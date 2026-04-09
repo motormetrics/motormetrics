@@ -46,7 +46,7 @@
     "@vercel/related-projects": "1.0.0",
     "@vercel/speed-insights": "1.3.1",
     "adm-zip": "0.5.16",
-    "better-auth": "1.5.0",
+    "better-auth": "1.6.0",
     "date-fns": "catalog:",
     "drizzle-orm": "catalog:",
     "embla-carousel": "8.6.0",
