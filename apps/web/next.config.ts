@@ -3,6 +3,14 @@ import { withWorkflow } from "workflow/next";
 
 const ONE_DAY = 60 * 60 * 24;
 
+const LEGACY_DOMAIN_REDIRECTS = [
+  ["sgcarstrends.com", "motormetrics.app"],
+  ["www.sgcarstrends.com", "motormetrics.app"],
+  ["staging.sgcarstrends.com", "staging.motormetrics.app"],
+  ["docs.sgcarstrends.com", "docs.motormetrics.app"],
+  ["api.sgcarstrends.com", "api.motormetrics.app"],
+] as const;
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
@@ -47,36 +55,12 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
   async redirects() {
     return [
-      {
+      ...LEGACY_DOMAIN_REDIRECTS.map(([fromHost, toHost]) => ({
         source: "/:path*",
-        has: [{ type: "host", value: "sgcarstrends.com" }],
-        destination: "https://motormetrics.app/:path*",
+        has: [{ type: "host" as const, value: fromHost }],
+        destination: `https://${toHost}/:path*`,
         permanent: true,
-      },
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.sgcarstrends.com" }],
-        destination: "https://motormetrics.app/:path*",
-        permanent: true,
-      },
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "staging.sgcarstrends.com" }],
-        destination: "https://staging.motormetrics.app/:path*",
-        permanent: true,
-      },
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "docs.sgcarstrends.com" }],
-        destination: "https://docs.motormetrics.app/:path*",
-        permanent: true,
-      },
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "api.sgcarstrends.com" }],
-        destination: "https://api.motormetrics.app/:path*",
-        permanent: true,
-      },
+      })),
       {
         source: "/instagram",
         destination: "https://www.instagram.com/motormetrics",
