@@ -16,7 +16,7 @@ const {
   normaliseMakeMock: vi.fn((value: string) => value.toLowerCase()),
 }));
 
-vi.mock("@sgcarstrends/utils", () => ({
+vi.mock("@motormetrics/utils", () => ({
   redis: {
     get: redisGet,
     set: redisSet,

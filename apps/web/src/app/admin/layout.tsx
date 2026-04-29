@@ -1,4 +1,4 @@
-import { Toaster } from "@sgcarstrends/ui/components/sonner";
+import { Toaster } from "@motormetrics/ui/components/sonner";
 import type { ReactNode } from "react";
 
 export default function AdminLayout({

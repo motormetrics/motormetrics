@@ -1,6 +1,6 @@
-# @sgcarstrends/logos
+# /logos
 
-Shared utilities for car logo management in the SG Cars Trends monorepo.
+Shared utilities for car logo management in the MotorMetrics monorepo.
 
 ## Overview
 
@@ -27,15 +27,15 @@ pnpm install
 Import utilities in other workspace packages:
 
 ```typescript
-import { downloadLogo, getLogo, listLogos } from "@sgcarstrends/logos";
-import { normaliseBrandName } from "@sgcarstrends/logos";
-import type { CarLogo, LogoMetadata } from "@sgcarstrends/logos";
+import { downloadLogo, getLogo, listLogos } from "@motormetrics/logos";
+import { normaliseBrandName } from "@motormetrics/logos";
+import type { CarLogo, LogoMetadata } from "@motormetrics/logos";
 ```
 
 ### Example: Download a Logo
 
 ```typescript
-import { downloadLogo } from "@sgcarstrends/logos";
+import { downloadLogo } from "@motormetrics/logos";
 
 // Download and store a logo (automatically uploads to Vercel Blob)
 const result = await downloadLogo("Mercedes-Benz");
@@ -50,7 +50,7 @@ if (result.success) {
 ### Example: Retrieve a Logo
 
 ```typescript
-import { getLogo } from "@sgcarstrends/logos";
+import { getLogo } from "@motormetrics/logos";
 
 // Get logo from storage (checks Redis cache, then Vercel Blob)
 const logo = await getLogo("BMW");
@@ -64,7 +64,7 @@ if (logo) {
 ### Example: Normalise Brand Name
 
 ```typescript
-import { normaliseBrandName } from "@sgcarstrends/logos";
+import { normaliseBrandName } from "@motormetrics/logos";
 
 const normalised = normaliseBrandName("Mercedes-Benz");
 // Result: "mercedes-benz"
@@ -102,8 +102,8 @@ The package uses **Vercel Blob** for logo storage with **Upstash Redis** for met
 
 **Environment Variables Required:**
 - `BLOB_READ_WRITE_TOKEN`: Vercel Blob authentication token
-- `UPSTASH_REDIS_REST_URL`: Redis REST API URL (from `@sgcarstrends/utils`)
-- `UPSTASH_REDIS_REST_TOKEN`: Redis authentication token (from `@sgcarstrends/utils`)
+- `UPSTASH_REDIS_REST_URL`: Redis REST API URL (from `@motormetrics/utils`)
+- `UPSTASH_REDIS_REST_TOKEN`: Redis authentication token (from `@motormetrics/utils`)
 
 ## Development Commands
 

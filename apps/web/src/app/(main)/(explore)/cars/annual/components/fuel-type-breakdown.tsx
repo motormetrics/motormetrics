@@ -2,13 +2,13 @@
 
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { cn } from "@heroui/theme";
-import { CHART_HEIGHTS } from "@sgcarstrends/theme/charts";
-import { CARD_PADDING, RADIUS } from "@sgcarstrends/theme/spacing";
+import { CHART_HEIGHTS } from "@motormetrics/theme/charts";
+import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
 import {
   FUEL_GROUP_COLORS,
   FUEL_GROUP_MAP,

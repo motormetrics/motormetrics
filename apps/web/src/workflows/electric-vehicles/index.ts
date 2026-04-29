@@ -1,5 +1,5 @@
-import { generateBlogContent, getEvDataForMonth } from "@sgcarstrends/ai";
-import { tokeniser } from "@sgcarstrends/utils";
+import { generateBlogContent, getEvDataForMonth } from "@motormetrics/ai";
+import { tokeniser } from "@motormetrics/utils";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { getExistingPostByMonth } from "@web/queries/posts";
 import {

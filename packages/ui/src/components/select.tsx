@@ -1,7 +1,7 @@
 "use client";
 
+import { cn } from "@motormetrics/ui/lib/utils";
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { cn } from "@sgcarstrends/ui/lib/utils";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import * as React from "react";
 

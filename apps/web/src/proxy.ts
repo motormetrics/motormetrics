@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
-import { and, db, eq, gt, sessions } from "@sgcarstrends/database";
-import { redis } from "@sgcarstrends/utils";
+import { and, db, eq, gt, sessions } from "@motormetrics/database";
+import { redis } from "@motormetrics/utils";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { auth } from "@web/app/admin/lib/auth";
@@ -73,7 +73,7 @@ export async function proxy(request: NextRequest) {
   const isOnMaintenancePage =
     request.nextUrl.pathname.startsWith("/maintenance");
 
-  // Check for admin session bypass (via cross-subdomain cookie from admin.sgcarstrends.com)
+  // Check for admin session bypass (via cross-subdomain cookie from admin.motormetrics.app)
   let hasAdminSession = false;
   if (isMaintenanceMode) {
     const sessionToken = request.cookies.get(
@@ -112,7 +112,7 @@ export async function proxy(request: NextRequest) {
   const nonce = crypto.randomBytes(16).toString("base64");
   const cspHeader = `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' *.sgcarstrends.com *.vercel-scripts.com vercel.live;
+      script-src 'self' 'unsafe-inline' *.motormetrics.app *.vercel-scripts.com vercel.live;
       style-src 'self' 'unsafe-inline';
       img-src 'self' blob: data: *.unsplash.com;
       connect-src *;

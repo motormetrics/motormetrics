@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { db, getTableName, type Table } from "@sgcarstrends/database";
+import { db, getTableName, type Table } from "@motormetrics/database";
 import { processCarCostXlsx } from "@web/lib/updater/services/process-xlsx";
 import type { UpdaterResult } from "@web/lib/updater/updater";
 import { Checksum } from "@web/utils/checksum";

@@ -1,12 +1,12 @@
-# SG Cars Trends - Shared UI Component Library
+# MotorMetrics - Shared UI Component Library
 
 ## Project Overview
 
-This is the shared UI component library (v4.16.3) for the SG Cars Trends monorepo, built with shadcn/ui components, Radix UI primitives, and Tailwind CSS. The package provides reusable UI components that can be consumed by any application in the monorepo, ensuring consistent design and reducing code duplication.
+This is the shared UI component library (v4.16.3) for the MotorMetrics monorepo, built with shadcn/ui components, Radix UI primitives, and Tailwind CSS. The package provides reusable UI components that can be consumed by any application in the monorepo, ensuring consistent design and reducing code duplication.
 
 ## Package Information
 
-- **Package Name**: `@sgcarstrends/ui`
+- **Package Name**: `@motormetrics/ui`
 - **Version**: 4.16.3
 - **Type**: ESM (ES Module)
 - **License**: MIT
@@ -75,17 +75,17 @@ The package uses explicit exports to control what can be imported:
 
 ```typescript
 // Import components
-import { Button } from "@sgcarstrends/ui/components/button";
-import { Card, CardHeader, CardContent } from "@sgcarstrends/ui/components/card";
+import { Button } from "@motormetrics/ui/components/button";
+import { Card, CardHeader, CardContent } from "@motormetrics/ui/components/card";
 
 // Import utilities
-import { cn } from "@sgcarstrends/ui/lib/utils";
+import { cn } from "@motormetrics/ui/lib/utils";
 
 // Import hooks
-import { useMobile } from "@sgcarstrends/ui/hooks/use-mobile";
+import { useMobile } from "@motormetrics/ui/hooks/use-mobile";
 
 // Import global styles (in root layout or _app)
-import "@sgcarstrends/ui/globals.css";
+import "@motormetrics/ui/globals.css";
 ```
 
 ## Available Components
@@ -141,7 +141,7 @@ Example:
 ```typescript
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@sgcarstrends/ui/lib/utils";
+import { cn } from "@motormetrics/ui/lib/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-md...",
@@ -233,11 +233,11 @@ The `components.json` file configures shadcn/ui component generation:
     "prefix": ""
   },
   "aliases": {
-    "components": "@sgcarstrends/ui/components",
-    "utils": "@sgcarstrends/ui/lib/utils",
-    "ui": "@sgcarstrends/ui/components",
-    "lib": "@sgcarstrends/ui/lib",
-    "hooks": "@sgcarstrends/ui/hooks"
+    "components": "@motormetrics/ui/components",
+    "utils": "@motormetrics/ui/lib/utils",
+    "ui": "@motormetrics/ui/components",
+    "lib": "@motormetrics/ui/lib",
+    "hooks": "@motormetrics/ui/hooks"
   }
 }
 ```
@@ -272,8 +272,8 @@ This package follows the monorepo's unified versioning strategy using semantic-r
 
 ### For Component Consumers
 
-1. **Import explicitly**: Use full import paths (e.g., `@sgcarstrends/ui/components/button`)
-2. **Use cn() utility**: Always use `cn()` from `@sgcarstrends/ui/lib/utils` for class merging
+1. **Import explicitly**: Use full import paths (e.g., `@motormetrics/ui/components/button`)
+2. **Use cn() utility**: Always use `cn()` from `@motormetrics/ui/lib/utils` for class merging
 3. **Follow composition patterns**: Use compound components as designed (e.g., Card with CardHeader)
 4. **Respect variants**: Use component variants instead of overriding base styles
 5. **Report issues**: If a component needs modification, discuss with the team first

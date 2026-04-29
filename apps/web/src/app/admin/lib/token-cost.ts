@@ -1,4 +1,4 @@
-import type { LanguageModelUsage } from "@sgcarstrends/ai";
+import type { LanguageModelUsage } from "@motormetrics/ai";
 
 // Gemini 2.5 Flash pricing (USD per million tokens)
 const PRICING = {

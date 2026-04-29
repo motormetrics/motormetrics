@@ -1,4 +1,4 @@
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCarPopulationYears } from "@web/queries/car-population";
 import { updateCarPopulation } from "@web/workflows/car-population/steps/process-data";

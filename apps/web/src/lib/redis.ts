@@ -1,1 +1,1 @@
-export { redis } from "@sgcarstrends/utils";
+export { redis } from "@motormetrics/utils";

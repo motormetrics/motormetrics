@@ -1,5 +1,5 @@
 import path from "node:path";
-import { db } from "@sgcarstrends/database";
+import { db } from "@motormetrics/database";
 import { AWS_LAMBDA_TEMP_DIR } from "@web/config/workflow";
 import {
   type UpdaterConfig,
@@ -20,9 +20,9 @@ vi.mock("@web/utils/checksum");
 vi.mock("@neondatabase/serverless", () => ({
   neon: vi.fn(() => vi.fn()),
 }));
-vi.mock("@sgcarstrends/database", async (importOriginal) => {
+vi.mock("@motormetrics/database", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("@sgcarstrends/database")>();
+    await importOriginal<typeof import("@motormetrics/database")>();
   return {
     ...actual,
     getTableName: vi.fn(() => "test_table"),

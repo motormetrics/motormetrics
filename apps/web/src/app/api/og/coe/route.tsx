@@ -1,4 +1,4 @@
-import { formatCurrency, formatOrdinal } from "@sgcarstrends/utils";
+import { formatCurrency, formatOrdinal } from "@motormetrics/utils";
 import { loadSearchParams } from "@web/app/api/og/coe/search-params";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";

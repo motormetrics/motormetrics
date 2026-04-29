@@ -1,4 +1,4 @@
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import {
   LAST_UPDATED_CARS_KEY,
   LAST_UPDATED_COE_KEY,
@@ -118,22 +118,22 @@ ${recentPosts.map((post) => `- [${post.title}](${SITE_URL}/blog/${post.slug})`).
 
 ## API & Documentation
 
-- [API Documentation](https://docs.sgcarstrends.com): Complete REST API reference
-- [Interactive API Explorer](https://api.sgcarstrends.com): Scalar-powered API docs
-- [Quickstart Guide](https://docs.sgcarstrends.com/quickstart): Get started with the API
-- [Authentication](https://docs.sgcarstrends.com/authentication): API authentication guide
-- [Data Models](https://docs.sgcarstrends.com/guides/data-models): Understanding data structures
-- [Filtering Guide](https://docs.sgcarstrends.com/guides/filtering): Query parameters and filters
-- [API Reference](https://docs.sgcarstrends.com/api-reference): Endpoint documentation
+- [API Documentation](https://docs.motormetrics.app): Complete REST API reference
+- [Interactive API Explorer](https://api.motormetrics.app): Scalar-powered API docs
+- [Quickstart Guide](https://docs.motormetrics.app/quickstart): Get started with the API
+- [Authentication](https://docs.motormetrics.app/authentication): API authentication guide
+- [Data Models](https://docs.motormetrics.app/guides/data-models): Understanding data structures
+- [Filtering Guide](https://docs.motormetrics.app/guides/filtering): Query parameters and filters
+- [API Reference](https://docs.motormetrics.app/api-reference): Endpoint documentation
 
 ## Architecture & Development
 
-- [System Architecture](https://docs.sgcarstrends.com/architecture/system): Overall system design
-- [API Architecture](https://docs.sgcarstrends.com/architecture/api): Hono framework structure
-- [Database Schema](https://docs.sgcarstrends.com/architecture/database): PostgreSQL schema
-- [Workflows](https://docs.sgcarstrends.com/architecture/workflows): Data processing automation
-- [Infrastructure](https://docs.sgcarstrends.com/architecture/infrastructure): AWS deployment with SST
-- [Social Integration](https://docs.sgcarstrends.com/architecture/social): Social media automation
+- [System Architecture](https://docs.motormetrics.app/architecture/system): Overall system design
+- [API Architecture](https://docs.motormetrics.app/architecture/api): Hono framework structure
+- [Database Schema](https://docs.motormetrics.app/architecture/database): PostgreSQL schema
+- [Workflows](https://docs.motormetrics.app/architecture/workflows): Data processing automation
+- [Infrastructure](https://docs.motormetrics.app/architecture/infrastructure): AWS deployment with SST
+- [Social Integration](https://docs.motormetrics.app/architecture/social): Social media automation
 
 ## About & Information
 
@@ -152,7 +152,7 @@ ${recentPosts.map((post) => `- [${post.title}](${SITE_URL}/blog/${post.slug})`).
 
 - [Privacy Policy](${SITE_URL}/legal/privacy-policy): Data privacy and usage policy
 - [Terms of Service](${SITE_URL}/legal/terms-of-service): Terms and conditions
-- [GitHub Repository](https://github.com/sgcarstrends/sgcarstrends): Open source codebase
+- [GitHub Repository](https://github.com/motormetrics/motormetrics): Open source codebase
 - [Instagram](${SITE_URL}/instagram): Follow us on Instagram
 - [Telegram](${SITE_URL}/telegram): Join our Telegram channel
 `;

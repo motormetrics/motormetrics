@@ -1,9 +1,9 @@
 import { Avatar } from "@heroui/avatar";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import type { CarLogo } from "@logos/types";
-import type { SelectCar } from "@sgcarstrends/database";
-import { DataTable } from "@sgcarstrends/ui/components/data-table";
-import { slugify } from "@sgcarstrends/utils";
+import type { SelectCar } from "@motormetrics/database";
+import { DataTable } from "@motormetrics/ui/components/data-table";
+import { slugify } from "@motormetrics/utils";
 import { CoeComparisonChart } from "@web/app/(main)/(explore)/cars/components/makes/coe-comparison-chart";
 import { MakeTrendChart } from "@web/app/(main)/(explore)/cars/components/makes/make-trend-chart";
 import { TypeBreakdownChart } from "@web/app/(main)/(explore)/cars/components/makes/type-breakdown-chart";

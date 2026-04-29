@@ -7,7 +7,7 @@ import {
   formatGrowthRate,
   formatPercentage,
   slugify,
-} from "@sgcarstrends/utils";
+} from "@motormetrics/utils";
 import { Sparkline } from "@web/components/charts/sparkline";
 import Typography from "@web/components/typography";
 import type { Make } from "@web/types";

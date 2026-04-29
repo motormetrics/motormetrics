@@ -33,7 +33,7 @@ This skill helps you create consistent, branded OpenGraph images for social medi
 import { ImageResponse } from "next/og";
 
 // Alt text for accessibility
-export const alt = "Page Title - SG Cars Trends";
+export const alt = "Page Title - MotorMetrics";
 
 // Standard OG image dimensions
 export const size = {

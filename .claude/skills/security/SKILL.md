@@ -91,7 +91,7 @@ React escapes content by default. When rendering HTML:
 
 ```typescript
 import { Ratelimit } from "@upstash/ratelimit";
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 
 const ratelimit = new Ratelimit({
   redis,
@@ -168,8 +168,8 @@ app.use(cors({ origin: "*" }));
 // ✅ Whitelist specific origins
 app.use(cors({
   origin: [
-    "https://sgcarstrends.com",
-    "https://staging.sgcarstrends.com",
+    "https://motormetrics.app",
+    "https://staging.motormetrics.app",
     process.env.NODE_ENV === "development" ? "http://localhost:3001" : "",
   ].filter(Boolean),
   credentials: true,

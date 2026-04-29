@@ -1,4 +1,4 @@
-import { formatCurrency } from "@sgcarstrends/utils";
+import { formatCurrency } from "@motormetrics/utils";
 import type { Period } from "@web/app/(main)/(explore)/coe/search-params";
 import type { CoeMarketShareData } from "@web/queries/coe";
 import type { COEBiddingResult, COEResult } from "@web/types";

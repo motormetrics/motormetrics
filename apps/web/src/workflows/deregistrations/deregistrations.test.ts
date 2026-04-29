@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@sgcarstrends/ai", () => ({
+vi.mock("@motormetrics/ai", () => ({
   generateBlogContent: vi.fn(),
   generateHeroImage: vi.fn(),
   getDeregistrationsForMonth: vi.fn(),
   updatePostHeroImage: vi.fn(),
 }));
 
-vi.mock("@sgcarstrends/utils", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@sgcarstrends/utils")>()),
+vi.mock("@motormetrics/utils", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@motormetrics/utils")>()),
   redis: {
     set: vi.fn(),
   },
@@ -66,8 +66,8 @@ import {
   generateHeroImage,
   getDeregistrationsForMonth,
   updatePostHeroImage,
-} from "@sgcarstrends/ai";
-import { redis } from "@sgcarstrends/utils";
+} from "@motormetrics/ai";
+import { redis } from "@motormetrics/utils";
 import { getDeregistrationsLatestMonth } from "@web/queries/deregistrations/latest-month";
 import { getExistingPostByMonth } from "@web/queries/posts";
 import { deregistrationsWorkflow } from "@web/workflows/deregistrations";

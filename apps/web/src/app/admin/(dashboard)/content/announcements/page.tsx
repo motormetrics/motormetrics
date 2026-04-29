@@ -3,7 +3,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
+} from "@motormetrics/ui/components/card";
 import { AnnouncementForm } from "@web/app/admin/components/announcement-form";
 import { ArrowLeft, MessageSquare } from "lucide-react";
 import Link from "next/link";

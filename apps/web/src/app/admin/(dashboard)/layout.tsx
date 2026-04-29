@@ -2,7 +2,7 @@ import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@sgcarstrends/ui/components/sidebar";
+} from "@motormetrics/ui/components/sidebar";
 import { AppSidebar } from "@web/app/admin/components/app-sidebar";
 import { type ReactNode, Suspense } from "react";
 

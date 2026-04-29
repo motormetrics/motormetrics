@@ -8,8 +8,8 @@ import {
   isNotNull,
   posts,
   sql,
-} from "@sgcarstrends/database";
-import { redis } from "@sgcarstrends/utils";
+} from "@motormetrics/database";
+import { redis } from "@motormetrics/utils";
 import { getPostsByIds } from "@web/queries/posts";
 import { cacheLife, cacheTag } from "next/cache";
 

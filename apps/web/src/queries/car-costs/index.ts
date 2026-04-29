@@ -1,4 +1,4 @@
-import { asc, carCosts, db, desc, eq, max } from "@sgcarstrends/database";
+import { asc, carCosts, db, desc, eq, max } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 export async function getLatestCarCosts() {

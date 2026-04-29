@@ -10,7 +10,7 @@ Automatically use Context7 for code generation and library documentation.
 
 Prefer using the GitHub MCP tools (`mcp__github__*`) over the `gh` CLI for all GitHub operations (issues, pull requests, checks, releases).
 
-# SG Cars Trends - Developer Reference Guide
+# MotorMetrics - Developer Reference Guide
 
 ## Project-Specific CLAUDE.md Files
 
@@ -48,11 +48,11 @@ System architecture documentation with Mermaid diagrams is available in the `doc
 
 - **[docs/diagrams/](docs/diagrams/)**: Source Mermaid diagram files (`.mmd` format)
 
-# SG Cars Trends Platform - Overview
+# MotorMetrics Platform - Overview
 
 ## Project Overview
 
-SG Cars Trends is a full-stack platform providing access to Singapore vehicle registration data,
+MotorMetrics is a full-stack platform providing access to Singapore vehicle registration data,
 Certificate of Entitlement (COE) bidding results, and vehicle deregistration statistics. The monorepo includes:
 
 - **Web Application**: Next.js 16 frontend with Cache Components, component co-location, interactive charts, analytics,
@@ -161,7 +161,7 @@ The project uses **pnpm with catalog** for centralised dependency version manage
 
 - Strict type checking enabled (noImplicitAny, strictNullChecks)
 - Avoid `any` type - prefer `unknown` with type guards
-- Use workspace imports: `@sgcarstrends/database`, `@sgcarstrends/ui`, `@sgcarstrends/utils`, `@sgcarstrends/types`
+- Use workspace imports: `@motormetrics/database`, `@motormetrics/ui`, `@motormetrics/utils`, `@motormetrics/types`
 
 ### Biome
 
@@ -213,7 +213,7 @@ Core cross-cutting variables:
 
 - `DATABASE_URL` - PostgreSQL connection string
 - `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` - Redis configuration
-- `SG_CARS_TRENDS_API_TOKEN` - Bearer token for REST API authentication (used by MCP server and external clients)
+- `MOTORMETRICS_API_TOKEN` - Bearer token for REST API authentication (used by MCP server and external clients)
 - `CRON_SECRET` - Auto-provisioned by Vercel; used to authenticate cron job requests via `Authorization: Bearer <CRON_SECRET>`
 
 *See component CLAUDE.md files for service-specific environment variables.*
@@ -221,14 +221,14 @@ Core cross-cutting variables:
 ## Deployment
 
 - **Platform**: Vercel (Singapore region)
-- **DNS**: Managed via Vercel with sgcarstrends.com domain
+- **DNS**: Managed via Vercel with motormetrics.app domain
 - **Automatic Deployments**: Push to main branch triggers production deployment
 - **Preview Deployments**: Pull requests get automatic preview URLs
 
 ## Domain Convention
 
-- **API**: `<service>.<environment>.sgcarstrends.com` (e.g., `api.sgcarstrends.com`)
-- **Web**: `<environment>.sgcarstrends.com` with apex for production (e.g., `sgcarstrends.com`)
+- **API**: `<service>.<environment>.motormetrics.app` (e.g., `api.motormetrics.app`)
+- **Web**: `<environment>.motormetrics.app` with apex for production (e.g., `motormetrics.app`)
 - **New services**: Use service subdomain pattern
 
 See `domain-management` skill for DNS configuration and routing details.
@@ -249,12 +249,12 @@ PostgreSQL with Drizzle ORM using **camelCase** column naming:
 
 ## Shared Packages
 
-- **`@sgcarstrends/ai`**: AI-powered blog generation with 2-step flow (analysis → structured output), Zod validation, hero images, tag constants, and Langfuse telemetry
-- **`@sgcarstrends/database`**: Drizzle ORM schemas and migrations
-- **`@sgcarstrends/types`**: Shared TypeScript interfaces
-- **`@sgcarstrends/ui`**: Shared UI component library with shadcn/ui, Radix UI primitives, and Tailwind CSS
-- **`@sgcarstrends/utils`**: Utility functions and centralised Redis client
-- **`@sgcarstrends/logos`**: Car logo management with Vercel Blob storage, automatic scraping, Redis caching, and brand name normalization
+- **`@motormetrics/ai`**: AI-powered blog generation with 2-step flow (analysis → structured output), Zod validation, hero images, tag constants, and Langfuse telemetry
+- **`@motormetrics/database`**: Drizzle ORM schemas and migrations
+- **`@motormetrics/types`**: Shared TypeScript interfaces
+- **`@motormetrics/ui`**: Shared UI component library with shadcn/ui, Radix UI primitives, and Tailwind CSS
+- **`@motormetrics/utils`**: Utility functions and centralised Redis client
+- **`@motormetrics/logos`**: Car logo management with Vercel Blob storage, automatic scraping, Redis caching, and brand name normalization
 
 *See component CLAUDE.md files for architecture details (workflows, blog generation, social media integration).*
 

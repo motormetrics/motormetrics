@@ -1,4 +1,4 @@
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { loadSearchParams } from "@web/app/(main)/(explore)/cars/registrations/search-params";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";

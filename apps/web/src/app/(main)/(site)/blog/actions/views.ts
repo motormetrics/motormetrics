@@ -1,6 +1,6 @@
 "use server";
 
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 
 export const incrementPostView = async (postId: string): Promise<number> => {
   try {

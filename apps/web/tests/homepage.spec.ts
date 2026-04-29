@@ -7,7 +7,7 @@ test.describe.skip("Homepage/Dashboard", () => {
   });
 
   test("should display page title and main heading", async ({ page }) => {
-    await expect(page).toHaveTitle(/SGCarsTrends/);
+    await expect(page).toHaveTitle(/MotorMetrics/);
     await expect(page.locator("h1")).toContainText(
       "Singapore Cars Registration Trends",
     );

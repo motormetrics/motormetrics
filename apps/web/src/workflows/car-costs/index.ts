@@ -1,4 +1,4 @@
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import { LAST_UPDATED_CAR_COSTS_KEY } from "@web/config";
 import type { UpdaterResult } from "@web/lib/updater";
 import { updateCarCosts } from "@web/workflows/car-costs/steps/process-data";

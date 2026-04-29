@@ -1,10 +1,10 @@
-# SG Cars Trends
+# MotorMetrics
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
-This monorepo provides a complete platform for SG Cars Trends, tracking Singapore's car registration statistics and Certificate of Entitlement (COE) data. The system includes:
+This monorepo provides a complete platform for MotorMetrics, tracking Singapore's car registration statistics and Certificate of Entitlement (COE) data. The system includes:
 
 - **Web Application**: Next.js 16 frontend with Cache Components, co-located route components, enhanced homepage featuring latest COE results, interactive charts, analytics, AI-generated blog content, and integrated admin interface at `/admin` path. Also hosts the data updater workflows.
 - **Integrated Data Updater**: Vercel WDK workflow-based system for fetching and processing LTA data (consolidated into web application)
@@ -78,7 +78,7 @@ graph TB
 ## Project Structure
 
 ```
-sgcarstrends/
+motormetrics/
 ├── apps/
 │   ├── docs/         # Fumadocs documentation site (Next.js 16)
 │   │   ├── content/         # MDX documentation files
@@ -162,8 +162,8 @@ System architecture diagrams are available in the `docs/` directory:
 
 ```bash
 # Clone the repository
-git clone https://github.com/sgcarstrends/sgcarstrends.git
-cd sgcarstrends
+git clone https://github.com/motormetrics/motormetrics.git
+cd motormetrics
 
 # Install dependencies
 pnpm install
@@ -207,8 +207,8 @@ pnpm test:web              # Run web tests only
 cd apps/web && pnpm test   # Web tests only
 
 # E2E Testing (Web App)
-pnpm -F @sgcarstrends/web test:e2e       # Run Playwright E2E tests
-pnpm -F @sgcarstrends/web test:e2e:ui    # Run E2E tests with Playwright UI
+pnpm -F /web test:e2e       # Run Playwright E2E tests
+pnpm -F /web test:e2e:ui    # Run E2E tests with Playwright UI
 
 # Code Quality
 pnpm lint                  # Run Biome linting on all packages

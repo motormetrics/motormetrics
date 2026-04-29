@@ -1,14 +1,14 @@
 "use client";
 
-import { Badge } from "@sgcarstrends/ui/components/badge";
-import { Button } from "@sgcarstrends/ui/components/button";
+import { Badge } from "@motormetrics/ui/components/badge";
+import { Button } from "@motormetrics/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
+} from "@motormetrics/ui/components/card";
 import { Loader2, Play, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";

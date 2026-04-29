@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mockRedisGet = vi.fn();
 const mockRedisSet = vi.fn();
 
-vi.mock("@sgcarstrends/utils", () => ({
+vi.mock("@motormetrics/utils", () => ({
   redis: {
     get: (...args: unknown[]) => mockRedisGet(...args),
     set: (...args: unknown[]) => mockRedisSet(...args),
@@ -13,7 +13,7 @@ vi.mock("@sgcarstrends/utils", () => ({
 const VALID_TOKEN = "test-token-123";
 
 beforeEach(() => {
-  vi.stubEnv("SG_CARS_TRENDS_API_TOKEN", VALID_TOKEN);
+  vi.stubEnv("MOTORMETRICS_API_TOKEN", VALID_TOKEN);
   vi.clearAllMocks();
 });
 

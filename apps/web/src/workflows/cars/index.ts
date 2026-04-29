@@ -1,8 +1,8 @@
 import {
   generateBlogContent,
   getCarsAggregatedByMonth,
-} from "@sgcarstrends/ai";
-import { redis, tokeniser } from "@sgcarstrends/utils";
+} from "@motormetrics/ai";
+import { redis, tokeniser } from "@motormetrics/utils";
 import { getCarsMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import { populateMakesSortedSet } from "@web/lib/redis/makes";
 import type { UpdaterResult } from "@web/lib/updater";

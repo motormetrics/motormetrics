@@ -1,9 +1,8 @@
 "use client";
 
+import { buttonVariants } from "@motormetrics/ui/components/button";
+import { cn } from "@motormetrics/ui/lib/utils";
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
-import { buttonVariants } from "@sgcarstrends/ui/components/button";
-
-import { cn } from "@sgcarstrends/ui/lib/utils";
 import * as React from "react";
 
 const AlertDialog = AlertDialogPrimitive.Root;

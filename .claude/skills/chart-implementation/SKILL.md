@@ -10,7 +10,7 @@ Uses **Recharts** via shadcn/ui `ChartContainer` for data visualization. Always 
 
 ## Core Pattern
 
-All charts use `ChartContainer` from `@sgcarstrends/ui/components/chart` wrapped in `ChartWidget` from `@web/components/charts/widget`. **Never use raw `ResponsiveContainer` directly.**
+All charts use `ChartContainer` from `@motormetrics/ui/components/chart` wrapped in `ChartWidget` from `@web/components/charts/widget`. **Never use raw `ResponsiveContainer` directly.**
 
 ```tsx
 "use client";
@@ -19,7 +19,7 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
 import { ChartWidget } from "@web/components/charts/widget";
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis } from "recharts";
 

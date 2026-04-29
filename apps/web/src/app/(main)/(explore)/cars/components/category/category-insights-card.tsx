@@ -1,5 +1,5 @@
 import { Chip } from "@heroui/chip";
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import { formatPercentage } from "@web/utils/charts";
 import { Award, Layers, PieChart } from "lucide-react";

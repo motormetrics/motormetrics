@@ -1,4 +1,4 @@
-import { slugify } from "@sgcarstrends/utils";
+import { slugify } from "@motormetrics/utils";
 import { withRelatedProject } from "@vercel/related-projects";
 import { VEHICLE_TYPE_MAP } from "@web/constants";
 import type { Announcement, LinkItem, VehicleType } from "@web/types";
@@ -9,12 +9,12 @@ import { Battery, Droplet, Fuel, Zap } from "lucide-react";
 // =============================================================================
 export const SITE_TITLE = "MotorMetrics";
 export const SITE_DESCRIPTION =
-  "Statistics for car trends in Singapore. Data provided by Land Transport Authority (LTA)";
+  "Singapore vehicle market intelligence for COE, registrations, EV adoption, ownership costs, and policy shifts.";
 
 // =============================================================================
-// Domain & URLs (Phase 3 - update when new domain is live)
+// Domain & URLs
 // =============================================================================
-export const DOMAIN_NAME = "sgcarstrends.com";
+export const DOMAIN_NAME = "motormetrics.app";
 
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
@@ -145,10 +145,10 @@ export const MEDAL_MAPPING: Record<number, string> = {
 };
 
 export const announcements: Announcement[] = [
-  // {
-  //   content: `🌟 Welcome to ${SITE_TITLE} - We are currently revamping the site!`,
-  //   paths: undefined, // Global announcement (fallback)
-  // },
+  {
+    content:
+      "SG Cars Trends is now MotorMetrics. If you have us bookmarked, please update it to https://motormetrics.app ✨",
+  },
   // {
   //   content: "🚗 Latest car registration data now available!",
   //   paths: ["/cars"],

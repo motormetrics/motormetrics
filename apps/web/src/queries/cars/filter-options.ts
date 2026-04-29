@@ -1,4 +1,4 @@
-import { and, cars, db, desc, eq, gt, sum } from "@sgcarstrends/database";
+import { and, cars, db, desc, eq, gt, sum } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 import { FUEL_TYPE, type TypeConfig, VEHICLE_TYPE } from "./categories";
 

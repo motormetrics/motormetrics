@@ -1,4 +1,4 @@
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import { ComparisonMixedChart } from "@web/app/(main)/(explore)/coe/components/pqp/comparison-mixed-chart";
 import { ComparisonSummaryCard } from "@web/app/(main)/(explore)/coe/components/pqp/comparison-summary-card";
 import { DataTable } from "@web/app/(main)/(explore)/coe/components/pqp/data-table";

@@ -6,7 +6,7 @@ const { zrangeMock, getDistinctMakesMock, slugifyMock } = vi.hoisted(() => ({
   slugifyMock: vi.fn((str: string) => str.toLowerCase().replace(/\s+/g, "-")),
 }));
 
-vi.mock("@sgcarstrends/utils", () => ({
+vi.mock("@motormetrics/utils", () => ({
   redis: {
     zrange: zrangeMock,
   },

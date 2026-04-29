@@ -11,8 +11,8 @@ Seed scripts live in `packages/database/src/seed/`.
 ## Running Seeds
 
 ```bash
-pnpm -F @sgcarstrends/database db:seed           # Run all seeds
-pnpm -F @sgcarstrends/database db:seed:cars      # Seed specific table
+pnpm -F /database db:seed           # Run all seeds
+pnpm -F /database db:seed:cars      # Seed specific table
 ```
 
 ## Basic Seed Pattern
@@ -62,7 +62,7 @@ async function clearDatabase() {
 ## Seed with Faker.js
 
 ```bash
-pnpm -F @sgcarstrends/database add -D @faker-js/faker
+pnpm -F /database add -D @faker-js/faker
 ```
 
 ```typescript

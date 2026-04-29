@@ -1,5 +1,5 @@
 import path from "node:path";
-import { db, getTableName, type Table } from "@sgcarstrends/database";
+import { db, getTableName, type Table } from "@motormetrics/database";
 import { AWS_LAMBDA_TEMP_DIR } from "@web/config/workflow";
 import { calculateChecksum } from "@web/lib/updater/services/calculate-checksum";
 import { downloadFile } from "@web/lib/updater/services/download-file";

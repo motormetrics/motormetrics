@@ -1,5 +1,5 @@
-import { coe, pqp } from "@sgcarstrends/database";
-import type { COE, PQP } from "@sgcarstrends/types";
+import { coe, pqp } from "@motormetrics/database";
+import type { COE, PQP } from "@motormetrics/types";
 import { LTA_DATAMALL_BASE_URL } from "@web/config/workflow";
 import { update } from "@web/lib/updater";
 import { fetchAndExtractZip } from "@web/lib/updater/services/download-file";

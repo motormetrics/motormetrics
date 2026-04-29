@@ -16,31 +16,31 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@sgcarstrends/ui/components/alert-dialog";
-import { Badge } from "@sgcarstrends/ui/components/badge";
-import { Button } from "@sgcarstrends/ui/components/button";
+} from "@motormetrics/ui/components/alert-dialog";
+import { Badge } from "@motormetrics/ui/components/badge";
+import { Button } from "@motormetrics/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
+} from "@motormetrics/ui/components/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@sgcarstrends/ui/components/dropdown-menu";
-import { Input } from "@sgcarstrends/ui/components/input";
+} from "@motormetrics/ui/components/dropdown-menu";
+import { Input } from "@motormetrics/ui/components/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@sgcarstrends/ui/components/select";
+} from "@motormetrics/ui/components/select";
 import {
   Table,
   TableBody,
@@ -48,7 +48,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@sgcarstrends/ui/components/table";
+} from "@motormetrics/ui/components/table";
 import {
   type ColumnDef,
   flexRender,

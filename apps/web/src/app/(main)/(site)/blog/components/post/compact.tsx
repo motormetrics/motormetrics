@@ -2,7 +2,7 @@
 
 import { Chip } from "@heroui/chip";
 import { Link } from "@heroui/link";
-import type { SelectPost } from "@sgcarstrends/database";
+import type { SelectPost } from "@motormetrics/database";
 import { formatDate, getCategoryConfig, getReadingTime } from "./utils";
 
 interface CompactProps {

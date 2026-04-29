@@ -1,4 +1,4 @@
-vi.mock("@sgcarstrends/database", () => ({
+vi.mock("@motormetrics/database", () => ({
   carCosts: {},
 }));
 

@@ -1,5 +1,5 @@
-import { vehiclePopulation } from "@sgcarstrends/database";
-import type { VehiclePopulation } from "@sgcarstrends/types";
+import { vehiclePopulation } from "@motormetrics/database";
+import type { VehiclePopulation } from "@motormetrics/types";
 import { update } from "@web/lib/updater";
 
 const VEHICLE_POPULATION_URL =

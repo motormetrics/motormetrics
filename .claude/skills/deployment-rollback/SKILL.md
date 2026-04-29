@@ -31,10 +31,10 @@ vercel rollback
 
 ```bash
 # Rollback last migration
-pnpm -F @sgcarstrends/database db:rollback
+pnpm -F /database db:rollback
 
 # Rollback to specific migration
-pnpm -F @sgcarstrends/database db:rollback --to 20240115_initial
+pnpm -F /database db:rollback --to 20240115_initial
 
 # Restore from backup
 pg_dump $DATABASE_URL > backup-pre-deploy.sql  # Before deploy
@@ -59,7 +59,7 @@ gh pr create --title "Rollback to v1.1.0" --body "Emergency rollback"
 
 ```bash
 # Revalidate Next.js cache
-curl -X POST "https://sgcarstrends.com/api/revalidate?tag=all&secret=$REVALIDATE_TOKEN"
+curl -X POST "https://motormetrics.app/api/revalidate?tag=all&secret=$REVALIDATE_TOKEN"
 
 # Clear Redis cache
 redis-cli -h $REDIS_HOST FLUSHALL
@@ -68,7 +68,7 @@ redis-cli -h $REDIS_HOST FLUSHALL
 ## Health Checks During Rollback
 
 ```bash
-curl -f https://sgcarstrends.com || echo "Web unhealthy"
+curl -f https://motormetrics.app || echo "Web unhealthy"
 psql $DATABASE_URL -c "SELECT 1" || echo "Database unreachable"
 ```
 
@@ -98,12 +98,12 @@ psql $DATABASE_URL -c "SELECT 1" || echo "Database unreachable"
 **Critical Bug:**
 ```bash
 vercel rollback
-curl https://sgcarstrends.com/api/health
+curl https://motormetrics.app/api/health
 ```
 
 **Database Migration Failure:**
 ```bash
-pnpm -F @sgcarstrends/database db:rollback
+pnpm -F /database db:rollback
 git revert HEAD
 git push origin main
 ```
@@ -119,7 +119,7 @@ vercel --prod
 
 **Database schema mismatch:**
 ```bash
-pnpm -F @sgcarstrends/database db:rollback
+pnpm -F /database db:rollback
 # Or restore backup: psql $DATABASE_URL < backup-pre-deploy.sql
 ```
 

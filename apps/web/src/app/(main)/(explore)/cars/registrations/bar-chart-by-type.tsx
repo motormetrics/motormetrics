@@ -3,7 +3,7 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
 import type { RegistrationStat } from "@web/types/cars";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 import { Bar, BarChart, Cell, LabelList, XAxis, YAxis } from "recharts";

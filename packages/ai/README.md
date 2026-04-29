@@ -1,6 +1,6 @@
-# @sgcarstrends/ai
+# /ai
 
-AI-powered blog post generation for the SG Cars Trends platform using Vercel AI SDK with Google Gemini.
+AI-powered blog post generation for the MotorMetrics platform using Vercel AI SDK with Google Gemini.
 
 ## Features
 
@@ -14,10 +14,10 @@ AI-powered blog post generation for the SG Cars Trends platform using Vercel AI 
 
 ## Installation
 
-This package is part of the SG Cars Trends monorepo and uses workspace dependencies:
+This package is part of the MotorMetrics monorepo and uses workspace dependencies:
 
 ```bash
-pnpm add @sgcarstrends/ai
+pnpm add @motormetrics/ai
 ```
 
 ## Usage
@@ -27,8 +27,8 @@ pnpm add @sgcarstrends/ai
 Generate blog content without workflow context (e.g., in Admin app):
 
 ```typescript
-import { generateBlogContent, shutdownTracing } from "@sgcarstrends/ai";
-import { tokeniser } from "@sgcarstrends/utils";
+import { generateBlogContent, shutdownTracing } from "@motormetrics/ai";
+import { tokeniser } from "@motormetrics/utils";
 
 try {
   // Fetch and tokenise data
@@ -59,8 +59,8 @@ try {
 Generate and save blog posts within Vercel WDK workflows:
 
 ```typescript
-import { generateBlogContent } from "@sgcarstrends/ai";
-import { tokeniser } from "@sgcarstrends/utils";
+import { generateBlogContent } from "@motormetrics/ai";
+import { tokeniser } from "@motormetrics/utils";
 import { fetch } from "workflow";
 
 export async function carsWorkflow(payload: { month?: string }) {
@@ -241,8 +241,8 @@ View traces at [cloud.langfuse.com](https://cloud.langfuse.com)
 - `@ai-sdk/google` - Google Gemini integration
 - `ai` - Vercel AI SDK
 - `@langfuse/otel` - Langfuse telemetry
-- `@sgcarstrends/database` - Database schemas
-- `@sgcarstrends/utils` - Utility functions
+- `@motormetrics/database` - Database schemas
+- `@motormetrics/utils` - Utility functions
 
 ## License
 

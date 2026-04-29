@@ -1,9 +1,9 @@
 {
-  "name": "@sgcarstrends/utils",
-  "description": "Utility functions for SG Cars Trends",
+  "name": "@motormetrics/utils",
+  "description": "Utility functions for MotorMetrics",
   "version": "4.65.0",
   "type": "module",
-  "author": "Ru Chern Chong <ruchern.chong@sgcarstrends.com>",
+  "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@sgcarstrends/types": "workspace:*",
+    "@motormetrics/types": "workspace:*",
     "@sindresorhus/slugify": "3.0.0",
     "@upstash/redis": "catalog:",
     "date-fns": "catalog:"

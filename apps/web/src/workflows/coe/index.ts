@@ -1,5 +1,5 @@
-import { generateBlogContent, getCoeForMonth } from "@sgcarstrends/ai";
-import { redis, tokeniser } from "@sgcarstrends/utils";
+import { generateBlogContent, getCoeForMonth } from "@motormetrics/ai";
+import { redis, tokeniser } from "@motormetrics/utils";
 import { getCoeMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";

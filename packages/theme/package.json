@@ -1,9 +1,9 @@
 {
-  "name": "@sgcarstrends/theme",
-  "description": "Shared design tokens for SG Cars Trends",
+  "name": "@motormetrics/theme",
+  "description": "Shared design tokens for MotorMetrics",
   "version": "4.65.0",
   "type": "module",
-  "author": "Ru Chern Chong <ruchern.chong@sgcarstrends.com>",
+  "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
   "scripts": {
     "typecheck": "tsc --noEmit"

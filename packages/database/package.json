@@ -1,9 +1,9 @@
 {
-  "name": "@sgcarstrends/database",
-  "description": "Database schema and migrations for SG Cars Trends",
+  "name": "@motormetrics/database",
+  "description": "Database schema and migrations for MotorMetrics",
   "version": "4.65.0",
   "type": "module",
-  "author": "Ru Chern Chong <ruchern.chong@sgcarstrends.com>",
+  "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
   "main": "src/index.ts",
   "module": "src/index.ts",

@@ -1,4 +1,4 @@
-import { cars, db, desc, eq, inArray, sql } from "@sgcarstrends/database";
+import { cars, db, desc, eq, inArray, sql } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 const BEV_FUEL_TYPES = ["Electric"];

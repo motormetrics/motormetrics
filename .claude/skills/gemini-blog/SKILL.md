@@ -30,7 +30,7 @@ packages/ai/
 
 ```typescript
 // Standalone generation
-import { generateBlogContent } from "@sgcarstrends/ai";
+import { generateBlogContent } from "@motormetrics/ai";
 
 const { object } = await generateBlogContent({
   data: tokenisedData,     // Pipe-delimited data

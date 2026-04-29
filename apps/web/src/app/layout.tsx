@@ -91,9 +91,9 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
       </body>
       <Script
         defer
-        src="https://analytics.sgcarstrends.com/script.js"
+        src="https://analytics.motormetrics.app/script.js"
         data-website-id="b98dda44-ccc9-4a73-87d4-dcbe561aedb8"
-        data-domains="sgcarstrends.com"
+        data-domains="motormetrics.app"
       />
     </html>
   );

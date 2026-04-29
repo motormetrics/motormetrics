@@ -1,4 +1,4 @@
-import { formatCurrency } from "@sgcarstrends/utils";
+import { formatCurrency } from "@motormetrics/utils";
 
 interface CurrencyProps {
   value: number;

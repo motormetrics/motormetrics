@@ -1,6 +1,6 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { cn } from "@heroui/theme";
-import { CARD_VARIANTS, type CardVariant } from "@sgcarstrends/theme/spacing";
+import { CARD_VARIANTS, type CardVariant } from "@motormetrics/theme/spacing";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { MetricsComparison } from "@web/components/metrics-comparison";
 import Typography from "@web/components/typography";

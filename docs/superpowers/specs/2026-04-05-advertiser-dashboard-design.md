@@ -2,14 +2,14 @@
 
 ## Overview
 
-A self-serve advertiser dashboard where businesses sign up, create ad campaigns, upload creatives, and view performance analytics. Accessible at `partners.sgcarstrends.com` as a subdomain of the main site. Includes admin oversight within the existing `/admin` interface and dynamic ad rendering on the public site.
+A self-serve advertiser dashboard where businesses sign up, create ad campaigns, upload creatives, and view performance analytics. Accessible at `partners.motormetrics.app` as a subdomain of the main site. Includes admin oversight within the existing `/admin` interface and dynamic ad rendering on the public site.
 
 ## Architecture
 
 ### Routing & Deployment
 
 - Lives within `apps/web` using a `(partners)` route group
-- Subdomain `partners.sgcarstrends.com` routed via Next.js middleware (hostname detection)
+- Subdomain `partners.motormetrics.app` routed via Next.js middleware (hostname detection)
 - Single deployment — no separate app. Shared auth, database, and UI components
 - Middleware checks hostname: `partners.*` serves partner layout, everything else unchanged
 

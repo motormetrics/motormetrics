@@ -22,7 +22,7 @@ strict: false
 
 network:
   allowed:
-    - sgcarstrends.com
+    - motormetrics.app
 
 tools:
   bash:
@@ -31,28 +31,28 @@ tools:
     - jq
 
 secrets:
-  SG_CARS_TRENDS_API_TOKEN: ${{ secrets.SG_CARS_TRENDS_API_TOKEN }}
+  MOTORMETRICS_API_TOKEN: ${{ secrets.MOTORMETRICS_API_TOKEN }}
 
 ---
 
 # Maintenance Mode
 
-Toggle maintenance mode for sgcarstrends.com via the REST API.
+Toggle maintenance mode for motormetrics.app via the REST API.
 
 ## Instructions
 
-You are managing maintenance mode for the SG Cars Trends platform.
+You are managing maintenance mode for the MotorMetrics platform.
 
 The user has selected the action: `${{ inputs.action }}`
 The user provided this custom message: `${{ inputs.message }}`
 
-Use the maintenance API at `https://sgcarstrends.com/api/v1/maintenance`.
+Use the maintenance API at `https://motormetrics.app/api/v1/maintenance`.
 
 ### Authentication
 
 All requests must include the header:
 ```
-Authorization: Bearer $SG_CARS_TRENDS_API_TOKEN
+Authorization: Bearer $MOTORMETRICS_API_TOKEN
 ```
 
 ### Actions

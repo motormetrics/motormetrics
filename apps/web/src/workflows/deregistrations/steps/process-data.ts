@@ -1,5 +1,5 @@
-import { deregistrations } from "@sgcarstrends/database";
-import type { Deregistration } from "@sgcarstrends/types";
+import { deregistrations } from "@motormetrics/database";
+import type { Deregistration } from "@motormetrics/types";
 import { LTA_DATAMALL_BASE_URL } from "@web/config/workflow";
 import { update } from "@web/lib/updater";
 

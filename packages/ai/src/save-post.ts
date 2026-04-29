@@ -1,5 +1,5 @@
-import { db, eq, posts } from "@sgcarstrends/database";
-import { slugify } from "@sgcarstrends/utils";
+import { db, eq, posts } from "@motormetrics/database";
+import { slugify } from "@motormetrics/utils";
 import type { LanguageModelUsage } from "ai";
 import { generatePostEmbedding } from "./embedding";
 import type { Highlight } from "./schemas";

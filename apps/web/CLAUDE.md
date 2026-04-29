@@ -118,7 +118,7 @@ Route-specific server actions (mutations only):
 **Keep Centralised When:**
 
 - Component used by 3+ different routes
-- Part of design system (use HeroUI components via `@heroui/*` packages, or `@sgcarstrends/ui` for shadcn/ui chart components)
+- Part of design system (use HeroUI components via `@heroui/*` packages, or `@motormetrics/ui` for shadcn/ui chart components)
 - Shared business logic (`queries/`, `lib/`)
 - Server actions used across multiple routes (`actions/`)
 - Generic utilities (`components/shared/`)
@@ -145,7 +145,7 @@ import {subscribeAction} from "@web/actions";
 
 // ✅ Shared components via existing alias
 import {MetricCard} from "@web/components/shared/metric-card";
-import {Button} from "@sgcarstrends/ui/components/button";
+import {Button} from "@motormetrics/ui/components/button";
 
 // ❌ Avoid relative imports for co-located code
 import {ProgressBar} from "../components/progress-bar"; // Don't use
@@ -321,10 +321,10 @@ This precisely invalidates only affected caches, avoiding unnecessary regenerati
 - **COE Queries** (`queries/coe/`): Historical results, latest results, available months, PQP rates
 - **Deregistration Queries** (`queries/deregistrations/`): Monthly deregistration data, category breakdowns, available months, totals by month
 - **Vehicle Population Queries** (`queries/vehicle-population/`): Annual vehicle population by fuel type, yearly totals, available years
-- **Logo Queries** (`queries/logos/`): Dynamic logo loading via `@sgcarstrends/logos` package with Vercel Blob storage
+- **Logo Queries** (`queries/logos/`): Dynamic logo loading via `@motormetrics/logos` package with Vercel Blob storage
 - All queries include comprehensive unit tests in `queries/__tests__/`
 
-**Car Logos**: Dynamic logo loading via `@sgcarstrends/logos` package with Vercel Blob storage:
+**Car Logos**: Dynamic logo loading via `@motormetrics/logos` package with Vercel Blob storage:
 
 - Logo queries in `src/queries/logos/` fetch logos from Vercel Blob
 - `getLogoUrlMap()` pre-fetches all logos for the makes list page
@@ -371,9 +371,9 @@ philosophy inspired by Vercel, Linear, and Stripe. Uses lighter font weights (se
 secondary headings/labels, normal for body text) with hierarchy driven by size and spacing.
 See [Typography System](#typography-system) section below.
 
-**UI Components**: HeroUI is the primary component library, imported directly from `@heroui/*` packages (e.g., `@heroui/button`, `@heroui/card`, `@heroui/table`). Chart components use shadcn/ui's chart library from `@sgcarstrends/ui/components/chart`.
+**UI Components**: HeroUI is the primary component library, imported directly from `@heroui/*` packages (e.g., `@heroui/button`, `@heroui/card`, `@heroui/table`). Chart components use shadcn/ui's chart library from `@motormetrics/ui/components/chart`.
 
-**Charts**: Recharts-based shadcn/ui chart components from `@sgcarstrends/ui/components/chart` for data visualization.
+**Charts**: Recharts-based shadcn/ui chart components from `@motormetrics/ui/components/chart` for data visualization.
 
 **Dashboard Components**: Interactive components for the homepage including:
 
@@ -1000,7 +1000,7 @@ OG images follow a three-part layout:
 **Required Exports**:
 
 ```typescript
-export const alt = "Page Title - SG Cars Trends";
+export const alt = "Page Title - MotorMetrics";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 ```
@@ -1066,8 +1066,8 @@ Environment variables managed through Vercel project settings:
 
 - `DATABASE_URL`: Neon PostgreSQL connection
 - `UPSTASH_REDIS_REST_URL/TOKEN`: Redis caching
-- `BLOB_READ_WRITE_TOKEN`: Vercel Blob storage access for car logos (via `@sgcarstrends/logos`)
-- `SG_CARS_TRENDS_API_TOKEN`: External API authentication
+- `BLOB_READ_WRITE_TOKEN`: Vercel Blob storage access for car logos (via `@motormetrics/logos`)
+- `MOTORMETRICS_API_TOKEN`: External API authentication
 - `CRON_SECRET`: Auto-provisioned by Vercel; authenticates cron requests via `Authorization: Bearer <CRON_SECRET>`. Workflow `GET` handlers validate this header
 - `NEXT_PUBLIC_FEATURE_FLAG_UNRELEASED`: Feature flag for unreleased features
 - `VERCEL_ENV`: Vercel's automatic environment detection (production/preview/development)
@@ -1099,7 +1099,7 @@ The web application uses Vercel Related Projects for automatic API URL resolutio
 
 - API URL automatically resolved via `withRelatedProject()` in `src/config/index.ts`
 - Works across all environments: dev, staging, production, and preview deployments
-- Falls back to `NEXT_PUBLIC_API_URL` or default `https://api.sgcarstrends.com` if Related Projects unavailable
+- Falls back to `NEXT_PUBLIC_API_URL` or default `https://api.motormetrics.app` if Related Projects unavailable
 
 **Benefits:**
 
@@ -1112,7 +1112,7 @@ The web application uses Vercel Related Projects for automatic API URL resolutio
 
 Deployed via Vercel with automatic deployments:
 
-- **Production**: `sgcarstrends.com` (apex domain) - deployed on push to main
+- **Production**: `motormetrics.app` (apex domain) - deployed on push to main
 - **Preview**: Automatic preview URLs for pull requests
 
 ## Development Notes
@@ -1128,7 +1128,7 @@ Deployed via Vercel with automatic deployments:
 The codebase has consolidated on **HeroUI as the primary component library**:
 
 - **UI Components**: Use HeroUI components imported from `@heroui/*` packages (e.g., `@heroui/button`, `@heroui/card`, `@heroui/table`, `@heroui/skeleton`)
-- **Chart Components**: Use shadcn/ui chart components from `@sgcarstrends/ui/components/chart` (Recharts-based)
+- **Chart Components**: Use shadcn/ui chart components from `@motormetrics/ui/components/chart` (Recharts-based)
 - **Component Selection**: Leverage HeroUI's professional design system for analytics interfaces, tables, forms, and navigation
 - **Customisation**: Apply HeroUI's theming system (`@heroui/theme` for `cn()` utility) to match Singapore car market branding
 - **Performance**: Take advantage of HeroUI's tree-shakeable, optimised components

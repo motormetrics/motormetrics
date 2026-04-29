@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@sgcarstrends/ai", () => ({
+vi.mock("@motormetrics/ai", () => ({
   generateBlogContent: vi.fn(),
   generateHeroImage: vi.fn(),
   getEvDataForMonth: vi.fn(),
@@ -55,7 +55,7 @@ import {
   generateHeroImage,
   getEvDataForMonth,
   updatePostHeroImage,
-} from "@sgcarstrends/ai";
+} from "@motormetrics/ai";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { getExistingPostByMonth } from "@web/queries/posts";
 import { electricVehiclesWorkflow } from "@web/workflows/electric-vehicles";

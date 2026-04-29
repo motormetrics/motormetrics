@@ -1,4 +1,4 @@
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { MetricCard } from "@web/components/shared/metric-card";
 import { SkeletonMetricCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";

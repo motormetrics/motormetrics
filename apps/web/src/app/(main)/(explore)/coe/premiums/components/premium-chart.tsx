@@ -8,8 +8,8 @@ import {
   ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+} from "@motormetrics/ui/components/chart";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
   type Period,
   periods,

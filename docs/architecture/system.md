@@ -1,6 +1,6 @@
 # System Architecture Overview
 
-This document provides a high-level overview of the SG Cars Trends platform architecture, illustrating how the various components interact to deliver Singapore vehicle registration data and COE bidding results.
+This document provides a high-level overview of the MotorMetrics platform architecture, illustrating how the various components interact to deliver Singapore vehicle registration data and COE bidding results.
 
 ## Architecture Diagram
 
@@ -43,7 +43,7 @@ graph TB
     end
 
     %% Application Layer
-    subgraph "SG Cars Trends Platform"
+    subgraph "MotorMetrics Platform"
         subgraph "Apps"
             Web[Web Application - Next.js 16]
         end

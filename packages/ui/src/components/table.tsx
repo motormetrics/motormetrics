@@ -1,4 +1,4 @@
-import { cn } from "@sgcarstrends/ui/lib/utils";
+import { cn } from "@motormetrics/ui/lib/utils";
 import * as React from "react";
 
 const Table = React.forwardRef<

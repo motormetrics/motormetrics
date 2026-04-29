@@ -1,5 +1,5 @@
 {
-  "name": "@sgcarstrends/logos",
+  "name": "@motormetrics/logos",
   "version": "4.65.0",
   "description": "Shared utilities for car logo management",
   "type": "module",
@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@sgcarstrends/utils": "workspace:*",
+    "@motormetrics/utils": "workspace:*",
     "@vercel/blob": "2.3.0"
   },
   "devDependencies": {

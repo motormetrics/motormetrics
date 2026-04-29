@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "@heroui/link";
-import type { SelectPost } from "@sgcarstrends/database";
+import type { SelectPost } from "@motormetrics/database";
 import {
   fadeInVariants,
   staggerContainerVariants,

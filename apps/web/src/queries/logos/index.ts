@@ -2,7 +2,7 @@ import { getLogo, listLogos } from "@logos/services/blob";
 import { downloadLogo } from "@logos/services/scraper";
 import type { CarLogo } from "@logos/types";
 import { normaliseMake } from "@logos/utils/normalise-make";
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**

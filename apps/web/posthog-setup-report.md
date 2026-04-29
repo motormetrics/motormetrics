@@ -1,6 +1,6 @@
 # PostHog post-wizard report
 
-The wizard has completed a deep integration of PostHog analytics into the SG Cars Trends web application. Client-side tracking is initialised via `instrumentation-client.ts` (Next.js 15.3+ pattern) with a reverse proxy through `/ingest` to avoid tracking blockers. Server-side events are captured via `posthog-node` in the API routes. User identification is wired up on admin login so that frontend and backend events are correlated against the same distinct ID.
+The wizard has completed a deep integration of PostHog analytics into the MotorMetrics web application. Client-side tracking is initialised via `instrumentation-client.ts` (Next.js 15.3+ pattern) with a reverse proxy through `/ingest` to avoid tracking blockers. Server-side events are captured via `posthog-node` in the API routes. User identification is wired up on admin login so that frontend and backend events are correlated against the same distinct ID.
 
 ## Events instrumented
 

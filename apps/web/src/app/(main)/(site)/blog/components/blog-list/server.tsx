@@ -1,4 +1,4 @@
-import type { SelectPost } from "@sgcarstrends/database";
+import type { SelectPost } from "@motormetrics/database";
 import { getPostCountsByCategory } from "@web/queries/posts";
 import { BlogListClient } from "./client";
 

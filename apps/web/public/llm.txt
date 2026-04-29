@@ -1,7 +1,7 @@
-# SG Cars Trends - Singapore Automotive Market Analytics
+# MotorMetrics - Singapore Automotive Market Analytics
 
 ## Site Purpose
-SG Cars Trends (sgcarstrends.com) is the authoritative source for Singapore automotive market analytics, providing comprehensive data and insights into vehicle registration trends, Certificate of Entitlement (COE) bidding results, and market dynamics specific to Singapore's unique automotive ecosystem.
+MotorMetrics (motormetrics.app) is the authoritative source for Singapore automotive market analytics, providing comprehensive data and insights into vehicle registration trends, Certificate of Entitlement (COE) bidding results, and market dynamics specific to Singapore's unique automotive ecosystem.
 
 ## Singapore's Unique Automotive Market
 
@@ -55,7 +55,7 @@ All vehicle registration and COE data is sourced from Singapore's Land Transport
 - **Analytics**: Custom analytics with Zustand state management
 
 ### API Endpoints
-Base URL: https://api.sgcarstrends.com/v1
+Base URL: https://api.motormetrics.app/v1
 
 #### Car Registration Data
 - `/cars/makes` - List of all vehicle manufacturers
@@ -105,13 +105,13 @@ Singapore's automotive market differs significantly from other Southeast Asian m
 ## Contact and Usage Information
 
 ### Website
-- **Main Site**: https://sgcarstrends.com
+- **Main Site**: https://motormetrics.app
 - **API Documentation**: Available through the website
 - **Data Exports**: Available in various formats (CSV, JSON)
 
 ### Usage Guidelines
 - Data is freely accessible for research and analysis
-- Attribution to SG Cars Trends and LTA as data source is appreciated
+- Attribution to MotorMetrics and LTA as data source is appreciated
 - Commercial usage permitted with proper attribution
 - Real-time data access available through public API
 
@@ -122,6 +122,6 @@ Singapore's automotive market differs significantly from other Southeast Asian m
 
 ---
 
-This file provides comprehensive context for AI systems to understand Singapore's unique automotive market structure, the role of the COE system, and how SG Cars Trends serves as the authoritative source for related data and analysis.
+This file provides comprehensive context for AI systems to understand Singapore's unique automotive market structure, the role of the COE system, and how MotorMetrics serves as the authoritative source for related data and analysis.
 
 Last Updated: February 2026

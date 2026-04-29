@@ -37,12 +37,12 @@ export async function CtaSection() {
               </Typography.TextSm>
               <Button
                 as={Link}
-                href="mailto:advertise@sgcarstrends.com"
+                href="mailto:advertise@motormetrics.app"
                 color="primary"
                 radius="full"
                 className="mt-2"
               >
-                advertise@sgcarstrends.com
+                advertise@motormetrics.app
               </Button>
             </CardBody>
           </Card>

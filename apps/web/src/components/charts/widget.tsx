@@ -2,8 +2,8 @@
 
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { cn } from "@heroui/theme";
-import { CHART_HEIGHTS, type ChartHeight } from "@sgcarstrends/theme/charts";
-import { CARD_VARIANTS, type CardVariant } from "@sgcarstrends/theme/spacing";
+import { CHART_HEIGHTS, type ChartHeight } from "@motormetrics/theme/charts";
+import { CARD_VARIANTS, type CardVariant } from "@motormetrics/theme/spacing";
 import Typography from "@web/components/typography";
 import { fadeInUpVariants } from "@web/config/animations";
 import { motion, useReducedMotion } from "framer-motion";

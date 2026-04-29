@@ -10,7 +10,7 @@ import {
   inArray,
   lte,
   sql,
-} from "@sgcarstrends/database";
+} from "@motormetrics/database";
 import { getDateRange24Months } from "@web/lib/coe/calculations";
 import { cacheLife, cacheTag } from "next/cache";
 

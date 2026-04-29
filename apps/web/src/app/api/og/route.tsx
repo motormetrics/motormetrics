@@ -1,4 +1,4 @@
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { loadSearchParams } from "@web/app/api/og/search-params";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";

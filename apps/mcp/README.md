@@ -1,6 +1,6 @@
-# SG Cars Trends MCP
+# MotorMetrics MCP
 
-MCP (Model Context Protocol) server for managing SG Cars Trends blog posts. Provides CRUD tools callable from Claude Code and other MCP-compatible clients via stdio transport.
+MCP (Model Context Protocol) server for managing MotorMetrics blog posts. Provides CRUD tools callable from Claude Code and other MCP-compatible clients via stdio transport.
 
 ## Tools
 
@@ -18,7 +18,7 @@ MCP (Model Context Protocol) server for managing SG Cars Trends blog posts. Prov
 
 | Variable                    | Description                        | Required |
 | --------------------------- | ---------------------------------- | -------- |
-| `SG_CARS_TRENDS_API_TOKEN`  | Bearer token for REST API auth     | Yes      |
+| `MOTORMETRICS_API_TOKEN`  | Bearer token for REST API auth     | Yes      |
 
 ### Claude Code
 
@@ -27,12 +27,12 @@ Add to your Claude Code MCP settings (`~/.claude/mcp.json`):
 ```json
 {
   "mcpServers": {
-    "sgcarstrends": {
+    "motormetrics": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@sgcarstrends/mcp"],
+      "args": ["-y", "@motormetrics/mcp"],
       "env": {
-        "SG_CARS_TRENDS_API_TOKEN": "<your-token>"
+        "MOTORMETRICS_API_TOKEN": "<your-token>"
       }
     }
   }
@@ -43,13 +43,13 @@ Add to your Claude Code MCP settings (`~/.claude/mcp.json`):
 
 ```sh
 pnpm install
-pnpm --filter @sgcarstrends/mcp build
+pnpm --filter @motormetrics/mcp build
 ```
 
 The dev script watches for changes:
 
 ```sh
-pnpm --filter @sgcarstrends/mcp dev
+pnpm --filter @motormetrics/mcp dev
 ```
 
 ## License

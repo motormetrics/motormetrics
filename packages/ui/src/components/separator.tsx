@@ -1,7 +1,7 @@
 "use client";
 
+import { cn } from "@motormetrics/ui/lib/utils";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
-import { cn } from "@sgcarstrends/ui/lib/utils";
 import type * as React from "react";
 
 function Separator({

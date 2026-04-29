@@ -1,4 +1,4 @@
-import { asc, cars, db, max, sql } from "@sgcarstrends/database";
+import { asc, cars, db, max, sql } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 export interface MakeRegistrationStat {

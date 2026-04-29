@@ -1,4 +1,4 @@
-import { cars, db, desc, eq, sql, sum } from "@sgcarstrends/database";
+import { cars, db, desc, eq, sql, sum } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";

@@ -1,4 +1,4 @@
-import { redis, slugify } from "@sgcarstrends/utils";
+import { redis, slugify } from "@motormetrics/utils";
 import { MakeDetail } from "@web/app/(main)/(explore)/cars/components/makes/make-detail";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
@@ -36,7 +36,9 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const makes = await getDistinctMakes();
-  return makes.map(({ make }) => ({ make: slugify(make) }));
+  const params = makes.map(({ make }) => ({ make: slugify(make) }));
+
+  return params.length > 0 ? params : [{ make: "__static-validation__" }];
 }
 
 export async function generateMetadata({

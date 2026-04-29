@@ -16,7 +16,7 @@ allowed-tools: Read, Edit, Bash, Grep, Glob
 
 ```bash
 # Lighthouse audit
-npx lighthouse https://sgcarstrends.com --view
+npx lighthouse https://motormetrics.app --view
 
 # Bundle analysis
 cd apps/web && ANALYZE=true pnpm build
@@ -128,7 +128,7 @@ const cars = await db.query.cars.findMany({
 ### Redis Caching
 
 ```typescript
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 
 export async function getCarsWithCache(make: string) {
   const cacheKey = `cars:${make}`;
@@ -237,7 +237,7 @@ export const options = {
 };
 
 export default function() {
-  const res = http.get("https://api.sgcarstrends.com/api/v1/cars/makes");
+  const res = http.get("https://api.motormetrics.app/api/v1/cars/makes");
   check(res, { "status 200": (r) => r.status === 200 });
 }
 ```

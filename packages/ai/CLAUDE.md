@@ -1,8 +1,8 @@
-# SG Cars Trends AI Package
+# MotorMetrics AI Package
 
 ## Overview
 
-The `@sgcarstrends/ai` package provides AI-powered blog post generation for the SG Cars Trends platform. It uses Vercel AI SDK with Google Gemini to analyse car registration and COE bidding data, generating accurate, SEO-optimised blog posts with structured output validation.
+The `@motormetrics/ai` package provides AI-powered blog post generation for the MotorMetrics platform. It uses Vercel AI SDK with Google Gemini to analyse car registration and COE bidding data, generating accurate, SEO-optimised blog posts with structured output validation.
 
 **Key Features:**
 - **Single-Call Generation**: Combined tool calling (Code Execution) + structured output in one API call
@@ -93,8 +93,8 @@ interface GeneratedPost {
 
 **Usage Example:**
 ```typescript
-import { generateBlogContent, getCarsAggregatedByMonth } from "@sgcarstrends/ai";
-import { tokeniser } from "@sgcarstrends/utils";
+import { generateBlogContent, getCarsAggregatedByMonth } from "@motormetrics/ai";
+import { tokeniser } from "@motormetrics/utils";
 
 const cars = await getCarsAggregatedByMonth("October 2024");
 const data = tokeniser(cars);
@@ -307,15 +307,15 @@ interface SavePostParams {
 - `@opentelemetry/sdk-trace-node`: ^2.1.0 - Tracing SDK
 
 **Workspace:**
-- `@sgcarstrends/database`: Database schemas and queries
-- `@sgcarstrends/utils`: Utility functions (tokeniser, slugify, Redis)
+- `@motormetrics/database`: Database schemas and queries
+- `@motormetrics/utils`: Utility functions (tokeniser, slugify, Redis)
 
 ## Usage Patterns
 
 ### Pattern 1: Standalone Generation (Admin App)
 
 ```typescript
-import { generateBlogContent, shutdownTracing, getHeroImage } from "@sgcarstrends/ai";
+import { generateBlogContent, shutdownTracing, getHeroImage } from "@motormetrics/ai";
 
 try {
   const { object, usage, response } = await generateBlogContent({
@@ -342,8 +342,8 @@ try {
 ### Pattern 2: Workflow Integration (Vercel WDK)
 
 ```typescript
-import { generateBlogContent } from "@sgcarstrends/ai";
-import { tokeniser } from "@sgcarstrends/utils";
+import { generateBlogContent } from "@motormetrics/ai";
+import { tokeniser } from "@motormetrics/utils";
 import { fetch } from "workflow";
 
 export async function carsWorkflow(payload: { month?: string }) {
@@ -375,7 +375,7 @@ async function generateCarsPost(data: string, month: string) {
 - **TypeScript**: Strict mode with proper type definitions
 - **Error Handling**: Try/catch blocks with console logging
 - **Async/Await**: Promise-based patterns
-- **Imports**: Workspace packages via `@sgcarstrends/*`
+- **Imports**: Workspace packages via `/*`
 
 ## Testing
 

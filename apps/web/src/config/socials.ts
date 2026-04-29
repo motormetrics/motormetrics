@@ -1,4 +1,4 @@
-const BRAND_HANDLE = "sgcarstrends";
+const BRAND_HANDLE = "motormetrics";
 
 export const SOCIAL_HANDLE = `@${BRAND_HANDLE}`;
 

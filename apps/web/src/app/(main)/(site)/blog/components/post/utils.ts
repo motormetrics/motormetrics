@@ -1,5 +1,5 @@
 import type { ChipProps } from "@heroui/chip";
-import type { SelectPost } from "@sgcarstrends/database";
+import type { SelectPost } from "@motormetrics/database";
 import { differenceInDays } from "date-fns";
 
 // Unified category configuration supporting both text styling and HeroUI Chip

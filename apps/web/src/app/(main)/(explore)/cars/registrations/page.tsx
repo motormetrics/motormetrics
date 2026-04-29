@@ -1,4 +1,4 @@
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CategoryTabsSection } from "@web/app/(main)/(explore)/cars/registrations/components/category-tabs-section";
 import { MetricCardsSection } from "@web/app/(main)/(explore)/cars/registrations/components/metric-cards-section";
 import { TopMakesFuelSection } from "@web/app/(main)/(explore)/cars/registrations/components/top-makes-section";

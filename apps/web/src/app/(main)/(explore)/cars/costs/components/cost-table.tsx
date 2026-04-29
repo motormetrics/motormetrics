@@ -14,8 +14,8 @@ import {
   TableRow,
 } from "@heroui/table";
 import { cn } from "@heroui/theme";
-import type { SelectCarCost } from "@sgcarstrends/database";
-import { formatCurrency } from "@sgcarstrends/utils";
+import type { SelectCarCost } from "@motormetrics/database";
+import { formatCurrency } from "@motormetrics/utils";
 import { CostLegend } from "@web/app/(main)/(explore)/cars/costs/components/cost-legend";
 import { FUEL_TYPE_LABELS } from "@web/app/(main)/(explore)/cars/costs/constants";
 import Typography from "@web/components/typography";

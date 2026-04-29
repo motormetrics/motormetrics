@@ -1,5 +1,5 @@
-import * as schema from "@sgcarstrends/database";
-import { db } from "@sgcarstrends/database";
+import * as schema from "@motormetrics/database";
+import { db } from "@motormetrics/database";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -11,12 +11,12 @@ export const auth = betterAuth({
     schema,
     usePlural: true,
   }),
-  trustedOrigins: ["https://*.sgcarstrends.com"],
+  trustedOrigins: ["https://*.motormetrics.app"],
   advanced: {
     trustedProxyHeaders: true,
     allowedHosts: [
-      "sgcarstrends.com",
-      "*.sgcarstrends.com",
+      "motormetrics.app",
+      "*.motormetrics.app",
       "*.vercel.app",
       "localhost:3000",
     ],

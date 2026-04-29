@@ -13,7 +13,7 @@ Uses **pnpm with catalog** for centralized dependency management.
 ```bash
 pnpm outdated                      # Check all outdated
 pnpm -r outdated                   # Across workspace
-pnpm -F @sgcarstrends/api outdated # Specific package
+pnpm -F /api outdated # Specific package
 pnpm dlx taze --interactive        # Interactive upgrade
 ```
 
@@ -93,7 +93,7 @@ pnpm tsc --noEmit  # Fix type errors
 ```bash
 # Update catalog: drizzle-orm: ^0.30.0, drizzle-kit: ^0.20.0
 pnpm install
-pnpm -F @sgcarstrends/database db:generate  # If schema changed
+pnpm -F /database db:generate  # If schema changed
 ```
 
 ## Security Updates

@@ -103,7 +103,7 @@ export const GET = () => {
 **Test health endpoint:**
 
 ```bash
-curl -f https://sgcarstrends.com/api/health || echo "Web unhealthy"
+curl -f https://motormetrics.app/api/health || echo "Web unhealthy"
 ```
 
 ## Workflow Error Handling
@@ -150,7 +150,7 @@ vercel logs <url> --follow
 ### 3. Test Endpoint
 
 ```bash
-curl -v https://sgcarstrends.com/api/health
+curl -v https://motormetrics.app/api/health
 ```
 
 ### 4. Check Function Runtime

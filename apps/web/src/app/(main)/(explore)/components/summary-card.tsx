@@ -18,6 +18,7 @@ export async function SummaryCard() {
 
   const totalRegistrations = currentYear?.total ?? 0;
   const previousTotal = previousYear?.total ?? 0;
+  const displayYear = currentYear?.year ?? "No data";
   const changePercent =
     previousTotal > 0
       ? (((totalRegistrations - previousTotal) / previousTotal) * 100).toFixed(
@@ -40,7 +41,7 @@ export async function SummaryCard() {
           </Link>
         </div>
         <p className="text-default-500 text-sm">
-          Total Registrations ({currentYear?.year ?? new Date().getFullYear()})
+          Total Registrations ({displayYear})
         </p>
         <p className="mt-1 font-bold text-4xl text-primary tabular-nums">
           <AnimatedNumber value={totalRegistrations} />

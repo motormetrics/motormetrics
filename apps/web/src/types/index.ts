@@ -1,4 +1,4 @@
-import type { COECategory, VehicleType } from "@sgcarstrends/types";
+import type { COECategory, VehicleType } from "@motormetrics/types";
 import type { LucideIcon } from "lucide-react";
 
 export type { COECategory, VehicleType };

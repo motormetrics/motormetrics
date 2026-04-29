@@ -1,12 +1,12 @@
 ---
 name: domain-management
-description: Configure domain routing and DNS for sgcarstrends.com. Use when adding new services, updating domain patterns, or debugging DNS issues.
+description: Configure domain routing and DNS for motormetrics.app. Use when adding new services, updating domain patterns, or debugging DNS issues.
 allowed-tools: Read, Edit, Grep, Glob
 ---
 
 # Domain Management Skill
 
-This skill helps you manage domains and DNS configuration for the SG Cars Trends platform.
+This skill helps you manage domains and DNS configuration for the MotorMetrics platform.
 
 ## When to Use This Skill
 
@@ -20,7 +20,7 @@ This skill helps you manage domains and DNS configuration for the SG Cars Trends
 ### Domain Structure
 
 ```
-sgcarstrends.com                    # Production web app
+motormetrics.app                    # Production web app
 *.vercel.app                        # Preview deployments
 ```
 
@@ -39,7 +39,7 @@ Vercel handles DNS management with automatic SSL certificates.
 ### Adding Custom Domain
 
 1. Go to Vercel Dashboard → Project Settings → Domains
-2. Add `sgcarstrends.com`
+2. Add `motormetrics.app`
 3. Follow DNS configuration instructions
 4. Vercel automatically provisions SSL certificate
 
@@ -61,31 +61,31 @@ Or use Vercel nameservers for full DNS management.
 
 ```bash
 # Check DNS resolution
-dig sgcarstrends.com
-dig @8.8.8.8 sgcarstrends.com
+dig motormetrics.app
+dig @8.8.8.8 motormetrics.app
 
 # Or use online tools
-# https://www.whatsmydns.net/#A/sgcarstrends.com
+# https://www.whatsmydns.net/#A/motormetrics.app
 ```
 
 ### Check SSL Certificate
 
 ```bash
 # Check certificate details
-openssl s_client -connect sgcarstrends.com:443 -servername sgcarstrends.com
+openssl s_client -connect motormetrics.app:443 -servername motormetrics.app
 
 # Check certificate expiry
-echo | openssl s_client -connect sgcarstrends.com:443 2>/dev/null | openssl x509 -noout -dates
+echo | openssl s_client -connect motormetrics.app:443 2>/dev/null | openssl x509 -noout -dates
 ```
 
 ### Test Domain Resolution
 
 ```bash
 # Test HTTPS
-curl -I https://sgcarstrends.com
+curl -I https://motormetrics.app
 
 # Test redirect (www → apex)
-curl -I https://www.sgcarstrends.com
+curl -I https://www.motormetrics.app
 ```
 
 ### Common Issues
@@ -147,7 +147,7 @@ const nextConfig = {
 
 ## Best Practices
 
-1. **Use Apex Domain**: `sgcarstrends.com` for cleaner URLs
+1. **Use Apex Domain**: `motormetrics.app` for cleaner URLs
 2. **HTTPS Only**: Vercel enforces HTTPS automatically
 3. **www Redirect**: Configure www → apex redirect
 4. **Monitor**: Check Vercel dashboard for domain status

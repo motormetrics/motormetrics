@@ -1,9 +1,9 @@
 {
-  "name": "@sgcarstrends/web",
-  "description": "Web application for SG Cars Trends",
+  "name": "@motormetrics/web",
+  "description": "Web application for MotorMetrics",
   "version": "4.65.0",
   "type": "module",
-  "author": "Ru Chern Chong <ruchern.chong@sgcarstrends.com>",
+  "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
   "scripts": {
     "dev": "portless motormetrics next dev",
@@ -20,7 +20,7 @@
     "test:e2e:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit",
     "auth:generate": "pnpm dlx auth@latest generate --config ./src/app/admin/lib/auth.ts --output ../../packages/database/src/schema/auth.ts --yes",
-    "vercel-build": "turbo run @sgcarstrends/database#migrate && next build"
+    "vercel-build": "turbo run @motormetrics/database#migrate && next build"
   },
   "dependencies": {
     "@heroui/accordion": "2.2.26",
@@ -56,12 +56,12 @@
     "@neondatabase/serverless": "1.0.1",
     "@opentelemetry/sdk-trace-node": "2.2.0",
     "@ruchernchong/number-format": "2.3.5",
-    "@sgcarstrends/ai": "workspace:*",
-    "@sgcarstrends/database": "workspace:*",
-    "@sgcarstrends/theme": "workspace:*",
-    "@sgcarstrends/types": "workspace:*",
-    "@sgcarstrends/ui": "workspace:*",
-    "@sgcarstrends/utils": "workspace:*",
+    "@motormetrics/ai": "workspace:*",
+    "@motormetrics/database": "workspace:*",
+    "@motormetrics/theme": "workspace:*",
+    "@motormetrics/types": "workspace:*",
+    "@motormetrics/ui": "workspace:*",
+    "@motormetrics/utils": "workspace:*",
     "@tanstack/react-table": "8.21.3",
     "@upstash/ratelimit": "2.0.8",
     "@upstash/redis": "catalog:",

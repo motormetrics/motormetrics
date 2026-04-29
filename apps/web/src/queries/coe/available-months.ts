@@ -1,4 +1,4 @@
-import { coe, db, desc } from "@sgcarstrends/database";
+import { coe, db, desc } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 export async function getCoeMonths(): Promise<{ month: string }[]> {

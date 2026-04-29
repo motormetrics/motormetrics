@@ -1,7 +1,7 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
-import type { SelectCarCost } from "@sgcarstrends/database";
-import { formatCurrency } from "@sgcarstrends/utils";
+import type { SelectCarCost } from "@motormetrics/database";
+import { formatCurrency } from "@motormetrics/utils";
 import {
   FUEL_TYPE_LABELS,
   FUEL_TYPE_ORDER,

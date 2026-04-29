@@ -1,4 +1,4 @@
-import { cars, db, ilike } from "@sgcarstrends/database";
+import { cars, db, ilike } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 function normalisePattern(input: string) {

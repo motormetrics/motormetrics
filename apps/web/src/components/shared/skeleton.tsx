@@ -1,7 +1,7 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { Skeleton as HeroUISkeleton } from "@heroui/skeleton";
 import { cn } from "@heroui/theme";
-import { RADIUS } from "@sgcarstrends/theme/spacing";
+import { RADIUS } from "@motormetrics/theme/spacing";
 
 interface SkeletonProps {
   className?: string;

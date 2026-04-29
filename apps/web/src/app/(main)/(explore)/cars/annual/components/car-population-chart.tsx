@@ -2,13 +2,13 @@
 
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { cn } from "@heroui/theme";
-import { CHART_CURSOR, CHART_GRID } from "@sgcarstrends/theme/charts";
-import { CARD_PADDING, RADIUS } from "@sgcarstrends/theme/spacing";
+import { CHART_CURSOR, CHART_GRID } from "@motormetrics/theme/charts";
+import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
 import { useMemo } from "react";

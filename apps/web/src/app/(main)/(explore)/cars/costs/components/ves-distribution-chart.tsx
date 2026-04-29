@@ -2,14 +2,14 @@
 
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { cn } from "@heroui/theme";
-import type { SelectCarCost } from "@sgcarstrends/database";
-import { CHART_HEIGHTS } from "@sgcarstrends/theme/charts";
-import { CARD_PADDING, RADIUS } from "@sgcarstrends/theme/spacing";
+import type { SelectCarCost } from "@motormetrics/database";
+import { CHART_HEIGHTS } from "@motormetrics/theme/charts";
+import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
 import { VES_BAND_ORDER } from "@web/app/(main)/(explore)/cars/costs/constants";
 import Typography from "@web/components/typography";
 import { Cell, Pie, PieChart } from "recharts";

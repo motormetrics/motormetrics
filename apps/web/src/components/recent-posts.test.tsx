@@ -1,4 +1,4 @@
-import type { SelectPost } from "@sgcarstrends/database";
+import type { SelectPost } from "@motormetrics/database";
 import { render, screen } from "@testing-library/react";
 import { RecentPosts } from "@web/app/(main)/(explore)/components/recent-posts";
 

@@ -1,8 +1,8 @@
 import {
   generateBlogContent,
   getDeregistrationsForMonth,
-} from "@sgcarstrends/ai";
-import { redis, tokeniser } from "@sgcarstrends/utils";
+} from "@motormetrics/ai";
+import { redis, tokeniser } from "@motormetrics/utils";
 import { getDeregistrationsMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getDeregistrationsLatestMonth } from "@web/queries/deregistrations/latest-month";

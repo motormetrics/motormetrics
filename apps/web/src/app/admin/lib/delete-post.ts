@@ -1,4 +1,4 @@
-import { db, eq, posts } from "@sgcarstrends/database";
+import { db, eq, posts } from "@motormetrics/database";
 import { getPostPublishRevalidationTags } from "@web/lib/cache-tags/posts";
 import { revalidateTag } from "next/cache";
 

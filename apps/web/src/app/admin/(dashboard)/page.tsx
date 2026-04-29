@@ -1,11 +1,11 @@
-import { Badge } from "@sgcarstrends/ui/components/badge";
-import { Button } from "@sgcarstrends/ui/components/button";
+import { Badge } from "@motormetrics/ui/components/badge";
+import { Button } from "@motormetrics/ui/components/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
+} from "@motormetrics/ui/components/card";
 import { WorkflowMonitor } from "@web/app/admin/components/workflow-monitor";
 import { Database, RefreshCw, Server, Settings, Wrench } from "lucide-react";
 import Link from "next/link";

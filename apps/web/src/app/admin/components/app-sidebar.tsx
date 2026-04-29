@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@sgcarstrends/ui/components/sidebar";
+} from "@motormetrics/ui/components/sidebar";
 import { authClient } from "@web/app/admin/lib/auth-client";
 import {
   Activity,

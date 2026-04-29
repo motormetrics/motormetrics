@@ -2,19 +2,19 @@
 
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { cn } from "@heroui/theme";
-import type { SelectCarCost } from "@sgcarstrends/database";
+import type { SelectCarCost } from "@motormetrics/database";
 import {
   CHART_CURSOR,
   CHART_GRID,
   CHART_HEIGHTS,
-} from "@sgcarstrends/theme/charts";
-import { CARD_PADDING, RADIUS } from "@sgcarstrends/theme/spacing";
+} from "@motormetrics/theme/charts";
+import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
-import { formatCurrency } from "@sgcarstrends/utils";
+} from "@motormetrics/ui/components/chart";
+import { formatCurrency } from "@motormetrics/utils";
 import {
   FUEL_TYPE_LABELS,
   FUEL_TYPE_ORDER,

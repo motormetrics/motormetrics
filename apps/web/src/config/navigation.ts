@@ -5,7 +5,7 @@ import {
   SiTelegram,
   // SiThreads,
 } from "@icons-pack/react-simple-icons";
-import { sortByName } from "@sgcarstrends/utils";
+import { sortByName } from "@motormetrics/utils";
 import {
   BarChart3,
   BookOpen,
@@ -217,4 +217,4 @@ export const NAV_ITEMS = [
   { href: "/learn", label: "Learn" },
 ] as const satisfies readonly NavItem[];
 
-export const POLAR_DONATION_URL = "https://polar.sh/sgcarstrends";
+export const POLAR_DONATION_URL = "https://polar.sh/motormetrics";

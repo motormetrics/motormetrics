@@ -1,4 +1,4 @@
-import { slugify } from "@sgcarstrends/utils";
+import { slugify } from "@motormetrics/utils";
 import {
   loadTypeSearchParams,
   TypeDetail,
@@ -66,7 +66,9 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const fuelTypes = await getDistinctFuelTypes();
-  return fuelTypes.map(({ fuelType }) => ({ type: slugify(fuelType) }));
+  const params = fuelTypes.map(({ fuelType }) => ({ type: slugify(fuelType) }));
+
+  return params.length > 0 ? params : [{ type: "__static-validation__" }];
 }
 
 export default function Page({ params, searchParams }: PageProps) {

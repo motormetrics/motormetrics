@@ -2,7 +2,7 @@
 
 import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
-import { formatCurrency, formatOrdinal } from "@sgcarstrends/utils";
+import { formatCurrency, formatOrdinal } from "@motormetrics/utils";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { COEResult } from "@web/types";
 import { ArrowUpDown } from "lucide-react";

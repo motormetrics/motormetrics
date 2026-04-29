@@ -7,7 +7,7 @@ import {
   ilike,
   type SelectCar,
   sql,
-} from "@sgcarstrends/database";
+} from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 import { FUEL_TYPE, type TypeConfig, VEHICLE_TYPE } from "../categories";
 

@@ -1,5 +1,5 @@
-import { carCosts } from "@sgcarstrends/database";
-import type { CarCost } from "@sgcarstrends/types";
+import { carCosts } from "@motormetrics/database";
+import type { CarCost } from "@motormetrics/types";
 import { updateFromXlsx } from "@web/lib/updater";
 
 const CAR_COST_UPDATE_URL =

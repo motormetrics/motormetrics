@@ -4,7 +4,7 @@ import { cn } from "@heroui/react";
 import {
   type ChartConfig,
   ChartContainer,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
 import { Area, AreaChart } from "recharts";
 
 interface SparklineData {

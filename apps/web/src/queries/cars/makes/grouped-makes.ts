@@ -1,4 +1,4 @@
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import { MAKES_SORTED_SET_KEY } from "@web/lib/redis/makes";
 import { getDistinctMakes } from "@web/queries/cars";
 import type { Make } from "@web/types";

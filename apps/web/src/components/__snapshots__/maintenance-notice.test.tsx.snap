@@ -356,7 +356,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
         <a
           class="relative tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-primary no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex items-center gap-2 font-medium text-sm"
           data-react-aria-pressable="true"
-          href="mailto:support@sgcarstrends.com"
+          href="mailto:support@motormetrics.app"
           role="link"
           tabindex="0"
         >
@@ -383,7 +383,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
               d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
             />
           </svg>
-          support@sgcarstrends.com
+          support@motormetrics.app
         </a>
         <span
           class="hidden text-foreground-400 sm:inline"
@@ -393,7 +393,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
         <a
           class="relative tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-primary no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex items-center gap-2 font-medium text-sm"
           data-react-aria-pressable="true"
-          href="https://twitter.com/sgcarstrends"
+          href="https://twitter.com/motormetrics"
           rel="noopener noreferrer"
           role="link"
           tabindex="0"

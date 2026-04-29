@@ -1,4 +1,4 @@
-import type { SelectCar } from "@sgcarstrends/database";
+import type { SelectCar } from "@motormetrics/database";
 import { render, screen } from "@testing-library/react";
 import { MakeDetail } from "./make-detail";
 
@@ -28,7 +28,7 @@ vi.mock(
   }),
 );
 
-vi.mock("@sgcarstrends/ui/components/data-table", () => ({
+vi.mock("@motormetrics/ui/components/data-table", () => ({
   DataTable: () => <div>DataTable</div>,
 }));
 

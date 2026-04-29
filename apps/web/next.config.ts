@@ -3,6 +3,14 @@ import { withWorkflow } from "workflow/next";
 
 const ONE_DAY = 60 * 60 * 24;
 
+const LEGACY_DOMAIN_REDIRECTS = [
+  ["sgcarstrends.com", "motormetrics.app"],
+  ["www.sgcarstrends.com", "motormetrics.app"],
+  ["staging.sgcarstrends.com", "staging.motormetrics.app"],
+  ["docs.sgcarstrends.com", "docs.motormetrics.app"],
+  ["api.sgcarstrends.com", "api.motormetrics.app"],
+] as const;
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
@@ -18,7 +26,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "assets.sgcarstrends.com",
+        hostname: "assets.motormetrics.app",
         pathname: "/logos/**",
       },
       {
@@ -38,7 +46,7 @@ const nextConfig: NextConfig = {
     },
     browserToTerminal: true,
   },
-  transpilePackages: ["@sgcarstrends/ui"],
+  transpilePackages: ["@motormetrics/ui"],
   experimental: {
     mcpServer: true,
     turbopackFileSystemCacheForBuild: true,
@@ -47,19 +55,25 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
   async redirects() {
     return [
+      ...LEGACY_DOMAIN_REDIRECTS.map(([fromHost, toHost]) => ({
+        source: "/:path*",
+        has: [{ type: "host" as const, value: fromHost }],
+        destination: `https://${toHost}/:path*`,
+        permanent: true,
+      })),
       {
         source: "/instagram",
-        destination: "https://www.instagram.com/sgcarstrends",
+        destination: "https://www.instagram.com/motormetrics",
         permanent: false,
       },
       {
         source: "/telegram",
-        destination: "https://t.me/sgcarstrends",
+        destination: "https://t.me/motormetrics",
         permanent: false,
       },
       {
         source: "/github",
-        destination: "https://github.com/sgcarstrends",
+        destination: "https://github.com/motormetrics",
         permanent: false,
       },
     ];
@@ -68,7 +82,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/:path*",
-        has: [{ type: "host", value: "api.sgcarstrends.com" }],
+        has: [{ type: "host", value: "api.motormetrics.app" }],
         destination: "/api/v1/:path*",
       },
       {

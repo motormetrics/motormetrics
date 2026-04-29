@@ -1,7 +1,7 @@
 {
-  "name": "@sgcarstrends/mcp",
+  "name": "@motormetrics/mcp",
   "version": "4.65.0",
-  "description": "MCP server for SG Cars Trends blog post management",
+  "description": "MCP server for MotorMetrics blog post management",
   "type": "module",
   "bin": "dist/index.js",
   "files": [
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sgcarstrends/sgcarstrends.git",
+    "url": "git+https://github.com/motormetrics/motormetrics.git",
     "directory": "apps/mcp"
   },
   "license": "MIT",

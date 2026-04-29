@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "@sgcarstrends/theme/light.css";
-@import "@sgcarstrends/theme/dark.css";
+@import "@motormetrics/theme/light.css";
+@import "@motormetrics/theme/dark.css";
 
 @source "../../../apps/**/*.{ts,tsx}";
 @source "../../../components/**/*.{ts,tsx}";

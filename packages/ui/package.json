@@ -1,9 +1,9 @@
 {
-  "name": "@sgcarstrends/ui",
+  "name": "@motormetrics/ui",
   "description": "",
   "version": "4.65.0",
   "type": "module",
-  "author": "Ru Chern Chong <ruchern.chong@sgcarstrends.com>",
+  "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
   "scripts": {
     "lint": "biome check .",
@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@sgcarstrends/theme": "workspace:*",
+    "@motormetrics/theme": "workspace:*",
     "@radix-ui/react-alert-dialog": "1.1.15",
     "@radix-ui/react-dialog": "1.1.15",
     "@radix-ui/react-dropdown-menu": "2.1.16",

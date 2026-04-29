@@ -1,6 +1,6 @@
 # Data Processing Workflows
 
-This document describes the end-to-end data processing workflows that keep the SG Cars Trends platform updated with the latest vehicle registration and COE bidding data.
+This document describes the end-to-end data processing workflows that keep the MotorMetrics platform updated with the latest vehicle registration and COE bidding data.
 
 ## Workflow Sequence Diagram
 

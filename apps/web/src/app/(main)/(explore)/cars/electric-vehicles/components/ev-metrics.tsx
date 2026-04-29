@@ -1,7 +1,7 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { cn } from "@heroui/theme";
-import { CARD_PADDING, RADIUS } from "@sgcarstrends/theme/spacing";
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { EvLatestSummary } from "@web/queries/cars/electric-vehicles";
 

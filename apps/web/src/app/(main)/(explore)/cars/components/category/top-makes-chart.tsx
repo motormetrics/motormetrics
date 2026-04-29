@@ -6,8 +6,8 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
-import { slugify } from "@sgcarstrends/utils";
+} from "@motormetrics/ui/components/chart";
+import { slugify } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import { getRankingEmoji } from "@web/lib/cars/calculations";
 import { formatNumber } from "@web/utils/charts";

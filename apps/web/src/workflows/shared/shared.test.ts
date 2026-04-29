@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@sgcarstrends/ai", () => ({
+vi.mock("@motormetrics/ai", () => ({
   generateHeroImage: vi.fn(),
   updatePostHeroImage: vi.fn(),
 }));
@@ -49,7 +49,7 @@ vi.mock("workflow", () => ({
   })),
 }));
 
-import { generateHeroImage, updatePostHeroImage } from "@sgcarstrends/ai";
+import { generateHeroImage, updatePostHeroImage } from "@motormetrics/ai";
 import {
   emitEvent,
   generatePostHero,

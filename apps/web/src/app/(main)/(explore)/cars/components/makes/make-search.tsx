@@ -1,7 +1,7 @@
 "use client";
 
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
-import { slugify } from "@sgcarstrends/utils";
+import { slugify } from "@motormetrics/utils";
 import type { Make } from "@web/types";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";

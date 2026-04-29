@@ -1,5 +1,5 @@
 import path from "node:path";
-import { redis, slugify } from "@sgcarstrends/utils";
+import { redis, slugify } from "@motormetrics/utils";
 import type { Redis } from "@upstash/redis";
 
 export class Checksum {

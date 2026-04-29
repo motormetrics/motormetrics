@@ -1,10 +1,10 @@
 "use client";
 
-import { CHART_CURSOR, type ChartCursor } from "@sgcarstrends/theme/charts";
+import { CHART_CURSOR, type ChartCursor } from "@motormetrics/theme/charts";
 import {
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
 import type { ComponentProps } from "react";
 
 type ChartTooltipContentProps = ComponentProps<typeof ChartTooltipContent>;

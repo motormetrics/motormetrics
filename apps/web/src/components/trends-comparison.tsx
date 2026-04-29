@@ -9,7 +9,7 @@ import {
   DrawerContent,
   DrawerHeader,
 } from "@heroui/react";
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { ComparisonBarChart } from "@web/app/(main)/(explore)/cars/registrations/components/comparison-bar-chart";
 import { ComparisonSummary } from "@web/app/(main)/(explore)/cars/registrations/components/comparison-summary";
 import type { ComparisonData } from "@web/queries/cars/compare";

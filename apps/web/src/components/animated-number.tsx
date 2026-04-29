@@ -1,6 +1,6 @@
 "use client";
 
-import { formatCurrency, formatNumber } from "@sgcarstrends/utils";
+import { formatCurrency, formatNumber } from "@motormetrics/utils";
 import { motion, useSpring, useTransform } from "framer-motion";
 import { useEffect } from "react";
 

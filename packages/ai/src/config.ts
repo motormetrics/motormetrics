@@ -347,7 +347,7 @@ export type HeroImageSize = typeof HERO_IMAGE_SIZE;
  * Image-only models (e.g., openai/gpt-image-2) accept a single prompt string,
  * so this is concatenated with the per-post subject at call time.
  */
-export const HERO_IMAGE_INSTRUCTION = `Editorial data-journalism hero illustration for the SG Cars Trends blog.
+export const HERO_IMAGE_INSTRUCTION = `Editorial data-journalism hero illustration for the MotorMetrics blog.
 
 DIMENSIONS
 - Target canvas: ${HERO_IMAGE_SIZE} (landscape, 3:2)
