@@ -2,9 +2,9 @@ import { withRelatedProject } from "@vercel/related-projects";
 
 const baseUrl = withRelatedProject({
   projectName: "web",
-  defaultHost: "https://sgcarstrends.com",
+  defaultHost: "https://motormetrics.app",
 });
-const apiToken = process.env.SG_CARS_TRENDS_API_TOKEN;
+const apiToken = process.env.MOTORMETRICS_API_TOKEN;
 
 export interface ApiResponse<T> {
   ok: boolean;
@@ -17,7 +17,7 @@ export async function request<T>(
   options: RequestInit = {},
 ): Promise<ApiResponse<T>> {
   if (!apiToken) {
-    throw new Error("SG_CARS_TRENDS_API_TOKEN environment variable is not set");
+    throw new Error("MOTORMETRICS_API_TOKEN environment variable is not set");
   }
 
   const url = `${baseUrl}${path}`;

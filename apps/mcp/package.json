@@ -1,7 +1,7 @@
 {
-  "name": "@sgcarstrends/mcp",
-  "version": "4.61.8",
-  "description": "MCP server for SG Cars Trends blog post management",
+  "name": "@motormetrics/mcp",
+  "version": "4.66.0",
+  "description": "MCP server for MotorMetrics blog post management",
   "type": "module",
   "bin": "dist/index.js",
   "files": [
@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sgcarstrends/sgcarstrends.git",
+    "url": "git+https://github.com/motormetrics/motormetrics.git",
     "directory": "apps/mcp"
   },
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@modelcontextprotocol/sdk": "1.28.0",
     "@vercel/related-projects": "catalog:",
     "zod": "catalog:"
   },

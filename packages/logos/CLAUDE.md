@@ -63,7 +63,7 @@ This architecture provides:
 This package is imported by `apps/api` for logo functionality:
 
 ```typescript
-import { downloadLogo, getLogo, listLogos } from "@sgcarstrends/logos";
+import { downloadLogo, getLogo, listLogos } from "@motormetrics/logos";
 ```
 
 ## Release Management

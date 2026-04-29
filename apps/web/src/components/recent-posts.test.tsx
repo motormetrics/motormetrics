@@ -1,4 +1,4 @@
-import type { SelectPost } from "@sgcarstrends/database";
+import type { SelectPost } from "@motormetrics/database";
 import { render, screen } from "@testing-library/react";
 import { RecentPosts } from "@web/app/(main)/(explore)/components/recent-posts";
 
@@ -16,7 +16,7 @@ vi.mock("framer-motion", () => ({
   },
 }));
 
-vi.mock("@web/app/(main)/blog/components/post", () => ({
+vi.mock("@web/app/(main)/(site)/blog/components/post", () => ({
   Post: {
     Card: ({ post }: { post: SelectPost }) => (
       <article data-testid={`post-card-${post.id}`}>
@@ -40,6 +40,7 @@ describe("RecentPosts", () => {
       slug: "first-post",
       content: "Content of first post",
       excerpt: "Excerpt",
+      heroImage: null,
       tags: [],
       highlights: null,
       status: "published",
@@ -57,6 +58,7 @@ describe("RecentPosts", () => {
       slug: "second-post",
       content: "Content of second post",
       excerpt: "Excerpt",
+      heroImage: null,
       tags: [],
       highlights: null,
       status: "published",
@@ -73,6 +75,7 @@ describe("RecentPosts", () => {
   it("should render title and view all link", () => {
     render(<RecentPosts posts={mockPosts} />);
 
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("Recent Posts")).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "View all blog posts" }),

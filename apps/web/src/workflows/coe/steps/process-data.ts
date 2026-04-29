@@ -1,9 +1,10 @@
-import { coe, pqp } from "@sgcarstrends/database";
-import type { COE, PQP } from "@sgcarstrends/types";
+import { coe, pqp } from "@motormetrics/database";
+import type { COE, PQP } from "@motormetrics/types";
 import { LTA_DATAMALL_BASE_URL } from "@web/config/workflow";
 import { update } from "@web/lib/updater";
+import { fetchAndExtractZip } from "@web/lib/updater/services/download-file";
 
-export const updateCoe = async () => {
+export async function updateCoe() {
   const filename = "COE Bidding Results.zip";
   const url = `${LTA_DATAMALL_BASE_URL}/${filename}`;
 
@@ -15,8 +16,18 @@ export const updateCoe = async () => {
     return value;
   };
 
+  // Download and extract ZIP once for both tables
+  const extractedFiles = await fetchAndExtractZip(url);
+  const coeCsvPath = extractedFiles.get("M11-coe_results.csv");
+  const pqpCsvPath = extractedFiles.get("M11-coe_results_pqp.csv");
+
+  if (!coeCsvPath || !pqpCsvPath) {
+    throw new Error(
+      `Expected CSV files not found in ZIP. Found: ${[...extractedFiles.keys()].join(", ")}`,
+    );
+  }
+
   // Update COE bidding results
-  const coeKeyFields: Array<keyof COE> = ["month", "biddingNo"];
   const coeParseNumericFields: Array<keyof COE> = [
     "quota",
     "bidsSuccess",
@@ -27,8 +38,7 @@ export const updateCoe = async () => {
   const coeResult = await update<COE>({
     table: coe,
     url,
-    csvFile: "M11-coe_results.csv",
-    keyFields: coeKeyFields,
+    filePath: coeCsvPath,
     csvTransformOptions: {
       columnMapping: {
         bidding_no: "biddingNo",
@@ -44,14 +54,12 @@ export const updateCoe = async () => {
   console.log("[COE]", coeResult);
 
   // Update COE PQP (Prevailing Quota Premium)
-  const pqpKeyFields: Array<keyof PQP> = ["month", "vehicleClass", "pqp"];
   const pqpParseNumericFields: Array<keyof PQP> = ["pqp"];
 
   const pqpResult = await update<PQP>({
     table: pqp,
     url,
-    csvFile: "M11-coe_results_pqp.csv",
-    keyFields: pqpKeyFields,
+    filePath: pqpCsvPath,
     csvTransformOptions: {
       columnMapping: {
         vehicle_class: "vehicleClass",
@@ -64,4 +72,4 @@ export const updateCoe = async () => {
   console.log("[COE PQP]", pqpResult);
 
   return coeResult;
-};
+}

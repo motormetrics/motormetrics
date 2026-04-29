@@ -14,7 +14,7 @@
     "components": "@web/components",
     "hooks": "@web/hooks",
     "lib": "@web/lib",
-    "utils": "@sgcarstrends/ui/lib/utils",
-    "ui": "@sgcarstrends/ui/components"
+    "utils": "@motormetrics/ui/lib/utils",
+    "ui": "@motormetrics/ui/components"
   }
 }

@@ -24,6 +24,7 @@ describe("Banner", () => {
 
     render(<Banner />);
 
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByTestId("banner-content")).toHaveTextContent("Hello COE");
   });
 

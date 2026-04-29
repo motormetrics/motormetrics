@@ -7,7 +7,7 @@ import {
   inArray,
   isNotNull,
   pqp,
-} from "@sgcarstrends/database";
+} from "@motormetrics/database";
 import type { Pqp } from "@web/types/coe";
 import { cacheLife, cacheTag } from "next/cache";
 

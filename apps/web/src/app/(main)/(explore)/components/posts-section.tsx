@@ -1,3 +1,5 @@
+import { Card, CardBody } from "@heroui/card";
+import { Skeleton } from "@heroui/skeleton";
 import { getRecentPosts } from "@web/queries/posts";
 import { Suspense } from "react";
 import { RecentPosts } from "./recent-posts";
@@ -9,23 +11,25 @@ async function PostsSectionContent() {
 
 function PostsSectionSkeleton() {
   return (
-    <div className="rounded-3xl bg-white p-6">
-      <div className="mb-5 flex items-center justify-between">
-        <div className="h-6 w-28 animate-pulse rounded bg-default-200" />
-        <div className="h-4 w-16 animate-pulse rounded bg-default-200" />
-      </div>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        {/* Featured Post Skeleton */}
-        <div className="lg:row-span-2">
-          <div className="aspect-[16/10] w-full animate-pulse rounded-lg bg-default-200" />
+    <Card radius="lg">
+      <CardBody className="p-6">
+        <div className="mb-5 flex items-center justify-between">
+          <Skeleton className="h-6 w-28 rounded-lg" />
+          <Skeleton className="h-4 w-16 rounded-lg" />
         </div>
-        {/* Stacked Posts Skeleton */}
-        <div className="flex flex-col gap-4">
-          <div className="aspect-[16/10] w-full animate-pulse rounded-lg bg-default-200" />
-          <div className="aspect-[16/10] w-full animate-pulse rounded-lg bg-default-200" />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          {/* Featured Post Skeleton */}
+          <div className="lg:row-span-2">
+            <Skeleton className="aspect-[16/10] w-full rounded-lg" />
+          </div>
+          {/* Stacked Posts Skeleton */}
+          <div className="flex flex-col gap-4">
+            <Skeleton className="aspect-[16/10] w-full rounded-lg" />
+            <Skeleton className="aspect-[16/10] w-full rounded-lg" />
+          </div>
         </div>
-      </div>
-    </div>
+      </CardBody>
+    </Card>
   );
 }
 

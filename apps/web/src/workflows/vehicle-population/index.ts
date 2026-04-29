@@ -1,6 +1,7 @@
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getVehiclePopulationYears } from "@web/queries/vehicle-population";
+import { emitEvent } from "@web/workflows/shared";
 import { updateVehiclePopulation } from "@web/workflows/vehicle-population/steps/process-data";
 import { revalidateTag } from "next/cache";
 
@@ -9,7 +10,13 @@ export async function vehiclePopulationWorkflow(): Promise<{
 }> {
   "use workflow";
 
+  await emitEvent({ type: "step:start", step: "processVehiclePopulationData" });
   const result = await processVehiclePopulationData();
+  await emitEvent({
+    type: "data:processed",
+    step: "processVehiclePopulationData",
+    data: { recordsProcessed: result.recordsProcessed },
+  });
 
   if (result.recordsProcessed === 0) {
     return { message: "No vehicle population records processed." };
@@ -20,7 +27,16 @@ export async function vehiclePopulationWorkflow(): Promise<{
     return { message: "No vehicle population data found." };
   }
 
+  await emitEvent({
+    type: "step:start",
+    step: "revalidateVehiclePopulationCache",
+  });
   await revalidateVehiclePopulationCache(latestYear);
+  await emitEvent({
+    type: "cache:revalidated",
+    step: "revalidateVehiclePopulationCache",
+    data: { year: latestYear },
+  });
 
   return {
     message:
@@ -36,8 +52,6 @@ async function processVehiclePopulationData(): Promise<UpdaterResult> {
   }
   return result;
 }
-processVehiclePopulationData.maxRetries = 3;
-
 async function getLatestYear(): Promise<string | null> {
   "use step";
   const years = await getVehiclePopulationYears();

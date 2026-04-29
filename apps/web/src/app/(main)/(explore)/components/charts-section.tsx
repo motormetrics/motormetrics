@@ -1,3 +1,6 @@
+import { Button } from "@heroui/button";
+import { Card, CardBody } from "@heroui/card";
+import { Skeleton } from "@heroui/skeleton";
 import Typography from "@web/components/typography";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
@@ -9,43 +12,44 @@ async function YearlyChartContent() {
   const maxTotal = yearlyData.reduce((max, d) => Math.max(max, d.total), 0);
 
   return (
-    <div className="rounded-3xl bg-white p-6">
-      <div className="mb-5 flex items-center justify-between">
-        <div>
-          <Typography.H3>Yearly Registrations</Typography.H3>
-          <p className="text-default-500 text-sm">
-            Total registrations over the years
-          </p>
+    <Card radius="lg">
+      <CardBody className="p-6">
+        <div className="mb-5 flex items-center justify-between">
+          <div>
+            <Typography.H3>Yearly Registrations</Typography.H3>
+            <p className="text-default-500 text-sm">
+              Total registrations over the years
+            </p>
+          </div>
+          <Link href="/cars/annual">
+            <Button isIconOnly variant="flat" radius="full" tabIndex={-1}>
+              <ArrowUpRight className="size-6" />
+            </Button>
+          </Link>
         </div>
-        <Link
-          href="/cars/annual"
-          className="flex size-10 items-center justify-center rounded-full bg-default-100 text-default-500 transition-colors hover:bg-default-200"
-        >
-          <ArrowUpRight className="size-6" />
-        </Link>
-      </div>
-      <div className="flex h-[160px] items-end gap-4">
-        {yearlyData.slice(-6).map((item, i, arr) => {
-          const height = (item.total / maxTotal) * 140;
-          const isLatest = i === arr.length - 1;
-          return (
-            <div
-              key={item.year}
-              className="flex flex-1 flex-col items-center gap-2"
-            >
-              <span className="font-medium text-default-500 text-xs tabular-nums">
-                {(item.total / 1000).toFixed(1)}K
-              </span>
+        <div className="flex h-[160px] items-end gap-4">
+          {yearlyData.slice(-6).map((item, i, arr) => {
+            const height = (item.total / maxTotal) * 140;
+            const isLatest = i === arr.length - 1;
+            return (
               <div
-                className={`w-full rounded-t-xl transition-colors ${isLatest ? "bg-[var(--chart-1)]" : "bg-default-200 hover:bg-default-300"}`}
-                style={{ height: `${height}px` }}
-              />
-              <span className="text-default-500 text-xs">{item.year}</span>
-            </div>
-          );
-        })}
-      </div>
-    </div>
+                key={item.year}
+                className="flex flex-1 flex-col items-center gap-2"
+              >
+                <span className="font-medium text-default-500 text-xs tabular-nums">
+                  {(item.total / 1000).toFixed(1)}K
+                </span>
+                <div
+                  className={`w-full rounded-t-xl transition-colors ${isLatest ? "bg-[var(--chart-1)]" : "bg-default-200 hover:bg-default-300"}`}
+                  style={{ height: `${height}px` }}
+                />
+                <span className="text-default-500 text-xs">{item.year}</span>
+              </div>
+            );
+          })}
+        </div>
+      </CardBody>
+    </Card>
   );
 }
 
@@ -54,79 +58,84 @@ async function TopMakesContent() {
   const maxValue = topMakes[0]?.value ?? 1;
 
   return (
-    <div className="rounded-3xl bg-white p-6">
-      <div className="mb-5 flex items-center justify-between">
-        <Typography.H3>Top Makes</Typography.H3>
-        <Link
-          href="/cars/makes"
-          className="flex size-10 items-center justify-center rounded-full bg-default-100 text-default-500 transition-colors hover:bg-default-200"
-        >
-          <ArrowUpRight className="size-6" />
-        </Link>
-      </div>
-      <div className="flex flex-col gap-4">
-        {topMakes.slice(0, 5).map((item, i) => (
-          <div key={item.make} className="flex items-center gap-4">
-            <span className="w-5 font-medium text-default-500 text-sm">
-              {i + 1}
-            </span>
-            <div className="flex-1">
-              <div className="mb-1 flex items-center justify-between">
-                <span className="font-medium text-sm">{item.make}</span>
-                <span className="text-default-500 text-xs tabular-nums">
-                  {item.value.toLocaleString()}
-                </span>
-              </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-default-100">
-                <div
-                  className="h-full rounded-full transition-all"
-                  style={{
-                    width: `${(item.value / maxValue) * 100}%`,
-                    backgroundColor: `var(--chart-${i + 1})`,
-                  }}
-                />
+    <Card radius="lg">
+      <CardBody className="p-6">
+        <div className="mb-5 flex items-center justify-between">
+          <Typography.H3>Top Makes</Typography.H3>
+          <Link href="/cars/makes">
+            <Button isIconOnly variant="flat" radius="full" tabIndex={-1}>
+              <ArrowUpRight className="size-6" />
+            </Button>
+          </Link>
+        </div>
+        <div className="flex flex-col gap-4">
+          {topMakes.slice(0, 5).map((item, i) => (
+            <div key={item.make} className="flex items-center gap-4">
+              <span className="w-5 font-medium text-default-500 text-sm">
+                {i + 1}
+              </span>
+              <div className="flex-1">
+                <div className="mb-1 flex items-center justify-between">
+                  <span className="font-medium text-sm">{item.make}</span>
+                  <span className="text-default-500 text-xs tabular-nums">
+                    {item.value.toLocaleString()}
+                  </span>
+                </div>
+                <div className="h-1.5 overflow-hidden rounded-full bg-default-100">
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{
+                      width: `${(item.value / maxValue) * 100}%`,
+                      backgroundColor: `var(--chart-${i + 1})`,
+                    }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </CardBody>
+    </Card>
   );
 }
 
 function YearlyChartSkeleton() {
   return (
-    <div className="rounded-3xl bg-white p-6">
-      <div className="mb-5 h-6 w-40 animate-pulse rounded bg-default-200" />
-      <div className="flex h-[160px] items-end gap-4">
-        {[0, 1, 2, 3, 4, 5].map((num) => (
-          <div key={num} className="flex flex-1 flex-col items-center gap-2">
-            <div className="h-4 w-8 animate-pulse rounded bg-default-200" />
-            <div className="w-full animate-pulse rounded-t-xl bg-default-200" />
-            <div className="h-4 w-8 animate-pulse rounded bg-default-200" />
-          </div>
-        ))}
-      </div>
-    </div>
+    <Card radius="lg">
+      <CardBody className="p-6">
+        <Skeleton className="mb-5 h-6 w-40 rounded-lg" />
+        <div className="flex h-[160px] items-end gap-4">
+          {[0, 1, 2, 3, 4, 5].map((num) => (
+            <div key={num} className="flex flex-1 flex-col items-center gap-2">
+              <Skeleton className="h-4 w-8 rounded-lg" />
+              <Skeleton className="w-full rounded-t-xl" />
+              <Skeleton className="h-4 w-8 rounded-lg" />
+            </div>
+          ))}
+        </div>
+      </CardBody>
+    </Card>
   );
 }
 
 function TopMakesSkeleton() {
   return (
-    <div className="rounded-3xl bg-white p-6">
-      <div className="mb-5 h-6 w-24 animate-pulse rounded bg-default-200" />
-      <div className="flex flex-col gap-4">
-        {[0, 1, 2, 3, 4].map((num) => (
-          <div key={num} className="flex items-center gap-4">
-            <div className="h-5 w-5 animate-pulse rounded bg-default-200" />
-            <div className="flex-1">
-              <div className="mb-1 h-4 w-20 animate-pulse rounded bg-default-200" />
-              <div className="h-1.5 w-full animate-pulse rounded-full bg-default-200" />
+    <Card radius="lg">
+      <CardBody className="p-6">
+        <Skeleton className="mb-5 h-6 w-24 rounded-lg" />
+        <div className="flex flex-col gap-4">
+          {[0, 1, 2, 3, 4].map((num) => (
+            <div key={num} className="flex items-center gap-4">
+              <Skeleton className="h-5 w-5 rounded-lg" />
+              <div className="flex-1">
+                <Skeleton className="mb-1 h-4 w-20 rounded-lg" />
+                <Skeleton className="h-1.5 w-full rounded-full" />
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </CardBody>
+    </Card>
   );
 }
 

@@ -1,4 +1,4 @@
-import { cn } from "@sgcarstrends/ui/lib/utils";
+import { cn } from "@motormetrics/ui/lib/utils";
 
 function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (

@@ -1,4 +1,4 @@
-import { db, deregistrations, desc, eq, sql } from "@sgcarstrends/database";
+import { db, deregistrations, desc, eq, sql } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 interface CategoryTotal {

@@ -1,3 +1,99 @@
+## [4.66.0](https://github.com/motormetrics/motormetrics/compare/v4.65.0...v4.66.0) (2026-04-29)
+
+### Features
+
+* add EV and deregistrations blog generation workflows ([ee97cbf](https://github.com/motormetrics/motormetrics/commit/ee97cbfab41225e30ecbbbc41734f792aaca904b))
+* rebrand to MotorMetrics ([fca0450](https://github.com/motormetrics/motormetrics/commit/fca04501984cad6f533127562cac3ca1ebd4a390))
+* **web:** add AI-generated hero images to blog posts ([83070a5](https://github.com/motormetrics/motormetrics/commit/83070a5e1ca15c28cbb92524918058212e615177))
+* **web:** add dynamic metadata and H1 for type detail pages ([857081c](https://github.com/motormetrics/motormetrics/commit/857081c48c2a7a99a1c128c8c4d7e69105327553))
+* **web:** add intro text and cross-links to pSEO data pages ([5454fd6](https://github.com/motormetrics/motormetrics/commit/5454fd63b6d9b12b6abb7946ae92463fb2f4b1c3))
+* **web:** add intro text and cross-links to pSEO data pages ([7078f06](https://github.com/motormetrics/motormetrics/commit/7078f0687adb7a7ff0d3b01634edbf5a1a03fb77))
+* **web:** add OG images for learn guides and align schema naming ([ac4b415](https://github.com/motormetrics/motormetrics/commit/ac4b415eaa5135f3cb2a7d79a85179fcb18c8e6a))
+* **web:** add pSEO guide pages under /learn ([eaf0168](https://github.com/motormetrics/motormetrics/commit/eaf01688d8891b51d873f2b8220c079c4b2d1194))
+* **web:** add rebrand announcement ([dce0d01](https://github.com/motormetrics/motormetrics/commit/dce0d01cf1251fa0ffacb1629d402a27f6e84a97))
+* **web:** add share buttons to blog posts ([61ea110](https://github.com/motormetrics/motormetrics/commit/61ea1100c9daa16f6bd6fee0745307e633e3511c))
+* **web:** add social media vanity URL redirects ([b61e29e](https://github.com/motormetrics/motormetrics/commit/b61e29e25b4b207d26b9d51a21a810881273c8aa))
+* **web:** add structured data schemas for SEO rich results ([1241209](https://github.com/motormetrics/motormetrics/commit/12412093ec750900b36a0f287025c474caea2877))
+* **web:** add WDK workflow streaming and admin monitor ([b97b9fc](https://github.com/motormetrics/motormetrics/commit/b97b9fcc01a1c9f396157a92e11af087f4dd8ff1))
+* **web:** admin action to regenerate post hero image ([a2279b2](https://github.com/motormetrics/motormetrics/commit/a2279b2f146ab388e3721b3d82f00f0af0dd55e1))
+* **web:** centralise social handles and add share buttons ([406b90e](https://github.com/motormetrics/motormetrics/commit/406b90e78625a8d08d246e118f80c046ebacfb94))
+* **web:** rebrand frontend to MotorMetrics (Phase 2) ([11265c7](https://github.com/motormetrics/motormetrics/commit/11265c7be8cae5bf0c9fd121949f9ea32bb887a8)), closes [#749](https://github.com/motormetrics/motormetrics/issues/749)
+* **web:** redesign /cars and /coe hub pages with bento grid layout ([18c0df3](https://github.com/motormetrics/motormetrics/commit/18c0df3183acfc1d71778752fe98a40381f44e0d))
+* **web:** render hero image thumbnails on blog cards ([c43af43](https://github.com/motormetrics/motormetrics/commit/c43af4333d8b0496a4bd0e277a8a31e21d022433))
+
+### Bug Fixes
+
+* support pnpm v11 release versioning ([127419b](https://github.com/motormetrics/motormetrics/commit/127419b477dc8d951597173b92298ce7b24d6275))
+* **web:** allow blog hero blob images ([23300ed](https://github.com/motormetrics/motormetrics/commit/23300ed87a42c061f22afdfea846c3d4fc27288b))
+* **web:** correct COE trend badges ([44dfd08](https://github.com/motormetrics/motormetrics/commit/44dfd08e5b5b1065687a80e633f6e6dca5ecdcf6))
+* **web:** redirect staging old domain ([e0ed7b2](https://github.com/motormetrics/motormetrics/commit/e0ed7b2df8b5ed15c496b94169ee56c138ba69db))
+* **web:** reduce rebrand redirect duplication ([1e2597d](https://github.com/motormetrics/motormetrics/commit/1e2597d09133ec82cb22e05dd1997e23153293be))
+* **web:** resolve biome lint and formatting errors ([6cc29fc](https://github.com/motormetrics/motormetrics/commit/6cc29fcea820d4bd9d826554513beeb98488dea3))
+* **web:** update learn guides with Budget 2026 changes and add PQP ([22cf481](https://github.com/motormetrics/motormetrics/commit/22cf481ebcafbd6099136cdc76f7c75fe4475fa1))
+* **web:** update SonarCloud rebrand metadata ([16c83ec](https://github.com/motormetrics/motormetrics/commit/16c83eccc928a6f5e8b2955b87e064d4dcbae805))
+* **web:** use direct HeroUI imports ([aec2ad8](https://github.com/motormetrics/motormetrics/commit/aec2ad80ba50577c398beb96ebe659b04da1e313))
+
+## [4.65.0](https://github.com/sgcarstrends/sgcarstrends/compare/v4.64.4...v4.65.0) (2026-04-05)
+
+### Features
+
+* **web:** add /advertise page with PostHog traffic stats ([#746](https://github.com/sgcarstrends/sgcarstrends/issues/746)) ([fc873da](https://github.com/sgcarstrends/sgcarstrends/commit/fc873da04cc71d390165e4d3bf1e18bb18ba9f3d))
+* **web:** integrate PostHog with production-only pageview tracking ([883e2bd](https://github.com/sgcarstrends/sgcarstrends/commit/883e2bd93378020aed326a691321be6c08975a48))
+
+## [4.64.4](https://github.com/sgcarstrends/sgcarstrends/compare/v4.64.3...v4.64.4) (2026-04-04)
+
+### Bug Fixes
+
+* **web:** use dynamic import to fix PARF page prerender failure ([2c978cd](https://github.com/sgcarstrends/sgcarstrends/commit/2c978cd86140e31cb5860f5088bf3477a462fd72))
+
+## [4.64.3](https://github.com/sgcarstrends/sgcarstrends/compare/v4.64.2...v4.64.3) (2026-04-04)
+
+### Bug Fixes
+
+* **web:** fix prerender build failures for HeroUI components ([61a40df](https://github.com/sgcarstrends/sgcarstrends/commit/61a40df10dabeca6c04e580bc0c99dd72eae1cd0))
+
+## [4.64.2](https://github.com/sgcarstrends/sgcarstrends/compare/v4.64.1...v4.64.2) (2026-04-04)
+
+### Bug Fixes
+
+* **web:** mock package version in footer snapshot test ([330dd58](https://github.com/sgcarstrends/sgcarstrends/commit/330dd58e7288cde45303e7fe267a2d5b90f32af0))
+* **web:** provide explicit compare functions and reduce initial value ([828cd87](https://github.com/sgcarstrends/sgcarstrends/commit/828cd87aeaa3a90fd8bffda2dc6dafc6bc15fe08))
+
+## [4.64.1](https://github.com/sgcarstrends/sgcarstrends/compare/v4.64.0...v4.64.1) (2026-03-25)
+
+### Bug Fixes
+
+* **web:** use color-mix for dot pattern background ([f744be0](https://github.com/sgcarstrends/sgcarstrends/commit/f744be08bd2e50a223e8e61373f646d3727b9b2d))
+
+## [4.64.0](https://github.com/sgcarstrends/sgcarstrends/compare/v4.63.0...v4.64.0) (2026-03-07)
+
+### Features
+
+* ingest LTA Car Cost Update XLSX into Postgres ([#729](https://github.com/sgcarstrends/sgcarstrends/issues/729)) ([ef22a82](https://github.com/sgcarstrends/sgcarstrends/commit/ef22a829f5582ff118e16090f21a816e5f76178d))
+* **web:** redesign car costs cards and add fuel type ranges ([85d09e1](https://github.com/sgcarstrends/sgcarstrends/commit/85d09e16a77a34287b2eae7fdf9aa554ffa349cb))
+
+### Bug Fixes
+
+* **web:** improve car costs cache, constants, and pagination ([c054245](https://github.com/sgcarstrends/sgcarstrends/commit/c054245c541d11ae5ef83aa4877429eed583a423))
+
+## [4.63.0](https://github.com/sgcarstrends/sgcarstrends/compare/v4.62.1...v4.63.0) (2026-03-01)
+
+### Features
+
+* upgrade Better Auth to 1.5 with Dynamic Base URL ([e3eb3e1](https://github.com/sgcarstrends/sgcarstrends/commit/e3eb3e1ef99288b0cd2772c238b261fcee4667c4))
+
+## [4.62.1](https://github.com/sgcarstrends/sgcarstrends/compare/v4.62.0...v4.62.1) (2026-02-28)
+
+### Performance Improvements
+
+* **web:** download COE ZIP once for both coe and pqp tables ([#742](https://github.com/sgcarstrends/sgcarstrends/issues/742)) ([b70eaa8](https://github.com/sgcarstrends/sgcarstrends/commit/b70eaa8dfe84afddfeeda397cf6f7e304bd43b82))
+
+## [4.62.0](https://github.com/sgcarstrends/sgcarstrends/compare/v4.61.8...v4.62.0) (2026-02-28)
+
+### Features
+
+* **infra:** add GitHub Agentic Workflow for maintenance mode ([#741](https://github.com/sgcarstrends/sgcarstrends/issues/741)) ([6f522cf](https://github.com/sgcarstrends/sgcarstrends/commit/6f522cf7847362a568ddf3665f3574950ee7b452))
+
 ## [4.61.8](https://github.com/sgcarstrends/sgcarstrends/compare/v4.61.7...v4.61.8) (2026-02-28)
 
 ### Bug Fixes

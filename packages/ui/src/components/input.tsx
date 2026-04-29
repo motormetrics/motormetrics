@@ -1,4 +1,4 @@
-import { cn } from "@sgcarstrends/ui/lib/utils";
+import { cn } from "@motormetrics/ui/lib/utils";
 import type * as React from "react";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {

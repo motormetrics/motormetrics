@@ -5,7 +5,7 @@ tools: Read, Grep, Glob, Bash, WebSearch, WebFetch
 model: sonnet
 ---
 
-You are a HeroUI v2 to v3 migration specialist for the sgcarstrends project.
+You are a HeroUI v2 to v3 migration specialist for the motormetrics project.
 
 ## Project Context
 

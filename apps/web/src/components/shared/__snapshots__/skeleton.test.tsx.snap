@@ -1,0 +1,303 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Skeleton components > should render GridSkeleton 1`] = `
+<div>
+  <div
+    class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+  >
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-32 w-full rounded-lg"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-32 w-full rounded-lg"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-32 w-full rounded-lg"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-32 w-full rounded-lg"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Skeleton components > should render ListSkeleton 1`] = `
+<div>
+  <div
+    class="flex flex-col gap-4"
+  >
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 w-full rounded-lg h-20"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 w-full rounded-lg h-20"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 w-full rounded-lg h-20"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Skeleton components > should render SectionSkeleton with title 1`] = `
+<div>
+  <section
+    class="flex flex-col gap-4"
+  >
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-8 w-48 rounded-lg"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-32 w-full rounded-lg"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Skeleton components > should render SectionSkeleton without title 1`] = `
+<div>
+  <section
+    class="flex flex-col gap-4"
+  >
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-32 w-full rounded-lg"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Skeleton components > should render SkeletonBentoCard 1`] = `
+<div>
+  <div
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none p-6 rounded-3xl"
+    tabindex="-1"
+  >
+    <div
+      class="p-3 z-10 w-full justify-start shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-col items-start gap-2"
+    >
+      <div
+        class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-6 w-40 rounded-lg"
+      >
+        <div
+          class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+        />
+      </div>
+      <div
+        class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-4 w-full rounded-lg"
+      >
+        <div
+          class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+        />
+      </div>
+    </div>
+    <div
+      class="relative w-full p-3 flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-col gap-4"
+    >
+      <div
+        class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-24 w-full rounded-lg"
+      >
+        <div
+          class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Skeleton components > should render SkeletonCard 1`] = `
+<div>
+  <div
+    class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-32 w-full rounded-lg"
+  >
+    <div
+      class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+    />
+  </div>
+</div>
+`;
+
+exports[`Skeleton components > should render SkeletonChart 1`] = `
+<div>
+  <div
+    class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-80 w-full rounded-lg"
+  >
+    <div
+      class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+    />
+  </div>
+</div>
+`;
+
+exports[`Skeleton components > should render SkeletonChartWidget 1`] = `
+<div>
+  <div
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none p-3 rounded-2xl"
+    tabindex="-1"
+  >
+    <div
+      class="flex p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large"
+    >
+      <div
+        class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-6 w-48 rounded-lg"
+      >
+        <div
+          class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+        />
+      </div>
+    </div>
+    <div
+      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+    >
+      <div
+        class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-64 w-full rounded-lg"
+      >
+        <div
+          class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Skeleton components > should render SkeletonHeading 1`] = `
+<div>
+  <div
+    class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-8 w-48 rounded-lg"
+  >
+    <div
+      class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+    />
+  </div>
+</div>
+`;
+
+exports[`Skeleton components > should render SkeletonMetricCard 1`] = `
+<div>
+  <div
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none p-3 rounded-2xl"
+    tabindex="-1"
+  >
+    <div
+      class="flex p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large"
+    >
+      <div
+        class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-6 w-3/4 rounded-lg"
+      >
+        <div
+          class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+        />
+      </div>
+    </div>
+    <div
+      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+    >
+      <div
+        class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-10 w-32 rounded-lg"
+      >
+        <div
+          class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+        />
+      </div>
+    </div>
+    <div
+      class="p-3 h-auto flex w-full items-center overflow-hidden color-inherit subpixel-antialiased rounded-b-large"
+    >
+      <div
+        class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-5 w-24 rounded-lg"
+      >
+        <div
+          class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Skeleton components > should render SkeletonPageHeader 1`] = `
+<div>
+  <div
+    class="flex flex-col gap-4"
+  >
+    <div
+      class="flex items-center justify-between"
+    >
+      <div
+        class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-8 w-48 rounded-lg"
+      >
+        <div
+          class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+        />
+      </div>
+      <div
+        class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-10 w-40 rounded-lg"
+      >
+        <div
+          class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+        />
+      </div>
+    </div>
+    <div
+      class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-5 w-32 rounded-lg"
+    >
+      <div
+        class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Skeleton components > should render SkeletonText 1`] = `
+<div>
+  <div
+    class="group relative overflow-hidden bg-content3 dark:bg-content2 pointer-events-none before:opacity-100 before:absolute before:inset-0 before:-translate-x-full before:border-t before:border-content4/30 before:bg-gradient-to-r before:from-transparent before:via-content4 dark:before:via-default-700/10 before:to-transparent after:opacity-100 after:absolute after:inset-0 after:-z-10 after:bg-content3 dark:after:bg-content2 data-[loaded=true]:pointer-events-auto data-[loaded=true]:overflow-visible data-[loaded=true]:!bg-transparent data-[loaded=true]:before:opacity-0 data-[loaded=true]:before:-z-10 data-[loaded=true]:before:animate-none data-[loaded=true]:after:opacity-0 before:animate-shimmer transition-background !duration-300 h-4 w-full rounded-lg"
+  >
+    <div
+      class="opacity-0 group-data-[loaded=true]:opacity-100 transition-opacity motion-reduce:transition-none !duration-300"
+    />
+  </div>
+</div>
+`;

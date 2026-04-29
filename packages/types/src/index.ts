@@ -93,6 +93,32 @@ export interface CarPopulation {
   number: number;
 }
 
+export interface CarCost {
+  month: string;
+  sn: number;
+  make: string;
+  model: string;
+  coeCat: string;
+  engineCapacity: string | null;
+  maxPowerOutput: number;
+  fuelType: string;
+  co2: number;
+  vesBanding: string;
+  omv: number;
+  gstExciseDuty: number;
+  arf: number;
+  vesSurchargeRebate: number;
+  eeai: number;
+  registrationFee: number;
+  coePremium: number;
+  totalBasicCostWithoutCoe: number;
+  totalBasicCostWithCoe: number;
+  sellingPriceWithoutCoe: number;
+  sellingPriceWithCoe: number;
+  differenceWithoutCoe: number | null;
+  differenceWithCoe: number | null;
+}
+
 export interface CleanSpecialCharsOptions {
   separator?: string;
   joinSeparator?: string;

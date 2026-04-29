@@ -48,3 +48,44 @@
 
 # Turborepo
 .turbo
+
+# Skills
+.agents/
+
+# Agent platform directories
+.adal/
+.augment/
+.bob/
+.codebuddy/
+.commandcode/
+.continue/
+.cortex/
+.crush/
+.cursor/
+.factory/
+.gemini/
+.goose/
+.iflow/
+.junie/
+.kilocode/
+.kiro/
+.kode/
+.mcpjam/
+.mux/
+.neovate/
+.opencode/
+.openhands/
+.pi/
+.pochi/
+.qoder/
+.qwen/
+.roo/
+.trae/
+.vibe/
+.windsurf/
+.zencoder/
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key

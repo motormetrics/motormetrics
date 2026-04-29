@@ -8,7 +8,7 @@ import {
   max,
   or,
   sql,
-} from "@sgcarstrends/database";
+} from "@motormetrics/database";
 import type { COEResult } from "@web/types";
 import { cacheLife, cacheTag } from "next/cache";
 

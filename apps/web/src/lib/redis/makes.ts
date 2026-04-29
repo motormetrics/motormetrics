@@ -1,4 +1,4 @@
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import { getDistinctMakes } from "@web/queries/cars";
 
 const MAKES_SORTED_SET_KEY = "makes:alpha";

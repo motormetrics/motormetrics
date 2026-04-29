@@ -1,0 +1,38 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "rangeStrategy": "pin",
+  "schedule": ["before 9am on Monday"],
+  "packageRules": [
+    {
+      "description": "Auto-merge patch updates for devDependencies",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "description": "Group @heroui packages",
+      "matchPackageNames": ["@heroui/*"],
+      "groupName": "heroui"
+    },
+    {
+      "description": "Group semantic-release packages",
+      "matchPackageNames": ["semantic-release", "@semantic-release/*"],
+      "groupName": "semantic-release"
+    },
+    {
+      "description": "Group @commitlint packages",
+      "matchPackageNames": ["@commitlint/*"],
+      "groupName": "commitlint"
+    },
+    {
+      "description": "Group vitest packages",
+      "matchPackageNames": ["vitest", "@vitest/*"],
+      "groupName": "vitest"
+    }
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 9am on the first day of the month"]
+  }
+}

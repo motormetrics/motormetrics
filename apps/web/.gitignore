@@ -20,6 +20,8 @@
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+.workflow-vitest/
+.workflow-data/
 
 # Cache & Temp
 *.tsbuildinfo
@@ -34,3 +36,4 @@ sst-env.d.ts
 
 # Changesets
 .changeset/pre.json
+.env.local

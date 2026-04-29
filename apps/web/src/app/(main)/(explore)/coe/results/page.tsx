@@ -14,8 +14,12 @@ import { StructuredData } from "@web/components/structured-data";
 import { TrendTable } from "@web/components/tables/coe-results-table";
 import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
+import { SOCIAL_HANDLE } from "@web/config/socials";
 import { loadResultsPageData } from "@web/lib/coe/page-data";
-import { createPageMetadata } from "@web/lib/metadata";
+import {
+  generateBreadcrumbSchema,
+  generateDatasetSchema,
+} from "@web/lib/metadata";
 import { getLatestCoeResults } from "@web/queries/coe";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
@@ -26,11 +30,11 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-const title = "COE Results";
+const title = "Historical COE Bidding Results";
 const description =
   "Complete historical COE bidding results for Singapore. Explore trends, analyze price movements, and view detailed data for all vehicle categories.";
 
-export const generateMetadata = async (): Promise<Metadata> => {
+export async function generateMetadata(): Promise<Metadata> {
   const results = await getLatestCoeResults();
   const categories = results.reduce<Record<string, number>>(
     (category, current) => {
@@ -42,35 +46,57 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
   const images = `/api/og/coe?title=COE Results&subtitle=Historical Data&biddingNo=2&categoryA=${categories["Category A"]}&categoryB=${categories["Category B"]}&categoryC=${categories["Category C"]}&categoryD=${categories["Category D"]}&categoryE=${categories["Category E"]}`;
 
-  return createPageMetadata({
+  return {
     title,
     description,
-    canonical: "/coe/results",
-    images,
-    includeAuthors: true,
-  });
-};
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/coe/results`,
+      siteName: SITE_TITLE,
+      locale: "en_SG",
+      type: "website",
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      site: SOCIAL_HANDLE,
+      creator: SOCIAL_HANDLE,
+      images,
+    },
+    alternates: {
+      canonical: "/coe/results",
+    },
+    authors: [{ name: SITE_TITLE, url: SITE_URL }],
+    creator: SITE_TITLE,
+    publisher: SITE_TITLE,
+  };
+}
 
-const COEResultsPage = ({ searchParams }: PageProps) => (
-  <div className="flex flex-col gap-6">
-    <DashboardPageHeader
-      title={
-        <DashboardPageTitle
-          title="COE Results"
-          subtitle="Historical COE bidding results by category and month."
-        />
-      }
-      meta={
-        <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-          <COEResultsHeaderMeta searchParams={searchParams} />
-        </Suspense>
-      }
-    />
-    <Suspense fallback={<SkeletonCard className="h-[840px] w-full" />}>
-      <COEResultsContent searchParams={searchParams} />
-    </Suspense>
-  </div>
-);
+export default function COEResultsPage({ searchParams }: PageProps) {
+  return (
+    <div className="flex flex-col gap-6">
+      <DashboardPageHeader
+        title={
+          <DashboardPageTitle
+            title="COE Results"
+            subtitle="Historical COE bidding results by category and month."
+          />
+        }
+        meta={
+          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+            <COEResultsHeaderMeta searchParams={searchParams} />
+          </Suspense>
+        }
+      />
+      <Suspense fallback={<SkeletonCard className="h-[840px] w-full" />}>
+        <COEResultsContent searchParams={searchParams} />
+      </Suspense>
+    </div>
+  );
+}
 
 async function COEResultsHeaderMeta({
   searchParams: searchParamsPromise,
@@ -115,6 +141,22 @@ async function COEResultsContent({
   return (
     <>
       <StructuredData data={structuredData} />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateDatasetSchema("coe-results"),
+        }}
+      />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "COE", path: "/coe" },
+            { name: "Results", path: "/coe/results" },
+          ]),
+        }}
+      />
       <AnimatedSection order={1}>
         <Infobox {...PAGE_CONTEXTS.coe} />
       </AnimatedSection>
@@ -158,5 +200,3 @@ async function COEResultsContent({
     </>
   );
 }
-
-export default COEResultsPage;

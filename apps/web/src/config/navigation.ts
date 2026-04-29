@@ -1,13 +1,11 @@
 import {
   type IconType,
-  SiDiscord,
   SiGithub,
   SiInstagram,
-  SiLinkedin,
   SiTelegram,
-  SiX,
+  // SiThreads,
 } from "@icons-pack/react-simple-icons";
-import { sortByName } from "@sgcarstrends/utils";
+import { sortByName } from "@motormetrics/utils";
 import {
   BarChart3,
   BookOpen,
@@ -15,6 +13,7 @@ import {
   Calendar,
   Car,
   CarFront,
+  DollarSign,
   FileMinus,
   FilePlus,
   FileText,
@@ -59,20 +58,15 @@ export interface NavigationSection {
 
 const socialMedia: SocialMedia[] = [
   {
-    title: "Twitter",
-    url: "/twitter",
-    icon: SiX,
-  },
-  {
     title: "Instagram",
     url: "/instagram",
     icon: SiInstagram,
   },
-  {
-    title: "LinkedIn",
-    url: "/linkedin",
-    icon: SiLinkedin,
-  },
+  // {
+  //   title: "Threads",
+  //   url: "/threads",
+  //   icon: SiThreads,
+  // },
   {
     title: "Telegram",
     url: "/telegram",
@@ -82,11 +76,6 @@ const socialMedia: SocialMedia[] = [
     title: "GitHub",
     url: "/github",
     icon: SiGithub,
-  },
-  {
-    title: "Discord",
-    url: "/discord",
-    icon: SiDiscord,
   },
 ];
 
@@ -151,6 +140,15 @@ export const navLinks: NavLinks = {
       description: "Calculate PARF rebate under old and new rates",
       badge: "new",
     },
+    {
+      title: "Cost Breakdown",
+      url: "/cars/costs",
+      icon: DollarSign,
+      description:
+        "See how new car prices are composed — OMV, ARF, VES, and COE",
+      badge: "new",
+      iconColor: "text-orange-500",
+    },
   ],
   coe: [
     {
@@ -181,8 +179,8 @@ export const navLinks: NavLinks = {
       show: true,
     },
     {
-      title: "Resources",
-      url: "/resources",
+      title: "Learn",
+      url: "/learn",
       icon: BookOpen,
       description:
         "Educational hub with FAQs, glossary, guides and data sources",
@@ -216,7 +214,7 @@ export const NAV_ITEMS = [
   { href: "/", label: "Overview" },
   { href: "/about", label: "About" },
   { href: "/blog", label: "Blog" },
-  { href: "/resources", label: "Resources" },
+  { href: "/learn", label: "Learn" },
 ] as const satisfies readonly NavItem[];
 
-export const POLAR_DONATION_URL = "https://polar.sh/sgcarstrends";
+export const POLAR_DONATION_URL = "https://polar.sh/motormetrics";

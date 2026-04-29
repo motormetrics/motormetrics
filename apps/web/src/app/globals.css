@@ -1,8 +1,8 @@
 @import "tailwindcss";
-@import "@sgcarstrends/ui/globals.css";
+@import "@motormetrics/ui/globals.css";
 
 @plugin "@tailwindcss/typography";
-@plugin "./hero.ts";
+@plugin "@motormetrics/theme/hero";
 
 @source "../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
 
@@ -24,124 +24,6 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
-}
-
-:root {
-  /* Background & Foreground - Professional colour scheme (Issue #406) */
-  --background: hsl(
-    213 32% 95%
-  ); /* #F0F4F8 - Light blue-gray (matches preview design) */
-  /* Blue-tinted gray, harmonizes with Navy Blue primary */
-  --foreground: hsl(220 15% 20%);
-
-  /* Card & Popover */
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(220 15% 20%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(220 15% 20%);
-
-  /* Primary - Navy Blue */
-  --primary: hsl(240 63% 27%); /* #191970 */
-  --primary-foreground: hsl(0 0% 100%);
-
-  /* Secondary - Slate Gray */
-  --secondary: hsl(210 13% 50%); /* #708090 */
-  --secondary-foreground: hsl(0 0% 100%);
-
-  /* Muted - Light Blue-Gray */
-  --muted: hsl(213 32% 95%); /* #F0F4F8 */
-  --muted-foreground: hsl(220 15% 20%);
-
-  /* Accent - Steel Blue */
-  --accent: hsl(220 40% 49%); /* #4A6AAE */
-  --accent-foreground: hsl(0 0% 100%);
-
-  /* Destructive - Red */
-  --destructive: hsl(0 72% 51%); /* #DC2626 */
-  --destructive-foreground: hsl(0 0% 100%);
-
-  /* Success - Green */
-  --success: hsl(142 71% 45%); /* #22C55E */
-  --success-foreground: hsl(0 0% 100%);
-
-  /* Border - Light Slate */
-  --border: hsl(214 32% 91%); /* #E2E8F0 */
-  --input: hsl(214 32% 91%); /* #E2E8F0 */
-  --ring: hsl(240 63% 27%); /* Navy Blue for focus */
-
-  /* Radius tokens - Design System */
-  --radius: 0.5rem;
-  --radius-sm: 0.5rem; /* 8px - rounded-lg */
-  --radius-md: 0.75rem; /* 12px - rounded-xl */
-  --radius-lg: 1rem; /* 16px - rounded-2xl */
-  --radius-xl: 1.5rem; /* 24px - rounded-3xl */
-  --radius-full: 9999px; /* rounded-full */
-
-  /* Chart colours - Navy Blue gradient palette */
-  --chart-1: hsl(240 64% 27%);
-  --chart-2: hsl(220 51% 37%);
-  --chart-3: hsl(220 41% 49%);
-  --chart-4: hsl(210 14% 53%);
-  --chart-5: hsl(215 23% 65%);
-  --chart-6: hsl(212 17% 76%);
-
-  /* Surface colors for card hierarchy */
-  --surface-1: hsl(0 0% 100%);
-  --surface-2: hsl(213 32% 97%);
-  --surface-3: hsl(213 32% 95%);
-
-  /* Chart grid stroke */
-  --chart-grid: hsl(214 32% 91%);
-
-  /* Sidebar */
-  --sidebar-background: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(220 15% 20%);
-  --sidebar-primary: hsl(240 63% 27%); /* Navy Blue */
-  --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(213 32% 95%); /* Light Blue-Gray */
-  --sidebar-accent-foreground: hsl(220 15% 20%);
-  --sidebar-border: hsl(214 32% 91%); /* #E2E8F0 */
-  --sidebar-ring: hsl(240 63% 27%); /* Navy Blue */
-  --sidebar: hsl(0 0% 98%);
-}
-
-.dark {
-  --background: hsl(222.2 84% 4.9%);
-  --foreground: hsl(210 40% 98%);
-  --card: hsl(222.2 84% 4.9%);
-  --card-foreground: hsl(210 40% 98%);
-  --popover: hsl(222.2 84% 4.9%);
-  --popover-foreground: hsl(210 40% 98%);
-  --primary: hsl(217.2 91.2% 59.8%);
-  --primary-foreground: hsl(222.2 47.4% 11.2%);
-  --secondary: hsl(217.2 32.6% 17.5%);
-  --secondary-foreground: hsl(210 40% 98%);
-  --muted: hsl(217.2 32.6% 17.5%);
-  --muted-foreground: hsl(215 20.2% 65.1%);
-  --accent: hsl(217.2 32.6% 17.5%);
-  --accent-foreground: hsl(210 40% 98%);
-  --destructive: hsl(0 62.8% 30.6%);
-  --destructive-foreground: hsl(210 40% 98%);
-  --success: hsl(160 60% 45%);
-  --success-foreground: hsl(210 40% 98%);
-  --border: hsl(217.2 32.6% 17.5%);
-  --input: hsl(217.2 32.6% 17.5%);
-  --ring: hsl(224.3 76.3% 48%);
-  --chart-1: hsl(220 70% 50%);
-  --chart-2: hsl(160 60% 45%);
-  --chart-3: hsl(30 80% 55%);
-  --chart-4: hsl(280 65% 60%);
-  --chart-5: hsl(340 75% 55%);
-  --chart-6: hsl(100 70% 50%);
-  --sidebar-background: hsl(240 5.9% 10%);
-  --sidebar-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-primary: hsl(224.3 76.3% 48%);
-  --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(240 3.7% 15.9%);
-  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-border: hsl(240 3.7% 15.9%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
-  --sidebar: hsl(240 5.9% 10%);
 }
 
 @theme inline {

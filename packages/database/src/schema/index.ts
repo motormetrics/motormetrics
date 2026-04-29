@@ -1,5 +1,10 @@
 export * from "./auth";
 export {
+  carCosts,
+  type InsertCarCost,
+  type SelectCarCost,
+} from "./car-cost";
+export {
   carPopulation,
   type InsertCarPopulation,
   type SelectCarPopulation,

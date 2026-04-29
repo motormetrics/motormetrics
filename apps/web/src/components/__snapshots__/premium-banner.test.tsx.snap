@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PremiumBanner > should populate the global banner with sorted categories and clean up on unmount 1`] = `
+<div>
+  <div
+    class="flex items-center justify-center gap-4"
+  >
+    <div
+      class="flex items-center gap-2"
+    >
+      <div
+        class="font-semibold text-sm"
+      >
+        Category A
+      </div>
+      <div
+        class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap border-medium px-1 h-7 text-small rounded-full bg-transparent border-primary text-primary"
+      >
+        <span
+          class="flex-1 text-inherit font-normal px-2"
+        >
+          $40,000
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-2"
+    >
+      <div
+        class="font-semibold text-sm"
+      >
+        Category B
+      </div>
+      <div
+        class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap border-medium px-1 h-7 text-small rounded-full bg-transparent border-primary text-primary"
+      >
+        <span
+          class="flex-1 text-inherit font-normal px-2"
+        >
+          $42,000
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

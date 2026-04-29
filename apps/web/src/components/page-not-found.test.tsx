@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { PageNotFound } from "./page-not-found";
 
@@ -23,6 +23,16 @@ describe("PageNotFound", () => {
     expect(screen.getByText("Go Back")).toBeInTheDocument();
   });
 
+  it("should go back when Go Back button is clicked", () => {
+    const historyBackSpy = vi.spyOn(history, "back");
+    render(<PageNotFound />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Go Back" }));
+    expect(historyBackSpy).toHaveBeenCalledTimes(1);
+
+    historyBackSpy.mockRestore();
+  });
+
   it("renders help text with links", () => {
     render(<PageNotFound />);
 
@@ -33,9 +43,9 @@ describe("PageNotFound", () => {
   it("has correct link href attributes", () => {
     render(<PageNotFound />);
 
-    const resourcesLink = screen.getByRole("link", {
-      name: /resources page/i,
-    });
-    expect(resourcesLink).toHaveAttribute("href", "/resources");
+    expect(screen.getByRole("link", { name: /learn page/i })).toHaveAttribute(
+      "href",
+      "/learn",
+    );
   });
 });

@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DashboardPageHeader > should render title and meta content 1`] = `
+<div>
+  <div
+    class="flex flex-col gap-2"
+  >
+    <div
+      class="flex flex-col justify-between gap-2 lg:flex-row lg:items-center"
+    >
+      <h1>
+        Overview
+      </h1>
+      <span
+        data-testid="meta"
+      >
+        Last updated
+      </span>
+    </div>
+  </div>
+</div>
+`;

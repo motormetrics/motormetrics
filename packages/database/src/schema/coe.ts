@@ -1,4 +1,11 @@
-import { index, integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import {
+  index,
+  integer,
+  pgTable,
+  text,
+  unique,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const coe = pgTable(
   "coe",
@@ -13,6 +20,7 @@ export const coe = pgTable(
     premium: integer().notNull(),
   },
   (table) => [
+    unique().on(table.month, table.biddingNo, table.vehicleClass),
     index().on(table.month, table.vehicleClass),
     index().on(table.vehicleClass),
     index().on(table.month, table.biddingNo),
@@ -31,6 +39,7 @@ export const pqp = pgTable(
     pqp: integer().notNull(),
   },
   (table) => [
+    unique().on(table.month, table.vehicleClass),
     index().on(table.month, table.vehicleClass),
     index().on(table.vehicleClass),
     index().on(table.pqp),

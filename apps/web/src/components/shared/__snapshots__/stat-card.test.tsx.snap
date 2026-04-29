@@ -1,0 +1,85 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`StatCard > should render with hero variant 1`] = `
+<div>
+  <div
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 transition-transform-background motion-reduce:transition-none rounded-3xl shadow-md p-6"
+    tabindex="-1"
+  >
+    <div
+      class="p-3 z-10 w-full justify-start shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-col items-start gap-2"
+    >
+      <h4
+        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+      >
+        Test Title
+      </h4>
+      <p
+        class="text-default-600 text-sm leading-6"
+      >
+        Test Description
+      </p>
+    </div>
+    <div
+      class="relative flex w-full p-3 flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex-1"
+    >
+      <div
+        data-testid="bar-chart"
+      >
+        <div>
+          Petrol
+          : 
+          1000
+        </div>
+        <div>
+          Electric
+          : 
+          500
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`StatCard > should render with required props 1`] = `
+<div>
+  <div
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
+    tabindex="-1"
+  >
+    <div
+      class="p-3 z-10 w-full justify-start shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-col items-start gap-2"
+    >
+      <h4
+        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+      >
+        Test Title
+      </h4>
+      <p
+        class="text-default-600 text-sm leading-6"
+      >
+        Test Description
+      </p>
+    </div>
+    <div
+      class="relative flex w-full p-3 flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex-1"
+    >
+      <div
+        data-testid="bar-chart"
+      >
+        <div>
+          Petrol
+          : 
+          1000
+        </div>
+        <div>
+          Electric
+          : 
+          500
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

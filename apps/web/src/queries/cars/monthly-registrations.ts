@@ -1,4 +1,4 @@
-import { cars, db, desc, eq, gt, sql, sum } from "@sgcarstrends/database";
+import { cars, db, desc, eq, gt, sql, sum } from "@motormetrics/database";
 import type { Comparison, Registration } from "@web/types/cars";
 import { format, subMonths } from "date-fns";
 import { cacheLife, cacheTag } from "next/cache";

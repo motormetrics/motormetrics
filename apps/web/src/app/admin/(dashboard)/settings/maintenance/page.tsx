@@ -3,7 +3,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
+} from "@motormetrics/ui/components/card";
 import { getMaintenanceConfig } from "@web/app/admin/actions/maintenance";
 import { MaintenanceForm } from "@web/app/admin/components/maintenance-form";
 import { ArrowLeft, Wrench } from "lucide-react";

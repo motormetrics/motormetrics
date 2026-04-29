@@ -6,7 +6,7 @@ allowed-tools: Read, Edit, Grep, Glob
 
 # Design Language System Skill
 
-This skill documents the professional colour scheme and design tokens for SG Cars Trends, optimised for automotive data visualisation (GitHub Issue #406).
+This skill documents the professional colour scheme and design tokens for MotorMetrics, optimised for automotive data visualisation (GitHub Issue #406).
 
 ## When to Use This Skill
 

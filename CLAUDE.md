@@ -10,7 +10,7 @@ Automatically use Context7 for code generation and library documentation.
 
 Prefer using the GitHub MCP tools (`mcp__github__*`) over the `gh` CLI for all GitHub operations (issues, pull requests, checks, releases).
 
-# SG Cars Trends - Developer Reference Guide
+# MotorMetrics - Developer Reference Guide
 
 ## Project-Specific CLAUDE.md Files
 
@@ -48,11 +48,11 @@ System architecture documentation with Mermaid diagrams is available in the `doc
 
 - **[docs/diagrams/](docs/diagrams/)**: Source Mermaid diagram files (`.mmd` format)
 
-# SG Cars Trends Platform - Overview
+# MotorMetrics Platform - Overview
 
 ## Project Overview
 
-SG Cars Trends is a full-stack platform providing access to Singapore vehicle registration data,
+MotorMetrics is a full-stack platform providing access to Singapore vehicle registration data,
 Certificate of Entitlement (COE) bidding results, and vehicle deregistration statistics. The monorepo includes:
 
 - **Web Application**: Next.js 16 frontend with Cache Components, component co-location, interactive charts, analytics,
@@ -161,7 +161,7 @@ The project uses **pnpm with catalog** for centralised dependency version manage
 
 - Strict type checking enabled (noImplicitAny, strictNullChecks)
 - Avoid `any` type - prefer `unknown` with type guards
-- Use workspace imports: `@sgcarstrends/database`, `@sgcarstrends/ui`, `@sgcarstrends/utils`, `@sgcarstrends/types`
+- Use workspace imports: `@motormetrics/database`, `@motormetrics/ui`, `@motormetrics/utils`, `@motormetrics/types`
 
 ### Biome
 
@@ -213,7 +213,7 @@ Core cross-cutting variables:
 
 - `DATABASE_URL` - PostgreSQL connection string
 - `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` - Redis configuration
-- `SG_CARS_TRENDS_API_TOKEN` - Bearer token for REST API authentication (used by MCP server and external clients)
+- `MOTORMETRICS_API_TOKEN` - Bearer token for REST API authentication (used by MCP server and external clients)
 - `CRON_SECRET` - Auto-provisioned by Vercel; used to authenticate cron job requests via `Authorization: Bearer <CRON_SECRET>`
 
 *See component CLAUDE.md files for service-specific environment variables.*
@@ -221,14 +221,14 @@ Core cross-cutting variables:
 ## Deployment
 
 - **Platform**: Vercel (Singapore region)
-- **DNS**: Managed via Vercel with sgcarstrends.com domain
+- **DNS**: Managed via Vercel with motormetrics.app domain
 - **Automatic Deployments**: Push to main branch triggers production deployment
 - **Preview Deployments**: Pull requests get automatic preview URLs
 
 ## Domain Convention
 
-- **API**: `<service>.<environment>.sgcarstrends.com` (e.g., `api.sgcarstrends.com`)
-- **Web**: `<environment>.sgcarstrends.com` with apex for production (e.g., `sgcarstrends.com`)
+- **API**: `<service>.<environment>.motormetrics.app` (e.g., `api.motormetrics.app`)
+- **Web**: `<environment>.motormetrics.app` with apex for production (e.g., `motormetrics.app`)
 - **New services**: Use service subdomain pattern
 
 See `domain-management` skill for DNS configuration and routing details.
@@ -249,12 +249,12 @@ PostgreSQL with Drizzle ORM using **camelCase** column naming:
 
 ## Shared Packages
 
-- **`@sgcarstrends/ai`**: AI-powered blog generation with 2-step flow (analysis → structured output), Zod validation, hero images, tag constants, and Langfuse telemetry
-- **`@sgcarstrends/database`**: Drizzle ORM schemas and migrations
-- **`@sgcarstrends/types`**: Shared TypeScript interfaces
-- **`@sgcarstrends/ui`**: Shared UI component library with shadcn/ui, Radix UI primitives, and Tailwind CSS
-- **`@sgcarstrends/utils`**: Utility functions and centralised Redis client
-- **`@sgcarstrends/logos`**: Car logo management with Vercel Blob storage, automatic scraping, Redis caching, and brand name normalization
+- **`@motormetrics/ai`**: AI-powered blog generation with 2-step flow (analysis → structured output), Zod validation, hero images, tag constants, and Langfuse telemetry
+- **`@motormetrics/database`**: Drizzle ORM schemas and migrations
+- **`@motormetrics/types`**: Shared TypeScript interfaces
+- **`@motormetrics/ui`**: Shared UI component library with shadcn/ui, Radix UI primitives, and Tailwind CSS
+- **`@motormetrics/utils`**: Utility functions and centralised Redis client
+- **`@motormetrics/logos`**: Car logo management with Vercel Blob storage, automatic scraping, Redis caching, and brand name normalization
 
 *See component CLAUDE.md files for architecture details (workflows, blog generation, social media integration).*
 
@@ -295,3 +295,126 @@ See `github-actions` skill for workflow management and automation.
 **Rule of thumb:** Component-specific changes → component docs. Cross-cutting changes → root docs.
 
 See `readme-updates` and `mermaid-diagrams` skills for documentation workflows.
+
+<!-- BEGIN BEADS INTEGRATION v:1 profile:full hash:f65d5d33 -->
+## Issue Tracking with bd (beads)
+
+**IMPORTANT**: This project uses **bd (beads)** for ALL issue tracking. Do NOT use markdown TODOs, task lists, or other tracking methods.
+
+### Why bd?
+
+- Dependency-aware: Track blockers and relationships between issues
+- Git-friendly: Dolt-powered version control with native sync
+- Agent-optimized: JSON output, ready work detection, discovered-from links
+- Prevents duplicate tracking systems and confusion
+
+### Quick Start
+
+**Check for ready work:**
+
+```bash
+bd ready --json
+```
+
+**Create new issues:**
+
+```bash
+bd create "Issue title" --description="Detailed context" -t bug|feature|task -p 0-4 --json
+bd create "Issue title" --description="What this issue is about" -p 1 --deps discovered-from:bd-123 --json
+```
+
+**Claim and update:**
+
+```bash
+bd update <id> --claim --json
+bd update bd-42 --priority 1 --json
+```
+
+**Complete work:**
+
+```bash
+bd close bd-42 --reason "Completed" --json
+```
+
+### Issue Types
+
+- `bug` - Something broken
+- `feature` - New functionality
+- `task` - Work item (tests, docs, refactoring)
+- `epic` - Large feature with subtasks
+- `chore` - Maintenance (dependencies, tooling)
+
+### Priorities
+
+- `0` - Critical (security, data loss, broken builds)
+- `1` - High (major features, important bugs)
+- `2` - Medium (default, nice-to-have)
+- `3` - Low (polish, optimization)
+- `4` - Backlog (future ideas)
+
+### Workflow for AI Agents
+
+1. **Check ready work**: `bd ready` shows unblocked issues
+2. **Claim your task atomically**: `bd update <id> --claim`
+3. **Work on it**: Implement, test, document
+4. **Discover new work?** Create linked issue:
+   - `bd create "Found bug" --description="Details about what was found" -p 1 --deps discovered-from:<parent-id>`
+5. **Complete**: `bd close <id> --reason "Done"`
+
+### Quality
+- Use `--acceptance` and `--design` fields when creating issues
+- Use `--validate` to check description completeness
+
+### Lifecycle
+- `bd defer <id>` / `bd supersede <id>` for issue management
+- `bd stale` / `bd orphans` / `bd lint` for hygiene
+- `bd human <id>` to flag for human decisions
+- `bd formula list` / `bd mol pour <name>` for structured workflows
+
+### Auto-Sync
+
+bd automatically syncs via Dolt:
+
+- Each write auto-commits to Dolt history
+- Use `bd dolt push`/`bd dolt pull` for remote sync
+- No manual export/import needed!
+
+### Important Rules
+
+- ✅ Use bd for ALL task tracking
+- ✅ Always use `--json` flag for programmatic use
+- ✅ Link discovered work with `discovered-from` dependencies
+- ✅ Check `bd ready` before asking "what should I work on?"
+- ❌ Do NOT create markdown TODO lists
+- ❌ Do NOT use external issue trackers
+- ❌ Do NOT duplicate tracking systems
+
+For more details, see README.md and docs/QUICKSTART.md.
+
+## Session Completion
+
+**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
+
+**MANDATORY WORKFLOW:**
+
+1. **File issues for remaining work** - Create issues for anything that needs follow-up
+2. **Run quality gates** (if code changed) - Tests, linters, builds
+3. **Update issue status** - Close finished work, update in-progress items
+4. **PUSH TO REMOTE** - This is MANDATORY:
+   ```bash
+   git pull --rebase
+   bd dolt push
+   git push
+   git status  # MUST show "up to date with origin"
+   ```
+5. **Clean up** - Clear stashes, prune remote branches
+6. **Verify** - All changes committed AND pushed
+7. **Hand off** - Provide context for next session
+
+**CRITICAL RULES:**
+- Work is NOT complete until `git push` succeeds
+- NEVER stop before pushing - that leaves work stranded locally
+- NEVER say "ready to push when you are" - YOU must push
+- If push fails, resolve and retry until it succeeds
+
+<!-- END BEADS INTEGRATION -->

@@ -1,5 +1,5 @@
 import type { SortDescriptor } from "@heroui/table";
-import { SortDirection, sortByName, sortByValue } from "@sgcarstrends/utils";
+import { SortDirection, sortByName, sortByValue } from "@motormetrics/utils";
 
 export function sortByDescriptor<T extends Record<string, unknown>>(
   data: T[],

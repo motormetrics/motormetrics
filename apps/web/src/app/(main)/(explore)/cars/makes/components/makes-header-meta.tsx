@@ -1,4 +1,4 @@
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";

@@ -1,7 +1,7 @@
 import { Button } from "@heroui/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { Progress } from "@heroui/progress";
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { SkeletonBentoCard } from "@web/components/shared/skeleton";
 import Typography from "@web/components/typography";

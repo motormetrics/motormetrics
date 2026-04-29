@@ -9,17 +9,18 @@ import { DashboardPageTitle } from "@web/components/dashboard-page-title";
 import { Infobox } from "@web/components/shared/infobox";
 import { PAGE_CONTEXTS } from "@web/components/shared/page-contexts";
 import { SkeletonCard } from "@web/components/shared/skeleton";
+import { SITE_TITLE, SITE_URL } from "@web/config";
+import { SOCIAL_HANDLE } from "@web/config/socials";
 import { loadLastUpdated } from "@web/lib/common";
-import { createPageMetadata } from "@web/lib/metadata";
 import { getLatestCoeResults } from "@web/queries/coe";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-const title = "COE Overview";
+const title = "COE Premiums and Trends";
 const description =
   "Certificate of Entitlement (COE) analysis hub for Singapore vehicle registration. View latest premiums, trends, and category-specific insights.";
 
-export const generateMetadata = async (): Promise<Metadata> => {
+export async function generateMetadata(): Promise<Metadata> {
   const results = await getLatestCoeResults();
   const categories = results.reduce<Record<string, number>>(
     (category, current) => {
@@ -31,16 +32,36 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
   const images = `/api/og/coe?title=COE Overview&subtitle=Overview&biddingNo=2&categoryA=${categories["Category A"]}&categoryB=${categories["Category B"]}&categoryC=${categories["Category C"]}&categoryD=${categories["Category D"]}&categoryE=${categories["Category E"]}`;
 
-  return createPageMetadata({
+  return {
     title,
     description,
-    canonical: "/coe/premiums",
-    images,
-    includeAuthors: true,
-  });
-};
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/coe/premiums`,
+      siteName: SITE_TITLE,
+      locale: "en_SG",
+      type: "website",
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      site: SOCIAL_HANDLE,
+      creator: SOCIAL_HANDLE,
+      images,
+    },
+    alternates: {
+      canonical: "/coe/premiums",
+    },
+    authors: [{ name: SITE_TITLE, url: SITE_URL }],
+    creator: SITE_TITLE,
+    publisher: SITE_TITLE,
+  };
+}
 
-const COEOverviewPage = () => {
+export default function COEOverviewPage() {
   return (
     <div className="flex flex-col gap-8">
       <DashboardPageHeader
@@ -78,12 +99,10 @@ const COEOverviewPage = () => {
       </AnimatedSection>
     </div>
   );
-};
+}
 
 async function COEOverviewHeaderMeta() {
   const lastUpdated = await loadLastUpdated("coe");
 
   return <DashboardPageMeta lastUpdated={lastUpdated} />;
 }
-
-export default COEOverviewPage;

@@ -5,7 +5,7 @@ import {
   formatNumber,
   formatPercent,
   formatPercentage,
-} from "@sgcarstrends/utils";
+} from "@motormetrics/utils";
 
 export {
   formatCount,

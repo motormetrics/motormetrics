@@ -1,7 +1,7 @@
 "use client";
 
 import { Chip } from "@heroui/chip";
-import { formatCurrency } from "@sgcarstrends/utils";
+import { formatCurrency } from "@motormetrics/utils";
 import useStore from "@web/app/store";
 import type { COEResult } from "@web/types";
 import { useEffect } from "react";

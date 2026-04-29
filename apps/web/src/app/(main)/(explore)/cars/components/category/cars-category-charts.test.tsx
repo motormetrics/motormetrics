@@ -23,6 +23,7 @@ describe("Cars Category Charts", () => {
       expect(
         screen.getByText("Most popular brands in this category"),
       ).toBeInTheDocument();
+      expect(document.body.firstChild).toMatchSnapshot();
     });
 
     it("should render custom description when provided", () => {

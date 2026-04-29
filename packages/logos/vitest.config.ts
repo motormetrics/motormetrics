@@ -6,6 +6,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
+    detectAsyncLeaks: true,
     coverage: {
       include: ["src/**/*.ts"],
       exclude: ["src/**/*.test.ts", "src/types"],

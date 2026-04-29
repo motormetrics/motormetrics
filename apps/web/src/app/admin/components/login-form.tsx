@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
+} from "@motormetrics/ui/components/card";
 import { LoginFormClient } from "./login-form.client";
 
 function GoogleIcon() {

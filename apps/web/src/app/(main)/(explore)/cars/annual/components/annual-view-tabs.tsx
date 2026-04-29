@@ -6,6 +6,7 @@ import {
   type View,
 } from "@web/app/(main)/(explore)/cars/annual/search-params";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { type ReactNode, useTransition } from "react";
 
 interface AnnualViewTabsProps {
@@ -28,7 +29,10 @@ export function AnnualViewTabs({
   return (
     <Tabs
       selectedKey={view}
-      onSelectionChange={(key) => setView(key as View)}
+      onSelectionChange={(key) => {
+        posthog.capture("annual_view_tab_changed", { view: key as string });
+        setView(key as View);
+      }}
       variant="underlined"
       aria-label="Annual data view"
     >

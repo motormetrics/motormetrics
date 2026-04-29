@@ -1,4 +1,4 @@
-vi.mock("@sgcarstrends/database", () => ({
+vi.mock("@motormetrics/database", () => ({
   vehiclePopulation: {
     year: "year",
     category: "category",
@@ -33,8 +33,6 @@ describe("updateVehiclePopulation", () => {
 
     expect(vi.mocked(update).mock.calls[0][0]).toMatchObject({
       url: expect.stringContaining("Annual Motor Vehicle Population"),
-      partitionField: "year",
-      keyFields: ["year", "category", "fuelType"],
     });
   });
 
@@ -80,16 +78,5 @@ describe("updateVehiclePopulation", () => {
     expect(numberTransform).toBeDefined();
     expect(numberTransform?.("")).toBe(0);
     expect(numberTransform?.("100")).toBe(100);
-  });
-
-  it("should use year as partition field", async () => {
-    vi.mocked(update).mockResolvedValueOnce(mockResult());
-
-    await updateVehiclePopulation();
-
-    const config = vi.mocked(update).mock.calls[0][0] as {
-      partitionField?: string;
-    };
-    expect(config.partitionField).toBe("year");
   });
 });

@@ -3,19 +3,18 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { cn } from "@heroui/theme";
 import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
-import { EV_COLORS } from "@web/app/(main)/(explore)/cars/electric-vehicles/constants";
-import Typography from "@web/components/typography";
-import {
-  CARD_PADDING,
   CHART_CURSOR,
   CHART_GRID,
   CHART_HEIGHTS,
-  RADIUS,
-} from "@web/config/design-system";
+} from "@motormetrics/theme/charts";
+import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@motormetrics/ui/components/chart";
+import { EV_COLORS } from "@web/app/(main)/(explore)/cars/electric-vehicles/constants";
+import Typography from "@web/components/typography";
 import type { EvMonthlyTrend } from "@web/queries/cars/electric-vehicles";
 import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@sgcarstrends/ui/components/data-table";
+import { DataTable } from "@motormetrics/ui/components/data-table";
 import { columns } from "@web/components/tables/columns/coe-results-columns";
 import type { COEResult } from "@web/types";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";

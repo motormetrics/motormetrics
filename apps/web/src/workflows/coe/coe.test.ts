@@ -1,15 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@sgcarstrends/ai", () => ({
+vi.mock("@motormetrics/ai", () => ({
   generateBlogContent: vi.fn(),
+  generateHeroImage: vi.fn(),
   getCoeForMonth: vi.fn(),
+  updatePostHeroImage: vi.fn(),
 }));
 
-vi.mock("@sgcarstrends/utils", () => ({
+vi.mock("@motormetrics/utils", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@motormetrics/utils")>()),
   redis: {
     set: vi.fn(),
   },
-  tokeniser: vi.fn((data) => JSON.stringify(data)),
 }));
 
 vi.mock("@web/workflows/coe/steps/process-data", () => ({
@@ -31,6 +33,12 @@ vi.mock("next/cache", () => ({
 vi.mock("workflow", () => ({
   fetch: vi.fn(),
   getStepMetadata: vi.fn(() => ({ attempt: 1 })),
+  getWritable: vi.fn(() => ({
+    getWriter: () => ({
+      write: vi.fn().mockResolvedValue(undefined),
+      releaseLock: vi.fn(),
+    }),
+  })),
   FatalError: class FatalError extends Error {
     constructor(message: string) {
       super(message);
@@ -48,12 +56,18 @@ vi.mock("workflow", () => ({
   },
 }));
 
-vi.mock("@web/workflows/shared", () => ({
+vi.mock("@web/workflows/shared", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@web/workflows/shared")>()),
   revalidatePostsCache: vi.fn(),
 }));
 
-import { generateBlogContent, getCoeForMonth } from "@sgcarstrends/ai";
-import { redis } from "@sgcarstrends/utils";
+import {
+  generateBlogContent,
+  generateHeroImage,
+  getCoeForMonth,
+  updatePostHeroImage,
+} from "@motormetrics/ai";
+import { redis } from "@motormetrics/utils";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";
 import { getExistingPostByMonth } from "@web/queries/posts";
 import { coeWorkflow } from "@web/workflows/coe";
@@ -65,6 +79,7 @@ describe("coeWorkflow", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
   });
 
   it("should return early when no records are processed", async () => {
@@ -186,10 +201,27 @@ describe("coeWorkflow", () => {
       postId: "new-post-id",
       title: "January 2024 COE Results",
       slug: "january-2024-coe-results",
+      excerpt: "Summary of January 2024 COE results.",
+      dataType: "coe",
     });
+    vi.mocked(generateHeroImage).mockResolvedValueOnce({
+      pathname: "coe.png",
+      url: "https://blob.example/coe.png",
+    });
+    vi.mocked(updatePostHeroImage).mockResolvedValueOnce(undefined);
 
     const result = await coeWorkflow({});
 
+    expect(generateHeroImage).toHaveBeenCalledWith({
+      title: "January 2024 COE Results",
+      excerpt: "Summary of January 2024 COE results.",
+      dataType: "coe",
+      slug: expect.any(String),
+    });
+    expect(updatePostHeroImage).toHaveBeenCalledWith(
+      "new-post-id",
+      "https://blob.example/coe.png",
+    );
     expect(revalidateTag).toHaveBeenCalledWith("coe:latest", "max");
     expect(revalidateTag).toHaveBeenCalledWith("coe:previous", "max");
     expect(revalidateTag).toHaveBeenCalledWith("coe:months", "max");
@@ -199,6 +231,57 @@ describe("coeWorkflow", () => {
     expect(revalidateTag).toHaveBeenCalledWith("coe:month:2024-01", "max");
     expect(revalidateTag).toHaveBeenCalledWith("coe:year:2024", "max");
     expect(generateBlogContent).toHaveBeenCalled();
+    expect(revalidatePostsCache).toHaveBeenCalled();
+    expect(result.message).toBe(
+      "[COE] Data processed and cache revalidated successfully",
+    );
+    expect(result.postId).toBe("new-post-id");
+  });
+
+  it("should still complete when hero image generation fails", async () => {
+    vi.mocked(updateCoe).mockResolvedValueOnce({
+      recordsProcessed: 10,
+      table: "coe",
+      message: "",
+      timestamp: "",
+    });
+    vi.mocked(getCOELatestRecord).mockResolvedValueOnce({
+      id: "test-id",
+      month: "2024-01",
+      biddingNo: 2,
+      vehicleClass: "A",
+      quota: 100,
+      bidsSuccess: 100,
+      bidsReceived: 200,
+      premium: 100000,
+    });
+    vi.mocked(getExistingPostByMonth).mockResolvedValueOnce([]);
+    vi.mocked(getCoeForMonth).mockResolvedValueOnce([
+      {
+        month: "2024-01",
+        biddingNo: 2,
+        vehicleClass: "A",
+        quota: 100,
+        bidsSuccess: 100,
+        bidsReceived: 200,
+        premium: 100000,
+      },
+    ]);
+    vi.mocked(generateBlogContent).mockResolvedValueOnce({
+      month: "2024-01",
+      postId: "new-post-id",
+      title: "January 2024 COE Results",
+      slug: "january-2024-coe-results",
+      excerpt: "Summary of January 2024 COE results.",
+      dataType: "coe",
+    });
+    vi.mocked(generateHeroImage).mockRejectedValueOnce(
+      new Error("hero gen boom"),
+    );
+
+    const result = await coeWorkflow({});
+
+    expect(updatePostHeroImage).not.toHaveBeenCalled();
     expect(revalidatePostsCache).toHaveBeenCalled();
     expect(result.message).toBe(
       "[COE] Data processed and cache revalidated successfully",

@@ -1,4 +1,4 @@
-import { coe, db, desc, max } from "@sgcarstrends/database";
+import { coe, db, desc, max } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**

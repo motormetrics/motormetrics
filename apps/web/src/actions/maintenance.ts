@@ -1,6 +1,6 @@
 "use server";
 
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 
 interface AppConfig {
   maintenance: {

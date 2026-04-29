@@ -1,4 +1,4 @@
-import { asc, coe, db, eq, max } from "@sgcarstrends/database";
+import { asc, coe, db, eq, max } from "@motormetrics/database";
 import type { COEResult } from "@web/types";
 import { cacheLife, cacheTag } from "next/cache";
 

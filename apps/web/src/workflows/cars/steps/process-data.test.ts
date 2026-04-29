@@ -1,8 +1,8 @@
-vi.mock("@sgcarstrends/database", () => ({
+vi.mock("@motormetrics/database", () => ({
   cars: { name: "cars" },
 }));
 
-vi.mock("@sgcarstrends/utils", () => ({
+vi.mock("@motormetrics/utils", () => ({
   cleanSpecialChars: vi.fn(
     (
       value: string,
@@ -27,7 +27,7 @@ vi.mock("@web/lib/updater", () => ({
   update: vi.fn(),
 }));
 
-import { cleanSpecialChars } from "@sgcarstrends/utils";
+import { cleanSpecialChars } from "@motormetrics/utils";
 import { type UpdaterResult, update } from "@web/lib/updater";
 import { updateCars } from "./process-data";
 
@@ -53,7 +53,6 @@ describe("updateCars", () => {
 
     expect(vi.mocked(update).mock.calls[0][0]).toMatchObject({
       url: "https://example.com/datamall/Monthly New Registration of Cars by Make.zip",
-      keyFields: ["month", "make", "fuelType", "vehicleType"],
     });
   });
 

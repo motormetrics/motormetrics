@@ -1,6 +1,17 @@
+"use client";
+
 import { Card, CardBody } from "@heroui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@heroui/table";
+import { cn } from "@heroui/theme";
 import Typography from "@web/components/typography";
-import { ArrowDown, Table } from "lucide-react";
+import { ArrowDown, Table as TableIcon } from "lucide-react";
 
 const BRACKETS = [
   {
@@ -22,57 +33,51 @@ export function PARFComparisonTable() {
     <Card className="overflow-hidden rounded-2xl">
       <CardBody className="flex flex-col gap-0 p-0">
         <div className="flex items-center gap-2 px-6 py-4">
-          <Table className="size-4 text-primary" />
+          <TableIcon className="size-4 text-primary" />
           <Typography.H4>PARF Rebate Rate Comparison</Typography.H4>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-default-200 border-y bg-default-50">
-                <th className="px-6 py-2 text-left font-semibold text-default-600 text-xs uppercase tracking-wider">
-                  Vehicle Age
-                </th>
-                <th className="px-6 py-2 text-center font-semibold text-default-600 text-xs uppercase tracking-wider">
-                  Old Rate
-                </th>
-                <th className="px-6 py-2 text-center font-semibold text-primary text-xs uppercase tracking-wider">
-                  New Rate
-                </th>
-                <th className="px-6 py-2 text-right font-semibold text-danger text-xs uppercase tracking-wider">
-                  Change
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {BRACKETS.map((row) => (
-                <tr
-                  key={row.age}
-                  className="border-default-100 border-b transition-colors last:border-b-0 hover:bg-default-50"
-                >
-                  <td className="px-6 py-2 font-medium">{row.age}</td>
-                  <td className="px-6 py-2 text-center text-default-500">
-                    {row.oldRate}
-                  </td>
-                  <td className="px-6 py-2 text-center font-semibold text-primary">
-                    {row.newRate}
-                  </td>
-                  <td className="px-6 py-2 text-right">
-                    {row.change ? (
-                      <span className="inline-flex items-center gap-1 font-semibold text-danger text-xs">
-                        <ArrowDown className="size-4" />
-                        {row.change}
-                      </span>
-                    ) : (
-                      <span className="text-default-400 text-xs">
-                        No change
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          aria-label="PARF rebate rate comparison by vehicle age"
+          removeWrapper
+          classNames={{
+            th: "text-xs uppercase tracking-wider",
+            td: "py-2",
+          }}
+        >
+          <TableHeader>
+            <TableColumn>Vehicle Age</TableColumn>
+            <TableColumn align="center">Old Rate</TableColumn>
+            <TableColumn align="center" className="text-primary">
+              New Rate
+            </TableColumn>
+            <TableColumn align="end" className="text-danger">
+              Change
+            </TableColumn>
+          </TableHeader>
+          <TableBody>
+            {BRACKETS.map((row) => (
+              <TableRow key={row.age}>
+                <TableCell className="font-medium">{row.age}</TableCell>
+                <TableCell className={cn("text-center text-default-500")}>
+                  {row.oldRate}
+                </TableCell>
+                <TableCell className="text-center font-semibold text-primary">
+                  {row.newRate}
+                </TableCell>
+                <TableCell className="text-right">
+                  {row.change ? (
+                    <span className="inline-flex items-center justify-end gap-1 font-semibold text-danger text-xs">
+                      <ArrowDown className="size-4" />
+                      {row.change}
+                    </span>
+                  ) : (
+                    <span className="text-default-400 text-xs">No change</span>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
         <div className="flex flex-col justify-between gap-2 border-default-200 border-t bg-default-50 px-6 py-4 text-default-500 text-xs sm:flex-row">
           <span>
             Rebate Cap: <strong className="text-foreground">$60,000</strong>{" "}

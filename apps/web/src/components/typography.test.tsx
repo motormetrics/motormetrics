@@ -5,6 +5,7 @@ describe("Typography", () => {
   describe("Headings", () => {
     it("should render H1", () => {
       render(<Typography.H1>Page Title</Typography.H1>);
+      expect(document.body.firstChild).toMatchSnapshot();
       expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
         "Page Title",
       );

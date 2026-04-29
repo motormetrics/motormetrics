@@ -1,3 +1,4 @@
+import { Chip } from "@heroui/chip";
 import type { PropsWithChildren } from "react";
 
 interface ComingSoonProps extends PropsWithChildren {}
@@ -6,9 +7,14 @@ export function ComingSoon({ children }: ComingSoonProps) {
   return (
     <div className="pointer-events-none relative inline-block rounded-sm">
       {children}
-      <span className="absolute top-0 left-0 translate-x-1/2 -translate-y-1/2 rotate-3 transform text-nowrap rounded-sm bg-blue-100 px-2 py-1 font-bold text-blue-600 text-xs">
+      <Chip
+        color="primary"
+        variant="flat"
+        size="sm"
+        className="absolute top-0 left-0 translate-x-1/2 -translate-y-1/2 rotate-3 transform text-nowrap"
+      >
         Coming Soon
-      </span>
+      </Chip>
     </div>
   );
 }

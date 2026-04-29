@@ -38,4 +38,16 @@ It provides insights into fleet turnover and the impact of the 10-year COE lifec
 
 This page tracks three categories of electrified vehicles: **BEV** (Battery Electric), **PHEV** (Plug-In Hybrid), and **Hybrid** (conventional hybrid). Together they show how Singapore's roads are going green.`,
   },
+  carCosts: {
+    title: "Understanding Car Costs",
+    content: `The total cost of a new car in Singapore is composed of several government-regulated components:
+
+- **OMV (Open Market Value)** — the assessed import price of the vehicle
+- **ARF (Additional Registration Fee)** — a tax on OMV, charged on a tiered scale (100%–220%)
+- **VES (Vehicular Emissions Scheme)** — a rebate (Bands A1/A2) or surcharge (Bands C/D) based on emissions. Band B is neutral.
+- **EEAI** — Energy Efficiency surcharge for the least efficient vehicles (included in VES where applicable)
+- **COE (Certificate of Entitlement)** — the quota premium required to register a vehicle, valid for 10 years
+
+Data is sourced from the **LTA Car Cost Update** spreadsheet published monthly.`,
+  },
 } as const;

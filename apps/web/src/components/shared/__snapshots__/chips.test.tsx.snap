@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NewChip > should render with default props 1`] = `
+<div>
+  <div
+    class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-6 text-tiny rounded-full bg-primary text-primary-foreground"
+  >
+    <span
+      class="flex-1 text-inherit font-normal px-1"
+    >
+      New
+    </span>
+  </div>
+</div>
+`;

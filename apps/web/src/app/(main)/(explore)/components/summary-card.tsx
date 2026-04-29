@@ -1,3 +1,6 @@
+import { Button } from "@heroui/button";
+import { Card, CardBody } from "@heroui/card";
+import { Chip } from "@heroui/chip";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { getYearlyRegistrations } from "@web/queries/cars";
 import {
@@ -15,6 +18,7 @@ export async function SummaryCard() {
 
   const totalRegistrations = currentYear?.total ?? 0;
   const previousTotal = previousYear?.total ?? 0;
+  const displayYear = currentYear?.year ?? "No data";
   const changePercent =
     previousTotal > 0
       ? (((totalRegistrations - previousTotal) / previousTotal) * 100).toFixed(
@@ -24,42 +28,43 @@ export async function SummaryCard() {
   const isPositive = totalRegistrations >= previousTotal;
 
   return (
-    <div className="rounded-3xl border-2 border-primary bg-white p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
-          <BarChart3 className="size-6 text-primary" />
+    <Card className="border-2 border-primary" radius="lg">
+      <CardBody className="p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
+            <BarChart3 className="size-6 text-primary" />
+          </div>
+          <Link href="/cars">
+            <Button isIconOnly variant="flat" radius="full">
+              <ArrowUpRight className="size-6" />
+            </Button>
+          </Link>
         </div>
-        <Link
-          href="/cars"
-          className="flex size-10 items-center justify-center rounded-full bg-default-100 text-default-500 transition-colors hover:bg-default-200"
-        >
-          <ArrowUpRight className="size-6" />
-        </Link>
-      </div>
-      <p className="text-default-500 text-sm">
-        Total Registrations ({currentYear?.year ?? new Date().getFullYear()})
-      </p>
-      <p className="mt-1 font-bold text-4xl text-primary tabular-nums">
-        <AnimatedNumber value={totalRegistrations} />
-      </p>
-      <div className="mt-4 flex items-center gap-2">
-        <span
-          className={`flex items-center gap-1 rounded-full px-2.5 py-1 font-medium text-xs ${
-            isPositive
-              ? "bg-success/20 text-success"
-              : "bg-danger/20 text-danger"
-          }`}
-        >
-          {isPositive ? (
-            <TrendingUp className="size-4" />
-          ) : (
-            <TrendingDown className="size-4" />
-          )}
-          {isPositive ? "+" : ""}
-          {changePercent}%
-        </span>
-        <span className="text-default-500 text-xs">vs previous year</span>
-      </div>
-    </div>
+        <p className="text-default-500 text-sm">
+          Total Registrations ({displayYear})
+        </p>
+        <p className="mt-1 font-bold text-4xl text-primary tabular-nums">
+          <AnimatedNumber value={totalRegistrations} />
+        </p>
+        <div className="mt-4 flex items-center gap-2">
+          <Chip
+            variant="flat"
+            color={isPositive ? "success" : "danger"}
+            size="sm"
+            startContent={
+              isPositive ? (
+                <TrendingUp className="size-4" />
+              ) : (
+                <TrendingDown className="size-4" />
+              )
+            }
+          >
+            {isPositive ? "+" : ""}
+            {changePercent}%
+          </Chip>
+          <span className="text-default-500 text-xs">vs previous year</span>
+        </div>
+      </CardBody>
+    </Card>
   );
 }

@@ -15,6 +15,7 @@ describe("Chart shared helpers", () => {
     });
 
     render(<div>{fragment}</div>);
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("COE Premium")).toBeInTheDocument();
     expect(screen.getByText("$123,456")).toBeInTheDocument();
   });

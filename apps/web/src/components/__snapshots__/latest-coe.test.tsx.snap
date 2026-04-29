@@ -1,0 +1,72 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LatestCoe > should render all COE results 1`] = `
+<div>
+  <div
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium motion-reduce:transition-none rounded-2xl p-3 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+    tabindex="-1"
+  >
+    <div
+      class="flex p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large"
+    >
+      <div
+        class="flex items-center gap-2"
+      >
+        <h4
+          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        >
+          Category A
+        </h4>
+      </div>
+    </div>
+    <div
+      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+    >
+      <div
+        class="grid grid-cols-2 items-center gap-2"
+      >
+        <div
+          class="bg-gradient-to-br from-primary to-primary/70 bg-clip-text font-bold text-2xl text-transparent"
+        >
+          <span>
+            95000
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium motion-reduce:transition-none rounded-2xl p-3 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+    tabindex="-1"
+  >
+    <div
+      class="flex p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large"
+    >
+      <div
+        class="flex items-center gap-2"
+      >
+        <h4
+          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        >
+          Category B
+        </h4>
+      </div>
+    </div>
+    <div
+      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+    >
+      <div
+        class="grid grid-cols-2 items-center gap-2"
+      >
+        <div
+          class="bg-gradient-to-br from-primary to-primary/70 bg-clip-text font-bold text-2xl text-transparent"
+        >
+          <span>
+            105000
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

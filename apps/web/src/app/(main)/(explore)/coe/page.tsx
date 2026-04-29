@@ -1,46 +1,115 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { AnimatedGrid } from "@web/app/(main)/(explore)/components/animated-grid";
+import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
+import { ExploreCard } from "@web/app/(main)/(explore)/components/explore-card";
+import { StructuredData } from "@web/components/structured-data";
 import Typography from "@web/components/typography";
+import { SITE_TITLE, SITE_URL } from "@web/config";
 import { navLinks } from "@web/config/navigation";
-import { createPageMetadata } from "@web/lib/metadata";
+import { SOCIAL_HANDLE } from "@web/config/socials";
+import { generateDataCatalogSchema } from "@web/lib/metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = createPageMetadata({
-  title: "COE",
-  description:
-    "Certificate of Entitlement (COE) data for Singapore. View premiums, historical results, and PQP rates.",
-  canonical: "/coe",
-});
+const title = "COE Bidding Results Singapore";
+const description =
+  "Certificate of Entitlement (COE) data for Singapore. View premiums, historical results, and PQP rates.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: `${SITE_URL}/coe`,
+    siteName: SITE_TITLE,
+    locale: "en_SG",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    site: SOCIAL_HANDLE,
+    creator: SOCIAL_HANDLE,
+  },
+  alternates: {
+    canonical: "/coe",
+  },
+};
 
 export default function Page() {
+  // Separate hero card (Premiums) from the rest
+  const heroItem = navLinks.coe.find((item) => item.url === "/coe/premiums");
+  const sidebarItems = navLinks.coe.filter(
+    (item) => item.url !== "/coe/premiums",
+  );
+
   return (
     <div className="flex flex-col gap-8">
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateDataCatalogSchema(
+            "Singapore COE Data Catalogue",
+            "Certificate of Entitlement bidding results, premium trends, and PQP rates for Singapore's vehicle quota system.",
+            "/coe",
+            ["coe-results", "coe-premiums", "coe-pqp"],
+          ),
+        }}
+      />
       <div className="flex flex-col gap-2">
         <Typography.H1>COE</Typography.H1>
         <Typography.TextLg>
-          Certificate of Entitlement data and analysis for Singapore.
+          Certificate of Entitlement data and analysis for Singapore. Explore{" "}
+          <Link href="/cars" className="text-primary hover:underline">
+            car registration data
+          </Link>{" "}
+          to see which makes and fuel types are most popular.
         </Typography.TextLg>
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {navLinks.coe.map(({ title, url, icon: Icon, description }) => (
-          <Link key={url} href={url}>
-            <Card
-              isPressable
-              className="h-full bg-content1 p-4 transition-shadow hover:shadow-md"
-            >
-              <CardHeader className="flex flex-row items-center gap-2">
-                {Icon && <Icon className="size-5 text-primary" />}
-                <Typography.H4>{title}</Typography.H4>
-              </CardHeader>
-              {description && (
-                <CardBody>
-                  <Typography.TextSm>{description}</Typography.TextSm>
-                </CardBody>
-              )}
-            </Card>
-          </Link>
-        ))}
-      </div>
+
+      <AnimatedGrid className="grid grid-cols-12 gap-4">
+        {/* Hero card: Premiums - spans 8 columns on desktop */}
+        {heroItem?.icon && (
+          <AnimatedSection className="col-span-12 md:col-span-8" order={0}>
+            <ExploreCard
+              title={heroItem.title}
+              description={heroItem.description ?? ""}
+              href={heroItem.url}
+              icon={
+                <heroItem.icon
+                  className={`size-6 ${heroItem.iconColor ?? "text-primary"}`}
+                />
+              }
+              badge={heroItem.badge}
+              variant="hero"
+              className="h-full min-h-[200px] md:min-h-[280px]"
+            />
+          </AnimatedSection>
+        )}
+
+        {/* Sidebar: Results and PQP stacked vertically */}
+        <div className="col-span-12 flex flex-col gap-4 md:col-span-4">
+          {sidebarItems.map((item, index) => (
+            <AnimatedSection key={item.url} order={index + 1}>
+              <ExploreCard
+                title={item.title}
+                description={item.description ?? ""}
+                href={item.url}
+                icon={
+                  item.icon && (
+                    <item.icon
+                      className={`size-5 ${item.iconColor ?? "text-primary"}`}
+                    />
+                  )
+                }
+                badge={item.badge}
+                variant="standard"
+              />
+            </AnimatedSection>
+          ))}
+        </div>
+      </AnimatedGrid>
     </div>
   );
 }

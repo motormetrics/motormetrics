@@ -1,0 +1,51 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MakeCard > should render the make name 1`] = `
+<div>
+  <a
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large cursor-pointer motion-reduce:transition-none data-[pressed=true]:scale-[0.97] tap-highlight-transparent p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+    data-react-aria-pressable="true"
+    href="/cars/makes/bmw"
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+    >
+      <div
+        class="flex flex-col gap-2"
+      >
+        <div
+          class="flex items-start gap-2"
+        >
+          <div
+            class="flex size-16 shrink-0 items-center justify-center"
+          >
+            <img
+              alt="BMW logo"
+              class="size-full object-contain"
+              data-nimg="1"
+              decoding="async"
+              height="512"
+              loading="lazy"
+              src="/_next/image?url=https%3A%2F%2Fblob.vercel-storage.com%2Flogos%2Fbmw.png&w=1080&q=75"
+              srcset="/_next/image?url=https%3A%2F%2Fblob.vercel-storage.com%2Flogos%2Fbmw.png&w=640&q=75 1x, /_next/image?url=https%3A%2F%2Fblob.vercel-storage.com%2Flogos%2Fbmw.png&w=1080&q=75 2x"
+              style="color: transparent;"
+              width="512"
+            />
+          </div>
+          <div
+            class="flex min-w-0 flex-col gap-2"
+          >
+            <span
+              class="font-medium text-foreground text-sm leading-none truncate"
+            >
+              BMW
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+`;

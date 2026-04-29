@@ -5,7 +5,7 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
 import Typography from "@web/components/typography";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 

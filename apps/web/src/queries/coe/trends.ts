@@ -9,7 +9,7 @@ import {
   lte,
   max,
   type SelectCOE,
-} from "@sgcarstrends/database";
+} from "@motormetrics/database";
 import { getDateRangeForYear } from "@web/lib/coe/calculations";
 import type { COECategory } from "@web/types";
 import { subMonths } from "date-fns";

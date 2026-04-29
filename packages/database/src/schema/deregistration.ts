@@ -1,4 +1,11 @@
-import { index, integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import {
+  index,
+  integer,
+  pgTable,
+  text,
+  unique,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const deregistrations = pgTable(
   "deregistrations",
@@ -9,6 +16,7 @@ export const deregistrations = pgTable(
     number: integer().default(0),
   },
   (table) => [
+    unique().on(table.month, table.category),
     index().on(table.month, table.category),
     index().on(table.month),
     index().on(table.category),

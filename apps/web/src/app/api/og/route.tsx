@@ -1,4 +1,4 @@
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { loadSearchParams } from "@web/app/api/og/search-params";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
@@ -54,8 +54,8 @@ export const GET = async (request: NextRequest) => {
           tw="ml-2 text-xl"
           style={{ textShadow: `0 2px 4px rgba(0,0,0,0.3)` }}
         >
-          <span tw="text-black">SGCars</span>
-          <span tw="text-blue-600">Trends</span>
+          <span tw="text-black">Motor</span>
+          <span tw="text-blue-600">Metrics</span>
         </span>
       </div>
       <div tw="flex w-full p-32">

@@ -1,8 +1,8 @@
-# SG Cars Trends Database - Developer Reference Guide
+# MotorMetrics Database - Developer Reference Guide
 
 ## Package Overview
 
-The `@sgcarstrends/database` package (v4.26.1) provides the database schema, types, and migration system for the SG Cars Trends
+The `@motormetrics/database` package (v4.26.1) provides the database schema, types, and migration system for the MotorMetrics
 platform. It uses Drizzle ORM v0.44.3 with PostgreSQL to manage:
  
 - **Car Registration Data**: Monthly vehicle registration statistics by make, fuel type, and vehicle type
@@ -204,7 +204,7 @@ export type SelectPost = typeof posts.$inferSelect;
 ### Usage in Applications
 
 ```typescript
-import {cars, type SelectCar} from "@sgcarstrends/database";
+import {cars, type SelectCar} from "@motormetrics/database";
 import {db} from "./config/db";
 
 // Type-safe database queries
@@ -279,7 +279,7 @@ Applications should create their own database connection using this schema:
 ```typescript
 import {drizzle} from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import * as schema from "@sgcarstrends/database";
+import * as schema from "@motormetrics/database";
 
 const client = postgres(process.env.DATABASE_URL!);
 export const db = drizzle(client, {schema});

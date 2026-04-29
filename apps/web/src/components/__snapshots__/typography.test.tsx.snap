@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Typography > Headings > should render H1 1`] = `
+<div>
+  <h1
+    class="scroll-m-20 font-semibold text-4xl text-foreground tracking-tight lg:text-5xl"
+  >
+    Page Title
+  </h1>
+</div>
+`;

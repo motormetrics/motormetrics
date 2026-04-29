@@ -1,6 +1,6 @@
 {
-  "name": "@sgcarstrends/logos",
-  "version": "4.61.8",
+  "name": "@motormetrics/logos",
+  "version": "4.66.0",
   "description": "Shared utilities for car logo management",
   "type": "module",
   "scripts": {
@@ -11,15 +11,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@sgcarstrends/utils": "workspace:*",
-    "@vercel/blob": "^2.3.0"
+    "@motormetrics/utils": "workspace:*",
+    "@vercel/blob": "2.3.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
     "typescript": "catalog:",
-    "vite-tsconfig-paths": "^5.1.4",
+    "vite-tsconfig-paths": "catalog:",
     "vitest": "catalog:"
   }
 }

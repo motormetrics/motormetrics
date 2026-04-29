@@ -5,8 +5,8 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+} from "@motormetrics/ui/components/chart";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import { formatNumber } from "@web/utils/charts";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";

@@ -1,4 +1,4 @@
-import { redis, slugify } from "@sgcarstrends/utils";
+import { redis, slugify } from "@motormetrics/utils";
 import { MakeDetail } from "@web/app/(main)/(explore)/cars/components/makes/make-detail";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
@@ -7,10 +7,11 @@ import { DashboardPageTitle } from "@web/components/dashboard-page-title";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
-import { LAST_UPDATED_CARS_KEY } from "@web/config";
+import { LAST_UPDATED_CARS_KEY, SITE_TITLE, SITE_URL } from "@web/config";
+import { SOCIAL_HANDLE } from "@web/config/socials";
 import {
-  createPageMetadata,
   createWebPageStructuredData,
+  generateBreadcrumbSchema,
 } from "@web/lib/metadata";
 import { getDistinctMakes } from "@web/queries/cars";
 import { getMakeCoeComparison } from "@web/queries/cars/makes/coe-comparison";
@@ -35,35 +36,54 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const makes = await getDistinctMakes();
-  return makes.map(({ make }) => ({ make: slugify(make) }));
+  const params = makes.map(({ make }) => ({ make: slugify(make) }));
+
+  return params.length > 0 ? params : [{ make: "__static-validation__" }];
 }
 
-export const generateMetadata = async ({
+export async function generateMetadata({
   params,
-}: PageProps): Promise<Metadata> => {
+}: PageProps): Promise<Metadata> {
   const { make } = await params;
 
   const exactMake = await getMakeFromSlug(make);
   if (!exactMake) {
-    return createPageMetadata({
+    return {
       title: "Car Make Not Found",
       description: "The requested car make could not be found.",
-      canonical: `/cars/makes/${make}`,
-    });
+      alternates: { canonical: `/cars/makes/${make}` },
+    };
   }
 
-  const title = `${exactMake} Cars Overview: Registration Trends`;
+  const title = `${exactMake} Cars in Singapore`;
   const description = `${exactMake} cars overview. Historical car registration trends and monthly breakdown by fuel and vehicle types in Singapore.`;
-
   const images = `/api/og?title=${exactMake}&subtitle=Stats by Make`;
 
-  return createPageMetadata({
+  return {
     title,
     description,
-    canonical: `/cars/makes/${make}`,
-    images,
-  });
-};
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/cars/makes/${make}`,
+      siteName: SITE_TITLE,
+      locale: "en_SG",
+      type: "website",
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      site: SOCIAL_HANDLE,
+      creator: SOCIAL_HANDLE,
+      images,
+    },
+    alternates: {
+      canonical: `/cars/makes/${make}`,
+    },
+  };
+}
 
 export default async function CarMakePage({
   params,
@@ -191,7 +211,7 @@ async function CarMakeContent({
     monthsTracked: monthlyTotals.length,
   };
 
-  const title = `${exactMake} Cars Overview: Registration Trends`;
+  const title = `${exactMake} Cars in Singapore`;
   const description = `${exactMake} cars overview. Historical car registration trends and monthly breakdown by fuel and vehicle types in Singapore.`;
   const structuredData = createWebPageStructuredData(
     title,
@@ -202,6 +222,17 @@ async function CarMakeContent({
   return (
     <>
       <StructuredData data={structuredData} />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Cars", path: "/cars" },
+            { name: "Makes", path: "/cars/makes" },
+            { name: exactMake, path: `/cars/makes/${make}` },
+          ]),
+        }}
+      />
       <Suspense fallback={<SkeletonCard className="h-[560px] w-full" />}>
         <MakeDetail
           cars={cars}

@@ -1,3 +1,5 @@
+import { DOMAIN_NAME, SITE_TITLE } from "@web/config";
+
 /**
  * OG image configuration
  */
@@ -10,10 +12,10 @@ export const OG_CONFIG = {
   fontFamily: "Geist",
 
   /** Site name for branding */
-  siteName: "SG Cars Trends",
+  siteName: SITE_TITLE,
 
   /** Site URL for branding */
-  siteUrl: "sgcarstrends.com",
+  siteUrl: DOMAIN_NAME,
 
   /** Border radius in pixels */
   borderRadius: 10,

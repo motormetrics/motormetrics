@@ -3,10 +3,16 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { cn } from "@heroui/theme";
 import {
+  CHART_CURSOR,
+  CHART_GRID,
+  CHART_HEIGHTS,
+} from "@motormetrics/theme/charts";
+import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
+import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
 import {
   FUEL_GROUP_COLORS,
   FUEL_GROUP_MAP,
@@ -15,13 +21,6 @@ import {
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import { searchParams } from "@web/app/(main)/(explore)/cars/annual/search-params";
 import Typography from "@web/components/typography";
-import {
-  CARD_PADDING,
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-  RADIUS,
-} from "@web/config/design-system";
 import { useQueryStates } from "nuqs";
 import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";

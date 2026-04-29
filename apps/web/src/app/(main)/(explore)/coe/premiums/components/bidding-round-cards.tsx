@@ -4,7 +4,7 @@ import {
   formatCurrency,
   formatDateToMonthYear,
   formatOrdinal,
-} from "@sgcarstrends/utils";
+} from "@motormetrics/utils";
 import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
 import type { COEResult } from "@web/types";

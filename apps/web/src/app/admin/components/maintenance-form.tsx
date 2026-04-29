@@ -32,7 +32,7 @@ const MAINTENANCE_FORM_LABELS = {
     serviceScope: {
       label: "Service Scope",
       description:
-        "Maintenance mode affects the web application only (sgcarstrends.com). The API (api.sgcarstrends.com) remains operational.",
+        "Maintenance mode affects the web application only (motormetrics.app). The API (api.motormetrics.app) remains operational.",
     },
     preview: {
       label: "Preview",

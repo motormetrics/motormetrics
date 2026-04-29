@@ -6,6 +6,25 @@ import { vi } from "vitest";
 const announcementsFixture: AnnouncementType[] = [];
 let mockPathname = "/";
 
+vi.mock("@heroui/alert", async () => {
+  const actual = await vi.importActual("@heroui/alert");
+  return {
+    ...actual,
+    Alert: ({
+      title,
+      children,
+    }: {
+      title?: string;
+      children?: React.ReactNode;
+    }) => (
+      <div data-testid="alert">
+        <div data-testid="alert-title">{title}</div>
+        {children}
+      </div>
+    ),
+  };
+});
+
 vi.mock("@web/config", () => ({
   get announcements() {
     return announcementsFixture;
@@ -31,7 +50,8 @@ describe("Announcement", () => {
 
     render(<Announcement />);
 
-    expect(screen.getByText(/Cars update/)).toBeInTheDocument();
+    expect(document.body.firstChild).toMatchSnapshot();
+    expect(screen.getByTestId("alert-title")).toHaveTextContent(/Cars update/);
   });
 
   it("should fall back to global announcements", () => {
@@ -40,7 +60,9 @@ describe("Announcement", () => {
 
     render(<Announcement />);
 
-    expect(screen.getByText("Global notice")).toBeInTheDocument();
+    expect(screen.getByTestId("alert-title")).toHaveTextContent(
+      "Global notice",
+    );
   });
 
   it("should render nothing when configured list is empty", () => {

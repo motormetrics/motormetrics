@@ -2,13 +2,13 @@
 
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import type { SelectDeregistration } from "@sgcarstrends/database";
+import type { SelectDeregistration } from "@motormetrics/database";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+} from "@motormetrics/ui/components/chart";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
   type CategoryWithPercentage,
   toPercentageDistribution,

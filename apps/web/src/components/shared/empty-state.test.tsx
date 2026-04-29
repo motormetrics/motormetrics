@@ -21,6 +21,7 @@ describe("EmptyState", () => {
   it("should render default title and description", () => {
     render(<EmptyState />);
 
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("No Data Available")).toBeInTheDocument();
     expect(
       screen.getByText(

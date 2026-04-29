@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Announcement > should prioritise path-specific announcements 1`] = `
+<div>
+  <div
+    data-testid="alert"
+  >
+    <div
+      data-testid="alert-title"
+    >
+      Cars update
+    </div>
+  </div>
+</div>
+`;

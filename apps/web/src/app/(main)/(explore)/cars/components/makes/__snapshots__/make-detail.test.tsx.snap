@@ -1,0 +1,262 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MakeDetail > should render metric cards 1`] = `
+<div>
+  <div
+    class="flex flex-col gap-6"
+  >
+    <div
+      class="flex items-center gap-4 border-default-100 border-b pb-6"
+    >
+      <div
+        class="flex size-16 items-center justify-center"
+      >
+        <span
+          class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny text-default-foreground rounded-full size-full bg-primary"
+          tabindex="-1"
+        >
+          <span
+            aria-label="B"
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-xl font-semibold text-primary-foreground"
+            role="img"
+          >
+            B
+          </span>
+        </span>
+      </div>
+      <div
+        class="flex flex-col gap-1"
+      >
+        <h2
+          class="scroll-m-20 font-semibold text-3xl text-foreground tracking-tight first:mt-0"
+        >
+          BMW
+        </h2>
+        <p
+          class="text-default-600 text-sm leading-6"
+        >
+          Vehicle Registrations
+        </p>
+      </div>
+    </div>
+    <div
+      class="grid grid-cols-3 gap-4"
+    >
+      <div
+        class="flex flex-col gap-2 rounded-2xl bg-default-100 p-4"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <svg
+            class="lucide lucide-car size-3.5 text-primary"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"
+            />
+            <circle
+              cx="7"
+              cy="17"
+              r="2"
+            />
+            <path
+              d="M9 17h6"
+            />
+            <circle
+              cx="17"
+              cy="17"
+              r="2"
+            />
+          </svg>
+          <span
+            class="text-xs leading-tight text-primary"
+          >
+            Total
+          </span>
+        </div>
+        <span
+          class="font-bold text-primary text-xl tabular-nums"
+        >
+          100
+        </span>
+      </div>
+      <div
+        class="flex flex-col gap-2 rounded-2xl bg-default-100 p-4"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <svg
+            class="lucide lucide-trending-up size-3.5 text-success"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polyline
+              points="22 7 13.5 15.5 8.5 10.5 2 17"
+            />
+            <polyline
+              points="16 7 22 7 22 13"
+            />
+          </svg>
+          <span
+            class="text-xs leading-tight text-success"
+          >
+            This Month
+          </span>
+        </div>
+        <span
+          class="font-bold text-foreground text-xl tabular-nums"
+        >
+          50
+        </span>
+      </div>
+      <div
+        class="flex flex-col gap-2 rounded-2xl bg-default-100 p-4"
+      >
+        <div
+          class="flex items-center gap-2"
+        >
+          <svg
+            class="lucide lucide-calendar size-3.5 text-default-500"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 2v4"
+            />
+            <path
+              d="M16 2v4"
+            />
+            <rect
+              height="18"
+              rx="2"
+              width="18"
+              x="3"
+              y="4"
+            />
+            <path
+              d="M3 10h18"
+            />
+          </svg>
+          <span
+            class="text-muted-foreground text-xs leading-tight"
+          >
+            Tracked
+          </span>
+        </div>
+        <span
+          class="font-bold text-foreground text-xl tabular-nums"
+        >
+          2
+          <span
+            class="ml-1 font-normal text-default-400 text-sm"
+          >
+            mo
+          </span>
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
+      tabindex="-1"
+    >
+      <div
+        class="p-3 z-10 w-full shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-row items-baseline justify-between"
+      >
+        <h4
+          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        >
+          Historical Trend
+        </h4>
+        <span
+          class="text-muted-foreground text-xs leading-tight"
+        >
+          Past registrations
+        </span>
+      </div>
+      <div
+        class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+      >
+        <div>
+          TrendChart
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
+      tabindex="-1"
+    >
+      <div
+        class="p-3 z-10 w-full justify-start shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-col items-start gap-2"
+      >
+        <h4
+          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        >
+          Registration vs COE Premium
+        </h4>
+      </div>
+      <div
+        class="relative w-full p-3 flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-col gap-4"
+      >
+        <div>
+          CoeComparisonChart
+        </div>
+        <span
+          class="text-muted-foreground text-xs leading-tight"
+        >
+          Bars show monthly registrations (left axis), lines show COE Category A and B premiums (right axis).
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
+      tabindex="-1"
+    >
+      <div
+        class="p-3 z-10 w-full shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-row items-baseline justify-between"
+      >
+        <h4
+          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        >
+          Summary
+        </h4>
+        <span
+          class="text-muted-foreground text-xs leading-tight"
+        >
+          Fuel & vehicle types by month
+        </span>
+      </div>
+      <div
+        class="relative flex w-full flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased p-0"
+      >
+        <div>
+          DataTable
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

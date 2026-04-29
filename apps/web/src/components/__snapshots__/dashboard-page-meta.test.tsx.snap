@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DashboardPageMeta > should render last updated and custom content 1`] = `
+<div>
+  <div
+    class="flex flex-col items-start gap-2"
+  >
+    <span
+      data-testid="last-updated"
+    >
+      1704067200000
+    </span>
+    <button
+      type="button"
+    >
+      Compare
+    </button>
+  </div>
+</div>
+`;

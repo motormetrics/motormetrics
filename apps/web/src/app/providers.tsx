@@ -2,11 +2,14 @@
 
 import { HeroUIProvider } from "@heroui/react";
 import { ToastProvider } from "@heroui/toast";
+import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 
 export function Providers({ children }: Readonly<{ children: ReactNode }>) {
+  const router = useRouter();
+
   return (
-    <HeroUIProvider>
+    <HeroUIProvider navigate={router.push}>
       <ToastProvider
         placement="top-right"
         toastProps={{

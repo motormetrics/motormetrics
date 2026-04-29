@@ -1,9 +1,10 @@
 import type { CarLogo } from "@logos/types";
-import { redis } from "@sgcarstrends/utils";
+import { redis, slugify } from "@motormetrics/utils";
 import { MakesDashboard } from "@web/app/(main)/(explore)/cars/components/makes/makes-dashboard";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
+import { generateItemListSchema } from "@web/lib/metadata";
 import { getPopularMakes } from "@web/queries/cars/makes/current-year-popular-makes";
 import { getGroupedMakes } from "@web/queries/cars/makes/grouped-makes";
 import { getMakeRegistrationStats } from "@web/queries/cars/makes/registration-stats";
@@ -64,6 +65,18 @@ async function CarMakesContent() {
   return (
     <>
       <StructuredData data={structuredData} />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateItemListSchema(
+            "Car Makes in Singapore",
+            sortedMakes.map((make) => ({
+              name: make,
+              url: `${SITE_URL}/cars/makes/${slugify(make)}`,
+            })),
+          ),
+        }}
+      />
       <MakesDashboard
         sortedMakes={sortedMakes}
         groupedMakes={groupedMakes}

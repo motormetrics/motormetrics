@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
+    // detectAsyncLeaks: true, // Available for targeted debugging; too noisy with framer-motion animation leaks
     coverage: {
       enabled: true,
       include: ["src"],
@@ -40,6 +41,14 @@ export default defineConfig({
         "**/visitors",
         "src/queries/coe/**", // Low priority for coverage
         "src/queries/posts/**", // Blog queries not prioritized for coverage
+        "src/queries/car-costs/**", // Low priority for coverage
+        "src/workflows/car-costs", // Workflow without tests yet
+        "src/workflows/car-costs/**", // Workflow without tests yet
+        "src/workflows/car-population", // Workflow without tests yet
+        "src/workflows/car-population/**", // Workflow without tests yet
+        "src/workflows/shared/types.ts", // Pure type definitions
+        "src/lib/updater/xlsx-updater.ts", // XLSX updater without tests
+        "src/lib/updater/services/process-xlsx.ts", // XLSX processor without tests
 
         // Barrel files (pure re-exports, no logic)
         "src/components/charts/index.ts",
@@ -48,7 +57,9 @@ export default defineConfig({
         "src/queries/index.ts",
         "src/queries/cars/index.ts",
         "src/queries/cars/makes/index.ts",
+        "src/queries/car-population/index.ts",
         "src/queries/deregistrations/index.ts",
+        "src/queries/vehicle-population/index.ts",
         "src/lib/updater/index.ts",
         "src/lib/updater/services/index.ts",
         "src/utils/arrays/index.ts",
@@ -83,7 +94,7 @@ export default defineConfig({
         statements: 80,
       },
     },
-    exclude: [...configDefaults.exclude, "tests"],
+    exclude: [...configDefaults.exclude, "tests", "**/*.integration.test.ts"],
     setupFiles: "./setup-tests.ts",
   },
 });

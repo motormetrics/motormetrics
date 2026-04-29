@@ -1,4 +1,4 @@
-import type { SelectCar } from "@sgcarstrends/database";
+import type { SelectCar } from "@motormetrics/database";
 import { render, screen } from "@testing-library/react";
 import { MakeDetail } from "./make-detail";
 
@@ -28,7 +28,7 @@ vi.mock(
   }),
 );
 
-vi.mock("@sgcarstrends/ui/components/data-table", () => ({
+vi.mock("@motormetrics/ui/components/data-table", () => ({
   DataTable: () => <div>DataTable</div>,
 }));
 
@@ -77,6 +77,7 @@ const mockLogo = {
 describe("MakeDetail", () => {
   it("should render metric cards", () => {
     render(<MakeDetail cars={mockCars} coeComparison={mockCoeComparison} />);
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("100")).toBeVisible();
     expect(screen.getByText("Total")).toBeVisible();
     expect(screen.getByText("50")).toBeVisible();

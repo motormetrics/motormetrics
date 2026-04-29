@@ -3,6 +3,7 @@ import { Divider } from "@heroui/divider";
 import { BrandLogo } from "@web/components/brand-logo";
 import Typography from "@web/components/typography";
 import { UnreleasedFeature } from "@web/components/unreleased-feature";
+import { SITE_TITLE } from "@web/config";
 import {
   NAV_ITEMS,
   navLinks,
@@ -81,7 +82,7 @@ export function Footer() {
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0">
           <div className="text-center text-default-600 md:text-left">
             <Typography.TextSm>
-              © {CURRENT_YEAR} SGCarsTrends. All rights reserved. • v{version}
+              © {CURRENT_YEAR} {SITE_TITLE}. All rights reserved. • v{version}
             </Typography.TextSm>
             <Typography.TextSm>
               Data provided by{" "}

@@ -1,10 +1,43 @@
+import { Badge } from "@heroui/badge";
+import { Button } from "@heroui/button";
+import { Card, CardBody } from "@heroui/card";
+import { Skeleton } from "@heroui/skeleton";
 import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults } from "@web/queries/coe";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { calculateChangePercent, calculateTrend } from "./coe-trend-utils";
+import {
+  calculateChangePercent,
+  calculateTrend,
+  type Trend,
+} from "./coe-trend-utils";
+
+function TrendBadge({ trend }: { trend: Exclude<Trend, "neutral"> }) {
+  const isUp = trend === "up";
+  const Icon = isUp ? ArrowUpIcon : ArrowDownIcon;
+
+  return (
+    <Badge
+      aria-label={isUp ? "Price increased" : "Price decreased"}
+      classNames={{
+        base: "inline-flex",
+        badge: "static h-5 min-w-5 translate-x-0 translate-y-0 border-0 p-0",
+      }}
+      color={isUp ? "danger" : "success"}
+      content={<Icon aria-hidden className="size-3" />}
+      shape="circle"
+      showOutline={false}
+      size="sm"
+      variant="solid"
+    >
+      <span className="sr-only">
+        {isUp ? "Price increased" : "Price decreased"}
+      </span>
+    </Badge>
+  );
+}
 
 async function CoeSectionContent() {
   const { latest, previous } = await getLatestAndPreviousCoeResults();
@@ -13,90 +46,80 @@ async function CoeSectionContent() {
   const previousMap = new Map(previous.map((r) => [r.vehicleClass, r.premium]));
 
   return (
-    <div className="rounded-3xl bg-white p-6">
-      <div className="mb-5 flex items-center justify-between">
-        <Typography.H3>Latest COE Results</Typography.H3>
-        <div className="flex items-center gap-2">
-          <Link
-            href="/coe"
-            aria-label="View all COE results"
-            className="flex size-10 items-center justify-center rounded-full bg-default-100 text-default-500 transition-colors hover:bg-default-200"
-          >
-            <ArrowUpRight className="size-6" />
+    <Card radius="lg">
+      <CardBody className="p-6">
+        <div className="mb-5 flex items-center justify-between">
+          <Typography.H3>Latest COE Results</Typography.H3>
+          <Link href="/coe" aria-label="View all COE results">
+            <Button isIconOnly variant="flat" radius="full" tabIndex={-1}>
+              <ArrowUpRight className="size-6" />
+            </Button>
           </Link>
         </div>
-      </div>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        {latest.map((result) => {
-          const previousPremium =
-            previousMap.get(result.vehicleClass) ?? result.premium;
-          const trend = calculateTrend(result.premium, previousPremium);
-          const changePercent = calculateChangePercent(
-            result.premium,
-            previousPremium,
-          );
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          {latest.map((result) => {
+            const previousPremium =
+              previousMap.get(result.vehicleClass) ?? result.premium;
+            const trend = calculateTrend(result.premium, previousPremium);
+            const changePercent = calculateChangePercent(
+              result.premium,
+              previousPremium,
+            );
 
-          return (
-            <div key={result.vehicleClass} className="rounded-2xl bg-muted p-4">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="font-medium text-default-500 text-xs">
-                  {result.vehicleClass}
-                </span>
-                {trend === "up" && (
-                  <span
-                    className="flex size-5 items-center justify-center rounded-full bg-danger text-white text-xs"
-                    aria-label="Price increased"
-                    role="img"
-                  >
-                    ↑
-                  </span>
-                )}
-                {trend === "down" && (
-                  <span
-                    className="flex size-5 items-center justify-center rounded-full bg-success text-white text-xs"
-                    aria-label="Price decreased"
-                    role="img"
-                  >
-                    ↓
-                  </span>
-                )}
-              </div>
-              <p className="font-bold text-foreground text-lg tabular-nums">
-                <AnimatedNumber value={result.premium} format="currency" />
-              </p>
-              <p
-                className={`mt-1 font-medium text-xs ${
-                  trend === "up"
-                    ? "text-danger"
-                    : trend === "down"
-                      ? "text-success"
-                      : "text-default-500"
-                }`}
+            return (
+              <Card
+                key={result.vehicleClass}
+                shadow="none"
+                className="bg-muted"
               >
-                {changePercent}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-    </div>
+                <CardBody className="p-4">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="font-medium text-default-500 text-xs">
+                      {result.vehicleClass}
+                    </span>
+                    {trend !== "neutral" && <TrendBadge trend={trend} />}
+                  </div>
+                  <p className="font-bold text-foreground text-lg tabular-nums">
+                    <AnimatedNumber value={result.premium} format="currency" />
+                  </p>
+                  <p
+                    className={`mt-1 font-medium text-xs ${
+                      trend === "up"
+                        ? "text-danger"
+                        : trend === "down"
+                          ? "text-success"
+                          : "text-default-500"
+                    }`}
+                  >
+                    {changePercent}
+                  </p>
+                </CardBody>
+              </Card>
+            );
+          })}
+        </div>
+      </CardBody>
+    </Card>
   );
 }
 
 function CoeSectionSkeleton() {
   return (
-    <div className="rounded-3xl bg-white p-6">
-      <div className="mb-5 h-6 w-40 animate-pulse rounded bg-default-200" />
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        {/* biome-ignore lint/suspicious/noArrayIndexKey: Static skeleton list */}
-        {[0, 1, 2, 3, 4].map((i) => (
-          <div key={i} className="rounded-2xl bg-default-100 p-4">
-            <div className="mb-2 h-4 w-12 animate-pulse rounded bg-default-200" />
-            <div className="h-6 w-20 animate-pulse rounded bg-default-200" />
-          </div>
-        ))}
-      </div>
-    </div>
+    <Card radius="lg">
+      <CardBody className="p-6">
+        <Skeleton className="mb-5 h-6 w-40 rounded-lg" />
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <Card key={i} shadow="none" className="bg-default-100">
+              <CardBody className="p-4">
+                <Skeleton className="mb-2 h-4 w-12 rounded-lg" />
+                <Skeleton className="h-6 w-20 rounded-lg" />
+              </CardBody>
+            </Card>
+          ))}
+        </div>
+      </CardBody>
+    </Card>
   );
 }
 

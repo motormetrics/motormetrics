@@ -1,11 +1,11 @@
-import { Button } from "@sgcarstrends/ui/components/button";
+import { Button } from "@motormetrics/ui/components/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
-import { mdxComponents } from "@web/app/(main)/blog/components/mdx-components";
+} from "@motormetrics/ui/components/card";
+import { mdxComponents } from "@web/app/(main)/(site)/blog/components/mdx-components";
 import { getAllPosts } from "@web/app/admin/actions/blog";
 import { BlogPostsTable } from "@web/app/admin/components/blog-posts-table";
 import { ListSkeleton } from "@web/components/shared/skeleton";

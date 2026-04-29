@@ -1,4 +1,11 @@
-import { index, integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import {
+  index,
+  integer,
+  pgTable,
+  text,
+  unique,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const vehiclePopulation = pgTable(
   "vehicle_population",
@@ -10,6 +17,7 @@ export const vehiclePopulation = pgTable(
     number: integer().notNull().default(0),
   },
   (table) => [
+    unique().on(table.year, table.category, table.fuelType),
     index().on(table.year, table.category),
     index().on(table.year, table.fuelType),
     index().on(table.year),

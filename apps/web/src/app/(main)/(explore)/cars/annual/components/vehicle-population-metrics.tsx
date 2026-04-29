@@ -3,9 +3,9 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import { cn } from "@heroui/theme";
+import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
-import { CARD_PADDING, RADIUS } from "@web/config/design-system";
 import { useMemo } from "react";
 
 interface YearlyTotal {

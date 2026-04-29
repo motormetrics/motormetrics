@@ -16,6 +16,7 @@ describe("MakeGrid", () => {
 
   it("should render all makes in grid layout", () => {
     render(<MakeGrid makes={germanMakes} />);
+    expect(document.body.firstChild).toMatchSnapshot();
     germanMakes.forEach((make) => {
       expect(screen.getByText(make)).toBeVisible();
     });

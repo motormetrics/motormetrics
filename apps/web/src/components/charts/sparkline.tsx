@@ -1,10 +1,10 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn } from "@heroui/theme";
 import {
   type ChartConfig,
   ChartContainer,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
 import { Area, AreaChart } from "recharts";
 
 interface SparklineData {

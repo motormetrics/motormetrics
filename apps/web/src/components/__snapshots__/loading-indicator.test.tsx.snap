@@ -1,0 +1,29 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LoadingIndicator > should render progress bar when pending 1`] = `
+<div>
+  <div
+    class="fixed top-0 left-0 z-50 w-full"
+  >
+    <div
+      aria-label="Navigation loading"
+      aria-valuemax="100"
+      aria-valuemin="0"
+      aria-valuenow="0"
+      aria-valuetext="0%"
+      class="flex flex-col gap-2 h-1 w-full rounded-none"
+      id="react-aria-_r_0_"
+      role="progressbar"
+    >
+      <div
+        class="z-0 relative overflow-hidden rtl:rotate-180 h-3 rounded-full bg-transparent"
+      >
+        <div
+          class="h-full bg-primary rounded-full !duration-500 transition-all duration-200 ease-out"
+          style="transform: translateX(-100%);"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

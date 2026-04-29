@@ -1,17 +1,13 @@
 "use client";
 
-import {
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon,
-} from "@radix-ui/react-icons";
-import { Button } from "@sgcarstrends/ui/components/button";
+import { Button } from "@motormetrics/ui/components/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@sgcarstrends/ui/components/select";
+} from "@motormetrics/ui/components/select";
 import {
   Table,
   TableBody,
@@ -19,7 +15,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@sgcarstrends/ui/components/table";
+} from "@motormetrics/ui/components/table";
+import {
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from "@radix-ui/react-icons";
 import {
   type ColumnDef,
   type ColumnFiltersState,

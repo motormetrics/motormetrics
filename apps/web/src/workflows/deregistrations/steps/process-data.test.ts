@@ -1,4 +1,4 @@
-vi.mock("@sgcarstrends/database", () => ({
+vi.mock("@motormetrics/database", () => ({
   deregistrations: { name: "deregistrations" },
 }));
 
@@ -35,7 +35,6 @@ describe("updateDeregistration", () => {
 
     expect(vi.mocked(update).mock.calls[0][0]).toMatchObject({
       url: "https://example.com/datamall/Monthly De-Registered Motor Vehicles under Vehicle Quota System (VQS).zip",
-      keyFields: ["month", "category"],
     });
   });
 
@@ -79,16 +78,5 @@ describe("updateDeregistration", () => {
     expect(numberTransform?.("")).toBe(0);
     expect(numberTransform?.(42)).toBe(42);
     expect(numberTransform?.("100")).toBe(100);
-  });
-
-  it("should use correct key fields for deduplication", async () => {
-    vi.mocked(update).mockResolvedValueOnce(mockResult());
-
-    await updateDeregistration();
-
-    const config = vi.mocked(update).mock.calls[0][0] as {
-      keyFields: string[];
-    };
-    expect(config.keyFields).toEqual(["month", "category"]);
   });
 });

@@ -1,4 +1,4 @@
-import { db, eq, posts } from "@sgcarstrends/database";
+import { db, eq, posts } from "@motormetrics/database";
 import { deletePost } from "@web/app/admin/lib/delete-post";
 import { updatePost, updatePostSchema } from "@web/app/admin/lib/update-post";
 import type { NextRequest } from "next/server";

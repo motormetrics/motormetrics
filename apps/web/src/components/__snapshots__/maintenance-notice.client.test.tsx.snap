@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`maintenance-notice client helpers > should render animated wrappers with expected classes 1`] = `
+<div>
+  <div
+    class="mx-auto flex max-w-4xl flex-col gap-8"
+    data-animate="visible"
+    data-has-variants="true"
+    data-initial="hidden"
+    data-layout="true"
+    data-testid="motion-div"
+  >
+    <div
+      class="section-class"
+      data-has-variants="true"
+      data-layout="false"
+      data-testid="motion-div"
+    >
+      <div
+        data-has-variants="true"
+        data-layout="false"
+        data-testid="motion-div"
+      >
+        <span>
+          Maintenance text
+        </span>
+      </div>
+    </div>
+    <div
+      class="grid gap-4 md:grid-cols-2"
+      data-has-variants="true"
+      data-layout="false"
+      data-testid="motion-div"
+    >
+      <div
+        data-has-variants="true"
+        data-layout="false"
+        data-testid="motion-div"
+      >
+        <span>
+          Card A
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

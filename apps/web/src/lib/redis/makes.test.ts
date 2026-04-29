@@ -12,7 +12,7 @@ const { delMock, pipelineExecMock, pipelineZaddMock, getDistinctMakesMock } =
     };
   });
 
-vi.mock("@sgcarstrends/utils", () => ({
+vi.mock("@motormetrics/utils", () => ({
   redis: {
     del: delMock,
     pipeline: () => ({
@@ -31,8 +31,8 @@ vi.mock("@neondatabase/serverless", () => ({
   neon: vi.fn(() => vi.fn()),
 }));
 
-vi.mock("@sgcarstrends/database", async (importOriginal) => {
-  const mod = await importOriginal<typeof import("@sgcarstrends/database")>();
+vi.mock("@motormetrics/database", async (importOriginal) => {
+  const mod = await importOriginal<typeof import("@motormetrics/database")>();
   return {
     ...mod,
     db: {

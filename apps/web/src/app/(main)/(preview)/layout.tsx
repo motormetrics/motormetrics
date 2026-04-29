@@ -11,5 +11,5 @@ export const metadata: Metadata = {
 export default function PreviewLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
-  return children;
+  return <main className="container mx-auto px-6 py-8">{children}</main>;
 }

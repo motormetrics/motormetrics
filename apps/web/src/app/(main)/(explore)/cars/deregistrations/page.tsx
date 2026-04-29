@@ -1,6 +1,6 @@
 import { Card, CardBody } from "@heroui/card";
-import type { SelectDeregistration } from "@sgcarstrends/database";
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import type { SelectDeregistration } from "@motormetrics/database";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CategoryBreakdown } from "@web/app/(main)/(explore)/cars/deregistrations/components/category-breakdown";
 import { CategoryChart } from "@web/app/(main)/(explore)/cars/deregistrations/components/category-chart";
 import { CategoryTrendsTable } from "@web/app/(main)/(explore)/cars/deregistrations/components/category-trends-table";
@@ -21,7 +21,11 @@ import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { createPageMetadata } from "@web/lib/metadata";
+import { SOCIAL_HANDLE } from "@web/config/socials";
+import {
+  generateBreadcrumbSchema,
+  generateDatasetSchema,
+} from "@web/lib/metadata";
 import {
   getDeregistrations,
   getDeregistrationsByCategory,
@@ -104,51 +108,69 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-export const generateMetadata = async ({
+export async function generateMetadata({
   searchParams,
-}: PageProps): Promise<Metadata> => {
+}: PageProps): Promise<Metadata> {
   const { month: parsedMonth } = await loadSearchParams(searchParams);
+
+  const makeMetadata = (pageTitle: string, canonical: string): Metadata => ({
+    title: pageTitle,
+    description,
+    openGraph: {
+      title: pageTitle,
+      description,
+      url: `${SITE_URL}${canonical}`,
+      siteName: SITE_TITLE,
+      locale: "en_SG",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: pageTitle,
+      description,
+      site: SOCIAL_HANDLE,
+      creator: SOCIAL_HANDLE,
+    },
+    alternates: { canonical },
+    authors: [{ name: SITE_TITLE, url: SITE_URL }],
+    creator: SITE_TITLE,
+    publisher: SITE_TITLE,
+  });
 
   try {
     const { month } = await getMonthOrLatest(parsedMonth, "deregistrations");
     const formattedMonth = formatDateToMonthYear(month);
-
-    return createPageMetadata({
-      title: `${formattedMonth} ${title}`,
-      description,
-      canonical: `/cars/deregistrations?month=${month}`,
-      includeAuthors: true,
-    });
+    return makeMetadata(
+      `${formattedMonth} ${title}`,
+      `/cars/deregistrations?month=${month}`,
+    );
   } catch {
-    return createPageMetadata({
-      title,
-      description,
-      canonical: "/cars/deregistrations",
-      includeAuthors: true,
-    });
+    return makeMetadata(title, "/cars/deregistrations");
   }
-};
+}
 
-const DeregistrationsPage = ({ searchParams }: PageProps) => (
-  <div className="flex flex-col gap-8">
-    <DashboardPageHeader
-      title={
-        <DashboardPageTitle
-          title="Vehicle Deregistrations"
-          subtitle="Monthly vehicle deregistrations and scrapping trends in Singapore."
-        />
-      }
-      meta={
-        <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-          <DeregistrationsHeaderMeta searchParams={searchParams} />
-        </Suspense>
-      }
-    />
-    <Suspense fallback={<SkeletonCard className="h-[860px] w-full" />}>
-      <DeregistrationsContent searchParams={searchParams} />
-    </Suspense>
-  </div>
-);
+export default function DeregistrationsPage({ searchParams }: PageProps) {
+  return (
+    <div className="flex flex-col gap-8">
+      <DashboardPageHeader
+        title={
+          <DashboardPageTitle
+            title="Vehicle Deregistrations"
+            subtitle="Monthly vehicle deregistrations and scrapping trends in Singapore."
+          />
+        }
+        meta={
+          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+            <DeregistrationsHeaderMeta searchParams={searchParams} />
+          </Suspense>
+        }
+      />
+      <Suspense fallback={<SkeletonCard className="h-[860px] w-full" />}>
+        <DeregistrationsContent searchParams={searchParams} />
+      </Suspense>
+    </div>
+  );
+}
 
 async function DeregistrationsHeaderMeta({
   searchParams: searchParamsPromise,
@@ -240,6 +262,22 @@ async function DeregistrationsContent({
   return (
     <>
       <StructuredData data={structuredData} />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateDatasetSchema("deregistrations"),
+        }}
+      />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Cars", path: "/cars" },
+            { name: "Deregistrations", path: "/cars/deregistrations" },
+          ]),
+        }}
+      />
       <AnimatedSection order={1}>
         <Infobox {...PAGE_CONTEXTS.deregistrations} />
       </AnimatedSection>
@@ -335,5 +373,3 @@ async function DeregistrationsContent({
     </>
   );
 }
-
-export default DeregistrationsPage;

@@ -1,4 +1,4 @@
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { loadSearchParams } from "@web/app/(main)/(explore)/cars/registrations/search-params";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
@@ -11,9 +11,7 @@ import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { loadCarsCategoryPageData } from "@web/lib/cars/page-data";
 import { loadLastUpdated } from "@web/lib/common";
-import { createPageMetadata } from "@web/lib/metadata";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
-import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
@@ -27,24 +25,6 @@ export interface CategoryConfig {
   tabTitle: string;
   description: string;
   urlPath: string;
-}
-
-export async function generateCategoryMetadata(
-  config: CategoryConfig,
-  searchParams: Promise<SearchParams>,
-): Promise<Metadata> {
-  const { month: parsedMonth } = await loadSearchParams(searchParams);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
-  const formattedMonth = formatDateToMonthYear(month);
-
-  const title = `${formattedMonth} ${config.title} - Car Registrations`;
-  const description = config.description.replace("{month}", formattedMonth);
-
-  return createPageMetadata({
-    title,
-    description,
-    canonical: `${config.urlPath}?month=${month}`,
-  });
 }
 
 interface CategoryOverviewProps {
@@ -61,8 +41,8 @@ export function CategoryOverview({
       <DashboardPageHeader
         title={
           <DashboardPageTitle
-            title="Category Overview"
-            subtitle="Breakdown of registrations by category for the selected month."
+            title={config.title}
+            subtitle={`Breakdown of registrations by ${config.tabTitle.toLowerCase()} for the selected month.`}
           />
         }
         meta={
@@ -119,7 +99,7 @@ async function CategoryOverviewContent({
   const categoryData = cars?.[config.apiDataField] || [];
 
   const formattedMonth = formatDateToMonthYear(month);
-  const title = `${formattedMonth} ${config.title} - Car Registrations`;
+  const title = `${formattedMonth} ${config.title}`;
   const description = config.description.replace("{month}", formattedMonth);
 
   const structuredData: WithContext<WebPage> = {

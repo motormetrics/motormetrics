@@ -8,7 +8,7 @@ import {
   lte,
   max,
   sql,
-} from "@sgcarstrends/database";
+} from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**

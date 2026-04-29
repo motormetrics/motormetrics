@@ -17,6 +17,7 @@ export const posts = pgTable(
     slug: text().notNull().unique(),
     content: text().notNull(),
     excerpt: text(),
+    heroImage: text(),
     tags: text().array(),
     highlights: jsonb(),
     status: text().default("draft"),

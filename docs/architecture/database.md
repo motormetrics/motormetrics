@@ -1,6 +1,6 @@
 # Database Schema
 
-This document describes the PostgreSQL database schema used by the SG Cars Trends platform, including table structures, relationships, and indexing strategies.
+This document describes the PostgreSQL database schema used by the MotorMetrics platform, including table structures, relationships, and indexing strategies.
 
 ## Entity Relationship Diagram
 

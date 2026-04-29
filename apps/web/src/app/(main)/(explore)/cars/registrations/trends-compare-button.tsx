@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, useDisclosure } from "@heroui/react";
+import { Button } from "@heroui/button";
+import { useDisclosure } from "@heroui/modal";
 import { TrendsComparison } from "@web/components/trends-comparison";
 import type { ComparisonData } from "@web/queries/cars/compare";
 import type { Month } from "@web/types";

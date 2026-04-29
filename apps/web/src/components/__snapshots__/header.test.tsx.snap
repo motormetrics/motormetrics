@@ -98,9 +98,9 @@ exports[`Navbar > should render correctly 1`] = `
         >
           <a
             class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-default-100 text-foreground hover:bg-default-200"
-            href="/resources"
+            href="/learn"
           >
-            Resources
+            Learn
           </a>
         </li>
       </ul>

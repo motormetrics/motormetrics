@@ -2,10 +2,10 @@
 
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { cn } from "@heroui/theme";
+import { CARD_VARIANTS, type CardVariant } from "@motormetrics/theme/spacing";
 import { BarChartByType } from "@web/app/(main)/(explore)/cars/registrations/bar-chart-by-type";
 import Typography from "@web/components/typography";
 import { FUEL_TYPE } from "@web/config";
-import { CARD_VARIANTS, type CardVariant } from "@web/config/design-system";
 import type { RegistrationStat } from "@web/types/cars";
 
 interface StatCardProps {

@@ -1,6 +1,6 @@
-import { generatePostEmbedding } from "@sgcarstrends/ai";
-import { db, eq, posts } from "@sgcarstrends/database";
-import { slugify } from "@sgcarstrends/utils";
+import { generatePostEmbedding } from "@motormetrics/ai";
+import { db, eq, posts } from "@motormetrics/database";
+import { slugify } from "@motormetrics/utils";
 import { getPostPublishRevalidationTags } from "@web/lib/cache-tags/posts";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";

@@ -1,9 +1,10 @@
 "use client";
 
-import { Autocomplete, AutocompleteItem } from "@heroui/react";
-import { slugify } from "@sgcarstrends/utils";
+import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
+import { slugify } from "@motormetrics/utils";
 import type { Make } from "@web/types";
 import Image from "next/image";
+import posthog from "posthog-js";
 import { useMemo } from "react";
 
 type MakeSelectorProps = {
@@ -34,9 +35,10 @@ export function MakeSelector({
   return (
     <Autocomplete
       selectedKey={validSelectedMake}
-      onSelectionChange={(key) =>
-        window.location.assign(slugify(key as string))
-      }
+      onSelectionChange={(key) => {
+        posthog.capture("car_make_selected", { make: key as string });
+        window.location.assign(slugify(key as string));
+      }}
       aria-label="Make"
       placeholder="Select Make"
       startContent={

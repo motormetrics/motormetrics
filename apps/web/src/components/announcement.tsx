@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert } from "@heroui/react";
+import { Alert } from "@heroui/alert";
 import { announcements } from "@web/config";
 import { usePathname } from "next/navigation";
 
@@ -30,6 +30,11 @@ export function Announcement() {
   }
 
   return (
-    <Alert radius="none" variant="solid" title={activeAnnouncement.content} />
+    <Alert
+      color="primary"
+      radius="none"
+      variant="solid"
+      title={activeAnnouncement.content}
+    />
   );
 }

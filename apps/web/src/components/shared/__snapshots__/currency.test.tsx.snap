@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Currency > should render a formatted value 1`] = `
+<div>
+  <span>
+    $1,000
+  </span>
+</div>
+`;

@@ -1,9 +1,12 @@
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { MetricCard } from "@web/components/shared/metric-card";
 import { SkeletonMetricCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { generateDatasetSchema } from "@web/lib/metadata";
+import {
+  generateBreadcrumbSchema,
+  generateDatasetSchema,
+} from "@web/lib/metadata";
 import { getTopTypes } from "@web/queries/cars/market-insights";
 import {
   getCarsComparison,
@@ -50,7 +53,20 @@ async function MetricCardsContent({ month }: MetricCardsSectionProps) {
     <>
       <StructuredData data={structuredData} />
       <StructuredData
-        data={{ "@context": "https://schema.org", ...generateDatasetSchema() }}
+        data={{
+          "@context": "https://schema.org",
+          ...generateDatasetSchema("registrations"),
+        }}
+      />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Cars", path: "/cars" },
+            { name: "Registrations", path: "/cars/registrations" },
+          ]),
+        }}
       />
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         <MetricCard

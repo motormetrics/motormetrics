@@ -1,5 +1,5 @@
-import { carPopulation } from "@sgcarstrends/database";
-import type { CarPopulation } from "@sgcarstrends/types";
+import { carPopulation } from "@motormetrics/database";
+import type { CarPopulation } from "@motormetrics/types";
 import { update } from "@web/lib/updater";
 
 const CAR_POPULATION_URL =
@@ -9,8 +9,6 @@ export const updateCarPopulation = () =>
   update<CarPopulation>({
     table: carPopulation,
     url: CAR_POPULATION_URL,
-    partitionField: "year",
-    keyFields: ["year", "make", "fuelType"],
     csvTransformOptions: {
       columnMapping: {
         fuel_type: "fuelType",

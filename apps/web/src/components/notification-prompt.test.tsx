@@ -1,11 +1,60 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import useStore from "@web/app/store";
-import type { Mock } from "vitest";
 import { vi } from "vitest";
 import { NotificationPrompt } from "./notification-prompt";
 
-vi.mock("@heroui/react", async () => {
-  const actual = await vi.importActual("@heroui/react");
+const mockSetNotificationStatus = vi.fn();
+let mockNotificationStatus: "default" | "granted" | "denied" = "default";
+
+vi.mock("@heroui/alert", async () => {
+  const actual = await vi.importActual("@heroui/alert");
+  return {
+    ...actual,
+    Alert: ({
+      title,
+      description,
+      endContent,
+      onClose,
+      children,
+    }: {
+      title?: string;
+      description?: string;
+      endContent?: React.ReactNode;
+      onClose?: () => void;
+      children?: React.ReactNode;
+    }) => (
+      <div data-testid="alert">
+        <div data-testid="alert-title">{title}</div>
+        <div data-testid="alert-description">{description}</div>
+        <div data-testid="alert-endcontent">{endContent}</div>
+        <button type="button" data-testid="alert-close" onClick={onClose}>
+          close
+        </button>
+        {children}
+      </div>
+    ),
+  };
+});
+
+vi.mock("@heroui/button", async () => {
+  const actual = await vi.importActual("@heroui/button");
+  return {
+    ...actual,
+    Button: ({
+      onPress,
+      children,
+    }: {
+      onPress?: () => void;
+      children?: React.ReactNode;
+    }) => (
+      <button type="button" onClick={onPress} data-testid="button">
+        {children}
+      </button>
+    ),
+  };
+});
+
+vi.mock("@heroui/toast", async () => {
+  const actual = await vi.importActual("@heroui/toast");
   return {
     ...actual,
     addToast: vi.fn(),
@@ -13,24 +62,17 @@ vi.mock("@heroui/react", async () => {
 });
 
 vi.mock("@web/app/store", () => ({
-  default: vi.fn(() => ({
-    notificationStatus: "default",
-    setNotificationStatus: vi.fn(),
-  })),
+  default: () => ({
+    notificationStatus: mockNotificationStatus,
+    setNotificationStatus: mockSetNotificationStatus,
+  }),
 }));
 
-const mockUseStore = useStore as unknown as Mock;
-
 describe("NotificationPrompt Component", () => {
-  let originalNotification: any;
+  let originalNotification: typeof global.Notification;
 
   beforeAll(() => {
     originalNotification = global.Notification;
-
-    global.Notification = {
-      requestPermission: vi.fn(),
-      permission: "default",
-    } as any;
   });
 
   afterAll(() => {
@@ -39,45 +81,36 @@ describe("NotificationPrompt Component", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockNotificationStatus = "default";
+    global.Notification = {
+      requestPermission: vi.fn().mockResolvedValue("default"),
+      permission: "default",
+    } as unknown as typeof global.Notification;
   });
 
   it("should set notification status to current permission on mount", () => {
-    const setNotificationStatus = vi.fn();
-    mockUseStore.mockReturnValue({
-      notificationStatus: "default",
-      setNotificationStatus,
-    });
-
     render(<NotificationPrompt />);
 
-    expect(setNotificationStatus).toHaveBeenCalledWith("default");
+    expect(document.body.firstChild).toMatchSnapshot();
+    expect(mockSetNotificationStatus).toHaveBeenCalledWith("default");
   });
 
   it("should display an alert when notificationStatus is 'default'", () => {
-    const setNotificationStatus = vi.fn();
-    mockUseStore.mockReturnValue({
-      notificationStatus: "default",
-      setNotificationStatus,
-    });
-
     render(<NotificationPrompt />);
 
-    expect(screen.getByText("Enable Notifications?")).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "Stay updated with the latest news and alerts by enabling browser notifications",
-      ),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Allow")).toBeInTheDocument();
-    expect(screen.getByText("Deny")).toBeInTheDocument();
+    expect(screen.getByTestId("alert-title")).toHaveTextContent(
+      "Enable Notifications?",
+    );
+    expect(screen.getByTestId("alert-description")).toHaveTextContent(
+      "Stay updated with the latest news and alerts by enabling browser notifications",
+    );
+    const buttons = screen.getAllByTestId("button");
+    expect(buttons[0]).toHaveTextContent("Allow");
+    expect(buttons[1]).toHaveTextContent("Deny");
   });
 
   it("should not display anything if notificationStatus is not 'default' (e.g., granted/denied)", () => {
-    const setNotificationStatus = vi.fn();
-    mockUseStore.mockReturnValue({
-      notificationStatus: "granted",
-      setNotificationStatus,
-    });
+    mockNotificationStatus = "granted";
 
     const { container } = render(<NotificationPrompt />);
 
@@ -85,40 +118,53 @@ describe("NotificationPrompt Component", () => {
   });
 
   it("should call handleGranted when Allow button is clicked", async () => {
-    const setNotificationStatus = vi.fn();
-    mockUseStore.mockReturnValue({
-      notificationStatus: "default",
-      setNotificationStatus,
-    });
-    (global.Notification.requestPermission as Mock).mockResolvedValue(
+    mockNotificationStatus = "default";
+    vi.mocked(global.Notification.requestPermission).mockResolvedValue(
       "granted",
     );
 
     render(<NotificationPrompt />);
 
-    fireEvent.click(screen.getByText("Allow"));
+    const buttons = screen.getAllByTestId("button");
+    fireEvent.click(buttons[0]);
 
     await waitFor(() => {
       expect(global.Notification.requestPermission).toHaveBeenCalled();
-      expect(setNotificationStatus).toHaveBeenCalledWith("granted");
+      expect(mockSetNotificationStatus).toHaveBeenCalledWith("granted");
     });
   });
 
   it("should call handleDenied when Deny button is clicked", async () => {
-    const setNotificationStatus = vi.fn();
-    mockUseStore.mockReturnValue({
-      notificationStatus: "default",
-      setNotificationStatus,
-    });
-    (global.Notification.requestPermission as Mock).mockResolvedValue("denied");
+    mockNotificationStatus = "default";
+    vi.mocked(global.Notification.requestPermission).mockResolvedValue(
+      "denied",
+    );
 
     render(<NotificationPrompt />);
 
-    fireEvent.click(screen.getByText("Deny"));
+    const buttons = screen.getAllByTestId("button");
+    fireEvent.click(buttons[1]);
 
     await waitFor(() => {
       expect(global.Notification.requestPermission).toHaveBeenCalled();
-      expect(setNotificationStatus).toHaveBeenCalledWith("denied");
+      expect(mockSetNotificationStatus).toHaveBeenCalledWith("denied");
     });
+  });
+
+  it("should set notification status to denied when alert is closed", () => {
+    render(<NotificationPrompt />);
+
+    fireEvent.click(screen.getByTestId("alert-close"));
+    expect(mockSetNotificationStatus).toHaveBeenCalledWith("denied");
+  });
+
+  it("should not sync permission when Notification API is unavailable", () => {
+    const original = global.Notification;
+    delete (global as any).Notification;
+
+    render(<NotificationPrompt />);
+    expect(mockSetNotificationStatus).not.toHaveBeenCalled();
+
+    global.Notification = original;
   });
 });

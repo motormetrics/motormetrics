@@ -23,6 +23,14 @@ export const config: VercelConfig = {
       path: "/api/workflows/car-population",
       schedule: "0 10 1 * *",
     },
+    {
+      path: "/api/workflows/car-costs",
+      schedule: "0 10 * * *",
+    },
+    {
+      path: "/api/workflows/electric-vehicles",
+      schedule: "30 10 * * *",
+    },
   ],
   regions: ["sin1"],
 };

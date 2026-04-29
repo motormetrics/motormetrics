@@ -8,6 +8,7 @@ describe("MakeCard", () => {
 
   it("should render the make name", () => {
     render(<MakeCard make={mockMake} logoUrl={mockLogoUrl} />);
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText(mockMake)).toBeVisible();
   });
 

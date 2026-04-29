@@ -14,6 +14,10 @@ import { YearSelector } from "@web/components/shared/year-selector";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
+  generateBreadcrumbSchema,
+  generateDatasetSchema,
+} from "@web/lib/metadata";
+import {
   getCarPopulationByYearAndMake,
   getCarPopulationYearlyTotals,
   getCarPopulationYears,
@@ -68,6 +72,22 @@ async function AnnualPage({ searchParams }: PageProps) {
   return (
     <>
       <StructuredData data={structuredData} />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateDatasetSchema("annual"),
+        }}
+      />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Cars", path: "/cars" },
+            { name: "Vehicle Population", path: "/cars/annual" },
+          ]),
+        }}
+      />
       <section className="flex flex-col gap-10">
         <DashboardPageHeader
           title={

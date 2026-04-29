@@ -7,3 +7,11 @@ export function NewChip() {
     </Chip>
   );
 }
+
+export function BetaChip() {
+  return (
+    <Chip color="warning" size="sm" variant="flat">
+      Beta
+    </Chip>
+  );
+}

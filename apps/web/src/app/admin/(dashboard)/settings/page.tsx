@@ -1,12 +1,12 @@
-import { Badge } from "@sgcarstrends/ui/components/badge";
+import { Badge } from "@motormetrics/ui/components/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
-import { Separator } from "@sgcarstrends/ui/components/separator";
+} from "@motormetrics/ui/components/card";
+import { Separator } from "@motormetrics/ui/components/separator";
 import {
   AlertTriangle,
   Bell,
@@ -85,7 +85,7 @@ const SettingsPage = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Domain:</span>
-                <span>sgcarstrends.com</span>
+                <span>motormetrics.app</span>
               </div>
             </div>
           </CardContent>

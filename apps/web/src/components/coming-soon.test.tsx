@@ -9,6 +9,7 @@ describe("ComingSoon", () => {
       </ComingSoon>,
     );
 
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("Coming Soon")).toBeInTheDocument();
   });
 });

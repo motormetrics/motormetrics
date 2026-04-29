@@ -12,8 +12,8 @@ allowed-tools: Read, Edit, Write, Bash, Grep, Glob
 pnpm test                  # Run all tests
 pnpm test:watch            # Watch mode
 pnpm test:coverage         # With coverage
-pnpm -F @sgcarstrends/web test              # Run web tests
-pnpm -F @sgcarstrends/web test:watch        # Watch mode for web
+pnpm -F /web test              # Run web tests
+pnpm -F /web test:watch        # Watch mode for web
 ```
 
 ## Test Structure
@@ -100,7 +100,7 @@ global.fetch = mockFetch;
 ### Mock Redis
 
 ```typescript
-vi.mock("@sgcarstrends/utils", () => ({
+vi.mock("@motormetrics/utils", () => ({
   redis: {
     get: vi.fn(),
     set: vi.fn(),

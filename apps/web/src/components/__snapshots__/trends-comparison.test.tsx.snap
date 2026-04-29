@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TrendsComparison > should render TrendsComparison content when open 1`] = `
+<div
+  aria-hidden="true"
+/>
+`;

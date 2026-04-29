@@ -18,7 +18,7 @@ A customizable button component built with Radix UI primitives.
 ## Usage
 
 \`\`\`tsx
-import { Button } from "@sgcarstrends/ui";
+import { Button } from "@motormetrics/ui";
 
 <Button variant="default">Click me</Button>
 \`\`\`

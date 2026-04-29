@@ -11,10 +11,10 @@
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "@sgcarstrends/ui/components",
-    "utils": "@sgcarstrends/ui/lib/utils",
-    "hooks": "@sgcarstrends/ui/hooks",
-    "lib": "@sgcarstrends/ui/lib",
-    "ui": "@sgcarstrends/ui/components"
+    "components": "@motormetrics/ui/components",
+    "utils": "@motormetrics/ui/lib/utils",
+    "hooks": "@motormetrics/ui/hooks",
+    "lib": "@motormetrics/ui/lib",
+    "ui": "@motormetrics/ui/components"
   }
 }

@@ -9,8 +9,10 @@ export async function GET(request: Request) {
 
   const run = await start(carPopulationWorkflow, []);
 
-  return Response.json({
-    message: "Car population workflow started",
-    runId: run.runId,
+  return new Response(run.getReadable(), {
+    headers: {
+      "Content-Type": "application/x-ndjson",
+      "X-Run-Id": run.runId,
+    },
   });
 }

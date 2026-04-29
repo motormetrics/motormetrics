@@ -9,10 +9,10 @@ allowed-tools: Read, Edit, Write, Bash, Grep, Glob
 ## Root README Structure
 
 ```markdown
-# SG Cars Trends
+# MotorMetrics
 
-[![License](https://img.shields.io/github/license/sgcarstrends/sgcarstrends)](LICENSE)
-[![CI](https://github.com/sgcarstrends/sgcarstrends/workflows/CI/badge.svg)](https://github.com/sgcarstrends/sgcarstrends/actions)
+[![License](https://img.shields.io/github/license/motormetrics/motormetrics)](LICENSE)
+[![CI](https://github.com/motormetrics/motormetrics/workflows/CI/badge.svg)](https://github.com/motormetrics/motormetrics/actions)
 
 > Platform for accessing Singapore vehicle registration and COE bidding data
 
@@ -25,8 +25,8 @@ allowed-tools: Read, Edit, Write, Bash, Grep, Glob
 ## Quick Start
 
 \`\`\`bash
-git clone https://github.com/sgcarstrends/sgcarstrends.git
-cd sgcarstrends
+git clone https://github.com/motormetrics/motormetrics.git
+cd motormetrics
 pnpm install
 cp .env.example .env
 pnpm db:migrate
@@ -43,7 +43,7 @@ pnpm dev
 ## Project Structure
 
 \`\`\`
-sgcarstrends/
+motormetrics/
 ├── apps/
 │   ├── api/          # Hono API
 │   └── web/          # Next.js web app
@@ -69,20 +69,20 @@ MIT
 ## Package README Template
 
 ```markdown
-# @sgcarstrends/[package-name]
+# /[package-name]
 
 > Brief description
 
 ## Installation
 
 \`\`\`bash
-pnpm add @sgcarstrends/[package-name]
+pnpm add @motormetrics/[package-name]
 \`\`\`
 
 ## Usage
 
 \`\`\`typescript
-import { functionName } from "@sgcarstrends/[package-name]";
+import { functionName } from "@motormetrics/[package-name]";
 
 const result = functionName();
 \`\`\`
@@ -114,7 +114,7 @@ MIT
 ```markdown
 [![License](https://img.shields.io/github/license/user/repo)](LICENSE)
 [![CI](https://github.com/user/repo/workflows/CI/badge.svg)](actions)
-[![npm](https://img.shields.io/npm/v/@sgcarstrends/package)](npm)
+[![npm](https://img.shields.io/npm/v//package)](npm)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](typescript)
 ```
 

@@ -1,0 +1,43 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MetricsComparison > should indicate positive growth 1`] = `
+<div>
+  <div
+    class="flex items-center gap-2"
+  >
+    <div
+      class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-7 text-small rounded-full bg-success/20 text-success-700 dark:text-success"
+    >
+      <svg
+        class="lucide lucide-arrow-up-right max-h-[80%] size-4"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M7 7h10v10"
+        />
+        <path
+          d="M7 17 17 7"
+        />
+      </svg>
+      <span
+        class="flex-1 text-inherit font-normal px-2 pl-1"
+      >
+        10%
+      </span>
+    </div>
+    <span
+      class="text-muted-foreground text-sm"
+    >
+      vs last month
+    </span>
+  </div>
+</div>
+`;

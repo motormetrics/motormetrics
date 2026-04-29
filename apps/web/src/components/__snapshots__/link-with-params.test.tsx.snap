@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LinkWithParams > should render with basic props 1`] = `
+<div>
+  <a
+    href="/test?"
+  >
+    <span>
+      Test Link
+    </span>
+  </a>
+</div>
+`;

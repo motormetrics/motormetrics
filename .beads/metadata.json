@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "sgcarstrends",
+  "project_id": "b0893a6a-9e3d-4a80-a436-31e90c6e47b9"
+}

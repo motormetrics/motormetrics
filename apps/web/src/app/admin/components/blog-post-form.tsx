@@ -1,6 +1,6 @@
 "use client";
 
-import type { SelectPost } from "@sgcarstrends/database";
+import type { SelectPost } from "@motormetrics/database";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,25 +11,25 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@sgcarstrends/ui/components/alert-dialog";
-import { Button } from "@sgcarstrends/ui/components/button";
+} from "@motormetrics/ui/components/alert-dialog";
+import { Button } from "@motormetrics/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
-import { Input } from "@sgcarstrends/ui/components/input";
-import { Label } from "@sgcarstrends/ui/components/label";
+} from "@motormetrics/ui/components/card";
+import { Input } from "@motormetrics/ui/components/input";
+import { Label } from "@motormetrics/ui/components/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@sgcarstrends/ui/components/select";
-import { Textarea } from "@sgcarstrends/ui/components/textarea";
+} from "@motormetrics/ui/components/select";
+import { Textarea } from "@motormetrics/ui/components/textarea";
 import {
   createBlogPost,
   regeneratePost,

@@ -4,6 +4,7 @@ import { AnimatedNumber } from "./animated-number";
 describe("AnimatedNumber", () => {
   it("should render with default props", () => {
     const { container } = render(<AnimatedNumber value={100} />);
+    expect(container).toMatchSnapshot();
     expect(container.firstChild).toBeInTheDocument();
   });
 

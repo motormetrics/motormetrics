@@ -1,4 +1,4 @@
-import { asc, db, desc, pqp } from "@sgcarstrends/database";
+import { asc, db, desc, pqp } from "@motormetrics/database";
 import type { Pqp } from "@web/types/coe";
 import { cacheLife, cacheTag } from "next/cache";
 

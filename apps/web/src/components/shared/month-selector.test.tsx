@@ -26,6 +26,7 @@ describe("MonthSelector", () => {
   it("should render with months array", () => {
     const mockMonths = ["2024-01"];
     render(<MonthSelector months={mockMonths} latestMonth="2024-01" />);
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByRole("combobox")).toBeInTheDocument();
   });
 

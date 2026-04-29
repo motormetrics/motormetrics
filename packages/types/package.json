@@ -1,15 +1,14 @@
 {
-  "name": "@sgcarstrends/types",
-  "description": "Shared type definitions for SG Cars Trends",
-  "version": "4.61.8",
+  "name": "@motormetrics/types",
+  "description": "Shared type definitions for MotorMetrics",
+  "version": "4.66.0",
   "type": "module",
-  "author": "Ru Chern Chong <ruchern.chong@sgcarstrends.com>",
+  "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
   "main": "src/index.ts",
   "module": "src/index.ts",
   "scripts": {
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit"
-  },
-  "devDependencies": {}
+  }
 }

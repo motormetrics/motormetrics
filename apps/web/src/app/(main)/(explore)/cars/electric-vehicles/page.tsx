@@ -1,3 +1,4 @@
+// TODO: Add "Last updated" date
 import { AdoptionTrendChart } from "@web/app/(main)/(explore)/cars/electric-vehicles/components/adoption-trend-chart";
 import { EvMetrics } from "@web/app/(main)/(explore)/cars/electric-vehicles/components/ev-metrics";
 import { MakeTable } from "@web/app/(main)/(explore)/cars/electric-vehicles/components/make-table";
@@ -11,6 +12,10 @@ import { Infobox } from "@web/components/shared/infobox";
 import { PAGE_CONTEXTS } from "@web/components/shared/page-contexts";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
+import {
+  generateBreadcrumbSchema,
+  generateDatasetSchema,
+} from "@web/lib/metadata";
 import {
   getEvLatestSummary,
   getEvMakeDetails,
@@ -79,6 +84,22 @@ export default async function ElectricVehiclesPage() {
   return (
     <>
       <StructuredData data={structuredData} />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateDatasetSchema("electric-vehicles"),
+        }}
+      />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Cars", path: "/cars" },
+            { name: "Electric Vehicles", path: "/cars/electric-vehicles" },
+          ]),
+        }}
+      />
       <section className="flex flex-col gap-10">
         <DashboardPageHeader
           title={

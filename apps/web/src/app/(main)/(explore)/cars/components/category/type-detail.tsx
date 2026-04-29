@@ -1,6 +1,6 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
-import { formatDateToMonthYear } from "@sgcarstrends/utils";
+import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
 import { CarOverviewTrends } from "@web/app/(main)/(explore)/cars/registrations/components/overview-trends";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
@@ -13,13 +13,12 @@ import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { loadCarsTypePageData } from "@web/lib/cars/page-data";
 import { loadLastUpdated } from "@web/lib/common";
-import { createPageMetadata } from "@web/lib/metadata";
+import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import {
   checkFuelTypeIfExist,
   checkVehicleTypeIfExist,
 } from "@web/queries/cars";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { SearchParams } from "nuqs/server";
 import { createLoader, parseAsString } from "nuqs/server";
@@ -34,30 +33,25 @@ export interface TypeDetailConfig {
   description: string;
 }
 
-export async function generateTypeDetailMetadata(
-  config: TypeDetailConfig,
-  params: Promise<{ type: string }>,
-  searchParams: Promise<SearchParams>,
-): Promise<Metadata> {
-  const { type } = await params;
-  const { month: parsedMonth } = await loadTypeSearchParams(searchParams);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
-
-  return createPageMetadata({
-    title: "Cars in Singapore",
-    description: config.description,
-    canonical: `/cars/${config.category}/${type}?month=${month}`,
-    images: `${SITE_URL}/opengraph-image.png`,
-  });
-}
-
 interface TypeDetailProps {
   config: TypeDetailConfig;
   params: Promise<{ type: string }>;
   searchParams: Promise<SearchParams>;
 }
 
-export function TypeDetail({ config, params, searchParams }: TypeDetailProps) {
+export async function TypeDetail({
+  config,
+  params,
+  searchParams,
+}: TypeDetailProps) {
+  const { type } = await params;
+  const displayName =
+    config.category === "fuel-types"
+      ? (await checkFuelTypeIfExist(type))?.fuelType
+      : (await checkVehicleTypeIfExist(type))?.vehicleType;
+  const categoryLabel =
+    config.category === "fuel-types" ? "Fuel Type" : "Vehicle Type";
+
   return (
     <div className="flex flex-col gap-4">
       <DashboardPageHeader
@@ -68,8 +62,8 @@ export function TypeDetail({ config, params, searchParams }: TypeDetailProps) {
         }
         title={
           <DashboardPageTitle
-            title="Type Overview"
-            subtitle="Registration trends and monthly statistics for Singapore vehicles."
+            title={displayName ?? "Type Overview"}
+            subtitle={`Registration trends and monthly statistics by ${categoryLabel.toLowerCase()} in Singapore.`}
           />
         }
       />
@@ -134,8 +128,14 @@ async function TypeDetailContent({
   }
 
   const { cars } = await loadCarsTypePageData(config.category, type, month);
-  const title = "Cars in Singapore";
-  const description = config.description;
+  const displayName =
+    config.category === "fuel-types"
+      ? ((await checkFuelTypeIfExist(type))?.fuelType ?? type)
+      : ((await checkVehicleTypeIfExist(type))?.vehicleType ?? type);
+  const categoryLabel =
+    config.category === "fuel-types" ? "fuel type" : "vehicle type";
+  const title = `${displayName} Cars in Singapore`;
+  const description = `${displayName} car registrations in Singapore. Explore registration trends, statistics, and distribution by ${categoryLabel} for each month.`;
   const structuredData: WithContext<WebPage> = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -159,6 +159,37 @@ async function TypeDetailContent({
   return (
     <>
       <StructuredData data={structuredData} />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Cars", path: "/cars" },
+            {
+              name:
+                config.category === "fuel-types"
+                  ? "Fuel Types"
+                  : "Vehicle Types",
+              path: `/cars/${config.category}`,
+            },
+            { name: type, path: `/cars/${config.category}/${type}` },
+          ]),
+        }}
+      />
+
+      <Typography.Text>
+        {cars.total > 0
+          ? `${displayName} vehicles accounted for ${cars.total.toLocaleString()} registrations in ${formattedMonth}.`
+          : `No ${displayName} vehicle registrations were recorded in ${formattedMonth}.`}{" "}
+        <a
+          href={`/cars/${config.category}`}
+          className="text-primary hover:underline"
+        >
+          View all{" "}
+          {config.category === "fuel-types" ? "fuel types" : "vehicle types"}{" "}
+          &rarr;
+        </a>
+      </Typography.Text>
 
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">

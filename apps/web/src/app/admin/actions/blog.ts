@@ -1,8 +1,8 @@
 "use server";
 
-import type { LanguageModelUsage } from "@sgcarstrends/ai";
-import type { SelectPost } from "@sgcarstrends/database";
-import { db, desc, eq, posts } from "@sgcarstrends/database";
+import type { LanguageModelUsage } from "@motormetrics/ai";
+import type { SelectPost } from "@motormetrics/database";
+import { db, desc, eq, posts } from "@motormetrics/database";
 import { auth } from "@web/app/admin/lib/auth";
 import {
   type CreatePostInput,

@@ -1,4 +1,4 @@
-# SG Cars Trends
+# MotorMetrics
 
 A comprehensive analytics platform for Singapore's car market, providing insights into car registrations, COE (
 Certificate of Entitlement) bidding results, and market trends.
@@ -28,7 +28,7 @@ Certificate of Entitlement) bidding results, and market trends.
 ### Prerequisites
 
 - Node.js >= 22
-- pnpm 10.22.0
+- pnpm 11.0.0
 
 ### Installation
 
@@ -127,9 +127,9 @@ src/
 
 Multi-stage deployment via SST on AWS with CloudFlare DNS:
 
-- **dev**: [dev.sgcarstrends.com](https://dev.sgcarstrends.com)
-- **staging**: [staging.sgcarstrends.com](https://staging.sgcarstrends.com)
-- **prod**: [sgcarstrends.com](https://sgcarstrends.com)
+- **dev**: [dev.motormetrics.app](https://dev.motormetrics.app)
+- **staging**: [staging.motormetrics.app](https://staging.motormetrics.app)
+- **prod**: [motormetrics.app](https://motormetrics.app)
 
 Infrastructure uses AWS Lambda with ARM64 architecture. The deployment process is automated through the configured CI/CD pipeline.
 

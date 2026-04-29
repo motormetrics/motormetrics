@@ -1,8 +1,9 @@
 import { Avatar } from "@heroui/avatar";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import type { CarLogo } from "@logos/types";
-import type { SelectCar } from "@sgcarstrends/database";
-import { DataTable } from "@sgcarstrends/ui/components/data-table";
+import type { SelectCar } from "@motormetrics/database";
+import { DataTable } from "@motormetrics/ui/components/data-table";
+import { slugify } from "@motormetrics/utils";
 import { CoeComparisonChart } from "@web/app/(main)/(explore)/cars/components/makes/coe-comparison-chart";
 import { MakeTrendChart } from "@web/app/(main)/(explore)/cars/components/makes/make-trend-chart";
 import { TypeBreakdownChart } from "@web/app/(main)/(explore)/cars/components/makes/type-breakdown-chart";
@@ -121,18 +122,44 @@ export function MakeDetail({
       {(fuelTypeBreakdown.length > 0 || vehicleTypeBreakdown.length > 0) && (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {fuelTypeBreakdown.length > 0 && (
-            <TypeBreakdownChart
-              data={fuelTypeBreakdown}
-              title="Fuel Type Breakdown"
-              description="Registrations by fuel type"
-            />
+            <div className="flex flex-col gap-3">
+              <TypeBreakdownChart
+                data={fuelTypeBreakdown}
+                title="Fuel Type Breakdown"
+                description="Registrations by fuel type"
+              />
+              <div className="flex flex-wrap gap-2 px-1">
+                {fuelTypeBreakdown.map(({ name }) => (
+                  <a
+                    key={name}
+                    href={`/cars/fuel-types/${slugify(name)}`}
+                    className="text-primary text-sm hover:underline"
+                  >
+                    {name}
+                  </a>
+                ))}
+              </div>
+            </div>
           )}
           {vehicleTypeBreakdown.length > 0 && (
-            <TypeBreakdownChart
-              data={vehicleTypeBreakdown}
-              title="Vehicle Type Breakdown"
-              description="Registrations by vehicle type"
-            />
+            <div className="flex flex-col gap-3">
+              <TypeBreakdownChart
+                data={vehicleTypeBreakdown}
+                title="Vehicle Type Breakdown"
+                description="Registrations by vehicle type"
+              />
+              <div className="flex flex-wrap gap-2 px-1">
+                {vehicleTypeBreakdown.map(({ name }) => (
+                  <a
+                    key={name}
+                    href={`/cars/vehicle-types/${slugify(name)}`}
+                    className="text-primary text-sm hover:underline"
+                  >
+                    {name}
+                  </a>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}

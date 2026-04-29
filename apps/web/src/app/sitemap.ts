@@ -1,4 +1,5 @@
-import { slugify } from "@sgcarstrends/utils";
+import { slugify } from "@motormetrics/utils";
+import { getAllGuideSlugs } from "@web/app/(main)/(site)/learn/lib/guides";
 import { SITE_LINKS, SITE_URL } from "@web/config";
 import { getDistinctMakes } from "@web/queries/cars";
 import { getAllPosts } from "@web/queries/posts";
@@ -59,6 +60,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
     })),
     {
+      url: `${SITE_URL}/cars/electric-vehicles`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+    },
+    {
       url: `${SITE_URL}/cars/deregistrations`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
@@ -99,15 +105,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
     },
     {
-      url: `${SITE_URL}/contact`,
+      url: `${SITE_URL}/learn`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
     },
-    {
-      url: `${SITE_URL}/resources`,
+    ...getAllGuideSlugs().map((slug) => ({
+      url: `${SITE_URL}/learn/${slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
-    },
+    })),
     ...SITE_LINKS.map((link) => ({
       url: `${SITE_URL}${link.href}`,
       lastModified: new Date(),

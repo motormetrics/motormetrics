@@ -1,6 +1,6 @@
 "use client";
 
-import { formatCurrency } from "@sgcarstrends/utils";
+import { formatCurrency } from "@motormetrics/utils";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Pqp } from "@web/types/coe";
 

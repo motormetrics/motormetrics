@@ -1,0 +1,190 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MakeGrid > should render all makes in grid layout 1`] = `
+<div>
+  <div
+    class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
+  >
+    <a
+      class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large cursor-pointer motion-reduce:transition-none data-[pressed=true]:scale-[0.97] tap-highlight-transparent p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+      data-react-aria-pressable="true"
+      href="/cars/makes/audi"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+      >
+        <div
+          class="flex flex-col gap-2"
+        >
+          <div
+            class="flex items-start gap-2"
+          >
+            <div
+              class="flex size-16 shrink-0 items-center justify-center"
+            >
+              <span
+                class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny text-default-foreground rounded-full size-full bg-primary"
+                tabindex="-1"
+              >
+                <span
+                  aria-label="A"
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg font-semibold text-primary-foreground"
+                  role="img"
+                >
+                  A
+                </span>
+              </span>
+            </div>
+            <div
+              class="flex min-w-0 flex-col gap-2"
+            >
+              <span
+                class="font-medium text-foreground text-sm leading-none truncate"
+              >
+                AUDI
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a
+      class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large cursor-pointer motion-reduce:transition-none data-[pressed=true]:scale-[0.97] tap-highlight-transparent p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+      data-react-aria-pressable="true"
+      href="/cars/makes/bmw"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+      >
+        <div
+          class="flex flex-col gap-2"
+        >
+          <div
+            class="flex items-start gap-2"
+          >
+            <div
+              class="flex size-16 shrink-0 items-center justify-center"
+            >
+              <span
+                class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny text-default-foreground rounded-full size-full bg-primary"
+                tabindex="-1"
+              >
+                <span
+                  aria-label="B"
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg font-semibold text-primary-foreground"
+                  role="img"
+                >
+                  B
+                </span>
+              </span>
+            </div>
+            <div
+              class="flex min-w-0 flex-col gap-2"
+            >
+              <span
+                class="font-medium text-foreground text-sm leading-none truncate"
+              >
+                BMW
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a
+      class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large cursor-pointer motion-reduce:transition-none data-[pressed=true]:scale-[0.97] tap-highlight-transparent p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+      data-react-aria-pressable="true"
+      href="/cars/makes/mercedes-benz"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+      >
+        <div
+          class="flex flex-col gap-2"
+        >
+          <div
+            class="flex items-start gap-2"
+          >
+            <div
+              class="flex size-16 shrink-0 items-center justify-center"
+            >
+              <span
+                class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny text-default-foreground rounded-full size-full bg-primary"
+                tabindex="-1"
+              >
+                <span
+                  aria-label="M"
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg font-semibold text-primary-foreground"
+                  role="img"
+                >
+                  M
+                </span>
+              </span>
+            </div>
+            <div
+              class="flex min-w-0 flex-col gap-2"
+            >
+              <span
+                class="font-medium text-foreground text-sm leading-none truncate"
+              >
+                MERCEDES BENZ
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a
+      class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large cursor-pointer motion-reduce:transition-none data-[pressed=true]:scale-[0.97] tap-highlight-transparent p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+      data-react-aria-pressable="true"
+      href="/cars/makes/volkswagen"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+      >
+        <div
+          class="flex flex-col gap-2"
+        >
+          <div
+            class="flex items-start gap-2"
+          >
+            <div
+              class="flex size-16 shrink-0 items-center justify-center"
+            >
+              <span
+                class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny text-default-foreground rounded-full size-full bg-primary"
+                tabindex="-1"
+              >
+                <span
+                  aria-label="V"
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg font-semibold text-primary-foreground"
+                  role="img"
+                >
+                  V
+                </span>
+              </span>
+            </div>
+            <div
+              class="flex min-w-0 flex-col gap-2"
+            >
+              <span
+                class="font-medium text-foreground text-sm leading-none truncate"
+              >
+                VOLKSWAGEN
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+`;

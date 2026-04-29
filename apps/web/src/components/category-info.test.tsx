@@ -21,6 +21,7 @@ describe("CategoryInfo", () => {
       />,
     );
 
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("Category A")).toBeInTheDocument();
     expect(screen.getByText("Cars up to 1600cc and 97kW")).toBeInTheDocument();
   });

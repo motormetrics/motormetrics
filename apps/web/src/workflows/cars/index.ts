@@ -1,17 +1,22 @@
 import {
   generateBlogContent,
   getCarsAggregatedByMonth,
-} from "@sgcarstrends/ai";
-import { redis, tokeniser } from "@sgcarstrends/utils";
+} from "@motormetrics/ai";
+import { redis, tokeniser } from "@motormetrics/utils";
 import { getCarsMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import { populateMakesSortedSet } from "@web/lib/redis/makes";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { getExistingPostByMonth } from "@web/queries/posts";
 import { updateCars } from "@web/workflows/cars/steps/process-data";
-import { revalidatePostsCache } from "@web/workflows/shared";
+import {
+  emitEvent,
+  generatePostHero,
+  handleAIError,
+  revalidatePostsCache,
+} from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
-import { FatalError, fetch, RetryableError } from "workflow";
+import { fetch } from "workflow";
 
 interface CarsWorkflowPayload {
   month?: string;
@@ -34,7 +39,13 @@ export async function carsWorkflow(
   // Enable WDK's durable fetch for AI SDK
   globalThis.fetch = fetch;
 
+  await emitEvent({ type: "step:start", step: "processCarsData" });
   const result = await processCarsData();
+  await emitEvent({
+    type: "data:processed",
+    step: "processCarsData",
+    data: { recordsProcessed: result.recordsProcessed },
+  });
 
   if (result.recordsProcessed === 0) {
     return {
@@ -42,14 +53,22 @@ export async function carsWorkflow(
     };
   }
 
+  await emitEvent({ type: "step:start", step: "syncMakesSortedSet" });
   await syncMakesSortedSet();
+  await emitEvent({ type: "step:complete", step: "syncMakesSortedSet" });
 
   const month = payload.month ?? (await getLatestMonth());
   if (!month) {
     return { message: "[CARS] No car records found" };
   }
 
+  await emitEvent({ type: "step:start", step: "revalidateCarsCache" });
   await revalidateCarsCache(month);
+  await emitEvent({
+    type: "cache:revalidated",
+    step: "revalidateCarsCache",
+    data: { month },
+  });
 
   const existingPost = await checkExistingCarsPost(month);
   if (existingPost) {
@@ -59,8 +78,36 @@ export async function carsWorkflow(
     };
   }
 
+  await emitEvent({ type: "step:start", step: "generateCarsPost" });
   const carsData = await fetchCarsData(month);
   const post = await generateCarsPost(carsData, month);
+  await emitEvent({
+    type: "post:generated",
+    step: "generateCarsPost",
+    data: { postId: post.postId },
+  });
+
+  await emitEvent({ type: "step:start", step: "generateCarsHero" });
+  try {
+    await generatePostHero({
+      postId: post.postId,
+      title: post.title,
+      excerpt: post.excerpt,
+      dataType: post.dataType,
+    });
+    await emitEvent({
+      type: "step:complete",
+      step: "generateCarsHero",
+      data: { postId: post.postId },
+    });
+  } catch (error) {
+    console.error("[CARS] Hero image generation failed after retries:", error);
+    await emitEvent({
+      type: "step:complete",
+      step: "generateCarsHero",
+      data: { postId: post.postId, heroGenerated: false },
+    });
+  }
 
   await revalidatePostsCache();
 
@@ -81,7 +128,6 @@ async function processCarsData(): Promise<UpdaterResult> {
 
   return result;
 }
-processCarsData.maxRetries = 3;
 
 async function syncMakesSortedSet(): Promise<void> {
   "use step";
@@ -127,16 +173,6 @@ async function generateCarsPost(
   try {
     return await generateBlogContent({ data, month, dataType: "cars" });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    // Rate limit - wait before retry
-    if (message.includes("429")) {
-      throw new RetryableError("AI rate limited", { retryAfter: "1m" });
-    }
-    // Auth error - can't succeed
-    if (message.includes("401") || message.includes("403")) {
-      throw new FatalError("AI authentication failed");
-    }
-    throw error;
+    handleAIError(error);
   }
 }
-generateCarsPost.maxRetries = 3;

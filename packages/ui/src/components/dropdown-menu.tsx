@@ -1,7 +1,7 @@
 "use client";
 
+import { cn } from "@motormetrics/ui/lib/utils";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { cn } from "@sgcarstrends/ui/lib/utils";
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 import type * as React from "react";
 

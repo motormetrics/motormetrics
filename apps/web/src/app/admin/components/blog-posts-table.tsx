@@ -16,31 +16,31 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@sgcarstrends/ui/components/alert-dialog";
-import { Badge } from "@sgcarstrends/ui/components/badge";
-import { Button } from "@sgcarstrends/ui/components/button";
+} from "@motormetrics/ui/components/alert-dialog";
+import { Badge } from "@motormetrics/ui/components/badge";
+import { Button } from "@motormetrics/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
+} from "@motormetrics/ui/components/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@sgcarstrends/ui/components/dropdown-menu";
-import { Input } from "@sgcarstrends/ui/components/input";
+} from "@motormetrics/ui/components/dropdown-menu";
+import { Input } from "@motormetrics/ui/components/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@sgcarstrends/ui/components/select";
+} from "@motormetrics/ui/components/select";
 import {
   Table,
   TableBody,
@@ -48,7 +48,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@sgcarstrends/ui/components/table";
+} from "@motormetrics/ui/components/table";
 import {
   type ColumnDef,
   flexRender,
@@ -65,6 +65,7 @@ import {
   type PostWithMetadata,
   regeneratePost,
 } from "@web/app/admin/actions/blog";
+import { regeneratePostHero } from "@web/app/admin/actions/regenerate-hero";
 import { estimateTokenCost } from "@web/app/admin/lib/token-cost";
 import {
   ArrowUpDown,
@@ -74,6 +75,7 @@ import {
   ChevronsRight,
   ExternalLink,
   Eye,
+  ImageIcon,
   Loader2,
   MoreHorizontal,
   Pencil,
@@ -131,6 +133,9 @@ export function BlogPostsTable({
     { id: "createdAt", desc: true },
   ]);
   const [regeneratingId, setRegeneratingId] = useState<string | null>(null);
+  const [heroRegeneratingId, setHeroRegeneratingId] = useState<string | null>(
+    null,
+  );
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
@@ -169,6 +174,28 @@ export function BlogPostsTable({
       setRegeneratingId(null);
     }
   };
+
+  const handleRegenerateHero = useCallback(async (post: PostWithMetadata) => {
+    setHeroRegeneratingId(post.id);
+    try {
+      const result = await regeneratePostHero(post.id);
+      if (result.success) {
+        toast.success(
+          `Hero image regeneration started for "${post.title}". Refresh in a moment to see the new image.`,
+        );
+      } else {
+        throw new Error(result.error ?? "Unknown error");
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to regenerate hero image.",
+      );
+    } finally {
+      setHeroRegeneratingId(null);
+    }
+  }, []);
 
   const handleDelete = async (post: PostWithMetadata) => {
     setDeletingId(post.id);
@@ -289,7 +316,9 @@ export function BlogPostsTable({
         cell: ({ row }) => {
           const post = row.original;
           const isLoading =
-            regeneratingId === post.id || deletingId === post.id;
+            regeneratingId === post.id ||
+            heroRegeneratingId === post.id ||
+            deletingId === post.id;
 
           if (isLoading) {
             return (
@@ -341,6 +370,12 @@ export function BlogPostsTable({
                       <RefreshCw className="mr-2 size-4" />
                       Regenerate
                     </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => handleRegenerateHero(post)}
+                    >
+                      <ImageIcon className="mr-2 size-4" />
+                      Regenerate Hero
+                    </DropdownMenuItem>
                   </>
                 )}
                 <DropdownMenuSeparator />
@@ -359,8 +394,13 @@ export function BlogPostsTable({
         },
       },
     ],
-    // biome-ignore lint/correctness/useExhaustiveDependencies: regeneratingId/deletingId drive loading state in cell renderers; handlePreview is stable within this closure
-    [regeneratingId, deletingId, handlePreview],
+    [
+      regeneratingId,
+      heroRegeneratingId,
+      deletingId,
+      handlePreview,
+      handleRegenerateHero,
+    ],
   );
 
   const table = useReactTable({

@@ -1,18 +1,18 @@
 "use client";
 
-import { Badge } from "@sgcarstrends/ui/components/badge";
-import { Button } from "@sgcarstrends/ui/components/button";
+import { Badge } from "@motormetrics/ui/components/badge";
+import { Button } from "@motormetrics/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@sgcarstrends/ui/components/card";
-import { Input } from "@sgcarstrends/ui/components/input";
-import { Label } from "@sgcarstrends/ui/components/label";
-import { Separator } from "@sgcarstrends/ui/components/separator";
-import { Switch } from "@sgcarstrends/ui/components/switch";
+} from "@motormetrics/ui/components/card";
+import { Input } from "@motormetrics/ui/components/input";
+import { Label } from "@motormetrics/ui/components/label";
+import { Separator } from "@motormetrics/ui/components/separator";
+import { Switch } from "@motormetrics/ui/components/switch";
 import {
   type MaintenanceConfig,
   updateMaintenanceConfig,

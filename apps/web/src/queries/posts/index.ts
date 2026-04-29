@@ -15,7 +15,7 @@ import {
   posts,
   type SelectPost,
   sql,
-} from "@sgcarstrends/database";
+} from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 export async function searchPosts(query: string): Promise<SelectPost[]> {
@@ -37,7 +37,7 @@ export async function searchPosts(query: string): Promise<SelectPost[]> {
     return keywordResults;
   }
 
-  const { generatePostEmbedding } = await import("@sgcarstrends/ai");
+  const { generatePostEmbedding } = await import("@motormetrics/ai");
   const embedding = await generatePostEmbedding({
     title: query,
     content: query,

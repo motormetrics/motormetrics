@@ -1,0 +1,439 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MaintenanceNotice > should render the maintenance copy and run the hook 1`] = `
+<div>
+  <div
+    class="mx-auto flex max-w-4xl flex-col gap-8"
+    style="opacity: 0;"
+  >
+    <div
+      class="flex flex-col items-center gap-4 text-center"
+      style="opacity: 0;"
+    >
+      <div
+        class="mb-4"
+      >
+        <div>
+          <svg
+            class="lucide lucide-settings size-20 text-primary"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        style="opacity: 0;"
+      >
+        <h1
+          class="scroll-m-20 font-semibold text-4xl text-foreground tracking-tight lg:text-5xl"
+        >
+          Pit Stop in Progress
+        </h1>
+      </div>
+      <div
+        style="opacity: 0;"
+      >
+        <p
+          class="text-foreground text-lg leading-relaxed"
+        >
+          Just like a Formula 1 pit stop, we're fine-tuning our engines to deliver the fastest and most reliable Singapore car market insights!
+        </p>
+      </div>
+    </div>
+    <div
+      style="opacity: 0;"
+    >
+      <div
+        class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
+        tabindex="-1"
+      >
+        <div
+          class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+        >
+          <div
+            class="flex flex-col gap-4"
+          >
+            <div
+              class="flex items-center justify-between"
+            >
+              <div
+                class="flex items-center gap-2"
+              >
+                <svg
+                  class="lucide lucide-clock size-5 text-primary"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                  />
+                  <polyline
+                    points="12 6 12 12 16 14"
+                  />
+                </svg>
+                <p
+                  class="text-base text-foreground leading-7"
+                >
+                  Estimated Completion
+                </p>
+              </div>
+              <div
+                class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-2 h-8 text-medium rounded-full shadow-lg shadow-primary/40 bg-primary text-primary-foreground"
+              >
+                <span
+                  class="flex-1 text-inherit font-normal px-2"
+                >
+                  2 hours
+                </span>
+              </div>
+            </div>
+            <div
+              class="flex items-center justify-center gap-2"
+            >
+              <div
+                class="flex items-center gap-1"
+              >
+                <div
+                  class="size-2 animate-pulse rounded-full bg-primary"
+                  style="animation-delay: 0s;"
+                />
+                <div
+                  class="size-2 animate-pulse rounded-full bg-primary"
+                  style="animation-delay: 0.2s;"
+                />
+                <div
+                  class="size-2 animate-pulse rounded-full bg-primary"
+                  style="animation-delay: 0.4s;"
+                />
+              </div>
+              <p
+                class="text-default-600 text-sm leading-6"
+              >
+                Maintenance in progress
+              </p>
+            </div>
+            <p
+              class="text-default-600 text-sm leading-6"
+            >
+              We are upgrading our data processing systems for faster analysis
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex flex-col gap-4"
+      style="opacity: 0;"
+    >
+      <h2
+        class="scroll-m-20 font-semibold text-3xl text-foreground tracking-tight first:mt-0"
+      >
+        What's Under the Hood?
+      </h2>
+      <div
+        class="grid gap-4 md:grid-cols-2"
+        style="opacity: 0;"
+      >
+        <div
+          style="opacity: 0;"
+        >
+          <div
+            class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
+            tabindex="-1"
+          >
+            <div
+              class="relative w-full flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-row items-start gap-4 p-4"
+            >
+              <svg
+                class="lucide lucide-zap mt-1 size-6 flex-shrink-0 text-primary"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"
+                />
+              </svg>
+              <div>
+                <h3
+                  class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+                >
+                  Performance Boost
+                </h3>
+                <p
+                  class="text-default-600 text-sm leading-6"
+                >
+                  Turbocharging our database for lightning-fast COE trend analysis
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style="opacity: 0;"
+        >
+          <div
+            class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
+            tabindex="-1"
+          >
+            <div
+              class="relative w-full flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-row items-start gap-4 p-4"
+            >
+              <svg
+                class="lucide lucide-shield mt-1 size-6 flex-shrink-0 text-primary"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+                />
+              </svg>
+              <div>
+                <h3
+                  class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+                >
+                  Security Updates
+                </h3>
+                <p
+                  class="text-default-600 text-sm leading-6"
+                >
+                  Installing the latest security patches to protect your data
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style="opacity: 0;"
+        >
+          <div
+            class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
+            tabindex="-1"
+          >
+            <div
+              class="relative w-full flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-row items-start gap-4 p-4"
+            >
+              <svg
+                class="lucide lucide-trending-up mt-1 size-6 flex-shrink-0 text-primary"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <polyline
+                  points="22 7 13.5 15.5 8.5 10.5 2 17"
+                />
+                <polyline
+                  points="16 7 22 7 22 13"
+                />
+              </svg>
+              <div>
+                <h3
+                  class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+                >
+                  New Features
+                </h3>
+                <p
+                  class="text-default-600 text-sm leading-6"
+                >
+                  Adding advanced analytics for better market predictions
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style="opacity: 0;"
+        >
+          <div
+            class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
+            tabindex="-1"
+          >
+            <div
+              class="relative w-full flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-row items-start gap-4 p-4"
+            >
+              <svg
+                class="lucide lucide-wrench mt-1 size-6 flex-shrink-0 text-primary"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                />
+              </svg>
+              <div>
+                <h3
+                  class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+                >
+                  Bug Fixes
+                </h3>
+                <p
+                  class="text-default-600 text-sm leading-6"
+                >
+                  Fixing minor issues to ensure smooth sailing ahead
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      style="opacity: 0;"
+    >
+      <hr
+        class="shrink-0 bg-divider border-none w-full h-divider"
+        role="separator"
+      />
+    </div>
+    <div
+      class="flex flex-col gap-4 text-center"
+      style="opacity: 0;"
+    >
+      <h3
+        class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+      >
+        Need Immediate Assistance?
+      </h3>
+      <p
+        class="text-base text-foreground leading-7"
+      >
+        While we're upgrading, our support team is still available for urgent inquiries
+      </p>
+      <div
+        class="flex flex-col items-center justify-center gap-4 sm:flex-row"
+      >
+        <a
+          class="relative tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-primary no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex items-center gap-2 font-medium text-sm"
+          data-react-aria-pressable="true"
+          href="mailto:support@motormetrics.app"
+          role="link"
+          tabindex="0"
+        >
+          <svg
+            class="lucide lucide-mail size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              height="16"
+              rx="2"
+              width="20"
+              x="2"
+              y="4"
+            />
+            <path
+              d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+            />
+          </svg>
+          support@motormetrics.app
+        </a>
+        <span
+          class="hidden text-foreground-400 sm:inline"
+        >
+          |
+        </span>
+        <a
+          class="relative tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-primary no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex items-center gap-2 font-medium text-sm"
+          data-react-aria-pressable="true"
+          href="https://twitter.com/motormetrics"
+          rel="noopener noreferrer"
+          role="link"
+          tabindex="0"
+          target="_blank"
+        >
+          <svg
+            class="lucide lucide-message-circle size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"
+            />
+          </svg>
+          Follow updates on Twitter
+        </a>
+      </div>
+    </div>
+    <div
+      class="text-center"
+      style="opacity: 0;"
+    >
+      <p
+        class="text-default-600 text-sm leading-6"
+      >
+        Thanks for your patience as we race towards a better experience!
+      </p>
+      <span
+        class="text-muted-foreground text-xs leading-tight"
+      >
+        This page will automatically refresh when maintenance is complete
+      </span>
+    </div>
+  </div>
+</div>
+`;

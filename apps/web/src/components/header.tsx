@@ -9,7 +9,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@heroui/navbar";
-import { cn } from "@heroui/react";
+import { cn } from "@heroui/theme";
 import { BrandLogo } from "@web/components/brand-logo";
 import { NAV_ITEMS, type NavItem } from "@web/config/navigation";
 import Link from "next/link";
@@ -25,7 +25,7 @@ export function Header() {
       // Dashboard active for home, cars, coe routes (all dashboard content)
       return (
         !pathname.startsWith("/blog") &&
-        !pathname.startsWith("/resources") &&
+        !pathname.startsWith("/learn") &&
         !pathname.startsWith("/about")
       );
     }

@@ -1,4 +1,4 @@
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import { NextResponse } from "next/server";
 import { validateApiToken } from "../lib/auth";
 

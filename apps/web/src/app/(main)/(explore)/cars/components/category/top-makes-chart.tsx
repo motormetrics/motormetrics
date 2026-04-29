@@ -6,10 +6,12 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@sgcarstrends/ui/components/chart";
+} from "@motormetrics/ui/components/chart";
+import { slugify } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import { getRankingEmoji } from "@web/lib/cars/calculations";
 import { formatNumber } from "@web/utils/charts";
+import Link from "next/link";
 import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
@@ -80,13 +82,17 @@ export function TopMakesChart({
           <div className="flex gap-2">
             {topThree.map((item, index) => {
               return (
-                <Chip
+                <Link
                   key={item.name}
-                  startContent={<span>{getRankingEmoji(index + 1)}</span>}
-                  className="first-of-type:bg-primary first-of-type:text-primary-foreground"
+                  href={`/cars/makes/${slugify(item.name)}`}
                 >
-                  {item.name}
-                </Chip>
+                  <Chip
+                    startContent={<span>{getRankingEmoji(index + 1)}</span>}
+                    className="cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
+                  >
+                    {item.name}
+                  </Chip>
+                </Link>
               );
             })}
           </div>

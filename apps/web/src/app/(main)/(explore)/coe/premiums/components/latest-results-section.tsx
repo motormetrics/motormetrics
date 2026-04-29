@@ -4,6 +4,10 @@ import { StructuredData } from "@web/components/structured-data";
 import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
+  generateBreadcrumbSchema,
+  generateDatasetSchema,
+} from "@web/lib/metadata";
+import {
   getAllCoeCategoryTrends,
   getLatestAndPreviousCoeResults,
 } from "@web/queries/coe";
@@ -36,6 +40,22 @@ async function LatestResultsContent() {
   return (
     <>
       <StructuredData data={structuredData} />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateDatasetSchema("coe-premiums"),
+        }}
+      />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "COE", path: "/coe" },
+            { name: "Premiums", path: "/coe/premiums" },
+          ]),
+        }}
+      />
       <div className="flex flex-col gap-4">
         <Typography.H2>Latest COE Results</Typography.H2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">

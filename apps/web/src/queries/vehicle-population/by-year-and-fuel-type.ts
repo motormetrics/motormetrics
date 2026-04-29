@@ -1,4 +1,4 @@
-import { db, desc, sql, vehiclePopulation } from "@sgcarstrends/database";
+import { db, desc, sql, vehiclePopulation } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 interface YearFuelTypeTotal {

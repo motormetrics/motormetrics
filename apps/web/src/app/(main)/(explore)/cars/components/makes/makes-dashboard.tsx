@@ -1,7 +1,7 @@
 "use client";
 
 import type { CarLogo } from "@logos/types";
-import { slugify } from "@sgcarstrends/utils";
+import { slugify } from "@motormetrics/utils";
 import { AllMakes } from "@web/app/(main)/(explore)/cars/components/makes/all-makes";
 import { MakeSearch } from "@web/app/(main)/(explore)/cars/components/makes/make-search";
 import { MakesSummary } from "@web/app/(main)/(explore)/cars/components/makes/makes-summary";

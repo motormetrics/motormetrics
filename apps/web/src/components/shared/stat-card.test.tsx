@@ -39,6 +39,7 @@ describe("StatCard", () => {
   it("should render with required props", () => {
     render(<StatCard {...defaultProps} />);
 
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("Test Title")).toBeInTheDocument();
     expect(screen.getByText("Test Description")).toBeInTheDocument();
     expect(screen.getByTestId("bar-chart")).toBeInTheDocument();
@@ -46,6 +47,13 @@ describe("StatCard", () => {
 
   it("should render with empty data", () => {
     render(<StatCard {...defaultProps} data={[]} />);
+    expect(screen.getByText("Test Title")).toBeInTheDocument();
+  });
+
+  it("should render with hero variant", () => {
+    render(<StatCard {...defaultProps} variant="hero" />);
+
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("Test Title")).toBeInTheDocument();
   });
 });

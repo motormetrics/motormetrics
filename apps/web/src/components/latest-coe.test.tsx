@@ -8,7 +8,11 @@ vi.mock("@web/components/animated-number", () => ({
 }));
 
 vi.mock("@web/components/charts/sparkline", () => ({
-  Sparkline: () => <div data-testid="sparkline">Sparkline</div>,
+  Sparkline: ({ colour }: { colour: string }) => (
+    <div data-testid="sparkline" data-colour={colour}>
+      Sparkline
+    </div>
+  ),
 }));
 
 describe("LatestCoe", () => {
@@ -36,6 +40,7 @@ describe("LatestCoe", () => {
   it("should render all COE results", () => {
     render(<LatestCoePremium results={mockResults} />);
 
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("Category A")).toBeInTheDocument();
     expect(screen.getByText("Category B")).toBeInTheDocument();
     expect(screen.getByText("95000")).toBeInTheDocument();
@@ -74,5 +79,82 @@ describe("LatestCoe", () => {
 
     const sparklines = screen.queryAllByTestId("sparkline");
     expect(sparklines).toHaveLength(0);
+  });
+
+  it("should use danger colour when premium trend goes up", () => {
+    const trends: Record<COECategory, CoeMonthlyPremium[]> = {
+      "Category A": [
+        { month: "2024-01", premium: 90000, biddingNo: 1 },
+        { month: "2024-02", premium: 95000, biddingNo: 1 },
+      ],
+      "Category B": [],
+      "Category C": [],
+      "Category D": [],
+      "Category E": [],
+    };
+
+    render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
+
+    expect(screen.getByTestId("sparkline")).toHaveAttribute(
+      "data-colour",
+      "hsl(var(--heroui-danger))",
+    );
+  });
+
+  it("should use success colour when premium trend goes down", () => {
+    const trends: Record<COECategory, CoeMonthlyPremium[]> = {
+      "Category A": [
+        { month: "2024-01", premium: 95000, biddingNo: 1 },
+        { month: "2024-02", premium: 90000, biddingNo: 1 },
+      ],
+      "Category B": [],
+      "Category C": [],
+      "Category D": [],
+      "Category E": [],
+    };
+
+    render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
+
+    expect(screen.getByTestId("sparkline")).toHaveAttribute(
+      "data-colour",
+      "hsl(var(--heroui-success))",
+    );
+  });
+
+  it("should use warning colour when premium trend is neutral", () => {
+    const trends: Record<COECategory, CoeMonthlyPremium[]> = {
+      "Category A": [
+        { month: "2024-01", premium: 90000, biddingNo: 1 },
+        { month: "2024-02", premium: 90000, biddingNo: 1 },
+      ],
+      "Category B": [],
+      "Category C": [],
+      "Category D": [],
+      "Category E": [],
+    };
+
+    render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
+
+    expect(screen.getByTestId("sparkline")).toHaveAttribute(
+      "data-colour",
+      "hsl(var(--heroui-warning))",
+    );
+  });
+
+  it("should use primary colour when there is only one premium point", () => {
+    const trends: Record<COECategory, CoeMonthlyPremium[]> = {
+      "Category A": [{ month: "2024-01", premium: 90000, biddingNo: 1 }],
+      "Category B": [],
+      "Category C": [],
+      "Category D": [],
+      "Category E": [],
+    };
+
+    render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
+
+    expect(screen.getByTestId("sparkline")).toHaveAttribute(
+      "data-colour",
+      "hsl(var(--heroui-primary))",
+    );
   });
 });

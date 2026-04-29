@@ -32,6 +32,7 @@ describe("LinkWithParams", () => {
       </LinkWithParams>,
     );
 
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByRole("link")).toBeInTheDocument();
     expect(screen.getByText("Test Link")).toBeInTheDocument();
   });

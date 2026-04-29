@@ -76,6 +76,7 @@ describe("processCSV", () => {
         header: true,
         dynamicTyping: true,
         skipEmptyLines: true,
+        transformHeader: expect.any(Function),
         transform: expect.any(Function),
       }),
     );
@@ -129,6 +130,58 @@ describe("processCSV", () => {
     });
 
     await expect(processCsv(filePath)).rejects.toThrow("Parse error");
+  });
+
+  it("should apply transformHeader to rename columns via columnMapping", async () => {
+    vi.spyOn(fs, "readFileSync").mockReturnValue("mock csv content");
+    const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
+      data: [],
+      errors: [],
+      meta: { fields: [] },
+    } as never);
+
+    await processCsv(filePath, {
+      columnMapping: { old_name: "newName" },
+    });
+
+    const config = parseMock.mock.calls[0][1] as {
+      transformHeader: (header: string) => string;
+    };
+    expect(config.transformHeader("old_name")).toBe("newName");
+    expect(config.transformHeader("unmapped")).toBe("unmapped");
+  });
+
+  it("should apply transform with field handler when provided", async () => {
+    vi.spyOn(fs, "readFileSync").mockReturnValue("mock csv content");
+    const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
+      data: [],
+      errors: [],
+      meta: { fields: [] },
+    } as never);
+
+    const fields = { age: (v: string) => Number(v) * 2 };
+    await processCsv(filePath, { fields });
+
+    const config = parseMock.mock.calls[0][1] as {
+      transform: (value: string, field: string) => unknown;
+    };
+    expect(config.transform("5", "age")).toBe(10);
+  });
+
+  it("should trim string values without a field handler", async () => {
+    vi.spyOn(fs, "readFileSync").mockReturnValue("mock csv content");
+    const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
+      data: [],
+      errors: [],
+      meta: { fields: [] },
+    } as never);
+
+    await processCsv(filePath);
+
+    const config = parseMock.mock.calls[0][1] as {
+      transform: (value: string, field: string) => unknown;
+    };
+    expect(config.transform("  hello  ", "name")).toBe("hello");
   });
 
   it("should return an empty array if no records are found", async () => {

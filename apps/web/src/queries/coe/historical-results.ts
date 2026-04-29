@@ -1,4 +1,4 @@
-import { and, asc, coe, db, gte, lte, max, min } from "@sgcarstrends/database";
+import { and, asc, coe, db, gte, lte, max, min } from "@motormetrics/database";
 import type { Period } from "@web/app/(main)/(explore)/coe/search-params";
 import { getDateRangeFromPeriod } from "@web/lib/coe/calculations";
 import type { COEResult } from "@web/types";

@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@sgcarstrends/ui/components/sidebar";
+} from "@motormetrics/ui/components/sidebar";
 import { authClient } from "@web/app/admin/lib/auth-client";
 import {
   Activity,
@@ -145,7 +145,7 @@ export const AppSidebar = () => {
             <LayoutDashboard className="size-4 text-primary-foreground" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">SG Cars Admin</span>
+            <span className="truncate font-semibold">MotorMetrics Admin</span>
             <span className="truncate text-muted-foreground text-xs">
               {session?.user?.email || "Dashboard"}
             </span>

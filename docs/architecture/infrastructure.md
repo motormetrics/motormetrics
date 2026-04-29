@@ -1,6 +1,6 @@
 # Infrastructure Architecture
 
-This document describes the Vercel-based infrastructure setup for the SG Cars Trends platform.
+This document describes the Vercel-based infrastructure setup for the MotorMetrics platform.
 
 ## Infrastructure Diagram
 
@@ -15,7 +15,7 @@ graph TB
         VercelDNS[Vercel DNS]
 
         subgraph "Domain Strategy"
-            ProdDomain[sgcarstrends.com]
+            ProdDomain[motormetrics.app]
             PreviewDomain[*.vercel.app]
         end
     end
@@ -154,7 +154,7 @@ graph TB
 ### Deployment Strategy
 
 **Production**
-- Domain: `sgcarstrends.com`
+- Domain: `motormetrics.app`
 - Trigger: Push to `main` branch
 - Automatic deployments
 

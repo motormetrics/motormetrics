@@ -163,7 +163,7 @@ Workflows typically need:
 
 Run workflow tests:
 ```bash
-pnpm -F @sgcarstrends/web test -- src/workflows
+pnpm -F /web test -- src/workflows
 ```
 
 Test individual workflow locally:

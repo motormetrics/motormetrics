@@ -12,9 +12,9 @@ import {
   TableRow,
 } from "@heroui/table";
 import { cn } from "@heroui/theme";
+import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
-import { CARD_PADDING, RADIUS } from "@web/config/design-system";
 import { sortByDescriptor } from "@web/utils/sort";
 import { type Key, useCallback, useMemo, useState } from "react";
 

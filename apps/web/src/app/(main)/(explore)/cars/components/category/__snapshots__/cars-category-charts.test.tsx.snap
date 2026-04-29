@@ -1,0 +1,123 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Cars Category Charts > TopMakesChart > should render chart title and description 1`] = `
+<div>
+  <div
+    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
+    tabindex="-1"
+  >
+    <div
+      class="p-3 z-10 w-full justify-start shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-col items-start gap-2"
+    >
+      <h4
+        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+      >
+        Top Makes - 
+        Petrol
+      </h4>
+      <p
+        class="text-default-600 text-sm leading-6"
+      >
+        Most popular brands in this category
+      </p>
+    </div>
+    <div
+      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+    >
+      <div
+        class="flex flex-col gap-6"
+      >
+        <div
+          class="flex gap-2"
+        >
+          <a
+            href="/cars/makes/toyota"
+          >
+            <div
+              class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-7 text-small rounded-full bg-default text-default-foreground cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
+            >
+              <span
+                class="max-h-[80%]"
+              >
+                🥇
+              </span>
+              <span
+                class="flex-1 text-inherit font-normal px-2 pl-1"
+              >
+                Toyota
+              </span>
+            </div>
+          </a>
+          <a
+            href="/cars/makes/honda"
+          >
+            <div
+              class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-7 text-small rounded-full bg-default text-default-foreground cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
+            >
+              <span
+                class="max-h-[80%]"
+              >
+                🥈
+              </span>
+              <span
+                class="flex-1 text-inherit font-normal px-2 pl-1"
+              >
+                Honda
+              </span>
+            </div>
+          </a>
+          <a
+            href="/cars/makes/bmw"
+          >
+            <div
+              class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-7 text-small rounded-full bg-default text-default-foreground cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
+            >
+              <span
+                class="max-h-[80%]"
+              >
+                🥉
+              </span>
+              <span
+                class="flex-1 text-inherit font-normal px-2 pl-1"
+              >
+                BMW
+              </span>
+            </div>
+          </a>
+        </div>
+        <div
+          class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none h-[300px] w-full"
+          data-chart="chart-_r_0_"
+        >
+          <style>
+            
+ [data-chart=chart-_r_0_] {
+  --color-value: var(--chart-1);
+  --color-Toyota: var(--chart-1);
+  --color-Honda: var(--chart-2);
+  --color-BMW: var(--chart-3);
+}
+
+
+.dark [data-chart=chart-_r_0_] {
+  --color-value: var(--chart-1);
+  --color-Toyota: var(--chart-1);
+  --color-Honda: var(--chart-2);
+  --color-BMW: var(--chart-3);
+}
+
+          </style>
+          <div
+            class="recharts-responsive-container"
+            style="width: 100%; height: 100%; min-width: 0;"
+          >
+            <div
+              style="width: 0px; height: 0px; overflow: visible;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

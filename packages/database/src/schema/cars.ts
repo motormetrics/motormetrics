@@ -1,4 +1,11 @@
-import { index, integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import {
+  index,
+  integer,
+  pgTable,
+  text,
+  unique,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const cars = pgTable(
   "cars",
@@ -12,6 +19,15 @@ export const cars = pgTable(
     number: integer().default(0),
   },
   (table) => [
+    unique()
+      .on(
+        table.month,
+        table.make,
+        table.importerType,
+        table.fuelType,
+        table.vehicleType,
+      )
+      .nullsNotDistinct(),
     index().on(table.month, table.make),
     index().on(table.month),
     index().on(table.make),

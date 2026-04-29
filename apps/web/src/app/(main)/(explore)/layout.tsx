@@ -3,10 +3,10 @@ import type { ReactNode } from "react";
 
 const DashboardLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   return (
-    <div className="flex min-h-screen flex-col gap-8">
+    <main className="container mx-auto flex min-h-screen flex-col gap-8 px-6 py-8">
       <DashboardNav />
       {children}
-    </div>
+    </main>
   );
 };
 

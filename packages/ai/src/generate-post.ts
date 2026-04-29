@@ -15,6 +15,8 @@ export interface GenerateAndSaveResult {
   postId: string;
   title: string;
   slug: string;
+  excerpt: string;
+  dataType: "cars" | "coe" | "deregistrations" | "electric-vehicles";
 }
 
 /**
@@ -54,7 +56,6 @@ async function generateContent(
   const result = await generateText({
     model: google("gemini-3-flash-preview"),
     tools: {
-      // @ts-expect-error - code_execution is a valid tool
       code_execution: google.tools.codeExecution({}),
     },
     output: Output.object({
@@ -113,6 +114,7 @@ async function saveGeneratedPost(
     title: output.title,
     content: output.content,
     excerpt: output.excerpt,
+    heroImage: null,
     tags: output.tags,
     highlights: output.highlights,
     month,
@@ -132,6 +134,8 @@ async function saveGeneratedPost(
     postId: post.id,
     title: post.title,
     slug: post.slug,
+    excerpt: output.excerpt,
+    dataType,
   };
 }
 

@@ -1,7 +1,8 @@
-import { redis } from "@sgcarstrends/utils";
+import { redis } from "@motormetrics/utils";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCarPopulationYears } from "@web/queries/car-population";
 import { updateCarPopulation } from "@web/workflows/car-population/steps/process-data";
+import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
 
 export async function carPopulationWorkflow(): Promise<{
@@ -9,7 +10,13 @@ export async function carPopulationWorkflow(): Promise<{
 }> {
   "use workflow";
 
+  await emitEvent({ type: "step:start", step: "processCarPopulationData" });
   const result = await processCarPopulationData();
+  await emitEvent({
+    type: "data:processed",
+    step: "processCarPopulationData",
+    data: { recordsProcessed: result.recordsProcessed },
+  });
 
   if (result.recordsProcessed === 0) {
     return { message: "No car population records processed." };
@@ -20,7 +27,13 @@ export async function carPopulationWorkflow(): Promise<{
     return { message: "No car population data found." };
   }
 
+  await emitEvent({ type: "step:start", step: "revalidateCarPopulationCache" });
   await revalidateCarPopulationCache(latestYear);
+  await emitEvent({
+    type: "cache:revalidated",
+    step: "revalidateCarPopulationCache",
+    data: { year: latestYear },
+  });
 
   return {
     message:
@@ -36,8 +49,6 @@ async function processCarPopulationData(): Promise<UpdaterResult> {
   }
   return result;
 }
-processCarPopulationData.maxRetries = 3;
-
 async function getLatestYear(): Promise<string | null> {
   "use step";
   const years = await getCarPopulationYears();

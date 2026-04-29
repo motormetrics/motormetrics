@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@sgcarstrends/ui/components/button";
-import { Input } from "@sgcarstrends/ui/components/input";
-import { Label } from "@sgcarstrends/ui/components/label";
+import { Button } from "@motormetrics/ui/components/button";
+import { Input } from "@motormetrics/ui/components/input";
+import { Label } from "@motormetrics/ui/components/label";
 import { authClient } from "@web/app/admin/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useState } from "react";

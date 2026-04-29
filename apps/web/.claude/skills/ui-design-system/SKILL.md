@@ -5,7 +5,7 @@ description: Enforce modern dashboard UI patterns with pill-shaped design, profe
 
 # UI Design System Skill
 
-This skill enforces consistent UI patterns across the SG Cars Trends web application, ensuring a modern, professional dashboard design.
+This skill enforces consistent UI patterns across the MotorMetrics web application, ensuring a modern, professional dashboard design.
 
 ## When to Activate
 

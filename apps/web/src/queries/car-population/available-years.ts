@@ -1,4 +1,4 @@
-import { carPopulation, db, desc } from "@sgcarstrends/database";
+import { carPopulation, db, desc } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 export async function getCarPopulationYears(): Promise<{ year: string }[]> {

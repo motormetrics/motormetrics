@@ -3,7 +3,7 @@
  * This module provides reusable query functions that work with both fuelType and vehicleType columns
  */
 
-import { and, cars, db, desc, eq, sql } from "@sgcarstrends/database";
+import { and, cars, db, desc, eq, sql } from "@motormetrics/database";
 
 /**
  * Configuration for type-based queries

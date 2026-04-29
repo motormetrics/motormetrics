@@ -15,6 +15,7 @@ describe("MaintenanceNotice", () => {
 
   it("should render the maintenance copy and run the hook", () => {
     render(<MaintenanceNotice />);
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText(/Pit Stop in Progress/i)).toBeInTheDocument();
     expect(mockUseMaintenance).toHaveBeenCalled();
   });

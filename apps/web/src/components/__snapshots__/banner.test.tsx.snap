@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Banner > should show banner content from the store 1`] = `
+<div>
+  <div
+    class="flex items-center overflow-x-auto whitespace-nowrap border-t bg-default-50 shadow-md"
+  >
+    <div
+      class="px-6 py-4 lg:container lg:mx-auto"
+    >
+      <span
+        data-testid="banner-content"
+      >
+        Hello COE
+      </span>
+    </div>
+  </div>
+</div>
+`;

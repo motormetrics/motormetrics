@@ -22,6 +22,7 @@ describe("Makes", () => {
         letters={lettersGerman}
       />,
     );
+    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("Test Makes")).toBeVisible();
     expect(screen.getByText(germanMakes.length.toString())).toBeVisible();
   });

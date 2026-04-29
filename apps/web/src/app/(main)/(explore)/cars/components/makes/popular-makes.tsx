@@ -1,4 +1,5 @@
-import { slugify } from "@sgcarstrends/utils";
+import { Chip } from "@heroui/chip";
+import { slugify } from "@motormetrics/utils";
 import type { Make, MakeStats } from "@web/types";
 import { TrendingUp } from "lucide-react";
 import { MakeCard } from "./make-card";
@@ -29,9 +30,9 @@ export function PopularMakes({
             Popular Makes
           </h2>
         </div>
-        <span className="rounded-full bg-primary/10 px-2.5 py-0.5 font-medium text-primary text-xs">
+        <Chip variant="flat" color="primary" size="sm">
           Top {makes.length}
-        </span>
+        </Chip>
       </div>
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         {makes.map((make) => {

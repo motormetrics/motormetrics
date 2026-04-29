@@ -1,4 +1,4 @@
-import type { CleanSpecialCharsOptions } from "@sgcarstrends/types";
+import type { CleanSpecialCharsOptions } from "@motormetrics/types";
 
 export const cleanSpecialChars = (
   value: string,

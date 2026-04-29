@@ -1,13 +1,18 @@
-import { generateBlogContent, getCoeForMonth } from "@sgcarstrends/ai";
-import { redis, tokeniser } from "@sgcarstrends/utils";
+import { generateBlogContent, getCoeForMonth } from "@motormetrics/ai";
+import { redis, tokeniser } from "@motormetrics/utils";
 import { getCoeMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";
 import { getExistingPostByMonth } from "@web/queries/posts";
 import { updateCoe } from "@web/workflows/coe/steps/process-data";
-import { revalidatePostsCache } from "@web/workflows/shared";
+import {
+  emitEvent,
+  generatePostHero,
+  handleAIError,
+  revalidatePostsCache,
+} from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
-import { FatalError, fetch, RetryableError } from "workflow";
+import { fetch } from "workflow";
 
 interface CoeWorkflowPayload {
   month?: string;
@@ -29,7 +34,13 @@ export async function coeWorkflow(
 
   globalThis.fetch = fetch;
 
+  await emitEvent({ type: "step:start", step: "processCoeData" });
   const result = await processCoeData();
+  await emitEvent({
+    type: "data:processed",
+    step: "processCoeData",
+    data: { recordsProcessed: result.recordsProcessed },
+  });
 
   if (result.recordsProcessed === 0) {
     return {
@@ -62,7 +73,13 @@ export async function coeWorkflow(
   }
 
   const year = month.split("-")[0];
+  await emitEvent({ type: "step:start", step: "revalidateCoeCache" });
   await revalidateCoeCache(month, year);
+  await emitEvent({
+    type: "cache:revalidated",
+    step: "revalidateCoeCache",
+    data: { month, year },
+  });
 
   const existingPost = await checkExistingCoePost(month);
   if (existingPost) {
@@ -72,8 +89,36 @@ export async function coeWorkflow(
     };
   }
 
+  await emitEvent({ type: "step:start", step: "generateCoePost" });
   const coeData = await fetchCoeData(month);
   const post = await generateCoePost(coeData, month);
+  await emitEvent({
+    type: "post:generated",
+    step: "generateCoePost",
+    data: { postId: post.postId },
+  });
+
+  await emitEvent({ type: "step:start", step: "generateCoeHero" });
+  try {
+    await generatePostHero({
+      postId: post.postId,
+      title: post.title,
+      excerpt: post.excerpt,
+      dataType: post.dataType,
+    });
+    await emitEvent({
+      type: "step:complete",
+      step: "generateCoeHero",
+      data: { postId: post.postId },
+    });
+  } catch (error) {
+    console.error("[COE] Hero image generation failed after retries:", error);
+    await emitEvent({
+      type: "step:complete",
+      step: "generateCoeHero",
+      data: { postId: post.postId, heroGenerated: false },
+    });
+  }
 
   await revalidatePostsCache();
 
@@ -94,8 +139,6 @@ async function processCoeData(): Promise<UpdaterResult> {
 
   return result;
 }
-processCoeData.maxRetries = 3;
-
 async function getLatestRecord(): Promise<{
   month: string;
   biddingNo: number;
@@ -140,14 +183,6 @@ async function generateCoePost(
   try {
     return await generateBlogContent({ data, month, dataType: "coe" });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    if (message.includes("429")) {
-      throw new RetryableError("AI rate limited", { retryAfter: "1m" });
-    }
-    if (message.includes("401") || message.includes("403")) {
-      throw new FatalError("AI authentication failed");
-    }
-    throw error;
+    handleAIError(error);
   }
 }
-generateCoePost.maxRetries = 3;

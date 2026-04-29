@@ -17,5 +17,19 @@ export const COE_TAGS = [
   "PQP",
 ] as const;
 
+export const DEREGISTRATION_TAGS = [
+  "Deregistrations",
+  "Monthly Update",
+  "Market Trends",
+] as const;
+
+export const EV_TAGS = [
+  "Electric Vehicles",
+  "Monthly Update",
+  "Market Trends",
+] as const;
+
 export type CarsTag = (typeof CARS_TAGS)[number];
 export type CoeTag = (typeof COE_TAGS)[number];
+export type DeregistrationTag = (typeof DEREGISTRATION_TAGS)[number];
+export type EvTag = (typeof EV_TAGS)[number];

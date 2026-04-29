@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "sgcarstrends": {
+    "motormetrics": {
       "command": "bunx",
-      "args": ["-y", "@sgcarstrends/mcp"]
+      "args": ["-y", "@motormetrics/mcp"]
     }
   }
 }

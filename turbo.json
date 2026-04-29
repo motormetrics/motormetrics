@@ -42,6 +42,14 @@
       "inputs": ["$TURBO_DEFAULT$", "test/**/*.ts", "tests/**/*.ts"],
       "outputs": ["coverage/**"]
     },
+    "test:integration": {
+      "dependsOn": ["^test:integration"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.integration.test.ts",
+        "vitest.integration.config.ts"
+      ]
+    },
     "test:e2e": {
       "inputs": ["$TURBO_DEFAULT$", "tests/**/*.ts"],
       "outputs": ["test-results/**", "playwright-report/**"]
@@ -51,7 +59,7 @@
       "outputs": ["migrations/**"],
       "env": ["DATABASE_URL"]
     },
-    "migrate:check": {
+    "check": {
       "inputs": ["migrations/**/*.sql"],
       "env": ["DATABASE_URL"]
     },

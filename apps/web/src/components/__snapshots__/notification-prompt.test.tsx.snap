@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NotificationPrompt Component > should set notification status to current permission on mount 1`] = `
+<div>
+  <div
+    data-testid="alert"
+  >
+    <div
+      data-testid="alert-title"
+    >
+      Enable Notifications?
+    </div>
+    <div
+      data-testid="alert-description"
+    >
+      Stay updated with the latest news and alerts by enabling browser notifications
+    </div>
+    <div
+      data-testid="alert-endcontent"
+    >
+      <div
+        class="flex gap-2"
+      >
+        <button
+          data-testid="button"
+          type="button"
+        >
+          Allow
+        </button>
+        <button
+          data-testid="button"
+          type="button"
+        >
+          Deny
+        </button>
+      </div>
+    </div>
+    <button
+      data-testid="alert-close"
+      type="button"
+    >
+      close
+    </button>
+  </div>
+</div>
+`;

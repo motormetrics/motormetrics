@@ -1,4 +1,4 @@
-vi.mock("@sgcarstrends/database", () => ({
+vi.mock("@motormetrics/database", () => ({
   coe: { name: "coe" },
   pqp: { name: "pqp" },
 }));
@@ -11,7 +11,12 @@ vi.mock("@web/lib/updater", () => ({
   update: vi.fn(),
 }));
 
+vi.mock("@web/lib/updater/services/download-file", () => ({
+  fetchAndExtractZip: vi.fn(),
+}));
+
 import { type UpdaterResult, update } from "@web/lib/updater";
+import { fetchAndExtractZip } from "@web/lib/updater/services/download-file";
 import { updateCoe } from "./process-data";
 
 const mockResult = (overrides?: Partial<UpdaterResult>): UpdaterResult => ({
@@ -22,12 +27,18 @@ const mockResult = (overrides?: Partial<UpdaterResult>): UpdaterResult => ({
   ...overrides,
 });
 
+const mockExtractedFiles = new Map([
+  ["M11-coe_results.csv", "/tmp/M11-coe_results.csv"],
+  ["M11-coe_results_pqp.csv", "/tmp/M11-coe_results_pqp.csv"],
+]);
+
 describe("updateCoe", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(fetchAndExtractZip).mockResolvedValue(mockExtractedFiles);
   });
 
-  it("should call update with correct COE and PQP configurations", async () => {
+  it("should download ZIP once and process both tables", async () => {
     vi.mocked(update)
       .mockResolvedValueOnce(
         mockResult({ recordsProcessed: 10, message: "10 records inserted" }),
@@ -42,20 +53,29 @@ describe("updateCoe", () => {
 
     await updateCoe();
 
-    expect(update).toHaveBeenCalledTimes(2);
+    expect(fetchAndExtractZip).toHaveBeenCalledTimes(1);
+    expect(fetchAndExtractZip).toHaveBeenCalledWith(
+      "https://example.com/datamall/COE Bidding Results.zip",
+    );
 
-    // First call - COE
+    expect(update).toHaveBeenCalledTimes(2);
+  });
+
+  it("should pass filePath to update calls instead of triggering downloads", async () => {
+    vi.mocked(update)
+      .mockResolvedValueOnce(mockResult())
+      .mockResolvedValueOnce(mockResult({ table: "pqp" }));
+
+    await updateCoe();
+
+    // COE call uses filePath
     expect(vi.mocked(update).mock.calls[0][0]).toMatchObject({
-      url: "https://example.com/datamall/COE Bidding Results.zip",
-      csvFile: "M11-coe_results.csv",
-      keyFields: ["month", "biddingNo"],
+      filePath: "/tmp/M11-coe_results.csv",
     });
 
-    // Second call - PQP
+    // PQP call uses filePath
     expect(vi.mocked(update).mock.calls[1][0]).toMatchObject({
-      url: "https://example.com/datamall/COE Bidding Results.zip",
-      csvFile: "M11-coe_results_pqp.csv",
-      keyFields: ["month", "vehicleClass", "pqp"],
+      filePath: "/tmp/M11-coe_results_pqp.csv",
     });
   });
 
@@ -77,6 +97,16 @@ describe("updateCoe", () => {
     const result = await updateCoe();
 
     expect(result).toEqual(coeResult);
+  });
+
+  it("should throw when expected CSV files are missing from ZIP", async () => {
+    vi.mocked(fetchAndExtractZip).mockResolvedValue(
+      new Map([["unexpected.csv", "/tmp/unexpected.csv"]]),
+    );
+
+    await expect(updateCoe()).rejects.toThrow(
+      "Expected CSV files not found in ZIP",
+    );
   });
 
   it("should configure COE column mappings correctly", async () => {

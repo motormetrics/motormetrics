@@ -43,7 +43,8 @@ describe("PremiumBanner", () => {
     expect(mockStoreState.setBannerContent).toHaveBeenCalledTimes(1);
     const bannerNode = mockStoreState.setBannerContent.mock
       .calls[0][0] as ReactElement;
-    const { getAllByText } = render(bannerNode);
+    const { container, getAllByText } = render(bannerNode);
+    expect(container).toMatchSnapshot();
     expect(getAllByText(/Category [AB]/)).toHaveLength(2);
 
     unmount();

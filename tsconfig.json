@@ -13,7 +13,7 @@
       "@web/*": ["apps/web/src/*"],
       "@logos/*": ["packages/logos/src/*"],
       "@utils/*": ["packages/utils/src/*"],
-      "@sgcarstrends/ui/*": ["packages/ui/src/*"]
+      "@motormetrics/ui/*": ["packages/ui/src/*"]
     }
   },
   "exclude": ["node_modules"]

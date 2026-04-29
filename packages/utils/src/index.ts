@@ -1,5 +1,4 @@
 export * from "./cleanSpecialChars";
-export * from "./createUniqueKey";
 export * from "./format-count";
 export * from "./format-currency";
 export * from "./format-date-to-month-year";
