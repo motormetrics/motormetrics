@@ -1,3 +1,10 @@
+## [4.66.5](https://github.com/motormetrics/motormetrics/compare/v4.66.4...v4.66.5) (2026-04-29)
+
+### Bug Fixes
+
+* **web:** proxy posthog array assets ([9db5d30](https://github.com/motormetrics/motormetrics/commit/9db5d30527f86637d6dba70c163995ea69ad75be))
+* **web:** proxy PostHog array assets ([269f504](https://github.com/motormetrics/motormetrics/commit/269f504737eadcda9a1f8840c6e1492dde86116b))
+
 ## [4.66.4](https://github.com/motormetrics/motormetrics/compare/v4.66.3...v4.66.4) (2026-04-29)
 
 ### Bug Fixes
