@@ -1,6 +1,6 @@
 {
   "name": "@motormetrics/logos",
-  "version": "4.66.2",
+  "version": "4.66.3",
   "description": "Shared utilities for car logo management",
   "type": "module",
   "scripts": {

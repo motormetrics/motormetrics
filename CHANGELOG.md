@@ -1,3 +1,9 @@
+## [4.66.3](https://github.com/motormetrics/motormetrics/compare/v4.66.2...v4.66.3) (2026-04-29)
+
+### Bug Fixes
+
+* **web:** expose posthog env to turbo ([28251c3](https://github.com/motormetrics/motormetrics/commit/28251c3eea0b0a682d3289fc807ab287641b9c24))
+
 ## [4.66.2](https://github.com/motormetrics/motormetrics/compare/v4.66.1...v4.66.2) (2026-04-29)
 
 ### Bug Fixes
