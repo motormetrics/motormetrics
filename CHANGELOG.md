@@ -1,3 +1,9 @@
+## [4.66.4](https://github.com/motormetrics/motormetrics/compare/v4.66.3...v4.66.4) (2026-04-29)
+
+### Bug Fixes
+
+* **web:** rename posthog project token env ([a947d31](https://github.com/motormetrics/motormetrics/commit/a947d31909308cfff7bb01b0024a49f35f590e61))
+
 ## [4.66.3](https://github.com/motormetrics/motormetrics/compare/v4.66.2...v4.66.3) (2026-04-29)
 
 ### Bug Fixes
