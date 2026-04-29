@@ -1,7 +1,7 @@
 "use client";
 
+import { Accordion, AccordionItem } from "@heroui/accordion";
 import { Card, CardBody } from "@heroui/card";
-import { Accordion, AccordionItem } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { SITE_TITLE } from "@web/config";
 import {

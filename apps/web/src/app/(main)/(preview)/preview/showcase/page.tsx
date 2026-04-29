@@ -20,9 +20,9 @@ import {
 } from "@heroui/drawer";
 import { Input } from "@heroui/input";
 import { Link } from "@heroui/link";
+import { useDisclosure } from "@heroui/modal";
 import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
 import { Progress } from "@heroui/progress";
-import { useDisclosure } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/select";
 import { Skeleton } from "@heroui/skeleton";
 import { Tab, Tabs } from "@heroui/tabs";

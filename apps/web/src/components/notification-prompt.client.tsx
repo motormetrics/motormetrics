@@ -1,6 +1,9 @@
 "use client";
 
-import { Alert, addToast, Button, cn } from "@heroui/react";
+import { Alert } from "@heroui/alert";
+import { Button } from "@heroui/button";
+import { cn } from "@heroui/theme";
+import { addToast } from "@heroui/toast";
 import useStore from "@web/app/store";
 import { useCallback, useEffect } from "react";
 

@@ -9,7 +9,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@heroui/navbar";
-import { cn } from "@heroui/react";
+import { cn } from "@heroui/theme";
 import { BrandLogo } from "@web/components/brand-logo";
 import { NAV_ITEMS, type NavItem } from "@web/config/navigation";
 import Link from "next/link";

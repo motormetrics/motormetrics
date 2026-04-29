@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn } from "@heroui/theme";
 import {
   type ChartConfig,
   ChartContainer,

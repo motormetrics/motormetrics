@@ -1,6 +1,6 @@
+import { Badge } from "@heroui/badge";
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
-import { Badge } from "@heroui/react";
 import { Skeleton } from "@heroui/skeleton";
 import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";

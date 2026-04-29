@@ -6,8 +6,8 @@ import { vi } from "vitest";
 const announcementsFixture: AnnouncementType[] = [];
 let mockPathname = "/";
 
-vi.mock("@heroui/react", async () => {
-  const actual = await vi.importActual("@heroui/react");
+vi.mock("@heroui/alert", async () => {
+  const actual = await vi.importActual("@heroui/alert");
   return {
     ...actual,
     Alert: ({

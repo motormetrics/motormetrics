@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert } from "@heroui/react";
+import { Alert } from "@heroui/alert";
 import { announcements } from "@web/config";
 import { usePathname } from "next/navigation";
 

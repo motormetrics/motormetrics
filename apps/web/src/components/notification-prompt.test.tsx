@@ -5,11 +5,10 @@ import { NotificationPrompt } from "./notification-prompt";
 const mockSetNotificationStatus = vi.fn();
 let mockNotificationStatus: "default" | "granted" | "denied" = "default";
 
-vi.mock("@heroui/react", async () => {
-  const actual = await vi.importActual("@heroui/react");
+vi.mock("@heroui/alert", async () => {
+  const actual = await vi.importActual("@heroui/alert");
   return {
     ...actual,
-    addToast: vi.fn(),
     Alert: ({
       title,
       description,
@@ -33,6 +32,13 @@ vi.mock("@heroui/react", async () => {
         {children}
       </div>
     ),
+  };
+});
+
+vi.mock("@heroui/button", async () => {
+  const actual = await vi.importActual("@heroui/button");
+  return {
+    ...actual,
     Button: ({
       onPress,
       children,
@@ -44,6 +50,14 @@ vi.mock("@heroui/react", async () => {
         {children}
       </button>
     ),
+  };
+});
+
+vi.mock("@heroui/toast", async () => {
+  const actual = await vi.importActual("@heroui/toast");
+  return {
+    ...actual,
+    addToast: vi.fn(),
   };
 });
 

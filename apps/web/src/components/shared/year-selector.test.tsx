@@ -18,7 +18,7 @@ vi.mock("@heroui/toast", () => ({
   addToast: vi.fn(),
 }));
 
-vi.mock("@heroui/react", () => ({
+vi.mock("@heroui/autocomplete", () => ({
   Autocomplete: ({
     selectedKey,
     onSelectionChange,

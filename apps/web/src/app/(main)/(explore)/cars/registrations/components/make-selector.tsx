@@ -1,6 +1,6 @@
 "use client";
 
-import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import { slugify } from "@motormetrics/utils";
 import type { Make } from "@web/types";
 import Image from "next/image";
