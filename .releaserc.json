@@ -23,7 +23,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "pnpm version ${nextRelease.version} --no-git-tag-version --allow-same-version && pnpm -r exec -- npm version ${nextRelease.version} --no-git-tag-version --allow-same-version"
+        "prepareCmd": "pnpm -r version ${nextRelease.version} --no-git-tag-version --allow-same-version --no-git-checks"
       }
     ],
     [
