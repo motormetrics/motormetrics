@@ -1,14 +1,43 @@
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Badge } from "@heroui/react";
 import { Skeleton } from "@heroui/skeleton";
 import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults } from "@web/queries/coe";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { calculateChangePercent, calculateTrend } from "./coe-trend-utils";
+import {
+  calculateChangePercent,
+  calculateTrend,
+  type Trend,
+} from "./coe-trend-utils";
+
+function TrendBadge({ trend }: { trend: Exclude<Trend, "neutral"> }) {
+  const isUp = trend === "up";
+  const Icon = isUp ? ArrowUpIcon : ArrowDownIcon;
+
+  return (
+    <Badge
+      aria-label={isUp ? "Price increased" : "Price decreased"}
+      classNames={{
+        base: "inline-flex",
+        badge: "static h-5 min-w-5 translate-x-0 translate-y-0 border-0 p-0",
+      }}
+      color={isUp ? "danger" : "success"}
+      content={<Icon aria-hidden className="size-3" />}
+      shape="circle"
+      showOutline={false}
+      size="sm"
+      variant="solid"
+    >
+      <span className="sr-only">
+        {isUp ? "Price increased" : "Price decreased"}
+      </span>
+    </Badge>
+  );
+}
 
 async function CoeSectionContent() {
   const { latest, previous } = await getLatestAndPreviousCoeResults();
@@ -48,34 +77,7 @@ async function CoeSectionContent() {
                     <span className="font-medium text-default-500 text-xs">
                       {result.vehicleClass}
                     </span>
-                    {trend === "up" && (
-                      <Chip
-                        size="sm"
-                        color="danger"
-                        variant="solid"
-                        classNames={{
-                          base: "size-5 min-w-0 p-0",
-                          content: "text-xs",
-                        }}
-                        aria-label="Price increased"
-                      >
-                        ↑
-                      </Chip>
-                    )}
-                    {trend === "down" && (
-                      <Chip
-                        size="sm"
-                        color="success"
-                        variant="solid"
-                        classNames={{
-                          base: "size-5 min-w-0 p-0",
-                          content: "text-xs",
-                        }}
-                        aria-label="Price decreased"
-                      >
-                        ↓
-                      </Chip>
-                    )}
+                    {trend !== "neutral" && <TrendBadge trend={trend} />}
                   </div>
                   <p className="font-bold text-foreground text-lg tabular-nums">
                     <AnimatedNumber value={result.premium} format="currency" />
@@ -107,7 +109,6 @@ function CoeSectionSkeleton() {
       <CardBody className="p-6">
         <Skeleton className="mb-5 h-6 w-40 rounded-lg" />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {/* biome-ignore lint/suspicious/noArrayIndexKey: Static skeleton list */}
           {[0, 1, 2, 3, 4].map((i) => (
             <Card key={i} shadow="none" className="bg-default-100">
               <CardBody className="p-4">
