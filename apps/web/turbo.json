@@ -3,12 +3,20 @@
   "extends": ["//"],
   "tasks": {
     "build": {
-      "inputs": ["$TURBO_DEFAULT$", ".env"],
-      "env": ["CRON_SECRET"]
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "env": [
+        "CRON_SECRET",
+        "NEXT_PUBLIC_POSTHOG_HOST",
+        "NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN"
+      ]
     },
     "dev": {
-      "inputs": ["$TURBO_DEFAULT$", ".env"],
-      "env": ["CRON_SECRET"]
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "passThroughEnv": [
+        "CRON_SECRET",
+        "NEXT_PUBLIC_POSTHOG_HOST",
+        "NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN"
+      ]
     }
   }
 }
