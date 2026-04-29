@@ -1,3 +1,9 @@
+## [4.66.2](https://github.com/motormetrics/motormetrics/compare/v4.66.1...v4.66.2) (2026-04-29)
+
+### Bug Fixes
+
+* **web:** move client instrumentation into src ([85202cd](https://github.com/motormetrics/motormetrics/commit/85202cd5b5929aafb6fbf93c05f629d1d6685741))
+
 ## [4.66.1](https://github.com/motormetrics/motormetrics/compare/v4.66.0...v4.66.1) (2026-04-29)
 
 ### Bug Fixes
