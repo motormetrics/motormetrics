@@ -1,3 +1,16 @@
+## [4.66.2](https://github.com/motormetrics/motormetrics/compare/v4.66.1...v4.66.2) (2026-04-29)
+
+### Bug Fixes
+
+* **web:** move client instrumentation into src ([85202cd](https://github.com/motormetrics/motormetrics/commit/85202cd5b5929aafb6fbf93c05f629d1d6685741))
+
+## [4.66.1](https://github.com/motormetrics/motormetrics/compare/v4.66.0...v4.66.1) (2026-04-29)
+
+### Bug Fixes
+
+* **web:** back-merge PostHog proxy hotfix ([6568c10](https://github.com/motormetrics/motormetrics/commit/6568c10a2879eea73f683b68a0e16a3ec98d55a6))
+* **web:** proxy posthog array assets ([dfeacfb](https://github.com/motormetrics/motormetrics/commit/dfeacfbe6b8c711d90a664cb5628fbe360ae0148))
+
 ## [4.66.0](https://github.com/motormetrics/motormetrics/compare/v4.65.0...v4.66.0) (2026-04-29)
 
 ### Features
