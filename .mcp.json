@@ -1,5 +1,13 @@
 {
   "mcpServers": {
+    "heroui-migration": {
+      "type": "http",
+      "url": "https://migration-mcp.heroui.com"
+    },
+    "heroui-react": {
+      "command": "bunx",
+      "args": ["-y", "@heroui/react-mcp@latest"]
+    },
     "motormetrics": {
       "command": "bunx",
       "args": ["-y", "@motormetrics/mcp"]
