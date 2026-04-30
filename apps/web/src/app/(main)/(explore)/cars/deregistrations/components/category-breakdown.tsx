@@ -1,12 +1,12 @@
 "use client";
 
 import { Card, CardBody } from "@heroui/card";
+import type { CategoryWithPercentage } from "@web/app/(main)/(explore)/cars/deregistrations/components/constants";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import type { CategoryWithPercentage } from "@web/app/(main)/(explore)/cars/deregistrations/components/constants";
+} from "@web/components/charts/chart";
 import { formatNumber, formatPercentage } from "@web/utils/charts";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 

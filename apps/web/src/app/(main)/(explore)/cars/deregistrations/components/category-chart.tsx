@@ -3,17 +3,17 @@
 import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import type { SelectDeregistration } from "@motormetrics/database";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
   type CategoryWithPercentage,
   toPercentageDistribution,
 } from "@web/app/(main)/(explore)/cars/deregistrations/components/constants";
 import { deregistrationsSearchParams } from "@web/app/(main)/(explore)/cars/deregistrations/search-params";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { formatNumber, formatPercentage } from "@web/utils/charts";
 import { useQueryStates } from "nuqs";

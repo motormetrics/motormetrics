@@ -12,7 +12,7 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import type { EvTopMake } from "@web/queries/cars/electric-vehicles";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";

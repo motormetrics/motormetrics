@@ -1,5 +1,7 @@
 "use client";
 
+import { formatDateToMonthYear } from "@motormetrics/utils";
+import { numberFormat } from "@ruchernchong/number-format";
 import {
   type ChartConfig,
   ChartContainer,
@@ -7,9 +9,7 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { formatDateToMonthYear } from "@motormetrics/utils";
-import { numberFormat } from "@ruchernchong/number-format";
+} from "@web/components/charts/chart";
 import type { MakeCoeComparisonData } from "@web/queries/cars/makes/coe-comparison";
 import {
   Bar,

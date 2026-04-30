@@ -1,15 +1,15 @@
 "use client";
 
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { formatDateToMonthYear } from "@motormetrics/utils";
+import { numberFormat } from "@ruchernchong/number-format";
 import {
   type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { formatDateToMonthYear } from "@motormetrics/utils";
-import { numberFormat } from "@ruchernchong/number-format";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";

@@ -8,12 +8,12 @@ import {
   CHART_HEIGHTS,
 } from "@motormetrics/theme/charts";
 import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
+import { EV_COLORS } from "@web/app/(main)/(explore)/cars/electric-vehicles/constants";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { EV_COLORS } from "@web/app/(main)/(explore)/cars/electric-vehicles/constants";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import type { EvMonthlyTrend } from "@web/queries/cars/electric-vehicles";
 import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";

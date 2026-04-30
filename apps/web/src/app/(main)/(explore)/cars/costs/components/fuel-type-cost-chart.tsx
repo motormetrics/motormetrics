@@ -9,16 +9,16 @@ import {
   CHART_HEIGHTS,
 } from "@motormetrics/theme/charts";
 import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
 import { formatCurrency } from "@motormetrics/utils";
 import {
   FUEL_TYPE_LABELS,
   FUEL_TYPE_ORDER,
 } from "@web/app/(main)/(explore)/cars/costs/constants";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 

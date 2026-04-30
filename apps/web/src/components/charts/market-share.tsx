@@ -6,7 +6,7 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
+} from "@web/components/charts/chart";
 import { ChartWidget } from "@web/components/charts/widget";
 import { formatNumber } from "@web/utils/charts";
 import { useMemo } from "react";

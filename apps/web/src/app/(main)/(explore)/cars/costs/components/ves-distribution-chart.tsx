@@ -5,12 +5,12 @@ import { cn } from "@heroui/theme";
 import type { SelectCarCost } from "@motormetrics/database";
 import { CHART_HEIGHTS } from "@motormetrics/theme/charts";
 import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
+import { VES_BAND_ORDER } from "@web/app/(main)/(explore)/cars/costs/constants";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { VES_BAND_ORDER } from "@web/app/(main)/(explore)/cars/costs/constants";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { Cell, Pie, PieChart } from "recharts";
 

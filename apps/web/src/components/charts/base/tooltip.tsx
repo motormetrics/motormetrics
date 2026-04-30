@@ -4,7 +4,7 @@ import { CHART_CURSOR, type ChartCursor } from "@motormetrics/theme/charts";
 import {
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
+} from "@web/components/charts/chart";
 import type { ComponentProps } from "react";
 
 type ChartTooltipContentProps = ComponentProps<typeof ChartTooltipContent>;

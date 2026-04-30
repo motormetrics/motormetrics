@@ -2,18 +2,18 @@
 
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Select, SelectItem } from "@heroui/select";
+import { formatDateToMonthYear } from "@motormetrics/utils";
+import {
+  type Period,
+  periods,
+} from "@web/app/(main)/(explore)/coe/search-params";
 import {
   type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { formatDateToMonthYear } from "@motormetrics/utils";
-import {
-  type Period,
-  periods,
-} from "@web/app/(main)/(explore)/coe/search-params";
+} from "@web/components/charts/chart";
 import {
   currencyTooltipFormatter,
   MonthXAxis,

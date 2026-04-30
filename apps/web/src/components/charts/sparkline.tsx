@@ -1,10 +1,7 @@
 "use client";
 
 import { cn } from "@heroui/theme";
-import {
-  type ChartConfig,
-  ChartContainer,
-} from "@motormetrics/ui/components/chart";
+import { type ChartConfig, ChartContainer } from "@web/components/charts/chart";
 import { Area, AreaChart } from "recharts";
 
 interface SparklineData {
