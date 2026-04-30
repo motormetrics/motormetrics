@@ -22,7 +22,7 @@ export function ComparisonSummary({ monthA, monthB }: ComparisonSummaryProps) {
   const isPositive = change > 0;
 
   return (
-    <Card className="rounded-2xl p-3">
+    <Card className="p-3">
       <CardHeader className="flex flex-col items-start gap-2">
         <Typography.H4>Total Registrations</Typography.H4>
       </CardHeader>

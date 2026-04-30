@@ -79,7 +79,7 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
   const periodLabel = PERIOD_LABELS[period].toLowerCase();
 
   return (
-    <Card className="rounded-2xl p-3">
+    <Card className="p-3">
       <CardHeader className="flex flex-col gap-2 border-b lg:flex-row lg:items-center lg:justify-between">
         <div className="grid flex-1 gap-1">
           <Typography.H4>Quota Premium ($)</Typography.H4>

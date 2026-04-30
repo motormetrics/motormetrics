@@ -34,7 +34,7 @@ export function TypeBreakdownChart({
   );
 
   return (
-    <Card className="rounded-2xl p-3">
+    <Card className="p-3">
       <CardHeader className="flex flex-col items-start gap-2">
         <Typography.H4>{title}</Typography.H4>
         {description && <Typography.TextSm>{description}</Typography.TextSm>}

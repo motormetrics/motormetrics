@@ -28,7 +28,7 @@ const chartConfig: ChartConfig = {};
 
 export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
   return (
-    <Card className="rounded-2xl p-3">
+    <Card className="p-3">
       <CardHeader>
         <div className="flex flex-col gap-1">
           <Typography.H4>Latest COE Premium vs PQP Rate</Typography.H4>

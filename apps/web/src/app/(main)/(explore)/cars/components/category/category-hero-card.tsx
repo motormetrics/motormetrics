@@ -29,7 +29,7 @@ export function CategoryHeroCard({
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <Card className="rounded-2xl p-3">
+      <Card className="p-3">
         <CardBody>
           <div className="flex flex-col gap-4">
             <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10">
@@ -46,7 +46,7 @@ export function CategoryHeroCard({
         </CardBody>
       </Card>
 
-      <Card className="rounded-2xl p-3">
+      <Card className="p-3">
         <CardBody>
           <div className="flex flex-col gap-4">
             <div className="flex size-10 items-center justify-center rounded-xl bg-warning/10">
@@ -63,7 +63,7 @@ export function CategoryHeroCard({
         </CardBody>
       </Card>
 
-      <Card className="rounded-2xl p-3">
+      <Card className="p-3">
         <CardBody>
           <div className="flex flex-col gap-4">
             <div className="flex size-10 items-center justify-center rounded-xl bg-success/10">

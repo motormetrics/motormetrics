@@ -100,7 +100,7 @@ export default function Page() {
         <Typography.TextLg>
           Explore Singapore vehicle data across registrations, deregistrations,
           and more. Looking for COE data?{" "}
-          <Link href="/coe" className="text-primary hover:underline">
+          <Link href="/coe" color="primary" underline="hover">
             View COE premiums and results
           </Link>
           .

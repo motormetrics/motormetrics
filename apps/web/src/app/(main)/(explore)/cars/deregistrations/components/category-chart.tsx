@@ -82,7 +82,7 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
   };
 
   return (
-    <Card className="rounded-2xl p-3">
+    <Card className="p-3">
       <CardHeader className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex flex-col gap-1">
           <Typography.H3>Deregistrations by Category</Typography.H3>

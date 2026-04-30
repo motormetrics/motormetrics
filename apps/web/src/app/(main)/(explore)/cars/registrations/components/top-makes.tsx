@@ -86,7 +86,7 @@ export function TopMakes({ data }: TopMakesProps) {
               ))}
             </CardBody>
             <CardFooter>
-              <Link href={href} className="underline">
+              <Link href={href} underline="always">
                 View More
               </Link>
             </CardFooter>

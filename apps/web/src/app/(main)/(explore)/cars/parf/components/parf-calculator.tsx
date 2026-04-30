@@ -56,7 +56,7 @@ export function PARFCalculator() {
   }, [arf, bracket]);
 
   return (
-    <Card className="rounded-2xl">
+    <Card>
       <CardBody className="flex flex-col gap-6 p-6">
         <Typography.H4>Calculate Your PARF Rebate</Typography.H4>
 
@@ -87,7 +87,7 @@ export function PARFCalculator() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Card className="rounded-2xl border border-default-200 bg-default-50 shadow-none">
+          <Card className="border border-default-200 bg-default-50 shadow-none">
             <CardBody className="flex flex-col gap-4 p-6">
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-default-400" />
@@ -128,7 +128,7 @@ export function PARFCalculator() {
             </CardBody>
           </Card>
 
-          <Card className="rounded-2xl border border-primary-200 bg-primary-50 shadow-none">
+          <Card className="border border-primary-200 bg-primary-50 shadow-none">
             <CardBody className="flex flex-col gap-4 p-6">
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-primary" />

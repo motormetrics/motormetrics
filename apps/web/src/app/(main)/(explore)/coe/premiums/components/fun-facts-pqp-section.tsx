@@ -31,7 +31,7 @@ async function FunFactsPqpContent() {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {/* Fun Facts Card */}
-      <Card className="rounded-2xl p-3">
+      <Card className="p-3">
         <CardHeader className="flex flex-col items-start gap-2">
           <Typography.H4>Category A vs B</Typography.H4>
           <Typography.TextSm>
@@ -62,7 +62,7 @@ async function FunFactsPqpContent() {
       </Card>
 
       {/* Latest PQP Rates Card */}
-      <Card className="rounded-2xl p-3">
+      <Card className="p-3">
         <CardHeader className="flex flex-col items-start gap-2">
           <Typography.H4>Latest PQP Rates</Typography.H4>
           <Typography.TextSm>
@@ -98,7 +98,7 @@ async function FunFactsPqpContent() {
             Note: There is no PQP for Category E
           </Typography.Caption>
           <Link href="/coe/pqp" className="w-full">
-            <Button color="primary" className="w-full rounded-full">
+            <Button color="primary" radius="full" fullWidth>
               View All PQP Rates
             </Button>
           </Link>

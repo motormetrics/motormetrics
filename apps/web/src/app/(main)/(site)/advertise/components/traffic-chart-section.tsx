@@ -46,7 +46,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
         </div>
 
         {/* Chart */}
-        <Card className="rounded-2xl p-3">
+        <Card className="p-3">
           <CardHeader className="flex flex-col items-start gap-2 pb-4">
             <Typography.H4>Daily Visitors</Typography.H4>
             <Typography.TextSm className="text-default-600">

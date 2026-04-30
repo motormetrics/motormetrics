@@ -30,7 +30,7 @@ const BRACKETS = [
 
 export function PARFComparisonTable() {
   return (
-    <Card className="overflow-hidden rounded-2xl">
+    <Card className="overflow-hidden">
       <CardBody className="flex flex-col gap-0 p-0">
         <div className="flex items-center gap-2 px-6 py-4">
           <TableIcon className="size-4 text-primary" />

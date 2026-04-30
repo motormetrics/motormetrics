@@ -11,7 +11,7 @@ export function InfoPopover() {
           isIconOnly
           variant="light"
           size="sm"
-          className="rounded-full"
+          radius="full"
           aria-label="About PQP Rates"
         >
           <InfoIcon className="size-5" aria-hidden="true" />

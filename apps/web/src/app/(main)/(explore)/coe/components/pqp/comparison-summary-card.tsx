@@ -29,7 +29,7 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
 
         return (
           <motion.div key={item.category} variants={staggerItemVariants}>
-            <Card className="rounded-2xl p-3">
+            <Card className="p-3">
               <CardHeader>
                 <div className="font-bold text-lg">{item.category}</div>
               </CardHeader>

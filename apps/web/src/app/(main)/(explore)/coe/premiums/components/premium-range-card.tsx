@@ -69,7 +69,7 @@ const RangeSection = ({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Chip size="sm" variant="flat" className="rounded-full font-medium">
+        <Chip size="sm" variant="flat" radius="full" className="font-medium">
           {label}
         </Chip>
         <span className="text-default-400 text-xs">
@@ -147,7 +147,7 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
         return (
           <Card
             key={stat.category}
-            className="group relative overflow-hidden rounded-2xl p-3 transition-shadow duration-300 hover:shadow-lg"
+            className="group relative overflow-hidden p-3 transition-shadow duration-300 hover:shadow-lg"
           >
             {/* Accent bar at top */}
             <div className="absolute top-0 right-0 left-0 h-1 bg-primary" />

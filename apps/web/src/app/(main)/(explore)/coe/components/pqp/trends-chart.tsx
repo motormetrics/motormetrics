@@ -22,7 +22,7 @@ const chartConfig: ChartConfig = {};
 
 export function TrendsChart({ data }: TrendsChartProps) {
   return (
-    <Card className="rounded-2xl p-3">
+    <Card className="p-3">
       <CardHeader>
         <div className="flex flex-col gap-1">
           <Typography.H4>PQP Trends</Typography.H4>

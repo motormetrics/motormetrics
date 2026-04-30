@@ -61,7 +61,7 @@ export default function Page() {
         <Typography.H1>COE</Typography.H1>
         <Typography.TextLg>
           Certificate of Entitlement data and analysis for Singapore. Explore{" "}
-          <Link href="/cars" className="text-primary hover:underline">
+          <Link href="/cars" color="primary" underline="hover">
             car registration data
           </Link>{" "}
           to see which makes and fuel types are most popular.

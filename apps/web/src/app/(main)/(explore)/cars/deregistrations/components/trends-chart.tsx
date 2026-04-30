@@ -32,7 +32,7 @@ export function TrendsChart({ data }: TrendsChartProps) {
 
   if (data.length === 0) {
     return (
-      <Card className="rounded-2xl p-3">
+      <Card className="p-3">
         <CardBody className="p-4">
           <Typography.TextSm>No trend data available</Typography.TextSm>
         </CardBody>
@@ -41,7 +41,7 @@ export function TrendsChart({ data }: TrendsChartProps) {
   }
 
   return (
-    <Card className="rounded-2xl p-3">
+    <Card className="p-3">
       <CardBody className="p-4">
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <AreaChart
