@@ -1,12 +1,12 @@
 import { Badge } from "@heroui/badge";
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
+import { Link } from "@heroui/link";
 import { Skeleton } from "@heroui/skeleton";
 import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults } from "@web/queries/coe";
 import { ArrowDownIcon, ArrowUpIcon, ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import { Suspense } from "react";
 import {
   calculateChangePercent,

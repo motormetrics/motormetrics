@@ -1,9 +1,9 @@
 "use client";
 
 import { Card, CardBody } from "@heroui/card";
+import { Link } from "@heroui/link";
 import type { SelectPost } from "@motormetrics/database";
 import Image from "next/image";
-import Link from "next/link";
 import { Cover } from "./cover";
 import { formatDate, getExcerpt, getReadingTime } from "./utils";
 

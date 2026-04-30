@@ -1,3 +1,4 @@
+import { Link } from "@heroui/link";
 import { AnimatedGrid } from "@web/app/(main)/(explore)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { ExploreCard } from "@web/app/(main)/(explore)/components/explore-card";
@@ -8,7 +9,6 @@ import { navLinks } from "@web/config/navigation";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateDataCatalogSchema } from "@web/lib/metadata";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 const title = "COE Bidding Results Singapore";
 const description =

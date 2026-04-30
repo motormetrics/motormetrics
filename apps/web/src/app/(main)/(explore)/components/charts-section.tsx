@@ -1,10 +1,10 @@
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
+import { Link } from "@heroui/link";
 import { Skeleton } from "@heroui/skeleton";
 import Typography from "@web/components/typography";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import { Suspense } from "react";
 
 async function YearlyChartContent() {

@@ -1,9 +1,9 @@
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Link } from "@heroui/link";
 import { Progress } from "@heroui/progress";
 import { slugify } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { FuelType } from "@web/types/cars";
-import Link from "next/link";
 
 // interface Category {
 //   title: string;

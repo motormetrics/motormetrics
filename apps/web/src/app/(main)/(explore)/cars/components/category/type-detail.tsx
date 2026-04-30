@@ -1,6 +1,7 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
-import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
+import { Link } from "@heroui/link";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CarOverviewTrends } from "@web/app/(main)/(explore)/cars/registrations/components/overview-trends";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
@@ -181,14 +182,14 @@ async function TypeDetailContent({
         {cars.total > 0
           ? `${displayName} vehicles accounted for ${cars.total.toLocaleString()} registrations in ${formattedMonth}.`
           : `No ${displayName} vehicle registrations were recorded in ${formattedMonth}.`}{" "}
-        <a
+        <Link
           href={`/cars/${config.category}`}
           className="text-primary hover:underline"
         >
           View all{" "}
           {config.category === "fuel-types" ? "fuel types" : "vehicle types"}{" "}
           &rarr;
-        </a>
+        </Link>
       </Typography.Text>
 
       <div className="flex flex-col gap-4">

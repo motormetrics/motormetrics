@@ -1,3 +1,4 @@
+import { Link } from "@heroui/link";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
@@ -76,14 +77,13 @@ export default function PARFCalculatorPage() {
           vehicle&apos;s actual ARF paid and age at deregistration. New rates
           apply to vehicles registered with COEs obtained from the 2nd bidding
           exercise in February 2026 onwards. Source:{" "}
-          <a
+          <Link
             href="https://www.lta.gov.sg/content/ltagov/en/newsroom/2026/2/news-releases/revision-parf-rebate-schedule-cap.html"
+            isExternal
             className="text-primary underline"
-            target="_blank"
-            rel="noopener noreferrer"
           >
             LTA
-          </a>
+          </Link>
           .
         </p>
       </AnimatedSection>

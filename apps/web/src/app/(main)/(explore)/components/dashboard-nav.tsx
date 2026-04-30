@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@heroui/button";
+import { Link } from "@heroui/link";
 import { cn } from "@heroui/theme";
 import { NewChip } from "@web/components/shared/chips";
 import { navigationSections } from "@web/config/navigation";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export function DashboardNav() {

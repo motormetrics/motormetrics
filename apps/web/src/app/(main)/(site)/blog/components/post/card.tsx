@@ -2,9 +2,9 @@
 
 import { CardBody, Card as HeroCard } from "@heroui/card";
 import { Chip } from "@heroui/chip";
+import { Link } from "@heroui/link";
 import type { SelectPost } from "@motormetrics/database";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Cover } from "./cover";
 import { formatDate, getExcerpt, getReadingTime, isNewPost } from "./utils";

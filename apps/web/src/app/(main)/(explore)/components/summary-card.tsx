@@ -1,6 +1,7 @@
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
 import { Chip } from "@heroui/chip";
+import { Link } from "@heroui/link";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { getYearlyRegistrations } from "@web/queries/cars";
 import {
@@ -9,7 +10,6 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
-import Link from "next/link";
 
 export async function SummaryCard() {
   const yearlyData = await getYearlyRegistrations();

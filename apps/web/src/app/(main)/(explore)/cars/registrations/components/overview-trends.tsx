@@ -1,12 +1,13 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Link } from "@heroui/link";
+import { Progress } from "@heroui/progress";
 import { slugify } from "@motormetrics/utils";
 import { TrendChart } from "@web/app/(main)/(explore)/cars/registrations/trend-chart";
 import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
-import Link from "next/link";
 
 interface CarOverviewTrendsProps {
-  cars: any[];
+  cars: { make: string; count: number }[];
   total: number;
 }
 
@@ -43,8 +44,11 @@ export function CarOverviewTrends({ cars, total }: CarOverviewTrendsProps) {
                     <Link href={`/cars/makes/${slugify(make)}`}>{make}</Link>
                     <div className="flex items-center gap-2">
                       <AnimatedNumber value={count} />
-                      <progress
-                        className="progress w-32"
+                      <Progress
+                        aria-label={`${make} market share`}
+                        className="w-32"
+                        maxValue={1}
+                        size="sm"
                         value={marketShare(count)}
                       />
                     </div>

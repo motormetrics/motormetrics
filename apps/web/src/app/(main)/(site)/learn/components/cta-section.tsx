@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@heroui/button";
+import { Link } from "@heroui/link";
 import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
@@ -8,7 +9,6 @@ import {
 } from "@web/config/animations";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 
 export function CtaSection() {
   return (

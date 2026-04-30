@@ -1,5 +1,6 @@
 import { Avatar } from "@heroui/avatar";
 import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Link } from "@heroui/link";
 import type { CarLogo } from "@logos/types";
 import type { SelectCar } from "@motormetrics/database";
 import { slugify } from "@motormetrics/utils";
@@ -130,13 +131,13 @@ export function MakeDetail({
               />
               <div className="flex flex-wrap gap-2 px-1">
                 {fuelTypeBreakdown.map(({ name }) => (
-                  <a
+                  <Link
                     key={name}
                     href={`/cars/fuel-types/${slugify(name)}`}
                     className="text-primary text-sm hover:underline"
                   >
                     {name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -150,13 +151,13 @@ export function MakeDetail({
               />
               <div className="flex flex-wrap gap-2 px-1">
                 {vehicleTypeBreakdown.map(({ name }) => (
-                  <a
+                  <Link
                     key={name}
                     href={`/cars/vehicle-types/${slugify(name)}`}
                     className="text-primary text-sm hover:underline"
                   >
                     {name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

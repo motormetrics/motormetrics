@@ -3,6 +3,7 @@
 import { Avatar } from "@heroui/avatar";
 import { Card, CardBody } from "@heroui/card";
 import { Chip } from "@heroui/chip";
+import { Link } from "@heroui/link";
 import {
   formatGrowthRate,
   formatPercentage,
@@ -13,7 +14,6 @@ import Typography from "@web/components/typography";
 import type { Make } from "@web/types";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 interface MakeCardProps {
   make: Make;

@@ -1,5 +1,6 @@
 import { Button } from "@heroui/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Link } from "@heroui/link";
 import { Progress } from "@heroui/progress";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { AnimatedNumber } from "@web/components/animated-number";
@@ -7,7 +8,6 @@ import { SkeletonBentoCard } from "@web/components/shared/skeleton";
 import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults, getPqpRates } from "@web/queries/coe";
 import { formatPercent } from "@web/utils/charts";
-import Link from "next/link";
 import { Suspense } from "react";
 
 async function FunFactsPqpContent() {

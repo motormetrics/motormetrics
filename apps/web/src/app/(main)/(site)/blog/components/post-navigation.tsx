@@ -1,6 +1,6 @@
+import { Link } from "@heroui/link";
 import type { SelectPost } from "@motormetrics/database";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import Link from "next/link";
 
 interface PostNavigationProps {
   previous?: SelectPost;

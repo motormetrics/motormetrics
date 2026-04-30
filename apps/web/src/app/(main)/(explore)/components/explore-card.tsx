@@ -1,8 +1,8 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Link } from "@heroui/link";
 import { cn } from "@heroui/theme";
 import { BetaChip, NewChip } from "@web/components/shared/chips";
 import Typography from "@web/components/typography";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
 interface ExploreCardProps {

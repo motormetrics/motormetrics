@@ -2,6 +2,7 @@
 
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
+import { Link } from "@heroui/link";
 import { slugify } from "@motormetrics/utils";
 import {
   ChartContainer,
@@ -11,7 +12,6 @@ import {
 import Typography from "@web/components/typography";
 import { getRankingEmoji } from "@web/lib/cars/calculations";
 import { formatNumber } from "@web/utils/charts";
-import Link from "next/link";
 import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
