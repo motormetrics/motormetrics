@@ -3,7 +3,7 @@
 exports[`LastUpdated > should render 1`] = `
 <div>
   <span
-    class="text-muted-foreground text-xs leading-tight"
+    class="text-muted text-xs leading-tight"
   >
     Last updated:
      

@@ -102,7 +102,7 @@ Navy Blue gradient palette for data visualisation:
 <span className="text-foreground">Primary body text</span>
 <span className="text-default-600">Secondary text</span>
 <span className="text-default-500">Muted/helper text</span>
-<span className="text-muted-foreground">Captions, metadata</span>
+<span className="text-muted">Captions, metadata</span>
 <span className="text-primary">Brand emphasis</span>
 
 // ❌ Bad - Hardcoded colours
@@ -115,7 +115,7 @@ Navy Blue gradient palette for data visualisation:
 ```tsx
 // ✅ Good - Use semantic classes
 <div className="bg-primary text-primary-foreground">Primary action</div>
-<div className="bg-content1">Card/panel background</div>
+<div className="bg-surface">Card/panel background</div>
 <div className="bg-default-100">Subtle background</div>
 <div className="bg-default-200">Hover state</div>
 
@@ -234,33 +234,15 @@ const chartData = data.map((item, index) => ({
 
 ## HeroUI Theme Integration
 
-The colour system is integrated with HeroUI via `apps/web/src/app/hero.ts`:
+The colour system is integrated with HeroUI v3 via CSS variables in `@motormetrics/theme` and `apps/web/src/app/globals.css`:
 
-```typescript
-import { heroui } from "@heroui/react";
-
-export default heroui({
-  themes: {
-    light: {
-      colors: {
-        primary: {
-          DEFAULT: "#191970",  // Navy Blue
-          foreground: "#FFFFFF",
-        },
-        secondary: {
-          DEFAULT: "#708090",  // Slate Gray
-          foreground: "#FFFFFF",
-        },
-        success: {
-          DEFAULT: "#008B8B",  // Dark Cyan
-          foreground: "#FFFFFF",
-        },
-        foreground: "#2F4F4F",  // Dark Slate Gray
-        // ... default scale for grays
-      },
-    },
-  },
-});
+```css
+:root {
+  --primary: hsl(240 63% 27%);
+  --primary-foreground: hsl(0 0% 100%);
+  --accent: hsl(220 40% 49%);
+  --surface: hsl(0 0% 100%);
+}
 ```
 
 ### HeroUI Default Scale
@@ -279,14 +261,14 @@ Use the `default` scale for UI element states:
 
 ## Dark Mode
 
-Dark CSS variables are fully defined in `apps/web/src/app/globals.css` (`.dark` block) and `packages/ui/src/styles/globals.css`. Dark mode activation is deferred until after HeroUI v3 migration (#714, blocked by #587).
+Dark CSS variables are defined in `packages/theme/src/dark.css` and imported by `apps/web/src/app/globals.css`.
 
 **Dark mode readiness guidelines:**
 
-- Use `bg-content1` instead of `bg-white` for card/panel backgrounds (HeroUI semantic, theme-adaptive)
+- Use `bg-surface` instead of `bg-white` for card/panel backgrounds (HeroUI semantic, theme-adaptive)
 - Use `bg-background` for page-level backgrounds (already in use)
 - All CSS variable-based colours (`--primary`, `--chart-N`, etc.) automatically adapt to dark mode
-- shadcn/ui and HeroUI components using semantic classes already support dark mode
+- HeroUI components using semantic classes already support dark mode
 
 ## Migration Checklist
 
@@ -297,7 +279,7 @@ When migrating existing code to the design system:
 - Use `var(--chart-N)` inline for chart colours
 - Replace `text-gray-*` with `text-default-*`
 - Replace `bg-gray-*` with `bg-default-*`
-- Replace `bg-white` with `bg-content1` for card/panel backgrounds
+- Replace `bg-white` with `bg-surface` for card/panel backgrounds
 - Ensure chart series count is 6 or fewer
 - Remove modulo operations if series count is controlled
 - Use `text-foreground` instead of `text-gray-900` for body text
@@ -352,23 +334,12 @@ OG images require inline styles and cannot use CSS variables:
 <div style={{ backgroundColor: "#191970" }}>
 ```
 
-### Theme Configuration
-
-The `hero.ts` theme config uses hex values to define the source of truth:
-
-```typescript
-// apps/web/src/app/hero.ts
-primary: {
-  DEFAULT: "#191970",  // This defines the --primary variable
-}
-```
-
 ## Related Files
 
 - `apps/web/src/app/globals.css` - CSS variable definitions
-- `apps/web/src/app/hero.ts` - HeroUI theme configuration
+- `packages/theme/src/light.css` - Light theme tokens
+- `packages/theme/src/dark.css` - Dark theme tokens
 - `apps/web/CLAUDE.md` - Colour System section
-- `packages/ui/src/styles/globals.css` - Shared UI package styles
 
 ## Accessibility (WCAG AA)
 

@@ -6,28 +6,28 @@ allowed-tools: Read, Edit, Write, Grep, Glob
 
 # Component Documentation Skill
 
-Documentation lives in `packages/ui/`.
+Component documentation lives next to local components in `apps/web/src/components` or the relevant route segment. For HeroUI components, link to the official HeroUI v3 docs instead of documenting third-party internals.
 
 ## Component Documentation Template
 
 ```markdown
 # Button
 
-A customizable button component built with Radix UI primitives.
+A reusable local component or wrapper used by MotorMetrics.
 
 ## Usage
 
 \`\`\`tsx
-import { Button } from "@motormetrics/ui";
+import { Button } from "@heroui/react";
 
-<Button variant="default">Click me</Button>
+<Button variant="primary">Click me</Button>
 \`\`\`
 
 ## Variants
 
 \`\`\`tsx
-<Button variant="default">Default</Button>
-<Button variant="destructive">Delete</Button>
+<Button variant="primary">Primary</Button>
+<Button variant="danger">Delete</Button>
 <Button variant="outline">Outline</Button>
 \`\`\`
 
@@ -44,7 +44,7 @@ import { Button } from "@motormetrics/ui";
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| variant | `"default" \| "destructive" \| "outline"` | `"default"` | Visual style |
+| variant | `"primary" \| "danger" \| "outline"` | `"primary"` | Visual style |
 | size | `"default" \| "sm" \| "lg" \| "icon"` | `"default"` | Button size |
 | asChild | `boolean` | `false` | Render as child element |
 
@@ -62,11 +62,11 @@ import { Button } from "@motormetrics/ui";
  * A customizable button component.
  *
  * @example
- * <Button variant="default">Click me</Button>
+  * <Button variant="primary">Click me</Button>
  */
 export interface ButtonProps {
-  /** Visual style variant @default "default" */
-  variant?: "default" | "destructive" | "outline";
+  /** Visual style variant @default "primary" */
+  variant?: "primary" | "danger" | "outline";
   /** Button size @default "default" */
   size?: "default" | "sm" | "lg" | "icon";
 }
@@ -75,7 +75,7 @@ export interface ButtonProps {
 ## Storybook Stories
 
 ```typescript
-// packages/ui/src/components/button.stories.tsx
+// apps/web/src/components/button.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "./button";
 
@@ -84,7 +84,7 @@ const meta = {
   component: Button,
   tags: ["autodocs"],
   argTypes: {
-    variant: { control: "select", options: ["default", "destructive", "outline"] },
+    variant: { control: "select", options: ["primary", "danger", "outline"] },
     size: { control: "select", options: ["default", "sm", "lg", "icon"] },
   },
 } satisfies Meta<typeof Button>;
@@ -93,7 +93,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = { args: { children: "Button" } };
-export const Destructive: Story = { args: { variant: "destructive", children: "Delete" } };
+export const Danger: Story = { args: { variant: "danger", children: "Delete" } };
 ```
 
 ## Documentation Checklist
@@ -104,7 +104,6 @@ export const Destructive: Story = { args: { variant: "destructive", children: "D
 - [ ] Variants documented
 - [ ] Accessibility notes
 - [ ] Storybook stories (if using Storybook)
-- [ ] Exported from package index
 
 ## Best Practices
 
@@ -115,5 +114,4 @@ export const Destructive: Story = { args: { variant: "destructive", children: "D
 
 ## References
 
-- `packages/ui/CLAUDE.md` for package details
-- shadcn/ui: https://ui.shadcn.com
+- HeroUI v3 docs: https://www.heroui.com/docs/react

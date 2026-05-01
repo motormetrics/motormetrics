@@ -51,7 +51,6 @@ const nextConfig: NextConfig = {
     },
     browserToTerminal: true,
   },
-  transpilePackages: ["@motormetrics/ui"],
   experimental: {
     mcpServer: true,
     turbopackFileSystemCacheForBuild: true,

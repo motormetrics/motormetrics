@@ -236,11 +236,11 @@ export function WorkflowMonitor() {
                         );
                       })()}
                   </div>
-                  <span className="text-muted-foreground text-xs">
+                  <span className="text-muted text-xs">
                     {workflow.description}
                   </span>
                   {state?.lastRun?.completedAt && (
-                    <span className="text-muted-foreground text-xs">
+                    <span className="text-muted text-xs">
                       Completed:{" "}
                       {new Date(state.lastRun.completedAt).toLocaleString()}
                     </span>

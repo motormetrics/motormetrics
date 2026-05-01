@@ -68,7 +68,7 @@ export function AnnouncementForm() {
               {currentAnnouncement}
             </div>
           ) : (
-            <div className="rounded-md border bg-muted p-4 text-center text-muted-foreground">
+            <div className="rounded-md border bg-surface-secondary p-4 text-center text-muted">
               No announcement is currently active
             </div>
           )}
@@ -119,7 +119,7 @@ export function AnnouncementForm() {
               onChange={(e) => setAnnouncementText(e.target.value)}
               className="text-base"
             />
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted text-sm">
               Keep it concise and clear. This will appear at the top of every
               page.
             </p>

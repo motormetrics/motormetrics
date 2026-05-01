@@ -73,7 +73,7 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
                     ) : null}
                     <AnimatedNumber value={Math.abs(item.differencePercent)} />%
                   </Chip>
-                  <span className="text-muted-foreground text-sm">
+                  <span className="text-muted text-sm">
                     PQP{" "}
                     {isPQPLower ? "below" : isPQPHigher ? "above" : "equals"}{" "}
                     premium

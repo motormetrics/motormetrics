@@ -77,7 +77,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
       lang="en"
       className={cn("scroll-smooth antialiased", geistSans.className)}
     >
-      <body className="bg-background">
+      <body className="bg-background text-foreground">
         <Providers>
           <NuqsAdapter>
             <Suspense fallback={null}>

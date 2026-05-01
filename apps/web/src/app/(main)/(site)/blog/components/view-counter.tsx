@@ -27,7 +27,7 @@ export function ViewCounter({
   }, []);
 
   return (
-    <span className={cn("text-muted-foreground", className)}>
+    <span className={cn("text-muted", className)}>
       {views.toLocaleString()} {views === 1 ? "view" : "views"}
     </span>
   );

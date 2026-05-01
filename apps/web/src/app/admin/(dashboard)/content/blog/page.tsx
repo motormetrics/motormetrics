@@ -40,7 +40,7 @@ export default async function BlogManagementPage() {
             <FileText className="size-8" />
             Blog Management
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-muted">
             View and regenerate blog posts generated from market data.
           </p>
         </div>
@@ -62,7 +62,7 @@ export default async function BlogManagementPage() {
         <Card.Header>
           <Card.Title>Instructions</Card.Title>
         </Card.Header>
-        <Card.Content className="flex flex-col gap-4 text-muted-foreground text-sm">
+        <Card.Content className="flex flex-col gap-4 text-muted text-sm">
           <div className="flex items-start gap-2">
             <span className="font-medium text-foreground">🤖</span>
             <span>

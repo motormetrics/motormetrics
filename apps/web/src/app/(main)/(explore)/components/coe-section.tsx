@@ -58,7 +58,10 @@ async function CoeSectionContent() {
             );
 
             return (
-              <Card key={result.vehicleClass} className="bg-muted shadow-none">
+              <Card
+                key={result.vehicleClass}
+                className="bg-surface-secondary shadow-none"
+              >
                 <Card.Content className="p-4">
                   <div className="mb-2 flex items-center justify-between">
                     <span className="font-medium text-default-500 text-xs">

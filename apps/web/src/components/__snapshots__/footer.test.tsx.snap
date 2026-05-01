@@ -3,7 +3,7 @@
 exports[`Footer > should render asynchronous footer content with version information 1`] = `
 <div>
   <footer
-    class="border-divider border-t bg-content1"
+    class="border-divider border-t bg-surface"
   >
     <div
       class="container mx-auto px-6 py-12"

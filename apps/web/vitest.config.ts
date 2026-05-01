@@ -37,7 +37,6 @@ export default defineConfig({
         "src/components/tables/columns/cars-make-columns.tsx",
         "src/utils/months.ts",
         "src/proxy.ts", // Next.js proxy middleware relies on Next internals
-        "**/use-mobile.ts", // Part of shadcn/ui Sidebar
         "**/visitors",
         "src/queries/coe/**", // Low priority for coverage
         "src/queries/posts/**", // Blog queries not prioritized for coverage

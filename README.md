@@ -108,11 +108,7 @@ motormetrics/
 │   │   └── migrations/      # Database migration files
 │   ├── logos/        # Car logo management with Vercel Blob storage
 │   ├── types/        # Shared TypeScript types
-│   ├── ui/           # Shared UI component library (shadcn/ui, Radix UI, Tailwind CSS)
-│   │   ├── src/components/  # shadcn/ui components
-│   │   ├── src/hooks/       # Custom React hooks
-│   │   ├── src/lib/         # Utility functions
-│   │   └── src/styles/      # Global styles
+│   ├── theme/        # Shared design tokens and chart/spacing constants
 │   └── utils/        # Shared utility functions and Redis configuration
 ```
 
@@ -142,7 +138,6 @@ For developers working on this codebase, detailed component-specific guidance is
 - **[AI Package](packages/ai/CLAUDE.md)** - AI-powered blog generation with Vercel AI SDK and Google Gemini
 - **[Database Package](packages/database/CLAUDE.md)** - Schema management, migrations, and TypeScript integration
 - **[Logos Package](packages/logos/CLAUDE.md)** - Car logo management with Vercel Blob storage
-- **[UI Package](packages/ui/CLAUDE.md)** - Shared component library with shadcn/ui and Tailwind CSS
 
 ### Architecture Documentation
 

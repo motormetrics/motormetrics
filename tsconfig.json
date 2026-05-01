@@ -12,8 +12,7 @@
     "paths": {
       "@web/*": ["apps/web/src/*"],
       "@logos/*": ["packages/logos/src/*"],
-      "@utils/*": ["packages/utils/src/*"],
-      "@motormetrics/ui/*": ["packages/ui/src/*"]
+      "@utils/*": ["packages/utils/src/*"]
     }
   },
   "exclude": ["node_modules"]

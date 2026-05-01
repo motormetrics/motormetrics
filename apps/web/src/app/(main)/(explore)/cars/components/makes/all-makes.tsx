@@ -76,7 +76,7 @@ export function AllMakes({
 
         <div
           ref={scrollContainerRef}
-          className="scrollbar-hide flex flex-1 gap-1 overflow-x-auto scroll-smooth"
+          className="flex flex-1 gap-1 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {letters.map((letter) => (
             <Button

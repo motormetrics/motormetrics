@@ -33,7 +33,7 @@ function StatItem({ value, suffix = "", label, description }: StatItemProps) {
       onViewportEnter={() => setIsInView(true)}
       viewport={{ once: true }}
     >
-      <Card className="group border-default-200 bg-card p-3 shadow-sm transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+      <Card className="group border-default-200 bg-surface p-3 shadow-sm transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
         <Card.Content className="flex flex-col gap-2 p-6">
           <div className="font-semibold text-4xl text-foreground tracking-tight lg:text-5xl">
             {isInView ? (

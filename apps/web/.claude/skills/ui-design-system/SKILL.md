@@ -63,15 +63,15 @@ This skill enforces consistent UI patterns across the MotorMetrics web applicati
 ### Cards
 
 ```tsx
-import { Card, CardHeader, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
 import Typography from "@web/components/typography";
 
 <Card className="rounded-2xl shadow-sm">
-  <CardHeader className="flex flex-col items-start gap-2">
+  <Card.Header className="flex flex-col items-start gap-2">
     <Typography.H4>Card Title</Typography.H4>
     <Typography.TextSm>Description text</Typography.TextSm>
-  </CardHeader>
-  <CardBody>{/* Content */}</CardBody>
+  </Card.Header>
+  <Card.Content>{/* Content */}</Card.Content>
 </Card>
 ```
 

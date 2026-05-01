@@ -61,7 +61,7 @@ exports[`MetricCard > should combine metric value and comparison 1`] = `
           11.1%
         </span>
         <span
-          class="text-muted-foreground text-sm"
+          class="text-muted text-sm"
         >
           vs last month
         </span>
@@ -132,7 +132,7 @@ exports[`MetricCard > should render with hero variant 1`] = `
           11.1%
         </span>
         <span
-          class="text-muted-foreground text-sm"
+          class="text-muted text-sm"
         >
           vs last month
         </span>

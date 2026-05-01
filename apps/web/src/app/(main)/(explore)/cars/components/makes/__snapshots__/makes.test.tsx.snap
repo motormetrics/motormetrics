@@ -60,7 +60,7 @@ exports[`Makes > should render the section with title and count 1`] = `
         </svg>
       </button>
       <div
-        class="scrollbar-hide flex flex-1 gap-1 overflow-x-auto scroll-smooth"
+        class="flex flex-1 gap-1 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         <button
           class="button button--sm button--primary shrink-0 rounded-full"

@@ -155,7 +155,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
             />
           </svg>
           <span
-            class="text-muted-foreground text-xs leading-tight"
+            class="text-muted text-xs leading-tight"
           >
             Tracked
           </span>
@@ -186,7 +186,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
           Historical Trend
         </h4>
         <span
-          class="text-muted-foreground text-xs leading-tight"
+          class="text-muted text-xs leading-tight"
         >
           Past registrations
         </span>
@@ -222,7 +222,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
           CoeComparisonChart
         </div>
         <span
-          class="text-muted-foreground text-xs leading-tight"
+          class="text-muted text-xs leading-tight"
         >
           Bars show monthly registrations (left axis), lines show COE Category A and B premiums (right axis).
         </span>
@@ -242,7 +242,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
           Summary
         </h4>
         <span
-          class="text-muted-foreground text-xs leading-tight"
+          class="text-muted text-xs leading-tight"
         >
           Fuel & vehicle types by month
         </span>

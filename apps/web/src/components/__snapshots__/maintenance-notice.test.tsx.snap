@@ -395,7 +395,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           support@motormetrics.app
         </a>
         <span
-          class="hidden text-foreground-400 sm:inline"
+          class="hidden text-muted sm:inline"
         >
           |
         </span>
@@ -438,7 +438,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
         Thanks for your patience as we race towards a better experience!
       </p>
       <span
-        class="text-muted-foreground text-xs leading-tight"
+        class="text-muted text-xs leading-tight"
       >
         This page will automatically refresh when maintenance is complete
       </span>

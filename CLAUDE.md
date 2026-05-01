@@ -31,7 +31,6 @@ This repository includes directory-specific CLAUDE.md files with detailed guidan
   migrations, and TypeScript integration
 - **[packages/logos/CLAUDE.md](packages/logos/CLAUDE.md)**: Car logo management with Vercel Blob storage, Redis caching,
   and brand normalisation
-- **[packages/ui/CLAUDE.md](packages/ui/CLAUDE.md)**: Shared UI components library with shadcn/ui and Tailwind CSS
 
 Refer to these files for component-specific development guidance and best practices.
 
@@ -128,11 +127,7 @@ All commands use pnpm as the package manager.
     - **src/infra/storage**: Vercel Blob service with Redis caching
     - **src/utils**: Brand name normalization utilities
 - **packages/types**: Shared TypeScript type definitions
-- **packages/ui**: Shared UI component library with shadcn/ui and Tailwind CSS
-    - **src/components**: shadcn/ui components (badge, button, card, dialog, etc.)
-    - **src/hooks**: Custom React hooks (use-mobile)
-    - **src/lib**: Utility functions (cn helper for class merging)
-    - **src/styles**: Global CSS styles and Tailwind configuration
+- **packages/theme**: Shared design tokens, chart constants, and spacing constants
 - **packages/utils**: Shared utility functions and Redis configuration
 
 ## Monorepo Build System
@@ -161,7 +156,7 @@ The project uses **pnpm with catalog** for centralised dependency version manage
 
 - Strict type checking enabled (noImplicitAny, strictNullChecks)
 - Avoid `any` type - prefer `unknown` with type guards
-- Use workspace imports: `@motormetrics/database`, `@motormetrics/ui`, `@motormetrics/utils`, `@motormetrics/types`
+- Use workspace imports: `@motormetrics/database`, `@motormetrics/theme`, `@motormetrics/utils`, `@motormetrics/types`
 
 ### Biome
 
@@ -252,8 +247,8 @@ PostgreSQL with Drizzle ORM using **camelCase** column naming:
 - **`@motormetrics/ai`**: AI-powered blog generation with 2-step flow (analysis → structured output), Zod validation, hero images, tag constants, and Langfuse telemetry
 - **`@motormetrics/database`**: Drizzle ORM schemas and migrations
 - **`@motormetrics/types`**: Shared TypeScript interfaces
-- **`@motormetrics/ui`**: Shared UI component library with shadcn/ui, Radix UI primitives, and Tailwind CSS
 - **`@motormetrics/utils`**: Utility functions and centralised Redis client
+- **`@motormetrics/theme`**: Shared design tokens, chart constants, and spacing constants
 - **`@motormetrics/logos`**: Car logo management with Vercel Blob storage, automatic scraping, Redis caching, and brand name normalization
 
 *See component CLAUDE.md files for architecture details (workflows, blog generation, social media integration).*

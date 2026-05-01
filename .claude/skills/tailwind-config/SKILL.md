@@ -9,18 +9,17 @@ allowed-tools: Read, Edit, Grep, Glob
 ## Configuration Structure
 
 ```
-packages/ui/
-├── tailwind.config.ts       # Base config with shadcn/ui theming
-└── src/styles/globals.css   # CSS variables
+packages/theme/
+├── src/light.css            # Light design tokens
+└── src/dark.css             # Dark design tokens
 
 apps/web/
-├── tailwind.config.ts       # Extends UI package config
-└── src/app/globals.css      # App-specific styles
+└── src/app/globals.css      # Tailwind, HeroUI, and theme imports
 ```
 
 ## CSS Variables
 
-Defined in `packages/ui/src/styles/globals.css`:
+Defined in `packages/theme/src/light.css` and `packages/theme/src/dark.css`, then mapped in `apps/web/src/app/globals.css`:
 
 ```css
 @layer base {
@@ -32,7 +31,7 @@ Defined in `packages/ui/src/styles/globals.css`:
     --secondary: 210 40% 96.1%;
     --muted: 210 40% 96.1%;
     --accent: 210 40% 96.1%;
-    --destructive: 0 84.2% 60.2%;
+    --danger: 0 84.2% 60.2%;
     --border: 214.3 31.8% 91.4%;
     --radius: 0.5rem;
   }
@@ -89,7 +88,7 @@ theme: {
   .text-balance {
     text-wrap: balance;
   }
-  .scrollbar-hide {
+  .scrollbar-hidden {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
@@ -102,7 +101,6 @@ theme: {
 plugins: [
   require("@tailwindcss/typography"),  // prose classes
   require("@tailwindcss/forms"),        // form resets
-  require("tailwindcss-animate"),       // animations
 ]
 ```
 
@@ -128,7 +126,7 @@ Use `size-*` instead of `h-* w-*` for equal dimensions:
 @custom-variant dark (&:is(.dark *));
 ```
 
-This is already configured in both `apps/web/src/app/globals.css` and `packages/ui/src/styles/globals.css`. Dark CSS variables are fully defined in `.dark` blocks in both files.
+This is configured in `apps/web/src/app/globals.css`. Dark CSS variables are defined in `packages/theme/src/dark.css`.
 
 **Theme switching** uses `next-themes` with `attribute="class"` to toggle `.dark` on `<html>`:
 
@@ -137,7 +135,7 @@ import { useTheme } from "next-themes";
 const { resolvedTheme, setTheme } = useTheme();
 ```
 
-**Status**: Dark mode activation is deferred until after HeroUI v3 migration (#714, blocked by #587). The CSS infrastructure is ready.
+**Status**: Dark mode CSS infrastructure is ready via shared theme tokens.
 
 ## Debugging
 

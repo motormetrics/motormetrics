@@ -123,4 +123,3 @@ src/components/icons/search-icon.tsx:8
 
 - `src/app/**/_components/` (co-located components)
 - `src/components/` (shared components)
-- Exclude: `src/components/ui/` (shadcn/ui - DO NOT MODIFY)

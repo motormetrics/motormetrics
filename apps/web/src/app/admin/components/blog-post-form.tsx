@@ -194,7 +194,7 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
         <Card>
           <Card.Header>
             <div className="flex items-center gap-2">
-              <RefreshCw className="size-5 text-muted-foreground" />
+              <RefreshCw className="size-5 text-muted" />
               <div className="flex flex-col gap-1">
                 <Card.Title>AI Regeneration</Card.Title>
                 <Card.Description>

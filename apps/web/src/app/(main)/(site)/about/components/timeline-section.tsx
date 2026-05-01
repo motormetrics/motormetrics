@@ -57,7 +57,7 @@ const TimelineItemComponent = ({ item, index }: TimelineItemComponentProps) => {
       <div className="relative flex flex-col items-center">
         <span
           className={cn(
-            "relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 bg-card font-medium text-sm transition-colors",
+            "relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 bg-surface font-medium text-sm transition-colors",
             item.highlight
               ? "border-primary text-primary"
               : "border-default-300 text-default-600 group-hover:border-primary/50",

@@ -10,7 +10,11 @@ import Typography from "@web/components/typography";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 interface MakeTrendChartProps {
-  data: any[];
+  data: Array<{
+    month: string;
+    count?: number;
+    number?: number;
+  }>;
 }
 
 export function MakeTrendChart({ data }: MakeTrendChartProps) {
@@ -80,7 +84,7 @@ export function MakeTrendChart({ data }: MakeTrendChartProps) {
             , helping identify seasonal patterns and market performance.
           </Typography.TextSm>
         </div>
-        <div className="grid grid-cols-1 gap-4 rounded-lg bg-muted/30 p-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 rounded-lg bg-surface-secondary/30 p-4 sm:grid-cols-3">
           <div className="text-center">
             <Typography.TextLg>{peakMonth?.month || "N/A"}</Typography.TextLg>
             <Typography.Caption>Peak Month</Typography.Caption>

@@ -6,14 +6,14 @@ const Page = () => (
   <div className="flex flex-col gap-6">
     <div>
       <h1 className="font-bold text-3xl tracking-tight">Content Management</h1>
-      <p className="text-muted-foreground">
+      <p className="text-muted">
         Manage website content, announcements, and user-facing information.
       </p>
     </div>
 
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <Link href="/content/announcements" className="group">
-        <Card className="h-full transition-colors hover:bg-muted/50">
+        <Card className="h-full transition-colors hover:bg-surface-secondary/50">
           <Card.Header>
             <div className="flex items-center gap-2">
               <MessageSquare className="size-5 text-primary" />
@@ -24,7 +24,7 @@ const Page = () => (
             </Card.Description>
           </Card.Header>
           <Card.Content>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted text-sm">
               Create, edit, and schedule announcements that appear on the main
               website.
             </p>
@@ -33,7 +33,7 @@ const Page = () => (
       </Link>
 
       <Link href="/admin/content/blog" className="group">
-        <Card className="h-full transition-colors hover:bg-muted/50">
+        <Card className="h-full transition-colors hover:bg-surface-secondary/50">
           <Card.Header>
             <div className="flex items-center gap-2">
               <FileText className="size-5 text-primary" />
@@ -44,7 +44,7 @@ const Page = () => (
             </Card.Description>
           </Card.Header>
           <Card.Content>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted text-sm">
               Create, view, and regenerate blog posts from market data.
             </p>
           </Card.Content>
@@ -57,7 +57,7 @@ const Page = () => (
           <Card.Description>Coming soon</Card.Description>
         </Card.Header>
         <Card.Content>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted text-sm">
             Manage promotional banners and notices.
           </p>
         </Card.Content>

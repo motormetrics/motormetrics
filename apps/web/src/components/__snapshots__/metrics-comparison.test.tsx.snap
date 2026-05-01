@@ -31,7 +31,7 @@ exports[`MetricsComparison > should indicate positive growth 1`] = `
       10%
     </span>
     <span
-      class="text-muted-foreground text-sm"
+      class="text-muted text-sm"
     >
       vs last month
     </span>

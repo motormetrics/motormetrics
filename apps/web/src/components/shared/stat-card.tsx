@@ -43,7 +43,7 @@ export function StatCard({
       <Card.Content className="flex-1">
         <BarChartByType data={data} />
         {Object.keys(data).includes(FUEL_TYPE.OTHERS) && (
-          <Typography.TextSm className="text-muted-foreground italic">
+          <Typography.TextSm className="text-muted italic">
             Note: We do not know what is the Land Transport Authority&apos;s
             exact definition of &quot;Others&quot;.
           </Typography.TextSm>
