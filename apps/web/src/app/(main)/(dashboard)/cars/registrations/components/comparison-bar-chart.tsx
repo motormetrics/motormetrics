@@ -1,19 +1,12 @@
 "use client";
 
 import { Card } from "@heroui/react";
+import { BarChart } from "@heroui-pro/react";
 
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import {
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import type { Registration } from "@web/types/cars";
 import { formatNumber } from "@web/utils/charts";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface ComparisonBarChartProps {
   monthA: Registration;
@@ -46,11 +39,6 @@ export function ComparisonBarChart({
   const labelA = formatDateToMonthYear(monthA.month);
   const labelB = formatDateToMonthYear(monthB.month);
 
-  const chartConfig = {
-    monthA: { label: labelA, color: "var(--chart-1)" },
-    monthB: { label: labelB, color: "var(--chart-3)" },
-  };
-
   const height = Math.max(200, allCategories.length * 56);
 
   return (
@@ -60,35 +48,58 @@ export function ComparisonBarChart({
         {description && <Typography.TextSm>{description}</Typography.TextSm>}
       </Card.Header>
       <Card.Content>
-        <ChartContainer config={chartConfig} style={{ height }}>
-          <BarChart data={chartData} layout="vertical">
-            <CartesianGrid
+        <div className="flex flex-col gap-4">
+          <BarChart data={chartData} height={height} layout="vertical">
+            <BarChart.Grid
               horizontal={false}
               strokeDasharray="3 3"
               className="stroke-border"
             />
-            <XAxis
+            <BarChart.XAxis
               type="number"
               tickFormatter={formatNumber}
               tickLine={false}
               axisLine={false}
             />
-            <YAxis
+            <BarChart.YAxis
               type="category"
               dataKey="name"
               tickLine={false}
               axisLine={false}
               width={110}
             />
-            <ChartTooltip
+            <BarChart.Tooltip
               cursor={{ fill: "var(--muted)", opacity: 0.2 }}
-              content={<ChartTooltipContent />}
+              content={<BarChart.TooltipContent />}
             />
-            <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="monthA" fill="var(--chart-1)" radius={[0, 4, 4, 0]} />
-            <Bar dataKey="monthB" fill="var(--chart-3)" radius={[0, 4, 4, 0]} />
+            <BarChart.Bar
+              dataKey="monthA"
+              name={labelA}
+              fill="var(--chart-1)"
+              radius={[0, 4, 4, 0]}
+            />
+            <BarChart.Bar
+              dataKey="monthB"
+              name={labelB}
+              fill="var(--chart-3)"
+              radius={[0, 4, 4, 0]}
+            />
           </BarChart>
-        </ChartContainer>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+            {[
+              { color: "var(--chart-1)", label: labelA },
+              { color: "var(--chart-3)", label: labelB },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center gap-2">
+                <span
+                  className="size-2.5 rounded-full"
+                  style={{ backgroundColor: item.color }}
+                />
+                <span className="text-muted text-xs">{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </Card.Content>
     </Card>
   );

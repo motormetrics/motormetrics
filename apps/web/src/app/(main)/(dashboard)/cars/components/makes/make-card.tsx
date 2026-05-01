@@ -1,13 +1,13 @@
 "use client";
 
 import { Card, Chip } from "@heroui/react";
+import { AreaChart } from "@heroui-pro/react";
 
 import {
   formatGrowthRate,
   formatPercentage,
   slugify,
 } from "@motormetrics/utils";
-import { Sparkline } from "@web/components/charts/sparkline";
 import Typography from "@web/components/typography";
 import type { Make } from "@web/types";
 import { TrendingDown, TrendingUp } from "lucide-react";
@@ -32,6 +32,7 @@ export function MakeCard({
   yoyChange,
 }: MakeCardProps) {
   const href = `/cars/makes/${slugify(make)}`;
+  const gradientId = `make-${slugify(make)}-sparkline`;
 
   return (
     <Link href={href} className="block h-full no-underline">
@@ -93,7 +94,36 @@ export function MakeCard({
               </div>
             </div>
             {trend && trend.length > 0 && (
-              <Sparkline data={trend} height="h-10" />
+              <div className="h-10 w-full">
+                <AreaChart
+                  data={trend}
+                  height={40}
+                  margin={{ bottom: 0, left: 0, right: 0, top: 2 }}
+                >
+                  <defs>
+                    <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                      <stop
+                        offset="0%"
+                        stopColor="var(--accent)"
+                        stopOpacity={0.1}
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="var(--accent)"
+                        stopOpacity={0}
+                      />
+                    </linearGradient>
+                  </defs>
+                  <AreaChart.Area
+                    dataKey="value"
+                    dot={false}
+                    fill={`url(#${gradientId})`}
+                    stroke="var(--accent)"
+                    strokeWidth={2}
+                    type="monotone"
+                  />
+                </AreaChart>
+              </div>
             )}
           </div>
         </Card.Content>

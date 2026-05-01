@@ -1,32 +1,15 @@
 "use client";
 
 import { Card } from "@heroui/react";
+import { AreaChart, ChartTooltip } from "@heroui-pro/react";
 
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface DailyTraffic {
   date: string;
   visitors: number;
   pageViews: number;
 }
-
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-    color: "var(--chart-1)",
-  },
-  pageViews: {
-    label: "Page Views",
-    color: "var(--chart-2)",
-  },
-} satisfies ChartConfig;
 
 export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
   if (data.length === 0) {
@@ -55,63 +38,83 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
             </Typography.TextSm>
           </Card.Header>
           <Card.Content className="pt-2">
-            <ChartContainer config={chartConfig} className="h-[300px] w-full">
-              <AreaChart accessibilityLayer data={data}>
-                <defs>
-                  <linearGradient id="fillVisitors" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="var(--chart-1)"
-                      stopOpacity={0.3}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--chart-1)"
-                      stopOpacity={0}
-                    />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid
-                  vertical={false}
-                  strokeDasharray="3 3"
-                  className="stroke-border"
-                />
-                <XAxis
-                  dataKey="date"
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value: string) => {
-                    const date = new Date(value);
+            <AreaChart
+              data={data as unknown as Record<string, string | number>[]}
+              height={300}
+            >
+              <defs>
+                <linearGradient id="fillVisitors" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--chart-1)"
+                    stopOpacity={0.3}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--chart-1)"
+                    stopOpacity={0}
+                  />
+                </linearGradient>
+              </defs>
+              <AreaChart.Grid
+                vertical={false}
+                strokeDasharray="3 3"
+                className="stroke-border"
+              />
+              <AreaChart.XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value: string) => {
+                  const date = new Date(value);
+                  return date.toLocaleDateString("en-SG", {
+                    day: "numeric",
+                    month: "short",
+                  });
+                }}
+              />
+              <AreaChart.YAxis tickLine={false} axisLine={false} />
+              <AreaChart.Tooltip
+                content={({ active, label, payload }) => {
+                  if (!active || !payload?.length) return null;
+
+                  const dateLabel = (() => {
+                    if (typeof label !== "string") return label;
+
+                    const date = new Date(label);
                     return date.toLocaleDateString("en-SG", {
                       day: "numeric",
-                      month: "short",
+                      month: "long",
+                      year: "numeric",
                     });
-                  }}
-                />
-                <YAxis tickLine={false} axisLine={false} />
-                <ChartTooltip
-                  content={
-                    <ChartTooltipContent
-                      labelFormatter={(value: string) => {
-                        const date = new Date(value);
-                        return date.toLocaleDateString("en-SG", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        });
-                      }}
-                    />
-                  }
-                />
-                <Area
-                  dataKey="visitors"
-                  type="monotone"
-                  fill="url(#fillVisitors)"
-                  stroke="var(--chart-1)"
-                  strokeWidth={2}
-                />
-              </AreaChart>
-            </ChartContainer>
+                  })();
+
+                  return (
+                    <ChartTooltip>
+                      <ChartTooltip.Header>{dateLabel}</ChartTooltip.Header>
+                      {payload.map((entry) => (
+                        <ChartTooltip.Item key={String(entry.dataKey)}>
+                          <ChartTooltip.Indicator
+                            color={entry.color ?? entry.stroke}
+                          />
+                          <ChartTooltip.Label>{entry.name}</ChartTooltip.Label>
+                          <ChartTooltip.Value>
+                            {Number(entry.value).toLocaleString()}
+                          </ChartTooltip.Value>
+                        </ChartTooltip.Item>
+                      ))}
+                    </ChartTooltip>
+                  );
+                }}
+              />
+              <AreaChart.Area
+                dataKey="visitors"
+                type="monotone"
+                fill="url(#fillVisitors)"
+                stroke="var(--chart-1)"
+                strokeWidth={2}
+              />
+            </AreaChart>
           </Card.Content>
         </Card>
       </div>

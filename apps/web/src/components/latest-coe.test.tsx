@@ -1,19 +1,23 @@
 import { render, screen } from "@testing-library/react";
 import type { CoeMonthlyPremium } from "@web/queries/coe";
 import type { COECategory, COEResult } from "@web/types";
+import type React from "react";
 import { LatestCoePremium } from "./coe/latest-coe-premium";
 
 vi.mock("@web/components/animated-number", () => ({
   AnimatedNumber: ({ value }: { value: number }) => <span>{value}</span>,
 }));
 
-vi.mock("@web/components/charts/sparkline", () => ({
-  Sparkline: ({ colour }: { colour: string }) => (
-    <div data-testid="sparkline" data-colour={colour}>
-      Sparkline
-    </div>
-  ),
-}));
+vi.mock("@heroui-pro/react", () => {
+  const AreaChart = ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="sparkline">{children}</div>
+  );
+  AreaChart.Area = ({ stroke }: { stroke: string }) => (
+    <div data-testid="sparkline-area" data-colour={stroke} />
+  );
+
+  return { AreaChart };
+});
 
 describe("LatestCoe", () => {
   const mockResults: COEResult[] = [
@@ -95,7 +99,7 @@ describe("LatestCoe", () => {
 
     render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
 
-    expect(screen.getByTestId("sparkline")).toHaveAttribute(
+    expect(screen.getByTestId("sparkline-area")).toHaveAttribute(
       "data-colour",
       "var(--danger)",
     );
@@ -115,7 +119,7 @@ describe("LatestCoe", () => {
 
     render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
 
-    expect(screen.getByTestId("sparkline")).toHaveAttribute(
+    expect(screen.getByTestId("sparkline-area")).toHaveAttribute(
       "data-colour",
       "var(--success)",
     );
@@ -135,7 +139,7 @@ describe("LatestCoe", () => {
 
     render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
 
-    expect(screen.getByTestId("sparkline")).toHaveAttribute(
+    expect(screen.getByTestId("sparkline-area")).toHaveAttribute(
       "data-colour",
       "var(--warning)",
     );
@@ -152,7 +156,7 @@ describe("LatestCoe", () => {
 
     render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
 
-    expect(screen.getByTestId("sparkline")).toHaveAttribute(
+    expect(screen.getByTestId("sparkline-area")).toHaveAttribute(
       "data-colour",
       "var(--accent)",
     );

@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, cn } from "@heroui/react";
+import { Card } from "@heroui/react";
+import { BarChart } from "@heroui-pro/react";
 
 import type { SelectCarCost } from "@motormetrics/database";
 import { formatCurrency } from "@motormetrics/utils";
@@ -8,26 +9,11 @@ import {
   FUEL_TYPE_LABELS,
   FUEL_TYPE_ORDER,
 } from "@web/app/(main)/(dashboard)/cars/costs/constants";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
-import {
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-} from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
-import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
 interface FuelTypeCostChartProps {
   data: SelectCarCost[];
 }
-
-const chartConfig = {
-  avgCost: { label: "Avg Selling Price (w/ COE)", color: "var(--chart-1)" },
-};
 
 export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
   const grouped = new Map<string, number[]>();
@@ -58,43 +44,39 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
         </Typography.TextSm>
       </Card.Header>
       <Card.Content>
-        <ChartContainer
-          config={chartConfig}
-          className={cn(CHART_HEIGHTS.tall, "w-full")}
-        >
-          <BarChart data={chartData} layout="vertical">
-            <CartesianGrid {...CHART_GRID.default} horizontal={false} />
-            <XAxis
-              type="number"
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => formatCurrency(value)}
-            />
-            <YAxis
-              type="category"
-              dataKey="fuelType"
-              tickLine={false}
-              axisLine={false}
-              width={160}
-            />
-            <ChartTooltip
-              cursor={CHART_CURSOR.highlight}
-              content={
-                <ChartTooltipContent
-                  formatter={(value) => formatCurrency(value as number)}
-                />
-              }
-            />
-            <Bar dataKey="avgCost" radius={[0, 4, 4, 0]}>
-              {chartData.map((entry, index) => (
-                <Cell
-                  key={entry.fuelType}
-                  fill={`var(--chart-${Math.min(index + 1, 6)})`}
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+        <BarChart data={chartData} height={400} layout="vertical">
+          <BarChart.Grid
+            strokeDasharray="3 3"
+            strokeOpacity={0.15}
+            horizontal={false}
+          />
+          <BarChart.XAxis
+            type="number"
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value: number) => formatCurrency(value)}
+          />
+          <BarChart.YAxis
+            type="category"
+            dataKey="fuelType"
+            tickLine={false}
+            axisLine={false}
+            width={160}
+          />
+          <BarChart.Tooltip
+            cursor={{ fill: "var(--muted)", opacity: 0.2 }}
+            content={
+              <BarChart.TooltipContent
+                valueFormatter={(value) => formatCurrency(value as number)}
+              />
+            }
+          />
+          <BarChart.Bar
+            dataKey="avgCost"
+            fill="var(--chart-1)"
+            radius={[0, 4, 4, 0]}
+          />
+        </BarChart>
       </Card.Content>
       <Card.Footer>
         <Typography.TextSm className="text-muted">

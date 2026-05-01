@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
+import { LineChart } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 interface MakeTrendChartProps {
   data: Array<{
@@ -48,32 +42,30 @@ export function MakeTrendChart({ data }: MakeTrendChartProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <ChartContainer config={chartConfig} className="h-[300px] w-full">
-        <LineChart
-          accessibilityLayer
-          data={chartData}
-          aria-label={`Monthly registration trend chart showing ${chartData.length} months of data with ${chartData.reduce((sum, item) => sum + item.count, 0)} total registrations`}
-        >
-          <CartesianGrid
-            vertical={false}
-            strokeDasharray="3 3"
-            className="stroke-border"
-          />
-          <XAxis dataKey="month" tickMargin={8} />
-          <ChartTooltip
-            cursor={false}
-            content={<ChartTooltipContent indicator="line" label />}
-          />
-          <Line
-            dataKey="count"
-            type="monotone"
-            dot={false}
-            fill="var(--chart-1)"
-            stroke="var(--chart-1)"
-            strokeWidth={2}
-          />
-        </LineChart>
-      </ChartContainer>
+      <LineChart
+        data={chartData}
+        height={300}
+        aria-label={`Monthly registration trend chart showing ${chartData.length} months of data with ${chartData.reduce((sum, item) => sum + item.count, 0)} total registrations`}
+      >
+        <LineChart.Grid
+          vertical={false}
+          strokeDasharray="3 3"
+          className="stroke-border"
+        />
+        <LineChart.XAxis dataKey="month" tickMargin={8} />
+        <LineChart.Tooltip
+          cursor={false}
+          content={<LineChart.TooltipContent indicator="line" />}
+        />
+        <LineChart.Line
+          dataKey="count"
+          type="monotone"
+          dot={false}
+          fill="var(--chart-1)"
+          stroke="var(--chart-1)"
+          strokeWidth={2}
+        />
+      </LineChart>
       <div className="flex flex-col gap-4">
         <div>
           <Typography.H4>Registration Trends</Typography.H4>
@@ -104,7 +96,3 @@ export function MakeTrendChart({ data }: MakeTrendChartProps) {
     </div>
   );
 }
-
-const chartConfig = {
-  count: { label: "Count" },
-} satisfies ChartConfig;

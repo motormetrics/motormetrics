@@ -1,31 +1,18 @@
 "use client";
 
-import { Card, cn } from "@heroui/react";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
-import {
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-} from "@web/components/charts/tokens";
+import { Card } from "@heroui/react";
+import { BarChart } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 import type { EvTopMake } from "@web/queries/cars/electric-vehicles";
-import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
 interface TopMakesChartProps {
   data: EvTopMake[];
   month: string;
 }
 
-const chartConfig = {
-  count: { label: "Registrations", color: "var(--chart-1)" },
-};
-
 export function TopMakesChart({ data, month }: TopMakesChartProps) {
   const numberFormatter = new Intl.NumberFormat("en-SG");
+  const chartData = data.map((item) => ({ ...item }));
 
   return (
     <Card>
@@ -36,43 +23,41 @@ export function TopMakesChart({ data, month }: TopMakesChartProps) {
         </Typography.TextSm>
       </Card.Header>
       <Card.Content>
-        <ChartContainer
-          config={chartConfig}
-          className={cn(CHART_HEIGHTS.tall, "w-full")}
-        >
-          <BarChart data={data} layout="vertical">
-            <CartesianGrid {...CHART_GRID.default} horizontal={false} />
-            <XAxis
-              type="number"
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => numberFormatter.format(value)}
-            />
-            <YAxis
-              type="category"
-              dataKey="make"
-              tickLine={false}
-              axisLine={false}
-              width={100}
-            />
-            <ChartTooltip
-              cursor={CHART_CURSOR.highlight}
-              content={
-                <ChartTooltipContent
-                  formatter={(value) => numberFormatter.format(value as number)}
-                />
-              }
-            />
-            <Bar dataKey="count" radius={[0, 4, 4, 0]}>
-              {data.map((entry, index) => (
-                <Cell
-                  key={entry.make}
-                  fill={`var(--chart-${Math.min(index + 1, 6)})`}
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+        <BarChart data={chartData} height={400} layout="vertical">
+          <BarChart.Grid
+            strokeDasharray="3 3"
+            strokeOpacity={0.15}
+            horizontal={false}
+          />
+          <BarChart.XAxis
+            type="number"
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value: number) => numberFormatter.format(value)}
+          />
+          <BarChart.YAxis
+            type="category"
+            dataKey="make"
+            tickLine={false}
+            axisLine={false}
+            width={100}
+          />
+          <BarChart.Tooltip
+            cursor={{ fill: "var(--muted)", opacity: 0.2 }}
+            content={
+              <BarChart.TooltipContent
+                valueFormatter={(value) =>
+                  numberFormatter.format(value as number)
+                }
+              />
+            }
+          />
+          <BarChart.Bar
+            dataKey="count"
+            fill="var(--chart-1)"
+            radius={[0, 4, 4, 0]}
+          />
+        </BarChart>
       </Card.Content>
       <Card.Footer>
         <Typography.TextSm className="text-muted">

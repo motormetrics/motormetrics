@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, cn } from "@heroui/react";
+import { Card } from "@heroui/react";
+import { BarChart } from "@heroui-pro/react";
 import {
   FUEL_GROUP_COLORS,
   FUEL_GROUP_MAP,
@@ -8,20 +9,9 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/annual/constants";
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
 import { searchParams } from "@web/app/(main)/(dashboard)/cars/annual/search-params";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
-import {
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-} from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { useQueryStates } from "nuqs";
 import { useMemo } from "react";
-import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";
 
 interface RawData {
   year: string;
@@ -94,13 +84,6 @@ export function VehiclePopulationChart({
     );
   }, [stackedData, effectiveYear]);
 
-  const chartConfig = Object.fromEntries(
-    FUEL_GROUPS.map((group) => [
-      group,
-      { label: group, color: FUEL_GROUP_COLORS[group] },
-    ]),
-  );
-
   const handleBarClick = async (_: unknown, index: number) => {
     const entry = stackedData[index];
     if (entry) {
@@ -118,35 +101,33 @@ export function VehiclePopulationChart({
         </Typography.TextSm>
       </Card.Header>
       <Card.Content>
-        <ChartContainer
-          config={chartConfig}
-          className={cn(CHART_HEIGHTS.tall, "w-full")}
-        >
-          <BarChart data={stackedData}>
-            <CartesianGrid {...CHART_GRID.default} />
-            <XAxis
+        <div className="flex flex-col gap-4">
+          <BarChart data={stackedData} height={400}>
+            <BarChart.Grid strokeDasharray="3 3" strokeOpacity={0.15} />
+            <BarChart.XAxis
               dataKey="year"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
             />
-            <YAxis
+            <BarChart.YAxis
               tickLine={false}
               axisLine={false}
-              tickFormatter={(value) => numberFormatter.format(value)}
+              tickFormatter={(value: number) => numberFormatter.format(value)}
               width={80}
             />
-            <ChartTooltip
-              cursor={CHART_CURSOR.highlight}
+            <BarChart.Tooltip
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={
-                <ChartTooltipContent
-                  formatter={(value) => numberFormatter.format(value as number)}
+                <BarChart.TooltipContent
+                  valueFormatter={(value) =>
+                    numberFormatter.format(value as number)
+                  }
                 />
               }
             />
-            <Legend />
             {FUEL_GROUPS.map((group) => (
-              <Bar
+              <BarChart.Bar
                 key={group}
                 dataKey={group}
                 stackId="fuel"
@@ -161,7 +142,18 @@ export function VehiclePopulationChart({
               />
             ))}
           </BarChart>
-        </ChartContainer>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+            {FUEL_GROUPS.map((group) => (
+              <div key={group} className="flex items-center gap-2">
+                <span
+                  className="size-2.5 rounded-full"
+                  style={{ backgroundColor: FUEL_GROUP_COLORS[group] }}
+                />
+                <span className="text-muted text-xs">{group}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </Card.Content>
       <Card.Footer>
         <Typography.TextSm className="text-muted">

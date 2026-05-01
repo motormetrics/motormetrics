@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, cn } from "@heroui/react";
+import { Card } from "@heroui/react";
+import { PieChart } from "@heroui-pro/react";
 
 import {
   FUEL_GROUP_COLORS,
@@ -8,15 +9,8 @@ import {
   FUEL_GROUPS,
 } from "@web/app/(main)/(dashboard)/cars/annual/constants";
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
-import { CHART_HEIGHTS } from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { useMemo } from "react";
-import { Cell, Pie, PieChart } from "recharts";
 
 interface FuelTypeData {
   year: string;
@@ -60,13 +54,6 @@ export function FuelTypeBreakdown({ data }: FuelTypeBreakdownProps) {
     );
   }, [data, effectiveYear]);
 
-  const chartConfig = Object.fromEntries(
-    FUEL_GROUPS.map((group) => [
-      group,
-      { label: group, color: FUEL_GROUP_COLORS[group] },
-    ]),
-  );
-
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
@@ -76,35 +63,35 @@ export function FuelTypeBreakdown({ data }: FuelTypeBreakdownProps) {
         </Typography.TextSm>
       </Card.Header>
       <Card.Content>
-        <ChartContainer
-          config={chartConfig}
-          className={cn("mx-auto", CHART_HEIGHTS.standard)}
-        >
-          <PieChart>
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  formatter={(value) => numberFormatter.format(value as number)}
-                />
-              }
-            />
-            <Pie
-              data={groupedData}
-              dataKey="value"
-              nameKey="name"
-              innerRadius={80}
-              outerRadius={140}
-              paddingAngle={2}
-              label={({ name, percent }) =>
-                `${name} ${((percent ?? 0) * 100).toFixed(1)}%`
-              }
-            >
-              {groupedData.map((entry) => (
-                <Cell key={entry.name} fill={FUEL_GROUP_COLORS[entry.name]} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ChartContainer>
+        <PieChart className="mx-auto" height={300}>
+          <PieChart.Tooltip
+            content={
+              <PieChart.TooltipContent
+                valueFormatter={(value) =>
+                  numberFormatter.format(value as number)
+                }
+              />
+            }
+          />
+          <PieChart.Pie
+            data={groupedData}
+            dataKey="value"
+            nameKey="name"
+            innerRadius={80}
+            outerRadius={140}
+            paddingAngle={2}
+            label={({ name, percent }: { name: string; percent?: number }) =>
+              `${name} ${((percent ?? 0) * 100).toFixed(1)}%`
+            }
+          >
+            {groupedData.map((entry) => (
+              <PieChart.Cell
+                key={entry.name}
+                fill={FUEL_GROUP_COLORS[entry.name]}
+              />
+            ))}
+          </PieChart.Pie>
+        </PieChart>
       </Card.Content>
     </Card>
   );

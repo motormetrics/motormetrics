@@ -1,9 +1,9 @@
 "use client";
 
 import { Card } from "@heroui/react";
+import { AreaChart } from "@heroui-pro/react";
 
 import { AnimatedNumber } from "@web/components/animated-number";
-import { Sparkline } from "@web/components/charts/sparkline";
 import Typography from "@web/components/typography";
 import type { CoeMonthlyPremium } from "@web/queries/coe";
 import type { COECategory, COEResult } from "@web/types";
@@ -49,6 +49,11 @@ export function LatestCoePremium({ results, trends }: LatestCoePremiumProps) {
           value: point.premium,
         }));
         const trend = calculateTrend(sparklineData);
+        const trendColour = getTrendColour(trend);
+        const gradientId = `coe-${result.vehicleClass}-sparkline`.replace(
+          /[^a-zA-Z0-9-]/g,
+          "",
+        );
 
         return (
           <Card
@@ -66,10 +71,40 @@ export function LatestCoePremium({ results, trends }: LatestCoePremiumProps) {
                   <AnimatedNumber value={result.premium} format="currency" />
                 </div>
                 {sparklineData.length > 0 && (
-                  <Sparkline
+                  <AreaChart
                     data={sparklineData}
-                    colour={getTrendColour(trend)}
-                  />
+                    height={64}
+                    margin={{ bottom: 0, left: 0, right: 0, top: 2 }}
+                  >
+                    <defs>
+                      <linearGradient
+                        id={gradientId}
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor={trendColour}
+                          stopOpacity={0.1}
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor={trendColour}
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <AreaChart.Area
+                      dataKey="value"
+                      dot={false}
+                      fill={`url(#${gradientId})`}
+                      stroke={trendColour}
+                      strokeWidth={2}
+                      type="monotone"
+                    />
+                  </AreaChart>
                 )}
               </div>
             </Card.Content>

@@ -1,15 +1,10 @@
 "use client";
 
 import { Card } from "@heroui/react";
+import { BarChart } from "@heroui-pro/react";
 
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { formatNumber } from "@web/utils/charts";
-import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
 interface TypeBreakdownChartProps {
   data: { name: string; value: number }[];
@@ -27,13 +22,6 @@ export function TypeBreakdownChart({
     fill: `var(--chart-${Math.min(index + 1, 6)})`,
   }));
 
-  const chartConfig = Object.fromEntries(
-    data.map((item, index) => [
-      item.name,
-      { label: item.name, color: `var(--chart-${Math.min(index + 1, 6)})` },
-    ]),
-  );
-
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
@@ -41,37 +29,35 @@ export function TypeBreakdownChart({
         {description && <Typography.TextSm>{description}</Typography.TextSm>}
       </Card.Header>
       <Card.Content>
-        <ChartContainer config={chartConfig} className="h-[200px] w-full">
-          <BarChart data={chartData} layout="vertical">
-            <CartesianGrid
-              horizontal={false}
-              strokeDasharray="3 3"
-              className="stroke-border"
-            />
-            <XAxis
-              type="number"
-              tickFormatter={formatNumber}
-              tickLine={false}
-              axisLine={false}
-            />
-            <YAxis
-              type="category"
-              dataKey="name"
-              tickLine={false}
-              axisLine={false}
-              width={100}
-            />
-            <ChartTooltip
-              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
-              content={<ChartTooltipContent />}
-            />
-            <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-              {chartData.map((entry) => (
-                <Cell key={`cell-${entry.name}`} fill={entry.fill} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+        <BarChart data={chartData} height={200} layout="vertical">
+          <BarChart.Grid
+            horizontal={false}
+            strokeDasharray="3 3"
+            className="stroke-border"
+          />
+          <BarChart.XAxis
+            type="number"
+            tickFormatter={formatNumber}
+            tickLine={false}
+            axisLine={false}
+          />
+          <BarChart.YAxis
+            type="category"
+            dataKey="name"
+            tickLine={false}
+            axisLine={false}
+            width={100}
+          />
+          <BarChart.Tooltip
+            cursor={{ fill: "var(--muted)", opacity: 0.2 }}
+            content={<BarChart.TooltipContent />}
+          />
+          <BarChart.Bar
+            dataKey="value"
+            fill="var(--chart-1)"
+            radius={[0, 4, 4, 0]}
+          />
+        </BarChart>
       </Card.Content>
     </Card>
   );

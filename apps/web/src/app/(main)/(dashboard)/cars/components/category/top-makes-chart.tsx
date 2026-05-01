@@ -1,18 +1,13 @@
 "use client";
 
 import { Card, Chip, Link } from "@heroui/react";
+import { BarChart } from "@heroui-pro/react";
 
 import { slugify } from "@motormetrics/utils";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { getRankingEmoji } from "@web/lib/cars/calculations";
 import { formatNumber } from "@web/utils/charts";
 import { useMemo } from "react";
-import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
 interface Make {
   make: string;
@@ -32,7 +27,7 @@ export function TopMakesChart({
   title,
   description = "Most popular brands in this category",
 }: TopMakesChartProps) {
-  const { chartData, chartConfig, topThree } = useMemo(() => {
+  const { chartData, topThree } = useMemo(() => {
     const chartData = makes.map((item, index) => ({
       name: item.make,
       value: item.count,
@@ -40,17 +35,9 @@ export function TopMakesChart({
       fill: `var(--chart-${index + 1})`,
     }));
 
-    const chartConfig = Object.fromEntries([
-      ["value", { label: "Registrations", color: "var(--chart-1)" }],
-      ...makes.map((item, index) => [
-        item.make,
-        { label: item.make, color: `var(--chart-${index + 1})` },
-      ]),
-    ]);
-
     const topThree = chartData.slice(0, 3);
 
-    return { chartData, chartConfig, topThree };
+    return { chartData, topThree };
   }, [makes, total]);
 
   if (!makes || makes.length === 0) {
@@ -95,36 +82,34 @@ export function TopMakesChart({
           </div>
 
           {/* Horizontal Bar Chart */}
-          <ChartContainer config={chartConfig} className="h-[300px] w-full">
-            <BarChart data={chartData} layout="vertical">
-              <CartesianGrid
-                horizontal={false}
-                strokeDasharray="3 3"
-                className="stroke-border"
-              />
-              <XAxis
-                type="number"
-                tickFormatter={formatNumber}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis
-                type="category"
-                dataKey="name"
-                tickLine={false}
-                axisLine={false}
-              />
-              <ChartTooltip
-                cursor={{ fill: "var(--muted)", opacity: 0.2 }}
-                content={<ChartTooltipContent />}
-              />
-              <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-                {chartData.map((entry) => {
-                  return <Cell key={`cell-${entry.name}`} fill={entry.fill} />;
-                })}
-              </Bar>
-            </BarChart>
-          </ChartContainer>
+          <BarChart data={chartData} height={300} layout="vertical">
+            <BarChart.Grid
+              horizontal={false}
+              strokeDasharray="3 3"
+              className="stroke-border"
+            />
+            <BarChart.XAxis
+              type="number"
+              tickFormatter={formatNumber}
+              tickLine={false}
+              axisLine={false}
+            />
+            <BarChart.YAxis
+              type="category"
+              dataKey="name"
+              tickLine={false}
+              axisLine={false}
+            />
+            <BarChart.Tooltip
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
+              content={<BarChart.TooltipContent />}
+            />
+            <BarChart.Bar
+              dataKey="value"
+              fill="var(--chart-1)"
+              radius={[0, 4, 4, 0]}
+            />
+          </BarChart>
         </div>
       </Card.Content>
     </Card>

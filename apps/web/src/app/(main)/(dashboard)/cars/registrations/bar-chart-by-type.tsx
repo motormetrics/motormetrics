@@ -1,12 +1,6 @@
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
+import { BarChart } from "@heroui-pro/react";
 import type { RegistrationStat } from "@web/types/cars";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
-import { Bar, BarChart, Cell, LabelList, XAxis, YAxis } from "recharts";
 
 interface BarChartByTypeProps {
   data: RegistrationStat[];
@@ -23,57 +17,39 @@ export const BarChartByType = ({ data }: BarChartByTypeProps) => {
   );
   const topType = chartData[0];
 
-  const chartConfig = {
-    count: { label: "Count" },
-    label: { color: "var(--background)" },
-  } satisfies ChartConfig;
-
   return (
     <div className="flex flex-col gap-4">
-      <ChartContainer config={chartConfig} className="h-[250px] w-full">
-        <BarChart
-          accessibilityLayer
-          data={chartData}
-          layout="vertical"
-          aria-label={`Vehicle registrations by type, showing ${chartData[0]?.label || "top category"} with ${chartData[0]?.count || 0} registrations`}
-        >
-          <XAxis type="number" dataKey="count" hide />
-          <YAxis
-            dataKey="label"
-            type="category"
-            tickLine={false}
-            tickMargin={10}
-            axisLine={false}
-            hide
-          />
-          <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
-          <Bar dataKey="count" radius={4}>
-            {chartData.map((_, index) => (
-              <Cell
-                key={
-                  // biome-ignore lint/suspicious/noArrayIndexKey: Recharts Cell requires index-based keys
-                  `cell-${index}`
-                }
-                fill={`var(--chart-${index + 1})`}
-              />
-            ))}
-            <LabelList
-              dataKey="label"
-              position="insideLeft"
-              offset={8}
-              className="fill-(--color-label)"
-              fontSize={12}
-            />
-            <LabelList
-              dataKey="count"
-              position="right"
-              offset={8}
-              className="fill-foreground"
-              fontSize={12}
-            />
-          </Bar>
-        </BarChart>
-      </ChartContainer>
+      <BarChart
+        data={chartData}
+        height={250}
+        layout="vertical"
+        aria-label={`Vehicle registrations by type, showing ${chartData[0]?.label || "top category"} with ${chartData[0]?.count || 0} registrations`}
+      >
+        <BarChart.XAxis type="number" dataKey="count" hide />
+        <BarChart.YAxis
+          dataKey="label"
+          type="category"
+          tickLine={false}
+          tickMargin={10}
+          axisLine={false}
+          width={120}
+        />
+        <BarChart.Tooltip
+          content={<BarChart.TooltipContent indicator="line" />}
+        />
+        <BarChart.Bar
+          dataKey="count"
+          fill="var(--chart-1)"
+          label={{
+            dataKey: "count",
+            fill: "var(--foreground)",
+            fontSize: 12,
+            offset: 8,
+            position: "right",
+          }}
+          radius={4}
+        />
+      </BarChart>
       <div className="flex flex-col gap-4">
         <div className="text-muted text-sm">
           <h4 className="mb-2 font-semibold text-foreground">

@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, ComboBox, Input, Label, ListBox } from "@heroui/react";
+import { BarChart, ChartTooltip } from "@heroui-pro/react";
 
 import type { SelectDeregistration } from "@motormetrics/database";
 import { formatDateToMonthYear } from "@motormetrics/utils";
@@ -9,17 +10,11 @@ import {
   toPercentageDistribution,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/constants";
 import { deregistrationsSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { formatNumber, formatPercentage } from "@web/utils/charts";
 import { useQueryStates } from "nuqs";
 import type React from "react";
 import { useMemo } from "react";
-import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
 interface CategoryChartProps {
   data: SelectDeregistration[];
@@ -55,6 +50,7 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
   const sortedData = [...categoryBreakdownData].sort(
     (a, b) => b.total - a.total,
   );
+  const chartData = sortedData.map((item) => ({ ...item }));
   const selectedCategory = sortedData.find(
     (item) => item.category === category,
   );
@@ -66,10 +62,6 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
     key: item,
     label: formatDateToMonthYear(item),
   }));
-
-  const chartConfig = {
-    total: { label: "Deregistrations", color: "var(--accent)" },
-  } as const;
 
   const handleBarClick = async (entry: CategoryWithPercentage) => {
     await setSearchParams({ category: entry.category });
@@ -126,71 +118,71 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
         </ComboBox>
       </Card.Header>
       <Card.Content>
-        <ChartContainer config={chartConfig} className="h-[400px] w-full">
-          <BarChart data={sortedData} layout="vertical">
-            <defs>
-              <linearGradient id="selectedGradient" x1="0" y1="0" x2="1" y2="0">
-                <stop
-                  offset="0%"
-                  stopColor="color-mix(in srgb, var(--accent) 40%, transparent)"
-                />
-                <stop offset="100%" stopColor="var(--accent)" />
-              </linearGradient>
-            </defs>
-            <CartesianGrid
-              horizontal={false}
-              strokeDasharray="3 3"
-              className="stroke-border"
-            />
-            <XAxis
-              type="number"
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={formatNumber}
-              tick={{ fill: "var(--muted)" }}
-            />
-            <YAxis
-              type="category"
-              dataKey="category"
-              tickLine={false}
-              axisLine={false}
-              width={180}
-              tick={{ fill: "var(--muted)" }}
-              tickFormatter={(value: string) =>
-                value.replace("Vehicles Exempted From VQS", "VQS Exempted")
-              }
-            />
-            <ChartTooltip
-              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
-              content={
-                <ChartTooltipContent
-                  formatter={(value, _name, item) => {
-                    const percentage = (item.payload as CategoryWithPercentage)
-                      .percentage;
-                    return `${formatNumber(value as number)} (${formatPercentage(percentage)})`;
-                  }}
-                />
-              }
-            />
-            <Bar
-              dataKey="total"
-              radius={[0, 4, 4, 0]}
-              onClick={(_, index) => handleBarClick(sortedData[index])}
-              className="cursor-pointer"
-            >
-              {sortedData.map((entry) => (
-                <Cell
-                  key={entry.category}
-                  fill={
-                    category === entry.category
-                      ? "url(#selectedGradient)"
-                      : entry.colour
-                  }
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+        <BarChart data={chartData} height={400} layout="vertical">
+          <defs>
+            <linearGradient id="selectedGradient" x1="0" y1="0" x2="1" y2="0">
+              <stop
+                offset="0%"
+                stopColor="color-mix(in srgb, var(--accent) 40%, transparent)"
+              />
+              <stop offset="100%" stopColor="var(--accent)" />
+            </linearGradient>
+          </defs>
+          <BarChart.Grid
+            horizontal={false}
+            strokeDasharray="3 3"
+            className="stroke-border"
+          />
+          <BarChart.XAxis
+            type="number"
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={formatNumber}
+            tick={{ fill: "var(--muted)" }}
+          />
+          <BarChart.YAxis
+            type="category"
+            dataKey="category"
+            tickLine={false}
+            axisLine={false}
+            width={180}
+            tick={{ fill: "var(--muted)" }}
+            tickFormatter={(value: string) =>
+              value.replace("Vehicles Exempted From VQS", "VQS Exempted")
+            }
+          />
+          <BarChart.Tooltip
+            cursor={{ fill: "var(--muted)", opacity: 0.2 }}
+            content={({ active, payload }) => {
+              const entry = payload?.[0];
+              if (!active || !entry) return null;
+              const percentage = (entry.payload as CategoryWithPercentage)
+                .percentage;
+
+              return (
+                <ChartTooltip>
+                  <ChartTooltip.Item>
+                    <ChartTooltip.Indicator color={entry.payload.colour} />
+                    <ChartTooltip.Label>{entry.name}</ChartTooltip.Label>
+                    <ChartTooltip.Value>
+                      {formatNumber(entry.value as number)} (
+                      {formatPercentage(percentage)})
+                    </ChartTooltip.Value>
+                  </ChartTooltip.Item>
+                </ChartTooltip>
+              );
+            }}
+          />
+          <BarChart.Bar
+            dataKey="total"
+            fill="var(--chart-1)"
+            radius={[0, 4, 4, 0]}
+            onClick={(_: unknown, index: number) =>
+              handleBarClick(sortedData[index])
+            }
+            className="cursor-pointer"
+          />
+        </BarChart>
       </Card.Content>
       <Card.Footer>
         <Typography.TextSm className="text-muted">

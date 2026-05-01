@@ -30,8 +30,6 @@ export default defineConfig({
         "src/types",
         "src/components/unreleased-feature.tsx",
         "src/components/tables/**", // Tables not prioritized for coverage
-        "src/components/charts/market-share.tsx", // Complex chart component
-        "src/components/charts/trends.tsx", // Complex chart component
         "src/components/notifications.tsx", // Realtime component
         "src/components/tables/columns/cars-make-columns.tsx",
         "src/utils/months.ts",
@@ -49,7 +47,6 @@ export default defineConfig({
         "src/lib/updater/services/process-xlsx.ts", // XLSX processor without tests
 
         // Barrel files (pure re-exports, no logic)
-        "src/components/charts/index.ts",
         "src/components/coe/index.ts",
         "src/components/shared/index.ts",
         "src/queries/index.ts",
@@ -73,7 +70,6 @@ export default defineConfig({
         "src/components/loading-indicator.tsx",
         "src/components/registration-trend.tsx",
         "src/components/top-makes-chart.tsx",
-        "src/components/charts/base/**",
         "src/components/shared/skeleton.tsx",
 
         // EV queries (DB aggregation, no testable logic without DB)

@@ -1,24 +1,14 @@
 "use client";
 
 import { Card, Label, ListBox, Select } from "@heroui/react";
+import { ChartTooltip, LineChart } from "@heroui-pro/react";
 
-import { formatDateToMonthYear } from "@motormetrics/utils";
+import { formatCurrency, formatDateToMonthYear } from "@motormetrics/utils";
+import { numberFormat } from "@ruchernchong/number-format";
 import {
   type Period,
   periods,
 } from "@web/app/(main)/(dashboard)/coe/search-params";
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
-import {
-  currencyTooltipFormatter,
-  MonthXAxis,
-  PriceYAxis,
-} from "@web/components/charts/shared";
 import Typography from "@web/components/typography";
 import type { COEBiddingResult } from "@web/types";
 import { CalendarIcon } from "lucide-react";
@@ -29,7 +19,6 @@ import {
   useQueryState,
 } from "nuqs";
 import { useMemo } from "react";
-import { CartesianGrid, Line, LineChart } from "recharts";
 
 interface COEPremiumChartProps {
   data: COEBiddingResult[];
@@ -60,10 +49,11 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
   const filteredData = useMemo(() => {
     return data.map((item) =>
       Object.entries(item).reduce(
-        (acc: Record<string, unknown>, [key, value]) => {
+        (acc: Record<string, string | number>, [key, value]) => {
           if (
-            key === "month" ||
-            (key.startsWith("Category") && categories.includes(key))
+            (key === "month" ||
+              (key.startsWith("Category") && categories.includes(key))) &&
+            (typeof value === "string" || typeof value === "number")
           ) {
             acc[key] = value;
           }
@@ -73,8 +63,6 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
       ),
     );
   }, [categories, data]);
-
-  const chartConfig: ChartConfig = {};
 
   const periodLabel = PERIOD_LABELS[period].toLowerCase();
 
@@ -113,53 +101,75 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
         </Select>
       </Card.Header>
       <Card.Content>
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
-          <LineChart
-            data={filteredData}
-            aria-label={`COE premium trends chart showing ${periodLabel} data for selected categories`}
-          >
-            <CartesianGrid
-              vertical={false}
-              strokeDasharray="3 3"
-              className="stroke-border"
-            />
-            <MonthXAxis tickFormatter={formatDateToMonthYear} />
-            <PriceYAxis label="Quota Premium (S$)" hide />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  indicator="line"
-                  labelFormatter={(label) =>
-                    formatDateToMonthYear(String(label))
-                  }
-                  formatter={(value, name, _, index) =>
-                    currencyTooltipFormatter({
-                      value:
-                        typeof value === "number"
-                          ? value
-                          : Number.parseFloat(String(value)),
-                      name: name ?? "",
-                      index: index ?? 0,
-                    })
-                  }
-                />
+        <LineChart
+          data={filteredData}
+          height={300}
+          width="100%"
+          aria-label={`COE premium trends chart showing ${periodLabel} data for selected categories`}
+        >
+          <LineChart.Grid vertical={false} strokeDasharray="3 3" />
+          <LineChart.XAxis
+            dataKey="month"
+            tickFormatter={formatDateToMonthYear}
+          />
+          <LineChart.YAxis
+            domain={[
+              (dataMin: number) => Math.floor(dataMin / 10000) * 10000,
+              (dataMax: number) => Math.ceil(dataMax / 10000) * 10000,
+            ]}
+            tickFormatter={numberFormat}
+            hide
+          />
+          <LineChart.Tooltip
+            cursor={false}
+            content={({ active, label, payload }) => {
+              if (!active || !payload?.length) {
+                return null;
               }
+
+              return (
+                <ChartTooltip indicator="line">
+                  <ChartTooltip.Header>
+                    {formatDateToMonthYear(String(label))}
+                  </ChartTooltip.Header>
+                  {payload.map((entry) => (
+                    <ChartTooltip.Item key={String(entry.dataKey)}>
+                      <ChartTooltip.Indicator
+                        color={entry.color ?? entry.stroke}
+                      />
+                      <ChartTooltip.Label>{entry.name}</ChartTooltip.Label>
+                      <ChartTooltip.Value>
+                        {formatCurrency(Number(entry.value))}
+                      </ChartTooltip.Value>
+                    </ChartTooltip.Item>
+                  ))}
+                </ChartTooltip>
+              );
+            }}
+          />
+          {categories.map((category, index) => (
+            <LineChart.Line
+              key={category}
+              dataKey={category}
+              name={category}
+              type="natural"
+              stroke={`var(--chart-${index + 1})`}
+              strokeWidth={2}
+              dot={false}
             />
-            {categories.map((category, index) => (
-              <Line
-                key={category}
-                dataKey={category}
-                name={category}
-                type="natural"
-                stroke={`var(--chart-${index + 1})`}
-                strokeWidth={2}
-                dot={false}
+          ))}
+        </LineChart>
+        <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+          {categories.map((category, index) => (
+            <div key={category} className="flex items-center gap-1.5">
+              <span
+                className="size-2.5 rounded-full"
+                style={{ backgroundColor: `var(--chart-${index + 1})` }}
               />
-            ))}
-            <ChartLegend />
-          </LineChart>
-        </ChartContainer>
+              <span className="text-muted text-xs">{category}</span>
+            </div>
+          ))}
+        </div>
       </Card.Content>
     </Card>
   );

@@ -1,29 +1,17 @@
 "use client";
 
-import { Card, cn } from "@heroui/react";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
-import {
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-} from "@web/components/charts/tokens";
+import { Card } from "@heroui/react";
+import { AreaChart } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 import type { EvMarketShare } from "@web/queries/cars/electric-vehicles";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface MarketShareChartProps {
   data: EvMarketShare[];
 }
 
-const chartConfig = {
-  evShare: { label: "EV Market Share (%)", color: "var(--chart-1)" },
-};
-
 export function MarketShareChart({ data }: MarketShareChartProps) {
+  const chartData = data.map((item) => ({ ...item }));
+
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
@@ -33,47 +21,42 @@ export function MarketShareChart({ data }: MarketShareChartProps) {
         </Typography.TextSm>
       </Card.Header>
       <Card.Content>
-        <ChartContainer
-          config={chartConfig}
-          className={cn(CHART_HEIGHTS.tall, "w-full")}
-        >
-          <AreaChart data={data}>
-            <CartesianGrid {...CHART_GRID.default} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => {
-                const [year, month] = value.split("-");
-                return `${month}/${year.slice(2)}`;
-              }}
-              interval="preserveStartEnd"
-              minTickGap={40}
-            />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickFormatter={(value) => `${value.toFixed(0)}%`}
-              width={50}
-            />
-            <ChartTooltip
-              cursor={CHART_CURSOR.highlight}
-              content={
-                <ChartTooltipContent
-                  formatter={(value) => `${(value as number).toFixed(1)}%`}
-                />
-              }
-            />
-            <Area
-              type="monotone"
-              dataKey="evShare"
-              fill="var(--chart-1)"
-              stroke="var(--chart-1)"
-              fillOpacity={0.3}
-            />
-          </AreaChart>
-        </ChartContainer>
+        <AreaChart data={chartData} height={400}>
+          <AreaChart.Grid strokeDasharray="3 3" strokeOpacity={0.15} />
+          <AreaChart.XAxis
+            dataKey="month"
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
+            tickFormatter={(value: string) => {
+              const [year, month] = value.split("-");
+              return `${month}/${year.slice(2)}`;
+            }}
+            interval="preserveStartEnd"
+            minTickGap={40}
+          />
+          <AreaChart.YAxis
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value: number) => `${value.toFixed(0)}%`}
+            width={50}
+          />
+          <AreaChart.Tooltip
+            cursor={{ fill: "var(--muted)", opacity: 0.2 }}
+            content={
+              <AreaChart.TooltipContent
+                valueFormatter={(value) => `${(value as number).toFixed(1)}%`}
+              />
+            }
+          />
+          <AreaChart.Area
+            type="monotone"
+            dataKey="evShare"
+            fill="var(--chart-1)"
+            stroke="var(--chart-1)"
+            fillOpacity={0.3}
+          />
+        </AreaChart>
       </Card.Content>
       <Card.Footer>
         <Typography.TextSm className="text-muted">

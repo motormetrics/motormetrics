@@ -1,33 +1,18 @@
 "use client";
 
-import { Card, cn } from "@heroui/react";
+import { Card } from "@heroui/react";
+import { AreaChart } from "@heroui-pro/react";
 import { EV_COLORS } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
-import {
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-} from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import type { EvMonthlyTrend } from "@web/queries/cars/electric-vehicles";
-import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";
 
 interface AdoptionTrendChartProps {
   data: EvMonthlyTrend[];
 }
 
-const chartConfig = {
-  BEV: { label: "BEV (Battery Electric)", color: EV_COLORS.BEV },
-  PHEV: { label: "PHEV (Plug-In Hybrid)", color: EV_COLORS.PHEV },
-  Hybrid: { label: "Hybrid (HEV)", color: EV_COLORS.Hybrid },
-};
-
 export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
   const numberFormatter = new Intl.NumberFormat("en-SG");
+  const chartData = data.map((item) => ({ ...item }));
 
   return (
     <Card>
@@ -38,40 +23,38 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
         </Typography.TextSm>
       </Card.Header>
       <Card.Content>
-        <ChartContainer
-          config={chartConfig}
-          className={cn(CHART_HEIGHTS.tall, "w-full")}
-        >
-          <AreaChart data={data}>
-            <CartesianGrid {...CHART_GRID.default} />
-            <XAxis
+        <div className="flex flex-col gap-4">
+          <AreaChart data={chartData} height={400}>
+            <AreaChart.Grid strokeDasharray="3 3" strokeOpacity={0.15} />
+            <AreaChart.XAxis
               dataKey="month"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => {
+              tickFormatter={(value: string) => {
                 const [year, month] = value.split("-");
                 return `${month}/${year.slice(2)}`;
               }}
               interval="preserveStartEnd"
               minTickGap={40}
             />
-            <YAxis
+            <AreaChart.YAxis
               tickLine={false}
               axisLine={false}
-              tickFormatter={(value) => numberFormatter.format(value)}
+              tickFormatter={(value: number) => numberFormatter.format(value)}
               width={60}
             />
-            <ChartTooltip
-              cursor={CHART_CURSOR.highlight}
+            <AreaChart.Tooltip
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={
-                <ChartTooltipContent
-                  formatter={(value) => numberFormatter.format(value as number)}
+                <AreaChart.TooltipContent
+                  valueFormatter={(value) =>
+                    numberFormatter.format(value as number)
+                  }
                 />
               }
             />
-            <Legend />
-            <Area
+            <AreaChart.Area
               type="monotone"
               dataKey="Hybrid"
               stackId="ev"
@@ -79,7 +62,7 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
               stroke={EV_COLORS.Hybrid}
               fillOpacity={0.4}
             />
-            <Area
+            <AreaChart.Area
               type="monotone"
               dataKey="PHEV"
               stackId="ev"
@@ -87,7 +70,7 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
               stroke={EV_COLORS.PHEV}
               fillOpacity={0.4}
             />
-            <Area
+            <AreaChart.Area
               type="monotone"
               dataKey="BEV"
               stackId="ev"
@@ -96,7 +79,24 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
               fillOpacity={0.4}
             />
           </AreaChart>
-        </ChartContainer>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+            {[
+              ["BEV", "BEV (Battery Electric)"],
+              ["PHEV", "PHEV (Plug-In Hybrid)"],
+              ["Hybrid", "Hybrid (HEV)"],
+            ].map(([key, label]) => (
+              <div key={key} className="flex items-center gap-2">
+                <span
+                  className="size-2.5 rounded-full"
+                  style={{
+                    backgroundColor: EV_COLORS[key as keyof typeof EV_COLORS],
+                  }}
+                />
+                <span className="text-muted text-xs">{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </Card.Content>
       <Card.Footer>
         <Typography.TextSm className="text-muted">

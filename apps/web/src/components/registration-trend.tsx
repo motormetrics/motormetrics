@@ -1,15 +1,9 @@
 "use client";
 
 import { Card } from "@heroui/react";
+import { LineChart } from "@heroui-pro/react";
 
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 interface YearTotal {
   year: number;
@@ -21,12 +15,9 @@ interface RegistrationTrendProps {
 }
 
 export function RegistrationTrend({ data }: RegistrationTrendProps) {
-  const chartConfig = {
-    total: {
-      label: "Total",
-      color: "var(--chart-1)",
-    },
-  } satisfies ChartConfig;
+  const chartData: Record<string, string | number>[] = data.map((item) => ({
+    ...item,
+  }));
 
   return (
     <Card>
@@ -38,31 +29,21 @@ export function RegistrationTrend({ data }: RegistrationTrendProps) {
         </Typography.TextSm>
       </Card.Header>
       <Card.Content className="pt-2">
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
-          <LineChart accessibilityLayer data={data}>
-            <CartesianGrid
-              vertical={false}
-              strokeDasharray="3 3"
-              className="stroke-border"
-            />
-            <XAxis dataKey="year" tickLine={false} axisLine={false} />
-            <YAxis
-              dataKey="total"
-              type="number"
-              tickLine={false}
-              axisLine={false}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <Line
-              dataKey="total"
-              fill="var(--chart-1)"
-              stroke="var(--chart-1)"
-            />
-          </LineChart>
-        </ChartContainer>
+        <LineChart data={chartData} height={300} width="100%">
+          <LineChart.Grid vertical={false} strokeDasharray="3 3" />
+          <LineChart.XAxis dataKey="year" />
+          <LineChart.YAxis dataKey="total" type="number" />
+          <LineChart.Tooltip
+            cursor={false}
+            content={<LineChart.TooltipContent indicator="line" />}
+          />
+          <LineChart.Line
+            dataKey="total"
+            name="Total"
+            fill="var(--chart-1)"
+            stroke="var(--chart-1)"
+          />
+        </LineChart>
       </Card.Content>
     </Card>
   );

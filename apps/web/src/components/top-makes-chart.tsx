@@ -1,23 +1,9 @@
 "use client";
 
 import { Card } from "@heroui/react";
+import { BarChart } from "@heroui-pro/react";
 
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  LabelList,
-  XAxis,
-  YAxis,
-} from "recharts";
 
 interface TopMake {
   make: string;
@@ -30,16 +16,9 @@ interface TopMakesChartProps {
 }
 
 export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
-  const data = [...topMakes].sort((a, b) => b.value - a.value);
-  const chartConfig = Object.fromEntries(
-    data.map(({ make }, index) => [
-      make,
-      {
-        label: make,
-        color: `var(--chart-${index + 1})`,
-      },
-    ]),
-  ) as ChartConfig;
+  const data: Record<string, string | number>[] = [...topMakes]
+    .sort((a, b) => b.value - a.value)
+    .map(({ make, value }) => ({ make, value }));
 
   return (
     <Card>
@@ -52,50 +31,31 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
         </Typography.TextSm>
       </Card.Header>
       <Card.Content className="pt-2">
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
-          <BarChart data={data} layout="vertical">
-            <CartesianGrid
-              horizontal={false}
-              strokeDasharray="3 3"
-              className="stroke-border"
-            />
-            <XAxis type="number" tickLine={false} axisLine={false} />
-            <YAxis
-              dataKey="make"
-              type="category"
-              tickLine={false}
-              tickMargin={8}
-              axisLine={false}
-              hide
-            />
-            <ChartTooltip
-              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <Bar dataKey="value" radius={4}>
-              {data.map((_, index) => (
-                <Cell
-                  key={
-                    // biome-ignore lint/suspicious/noArrayIndexKey: Recharts Cell requires index-based keys
-                    `cell-${index}`
-                  }
-                  fill={`var(--chart-${index + 1})`}
-                />
-              ))}
-              <LabelList
-                dataKey="make"
-                position="insideLeft"
-                offset={8}
-                className="fill-background"
-              />
-              <LabelList
-                dataKey="value"
-                position="right"
-                className="fill-foreground"
-              />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+        <BarChart data={data} height={300} width="100%" layout="vertical">
+          <BarChart.Grid horizontal={false} strokeDasharray="3 3" />
+          <BarChart.XAxis type="number" />
+          <BarChart.YAxis
+            dataKey="make"
+            type="category"
+            tickMargin={8}
+            width={120}
+          />
+          <BarChart.Tooltip
+            cursor={{ fill: "var(--muted)", opacity: 0.2 }}
+            content={<BarChart.TooltipContent indicator="line" />}
+          />
+          <BarChart.Bar
+            dataKey="value"
+            fill="var(--chart-1)"
+            label={{
+              dataKey: "value",
+              fill: "var(--foreground)",
+              position: "right",
+            }}
+            name="Registrations"
+            radius={4}
+          />
+        </BarChart>
       </Card.Content>
     </Card>
   );

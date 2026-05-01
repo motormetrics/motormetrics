@@ -1,17 +1,11 @@
 "use client";
 
-import { Card, cn } from "@heroui/react";
+import { Card } from "@heroui/react";
+import { PieChart } from "@heroui-pro/react";
 
 import type { SelectCarCost } from "@motormetrics/database";
 import { VES_BAND_ORDER } from "@web/app/(main)/(dashboard)/cars/costs/constants";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
-import { CHART_HEIGHTS } from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
-import { Cell, Pie, PieChart } from "recharts";
 
 interface VesDistributionChartProps {
   data: SelectCarCost[];
@@ -39,13 +33,6 @@ export function VesDistributionChart({ data }: VesDistributionChartProps) {
     }),
   );
 
-  const chartConfig = Object.fromEntries(
-    VES_BAND_ORDER.map((band) => [
-      `Band ${band}`,
-      { label: `Band ${band}`, color: VES_BAND_COLORS[band] },
-    ]),
-  );
-
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
@@ -55,33 +42,33 @@ export function VesDistributionChart({ data }: VesDistributionChartProps) {
         </Typography.TextSm>
       </Card.Header>
       <Card.Content>
-        <ChartContainer
-          config={chartConfig}
-          className={cn("mx-auto", CHART_HEIGHTS.standard)}
-        >
-          <PieChart>
-            <ChartTooltip
-              content={
-                <ChartTooltipContent formatter={(value) => `${value} models`} />
-              }
-            />
-            <Pie
-              data={chartData}
-              dataKey="value"
-              nameKey="name"
-              innerRadius={80}
-              outerRadius={140}
-              paddingAngle={2}
-              label={({ name, percent }) =>
-                `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
-              }
-            >
-              {chartData.map((entry) => (
-                <Cell key={entry.band} fill={VES_BAND_COLORS[entry.band]} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ChartContainer>
+        <PieChart className="mx-auto" height={300}>
+          <PieChart.Tooltip
+            content={
+              <PieChart.TooltipContent
+                valueFormatter={(value) => `${value} models`}
+              />
+            }
+          />
+          <PieChart.Pie
+            data={chartData}
+            dataKey="value"
+            nameKey="name"
+            innerRadius={80}
+            outerRadius={140}
+            paddingAngle={2}
+            label={({ name, percent }: { name: string; percent?: number }) =>
+              `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
+            }
+          >
+            {chartData.map((entry) => (
+              <PieChart.Cell
+                key={entry.band}
+                fill={VES_BAND_COLORS[entry.band]}
+              />
+            ))}
+          </PieChart.Pie>
+        </PieChart>
       </Card.Content>
     </Card>
   );

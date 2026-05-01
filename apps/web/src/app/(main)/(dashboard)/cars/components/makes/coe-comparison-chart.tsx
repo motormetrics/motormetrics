@@ -1,76 +1,50 @@
 "use client";
 
+import { ComposedChart } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { numberFormat } from "@ruchernchong/number-format";
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@web/components/charts/chart";
 import type { MakeCoeComparisonData } from "@web/queries/cars/makes/coe-comparison";
-import {
-  Bar,
-  CartesianGrid,
-  ComposedChart,
-  Label,
-  Line,
-  XAxis,
-  YAxis,
-} from "recharts";
 
 interface CoeComparisonChartProps {
   data: MakeCoeComparisonData[];
 }
 
-const chartConfig = {
-  registrations: {
-    label: "Registrations",
-    color: "var(--chart-1)",
-  },
-  categoryAPremium: {
-    label: "Category A Premium",
-    color: "var(--chart-2)",
-  },
-  categoryBPremium: {
-    label: "Category B Premium",
-    color: "var(--chart-3)",
-  },
-} satisfies ChartConfig;
-
 export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
+  const chartData = data.map((item) => ({ ...item }));
+
   return (
-    <ChartContainer config={chartConfig} className="h-[300px] w-full">
+    <div className="flex flex-col gap-4">
       <ComposedChart
-        accessibilityLayer
-        data={data}
+        data={chartData}
+        height={300}
         aria-label="Dual-axis chart comparing monthly registrations with COE Category A and B premiums"
       >
-        <CartesianGrid
+        <ComposedChart.Grid
           vertical={false}
           strokeDasharray="3 3"
           className="stroke-border"
         />
-        <XAxis
+        <ComposedChart.XAxis
           dataKey="month"
           tickFormatter={formatDateToMonthYear}
           tickMargin={8}
         />
 
         {/* Left Y-axis for registrations */}
-        <YAxis yAxisId="registrations" type="number" orientation="left">
-          <Label
-            value="Registrations"
-            angle={-90}
-            position="insideLeft"
-            style={{ textAnchor: "middle" }}
-          />
-        </YAxis>
+        <ComposedChart.YAxis
+          yAxisId="registrations"
+          type="number"
+          orientation="left"
+          label={{
+            angle: -90,
+            position: "insideLeft",
+            style: { textAnchor: "middle" },
+            value: "Registrations",
+          }}
+        />
 
         {/* Right Y-axis for COE premiums */}
-        <YAxis
+        <ComposedChart.YAxis
           yAxisId="premium"
           orientation="right"
           domain={[
@@ -78,21 +52,20 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
             (dataMax: number) => Math.ceil(dataMax / 10000) * 10000,
           ]}
           tickFormatter={numberFormat}
-        >
-          <Label
-            value="COE Premium (S$)"
-            angle={90}
-            position="insideRight"
-            style={{ textAnchor: "middle" }}
-          />
-        </YAxis>
-
-        <ChartTooltip
-          cursor={{ fill: "var(--muted)", opacity: 0.2 }}
-          content={<ChartTooltipContent />}
+          label={{
+            angle: 90,
+            position: "insideRight",
+            style: { textAnchor: "middle" },
+            value: "COE Premium (S$)",
+          }}
         />
 
-        <Bar
+        <ComposedChart.Tooltip
+          cursor={{ fill: "var(--muted)", opacity: 0.2 }}
+          content={<ComposedChart.TooltipContent />}
+        />
+
+        <ComposedChart.Bar
           dataKey="registrations"
           yAxisId="registrations"
           fill="var(--chart-1)"
@@ -100,7 +73,7 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
           maxBarSize={40}
         />
 
-        <Line
+        <ComposedChart.Line
           dataKey="categoryAPremium"
           yAxisId="premium"
           type="monotone"
@@ -109,7 +82,7 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
           strokeWidth={2}
         />
 
-        <Line
+        <ComposedChart.Line
           dataKey="categoryBPremium"
           yAxisId="premium"
           type="monotone"
@@ -118,9 +91,22 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
           strokeWidth={2}
           strokeDasharray="10 10"
         />
-
-        <ChartLegend content={<ChartLegendContent />} />
       </ComposedChart>
-    </ChartContainer>
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+        {[
+          { color: "var(--chart-1)", label: "Registrations" },
+          { color: "var(--chart-2)", label: "Category A Premium" },
+          { color: "var(--chart-3)", label: "Category B Premium" },
+        ].map((item) => (
+          <div key={item.label} className="flex items-center gap-2">
+            <span
+              className="size-2.5 rounded-full"
+              style={{ backgroundColor: item.color }}
+            />
+            <span className="text-muted text-xs">{item.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
