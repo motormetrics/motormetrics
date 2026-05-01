@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 export function Providers({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <>
-      <Toast.Provider placement="top end" />
+      <Toast.Provider placement="bottom end" />
       {children}
     </>
   );

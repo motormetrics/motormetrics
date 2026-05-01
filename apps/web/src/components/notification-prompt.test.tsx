@@ -1,25 +1,19 @@
+import { toast } from "@heroui/react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import { NotificationPrompt } from "./notification-prompt";
 
-const mockSetNotificationStatus = vi.fn();
-let mockNotificationStatus: "default" | "granted" | "denied" = "default";
-
 vi.mock("@heroui/react", () => {
-  const Alert = ({ children }: { children?: React.ReactNode }) => (
-    <div data-testid="alert">{children}</div>
-  );
-  Alert.Indicator = () => null;
-  Alert.Content = ({ children }: { children?: React.ReactNode }) => children;
-  Alert.Title = ({ children }: { children?: React.ReactNode }) => (
-    <div data-testid="alert-title">{children}</div>
-  );
-  Alert.Description = ({ children }: { children?: React.ReactNode }) => (
-    <div data-testid="alert-description">{children}</div>
+  const toastMock = Object.assign(
+    vi.fn(() => "notification-toast-id"),
+    {
+      close: vi.fn(),
+      success: vi.fn(),
+      warning: vi.fn(),
+    },
   );
 
   return {
-    Alert,
     Button: ({
       onPress,
       children,
@@ -31,22 +25,19 @@ vi.mock("@heroui/react", () => {
         {children}
       </button>
     ),
-    CloseButton: ({ onPress }: { onPress?: () => void }) => (
-      <button type="button" data-testid="alert-close" onClick={onPress}>
-        close
-      </button>
-    ),
-    cn: (...classes: unknown[]) => classes.flat().filter(Boolean).join(" "),
-    toast: { success: vi.fn(), warning: vi.fn() },
+    toast: toastMock,
   };
 });
 
-vi.mock("@web/app/store", () => ({
-  default: () => ({
-    notificationStatus: mockNotificationStatus,
-    setNotificationStatus: mockSetNotificationStatus,
-  }),
-}));
+function getFirstToastOptions() {
+  const call = vi.mocked(toast).mock.calls[0];
+
+  if (!call?.[1]) {
+    throw new Error("Expected toast to be called with options");
+  }
+
+  return call[1];
+}
 
 describe("NotificationPrompt Component", () => {
   let originalNotification: typeof global.Notification;
@@ -61,89 +52,128 @@ describe("NotificationPrompt Component", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockNotificationStatus = "default";
     global.Notification = {
       requestPermission: vi.fn().mockResolvedValue("default"),
       permission: "default",
     } as unknown as typeof global.Notification;
   });
 
-  it("should set notification status to current permission on mount", () => {
-    render(<NotificationPrompt />);
-
-    expect(document.body.firstChild).toMatchSnapshot();
-    expect(mockSetNotificationStatus).toHaveBeenCalledWith("default");
-  });
-
-  it("should display an alert when notificationStatus is 'default'", () => {
-    render(<NotificationPrompt />);
-
-    expect(screen.getByTestId("alert-title")).toHaveTextContent(
-      "Enable Notifications?",
-    );
-    expect(screen.getByTestId("alert-description")).toHaveTextContent(
-      "Stay updated with the latest news and alerts by enabling browser notifications",
-    );
-    const buttons = screen.getAllByTestId("button");
-    expect(buttons[0]).toHaveTextContent("Allow");
-    expect(buttons[1]).toHaveTextContent("Deny");
-  });
-
-  it("should not display anything if notificationStatus is not 'default' (e.g., granted/denied)", () => {
-    mockNotificationStatus = "granted";
-
+  it("should render nothing directly because the prompt is shown as a toast", () => {
     const { container } = render(<NotificationPrompt />);
 
     expect(container.firstChild).toBeNull();
   });
 
-  it("should call handleGranted when Allow button is clicked", async () => {
-    mockNotificationStatus = "default";
+  it("should show a persistent toast when notification permission is default", async () => {
+    render(<NotificationPrompt />);
+
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith(
+        "Enable Notifications?",
+        expect.objectContaining({ timeout: 0, variant: "accent" }),
+      );
+    });
+
+    const options = getFirstToastOptions();
+    render(options.description as React.ReactElement);
+
+    expect(
+      screen.getByText(
+        "Stay updated with the latest news and alerts by enabling browser notifications",
+      ),
+    ).toBeInTheDocument();
+    const buttons = screen.getAllByTestId("button");
+    expect(buttons[0]).toHaveTextContent("Allow");
+    expect(buttons[1]).toHaveTextContent("Deny");
+  });
+
+  it("should not show a toast when notification permission is granted", async () => {
+    global.Notification = {
+      requestPermission: vi.fn().mockResolvedValue("default"),
+      permission: "granted",
+    } as unknown as typeof global.Notification;
+
+    const { container } = render(<NotificationPrompt />);
+
+    expect(container.firstChild).toBeNull();
+    await waitFor(() => expect(toast).not.toHaveBeenCalled());
+  });
+
+  it("should not show a toast when notification permission is denied", async () => {
+    global.Notification = {
+      requestPermission: vi.fn().mockResolvedValue("default"),
+      permission: "denied",
+    } as unknown as typeof global.Notification;
+
+    render(<NotificationPrompt />);
+
+    await waitFor(() => expect(toast).not.toHaveBeenCalled());
+  });
+
+  it("should request permission when Allow button is clicked", async () => {
     vi.mocked(global.Notification.requestPermission).mockResolvedValue(
       "granted",
     );
 
     render(<NotificationPrompt />);
 
+    await waitFor(() => expect(toast).toHaveBeenCalled());
+    const options = getFirstToastOptions();
+    render(options.description as React.ReactElement);
+
     const buttons = screen.getAllByTestId("button");
     fireEvent.click(buttons[0]);
 
     await waitFor(() => {
       expect(global.Notification.requestPermission).toHaveBeenCalled();
-      expect(mockSetNotificationStatus).toHaveBeenCalledWith("granted");
+      expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
+      expect(toast.success).toHaveBeenCalledWith("Notifications Enabled!", {
+        description:
+          "You will now receive updates and alerts whenever new data is published",
+      });
     });
   });
 
-  it("should call handleDenied when Deny button is clicked", async () => {
-    mockNotificationStatus = "default";
+  it("should request permission when Deny button is clicked", async () => {
     vi.mocked(global.Notification.requestPermission).mockResolvedValue(
       "denied",
     );
 
     render(<NotificationPrompt />);
 
+    await waitFor(() => expect(toast).toHaveBeenCalled());
+    const options = getFirstToastOptions();
+    render(options.description as React.ReactElement);
+
     const buttons = screen.getAllByTestId("button");
     fireEvent.click(buttons[1]);
 
     await waitFor(() => {
       expect(global.Notification.requestPermission).toHaveBeenCalled();
-      expect(mockSetNotificationStatus).toHaveBeenCalledWith("denied");
+      expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
+      expect(toast.warning).toHaveBeenCalledWith("Notifications Disabled!", {
+        description:
+          "You will not receive updates and alerts whenever new data is published",
+      });
     });
   });
 
-  it("should set notification status to denied when alert is closed", () => {
+  it("should not reopen the prompt when toast is closed", async () => {
     render(<NotificationPrompt />);
 
-    fireEvent.click(screen.getByTestId("alert-close"));
-    expect(mockSetNotificationStatus).toHaveBeenCalledWith("denied");
+    await waitFor(() => expect(toast).toHaveBeenCalled());
+    const options = getFirstToastOptions();
+    options.onClose?.();
+
+    await waitFor(() => expect(toast).toHaveBeenCalledTimes(1));
   });
 
-  it("should not sync permission when Notification API is unavailable", () => {
+  it("should not show a toast when Notification API is unavailable", () => {
     const original = global.Notification;
     delete (global as Partial<typeof globalThis>).Notification;
 
     render(<NotificationPrompt />);
-    expect(mockSetNotificationStatus).not.toHaveBeenCalled();
+    expect(toast).not.toHaveBeenCalled();
 
     global.Notification = original;
   });
