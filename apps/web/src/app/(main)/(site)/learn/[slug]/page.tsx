@@ -170,7 +170,7 @@ export default async function GuidePage({ params }: PageProps) {
         data={{ "@context": "https://schema.org", ...breadcrumbSchema }}
       />
 
-      <div className="container mx-auto flex flex-col gap-8 px-4 py-8">
+      <div className="container mx-auto flex flex-col gap-8 px-6 py-8">
         {/* Back to Learn link */}
         <Link
           href="/learn"

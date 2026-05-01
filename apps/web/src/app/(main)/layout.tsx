@@ -1,6 +1,6 @@
 import { Announcement } from "@web/components/announcement";
+import { AppNavbar } from "@web/components/app-navbar";
 import { Banner } from "@web/components/banner";
-import { Header } from "@web/components/header";
 import { NotificationPrompt } from "@web/components/notification-prompt";
 import type { ReactNode } from "react";
 
@@ -11,8 +11,9 @@ export default function MainLayout({
     <>
       <NotificationPrompt />
       <Announcement />
-      <Header />
+      <AppNavbar />
       <Banner />
+      {/* TODO(sgcarstrends-9h9): Revisit nested route layouts and container responsibilities. */}
       {children}
     </>
   );

@@ -217,6 +217,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@gravity-ui/icons':
+        specifier: 2.18.0
+        version: 2.18.0(react@19.2.4)
       '@heroui-pro/react':
         specifier: 1.0.0-beta.2
         version: 1.0.0-beta.2
@@ -2015,6 +2018,14 @@ packages:
       tailwindcss: ^4.0.0
     peerDependenciesMeta:
       tailwindcss:
+        optional: true
+
+  '@gravity-ui/icons@2.18.0':
+    resolution: {integrity: sha512-JoRc/4Ch9GLaufZfpGd2ePRRisMXEjMI+r3y8kPKyYIAdQZz07jpIXEgsft1gvBxjSht2MS2uu5+vfhe1WP0ow==}
+    peerDependencies:
+      react: '*'
+    peerDependenciesMeta:
+      react:
         optional: true
 
   '@heroui-pro/react@1.0.0-beta.2':
@@ -11045,6 +11056,12 @@ snapshots:
       postcss-selector-parser: 7.1.1
     optionalDependencies:
       tailwindcss: 4.1.18
+
+  '@gravity-ui/icons@2.18.0(react@19.2.4)':
+    dependencies:
+      tslib: 2.8.1
+    optionalDependencies:
+      react: 19.2.4
 
   '@heroui-pro/react@1.0.0-beta.2':
     dependencies:

@@ -3,7 +3,7 @@
 exports[`PageNotFound > renders the 404 error message 1`] = `
 <div>
   <div
-    class="container mx-auto px-4 py-16"
+    class="container mx-auto px-6 py-16"
   >
     <div
       class="flex min-h-[60vh] flex-col items-center justify-center"

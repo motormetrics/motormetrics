@@ -30,7 +30,7 @@ export function Announcement() {
 
   return (
     <aside className="bg-accent text-accent-foreground">
-      <div className="w-full px-4 py-3 text-center sm:px-6 lg:px-8">
+      <div className="w-full px-6 py-3 text-center">
         <p className="font-medium text-sm">{activeAnnouncement.content}</p>
       </div>
     </aside>

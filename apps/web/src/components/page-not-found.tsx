@@ -4,7 +4,7 @@ import { NavigationButtons } from "./page-not-found.client";
 
 export function PageNotFound() {
   return (
-    <div className="container mx-auto px-4 py-16">
+    <div className="container mx-auto px-6 py-16">
       <div className="flex min-h-[60vh] flex-col items-center justify-center">
         <div className="mb-8 flex flex-col items-center">
           <Typography.H1 className="text-accent">404</Typography.H1>

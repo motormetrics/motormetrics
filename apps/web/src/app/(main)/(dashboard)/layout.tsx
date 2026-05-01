@@ -1,13 +1,13 @@
 import { DashboardNav } from "@web/app/(main)/(dashboard)/components/dashboard-nav";
 import type { ReactNode } from "react";
 
-const DashboardLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
+export default function DashboardLayout({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   return (
-    <main className="flex min-h-screen w-full flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
+    <main className="container mx-auto flex min-h-screen flex-col gap-8 px-6 py-8">
       <DashboardNav />
       {children}
     </main>
   );
-};
-
-export default DashboardLayout;
+}

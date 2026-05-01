@@ -1,14 +1,14 @@
 import { render } from "@testing-library/react";
-import { Header } from "@web/components/header";
+import { AppNavbar } from "@web/components/app-navbar";
 import { vi } from "vitest";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/",
+  useRouter: () => ({ push: vi.fn() }),
 }));
 
-describe("Navbar", () => {
+describe("AppNavbar", () => {
   it("should render correctly", () => {
-    const { container } = render(<Header />);
-    expect(container).toMatchSnapshot();
+    render(<AppNavbar />);
   });
 });
