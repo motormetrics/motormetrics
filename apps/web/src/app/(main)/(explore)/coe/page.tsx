@@ -1,3 +1,4 @@
+import { Link } from "@heroui/react";
 import { AnimatedGrid } from "@web/app/(main)/(explore)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { ExploreCard } from "@web/app/(main)/(explore)/components/explore-card";
@@ -8,7 +9,6 @@ import { navLinks } from "@web/config/navigation";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateDataCatalogSchema } from "@web/lib/metadata";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 const title = "COE Bidding Results Singapore";
 const description =
@@ -61,7 +61,10 @@ export default function Page() {
         <Typography.H1>COE</Typography.H1>
         <Typography.TextLg>
           Certificate of Entitlement data and analysis for Singapore. Explore{" "}
-          <Link href="/cars" className="text-primary hover:underline">
+          <Link
+            href="/cars"
+            className="text-accent underline-offset-4 hover:underline"
+          >
             car registration data
           </Link>{" "}
           to see which makes and fuel types are most popular.
@@ -78,7 +81,7 @@ export default function Page() {
               href={heroItem.url}
               icon={
                 <heroItem.icon
-                  className={`size-6 ${heroItem.iconColor ?? "text-primary"}`}
+                  className={`size-6 ${heroItem.iconColor ?? "text-accent"}`}
                 />
               }
               badge={heroItem.badge}
@@ -99,7 +102,7 @@ export default function Page() {
                 icon={
                   item.icon && (
                     <item.icon
-                      className={`size-5 ${item.iconColor ?? "text-primary"}`}
+                      className={`size-5 ${item.iconColor ?? "text-accent"}`}
                     />
                   )
                 }

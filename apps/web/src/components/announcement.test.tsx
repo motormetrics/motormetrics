@@ -6,23 +6,19 @@ import { vi } from "vitest";
 const announcementsFixture: AnnouncementType[] = [];
 let mockPathname = "/";
 
-vi.mock("@heroui/alert", async () => {
-  const actual = await vi.importActual("@heroui/alert");
-  return {
-    ...actual,
-    Alert: ({
-      title,
-      children,
-    }: {
-      title?: string;
-      children?: React.ReactNode;
-    }) => (
-      <div data-testid="alert">
-        <div data-testid="alert-title">{title}</div>
-        {children}
-      </div>
-    ),
-  };
+vi.mock("@heroui/react", () => {
+  const Alert = ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="alert">{children}</div>
+  );
+
+  Alert.Content = ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  );
+  Alert.Title = ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="alert-title">{children}</div>
+  );
+
+  return { Alert };
 });
 
 vi.mock("@web/config", () => ({

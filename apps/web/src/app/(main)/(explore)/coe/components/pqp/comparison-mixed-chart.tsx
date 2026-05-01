@@ -1,14 +1,15 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
+import { numberFormat } from "@ruchernchong/number-format";
 import {
   type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { numberFormat } from "@ruchernchong/number-format";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
 import {
@@ -28,22 +29,22 @@ const chartConfig: ChartConfig = {};
 
 export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
   return (
-    <Card className="rounded-2xl p-3">
-      <CardHeader>
+    <Card>
+      <Card.Header>
         <div className="flex flex-col gap-1">
           <Typography.H4>Latest COE Premium vs PQP Rate</Typography.H4>
-          <Typography.TextSm className="text-default-500">
+          <Typography.TextSm className="text-muted">
             Comparison of latest COE bidding premium against current PQP rates
           </Typography.TextSm>
         </div>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <ComposedChart data={data}>
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis dataKey="category" />
             <YAxis
@@ -54,7 +55,7 @@ export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
               tickFormatter={numberFormat}
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={<ChartTooltipContent />}
             />
             <Bar
@@ -75,14 +76,14 @@ export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
             <ChartLegend />
           </ComposedChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
-        <p className="text-default-500 text-sm">
+      </Card.Content>
+      <Card.Footer>
+        <p className="text-muted text-sm">
           Latest COE premium (bars) vs PQP baseline (dashed line). Bars above
           line indicate strong demand; bars below suggest favourable renewal
           conditions.
         </p>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

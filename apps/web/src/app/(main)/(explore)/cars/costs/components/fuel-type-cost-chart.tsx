@@ -1,24 +1,23 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card, cn } from "@heroui/react";
+
 import type { SelectCarCost } from "@motormetrics/database";
-import {
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-} from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
 import { formatCurrency } from "@motormetrics/utils";
 import {
   FUEL_TYPE_LABELS,
   FUEL_TYPE_ORDER,
 } from "@web/app/(main)/(explore)/cars/costs/constants";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@web/components/charts/chart";
+import {
+  CHART_CURSOR,
+  CHART_GRID,
+  CHART_HEIGHTS,
+} from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
@@ -42,7 +41,7 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
   const chartData = FUEL_TYPE_ORDER.filter((fuelType) =>
     grouped.has(fuelType),
   ).map((fuelType) => {
-    const costs = grouped.get(fuelType)!;
+    const costs = grouped.get(fuelType) ?? [];
     const average = costs.reduce((sum, cost) => sum + cost, 0) / costs.length;
     return {
       fuelType: FUEL_TYPE_LABELS[fuelType] ?? fuelType,
@@ -51,14 +50,14 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
   });
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Avg Selling Price by Fuel Type</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Average AD selling price (with COE) by fuel type
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer
           config={chartConfig}
           className={cn(CHART_HEIGHTS.tall, "w-full")}
@@ -96,12 +95,12 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
             </Bar>
           </BarChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
-        <Typography.TextSm className="text-default-500">
+      </Card.Content>
+      <Card.Footer>
+        <Typography.TextSm className="text-muted">
           Electric vehicles tend to have lower total costs due to VES rebates.
         </Typography.TextSm>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

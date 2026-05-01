@@ -1,12 +1,13 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
+
+import type { CategoryWithPercentage } from "@web/app/(main)/(explore)/cars/deregistrations/components/constants";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import type { CategoryWithPercentage } from "@web/app/(main)/(explore)/cars/deregistrations/components/constants";
+} from "@web/components/charts/chart";
 import { formatNumber, formatPercentage } from "@web/utils/charts";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
@@ -16,16 +17,16 @@ interface CategoryBreakdownProps {
 
 export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
   const chartConfig = {
-    total: { label: "Deregistrations", color: "hsl(var(--heroui-primary))" },
+    total: { label: "Deregistrations", color: "var(--accent)" },
   } as const;
 
   // Sort by total descending for better visualization
   const sortedData = [...data].sort((a, b) => b.total - a.total);
 
   return (
-    <Card className="h-full p-3">
-      <CardBody className="p-4">
-        <h3 className="mb-3 font-medium text-default-500 text-xs uppercase tracking-wider">
+    <Card className="h-full">
+      <Card.Content>
+        <h3 className="mb-3 font-medium text-muted text-xs uppercase tracking-wider">
           Distribution
         </h3>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -33,14 +34,14 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
             <CartesianGrid
               horizontal={false}
               strokeDasharray="3 3"
-              stroke="hsl(var(--heroui-default-200))"
+              stroke="var(--border)"
             />
             <XAxis
               type="number"
               tickLine={false}
               axisLine={false}
               tickFormatter={formatNumber}
-              tick={{ fill: "hsl(var(--heroui-default-500))" }}
+              tick={{ fill: "var(--muted)" }}
             />
             <YAxis
               type="category"
@@ -48,7 +49,7 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
               tickLine={false}
               axisLine={false}
               width={100}
-              tick={{ fill: "hsl(var(--heroui-default-600))" }}
+              tick={{ fill: "var(--muted)" }}
               tickFormatter={(value: string) =>
                 value
                   .replace("Category ", "")
@@ -56,7 +57,7 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
               }
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.3 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.3 }}
               content={
                 <ChartTooltipContent
                   formatter={(value, _name, item) => {
@@ -74,7 +75,7 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
             </Bar>
           </BarChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

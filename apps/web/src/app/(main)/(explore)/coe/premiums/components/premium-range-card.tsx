@@ -1,5 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
 import { formatCurrency, formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { PremiumRangeStats } from "@web/lib/coe/calculations";
@@ -21,9 +20,9 @@ const RangeBar = ({ lowest, highest, globalMin, globalMax }: RangeBarProps) => {
   const widthPercent = range > 0 ? ((highest - lowest) / range) * 100 : 100;
 
   return (
-    <div className="relative h-2 w-full rounded-full bg-default-100">
+    <div className="relative h-2 w-full rounded-full bg-default">
       <div
-        className="absolute h-full rounded-full bg-primary/30 transition-all duration-500 ease-out"
+        className="absolute h-full rounded-full bg-accent/30 transition-all duration-500 ease-out"
         style={{
           left: `${leftPercent}%`,
           width: `${Math.max(widthPercent, 2)}%`,
@@ -31,13 +30,13 @@ const RangeBar = ({ lowest, highest, globalMin, globalMax }: RangeBarProps) => {
       />
       {/* Low marker */}
       <div
-        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-primary"
+        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-accent"
         style={{ left: `${leftPercent}%` }}
         title={`Low: ${formatCurrency(lowest)}`}
       />
       {/* High marker */}
       <div
-        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-primary"
+        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-accent"
         style={{ left: `${leftPercent + widthPercent}%` }}
         title={`High: ${formatCurrency(highest)}`}
       />
@@ -69,10 +68,10 @@ const RangeSection = ({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Chip size="sm" variant="flat" className="rounded-full font-medium">
+        <Chip size="sm" variant="primary" className="font-medium">
           {label}
         </Chip>
-        <span className="text-default-400 text-xs">
+        <span className="text-muted text-xs">
           Spread: {formatCurrency(spread)}
         </span>
       </div>
@@ -88,12 +87,12 @@ const RangeSection = ({
         {/* Low value */}
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-primary" />
-            <span className="text-default-500 text-xs uppercase tracking-wider">
+            <div className="h-2 w-2 rounded-full bg-accent" />
+            <span className="text-muted text-xs uppercase tracking-wider">
               Low
             </span>
           </div>
-          <span className="font-semibold text-lg text-primary tabular-nums">
+          <span className="font-semibold text-accent text-lg tabular-nums">
             {formatCurrency(lowest)}
           </span>
           {lowestDate && (
@@ -106,12 +105,12 @@ const RangeSection = ({
         {/* High value */}
         <div className="flex flex-col gap-1 text-right">
           <div className="flex items-center justify-end gap-2">
-            <span className="text-default-500 text-xs uppercase tracking-wider">
+            <span className="text-muted text-xs uppercase tracking-wider">
               High
             </span>
-            <div className="h-2 w-2 rounded-full bg-primary" />
+            <div className="h-2 w-2 rounded-full bg-accent" />
           </div>
-          <span className="font-semibold text-lg text-primary tabular-nums">
+          <span className="font-semibold text-accent text-lg tabular-nums">
             {formatCurrency(highest)}
           </span>
           {highestDate && (
@@ -147,17 +146,17 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
         return (
           <Card
             key={stat.category}
-            className="group relative overflow-hidden rounded-2xl p-3 transition-shadow duration-300 hover:shadow-lg"
+            className="group relative overflow-hidden transition-shadow duration-300 hover:shadow-lg"
           >
             {/* Accent bar at top */}
-            <div className="absolute top-0 right-0 left-0 h-1 bg-primary" />
+            <div className="absolute top-0 right-0 left-0 h-1 bg-accent" />
 
-            <CardHeader className="flex flex-col items-start gap-1 pt-4">
+            <Card.Header className="flex flex-col items-start gap-1">
               <Typography.H4>{stat.category}</Typography.H4>
               <Typography.Caption>Premium range analysis</Typography.Caption>
-            </CardHeader>
+            </Card.Header>
 
-            <CardBody className="flex flex-col gap-6 pt-0">
+            <Card.Content className="flex flex-col gap-6">
               {/* YTD Range */}
               {stat.ytd ? (
                 <RangeSection
@@ -173,18 +172,18 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
                 <div className="flex flex-col gap-2">
                   <Chip
                     size="sm"
-                    variant="flat"
+                    variant="primary"
                     className="rounded-full font-medium"
                   >
                     {currentYear} YTD
                   </Chip>
-                  <Typography.TextSm className="text-default-400">
+                  <Typography.TextSm className="text-muted">
                     No data available for {currentYear}
                   </Typography.TextSm>
                 </div>
               )}
 
-              {/* Divider */}
+              {/* Separator */}
               <div className="h-px bg-divider" />
 
               {/* All-time Range */}
@@ -197,7 +196,7 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
                 globalMin={globalMin}
                 globalMax={globalMax}
               />
-            </CardBody>
+            </Card.Content>
           </Card>
         );
       })}

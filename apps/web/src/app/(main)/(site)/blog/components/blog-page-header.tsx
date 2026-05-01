@@ -18,7 +18,7 @@ export function BlogPageHeader({ title, description }: BlogPageHeaderProps) {
       animate="visible"
     >
       <Typography.H1>{title}</Typography.H1>
-      <Typography.TextLg className="text-default-600">
+      <Typography.TextLg className="text-muted">
         {description}
       </Typography.TextLg>
     </motion.div>

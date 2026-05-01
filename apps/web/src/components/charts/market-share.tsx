@@ -6,7 +6,7 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
+} from "@web/components/charts/chart";
 import { ChartWidget } from "@web/components/charts/widget";
 import { formatNumber } from "@web/utils/charts";
 import { useMemo } from "react";
@@ -95,7 +95,7 @@ export function MarketShareDonut({
                     className="size-4 shrink-0 rounded-full"
                     style={{ backgroundColor: item.colour }}
                   />
-                  <span className="truncate text-default-600">{item.name}</span>
+                  <span className="truncate text-muted">{item.name}</span>
                 </div>
                 <span className="font-medium text-foreground">
                   {item.value}

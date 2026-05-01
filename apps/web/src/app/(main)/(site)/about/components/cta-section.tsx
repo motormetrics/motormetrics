@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/button";
+import { Button } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
@@ -27,11 +28,11 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Label className="text-primary uppercase tracking-widest">
+            <Typography.Label className="text-accent uppercase tracking-widest">
               Stay Updated
             </Typography.Label>
             <Typography.H2>Follow for the Latest Updates</Typography.H2>
-            <Typography.TextLg className="max-w-xl text-default-600">
+            <Typography.TextLg className="max-w-xl text-muted">
               Get notified when new COE results, car registration data, and
               market insights are published.
             </Typography.TextLg>
@@ -43,18 +44,16 @@ export function CtaSection() {
             variants={staggerItemVariants}
           >
             {navLinks.socialMedia.map(({ title, url, icon: Icon }) => (
-              <Button
+              <a
                 key={title}
-                as="a"
                 href={url}
                 rel="me noreferrer"
                 target="_blank"
-                variant="bordered"
-                className="gap-2 rounded-full border-default-300 px-5 text-foreground transition-all hover:border-primary hover:bg-primary/5"
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-border px-5 font-medium text-foreground text-sm transition-all hover:border-accent hover:bg-accent/5"
               >
                 <Icon className="size-4" />
                 <span>{title}</span>
-              </Button>
+              </a>
             ))}
           </motion.div>
 
@@ -63,27 +62,25 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 pt-4 sm:flex-row sm:gap-6"
             variants={staggerItemVariants}
           >
-            <Button
-              as={Link}
-              href="/"
-              color="primary"
-              radius="full"
-              size="lg"
-              className="gap-2 px-8"
-            >
-              Explore the Dashboard
-              <ArrowRight className="size-4" />
-            </Button>
-            <Button
-              as={Link}
-              href="/blog"
-              variant="bordered"
-              radius="full"
-              size="lg"
-              className="gap-2 px-8 text-foreground"
-            >
-              Read Market Insights
-            </Button>
+            <Link href="/" className="no-underline">
+              <Button
+                variant="primary"
+                size="lg"
+                className="gap-2 rounded-full px-8"
+              >
+                Explore the Dashboard
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+            <Link href="/blog" className="no-underline">
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-2 rounded-full px-8 text-foreground"
+              >
+                Read Market Insights
+              </Button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

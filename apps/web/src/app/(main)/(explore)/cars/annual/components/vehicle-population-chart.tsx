@@ -1,18 +1,6 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
-import {
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-} from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
+import { Card, cn } from "@heroui/react";
 import {
   FUEL_GROUP_COLORS,
   FUEL_GROUP_MAP,
@@ -20,6 +8,16 @@ import {
 } from "@web/app/(main)/(explore)/cars/annual/constants";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import { searchParams } from "@web/app/(main)/(explore)/cars/annual/search-params";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@web/components/charts/chart";
+import {
+  CHART_CURSOR,
+  CHART_GRID,
+  CHART_HEIGHTS,
+} from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { useQueryStates } from "nuqs";
 import { useMemo } from "react";
@@ -74,7 +72,8 @@ export function VehiclePopulationChart({
         });
       }
 
-      const entry = yearMap.get(record.year)!;
+      const entry = yearMap.get(record.year);
+      if (!entry) continue;
       const group = FUEL_GROUP_MAP[record.fuelType] ?? "Others";
       entry[group] = (entry[group] as number) + record.total;
     }
@@ -110,15 +109,15 @@ export function VehiclePopulationChart({
   };
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Vehicle Population by Fuel Type</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           {numberFormatter.format(selectedYearTotal)} vehicles on the road in{" "}
           {effectiveYear}
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer
           config={chartConfig}
           className={cn(CHART_HEIGHTS.tall, "w-full")}
@@ -163,13 +162,13 @@ export function VehiclePopulationChart({
             ))}
           </BarChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
-        <Typography.TextSm className="text-default-500">
+      </Card.Content>
+      <Card.Footer>
+        <Typography.TextSm className="text-muted">
           Click on a bar to select a year. Hybrid includes Petrol-Electric,
           Plug-In, and Diesel-Electric vehicles.
         </Typography.TextSm>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

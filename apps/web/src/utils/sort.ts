@@ -1,4 +1,4 @@
-import type { SortDescriptor } from "@heroui/table";
+import type { SortDescriptor } from "@heroui/react";
 import { SortDirection, sortByName, sortByValue } from "@motormetrics/utils";
 
 export function sortByDescriptor<T extends Record<string, unknown>>(

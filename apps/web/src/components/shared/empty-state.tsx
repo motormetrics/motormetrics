@@ -24,8 +24,8 @@ export function EmptyState({
   className,
 }: EmptyStateProps) {
   const defaultIcon = (
-    <div className="flex size-16 items-center justify-center rounded-2xl bg-default-100">
-      <FileQuestion className="size-8 text-default-400" />
+    <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
+      <FileQuestion className="size-8 text-muted" />
     </div>
   );
 
@@ -35,7 +35,7 @@ export function EmptyState({
 
       <div className="flex flex-col items-center gap-2 text-center">
         <Typography.H3>{title}</Typography.H3>
-        <Typography.TextSm className="max-w-sm text-default-500">
+        <Typography.TextSm className="max-w-sm text-muted">
           {description}
         </Typography.TextSm>
       </div>

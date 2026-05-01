@@ -7,7 +7,7 @@ export function ProgressBar() {
 
   return (
     <motion.div
-      className="fixed inset-x-0 top-16 z-20 h-1 origin-[0%] bg-primary"
+      className="fixed inset-x-0 top-16 z-20 h-1 origin-[0%] bg-accent"
       style={{
         scaleX: scrollYProgress,
       }}

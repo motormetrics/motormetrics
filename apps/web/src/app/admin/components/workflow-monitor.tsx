@@ -1,14 +1,6 @@
 "use client";
 
-import { Badge } from "@motormetrics/ui/components/badge";
-import { Button } from "@motormetrics/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
+import { Button, Card, Chip } from "@heroui/react";
 import { Loader2, Play, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -65,19 +57,20 @@ interface WorkflowState {
   triggering: boolean;
 }
 
-function getStatusVariant(
-  status: WorkflowStatus,
-): "default" | "secondary" | "destructive" | "outline" {
+function getStatusVariant(status: WorkflowStatus): {
+  color: "default" | "success" | "warning" | "danger";
+  variant: "primary" | "secondary";
+} {
   switch (status) {
     case "completed":
-      return "default";
+      return { color: "success", variant: "primary" };
     case "running":
     case "pending":
-      return "secondary";
+      return { color: "warning", variant: "secondary" };
     case "failed":
-      return "destructive";
+      return { color: "danger", variant: "primary" };
     case "cancelled":
-      return "outline";
+      return { color: "default", variant: "secondary" };
   }
 }
 
@@ -91,7 +84,7 @@ export function WorkflowMonitor() {
   const [polling, setPolling] = useState(false);
 
   const checkRunStatus = useCallback(
-    async (workflowId: string, runId: string) => {
+    async (_workflowId: string, runId: string) => {
       try {
         const response = await fetch(
           `/api/admin/workflows?runId=${encodeURIComponent(runId)}`,
@@ -200,19 +193,19 @@ export function WorkflowMonitor() {
 
   return (
     <Card>
-      <CardHeader>
+      <Card.Header>
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <CardTitle>Workflow Monitor</CardTitle>
-            <CardDescription>
+            <Card.Title>Workflow Monitor</Card.Title>
+            <Card.Description>
               Trigger and monitor data update workflows
-            </CardDescription>
+            </Card.Description>
           </div>
           <Button
             variant="outline"
             size="sm"
-            onClick={refreshAll}
-            disabled={polling}
+            onPress={refreshAll}
+            isDisabled={polling}
           >
             <RefreshCw
               className={`mr-2 size-4 ${polling ? "animate-spin" : ""}`}
@@ -220,8 +213,8 @@ export function WorkflowMonitor() {
             Refresh
           </Button>
         </div>
-      </CardHeader>
-      <CardContent>
+      </Card.Header>
+      <Card.Content>
         <div className="flex flex-col gap-3">
           {WORKFLOW_TYPES.map((workflow) => {
             const state = workflows[workflow.id];
@@ -233,17 +226,21 @@ export function WorkflowMonitor() {
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-sm">{workflow.name}</span>
-                    {state?.lastRun && (
-                      <Badge variant={getStatusVariant(state.lastRun.status)}>
-                        {state.lastRun.status}
-                      </Badge>
-                    )}
+                    {state?.lastRun &&
+                      (() => {
+                        const statusVariant = getStatusVariant(
+                          state.lastRun.status,
+                        );
+                        return (
+                          <Chip {...statusVariant}>{state.lastRun.status}</Chip>
+                        );
+                      })()}
                   </div>
-                  <span className="text-muted-foreground text-xs">
+                  <span className="text-muted text-xs">
                     {workflow.description}
                   </span>
                   {state?.lastRun?.completedAt && (
-                    <span className="text-muted-foreground text-xs">
+                    <span className="text-muted text-xs">
                       Completed:{" "}
                       {new Date(state.lastRun.completedAt).toLocaleString()}
                     </span>
@@ -252,8 +249,8 @@ export function WorkflowMonitor() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => triggerWorkflow(workflow.id)}
-                  disabled={
+                  onPress={() => triggerWorkflow(workflow.id)}
+                  isDisabled={
                     state?.triggering || state?.lastRun?.status === "running"
                   }
                 >
@@ -270,7 +267,7 @@ export function WorkflowMonitor() {
             );
           })}
         </div>
-      </CardContent>
+      </Card.Content>
     </Card>
   );
 }

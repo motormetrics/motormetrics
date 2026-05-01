@@ -1,10 +1,8 @@
 "use client";
 
-import { cn } from "@heroui/theme";
-import {
-  type ChartConfig,
-  ChartContainer,
-} from "@motormetrics/ui/components/chart";
+import { cn } from "@heroui/react";
+
+import { type ChartConfig, ChartContainer } from "@web/components/charts/chart";
 import { Area, AreaChart } from "recharts";
 
 interface SparklineData {
@@ -18,7 +16,7 @@ interface SparklineProps {
   colour?: string;
 }
 
-const DEFAULT_COLOUR = "hsl(var(--heroui-primary))";
+const DEFAULT_COLOUR = "var(--accent)";
 
 export function Sparkline({
   data,

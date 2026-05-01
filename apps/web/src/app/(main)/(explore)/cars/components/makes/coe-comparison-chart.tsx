@@ -1,5 +1,7 @@
 "use client";
 
+import { formatDateToMonthYear } from "@motormetrics/utils";
+import { numberFormat } from "@ruchernchong/number-format";
 import {
   type ChartConfig,
   ChartContainer,
@@ -7,9 +9,7 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { formatDateToMonthYear } from "@motormetrics/utils";
-import { numberFormat } from "@ruchernchong/number-format";
+} from "@web/components/charts/chart";
 import type { MakeCoeComparisonData } from "@web/queries/cars/makes/coe-comparison";
 import {
   Bar,
@@ -51,7 +51,7 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
         <CartesianGrid
           vertical={false}
           strokeDasharray="3 3"
-          className="stroke-default-200"
+          className="stroke-border"
         />
         <XAxis
           dataKey="month"
@@ -88,7 +88,7 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
         </YAxis>
 
         <ChartTooltip
-          cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+          cursor={{ fill: "var(--muted)", opacity: 0.2 }}
           content={<ChartTooltipContent />}
         />
 

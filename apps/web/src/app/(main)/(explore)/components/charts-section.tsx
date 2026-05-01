@@ -1,10 +1,7 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Skeleton } from "@heroui/skeleton";
+import { Button, Card, Link, Skeleton } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import { Suspense } from "react";
 
 async function YearlyChartContent() {
@@ -12,17 +9,17 @@ async function YearlyChartContent() {
   const maxTotal = yearlyData.reduce((max, d) => Math.max(max, d.total), 0);
 
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <div>
             <Typography.H3>Yearly Registrations</Typography.H3>
-            <p className="text-default-500 text-sm">
+            <p className="text-muted text-sm">
               Total registrations over the years
             </p>
           </div>
           <Link href="/cars/annual">
-            <Button isIconOnly variant="flat" radius="full" tabIndex={-1}>
+            <Button isIconOnly variant="tertiary">
               <ArrowUpRight className="size-6" />
             </Button>
           </Link>
@@ -36,19 +33,19 @@ async function YearlyChartContent() {
                 key={item.year}
                 className="flex flex-1 flex-col items-center gap-2"
               >
-                <span className="font-medium text-default-500 text-xs tabular-nums">
+                <span className="font-medium text-muted text-xs tabular-nums">
                   {(item.total / 1000).toFixed(1)}K
                 </span>
                 <div
-                  className={`w-full rounded-t-xl transition-colors ${isLatest ? "bg-[var(--chart-1)]" : "bg-default-200 hover:bg-default-300"}`}
+                  className={`w-full rounded-t-xl transition-colors ${isLatest ? "bg-[var(--chart-1)]" : "bg-default hover:bg-default"}`}
                   style={{ height: `${height}px` }}
                 />
-                <span className="text-default-500 text-xs">{item.year}</span>
+                <span className="text-muted text-xs">{item.year}</span>
               </div>
             );
           })}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
@@ -58,12 +55,12 @@ async function TopMakesContent() {
   const maxValue = topMakes[0]?.value ?? 1;
 
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <Typography.H3>Top Makes</Typography.H3>
           <Link href="/cars/makes">
-            <Button isIconOnly variant="flat" radius="full" tabIndex={-1}>
+            <Button isIconOnly variant="tertiary">
               <ArrowUpRight className="size-6" />
             </Button>
           </Link>
@@ -71,17 +68,17 @@ async function TopMakesContent() {
         <div className="flex flex-col gap-4">
           {topMakes.slice(0, 5).map((item, i) => (
             <div key={item.make} className="flex items-center gap-4">
-              <span className="w-5 font-medium text-default-500 text-sm">
+              <span className="w-5 font-medium text-muted text-sm">
                 {i + 1}
               </span>
               <div className="flex-1">
                 <div className="mb-1 flex items-center justify-between">
                   <span className="font-medium text-sm">{item.make}</span>
-                  <span className="text-default-500 text-xs tabular-nums">
+                  <span className="text-muted text-xs tabular-nums">
                     {item.value.toLocaleString()}
                   </span>
                 </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-default-100">
+                <div className="h-1.5 overflow-hidden rounded-full bg-default">
                   <div
                     className="h-full rounded-full transition-all"
                     style={{
@@ -94,15 +91,15 @@ async function TopMakesContent() {
             </div>
           ))}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
 
 function YearlyChartSkeleton() {
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content>
         <Skeleton className="mb-5 h-6 w-40 rounded-lg" />
         <div className="flex h-[160px] items-end gap-4">
           {[0, 1, 2, 3, 4, 5].map((num) => (
@@ -113,15 +110,15 @@ function YearlyChartSkeleton() {
             </div>
           ))}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
 
 function TopMakesSkeleton() {
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content>
         <Skeleton className="mb-5 h-6 w-24 rounded-lg" />
         <div className="flex flex-col gap-4">
           {[0, 1, 2, 3, 4].map((num) => (
@@ -134,7 +131,7 @@ function TopMakesSkeleton() {
             </div>
           ))}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

@@ -98,8 +98,8 @@ describe("ChartWidget", () => {
     );
 
     expect(
-      screen.getByText("Styled Chart").closest(".rounded-3xl"),
-    ).toHaveClass("rounded-3xl");
+      screen.getByText("Styled Chart").closest("[data-slot='card']"),
+    ).toHaveClass("shadow-md");
     expect(screen.getByText("No data available").closest("div")).toHaveClass(
       "h-[400px]",
     );

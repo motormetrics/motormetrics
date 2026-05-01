@@ -5,40 +5,21 @@ import { NotificationPrompt } from "./notification-prompt";
 const mockSetNotificationStatus = vi.fn();
 let mockNotificationStatus: "default" | "granted" | "denied" = "default";
 
-vi.mock("@heroui/alert", async () => {
-  const actual = await vi.importActual("@heroui/alert");
-  return {
-    ...actual,
-    Alert: ({
-      title,
-      description,
-      endContent,
-      onClose,
-      children,
-    }: {
-      title?: string;
-      description?: string;
-      endContent?: React.ReactNode;
-      onClose?: () => void;
-      children?: React.ReactNode;
-    }) => (
-      <div data-testid="alert">
-        <div data-testid="alert-title">{title}</div>
-        <div data-testid="alert-description">{description}</div>
-        <div data-testid="alert-endcontent">{endContent}</div>
-        <button type="button" data-testid="alert-close" onClick={onClose}>
-          close
-        </button>
-        {children}
-      </div>
-    ),
-  };
-});
+vi.mock("@heroui/react", () => {
+  const Alert = ({ children }: { children?: React.ReactNode }) => (
+    <div data-testid="alert">{children}</div>
+  );
+  Alert.Indicator = () => null;
+  Alert.Content = ({ children }: { children?: React.ReactNode }) => children;
+  Alert.Title = ({ children }: { children?: React.ReactNode }) => (
+    <div data-testid="alert-title">{children}</div>
+  );
+  Alert.Description = ({ children }: { children?: React.ReactNode }) => (
+    <div data-testid="alert-description">{children}</div>
+  );
 
-vi.mock("@heroui/button", async () => {
-  const actual = await vi.importActual("@heroui/button");
   return {
-    ...actual,
+    Alert,
     Button: ({
       onPress,
       children,
@@ -50,14 +31,13 @@ vi.mock("@heroui/button", async () => {
         {children}
       </button>
     ),
-  };
-});
-
-vi.mock("@heroui/toast", async () => {
-  const actual = await vi.importActual("@heroui/toast");
-  return {
-    ...actual,
-    addToast: vi.fn(),
+    CloseButton: ({ onPress }: { onPress?: () => void }) => (
+      <button type="button" data-testid="alert-close" onClick={onPress}>
+        close
+      </button>
+    ),
+    cn: (...classes: unknown[]) => classes.flat().filter(Boolean).join(" "),
+    toast: { success: vi.fn(), warning: vi.fn() },
   };
 });
 
@@ -160,7 +140,7 @@ describe("NotificationPrompt Component", () => {
 
   it("should not sync permission when Notification API is unavailable", () => {
     const original = global.Notification;
-    delete (global as any).Notification;
+    delete (global as Partial<typeof globalThis>).Notification;
 
     render(<NotificationPrompt />);
     expect(mockSetNotificationStatus).not.toHaveBeenCalled();

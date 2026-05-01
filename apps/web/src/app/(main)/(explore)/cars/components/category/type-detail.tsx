@@ -1,6 +1,5 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
+import { Card, Chip, Link } from "@heroui/react";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CarOverviewTrends } from "@web/app/(main)/(explore)/cars/registrations/components/overview-trends";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
@@ -181,28 +180,28 @@ async function TypeDetailContent({
         {cars.total > 0
           ? `${displayName} vehicles accounted for ${cars.total.toLocaleString()} registrations in ${formattedMonth}.`
           : `No ${displayName} vehicle registrations were recorded in ${formattedMonth}.`}{" "}
-        <a
+        <Link
           href={`/cars/${config.category}`}
-          className="text-primary hover:underline"
+          className="text-accent hover:underline"
         >
           View all{" "}
           {config.category === "fuel-types" ? "fuel types" : "vehicle types"}{" "}
           &rarr;
-        </a>
+        </Link>
       </Typography.Text>
 
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <Card className="rounded-2xl bg-content1 p-4">
-            <CardHeader className="flex flex-row items-center justify-between gap-2">
+          <Card className="bg-surface">
+            <Card.Header className="flex flex-row items-center justify-between gap-2">
               <Typography.H4>Registrations</Typography.H4>
-              <Chip size="sm" variant="flat">
+              <Chip size="sm" variant="primary">
                 {formattedMonth}
               </Chip>
-            </CardHeader>
-            <CardBody className="font-bold text-4xl text-primary">
+            </Card.Header>
+            <Card.Content className="font-bold text-4xl text-accent">
               <AnimatedNumber value={cars.total} />
-            </CardBody>
+            </Card.Content>
           </Card>
         </div>
       </div>

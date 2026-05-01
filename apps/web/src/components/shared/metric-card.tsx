@@ -1,9 +1,9 @@
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
-import { CARD_VARIANTS, type CardVariant } from "@motormetrics/theme/spacing";
+import { Card, cn } from "@heroui/react";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { MetricsComparison } from "@web/components/metrics-comparison";
 import Typography from "@web/components/typography";
+
+type MetricCardVariant = "default" | "hero" | "metric";
 
 interface MetricCardProps {
   title: string;
@@ -11,15 +11,15 @@ interface MetricCardProps {
   current: number;
   previousMonth: number;
   /** Card styling variant */
-  variant?: CardVariant;
+  variant?: MetricCardVariant;
   /** Additional className for the card */
   className?: string;
 }
 
 const variantStyles = {
-  default: "p-3",
-  hero: "p-6 border-l-4 border-primary",
-  metric: "p-3",
+  default: "",
+  hero: "border-l-4 border-accent",
+  metric: "transition-shadow hover:shadow-sm",
 } as const;
 
 export function MetricCard({
@@ -31,27 +31,25 @@ export function MetricCard({
   className,
 }: MetricCardProps) {
   return (
-    <Card
-      className={cn(CARD_VARIANTS[variant], variantStyles[variant], className)}
-    >
-      <CardHeader>
+    <Card className={cn(variantStyles[variant], className)}>
+      <Card.Header>
         <Typography.H4>{title}</Typography.H4>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <div
           className={cn(
             "font-semibold tabular-nums",
             variant === "hero"
-              ? "text-5xl text-primary"
-              : "text-4xl text-primary",
+              ? "text-5xl text-accent"
+              : "text-4xl text-accent",
           )}
         >
           <AnimatedNumber value={value} />
         </div>
-      </CardBody>
-      <CardFooter>
+      </Card.Content>
+      <Card.Footer>
         <MetricsComparison current={current} previousMonth={previousMonth} />
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

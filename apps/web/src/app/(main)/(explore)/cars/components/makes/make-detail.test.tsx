@@ -28,7 +28,7 @@ vi.mock(
   }),
 );
 
-vi.mock("@motormetrics/ui/components/data-table", () => ({
+vi.mock("@web/components/tables/data-table", () => ({
   DataTable: () => <div>DataTable</div>,
 }));
 

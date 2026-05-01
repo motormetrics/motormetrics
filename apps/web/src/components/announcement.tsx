@@ -1,6 +1,7 @@
 "use client";
 
-import { Alert } from "@heroui/alert";
+import { Alert } from "@heroui/react";
+
 import { announcements } from "@web/config";
 import { usePathname } from "next/navigation";
 
@@ -31,10 +32,14 @@ export function Announcement() {
 
   return (
     <Alert
-      color="primary"
-      radius="none"
-      variant="solid"
-      title={activeAnnouncement.content}
-    />
+      className="rounded-none bg-accent text-accent-foreground"
+      status="accent"
+    >
+      <Alert.Content>
+        <Alert.Title className="text-accent-foreground">
+          {activeAnnouncement.content}
+        </Alert.Title>
+      </Alert.Content>
+    </Alert>
   );
 }

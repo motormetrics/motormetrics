@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/chip";
+import { Chip } from "@heroui/react";
 import { slugify } from "@motormetrics/utils";
 import type { Make, MakeStats } from "@web/types";
 import { TrendingUp } from "lucide-react";
@@ -23,14 +23,14 @@ export function PopularMakes({
     <section className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
-          <div className="flex size-7 items-center justify-center rounded-lg bg-primary">
-            <TrendingUp className="size-4 text-primary-foreground" />
+          <div className="flex size-7 items-center justify-center rounded-lg bg-accent">
+            <TrendingUp className="size-4 text-accent-foreground" />
           </div>
           <h2 className="font-semibold text-foreground text-lg">
             Popular Makes
           </h2>
         </div>
-        <Chip variant="flat" color="primary" size="sm">
+        <Chip variant="primary" color="accent" size="sm">
           Top {makes.length}
         </Chip>
       </div>

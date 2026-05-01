@@ -1,18 +1,9 @@
 "use client";
 
-import { Pagination } from "@heroui/pagination";
-import {
-  type SortDescriptor,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@heroui/table";
+import { Pagination, type SortDescriptor, Table } from "@heroui/react";
+
 import { Currency } from "@web/components/shared/currency";
 import type { Pqp } from "@web/types/coe";
-import { ArrowUpDown } from "lucide-react";
 import { type Key, useCallback, useMemo, useState } from "react";
 
 interface DataTableProps {
@@ -77,40 +68,77 @@ export function DataTable({ rows, columns, rowsPerPage = 10 }: DataTableProps) {
   }, []);
 
   return (
-    <Table
-      sortDescriptor={sortDescriptor}
-      sortIcon={<ArrowUpDown size={16} />}
-      bottomContent={
+    <Table>
+      <Table.ScrollContainer>
+        <Table.Content
+          sortDescriptor={sortDescriptor}
+          onSortChange={setSortDescriptor}
+        >
+          <Table.Header>
+            {columns.map((column, index) => (
+              <Table.Column
+                key={column.key}
+                id={column.key}
+                isRowHeader={index === 0}
+                allowsSorting={column.sortable}
+              >
+                {column.label}
+              </Table.Column>
+            ))}
+          </Table.Header>
+          <Table.Body>
+            {sortedItems.map((item) => (
+              <Table.Row key={item.key} id={item.key}>
+                {columns.map((column) => (
+                  <Table.Cell key={column.key}>
+                    {renderCell(item, column.key)}
+                  </Table.Cell>
+                ))}
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Content>
+      </Table.ScrollContainer>
+      <Table.Footer>
         <div className="flex w-full justify-center">
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            page={page}
-            total={pages}
-            onChange={setPage}
-          />
+          <Pagination size="sm">
+            <Pagination.Content>
+              <Pagination.Item>
+                <Pagination.Previous
+                  isDisabled={page === 1}
+                  onPress={() => setPage((current) => Math.max(current - 1, 1))}
+                >
+                  <Pagination.PreviousIcon />
+                  Prev
+                </Pagination.Previous>
+              </Pagination.Item>
+              {Array.from({ length: pages }, (_, index) => index + 1).map(
+                (pageNumber) => (
+                  <Pagination.Item key={pageNumber}>
+                    <Pagination.Link
+                      isActive={pageNumber === page}
+                      onPress={() => setPage(pageNumber)}
+                    >
+                      {pageNumber}
+                    </Pagination.Link>
+                  </Pagination.Item>
+                ),
+              )}
+              <Pagination.Item>
+                <Pagination.Next
+                  isDisabled={page === pages}
+                  onPress={() =>
+                    setPage((current) => Math.min(current + 1, pages))
+                  }
+                >
+                  Next
+                  <Pagination.NextIcon />
+                </Pagination.Next>
+              </Pagination.Item>
+            </Pagination.Content>
+          </Pagination>
         </div>
-      }
-      bottomContentPlacement="outside"
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn key={column.key} allowsSorting={column.sortable}>
-            {column.label}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.key}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
+      </Table.Footer>
     </Table>
   );
 }

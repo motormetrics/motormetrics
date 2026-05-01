@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
-import { Link } from "@heroui/link";
+import { Card, Link } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
@@ -16,9 +16,9 @@ const navItems = [
     description: "Common questions about COE, PARF, and car registration",
     href: "#faq",
     icon: HelpCircle,
-    iconColor: "text-primary",
-    containerBg: "bg-primary/10",
-    hoverBorder: "hover:border-primary/30",
+    iconColor: "text-accent",
+    containerBg: "bg-accent/10",
+    hoverBorder: "hover:border-accent/30",
   },
   {
     title: "Glossary",
@@ -34,9 +34,9 @@ const navItems = [
     description: "Where our data comes from and how it's updated",
     href: "#data-sources",
     icon: Database,
-    iconColor: "text-secondary",
-    containerBg: "bg-secondary/10",
-    hoverBorder: "hover:border-secondary/30",
+    iconColor: "text-muted",
+    containerBg: "bg-muted/10",
+    hoverBorder: "hover:border-muted/30",
   },
   {
     title: "Guides",
@@ -68,14 +68,12 @@ export function QuickNavSection() {
             >
               <Link
                 href={item.href}
-                color="foreground"
-                underline="none"
-                className="block h-full"
+                className="block h-full text-foreground no-underline"
               >
                 <Card
-                  className={`h-full border-default-200/80 p-3 transition-all duration-500 ${item.hoverBorder} hover:shadow-lg hover:shadow-primary/5`}
+                  className={`h-full border-border/80 transition-all duration-500 ${item.hoverBorder} hover:shadow-accent/5 hover:shadow-lg`}
                 >
-                  <CardBody className="flex flex-col gap-4 p-6">
+                  <Card.Content className="flex flex-col gap-4">
                     <div
                       className={`flex size-12 items-center justify-center rounded-xl ${item.containerBg} transition-colors`}
                     >
@@ -85,7 +83,7 @@ export function QuickNavSection() {
                       <Typography.H4>{item.title}</Typography.H4>
                       <Typography.TextSm>{item.description}</Typography.TextSm>
                     </div>
-                  </CardBody>
+                  </Card.Content>
                 </Card>
               </Link>
             </motion.div>

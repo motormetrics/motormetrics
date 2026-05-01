@@ -1,5 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
 import type { SelectCarCost } from "@motormetrics/database";
 import { formatCurrency } from "@motormetrics/utils";
 import {
@@ -25,9 +24,9 @@ function RangeBar({ lowest, highest, globalMin, globalMax }: RangeBarProps) {
   const widthPercent = range > 0 ? ((highest - lowest) / range) * 100 : 100;
 
   return (
-    <div className="relative h-2 w-full rounded-full bg-default-100">
+    <div className="relative h-2 w-full rounded-full bg-default">
       <div
-        className="absolute h-full rounded-full bg-primary/30 transition-all duration-500 ease-out"
+        className="absolute h-full rounded-full bg-accent/30 transition-all duration-500 ease-out"
         style={{
           left: `${leftPercent}%`,
           width: `${Math.max(widthPercent, 2)}%`,
@@ -35,13 +34,13 @@ function RangeBar({ lowest, highest, globalMin, globalMax }: RangeBarProps) {
       />
       {/* Low marker */}
       <div
-        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-primary"
+        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-accent"
         style={{ left: `${leftPercent}%` }}
         title={`Low: ${formatCurrency(lowest)}`}
       />
       {/* High marker */}
       <div
-        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-primary"
+        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-accent"
         style={{ left: `${leftPercent + widthPercent}%` }}
         title={`High: ${formatCurrency(highest)}`}
       />
@@ -71,10 +70,10 @@ function RangeSection({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Chip size="sm" variant="flat" className="rounded-full font-medium">
+        <Chip size="sm" variant="primary" className="font-medium">
           Price Range
         </Chip>
-        <span className="text-default-400 text-xs">
+        <span className="text-muted text-xs">
           Spread: {formatCurrency(spread)}
         </span>
       </div>
@@ -90,12 +89,12 @@ function RangeSection({
         {/* Low value */}
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-primary" />
-            <span className="text-default-500 text-xs uppercase tracking-wider">
+            <div className="h-2 w-2 rounded-full bg-accent" />
+            <span className="text-muted text-xs uppercase tracking-wider">
               Low
             </span>
           </div>
-          <span className="font-semibold text-lg text-primary tabular-nums">
+          <span className="font-semibold text-accent text-lg tabular-nums">
             {formatCurrency(lowestPrice)}
           </span>
           <Typography.Caption>{lowestModel}</Typography.Caption>
@@ -104,12 +103,12 @@ function RangeSection({
         {/* High value */}
         <div className="flex flex-col gap-1 text-right">
           <div className="flex items-center justify-end gap-2">
-            <span className="text-default-500 text-xs uppercase tracking-wider">
+            <span className="text-muted text-xs uppercase tracking-wider">
               High
             </span>
-            <div className="h-2 w-2 rounded-full bg-primary" />
+            <div className="h-2 w-2 rounded-full bg-accent" />
           </div>
-          <span className="font-semibold text-lg text-primary tabular-nums">
+          <span className="font-semibold text-accent text-lg tabular-nums">
             {formatCurrency(highestPrice)}
           </span>
           <Typography.Caption>{highestModel}</Typography.Caption>
@@ -170,21 +169,21 @@ export function CostRangeCard({ data }: CostRangeCardProps) {
       {groups.map((group) => (
         <Card
           key={group.fuelType}
-          className="group relative overflow-hidden rounded-2xl p-3 transition-shadow duration-300 hover:shadow-lg"
+          className="group relative overflow-hidden transition-shadow duration-300 hover:shadow-lg"
         >
           {/* Accent bar at top */}
-          <div className="absolute top-0 right-0 left-0 h-1 bg-primary" />
+          <div className="absolute top-0 right-0 left-0 h-1 bg-accent" />
 
-          <CardHeader className="flex flex-col items-start gap-1 pt-4">
+          <Card.Header className="flex flex-col items-start gap-1">
             <Typography.H4>
               {FUEL_TYPE_LABELS[group.fuelType] ?? group.fuelType}
             </Typography.H4>
             <Typography.Caption>
               Selling price range (w/ COE)
             </Typography.Caption>
-          </CardHeader>
+          </Card.Header>
 
-          <CardBody className="flex flex-col gap-6 pt-0">
+          <Card.Content className="flex flex-col gap-6">
             <RangeSection
               lowestModel={group.lowestModel}
               lowestPrice={group.lowestPrice}
@@ -193,7 +192,7 @@ export function CostRangeCard({ data }: CostRangeCardProps) {
               globalMin={globalMin}
               globalMax={globalMax}
             />
-          </CardBody>
+          </Card.Content>
         </Card>
       ))}
     </>

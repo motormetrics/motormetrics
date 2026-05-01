@@ -1,5 +1,4 @@
-import { Card, CardBody } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
 import type { KeyInsight } from "@web/lib/coe/calculations";
 import {
   ArrowDownIcon,
@@ -38,9 +37,9 @@ const getInsightColor = (insight: KeyInsight) => {
     case "record":
       return "warning";
     case "demand":
-      return "secondary";
+      return "default";
     default:
-      return "primary";
+      return "accent";
   }
 };
 
@@ -50,10 +49,10 @@ export function KeyInsights({ insights }: KeyInsightsProps) {
   }
 
   return (
-    <Card className="overflow-hidden p-3">
-      <CardBody>
+    <Card className="overflow-hidden">
+      <Card.Content>
         <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2 text-primary">
+          <div className="flex items-center gap-2 text-accent">
             <TrendingUpIcon className="size-4" />
             <span className="font-semibold">Key Insights</span>
           </div>
@@ -63,14 +62,14 @@ export function KeyInsights({ insights }: KeyInsightsProps) {
               <Chip
                 key={`${insight.type}-${insight.category}-${index}`}
                 color={getInsightColor(insight)}
-                startContent={getInsightIcon(insight)}
               >
+                {getInsightIcon(insight)}
                 {insight.message}
               </Chip>
             ))}
           </div>
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

@@ -1,7 +1,5 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card } from "@heroui/react";
 import type { SelectCarCost } from "@motormetrics/database";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { formatCurrency } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 
@@ -42,21 +40,18 @@ export function CostMetrics({ data }: CostMetricsProps) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {metrics.map((metric) => (
-        <Card
-          key={metric.title}
-          className={cn(RADIUS.card, CARD_PADDING.standard)}
-        >
-          <CardHeader>
+        <Card key={metric.title}>
+          <Card.Header>
             <Typography.H4>{metric.title}</Typography.H4>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-2">
-            <span className="font-bold text-4xl text-primary tabular-nums">
+          </Card.Header>
+          <Card.Content className="flex flex-col gap-2">
+            <span className="font-bold text-4xl text-accent tabular-nums">
               {metric.value}
             </span>
-            <Typography.TextSm className="text-default-500">
+            <Typography.TextSm className="text-muted">
               {metric.description}
             </Typography.TextSm>
-          </CardBody>
+          </Card.Content>
         </Card>
       ))}
     </div>

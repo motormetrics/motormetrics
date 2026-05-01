@@ -1,16 +1,15 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card, cn } from "@heroui/react";
+
 import type { SelectCarCost } from "@motormetrics/database";
-import { CHART_HEIGHTS } from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
+import { VES_BAND_ORDER } from "@web/app/(main)/(explore)/cars/costs/constants";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { VES_BAND_ORDER } from "@web/app/(main)/(explore)/cars/costs/constants";
+} from "@web/components/charts/chart";
+import { CHART_HEIGHTS } from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { Cell, Pie, PieChart } from "recharts";
 
@@ -36,7 +35,7 @@ export function VesDistributionChart({ data }: VesDistributionChartProps) {
     (band) => ({
       name: `Band ${band}`,
       band,
-      value: counts.get(band)!,
+      value: counts.get(band) ?? 0,
     }),
   );
 
@@ -48,14 +47,14 @@ export function VesDistributionChart({ data }: VesDistributionChartProps) {
   );
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>VES Band Distribution</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Number of models per VES band
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer
           config={chartConfig}
           className={cn("mx-auto", CHART_HEIGHTS.standard)}
@@ -83,7 +82,7 @@ export function VesDistributionChart({ data }: VesDistributionChartProps) {
             </Pie>
           </PieChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

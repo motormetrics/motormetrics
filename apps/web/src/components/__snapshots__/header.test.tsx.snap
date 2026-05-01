@@ -3,101 +3,108 @@
 exports[`Navbar > should render correctly 1`] = `
 <div>
   <nav
-    class="flex z-40 w-full h-auto items-center justify-center data-[menu-open=true]:border-none sticky top-0 inset-x-0 backdrop-blur-lg data-[menu-open=true]:backdrop-blur-xl backdrop-saturate-150 bg-background/70"
-    style="--navbar-height: 4rem;"
+    class="sticky top-0 z-40 w-full border-separator border-b bg-background/90 backdrop-blur-xl"
   >
     <header
-      class="z-40 flex px-6 gap-4 w-full flex-row relative flex-nowrap items-center justify-between h-[var(--navbar-height)] max-w-[1536px]"
+      class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
     >
-      <ul
-        class="flex gap-4 h-full flex-row flex-nowrap items-center data-[justify=start]:justify-start data-[justify=start]:flex-grow data-[justify=start]:basis-0 data-[justify=center]:justify-center data-[justify=end]:justify-end data-[justify=end]:flex-grow data-[justify=end]:basis-0"
-        data-justify="start"
+      <div
+        class="flex items-center gap-3"
       >
         <button
+          aria-expanded="false"
           aria-label="Open menu"
-          aria-pressed="false"
-          class="group flex items-center justify-center w-6 h-full rounded-small tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 md:hidden"
-          data-react-aria-pressable="true"
-          tabindex="0"
+          class="rounded-full p-2 text-foreground transition-colors hover:bg-surface md:hidden"
           type="button"
         >
-          <span
-            class="sr-only"
+          <svg
+            class="lucide lucide-menu size-5"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            open navigation menu
-          </span>
-          <span
-            class="w-full h-full pointer-events-none flex flex-col items-center justify-center text-inherit group-data-[pressed=true]:opacity-70 transition-opacity before:content-[''] before:block before:h-px before:w-6 before:bg-current before:transition-transform before:duration-150 before:-translate-y-1 before:rotate-0 group-data-[open=true]:before:translate-y-px group-data-[open=true]:before:rotate-45 after:content-[''] after:block after:h-px after:w-6 after:bg-current after:transition-transform after:duration-150 after:translate-y-1 after:rotate-0 group-data-[open=true]:after:translate-y-0 group-data-[open=true]:after:-rotate-45"
-          />
+            <line
+              x1="4"
+              x2="20"
+              y1="12"
+              y2="12"
+            />
+            <line
+              x1="4"
+              x2="20"
+              y1="6"
+              y2="6"
+            />
+            <line
+              x1="4"
+              x2="20"
+              y1="18"
+              y2="18"
+            />
+          </svg>
         </button>
-        <div
-          class="flex basis-0 flex-row flex-grow flex-nowrap justify-start bg-transparent items-center no-underline text-medium whitespace-nowrap box-border"
+        <a
+          class="flex items-center gap-2"
+          href="/"
         >
-          <a
-            class="flex items-center gap-2"
-            href="/"
+          <svg
+            class="lucide lucide-trending-up size-6 text-blue-600 lg:size-8"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              class="lucide lucide-trending-up size-6 text-blue-600 lg:size-8"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <polyline
-                points="22 7 13.5 15.5 8.5 10.5 2 17"
-              />
-              <polyline
-                points="16 7 22 7 22 13"
-              />
-            </svg>
-          </a>
-        </div>
-      </ul>
+            <polyline
+              points="22 7 13.5 15.5 8.5 10.5 2 17"
+            />
+            <polyline
+              points="16 7 22 7 22 13"
+            />
+          </svg>
+        </a>
+      </div>
       <ul
-        class="h-full flex-row flex-nowrap items-center data-[justify=start]:justify-start data-[justify=start]:flex-grow data-[justify=start]:basis-0 data-[justify=center]:justify-center data-[justify=end]:justify-end data-[justify=end]:flex-grow data-[justify=end]:basis-0 hidden gap-1 md:flex"
-        data-justify="center"
+        class="hidden items-center gap-1 md:flex"
       >
-        <li
-          class="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold"
-        >
+        <li>
           <a
-            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-primary text-primary-foreground shadow-sm"
+            aria-current="page"
+            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-accent text-accent-foreground shadow-sm"
             href="/"
           >
             Overview
           </a>
         </li>
-        <li
-          class="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold"
-        >
+        <li>
           <a
-            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-default-100 text-foreground hover:bg-default-200"
+            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-surface text-foreground hover:bg-surface-tertiary"
             href="/about"
           >
             About
           </a>
         </li>
-        <li
-          class="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold"
-        >
+        <li>
           <a
-            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-default-100 text-foreground hover:bg-default-200"
+            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-surface text-foreground hover:bg-surface-tertiary"
             href="/blog"
           >
             Blog
           </a>
         </li>
-        <li
-          class="text-medium whitespace-nowrap box-border list-none data-[active=true]:font-semibold"
-        >
+        <li>
           <a
-            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-default-100 text-foreground hover:bg-default-200"
+            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-surface text-foreground hover:bg-surface-tertiary"
             href="/learn"
           >
             Learn

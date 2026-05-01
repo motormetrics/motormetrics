@@ -1,19 +1,17 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
-import {
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-} from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
+import { Card, cn } from "@heroui/react";
+import { EV_COLORS } from "@web/app/(main)/(explore)/cars/electric-vehicles/constants";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { EV_COLORS } from "@web/app/(main)/(explore)/cars/electric-vehicles/constants";
+} from "@web/components/charts/chart";
+import {
+  CHART_CURSOR,
+  CHART_GRID,
+  CHART_HEIGHTS,
+} from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import type { EvMonthlyTrend } from "@web/queries/cars/electric-vehicles";
 import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";
@@ -32,14 +30,14 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
   const numberFormatter = new Intl.NumberFormat("en-SG");
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>EV Adoption Trend</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Monthly BEV, PHEV, and Hybrid registrations over time
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer
           config={chartConfig}
           className={cn(CHART_HEIGHTS.tall, "w-full")}
@@ -99,14 +97,14 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
             />
           </AreaChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
-        <Typography.TextSm className="text-default-500">
+      </Card.Content>
+      <Card.Footer>
+        <Typography.TextSm className="text-muted">
           Stacked area chart showing combined electrified vehicle registrations.
           BEV = Battery Electric, PHEV = Plug-In Hybrid, Hybrid = Conventional
           Hybrid.
         </Typography.TextSm>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

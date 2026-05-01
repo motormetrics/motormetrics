@@ -14,7 +14,6 @@ export default defineConfig({
       exclude: [
         "src/app",
         "src/components/analytics.tsx",
-        "src/components/ui",
         "src/config",
         "src/functions",
         // Exclude src/lib subdirectories except updater
@@ -37,7 +36,6 @@ export default defineConfig({
         "src/components/tables/columns/cars-make-columns.tsx",
         "src/utils/months.ts",
         "src/proxy.ts", // Next.js proxy middleware relies on Next internals
-        "**/use-mobile.ts", // Part of shadcn/ui Sidebar
         "**/visitors",
         "src/queries/coe/**", // Low priority for coverage
         "src/queries/posts/**", // Blog queries not prioritized for coverage

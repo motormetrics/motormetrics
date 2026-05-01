@@ -10,9 +10,35 @@ vi.mock("nuqs", () => ({
   useQueryState: vi.fn(() => ["2024-01", vi.fn()]),
 }));
 
-vi.mock("@heroui/toast", () => ({
-  addToast: vi.fn(),
-}));
+vi.mock("@heroui/react", () => {
+  const ComboBox = ({ children }: { children?: React.ReactNode }) => (
+    <select aria-label="Month">{children}</select>
+  );
+  ComboBox.InputGroup = () => null;
+  ComboBox.Popover = ({ children }: { children?: React.ReactNode }) => children;
+  ComboBox.Trigger = () => null;
+
+  const ListBox = ({ children }: { children?: React.ReactNode }) => children;
+  ListBox.Section = ({ children }: { children?: React.ReactNode }) => children;
+  ListBox.Item = ({
+    children,
+    textValue,
+  }: {
+    children?: React.ReactNode;
+    textValue: string;
+  }) => <option value={textValue}>{children}</option>;
+  ListBox.ItemIndicator = () => null;
+
+  return {
+    ComboBox,
+    Header: () => null,
+    Input: () => null,
+    Label: () => null,
+    ListBox,
+    Separator: () => null,
+    toast: { info: vi.fn() },
+  };
+});
 
 vi.mock("@web/utils/formatting/format-date-to-month-year", () => ({
   formatDateToMonthYear: vi.fn(() => "January 2024"),

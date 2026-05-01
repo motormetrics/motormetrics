@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
 import type { SelectDeregistration } from "@motormetrics/database";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CategoryBreakdown } from "@web/app/(main)/(explore)/cars/deregistrations/components/category-breakdown";
@@ -292,13 +292,13 @@ async function DeregistrationsContent({
       {/* Metrics Bar - All in one row */}
       <AnimatedSection order={3}>
         <section>
-          <Card className="bg-default-50 p-3">
-            <CardBody className="p-4">
+          <Card className="bg-default">
+            <Card.Content>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-7">
                 {/* Total */}
-                <div className="col-span-2 border-default-200 sm:col-span-1 sm:border-r sm:pr-4">
+                <div className="col-span-2 border-border sm:col-span-1 sm:border-r sm:pr-4">
                   <div className="flex flex-col gap-2">
-                    <span className="font-medium text-default-500 text-xs uppercase tracking-wider">
+                    <span className="font-medium text-muted text-xs uppercase tracking-wider">
                       Total
                     </span>
                     <div className="font-bold text-3xl text-foreground">
@@ -320,7 +320,7 @@ async function DeregistrationsContent({
                 {/* Category metrics */}
                 {categoryCardsData.map((cat) => (
                   <div key={cat.category} className="flex flex-col gap-2">
-                    <span className="truncate font-medium text-default-500 text-xs uppercase tracking-wider">
+                    <span className="truncate font-medium text-muted text-xs uppercase tracking-wider">
                       {cat.category
                         .replace("Category ", "Cat ")
                         .replace("Vehicles Exempted From VQS", "VQS")}
@@ -333,14 +333,14 @@ async function DeregistrationsContent({
                         className="h-1.5 w-8 rounded-full"
                         style={{ backgroundColor: cat.colour }}
                       />
-                      <span className="text-default-400 text-xs">
+                      <span className="text-muted text-xs">
                         {((cat.total / totalDeregistrations) * 100).toFixed(0)}%
                       </span>
                     </div>
                   </div>
                 ))}
               </div>
-            </CardBody>
+            </Card.Content>
           </Card>
         </section>
       </AnimatedSection>

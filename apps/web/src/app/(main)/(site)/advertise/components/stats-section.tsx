@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
 import {
@@ -32,8 +33,8 @@ function StatItem({ value, suffix = "", label, description }: StatItemProps) {
       onViewportEnter={() => setIsInView(true)}
       viewport={{ once: true }}
     >
-      <Card className="group border-default-200 bg-card p-3 shadow-sm transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-        <CardBody className="flex flex-col gap-2 p-6">
+      <Card className="group border-border bg-surface shadow-sm transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
+        <Card.Content className="flex flex-col gap-2">
           <div className="font-semibold text-4xl text-foreground tracking-tight lg:text-5xl">
             {isInView ? (
               <>
@@ -47,13 +48,13 @@ function StatItem({ value, suffix = "", label, description }: StatItemProps) {
           <Typography.Text className="font-medium text-foreground">
             {label}
           </Typography.Text>
-          <Typography.TextSm className="text-default-500">
+          <Typography.TextSm className="text-muted">
             {description}
           </Typography.TextSm>
-        </CardBody>
+        </Card.Content>
         {/* Subtle accent line */}
         <div
-          className="absolute right-6 bottom-0 left-6 h-0.5 scale-x-0 bg-gradient-to-r from-primary to-primary/60 transition-transform duration-300 group-hover:scale-x-100"
+          className="absolute right-6 bottom-0 left-6 h-0.5 scale-x-0 bg-gradient-to-r from-accent to-accent/60 transition-transform duration-300 group-hover:scale-x-100"
           aria-hidden="true"
         />
       </Card>
@@ -85,13 +86,13 @@ export function StatsSection({ stats }: { stats: TrafficStats }) {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col gap-4">
-          <Typography.Label className="text-primary uppercase tracking-widest">
+          <Typography.Label className="text-accent uppercase tracking-widest">
             Audience Metrics
           </Typography.Label>
           <Typography.H2 className="max-w-lg lg:text-4xl">
             Transparent, public analytics
           </Typography.H2>
-          <Typography.TextLg className="max-w-2xl text-default-600">
+          <Typography.TextLg className="max-w-2xl text-muted">
             Real traffic data from the last 30 days. Our audience comprises car
             buyers, owners, and enthusiasts actively evaluating the Singapore
             market.

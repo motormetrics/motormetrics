@@ -1,17 +1,16 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip, Link } from "@heroui/react";
+
+import { slugify } from "@motormetrics/utils";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { slugify } from "@motormetrics/utils";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { getRankingEmoji } from "@web/lib/cars/calculations";
 import { formatNumber } from "@web/utils/charts";
-import Link from "next/link";
 import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 
@@ -56,27 +55,27 @@ export function TopMakesChart({
 
   if (!makes || makes.length === 0) {
     return (
-      <Card className="rounded-2xl p-3">
-        <CardHeader className="flex flex-col items-start gap-2">
+      <Card>
+        <Card.Header className="flex flex-col items-start gap-2">
           <Typography.H4>Top Makes</Typography.H4>
           <Typography.TextSm>No make data available</Typography.TextSm>
-        </CardHeader>
-        <CardBody>
-          <div className="flex h-60 items-center justify-center rounded-lg bg-default-100">
-            <p className="text-default-500">No data available</p>
+        </Card.Header>
+        <Card.Content>
+          <div className="flex h-60 items-center justify-center rounded-lg bg-default">
+            <p className="text-muted">No data available</p>
           </div>
-        </CardBody>
+        </Card.Content>
       </Card>
     );
   }
 
   return (
-    <Card className="rounded-2xl p-3">
-      <CardHeader className="flex flex-col items-start gap-2">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Top Makes - {title}</Typography.H4>
         <Typography.TextSm>{description}</Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <div className="flex flex-col gap-6">
           {/* Top 3 Ranking Chips */}
           <div className="flex gap-2">
@@ -86,10 +85,8 @@ export function TopMakesChart({
                   key={item.name}
                   href={`/cars/makes/${slugify(item.name)}`}
                 >
-                  <Chip
-                    startContent={<span>{getRankingEmoji(index + 1)}</span>}
-                    className="cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
-                  >
+                  <Chip className="cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground">
+                    <span>{getRankingEmoji(index + 1)}</span>
                     {item.name}
                   </Chip>
                 </Link>
@@ -103,7 +100,7 @@ export function TopMakesChart({
               <CartesianGrid
                 horizontal={false}
                 strokeDasharray="3 3"
-                className="stroke-default-200"
+                className="stroke-border"
               />
               <XAxis
                 type="number"
@@ -118,7 +115,7 @@ export function TopMakesChart({
                 axisLine={false}
               />
               <ChartTooltip
-                cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+                cursor={{ fill: "var(--muted)", opacity: 0.2 }}
                 content={<ChartTooltipContent />}
               />
               <Bar dataKey="value" radius={[0, 4, 4, 0]}>
@@ -129,7 +126,7 @@ export function TopMakesChart({
             </BarChart>
           </ChartContainer>
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

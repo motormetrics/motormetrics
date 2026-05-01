@@ -16,15 +16,17 @@ exports[`Makes > should render the section with title and count 1`] = `
         >
           Test Makes
         </h2>
-        <div
-          class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-6 text-tiny rounded-full bg-primary/20 text-primary-600"
+        <span
+          class="chip chip--accent chip--sm chip--primary"
+          data-slot="chip"
         >
           <span
-            class="flex-1 text-inherit font-normal px-1"
+            class="chip__label"
+            data-slot="chip-label"
           >
             4
           </span>
-        </div>
+        </span>
       </div>
     </div>
     <div
@@ -32,8 +34,11 @@ exports[`Makes > should render the section with title and count 1`] = `
     >
       <button
         aria-label="Scroll left"
-        class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent transform-gpu data-[pressed=true]:scale-[0.97] cursor-pointer outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 border-medium text-tiny gap-2 rounded-full px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-transparent border-default text-foreground min-w-8 w-8 h-8 data-[hover=true]:opacity-hover"
+        class="button button--icon-only button--sm button--outline rounded-full"
+        data-rac=""
         data-react-aria-pressable="true"
+        data-slot="button"
+        id="react-aria-_r_0_"
         tabindex="0"
         type="button"
       >
@@ -55,43 +60,63 @@ exports[`Makes > should render the section with title and count 1`] = `
         </svg>
       </button>
       <div
-        class="scrollbar-hide flex flex-1 gap-1 overflow-x-auto scroll-smooth"
+        class="flex flex-1 gap-1 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         <button
-          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent transform-gpu data-[pressed=true]:scale-[0.97] cursor-pointer outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-3 min-w-16 h-8 text-tiny gap-2 rounded-full [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-primary text-primary-foreground data-[hover=true]:opacity-hover shrink-0"
+          aria-pressed="true"
+          class="button button--sm button--primary shrink-0 rounded-full"
+          data-rac=""
           data-react-aria-pressable="true"
+          data-slot="button"
+          id="react-aria-_r_2_"
           tabindex="0"
           type="button"
         >
           ALL
         </button>
         <button
-          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent transform-gpu data-[pressed=true]:scale-[0.97] cursor-pointer outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-3 min-w-16 h-8 text-tiny gap-2 rounded-full [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-transparent text-default-foreground data-[hover=true]:bg-default/40 shrink-0"
+          aria-pressed="false"
+          class="button button--sm button--tertiary shrink-0 rounded-full"
+          data-rac=""
           data-react-aria-pressable="true"
+          data-slot="button"
+          id="react-aria-_r_4_"
           tabindex="0"
           type="button"
         >
           A
         </button>
         <button
-          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent transform-gpu data-[pressed=true]:scale-[0.97] cursor-pointer outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-3 min-w-16 h-8 text-tiny gap-2 rounded-full [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-transparent text-default-foreground data-[hover=true]:bg-default/40 shrink-0"
+          aria-pressed="false"
+          class="button button--sm button--tertiary shrink-0 rounded-full"
+          data-rac=""
           data-react-aria-pressable="true"
+          data-slot="button"
+          id="react-aria-_r_6_"
           tabindex="0"
           type="button"
         >
           B
         </button>
         <button
-          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent transform-gpu data-[pressed=true]:scale-[0.97] cursor-pointer outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-3 min-w-16 h-8 text-tiny gap-2 rounded-full [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-transparent text-default-foreground data-[hover=true]:bg-default/40 shrink-0"
+          aria-pressed="false"
+          class="button button--sm button--tertiary shrink-0 rounded-full"
+          data-rac=""
           data-react-aria-pressable="true"
+          data-slot="button"
+          id="react-aria-_r_8_"
           tabindex="0"
           type="button"
         >
           M
         </button>
         <button
-          class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent transform-gpu data-[pressed=true]:scale-[0.97] cursor-pointer outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-3 min-w-16 h-8 text-tiny gap-2 rounded-full [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-transparent text-default-foreground data-[hover=true]:bg-default/40 shrink-0"
+          aria-pressed="false"
+          class="button button--sm button--tertiary shrink-0 rounded-full"
+          data-rac=""
           data-react-aria-pressable="true"
+          data-slot="button"
+          id="react-aria-_r_a_"
           tabindex="0"
           type="button"
         >
@@ -100,8 +125,11 @@ exports[`Makes > should render the section with title and count 1`] = `
       </div>
       <button
         aria-label="Scroll right"
-        class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent transform-gpu data-[pressed=true]:scale-[0.97] cursor-pointer outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 border-medium text-tiny gap-2 rounded-full px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-transparent border-default text-foreground min-w-8 w-8 h-8 data-[hover=true]:opacity-hover"
+        class="button button--icon-only button--sm button--outline rounded-full"
+        data-rac=""
         data-react-aria-pressable="true"
+        data-slot="button"
+        id="react-aria-_r_c_"
         tabindex="0"
         type="button"
       >
@@ -135,12 +163,12 @@ exports[`Makes > should render the section with title and count 1`] = `
           ALL
         </span>
         <span
-          class="text-default-400"
+          class="text-muted"
         >
           ·
         </span>
         <span
-          class="text-default-500 text-sm"
+          class="text-muted text-sm"
         >
           4
            
@@ -151,180 +179,164 @@ exports[`Makes > should render the section with title and count 1`] = `
         class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
       >
         <a
-          class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large cursor-pointer motion-reduce:transition-none data-[pressed=true]:scale-[0.97] tap-highlight-transparent p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-          data-react-aria-pressable="true"
+          class="block h-full no-underline"
           href="/cars/makes/audi"
-          role="button"
-          tabindex="0"
         >
           <div
-            class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+            class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            data-slot="card"
           >
             <div
-              class="flex flex-col gap-2"
+              class="card__content"
+              data-slot="card-content"
             >
               <div
-                class="flex items-start gap-2"
+                class="flex flex-col gap-2"
               >
                 <div
-                  class="flex size-16 shrink-0 items-center justify-center"
+                  class="flex items-start gap-2"
                 >
-                  <span
-                    class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny text-default-foreground rounded-full size-full bg-primary"
-                    tabindex="-1"
+                  <div
+                    class="flex size-16 shrink-0 items-center justify-center"
                   >
                     <span
-                      aria-label="A"
-                      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg font-semibold text-primary-foreground"
-                      role="img"
+                      class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                     >
                       A
                     </span>
-                  </span>
-                </div>
-                <div
-                  class="flex min-w-0 flex-col gap-2"
-                >
-                  <span
-                    class="font-medium text-foreground text-sm leading-none truncate"
+                  </div>
+                  <div
+                    class="flex min-w-0 flex-col gap-2"
                   >
-                    AUDI
-                  </span>
+                    <span
+                      class="font-medium text-foreground text-sm leading-none truncate"
+                    >
+                      AUDI
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </a>
         <a
-          class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large cursor-pointer motion-reduce:transition-none data-[pressed=true]:scale-[0.97] tap-highlight-transparent p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-          data-react-aria-pressable="true"
+          class="block h-full no-underline"
           href="/cars/makes/bmw"
-          role="button"
-          tabindex="0"
         >
           <div
-            class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+            class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            data-slot="card"
           >
             <div
-              class="flex flex-col gap-2"
+              class="card__content"
+              data-slot="card-content"
             >
               <div
-                class="flex items-start gap-2"
+                class="flex flex-col gap-2"
               >
                 <div
-                  class="flex size-16 shrink-0 items-center justify-center"
+                  class="flex items-start gap-2"
                 >
-                  <span
-                    class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny text-default-foreground rounded-full size-full bg-primary"
-                    tabindex="-1"
+                  <div
+                    class="flex size-16 shrink-0 items-center justify-center"
                   >
                     <span
-                      aria-label="B"
-                      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg font-semibold text-primary-foreground"
-                      role="img"
+                      class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                     >
                       B
                     </span>
-                  </span>
-                </div>
-                <div
-                  class="flex min-w-0 flex-col gap-2"
-                >
-                  <span
-                    class="font-medium text-foreground text-sm leading-none truncate"
+                  </div>
+                  <div
+                    class="flex min-w-0 flex-col gap-2"
                   >
-                    BMW
-                  </span>
+                    <span
+                      class="font-medium text-foreground text-sm leading-none truncate"
+                    >
+                      BMW
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </a>
         <a
-          class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large cursor-pointer motion-reduce:transition-none data-[pressed=true]:scale-[0.97] tap-highlight-transparent p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-          data-react-aria-pressable="true"
+          class="block h-full no-underline"
           href="/cars/makes/mercedes-benz"
-          role="button"
-          tabindex="0"
         >
           <div
-            class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+            class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            data-slot="card"
           >
             <div
-              class="flex flex-col gap-2"
+              class="card__content"
+              data-slot="card-content"
             >
               <div
-                class="flex items-start gap-2"
+                class="flex flex-col gap-2"
               >
                 <div
-                  class="flex size-16 shrink-0 items-center justify-center"
+                  class="flex items-start gap-2"
                 >
-                  <span
-                    class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny text-default-foreground rounded-full size-full bg-primary"
-                    tabindex="-1"
+                  <div
+                    class="flex size-16 shrink-0 items-center justify-center"
                   >
                     <span
-                      aria-label="M"
-                      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg font-semibold text-primary-foreground"
-                      role="img"
+                      class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                     >
                       M
                     </span>
-                  </span>
-                </div>
-                <div
-                  class="flex min-w-0 flex-col gap-2"
-                >
-                  <span
-                    class="font-medium text-foreground text-sm leading-none truncate"
+                  </div>
+                  <div
+                    class="flex min-w-0 flex-col gap-2"
                   >
-                    MERCEDES BENZ
-                  </span>
+                    <span
+                      class="font-medium text-foreground text-sm leading-none truncate"
+                    >
+                      MERCEDES BENZ
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </a>
         <a
-          class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium rounded-large cursor-pointer motion-reduce:transition-none data-[pressed=true]:scale-[0.97] tap-highlight-transparent p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-          data-react-aria-pressable="true"
+          class="block h-full no-underline"
           href="/cars/makes/porsche"
-          role="button"
-          tabindex="0"
         >
           <div
-            class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+            class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            data-slot="card"
           >
             <div
-              class="flex flex-col gap-2"
+              class="card__content"
+              data-slot="card-content"
             >
               <div
-                class="flex items-start gap-2"
+                class="flex flex-col gap-2"
               >
                 <div
-                  class="flex size-16 shrink-0 items-center justify-center"
+                  class="flex items-start gap-2"
                 >
-                  <span
-                    class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny text-default-foreground rounded-full size-full bg-primary"
-                    tabindex="-1"
+                  <div
+                    class="flex size-16 shrink-0 items-center justify-center"
                   >
                     <span
-                      aria-label="P"
-                      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg font-semibold text-primary-foreground"
-                      role="img"
+                      class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                     >
                       P
                     </span>
-                  </span>
-                </div>
-                <div
-                  class="flex min-w-0 flex-col gap-2"
-                >
-                  <span
-                    class="font-medium text-foreground text-sm leading-none truncate"
+                  </div>
+                  <div
+                    class="flex min-w-0 flex-col gap-2"
                   >
-                    PORSCHE
-                  </span>
+                    <span
+                      class="font-medium text-foreground text-sm leading-none truncate"
+                    >
+                      PORSCHE
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

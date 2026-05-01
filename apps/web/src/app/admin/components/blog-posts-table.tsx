@@ -1,54 +1,19 @@
 "use client";
 
 import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from "@heroui/modal";
-import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@motormetrics/ui/components/alert-dialog";
-import { Badge } from "@motormetrics/ui/components/badge";
-import { Button } from "@motormetrics/ui/components/button";
-import {
+  Button,
   Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@motormetrics/ui/components/dropdown-menu";
-import { Input } from "@motormetrics/ui/components/input";
-import {
+  Chip,
+  Dropdown,
+  Input,
+  Label,
+  ListBox,
+  Modal,
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@motormetrics/ui/components/select";
-import {
   Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@motormetrics/ui/components/table";
+  TextField,
+} from "@heroui/react";
 import {
   type ColumnDef,
   flexRender,
@@ -84,6 +49,7 @@ import {
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type ReactNode, useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -110,13 +76,13 @@ function formatTokens(post: PostWithMetadata): string {
 
 function SortableHeader({
   label,
-  onClick,
+  onPress,
 }: {
   label: string;
-  onClick: () => void;
+  onPress: () => void;
 }) {
   return (
-    <Button variant="ghost" size="sm" className="-ml-3 h-8" onClick={onClick}>
+    <Button variant="ghost" size="sm" className="-ml-3 h-8" onPress={onPress}>
       {label}
       <ArrowUpDown className="ml-2 size-4" />
     </Button>
@@ -127,6 +93,7 @@ export function BlogPostsTable({
   initialPosts,
   previews,
 }: BlogPostsTableProps) {
+  const router = useRouter();
   const [posts, setPosts] = useState(initialPosts);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([
@@ -228,7 +195,7 @@ export function BlogPostsTable({
         header: ({ column }) => (
           <SortableHeader
             label="Title"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onPress={() => column.toggleSorting(column.getIsSorted() === "asc")}
           />
         ),
         cell: ({ row }) => (
@@ -244,13 +211,14 @@ export function BlogPostsTable({
         accessorKey: "status",
         header: "Status",
         cell: ({ row }) => (
-          <Badge
+          <Chip
+            color={row.original.status === "published" ? "success" : "default"}
             variant={
-              row.original.status === "published" ? "default" : "secondary"
+              row.original.status === "published" ? "primary" : "secondary"
             }
           >
             {row.original.status ?? "draft"}
-          </Badge>
+          </Chip>
         ),
       },
       {
@@ -258,7 +226,7 @@ export function BlogPostsTable({
         header: ({ column }) => (
           <SortableHeader
             label="Month"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onPress={() => column.toggleSorting(column.getIsSorted() === "asc")}
           />
         ),
         cell: ({ row }) => row.original.month ?? "N/A",
@@ -267,32 +235,31 @@ export function BlogPostsTable({
         accessorKey: "dataType",
         header: "Type",
         cell: ({ row }) => (
-          <Badge variant="outline">
+          <Chip variant="secondary">
             {row.original.dataType?.toUpperCase() ?? "N/A"}
-          </Badge>
+          </Chip>
         ),
       },
       {
         id: "model",
         header: "Model",
         cell: ({ row }) => (
-          <span className="text-muted-foreground text-sm">
+          <span className="text-muted text-sm">
             {row.original.metadata?.modelId || "N/A"}
           </span>
         ),
       },
       {
         id: "tokens",
-        // biome-ignore lint/style/noNonNullAssertion: safe — totalTokens is a number or 0
         accessorFn: (row) => row.metadata?.usage?.totalTokens ?? 0,
         header: ({ column }) => (
           <SortableHeader
             label="Tokens"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onPress={() => column.toggleSorting(column.getIsSorted() === "asc")}
           />
         ),
         cell: ({ row }) => (
-          <span className="text-muted-foreground text-sm">
+          <span className="text-muted text-sm">
             {formatTokens(row.original)}
           </span>
         ),
@@ -302,11 +269,11 @@ export function BlogPostsTable({
         header: ({ column }) => (
           <SortableHeader
             label="Created"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onPress={() => column.toggleSorting(column.getIsSorted() === "asc")}
           />
         ),
         cell: ({ row }) => (
-          <span className="text-muted-foreground text-sm">
+          <span className="text-muted text-sm">
             {formatDate(row.original.createdAt)}
           </span>
         ),
@@ -321,75 +288,90 @@ export function BlogPostsTable({
             deletingId === post.id;
 
           if (isLoading) {
-            return (
-              <Loader2 className="size-4 animate-spin text-muted-foreground" />
-            );
+            return <Loader2 className="size-4 animate-spin text-muted" />;
           }
 
           return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="size-8 p-0">
-                  <MoreHorizontal className="size-4" />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink className="mr-2 size-4" />
-                    View
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href={`/admin/content/blog/${post.id}/edit`}>
-                    <Pencil className="mr-2 size-4" />
-                    Edit
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handlePreview(post)}>
-                  <Eye className="mr-2 size-4" />
-                  Preview
-                </DropdownMenuItem>
-                {post.month && post.dataType && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() =>
-                        setConfirmDialog({
-                          open: true,
-                          type: "regenerate",
-                          post,
-                        })
-                      }
-                    >
-                      <RefreshCw className="mr-2 size-4" />
-                      Regenerate
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => handleRegenerateHero(post)}
-                    >
-                      <ImageIcon className="mr-2 size-4" />
-                      Regenerate Hero
-                    </DropdownMenuItem>
-                  </>
-                )}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  variant="destructive"
-                  onClick={() =>
-                    setConfirmDialog({ open: true, type: "delete", post })
-                  }
+            <Dropdown>
+              <Button
+                isIconOnly
+                aria-label="Open menu"
+                variant="ghost"
+                size="sm"
+                className="size-8 p-0"
+              >
+                <MoreHorizontal className="size-4" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+              <Dropdown.Popover placement="bottom end">
+                <Dropdown.Menu
+                  onAction={(key) => {
+                    if (key === "view") {
+                      window.open(
+                        `/blog/${post.slug}`,
+                        "_blank",
+                        "noopener,noreferrer",
+                      );
+                    }
+                    if (key === "edit") {
+                      router.push(`/admin/content/blog/${post.id}/edit`);
+                    }
+                    if (key === "preview") {
+                      handlePreview(post);
+                    }
+                    if (key === "regenerate") {
+                      setConfirmDialog({
+                        open: true,
+                        type: "regenerate",
+                        post,
+                      });
+                    }
+                    if (key === "regenerate-hero") {
+                      handleRegenerateHero(post);
+                    }
+                    if (key === "delete") {
+                      setConfirmDialog({ open: true, type: "delete", post });
+                    }
+                  }}
                 >
-                  <Trash2 className="mr-2 size-4" />
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <Dropdown.Item id="view" textValue="View">
+                    <ExternalLink className="mr-2 size-4" />
+                    <Label>View</Label>
+                  </Dropdown.Item>
+                  <Dropdown.Item id="edit" textValue="Edit">
+                    <Pencil className="mr-2 size-4" />
+                    <Label>Edit</Label>
+                  </Dropdown.Item>
+                  <Dropdown.Item id="preview" textValue="Preview">
+                    <Eye className="mr-2 size-4" />
+                    <Label>Preview</Label>
+                  </Dropdown.Item>
+                  {post.month && post.dataType && (
+                    <>
+                      <Dropdown.Item id="regenerate" textValue="Regenerate">
+                        <RefreshCw className="mr-2 size-4" />
+                        <Label>Regenerate</Label>
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        id="regenerate-hero"
+                        textValue="Regenerate Hero"
+                      >
+                        <ImageIcon className="mr-2 size-4" />
+                        <Label>Regenerate Hero</Label>
+                      </Dropdown.Item>
+                    </>
+                  )}
+                  <Dropdown.Item
+                    id="delete"
+                    textValue="Delete"
+                    variant="danger"
+                  >
+                    <Trash2 className="mr-2 size-4" />
+                    <Label>Delete</Label>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown.Popover>
+            </Dropdown>
           );
         },
       },
@@ -400,6 +382,7 @@ export function BlogPostsTable({
       deletingId,
       handlePreview,
       handleRegenerateHero,
+      router,
     ],
   );
 
@@ -430,17 +413,20 @@ export function BlogPostsTable({
   return (
     <>
       <Card>
-        <CardHeader>
-          <CardTitle>All Blog Posts</CardTitle>
-          <CardDescription>
+        <Card.Header>
+          <Card.Title>All Blog Posts</Card.Title>
+          <Card.Description>
             {table.getFilteredRowModel().rows.length} of {posts.length} post
             {posts.length !== 1 ? "s" : ""}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+          </Card.Description>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-4">
           {/* Search */}
-          <div className="relative max-w-sm">
-            <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+          <TextField
+            aria-label="Search blog posts"
+            className="relative max-w-sm"
+          >
+            <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted" />
             <Input
               placeholder="Search by title, month, or type..."
               value={globalFilter}
@@ -450,58 +436,61 @@ export function BlogPostsTable({
               }}
               className="pl-9"
             />
-          </div>
+          </TextField>
 
           {/* Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </TableCell>
+          <Table>
+            <Table.ScrollContainer>
+              <Table.Content aria-label="Blog posts" className="min-w-[900px]">
+                <Table.Header>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <Table.Row key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => (
+                        <Table.Column
+                          key={header.id}
+                          id={header.id}
+                          isRowHeader={header.id === "title"}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                        </Table.Column>
                       ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center text-muted-foreground"
-                    >
-                      No blog posts found.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                    </Table.Row>
+                  ))}
+                </Table.Header>
+                <Table.Body>
+                  {table.getRowModel().rows.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <Table.Row key={row.id} id={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <Table.Cell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </Table.Cell>
+                        ))}
+                      </Table.Row>
+                    ))
+                  ) : (
+                    <Table.Row>
+                      <Table.Cell className="h-24 text-center text-muted">
+                        No blog posts found.
+                      </Table.Cell>
+                    </Table.Row>
+                  )}
+                </Table.Body>
+              </Table.Content>
+            </Table.ScrollContainer>
+          </Table>
 
           {/* Pagination */}
           <div className="flex flex-col items-center gap-2 lg:flex-row lg:justify-between">
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted text-sm">
               {table.getFilteredRowModel().rows.length} row
               {table.getFilteredRowModel().rows.length !== 1 ? "s" : ""}
             </p>
@@ -510,20 +499,27 @@ export function BlogPostsTable({
                 <span className="font-medium text-sm">Rows per page</span>
                 <Select
                   value={`${table.getState().pagination.pageSize}`}
-                  onValueChange={(value) => table.setPageSize(Number(value))}
+                  onChange={(value) => table.setPageSize(Number(value))}
+                  aria-label="Rows per page"
                 >
-                  <SelectTrigger className="h-8 w-[70px]">
-                    <SelectValue
-                      placeholder={table.getState().pagination.pageSize}
-                    />
-                  </SelectTrigger>
-                  <SelectContent side="top">
-                    {[10, 20, 30, 50].map((size) => (
-                      <SelectItem key={size} value={`${size}`}>
-                        {size}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
+                  <Select.Trigger className="h-8 w-[70px]">
+                    <Select.Value />
+                    <Select.Indicator />
+                  </Select.Trigger>
+                  <Select.Popover placement="top">
+                    <ListBox>
+                      {[10, 20, 30, 50].map((size) => (
+                        <ListBox.Item
+                          key={size}
+                          id={`${size}`}
+                          textValue={`${size}`}
+                        >
+                          {size}
+                          <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                      ))}
+                    </ListBox>
+                  </Select.Popover>
                 </Select>
               </div>
               <span className="font-medium text-sm">
@@ -535,8 +531,8 @@ export function BlogPostsTable({
                   variant="outline"
                   size="sm"
                   className="hidden size-8 p-0 lg:flex"
-                  onClick={() => table.setPageIndex(0)}
-                  disabled={!table.getCanPreviousPage()}
+                  onPress={() => table.setPageIndex(0)}
+                  isDisabled={!table.getCanPreviousPage()}
                 >
                   <span className="sr-only">First page</span>
                   <ChevronsLeft className="size-4" />
@@ -545,8 +541,8 @@ export function BlogPostsTable({
                   variant="outline"
                   size="sm"
                   className="size-8 p-0"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
+                  onPress={() => table.previousPage()}
+                  isDisabled={!table.getCanPreviousPage()}
                 >
                   <span className="sr-only">Previous page</span>
                   <ChevronLeft className="size-4" />
@@ -555,8 +551,8 @@ export function BlogPostsTable({
                   variant="outline"
                   size="sm"
                   className="size-8 p-0"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
+                  onPress={() => table.nextPage()}
+                  isDisabled={!table.getCanNextPage()}
                 >
                   <span className="sr-only">Next page</span>
                   <ChevronRight className="size-4" />
@@ -565,8 +561,8 @@ export function BlogPostsTable({
                   variant="outline"
                   size="sm"
                   className="hidden size-8 p-0 lg:flex"
-                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                  disabled={!table.getCanNextPage()}
+                  onPress={() => table.setPageIndex(table.getPageCount() - 1)}
+                  isDisabled={!table.getCanNextPage()}
                 >
                   <span className="sr-only">Last page</span>
                   <ChevronsRight className="size-4" />
@@ -574,22 +570,28 @@ export function BlogPostsTable({
               </div>
             </div>
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
 
       {/* Confirm Dialog */}
-      <AlertDialog
-        open={confirmDialog.open}
+      <AlertDialog.Backdrop
+        isOpen={confirmDialog.open}
         onOpenChange={(open) => setConfirmDialog({ ...confirmDialog, open })}
       >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {confirmDialog.type === "delete"
-                ? "Delete Blog Post?"
-                : "Regenerate Blog Post?"}
-            </AlertDialogTitle>
-            <AlertDialogDescription asChild>
+        <AlertDialog.Container>
+          <AlertDialog.Dialog className="sm:max-w-[480px]">
+            <AlertDialog.CloseTrigger />
+            <AlertDialog.Header>
+              <AlertDialog.Icon
+                status={confirmDialog.type === "delete" ? "danger" : "warning"}
+              />
+              <AlertDialog.Heading>
+                {confirmDialog.type === "delete"
+                  ? "Delete Blog Post?"
+                  : "Regenerate Blog Post?"}
+              </AlertDialog.Heading>
+            </AlertDialog.Header>
+            <AlertDialog.Body>
               <div className="flex flex-col gap-3">
                 {confirmDialog.type === "delete" ? (
                   <p>
@@ -609,7 +611,7 @@ export function BlogPostsTable({
                       be updated.
                     </p>
                     {confirmDialog.post?.metadata?.usage && (
-                      <div className="flex flex-col gap-1 rounded-md bg-muted p-3 text-sm">
+                      <div className="flex flex-col gap-1 rounded-md bg-surface p-3 text-sm">
                         <span className="font-medium">
                           Estimated regeneration cost:
                         </span>
@@ -622,7 +624,7 @@ export function BlogPostsTable({
                           Estimated cost: ~
                           {estimateTokenCost(confirmDialog.post.metadata.usage)}
                         </span>
-                        <span className="text-muted-foreground text-xs">
+                        <span className="text-muted text-xs">
                           Based on Gemini Flash pricing. Actual cost may vary.
                         </span>
                       </div>
@@ -630,65 +632,67 @@ export function BlogPostsTable({
                   </>
                 )}
               </div>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className={
-                confirmDialog.type === "delete"
-                  ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  : undefined
-              }
-              onClick={() => {
-                if (!confirmDialog.post) return;
-                if (confirmDialog.type === "delete") {
-                  handleDelete(confirmDialog.post);
-                } else {
-                  handleRegenerate(confirmDialog.post);
-                }
-              }}
-            >
-              {confirmDialog.type === "delete" ? "Delete" : "Regenerate"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </AlertDialog.Body>
+            <AlertDialog.Footer>
+              <Button slot="close" variant="tertiary">
+                Cancel
+              </Button>
+              <Button
+                slot="close"
+                variant={confirmDialog.type === "delete" ? "danger" : "primary"}
+                onPress={() => {
+                  if (!confirmDialog.post) return;
+                  if (confirmDialog.type === "delete") {
+                    handleDelete(confirmDialog.post);
+                  } else {
+                    handleRegenerate(confirmDialog.post);
+                  }
+                }}
+              >
+                {confirmDialog.type === "delete" ? "Delete" : "Regenerate"}
+              </Button>
+            </AlertDialog.Footer>
+          </AlertDialog.Dialog>
+        </AlertDialog.Container>
+      </AlertDialog.Backdrop>
 
       {/* Content Preview Modal */}
-      <Modal
+      <Modal.Backdrop
         isOpen={previewDialog.open}
         onOpenChange={(open) => {
           if (!open) {
             setPreviewDialog({ open: false, post: null });
           }
         }}
-        size="5xl"
-        scrollBehavior="inside"
       >
-        <ModalContent>
-          <ModalHeader className="line-clamp-2">
-            {previewDialog.post?.title}
-          </ModalHeader>
-          <ModalBody>
-            {previewDialog.post && previews[previewDialog.post.id]}
-          </ModalBody>
-          <ModalFooter>
-            {previewDialog.post?.slug && (
-              <Button asChild variant="outline">
+        <Modal.Container size="cover" scroll="inside">
+          <Modal.Dialog>
+            <Modal.CloseTrigger />
+            <Modal.Header>
+              <Modal.Heading className="line-clamp-2">
+                {previewDialog.post?.title}
+              </Modal.Heading>
+            </Modal.Header>
+            <Modal.Body>
+              {previewDialog.post && previews[previewDialog.post.id]}
+            </Modal.Body>
+            <Modal.Footer>
+              {previewDialog.post?.slug && (
                 <Link
                   href={`/blog/${previewDialog.post.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <ExternalLink className="mr-2 size-4" />
-                  View Live
+                  <Button variant="outline">
+                    <ExternalLink className="mr-2 size-4" />
+                    View Live
+                  </Button>
                 </Link>
-              </Button>
-            )}
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+              )}
+            </Modal.Footer>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
     </>
   );
 }

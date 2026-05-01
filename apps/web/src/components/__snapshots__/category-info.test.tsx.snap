@@ -39,12 +39,12 @@ exports[`CategoryInfo > should render with required props 1`] = `
     </svg>
     <div>
       <h4
-        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
       >
         Category A
       </h4>
       <p
-        class="text-default-600 text-sm leading-6"
+        class="text-muted text-sm leading-6"
       >
         Cars up to 1600cc and 97kW
       </p>

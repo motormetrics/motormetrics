@@ -1,4 +1,4 @@
-import { addToast } from "@heroui/toast";
+import { toast } from "@heroui/react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { YearSelector } from "./year-selector";
 
@@ -14,12 +14,8 @@ vi.mock("nuqs", () => ({
   useQueryState: () => mockUseQueryState(),
 }));
 
-vi.mock("@heroui/toast", () => ({
-  addToast: vi.fn(),
-}));
-
-vi.mock("@heroui/autocomplete", () => ({
-  Autocomplete: ({
+vi.mock("@heroui/react", () => {
+  const ComboBox = ({
     selectedKey,
     onSelectionChange,
     children,
@@ -37,15 +33,29 @@ vi.mock("@heroui/autocomplete", () => ({
       <option value="">None</option>
       {children}
     </select>
-  ),
-  AutocompleteItem: ({
+  );
+  ComboBox.InputGroup = () => null;
+  ComboBox.Popover = ({ children }: { children?: React.ReactNode }) => children;
+  ComboBox.Trigger = () => null;
+
+  const ListBox = ({ children }: { children?: React.ReactNode }) => children;
+  ListBox.Item = ({
     children,
     textValue,
   }: {
     children?: React.ReactNode;
     textValue: string;
-  }) => <option value={textValue}>{children}</option>,
-}));
+  }) => <option value={textValue}>{children}</option>;
+  ListBox.ItemIndicator = () => null;
+
+  return {
+    ComboBox,
+    Input: () => null,
+    Label: () => null,
+    ListBox,
+    toast: { info: vi.fn() },
+  };
+});
 
 describe("YearSelector", () => {
   beforeEach(() => {
@@ -89,11 +99,8 @@ describe("YearSelector", () => {
       />,
     );
 
-    expect(addToast).toHaveBeenCalledTimes(1);
-    expect(addToast).toHaveBeenCalledWith({
-      title: "Latest data is 2024",
-      variant: "bordered",
-    });
+    expect(toast.info).toHaveBeenCalledTimes(1);
+    expect(toast.info).toHaveBeenCalledWith("Latest data is 2024");
 
     rerender(
       <YearSelector
@@ -102,7 +109,7 @@ describe("YearSelector", () => {
         wasAdjusted={true}
       />,
     );
-    expect(addToast).toHaveBeenCalledTimes(1);
+    expect(toast.info).toHaveBeenCalledTimes(1);
   });
 
   it("should not show toast when year was not adjusted", () => {
@@ -114,6 +121,6 @@ describe("YearSelector", () => {
       />,
     );
 
-    expect(addToast).not.toHaveBeenCalled();
+    expect(toast.info).not.toHaveBeenCalled();
   });
 });

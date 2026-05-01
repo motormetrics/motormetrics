@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
 import { BiddingRoundCards } from "@web/app/(main)/(explore)/coe/premiums/components/bidding-round-cards";
 import { COEPremiumChart } from "@web/app/(main)/(explore)/coe/premiums/components/premium-chart";
 import { loadSearchParams } from "@web/app/(main)/(explore)/coe/search-params";
@@ -183,18 +183,18 @@ async function COEResultsContent({
 
       {/* Historical Data Table - Full Width */}
       <AnimatedSection order={4}>
-        <Card className="rounded-2xl p-3">
-          <CardHeader className="flex flex-col items-start gap-2">
+        <Card>
+          <Card.Header className="flex flex-col items-start gap-2">
             <Typography.H4>Historical Data</Typography.H4>
             <Typography.TextSm>
               Complete list of historical COE prices
             </Typography.TextSm>
-          </CardHeader>
-          <CardBody>
+          </Card.Header>
+          <Card.Content>
             <Suspense fallback={<SkeletonCard className="h-[420px] w-full" />}>
               <TrendTable coeResults={coeResults} />
             </Suspense>
-          </CardBody>
+          </Card.Content>
         </Card>
       </AnimatedSection>
     </>

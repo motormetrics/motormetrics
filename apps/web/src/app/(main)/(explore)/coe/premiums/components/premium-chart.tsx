@@ -1,19 +1,19 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Select, SelectItem } from "@heroui/select";
+import { Card, Label, ListBox, Select } from "@heroui/react";
+
+import { formatDateToMonthYear } from "@motormetrics/utils";
+import {
+  type Period,
+  periods,
+} from "@web/app/(main)/(explore)/coe/search-params";
 import {
   type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { formatDateToMonthYear } from "@motormetrics/utils";
-import {
-  type Period,
-  periods,
-} from "@web/app/(main)/(explore)/coe/search-params";
+} from "@web/components/charts/chart";
 import {
   currencyTooltipFormatter,
   MonthXAxis,
@@ -79,8 +79,8 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
   const periodLabel = PERIOD_LABELS[period].toLowerCase();
 
   return (
-    <Card className="rounded-2xl p-3">
-      <CardHeader className="flex flex-col gap-2 border-b lg:flex-row lg:items-center lg:justify-between">
+    <Card>
+      <Card.Header className="flex flex-col gap-2 border-b lg:flex-row lg:items-center lg:justify-between">
         <div className="grid flex-1 gap-1">
           <Typography.H4>Quota Premium ($)</Typography.H4>
           <Typography.TextSm>
@@ -91,19 +91,28 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
           aria-label="Select time period"
           placeholder="Last 12 months"
           className="max-w-xs"
-          selectedKeys={new Set([period])}
-          onSelectionChange={(keys) => {
-            const selected = Array.from(keys)[0];
-            if (selected) setPeriod(selected as Period);
-          }}
-          startContent={<CalendarIcon className="size-4" />}
+          value={period}
+          onChange={(selected) => setPeriod(selected as Period)}
         >
-          {periods.map((p) => (
-            <SelectItem key={p}>{PERIOD_LABELS[p]}</SelectItem>
-          ))}
+          <Label className="sr-only">Select time period</Label>
+          <Select.Trigger>
+            <CalendarIcon className="size-4 text-muted" />
+            <Select.Value />
+            <Select.Indicator />
+          </Select.Trigger>
+          <Select.Popover>
+            <ListBox>
+              {periods.map((p) => (
+                <ListBox.Item key={p} id={p} textValue={PERIOD_LABELS[p]}>
+                  {PERIOD_LABELS[p]}
+                  <ListBox.ItemIndicator />
+                </ListBox.Item>
+              ))}
+            </ListBox>
+          </Select.Popover>
         </Select>
-      </CardHeader>
-      <CardBody className="p-6">
+      </Card.Header>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <LineChart
             data={filteredData}
@@ -112,7 +121,7 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <MonthXAxis tickFormatter={formatDateToMonthYear} />
             <PriceYAxis label="Quota Premium (S$)" hide />
@@ -151,7 +160,7 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
             <ChartLegend />
           </LineChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

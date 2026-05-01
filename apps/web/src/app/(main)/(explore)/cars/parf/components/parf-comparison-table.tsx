@@ -1,15 +1,7 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@heroui/table";
-import { cn } from "@heroui/theme";
+import { Card, Table } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import { ArrowDown, Table as TableIcon } from "lucide-react";
 
@@ -30,55 +22,44 @@ const BRACKETS = [
 
 export function PARFComparisonTable() {
   return (
-    <Card className="overflow-hidden rounded-2xl">
-      <CardBody className="flex flex-col gap-0 p-0">
+    <Card className="overflow-hidden">
+      <Card.Content className="flex flex-col gap-0 p-0">
         <div className="flex items-center gap-2 px-6 py-4">
-          <TableIcon className="size-4 text-primary" />
+          <TableIcon className="size-4 text-accent" />
           <Typography.H4>PARF Rebate Rate Comparison</Typography.H4>
         </div>
-        <Table
-          aria-label="PARF rebate rate comparison by vehicle age"
-          removeWrapper
-          classNames={{
-            th: "text-xs uppercase tracking-wider",
-            td: "py-2",
-          }}
-        >
-          <TableHeader>
-            <TableColumn>Vehicle Age</TableColumn>
-            <TableColumn align="center">Old Rate</TableColumn>
-            <TableColumn align="center" className="text-primary">
-              New Rate
-            </TableColumn>
-            <TableColumn align="end" className="text-danger">
-              Change
-            </TableColumn>
-          </TableHeader>
-          <TableBody>
-            {BRACKETS.map((row) => (
-              <TableRow key={row.age}>
-                <TableCell className="font-medium">{row.age}</TableCell>
-                <TableCell className={cn("text-center text-default-500")}>
-                  {row.oldRate}
-                </TableCell>
-                <TableCell className="text-center font-semibold text-primary">
-                  {row.newRate}
-                </TableCell>
-                <TableCell className="text-right">
-                  {row.change ? (
-                    <span className="inline-flex items-center justify-end gap-1 font-semibold text-danger text-xs">
-                      <ArrowDown className="size-4" />
-                      {row.change}
-                    </span>
-                  ) : (
-                    <span className="text-default-400 text-xs">No change</span>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+        <Table>
+          <Table.ScrollContainer>
+            <Table.Content aria-label="PARF rebate rate comparison by vehicle age">
+              <Table.Header>
+                <Table.Column>Vehicle Age</Table.Column>
+                <Table.Column>Old Rate</Table.Column>
+                <Table.Column>New Rate</Table.Column>
+                <Table.Column>Change</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                {BRACKETS.map((row) => (
+                  <Table.Row key={row.age}>
+                    <Table.Cell>{row.age}</Table.Cell>
+                    <Table.Cell>{row.oldRate}</Table.Cell>
+                    <Table.Cell>{row.newRate}</Table.Cell>
+                    <Table.Cell>
+                      {row.change ? (
+                        <span className="inline-flex items-center gap-1 text-danger">
+                          <ArrowDown className="size-4" />
+                          {row.change}
+                        </span>
+                      ) : (
+                        "No change"
+                      )}
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
         </Table>
-        <div className="flex flex-col justify-between gap-2 border-default-200 border-t bg-default-50 px-6 py-4 text-default-500 text-xs sm:flex-row">
+        <div className="flex flex-col justify-between gap-2 border-border border-t bg-default px-6 py-4 text-muted text-xs sm:flex-row">
           <span>
             Rebate Cap: <strong className="text-foreground">$60,000</strong>{" "}
             (old) &rarr; <strong className="text-foreground">$30,000</strong>{" "}
@@ -86,7 +67,7 @@ export function PARFComparisonTable() {
           </span>
           <span>Effective: 2nd COE bidding, Feb 2026</span>
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

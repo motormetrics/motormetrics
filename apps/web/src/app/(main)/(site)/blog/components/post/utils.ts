@@ -1,6 +1,7 @@
-import type { ChipProps } from "@heroui/chip";
 import type { SelectPost } from "@motormetrics/database";
 import { differenceInDays } from "date-fns";
+
+type ChipColor = "default" | "warning" | "accent" | "danger" | "success";
 
 // Unified category configuration supporting both text styling and HeroUI Chip
 export const categoryConfig: Record<
@@ -8,13 +9,13 @@ export const categoryConfig: Record<
   {
     label: string;
     className: string;
-    color: ChipProps["color"];
+    color: ChipColor;
   }
 > = {
   coe: {
     label: "COE",
-    className: "text-primary",
-    color: "primary",
+    className: "text-accent",
+    color: "accent",
   },
   cars: {
     label: "Cars",
@@ -23,16 +24,16 @@ export const categoryConfig: Record<
   },
   default: {
     label: "Insights",
-    className: "text-secondary",
-    color: "secondary",
+    className: "text-muted",
+    color: "default",
   },
 };
 
 // Default fallback for unknown categories
 export const defaultCategory = {
   label: "INSIGHTS",
-  className: "text-secondary",
-  color: "secondary" as ChipProps["color"],
+  className: "text-muted",
+  color: "default" as ChipColor,
 };
 
 // Get category configuration for a post

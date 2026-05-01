@@ -1,6 +1,4 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Divider } from "@heroui/divider";
+import { Button, Card, Separator } from "@heroui/react";
 import { BlogHero } from "@web/app/(main)/(site)/blog/components/blog-hero";
 import {
   type Highlight,
@@ -26,6 +24,7 @@ import {
 import { Undo2 } from "lucide-react";
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
+import Link from "next/link";
 
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -229,19 +228,12 @@ export default async function BlogPostPage({ params }: PageProps) {
               <h2 className="mb-4 font-bold text-foreground/60 text-xs uppercase tracking-[0.3em]">
                 Executive Summary
               </h2>
-              <Card
-                shadow="none"
-                radius="none"
-                classNames={{
-                  base: "bg-transparent border-l-4 border-primary",
-                  body: "py-0 pl-4",
-                }}
-              >
-                <CardBody>
+              <Card className="border-accent border-l-4 bg-transparent shadow-none">
+                <Card.Content className="py-0 pl-4">
                   <p className="text-foreground/90 text-lg leading-relaxed md:text-xl">
                     {post.excerpt}
                   </p>
-                </CardBody>
+                </Card.Content>
               </Card>
             </section>
           )}
@@ -260,16 +252,14 @@ export default async function BlogPostPage({ params }: PageProps) {
           {/* Related Posts */}
           <RelatedPosts currentPostId={post.id} />
 
-          <Divider className="my-6" />
+          <Separator className="my-6" />
           <div className="flex justify-center pb-8">
-            <Button
-              href="/blog"
-              color="primary"
-              variant="ghost"
-              startContent={<Undo2 className="size-4" />}
-            >
-              Back to blog
-            </Button>
+            <Link href="/blog" className="no-underline">
+              <Button variant="ghost">
+                <Undo2 className="size-4" />
+                Back to blog
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

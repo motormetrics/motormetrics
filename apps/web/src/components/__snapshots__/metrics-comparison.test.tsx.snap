@@ -5,11 +5,12 @@ exports[`MetricsComparison > should indicate positive growth 1`] = `
   <div
     class="flex items-center gap-2"
   >
-    <div
-      class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-7 text-small rounded-full bg-success/20 text-success-700 dark:text-success"
+    <span
+      class="chip chip--success chip--primary"
+      data-slot="chip"
     >
       <svg
-        class="lucide lucide-arrow-up-right max-h-[80%] size-4"
+        class="lucide lucide-arrow-up-right size-4"
         fill="none"
         height="24"
         stroke="currentColor"
@@ -27,14 +28,10 @@ exports[`MetricsComparison > should indicate positive growth 1`] = `
           d="M7 17 17 7"
         />
       </svg>
-      <span
-        class="flex-1 text-inherit font-normal px-2 pl-1"
-      >
-        10%
-      </span>
-    </div>
+      10%
+    </span>
     <span
-      class="text-muted-foreground text-sm"
+      class="text-muted text-sm"
     >
       vs last month
     </span>

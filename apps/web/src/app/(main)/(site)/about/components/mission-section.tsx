@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import { SITE_TITLE } from "@web/config";
 import { fadeInUpVariants } from "@web/config/animations";
@@ -19,7 +20,7 @@ export function MissionSection() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            <blockquote className="border-primary border-l-4 pl-6">
+            <blockquote className="border-accent border-l-4 pl-6">
               <p className="font-medium text-2xl text-foreground leading-relaxed lg:text-3xl">
                 Car buying in Singapore shouldn&apos;t feel like navigating a
                 maze blindfolded.
@@ -39,20 +40,20 @@ export function MissionSection() {
           >
             <Typography.H2 className="lg:text-4xl">Our Mission</Typography.H2>
             <div className="flex flex-col gap-4">
-              <Typography.TextLg className="text-default-600">
+              <Typography.TextLg className="text-muted">
                 Singapore&apos;s car market is uniquely complex. Between COE
                 premiums that swing wildly, registration quotas that change
                 monthly, and a maze of vehicle categories, making informed
                 decisions feels nearly impossible.
               </Typography.TextLg>
-              <Typography.TextLg className="text-default-600">
+              <Typography.TextLg className="text-muted">
                 We built {SITE_TITLE} to change that. By aggregating official
                 data from the Land Transport Authority and presenting it through
                 intuitive visualisations, we hope to make this data easier to
                 find and explore, rather than scattered across government
                 portals and industry reports.
               </Typography.TextLg>
-              <Typography.TextLg className="text-default-600">
+              <Typography.TextLg className="text-muted">
                 Whether you&apos;re a first-time buyer trying to time your
                 purchase, a dealer analysing market trends, or simply curious
                 about Singapore&apos;s automotive landscape—this site might
@@ -63,7 +64,7 @@ export function MissionSection() {
 
           {/* Key points */}
           <motion.div
-            className="grid gap-6 border-default-200 border-t pt-8 sm:grid-cols-2"
+            className="grid gap-6 border-border border-t pt-8 sm:grid-cols-2"
             variants={fadeInUpVariants}
             initial="hidden"
             whileInView="visible"
@@ -71,21 +72,21 @@ export function MissionSection() {
             transition={{ delay: 0.2 }}
           >
             <Card className="border-none bg-transparent shadow-none">
-              <CardBody className="flex flex-col gap-2 p-0">
+              <Card.Content className="flex flex-col gap-2 p-0">
                 <Typography.H4>Data-Driven Decisions</Typography.H4>
                 <Typography.TextSm>
                   Historical trends to help inform your decisions.
                 </Typography.TextSm>
-              </CardBody>
+              </Card.Content>
             </Card>
             <Card className="border-none bg-transparent shadow-none">
-              <CardBody className="flex flex-col gap-2 p-0">
+              <Card.Content className="flex flex-col gap-2 p-0">
                 <Typography.H4>Always Up-to-Date</Typography.H4>
                 <Typography.TextSm>
                   Fresh data after every COE bidding round and monthly
                   registration release.
                 </Typography.TextSm>
-              </CardBody>
+              </Card.Content>
             </Card>
           </motion.div>
         </div>

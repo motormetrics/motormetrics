@@ -1,7 +1,7 @@
 "use client";
 
-import { Avatar } from "@heroui/avatar";
-import { cn } from "@heroui/theme";
+import { cn } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import { fadeInUpVariants } from "@web/config/animations";
 import { motion } from "framer-motion";
@@ -55,22 +55,18 @@ const TimelineItemComponent = ({ item, index }: TimelineItemComponentProps) => {
     >
       {/* Timeline line and dot */}
       <div className="relative flex flex-col items-center">
-        <Avatar
-          name={item.date}
-          classNames={{
-            base: cn(
-              "relative z-10 h-12 w-12 border-2 bg-card transition-colors",
-              item.highlight
-                ? "border-primary text-primary"
-                : "border-default-300 text-default-600 group-hover:border-primary/50",
-            ),
-            name: "font-medium text-sm",
-          }}
-          showFallback
-          getInitials={() => item.date}
-        />
+        <span
+          className={cn(
+            "relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 bg-surface font-medium text-sm transition-colors",
+            item.highlight
+              ? "border-accent text-accent"
+              : "border-border text-muted group-hover:border-accent/50",
+          )}
+        >
+          {item.date}
+        </span>
         {index < timelineData.length - 1 && (
-          <div className="absolute top-12 h-full w-0.5 bg-gradient-to-b from-default-300 to-default-200" />
+          <div className="absolute top-12 h-full w-0.5 bg-gradient-to-b from-muted to-default" />
         )}
       </div>
 
@@ -79,12 +75,12 @@ const TimelineItemComponent = ({ item, index }: TimelineItemComponentProps) => {
         <Typography.H3
           className={cn(
             "text-lg",
-            item.highlight ? "text-primary" : "text-foreground",
+            item.highlight ? "text-accent" : "text-foreground",
           )}
         >
           {item.title}
         </Typography.H3>
-        <Typography.Text className="max-w-md text-default-600">
+        <Typography.Text className="max-w-md text-muted">
           {item.description}
         </Typography.Text>
       </div>
@@ -105,13 +101,13 @@ export function TimelineSection() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            <Typography.Label className="text-primary uppercase tracking-widest">
+            <Typography.Label className="text-accent uppercase tracking-widest">
               Our Journey
             </Typography.Label>
             <Typography.H2 className="lg:text-4xl">
               How this project started
             </Typography.H2>
-            <Typography.Text className="text-default-600">
+            <Typography.Text className="text-muted">
               What started as a personal tool to track COE prices is now a free
               resource for anyone interested in Singapore&apos;s car market.
             </Typography.Text>

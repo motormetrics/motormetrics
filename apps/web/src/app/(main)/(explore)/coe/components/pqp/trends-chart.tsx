@@ -1,15 +1,16 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
+import { formatDateToMonthYear } from "@motormetrics/utils";
+import { numberFormat } from "@ruchernchong/number-format";
 import {
   type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { formatDateToMonthYear } from "@motormetrics/utils";
-import { numberFormat } from "@ruchernchong/number-format";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
@@ -22,22 +23,22 @@ const chartConfig: ChartConfig = {};
 
 export function TrendsChart({ data }: TrendsChartProps) {
   return (
-    <Card className="rounded-2xl p-3">
-      <CardHeader>
+    <Card>
+      <Card.Header>
         <div className="flex flex-col gap-1">
           <Typography.H4>PQP Trends</Typography.H4>
-          <Typography.TextSm className="text-default-500">
+          <Typography.TextSm className="text-muted">
             Historical Prevailing Quota Premium rates across all COE categories
           </Typography.TextSm>
         </div>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <LineChart data={data}>
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis
               dataKey="month"
@@ -68,13 +69,13 @@ export function TrendsChart({ data }: TrendsChartProps) {
             <ChartLegend />
           </LineChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
-        <p className="text-default-500 text-sm">
+      </Card.Content>
+      <Card.Footer>
+        <p className="text-muted text-sm">
           Historical PQP rates (3-month average COE prices) used for COE
           renewals across categories.
         </p>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

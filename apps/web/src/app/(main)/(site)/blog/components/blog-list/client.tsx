@@ -1,6 +1,7 @@
 "use client";
 
-import { Tab, Tabs } from "@heroui/tabs";
+import { Tabs } from "@heroui/react";
+
 import type { SelectPost } from "@motormetrics/database";
 import { Post } from "@web/app/(main)/(site)/blog/components/post";
 import {
@@ -65,7 +66,7 @@ export function BlogListClient({ posts, counts, query }: BlogListClientProps) {
   if (posts.length === 0) {
     return (
       <div className="py-12 text-center">
-        <p className="text-muted-foreground">
+        <p className="text-muted">
           {query
             ? `No results found for "${query}".`
             : "No blog posts available."}
@@ -77,7 +78,7 @@ export function BlogListClient({ posts, counts, query }: BlogListClientProps) {
   if (query) {
     return (
       <div className="flex flex-col gap-8">
-        <p className="text-default-600">
+        <p className="text-muted">
           {filteredPosts.length} result{filteredPosts.length !== 1 && "s"} for "
           {query}"
         </p>
@@ -90,28 +91,33 @@ export function BlogListClient({ posts, counts, query }: BlogListClientProps) {
     <div className="flex flex-col gap-8">
       <Tabs
         selectedKey={selectedTab}
-        variant="underlined"
+        variant="secondary"
         onSelectionChange={(key) => {
           posthog.capture("blog_category_tab_changed", {
             category: key as string,
           });
           setSelectedTab(key as string);
         }}
-        classNames={{
-          tabList: "gap-6",
-          tab: "px-0 h-10",
-          tabContent: "group-data-[selected=true]:font-semibold",
-        }}
       >
-        <Tab key="all" title={`${tabLabels.all} (${counts.total})`} />
-        {Object.keys(counts.category)
-          .sort((a, b) => a.localeCompare(b))
-          .map((cat) => (
-            <Tab
-              key={cat}
-              title={`${tabLabels[cat] || cat} (${counts.category[cat]})`}
-            />
-          ))}
+        <Tabs.ListContainer>
+          <Tabs.List
+            aria-label="Blog categories"
+            className="gap-6 *:h-10 *:px-0"
+          >
+            <Tabs.Tab id="all">
+              {tabLabels.all} ({counts.total})
+              <Tabs.Indicator />
+            </Tabs.Tab>
+            {Object.keys(counts.category)
+              .sort((a, b) => a.localeCompare(b))
+              .map((cat) => (
+                <Tabs.Tab key={cat} id={cat}>
+                  {tabLabels[cat] || cat} ({counts.category[cat]})
+                  <Tabs.Indicator />
+                </Tabs.Tab>
+              ))}
+          </Tabs.List>
+        </Tabs.ListContainer>
       </Tabs>
 
       {heroPost && (

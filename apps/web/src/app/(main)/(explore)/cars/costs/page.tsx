@@ -64,8 +64,8 @@ export default async function CarCostsPage() {
         {data.length === 0 ? (
           <EmptyState
             icon={
-              <div className="flex size-16 items-center justify-center rounded-2xl bg-default-100">
-                <DollarSign className="size-8 text-default-400" />
+              <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
+                <DollarSign className="size-8 text-muted" />
               </div>
             }
             title="No Cost Data Available"

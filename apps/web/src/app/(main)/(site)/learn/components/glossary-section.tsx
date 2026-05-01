@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Link } from "@heroui/link";
+import { Card, Link } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
@@ -19,14 +19,14 @@ export function GlossarySection() {
   return (
     <section
       id="glossary"
-      className="relative -mx-6 scroll-mt-24 overflow-hidden bg-default-100 px-6 py-20 lg:py-28"
+      className="relative -mx-6 scroll-mt-24 overflow-hidden bg-default px-6 py-20 lg:py-28"
     >
       {/* Dot pattern background */}
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--muted-foreground) 15%, transparent) 1px, transparent 0)",
+            "radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--muted) 15%, transparent) 1px, transparent 0)",
           backgroundSize: "24px 24px",
         }}
         aria-hidden="true"
@@ -41,13 +41,13 @@ export function GlossarySection() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <Typography.Label className="text-primary uppercase tracking-widest">
+          <Typography.Label className="text-accent uppercase tracking-widest">
             Terminology
           </Typography.Label>
           <Typography.H2 className="lg:text-4xl">
             Glossary of Key Terms
           </Typography.H2>
-          <Typography.Text className="max-w-2xl text-default-600">
+          <Typography.Text className="max-w-2xl text-muted">
             Understanding Singapore&apos;s automotive terminology is essential
             for navigating the car market.
           </Typography.Text>
@@ -74,18 +74,18 @@ export function GlossarySection() {
                   const hasGuide = guideSlugs.includes(slug);
 
                   const card = (
-                    <Card className="h-full border-default-200/80 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-                      <CardHeader className="pb-0">
+                    <Card className="h-full border-border/80 transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
+                      <Card.Header className="pb-0">
                         <div className="flex w-full items-center justify-between">
                           <Typography.H4>{term}</Typography.H4>
                           {hasGuide && (
-                            <ArrowRight className="size-4 text-primary" />
+                            <ArrowRight className="size-4 text-accent" />
                           )}
                         </div>
-                      </CardHeader>
-                      <CardBody>
+                      </Card.Header>
+                      <Card.Content>
                         <Typography.TextSm>{definition}</Typography.TextSm>
-                      </CardBody>
+                      </Card.Content>
                     </Card>
                   );
 

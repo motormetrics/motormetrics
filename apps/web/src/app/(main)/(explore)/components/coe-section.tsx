@@ -1,12 +1,8 @@
-import { Badge } from "@heroui/badge";
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Skeleton } from "@heroui/skeleton";
+import { Button, Card, Link, Skeleton } from "@heroui/react";
 import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults } from "@web/queries/coe";
 import { ArrowDownIcon, ArrowUpIcon, ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import { Suspense } from "react";
 import {
   calculateChangePercent,
@@ -19,23 +15,18 @@ function TrendBadge({ trend }: { trend: Exclude<Trend, "neutral"> }) {
   const Icon = isUp ? ArrowUpIcon : ArrowDownIcon;
 
   return (
-    <Badge
-      aria-label={isUp ? "Price increased" : "Price decreased"}
-      classNames={{
-        base: "inline-flex",
-        badge: "static h-5 min-w-5 translate-x-0 translate-y-0 border-0 p-0",
-      }}
-      color={isUp ? "danger" : "success"}
-      content={<Icon aria-hidden className="size-3" />}
-      shape="circle"
-      showOutline={false}
-      size="sm"
-      variant="solid"
+    <span
+      className={`inline-flex size-5 items-center justify-center rounded-full ${
+        isUp
+          ? "bg-danger text-danger-foreground"
+          : "bg-success text-success-foreground"
+      }`}
     >
+      <Icon aria-hidden className="size-3" />
       <span className="sr-only">
         {isUp ? "Price increased" : "Price decreased"}
       </span>
-    </Badge>
+    </span>
   );
 }
 
@@ -46,12 +37,12 @@ async function CoeSectionContent() {
   const previousMap = new Map(previous.map((r) => [r.vehicleClass, r.premium]));
 
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <Typography.H3>Latest COE Results</Typography.H3>
           <Link href="/coe" aria-label="View all COE results">
-            <Button isIconOnly variant="flat" radius="full" tabIndex={-1}>
+            <Button isIconOnly variant="tertiary">
               <ArrowUpRight className="size-6" />
             </Button>
           </Link>
@@ -69,12 +60,11 @@ async function CoeSectionContent() {
             return (
               <Card
                 key={result.vehicleClass}
-                shadow="none"
-                className="bg-muted"
+                className="bg-surface shadow-none"
               >
-                <CardBody className="p-4">
+                <Card.Content>
                   <div className="mb-2 flex items-center justify-between">
-                    <span className="font-medium text-default-500 text-xs">
+                    <span className="font-medium text-muted text-xs">
                       {result.vehicleClass}
                     </span>
                     {trend !== "neutral" && <TrendBadge trend={trend} />}
@@ -88,37 +78,37 @@ async function CoeSectionContent() {
                         ? "text-danger"
                         : trend === "down"
                           ? "text-success"
-                          : "text-default-500"
+                          : "text-muted"
                     }`}
                   >
                     {changePercent}
                   </p>
-                </CardBody>
+                </Card.Content>
               </Card>
             );
           })}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
 
 function CoeSectionSkeleton() {
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content>
         <Skeleton className="mb-5 h-6 w-40 rounded-lg" />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {[0, 1, 2, 3, 4].map((i) => (
-            <Card key={i} shadow="none" className="bg-default-100">
-              <CardBody className="p-4">
+            <Card key={i} className="bg-default shadow-none">
+              <Card.Content>
                 <Skeleton className="mb-2 h-4 w-12 rounded-lg" />
                 <Skeleton className="h-6 w-20 rounded-lg" />
-              </CardBody>
+              </Card.Content>
             </Card>
           ))}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

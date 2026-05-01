@@ -1,8 +1,7 @@
 "use client";
 
-import { Avatar } from "@heroui/avatar";
-import { Card, CardBody } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
+
 import {
   formatGrowthRate,
   formatPercentage,
@@ -35,79 +34,70 @@ export function MakeCard({
   const href = `/cars/makes/${slugify(make)}`;
 
   return (
-    <Card
-      isPressable
-      as={Link}
-      href={href}
-      className="p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-    >
-      <CardBody>
-        <div className="flex flex-col gap-2">
-          <div className="flex items-start gap-2">
-            <div className="flex size-16 shrink-0 items-center justify-center">
-              {logoUrl ? (
-                <Image
-                  alt={`${make} logo`}
-                  src={logoUrl}
-                  width={512}
-                  height={512}
-                  className="size-full object-contain"
-                />
-              ) : (
-                <Avatar
-                  name={make.charAt(0) || "?"}
-                  classNames={{
-                    base: "size-full bg-primary",
-                    name: "text-lg font-semibold text-primary-foreground",
-                  }}
-                />
-              )}
-            </div>
-            <div className="flex min-w-0 flex-col gap-2">
-              <Typography.Label className="truncate">{make}</Typography.Label>
-              {!!count && !!share && (
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-bold text-xl tabular-nums leading-none">
-                      {count.toLocaleString()}
-                    </span>
-                    <Typography.Caption>regs</Typography.Caption>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Chip
-                      color="primary"
-                      variant="flat"
-                      size="sm"
-                      className="rounded-full"
-                    >
-                      {formatPercentage(share)} share
-                    </Chip>
-                    {!!yoyChange && (
+    <Link href={href} className="block h-full no-underline">
+      <Card className="h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <Card.Content>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-start gap-2">
+              <div className="flex size-16 shrink-0 items-center justify-center">
+                {logoUrl ? (
+                  <Image
+                    alt={`${make} logo`}
+                    src={logoUrl}
+                    width={512}
+                    height={512}
+                    className="size-full object-contain"
+                  />
+                ) : (
+                  <span className="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg">
+                    {make.charAt(0) || "?"}
+                  </span>
+                )}
+              </div>
+              <div className="flex min-w-0 flex-col gap-2">
+                <Typography.Label className="truncate">{make}</Typography.Label>
+                {!!count && !!share && (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-bold text-xl tabular-nums leading-none">
+                        {count.toLocaleString()}
+                      </span>
+                      <Typography.Caption>regs</Typography.Caption>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
                       <Chip
-                        color={yoyChange >= 0 ? "success" : "danger"}
-                        variant="flat"
+                        color="accent"
+                        variant="primary"
                         size="sm"
-                        startContent={
-                          yoyChange >= 0 ? (
+                        className="rounded-full"
+                      >
+                        {formatPercentage(share)} share
+                      </Chip>
+                      {!!yoyChange && (
+                        <Chip
+                          color={yoyChange >= 0 ? "success" : "danger"}
+                          variant="primary"
+                          size="sm"
+                        >
+                          {yoyChange >= 0 ? (
                             <TrendingUp className="size-3" />
                           ) : (
                             <TrendingDown className="size-3" />
-                          )
-                        }
-                      >
-                        {formatGrowthRate(yoyChange)}
-                      </Chip>
-                    )}
+                          )}
+                          {formatGrowthRate(yoyChange)}
+                        </Chip>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
+            {trend && trend.length > 0 && (
+              <Sparkline data={trend} height="h-10" />
+            )}
           </div>
-          {trend && trend.length > 0 && (
-            <Sparkline data={trend} height="h-10" />
-          )}
-        </div>
-      </CardBody>
-    </Card>
+        </Card.Content>
+      </Card>
+    </Link>
   );
 }

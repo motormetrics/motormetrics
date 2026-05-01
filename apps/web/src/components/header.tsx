@@ -1,17 +1,9 @@
 "use client";
 
-import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  NavbarMenu,
-  NavbarMenuItem,
-  NavbarMenuToggle,
-} from "@heroui/navbar";
-import { cn } from "@heroui/theme";
+import { cn } from "@heroui/react";
 import { BrandLogo } from "@web/components/brand-logo";
 import { NAV_ITEMS, type NavItem } from "@web/config/navigation";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -22,83 +14,93 @@ export function Header() {
 
   const isActive = (path: NavItem["href"]) => {
     if (path === "/") {
-      // Dashboard active for home, cars, coe routes (all dashboard content)
       return (
         !pathname.startsWith("/blog") &&
         !pathname.startsWith("/learn") &&
         !pathname.startsWith("/about")
       );
     }
+
     return pathname.startsWith(path);
   };
 
   return (
-    <Navbar
-      isMenuOpen={isMenuOpen}
-      onMenuOpenChange={setIsMenuOpen}
-      maxWidth="2xl"
-      isBordered={false}
-      position="sticky"
-    >
-      {/* Brand and Mobile Toggle */}
-      <NavbarContent justify="start">
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="md:hidden"
-        />
-        <NavbarBrand>
-          <Link href="/" className="flex items-center gap-2">
+    <nav className="sticky top-0 z-40 w-full border-separator border-b bg-background/90 backdrop-blur-xl">
+      <header className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+            className="rounded-full p-2 text-foreground transition-colors hover:bg-surface md:hidden"
+            onClick={() => setIsMenuOpen((open) => !open)}
+          >
+            {isMenuOpen ? (
+              <X className="size-5" />
+            ) : (
+              <Menu className="size-5" />
+            )}
+          </button>
+          <Link
+            href="/"
+            className="flex items-center gap-2"
+            onClick={() => setIsMenuOpen(false)}
+          >
             <BrandLogo />
           </Link>
-        </NavbarBrand>
-      </NavbarContent>
+        </div>
 
-      {/* Desktop Navigation */}
-      <NavbarContent className="hidden gap-1 md:flex" justify="center">
-        {NAV_ITEMS.map(({ href, label }) => {
-          const active = isActive(href);
+        <ul className="hidden items-center gap-1 md:flex">
+          {NAV_ITEMS.map(({ href, label }) => {
+            const active = isActive(href);
 
-          return (
-            <NavbarItem key={href}>
-              <Link
-                href={href}
-                className={cn(
-                  "rounded-full px-4 py-2 font-medium text-sm transition-all duration-200",
-                  active
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "bg-default-100 text-foreground hover:bg-default-200",
-                )}
-              >
-                {label}
-              </Link>
-            </NavbarItem>
-          );
-        })}
-      </NavbarContent>
+            return (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className={cn(
+                    "rounded-full px-4 py-2 font-medium text-sm transition-all duration-200",
+                    active
+                      ? "bg-accent text-accent-foreground shadow-sm"
+                      : "bg-surface text-foreground hover:bg-surface-tertiary",
+                  )}
+                  aria-current={active ? "page" : undefined}
+                >
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </header>
 
-      {/* Mobile Menu */}
-      <NavbarMenu className="bg-background/95 pt-6 backdrop-blur-xl">
-        {NAV_ITEMS.map(({ href, label }) => {
-          const active = isActive(href);
+      {isMenuOpen && (
+        <div className="border-separator border-t bg-background/95 px-4 py-4 backdrop-blur-xl md:hidden">
+          <ul className="flex flex-col gap-1">
+            {NAV_ITEMS.map(({ href, label }) => {
+              const active = isActive(href);
 
-          return (
-            <NavbarMenuItem key={href}>
-              <Link
-                href={href}
-                className={cn(
-                  "block w-full py-3 text-lg transition-colors",
-                  active
-                    ? "font-semibold text-primary"
-                    : "text-foreground/70 hover:text-foreground",
-                )}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {label}
-              </Link>
-            </NavbarMenuItem>
-          );
-        })}
-      </NavbarMenu>
-    </Navbar>
+              return (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className={cn(
+                      "block w-full rounded-2xl px-4 py-3 text-lg transition-colors",
+                      active
+                        ? "bg-accent-soft font-semibold text-accent"
+                        : "text-foreground/70 hover:bg-surface hover:text-foreground",
+                    )}
+                    aria-current={active ? "page" : undefined}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </nav>
   );
 }

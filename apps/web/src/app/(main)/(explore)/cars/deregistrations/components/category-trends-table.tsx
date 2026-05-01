@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import { formatNumber } from "@web/utils/charts";
 
@@ -17,8 +18,8 @@ interface CategoryTrendsTableProps {
 
 export function CategoryTrendsTable({ data }: CategoryTrendsTableProps) {
   return (
-    <Card className="rounded-2xl p-3">
-      <CardBody className="p-4">
+    <Card>
+      <Card.Content>
         <Typography.Caption className="mb-3 font-medium uppercase tracking-wider">
           Category Trends (12 months)
         </Typography.Caption>
@@ -32,7 +33,7 @@ export function CategoryTrendsTable({ data }: CategoryTrendsTableProps) {
             return (
               <div
                 key={cat.category}
-                className="grid grid-cols-12 items-center gap-2 rounded-lg bg-default-50 px-3 py-2"
+                className="grid grid-cols-12 items-center gap-2 rounded-lg bg-default px-3 py-2"
               >
                 <div className="col-span-3 flex items-center gap-2">
                   <div
@@ -77,7 +78,7 @@ export function CategoryTrendsTable({ data }: CategoryTrendsTableProps) {
             );
           })}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

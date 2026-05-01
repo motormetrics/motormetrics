@@ -1,12 +1,13 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import {
   type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
@@ -37,7 +38,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col gap-4">
-          <Typography.Label className="text-primary uppercase tracking-widest">
+          <Typography.Label className="text-accent uppercase tracking-widest">
             Traffic Trend
           </Typography.Label>
           <Typography.H2 className="max-w-lg lg:text-4xl">
@@ -46,14 +47,14 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
         </div>
 
         {/* Chart */}
-        <Card className="rounded-2xl p-3">
-          <CardHeader className="flex flex-col items-start gap-2 pb-4">
+        <Card>
+          <Card.Header className="flex flex-col items-start gap-2">
             <Typography.H4>Daily Visitors</Typography.H4>
-            <Typography.TextSm className="text-default-600">
+            <Typography.TextSm className="text-muted">
               Unique visitors and page views per day
             </Typography.TextSm>
-          </CardHeader>
-          <CardBody className="pt-2">
+          </Card.Header>
+          <Card.Content className="pt-2">
             <ChartContainer config={chartConfig} className="h-[300px] w-full">
               <AreaChart accessibilityLayer data={data}>
                 <defs>
@@ -73,7 +74,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
                 <CartesianGrid
                   vertical={false}
                   strokeDasharray="3 3"
-                  className="stroke-default-200"
+                  className="stroke-border"
                 />
                 <XAxis
                   dataKey="date"
@@ -111,7 +112,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
                 />
               </AreaChart>
             </ChartContainer>
-          </CardBody>
+          </Card.Content>
         </Card>
       </div>
     </section>

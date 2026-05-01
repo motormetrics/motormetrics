@@ -1,11 +1,12 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { formatNumber } from "@web/utils/charts";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
@@ -34,18 +35,18 @@ export function TypeBreakdownChart({
   );
 
   return (
-    <Card className="rounded-2xl p-3">
-      <CardHeader className="flex flex-col items-start gap-2">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>{title}</Typography.H4>
         {description && <Typography.TextSm>{description}</Typography.TextSm>}
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[200px] w-full">
           <BarChart data={chartData} layout="vertical">
             <CartesianGrid
               horizontal={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis
               type="number"
@@ -61,7 +62,7 @@ export function TypeBreakdownChart({
               width={100}
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={<ChartTooltipContent />}
             />
             <Bar dataKey="value" radius={[0, 4, 4, 0]}>
@@ -71,7 +72,7 @@ export function TypeBreakdownChart({
             </Bar>
           </BarChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

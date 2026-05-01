@@ -1,5 +1,5 @@
-import { Toaster } from "@motormetrics/ui/components/sonner";
 import type { ReactNode } from "react";
+import { Toaster } from "sonner";
 
 export default function AdminLayout({
   children,

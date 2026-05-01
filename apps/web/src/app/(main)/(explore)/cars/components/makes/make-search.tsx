@@ -1,6 +1,7 @@
 "use client";
 
-import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
+import { ComboBox, Input, Label, ListBox } from "@heroui/react";
+
 import { slugify } from "@motormetrics/utils";
 import type { Make } from "@web/types";
 import { Search } from "lucide-react";
@@ -23,20 +24,25 @@ export function MakeSearch({ makes }: MakeSearchProps) {
   };
 
   return (
-    <Autocomplete
-      aria-label="Search make..."
-      placeholder="Search make..."
-      startContent={<Search className="size-4" />}
-      onSelectionChange={handleSelectionChange}
-      variant="underlined"
-    >
-      {makes.map((make) => {
-        return (
-          <AutocompleteItem key={make} textValue={make}>
-            {make}
-          </AutocompleteItem>
-        );
-      })}
-    </Autocomplete>
+    <ComboBox onSelectionChange={handleSelectionChange}>
+      <Label className="sr-only">Search make</Label>
+      <ComboBox.InputGroup>
+        <Search className="ml-3 size-4 text-muted" />
+        <Input placeholder="Search make..." />
+        <ComboBox.Trigger />
+      </ComboBox.InputGroup>
+      <ComboBox.Popover>
+        <ListBox>
+          {makes.map((make) => {
+            return (
+              <ListBox.Item key={make} id={make} textValue={make}>
+                {make}
+                <ListBox.ItemIndicator />
+              </ListBox.Item>
+            );
+          })}
+        </ListBox>
+      </ComboBox.Popover>
+    </ComboBox>
   );
 }

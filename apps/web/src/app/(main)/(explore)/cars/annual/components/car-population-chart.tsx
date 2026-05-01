@@ -1,15 +1,14 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
-import { CHART_CURSOR, CHART_GRID } from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
+import { Card } from "@heroui/react";
+
+import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
+} from "@web/components/charts/chart";
+import { CHART_CURSOR, CHART_GRID } from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
@@ -48,16 +47,16 @@ export function CarPopulationChart({
   };
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>
           Top {TOP_N} Makes ({effectiveYear})
         </Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Car population by manufacturer
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[500px] w-full">
           <BarChart data={topMakes} layout="vertical">
             <CartesianGrid
@@ -89,12 +88,12 @@ export function CarPopulationChart({
             <Bar dataKey="total" radius={[0, 4, 4, 0]} fill="var(--chart-1)" />
           </BarChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
-        <Typography.TextSm className="text-default-500">
+      </Card.Content>
+      <Card.Footer>
+        <Typography.TextSm className="text-muted">
           Showing top {TOP_N} makes by car population for {effectiveYear}.
         </Typography.TextSm>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

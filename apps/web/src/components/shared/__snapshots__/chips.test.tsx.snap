@@ -2,14 +2,16 @@
 
 exports[`NewChip > should render with default props 1`] = `
 <div>
-  <div
-    class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-6 text-tiny rounded-full bg-primary text-primary-foreground"
+  <span
+    class="chip chip--accent chip--sm chip--primary"
+    data-slot="chip"
   >
     <span
-      class="flex-1 text-inherit font-normal px-1"
+      class="chip__label"
+      data-slot="chip-label"
     >
       New
     </span>
-  </div>
+  </span>
 </div>
 `;

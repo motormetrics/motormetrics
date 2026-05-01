@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
+import { Card } from "@heroui/react";
 import { LoginFormClient } from "./login-form.client";
 
 function GoogleIcon() {
@@ -30,11 +24,11 @@ function GoogleIcon() {
 export function LoginForm() {
   return (
     <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-xl">Welcome back</CardTitle>
-        <CardDescription>Login to access the admin dashboard</CardDescription>
-      </CardHeader>
-      <CardContent>
+      <Card.Header className="text-center">
+        <Card.Title className="text-xl">Welcome back</Card.Title>
+        <Card.Description>Login to access the admin dashboard</Card.Description>
+      </Card.Header>
+      <Card.Content>
         <LoginFormClient
           googleButtonContent={<GoogleIcon />}
           dividerText="Or continue with"
@@ -43,7 +37,7 @@ export function LoginForm() {
           loginButtonText="Login"
           loadingButtonText="Signing in..."
         />
-      </CardContent>
+      </Card.Content>
     </Card>
   );
 }

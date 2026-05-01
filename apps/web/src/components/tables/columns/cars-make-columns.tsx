@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/button";
+import { Button } from "@heroui/react";
+
 import type { SelectCar } from "@motormetrics/database";
 import { slugify } from "@motormetrics/utils";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -14,11 +15,11 @@ export const columns: ColumnDef<Partial<SelectCar>>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant="light"
+          variant="tertiary"
           onPress={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          endContent={<ArrowUpDown className="size-4" />}
         >
           Month
+          <ArrowUpDown className="size-4" />
         </Button>
       );
     },

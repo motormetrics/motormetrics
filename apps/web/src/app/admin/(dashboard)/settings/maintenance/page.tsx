@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
+import { Card } from "@heroui/react";
 import { getMaintenanceConfig } from "@web/app/admin/actions/maintenance";
 import { MaintenanceForm } from "@web/app/admin/components/maintenance-form";
 import { ArrowLeft, Wrench } from "lucide-react";
@@ -18,7 +13,7 @@ export default async function MaintenancePage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/settings"
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-2 text-muted hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
           Back to Settings
@@ -30,7 +25,7 @@ export default async function MaintenancePage() {
           <Wrench className="size-8" />
           Maintenance Mode
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted">
           Configure maintenance mode settings to temporarily disable services
           during updates and repairs.
         </p>
@@ -40,10 +35,10 @@ export default async function MaintenancePage() {
 
       {/* Instructions */}
       <Card>
-        <CardHeader>
-          <CardTitle>Instructions & Important Notes</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4 text-muted-foreground text-sm">
+        <Card.Header>
+          <Card.Title>Instructions & Important Notes</Card.Title>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-4 text-muted text-sm">
           <div className="flex items-start gap-2">
             <span className="font-medium text-foreground">⚠️</span>
             <span>
@@ -72,7 +67,7 @@ export default async function MaintenancePage() {
               automatically redirected when maintenance mode is disabled.
             </span>
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
     </div>
   );

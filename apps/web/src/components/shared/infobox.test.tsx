@@ -1,38 +1,40 @@
 import { render, screen } from "@testing-library/react";
 import { Infobox } from "./infobox";
 
-vi.mock("@heroui/alert", () => ({
-  Alert: ({
-    title,
-    description,
-    color,
-    variant,
+vi.mock("@heroui/react", () => {
+  const Alert = ({
+    status,
     className,
+    children,
   }: {
-    title: string;
-    description: React.ReactNode;
-    color: string;
-    variant: string;
+    status?: string;
     className?: string;
+    children: React.ReactNode;
   }) => (
-    <section
-      data-testid="alert"
-      data-color={color}
-      data-variant={variant}
-      className={className}
-    >
-      <h3>{title}</h3>
-      <div data-testid="alert-description">{description}</div>
+    <section data-testid="alert" data-status={status} className={className}>
+      {children}
     </section>
-  ),
-}));
+  );
+
+  Alert.Content = ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  );
+  Alert.Title = ({ children }: { children: React.ReactNode }) => (
+    <h3>{children}</h3>
+  );
+  Alert.Description = ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="alert-description">{children}</div>
+  );
+
+  return { Alert };
+});
 
 describe("Infobox", () => {
   it("should render title and markdown content", () => {
     const { container } = render(
       <Infobox
         title="What is COE?"
-        content="The **Certificate of Entitlement** controls vehicle ownership."
+        content="**Certificate of Entitlement** controls vehicle ownership."
       />,
     );
 
@@ -45,8 +47,7 @@ describe("Infobox", () => {
     render(<Infobox title="Info" content="A short note" />);
 
     const alert = screen.getByTestId("alert");
-    expect(alert).toHaveAttribute("data-color", "primary");
-    expect(alert).toHaveAttribute("data-variant", "bordered");
-    expect(alert).toHaveClass("px-4", "py-3");
+    expect(alert).toHaveAttribute("data-status", "accent");
+    expect(alert).toHaveClass("border", "border-accent/30", "px-4", "py-3");
   });
 });

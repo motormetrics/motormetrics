@@ -1,19 +1,19 @@
 "use client";
 
-import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Card, ComboBox, Input, Label, ListBox } from "@heroui/react";
+
 import type { SelectDeregistration } from "@motormetrics/database";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
   type CategoryWithPercentage,
   toPercentageDistribution,
 } from "@web/app/(main)/(explore)/cars/deregistrations/components/constants";
 import { deregistrationsSearchParams } from "@web/app/(main)/(explore)/cars/deregistrations/search-params";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { formatNumber, formatPercentage } from "@web/utils/charts";
 import { useQueryStates } from "nuqs";
@@ -68,7 +68,7 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
   }));
 
   const chartConfig = {
-    total: { label: "Deregistrations", color: "hsl(var(--heroui-primary))" },
+    total: { label: "Deregistrations", color: "var(--accent)" },
   } as const;
 
   const handleBarClick = async (entry: CategoryWithPercentage) => {
@@ -82,59 +82,72 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
   };
 
   return (
-    <Card className="rounded-2xl p-3">
-      <CardHeader className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+    <Card>
+      <Card.Header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex flex-col gap-1">
           <Typography.H3>Deregistrations by Category</Typography.H3>
           {selectedCategory ? (
-            <Typography.Text className="text-default-500">
+            <Typography.Text className="text-muted">
               {formatNumber(selectedCategory.total)} deregistrations in{" "}
               {selectedCategory.category} (
               {formatPercentage(selectedCategory.percentage)})
             </Typography.Text>
           ) : (
-            <Typography.Text className="text-default-500">
+            <Typography.Text className="text-muted">
               {formatNumber(totalDeregistrations)} total deregistrations for{" "}
               {formatDateToMonthYear(currentMonth)}
             </Typography.Text>
           )}
         </div>
-        <Autocomplete
-          label="Month"
-          variant="bordered"
+        <ComboBox
           className="max-w-xs"
           selectedKey={currentMonth}
           onSelectionChange={handleMonthChange}
-          defaultItems={monthOptions}
         >
-          {(item: MonthOption) => (
-            <AutocompleteItem key={item.key}>{item.label}</AutocompleteItem>
-          )}
-        </Autocomplete>
-      </CardHeader>
-      <CardBody>
+          <Label>Month</Label>
+          <ComboBox.InputGroup>
+            <Input placeholder="Month" />
+            <ComboBox.Trigger />
+          </ComboBox.InputGroup>
+          <ComboBox.Popover>
+            <ListBox>
+              {monthOptions.map((item) => (
+                <ListBox.Item
+                  key={item.key}
+                  id={item.key}
+                  textValue={item.label}
+                >
+                  {item.label}
+                  <ListBox.ItemIndicator />
+                </ListBox.Item>
+              ))}
+            </ListBox>
+          </ComboBox.Popover>
+        </ComboBox>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[400px] w-full">
           <BarChart data={sortedData} layout="vertical">
             <defs>
               <linearGradient id="selectedGradient" x1="0" y1="0" x2="1" y2="0">
                 <stop
                   offset="0%"
-                  stopColor="hsl(var(--heroui-primary) / 0.4)"
+                  stopColor="color-mix(in srgb, var(--accent) 40%, transparent)"
                 />
-                <stop offset="100%" stopColor="hsl(var(--heroui-primary))" />
+                <stop offset="100%" stopColor="var(--accent)" />
               </linearGradient>
             </defs>
             <CartesianGrid
               horizontal={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis
               type="number"
               tickLine={false}
               axisLine={false}
               tickFormatter={formatNumber}
-              tick={{ fill: "hsl(var(--heroui-default-500))" }}
+              tick={{ fill: "var(--muted)" }}
             />
             <YAxis
               type="category"
@@ -142,13 +155,13 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
               tickLine={false}
               axisLine={false}
               width={180}
-              tick={{ fill: "hsl(var(--heroui-default-600))" }}
+              tick={{ fill: "var(--muted)" }}
               tickFormatter={(value: string) =>
                 value.replace("Vehicles Exempted From VQS", "VQS Exempted")
               }
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={
                 <ChartTooltipContent
                   formatter={(value, _name, item) => {
@@ -178,13 +191,13 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
             </Bar>
           </BarChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
-        <Typography.TextSm className="text-default-500">
+      </Card.Content>
+      <Card.Footer>
+        <Typography.TextSm className="text-muted">
           Click on a bar to select a category, or use the dropdown above to
           change the month
         </Typography.TextSm>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

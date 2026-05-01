@@ -1,5 +1,4 @@
-import { Button } from "@heroui/button";
-import { Divider } from "@heroui/divider";
+import { Button, Separator } from "@heroui/react";
 import { BrandLogo } from "@web/components/brand-logo";
 import Typography from "@web/components/typography";
 import { UnreleasedFeature } from "@web/components/unreleased-feature";
@@ -17,7 +16,7 @@ const CURRENT_YEAR = new Date().getFullYear();
 
 export function Footer() {
   return (
-    <footer className="border-divider border-t bg-content1">
+    <footer className="border-divider border-t bg-surface">
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Brand Section */}
@@ -29,20 +28,17 @@ export function Footer() {
             </Typography.TextSm>
             <div className="flex gap-2">
               {navLinks.socialMedia.map(({ title, url, icon: Icon }) => (
-                <Button
-                  key={title}
-                  as="a"
-                  href={url}
-                  rel="me noreferrer"
-                  target="_blank"
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  className="rounded-full text-default-500 transition-colors hover:text-primary"
-                  aria-label={title}
-                >
-                  <Icon className="size-4" aria-hidden="true" />
-                </Button>
+                <a key={title} href={url} rel="me noreferrer" target="_blank">
+                  <Button
+                    isIconOnly
+                    variant="tertiary"
+                    size="sm"
+                    className="rounded-full text-muted transition-colors hover:text-accent"
+                    aria-label={title}
+                  >
+                    <Icon className="size-4" aria-hidden="true" />
+                  </Button>
+                </a>
               ))}
             </div>
           </div>
@@ -55,19 +51,19 @@ export function Footer() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="block text-default-600 transition-colors hover:text-primary"
+                  className="block text-muted transition-colors hover:text-accent"
                 >
                   <Typography.TextSm>{item.label}</Typography.TextSm>
                 </Link>
               ))}
             </div>
             <UnreleasedFeature>
-              <Divider />
+              <Separator />
               <Link
                 href={POLAR_DONATION_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-default-600 transition-colors hover:text-primary"
+                className="flex items-center gap-2 text-muted transition-colors hover:text-accent"
               >
                 <Heart className="size-4" />
                 <Typography.TextSm>Support this project</Typography.TextSm>
@@ -76,11 +72,11 @@ export function Footer() {
           </div>
         </div>
 
-        <Divider className="my-8" />
+        <Separator className="my-8" />
 
         {/* Bottom Section */}
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0">
-          <div className="text-center text-default-600 md:text-left">
+          <div className="text-center text-muted md:text-left">
             <Typography.TextSm>
               © {CURRENT_YEAR} {SITE_TITLE}. All rights reserved. • v{version}
             </Typography.TextSm>
@@ -90,7 +86,7 @@ export function Footer() {
                 href="https://datamall.lta.gov.sg"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary hover:underline"
+                className="text-accent hover:underline"
               >
                 LTA DataMall
               </Link>
@@ -100,13 +96,13 @@ export function Footer() {
           <div className="flex gap-4">
             <Link
               href="/legal/privacy-policy"
-              className="text-default-600 transition-colors hover:text-primary"
+              className="text-muted transition-colors hover:text-accent"
             >
               <Typography.TextSm>Privacy Policy</Typography.TextSm>
             </Link>
             <Link
               href="/legal/terms-of-service"
-              className="text-default-600 transition-colors hover:text-primary"
+              className="text-muted transition-colors hover:text-accent"
             >
               <Typography.TextSm>Terms of Service</Typography.TextSm>
             </Link>

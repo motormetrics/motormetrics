@@ -156,8 +156,8 @@ async function ByFuelTypeContent() {
     return (
       <EmptyState
         icon={
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-default-100">
-            <BarChart3 className="size-8 text-default-400" />
+          <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
+            <BarChart3 className="size-8 text-muted" />
           </div>
         }
         title="No Data Available Yet"
@@ -201,8 +201,8 @@ async function ByMakeContent() {
     return (
       <EmptyState
         icon={
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-default-100">
-            <BarChart3 className="size-8 text-default-400" />
+          <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
+            <BarChart3 className="size-8 text-muted" />
           </div>
         }
         title="No Data Available Yet"

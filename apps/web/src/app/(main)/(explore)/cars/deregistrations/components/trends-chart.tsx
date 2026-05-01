@@ -1,12 +1,13 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
+
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { formatDateToMonthYear } from "@motormetrics/utils";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { formatNumber } from "@web/utils/charts";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
@@ -22,7 +23,7 @@ interface TrendsChartProps {
 
 export function TrendsChart({ data }: TrendsChartProps) {
   const chartConfig = {
-    total: { label: "Deregistrations", color: "hsl(var(--heroui-primary))" },
+    total: { label: "Deregistrations", color: "var(--accent)" },
   } as const;
 
   const formattedData = data.map((item) => ({
@@ -32,17 +33,17 @@ export function TrendsChart({ data }: TrendsChartProps) {
 
   if (data.length === 0) {
     return (
-      <Card className="rounded-2xl p-3">
-        <CardBody className="p-4">
+      <Card>
+        <Card.Content>
           <Typography.TextSm>No trend data available</Typography.TextSm>
-        </CardBody>
+        </Card.Content>
       </Card>
     );
   }
 
   return (
-    <Card className="rounded-2xl p-3">
-      <CardBody className="p-4">
+    <Card>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <AreaChart
             data={formattedData}
@@ -55,29 +56,21 @@ export function TrendsChart({ data }: TrendsChartProps) {
           >
             <defs>
               <linearGradient id="trendsGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor="hsl(var(--heroui-primary))"
-                  stopOpacity={0.3}
-                />
-                <stop
-                  offset="100%"
-                  stopColor="hsl(var(--heroui-primary))"
-                  stopOpacity={0}
-                />
+                <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis
               dataKey="month"
               tickLine={false}
               axisLine={false}
               className="text-xs"
-              tick={{ fill: "hsl(var(--heroui-default-500))" }}
+              tick={{ fill: "var(--muted)" }}
             />
             <YAxis
               tickLine={false}
@@ -85,10 +78,10 @@ export function TrendsChart({ data }: TrendsChartProps) {
               width={60}
               tickFormatter={formatNumber}
               className="text-xs"
-              tick={{ fill: "hsl(var(--heroui-default-500))" }}
+              tick={{ fill: "var(--muted)" }}
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={
                 <ChartTooltipContent
                   formatter={(value) => formatNumber(value as number)}
@@ -98,13 +91,13 @@ export function TrendsChart({ data }: TrendsChartProps) {
             <Area
               type="monotone"
               dataKey="total"
-              stroke="hsl(var(--heroui-primary))"
+              stroke="var(--accent)"
               strokeWidth={2}
               fill="url(#trendsGradient)"
             />
           </AreaChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

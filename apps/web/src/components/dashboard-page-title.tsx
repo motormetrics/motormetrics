@@ -19,9 +19,7 @@ export function DashboardPageTitle({
         {badge}
       </div>
       {subtitle && (
-        <Typography.TextLg className="text-default-500">
-          {subtitle}
-        </Typography.TextLg>
+        <Typography.TextLg className="text-muted">{subtitle}</Typography.TextLg>
       )}
     </div>
   );

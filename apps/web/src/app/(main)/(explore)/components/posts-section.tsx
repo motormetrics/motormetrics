@@ -1,5 +1,4 @@
-import { Card, CardBody } from "@heroui/card";
-import { Skeleton } from "@heroui/skeleton";
+import { Card, Skeleton } from "@heroui/react";
 import { getRecentPosts } from "@web/queries/posts";
 import { Suspense } from "react";
 import { RecentPosts } from "./recent-posts";
@@ -11,8 +10,8 @@ async function PostsSectionContent() {
 
 function PostsSectionSkeleton() {
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <Skeleton className="h-6 w-28 rounded-lg" />
           <Skeleton className="h-4 w-16 rounded-lg" />
@@ -28,7 +27,7 @@ function PostsSectionSkeleton() {
             <Skeleton className="aspect-[16/10] w-full rounded-lg" />
           </div>
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

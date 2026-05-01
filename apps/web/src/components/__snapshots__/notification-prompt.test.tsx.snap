@@ -16,24 +16,20 @@ exports[`NotificationPrompt Component > should set notification status to curren
       Stay updated with the latest news and alerts by enabling browser notifications
     </div>
     <div
-      data-testid="alert-endcontent"
+      class="mt-3 flex gap-2"
     >
-      <div
-        class="flex gap-2"
+      <button
+        data-testid="button"
+        type="button"
       >
-        <button
-          data-testid="button"
-          type="button"
-        >
-          Allow
-        </button>
-        <button
-          data-testid="button"
-          type="button"
-        >
-          Deny
-        </button>
-      </div>
+        Allow
+      </button>
+      <button
+        data-testid="button"
+        type="button"
+      >
+        Deny
+      </button>
     </div>
     <button
       data-testid="alert-close"

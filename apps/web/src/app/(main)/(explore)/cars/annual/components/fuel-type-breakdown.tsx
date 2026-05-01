@@ -1,20 +1,19 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
-import { CHART_HEIGHTS } from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
+import { Card, cn } from "@heroui/react";
+
 import {
   FUEL_GROUP_COLORS,
   FUEL_GROUP_MAP,
   FUEL_GROUPS,
 } from "@web/app/(main)/(explore)/cars/annual/constants";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@web/components/charts/chart";
+import { CHART_HEIGHTS } from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { useMemo } from "react";
 import { Cell, Pie, PieChart } from "recharts";
@@ -69,14 +68,14 @@ export function FuelTypeBreakdown({ data }: FuelTypeBreakdownProps) {
   );
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Fuel Type Mix ({effectiveYear})</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Distribution of vehicles by fuel type
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer
           config={chartConfig}
           className={cn("mx-auto", CHART_HEIGHTS.standard)}
@@ -106,7 +105,7 @@ export function FuelTypeBreakdown({ data }: FuelTypeBreakdownProps) {
             </Pie>
           </PieChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

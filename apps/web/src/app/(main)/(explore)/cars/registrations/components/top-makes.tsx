@@ -1,9 +1,7 @@
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Progress } from "@heroui/progress";
+import { Card, Link } from "@heroui/react";
 import { slugify } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { FuelType } from "@web/types/cars";
-import Link from "next/link";
 
 // interface Category {
 //   title: string;
@@ -62,34 +60,37 @@ export function TopMakes({ data }: TopMakesProps) {
         const href = `/cars/fuel-types/${slugify(fuelType)}`;
 
         return (
-          <Card key={fuelType} className="p-3">
-            <CardHeader>
+          <Card key={fuelType}>
+            <Card.Header>
               <Typography.H4>{fuelType}</Typography.H4>
-            </CardHeader>
-            <CardBody>
+            </Card.Header>
+            <Card.Content>
               {makes.map(({ make, count }) => (
                 <div key={make} className="py-2">
-                  <Progress
-                    className="max-w-md"
-                    color="primary"
-                    formatOptions={{
-                      style: "decimal",
-                      maximumFractionDigits: 0,
-                    }}
-                    label={make.toUpperCase()}
-                    maxValue={total}
-                    showValueLabel={true}
-                    size="sm"
-                    value={count}
-                  />
+                  <div className="flex max-w-md flex-col gap-1">
+                    <div className="flex items-center justify-between gap-3 text-xs">
+                      <span className="font-medium text-muted">
+                        {make.toUpperCase()}
+                      </span>
+                      <span className="text-muted tabular-nums">
+                        {count.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-default">
+                      <div
+                        className="h-full rounded-full bg-accent"
+                        style={{ width: `${(count / total) * 100}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
               ))}
-            </CardBody>
-            <CardFooter>
+            </Card.Content>
+            <Card.Footer>
               <Link href={href} className="underline">
                 View More
               </Link>
-            </CardFooter>
+            </Card.Footer>
           </Card>
         );
       })}

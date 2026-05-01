@@ -1,14 +1,14 @@
 "use client";
 
-import { CHART_MARGINS } from "@motormetrics/theme/charts";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { formatDateToMonthYear } from "@motormetrics/utils";
+} from "@web/components/charts/chart";
+import { CHART_MARGINS } from "@web/components/charts/tokens";
 import { ChartWidget } from "@web/components/charts/widget";
 import { formatNumber } from "@web/utils/charts";
 import { useMemo } from "react";
@@ -98,7 +98,7 @@ export function TrendAreaChart({
           <CartesianGrid
             vertical={false}
             strokeDasharray="3 3"
-            className="stroke-default-200"
+            className="stroke-border"
           />
           <XAxis
             dataKey="month"
@@ -114,7 +114,7 @@ export function TrendAreaChart({
             className="text-xs"
           />
           <ChartTooltip
-            cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+            cursor={{ fill: "var(--muted)", opacity: 0.2 }}
             content={<ChartTooltipContent />}
           />
           <ChartLegend content={<ChartLegendContent />} />

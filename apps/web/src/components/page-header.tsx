@@ -1,4 +1,4 @@
-import { cn } from "@heroui/theme";
+import { cn } from "@heroui/react";
 import { LastUpdated } from "@web/components/shared/last-updated";
 import Typography from "@web/components/typography";
 import type { ReactNode } from "react";
@@ -24,7 +24,7 @@ export function PageHeader({
         <div className="flex flex-col">
           <Typography.H1>{title}</Typography.H1>
           {subtitle && (
-            <Typography.TextLg className="text-default-500">
+            <Typography.TextLg className="text-muted">
               {subtitle}
             </Typography.TextLg>
           )}

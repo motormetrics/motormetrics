@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import { AnimatedNumber } from "@web/components/animated-number";
 import { Sparkline } from "@web/components/charts/sparkline";
 import Typography from "@web/components/typography";
@@ -29,13 +30,13 @@ const calculateTrend = (data: { value: number }[]): Trend | undefined => {
 const getTrendColour = (trend?: Trend): string => {
   switch (trend) {
     case "up":
-      return "hsl(var(--heroui-danger))";
+      return "var(--danger)";
     case "down":
-      return "hsl(var(--heroui-success))";
+      return "var(--success)";
     case "neutral":
-      return "hsl(var(--heroui-warning))";
+      return "var(--warning)";
     default:
-      return "hsl(var(--heroui-primary))";
+      return "var(--accent)";
   }
 };
 
@@ -52,16 +53,16 @@ export function LatestCoePremium({ results, trends }: LatestCoePremiumProps) {
         return (
           <Card
             key={result.vehicleClass}
-            className="rounded-2xl p-3 transition-shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+            className="transition-shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
-            <CardHeader>
+            <Card.Header>
               <div className="flex items-center gap-2">
                 <Typography.H4>{result.vehicleClass}</Typography.H4>
               </div>
-            </CardHeader>
-            <CardBody>
+            </Card.Header>
+            <Card.Content>
               <div className="grid grid-cols-2 items-center gap-2">
-                <div className="bg-gradient-to-br from-primary to-primary/70 bg-clip-text font-bold text-2xl text-transparent">
+                <div className="bg-gradient-to-br from-accent to-accent/70 bg-clip-text font-bold text-2xl text-transparent">
                   <AnimatedNumber value={result.premium} format="currency" />
                 </div>
                 {sparklineData.length > 0 && (
@@ -71,7 +72,7 @@ export function LatestCoePremium({ results, trends }: LatestCoePremiumProps) {
                   />
                 )}
               </div>
-            </CardBody>
+            </Card.Content>
           </Card>
         );
       })}

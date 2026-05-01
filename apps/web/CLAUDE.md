@@ -118,7 +118,7 @@ Route-specific server actions (mutations only):
 **Keep Centralised When:**
 
 - Component used by 3+ different routes
-- Part of design system (use HeroUI components via `@heroui/*` packages, or `@motormetrics/ui` for shadcn/ui chart components)
+- Part of design system (use HeroUI components from `@heroui/react` and tokens in `src/app/globals.css`)
 - Shared business logic (`queries/`, `lib/`)
 - Server actions used across multiple routes (`actions/`)
 - Generic utilities (`components/shared/`)
@@ -145,7 +145,7 @@ import {subscribeAction} from "@web/actions";
 
 // ✅ Shared components via existing alias
 import {MetricCard} from "@web/components/shared/metric-card";
-import {Button} from "@motormetrics/ui/components/button";
+import {Button} from "@heroui/react";
 
 // ❌ Avoid relative imports for co-located code
 import {ProgressBar} from "../components/progress-bar"; // Don't use
@@ -371,9 +371,9 @@ philosophy inspired by Vercel, Linear, and Stripe. Uses lighter font weights (se
 secondary headings/labels, normal for body text) with hierarchy driven by size and spacing.
 See [Typography System](#typography-system) section below.
 
-**UI Components**: HeroUI is the primary component library, imported directly from `@heroui/*` packages (e.g., `@heroui/button`, `@heroui/card`, `@heroui/table`). Chart components use shadcn/ui's chart library from `@motormetrics/ui/components/chart`.
+**UI Components**: HeroUI v3 is the primary component library, imported from `@heroui/react` with compound component patterns.
 
-**Charts**: Recharts-based shadcn/ui chart components from `@motormetrics/ui/components/chart` for data visualization.
+**Charts**: Recharts-based chart wrappers live locally in `src/components/charts/chart.tsx` for data visualization.
 
 **Dashboard Components**: Interactive components for the homepage including:
 
@@ -435,7 +435,7 @@ See `component-naming` skill for detailed guidance and validation checklist.
 
 A consistent approach to animations using Framer Motion for scroll-triggered reveals and entrance effects.
 
-> **Note**: Import from `framer-motion`, not `motion/react`. HeroUI v2 depends on `framer-motion` as a peer dependency. Migration to `motion/react` will be possible after upgrading to HeroUI v3.
+> **Note**: Import from `framer-motion`, not `motion/react`. HeroUI v3 does not require Framer Motion; this app keeps it as a direct dependency for custom page and chart animations.
 
 **Design Philosophy**:
 
@@ -549,7 +549,7 @@ A modern, semantic typography system for consistent visual hierarchy across the 
 **UI Labels**:
 
 - `Typography.Label`: Form labels, navigation items, tabs (font-medium text-sm text-foreground)
-- `Typography.Caption`: Metadata text, timestamps, footnotes (text-xs text-muted-foreground leading-tight)
+- `Typography.Caption`: Metadata text, timestamps, footnotes (text-xs text-default-500 leading-tight)
 
 **Content Elements** (legacy, for backward compatibility):
 
@@ -557,7 +557,7 @@ A modern, semantic typography system for consistent visual hierarchy across the 
 - `Typography.Blockquote`: Quoted text with left border
 - `Typography.List`: Unordered lists with disc markers
 - `Typography.InlineCode`: Inline code snippets (font-medium monospace)
-- `Typography.Lead`: Lead paragraphs (text-xl text-muted-foreground)
+- `Typography.Lead`: Lead paragraphs (text-xl text-default-500)
 
 **Usage Examples**:
 
@@ -608,7 +608,7 @@ All Typography components include default colours from HeroUI's semantic colour 
 - `text-foreground`: Theme-adaptive primary text colour (auto-adjusts for light/dark mode)
 - `text-default-900`: Darkest shade for strong emphasis (H4 headings)
 - `text-default-600`: Medium shade for secondary text (TextSm for links, footer text)
-- `text-muted-foreground`: Muted colour for metadata and captions (Caption, Lead components)
+- `text-default-500`: Muted colour for metadata and captions (Caption, Lead components)
 
 These defaults provide proper visual hierarchy while allowing override via `className` prop when specific colours like
 `text-primary` are needed for emphasis.
@@ -623,23 +623,23 @@ These defaults provide proper visual hierarchy while allowing override via `clas
 
 **Enforcement Rules**:
 
-- ✅ Always use `Typography.H4` for CardHeader titles (not raw `<h3>`)
-- ✅ Always use `Typography.TextSm` for CardHeader descriptions (not raw `<p>`)
+- ✅ Always use `Typography.H4` for `Card.Header` titles (not raw `<h3>`)
+- ✅ Always use `Typography.TextSm` for `Card.Header` descriptions (not raw `<p>`)
 - ✅ Use `Typography.H2` for section headings in blog components
 - ✅ Use `Typography.H3` for card titles and subsections
 - ❌ Avoid raw heading tags (`<h1>`, `<h2>`, `<h3>`, `<h4>`) outside of MDX content
 - ⚠️ Exception: Raw tags allowed only for MDX blog content and image overlay text
 
-**CardHeader Pattern** (standard for all cards):
+**Card Header Pattern** (standard for all cards):
 
 ```tsx
-import { CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
 import Typography from "@web/components/typography";
 
-<CardHeader className="flex flex-col items-start gap-2">
+<Card.Header className="flex flex-col items-start gap-2">
   <Typography.H4>Card Title</Typography.H4>
   <Typography.TextSm>Card description text</Typography.TextSm>
-</CardHeader>
+</Card.Header>
 ```
 
 ### Page Title Conventions
@@ -782,7 +782,7 @@ When refactoring existing code:
 
 A professional colour scheme optimised for HeroUI integration and automotive industry data visualisation (see GitHub issue #406). See `design-language-system` skill for comprehensive colour guidelines, chart implementation patterns, and migration checklists.
 
-**Dark Mode**: Dark CSS variables are fully defined in `globals.css` (`.dark` block) but dark mode is not yet activated (#714, blocked by HeroUI v3 migration #587). Use `bg-content1` instead of `bg-white` for card/panel backgrounds to future-proof for dark mode.
+**Dark Mode**: Dark CSS variables are defined in `src/app/globals.css`. Use HeroUI surface tokens such as `bg-surface` and `bg-surface-secondary` instead of hardcoded `bg-white` for card/panel backgrounds.
 
 **Brand Colour Palette**:
 
@@ -794,20 +794,16 @@ A professional colour scheme optimised for HeroUI integration and automotive ind
 | Background | Powder Blue | `#B0E0E6` | `hsl(187, 52%, 80%)` | Chart areas, subtle textures |
 | Text | Dark Slate Gray | `#2F4F4F` | `hsl(180, 25%, 25%)` | Body text, icons |
 
-**CSS Variable Mapping** (in `globals.css`):
+**CSS Variable Mapping**:
+
+Base runtime tokens live in `src/app/globals.css`, which bridges those tokens into Tailwind v4 utility classes with `@theme inline`, so utilities like `bg-primary`, `text-default-500`, `bg-surface`, and `border-default-200` resolve to the active theme values.
 
 ```css
-:root {
-  --primary: hsl(240, 63%, 27%);           /* Navy Blue */
-  --primary-foreground: hsl(0, 0%, 100%);  /* White text on primary */
-  --secondary: hsl(210, 13%, 50%);         /* Slate Gray */
-  --secondary-foreground: hsl(0, 0%, 100%);
-  --accent: hsl(180, 100%, 50%);           /* Cyan */
-  --accent-foreground: hsl(180, 25%, 25%);
-  --muted: hsl(187, 52%, 80%);             /* Powder Blue */
-  --muted-foreground: hsl(180, 25%, 25%);
-  --foreground: hsl(180, 25%, 25%);        /* Dark Slate Gray */
-  --background: hsl(0, 0%, 100%);          /* White */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-surface: var(--surface);
+  --color-default-500: var(--default-500);
 }
 ```
 
@@ -817,7 +813,7 @@ A professional colour scheme optimised for HeroUI integration and automotive ind
 - `text-foreground` - Dark Slate Gray for body text
 - `text-default-900` - Strong emphasis (H4 headings)
 - `text-default-600` - Secondary text (TextSm)
-- `text-muted-foreground` - Captions/metadata
+- `text-default-500` - Captions/metadata
 
 **Opacity Scale**:
 
@@ -881,18 +877,18 @@ A pill-based, sidebar-free design system for professional automotive analytics d
 
 **Card Design**:
 
-- Large rounded corners: `rounded-2xl` or `rounded-3xl`
-- Soft shadows: `shadow-sm` or custom subtle shadow
-- White/light backgrounds with generous padding (`p-6`)
+- Use HeroUI Card defaults for base radius, padding, background, and shadow
+- Add custom shadows, borders, or backgrounds only when they communicate hierarchy
+- Use explicit `Card.Content` padding only for intentional edge-to-edge or specialised layouts
 - Optional coloured accent borders or backgrounds
 
 ```tsx
-<Card className="rounded-2xl shadow-sm">
-  <CardHeader className="flex flex-col items-start gap-2">
+<Card>
+  <Card.Header className="flex flex-col items-start gap-2">
     <Typography.H4>Card Title</Typography.H4>
     <Typography.TextSm>Description</Typography.TextSm>
-  </CardHeader>
-  <CardBody>{/* Content */}</CardBody>
+  </Card.Header>
+  <Card.Content>{/* Content */}</Card.Content>
 </Card>
 ```
 
@@ -1127,9 +1123,13 @@ Deployed via Vercel with automatic deployments:
 
 The codebase has consolidated on **HeroUI as the primary component library**:
 
-- **UI Components**: Use HeroUI components imported from `@heroui/*` packages (e.g., `@heroui/button`, `@heroui/card`, `@heroui/table`, `@heroui/skeleton`)
-- **Chart Components**: Use shadcn/ui chart components from `@motormetrics/ui/components/chart` (Recharts-based)
+- **UI Components**: Use HeroUI v3 components imported from `@heroui/react`
+- **Chart Components**: Use local Recharts wrappers from `@web/components/charts/chart`
 - **Component Selection**: Leverage HeroUI's professional design system for analytics interfaces, tables, forms, and navigation
-- **Customisation**: Apply HeroUI's theming system (`@heroui/theme` for `cn()` utility) to match Singapore car market branding
+- **Customisation**: Apply HeroUI v3 CSS variables and local web tokens to match Singapore car market branding
 - **Performance**: Take advantage of HeroUI's tree-shakeable, optimised components
-- **Migration Complete**: All UI components have been migrated from shadcn/ui to HeroUI; shadcn/ui is retained only for chart components
+- **Migration Complete**: shadcn/ui has been removed; HeroUI v3 and local chart wrappers are the UI foundation
+
+<!-- HEROUI-REACT-AGENTS-MD-START -->
+[HeroUI React v3 Docs Index]|root: ./.heroui-docs/react|STOP. What you remember about HeroUI React v3 is WRONG for this project. Always search docs and read before any task.|If docs missing, run this command first: heroui agents-md --react --output AGENTS.md|components/(buttons):{button-group.mdx,button.mdx,close-button.mdx,toggle-button-group.mdx,toggle-button.mdx}|components/(collections):{dropdown.mdx,list-box.mdx,tag-group.mdx}|components/(colors):{color-area.mdx,color-field.mdx,color-picker.mdx,color-slider.mdx,color-swatch-picker.mdx,color-swatch.mdx}|components/(controls):{slider.mdx,switch.mdx}|components/(data-display):{badge.mdx,chip.mdx,table.mdx}|components/(date-and-time):{calendar.mdx,date-field.mdx,date-picker.mdx,date-range-picker.mdx,range-calendar.mdx,time-field.mdx}|components/(feedback):{alert.mdx,meter.mdx,progress-bar.mdx,progress-circle.mdx,skeleton.mdx,spinner.mdx}|components/(forms):{checkbox-group.mdx,checkbox.mdx,description.mdx,error-message.mdx,field-error.mdx,fieldset.mdx,form.mdx,input-group.mdx,input-otp.mdx,input.mdx,label.mdx,number-field.mdx,radio-group.mdx,search-field.mdx,text-area.mdx,text-field.mdx}|components/(layout):{card.mdx,separator.mdx,surface.mdx,toolbar.mdx}|components/(media):{avatar.mdx}|components/(navigation):{accordion.mdx,breadcrumbs.mdx,disclosure-group.mdx,disclosure.mdx,link.mdx,pagination.mdx,tabs.mdx}|components/(overlays):{alert-dialog.mdx,drawer.mdx,modal.mdx,popover.mdx,toast.mdx,tooltip.mdx}|components/(pickers):{autocomplete.mdx,combo-box.mdx,select.mdx}|components/(typography):{kbd.mdx}|components/(utilities):{scroll-shadow.mdx}|getting-started/(handbook):{animation.mdx,colors.mdx,composition.mdx,styling.mdx,theming.mdx}|getting-started/(overview):{design-principles.mdx,quick-start.mdx}|getting-started/(ui-for-agents):{agent-skills.mdx,agents-md.mdx,llms-txt.mdx,mcp-server.mdx}|releases:{v3-0-0-alpha-32.mdx,v3-0-0-alpha-33.mdx,v3-0-0-alpha-34.mdx,v3-0-0-alpha-35.mdx,v3-0-0-beta-1.mdx,v3-0-0-beta-2.mdx,v3-0-0-beta-3.mdx,v3-0-0-beta-4.mdx,v3-0-0-beta-6.mdx,v3-0-0-beta-7.mdx,v3-0-0-beta-8.mdx,v3-0-0-rc-1.mdx,v3-0-0.mdx,v3-0-2.mdx,v3-0-3.mdx}|demos/accordion:{basic.tsx,controlled.tsx,custom-indicator.tsx,custom-render-function.tsx,custom-styles.tsx,disabled.tsx,faq.tsx,multiple.tsx,surface.tsx,without-separator.tsx}|demos/alert-dialog:{backdrop-variants.tsx,close-methods.tsx,controlled.tsx,custom-animations.tsx,custom-backdrop.tsx,custom-icon.tsx,custom-portal.tsx,custom-trigger.tsx,default.tsx,dismiss-behavior.tsx,placements.tsx,sizes.tsx,statuses.tsx,with-close-button.tsx}|demos/alert:{basic.tsx}|demos/autocomplete:{allows-empty-collection.tsx,asynchronous-filtering.tsx,controlled-open-state.tsx,controlled.tsx,custom-indicator.tsx,default.tsx,disabled.tsx,email-recipients.tsx,full-width.tsx,location-search.tsx,multiple-select.tsx,required.tsx,single-select.tsx,tag-group-selection.tsx,user-selection-multiple.tsx,user-selection.tsx,variants.tsx,with-description.tsx,with-disabled-options.tsx,with-sections.tsx}|demos/avatar:{basic.tsx,colors.tsx,custom-styles.tsx,fallback.tsx,group.tsx,sizes.tsx,variants.tsx}|demos/badge:{basic.tsx,colors.tsx,dot.tsx,placements.tsx,sizes.tsx,variants.tsx,with-content.tsx}|demos/breadcrumbs:{basic.tsx,custom-render-function.tsx,custom-separator.tsx,disabled.tsx,level-2.tsx,level-3.tsx}|demos/button-group:{basic.tsx,disabled.tsx,full-width.tsx,orientation.tsx,sizes.tsx,variants.tsx,with-icons.tsx,without-separator.tsx}|demos/button:{basic.tsx,custom-render-function.tsx,custom-variants.tsx,disabled.tsx,full-width.tsx,icon-only.tsx,loading-state.tsx,loading.tsx,outline-variant.tsx,ripple-effect.tsx,sizes.tsx,social.tsx,variants.tsx,with-icons.tsx}|demos/calendar:{basic.tsx,booking-calendar.tsx,controlled.tsx,custom-icons.tsx,custom-styles.tsx,default-value.tsx,disabled.tsx,focused-value.tsx,international-calendar.tsx,min-max-dates.tsx,multiple-months.tsx,read-only.tsx,unavailable-dates.tsx,with-indicators.tsx,year-picker.tsx}|demos/card:{default.tsx,horizontal.tsx,variants.tsx,with-avatar.tsx,with-form.tsx,with-images.tsx}|demos/checkbox-group:{basic.tsx,controlled.tsx,custom-render-function.tsx,disabled.tsx,features-and-addons.tsx,indeterminate.tsx,on-surface.tsx,validation.tsx,with-custom-indicator.tsx}|demos/checkbox:{basic.tsx,controlled.tsx,custom-indicator.tsx,custom-render-function.tsx,custom-styles.tsx,default-selected.tsx,disabled.tsx,form.tsx,full-rounded.tsx,indeterminate.tsx,invalid.tsx,render-props.tsx,variants.tsx,with-description.tsx,with-label.tsx}|demos/chip:{basic.tsx,statuses.tsx,variants.tsx,with-icon.tsx}|demos/close-button:{default.tsx,interactive.tsx,variants.tsx,with-custom-icon.tsx}|demos/color-area:{basic.tsx,controlled.tsx,custom-render-function.tsx,disabled.tsx,space-and-channels.tsx,with-dots.tsx}|demos/color-field:{basic.tsx,channel-editing.tsx,controlled.tsx,custom-render-function.tsx,disabled.tsx,form-example.tsx,full-width.tsx,invalid.tsx,on-surface.tsx,required.tsx,variants.tsx,with-description.tsx}|demos/color-picker:{basic.tsx,controlled.tsx,with-fields.tsx,with-sliders.tsx,with-swatches.tsx}|demos/color-slider:{alpha-channel.tsx,basic.tsx,channels.tsx,controlled.tsx,custom-render-function.tsx,disabled.tsx,rgb-channels.tsx,vertical.tsx}|demos/color-swatch-picker:{basic.tsx,controlled.tsx,custom-indicator.tsx,custom-render-function.tsx,default-value.tsx,disabled.tsx,sizes.tsx,stack-layout.tsx,variants.tsx}|demos/color-swatch:{accessibility.tsx,basic.tsx,custom-render-function.tsx,custom-styles.tsx,shapes.tsx,sizes.tsx,transparency.tsx}|demos/combo-box:{allows-custom-value.tsx,asynchronous-loading.tsx,controlled-input-value.tsx,controlled.tsx,custom-filtering.tsx,custom-indicator.tsx,custom-render-function.tsx,custom-value.tsx,default-selected-key.tsx,default.tsx,disabled.tsx,full-width.tsx,menu-trigger.tsx,on-surface.tsx,required.tsx,with-description.tsx,with-disabled-options.tsx,with-sections.tsx}|demos/date-field:{basic.tsx,controlled.tsx,custom-render-function.tsx,disabled.tsx,form-example.tsx,full-width.tsx,granularity.tsx,invalid.tsx,on-surface.tsx,required.tsx,variants.tsx,with-description.tsx,with-prefix-and-suffix.tsx,with-prefix-icon.tsx,with-suffix-icon.tsx,with-validation.tsx}|demos/date-picker:{basic.tsx,controlled.tsx,custom-render-function.tsx,disabled.tsx,form-example.tsx,format-options-no-ssr.tsx,format-options.tsx,international-calendar.tsx,with-custom-indicator.tsx,with-validation.tsx}|demos/date-range-picker:{basic.tsx,controlled.tsx,custom-render-function.tsx,disabled.tsx,form-example.tsx,format-options-no-ssr.tsx,format-options.tsx,input-container.tsx,international-calendar.tsx,with-custom-indicator.tsx,with-validation.tsx}|demos/description:{basic.tsx}|demos/disclosure-group:{basic.tsx,controlled.tsx}|demos/disclosure:{basic.tsx,custom-render-function.tsx}|demos/drawer:{backdrop-variants.tsx,basic.tsx,controlled.tsx,navigation.tsx,non-dismissable.tsx,placements.tsx,scrollable-content.tsx,with-form.tsx}|demos/dropdown:{controlled-open-state.tsx,controlled.tsx,custom-trigger.tsx,default.tsx,long-press-trigger.tsx,single-with-custom-indicator.tsx,with-custom-submenu-indicator.tsx,with-descriptions.tsx,with-disabled-items.tsx,with-icons.tsx,with-keyboard-shortcuts.tsx,with-multiple-selection.tsx,with-section-level-selection.tsx,with-sections.tsx,with-single-selection.tsx,with-submenus.tsx}|demos/error-message:{basic.tsx,with-tag-group.tsx}|demos/field-error:{basic.tsx}|demos/fieldset:{basic.tsx,on-surface.tsx}|demos/form:{basic.tsx,custom-render-function.tsx}|demos/input-group:{default.tsx,disabled.tsx,full-width.tsx,invalid.tsx,on-surface.tsx,password-with-toggle.tsx,required.tsx,variants.tsx,with-badge-suffix.tsx,with-copy-suffix.tsx,with-icon-prefix-and-copy-suffix.tsx,with-icon-prefix-and-text-suffix.tsx,with-keyboard-shortcut.tsx,with-loading-suffix.tsx,with-prefix-and-suffix.tsx,with-prefix-icon.tsx,with-suffix-icon.tsx,with-text-prefix.tsx,with-text-suffix.tsx,with-textarea.tsx}|demos/input-otp:{basic.tsx,controlled.tsx,disabled.tsx,form-example.tsx,four-digits.tsx,on-complete.tsx,on-surface.tsx,variants.tsx,with-pattern.tsx,with-validation.tsx}|demos/input:{basic.tsx,controlled.tsx,full-width.tsx,on-surface.tsx,types.tsx,variants.tsx}|demos/kbd:{basic.tsx,inline.tsx,instructional.tsx,navigation.tsx,special.tsx,variants.tsx}|demos/label:{basic.tsx}|demos/link:{basic.tsx,custom-icon.tsx,custom-render-function.tsx,icon-placement.tsx,underline-and-offset.tsx,underline-offset.tsx,underline-variants.tsx}|demos/list-box:{controlled.tsx,custom-check-icon.tsx,custom-render-function.tsx,default.tsx,multi-select.tsx,virtualization.tsx,with-disabled-items.tsx,with-sections.tsx}|demos/meter:{basic.tsx,colors.tsx,custom-value.tsx,sizes.tsx,without-label.tsx}|demos/modal:{backdrop-variants.tsx,close-methods.tsx,controlled.tsx,custom-animations.tsx,custom-backdrop.tsx,custom-portal.tsx,custom-trigger.tsx,default.tsx,dismiss-behavior.tsx,placements.tsx,scroll-comparison.tsx,sizes.tsx,with-form.tsx}|demos/number-field:{basic.tsx,controlled.tsx,custom-icons.tsx,custom-render-function.tsx,disabled.tsx,form-example.tsx,full-width.tsx,on-surface.tsx,required.tsx,validation.tsx,variants.tsx,with-chevrons.tsx,with-description.tsx,with-format-options.tsx,with-step.tsx,with-validation.tsx}|demos/pagination:{basic.tsx,controlled.tsx,custom-icons.tsx,disabled.tsx,simple-prev-next.tsx,sizes.tsx,with-ellipsis.tsx,with-summary.tsx}|demos/popover:{basic.tsx,custom-render-function.tsx,interactive.tsx,placement.tsx,with-arrow.tsx}|demos/progress-bar:{basic.tsx,colors.tsx,custom-value.tsx,indeterminate.tsx,sizes.tsx,without-label.tsx}|demos/progress-circle:{basic.tsx,colors.tsx,custom-svg.tsx,indeterminate.tsx,sizes.tsx,with-label.tsx}|demos/radio-group:{basic.tsx,controlled.tsx,custom-indicator.tsx,custom-render-function.tsx,delivery-and-payment.tsx,disabled.tsx,horizontal.tsx,on-surface.tsx,uncontrolled.tsx,validation.tsx,variants.tsx}|demos/range-calendar:{allows-non-contiguous-ranges.tsx,basic.tsx,booking-calendar.tsx,controlled.tsx,default-value.tsx,disabled.tsx,focused-value.tsx,international-calendar.tsx,invalid.tsx,min-max-dates.tsx,multiple-months.tsx,read-only.tsx,three-months.tsx,unavailable-dates.tsx,with-indicators.tsx,year-picker.tsx}|demos/scroll-shadow:{custom-size.tsx,default.tsx,hide-scroll-bar.tsx,orientation.tsx,visibility-change.tsx,with-card.tsx}|demos/search-field:{basic.tsx,controlled.tsx,custom-icons.tsx,custom-render-function.tsx,disabled.tsx,form-example.tsx,full-width.tsx,on-surface.tsx,required.tsx,validation.tsx,variants.tsx,with-description.tsx,with-keyboard-shortcut.tsx,with-validation.tsx}|demos/select:{asynchronous-loading.tsx,controlled-multiple.tsx,controlled-open-state.tsx,controlled.tsx,custom-indicator.tsx,custom-render-function.tsx,custom-value-multiple.tsx,custom-value.tsx,default.tsx,disabled.tsx,full-width.tsx,multiple-select.tsx,on-surface.tsx,required.tsx,variants.tsx,with-description.tsx,with-disabled-options.tsx,with-sections.tsx}|demos/separator:{basic.tsx,custom-render-function.tsx,manual-variant-override.tsx,variants.tsx,vertical.tsx,with-content.tsx,with-surface.tsx}|demos/skeleton:{animation-types.tsx,basic.tsx,card.tsx,grid.tsx,list.tsx,single-shimmer.tsx,text-content.tsx,user-profile.tsx}|demos/slider:{custom-render-function.tsx,default.tsx,disabled.tsx,range.tsx,vertical.tsx}|demos/spinner:{basic.tsx,colors.tsx,sizes.tsx}|demos/surface:{variants.tsx}|demos/switch:{basic.tsx,controlled.tsx,custom-render-function.tsx,custom-styles.tsx,default-selected.tsx,disabled.tsx,form.tsx,group-horizontal.tsx,group.tsx,label-position.tsx,render-props.tsx,sizes.tsx,with-description.tsx,with-icons.tsx,without-label.tsx}|demos/table:{async-loading.tsx,basic.tsx,column-resizing.tsx,custom-cells.tsx,empty-state.tsx,expandable-rows.tsx,pagination.tsx,secondary-variant.tsx,selection.tsx,sorting.tsx,tanstack-table.tsx,virtualization.tsx}|demos/tabs:{basic.tsx,custom-render-function.tsx,custom-styles.tsx,disabled.tsx,secondary-vertical.tsx,secondary.tsx,vertical.tsx,with-separator.tsx}|demos/tag-group:{basic.tsx,controlled.tsx,custom-render-function.tsx,disabled.tsx,selection-modes.tsx,sizes.tsx,variants.tsx,with-error-message.tsx,with-list-data.tsx,with-prefix.tsx,with-remove-button.tsx}|demos/textarea:{basic.tsx,controlled.tsx,full-width.tsx,on-surface.tsx,rows.tsx,variants.tsx}|demos/textfield:{basic.tsx,controlled.tsx,custom-render-function.tsx,disabled.tsx,full-width.tsx,input-types.tsx,on-surface.tsx,required.tsx,textarea.tsx,validation.tsx,with-description.tsx,with-error.tsx}|demos/time-field:{basic.tsx,controlled.tsx,custom-render-function.tsx,disabled.tsx,form-example.tsx,full-width.tsx,invalid.tsx,on-surface.tsx,required.tsx,with-description.tsx,with-prefix-and-suffix.tsx,with-prefix-icon.tsx,with-suffix-icon.tsx,with-validation.tsx}|demos/toast:{callbacks.tsx,custom-indicator.tsx,custom-queue.tsx,custom-toast.tsx,default.tsx,placements.tsx,promise.tsx,simple.tsx,variants.tsx}|demos/toggle-button-group:{attached.tsx,basic.tsx,controlled.tsx,disabled.tsx,full-width.tsx,orientation.tsx,selection-mode.tsx,sizes.tsx,without-separator.tsx}|demos/toggle-button:{basic.tsx,controlled.tsx,disabled.tsx,icon-only.tsx,sizes.tsx,variants.tsx}|demos/toolbar:{basic.tsx,custom-styles.tsx,vertical.tsx,with-button-group.tsx}|demos/tooltip:{basic.tsx,custom-render-function.tsx,custom-trigger.tsx,placement.tsx,with-arrow.tsx}
+<!-- HEROUI-REACT-AGENTS-MD-END -->

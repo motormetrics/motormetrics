@@ -1,12 +1,13 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import {
   type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
@@ -28,21 +29,21 @@ export function RegistrationTrend({ data }: RegistrationTrendProps) {
   } satisfies ChartConfig;
 
   return (
-    <Card className="rounded-2xl p-3">
-      <CardHeader className="flex flex-col items-start gap-2 pb-4">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Yearly Registration Trend</Typography.H4>
-        <Typography.TextSm className="text-default-600">
+        <Typography.TextSm className="text-muted">
           Historical vehicle registration data from {data[0]?.year} to{" "}
           {data[data.length - 1]?.year}
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody className="pt-2">
+      </Card.Header>
+      <Card.Content className="pt-2">
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <LineChart accessibilityLayer data={data}>
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis dataKey="year" tickLine={false} axisLine={false} />
             <YAxis
@@ -62,7 +63,7 @@ export function RegistrationTrend({ data }: RegistrationTrendProps) {
             />
           </LineChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

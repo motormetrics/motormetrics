@@ -9,7 +9,7 @@ export default function CreatePostPage() {
           <PenLine className="size-8" />
           Create Blog Post
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted">
           Manually create a new blog post with custom content.
         </p>
       </div>

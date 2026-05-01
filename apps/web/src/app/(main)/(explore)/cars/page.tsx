@@ -1,4 +1,4 @@
-import { cn } from "@heroui/theme";
+import { cn, Link } from "@heroui/react";
 import { AnimatedGrid } from "@web/app/(main)/(explore)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { ExploreCard } from "@web/app/(main)/(explore)/components/explore-card";
@@ -9,7 +9,6 @@ import { navLinks } from "@web/config/navigation";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateDataCatalogSchema } from "@web/lib/metadata";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 const title = "Singapore Car Registration Data";
 const description =
@@ -100,7 +99,10 @@ export default function Page() {
         <Typography.TextLg>
           Explore Singapore vehicle data across registrations, deregistrations,
           and more. Looking for COE data?{" "}
-          <Link href="/coe" className="text-primary hover:underline">
+          <Link
+            href="/coe"
+            className="text-accent underline-offset-4 hover:underline"
+          >
             View COE premiums and results
           </Link>
           .
@@ -134,7 +136,7 @@ export default function Page() {
                       <Icon
                         className={cn(
                           isHero ? "size-6" : "size-5",
-                          iconColor ?? "text-primary",
+                          iconColor ?? "text-accent",
                         )}
                       />
                     )

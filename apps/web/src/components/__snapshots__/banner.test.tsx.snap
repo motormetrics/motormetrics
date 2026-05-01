@@ -3,7 +3,7 @@
 exports[`Banner > should show banner content from the store 1`] = `
 <div>
   <div
-    class="flex items-center overflow-x-auto whitespace-nowrap border-t bg-default-50 shadow-md"
+    class="flex items-center overflow-x-auto whitespace-nowrap border-t bg-default shadow-md"
   >
     <div
       class="px-6 py-4 lg:container lg:mx-auto"

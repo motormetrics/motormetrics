@@ -1,0 +1,3 @@
+[mcp_servers.heroui-react]
+command = "bunx"
+args = ["-y", "@heroui/react-mcp@latest"]

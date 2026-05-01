@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/button";
-import { Chip } from "@heroui/chip";
+import { Button, Chip } from "@heroui/react";
+
 import { formatCurrency, formatOrdinal } from "@motormetrics/utils";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { COEResult } from "@web/types";
@@ -18,11 +18,11 @@ export const columns: ColumnDef<COEResult>[] = [
     accessorKey: "month",
     header: ({ column }) => (
       <Button
-        variant="light"
+        variant="tertiary"
         onPress={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        endContent={<ArrowUpDown className="size-4" />}
       >
         Month
+        <ArrowUpDown className="size-4" />
       </Button>
     ),
   },
@@ -57,7 +57,11 @@ export const columns: ColumnDef<COEResult>[] = [
       const isHigh = ratio > 1.5;
 
       return (
-        <Chip size="sm" variant="flat" color={isHigh ? "warning" : "default"}>
+        <Chip
+          size="sm"
+          variant="primary"
+          color={isHigh ? "warning" : "default"}
+        >
           {ratio.toFixed(1)}x
         </Chip>
       );

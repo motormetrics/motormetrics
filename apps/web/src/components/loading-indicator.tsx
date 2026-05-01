@@ -1,6 +1,7 @@
 "use client";
 
-import { Progress } from "@heroui/progress";
+import { ProgressBar } from "@heroui/react";
+
 import { useLinkStatus } from "next/link";
 import { useEffect, useState } from "react";
 
@@ -30,15 +31,11 @@ const LoadingIndicator = () => {
 
   return (
     <div className="fixed top-0 left-0 z-50 w-full">
-      <Progress
+      <ProgressBar
         value={progress}
         className="h-1 w-full rounded-none"
-        color="primary"
+        color="accent"
         aria-label="Navigation loading"
-        classNames={{
-          indicator: "transition-all duration-200 ease-out",
-          track: "bg-transparent",
-        }}
       />
     </div>
   );

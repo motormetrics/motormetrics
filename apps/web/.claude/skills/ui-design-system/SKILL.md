@@ -31,7 +31,7 @@ This skill enforces consistent UI patterns across the MotorMetrics web applicati
 | Primary | Navy Blue | `#191970` | `bg-primary`, `text-primary` |
 | Secondary | Slate Gray | `#708090` | `bg-secondary`, `text-secondary` |
 | Accent | Cyan | `#00FFFF` | `bg-accent`, `text-accent` |
-| Background | Powder Blue | `#B0E0E6` | `bg-muted` |
+| Background | Powder Blue | `#B0E0E6` | `bg-background` |
 | Text | Dark Slate Gray | `#2F4F4F` | `text-foreground` |
 
 ### Semantic Colour Usage
@@ -40,7 +40,7 @@ This skill enforces consistent UI patterns across the MotorMetrics web applicati
 - `text-foreground` - Body text (Dark Slate Gray)
 - `text-default-900` - Strong emphasis (H4 headings)
 - `text-default-600` - Secondary text (TextSm)
-- `text-muted-foreground` - Captions, metadata
+- `text-default-500` - Captions, metadata
 
 ### Opacity Scale
 
@@ -63,15 +63,15 @@ This skill enforces consistent UI patterns across the MotorMetrics web applicati
 ### Cards
 
 ```tsx
-import { Card, CardHeader, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
 import Typography from "@web/components/typography";
 
-<Card className="rounded-2xl shadow-sm">
-  <CardHeader className="flex flex-col items-start gap-2">
+<Card>
+  <Card.Header className="flex flex-col items-start gap-2">
     <Typography.H4>Card Title</Typography.H4>
     <Typography.TextSm>Description text</Typography.TextSm>
-  </CardHeader>
-  <CardBody>{/* Content */}</CardBody>
+  </Card.Header>
+  <Card.Content>{/* Content */}</Card.Content>
 </Card>
 ```
 
@@ -121,12 +121,12 @@ Always use Typography components from `@web/components/typography`:
 | `Typography.Text` | Body text | `text-base text-foreground` |
 | `Typography.TextSm` | Secondary text | `text-sm text-default-600` |
 | `Typography.Label` | Form labels | `font-medium text-sm text-foreground` |
-| `Typography.Caption` | Metadata | `text-xs text-muted-foreground` |
+| `Typography.Caption` | Metadata | `text-xs text-default-500` |
 
 ### Enforcement Rules
 
-- ✅ Always use `Typography.H4` for CardHeader titles
-- ✅ Always use `Typography.TextSm` for CardHeader descriptions
+- ✅ Always use `Typography.H4` for `Card.Header` titles
+- ✅ Always use `Typography.TextSm` for `Card.Header` descriptions
 - ✅ Use `Typography.H2` for section headings
 - ❌ Avoid raw `<h1>`, `<h2>`, `<h3>`, `<h4>` tags outside MDX content
 - ⚠️ Exception: Raw tags allowed for MDX blog content and image overlays
@@ -143,9 +143,9 @@ Always use Typography components from `@web/components/typography`:
 
 ```tsx
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  <Card className="rounded-2xl">{/* ... */}</Card>
-  <Card className="rounded-2xl">{/* ... */}</Card>
-  <Card className="rounded-2xl">{/* ... */}</Card>
+  <Card>{/* ... */}</Card>
+  <Card>{/* ... */}</Card>
+  <Card>{/* ... */}</Card>
 </div>
 ```
 
@@ -159,7 +159,7 @@ Always use Typography components from `@web/components/typography`:
 ### Cards
 - ❌ Sharp corners (`rounded-none`, `rounded-sm`)
 - ❌ Heavy shadows (`shadow-lg`, `shadow-xl`)
-- ❌ Raw `<h3>` tags in CardHeader
+- ❌ Raw `<h3>` tags in `Card.Header`
 
 ### Buttons
 - ❌ Square buttons (`rounded-none`, `rounded-md`)

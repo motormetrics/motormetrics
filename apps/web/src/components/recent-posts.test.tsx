@@ -2,17 +2,49 @@ import type { SelectPost } from "@motormetrics/database";
 import { render, screen } from "@testing-library/react";
 import { RecentPosts } from "@web/app/(main)/(explore)/components/recent-posts";
 
-vi.mock("@heroui/link", () => ({
-  Link: ({ href, children, ...props }: any) => (
+vi.mock("@heroui/react", () => ({
+  Button: ({
+    children,
+    isIconOnly: _isIconOnly,
+    ...props
+  }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    isIconOnly?: boolean;
+  }) => (
+    <button type="button" {...props}>
+      {children}
+    </button>
+  ),
+  Card: Object.assign(
+    ({ children }: { children?: React.ReactNode }) => (
+      <section>{children}</section>
+    ),
+    {
+      Content: ({
+        children,
+        className,
+      }: {
+        children?: React.ReactNode;
+        className?: string;
+      }) => <div className={className}>{children}</div>,
+    },
+  ),
+  Link: ({
+    href,
+    children,
+    ...props
+  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
     <a href={href} {...props}>
       {children}
     </a>
   ),
+  cn: (...classes: unknown[]) => classes.flat().filter(Boolean).join(" "),
 }));
 
 vi.mock("framer-motion", () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+      <div {...props}>{children}</div>
+    ),
   },
 }));
 

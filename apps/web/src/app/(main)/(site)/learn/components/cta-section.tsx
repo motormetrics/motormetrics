@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/button";
+import { Button } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
@@ -23,7 +24,7 @@ export function CtaSection() {
         >
           {/* Gradient line separator */}
           <motion.div
-            className="h-px w-48 bg-gradient-to-r from-transparent via-primary/50 to-transparent"
+            className="h-px w-48 bg-gradient-to-r from-transparent via-accent/50 to-transparent"
             variants={staggerItemVariants}
             aria-hidden="true"
           />
@@ -33,11 +34,11 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Label className="text-primary uppercase tracking-widest">
+            <Typography.Label className="text-accent uppercase tracking-widest">
               Ready to Explore?
             </Typography.Label>
             <Typography.H2>Dive Into the Data</Typography.H2>
-            <Typography.TextLg className="max-w-xl text-default-600">
+            <Typography.TextLg className="max-w-xl text-muted">
               Explore Singapore&apos;s car registration trends, COE bidding
               results, and market insights — all in one place.
             </Typography.TextLg>
@@ -48,27 +49,25 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6"
             variants={staggerItemVariants}
           >
-            <Button
-              as={Link}
-              href="/"
-              color="primary"
-              radius="full"
-              size="lg"
-              className="gap-2 px-8"
-            >
-              Explore the Dashboard
-              <ArrowRight className="size-4" />
-            </Button>
-            <Button
-              as={Link}
-              href="/blog"
-              variant="bordered"
-              radius="full"
-              size="lg"
-              className="gap-2 px-8 text-foreground"
-            >
-              Read Our Blog
-            </Button>
+            <Link href="/" className="no-underline">
+              <Button
+                variant="primary"
+                size="lg"
+                className="gap-2 rounded-full px-8"
+              >
+                Explore the Dashboard
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+            <Link href="/blog" className="no-underline">
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-2 rounded-full px-8 text-foreground"
+              >
+                Read Our Blog
+              </Button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

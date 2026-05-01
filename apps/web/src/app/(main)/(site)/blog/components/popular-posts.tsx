@@ -1,6 +1,7 @@
 "use client";
 
-import { Link } from "@heroui/link";
+import { Link } from "@heroui/react";
+
 import type { SelectPost } from "@motormetrics/database";
 import {
   fadeInVariants,
@@ -40,7 +41,7 @@ export function PopularPosts({ posts }: PopularPostsProps) {
         className="flex items-center gap-2"
       >
         <Flame className="size-4 text-orange-500" />
-        <span className="font-semibold text-default-500 text-xs uppercase tracking-widest">
+        <span className="font-semibold text-muted text-xs uppercase tracking-widest">
           Trending
         </span>
       </motion.div>
@@ -56,19 +57,19 @@ export function PopularPosts({ posts }: PopularPostsProps) {
           <motion.div key={post.id} variants={staggerItemVariants}>
             <Link
               href={`/blog/${post.slug}`}
-              className="group flex h-full items-center gap-4 overflow-hidden rounded-xl border border-default-200 bg-default-50 p-4 transition-all duration-300 hover:border-default-300 hover:shadow-lg"
+              className="group flex h-full items-center gap-4 overflow-hidden rounded-xl border border-border bg-default p-4 transition-all duration-300 hover:border-border hover:shadow-lg"
             >
               {/* Rank */}
-              <span className="shrink-0 font-black text-2xl text-primary/20">
+              <span className="shrink-0 font-black text-2xl text-accent/20">
                 {String(index + 1).padStart(2, "0")}
               </span>
 
               {/* Content */}
               <div className="flex flex-1 flex-col gap-2">
-                <span className="line-clamp-2 font-medium text-default-800 text-sm leading-snug transition-colors group-hover:text-primary">
+                <span className="line-clamp-2 font-medium text-foreground text-sm leading-snug transition-colors group-hover:text-accent">
                   {post.title}
                 </span>
-                <div className="flex items-center gap-2 text-default-400">
+                <div className="flex items-center gap-2 text-muted">
                   <TrendingUp className="size-3 text-orange-500" />
                   <span className="text-xs tabular-nums">
                     {formatViewCount(post.viewCount)} views

@@ -5,10 +5,12 @@ exports[`Announcement > should prioritise path-specific announcements 1`] = `
   <div
     data-testid="alert"
   >
-    <div
-      data-testid="alert-title"
-    >
-      Cars update
+    <div>
+      <div
+        data-testid="alert-title"
+      >
+        Cars update
+      </div>
     </div>
   </div>
 </div>

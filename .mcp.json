@@ -1,5 +1,9 @@
 {
   "mcpServers": {
+    "heroui-react": {
+      "command": "bunx",
+      "args": ["-y", "@heroui/react-mcp@latest"]
+    },
     "motormetrics": {
       "command": "bunx",
       "args": ["-y", "@motormetrics/mcp"]

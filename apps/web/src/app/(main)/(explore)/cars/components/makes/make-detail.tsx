@@ -1,14 +1,13 @@
-import { Avatar } from "@heroui/avatar";
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card, Link } from "@heroui/react";
 import type { CarLogo } from "@logos/types";
 import type { SelectCar } from "@motormetrics/database";
-import { DataTable } from "@motormetrics/ui/components/data-table";
 import { slugify } from "@motormetrics/utils";
 import { CoeComparisonChart } from "@web/app/(main)/(explore)/cars/components/makes/coe-comparison-chart";
 import { MakeTrendChart } from "@web/app/(main)/(explore)/cars/components/makes/make-trend-chart";
 import { TypeBreakdownChart } from "@web/app/(main)/(explore)/cars/components/makes/type-breakdown-chart";
 import { EmptyState } from "@web/components/shared/empty-state";
 import { columns } from "@web/components/tables/columns/cars-make-columns";
+import { DataTable } from "@web/components/tables/data-table";
 import Typography from "@web/components/typography";
 import type { MakeCoeComparisonData } from "@web/queries/cars/makes/coe-comparison";
 import { Calendar, Car, TrendingUp } from "lucide-react";
@@ -43,7 +42,7 @@ export function MakeDetail({
   return (
     <div className="flex flex-col gap-6">
       {/* Header with logo and make name */}
-      <div className="flex items-center gap-4 border-default-100 border-b pb-6">
+      <div className="flex items-center gap-4 border-border border-b pb-6">
         <div className="flex size-16 items-center justify-center">
           {logo?.url ? (
             <Image
@@ -54,13 +53,9 @@ export function MakeDetail({
               className="object-contain"
             />
           ) : (
-            <Avatar
-              name={cars.make.charAt(0)}
-              classNames={{
-                base: "size-full bg-primary",
-                name: "text-xl font-semibold text-primary-foreground",
-              }}
-            />
+            <span className="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-xl">
+              {cars.make.charAt(0)}
+            </span>
           )}
         </div>
         <div className="flex flex-col gap-1">
@@ -71,18 +66,18 @@ export function MakeDetail({
 
       {/* Metric cards */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="flex flex-col gap-2 rounded-2xl bg-default-100 p-4">
+        <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
           <div className="flex items-center gap-2">
-            <Car className="size-3.5 text-primary" />
-            <Typography.Caption className="text-primary">
+            <Car className="size-3.5 text-accent" />
+            <Typography.Caption className="text-accent">
               Total
             </Typography.Caption>
           </div>
-          <span className="font-bold text-primary text-xl tabular-nums">
+          <span className="font-bold text-accent text-xl tabular-nums">
             {cars.total.toLocaleString()}
           </span>
         </div>
-        <div className="flex flex-col gap-2 rounded-2xl bg-default-100 p-4">
+        <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
           <div className="flex items-center gap-2">
             <TrendingUp className="size-3.5 text-success" />
             <Typography.Caption className="text-success">
@@ -93,29 +88,27 @@ export function MakeDetail({
             {cars.monthTotal.toLocaleString()}
           </span>
         </div>
-        <div className="flex flex-col gap-2 rounded-2xl bg-default-100 p-4">
+        <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
           <div className="flex items-center gap-2">
-            <Calendar className="size-3.5 text-default-500" />
+            <Calendar className="size-3.5 text-muted" />
             <Typography.Caption>Tracked</Typography.Caption>
           </div>
           <span className="font-bold text-foreground text-xl tabular-nums">
             {cars.monthsTracked}
-            <span className="ml-1 font-normal text-default-400 text-sm">
-              mo
-            </span>
+            <span className="ml-1 font-normal text-muted text-sm">mo</span>
           </span>
         </div>
       </div>
 
       {/* Historical Trend Chart */}
-      <Card className="rounded-2xl p-3">
-        <CardHeader className="flex flex-row items-baseline justify-between">
+      <Card>
+        <Card.Header className="flex flex-row items-baseline justify-between">
           <Typography.H4>Historical Trend</Typography.H4>
           <Typography.Caption>Past registrations</Typography.Caption>
-        </CardHeader>
-        <CardBody>
+        </Card.Header>
+        <Card.Content>
           <MakeTrendChart data={cars.historicalData.toReversed()} />
-        </CardBody>
+        </Card.Content>
       </Card>
 
       {/* Fuel & Vehicle Type Breakdown Charts */}
@@ -130,13 +123,13 @@ export function MakeDetail({
               />
               <div className="flex flex-wrap gap-2 px-1">
                 {fuelTypeBreakdown.map(({ name }) => (
-                  <a
+                  <Link
                     key={name}
                     href={`/cars/fuel-types/${slugify(name)}`}
-                    className="text-primary text-sm hover:underline"
+                    className="text-accent text-sm hover:underline"
                   >
                     {name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -150,13 +143,13 @@ export function MakeDetail({
               />
               <div className="flex flex-wrap gap-2 px-1">
                 {vehicleTypeBreakdown.map(({ name }) => (
-                  <a
+                  <Link
                     key={name}
                     href={`/cars/vehicle-types/${slugify(name)}`}
-                    className="text-primary text-sm hover:underline"
+                    className="text-accent text-sm hover:underline"
                   >
                     {name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -165,28 +158,28 @@ export function MakeDetail({
       )}
 
       {/* COE Comparison Chart */}
-      <Card className="rounded-2xl p-3">
-        <CardHeader className="flex flex-col items-start gap-2">
+      <Card>
+        <Card.Header className="flex flex-col items-start gap-2">
           <Typography.H4>Registration vs COE Premium</Typography.H4>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-4">
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-4">
           <CoeComparisonChart data={coeComparison} />
           <Typography.Caption>
             Bars show monthly registrations (left axis), lines show COE Category
             A and B premiums (right axis).
           </Typography.Caption>
-        </CardBody>
+        </Card.Content>
       </Card>
 
       {/* Summary Table */}
-      <Card className="rounded-2xl p-3">
-        <CardHeader className="flex flex-row items-baseline justify-between">
+      <Card>
+        <Card.Header className="flex flex-row items-baseline justify-between">
           <Typography.H4>Summary</Typography.H4>
           <Typography.Caption>Fuel & vehicle types by month</Typography.Caption>
-        </CardHeader>
-        <CardBody className="p-0">
+        </Card.Header>
+        <Card.Content className="p-0">
           <DataTable columns={columns} data={cars.data} />
-        </CardBody>
+        </Card.Content>
       </Card>
     </div>
   );

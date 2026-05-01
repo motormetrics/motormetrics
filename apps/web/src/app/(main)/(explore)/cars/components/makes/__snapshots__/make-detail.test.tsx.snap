@@ -6,22 +6,15 @@ exports[`MakeDetail > should render metric cards 1`] = `
     class="flex flex-col gap-6"
   >
     <div
-      class="flex items-center gap-4 border-default-100 border-b pb-6"
+      class="flex items-center gap-4 border-border border-b pb-6"
     >
       <div
         class="flex size-16 items-center justify-center"
       >
         <span
-          class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny text-default-foreground rounded-full size-full bg-primary"
-          tabindex="-1"
+          class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-xl"
         >
-          <span
-            aria-label="B"
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-xl font-semibold text-primary-foreground"
-            role="img"
-          >
-            B
-          </span>
+          B
         </span>
       </div>
       <div
@@ -33,7 +26,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
           BMW
         </h2>
         <p
-          class="text-default-600 text-sm leading-6"
+          class="text-muted text-sm leading-6"
         >
           Vehicle Registrations
         </p>
@@ -43,13 +36,13 @@ exports[`MakeDetail > should render metric cards 1`] = `
       class="grid grid-cols-3 gap-4"
     >
       <div
-        class="flex flex-col gap-2 rounded-2xl bg-default-100 p-4"
+        class="flex flex-col gap-2 rounded-2xl bg-default p-4"
       >
         <div
           class="flex items-center gap-2"
         >
           <svg
-            class="lucide lucide-car size-3.5 text-primary"
+            class="lucide lucide-car size-3.5 text-accent"
             fill="none"
             height="24"
             stroke="currentColor"
@@ -78,19 +71,19 @@ exports[`MakeDetail > should render metric cards 1`] = `
             />
           </svg>
           <span
-            class="text-xs leading-tight text-primary"
+            class="text-xs leading-tight text-accent"
           >
             Total
           </span>
         </div>
         <span
-          class="font-bold text-primary text-xl tabular-nums"
+          class="font-bold text-accent text-xl tabular-nums"
         >
           100
         </span>
       </div>
       <div
-        class="flex flex-col gap-2 rounded-2xl bg-default-100 p-4"
+        class="flex flex-col gap-2 rounded-2xl bg-default p-4"
       >
         <div
           class="flex items-center gap-2"
@@ -127,13 +120,13 @@ exports[`MakeDetail > should render metric cards 1`] = `
         </span>
       </div>
       <div
-        class="flex flex-col gap-2 rounded-2xl bg-default-100 p-4"
+        class="flex flex-col gap-2 rounded-2xl bg-default p-4"
       >
         <div
           class="flex items-center gap-2"
         >
           <svg
-            class="lucide lucide-calendar size-3.5 text-default-500"
+            class="lucide lucide-calendar size-3.5 text-muted"
             fill="none"
             height="24"
             stroke="currentColor"
@@ -162,7 +155,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
             />
           </svg>
           <span
-            class="text-muted-foreground text-xs leading-tight"
+            class="text-muted text-xs leading-tight"
           >
             Tracked
           </span>
@@ -172,7 +165,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
         >
           2
           <span
-            class="ml-1 font-normal text-default-400 text-sm"
+            class="ml-1 font-normal text-muted text-sm"
           >
             mo
           </span>
@@ -180,25 +173,27 @@ exports[`MakeDetail > should render metric cards 1`] = `
       </div>
     </div>
     <div
-      class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
-      tabindex="-1"
+      class="card card--default"
+      data-slot="card"
     >
       <div
-        class="p-3 z-10 w-full shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-row items-baseline justify-between"
+        class="card__header flex flex-row items-baseline justify-between"
+        data-slot="card-header"
       >
         <h4
-          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
         >
           Historical Trend
         </h4>
         <span
-          class="text-muted-foreground text-xs leading-tight"
+          class="text-muted text-xs leading-tight"
         >
           Past registrations
         </span>
       </div>
       <div
-        class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+        class="card__content"
+        data-slot="card-content"
       >
         <div>
           TrendChart
@@ -206,51 +201,55 @@ exports[`MakeDetail > should render metric cards 1`] = `
       </div>
     </div>
     <div
-      class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
-      tabindex="-1"
+      class="card card--default"
+      data-slot="card"
     >
       <div
-        class="p-3 z-10 w-full justify-start shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-col items-start gap-2"
+        class="card__header flex flex-col items-start gap-2"
+        data-slot="card-header"
       >
         <h4
-          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
         >
           Registration vs COE Premium
         </h4>
       </div>
       <div
-        class="relative w-full p-3 flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-col gap-4"
+        class="card__content flex flex-col gap-4"
+        data-slot="card-content"
       >
         <div>
           CoeComparisonChart
         </div>
         <span
-          class="text-muted-foreground text-xs leading-tight"
+          class="text-muted text-xs leading-tight"
         >
           Bars show monthly registrations (left axis), lines show COE Category A and B premiums (right axis).
         </span>
       </div>
     </div>
     <div
-      class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
-      tabindex="-1"
+      class="card card--default"
+      data-slot="card"
     >
       <div
-        class="p-3 z-10 w-full shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-row items-baseline justify-between"
+        class="card__header flex flex-row items-baseline justify-between"
+        data-slot="card-header"
       >
         <h4
-          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
         >
           Summary
         </h4>
         <span
-          class="text-muted-foreground text-xs leading-tight"
+          class="text-muted text-xs leading-tight"
         >
           Fuel & vehicle types by month
         </span>
       </div>
       <div
-        class="relative flex w-full flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased p-0"
+        class="card__content p-0"
+        data-slot="card-content"
       >
         <div>
           DataTable

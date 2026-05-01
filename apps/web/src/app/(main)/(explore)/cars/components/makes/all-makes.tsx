@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/button";
-import { Chip } from "@heroui/chip";
+import { Button, Chip } from "@heroui/react";
+
 import type { Make, MakeStats } from "@web/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Key } from "react";
@@ -55,7 +55,7 @@ export function AllMakes({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h2 className="font-semibold text-foreground text-lg">{title}</h2>
-          <Chip variant="flat" color="primary" size="sm">
+          <Chip variant="primary" color="accent" size="sm">
             {sortedMakes.length}
           </Chip>
         </div>
@@ -65,9 +65,9 @@ export function AllMakes({
       <div className="relative flex items-center gap-2">
         <Button
           isIconOnly
-          variant="bordered"
-          radius="full"
+          variant="outline"
           size="sm"
+          className="rounded-full"
           onPress={() => scroll("left")}
           aria-label="Scroll left"
         >
@@ -76,17 +76,16 @@ export function AllMakes({
 
         <div
           ref={scrollContainerRef}
-          className="scrollbar-hide flex flex-1 gap-1 overflow-x-auto scroll-smooth"
+          className="flex flex-1 gap-1 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {letters.map((letter) => (
             <Button
               key={letter}
-              radius="full"
               size="sm"
-              color={selectedLetter === letter ? "primary" : "default"}
-              variant={selectedLetter === letter ? "solid" : "light"}
+              className="shrink-0 rounded-full"
+              variant={selectedLetter === letter ? "primary" : "tertiary"}
+              aria-pressed={selectedLetter === letter}
               onPress={() => handleSelectionChange(letter)}
-              className="shrink-0"
             >
               {letter}
             </Button>
@@ -95,9 +94,9 @@ export function AllMakes({
 
         <Button
           isIconOnly
-          variant="bordered"
-          radius="full"
+          variant="outline"
           size="sm"
+          className="rounded-full"
           onPress={() => scroll("right")}
           aria-label="Scroll right"
         >
@@ -111,8 +110,8 @@ export function AllMakes({
           <span className="font-medium text-foreground">
             {selectedLetter === "#" ? "Other" : selectedLetter}
           </span>
-          <span className="text-default-400">·</span>
-          <span className="text-default-500 text-sm">
+          <span className="text-muted">·</span>
+          <span className="text-muted text-sm">
             {activeMakes.length} {activeMakes.length === 1 ? "make" : "makes"}
           </span>
         </div>

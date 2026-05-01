@@ -3,26 +3,28 @@
 exports[`Cars Category Charts > TopMakesChart > should render chart title and description 1`] = `
 <div>
   <div
-    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
-    tabindex="-1"
+    class="card card--default"
+    data-slot="card"
   >
     <div
-      class="p-3 z-10 w-full justify-start shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large flex flex-col items-start gap-2"
+      class="card__header flex flex-col items-start gap-2"
+      data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
       >
         Top Makes - 
         Petrol
       </h4>
       <p
-        class="text-default-600 text-sm leading-6"
+        class="text-muted text-sm leading-6"
       >
         Most popular brands in this category
       </p>
     </div>
     <div
-      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+      class="card__content"
+      data-slot="card-content"
     >
       <div
         class="flex flex-col gap-6"
@@ -31,62 +33,59 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
           class="flex gap-2"
         >
           <a
+            class="link"
+            data-rac=""
+            data-react-aria-pressable="true"
             href="/cars/makes/toyota"
+            tabindex="0"
           >
-            <div
-              class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-7 text-small rounded-full bg-default text-default-foreground cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
+            <span
+              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
+              data-slot="chip"
             >
-              <span
-                class="max-h-[80%]"
-              >
+              <span>
                 🥇
               </span>
-              <span
-                class="flex-1 text-inherit font-normal px-2 pl-1"
-              >
-                Toyota
-              </span>
-            </div>
+              Toyota
+            </span>
           </a>
           <a
+            class="link"
+            data-rac=""
+            data-react-aria-pressable="true"
             href="/cars/makes/honda"
+            tabindex="0"
           >
-            <div
-              class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-7 text-small rounded-full bg-default text-default-foreground cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
+            <span
+              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
+              data-slot="chip"
             >
-              <span
-                class="max-h-[80%]"
-              >
+              <span>
                 🥈
               </span>
-              <span
-                class="flex-1 text-inherit font-normal px-2 pl-1"
-              >
-                Honda
-              </span>
-            </div>
+              Honda
+            </span>
           </a>
           <a
+            class="link"
+            data-rac=""
+            data-react-aria-pressable="true"
             href="/cars/makes/bmw"
+            tabindex="0"
           >
-            <div
-              class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-7 text-small rounded-full bg-default text-default-foreground cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
+            <span
+              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
+              data-slot="chip"
             >
-              <span
-                class="max-h-[80%]"
-              >
+              <span>
                 🥉
               </span>
-              <span
-                class="flex-1 text-inherit font-normal px-2 pl-1"
-              >
-                BMW
-              </span>
-            </div>
+              BMW
+            </span>
           </a>
         </div>
         <div
-          class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none h-[300px] w-full"
+          class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-default [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-default [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none h-[300px] w-full"
           data-chart="chart-_r_0_"
         >
           <style>

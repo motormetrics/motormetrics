@@ -1,12 +1,13 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import {
   type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import {
   Bar,
@@ -41,22 +42,22 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
   ) as ChartConfig;
 
   return (
-    <Card className="rounded-2xl p-3">
-      <CardHeader className="flex flex-col items-start gap-2 pb-4">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>
           Top {topMakes.length} Car Makes ({year})
         </Typography.H4>
-        <Typography.TextSm className="text-default-600">
+        <Typography.TextSm className="text-muted">
           Most popular vehicle brands by registration volume
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody className="pt-2">
+      </Card.Header>
+      <Card.Content className="pt-2">
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <BarChart data={data} layout="vertical">
             <CartesianGrid
               horizontal={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis type="number" tickLine={false} axisLine={false} />
             <YAxis
@@ -68,7 +69,7 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
               hide
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Bar dataKey="value" radius={4}>
@@ -95,7 +96,7 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
             </Bar>
           </BarChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

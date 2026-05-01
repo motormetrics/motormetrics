@@ -1,9 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { cn } from "@heroui/theme";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
+import { Card, Chip } from "@heroui/react";
+
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
 import { useMemo } from "react";
@@ -70,12 +68,12 @@ export function CarPopulationMetrics({
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-      <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-        <CardHeader>
+      <Card>
+        <Card.Header>
           <Typography.H4>Total Cars</Typography.H4>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-2">
-          <span className="font-semibold text-4xl text-primary tabular-nums">
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-2">
+          <span className="font-semibold text-4xl text-accent tabular-nums">
             {numberFormatter.format(grandTotal)}
           </span>
           {previousYearTotal && previousYearTotal.total > 0 && (
@@ -83,45 +81,45 @@ export function CarPopulationMetrics({
               className="rounded-full"
               color={yoyChange >= 0 ? "success" : "danger"}
               size="sm"
-              variant="flat"
+              variant="primary"
             >
               {yoyChange >= 0 ? "+" : ""}
               {yoyPercentage.toFixed(1)}%
             </Chip>
           )}
-        </CardBody>
+        </Card.Content>
       </Card>
 
-      <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-        <CardHeader>
+      <Card>
+        <Card.Header>
           <Typography.H4>Top Make</Typography.H4>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-2">
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-2">
           <span className="font-semibold text-4xl tabular-nums">
             {topMake?.make ?? "—"}
           </span>
           {topMake && (
-            <Typography.TextSm className="text-default-500">
+            <Typography.TextSm className="text-muted">
               {numberFormatter.format(topMake.total)} cars ({totalMakes} makes
               total)
             </Typography.TextSm>
           )}
-        </CardBody>
+        </Card.Content>
       </Card>
 
-      <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-        <CardHeader>
+      <Card>
+        <Card.Header>
           <Typography.H4>Top 5 Concentration</Typography.H4>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-2">
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-2">
           <span className="font-semibold text-4xl tabular-nums">
             {top5Share.toFixed(1)}%
           </span>
-          <Typography.TextSm className="text-default-500">
+          <Typography.TextSm className="text-muted">
             {numberFormatter.format(top5Total)} of{" "}
             {numberFormatter.format(grandTotal)} cars
           </Typography.TextSm>
-        </CardBody>
+        </Card.Content>
       </Card>
     </div>
   );

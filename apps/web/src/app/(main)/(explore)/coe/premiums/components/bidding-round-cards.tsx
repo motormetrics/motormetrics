@@ -1,5 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
 import {
   formatCurrency,
   formatDateToMonthYear,
@@ -49,16 +48,16 @@ const CategoryRow = ({
       className={`flex items-center justify-between ${isPrimary ? "py-3" : "py-2"}`}
     >
       <div className="flex items-center gap-2">
-        <div className="h-6 w-2 rounded-full bg-primary" />
+        <div className="h-6 w-2 rounded-full bg-accent" />
         <span
-          className={`font-medium ${isPrimary ? "text-foreground" : "text-default-600 text-sm"}`}
+          className={`font-medium ${isPrimary ? "text-foreground" : "text-muted text-sm"}`}
         >
           {category}
         </span>
       </div>
       <div className="flex items-center gap-2">
         <span
-          className={`font-semibold text-primary tabular-nums ${isPrimary ? "text-lg" : "text-sm"}`}
+          className={`font-semibold text-accent tabular-nums ${isPrimary ? "text-lg" : "text-sm"}`}
         >
           {isPrimary ? (
             <AnimatedNumber value={premium} format="currency" />
@@ -69,20 +68,15 @@ const CategoryRow = ({
         {change !== null && change !== 0 && (
           <Chip
             size="sm"
-            variant="flat"
+            variant="primary"
             color={change > 0 ? "danger" : "success"}
-            startContent={
-              change > 0 ? (
-                <ArrowUpIcon className="size-3" />
-              ) : (
-                <ArrowDownIcon className="size-3" />
-              )
-            }
-            classNames={{
-              base: "h-6 px-1.5",
-              content: "text-xs font-medium tabular-nums",
-            }}
+            className="h-6 px-1.5 font-medium text-xs tabular-nums"
           >
+            {change > 0 ? (
+              <ArrowUpIcon className="size-3" />
+            ) : (
+              <ArrowDownIcon className="size-3" />
+            )}
             {Math.abs(change).toFixed(1)}%
           </Chip>
         )}
@@ -113,37 +107,37 @@ const RoundCard = ({
 
   if (isPlaceholder) {
     return (
-      <Card className="border-2 border-dashed bg-default-50/50 p-3 shadow-none">
-        <CardHeader className="flex flex-row items-center gap-2 pb-2">
-          <Chip size="sm" color="primary">
+      <Card className="border-2 border-dashed bg-default/50 shadow-none">
+        <Card.Header className="flex flex-row items-center gap-2 pb-2">
+          <Chip size="sm" color="accent">
             {formatOrdinal(roundNumber)} Round
           </Chip>
-        </CardHeader>
-        <CardBody className="flex flex-col items-center justify-center gap-4 py-12">
-          <div className="flex size-12 items-center justify-center rounded-full bg-default-100">
-            <ClockIcon className="size-6 text-default-400" />
+        </Card.Header>
+        <Card.Content className="flex flex-col items-center justify-center gap-4 py-12">
+          <div className="flex size-12 items-center justify-center rounded-full bg-default">
+            <ClockIcon className="size-6 text-muted" />
           </div>
           <div className="flex flex-col items-center gap-1 text-center">
-            <Typography.TextSm className="font-medium text-default-600">
+            <Typography.TextSm className="font-medium text-muted">
               Results Pending
             </Typography.TextSm>
             <Typography.Caption>
               2nd round bidding typically occurs mid-month
             </Typography.Caption>
           </div>
-        </CardBody>
+        </Card.Content>
       </Card>
     );
   }
 
   return (
-    <Card className="rounded-2xl p-3">
-      <CardHeader className="flex flex-row items-center gap-2 pb-2">
-        <Chip size="sm" color="primary">
+    <Card>
+      <Card.Header className="flex flex-row items-center gap-2 pb-2">
+        <Chip size="sm" color="accent">
           {formatOrdinal(roundNumber)} Round
         </Chip>
-      </CardHeader>
-      <CardBody className="flex flex-col gap-0 pt-0">
+      </Card.Header>
+      <Card.Content className="flex flex-col gap-0 pt-0">
         {/* Primary categories (A & B) */}
         <div className="flex flex-col">
           {PRIMARY_CATEGORIES.map((category) => {
@@ -167,7 +161,7 @@ const RoundCard = ({
           })}
         </div>
 
-        {/* Divider */}
+        {/* Separator */}
         <div className="my-2 h-px bg-divider" />
 
         {/* Secondary categories (C, D, E) */}
@@ -191,7 +185,7 @@ const RoundCard = ({
             );
           })}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 };
@@ -210,7 +204,7 @@ export function BiddingRoundCards({
       <div className="flex items-center gap-2">
         <Typography.H3>Bidding Rounds</Typography.H3>
         {formattedMonth && (
-          <Chip size="sm" color="primary">
+          <Chip size="sm" color="accent">
             {formattedMonth}
           </Chip>
         )}

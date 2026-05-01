@@ -20,7 +20,7 @@ exports[`DashboardPageTitle > should render title with badge and subtitle 1`] = 
       </span>
     </div>
     <p
-      class="text-lg leading-relaxed text-default-500"
+      class="text-lg leading-relaxed text-muted"
     >
       Latest monthly overview
     </p>

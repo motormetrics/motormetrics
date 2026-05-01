@@ -1,6 +1,6 @@
 "use client";
 
-import { CHART_GRID, type ChartGrid } from "@motormetrics/theme/charts";
+import { CHART_GRID, type ChartGrid } from "@web/components/charts/tokens";
 import { CartesianGrid as RechartsCartesianGrid } from "recharts";
 
 interface StandardCartesianGridProps {

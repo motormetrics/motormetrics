@@ -1,8 +1,4 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { Divider } from "@heroui/divider";
-import { Link } from "@heroui/link";
+import { Button, Card, Chip, Link, Separator } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { Check } from "lucide-react";
 import { cacheLife } from "next/cache";
@@ -54,13 +50,13 @@ export async function PricingSection() {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col items-center gap-4 text-center">
-          <Typography.Label className="text-primary uppercase tracking-widest">
+          <Typography.Label className="text-accent uppercase tracking-widest">
             Simple Pricing
           </Typography.Label>
           <Typography.H2 className="lg:text-4xl">
             Monthly plans that fit your budget
           </Typography.H2>
-          <Typography.TextLg className="max-w-xl text-default-600">
+          <Typography.TextLg className="max-w-xl text-muted">
             Billed monthly. Cancel anytime. No long-term commitments.
           </Typography.TextLg>
         </div>
@@ -70,60 +66,60 @@ export async function PricingSection() {
           {plans.map((plan) => (
             <Card
               key={plan.name}
-              className={`relative h-full p-3 shadow-sm transition-all duration-500 ${
+              className={`relative h-full shadow-sm transition-all duration-500 ${
                 plan.featured
-                  ? "border-primary shadow-lg shadow-primary/10"
-                  : "border-default-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                  ? "border-accent shadow-accent/10 shadow-lg"
+                  : "border-border hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg"
               }`}
             >
               {plan.featured && (
                 <div className="absolute top-4 right-4">
                   <Chip
                     size="sm"
-                    color="primary"
-                    variant="solid"
-                    classNames={{
-                      content: "text-xs font-semibold",
-                    }}
+                    color="accent"
+                    variant="primary"
+                    className="font-semibold text-xs"
                   >
                     Recommended
                   </Chip>
                 </div>
               )}
-              <CardHeader className="flex flex-col items-start gap-2 pb-2">
+              <Card.Header className="flex flex-col items-start gap-2">
                 <Typography.H3 className="text-xl">{plan.name}</Typography.H3>
                 <div className="flex items-baseline gap-1">
                   <span className="font-bold text-4xl text-foreground tracking-tight">
                     {plan.price}
                   </span>
-                  <span className="text-default-500 text-sm">/month</span>
+                  <span className="text-muted text-sm">/month</span>
                 </div>
-                <Typography.TextSm className="text-default-500">
+                <Typography.TextSm className="text-muted">
                   {plan.description}
                 </Typography.TextSm>
-              </CardHeader>
-              <Divider />
-              <CardBody className="gap-3 py-4">
+              </Card.Header>
+              <Separator />
+              <Card.Content className="gap-3">
                 {plan.features.map((feature) => (
                   <div key={feature} className="flex items-center gap-2">
-                    <Check className="size-4 shrink-0 text-primary" />
+                    <Check className="size-4 shrink-0 text-accent" />
                     <Typography.TextSm>{feature}</Typography.TextSm>
                   </div>
                 ))}
-              </CardBody>
-              <CardFooter>
-                <Button
-                  as={Link}
-                  href="#contact"
-                  color={plan.featured ? "primary" : "default"}
-                  variant={plan.featured ? "solid" : "bordered"}
-                  radius="full"
-                  fullWidth
-                  className={plan.featured ? "" : "text-foreground"}
-                >
-                  Get Started
-                </Button>
-              </CardFooter>
+              </Card.Content>
+              <Card.Footer>
+                <Link href="#contact" className="w-full no-underline">
+                  <Button
+                    variant={plan.featured ? "primary" : "outline"}
+                    fullWidth
+                    className={
+                      plan.featured
+                        ? "rounded-full"
+                        : "rounded-full text-foreground"
+                    }
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+              </Card.Footer>
             </Card>
           ))}
         </div>

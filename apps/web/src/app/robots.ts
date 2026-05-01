@@ -2,7 +2,7 @@ import { SITE_URL } from "@web/config";
 import type { MetadataRoute } from "next";
 
 const robots = (): MetadataRoute.Robots => {
-  const protectedPaths = ["/api/", "/_next/data/", "/preview/"];
+  const protectedPaths = ["/api/", "/_next/data/"];
   const sitemap = `${SITE_URL}/sitemap.xml`;
 
   if (process.env.VERCEL_ENV !== "production") {

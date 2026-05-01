@@ -1,14 +1,15 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@motormetrics/ui/components/chart";
-import { formatDateToMonthYear } from "@motormetrics/utils";
+} from "@web/components/charts/chart";
 import Typography from "@web/components/typography";
 import type { Registration } from "@web/types/cars";
 import { formatNumber } from "@web/utils/charts";
@@ -53,18 +54,18 @@ export function ComparisonBarChart({
   const height = Math.max(200, allCategories.length * 56);
 
   return (
-    <Card className="rounded-2xl p-3">
-      <CardHeader className="flex flex-col items-start gap-2">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>{title}</Typography.H4>
         {description && <Typography.TextSm>{description}</Typography.TextSm>}
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer config={chartConfig} style={{ height }}>
           <BarChart data={chartData} layout="vertical">
             <CartesianGrid
               horizontal={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis
               type="number"
@@ -80,7 +81,7 @@ export function ComparisonBarChart({
               width={110}
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={<ChartTooltipContent />}
             />
             <ChartLegend content={<ChartLegendContent />} />
@@ -88,7 +89,7 @@ export function ComparisonBarChart({
             <Bar dataKey="monthB" fill="var(--chart-3)" radius={[0, 4, 4, 0]} />
           </BarChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

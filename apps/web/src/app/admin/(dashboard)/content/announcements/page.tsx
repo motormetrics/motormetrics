@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
+import { Card } from "@heroui/react";
 import { AnnouncementForm } from "@web/app/admin/components/announcement-form";
 import { ArrowLeft, MessageSquare } from "lucide-react";
 import Link from "next/link";
@@ -15,7 +10,7 @@ export default function AnnouncementsPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/content"
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-2 text-muted hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
           Back to Content Management
@@ -27,7 +22,7 @@ export default function AnnouncementsPage() {
           <MessageSquare className="size-8" />
           Announcements
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-muted">
           Manage site-wide announcements that appear at the top of the website.
         </p>
       </div>
@@ -36,10 +31,10 @@ export default function AnnouncementsPage() {
 
       {/* Instructions */}
       <Card>
-        <CardHeader>
-          <CardTitle>Instructions</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4 text-muted-foreground text-sm">
+        <Card.Header>
+          <Card.Title>Instructions</Card.Title>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-4 text-muted text-sm">
           <div className="flex items-start gap-2">
             <span className="font-medium text-foreground">1.</span>
             <span>
@@ -68,7 +63,7 @@ export default function AnnouncementsPage() {
               caching.
             </span>
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
     </div>
   );

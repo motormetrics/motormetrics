@@ -1,7 +1,7 @@
 "use client";
 
-import { DataTable } from "@motormetrics/ui/components/data-table";
 import { columns } from "@web/components/tables/columns/coe-results-columns";
+import { DataTable } from "@web/components/tables/data-table";
 import type { COEResult } from "@web/types";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import { useCallback, useMemo } from "react";

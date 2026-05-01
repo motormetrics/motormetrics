@@ -36,7 +36,7 @@ This Skill ensures all UI components follow the project's Typography system and 
   - `text-foreground` (primary text)
   - `text-default-900` (strong emphasis)
   - `text-default-600` (secondary text)
-  - `text-muted-foreground` (metadata)
+  - `text-default-500` (metadata)
 
 ### Spacing Violations
 
@@ -123,4 +123,3 @@ src/components/icons/search-icon.tsx:8
 
 - `src/app/**/_components/` (co-located components)
 - `src/components/` (shared components)
-- Exclude: `src/components/ui/` (shadcn/ui - DO NOT MODIFY)

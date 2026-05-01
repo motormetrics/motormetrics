@@ -1,4 +1,4 @@
-import { cn } from "@heroui/theme";
+import { cn } from "@heroui/react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "@web/app/providers";
@@ -75,9 +75,10 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
   return (
     <html
       lang="en"
+      data-theme="light"
       className={cn("scroll-smooth antialiased", geistSans.className)}
     >
-      <body className="bg-background">
+      <body className="bg-background text-foreground">
         <Providers>
           <NuqsAdapter>
             <Suspense fallback={null}>

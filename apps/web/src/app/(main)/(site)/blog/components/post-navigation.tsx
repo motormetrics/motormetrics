@@ -1,6 +1,6 @@
+import { Link } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import Link from "next/link";
 
 interface PostNavigationProps {
   previous?: SelectPost;
@@ -27,19 +27,19 @@ export function PostNavigation({ previous, next }: PostNavigationProps) {
             >
               {/* Direction Label */}
               <div className="mb-3 flex items-center gap-2">
-                <ArrowLeft className="size-4 -translate-x-0 text-foreground/40 transition-transform duration-300 ease-out group-hover:-translate-x-1 group-hover:text-primary" />
-                <span className="font-medium text-[10px] text-foreground/40 uppercase tracking-[0.25em] transition-colors duration-300 group-hover:text-primary">
+                <ArrowLeft className="size-4 -translate-x-0 text-foreground/40 transition-transform duration-300 ease-out group-hover:-translate-x-1 group-hover:text-accent" />
+                <span className="font-medium text-[10px] text-foreground/40 uppercase tracking-[0.25em] transition-colors duration-300 group-hover:text-accent">
                   Previous
                 </span>
               </div>
 
               {/* Title */}
-              <h3 className="line-clamp-2 font-semibold text-foreground text-lg leading-snug transition-colors duration-300 group-hover:text-primary md:text-xl">
+              <h3 className="line-clamp-2 font-semibold text-foreground text-lg leading-snug transition-colors duration-300 group-hover:text-accent md:text-xl">
                 {previous.title}
               </h3>
 
               {/* Animated underline */}
-              <div className="mt-4 h-px w-0 bg-primary transition-all duration-500 ease-out group-hover:w-16" />
+              <div className="mt-4 h-px w-0 bg-accent transition-all duration-500 ease-out group-hover:w-16" />
             </Link>
           ) : (
             <div className="hidden md:block" />
@@ -55,19 +55,19 @@ export function PostNavigation({ previous, next }: PostNavigationProps) {
             >
               {/* Direction Label */}
               <div className="mb-3 flex items-center gap-2">
-                <span className="font-medium text-[10px] text-foreground/40 uppercase tracking-[0.25em] transition-colors duration-300 group-hover:text-primary">
+                <span className="font-medium text-[10px] text-foreground/40 uppercase tracking-[0.25em] transition-colors duration-300 group-hover:text-accent">
                   Next
                 </span>
-                <ArrowRight className="size-4 translate-x-0 text-foreground/40 transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:text-primary" />
+                <ArrowRight className="size-4 translate-x-0 text-foreground/40 transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:text-accent" />
               </div>
 
               {/* Title */}
-              <h3 className="line-clamp-2 font-semibold text-foreground text-lg leading-snug transition-colors duration-300 group-hover:text-primary md:text-xl">
+              <h3 className="line-clamp-2 font-semibold text-foreground text-lg leading-snug transition-colors duration-300 group-hover:text-accent md:text-xl">
                 {next.title}
               </h3>
 
               {/* Animated underline */}
-              <div className="mt-4 h-px w-0 bg-primary transition-all duration-500 ease-out group-hover:w-16 md:ml-auto" />
+              <div className="mt-4 h-px w-0 bg-accent transition-all duration-500 ease-out group-hover:w-16 md:ml-auto" />
             </Link>
           ) : (
             <div className="hidden md:block" />

@@ -3,23 +3,25 @@
 exports[`MetricCard > should combine metric value and comparison 1`] = `
 <div>
   <div
-    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
-    tabindex="-1"
+    class="card card--default"
+    data-slot="card"
   >
     <div
-      class="flex p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large"
+      class="card__header"
+      data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
       >
         COE Premiums
       </h4>
     </div>
     <div
-      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+      class="card__content"
+      data-slot="card-content"
     >
       <div
-        class="font-semibold tabular-nums text-4xl text-primary"
+        class="font-semibold tabular-nums text-4xl text-accent"
       >
         <span>
           0
@@ -27,16 +29,18 @@ exports[`MetricCard > should combine metric value and comparison 1`] = `
       </div>
     </div>
     <div
-      class="p-3 h-auto flex w-full items-center overflow-hidden color-inherit subpixel-antialiased rounded-b-large"
+      class="card__footer"
+      data-slot="card-footer"
     >
       <div
         class="flex items-center gap-2"
       >
-        <div
-          class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-7 text-small rounded-full bg-success/20 text-success-700 dark:text-success"
+        <span
+          class="chip chip--success chip--primary"
+          data-slot="chip"
         >
           <svg
-            class="lucide lucide-arrow-up-right max-h-[80%] size-4"
+            class="lucide lucide-arrow-up-right size-4"
             fill="none"
             height="24"
             stroke="currentColor"
@@ -54,14 +58,10 @@ exports[`MetricCard > should combine metric value and comparison 1`] = `
               d="M7 17 17 7"
             />
           </svg>
-          <span
-            class="flex-1 text-inherit font-normal px-2 pl-1"
-          >
-            11.1%
-          </span>
-        </div>
+          11.1%
+        </span>
         <span
-          class="text-muted-foreground text-sm"
+          class="text-muted text-sm"
         >
           vs last month
         </span>
@@ -74,23 +74,25 @@ exports[`MetricCard > should combine metric value and comparison 1`] = `
 exports[`MetricCard > should render with hero variant 1`] = `
 <div>
   <div
-    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 transition-transform-background motion-reduce:transition-none rounded-3xl shadow-md p-6 border-l-4 border-primary"
-    tabindex="-1"
+    class="card card--default border-l-4 border-accent"
+    data-slot="card"
   >
     <div
-      class="flex p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large"
+      class="card__header"
+      data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
       >
         Total Registrations
       </h4>
     </div>
     <div
-      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+      class="card__content"
+      data-slot="card-content"
     >
       <div
-        class="font-semibold tabular-nums text-5xl text-primary"
+        class="font-semibold tabular-nums text-5xl text-accent"
       >
         <span>
           0
@@ -98,16 +100,18 @@ exports[`MetricCard > should render with hero variant 1`] = `
       </div>
     </div>
     <div
-      class="p-3 h-auto flex w-full items-center overflow-hidden color-inherit subpixel-antialiased rounded-b-large"
+      class="card__footer"
+      data-slot="card-footer"
     >
       <div
         class="flex items-center gap-2"
       >
-        <div
-          class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-1 h-7 text-small rounded-full bg-success/20 text-success-700 dark:text-success"
+        <span
+          class="chip chip--success chip--primary"
+          data-slot="chip"
         >
           <svg
-            class="lucide lucide-arrow-up-right max-h-[80%] size-4"
+            class="lucide lucide-arrow-up-right size-4"
             fill="none"
             height="24"
             stroke="currentColor"
@@ -125,14 +129,10 @@ exports[`MetricCard > should render with hero variant 1`] = `
               d="M7 17 17 7"
             />
           </svg>
-          <span
-            class="flex-1 text-inherit font-normal px-2 pl-1"
-          >
-            11.1%
-          </span>
-        </div>
+          11.1%
+        </span>
         <span
-          class="text-muted-foreground text-sm"
+          class="text-muted text-sm"
         >
           vs last month
         </span>
