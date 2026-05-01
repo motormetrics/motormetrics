@@ -1,6 +1,3 @@
-[mcp_servers.heroui-migration]
-url = "https://migration-mcp.heroui.com"
-
 [mcp_servers.heroui-react]
 command = "bunx"
 args = ["-y", "@heroui/react-mcp@latest"]

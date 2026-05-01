@@ -1,10 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "heroui-migration": {
-      "type": "remote",
-      "url": "https://migration-mcp.heroui.com"
-    },
     "heroui-react": {
       "type": "local",
       "command": ["bunx", "-y", "@heroui/react-mcp@latest"]

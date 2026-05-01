@@ -435,7 +435,7 @@ See `component-naming` skill for detailed guidance and validation checklist.
 
 A consistent approach to animations using Framer Motion for scroll-triggered reveals and entrance effects.
 
-> **Note**: Import from `framer-motion`, not `motion/react`. HeroUI v2 depends on `framer-motion` as a peer dependency. Migration to `motion/react` will be possible after upgrading to HeroUI v3.
+> **Note**: Import from `framer-motion`, not `motion/react`. HeroUI v3 does not require Framer Motion; this app keeps it as a direct dependency for custom page and chart animations.
 
 **Design Philosophy**:
 
