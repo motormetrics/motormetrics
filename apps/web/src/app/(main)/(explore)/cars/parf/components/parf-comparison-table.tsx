@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, cn, Table } from "@heroui/react";
+import { Card, Table } from "@heroui/react";
 
 import Typography from "@web/components/typography";
 import { ArrowDown, Table as TableIcon } from "lucide-react";
@@ -28,40 +28,36 @@ export function PARFComparisonTable() {
           <TableIcon className="size-4 text-primary" />
           <Typography.H4>PARF Rebate Rate Comparison</Typography.H4>
         </div>
-        <Table aria-label="PARF rebate rate comparison by vehicle age">
-          <Table.Header>
-            <Table.Column>Vehicle Age</Table.Column>
-            <Table.Column className="text-center">Old Rate</Table.Column>
-            <Table.Column className="text-center text-primary">
-              New Rate
-            </Table.Column>
-            <Table.Column className="text-right text-danger">
-              Change
-            </Table.Column>
-          </Table.Header>
-          <Table.Body>
-            {BRACKETS.map((row) => (
-              <Table.Row key={row.age}>
-                <Table.Cell className="font-medium">{row.age}</Table.Cell>
-                <Table.Cell className={cn("text-center text-default-500")}>
-                  {row.oldRate}
-                </Table.Cell>
-                <Table.Cell className="text-center font-semibold text-primary">
-                  {row.newRate}
-                </Table.Cell>
-                <Table.Cell className="text-right">
-                  {row.change ? (
-                    <span className="inline-flex items-center justify-end gap-1 font-semibold text-danger text-xs">
-                      <ArrowDown className="size-4" />
-                      {row.change}
-                    </span>
-                  ) : (
-                    <span className="text-default-400 text-xs">No change</span>
-                  )}
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
+        <Table>
+          <Table.ScrollContainer>
+            <Table.Content aria-label="PARF rebate rate comparison by vehicle age">
+              <Table.Header>
+                <Table.Column>Vehicle Age</Table.Column>
+                <Table.Column>Old Rate</Table.Column>
+                <Table.Column>New Rate</Table.Column>
+                <Table.Column>Change</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                {BRACKETS.map((row) => (
+                  <Table.Row key={row.age}>
+                    <Table.Cell>{row.age}</Table.Cell>
+                    <Table.Cell>{row.oldRate}</Table.Cell>
+                    <Table.Cell>{row.newRate}</Table.Cell>
+                    <Table.Cell>
+                      {row.change ? (
+                        <span className="inline-flex items-center gap-1 text-danger">
+                          <ArrowDown className="size-4" />
+                          {row.change}
+                        </span>
+                      ) : (
+                        "No change"
+                      )}
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
         </Table>
         <div className="flex flex-col justify-between gap-2 border-default-200 border-t bg-default-50 px-6 py-4 text-default-500 text-xs sm:flex-row">
           <span>
