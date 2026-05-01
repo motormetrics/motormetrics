@@ -9,6 +9,9 @@ on:
       - ready_for_review
   merge_group:
 
+env:
+  HEROUI_AUTH_TOKEN: ${{ secrets.HEROUI_AUTH_TOKEN }}
+
 concurrency:
   group: pr-${{ github.ref }}
   cancel-in-progress: true

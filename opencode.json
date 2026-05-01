@@ -1,6 +1,13 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
+    "heroui-pro": {
+      "type": "remote",
+      "url": "https://mcp.heroui.pro/mcp",
+      "headers": {
+        "x-heroui-personal-token": "{env:HEROUI_PERSONAL_TOKEN}"
+      }
+    },
     "heroui-react": {
       "type": "local",
       "command": ["bunx", "-y", "@heroui/react-mcp@latest"]

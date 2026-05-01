@@ -2,37 +2,49 @@ packages:
   - apps/*
   - packages/*
 
+allowBuilds:
+  "@heroui-pro/react": true
+  '@nestjs/core': false
+  '@prisma/engines': false
+  '@swc/core': false
+  '@zowe/secrets-for-zowe-sdk': false
+  cbor-extract: false
+  core-js: false
+  esbuild: false
+  prisma: false
+  heroui-pro: true
+  protobufjs: false
+  sharp: false
+
 catalog:
   "@ai-sdk/gateway": 3.0.104
   "@ai-sdk/google": 3.0.64
   "@heroui/react": 3.0.3
   "@heroui/styles": 3.0.3
-  "@upstash/redis": 1.37.0
-  drizzle-orm: 0.45.2
   "@langfuse/otel": 4.5.1
   "@tailwindcss/postcss": 4.1.18
   "@types/node": 22.19.3
   "@types/react": 19.2.10
   "@types/react-dom": 19.2.3
+  "@upstash/redis": 1.37.0
   "@vercel/related-projects": 1.0.1
   "@vitest/coverage-v8": 4.1.0
   "@vitest/ui": 4.1.0
   ai: 6.0.168
   date-fns: 3.6.0
+  drizzle-orm: 0.45.2
   next: 16.2.0
   react: 19.2.4
   react-dom: 19.2.4
   sonner: 2.0.7
   tailwindcss: 4.1.18
+  tsx: 4.21.0
   typescript: 5.9.3
   vite-tsconfig-paths: 5.1.4
   vitest: 4.1.0
-  tsx: 4.21.0
   zod: 4.3.6
 
 overrides:
   form-data@>=4.0.0 <4.0.4: ">=4.0.4"
-
-ignoreScripts: true
 
 savePrefix: ""

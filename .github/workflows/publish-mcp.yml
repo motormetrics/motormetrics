@@ -7,6 +7,9 @@ on:
     paths:
       - "apps/mcp/**"
 
+env:
+  HEROUI_AUTH_TOKEN: ${{ secrets.HEROUI_AUTH_TOKEN }}
+
 jobs:
   publish:
     name: Publish

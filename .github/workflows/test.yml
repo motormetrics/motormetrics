@@ -3,6 +3,9 @@ name: Test Job
 on:
   workflow_call:
 
+env:
+  HEROUI_AUTH_TOKEN: ${{ secrets.HEROUI_AUTH_TOKEN }}
+
 permissions:
   contents: read
 

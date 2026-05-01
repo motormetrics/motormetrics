@@ -1,3 +1,7 @@
+[mcp_servers.heroui-pro]
+url = "https://mcp.heroui.pro/mcp"
+env_http_headers = { "x-heroui-personal-token" = "HEROUI_PERSONAL_TOKEN" }
+
 [mcp_servers.heroui-react]
 command = "bunx"
 args = ["-y", "@heroui/react-mcp@latest"]
