@@ -30,9 +30,9 @@ describe("Announcement", () => {
     );
     mockPathname = "/cars/makes";
 
-    render(createElement(Announcement));
+    const { container } = render(createElement(Announcement));
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container.firstChild).toMatchSnapshot();
     expect(screen.getByText("Cars update")).toBeInTheDocument();
   });
 
