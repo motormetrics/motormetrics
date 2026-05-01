@@ -1,7 +1,4 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Link } from "@heroui/link";
-import { Skeleton } from "@heroui/skeleton";
+import { Button, Card, Link, Skeleton } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
@@ -12,8 +9,8 @@ async function YearlyChartContent() {
   const maxTotal = yearlyData.reduce((max, d) => Math.max(max, d.total), 0);
 
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content className="p-6">
         <div className="mb-5 flex items-center justify-between">
           <div>
             <Typography.H3>Yearly Registrations</Typography.H3>
@@ -22,7 +19,7 @@ async function YearlyChartContent() {
             </p>
           </div>
           <Link href="/cars/annual">
-            <Button isIconOnly variant="flat" radius="full" tabIndex={-1}>
+            <Button isIconOnly variant="tertiary">
               <ArrowUpRight className="size-6" />
             </Button>
           </Link>
@@ -48,7 +45,7 @@ async function YearlyChartContent() {
             );
           })}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
@@ -58,12 +55,12 @@ async function TopMakesContent() {
   const maxValue = topMakes[0]?.value ?? 1;
 
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content className="p-6">
         <div className="mb-5 flex items-center justify-between">
           <Typography.H3>Top Makes</Typography.H3>
           <Link href="/cars/makes">
-            <Button isIconOnly variant="flat" radius="full" tabIndex={-1}>
+            <Button isIconOnly variant="tertiary">
               <ArrowUpRight className="size-6" />
             </Button>
           </Link>
@@ -94,15 +91,15 @@ async function TopMakesContent() {
             </div>
           ))}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
 
 function YearlyChartSkeleton() {
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content className="p-6">
         <Skeleton className="mb-5 h-6 w-40 rounded-lg" />
         <div className="flex h-[160px] items-end gap-4">
           {[0, 1, 2, 3, 4, 5].map((num) => (
@@ -113,15 +110,15 @@ function YearlyChartSkeleton() {
             </div>
           ))}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
 
 function TopMakesSkeleton() {
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content className="p-6">
         <Skeleton className="mb-5 h-6 w-24 rounded-lg" />
         <div className="flex flex-col gap-4">
           {[0, 1, 2, 3, 4].map((num) => (
@@ -134,7 +131,7 @@ function TopMakesSkeleton() {
             </div>
           ))}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

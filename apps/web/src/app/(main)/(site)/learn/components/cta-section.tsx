@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/button";
-import { Link } from "@heroui/link";
+import { Button } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
@@ -9,6 +9,7 @@ import {
 } from "@web/config/animations";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export function CtaSection() {
   return (
@@ -48,27 +49,25 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6"
             variants={staggerItemVariants}
           >
-            <Button
-              as={Link}
-              href="/"
-              color="primary"
-              radius="full"
-              size="lg"
-              className="gap-2 px-8"
-            >
-              Explore the Dashboard
-              <ArrowRight className="size-4" />
-            </Button>
-            <Button
-              as={Link}
-              href="/blog"
-              variant="bordered"
-              radius="full"
-              size="lg"
-              className="gap-2 px-8 text-foreground"
-            >
-              Read Our Blog
-            </Button>
+            <Link href="/" className="no-underline">
+              <Button
+                variant="primary"
+                size="lg"
+                className="gap-2 rounded-full px-8"
+              >
+                Explore the Dashboard
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+            <Link href="/blog" className="no-underline">
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-2 rounded-full px-8 text-foreground"
+              >
+                Read Our Blog
+              </Button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

@@ -1,5 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { Layout, Rows3, StickyNote } from "lucide-react";
 import { cacheLife } from "next/cache";
@@ -56,29 +55,27 @@ export async function PlacementsSection() {
               key={title}
               className="group h-full border-default-200 p-3 shadow-sm transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
             >
-              <CardHeader className="flex flex-col items-start gap-3 pb-2">
+              <Card.Header className="flex flex-col items-start gap-3 pb-2">
                 <div className="flex items-center gap-3">
                   <div className="rounded-xl bg-primary/10 p-2.5">
                     <Icon className="size-5 text-primary" />
                   </div>
                   <Chip
                     size="sm"
-                    variant="flat"
-                    color="primary"
-                    classNames={{
-                      content: "text-xs font-medium",
-                    }}
+                    variant="soft"
+                    color="accent"
+                    className="font-medium text-xs"
                   >
                     {highlight}
                   </Chip>
                 </div>
                 <Typography.H3 className="text-xl">{title}</Typography.H3>
-              </CardHeader>
-              <CardBody className="pt-0">
+              </Card.Header>
+              <Card.Content className="pt-0">
                 <Typography.Text className="text-default-600">
                   {description}
                 </Typography.Text>
-              </CardBody>
+              </Card.Content>
             </Card>
           ))}
         </div>

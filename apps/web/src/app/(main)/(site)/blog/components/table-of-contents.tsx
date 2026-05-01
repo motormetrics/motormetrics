@@ -1,7 +1,7 @@
 "use client";
 
-import { Link } from "@heroui/link";
-import { cn } from "@heroui/theme";
+import { cn, Link } from "@heroui/react";
+
 import { useEffect, useState } from "react";
 
 interface TocItem {
@@ -84,8 +84,6 @@ export function TableOfContents() {
           <Link
             key={heading.id}
             href={`#${heading.id}`}
-            color="foreground"
-            underline="hover"
             onClick={(e) => {
               e.preventDefault();
               const element = document.getElementById(heading.id);
@@ -95,7 +93,7 @@ export function TableOfContents() {
               }
             }}
             className={cn(
-              "group flex items-center gap-2 font-bold text-sm underline-offset-4",
+              "group flex items-center gap-2 font-bold text-sm underline-offset-4 hover:underline",
               activeId === heading.id
                 ? "text-foreground"
                 : "text-foreground hover:text-foreground",

@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import {
   ChartContainer,
   ChartTooltip,
@@ -35,11 +36,11 @@ export function TypeBreakdownChart({
 
   return (
     <Card className="p-3">
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>{title}</Typography.H4>
         {description && <Typography.TextSm>{description}</Typography.TextSm>}
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[200px] w-full">
           <BarChart data={chartData} layout="vertical">
             <CartesianGrid
@@ -71,7 +72,7 @@ export function TypeBreakdownChart({
             </Bar>
           </BarChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

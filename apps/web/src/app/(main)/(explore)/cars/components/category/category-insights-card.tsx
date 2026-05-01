@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/chip";
+import { Chip } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import { formatPercentage } from "@web/utils/charts";
@@ -26,7 +26,7 @@ export function CategoryInsightsCard({
     <div className="col-span-12 flex flex-col gap-6 rounded-3xl border border-default-200 bg-white p-6 lg:col-span-8">
       <div className="flex items-center justify-between">
         <Typography.H4>Market Insights</Typography.H4>
-        <Chip color="primary" size="sm">
+        <Chip color="accent" size="sm">
           {formattedMonth}
         </Chip>
       </div>

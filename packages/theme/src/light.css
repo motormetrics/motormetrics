@@ -9,6 +9,16 @@
   --card-foreground: hsl(220 15% 20%);
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(220 15% 20%);
+  --content1: hsl(0 0% 100%);
+  --content2: hsl(210 40% 98%);
+  --content3: hsl(210 40% 96%);
+  --content4: hsl(214 32% 91%);
+  --surface: hsl(0 0% 100%);
+  --surface-foreground: hsl(220 15% 20%);
+  --surface-secondary: hsl(213 32% 97%);
+  --surface-tertiary: hsl(213 32% 95%);
+  --overlay: hsl(0 0% 100%);
+  --overlay-foreground: hsl(220 15% 20%);
 
   /* Primary - Navy Blue */
   --primary: hsl(240 63% 27%); /* #191970 */
@@ -17,6 +27,30 @@
   /* Secondary - Slate Gray */
   --secondary: hsl(210 13% 50%); /* #708090 */
   --secondary-foreground: hsl(0 0% 100%);
+
+  /* HeroUI default scale */
+  --default: hsl(214 32% 91%);
+  --default-foreground: hsl(220 15% 20%);
+  --default-50: hsl(210 40% 98%);
+  --default-100: hsl(210 40% 96%);
+  --default-200: hsl(214 32% 91%);
+  --default-300: hsl(213 27% 84%);
+  --default-400: hsl(215 20% 65%);
+  --default-500: hsl(215 16% 47%);
+  --default-600: hsl(215 19% 35%);
+  --default-700: hsl(215 25% 27%);
+  --default-800: hsl(217 33% 17%);
+  --default-900: hsl(222 47% 11%);
+  --heroui-default-50: 210 40% 98%;
+  --heroui-default-100: 210 40% 96%;
+  --heroui-default-200: 214 32% 91%;
+  --heroui-default-300: 213 27% 84%;
+  --heroui-default-400: 215 20% 65%;
+  --heroui-default-500: 215 16% 47%;
+  --heroui-default-600: 215 19% 35%;
+  --heroui-default-700: 215 25% 27%;
+  --heroui-default-800: 217 33% 17%;
+  --heroui-default-900: 222 47% 11%;
 
   /* Muted - Light Blue-Gray */
   --muted: hsl(213 32% 95%); /* #F0F4F8 */
@@ -36,8 +70,16 @@
 
   /* Border - Light Slate */
   --border: hsl(214 32% 91%); /* #E2E8F0 */
+  --divider: hsl(214 32% 91%);
+  --separator: hsl(214 32% 91%);
   --input: hsl(214 32% 91%);
   --ring: hsl(240 63% 27%); /* Navy Blue for focus */
+  --focus: hsl(240 63% 27%);
+  --link: hsl(240 63% 27%);
+  --field-background: hsl(0 0% 100%);
+  --field-foreground: hsl(220 15% 20%);
+  --field-placeholder: hsl(215 16% 47%);
+  --field-border: hsl(214 32% 91%);
 
   /* Radius tokens */
   --radius: 0.5rem;

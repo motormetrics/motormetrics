@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { cn } from "@heroui/theme";
+import { Card, Chip, cn } from "@heroui/react";
+
 import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
@@ -71,10 +70,10 @@ export function CarPopulationMetrics({
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-        <CardHeader>
+        <Card.Header>
           <Typography.H4>Total Cars</Typography.H4>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-2">
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-2">
           <span className="font-semibold text-4xl text-primary tabular-nums">
             {numberFormatter.format(grandTotal)}
           </span>
@@ -83,20 +82,20 @@ export function CarPopulationMetrics({
               className="rounded-full"
               color={yoyChange >= 0 ? "success" : "danger"}
               size="sm"
-              variant="flat"
+              variant="soft"
             >
               {yoyChange >= 0 ? "+" : ""}
               {yoyPercentage.toFixed(1)}%
             </Chip>
           )}
-        </CardBody>
+        </Card.Content>
       </Card>
 
       <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-        <CardHeader>
+        <Card.Header>
           <Typography.H4>Top Make</Typography.H4>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-2">
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-2">
           <span className="font-semibold text-4xl tabular-nums">
             {topMake?.make ?? "—"}
           </span>
@@ -106,14 +105,14 @@ export function CarPopulationMetrics({
               total)
             </Typography.TextSm>
           )}
-        </CardBody>
+        </Card.Content>
       </Card>
 
       <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-        <CardHeader>
+        <Card.Header>
           <Typography.H4>Top 5 Concentration</Typography.H4>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-2">
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-2">
           <span className="font-semibold text-4xl tabular-nums">
             {top5Share.toFixed(1)}%
           </span>
@@ -121,7 +120,7 @@ export function CarPopulationMetrics({
             {numberFormatter.format(top5Total)} of{" "}
             {numberFormatter.format(grandTotal)} cars
           </Typography.TextSm>
-        </CardBody>
+        </Card.Content>
       </Card>
     </div>
   );

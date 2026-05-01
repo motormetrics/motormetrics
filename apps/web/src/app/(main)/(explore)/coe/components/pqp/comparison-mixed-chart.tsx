@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import { numberFormat } from "@ruchernchong/number-format";
 import {
   type ChartConfig,
@@ -29,15 +30,15 @@ const chartConfig: ChartConfig = {};
 export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
   return (
     <Card className="p-3">
-      <CardHeader>
+      <Card.Header>
         <div className="flex flex-col gap-1">
           <Typography.H4>Latest COE Premium vs PQP Rate</Typography.H4>
           <Typography.TextSm className="text-default-500">
             Comparison of latest COE bidding premium against current PQP rates
           </Typography.TextSm>
         </div>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <ComposedChart data={data}>
             <CartesianGrid
@@ -75,14 +76,14 @@ export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
             <ChartLegend />
           </ComposedChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
+      </Card.Content>
+      <Card.Footer>
         <p className="text-default-500 text-sm">
           Latest COE premium (bars) vs PQP baseline (dashed line). Bars above
           line indicate strong demand; bars below suggest favourable renewal
           conditions.
         </p>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/chip";
+import { Chip } from "@heroui/react";
 import { ViewCounter } from "@web/app/(main)/(site)/blog/components/view-counter";
 import Image from "next/image";
 import { Suspense } from "react";
@@ -43,12 +43,8 @@ export function BlogHero({
       <div className="container relative mx-auto flex flex-col justify-end px-6 md:px-12">
         <Chip
           size="sm"
-          variant="flat"
-          classNames={{
-            base: "mb-3 bg-white/15",
-            content:
-              "text-white/80 font-bold text-xs uppercase tracking-[0.3em]",
-          }}
+          variant="soft"
+          className="mb-3 bg-white/15 font-bold text-white/80 text-xs uppercase tracking-[0.3em]"
         >
           {categoryLabel}
         </Chip>

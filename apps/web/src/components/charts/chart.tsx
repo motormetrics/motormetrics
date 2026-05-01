@@ -1,8 +1,9 @@
 "use client";
 
+import { cn } from "@heroui/react";
+
 /* v8 ignore start -- Recharts integration wrapper is exercised by chart consumers. */
 
-import { cn } from "@heroui/theme";
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 

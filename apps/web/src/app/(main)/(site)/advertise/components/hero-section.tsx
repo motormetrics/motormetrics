@@ -1,8 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/button";
-import { Chip } from "@heroui/chip";
-import { Link } from "@heroui/link";
+import { Button, Chip, Link } from "@heroui/react";
+
 import { SITE_TITLE } from "@web/config";
 import { motion } from "framer-motion";
 import { ArrowRight, BarChart3 } from "lucide-react";
@@ -34,13 +33,9 @@ export function HeroSection() {
             transition={entranceTransition(0.1)}
           >
             <Chip
-              color="primary"
-              variant="dot"
-              classNames={{
-                base: "border-primary/20 bg-primary/5 backdrop-blur-sm",
-                content: "font-medium text-foreground tracking-wide text-sm",
-                dot: "bg-primary",
-              }}
+              color="accent"
+              variant="soft"
+              className="border-primary/20 bg-primary/5 font-medium text-foreground text-sm tracking-wide backdrop-blur-sm"
             >
               Advertising Opportunities
             </Chip>
@@ -78,28 +73,26 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={entranceTransition(0.45)}
           >
-            <Button
-              as={Link}
-              href="#pricing"
-              color="primary"
-              radius="full"
-              size="lg"
-              className="gap-2 px-8"
-            >
-              See Plans
-              <ArrowRight className="size-4" />
-            </Button>
-            <Button
-              as={Link}
-              href="#stats"
-              variant="bordered"
-              radius="full"
-              size="lg"
-              className="gap-2 px-8 text-foreground"
-            >
-              <BarChart3 className="size-4" />
-              View Traffic
-            </Button>
+            <Link href="#pricing" className="no-underline">
+              <Button
+                variant="primary"
+                size="lg"
+                className="gap-2 rounded-full px-8"
+              >
+                See Plans
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+            <Link href="#stats" className="no-underline">
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-2 rounded-full px-8 text-foreground"
+              >
+                <BarChart3 className="size-4" />
+                View Traffic
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </div>

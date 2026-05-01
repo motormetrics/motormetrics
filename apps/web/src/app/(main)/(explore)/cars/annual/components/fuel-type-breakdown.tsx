@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card, cn } from "@heroui/react";
+
 import { CHART_HEIGHTS } from "@motormetrics/theme/charts";
 import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import {
@@ -70,13 +70,13 @@ export function FuelTypeBreakdown({ data }: FuelTypeBreakdownProps) {
 
   return (
     <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Fuel Type Mix ({effectiveYear})</Typography.H4>
         <Typography.TextSm className="text-default-500">
           Distribution of vehicles by fuel type
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer
           config={chartConfig}
           className={cn("mx-auto", CHART_HEIGHTS.standard)}
@@ -106,7 +106,7 @@ export function FuelTypeBreakdown({ data }: FuelTypeBreakdownProps) {
             </Pie>
           </PieChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

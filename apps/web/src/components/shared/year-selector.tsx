@@ -1,7 +1,7 @@
 "use client";
 
-import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
-import { addToast } from "@heroui/toast";
+import { ComboBox, Input, Label, ListBox, toast } from "@heroui/react";
+
 import { Calendar } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useRef } from "react";
@@ -27,10 +27,7 @@ export function YearSelector({
   useEffect(() => {
     if (wasAdjusted && !hasShownToast.current) {
       hasShownToast.current = true;
-      addToast({
-        title: `Latest data is ${latestYear}`,
-        variant: "bordered",
-      });
+      toast.info(`Latest data is ${latestYear}`);
     }
   }, [wasAdjusted, latestYear]);
 
@@ -38,19 +35,30 @@ export function YearSelector({
   const sortedYears = [...years].sort((a, b) => b - a);
 
   return (
-    <Autocomplete
+    <ComboBox
       selectedKey={year?.toString()}
       onSelectionChange={(key) => setYear(key ? Number(key) : null)}
-      aria-label="Year"
-      placeholder="Select Year"
-      startContent={<Calendar className="size-4" />}
-      variant="underlined"
     >
-      {sortedYears.map((year) => (
-        <AutocompleteItem key={year.toString()} textValue={year.toString()}>
-          {year}
-        </AutocompleteItem>
-      ))}
-    </Autocomplete>
+      <Label className="sr-only">Year</Label>
+      <ComboBox.InputGroup>
+        <Calendar className="ml-3 size-4 text-muted" />
+        <Input placeholder="Select Year" />
+        <ComboBox.Trigger />
+      </ComboBox.InputGroup>
+      <ComboBox.Popover>
+        <ListBox>
+          {sortedYears.map((year) => (
+            <ListBox.Item
+              key={year}
+              id={year.toString()}
+              textValue={year.toString()}
+            >
+              {year}
+              <ListBox.ItemIndicator />
+            </ListBox.Item>
+          ))}
+        </ListBox>
+      </ComboBox.Popover>
+    </ComboBox>
   );
 }

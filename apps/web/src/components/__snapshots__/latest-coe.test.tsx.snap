@@ -3,11 +3,12 @@
 exports[`LatestCoe > should render all COE results 1`] = `
 <div>
   <div
-    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium motion-reduce:transition-none rounded-2xl p-3 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
-    tabindex="-1"
+    class="card card--default rounded-2xl p-3 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+    data-slot="card"
   >
     <div
-      class="flex p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large"
+      class="card__header"
+      data-slot="card-header"
     >
       <div
         class="flex items-center gap-2"
@@ -20,7 +21,8 @@ exports[`LatestCoe > should render all COE results 1`] = `
       </div>
     </div>
     <div
-      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+      class="card__content"
+      data-slot="card-content"
     >
       <div
         class="grid grid-cols-2 items-center gap-2"
@@ -36,11 +38,12 @@ exports[`LatestCoe > should render all COE results 1`] = `
     </div>
   </div>
   <div
-    class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium motion-reduce:transition-none rounded-2xl p-3 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
-    tabindex="-1"
+    class="card card--default rounded-2xl p-3 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+    data-slot="card"
   >
     <div
-      class="flex p-3 z-10 w-full justify-start items-center shrink-0 overflow-inherit color-inherit subpixel-antialiased rounded-t-large"
+      class="card__header"
+      data-slot="card-header"
     >
       <div
         class="flex items-center gap-2"
@@ -53,7 +56,8 @@ exports[`LatestCoe > should render all COE results 1`] = `
       </div>
     </div>
     <div
-      class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+      class="card__content"
+      data-slot="card-content"
     >
       <div
         class="grid grid-cols-2 items-center gap-2"

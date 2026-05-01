@@ -1,6 +1,7 @@
 "use client";
 
-import { Chip } from "@heroui/chip";
+import { Chip } from "@heroui/react";
+
 import { motion } from "framer-motion";
 
 export function HeroSection() {
@@ -30,13 +31,9 @@ export function HeroSection() {
             transition={entranceTransition(0.1)}
           >
             <Chip
-              color="primary"
-              variant="dot"
-              classNames={{
-                base: "border-primary/20 bg-primary/5 backdrop-blur-sm",
-                content: "font-medium text-foreground tracking-wide text-sm",
-                dot: "bg-primary",
-              }}
+              color="accent"
+              variant="soft"
+              className="border-primary/20 bg-primary/5 font-medium text-foreground text-sm tracking-wide backdrop-blur-sm"
             >
               Singapore Car Market Data
             </Chip>

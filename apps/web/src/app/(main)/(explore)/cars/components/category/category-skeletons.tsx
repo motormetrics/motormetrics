@@ -1,5 +1,4 @@
-import { Skeleton } from "@heroui/skeleton";
-
+import { Skeleton } from "@heroui/react";
 export function CategorySummaryCardSkeleton() {
   return (
     <div className="col-span-12 flex flex-col gap-4 rounded-3xl border-2 border-primary bg-white p-6 lg:col-span-4">

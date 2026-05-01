@@ -1,17 +1,13 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Pagination } from "@heroui/pagination";
 import {
+  Card,
+  cn,
+  Pagination,
   type SortDescriptor,
   Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@heroui/table";
-import { cn } from "@heroui/theme";
+} from "@heroui/react";
+
 import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import Typography from "@web/components/typography";
 import type { EvMakeDetail } from "@web/queries/cars";
@@ -83,54 +79,91 @@ export function MakeTable({ data, month }: MakeTableProps) {
 
   return (
     <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>EV Registrations by Make</Typography.H4>
         <Typography.TextSm className="text-default-500">
           {data.length} makes with EV registrations in {month}
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
-        <Table
-          aria-label="EV registrations by make"
-          sortDescriptor={sortDescriptor}
-          onSortChange={setSortDescriptor}
-          bottomContent={
-            pages > 1 ? (
+      </Card.Header>
+      <Card.Content>
+        <Table>
+          <Table.ScrollContainer>
+            <Table.Content
+              aria-label="EV registrations by make"
+              sortDescriptor={sortDescriptor}
+              onSortChange={setSortDescriptor}
+            >
+              <Table.Header>
+                {columns.map((column, index) => (
+                  <Table.Column
+                    key={column.key}
+                    id={column.key}
+                    isRowHeader={index === 0}
+                    allowsSorting={column.key !== "rank"}
+                  >
+                    {column.label}
+                  </Table.Column>
+                ))}
+              </Table.Header>
+              <Table.Body>
+                {paginatedData.map((item) => (
+                  <Table.Row key={item.make} id={item.make}>
+                    {columns.map((column) => (
+                      <Table.Cell key={column.key}>
+                        {renderCell(item, column.key)}
+                      </Table.Cell>
+                    ))}
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
+          <Table.Footer>
+            {pages > 1 ? (
               <div className="flex w-full justify-center">
-                <Pagination
-                  isCompact
-                  showControls
-                  showShadow
-                  page={page}
-                  total={pages}
-                  onChange={setPage}
-                />
+                <Pagination size="sm">
+                  <Pagination.Content>
+                    <Pagination.Item>
+                      <Pagination.Previous
+                        isDisabled={page === 1}
+                        onPress={() =>
+                          setPage((current) => Math.max(current - 1, 1))
+                        }
+                      >
+                        <Pagination.PreviousIcon />
+                        Prev
+                      </Pagination.Previous>
+                    </Pagination.Item>
+                    {Array.from({ length: pages }, (_, index) => index + 1).map(
+                      (pageNumber) => (
+                        <Pagination.Item key={pageNumber}>
+                          <Pagination.Link
+                            isActive={pageNumber === page}
+                            onPress={() => setPage(pageNumber)}
+                          >
+                            {pageNumber}
+                          </Pagination.Link>
+                        </Pagination.Item>
+                      ),
+                    )}
+                    <Pagination.Item>
+                      <Pagination.Next
+                        isDisabled={page === pages}
+                        onPress={() =>
+                          setPage((current) => Math.min(current + 1, pages))
+                        }
+                      >
+                        Next
+                        <Pagination.NextIcon />
+                      </Pagination.Next>
+                    </Pagination.Item>
+                  </Pagination.Content>
+                </Pagination>
               </div>
-            ) : null
-          }
-          bottomContentPlacement="outside"
-        >
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn
-                key={column.key}
-                allowsSorting={column.key !== "rank"}
-              >
-                {column.label}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={paginatedData}>
-            {(item) => (
-              <TableRow key={item.make}>
-                {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
-                )}
-              </TableRow>
-            )}
-          </TableBody>
+            ) : null}
+          </Table.Footer>
         </Table>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

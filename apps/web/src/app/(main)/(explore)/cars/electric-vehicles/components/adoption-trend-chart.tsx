@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card, cn } from "@heroui/react";
+
 import {
   CHART_CURSOR,
   CHART_GRID,
@@ -33,13 +33,13 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
 
   return (
     <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>EV Adoption Trend</Typography.H4>
         <Typography.TextSm className="text-default-500">
           Monthly BEV, PHEV, and Hybrid registrations over time
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer
           config={chartConfig}
           className={cn(CHART_HEIGHTS.tall, "w-full")}
@@ -99,14 +99,14 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
             />
           </AreaChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
+      </Card.Content>
+      <Card.Footer>
         <Typography.TextSm className="text-default-500">
           Stacked area chart showing combined electrified vehicle registrations.
           BEV = Battery Electric, PHEV = Plug-In Hybrid, Hybrid = Conventional
           Hybrid.
         </Typography.TextSm>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

@@ -78,7 +78,7 @@ describe("Makes", () => {
         />,
       );
       const allButton = screen.getByRole("button", { name: "ALL" });
-      expect(allButton).toHaveClass("bg-primary");
+      expect(allButton).toHaveClass("button--primary");
       germanMakes.forEach((make) => {
         expect(screen.getByText(make)).toBeVisible();
       });
@@ -98,7 +98,7 @@ describe("Makes", () => {
 
       await waitFor(() => {
         expect(screen.getByRole("button", { name: "B" })).toHaveClass(
-          "bg-primary",
+          "button--primary",
         );
       });
 

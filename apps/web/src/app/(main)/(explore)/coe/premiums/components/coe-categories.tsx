@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Tooltip } from "@heroui/tooltip";
+import { Card } from "@heroui/react";
+
 import { CategoryInfo } from "@web/app/(main)/(explore)/cars/registrations/components/category-info";
 import Typography from "@web/components/typography";
 import type { COECategory } from "@web/types";
@@ -45,18 +45,19 @@ export function CoeCategories() {
 
   return (
     <Card className="p-3">
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>COE Categories</Typography.H4>
         <Typography.TextSm className="inline-flex items-center gap-2">
           <span>Filter based on Category</span>
-          <Tooltip content="You can only filter Categories C & D">
-            <span className="cursor-help">
-              <HelpCircleIcon className="size-4" aria-hidden="true" />
-            </span>
-          </Tooltip>
+          <span
+            className="cursor-help"
+            title="You can only filter Categories C & D"
+          >
+            <HelpCircleIcon className="size-4" aria-hidden="true" />
+          </span>
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <div className="grid grid-cols-1 gap-4">
           <CategoryInfo
             icon={Car}
@@ -97,7 +98,7 @@ export function CoeCategories() {
             onToggle={toggleCategory}
           />
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

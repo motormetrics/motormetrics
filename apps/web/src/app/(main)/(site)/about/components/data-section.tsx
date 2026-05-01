@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
-import { Link } from "@heroui/link";
+import { Card, Link } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
@@ -69,7 +69,7 @@ export function DataSection() {
 
               {/* LTA Badge */}
               <Card className="border-default-200 p-3">
-                <CardBody className="flex flex-row items-center gap-4 p-4">
+                <Card.Content className="flex flex-row items-center gap-4 p-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-default-200">
                     <Database className="h-6 w-6 text-default-600" />
                   </div>
@@ -79,15 +79,14 @@ export function DataSection() {
                     </div>
                     <Link
                       href="https://datamall.lta.gov.sg"
-                      isExternal
-                      showAnchorIcon
-                      color="primary"
-                      size="sm"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-primary text-sm underline"
                     >
                       LTA DataMall
                     </Link>
                   </div>
-                </CardBody>
+                </Card.Content>
               </Card>
             </motion.div>
           </div>
@@ -104,7 +103,7 @@ export function DataSection() {
               {features.map((feature) => (
                 <motion.div key={feature.title} variants={staggerItemVariants}>
                   <Card className="group h-full border-default-200/80 p-3 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-                    <CardBody className="flex flex-col gap-4 p-6">
+                    <Card.Content className="flex flex-col gap-4 p-6">
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-default-200 transition-colors group-hover:bg-primary/10">
                         <feature.icon className="h-6 w-6 text-default-600 transition-colors group-hover:text-primary" />
                       </div>
@@ -114,7 +113,7 @@ export function DataSection() {
                           {feature.description}
                         </Typography.TextSm>
                       </div>
-                    </CardBody>
+                    </Card.Content>
                   </Card>
                 </motion.div>
               ))}

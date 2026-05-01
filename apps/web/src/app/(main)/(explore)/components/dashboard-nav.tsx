@@ -1,8 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/button";
-import { Link } from "@heroui/link";
-import { cn } from "@heroui/theme";
+import { cn, Link } from "@heroui/react";
+
 import { NewChip } from "@web/components/shared/chips";
 import { navigationSections } from "@web/config/navigation";
 import { usePathname } from "next/navigation";
@@ -32,21 +31,20 @@ export function DashboardNav() {
           {section.children.map(({ title, url, icon: Icon, badge }) => {
             const isActive = activeKey === url;
             return (
-              <Button
+              <Link
                 key={url}
-                as={Link}
                 href={url}
                 className={cn(
-                  "h-8 shrink-0 rounded-full px-3 font-medium text-sm transition-all duration-200",
+                  "inline-flex h-8 shrink-0 items-center gap-2 rounded-full px-3 font-medium text-sm no-underline transition-all duration-200",
                   isActive
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "bg-transparent text-default-600 hover:bg-default-100",
                 )}
-                startContent={Icon && <Icon className="size-4" />}
-                endContent={badge && <NewChip />}
               >
+                {Icon && <Icon className="size-4" />}
                 {title}
-              </Button>
+                {badge && <NewChip />}
+              </Link>
             );
           })}
         </div>

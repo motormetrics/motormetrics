@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import {
   type ChartConfig,
   ChartContainer,
@@ -29,14 +30,14 @@ export function RegistrationTrend({ data }: RegistrationTrendProps) {
 
   return (
     <Card className="rounded-2xl p-3">
-      <CardHeader className="flex flex-col items-start gap-2 pb-4">
+      <Card.Header className="flex flex-col items-start gap-2 pb-4">
         <Typography.H4>Yearly Registration Trend</Typography.H4>
         <Typography.TextSm className="text-default-600">
           Historical vehicle registration data from {data[0]?.year} to{" "}
           {data[data.length - 1]?.year}
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody className="pt-2">
+      </Card.Header>
+      <Card.Content className="pt-2">
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <LineChart accessibilityLayer data={data}>
             <CartesianGrid
@@ -62,7 +63,7 @@ export function RegistrationTrend({ data }: RegistrationTrendProps) {
             />
           </LineChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

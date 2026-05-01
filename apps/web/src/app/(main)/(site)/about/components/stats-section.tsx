@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
 import {
@@ -26,7 +27,7 @@ const StatItem = ({ value, suffix = "", label }: StatItemProps) => {
       viewport={{ once: true }}
     >
       <Card className="group border-default-200 bg-card p-3 shadow-sm transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-        <CardBody className="flex flex-col gap-2 p-6">
+        <Card.Content className="flex flex-col gap-2 p-6">
           <div className="font-semibold text-4xl text-foreground tracking-tight lg:text-5xl">
             {isInView ? (
               <>
@@ -38,7 +39,7 @@ const StatItem = ({ value, suffix = "", label }: StatItemProps) => {
             )}
           </div>
           <div className="text-default-600 text-sm">{label}</div>
-        </CardBody>
+        </Card.Content>
         {/* Subtle accent line */}
         <div
           className="absolute right-6 bottom-0 left-6 h-0.5 scale-x-0 bg-gradient-to-r from-primary to-primary/60 transition-transform duration-300 group-hover:scale-x-100"

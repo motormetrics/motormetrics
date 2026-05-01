@@ -1,7 +1,40 @@
-import { Divider } from "@heroui/divider";
-import { Link } from "@heroui/link";
+import { Separator } from "@heroui/react";
 import Typography from "@web/components/typography";
+import type { Route } from "next";
+import NextLink from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
+
+type MdxLinkProps = ComponentPropsWithoutRef<"a">;
+
+function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
+  const isInternalLink = href.startsWith("/") || href.startsWith("#");
+  const linkClassName = [
+    "font-medium text-primary underline underline-offset-4",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  if (isInternalLink) {
+    return (
+      <NextLink href={href as Route} className={linkClassName} {...props}>
+        {children}
+      </NextLink>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer nofollow"
+      className={linkClassName}
+      {...props}
+    >
+      {children}
+    </a>
+  );
+}
 
 /**
  * MDX Components Mapping
@@ -57,18 +90,7 @@ export const mdxComponents = {
   ),
 
   // Links - styled for blog content
-  a: ({ href, children }: ComponentPropsWithoutRef<"a">) => (
-    <Link
-      href={href ?? "#"}
-      isExternal={href?.startsWith("http")}
-      showAnchorIcon={href?.startsWith("http")}
-      color="primary"
-      underline="always"
-      className="font-medium underline-offset-4"
-    >
-      {children}
-    </Link>
-  ),
+  a: MdxLink,
 
   // Tables - Editorial style with accent border (HybridStyle)
   table: (props: ComponentPropsWithoutRef<"table">) => (
@@ -100,7 +122,7 @@ export const mdxComponents = {
   ),
 
   // Horizontal rule
-  hr: () => <Divider className="my-12" />,
+  hr: () => <Separator className="my-12" />,
 
   // Pre-formatted code blocks
   pre: (props: ComponentPropsWithoutRef<"pre">) => (

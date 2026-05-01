@@ -1,5 +1,4 @@
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card, cn } from "@heroui/react";
 import { CARD_VARIANTS, type CardVariant } from "@motormetrics/theme/spacing";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { MetricsComparison } from "@web/components/metrics-comparison";
@@ -34,10 +33,10 @@ export function MetricCard({
     <Card
       className={cn(CARD_VARIANTS[variant], variantStyles[variant], className)}
     >
-      <CardHeader>
+      <Card.Header>
         <Typography.H4>{title}</Typography.H4>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <div
           className={cn(
             "font-semibold tabular-nums",
@@ -48,10 +47,10 @@ export function MetricCard({
         >
           <AnimatedNumber value={value} />
         </div>
-      </CardBody>
-      <CardFooter>
+      </Card.Content>
+      <Card.Footer>
         <MetricsComparison current={current} previousMonth={previousMonth} />
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

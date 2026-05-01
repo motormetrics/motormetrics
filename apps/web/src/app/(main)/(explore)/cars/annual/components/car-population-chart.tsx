@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card, cn } from "@heroui/react";
+
 import { CHART_CURSOR, CHART_GRID } from "@motormetrics/theme/charts";
 import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
@@ -49,15 +49,15 @@ export function CarPopulationChart({
 
   return (
     <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>
           Top {TOP_N} Makes ({effectiveYear})
         </Typography.H4>
         <Typography.TextSm className="text-default-500">
           Car population by manufacturer
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[500px] w-full">
           <BarChart data={topMakes} layout="vertical">
             <CartesianGrid
@@ -89,12 +89,12 @@ export function CarPopulationChart({
             <Bar dataKey="total" radius={[0, 4, 4, 0]} fill="var(--chart-1)" />
           </BarChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
+      </Card.Content>
+      <Card.Footer>
         <Typography.TextSm className="text-default-500">
           Showing top {TOP_N} makes by car population for {effectiveYear}.
         </Typography.TextSm>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

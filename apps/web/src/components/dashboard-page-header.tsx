@@ -1,4 +1,4 @@
-import { cn } from "@heroui/theme";
+import { cn } from "@heroui/react";
 import type { ReactNode } from "react";
 
 interface DashboardPageHeaderProps {

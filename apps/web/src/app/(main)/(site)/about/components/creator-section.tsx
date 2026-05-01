@@ -1,6 +1,7 @@
 "use client";
 
-import { Link } from "@heroui/link";
+import { Link } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import { SITE_TITLE } from "@web/config";
 import {
@@ -49,7 +50,8 @@ export function CreatorSection() {
                 {SITE_TITLE} is an independent project created by{" "}
                 <Link
                   href="https://ruchern.dev"
-                  isExternal
+                  target="_blank"
+                  rel="noreferrer"
                   className="font-medium text-primary transition-colors hover:text-primary/80"
                 >
                   Ru Chern

@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import { AnimatedNumber } from "@web/components/animated-number";
 import { Sparkline } from "@web/components/charts/sparkline";
 import Typography from "@web/components/typography";
@@ -54,12 +55,12 @@ export function LatestCoePremium({ results, trends }: LatestCoePremiumProps) {
             key={result.vehicleClass}
             className="rounded-2xl p-3 transition-shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
-            <CardHeader>
+            <Card.Header>
               <div className="flex items-center gap-2">
                 <Typography.H4>{result.vehicleClass}</Typography.H4>
               </div>
-            </CardHeader>
-            <CardBody>
+            </Card.Header>
+            <Card.Content>
               <div className="grid grid-cols-2 items-center gap-2">
                 <div className="bg-gradient-to-br from-primary to-primary/70 bg-clip-text font-bold text-2xl text-transparent">
                   <AnimatedNumber value={result.premium} format="currency" />
@@ -71,7 +72,7 @@ export function LatestCoePremium({ results, trends }: LatestCoePremiumProps) {
                   />
                 )}
               </div>
-            </CardBody>
+            </Card.Content>
           </Card>
         );
       })}

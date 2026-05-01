@@ -1,7 +1,7 @@
 "use client";
 
-import { Chip } from "@heroui/chip";
-import { Link } from "@heroui/link";
+import { Chip, Link } from "@heroui/react";
+
 import type { SelectPost } from "@motormetrics/database";
 import { formatDate, getCategoryConfig, getReadingTime } from "./utils";
 
@@ -33,11 +33,8 @@ export function Compact({ post }: CompactProps) {
       <Chip
         size="sm"
         color={category.color}
-        variant="flat"
-        classNames={{
-          base: "h-5 shrink-0",
-          content: "text-[10px] font-semibold px-1",
-        }}
+        variant="soft"
+        className="h-5 shrink-0 px-1 font-semibold text-[10px]"
       >
         {category.label.split(" ")[0]}
       </Chip>

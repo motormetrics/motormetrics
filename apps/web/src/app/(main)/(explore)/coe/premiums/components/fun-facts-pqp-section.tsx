@@ -1,7 +1,4 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Link } from "@heroui/link";
-import { Progress } from "@heroui/progress";
+import { Button, Card, Link, ProgressBar } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { SkeletonBentoCard } from "@web/components/shared/skeleton";
@@ -32,16 +29,16 @@ async function FunFactsPqpContent() {
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {/* Fun Facts Card */}
       <Card className="p-3">
-        <CardHeader className="flex flex-col items-start gap-2">
+        <Card.Header className="flex flex-col items-start gap-2">
           <Typography.H4>Category A vs B</Typography.H4>
           <Typography.TextSm>
             Will the premium quota of Category A ever surpass Category B?
           </Typography.TextSm>
-        </CardHeader>
-        <CardBody>
+        </Card.Header>
+        <Card.Content>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <Progress value={categoryAPercentage * 100} size="lg" />
+              <ProgressBar value={categoryAPercentage * 100} size="lg" />
               <div className="text-center">
                 <span className="font-bold text-2xl text-primary tabular-nums">
                   {formatPercent(categoryAPercentage, {
@@ -58,19 +55,19 @@ async function FunFactsPqpContent() {
               </div>
             </div>
           </div>
-        </CardBody>
+        </Card.Content>
       </Card>
 
       {/* Latest PQP Rates Card */}
       <Card className="p-3">
-        <CardHeader className="flex flex-col items-start gap-2">
+        <Card.Header className="flex flex-col items-start gap-2">
           <Typography.H4>Latest PQP Rates</Typography.H4>
           <Typography.TextSm>
             {latestPqpMonth &&
               `Prevailing Quota Premium for ${formatDateToMonthYear(latestPqpMonth)}`}
           </Typography.TextSm>
-        </CardHeader>
-        <CardBody>
+        </Card.Header>
+        <Card.Content>
           <div className="grid grid-cols-2 gap-4">
             {Object.entries(latestPqpRates)
               .filter(([key]) =>
@@ -92,17 +89,17 @@ async function FunFactsPqpContent() {
                 </div>
               ))}
           </div>
-        </CardBody>
-        <CardFooter className="flex-col items-start gap-2">
+        </Card.Content>
+        <Card.Footer className="flex-col items-start gap-2">
           <Typography.Caption>
             Note: There is no PQP for Category E
           </Typography.Caption>
           <Link href="/coe/pqp" className="w-full">
-            <Button color="primary" radius="full" fullWidth>
+            <Button variant="primary" fullWidth>
               View All PQP Rates
             </Button>
           </Link>
-        </CardFooter>
+        </Card.Footer>
       </Card>
     </div>
   );

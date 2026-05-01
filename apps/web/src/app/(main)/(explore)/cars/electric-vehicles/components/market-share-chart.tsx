@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card, cn } from "@heroui/react";
+
 import {
   CHART_CURSOR,
   CHART_GRID,
@@ -28,13 +28,13 @@ const chartConfig = {
 export function MarketShareChart({ data }: MarketShareChartProps) {
   return (
     <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>EV Market Share</Typography.H4>
         <Typography.TextSm className="text-default-500">
           Percentage of electrified vehicles among all new registrations
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer
           config={chartConfig}
           className={cn(CHART_HEIGHTS.tall, "w-full")}
@@ -76,13 +76,13 @@ export function MarketShareChart({ data }: MarketShareChartProps) {
             />
           </AreaChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
+      </Card.Content>
+      <Card.Footer>
         <Typography.TextSm className="text-default-500">
           Includes BEV, PHEV, and conventional hybrid vehicles as a share of
           total new registrations each month.
         </Typography.TextSm>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { cn } from "@heroui/theme";
+import { cn } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import type { COECategory } from "@web/types";
 import type { LucideIcon } from "lucide-react";

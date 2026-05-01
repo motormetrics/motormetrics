@@ -1,6 +1,7 @@
 "use client";
 
-import { cn } from "@heroui/theme";
+import { cn } from "@heroui/react";
+
 import { type ChartConfig, ChartContainer } from "@web/components/charts/chart";
 import { Area, AreaChart } from "recharts";
 

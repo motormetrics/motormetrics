@@ -1,5 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card, cn } from "@heroui/react";
 import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
@@ -42,17 +41,17 @@ export function EvMetrics({ summary }: EvMetricsProps) {
           key={metric.title}
           className={cn(RADIUS.card, CARD_PADDING.standard)}
         >
-          <CardHeader>
+          <Card.Header>
             <Typography.H4>{metric.title}</Typography.H4>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-2">
+          </Card.Header>
+          <Card.Content className="flex flex-col gap-2">
             <span className="font-semibold text-4xl text-primary tabular-nums">
               {metric.value}
             </span>
             <Typography.TextSm className="text-default-500">
               {metric.description}
             </Typography.TextSm>
-          </CardBody>
+          </Card.Content>
         </Card>
       ))}
     </div>

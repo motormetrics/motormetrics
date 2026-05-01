@@ -43,7 +43,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
         <h1
           class="scroll-m-20 font-semibold text-4xl text-foreground tracking-tight lg:text-5xl"
         >
-          Pit Stop in Progress
+          Pit Stop in ProgressBar
         </h1>
       </div>
       <div
@@ -60,11 +60,12 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
       style="opacity: 0;"
     >
       <div
-        class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
-        tabindex="-1"
+        class="card card--default rounded-2xl p-3"
+        data-slot="card"
       >
         <div
-          class="relative flex w-full p-3 flex-auto flex-col place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased"
+          class="card__content"
+          data-slot="card-content"
         >
           <div
             class="flex flex-col gap-4"
@@ -102,15 +103,17 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
                   Estimated Completion
                 </p>
               </div>
-              <div
-                class="relative max-w-fit min-w-min inline-flex items-center justify-between box-border whitespace-nowrap px-2 h-8 text-medium rounded-full shadow-lg shadow-primary/40 bg-primary text-primary-foreground"
+              <span
+                class="chip chip--accent chip--lg chip--primary"
+                data-slot="chip"
               >
                 <span
-                  class="flex-1 text-inherit font-normal px-2"
+                  class="chip__label"
+                  data-slot="chip-label"
                 >
                   2 hours
                 </span>
-              </div>
+              </span>
             </div>
             <div
               class="flex items-center justify-center gap-2"
@@ -163,11 +166,12 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           style="opacity: 0;"
         >
           <div
-            class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
-            tabindex="-1"
+            class="card card--default rounded-2xl p-3"
+            data-slot="card"
           >
             <div
-              class="relative w-full flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-row items-start gap-4 p-4"
+              class="card__content flex flex-row items-start gap-4 p-4"
+              data-slot="card-content"
             >
               <svg
                 class="lucide lucide-zap mt-1 size-6 flex-shrink-0 text-primary"
@@ -204,11 +208,12 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           style="opacity: 0;"
         >
           <div
-            class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
-            tabindex="-1"
+            class="card card--default rounded-2xl p-3"
+            data-slot="card"
           >
             <div
-              class="relative w-full flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-row items-start gap-4 p-4"
+              class="card__content flex flex-row items-start gap-4 p-4"
+              data-slot="card-content"
             >
               <svg
                 class="lucide lucide-shield mt-1 size-6 flex-shrink-0 text-primary"
@@ -245,11 +250,12 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           style="opacity: 0;"
         >
           <div
-            class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
-            tabindex="-1"
+            class="card card--default rounded-2xl p-3"
+            data-slot="card"
           >
             <div
-              class="relative w-full flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-row items-start gap-4 p-4"
+              class="card__content flex flex-row items-start gap-4 p-4"
+              data-slot="card-content"
             >
               <svg
                 class="lucide lucide-trending-up mt-1 size-6 flex-shrink-0 text-primary"
@@ -289,11 +295,12 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           style="opacity: 0;"
         >
           <div
-            class="flex flex-col relative overflow-hidden h-auto text-foreground box-border bg-content1 outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 shadow-medium transition-transform-background motion-reduce:transition-none rounded-2xl p-3"
-            tabindex="-1"
+            class="card card--default rounded-2xl p-3"
+            data-slot="card"
           >
             <div
-              class="relative w-full flex-auto place-content-inherit align-items-inherit h-auto break-words text-left overflow-y-auto subpixel-antialiased flex flex-row items-start gap-4 p-4"
+              class="card__content flex flex-row items-start gap-4 p-4"
+              data-slot="card-content"
             >
               <svg
                 class="lucide lucide-wrench mt-1 size-6 flex-shrink-0 text-primary"
@@ -332,7 +339,9 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
       style="opacity: 0;"
     >
       <hr
-        class="shrink-0 bg-divider border-none w-full h-divider"
+        class="separator separator--horizontal separator--default"
+        data-orientation="horizontal"
+        data-slot="separator"
         role="separator"
       />
     </div>
@@ -354,10 +363,10 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
         class="flex flex-col items-center justify-center gap-4 sm:flex-row"
       >
         <a
-          class="relative tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-primary no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex items-center gap-2 font-medium text-sm"
+          class="link flex items-center gap-2 font-medium text-primary text-sm"
+          data-rac=""
           data-react-aria-pressable="true"
           href="mailto:support@motormetrics.app"
-          role="link"
           tabindex="0"
         >
           <svg
@@ -391,11 +400,11 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           |
         </span>
         <a
-          class="relative tap-highlight-transparent outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-primary no-underline hover:opacity-hover active:opacity-disabled transition-opacity flex items-center gap-2 font-medium text-sm"
+          class="link flex items-center gap-2 font-medium text-primary text-sm"
+          data-rac=""
           data-react-aria-pressable="true"
           href="https://twitter.com/motormetrics"
-          rel="noopener noreferrer"
-          role="link"
+          rel="noreferrer"
           tabindex="0"
           target="_blank"
         >

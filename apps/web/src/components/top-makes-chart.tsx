@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import {
   type ChartConfig,
   ChartContainer,
@@ -42,15 +43,15 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
 
   return (
     <Card className="rounded-2xl p-3">
-      <CardHeader className="flex flex-col items-start gap-2 pb-4">
+      <Card.Header className="flex flex-col items-start gap-2 pb-4">
         <Typography.H4>
           Top {topMakes.length} Car Makes ({year})
         </Typography.H4>
         <Typography.TextSm className="text-default-600">
           Most popular vehicle brands by registration volume
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody className="pt-2">
+      </Card.Header>
+      <Card.Content className="pt-2">
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <BarChart data={data} layout="vertical">
             <CartesianGrid
@@ -95,7 +96,7 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
             </Bar>
           </BarChart>
         </ChartContainer>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

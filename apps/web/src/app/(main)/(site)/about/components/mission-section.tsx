@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import { SITE_TITLE } from "@web/config";
 import { fadeInUpVariants } from "@web/config/animations";
@@ -71,21 +72,21 @@ export function MissionSection() {
             transition={{ delay: 0.2 }}
           >
             <Card className="border-none bg-transparent shadow-none">
-              <CardBody className="flex flex-col gap-2 p-0">
+              <Card.Content className="flex flex-col gap-2 p-0">
                 <Typography.H4>Data-Driven Decisions</Typography.H4>
                 <Typography.TextSm>
                   Historical trends to help inform your decisions.
                 </Typography.TextSm>
-              </CardBody>
+              </Card.Content>
             </Card>
             <Card className="border-none bg-transparent shadow-none">
-              <CardBody className="flex flex-col gap-2 p-0">
+              <Card.Content className="flex flex-col gap-2 p-0">
                 <Typography.H4>Always Up-to-Date</Typography.H4>
                 <Typography.TextSm>
                   Fresh data after every COE bidding round and monthly
                   registration release.
                 </Typography.TextSm>
-              </CardBody>
+              </Card.Content>
             </Card>
           </motion.div>
         </div>

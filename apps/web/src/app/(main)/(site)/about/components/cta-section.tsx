@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/button";
-import { Link } from "@heroui/link";
+import { Button } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
@@ -10,6 +10,7 @@ import {
 import { navLinks } from "@web/config/navigation";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export function CtaSection() {
   return (
@@ -43,18 +44,16 @@ export function CtaSection() {
             variants={staggerItemVariants}
           >
             {navLinks.socialMedia.map(({ title, url, icon: Icon }) => (
-              <Button
+              <a
                 key={title}
-                as="a"
                 href={url}
                 rel="me noreferrer"
                 target="_blank"
-                variant="bordered"
-                className="gap-2 rounded-full border-default-300 px-5 text-foreground transition-all hover:border-primary hover:bg-primary/5"
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-default-300 px-5 font-medium text-foreground text-sm transition-all hover:border-primary hover:bg-primary/5"
               >
                 <Icon className="size-4" />
                 <span>{title}</span>
-              </Button>
+              </a>
             ))}
           </motion.div>
 
@@ -63,27 +62,25 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 pt-4 sm:flex-row sm:gap-6"
             variants={staggerItemVariants}
           >
-            <Button
-              as={Link}
-              href="/"
-              color="primary"
-              radius="full"
-              size="lg"
-              className="gap-2 px-8"
-            >
-              Explore the Dashboard
-              <ArrowRight className="size-4" />
-            </Button>
-            <Button
-              as={Link}
-              href="/blog"
-              variant="bordered"
-              radius="full"
-              size="lg"
-              className="gap-2 px-8 text-foreground"
-            >
-              Read Market Insights
-            </Button>
+            <Link href="/" className="no-underline">
+              <Button
+                variant="primary"
+                size="lg"
+                className="gap-2 rounded-full px-8"
+              >
+                Explore the Dashboard
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+            <Link href="/blog" className="no-underline">
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-2 rounded-full px-8 text-foreground"
+              >
+                Read Market Insights
+              </Button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

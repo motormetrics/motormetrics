@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
@@ -97,7 +98,7 @@ export function GuidesSection() {
               {GUIDES.map((guide, index) => (
                 <motion.div key={guide.title} variants={staggerItemVariants}>
                   <Card className="group border-default-200/80 p-3 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-                    <CardBody className="flex flex-row gap-6 p-6">
+                    <Card.Content className="flex flex-row gap-6 p-6">
                       <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground text-sm">
                         {String(index + 1).padStart(2, "0")}
                       </div>
@@ -109,7 +110,7 @@ export function GuidesSection() {
                           </Typography.Text>
                         ))}
                       </div>
-                    </CardBody>
+                    </Card.Content>
                   </Card>
                 </motion.div>
               ))}

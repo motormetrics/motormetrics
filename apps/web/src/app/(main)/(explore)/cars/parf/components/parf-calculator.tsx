@@ -1,10 +1,15 @@
 "use client";
 
-import { Alert } from "@heroui/alert";
-import { Card, CardBody } from "@heroui/card";
-import { Divider } from "@heroui/divider";
-import { Input } from "@heroui/input";
-import { Select, SelectItem } from "@heroui/select";
+import {
+  Alert,
+  Card,
+  Input,
+  Label,
+  ListBox,
+  Select,
+  Separator,
+} from "@heroui/react";
+
 import { Currency } from "@web/components/shared/currency";
 import Typography from "@web/components/typography";
 import { ArrowDown } from "lucide-react";
@@ -57,38 +62,43 @@ export function PARFCalculator() {
 
   return (
     <Card>
-      <CardBody className="flex flex-col gap-6 p-6">
+      <Card.Content className="flex flex-col gap-6 p-6">
         <Typography.H4>Calculate Your PARF Rebate</Typography.H4>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Input
-            label="ARF Amount Paid"
-            labelPlacement="outside"
+            aria-label="ARF Amount Paid"
             placeholder="e.g. 40,000"
-            startContent={<span className="text-default-400 text-sm">$</span>}
             type="text"
             inputMode="numeric"
             value={arfInput}
-            onValueChange={setArfInput}
+            onChange={(event) => setArfInput(event.target.value)}
           />
           <Select
-            label="Vehicle Age at Deregistration"
-            labelPlacement="outside"
-            selectedKeys={[selectedBracket]}
-            onSelectionChange={(keys) => {
-              const key = Array.from(keys)[0];
-              if (key !== undefined) setSelectedBracket(String(key));
-            }}
+            value={selectedBracket}
+            onChange={(key) => key && setSelectedBracket(String(key))}
           >
-            {AGE_BRACKETS.map(({ key, label }) => (
-              <SelectItem key={key}>{label}</SelectItem>
-            ))}
+            <Label>Vehicle Age at Deregistration</Label>
+            <Select.Trigger>
+              <Select.Value />
+              <Select.Indicator />
+            </Select.Trigger>
+            <Select.Popover>
+              <ListBox>
+                {AGE_BRACKETS.map(({ key, label }) => (
+                  <ListBox.Item key={key} id={key} textValue={label}>
+                    {label}
+                    <ListBox.ItemIndicator />
+                  </ListBox.Item>
+                ))}
+              </ListBox>
+            </Select.Popover>
           </Select>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Card className="border border-default-200 bg-default-50 shadow-none">
-            <CardBody className="flex flex-col gap-4 p-6">
+            <Card.Content className="flex flex-col gap-4 p-6">
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-default-400" />
                 <Typography.Caption className="font-semibold text-default-500 uppercase tracking-wider">
@@ -101,7 +111,7 @@ export function PARFCalculator() {
                   <Currency value={result.oldRebate} />
                 </span>
               </div>
-              <Divider />
+              <Separator />
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-default-500">Rebate Rate</span>
@@ -125,11 +135,11 @@ export function PARFCalculator() {
                   Cap of <Currency value={OLD_CAP} /> applied
                 </Typography.Caption>
               )}
-            </CardBody>
+            </Card.Content>
           </Card>
 
-          <Card className="border border-primary-200 bg-primary-50 shadow-none">
-            <CardBody className="flex flex-col gap-4 p-6">
+          <Card className="border border-accent/20 bg-accent-soft shadow-none">
+            <Card.Content className="flex flex-col gap-4 p-6">
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-primary" />
                 <Typography.Caption className="font-semibold text-primary uppercase tracking-wider">
@@ -142,7 +152,7 @@ export function PARFCalculator() {
                   <Currency value={result.newRebate} />
                 </span>
               </div>
-              <Divider />
+              <Separator />
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-default-500">Rebate Rate</span>
@@ -166,36 +176,39 @@ export function PARFCalculator() {
                   Cap of <Currency value={NEW_CAP} /> applied
                 </Typography.Caption>
               )}
-            </CardBody>
+            </Card.Content>
           </Card>
         </div>
 
         {result.difference > 0 && (
-          <Alert
-            color="danger"
-            variant="bordered"
-            icon={<ArrowDown className="size-4" />}
-            title={
-              <span>
-                You would receive{" "}
-                <strong>
-                  <Currency value={result.difference} /> less
-                </strong>{" "}
-                under the new Budget 2026 rates.
-              </span>
-            }
-          />
+          <Alert status="danger" className="border border-danger/40">
+            <Alert.Indicator>
+              <ArrowDown className="size-4" />
+            </Alert.Indicator>
+            <Alert.Content>
+              <Alert.Title>
+                <span>
+                  You would receive{" "}
+                  <strong>
+                    <Currency value={result.difference} /> less
+                  </strong>{" "}
+                  under the new Budget 2026 rates.
+                </span>
+              </Alert.Title>
+            </Alert.Content>
+          </Alert>
         )}
 
         {bracket.oldRate === 0 && (
-          <Alert
-            hideIconWrapper
-            color="default"
-            variant="bordered"
-            title="No PARF rebate is given for vehicles over 10 years old."
-          />
+          <Alert className="border border-border">
+            <Alert.Content>
+              <Alert.Title>
+                No PARF rebate is given for vehicles over 10 years old.
+              </Alert.Title>
+            </Alert.Content>
+          </Alert>
         )}
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

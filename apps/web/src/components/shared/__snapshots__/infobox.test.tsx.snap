@@ -3,33 +3,33 @@
 exports[`Infobox > should render title and markdown content 1`] = `
 <div>
   <section
-    class="px-4 py-3"
-    data-color="primary"
+    class="border border-primary/30 px-4 py-3"
+    data-status="accent"
     data-testid="alert"
-    data-variant="bordered"
   >
-    <h3>
-      What is COE?
-    </h3>
-    <div
-      data-testid="alert-description"
-    >
+    <div>
+      <h3>
+        What is COE?
+      </h3>
       <div
-        class="prose prose-sm prose-p:my-0 max-w-none text-foreground"
+        data-testid="alert-description"
       >
         <div
-          class="space-y-4 whitespace-normal *:first:mt-0 *:last:mb-0"
+          class="prose prose-sm prose-p:my-0 max-w-none text-foreground"
         >
-          <p>
-            The 
-            <span
-              class="font-semibold"
-              data-streamdown="strong"
-            >
-              Certificate of Entitlement
-            </span>
-             controls vehicle ownership.
-          </p>
+          <div
+            class="space-y-4 whitespace-normal *:first:mt-0 *:last:mb-0"
+          >
+            <p>
+              <span
+                class="font-semibold"
+                data-streamdown="strong"
+              >
+                Certificate of Entitlement
+              </span>
+               controls vehicle ownership.
+            </p>
+          </div>
         </div>
       </div>
     </div>

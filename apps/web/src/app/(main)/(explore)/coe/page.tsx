@@ -1,4 +1,4 @@
-import { Link } from "@heroui/link";
+import { Link } from "@heroui/react";
 import { AnimatedGrid } from "@web/app/(main)/(explore)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { ExploreCard } from "@web/app/(main)/(explore)/components/explore-card";
@@ -61,7 +61,10 @@ export default function Page() {
         <Typography.H1>COE</Typography.H1>
         <Typography.TextLg>
           Certificate of Entitlement data and analysis for Singapore. Explore{" "}
-          <Link href="/cars" color="primary" underline="hover">
+          <Link
+            href="/cars"
+            className="text-primary underline-offset-4 hover:underline"
+          >
             car registration data
           </Link>{" "}
           to see which makes and fuel types are most popular.

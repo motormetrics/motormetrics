@@ -32,9 +32,6 @@
     "db:drop": "turbo run @motormetrics/database#drop",
     "auth:generate": "turbo run auth:generate"
   },
-  "dependencies": {
-    "@heroui/navbar": "2.2.27"
-  },
   "devDependencies": {
     "@biomejs/biome": "2.4.0",
     "@commitlint/cli": "19.8.1",

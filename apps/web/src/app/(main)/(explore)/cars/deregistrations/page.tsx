@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
 import type { SelectDeregistration } from "@motormetrics/database";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CategoryBreakdown } from "@web/app/(main)/(explore)/cars/deregistrations/components/category-breakdown";
@@ -293,7 +293,7 @@ async function DeregistrationsContent({
       <AnimatedSection order={3}>
         <section>
           <Card className="bg-default-50 p-3">
-            <CardBody className="p-4">
+            <Card.Content className="p-4">
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-7">
                 {/* Total */}
                 <div className="col-span-2 border-default-200 sm:col-span-1 sm:border-r sm:pr-4">
@@ -340,7 +340,7 @@ async function DeregistrationsContent({
                   </div>
                 ))}
               </div>
-            </CardBody>
+            </Card.Content>
           </Card>
         </section>
       </AnimatedSection>

@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Link } from "@heroui/link";
+import { Card, Link } from "@heroui/react";
+
 import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
@@ -75,17 +75,17 @@ export function GlossarySection() {
 
                   const card = (
                     <Card className="h-full border-default-200/80 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-                      <CardHeader className="pb-0">
+                      <Card.Header className="pb-0">
                         <div className="flex w-full items-center justify-between">
                           <Typography.H4>{term}</Typography.H4>
                           {hasGuide && (
                             <ArrowRight className="size-4 text-primary" />
                           )}
                         </div>
-                      </CardHeader>
-                      <CardBody>
+                      </Card.Header>
+                      <Card.Content>
                         <Typography.TextSm>{definition}</Typography.TextSm>
-                      </CardBody>
+                      </Card.Content>
                     </Card>
                   );
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/button";
-import { Tooltip } from "@heroui/tooltip";
+import { Button } from "@heroui/react";
+
 import {
   SiLinkedin,
   SiTelegram,
@@ -42,92 +42,92 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
     <div className="flex items-center gap-2">
       {/* Native share on mobile */}
       <div className="flex md:hidden">
-        <Tooltip content="Share">
-          <Button
-            size="sm"
-            variant="flat"
-            isIconOnly
-            onPress={nativeShare}
-            aria-label="Share"
-          >
-            <Share2 className="size-4" />
-          </Button>
-        </Tooltip>
+        <Button
+          size="sm"
+          variant="tertiary"
+          isIconOnly
+          onPress={nativeShare}
+          aria-label="Share"
+        >
+          <Share2 className="size-4" />
+        </Button>
       </div>
 
       {/* Individual buttons on desktop */}
       <div className="hidden items-center gap-2 md:flex">
-        <Tooltip content={copied ? "Copied!" : "Copy link"}>
+        <Button
+          size="sm"
+          variant="tertiary"
+          isIconOnly
+          onPress={copyLink}
+          aria-label={copied ? "Copied!" : "Copy link"}
+        >
+          {copied ? (
+            <Check className="size-4 text-success" />
+          ) : (
+            <Copy className="size-4" />
+          )}
+        </Button>
+        <a
+          href={xUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Share on X"
+        >
           <Button
             size="sm"
-            variant="flat"
+            variant="tertiary"
             isIconOnly
-            onPress={copyLink}
-            aria-label="Copy link"
-          >
-            {copied ? (
-              <Check className="size-4 text-success" />
-            ) : (
-              <Copy className="size-4" />
-            )}
-          </Button>
-        </Tooltip>
-        <Tooltip content="Share on X">
-          <Button
-            as="a"
-            size="sm"
-            variant="flat"
-            isIconOnly
-            href={xUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             aria-label="Share on X"
           >
             <SiX className="size-4" />
           </Button>
-        </Tooltip>
-        <Tooltip content="Share on LinkedIn">
+        </a>
+        <a
+          href={linkedinUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Share on LinkedIn"
+        >
           <Button
-            as="a"
             size="sm"
-            variant="flat"
+            variant="tertiary"
             isIconOnly
-            href={linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             aria-label="Share on LinkedIn"
           >
             <SiLinkedin className="size-4" />
           </Button>
-        </Tooltip>
-        <Tooltip content="Share on Telegram">
+        </a>
+        <a
+          href={telegramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Share on Telegram"
+        >
           <Button
-            as="a"
             size="sm"
-            variant="flat"
+            variant="tertiary"
             isIconOnly
-            href={telegramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             aria-label="Share on Telegram"
           >
             <SiTelegram className="size-4" />
           </Button>
-        </Tooltip>
-        <Tooltip content="Share on WhatsApp">
+        </a>
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Share on WhatsApp"
+        >
           <Button
-            as="a"
             size="sm"
-            variant="flat"
+            variant="tertiary"
             isIconOnly
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
             aria-label="Share on WhatsApp"
           >
             <SiWhatsapp className="size-4" />
           </Button>
-        </Tooltip>
+        </a>
       </div>
     </div>
   );

@@ -2,142 +2,14 @@
 
 exports[`MonthSelector > should render with months array 1`] = `
 <div>
-  <div
-    class="group inline-flex flex-column w-full"
+  <select
+    aria-label="Month"
   >
-    <div
-      class="group flex flex-col data-[hidden=true]:hidden w-full relative justify-end data-[has-label=true]:mt-[calc(var(--heroui-font-size-small)_+_10px)] is-filled"
-      data-filled="true"
-      data-filled-within="true"
-      data-has-value="true"
-      data-slot="base"
+    <option
+      value="Jan 2024"
     >
-      <div
-        class="h-full flex flex-col"
-        data-slot="main-wrapper"
-      >
-        <div
-          class="w-full inline-flex tap-highlight-transparent flex-row items-center px-3 gap-3 !px-1 !pb-0 !gap-0 relative box-border shadow-[0_1px_0px_0_rgba(0,0,0,0.05)] border-default-200 !rounded-none hover:border-default-300 after:content-[''] after:w-0 after:origin-center after:bg-default-foreground after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-[2px] after:h-[2px] group-data-[focus=true]:after:w-full h-10 min-h-10 rounded-medium transition-background motion-reduce:transition-none !duration-150 after:transition-width motion-reduce:after:transition-none is-filled"
-          data-slot="input-wrapper"
-          style="cursor: text;"
-        >
-          <div
-            class="inline-flex w-full items-center h-full box-border pb-1.5"
-            data-slot="inner-wrapper"
-          >
-            <svg
-              class="lucide lucide-calendar size-4"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 2v4"
-              />
-              <path
-                d="M16 2v4"
-              />
-              <rect
-                height="18"
-                rx="2"
-                width="18"
-                x="3"
-                y="4"
-              />
-              <path
-                d="M3 10h18"
-              />
-            </svg>
-            <input
-              aria-autocomplete="list"
-              aria-expanded="false"
-              aria-label="Month"
-              autocomplete="off"
-              autocorrect="off"
-              class="w-full font-normal bg-transparent !outline-solid placeholder:text-foreground-500 focus-visible:outline-solid outline-transparent data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 data-[type=color]:rounded-none file:cursor-pointer file:bg-transparent file:border-0 autofill:bg-transparent bg-clip-text dark:autofill:[-webkit-text-fill-color:hsl(var(--heroui-foreground))] [&::-ms-reveal]:hidden text-small group-data-[has-value=true]:text-foreground is-filled"
-              data-filled="true"
-              data-filled-within="true"
-              data-has-end-content="true"
-              data-has-start-content="true"
-              data-slot="input"
-              data-type="text"
-              id="react-aria-_r_3_"
-              placeholder="Select Month"
-              role="combobox"
-              spellcheck="false"
-              tabindex="0"
-              title=""
-              type="text"
-              value="Jan 2024"
-            />
-            <div
-              class="relative flex h-full items-center -mr-2"
-            >
-              <button
-                class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent transform-gpu data-[pressed=true]:scale-[0.97] outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 gap-2 rounded-full px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-transparent data-[hover=true]:bg-default/40 min-w-8 w-8 h-8 text-medium translate-x-1 cursor-text opacity-0 pointer-events-none text-default-500 group-data-[invalid=true]:text-danger data-[visible=true]:opacity-100 data-[visible=true]:pointer-events-auto data-[visible=true]:cursor-pointer sm:data-[visible=true]:opacity-0 sm:data-[visible=true]:pointer-events-none sm:group-data-[hover=true]:data-[visible=true]:opacity-100 sm:group-data-[hover=true]:data-[visible=true]:pointer-events-auto"
-                data-react-aria-pressable="true"
-                data-visible="true"
-                tabindex="-1"
-                type="button"
-              >
-                <svg
-                  aria-hidden="true"
-                  class="fill-current"
-                  fill="none"
-                  focusable="false"
-                  height="1em"
-                  role="presentation"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                >
-                  <path
-                    d="M18 6L6 18M6 6l12 12"
-                  />
-                </svg>
-              </button>
-              <button
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-label="Show suggestions"
-                class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent transform-gpu data-[pressed=true]:scale-[0.97] cursor-pointer outline-solid outline-transparent data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 gap-2 rounded-full px-0 !gap-0 bg-transparent text-default-foreground data-[hover=true]:bg-default/40 min-w-8 w-8 h-8 text-medium transition-transform duration-150 ease motion-reduce:transition-none data-[open=true]:rotate-180"
-                data-react-aria-pressable="true"
-                id="react-aria-_r_0_"
-                tabindex="-1"
-                type="button"
-              >
-                <svg
-                  aria-hidden="true"
-                  fill="none"
-                  focusable="false"
-                  height="1em"
-                  role="presentation"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                >
-                  <path
-                    d="m6 9 6 6 6-6"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+      Jan 2024
+    </option>
+  </select>
 </div>
 `;

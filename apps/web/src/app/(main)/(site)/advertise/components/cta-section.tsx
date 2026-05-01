@@ -1,6 +1,4 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Link } from "@heroui/link";
+import { Button, Card } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { Mail } from "lucide-react";
 import { cacheLife } from "next/cache";
@@ -27,7 +25,7 @@ export async function CtaSection() {
 
           {/* Contact card */}
           <Card className="w-full max-w-md border-default-200 p-3 shadow-sm">
-            <CardBody className="flex flex-col items-center gap-4 p-6 text-center">
+            <Card.Content className="flex flex-col items-center gap-4 p-6 text-center">
               <div className="rounded-xl bg-primary/10 p-3">
                 <Mail className="size-6 text-primary" />
               </div>
@@ -35,16 +33,15 @@ export async function CtaSection() {
               <Typography.TextSm className="text-default-500">
                 For enquiries, proposals, and custom packages
               </Typography.TextSm>
-              <Button
-                as={Link}
+              <a
                 href="mailto:advertise@motormetrics.app"
-                color="primary"
-                radius="full"
-                className="mt-2"
+                className="mt-2 no-underline"
               >
-                advertise@motormetrics.app
-              </Button>
-            </CardBody>
+                <Button variant="primary" className="rounded-full">
+                  advertise@motormetrics.app
+                </Button>
+              </a>
+            </Card.Content>
           </Card>
         </div>
       </div>

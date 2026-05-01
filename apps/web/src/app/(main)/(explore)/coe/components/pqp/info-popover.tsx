@@ -1,23 +1,22 @@
-import { Button } from "@heroui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@heroui/popover";
+import { Button, Popover } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { InfoIcon } from "lucide-react";
 
 export function InfoPopover() {
   return (
-    <Popover placement="bottom-end">
-      <PopoverTrigger>
+    <Popover>
+      <Popover.Trigger>
         <Button
           isIconOnly
-          variant="light"
+          variant="tertiary"
           size="sm"
-          radius="full"
+          className="rounded-full"
           aria-label="About PQP Rates"
         >
           <InfoIcon className="size-5" aria-hidden="true" />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="max-w-md">
+      </Popover.Trigger>
+      <Popover.Content className="max-w-md" placement="bottom end">
         <div className="flex flex-col gap-4 p-4">
           <Typography.H4>Understanding PQP Rates</Typography.H4>
           <div className="flex flex-col gap-4 text-sm">
@@ -42,7 +41,7 @@ export function InfoPopover() {
             </p>
           </div>
         </div>
-      </PopoverContent>
+      </Popover.Content>
     </Popover>
   );
 }

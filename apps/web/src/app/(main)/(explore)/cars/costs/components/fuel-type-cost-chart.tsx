@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card, cn } from "@heroui/react";
+
 import type { SelectCarCost } from "@motormetrics/database";
 import {
   CHART_CURSOR,
@@ -42,7 +42,7 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
   const chartData = FUEL_TYPE_ORDER.filter((fuelType) =>
     grouped.has(fuelType),
   ).map((fuelType) => {
-    const costs = grouped.get(fuelType)!;
+    const costs = grouped.get(fuelType) ?? [];
     const average = costs.reduce((sum, cost) => sum + cost, 0) / costs.length;
     return {
       fuelType: FUEL_TYPE_LABELS[fuelType] ?? fuelType,
@@ -52,13 +52,13 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
 
   return (
     <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Avg Selling Price by Fuel Type</Typography.H4>
         <Typography.TextSm className="text-default-500">
           Average AD selling price (with COE) by fuel type
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer
           config={chartConfig}
           className={cn(CHART_HEIGHTS.tall, "w-full")}
@@ -96,12 +96,12 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
             </Bar>
           </BarChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
+      </Card.Content>
+      <Card.Footer>
         <Typography.TextSm className="text-default-500">
           Electric vehicles tend to have lower total costs due to VES rebates.
         </Typography.TextSm>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

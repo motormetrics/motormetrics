@@ -1,6 +1,7 @@
 "use client";
 
-import { Chip } from "@heroui/chip";
+import { Chip } from "@heroui/react";
+
 import { formatCurrency } from "@motormetrics/utils";
 import useStore from "@web/app/store";
 import type { COEResult } from "@web/types";
@@ -19,7 +20,7 @@ export function PremiumBanner({ data = [] }: PremiumBannerProps) {
         {data.toSorted(sortByCategory).map(({ vehicleClass, premium }) => (
           <div key={vehicleClass} className="flex items-center gap-2">
             <div className="font-semibold text-sm">{vehicleClass}</div>
-            <Chip color="primary" variant="bordered">
+            <Chip color="accent" variant="soft">
               {formatCurrency(premium)}
             </Chip>
           </div>

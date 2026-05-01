@@ -1,5 +1,4 @@
-import { Chip } from "@heroui/chip";
-import { cn } from "@heroui/theme";
+import { Chip, cn } from "@heroui/react";
 
 interface CoverProps {
   category: string;
@@ -73,11 +72,8 @@ export function Cover({ category, className }: CoverProps) {
           {tagline && (
             <Chip
               size="sm"
-              variant="flat"
-              classNames={{
-                base: "bg-white/15 backdrop-blur-sm",
-                content: "text-white/80 text-xs",
-              }}
+              variant="soft"
+              className="bg-white/15 text-white/80 text-xs backdrop-blur-sm"
             >
               {tagline}
             </Chip>

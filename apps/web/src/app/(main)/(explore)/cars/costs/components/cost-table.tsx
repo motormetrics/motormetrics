@@ -1,26 +1,23 @@
 "use client";
 
-import { Chip } from "@heroui/chip";
-import { Input } from "@heroui/input";
-import { Pagination } from "@heroui/pagination";
-import { Select, SelectItem } from "@heroui/select";
 import {
+  Chip,
+  cn,
+  Input,
+  Label,
+  ListBox,
+  Pagination,
+  Select,
   type SortDescriptor,
   Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@heroui/table";
-import { cn } from "@heroui/theme";
+} from "@heroui/react";
+
 import type { SelectCarCost } from "@motormetrics/database";
 import { formatCurrency } from "@motormetrics/utils";
 import { CostLegend } from "@web/app/(main)/(explore)/cars/costs/components/cost-legend";
 import { FUEL_TYPE_LABELS } from "@web/app/(main)/(explore)/cars/costs/constants";
 import Typography from "@web/components/typography";
 import { sortByDescriptor } from "@web/utils/sort";
-import { Search } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 import { type Key, useCallback, useMemo, useState } from "react";
 
@@ -47,20 +44,20 @@ const ROWS_PER_PAGE = 20;
 
 const FUEL_TYPE_COLORS: Record<
   string,
-  "success" | "primary" | "secondary" | "warning" | "default"
+  "success" | "accent" | "warning" | "default"
 > = {
   E: "success",
-  H: "primary",
-  R: "secondary",
+  H: "accent",
+  R: "default",
   P: "warning",
 };
 
 const VES_BAND_COLORS: Record<
   string,
-  "success" | "primary" | "warning" | "danger" | "default"
+  "success" | "accent" | "warning" | "danger" | "default"
 > = {
   A: "success",
-  B: "primary",
+  B: "accent",
   C1: "warning",
   C2: "warning",
   C3: "danger",
@@ -147,7 +144,7 @@ export function CostTable({ data }: CostTableProps) {
         return (
           <Chip
             size="sm"
-            variant="flat"
+            variant="soft"
             color={FUEL_TYPE_COLORS[item.fuelType ?? ""] ?? "default"}
           >
             {FUEL_TYPE_LABELS[item.fuelType ?? ""] ?? item.fuelType}
@@ -157,7 +154,7 @@ export function CostTable({ data }: CostTableProps) {
         return (
           <Chip
             size="sm"
-            variant="flat"
+            variant="soft"
             color={VES_BAND_COLORS[item.vesBanding] ?? "default"}
           >
             {item.vesBanding}
@@ -219,85 +216,155 @@ export function CostTable({ data }: CostTableProps) {
           type="search"
           placeholder="Search make or model..."
           value={search}
-          onValueChange={(value) => {
-            setSearch(value);
+          onChange={(event) => {
+            setSearch(event.target.value);
             setPage(1);
           }}
-          startContent={<Search className="size-4 text-default-400" />}
           className="sm:max-w-xs"
         />
         <Select
           placeholder="All Makes"
-          selectedKeys={makeFilter ? [makeFilter] : []}
-          onSelectionChange={(keys) => {
-            const selected = Array.from(keys)[0] as string | undefined;
-            setMakeFilter(selected ?? "");
+          value={makeFilter || "all"}
+          onChange={(selected) => {
+            setMakeFilter(selected === "all" ? "" : String(selected));
             setPage(1);
           }}
           className="sm:max-w-[200px]"
-          aria-label="Filter by make"
         >
-          {makes.map((make) => (
-            <SelectItem key={make}>{make}</SelectItem>
-          ))}
+          <Label className="sr-only">Filter by make</Label>
+          <Select.Trigger>
+            <Select.Value />
+            <Select.Indicator />
+          </Select.Trigger>
+          <Select.Popover>
+            <ListBox>
+              <ListBox.Item id="all" textValue="All Makes">
+                All Makes
+                <ListBox.ItemIndicator />
+              </ListBox.Item>
+              {makes.map((make) => (
+                <ListBox.Item key={make} id={make} textValue={make}>
+                  {make}
+                  <ListBox.ItemIndicator />
+                </ListBox.Item>
+              ))}
+            </ListBox>
+          </Select.Popover>
         </Select>
         <Select
           placeholder="All Fuel Types"
-          selectedKeys={fuelFilter ? [fuelFilter] : []}
-          onSelectionChange={(keys) => {
-            const selected = Array.from(keys)[0] as string | undefined;
-            setFuelFilter(selected ?? "");
+          value={fuelFilter || "all"}
+          onChange={(selected) => {
+            setFuelFilter(selected === "all" ? "" : String(selected));
             setPage(1);
           }}
           className="sm:max-w-[240px]"
-          aria-label="Filter by fuel type"
         >
-          {fuelTypes.map((fuelType) => (
-            <SelectItem key={fuelType}>
-              {FUEL_TYPE_LABELS[fuelType] ?? fuelType}
-            </SelectItem>
-          ))}
+          <Label className="sr-only">Filter by fuel type</Label>
+          <Select.Trigger>
+            <Select.Value />
+            <Select.Indicator />
+          </Select.Trigger>
+          <Select.Popover>
+            <ListBox>
+              <ListBox.Item id="all" textValue="All Fuel Types">
+                All Fuel Types
+                <ListBox.ItemIndicator />
+              </ListBox.Item>
+              {fuelTypes.map((fuelType) => {
+                const label = FUEL_TYPE_LABELS[fuelType] ?? fuelType;
+                return (
+                  <ListBox.Item key={fuelType} id={fuelType} textValue={label}>
+                    {label}
+                    <ListBox.ItemIndicator />
+                  </ListBox.Item>
+                );
+              })}
+            </ListBox>
+          </Select.Popover>
         </Select>
       </div>
-      <Table
-        aria-label="Car cost breakdown table"
-        sortDescriptor={sortDescriptor}
-        onSortChange={setSortDescriptor}
-        bottomContent={
-          pages > 1 ? (
+      <Table>
+        <Table.ScrollContainer>
+          <Table.Content
+            aria-label="Car cost breakdown table"
+            sortDescriptor={sortDescriptor}
+            onSortChange={setSortDescriptor}
+          >
+            <Table.Header>
+              {columns.map((column, index) => (
+                <Table.Column
+                  key={column.key}
+                  id={column.key}
+                  isRowHeader={index === 0}
+                  allowsSorting={
+                    !["fuelType", "vesBanding"].includes(column.key)
+                  }
+                >
+                  {column.label}
+                </Table.Column>
+              ))}
+            </Table.Header>
+            <Table.Body>
+              {paginatedData.map((item) => (
+                <Table.Row
+                  key={`${item.make}-${item.model}`}
+                  id={`${item.make}-${item.model}`}
+                >
+                  {columns.map((column) => (
+                    <Table.Cell key={column.key}>
+                      {renderCell(item, column.key)}
+                    </Table.Cell>
+                  ))}
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+        <Table.Footer>
+          {pages > 1 ? (
             <div className="flex w-full justify-center">
-              <Pagination
-                isCompact
-                showControls
-                showShadow
-                page={effectivePage}
-                total={pages}
-                onChange={setPage}
-              />
+              <Pagination size="sm">
+                <Pagination.Content>
+                  <Pagination.Item>
+                    <Pagination.Previous
+                      isDisabled={effectivePage === 1}
+                      onPress={() =>
+                        setPage((current) => Math.max(current - 1, 1))
+                      }
+                    >
+                      <Pagination.PreviousIcon />
+                      Prev
+                    </Pagination.Previous>
+                  </Pagination.Item>
+                  {Array.from({ length: pages }, (_, index) => index + 1).map(
+                    (pageNumber) => (
+                      <Pagination.Item key={pageNumber}>
+                        <Pagination.Link
+                          isActive={pageNumber === effectivePage}
+                          onPress={() => setPage(pageNumber)}
+                        >
+                          {pageNumber}
+                        </Pagination.Link>
+                      </Pagination.Item>
+                    ),
+                  )}
+                  <Pagination.Item>
+                    <Pagination.Next
+                      isDisabled={effectivePage === pages}
+                      onPress={() =>
+                        setPage((current) => Math.min(current + 1, pages))
+                      }
+                    >
+                      Next
+                      <Pagination.NextIcon />
+                    </Pagination.Next>
+                  </Pagination.Item>
+                </Pagination.Content>
+              </Pagination>
             </div>
-          ) : null
-        }
-        bottomContentPlacement="outside"
-      >
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn
-              key={column.key}
-              allowsSorting={!["fuelType", "vesBanding"].includes(column.key)}
-            >
-              {column.label}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={paginatedData}>
-          {(item) => (
-            <TableRow key={`${item.make}-${item.model}`}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
+          ) : null}
+        </Table.Footer>
       </Table>
     </div>
   );

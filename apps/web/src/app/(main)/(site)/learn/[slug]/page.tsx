@@ -1,8 +1,4 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { Divider } from "@heroui/divider";
-import { Link } from "@heroui/link";
+import { Button, Card, Chip, Link, Separator } from "@heroui/react";
 import { StructuredData } from "@web/components/structured-data";
 import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -11,6 +7,7 @@ import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
+import NextLink from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -177,8 +174,7 @@ export default async function GuidePage({ params }: PageProps) {
         {/* Back to Learn link */}
         <Link
           href="/learn"
-          color="foreground"
-          className="flex w-fit items-center gap-2 text-sm"
+          className="flex w-fit items-center gap-2 text-foreground text-sm"
         >
           <ArrowLeft className="size-4" />
           Back to Learn
@@ -186,12 +182,8 @@ export default async function GuidePage({ params }: PageProps) {
 
         {/* Header */}
         <header className="flex flex-col gap-4">
-          <Chip
-            startContent={<BookOpen className="size-3" />}
-            variant="flat"
-            color="primary"
-            size="sm"
-          >
+          <Chip variant="soft" color="accent" size="sm">
+            <BookOpen className="size-3" />
             {guide.term}
           </Chip>
           <Typography.H1>{guide.title}</Typography.H1>
@@ -208,67 +200,66 @@ export default async function GuidePage({ params }: PageProps) {
           </Typography.Caption>
         </header>
 
-        <Divider />
+        <Separator />
 
         {/* Main Content */}
         <GuideContent slug={guide.slug} content={guide.content} />
 
         {/* Related Links */}
         {guide.relatedLinks.length > 0 && (
-          <Card shadow="sm">
-            <CardHeader>
+          <Card className="shadow-sm">
+            <Card.Header>
               <Typography.H4>Explore Data</Typography.H4>
-            </CardHeader>
-            <CardBody className="flex flex-row flex-wrap gap-2">
+            </Card.Header>
+            <Card.Content className="flex flex-row flex-wrap gap-2">
               {guide.relatedLinks.map((link) => (
-                <Button
+                <NextLink
                   key={link.href}
-                  as={Link}
                   href={link.href}
-                  variant="flat"
-                  color="primary"
-                  size="sm"
+                  className="no-underline"
                 >
-                  {link.label}
-                </Button>
+                  <Button variant="primary" size="sm">
+                    {link.label}
+                  </Button>
+                </NextLink>
               ))}
-            </CardBody>
+            </Card.Content>
           </Card>
         )}
 
-        <Divider />
+        <Separator />
 
         {/* Guide Navigation */}
         <nav className="flex justify-between gap-4">
           {previousGuide ? (
-            <Button
-              as={Link}
+            <NextLink
               href={`/learn/${previousGuide.slug}`}
-              variant="bordered"
-              startContent={<ArrowLeft className="size-4" />}
-              className="flex-1 justify-start"
+              className="flex-1 no-underline"
             >
-              <span className="flex flex-col items-start">
-                <span className="text-default-500 text-xs">Previous</span>
-                <span>{previousGuide.term}</span>
-              </span>
-            </Button>
+              <Button variant="outline" className="w-full justify-start">
+                <ArrowLeft className="size-4" />
+                <span className="flex flex-col items-start">
+                  <span className="text-default-500 text-xs">Previous</span>
+                  <span>{previousGuide.term}</span>
+                </span>
+              </Button>
+            </NextLink>
           ) : (
             <div className="flex-1" />
           )}
           {nextGuide ? (
-            <Button
-              as={Link}
+            <NextLink
               href={`/learn/${nextGuide.slug}`}
-              variant="bordered"
-              endContent={<ArrowRight className="size-4" />}
-              className="flex-1 justify-end"
+              className="flex-1 no-underline"
             >
-              <span className="flex flex-col items-end">
-                <span className="text-default-500 text-xs">Next</span>
-                <span>{nextGuide.term}</span>
-              </span>
-            </Button>
+              <Button variant="outline" className="w-full justify-end">
+                <span className="flex flex-col items-end">
+                  <span className="text-default-500 text-xs">Next</span>
+                  <span>{nextGuide.term}</span>
+                </span>
+                <ArrowRight className="size-4" />
+              </Button>
+            </NextLink>
           ) : (
             <div className="flex-1" />
           )}
@@ -276,15 +267,12 @@ export default async function GuidePage({ params }: PageProps) {
 
         {/* Back to Learn */}
         <div className="flex justify-center pb-8">
-          <Button
-            as={Link}
-            href="/learn"
-            color="primary"
-            variant="ghost"
-            startContent={<BookOpen className="size-4" />}
-          >
-            Back to Learn Hub
-          </Button>
+          <NextLink href="/learn" className="no-underline">
+            <Button variant="ghost">
+              <BookOpen className="size-4" />
+              Back to Learn Hub
+            </Button>
+          </NextLink>
         </div>
       </div>
     </>

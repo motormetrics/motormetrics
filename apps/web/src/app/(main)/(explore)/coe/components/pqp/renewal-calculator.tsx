@@ -1,8 +1,7 @@
 "use client";
 
-import { Alert } from "@heroui/alert";
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Tab, Tabs } from "@heroui/tabs";
+import { Alert, Card, Tabs } from "@heroui/react";
+
 import { Currency } from "@web/components/shared/currency";
 import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
@@ -85,7 +84,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
 
   return (
     <Card className="p-3">
-      <CardHeader className="flex-col items-start gap-2 p-4">
+      <Card.Header className="flex-col items-start gap-2 p-4">
         <div className="flex items-center gap-2">
           <Calculator className="size-5" />
           <Typography.H4>PQP vs Bidding Calculator</Typography.H4>
@@ -93,17 +92,26 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
         <Typography.TextSm className="text-default-500">
           Compare costs between PQP renewal and current market bidding
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody className="gap-4">
+      </Card.Header>
+      <Card.Content className="gap-4">
         <Tabs
-          color="primary"
-          radius="full"
           selectedKey={selectedCategory}
           onSelectionChange={(key) =>
             setSelectedCategory(key as keyof Pqp.Rates)
           }
         >
-          {coeCategories.map(({ key, icon: Icon, label }) => {
+          <Tabs.ListContainer>
+            <Tabs.List aria-label="COE categories">
+              {coeCategories.map(({ key, icon: Icon, label }) => (
+                <Tabs.Tab key={key} id={key}>
+                  <Icon className="size-4" />
+                  <span>{label}</span>
+                  <Tabs.Indicator />
+                </Tabs.Tab>
+              ))}
+            </Tabs.List>
+          </Tabs.ListContainer>
+          {coeCategories.map(({ key }) => {
             const categoryRecord = renewalRecords.find(
               ({ category }) => category === key,
             );
@@ -111,19 +119,11 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
             const currentCOEPremium = categoryRecord?.coePremium ?? 0;
 
             return (
-              <Tab
-                key={key}
-                title={
-                  <div className="flex items-center gap-2">
-                    <Icon className="size-4" />
-                    <span>{label}</span>
-                  </div>
-                }
-              >
+              <Tabs.Panel key={key} id={key}>
                 <div className="flex flex-col gap-4">
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <Card className="p-3">
-                      <CardBody className="text-center">
+                      <Card.Content className="text-center">
                         <Typography.TextSm className="mb-1 font-medium text-default-600">
                           Current PQP Rate
                         </Typography.TextSm>
@@ -133,11 +133,11 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                         <p className="text-default-500 text-xs">
                           Latest available rate
                         </p>
-                      </CardBody>
+                      </Card.Content>
                     </Card>
 
                     <Card className="p-3">
-                      <CardBody className="text-center">
+                      <Card.Content className="text-center">
                         <Typography.TextSm className="mb-1 font-medium text-default-600">
                           Current COE Price
                         </Typography.TextSm>
@@ -147,11 +147,11 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                         <p className="text-default-500 text-xs">
                           Latest COE premium
                         </p>
-                      </CardBody>
+                      </Card.Content>
                     </Card>
                   </div>
                 </div>
-              </Tab>
+              </Tabs.Panel>
             );
           })}
         </Tabs>
@@ -159,7 +159,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
           <div className="flex flex-col gap-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Card className="p-3">
-                <CardBody className="text-center">
+                <Card.Content className="text-center">
                   <Typography.TextSm className="font-medium text-default-500">
                     PQP 5-Year Renewal (Estimate)
                   </Typography.TextSm>
@@ -178,11 +178,11 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                       value={Math.abs(selectedRecord.pqpSavings5Year)}
                     />
                   </p>
-                </CardBody>
+                </Card.Content>
               </Card>
 
               <Card className="p-3">
-                <CardBody className="text-center">
+                <Card.Content className="text-center">
                   <Typography.TextSm className="font-medium text-default-500">
                     PQP 10-Year Renewal (Estimate)
                   </Typography.TextSm>
@@ -201,17 +201,18 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                       value={Math.abs(selectedRecord.pqpSavings10Year)}
                     />
                   </p>
-                </CardBody>
+                </Card.Content>
               </Card>
             </div>
 
-            <Alert
-              hideIconWrapper
-              color="primary"
-              variant="bordered"
-              title="Note"
-              description={selectedRecord.recommendation}
-            />
+            <Alert status="accent" className="border border-accent/40">
+              <Alert.Content>
+                <Alert.Title>Note</Alert.Title>
+                <Alert.Description>
+                  {selectedRecord.recommendation}
+                </Alert.Description>
+              </Alert.Content>
+            </Alert>
 
             <div className="flex flex-col gap-1 text-default-500 text-xs">
               <p>
@@ -231,7 +232,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
             </div>
           </div>
         )}
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

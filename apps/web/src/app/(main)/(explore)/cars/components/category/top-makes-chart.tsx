@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { Link } from "@heroui/link";
+import { Card, Chip, Link } from "@heroui/react";
+
 import { slugify } from "@motormetrics/utils";
 import {
   ChartContainer,
@@ -57,26 +56,26 @@ export function TopMakesChart({
   if (!makes || makes.length === 0) {
     return (
       <Card className="p-3">
-        <CardHeader className="flex flex-col items-start gap-2">
+        <Card.Header className="flex flex-col items-start gap-2">
           <Typography.H4>Top Makes</Typography.H4>
           <Typography.TextSm>No make data available</Typography.TextSm>
-        </CardHeader>
-        <CardBody>
+        </Card.Header>
+        <Card.Content>
           <div className="flex h-60 items-center justify-center rounded-lg bg-default-100">
             <p className="text-default-500">No data available</p>
           </div>
-        </CardBody>
+        </Card.Content>
       </Card>
     );
   }
 
   return (
     <Card className="p-3">
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Top Makes - {title}</Typography.H4>
         <Typography.TextSm>{description}</Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <div className="flex flex-col gap-6">
           {/* Top 3 Ranking Chips */}
           <div className="flex gap-2">
@@ -86,10 +85,8 @@ export function TopMakesChart({
                   key={item.name}
                   href={`/cars/makes/${slugify(item.name)}`}
                 >
-                  <Chip
-                    startContent={<span>{getRankingEmoji(index + 1)}</span>}
-                    className="cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
-                  >
+                  <Chip className="cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground">
+                    <span>{getRankingEmoji(index + 1)}</span>
                     {item.name}
                   </Chip>
                 </Link>
@@ -129,7 +126,7 @@ export function TopMakesChart({
             </BarChart>
           </ChartContainer>
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

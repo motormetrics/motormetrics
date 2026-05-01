@@ -1,15 +1,7 @@
 "use client";
 
-import { Pagination } from "@heroui/pagination";
-import { Select, SelectItem } from "@heroui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@heroui/table";
+import { Label, ListBox, Pagination, Select, Table } from "@heroui/react";
+
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -71,30 +63,66 @@ export function DataTable<TData, TValue>({
           <div className="flex items-center gap-2">
             <span className="font-medium text-sm">Rows per page</span>
             <Select
-              aria-label="Rows per page"
               className="w-24"
-              selectedKeys={[String(pageSize)]}
-              size="sm"
-              onSelectionChange={(keys) => {
-                const selected = Array.from(keys)[0];
-                if (selected) {
-                  table.setPageSize(Number(selected));
-                }
-              }}
+              value={String(pageSize)}
+              onChange={(selected) => table.setPageSize(Number(selected))}
             >
-              {pageSizes.map((size) => (
-                <SelectItem key={String(size)}>{size}</SelectItem>
-              ))}
+              <Label className="sr-only">Rows per page</Label>
+              <Select.Trigger>
+                <Select.Value />
+                <Select.Indicator />
+              </Select.Trigger>
+              <Select.Popover>
+                <ListBox>
+                  {pageSizes.map((size) => (
+                    <ListBox.Item
+                      key={size}
+                      id={String(size)}
+                      textValue={String(size)}
+                    >
+                      {size}
+                      <ListBox.ItemIndicator />
+                    </ListBox.Item>
+                  ))}
+                </ListBox>
+              </Select.Popover>
             </Select>
           </div>
           {hasPagination ? (
-            <Pagination
-              isCompact
-              showControls
-              page={currentPage}
-              total={pageCount}
-              onChange={(page) => table.setPageIndex(page - 1)}
-            />
+            <Pagination size="sm">
+              <Pagination.Content>
+                <Pagination.Item>
+                  <Pagination.Previous
+                    isDisabled={!table.getCanPreviousPage()}
+                    onPress={() => table.previousPage()}
+                  >
+                    <Pagination.PreviousIcon />
+                    Prev
+                  </Pagination.Previous>
+                </Pagination.Item>
+                {Array.from({ length: pageCount }, (_, index) => index + 1).map(
+                  (page) => (
+                    <Pagination.Item key={page}>
+                      <Pagination.Link
+                        isActive={page === currentPage}
+                        onPress={() => table.setPageIndex(page - 1)}
+                      >
+                        {page}
+                      </Pagination.Link>
+                    </Pagination.Item>
+                  ),
+                )}
+                <Pagination.Item>
+                  <Pagination.Next
+                    isDisabled={!table.getCanNextPage()}
+                    onPress={() => table.nextPage()}
+                  >
+                    Next
+                    <Pagination.NextIcon />
+                  </Pagination.Next>
+                </Pagination.Item>
+              </Pagination.Content>
+            </Pagination>
           ) : (
             <span className="text-default-500 text-sm">Page 1 of 1</span>
           )}
@@ -105,36 +133,39 @@ export function DataTable<TData, TValue>({
   );
 
   return (
-    <Table
-      aria-label={ariaLabel}
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-    >
-      <TableHeader>
-        {table
-          .getHeaderGroups()[0]
-          ?.headers.map((header) => (
-            <TableColumn key={header.id}>
-              {header.isPlaceholder
-                ? null
-                : flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
-            </TableColumn>
-          )) ?? []}
-      </TableHeader>
-      <TableBody emptyContent="No results.">
-        {rows.map((row) => (
-          <TableRow key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
+    <Table>
+      <Table.ScrollContainer>
+        <Table.Content aria-label={ariaLabel}>
+          <Table.Header>
+            {table.getHeaderGroups()[0]?.headers.map((header, index) => (
+              <Table.Column
+                key={header.id}
+                id={header.id}
+                isRowHeader={index === 0}
+              >
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+              </Table.Column>
+            )) ?? []}
+          </Table.Header>
+          <Table.Body renderEmptyState={() => <span>No results.</span>}>
+            {rows.map((row) => (
+              <Table.Row key={row.id} id={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <Table.Cell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Table.Cell>
+                ))}
+              </Table.Row>
             ))}
-          </TableRow>
-        ))}
-      </TableBody>
+          </Table.Body>
+        </Table.Content>
+      </Table.ScrollContainer>
+      <Table.Footer>{bottomContent}</Table.Footer>
     </Table>
   );
 }

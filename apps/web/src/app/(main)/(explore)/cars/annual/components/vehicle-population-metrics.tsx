@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { cn } from "@heroui/theme";
+import { Card, Chip, cn } from "@heroui/react";
+
 import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
@@ -60,21 +59,21 @@ export function VehiclePopulationMetrics({
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-        <CardHeader>
+        <Card.Header>
           <Typography.H4>Total Fleet Size</Typography.H4>
-        </CardHeader>
-        <CardBody>
+        </Card.Header>
+        <Card.Content>
           <span className="font-semibold text-4xl text-primary tabular-nums">
             {numberFormatter.format(totalFleet)}
           </span>
-        </CardBody>
+        </Card.Content>
       </Card>
 
       <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-        <CardHeader>
+        <Card.Header>
           <Typography.H4>Year-on-Year Change</Typography.H4>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-2">
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-2">
           <span className="font-semibold text-4xl tabular-nums">
             {yoyChange >= 0 ? "+" : ""}
             {numberFormatter.format(yoyChange)}
@@ -84,27 +83,27 @@ export function VehiclePopulationMetrics({
               className="rounded-full"
               color={yoyChange >= 0 ? "success" : "danger"}
               size="sm"
-              variant="flat"
+              variant="soft"
             >
               {yoyChange >= 0 ? "+" : ""}
               {yoyPercentage.toFixed(1)}%
             </Chip>
           )}
-        </CardBody>
+        </Card.Content>
       </Card>
 
       <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-        <CardHeader>
+        <Card.Header>
           <Typography.H4>EV Share</Typography.H4>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-2">
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-2">
           <span className="font-semibold text-4xl tabular-nums">
             {evShare.toFixed(1)}%
           </span>
           <Typography.TextSm className="text-default-500">
             {numberFormatter.format(electricTotal)} electric vehicles
           </Typography.TextSm>
-        </CardBody>
+        </Card.Content>
       </Card>
     </div>
   );

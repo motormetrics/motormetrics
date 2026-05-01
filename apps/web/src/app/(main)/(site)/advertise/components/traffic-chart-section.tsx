@@ -1,6 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card } from "@heroui/react";
+
 import {
   type ChartConfig,
   ChartContainer,
@@ -47,13 +48,13 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
 
         {/* Chart */}
         <Card className="p-3">
-          <CardHeader className="flex flex-col items-start gap-2 pb-4">
+          <Card.Header className="flex flex-col items-start gap-2 pb-4">
             <Typography.H4>Daily Visitors</Typography.H4>
             <Typography.TextSm className="text-default-600">
               Unique visitors and page views per day
             </Typography.TextSm>
-          </CardHeader>
-          <CardBody className="pt-2">
+          </Card.Header>
+          <Card.Content className="pt-2">
             <ChartContainer config={chartConfig} className="h-[300px] w-full">
               <AreaChart accessibilityLayer data={data}>
                 <defs>
@@ -111,7 +112,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
                 />
               </AreaChart>
             </ChartContainer>
-          </CardBody>
+          </Card.Content>
         </Card>
       </div>
     </section>

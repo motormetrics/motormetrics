@@ -1,6 +1,4 @@
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Skeleton as HeroUISkeleton } from "@heroui/skeleton";
-import { cn } from "@heroui/theme";
+import { Card, cn, Skeleton as HeroUISkeleton } from "@heroui/react";
 import { RADIUS } from "@motormetrics/theme/spacing";
 
 interface SkeletonProps {
@@ -32,15 +30,15 @@ export function SkeletonChart({ className }: SkeletonProps) {
 export function SkeletonMetricCard() {
   return (
     <Card className={cn("p-3", RADIUS.card)}>
-      <CardHeader>
+      <Card.Header>
         <HeroUISkeleton className="h-6 w-3/4 rounded-lg" />
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <HeroUISkeleton className="h-10 w-32 rounded-lg" />
-      </CardBody>
-      <CardFooter>
+      </Card.Content>
+      <Card.Footer>
         <HeroUISkeleton className="h-5 w-24 rounded-lg" />
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }
@@ -51,12 +49,12 @@ export function SkeletonMetricCard() {
 export function SkeletonChartWidget({ className }: SkeletonProps) {
   return (
     <Card className={cn("p-3", RADIUS.card, className)}>
-      <CardHeader>
+      <Card.Header>
         <HeroUISkeleton className="h-6 w-48 rounded-lg" />
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <HeroUISkeleton className="h-64 w-full rounded-lg" />
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
@@ -82,13 +80,13 @@ export function SkeletonPageHeader() {
 export function SkeletonBentoCard({ className }: SkeletonProps) {
   return (
     <Card className={cn("p-6", RADIUS.cardLarge, className)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <HeroUISkeleton className="h-6 w-40 rounded-lg" />
         <HeroUISkeleton className="h-4 w-full rounded-lg" />
-      </CardHeader>
-      <CardBody className="flex flex-col gap-4">
+      </Card.Header>
+      <Card.Content className="flex flex-col gap-4">
         <HeroUISkeleton className="h-24 w-full rounded-lg" />
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

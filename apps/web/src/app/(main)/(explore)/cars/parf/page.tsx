@@ -1,4 +1,4 @@
-import { Link } from "@heroui/link";
+import { Link } from "@heroui/react";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
@@ -79,7 +79,8 @@ export default function PARFCalculatorPage() {
           exercise in February 2026 onwards. Source:{" "}
           <Link
             href="https://www.lta.gov.sg/content/ltagov/en/newsroom/2026/2/news-releases/revision-parf-rebate-schedule-cap.html"
-            isExternal
+            target="_blank"
+            rel="noreferrer"
             className="text-primary underline"
           >
             LTA

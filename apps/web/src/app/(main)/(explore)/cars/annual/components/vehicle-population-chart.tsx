@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { cn } from "@heroui/theme";
+import { Card, cn } from "@heroui/react";
+
 import {
   CHART_CURSOR,
   CHART_GRID,
@@ -74,7 +74,8 @@ export function VehiclePopulationChart({
         });
       }
 
-      const entry = yearMap.get(record.year)!;
+      const entry = yearMap.get(record.year);
+      if (!entry) continue;
       const group = FUEL_GROUP_MAP[record.fuelType] ?? "Others";
       entry[group] = (entry[group] as number) + record.total;
     }
@@ -111,14 +112,14 @@ export function VehiclePopulationChart({
 
   return (
     <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
-      <CardHeader className="flex flex-col items-start gap-2">
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Vehicle Population by Fuel Type</Typography.H4>
         <Typography.TextSm className="text-default-500">
           {numberFormatter.format(selectedYearTotal)} vehicles on the road in{" "}
           {effectiveYear}
         </Typography.TextSm>
-      </CardHeader>
-      <CardBody>
+      </Card.Header>
+      <Card.Content>
         <ChartContainer
           config={chartConfig}
           className={cn(CHART_HEIGHTS.tall, "w-full")}
@@ -163,13 +164,13 @@ export function VehiclePopulationChart({
             ))}
           </BarChart>
         </ChartContainer>
-      </CardBody>
-      <CardFooter>
+      </Card.Content>
+      <Card.Footer>
         <Typography.TextSm className="text-default-500">
           Click on a bar to select a year. Hybrid includes Petrol-Electric,
           Plug-In, and Diesel-Electric vehicles.
         </Typography.TextSm>
-      </CardFooter>
+      </Card.Footer>
     </Card>
   );
 }

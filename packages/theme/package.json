@@ -16,9 +16,7 @@
     "./charts": "./src/charts.ts",
     "./spacing": "./src/spacing.ts"
   },
-  "dependencies": {
-    "@heroui/react": "catalog:"
-  },
+  "dependencies": {},
   "devDependencies": {
     "tailwindcss": "catalog:",
     "typescript": "catalog:"

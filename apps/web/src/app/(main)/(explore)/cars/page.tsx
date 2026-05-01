@@ -1,5 +1,4 @@
-import { Link } from "@heroui/link";
-import { cn } from "@heroui/theme";
+import { cn, Link } from "@heroui/react";
 import { AnimatedGrid } from "@web/app/(main)/(explore)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(explore)/components/animated-section";
 import { ExploreCard } from "@web/app/(main)/(explore)/components/explore-card";
@@ -100,7 +99,10 @@ export default function Page() {
         <Typography.TextLg>
           Explore Singapore vehicle data across registrations, deregistrations,
           and more. Looking for COE data?{" "}
-          <Link href="/coe" color="primary" underline="hover">
+          <Link
+            href="/coe"
+            className="text-primary underline-offset-4 hover:underline"
+          >
             View COE premiums and results
           </Link>
           .

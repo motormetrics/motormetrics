@@ -1,5 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
 import type { SelectCarCost } from "@motormetrics/database";
 import { formatCurrency } from "@motormetrics/utils";
 import {
@@ -71,7 +70,7 @@ function RangeSection({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Chip size="sm" variant="flat" radius="full" className="font-medium">
+        <Chip size="sm" variant="soft" className="font-medium">
           Price Range
         </Chip>
         <span className="text-default-400 text-xs">
@@ -175,16 +174,16 @@ export function CostRangeCard({ data }: CostRangeCardProps) {
           {/* Accent bar at top */}
           <div className="absolute top-0 right-0 left-0 h-1 bg-primary" />
 
-          <CardHeader className="flex flex-col items-start gap-1 pt-4">
+          <Card.Header className="flex flex-col items-start gap-1 pt-4">
             <Typography.H4>
               {FUEL_TYPE_LABELS[group.fuelType] ?? group.fuelType}
             </Typography.H4>
             <Typography.Caption>
               Selling price range (w/ COE)
             </Typography.Caption>
-          </CardHeader>
+          </Card.Header>
 
-          <CardBody className="flex flex-col gap-6 pt-0">
+          <Card.Content className="flex flex-col gap-6 pt-0">
             <RangeSection
               lowestModel={group.lowestModel}
               lowestPrice={group.lowestPrice}
@@ -193,7 +192,7 @@ export function CostRangeCard({ data }: CostRangeCardProps) {
               globalMin={globalMin}
               globalMax={globalMax}
             />
-          </CardBody>
+          </Card.Content>
         </Card>
       ))}
     </>

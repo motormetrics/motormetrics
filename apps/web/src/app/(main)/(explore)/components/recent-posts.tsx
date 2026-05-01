@@ -1,6 +1,4 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Link } from "@heroui/link";
+import { Button, Card, Link } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database";
 import { Post } from "@web/app/(main)/(site)/blog/components/post";
 import Typography from "@web/components/typography";
@@ -13,12 +11,12 @@ interface RecentPostsProps {
 export function RecentPosts({ posts }: RecentPostsProps) {
   if (!posts || posts.length === 0) {
     return (
-      <Card radius="lg">
-        <CardBody className="p-6">
+      <Card>
+        <Card.Content className="p-6">
           <div className="mb-5 flex items-center justify-between">
             <Typography.H3>Recent Posts</Typography.H3>
             <Link href="/blog" aria-label="View all blog posts">
-              <Button isIconOnly variant="flat" radius="full" tabIndex={-1}>
+              <Button isIconOnly variant="tertiary">
                 <ArrowUpRight className="size-6" />
               </Button>
             </Link>
@@ -26,18 +24,18 @@ export function RecentPosts({ posts }: RecentPostsProps) {
           <p className="py-8 text-center text-default-500">
             No recent posts available.
           </p>
-        </CardBody>
+        </Card.Content>
       </Card>
     );
   }
 
   return (
-    <Card radius="lg">
-      <CardBody className="p-6">
+    <Card>
+      <Card.Content className="p-6">
         <div className="mb-5 flex items-center justify-between">
           <Typography.H3>Recent Posts</Typography.H3>
           <Link href="/blog" aria-label="View all blog posts">
-            <Button isIconOnly variant="flat" radius="full" tabIndex={-1}>
+            <Button isIconOnly variant="tertiary">
               <ArrowUpRight className="size-6" />
             </Button>
           </Link>
@@ -48,7 +46,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
             <Post.Card key={post.id} post={post} />
           ))}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

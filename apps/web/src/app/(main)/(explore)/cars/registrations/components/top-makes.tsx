@@ -1,6 +1,4 @@
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Link } from "@heroui/link";
-import { Progress } from "@heroui/progress";
+import { Card, Link } from "@heroui/react";
 import { slugify } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { FuelType } from "@web/types/cars";
@@ -63,33 +61,36 @@ export function TopMakes({ data }: TopMakesProps) {
 
         return (
           <Card key={fuelType} className="p-3">
-            <CardHeader>
+            <Card.Header>
               <Typography.H4>{fuelType}</Typography.H4>
-            </CardHeader>
-            <CardBody>
+            </Card.Header>
+            <Card.Content>
               {makes.map(({ make, count }) => (
                 <div key={make} className="py-2">
-                  <Progress
-                    className="max-w-md"
-                    color="primary"
-                    formatOptions={{
-                      style: "decimal",
-                      maximumFractionDigits: 0,
-                    }}
-                    label={make.toUpperCase()}
-                    maxValue={total}
-                    showValueLabel={true}
-                    size="sm"
-                    value={count}
-                  />
+                  <div className="flex max-w-md flex-col gap-1">
+                    <div className="flex items-center justify-between gap-3 text-xs">
+                      <span className="font-medium text-default-600">
+                        {make.toUpperCase()}
+                      </span>
+                      <span className="text-default-500 tabular-nums">
+                        {count.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-default-100">
+                      <div
+                        className="h-full rounded-full bg-primary"
+                        style={{ width: `${(count / total) * 100}%` }}
+                      />
+                    </div>
+                  </div>
                 </div>
               ))}
-            </CardBody>
-            <CardFooter>
-              <Link href={href} underline="always">
+            </Card.Content>
+            <Card.Footer>
+              <Link href={href} className="underline">
                 View More
               </Link>
-            </CardFooter>
+            </Card.Footer>
           </Card>
         );
       })}

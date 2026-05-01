@@ -1,7 +1,4 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { Link } from "@heroui/link";
+import { Button, Card, Chip, Link } from "@heroui/react";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { getYearlyRegistrations } from "@web/queries/cars";
 import {
@@ -28,14 +25,14 @@ export async function SummaryCard() {
   const isPositive = totalRegistrations >= previousTotal;
 
   return (
-    <Card className="border-2 border-primary" radius="lg">
-      <CardBody className="p-6">
+    <Card className="border-2 border-primary">
+      <Card.Content className="p-6">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
             <BarChart3 className="size-6 text-primary" />
           </div>
           <Link href="/cars">
-            <Button isIconOnly variant="flat" radius="full">
+            <Button isIconOnly variant="tertiary">
               <ArrowUpRight className="size-6" />
             </Button>
           </Link>
@@ -48,23 +45,21 @@ export async function SummaryCard() {
         </p>
         <div className="mt-4 flex items-center gap-2">
           <Chip
-            variant="flat"
+            variant="soft"
             color={isPositive ? "success" : "danger"}
             size="sm"
-            startContent={
-              isPositive ? (
-                <TrendingUp className="size-4" />
-              ) : (
-                <TrendingDown className="size-4" />
-              )
-            }
           >
+            {isPositive ? (
+              <TrendingUp className="size-4" />
+            ) : (
+              <TrendingDown className="size-4" />
+            )}
             {isPositive ? "+" : ""}
             {changePercent}%
           </Chip>
           <span className="text-default-500 text-xs">vs previous year</span>
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }

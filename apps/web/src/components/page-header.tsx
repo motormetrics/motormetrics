@@ -1,4 +1,4 @@
-import { cn } from "@heroui/theme";
+import { cn } from "@heroui/react";
 import { LastUpdated } from "@web/components/shared/last-updated";
 import Typography from "@web/components/typography";
 import type { ReactNode } from "react";

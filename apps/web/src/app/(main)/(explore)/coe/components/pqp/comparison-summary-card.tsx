@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
+
 import { AnimatedNumber } from "@web/components/animated-number";
 import {
   staggerContainerVariants,
@@ -30,10 +30,10 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
         return (
           <motion.div key={item.category} variants={staggerItemVariants}>
             <Card className="p-3">
-              <CardHeader>
+              <Card.Header>
                 <div className="font-bold text-lg">{item.category}</div>
-              </CardHeader>
-              <CardBody>
+              </Card.Header>
+              <Card.Content>
                 <div className="flex flex-col gap-4">
                   <div>
                     <div className="text-default-500 text-sm">
@@ -53,11 +53,11 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
                     </div>
                   </div>
                 </div>
-              </CardBody>
-              <CardFooter>
+              </Card.Content>
+              <Card.Footer>
                 <div className="flex items-center gap-2">
                   <Chip
-                    variant="flat"
+                    variant="soft"
                     color={
                       isPQPLower
                         ? "success"
@@ -65,14 +65,12 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
                           ? "danger"
                           : "default"
                     }
-                    startContent={
-                      isPQPLower ? (
-                        <ArrowDownRight className="size-4" />
-                      ) : isPQPHigher ? (
-                        <ArrowUpRight className="size-4" />
-                      ) : null
-                    }
                   >
+                    {isPQPLower ? (
+                      <ArrowDownRight className="size-4" />
+                    ) : isPQPHigher ? (
+                      <ArrowUpRight className="size-4" />
+                    ) : null}
                     <AnimatedNumber value={Math.abs(item.differencePercent)} />%
                   </Chip>
                   <span className="text-muted-foreground text-sm">
@@ -81,7 +79,7 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
                     premium
                   </span>
                 </div>
-              </CardFooter>
+              </Card.Footer>
             </Card>
           </motion.div>
         );

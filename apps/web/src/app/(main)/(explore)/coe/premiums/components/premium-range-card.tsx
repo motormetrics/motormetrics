@@ -1,5 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
 import { formatCurrency, formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { PremiumRangeStats } from "@web/lib/coe/calculations";
@@ -69,7 +68,7 @@ const RangeSection = ({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Chip size="sm" variant="flat" radius="full" className="font-medium">
+        <Chip size="sm" variant="soft" className="font-medium">
           {label}
         </Chip>
         <span className="text-default-400 text-xs">
@@ -152,12 +151,12 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
             {/* Accent bar at top */}
             <div className="absolute top-0 right-0 left-0 h-1 bg-primary" />
 
-            <CardHeader className="flex flex-col items-start gap-1 pt-4">
+            <Card.Header className="flex flex-col items-start gap-1 pt-4">
               <Typography.H4>{stat.category}</Typography.H4>
               <Typography.Caption>Premium range analysis</Typography.Caption>
-            </CardHeader>
+            </Card.Header>
 
-            <CardBody className="flex flex-col gap-6 pt-0">
+            <Card.Content className="flex flex-col gap-6 pt-0">
               {/* YTD Range */}
               {stat.ytd ? (
                 <RangeSection
@@ -173,7 +172,7 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
                 <div className="flex flex-col gap-2">
                   <Chip
                     size="sm"
-                    variant="flat"
+                    variant="soft"
                     className="rounded-full font-medium"
                   >
                     {currentYear} YTD
@@ -184,7 +183,7 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
                 </div>
               )}
 
-              {/* Divider */}
+              {/* Separator */}
               <div className="h-px bg-divider" />
 
               {/* All-time Range */}
@@ -197,7 +196,7 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
                 globalMin={globalMin}
                 globalMax={globalMax}
               />
-            </CardBody>
+            </Card.Content>
           </Card>
         );
       })}

@@ -1,6 +1,4 @@
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Link } from "@heroui/link";
-import { cn } from "@heroui/theme";
+import { Card, cn, Link } from "@heroui/react";
 import { BetaChip, NewChip } from "@web/components/shared/chips";
 import Typography from "@web/components/typography";
 import type { ReactNode } from "react";
@@ -39,10 +37,10 @@ export function ExploreCard({
             "border border-primary/10",
           ],
           isTool && "border border-default-200 bg-default-100/50",
-          !isHero && !isTool && "bg-content1",
+          !isHero && !isTool && "bg-surface",
         )}
       >
-        <CardHeader
+        <Card.Header
           className={cn(
             "flex flex-col items-start gap-3",
             isHero ? "p-6" : "p-4",
@@ -69,12 +67,14 @@ export function ExploreCard({
               {title}
             </Typography.H4>
           )}
-        </CardHeader>
-        <CardBody className={cn("pt-0", isHero ? "px-6 pb-6" : "px-4 pb-4")}>
+        </Card.Header>
+        <Card.Content
+          className={cn("pt-0", isHero ? "px-6 pb-6" : "px-4 pb-4")}
+        >
           <Typography.TextSm className={isHero ? "text-default-600" : ""}>
             {description}
           </Typography.TextSm>
-        </CardBody>
+        </Card.Content>
       </Card>
     </Link>
   );

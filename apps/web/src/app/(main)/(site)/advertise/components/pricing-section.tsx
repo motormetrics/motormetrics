@@ -1,8 +1,4 @@
-import { Button } from "@heroui/button";
-import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import { Divider } from "@heroui/divider";
-import { Link } from "@heroui/link";
+import { Button, Card, Chip, Link, Separator } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { Check } from "lucide-react";
 import { cacheLife } from "next/cache";
@@ -80,17 +76,15 @@ export async function PricingSection() {
                 <div className="absolute top-4 right-4">
                   <Chip
                     size="sm"
-                    color="primary"
-                    variant="solid"
-                    classNames={{
-                      content: "text-xs font-semibold",
-                    }}
+                    color="accent"
+                    variant="primary"
+                    className="font-semibold text-xs"
                   >
                     Recommended
                   </Chip>
                 </div>
               )}
-              <CardHeader className="flex flex-col items-start gap-2 pb-2">
+              <Card.Header className="flex flex-col items-start gap-2 pb-2">
                 <Typography.H3 className="text-xl">{plan.name}</Typography.H3>
                 <div className="flex items-baseline gap-1">
                   <span className="font-bold text-4xl text-foreground tracking-tight">
@@ -101,29 +95,31 @@ export async function PricingSection() {
                 <Typography.TextSm className="text-default-500">
                   {plan.description}
                 </Typography.TextSm>
-              </CardHeader>
-              <Divider />
-              <CardBody className="gap-3 py-4">
+              </Card.Header>
+              <Separator />
+              <Card.Content className="gap-3 py-4">
                 {plan.features.map((feature) => (
                   <div key={feature} className="flex items-center gap-2">
                     <Check className="size-4 shrink-0 text-primary" />
                     <Typography.TextSm>{feature}</Typography.TextSm>
                   </div>
                 ))}
-              </CardBody>
-              <CardFooter>
-                <Button
-                  as={Link}
-                  href="#contact"
-                  color={plan.featured ? "primary" : "default"}
-                  variant={plan.featured ? "solid" : "bordered"}
-                  radius="full"
-                  fullWidth
-                  className={plan.featured ? "" : "text-foreground"}
-                >
-                  Get Started
-                </Button>
-              </CardFooter>
+              </Card.Content>
+              <Card.Footer>
+                <Link href="#contact" className="w-full no-underline">
+                  <Button
+                    variant={plan.featured ? "primary" : "outline"}
+                    fullWidth
+                    className={
+                      plan.featured
+                        ? "rounded-full"
+                        : "rounded-full text-foreground"
+                    }
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+              </Card.Footer>
             </Card>
           ))}
         </div>

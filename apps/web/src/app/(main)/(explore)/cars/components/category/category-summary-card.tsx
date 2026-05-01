@@ -1,5 +1,4 @@
-import { Card, CardBody } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
 import { AnimatedNumber } from "@web/components/animated-number";
 import { BarChart3, TrendingDown, TrendingUp } from "lucide-react";
 
@@ -20,7 +19,7 @@ export function CategorySummaryCard({
 
   return (
     <Card className="col-span-12 border-2 border-primary p-3 lg:col-span-4">
-      <CardBody>
+      <Card.Content>
         <div className="flex flex-col gap-4">
           <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
             <BarChart3 className="size-6 text-primary" />
@@ -35,16 +34,14 @@ export function CategorySummaryCard({
             <div className="flex items-center gap-2">
               <Chip
                 color={isPositive ? "success" : "danger"}
-                variant="flat"
+                variant="soft"
                 size="sm"
-                startContent={
-                  isPositive ? (
-                    <TrendingUp className="size-3" />
-                  ) : (
-                    <TrendingDown className="size-3" />
-                  )
-                }
               >
+                {isPositive ? (
+                  <TrendingUp className="size-3" />
+                ) : (
+                  <TrendingDown className="size-3" />
+                )}
                 {isPositive ? "+" : ""}
                 {changePercent}%
               </Chip>
@@ -52,7 +49,7 @@ export function CategorySummaryCard({
             </div>
           )}
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
