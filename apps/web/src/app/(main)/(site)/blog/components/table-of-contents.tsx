@@ -103,8 +103,8 @@ export function TableOfContents() {
               className={cn(
                 "text-xs transition-opacity",
                 activeId === heading.id
-                  ? "text-primary"
-                  : "text-primary/60 group-hover:text-primary",
+                  ? "text-accent"
+                  : "text-accent/60 group-hover:text-accent",
               )}
             >
               {String(idx + 1).padStart(2, "0")}

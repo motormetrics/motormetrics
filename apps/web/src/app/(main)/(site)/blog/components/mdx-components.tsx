@@ -9,7 +9,7 @@ type MdxLinkProps = ComponentPropsWithoutRef<"a">;
 function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
   const isInternalLink = href.startsWith("/") || href.startsWith("#");
   const linkClassName = [
-    "font-medium text-primary underline underline-offset-4",
+    "font-medium text-accent underline underline-offset-4",
     className,
   ]
     .filter(Boolean)
@@ -52,7 +52,7 @@ export const mdxComponents = {
   ),
   h3: (props: ComponentPropsWithoutRef<"h3">) => (
     <Typography.H3
-      className="mt-8 mb-4 border-primary border-l-4 pl-4"
+      className="mt-8 mb-4 border-accent border-l-4 pl-4"
       {...props}
     />
   ),
@@ -68,7 +68,7 @@ export const mdxComponents = {
   // Blockquotes - editorial style with subtle background
   blockquote: (props: ComponentPropsWithoutRef<"blockquote">) => (
     <blockquote
-      className="my-8 border-primary border-l-4 bg-default-50 py-4 pr-4 pl-6 text-default-700 text-lg italic"
+      className="my-8 border-accent border-l-4 bg-default py-4 pr-4 pl-6 text-foreground text-lg italic"
       {...props}
     />
   ),
@@ -94,7 +94,7 @@ export const mdxComponents = {
 
   // Tables - Editorial style with accent border (HybridStyle)
   table: (props: ComponentPropsWithoutRef<"table">) => (
-    <div className="my-8 w-full overflow-x-auto border-primary border-l-4 pl-4">
+    <div className="my-8 w-full overflow-x-auto border-accent border-l-4 pl-4">
       <table className="w-full border-collapse" {...props} />
     </div>
   ),
@@ -104,19 +104,19 @@ export const mdxComponents = {
   th: (props: ComponentPropsWithoutRef<"th">) => (
     <th
       scope="col"
-      className="border-foreground border-b-2 px-4 py-3 text-left font-bold text-[10px] text-default-400 uppercase tracking-wider [&:not(:first-child)]:text-right [&[align=center]]:text-center [&[align=right]]:text-right"
+      className="border-foreground border-b-2 px-4 py-3 text-left font-bold text-[10px] text-muted uppercase tracking-wider [&:not(:first-child)]:text-right [&[align=center]]:text-center [&[align=right]]:text-right"
       {...props}
     />
   ),
   td: (props: ComponentPropsWithoutRef<"td">) => (
     <td
-      className="px-4 py-3 text-sm tabular-nums [&:last-child]:font-semibold [&:last-child]:text-primary [&:not(:first-child)]:text-right [&[align=center]]:text-center [&[align=right]]:text-right"
+      className="px-4 py-3 text-sm tabular-nums [&:last-child]:font-semibold [&:last-child]:text-accent [&:not(:first-child)]:text-right [&[align=center]]:text-center [&[align=right]]:text-right"
       {...props}
     />
   ),
   tr: (props: ComponentPropsWithoutRef<"tr">) => (
     <tr
-      className="border-default-100 border-b transition-colors last:border-none hover:bg-default-50"
+      className="border-border border-b transition-colors last:border-none hover:bg-default"
       {...props}
     />
   ),
@@ -127,7 +127,7 @@ export const mdxComponents = {
   // Pre-formatted code blocks
   pre: (props: ComponentPropsWithoutRef<"pre">) => (
     <pre
-      className="my-6 overflow-x-auto rounded-lg bg-default-100 p-4 text-sm"
+      className="my-6 overflow-x-auto rounded-lg bg-default p-4 text-sm"
       {...props}
     />
   ),

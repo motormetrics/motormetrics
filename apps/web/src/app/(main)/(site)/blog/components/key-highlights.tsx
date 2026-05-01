@@ -24,7 +24,7 @@ export function KeyHighlights({ highlights }: KeyHighlightsProps) {
             key={`${item.label}-${item.value}`}
             className="border-foreground border-r-0 border-b-2 p-5 last:border-r-0 md:border-r-2"
           >
-            <div className="mb-1 font-black text-3xl text-primary tabular-nums md:text-4xl">
+            <div className="mb-1 font-black text-3xl text-accent tabular-nums md:text-4xl">
               {item.value}
             </div>
             <div className="mb-1 font-bold text-foreground text-xs uppercase tracking-wide">

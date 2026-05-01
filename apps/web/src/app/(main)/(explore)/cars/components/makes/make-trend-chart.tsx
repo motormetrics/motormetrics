@@ -57,7 +57,7 @@ export function MakeTrendChart({ data }: MakeTrendChartProps) {
           <CartesianGrid
             vertical={false}
             strokeDasharray="3 3"
-            className="stroke-default-200"
+            className="stroke-border"
           />
           <XAxis dataKey="month" tickMargin={8} />
           <ChartTooltip
@@ -84,7 +84,7 @@ export function MakeTrendChart({ data }: MakeTrendChartProps) {
             , helping identify seasonal patterns and market performance.
           </Typography.TextSm>
         </div>
-        <div className="grid grid-cols-1 gap-4 rounded-lg bg-surface-secondary/30 p-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 rounded-lg bg-surface/30 p-4 sm:grid-cols-3">
           <div className="text-center">
             <Typography.TextLg>{peakMonth?.month || "N/A"}</Typography.TextLg>
             <Typography.Caption>Peak Month</Typography.Caption>

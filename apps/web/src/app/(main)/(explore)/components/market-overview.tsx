@@ -15,26 +15,26 @@ export async function MarketOverview() {
           </Chip>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Card className="bg-default-100 shadow-none">
+          <Card className="bg-default shadow-none">
             <Card.Content>
-              <p className="text-default-500 text-sm">Total Cars</p>
-              <p className="mt-1 font-bold text-2xl text-primary tabular-nums">
+              <p className="text-muted text-sm">Total Cars</p>
+              <p className="mt-1 font-bold text-2xl text-accent tabular-nums">
                 {summary.total.toLocaleString()}
               </p>
             </Card.Content>
           </Card>
-          <Card className="bg-default-100 shadow-none">
+          <Card className="bg-default shadow-none">
             <Card.Content>
-              <p className="text-default-500 text-sm">Electric</p>
-              <p className="mt-1 font-bold text-2xl text-primary tabular-nums">
+              <p className="text-muted text-sm">Electric</p>
+              <p className="mt-1 font-bold text-2xl text-accent tabular-nums">
                 {summary.electric.toLocaleString()}
               </p>
             </Card.Content>
           </Card>
-          <Card className="bg-default-100 shadow-none">
+          <Card className="bg-default shadow-none">
             <Card.Content>
-              <p className="text-default-500 text-sm">Hybrid</p>
-              <p className="mt-1 font-bold text-2xl text-primary tabular-nums">
+              <p className="text-muted text-sm">Hybrid</p>
+              <p className="mt-1 font-bold text-2xl text-accent tabular-nums">
                 {summary.hybrid.toLocaleString()}
               </p>
             </Card.Content>

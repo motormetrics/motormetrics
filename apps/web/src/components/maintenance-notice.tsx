@@ -28,7 +28,7 @@ export function MaintenanceNotice() {
         {/* Hero Section */}
         <AnimatedSection className="flex flex-col items-center gap-4 text-center">
           <AnimatedIconWrapper>
-            <Settings className="size-20 text-primary" />
+            <Settings className="size-20 text-accent" />
           </AnimatedIconWrapper>
           <AnimatedText>
             <Typography.H1>Pit Stop in ProgressBar</Typography.H1>
@@ -49,7 +49,7 @@ export function MaintenanceNotice() {
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Clock className="size-5 text-primary" />
+                    <Clock className="size-5 text-accent" />
                     <Typography.Text>Estimated Completion</Typography.Text>
                   </div>
                   <Chip variant="primary" color="accent" size="lg">
@@ -59,15 +59,15 @@ export function MaintenanceNotice() {
                 <div className="flex items-center justify-center gap-2">
                   <div className="flex items-center gap-1">
                     <div
-                      className="size-2 animate-pulse rounded-full bg-primary"
+                      className="size-2 animate-pulse rounded-full bg-accent"
                       style={{ animationDelay: "0s" }}
                     />
                     <div
-                      className="size-2 animate-pulse rounded-full bg-primary"
+                      className="size-2 animate-pulse rounded-full bg-accent"
                       style={{ animationDelay: "0.2s" }}
                     />
                     <div
-                      className="size-2 animate-pulse rounded-full bg-primary"
+                      className="size-2 animate-pulse rounded-full bg-accent"
                       style={{ animationDelay: "0.4s" }}
                     />
                   </div>
@@ -89,7 +89,7 @@ export function MaintenanceNotice() {
             <AnimatedCard>
               <Card>
                 <Card.Content className="flex flex-row items-start gap-4">
-                  <Zap className="mt-1 size-6 flex-shrink-0 text-primary" />
+                  <Zap className="mt-1 size-6 flex-shrink-0 text-accent" />
                   <div>
                     <Typography.H3>Performance Boost</Typography.H3>
                     <Typography.TextSm>
@@ -103,7 +103,7 @@ export function MaintenanceNotice() {
             <AnimatedCard>
               <Card>
                 <Card.Content className="flex flex-row items-start gap-4">
-                  <Shield className="mt-1 size-6 flex-shrink-0 text-primary" />
+                  <Shield className="mt-1 size-6 flex-shrink-0 text-accent" />
                   <div>
                     <Typography.H3>Security Updates</Typography.H3>
                     <Typography.TextSm>
@@ -117,7 +117,7 @@ export function MaintenanceNotice() {
             <AnimatedCard>
               <Card>
                 <Card.Content className="flex flex-row items-start gap-4">
-                  <TrendingUp className="mt-1 size-6 flex-shrink-0 text-primary" />
+                  <TrendingUp className="mt-1 size-6 flex-shrink-0 text-accent" />
                   <div>
                     <Typography.H3>New Features</Typography.H3>
                     <Typography.TextSm>
@@ -130,7 +130,7 @@ export function MaintenanceNotice() {
             <AnimatedCard>
               <Card>
                 <Card.Content className="flex flex-row items-start gap-4">
-                  <Wrench className="mt-1 size-6 flex-shrink-0 text-primary" />
+                  <Wrench className="mt-1 size-6 flex-shrink-0 text-accent" />
                   <div>
                     <Typography.H3>Bug Fixes</Typography.H3>
                     <Typography.TextSm>
@@ -157,15 +157,15 @@ export function MaintenanceNotice() {
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="mailto:support@motormetrics.app"
-              className="flex items-center gap-2 font-medium text-primary text-sm"
+              className="flex items-center gap-2 font-medium text-accent text-sm"
             >
               <Mail className="size-4" />
               support@motormetrics.app
             </Link>
-            <span className="hidden text-default-500 sm:inline">|</span>
+            <span className="hidden text-muted sm:inline">|</span>
             <Link
               href={SOCIAL_URLS.twitter}
-              className="flex items-center gap-2 font-medium text-primary text-sm"
+              className="flex items-center gap-2 font-medium text-accent text-sm"
               target="_blank"
               rel="noreferrer"
             >

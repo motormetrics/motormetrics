@@ -55,7 +55,7 @@ export function MonthSelector({
     >
       <Label className="sr-only">Month</Label>
       <ComboBox.InputGroup>
-        <Calendar className="ml-3 size-4 text-default-500" />
+        <Calendar className="ml-3 size-4 text-muted" />
         <Input placeholder="Select Month" />
         <ComboBox.Trigger />
       </ComboBox.InputGroup>

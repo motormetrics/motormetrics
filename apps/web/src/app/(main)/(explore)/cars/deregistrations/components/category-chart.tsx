@@ -68,7 +68,7 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
   }));
 
   const chartConfig = {
-    total: { label: "Deregistrations", color: "var(--primary)" },
+    total: { label: "Deregistrations", color: "var(--accent)" },
   } as const;
 
   const handleBarClick = async (entry: CategoryWithPercentage) => {
@@ -87,13 +87,13 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
         <div className="flex flex-col gap-1">
           <Typography.H3>Deregistrations by Category</Typography.H3>
           {selectedCategory ? (
-            <Typography.Text className="text-default-500">
+            <Typography.Text className="text-muted">
               {formatNumber(selectedCategory.total)} deregistrations in{" "}
               {selectedCategory.category} (
               {formatPercentage(selectedCategory.percentage)})
             </Typography.Text>
           ) : (
-            <Typography.Text className="text-default-500">
+            <Typography.Text className="text-muted">
               {formatNumber(totalDeregistrations)} total deregistrations for{" "}
               {formatDateToMonthYear(currentMonth)}
             </Typography.Text>
@@ -132,22 +132,22 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
               <linearGradient id="selectedGradient" x1="0" y1="0" x2="1" y2="0">
                 <stop
                   offset="0%"
-                  stopColor="color-mix(in srgb, var(--primary) 40%, transparent)"
+                  stopColor="color-mix(in srgb, var(--accent) 40%, transparent)"
                 />
-                <stop offset="100%" stopColor="var(--primary)" />
+                <stop offset="100%" stopColor="var(--accent)" />
               </linearGradient>
             </defs>
             <CartesianGrid
               horizontal={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis
               type="number"
               tickLine={false}
               axisLine={false}
               tickFormatter={formatNumber}
-              tick={{ fill: "var(--default-500)" }}
+              tick={{ fill: "var(--muted)" }}
             />
             <YAxis
               type="category"
@@ -155,13 +155,13 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
               tickLine={false}
               axisLine={false}
               width={180}
-              tick={{ fill: "var(--default-600)" }}
+              tick={{ fill: "var(--muted)" }}
               tickFormatter={(value: string) =>
                 value.replace("Vehicles Exempted From VQS", "VQS Exempted")
               }
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={
                 <ChartTooltipContent
                   formatter={(value, _name, item) => {
@@ -193,7 +193,7 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
         </ChartContainer>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Click on a bar to select a category, or use the dropdown above to
           change the month
         </Typography.TextSm>

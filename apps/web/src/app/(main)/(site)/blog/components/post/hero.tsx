@@ -35,7 +35,7 @@ export function Hero({ post }: HeroProps) {
                 className="object-cover"
                 priority
               />
-              <div className="absolute inset-0 bg-linear-to-br from-primary/40 to-primary/20" />
+              <div className="absolute inset-0 bg-linear-to-br from-accent/40 to-accent/20" />
             </div>
           ) : (
             <Cover
@@ -44,16 +44,16 @@ export function Hero({ post }: HeroProps) {
             />
           )}
           <div className="flex flex-col justify-center gap-4 p-6 md:col-span-3">
-            <div className="flex items-center gap-2 text-default-400 text-sm">
+            <div className="flex items-center gap-2 text-muted text-sm">
               <span>{formatDate(publishedDate)}</span>
-              <span className="size-1 rounded-full bg-default-300" />
+              <span className="size-1 rounded-full bg-default" />
               <span>{readingTime} min read</span>
             </div>
             <h2 className="line-clamp-3 font-bold text-2xl leading-tight md:text-3xl">
               {post.title}
             </h2>
             {excerpt && (
-              <p className="line-clamp-3 text-base text-default-500 leading-relaxed">
+              <p className="line-clamp-3 text-base text-muted leading-relaxed">
                 {excerpt}
               </p>
             )}

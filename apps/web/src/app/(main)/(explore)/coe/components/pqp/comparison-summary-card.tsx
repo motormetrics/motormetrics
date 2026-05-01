@@ -36,10 +36,8 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
               <Card.Content>
                 <div className="flex flex-col gap-4">
                   <div>
-                    <div className="text-default-500 text-sm">
-                      Latest Premium
-                    </div>
-                    <div className="font-bold text-2xl text-primary">
+                    <div className="text-muted text-sm">Latest Premium</div>
+                    <div className="font-bold text-2xl text-accent">
                       <AnimatedNumber
                         value={item.latestPremium}
                         format="currency"
@@ -47,7 +45,7 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
                     </div>
                   </div>
                   <div>
-                    <div className="text-default-500 text-sm">PQP Rate</div>
+                    <div className="text-muted text-sm">PQP Rate</div>
                     <div className="font-bold text-2xl">
                       <AnimatedNumber value={item.pqpRate} format="currency" />
                     </div>
@@ -73,7 +71,7 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
                     ) : null}
                     <AnimatedNumber value={Math.abs(item.differencePercent)} />%
                   </Chip>
-                  <span className="text-default-500 text-sm">
+                  <span className="text-muted text-sm">
                     PQP{" "}
                     {isPQPLower ? "below" : isPQPHigher ? "above" : "equals"}{" "}
                     premium

@@ -27,7 +27,7 @@ export function TrendsChart({ data }: TrendsChartProps) {
       <Card.Header>
         <div className="flex flex-col gap-1">
           <Typography.H4>PQP Trends</Typography.H4>
-          <Typography.TextSm className="text-default-500">
+          <Typography.TextSm className="text-muted">
             Historical Prevailing Quota Premium rates across all COE categories
           </Typography.TextSm>
         </div>
@@ -38,7 +38,7 @@ export function TrendsChart({ data }: TrendsChartProps) {
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis
               dataKey="month"
@@ -71,7 +71,7 @@ export function TrendsChart({ data }: TrendsChartProps) {
         </ChartContainer>
       </Card.Content>
       <Card.Footer>
-        <p className="text-default-500 text-sm">
+        <p className="text-muted text-sm">
           Historical PQP rates (3-month average COE prices) used for COE
           renewals across categories.
         </p>

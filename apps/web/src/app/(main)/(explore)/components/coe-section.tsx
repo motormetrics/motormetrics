@@ -60,11 +60,11 @@ async function CoeSectionContent() {
             return (
               <Card
                 key={result.vehicleClass}
-                className="bg-surface-secondary shadow-none"
+                className="bg-surface shadow-none"
               >
                 <Card.Content>
                   <div className="mb-2 flex items-center justify-between">
-                    <span className="font-medium text-default-500 text-xs">
+                    <span className="font-medium text-muted text-xs">
                       {result.vehicleClass}
                     </span>
                     {trend !== "neutral" && <TrendBadge trend={trend} />}
@@ -78,7 +78,7 @@ async function CoeSectionContent() {
                         ? "text-danger"
                         : trend === "down"
                           ? "text-success"
-                          : "text-default-500"
+                          : "text-muted"
                     }`}
                   >
                     {changePercent}
@@ -100,7 +100,7 @@ function CoeSectionSkeleton() {
         <Skeleton className="mb-5 h-6 w-40 rounded-lg" />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {[0, 1, 2, 3, 4].map((i) => (
-            <Card key={i} className="bg-default-100 shadow-none">
+            <Card key={i} className="bg-default shadow-none">
               <Card.Content>
                 <Skeleton className="mb-2 h-4 w-12 rounded-lg" />
                 <Skeleton className="h-6 w-20 rounded-lg" />

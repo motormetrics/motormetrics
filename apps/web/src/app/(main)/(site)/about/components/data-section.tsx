@@ -34,12 +34,12 @@ const features = [
 
 export function DataSection() {
   return (
-    <section className="relative -mx-6 overflow-hidden bg-default-100 px-6 py-20 lg:py-28">
+    <section className="relative -mx-6 overflow-hidden bg-default px-6 py-20 lg:py-28">
       {/* Subtle background pattern */}
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
         style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--default-500) 15%, transparent) 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--muted) 15%, transparent) 1px, transparent 0)`,
           backgroundSize: "24px 24px",
         }}
         aria-hidden="true"
@@ -56,22 +56,22 @@ export function DataSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-primary uppercase tracking-widest">
+              <Typography.Label className="text-accent uppercase tracking-widest">
                 Data Transparency
               </Typography.Label>
               <Typography.H2 className="lg:text-4xl">
                 Where the data comes from
               </Typography.H2>
-              <Typography.Text className="text-default-600">
+              <Typography.Text className="text-muted">
                 Here&apos;s where the data comes from and how it&apos;s
                 processed.
               </Typography.Text>
 
               {/* LTA Badge */}
-              <Card className="border-default-200">
+              <Card className="border-border">
                 <Card.Content className="flex flex-row items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-default-200">
-                    <Database className="h-6 w-6 text-default-600" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-default">
+                    <Database className="h-6 w-6 text-muted" />
                   </div>
                   <div>
                     <div className="font-medium text-foreground text-sm">
@@ -81,7 +81,7 @@ export function DataSection() {
                       href="https://datamall.lta.gov.sg"
                       target="_blank"
                       rel="noreferrer"
-                      className="text-primary text-sm underline"
+                      className="text-accent text-sm underline"
                     >
                       LTA DataMall
                     </Link>
@@ -102,10 +102,10 @@ export function DataSection() {
             >
               {features.map((feature) => (
                 <motion.div key={feature.title} variants={staggerItemVariants}>
-                  <Card className="group h-full border-default-200/80 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+                  <Card className="group h-full border-border/80 transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
                     <Card.Content className="flex flex-col gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-default-200 transition-colors group-hover:bg-primary/10">
-                        <feature.icon className="h-6 w-6 text-default-600 transition-colors group-hover:text-primary" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-default transition-colors group-hover:bg-accent/10">
+                        <feature.icon className="h-6 w-6 text-muted transition-colors group-hover:text-accent" />
                       </div>
                       <div className="flex flex-col gap-2">
                         <Typography.H4>{feature.title}</Typography.H4>

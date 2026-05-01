@@ -1,61 +1,53 @@
-/* TODO: Redesign with Navy Blue derived palette when dark mode (#714) is implemented */
-.dark {
-  --background: hsl(222.2 84% 4.9%);
-  --foreground: hsl(210 40% 98%);
-  --surface: hsl(222.2 84% 4.9%);
-  --surface-foreground: hsl(210 40% 98%);
-  --surface-secondary: hsl(217.2 32.6% 17.5%);
-  --surface-secondary-foreground: hsl(210 40% 98%);
-  --surface-tertiary: hsl(215 25% 27%);
-  --surface-tertiary-foreground: hsl(210 40% 98%);
-  --overlay: hsl(222.2 84% 4.9%);
-  --overlay-foreground: hsl(210 40% 98%);
-  --primary: hsl(217.2 91.2% 59.8%);
-  --primary-foreground: hsl(222.2 47.4% 11.2%);
-  --secondary: hsl(217.2 32.6% 17.5%);
-  --secondary-foreground: hsl(210 40% 98%);
-  --default: hsl(217.2 32.6% 17.5%);
-  --default-foreground: hsl(210 40% 98%);
-  --default-50: hsl(222.2 84% 4.9%);
-  --default-100: hsl(217.2 32.6% 17.5%);
-  --default-200: hsl(215 25% 27%);
-  --default-300: hsl(215 19% 35%);
-  --default-400: hsl(215 20.2% 65.1%);
-  --default-500: hsl(215 20.2% 65.1%);
-  --default-600: hsl(210 40% 98%);
-  --default-700: hsl(210 40% 98%);
-  --default-800: hsl(210 40% 98%);
-  --default-900: hsl(210 40% 98%);
-  --muted: hsl(217.2 32.6% 17.5%);
-  --scrollbar: hsl(215 20.2% 65.1%);
-  --accent: hsl(217.2 32.6% 17.5%);
-  --accent-foreground: hsl(210 40% 98%);
-  --success: hsl(160 60% 45%);
-  --success-foreground: hsl(210 40% 98%);
-  --warning: hsl(38 92% 50%);
-  --warning-foreground: hsl(222.2 84% 4.9%);
-  --danger: hsl(0 62.8% 30.6%);
-  --danger-foreground: hsl(210 40% 98%);
-  --segment: hsl(217.2 32.6% 17.5%);
-  --segment-foreground: hsl(210 40% 98%);
-  --border: hsl(217.2 32.6% 17.5%);
-  --divider: hsl(217.2 32.6% 17.5%);
-  --separator: hsl(217.2 32.6% 17.5%);
-  --focus: hsl(224.3 76.3% 48%);
-  --link: hsl(217.2 91.2% 59.8%);
-  --backdrop: rgba(0, 0, 0, 0.6);
-  --field-background: hsl(217.2 32.6% 17.5%);
-  --field-foreground: hsl(210 40% 98%);
-  --field-placeholder: hsl(215 20.2% 65.1%);
-  --field-border: hsl(217.2 32.6% 17.5%);
-  --field-border-width: 0px;
-  --field-shadow: 0 0 0 0 transparent inset;
-  --surface-shadow: 0 0 0 0 transparent inset;
-  --overlay-shadow: 0 0 0 0 transparent inset;
-  --chart-1: hsl(220 70% 50%);
-  --chart-2: hsl(160 60% 45%);
-  --chart-3: hsl(30 80% 55%);
-  --chart-4: hsl(280 65% 60%);
-  --chart-5: hsl(340 75% 55%);
-  --chart-6: hsl(100 70% 50%);
+@layer base {
+  .dark,
+  [data-theme="dark"] {
+    color-scheme: dark;
+
+    /* Base Colors */
+    --background: oklch(0.1371 0.036 258.53);
+    --foreground: oklch(0.9838 0.0035 247.86);
+
+    /* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
+    --surface: oklch(0.28 0.0369 259.97);
+    --surface-foreground: var(--foreground);
+
+    /* Overlay: Used for floating/overlay components (tooltips, popovers, modals, menus) */
+    --overlay: oklch(0.3037 0.0413 259.96);
+    --overlay-foreground: var(--foreground);
+
+    --muted: oklch(0.7107 0.0351 256.79);
+    --scrollbar: oklch(0.7107 0.0351 256.79);
+
+    --default: oklch(0.28 0.0369 259.97);
+    --default-foreground: var(--foreground);
+
+    /* Form Field Defaults - Colors (only the ones that are different from light theme) */
+    --field-background: var(--default);
+    --field-foreground: var(--foreground);
+
+    /* Status Colors */
+    --warning: oklch(0.7697 0.1645 70.61);
+    --warning-foreground: var(--background);
+
+    --danger: oklch(0.3959 0.1331 25.72);
+    --danger-foreground: var(--foreground);
+
+    /* Component Colors */
+    --segment: oklch(0.28 0.0369 259.97);
+    --segment-foreground: var(--foreground);
+
+    /* Misc Colors */
+    --border: oklch(0.28 0.0369 259.97);
+    --separator: oklch(0.28 0.0369 259.97);
+    --focus: var(--accent);
+    --link: var(--foreground);
+
+    /* Backdrop */
+    --backdrop: rgba(0, 0, 0, 0.6);
+
+    /* Shadows */
+    --surface-shadow: 0 0 0 0 transparent inset;
+    --overlay-shadow: 0 0 0 0 transparent inset;
+    --field-shadow: 0 0 0 0 transparent inset;
+  }
 }

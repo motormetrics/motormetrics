@@ -20,9 +20,9 @@ const RangeBar = ({ lowest, highest, globalMin, globalMax }: RangeBarProps) => {
   const widthPercent = range > 0 ? ((highest - lowest) / range) * 100 : 100;
 
   return (
-    <div className="relative h-2 w-full rounded-full bg-default-100">
+    <div className="relative h-2 w-full rounded-full bg-default">
       <div
-        className="absolute h-full rounded-full bg-primary/30 transition-all duration-500 ease-out"
+        className="absolute h-full rounded-full bg-accent/30 transition-all duration-500 ease-out"
         style={{
           left: `${leftPercent}%`,
           width: `${Math.max(widthPercent, 2)}%`,
@@ -30,13 +30,13 @@ const RangeBar = ({ lowest, highest, globalMin, globalMax }: RangeBarProps) => {
       />
       {/* Low marker */}
       <div
-        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-primary"
+        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-accent"
         style={{ left: `${leftPercent}%` }}
         title={`Low: ${formatCurrency(lowest)}`}
       />
       {/* High marker */}
       <div
-        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-primary"
+        className="absolute top-1/2 h-3 w-1 -translate-y-1/2 rounded-full bg-accent"
         style={{ left: `${leftPercent + widthPercent}%` }}
         title={`High: ${formatCurrency(highest)}`}
       />
@@ -71,7 +71,7 @@ const RangeSection = ({
         <Chip size="sm" variant="soft" className="font-medium">
           {label}
         </Chip>
-        <span className="text-default-400 text-xs">
+        <span className="text-muted text-xs">
           Spread: {formatCurrency(spread)}
         </span>
       </div>
@@ -87,12 +87,12 @@ const RangeSection = ({
         {/* Low value */}
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-primary" />
-            <span className="text-default-500 text-xs uppercase tracking-wider">
+            <div className="h-2 w-2 rounded-full bg-accent" />
+            <span className="text-muted text-xs uppercase tracking-wider">
               Low
             </span>
           </div>
-          <span className="font-semibold text-lg text-primary tabular-nums">
+          <span className="font-semibold text-accent text-lg tabular-nums">
             {formatCurrency(lowest)}
           </span>
           {lowestDate && (
@@ -105,12 +105,12 @@ const RangeSection = ({
         {/* High value */}
         <div className="flex flex-col gap-1 text-right">
           <div className="flex items-center justify-end gap-2">
-            <span className="text-default-500 text-xs uppercase tracking-wider">
+            <span className="text-muted text-xs uppercase tracking-wider">
               High
             </span>
-            <div className="h-2 w-2 rounded-full bg-primary" />
+            <div className="h-2 w-2 rounded-full bg-accent" />
           </div>
-          <span className="font-semibold text-lg text-primary tabular-nums">
+          <span className="font-semibold text-accent text-lg tabular-nums">
             {formatCurrency(highest)}
           </span>
           {highestDate && (
@@ -149,7 +149,7 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
             className="group relative overflow-hidden transition-shadow duration-300 hover:shadow-lg"
           >
             {/* Accent bar at top */}
-            <div className="absolute top-0 right-0 left-0 h-1 bg-primary" />
+            <div className="absolute top-0 right-0 left-0 h-1 bg-accent" />
 
             <Card.Header className="flex flex-col items-start gap-1">
               <Typography.H4>{stat.category}</Typography.H4>
@@ -177,7 +177,7 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
                   >
                     {currentYear} YTD
                   </Chip>
-                  <Typography.TextSm className="text-default-400">
+                  <Typography.TextSm className="text-muted">
                     No data available for {currentYear}
                   </Typography.TextSm>
                 </div>

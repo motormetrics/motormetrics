@@ -42,7 +42,7 @@ export function MakeDetail({
   return (
     <div className="flex flex-col gap-6">
       {/* Header with logo and make name */}
-      <div className="flex items-center gap-4 border-default-100 border-b pb-6">
+      <div className="flex items-center gap-4 border-border border-b pb-6">
         <div className="flex size-16 items-center justify-center">
           {logo?.url ? (
             <Image
@@ -53,7 +53,7 @@ export function MakeDetail({
               className="object-contain"
             />
           ) : (
-            <span className="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground text-xl">
+            <span className="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-xl">
               {cars.make.charAt(0)}
             </span>
           )}
@@ -66,18 +66,18 @@ export function MakeDetail({
 
       {/* Metric cards */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="flex flex-col gap-2 rounded-2xl bg-default-100 p-4">
+        <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
           <div className="flex items-center gap-2">
-            <Car className="size-3.5 text-primary" />
-            <Typography.Caption className="text-primary">
+            <Car className="size-3.5 text-accent" />
+            <Typography.Caption className="text-accent">
               Total
             </Typography.Caption>
           </div>
-          <span className="font-bold text-primary text-xl tabular-nums">
+          <span className="font-bold text-accent text-xl tabular-nums">
             {cars.total.toLocaleString()}
           </span>
         </div>
-        <div className="flex flex-col gap-2 rounded-2xl bg-default-100 p-4">
+        <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
           <div className="flex items-center gap-2">
             <TrendingUp className="size-3.5 text-success" />
             <Typography.Caption className="text-success">
@@ -88,16 +88,14 @@ export function MakeDetail({
             {cars.monthTotal.toLocaleString()}
           </span>
         </div>
-        <div className="flex flex-col gap-2 rounded-2xl bg-default-100 p-4">
+        <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
           <div className="flex items-center gap-2">
-            <Calendar className="size-3.5 text-default-500" />
+            <Calendar className="size-3.5 text-muted" />
             <Typography.Caption>Tracked</Typography.Caption>
           </div>
           <span className="font-bold text-foreground text-xl tabular-nums">
             {cars.monthsTracked}
-            <span className="ml-1 font-normal text-default-400 text-sm">
-              mo
-            </span>
+            <span className="ml-1 font-normal text-muted text-sm">mo</span>
           </span>
         </div>
       </div>
@@ -128,7 +126,7 @@ export function MakeDetail({
                   <Link
                     key={name}
                     href={`/cars/fuel-types/${slugify(name)}`}
-                    className="text-primary text-sm hover:underline"
+                    className="text-accent text-sm hover:underline"
                   >
                     {name}
                   </Link>
@@ -148,7 +146,7 @@ export function MakeDetail({
                   <Link
                     key={name}
                     href={`/cars/vehicle-types/${slugify(name)}`}
-                    className="text-primary text-sm hover:underline"
+                    className="text-accent text-sm hover:underline"
                   >
                     {name}
                   </Link>

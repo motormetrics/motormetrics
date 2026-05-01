@@ -23,7 +23,7 @@ interface TrendsChartProps {
 
 export function TrendsChart({ data }: TrendsChartProps) {
   const chartConfig = {
-    total: { label: "Deregistrations", color: "var(--primary)" },
+    total: { label: "Deregistrations", color: "var(--accent)" },
   } as const;
 
   const formattedData = data.map((item) => ({
@@ -56,29 +56,21 @@ export function TrendsChart({ data }: TrendsChartProps) {
           >
             <defs>
               <linearGradient id="trendsGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor="var(--primary)"
-                  stopOpacity={0.3}
-                />
-                <stop
-                  offset="100%"
-                  stopColor="var(--primary)"
-                  stopOpacity={0}
-                />
+                <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis
               dataKey="month"
               tickLine={false}
               axisLine={false}
               className="text-xs"
-              tick={{ fill: "var(--default-500)" }}
+              tick={{ fill: "var(--muted)" }}
             />
             <YAxis
               tickLine={false}
@@ -86,10 +78,10 @@ export function TrendsChart({ data }: TrendsChartProps) {
               width={60}
               tickFormatter={formatNumber}
               className="text-xs"
-              tick={{ fill: "var(--default-500)" }}
+              tick={{ fill: "var(--muted)" }}
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={
                 <ChartTooltipContent
                   formatter={(value) => formatNumber(value as number)}
@@ -99,7 +91,7 @@ export function TrendsChart({ data }: TrendsChartProps) {
             <Area
               type="monotone"
               dataKey="total"
-              stroke="var(--primary)"
+              stroke="var(--accent)"
               strokeWidth={2}
               fill="url(#trendsGradient)"
             />

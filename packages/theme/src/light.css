@@ -1,109 +1,92 @@
-:root,
-:host {
-  /* Background & Foreground - Professional colour scheme (Issue #406) */
-  --background: hsl(213 32% 95%); /* #F0F4F8 - Light blue-gray */
-  --foreground: hsl(220 15% 20%);
+@layer base {
+  :root {
+    color-scheme: light;
 
-  /* Surface & Overlay */
-  --surface: hsl(0 0% 100%);
-  --surface-foreground: hsl(220 15% 20%);
-  --surface-secondary: hsl(213 32% 97%);
-  --surface-secondary-foreground: hsl(220 15% 20%);
-  --surface-tertiary: hsl(213 32% 95%);
-  --surface-tertiary-foreground: hsl(220 15% 20%);
-  --overlay: hsl(0 0% 100%);
-  --overlay-foreground: hsl(220 15% 20%);
+    /* Primitive Colors (Do not change between light and dark) */
+    --white: oklch(100% 0 0);
+    --black: oklch(0% 0 0);
+    --snow: oklch(0.9911 0 0);
+    --eclipse: oklch(0.3103 0.0197 264.23);
 
-  /* Primary - Navy Blue */
-  --primary: hsl(240 63% 27%); /* #191970 */
-  --primary-foreground: hsl(0 0% 100%);
+    /* Spacing scale */
+    --spacing: 0.25rem;
 
-  /* Secondary - Slate Gray */
-  --secondary: hsl(210 13% 50%); /* #708090 */
-  --secondary-foreground: hsl(0 0% 100%);
+    /* Border */
+    --border-width: 1px;
+    --field-border-width: 0px;
+    --disabled-opacity: 0.5;
 
-  /* HeroUI default scale */
-  --default: hsl(214 32% 91%);
-  --default-foreground: hsl(220 15% 20%);
-  --default-50: hsl(210 40% 98%);
-  --default-100: hsl(210 40% 96%);
-  --default-200: hsl(214 32% 91%);
-  --default-300: hsl(213 27% 84%);
-  --default-400: hsl(215 20% 65%);
-  --default-500: hsl(215 16% 47%);
-  --default-600: hsl(215 19% 35%);
-  --default-700: hsl(215 25% 27%);
-  --default-800: hsl(217 33% 17%);
-  --default-900: hsl(222 47% 11%);
+    /* Ring offset - Used for focus ring */
+    --ring-offset-width: 2px;
 
-  /* Muted - Light Blue-Gray */
-  --muted: hsl(213 32% 95%); /* #F0F4F8 */
-  --scrollbar: hsl(214 32% 91%);
+    /* Cursor */
+    --cursor-interactive: pointer;
+    --cursor-disabled: not-allowed;
 
-  /* Accent - Steel Blue */
-  --accent: hsl(220 40% 49%); /* #4A6AAE */
-  --accent-foreground: hsl(0 0% 100%);
+    /* Radius */
+    --radius: 0.5rem;
+    --field-radius: calc(var(--radius) * 1.5);
 
-  /* Success - Green */
-  --success: hsl(142 71% 45%); /* #22C55E */
-  --success-foreground: hsl(0 0% 100%);
+    /* Base Colors */
+    --background: oklch(0.9592 0.0072 253.27);
+    --foreground: var(--eclipse);
 
-  --warning: hsl(38 92% 50%);
-  --warning-foreground: hsl(220 15% 20%);
-  --danger: hsl(0 72% 51%); /* #DC2626 */
-  --danger-foreground: hsl(0 0% 100%);
-  --segment: hsl(0 0% 100%);
-  --segment-foreground: hsl(220 15% 20%);
+    /* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
+    --surface: var(--white);
+    --surface-foreground: var(--foreground);
 
-  /* Border - Light Slate */
-  --border: hsl(214 32% 91%); /* #E2E8F0 */
-  --divider: hsl(214 32% 91%);
-  --separator: hsl(214 32% 91%);
-  --focus: hsl(240 63% 27%);
-  --link: hsl(240 63% 27%);
-  --backdrop: rgba(0, 0, 0, 0.5);
-  --field-background: hsl(0 0% 100%);
-  --field-foreground: hsl(220 15% 20%);
-  --field-placeholder: hsl(215 16% 47%);
-  --field-border: hsl(214 32% 91%);
-  --border-width: 1px;
-  --field-border-width: 0px;
-  --disabled-opacity: 0.5;
-  --ring-offset-width: 2px;
-  --cursor-interactive: pointer;
-  --cursor-disabled: not-allowed;
-  --surface-shadow:
-    0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
-    0 0 1px 0 rgba(0, 0, 0, 0.06);
-  --overlay-shadow:
-    0 4px 16px 0 rgba(24, 24, 27, 0.08), 0 8px 24px 0 rgba(24, 24, 27, 0.09);
-  --field-shadow:
-    0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
-    0 0 1px 0 rgba(0, 0, 0, 0.06);
-  --skeleton-animation: shimmer;
+    /* Overlay: Used for floating/overlay components (tooltips, popovers, modals, menus) */
+    --overlay: var(--white);
+    --overlay-foreground: var(--foreground);
 
-  /* Radius tokens */
-  --radius: 0.5rem;
-  --field-radius: calc(var(--radius) * 1.5);
-  --radius-sm: 0.5rem; /* 8px */
-  --radius-md: 0.75rem; /* 12px */
-  --radius-lg: 1rem; /* 16px */
-  --radius-xl: 1.5rem; /* 24px */
-  --radius-full: 9999px;
+    --muted: oklch(0.5564 0.0398 256.82);
+    --scrollbar: oklch(0.9258 0.0132 255.03);
 
-  /* Chart colours - Navy Blue gradient palette */
-  --chart-1: hsl(240 64% 27%);
-  --chart-2: hsl(220 51% 37%);
-  --chart-3: hsl(220 41% 49%);
-  --chart-4: hsl(210 14% 53%);
-  --chart-5: hsl(215 23% 65%);
-  --chart-6: hsl(212 17% 76%);
+    --default: oklch(0.9258 0.0132 255.03);
+    --default-foreground: var(--foreground);
 
-  /* Surface colours for card hierarchy */
-  --surface-1: hsl(0 0% 100%);
-  --surface-2: hsl(213 32% 97%);
-  --surface-3: hsl(213 32% 95%);
+    --accent: oklch(0.2894 0.1433 272.9);
+    --accent-foreground: var(--white);
 
-  /* Chart grid stroke */
-  --chart-grid: hsl(214 32% 91%);
+    /* Form Field Defaults - Colors */
+    --field-background: var(--white);
+    --field-foreground: var(--foreground);
+    --field-placeholder: var(--muted);
+    --field-border: transparent;
+
+    /* Status Colors */
+    --success: oklch(0.7205 0.192 149.49);
+    --success-foreground: var(--foreground);
+
+    --warning: oklch(0.7697 0.1645 70.61);
+    --warning-foreground: var(--foreground);
+
+    --danger: oklch(0.5786 0.2137 27.17);
+    --danger-foreground: var(--white);
+
+    /* Component Colors */
+    --segment: var(--white);
+    --segment-foreground: var(--foreground);
+
+    /* Misc Colors */
+    --border: oklch(0.9258 0.0132 255.03);
+    --separator: oklch(0.9258 0.0132 255.03);
+    --focus: var(--accent);
+    --link: var(--foreground);
+
+    /* Backdrop */
+    --backdrop: rgba(0, 0, 0, 0.5);
+
+    /* Shadows */
+    --surface-shadow:
+      0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+      0 0 1px 0 rgba(0, 0, 0, 0.06);
+    --overlay-shadow: 0 4px 16px 0 rgba(24, 24, 27, 0.08), 0 8px 24px 0 rgba(24, 24, 27, 0.09);
+    --field-shadow:
+      0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+      0 0 1px 0 rgba(0, 0, 0, 0.06);
+
+    /* Skeleton Default Global Animation */
+    --skeleton-animation: shimmer;
+  }
 }

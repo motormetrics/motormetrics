@@ -36,7 +36,7 @@ const getTrendColour = (trend?: Trend): string => {
     case "neutral":
       return "var(--warning)";
     default:
-      return "var(--primary)";
+      return "var(--accent)";
   }
 };
 
@@ -62,7 +62,7 @@ export function LatestCoePremium({ results, trends }: LatestCoePremiumProps) {
             </Card.Header>
             <Card.Content>
               <div className="grid grid-cols-2 items-center gap-2">
-                <div className="bg-gradient-to-br from-primary to-primary/70 bg-clip-text font-bold text-2xl text-transparent">
+                <div className="bg-gradient-to-br from-accent to-accent/70 bg-clip-text font-bold text-2xl text-transparent">
                   <AnimatedNumber value={result.premium} format="currency" />
                 </div>
                 {sparklineData.length > 0 && (

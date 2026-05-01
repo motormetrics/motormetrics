@@ -43,7 +43,7 @@ export function CategoryInfo({
         "pointer-events-none flex cursor-not-allowed items-center gap-2 rounded-xl border-2 border-transparent p-2 hover:bg-gray-100",
         {
           "pointer-events-auto cursor-pointer": canFilter,
-          "border-primary": isSelected,
+          "border-accent": isSelected,
         },
       )}
       onClick={handleFilterCategories}

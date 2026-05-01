@@ -7,10 +7,10 @@ export function CostLegend() {
         return (
           <div
             key={abbr}
-            className="flex items-center gap-2 rounded-full bg-default-100 px-4 py-2"
+            className="flex items-center gap-2 rounded-full bg-default px-4 py-2"
           >
-            <span className="font-medium text-default-700 text-xs">{abbr}</span>
-            <span className="text-default-500 text-xs">{definition}</span>
+            <span className="font-medium text-foreground text-xs">{abbr}</span>
+            <span className="text-muted text-xs">{definition}</span>
           </div>
         );
       })}

@@ -26,7 +26,7 @@ export function BlogHero({
   const categoryLabel = tags && tags.length > 0 ? tags[0] : "Market Analysis";
 
   return (
-    <div className="relative mb-12 w-full overflow-hidden bg-linear-to-br from-primary to-primary/70 py-16 md:py-24">
+    <div className="relative mb-12 w-full overflow-hidden bg-linear-to-br from-accent to-accent/70 py-16 md:py-24">
       {heroImage && (
         <>
           <Image
@@ -37,7 +37,7 @@ export function BlogHero({
             sizes="100vw"
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-linear-to-br from-primary/85 to-primary/70" />
+          <div className="absolute inset-0 bg-linear-to-br from-accent/85 to-accent/70" />
         </>
       )}
       <div className="container relative mx-auto flex flex-col justify-end px-6 md:px-12">

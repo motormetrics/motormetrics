@@ -15,7 +15,7 @@ export function BlogSearchInput() {
 
   return (
     <div className="relative">
-      <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-default-400" />
+      <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted" />
       <Input
         aria-label="Search blog posts"
         className="w-full rounded-full pr-10 pl-9"
@@ -32,7 +32,7 @@ export function BlogSearchInput() {
             onPress={() => setQuery("")}
             aria-label="Clear search"
           >
-            <X className="size-4 text-default-400" />
+            <X className="size-4 text-muted" />
           </Button>
         ) : null}
       </div>

@@ -97,34 +97,34 @@ export function PARFCalculator() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Card className="border border-default-200 bg-default-50 shadow-none">
+          <Card className="border border-border bg-default shadow-none">
             <Card.Content className="flex flex-col gap-4">
               <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-default-400" />
-                <Typography.Caption className="font-semibold text-default-500 uppercase tracking-wider">
+                <span className="size-2 rounded-full bg-muted" />
+                <Typography.Caption className="font-semibold text-muted uppercase tracking-wider">
                   Before Budget 2026
                 </Typography.Caption>
               </div>
               <div className="flex flex-col gap-2">
                 <Typography.Caption>PARF Rebate</Typography.Caption>
-                <span className="font-bold text-3xl text-default-600 tracking-tight">
+                <span className="font-bold text-3xl text-muted tracking-tight">
                   <Currency value={result.oldRebate} />
                 </span>
               </div>
               <Separator />
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-default-500">Rebate Rate</span>
+                  <span className="text-muted">Rebate Rate</span>
                   <span className="font-medium">{bracket.oldRate * 100}%</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-default-500">Uncapped Amount</span>
+                  <span className="text-muted">Uncapped Amount</span>
                   <span className="font-medium">
                     <Currency value={result.oldUncapped} />
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-default-500">Cap</span>
+                  <span className="text-muted">Cap</span>
                   <span className="font-medium">
                     <Currency value={OLD_CAP} />
                   </span>
@@ -141,31 +141,31 @@ export function PARFCalculator() {
           <Card className="border border-accent/20 bg-accent-soft shadow-none">
             <Card.Content className="flex flex-col gap-4">
               <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-primary" />
-                <Typography.Caption className="font-semibold text-primary uppercase tracking-wider">
+                <span className="size-2 rounded-full bg-accent" />
+                <Typography.Caption className="font-semibold text-accent uppercase tracking-wider">
                   After Budget 2026
                 </Typography.Caption>
               </div>
               <div className="flex flex-col gap-2">
                 <Typography.Caption>PARF Rebate</Typography.Caption>
-                <span className="font-bold text-3xl text-primary tracking-tight">
+                <span className="font-bold text-3xl text-accent tracking-tight">
                   <Currency value={result.newRebate} />
                 </span>
               </div>
               <Separator />
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-default-500">Rebate Rate</span>
+                  <span className="text-muted">Rebate Rate</span>
                   <span className="font-medium">{bracket.newRate * 100}%</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-default-500">Uncapped Amount</span>
+                  <span className="text-muted">Uncapped Amount</span>
                   <span className="font-medium">
                     <Currency value={result.newUncapped} />
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-default-500">Cap</span>
+                  <span className="text-muted">Cap</span>
                   <span className="font-medium">
                     <Currency value={NEW_CAP} />
                   </span>

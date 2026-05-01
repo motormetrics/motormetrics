@@ -62,7 +62,7 @@ export function VehiclePopulationMetrics({
           <Typography.H4>Total Fleet Size</Typography.H4>
         </Card.Header>
         <Card.Content>
-          <span className="font-semibold text-4xl text-primary tabular-nums">
+          <span className="font-semibold text-4xl text-accent tabular-nums">
             {numberFormatter.format(totalFleet)}
           </span>
         </Card.Content>
@@ -99,7 +99,7 @@ export function VehiclePopulationMetrics({
           <span className="font-semibold text-4xl tabular-nums">
             {evShare.toFixed(1)}%
           </span>
-          <Typography.TextSm className="text-default-500">
+          <Typography.TextSm className="text-muted">
             {numberFormatter.format(electricTotal)} electric vehicles
           </Typography.TextSm>
         </Card.Content>

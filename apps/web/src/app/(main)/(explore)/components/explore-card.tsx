@@ -31,12 +31,12 @@ export function ExploreCard({
         className={cn(
           "h-full transition-all duration-300",
           "hover:scale-[1.02] hover:shadow-lg",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
           isHero && [
-            "bg-gradient-to-br from-primary/5 via-primary/8 to-primary/12",
-            "border border-primary/10",
+            "bg-gradient-to-br from-accent/5 via-accent/8 to-accent/12",
+            "border border-accent/10",
           ],
-          isTool && "border border-default-200 bg-default-100/50",
+          isTool && "border border-border bg-default/50",
           !isHero && !isTool && "bg-surface",
         )}
       >
@@ -50,7 +50,7 @@ export function ExploreCard({
             <div
               className={cn(
                 "flex items-center justify-center rounded-xl",
-                isHero ? "size-12 bg-primary/10" : "size-10 bg-default-100",
+                isHero ? "size-12 bg-accent/10" : "size-10 bg-default",
               )}
             >
               {icon}
@@ -59,11 +59,11 @@ export function ExploreCard({
             {badge === "beta" && <BetaChip />}
           </div>
           {isHero ? (
-            <Typography.H3 className="transition-colors group-hover:text-primary">
+            <Typography.H3 className="transition-colors group-hover:text-accent">
               {title}
             </Typography.H3>
           ) : (
-            <Typography.H4 className="transition-colors group-hover:text-primary">
+            <Typography.H4 className="transition-colors group-hover:text-accent">
               {title}
             </Typography.H4>
           )}
@@ -71,7 +71,7 @@ export function ExploreCard({
         <Card.Content
           className={cn("pt-0", isHero ? "px-6 pb-6" : "px-4 pb-4")}
         >
-          <Typography.TextSm className={isHero ? "text-default-600" : ""}>
+          <Typography.TextSm className={isHero ? "text-muted" : ""}>
             {description}
           </Typography.TextSm>
         </Card.Content>

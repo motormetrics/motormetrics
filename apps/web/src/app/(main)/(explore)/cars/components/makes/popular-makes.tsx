@@ -23,8 +23,8 @@ export function PopularMakes({
     <section className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
-          <div className="flex size-7 items-center justify-center rounded-lg bg-primary">
-            <TrendingUp className="size-4 text-primary-foreground" />
+          <div className="flex size-7 items-center justify-center rounded-lg bg-accent">
+            <TrendingUp className="size-4 text-accent-foreground" />
           </div>
           <h2 className="font-semibold text-foreground text-lg">
             Popular Makes

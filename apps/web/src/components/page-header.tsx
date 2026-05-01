@@ -24,7 +24,7 @@ export function PageHeader({
         <div className="flex flex-col">
           <Typography.H1>{title}</Typography.H1>
           {subtitle && (
-            <Typography.TextLg className="text-default-500">
+            <Typography.TextLg className="text-muted">
               {subtitle}
             </Typography.TextLg>
           )}

@@ -46,7 +46,7 @@ export function TypeBreakdownChart({
             <CartesianGrid
               horizontal={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis
               type="number"
@@ -62,7 +62,7 @@ export function TypeBreakdownChart({
               width={100}
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={<ChartTooltipContent />}
             />
             <Bar dataKey="value" radius={[0, 4, 4, 0]}>

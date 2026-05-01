@@ -101,7 +101,7 @@ export default function Page() {
           and more. Looking for COE data?{" "}
           <Link
             href="/coe"
-            className="text-primary underline-offset-4 hover:underline"
+            className="text-accent underline-offset-4 hover:underline"
           >
             View COE premiums and results
           </Link>
@@ -136,7 +136,7 @@ export default function Page() {
                       <Icon
                         className={cn(
                           isHero ? "size-6" : "size-5",
-                          iconColor ?? "text-primary",
+                          iconColor ?? "text-accent",
                         )}
                       />
                     )

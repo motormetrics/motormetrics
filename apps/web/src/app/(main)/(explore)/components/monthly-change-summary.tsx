@@ -34,11 +34,11 @@ export async function MonthlyChangeSummary() {
   );
 
   return (
-    <Card className="border-2 border-primary">
+    <Card className="border-2 border-accent">
       <Card.Content>
         <div className="mb-4 flex items-center justify-between">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
-            <CalendarDays className="size-6 text-primary" />
+          <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10">
+            <CalendarDays className="size-6 text-accent" />
           </div>
           <Link
             href={`/cars?month=${latestMonth}`}
@@ -49,10 +49,8 @@ export async function MonthlyChangeSummary() {
             </Button>
           </Link>
         </div>
-        <p className="text-default-500 text-sm">
-          Monthly Change ({displayMonth})
-        </p>
-        <p className="mt-1 font-bold text-4xl text-primary tabular-nums">
+        <p className="text-muted text-sm">Monthly Change ({displayMonth})</p>
+        <p className="mt-1 font-bold text-4xl text-accent tabular-nums">
           {isPositive ? "+" : ""}
           <AnimatedNumber value={Number(changePercent)} />%
         </p>
@@ -70,7 +68,7 @@ export async function MonthlyChangeSummary() {
             {isPositive ? "+" : ""}
             {changeAmount.toLocaleString()}
           </Chip>
-          <span className="text-default-500 text-xs">vs previous month</span>
+          <span className="text-muted text-xs">vs previous month</span>
         </div>
       </Card.Content>
     </Card>

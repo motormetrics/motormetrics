@@ -16,7 +16,7 @@ interface SparklineProps {
   colour?: string;
 }
 
-const DEFAULT_COLOUR = "var(--primary)";
+const DEFAULT_COLOUR = "var(--accent)";
 
 export function Sparkline({
   data,

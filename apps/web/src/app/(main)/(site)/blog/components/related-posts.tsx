@@ -37,7 +37,7 @@ export async function RelatedPosts({
               href={`/blog/${post.slug}`}
               className="group block h-full"
             >
-              <Card className="h-full border-default-200 transition-colors hover:border-default-400">
+              <Card className="h-full border-border transition-colors hover:border-muted">
                 <Card.Content className="flex flex-col gap-4">
                   {/* Category Label */}
                   <Chip
@@ -55,7 +55,7 @@ export async function RelatedPosts({
                   </h3>
 
                   {/* Metadata */}
-                  <div className="flex items-center gap-2 text-default-400 text-xs">
+                  <div className="flex items-center gap-2 text-muted text-xs">
                     <span>
                       {publishedDate.toLocaleDateString("en-SG", {
                         day: "numeric",
@@ -63,7 +63,7 @@ export async function RelatedPosts({
                         year: "numeric",
                       })}
                     </span>
-                    <span className="size-1 rounded-full bg-default-300" />
+                    <span className="size-1 rounded-full bg-default" />
                     <span>{Math.ceil(readTime)} min read</span>
                   </div>
                 </Card.Content>

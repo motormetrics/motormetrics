@@ -32,12 +32,12 @@ export function CategoryHeroCard({
       <Card>
         <Card.Content>
           <div className="flex flex-col gap-4">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10">
-              <BarChart3 className="size-5 text-primary" />
+            <div className="flex size-10 items-center justify-center rounded-xl bg-accent/10">
+              <BarChart3 className="size-5 text-accent" />
             </div>
             <div className="flex flex-col gap-2">
               <Typography.Caption>Total Registrations</Typography.Caption>
-              <p className="font-bold text-3xl text-primary tabular-nums">
+              <p className="font-bold text-3xl text-accent tabular-nums">
                 <AnimatedNumber value={count} />
               </p>
               <Typography.TextSm>{formattedMonth}</Typography.TextSm>

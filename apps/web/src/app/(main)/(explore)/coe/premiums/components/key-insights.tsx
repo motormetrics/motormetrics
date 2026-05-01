@@ -52,7 +52,7 @@ export function KeyInsights({ insights }: KeyInsightsProps) {
     <Card className="overflow-hidden">
       <Card.Content>
         <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2 text-primary">
+          <div className="flex items-center gap-2 text-accent">
             <TrendingUpIcon className="size-4" />
             <span className="font-semibold">Key Insights</span>
           </div>

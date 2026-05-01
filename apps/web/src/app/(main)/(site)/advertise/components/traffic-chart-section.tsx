@@ -38,7 +38,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col gap-4">
-          <Typography.Label className="text-primary uppercase tracking-widest">
+          <Typography.Label className="text-accent uppercase tracking-widest">
             Traffic Trend
           </Typography.Label>
           <Typography.H2 className="max-w-lg lg:text-4xl">
@@ -50,7 +50,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
         <Card>
           <Card.Header className="flex flex-col items-start gap-2">
             <Typography.H4>Daily Visitors</Typography.H4>
-            <Typography.TextSm className="text-default-600">
+            <Typography.TextSm className="text-muted">
               Unique visitors and page views per day
             </Typography.TextSm>
           </Card.Header>
@@ -74,7 +74,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
                 <CartesianGrid
                   vertical={false}
                   strokeDasharray="3 3"
-                  className="stroke-default-200"
+                  className="stroke-border"
                 />
                 <XAxis
                   dataKey="date"

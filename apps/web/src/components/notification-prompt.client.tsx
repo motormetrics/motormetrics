@@ -70,7 +70,7 @@ export function NotificationPromptClient({
         className={cn([
           "bg-surface text-foreground shadow-sm",
           "rounded-md rounded-l-none border border-l-8",
-          "border-primary/20 border-l-primary",
+          "border-accent/20 border-l-accent",
         ])}
       >
         <Alert.Indicator />

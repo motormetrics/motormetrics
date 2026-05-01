@@ -11,6 +11,7 @@
   "exports": {
     "./light.css": "./src/light.css",
     "./dark.css": "./src/dark.css",
+    "./charts.css": "./src/charts.css",
     "./colours": "./src/colours.ts",
     "./charts": "./src/charts.ts",
     "./spacing": "./src/spacing.ts"

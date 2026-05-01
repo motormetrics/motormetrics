@@ -14,8 +14,8 @@ import { AlertTriangle, Calendar, Database, RefreshCw } from "lucide-react";
 const features = [
   {
     icon: Database,
-    iconColor: "text-primary",
-    containerBg: "bg-primary/10",
+    iconColor: "text-accent",
+    containerBg: "bg-accent/10",
     title: "Primary Data Source",
     description: (
       <>
@@ -51,8 +51,8 @@ const features = [
   },
   {
     icon: Calendar,
-    iconColor: "text-secondary",
-    containerBg: "bg-secondary/10",
+    iconColor: "text-muted",
+    containerBg: "bg-muted/10",
     title: "Data Coverage",
     description: (
       <>
@@ -104,22 +104,22 @@ export function DataSourcesSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-primary uppercase tracking-widest">
+              <Typography.Label className="text-accent uppercase tracking-widest">
                 Data Transparency
               </Typography.Label>
               <Typography.H2 className="lg:text-4xl">
                 Where Our Data Comes From
               </Typography.H2>
-              <Typography.Text className="text-default-600">
+              <Typography.Text className="text-muted">
                 All data is sourced from official government channels and
                 updated regularly.
               </Typography.Text>
 
               {/* LTA Badge */}
-              <Card className="border-default-200">
+              <Card className="border-border">
                 <Card.Content className="flex flex-row items-center gap-4">
-                  <div className="flex size-12 items-center justify-center rounded-lg bg-default-200">
-                    <Database className="size-6 text-default-600" />
+                  <div className="flex size-12 items-center justify-center rounded-lg bg-default">
+                    <Database className="size-6 text-muted" />
                   </div>
                   <div>
                     <div className="font-medium text-foreground text-sm">
@@ -129,7 +129,7 @@ export function DataSourcesSection() {
                       href="https://datamall.lta.gov.sg"
                       target="_blank"
                       rel="noreferrer"
-                      className="text-primary text-sm underline"
+                      className="text-accent text-sm underline"
                     >
                       LTA DataMall
                     </Link>
@@ -150,7 +150,7 @@ export function DataSourcesSection() {
             >
               {features.map((feature) => (
                 <motion.div key={feature.title} variants={staggerItemVariants}>
-                  <Card className="group h-full border-default-200/80 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+                  <Card className="group h-full border-border/80 transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
                     <Card.Content className="flex flex-col gap-4">
                       <div
                         className={`flex size-12 items-center justify-center rounded-xl ${feature.containerBg} transition-colors`}

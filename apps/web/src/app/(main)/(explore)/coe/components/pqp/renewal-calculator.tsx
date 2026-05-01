@@ -89,7 +89,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
           <Calculator className="size-5" />
           <Typography.H4>PQP vs Bidding Calculator</Typography.H4>
         </div>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Compare costs between PQP renewal and current market bidding
         </Typography.TextSm>
       </Card.Header>
@@ -124,13 +124,13 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <Card>
                       <Card.Content className="text-center">
-                        <Typography.TextSm className="mb-1 font-medium text-default-600">
+                        <Typography.TextSm className="mb-1 font-medium text-muted">
                           Current PQP Rate
                         </Typography.TextSm>
                         <p className="font-bold text-xl">
                           <Currency value={currentPQPRate} />
                         </p>
-                        <p className="text-default-500 text-xs">
+                        <p className="text-muted text-xs">
                           Latest available rate
                         </p>
                       </Card.Content>
@@ -138,15 +138,13 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
 
                     <Card>
                       <Card.Content className="text-center">
-                        <Typography.TextSm className="mb-1 font-medium text-default-600">
+                        <Typography.TextSm className="mb-1 font-medium text-muted">
                           Current COE Price
                         </Typography.TextSm>
                         <p className="font-bold text-xl">
                           <Currency value={currentCOEPremium} />
                         </p>
-                        <p className="text-default-500 text-xs">
-                          Latest COE premium
-                        </p>
+                        <p className="text-muted text-xs">Latest COE premium</p>
                       </Card.Content>
                     </Card>
                   </div>
@@ -160,7 +158,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Card>
                 <Card.Content className="text-center">
-                  <Typography.TextSm className="font-medium text-default-500">
+                  <Typography.TextSm className="font-medium text-muted">
                     PQP 5-Year Renewal (Estimate)
                   </Typography.TextSm>
                   <p className="font-bold text-2xl">
@@ -183,7 +181,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
 
               <Card>
                 <Card.Content className="text-center">
-                  <Typography.TextSm className="font-medium text-default-500">
+                  <Typography.TextSm className="font-medium text-muted">
                     PQP 10-Year Renewal (Estimate)
                   </Typography.TextSm>
                   <p className="font-bold text-2xl">
@@ -214,7 +212,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
               </Alert.Content>
             </Alert>
 
-            <div className="flex flex-col gap-1 text-default-500 text-xs">
+            <div className="flex flex-col gap-1 text-muted text-xs">
               <p>
                 * All calculations are estimates only and exclude processing
                 fees, registration fees, and other charges

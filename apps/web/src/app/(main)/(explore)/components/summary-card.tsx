@@ -25,11 +25,11 @@ export async function SummaryCard() {
   const isPositive = totalRegistrations >= previousTotal;
 
   return (
-    <Card className="border-2 border-primary">
+    <Card className="border-2 border-accent">
       <Card.Content>
         <div className="mb-4 flex items-center justify-between">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
-            <BarChart3 className="size-6 text-primary" />
+          <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10">
+            <BarChart3 className="size-6 text-accent" />
           </div>
           <Link href="/cars">
             <Button isIconOnly variant="tertiary">
@@ -37,10 +37,10 @@ export async function SummaryCard() {
             </Button>
           </Link>
         </div>
-        <p className="text-default-500 text-sm">
+        <p className="text-muted text-sm">
           Total Registrations ({displayYear})
         </p>
-        <p className="mt-1 font-bold text-4xl text-primary tabular-nums">
+        <p className="mt-1 font-bold text-4xl text-accent tabular-nums">
           <AnimatedNumber value={totalRegistrations} />
         </p>
         <div className="mt-4 flex items-center gap-2">
@@ -57,7 +57,7 @@ export async function SummaryCard() {
             {isPositive ? "+" : ""}
             {changePercent}%
           </Chip>
-          <span className="text-default-500 text-xs">vs previous year</span>
+          <span className="text-muted text-xs">vs previous year</span>
         </div>
       </Card.Content>
     </Card>

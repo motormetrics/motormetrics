@@ -14,7 +14,7 @@ export default function PrivacyPage() {
     <article className="prose prose-neutral mx-auto max-w-4xl">
       <header className="mb-8">
         <h1>Privacy Policy</h1>
-        <p className="text-default-600">Last updated: December 2024</p>
+        <p className="text-muted">Last updated: December 2024</p>
       </header>
 
       <section>

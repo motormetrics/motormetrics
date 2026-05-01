@@ -102,7 +102,7 @@ const H4 = React.forwardRef<
   <h4
     ref={ref}
     className={cn(
-      "scroll-m-20 font-medium text-default-900 text-xl tracking-tight",
+      "scroll-m-20 font-medium text-foreground text-xl tracking-tight",
       className,
     )}
     {...props}
@@ -170,7 +170,7 @@ const TextSm = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-default-600 text-sm leading-6", className)}
+    className={cn("text-muted text-sm leading-6", className)}
     {...props}
   />
 ));
@@ -215,7 +215,7 @@ const Caption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <span
     ref={ref}
-    className={cn("text-default-500 text-xs leading-tight", className)}
+    className={cn("text-muted text-xs leading-tight", className)}
     {...props}
   />
 ));
@@ -265,7 +265,7 @@ const InlineCode = React.forwardRef<
   <code
     ref={ref}
     className={cn(
-      "relative rounded-sm bg-surface-secondary px-[0.3rem] py-[0.2rem] font-medium font-mono text-sm",
+      "relative rounded-sm bg-surface px-[0.3rem] py-[0.2rem] font-medium font-mono text-sm",
       className,
     )}
     {...props}
@@ -279,7 +279,7 @@ const Lead = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-default-500 text-xl leading-relaxed", className)}
+    className={cn("text-muted text-xl leading-relaxed", className)}
     {...props}
   />
 ));

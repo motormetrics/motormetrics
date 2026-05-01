@@ -228,7 +228,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <h2 className="mb-4 font-bold text-foreground/60 text-xs uppercase tracking-[0.3em]">
                 Executive Summary
               </h2>
-              <Card className="border-primary border-l-4 bg-transparent shadow-none">
+              <Card className="border-accent border-l-4 bg-transparent shadow-none">
                 <Card.Content className="py-0 pl-4">
                   <p className="text-foreground/90 text-lg leading-relaxed md:text-xl">
                     {post.excerpt}

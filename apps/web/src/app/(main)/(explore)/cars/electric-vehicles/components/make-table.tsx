@@ -74,7 +74,7 @@ export function MakeTable({ data, month }: MakeTableProps) {
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>EV Registrations by Make</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           {data.length} makes with EV registrations in {month}
         </Typography.TextSm>
       </Card.Header>

@@ -18,7 +18,7 @@ interface MetricCardProps {
 
 const variantStyles = {
   default: "",
-  hero: "border-l-4 border-primary",
+  hero: "border-l-4 border-accent",
   metric: "transition-shadow hover:shadow-sm",
 } as const;
 
@@ -40,8 +40,8 @@ export function MetricCard({
           className={cn(
             "font-semibold tabular-nums",
             variant === "hero"
-              ? "text-5xl text-primary"
-              : "text-4xl text-primary",
+              ? "text-5xl text-accent"
+              : "text-4xl text-accent",
           )}
         >
           <AnimatedNumber value={value} />

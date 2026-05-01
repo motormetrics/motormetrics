@@ -33,7 +33,7 @@ export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
       <Card.Header>
         <div className="flex flex-col gap-1">
           <Typography.H4>Latest COE Premium vs PQP Rate</Typography.H4>
-          <Typography.TextSm className="text-default-500">
+          <Typography.TextSm className="text-muted">
             Comparison of latest COE bidding premium against current PQP rates
           </Typography.TextSm>
         </div>
@@ -44,7 +44,7 @@ export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis dataKey="category" />
             <YAxis
@@ -55,7 +55,7 @@ export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
               tickFormatter={numberFormat}
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={<ChartTooltipContent />}
             />
             <Bar
@@ -78,7 +78,7 @@ export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
         </ChartContainer>
       </Card.Content>
       <Card.Footer>
-        <p className="text-default-500 text-sm">
+        <p className="text-muted text-sm">
           Latest COE premium (bars) vs PQP baseline (dashed line). Bars above
           line indicate strong demand; bars below suggest favourable renewal
           conditions.

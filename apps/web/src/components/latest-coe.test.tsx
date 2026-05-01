@@ -154,7 +154,7 @@ describe("LatestCoe", () => {
 
     expect(screen.getByTestId("sparkline")).toHaveAttribute(
       "data-colour",
-      "var(--primary)",
+      "var(--accent)",
     );
   });
 });

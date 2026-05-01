@@ -20,7 +20,7 @@ export const GLOSSARY_CATEGORIES: GlossaryCategoryData[] = [
   {
     title: "Core Terms",
     icon: BookOpen,
-    iconColor: "text-primary",
+    iconColor: "text-accent",
     terms: [
       {
         term: "COE",
@@ -109,7 +109,7 @@ export const GLOSSARY_CATEGORIES: GlossaryCategoryData[] = [
   {
     title: "Regulatory Bodies and Schemes",
     icon: Landmark,
-    iconColor: "text-secondary",
+    iconColor: "text-muted",
     terms: [
       {
         term: "LTA",
@@ -141,7 +141,7 @@ export const GLOSSARY_CATEGORIES: GlossaryCategoryData[] = [
   {
     title: "Market Terms",
     icon: TrendingUp,
-    iconColor: "text-primary",
+    iconColor: "text-accent",
     terms: [
       {
         term: "Quota Premium",

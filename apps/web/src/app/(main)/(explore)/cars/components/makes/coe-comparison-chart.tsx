@@ -51,7 +51,7 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
         <CartesianGrid
           vertical={false}
           strokeDasharray="3 3"
-          className="stroke-default-200"
+          className="stroke-border"
         />
         <XAxis
           dataKey="month"
@@ -88,7 +88,7 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
         </YAxis>
 
         <ChartTooltip
-          cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+          cursor={{ fill: "var(--muted)", opacity: 0.2 }}
           content={<ChartTooltipContent />}
         />
 

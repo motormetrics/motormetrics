@@ -49,14 +49,14 @@ export function GuidesSection() {
   return (
     <section
       id="guides"
-      className="relative -mx-6 scroll-mt-24 overflow-hidden bg-default-100 px-6 py-20 lg:py-28"
+      className="relative -mx-6 scroll-mt-24 overflow-hidden bg-default px-6 py-20 lg:py-28"
     >
       {/* Dot pattern background */}
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--default-500) 15%, transparent) 1px, transparent 0)",
+            "radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--muted) 15%, transparent) 1px, transparent 0)",
           backgroundSize: "24px 24px",
         }}
         aria-hidden="true"
@@ -73,13 +73,13 @@ export function GuidesSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-primary uppercase tracking-widest">
+              <Typography.Label className="text-accent uppercase tracking-widest">
                 Learn
               </Typography.Label>
               <Typography.H2 className="lg:text-4xl">
                 Guides &amp; Tutorials
               </Typography.H2>
-              <Typography.Text className="text-default-600">
+              <Typography.Text className="text-muted">
                 Step-by-step guides to help you understand Singapore&apos;s
                 vehicle market and make the most of our platform.
               </Typography.Text>
@@ -97,9 +97,9 @@ export function GuidesSection() {
             >
               {GUIDES.map((guide, index) => (
                 <motion.div key={guide.title} variants={staggerItemVariants}>
-                  <Card className="group border-default-200/80 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+                  <Card className="group border-border/80 transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
                     <Card.Content className="flex flex-row gap-6">
-                      <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground text-sm">
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-sm">
                         {String(index + 1).padStart(2, "0")}
                       </div>
                       <div className="flex flex-col gap-4">

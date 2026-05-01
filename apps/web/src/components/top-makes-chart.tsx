@@ -47,7 +47,7 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
         <Typography.H4>
           Top {topMakes.length} Car Makes ({year})
         </Typography.H4>
-        <Typography.TextSm className="text-default-600">
+        <Typography.TextSm className="text-muted">
           Most popular vehicle brands by registration volume
         </Typography.TextSm>
       </Card.Header>
@@ -57,7 +57,7 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
             <CartesianGrid
               horizontal={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis type="number" tickLine={false} axisLine={false} />
             <YAxis
@@ -69,7 +69,7 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
               hide
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Bar dataKey="value" radius={4}>

@@ -32,7 +32,7 @@ export function Header() {
             type="button"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
-            className="rounded-full p-2 text-foreground transition-colors hover:bg-surface-secondary md:hidden"
+            className="rounded-full p-2 text-foreground transition-colors hover:bg-surface md:hidden"
             onClick={() => setIsMenuOpen((open) => !open)}
           >
             {isMenuOpen ? (
@@ -61,8 +61,8 @@ export function Header() {
                   className={cn(
                     "rounded-full px-4 py-2 font-medium text-sm transition-all duration-200",
                     active
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "bg-surface-secondary text-foreground hover:bg-surface-tertiary",
+                      ? "bg-accent text-accent-foreground shadow-sm"
+                      : "bg-surface text-foreground hover:bg-surface-tertiary",
                   )}
                   aria-current={active ? "page" : undefined}
                 >
@@ -88,7 +88,7 @@ export function Header() {
                       "block w-full rounded-2xl px-4 py-3 text-lg transition-colors",
                       active
                         ? "bg-accent-soft font-semibold text-accent"
-                        : "text-foreground/70 hover:bg-surface-secondary hover:text-foreground",
+                        : "text-foreground/70 hover:bg-surface hover:text-foreground",
                     )}
                     aria-current={active ? "page" : undefined}
                     onClick={() => setIsMenuOpen(false)}

@@ -14,7 +14,7 @@ async function YearlyChartContent() {
         <div className="mb-5 flex items-center justify-between">
           <div>
             <Typography.H3>Yearly Registrations</Typography.H3>
-            <p className="text-default-500 text-sm">
+            <p className="text-muted text-sm">
               Total registrations over the years
             </p>
           </div>
@@ -33,14 +33,14 @@ async function YearlyChartContent() {
                 key={item.year}
                 className="flex flex-1 flex-col items-center gap-2"
               >
-                <span className="font-medium text-default-500 text-xs tabular-nums">
+                <span className="font-medium text-muted text-xs tabular-nums">
                   {(item.total / 1000).toFixed(1)}K
                 </span>
                 <div
-                  className={`w-full rounded-t-xl transition-colors ${isLatest ? "bg-[var(--chart-1)]" : "bg-default-200 hover:bg-default-300"}`}
+                  className={`w-full rounded-t-xl transition-colors ${isLatest ? "bg-[var(--chart-1)]" : "bg-default hover:bg-default"}`}
                   style={{ height: `${height}px` }}
                 />
-                <span className="text-default-500 text-xs">{item.year}</span>
+                <span className="text-muted text-xs">{item.year}</span>
               </div>
             );
           })}
@@ -68,17 +68,17 @@ async function TopMakesContent() {
         <div className="flex flex-col gap-4">
           {topMakes.slice(0, 5).map((item, i) => (
             <div key={item.make} className="flex items-center gap-4">
-              <span className="w-5 font-medium text-default-500 text-sm">
+              <span className="w-5 font-medium text-muted text-sm">
                 {i + 1}
               </span>
               <div className="flex-1">
                 <div className="mb-1 flex items-center justify-between">
                   <span className="font-medium text-sm">{item.make}</span>
-                  <span className="text-default-500 text-xs tabular-nums">
+                  <span className="text-muted text-xs tabular-nums">
                     {item.value.toLocaleString()}
                   </span>
                 </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-default-100">
+                <div className="h-1.5 overflow-hidden rounded-full bg-default">
                   <div
                     className="h-full rounded-full transition-all"
                     style={{

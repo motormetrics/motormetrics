@@ -34,7 +34,7 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>EV Adoption Trend</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Monthly BEV, PHEV, and Hybrid registrations over time
         </Typography.TextSm>
       </Card.Header>
@@ -100,7 +100,7 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
         </ChartContainer>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Stacked area chart showing combined electrified vehicle registrations.
           BEV = Battery Electric, PHEV = Plug-In Hybrid, Hybrid = Conventional
           Hybrid.

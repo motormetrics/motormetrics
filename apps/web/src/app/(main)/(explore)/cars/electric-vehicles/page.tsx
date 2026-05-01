@@ -70,8 +70,8 @@ export default async function ElectricVehiclesPage() {
     return (
       <EmptyState
         icon={
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-default-100">
-            <Zap className="size-8 text-default-400" />
+          <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
+            <Zap className="size-8 text-muted" />
           </div>
         }
         title="No Data Available Yet"

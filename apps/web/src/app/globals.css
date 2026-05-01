@@ -2,6 +2,7 @@
 @import "@heroui/styles";
 @import "@motormetrics/theme/light.css";
 @import "@motormetrics/theme/dark.css";
+@import "@motormetrics/theme/charts.css";
 
 @plugin "@tailwindcss/typography";
 
@@ -12,27 +13,9 @@
   --font-mono: var(--font-geist-mono);
   --color-surface: var(--surface);
   --color-surface-foreground: var(--surface-foreground);
-  --color-surface-secondary: var(--surface-secondary);
-  --color-surface-secondary-foreground: var(--surface-secondary-foreground);
-  --color-surface-tertiary: var(--surface-tertiary);
-  --color-surface-tertiary-foreground: var(--surface-tertiary-foreground);
   --color-overlay: var(--overlay);
   --color-overlay-foreground: var(--overlay-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
   --color-default: var(--default);
-  --color-default-50: var(--default-50);
-  --color-default-100: var(--default-100);
-  --color-default-200: var(--default-200);
-  --color-default-300: var(--default-300);
-  --color-default-400: var(--default-400);
-  --color-default-500: var(--default-500);
-  --color-default-600: var(--default-600);
-  --color-default-700: var(--default-700);
-  --color-default-800: var(--default-800);
-  --color-default-900: var(--default-900);
   --color-default-foreground: var(--default-foreground);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
@@ -46,7 +29,6 @@
   --color-segment: var(--segment);
   --color-segment-foreground: var(--segment-foreground);
   --color-border: var(--border);
-  --color-divider: var(--divider);
   --color-separator: var(--separator);
   --color-focus: var(--focus);
   --color-link: var(--link);
@@ -66,9 +48,6 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
   --color-chart-6: var(--chart-6);
-  --color-surface-1: var(--surface-1);
-  --color-surface-2: var(--surface-2);
-  --color-surface-3: var(--surface-3);
   --color-chart-grid: var(--chart-grid);
 }
 

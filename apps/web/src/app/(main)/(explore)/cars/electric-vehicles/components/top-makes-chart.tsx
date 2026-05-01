@@ -32,7 +32,7 @@ export function TopMakesChart({ data, month }: TopMakesChartProps) {
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Top EV Makes</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Top 10 electrified vehicle makes for {month}
         </Typography.TextSm>
       </Card.Header>
@@ -76,7 +76,7 @@ export function TopMakesChart({ data, month }: TopMakesChartProps) {
         </ChartContainer>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Includes BEV, PHEV, and hybrid registrations combined.
         </Typography.TextSm>
       </Card.Footer>

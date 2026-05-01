@@ -83,7 +83,7 @@ const organisationSchema = {
 
 function SummaryCardSkeleton() {
   return (
-    <Card className="border-2 border-primary">
+    <Card className="border-2 border-accent">
       <Card.Content>
         <div className="mb-4 flex items-center justify-between">
           <Skeleton className="h-12 w-12 rounded-2xl" />
@@ -104,7 +104,7 @@ function MarketOverviewSkeleton() {
         <Skeleton className="mb-4 h-6 w-36 rounded-lg" />
         <div className="grid grid-cols-3 gap-4">
           {[0, 1, 2].map((i) => (
-            <Card key={i} className="bg-default-100 shadow-none">
+            <Card key={i} className="bg-default shadow-none">
               <Card.Content>
                 <Skeleton className="h-4 w-16 rounded-lg" />
                 <Skeleton className="mt-2 h-7 w-20 rounded-lg" />
@@ -119,7 +119,7 @@ function MarketOverviewSkeleton() {
 
 function MonthlyChangeSummarySkeleton() {
   return (
-    <Card className="border-2 border-primary">
+    <Card className="border-2 border-accent">
       <Card.Content>
         <div className="mb-4 flex items-center justify-between">
           <Skeleton className="h-12 w-12 rounded-2xl" />

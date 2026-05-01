@@ -20,7 +20,7 @@ export function MissionSection() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            <blockquote className="border-primary border-l-4 pl-6">
+            <blockquote className="border-accent border-l-4 pl-6">
               <p className="font-medium text-2xl text-foreground leading-relaxed lg:text-3xl">
                 Car buying in Singapore shouldn&apos;t feel like navigating a
                 maze blindfolded.
@@ -40,20 +40,20 @@ export function MissionSection() {
           >
             <Typography.H2 className="lg:text-4xl">Our Mission</Typography.H2>
             <div className="flex flex-col gap-4">
-              <Typography.TextLg className="text-default-600">
+              <Typography.TextLg className="text-muted">
                 Singapore&apos;s car market is uniquely complex. Between COE
                 premiums that swing wildly, registration quotas that change
                 monthly, and a maze of vehicle categories, making informed
                 decisions feels nearly impossible.
               </Typography.TextLg>
-              <Typography.TextLg className="text-default-600">
+              <Typography.TextLg className="text-muted">
                 We built {SITE_TITLE} to change that. By aggregating official
                 data from the Land Transport Authority and presenting it through
                 intuitive visualisations, we hope to make this data easier to
                 find and explore, rather than scattered across government
                 portals and industry reports.
               </Typography.TextLg>
-              <Typography.TextLg className="text-default-600">
+              <Typography.TextLg className="text-muted">
                 Whether you&apos;re a first-time buyer trying to time your
                 purchase, a dealer analysing market trends, or simply curious
                 about Singapore&apos;s automotive landscape—this site might
@@ -64,7 +64,7 @@ export function MissionSection() {
 
           {/* Key points */}
           <motion.div
-            className="grid gap-6 border-default-200 border-t pt-8 sm:grid-cols-2"
+            className="grid gap-6 border-border border-t pt-8 sm:grid-cols-2"
             variants={fadeInUpVariants}
             initial="hidden"
             whileInView="visible"

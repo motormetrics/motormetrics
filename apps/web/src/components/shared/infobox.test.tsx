@@ -48,6 +48,6 @@ describe("Infobox", () => {
 
     const alert = screen.getByTestId("alert");
     expect(alert).toHaveAttribute("data-status", "accent");
-    expect(alert).toHaveClass("border", "border-primary/30", "px-4", "py-3");
+    expect(alert).toHaveClass("border", "border-accent/30", "px-4", "py-3");
   });
 });

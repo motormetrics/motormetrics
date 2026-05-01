@@ -206,7 +206,7 @@ export function CostTable({ data }: CostTableProps) {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         <Typography.H4>All Models</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           {filteredData.length} models found
         </Typography.TextSm>
       </div>

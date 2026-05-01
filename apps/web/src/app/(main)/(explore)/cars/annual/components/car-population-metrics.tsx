@@ -73,7 +73,7 @@ export function CarPopulationMetrics({
           <Typography.H4>Total Cars</Typography.H4>
         </Card.Header>
         <Card.Content className="flex flex-col gap-2">
-          <span className="font-semibold text-4xl text-primary tabular-nums">
+          <span className="font-semibold text-4xl text-accent tabular-nums">
             {numberFormatter.format(grandTotal)}
           </span>
           {previousYearTotal && previousYearTotal.total > 0 && (
@@ -99,7 +99,7 @@ export function CarPopulationMetrics({
             {topMake?.make ?? "—"}
           </span>
           {topMake && (
-            <Typography.TextSm className="text-default-500">
+            <Typography.TextSm className="text-muted">
               {numberFormatter.format(topMake.total)} cars ({totalMakes} makes
               total)
             </Typography.TextSm>
@@ -115,7 +115,7 @@ export function CarPopulationMetrics({
           <span className="font-semibold text-4xl tabular-nums">
             {top5Share.toFixed(1)}%
           </span>
-          <Typography.TextSm className="text-default-500">
+          <Typography.TextSm className="text-muted">
             {numberFormatter.format(top5Total)} of{" "}
             {numberFormatter.format(grandTotal)} cars
           </Typography.TextSm>

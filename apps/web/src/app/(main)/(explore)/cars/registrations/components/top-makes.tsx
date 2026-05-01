@@ -69,16 +69,16 @@ export function TopMakes({ data }: TopMakesProps) {
                 <div key={make} className="py-2">
                   <div className="flex max-w-md flex-col gap-1">
                     <div className="flex items-center justify-between gap-3 text-xs">
-                      <span className="font-medium text-default-600">
+                      <span className="font-medium text-muted">
                         {make.toUpperCase()}
                       </span>
-                      <span className="text-default-500 tabular-nums">
+                      <span className="text-muted tabular-nums">
                         {count.toLocaleString()}
                       </span>
                     </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-default-100">
+                    <div className="h-1.5 overflow-hidden rounded-full bg-default">
                       <div
-                        className="h-full rounded-full bg-primary"
+                        className="h-full rounded-full bg-accent"
                         style={{ width: `${(count / total) * 100}%` }}
                       />
                     </div>

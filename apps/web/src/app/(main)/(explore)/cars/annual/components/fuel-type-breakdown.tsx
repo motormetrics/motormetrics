@@ -71,7 +71,7 @@ export function FuelTypeBreakdown({ data }: FuelTypeBreakdownProps) {
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Fuel Type Mix ({effectiveYear})</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Distribution of vehicles by fuel type
         </Typography.TextSm>
       </Card.Header>

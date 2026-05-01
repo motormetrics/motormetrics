@@ -18,15 +18,15 @@ export function CategorySummaryCard({
   const isPositive = hasComparison ? total >= previousTotal : true;
 
   return (
-    <Card className="col-span-12 border-2 border-primary lg:col-span-4">
+    <Card className="col-span-12 border-2 border-accent lg:col-span-4">
       <Card.Content>
         <div className="flex flex-col gap-4">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
-            <BarChart3 className="size-6 text-primary" />
+          <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10">
+            <BarChart3 className="size-6 text-accent" />
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-default-500 text-sm">Total Registrations</p>
-            <p className="font-bold text-4xl text-primary tabular-nums">
+            <p className="text-muted text-sm">Total Registrations</p>
+            <p className="font-bold text-4xl text-accent tabular-nums">
               <AnimatedNumber value={total} />
             </p>
           </div>
@@ -45,7 +45,7 @@ export function CategorySummaryCard({
                 {isPositive ? "+" : ""}
                 {changePercent}%
               </Chip>
-              <span className="text-default-500 text-xs">vs last month</span>
+              <span className="text-muted text-xs">vs last month</span>
             </div>
           )}
         </div>

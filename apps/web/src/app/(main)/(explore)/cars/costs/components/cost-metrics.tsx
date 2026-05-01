@@ -45,10 +45,10 @@ export function CostMetrics({ data }: CostMetricsProps) {
             <Typography.H4>{metric.title}</Typography.H4>
           </Card.Header>
           <Card.Content className="flex flex-col gap-2">
-            <span className="font-bold text-4xl text-primary tabular-nums">
+            <span className="font-bold text-4xl text-accent tabular-nums">
               {metric.value}
             </span>
-            <Typography.TextSm className="text-default-500">
+            <Typography.TextSm className="text-muted">
               {metric.description}
             </Typography.TextSm>
           </Card.Content>

@@ -50,13 +50,13 @@ export async function PricingSection() {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col items-center gap-4 text-center">
-          <Typography.Label className="text-primary uppercase tracking-widest">
+          <Typography.Label className="text-accent uppercase tracking-widest">
             Simple Pricing
           </Typography.Label>
           <Typography.H2 className="lg:text-4xl">
             Monthly plans that fit your budget
           </Typography.H2>
-          <Typography.TextLg className="max-w-xl text-default-600">
+          <Typography.TextLg className="max-w-xl text-muted">
             Billed monthly. Cancel anytime. No long-term commitments.
           </Typography.TextLg>
         </div>
@@ -68,8 +68,8 @@ export async function PricingSection() {
               key={plan.name}
               className={`relative h-full shadow-sm transition-all duration-500 ${
                 plan.featured
-                  ? "border-primary shadow-lg shadow-primary/10"
-                  : "border-default-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                  ? "border-accent shadow-accent/10 shadow-lg"
+                  : "border-border hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg"
               }`}
             >
               {plan.featured && (
@@ -90,9 +90,9 @@ export async function PricingSection() {
                   <span className="font-bold text-4xl text-foreground tracking-tight">
                     {plan.price}
                   </span>
-                  <span className="text-default-500 text-sm">/month</span>
+                  <span className="text-muted text-sm">/month</span>
                 </div>
-                <Typography.TextSm className="text-default-500">
+                <Typography.TextSm className="text-muted">
                   {plan.description}
                 </Typography.TextSm>
               </Card.Header>
@@ -100,7 +100,7 @@ export async function PricingSection() {
               <Card.Content className="gap-3">
                 {plan.features.map((feature) => (
                   <div key={feature} className="flex items-center gap-2">
-                    <Check className="size-4 shrink-0 text-primary" />
+                    <Check className="size-4 shrink-0 text-accent" />
                     <Typography.TextSm>{feature}</Typography.TextSm>
                   </div>
                 ))}

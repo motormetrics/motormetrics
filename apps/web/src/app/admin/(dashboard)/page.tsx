@@ -16,7 +16,7 @@ const Dashboard = () => {
             <Card.Title className="font-medium text-sm">
               System Status
             </Card.Title>
-            <Server className="size-4 text-default-500" />
+            <Server className="size-4 text-muted" />
           </Card.Header>
           <Card.Content>
             <div className="flex items-center gap-2">
@@ -24,7 +24,7 @@ const Dashboard = () => {
                 Operational
               </Chip>
             </div>
-            <p className="mt-2 text-default-500 text-xs">
+            <p className="mt-2 text-muted text-xs">
               All systems running normally
             </p>
           </Card.Content>
@@ -35,22 +35,20 @@ const Dashboard = () => {
             <Card.Title className="font-medium text-sm">
               Maintenance Mode
             </Card.Title>
-            <Wrench className="size-4 text-default-500" />
+            <Wrench className="size-4 text-muted" />
           </Card.Header>
           <Card.Content>
             <div className="flex items-center gap-2">
               <Chip>Inactive</Chip>
             </div>
-            <p className="mt-2 text-default-500 text-xs">
-              Services running normally
-            </p>
+            <p className="mt-2 text-muted text-xs">Services running normally</p>
           </Card.Content>
         </Card>
 
         <Card>
           <Card.Header className="flex flex-row items-center justify-between pb-2">
             <Card.Title className="font-medium text-sm">Database</Card.Title>
-            <Database className="size-4 text-default-500" />
+            <Database className="size-4 text-muted" />
           </Card.Header>
           <Card.Content>
             <div className="flex items-center gap-2">
@@ -58,7 +56,7 @@ const Dashboard = () => {
                 Connected
               </Chip>
             </div>
-            <p className="mt-2 text-default-500 text-xs">
+            <p className="mt-2 text-muted text-xs">
               PostgreSQL connection active
             </p>
           </Card.Content>
@@ -77,7 +75,7 @@ const Dashboard = () => {
               <RefreshCw className="size-6" />
               <div className="text-center">
                 <div className="font-medium">Trigger Data Update</div>
-                <div className="text-default-500 text-xs">
+                <div className="text-muted text-xs">
                   Update car registration data
                 </div>
               </div>
@@ -87,7 +85,7 @@ const Dashboard = () => {
               <Database className="size-6" />
               <div className="text-center">
                 <div className="font-medium">Manage Data</div>
-                <div className="text-default-500 text-xs">
+                <div className="text-muted text-xs">
                   View and edit data records
                 </div>
               </div>
@@ -97,9 +95,7 @@ const Dashboard = () => {
               <Server className="size-6" />
               <div className="text-center">
                 <div className="font-medium">System Logs</div>
-                <div className="text-default-500 text-xs">
-                  View application logs
-                </div>
+                <div className="text-muted text-xs">View application logs</div>
               </div>
             </Button>
 
@@ -111,7 +107,7 @@ const Dashboard = () => {
                 <Wrench className="size-6" />
                 <div className="text-center">
                   <div className="font-medium">Maintenance Mode</div>
-                  <div className="text-default-500 text-xs">
+                  <div className="text-muted text-xs">
                     Configure maintenance settings
                   </div>
                 </div>
@@ -126,9 +122,7 @@ const Dashboard = () => {
                 <Settings className="size-6" />
                 <div className="text-center">
                   <div className="font-medium">Settings</div>
-                  <div className="text-default-500 text-xs">
-                    System configuration
-                  </div>
+                  <div className="text-muted text-xs">System configuration</div>
                 </div>
               </Button>
             </Link>

@@ -37,8 +37,8 @@ export function DashboardNav() {
                 className={cn(
                   "inline-flex h-8 shrink-0 items-center gap-2 rounded-full px-3 font-medium text-sm no-underline transition-all duration-200",
                   isActive
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "bg-transparent text-default-600 hover:bg-default-100",
+                    ? "bg-accent text-accent-foreground shadow-sm"
+                    : "bg-transparent text-muted hover:bg-default",
                 )}
               >
                 {Icon && <Icon className="size-4" />}

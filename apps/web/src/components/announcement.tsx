@@ -32,11 +32,13 @@ export function Announcement() {
 
   return (
     <Alert
-      className="rounded-none bg-primary text-primary-foreground"
+      className="rounded-none bg-accent text-accent-foreground"
       status="accent"
     >
       <Alert.Content>
-        <Alert.Title>{activeAnnouncement.content}</Alert.Title>
+        <Alert.Title className="text-accent-foreground">
+          {activeAnnouncement.content}
+        </Alert.Title>
       </Alert.Content>
     </Alert>
   );

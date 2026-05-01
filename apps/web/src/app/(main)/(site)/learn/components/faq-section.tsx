@@ -36,7 +36,7 @@ export const FAQ_SECTIONS: FAQSectionData[] = [
   {
     title: "Certificate of Entitlement (COE)",
     icon: Landmark,
-    iconColor: "text-primary",
+    iconColor: "text-accent",
     items: [
       {
         question: "What is COE in Singapore?",
@@ -107,7 +107,7 @@ export const FAQ_SECTIONS: FAQSectionData[] = [
   {
     title: "PARF and Vehicle Deregistration",
     icon: FileText,
-    iconColor: "text-secondary",
+    iconColor: "text-muted",
     items: [
       {
         question: "What is PARF?",
@@ -129,7 +129,7 @@ export const FAQ_SECTIONS: FAQSectionData[] = [
   {
     title: `Using ${SITE_TITLE}`,
     icon: BarChart3,
-    iconColor: "text-primary",
+    iconColor: "text-accent",
     items: [
       {
         question: "How can I access historical data?",
@@ -154,13 +154,13 @@ export function FAQSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-primary uppercase tracking-widest">
+              <Typography.Label className="text-accent uppercase tracking-widest">
                 Common Questions
               </Typography.Label>
               <Typography.H2 className="lg:text-4xl">
                 Frequently Asked Questions
               </Typography.H2>
-              <Typography.Text className="text-default-600">
+              <Typography.Text className="text-muted">
                 Everything you need to know about Singapore&apos;s vehicle
                 market, from COE bidding to PARF rebates.
               </Typography.Text>
@@ -208,10 +208,10 @@ export function FAQSection() {
 
               {/* Still Have Questions? */}
               <motion.div variants={staggerItemVariants}>
-                <Card className="border border-primary/20 bg-primary/5">
+                <Card className="border border-accent/20 bg-accent/5">
                   <Card.Content className="flex flex-row items-start gap-4">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                      <MessageCircleQuestion className="size-5 text-primary" />
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent/10">
+                      <MessageCircleQuestion className="size-5 text-accent" />
                     </div>
                     <div className="flex flex-col gap-2">
                       <Typography.H4>Still Have Questions?</Typography.H4>

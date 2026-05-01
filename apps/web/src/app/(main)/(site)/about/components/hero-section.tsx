@@ -17,7 +17,7 @@ export function HeroSection() {
         <div className="flex max-w-4xl flex-col items-center gap-8 text-center lg:items-start lg:text-left">
           {/* Decorative line */}
           <motion.div
-            className="h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent lg:hidden"
+            className="h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent lg:hidden"
             initial={{ width: 0, opacity: 0 }}
             animate={{ width: "6rem", opacity: 1 }}
             transition={entranceTransition(0)}
@@ -33,7 +33,7 @@ export function HeroSection() {
             <Chip
               color="accent"
               variant="soft"
-              className="border-primary/20 bg-primary/5 font-medium text-foreground text-sm tracking-wide backdrop-blur-sm"
+              className="border-accent/20 bg-accent/5 font-medium text-foreground text-sm tracking-wide backdrop-blur-sm"
             >
               Singapore Car Market Data
             </Chip>
@@ -47,14 +47,14 @@ export function HeroSection() {
             transition={entranceTransition(0.15)}
           >
             Making Sense of{" "}
-            <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-accent to-accent/70 bg-clip-text text-transparent">
               Singapore&apos;s Car Market
             </span>
           </motion.h1>
 
           {/* Subheadline */}
           <motion.p
-            className="max-w-2xl text-default-600 text-lg leading-relaxed lg:text-xl lg:leading-relaxed"
+            className="max-w-2xl text-lg text-muted leading-relaxed lg:text-xl lg:leading-relaxed"
             initial={{ opacity: 0, y: 32, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={entranceTransition(0.3)}

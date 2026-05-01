@@ -187,7 +187,7 @@ export default async function GuidePage({ params }: PageProps) {
             {guide.term}
           </Chip>
           <Typography.H1>{guide.title}</Typography.H1>
-          <Typography.TextLg className="text-default-600">
+          <Typography.TextLg className="text-muted">
             {guide.excerpt}
           </Typography.TextLg>
           <Typography.Caption>
@@ -239,7 +239,7 @@ export default async function GuidePage({ params }: PageProps) {
               <Button variant="outline" className="w-full justify-start">
                 <ArrowLeft className="size-4" />
                 <span className="flex flex-col items-start">
-                  <span className="text-default-500 text-xs">Previous</span>
+                  <span className="text-muted text-xs">Previous</span>
                   <span>{previousGuide.term}</span>
                 </span>
               </Button>
@@ -254,7 +254,7 @@ export default async function GuidePage({ params }: PageProps) {
             >
               <Button variant="outline" className="w-full justify-end">
                 <span className="flex flex-col items-end">
-                  <span className="text-default-500 text-xs">Next</span>
+                  <span className="text-muted text-xs">Next</span>
                   <span>{nextGuide.term}</span>
                 </span>
                 <ArrowRight className="size-4" />

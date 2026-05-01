@@ -99,7 +99,7 @@ export function TrendsComparison({
     >
       <Label>{label}</Label>
       <ComboBox.InputGroup>
-        <Calendar className="ml-3 size-4 text-default-500" />
+        <Calendar className="ml-3 size-4 text-muted" />
         <Input placeholder={label} />
         <ComboBox.Trigger />
       </ComboBox.InputGroup>
@@ -146,9 +146,7 @@ export function TrendsComparison({
             </div>
             {!comparisonData && (
               <div className="flex justify-center py-8">
-                <span className="text-default-500">
-                  Loading comparison data…
-                </span>
+                <span className="text-muted">Loading comparison data…</span>
               </div>
             )}
             {comparisonData && (

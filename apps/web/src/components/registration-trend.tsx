@@ -32,7 +32,7 @@ export function RegistrationTrend({ data }: RegistrationTrendProps) {
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Yearly Registration Trend</Typography.H4>
-        <Typography.TextSm className="text-default-600">
+        <Typography.TextSm className="text-muted">
           Historical vehicle registration data from {data[0]?.year} to{" "}
           {data[data.length - 1]?.year}
         </Typography.TextSm>
@@ -43,7 +43,7 @@ export function RegistrationTrend({ data }: RegistrationTrendProps) {
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis dataKey="year" tickLine={false} axisLine={false} />
             <YAxis

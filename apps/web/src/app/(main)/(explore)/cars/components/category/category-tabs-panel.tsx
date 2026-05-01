@@ -79,7 +79,7 @@ export function CategoryTabsPanel({
                     title={formatVehicleType(type.name)}
                   />
                 ) : (
-                  <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-default-50 p-8">
+                  <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-default p-8">
                     <Typography.H4>Top Makes</Typography.H4>
                     <Typography.TextSm>
                       No detailed make data available for{" "}

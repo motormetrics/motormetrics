@@ -29,7 +29,7 @@ export function MarketShareChart({ data }: MarketShareChartProps) {
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>EV Market Share</Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Percentage of electrified vehicles among all new registrations
         </Typography.TextSm>
       </Card.Header>
@@ -77,7 +77,7 @@ export function MarketShareChart({ data }: MarketShareChartProps) {
         </ChartContainer>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Includes BEV, PHEV, and conventional hybrid vehicles as a share of
           total new registrations each month.
         </Typography.TextSm>

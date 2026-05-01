@@ -48,7 +48,7 @@ export function ChartWidget({
         <div className="flex flex-col gap-1">
           <Typography.H4>{title}</Typography.H4>
           {subtitle && (
-            <Typography.TextSm className="text-default-500">
+            <Typography.TextSm className="text-muted">
               {subtitle}
             </Typography.TextSm>
           )}
@@ -58,11 +58,11 @@ export function ChartWidget({
         {isEmpty ? (
           <div
             className={cn(
-              "flex items-center justify-center rounded-xl bg-default-100",
+              "flex items-center justify-center rounded-xl bg-default",
               CHART_HEIGHTS[height],
             )}
           >
-            <Typography.TextSm className="text-default-500">
+            <Typography.TextSm className="text-muted">
               {emptyMessage}
             </Typography.TextSm>
           </div>

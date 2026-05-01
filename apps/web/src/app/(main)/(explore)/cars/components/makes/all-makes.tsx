@@ -110,8 +110,8 @@ export function AllMakes({
           <span className="font-medium text-foreground">
             {selectedLetter === "#" ? "Other" : selectedLetter}
           </span>
-          <span className="text-default-400">·</span>
-          <span className="text-default-500 text-sm">
+          <span className="text-muted">·</span>
+          <span className="text-muted text-sm">
             {activeMakes.length} {activeMakes.length === 1 ? "make" : "makes"}
           </span>
         </div>

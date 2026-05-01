@@ -16,9 +16,9 @@ const navItems = [
     description: "Common questions about COE, PARF, and car registration",
     href: "#faq",
     icon: HelpCircle,
-    iconColor: "text-primary",
-    containerBg: "bg-primary/10",
-    hoverBorder: "hover:border-primary/30",
+    iconColor: "text-accent",
+    containerBg: "bg-accent/10",
+    hoverBorder: "hover:border-accent/30",
   },
   {
     title: "Glossary",
@@ -34,9 +34,9 @@ const navItems = [
     description: "Where our data comes from and how it's updated",
     href: "#data-sources",
     icon: Database,
-    iconColor: "text-secondary",
-    containerBg: "bg-secondary/10",
-    hoverBorder: "hover:border-secondary/30",
+    iconColor: "text-muted",
+    containerBg: "bg-muted/10",
+    hoverBorder: "hover:border-muted/30",
   },
   {
     title: "Guides",
@@ -71,7 +71,7 @@ export function QuickNavSection() {
                 className="block h-full text-foreground no-underline"
               >
                 <Card
-                  className={`h-full border-default-200/80 transition-all duration-500 ${item.hoverBorder} hover:shadow-lg hover:shadow-primary/5`}
+                  className={`h-full border-border/80 transition-all duration-500 ${item.hoverBorder} hover:shadow-accent/5 hover:shadow-lg`}
                 >
                   <Card.Content className="flex flex-col gap-4">
                     <div

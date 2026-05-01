@@ -61,8 +61,8 @@ export function TopMakesChart({
           <Typography.TextSm>No make data available</Typography.TextSm>
         </Card.Header>
         <Card.Content>
-          <div className="flex h-60 items-center justify-center rounded-lg bg-default-100">
-            <p className="text-default-500">No data available</p>
+          <div className="flex h-60 items-center justify-center rounded-lg bg-default">
+            <p className="text-muted">No data available</p>
           </div>
         </Card.Content>
       </Card>
@@ -85,7 +85,7 @@ export function TopMakesChart({
                   key={item.name}
                   href={`/cars/makes/${slugify(item.name)}`}
                 >
-                  <Chip className="cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground">
+                  <Chip className="cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground">
                     <span>{getRankingEmoji(index + 1)}</span>
                     {item.name}
                   </Chip>
@@ -100,7 +100,7 @@ export function TopMakesChart({
               <CartesianGrid
                 horizontal={false}
                 strokeDasharray="3 3"
-                className="stroke-default-200"
+                className="stroke-border"
               />
               <XAxis
                 type="number"
@@ -115,7 +115,7 @@ export function TopMakesChart({
                 axisLine={false}
               />
               <ChartTooltip
-                cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+                cursor={{ fill: "var(--muted)", opacity: 0.2 }}
                 content={<ChartTooltipContent />}
               />
               <Bar dataKey="value" radius={[0, 4, 4, 0]}>

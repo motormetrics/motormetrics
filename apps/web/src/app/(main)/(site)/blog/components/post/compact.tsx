@@ -17,14 +17,14 @@ export function Compact({ post }: CompactProps) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex items-center gap-4 p-4 transition-colors hover:bg-default-100"
+      className="group flex items-center gap-4 p-4 transition-colors hover:bg-default"
     >
       {/* Content */}
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="line-clamp-1 font-medium text-sm transition-colors group-hover:text-primary">
+        <span className="line-clamp-1 font-medium text-sm transition-colors group-hover:text-accent">
           {post.title}
         </span>
-        <span className="text-default-500 text-xs">
+        <span className="text-muted text-xs">
           {formatDate(publishedDate, "short")} · {readingTime} min read
         </span>
       </div>

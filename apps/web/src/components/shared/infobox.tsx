@@ -11,7 +11,7 @@ interface InfoboxProps {
 
 export function Infobox({ title, content }: InfoboxProps) {
   return (
-    <Alert className="border border-primary/30 px-4 py-3" status="accent">
+    <Alert className="border border-accent/30 px-4 py-3" status="accent">
       <Alert.Content>
         <Alert.Title>{title}</Alert.Title>
         <Alert.Description>

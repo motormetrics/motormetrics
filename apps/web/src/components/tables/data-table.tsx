@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
   const bottomContent = useMemo(
     () => (
       <div className="flex flex-col items-center gap-4 px-2 py-2 lg:flex-row lg:justify-between">
-        <div className="flex-1 text-default-500 text-sm">
+        <div className="flex-1 text-muted text-sm">
           {filteredRowCount} rows fetched.
         </div>
         <div className="flex flex-col items-center gap-4 lg:flex-row">
@@ -124,7 +124,7 @@ export function DataTable<TData, TValue>({
               </Pagination.Content>
             </Pagination>
           ) : (
-            <span className="text-default-500 text-sm">Page 1 of 1</span>
+            <span className="text-muted text-sm">Page 1 of 1</span>
           )}
         </div>
       </div>

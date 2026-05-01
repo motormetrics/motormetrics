@@ -25,7 +25,7 @@ export function PARFComparisonTable() {
     <Card className="overflow-hidden">
       <Card.Content className="flex flex-col gap-0 p-0">
         <div className="flex items-center gap-2 px-6 py-4">
-          <TableIcon className="size-4 text-primary" />
+          <TableIcon className="size-4 text-accent" />
           <Typography.H4>PARF Rebate Rate Comparison</Typography.H4>
         </div>
         <Table>
@@ -59,7 +59,7 @@ export function PARFComparisonTable() {
             </Table.Content>
           </Table.ScrollContainer>
         </Table>
-        <div className="flex flex-col justify-between gap-2 border-default-200 border-t bg-default-50 px-6 py-4 text-default-500 text-xs sm:flex-row">
+        <div className="flex flex-col justify-between gap-2 border-border border-t bg-default px-6 py-4 text-muted text-xs sm:flex-row">
           <span>
             Rebate Cap: <strong className="text-foreground">$60,000</strong>{" "}
             (old) &rarr; <strong className="text-foreground">$30,000</strong>{" "}

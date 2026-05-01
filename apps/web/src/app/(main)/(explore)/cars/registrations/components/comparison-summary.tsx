@@ -32,7 +32,7 @@ export function ComparisonSummary({ monthA, monthB }: ComparisonSummaryProps) {
             <Typography.TextSm>
               {formatDateToMonthYear(monthA.month)}
             </Typography.TextSm>
-            <div className="font-semibold text-4xl text-primary tabular-nums">
+            <div className="font-semibold text-4xl text-accent tabular-nums">
               <AnimatedNumber value={monthA.total} />
             </div>
           </div>
@@ -40,7 +40,7 @@ export function ComparisonSummary({ monthA, monthB }: ComparisonSummaryProps) {
             <Typography.TextSm>
               {formatDateToMonthYear(monthB.month)}
             </Typography.TextSm>
-            <div className="font-semibold text-4xl text-default-500 tabular-nums">
+            <div className="font-semibold text-4xl text-muted tabular-nums">
               <AnimatedNumber value={monthB.total} />
             </div>
           </div>
@@ -57,7 +57,7 @@ export function ComparisonSummary({ monthA, monthB }: ComparisonSummaryProps) {
             )}
             {formatPercent(Math.abs(change), { maximumFractionDigits: 1 })}
           </Chip>
-          <span className="text-default-500 text-sm">
+          <span className="text-muted text-sm">
             {diff >= 0 ? "+" : ""}
             {formatNumber(diff)} registrations
           </span>

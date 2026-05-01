@@ -40,12 +40,12 @@ async function FunFactsPqpContent() {
             <div className="flex flex-col gap-2">
               <ProgressBar value={categoryAPercentage * 100} size="lg" />
               <div className="text-center">
-                <span className="font-bold text-2xl text-primary tabular-nums">
+                <span className="font-bold text-2xl text-accent tabular-nums">
                   {formatPercent(categoryAPercentage, {
                     maximumFractionDigits: 1,
                   })}
                 </span>
-                <Typography.TextSm className="text-default-500">
+                <Typography.TextSm className="text-muted">
                   Category A is{" "}
                   {formatPercent(categoryAPercentage, {
                     maximumFractionDigits: 0,
@@ -80,10 +80,10 @@ async function FunFactsPqpContent() {
               )
               .map(([category, rate]) => (
                 <div key={category} className="flex flex-col gap-1">
-                  <Typography.TextSm className="text-default-500">
+                  <Typography.TextSm className="text-muted">
                     {category}
                   </Typography.TextSm>
-                  <span className="font-bold text-primary text-xl tabular-nums">
+                  <span className="font-bold text-accent text-xl tabular-nums">
                     <AnimatedNumber value={rate} format="currency" />
                   </span>
                 </div>

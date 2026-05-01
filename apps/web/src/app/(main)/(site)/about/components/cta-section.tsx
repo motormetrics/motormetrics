@@ -28,11 +28,11 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Label className="text-primary uppercase tracking-widest">
+            <Typography.Label className="text-accent uppercase tracking-widest">
               Stay Updated
             </Typography.Label>
             <Typography.H2>Follow for the Latest Updates</Typography.H2>
-            <Typography.TextLg className="max-w-xl text-default-600">
+            <Typography.TextLg className="max-w-xl text-muted">
               Get notified when new COE results, car registration data, and
               market insights are published.
             </Typography.TextLg>
@@ -49,7 +49,7 @@ export function CtaSection() {
                 href={url}
                 rel="me noreferrer"
                 target="_blank"
-                className="inline-flex h-10 items-center gap-2 rounded-full border border-default-300 px-5 font-medium text-foreground text-sm transition-all hover:border-primary hover:bg-primary/5"
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-border px-5 font-medium text-foreground text-sm transition-all hover:border-accent hover:bg-accent/5"
               >
                 <Icon className="size-4" />
                 <span>{title}</span>

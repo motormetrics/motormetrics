@@ -182,7 +182,7 @@ async function TypeDetailContent({
           : `No ${displayName} vehicle registrations were recorded in ${formattedMonth}.`}{" "}
         <Link
           href={`/cars/${config.category}`}
-          className="text-primary hover:underline"
+          className="text-accent hover:underline"
         >
           View all{" "}
           {config.category === "fuel-types" ? "fuel types" : "vehicle types"}{" "}
@@ -199,7 +199,7 @@ async function TypeDetailContent({
                 {formattedMonth}
               </Chip>
             </Card.Header>
-            <Card.Content className="font-bold text-4xl text-primary">
+            <Card.Content className="font-bold text-4xl text-accent">
               <AnimatedNumber value={cars.total} />
             </Card.Content>
           </Card>

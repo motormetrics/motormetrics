@@ -52,7 +52,7 @@ export function CarPopulationChart({
         <Typography.H4>
           Top {TOP_N} Makes ({effectiveYear})
         </Typography.H4>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Car population by manufacturer
         </Typography.TextSm>
       </Card.Header>
@@ -90,7 +90,7 @@ export function CarPopulationChart({
         </ChartContainer>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-default-500">
+        <Typography.TextSm className="text-muted">
           Showing top {TOP_N} makes by car population for {effectiveYear}.
         </Typography.TextSm>
       </Card.Footer>

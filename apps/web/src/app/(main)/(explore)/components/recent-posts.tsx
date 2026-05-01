@@ -21,7 +21,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
               </Button>
             </Link>
           </div>
-          <p className="py-8 text-center text-default-500">
+          <p className="py-8 text-center text-muted">
             No recent posts available.
           </p>
         </Card.Content>

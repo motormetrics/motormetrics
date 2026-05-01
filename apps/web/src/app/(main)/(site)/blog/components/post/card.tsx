@@ -41,7 +41,7 @@ export function Card({ post }: CardProps) {
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-linear-to-br from-primary/40 to-primary/20" />
+              <div className="absolute inset-0 bg-linear-to-br from-accent/40 to-accent/20" />
             </div>
           ) : (
             <Cover
@@ -50,9 +50,9 @@ export function Card({ post }: CardProps) {
             />
           )}
           <div className="flex flex-col gap-2 p-4">
-            <div className="flex items-center gap-2 text-default-400 text-xs">
+            <div className="flex items-center gap-2 text-muted text-xs">
               <span>{formatDate(publishedDate)}</span>
-              <span className="size-1 rounded-full bg-default-300" />
+              <span className="size-1 rounded-full bg-default" />
               <span>{readingTime} min read</span>
               {isNew && (
                 <Chip color="warning" variant="soft" size="sm">
@@ -64,7 +64,7 @@ export function Card({ post }: CardProps) {
               {post.title}
             </h3>
             {excerpt && (
-              <p className="line-clamp-2 text-default-500 text-sm">{excerpt}</p>
+              <p className="line-clamp-2 text-muted text-sm">{excerpt}</p>
             )}
           </div>
         </HeroCard.Content>

@@ -49,7 +49,7 @@ export function MakeCard({
                     className="size-full object-contain"
                   />
                 ) : (
-                  <span className="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-lg text-primary-foreground">
+                  <span className="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg">
                     {make.charAt(0) || "?"}
                   </span>
                 )}

@@ -14,7 +14,7 @@ export const categoryConfig: Record<
 > = {
   coe: {
     label: "COE",
-    className: "text-primary",
+    className: "text-accent",
     color: "accent",
   },
   cars: {
@@ -24,7 +24,7 @@ export const categoryConfig: Record<
   },
   default: {
     label: "Insights",
-    className: "text-secondary",
+    className: "text-muted",
     color: "default",
   },
 };
@@ -32,7 +32,7 @@ export const categoryConfig: Record<
 // Default fallback for unknown categories
 export const defaultCategory = {
   label: "INSIGHTS",
-  className: "text-secondary",
+  className: "text-muted",
   color: "default" as ChipColor,
 };
 

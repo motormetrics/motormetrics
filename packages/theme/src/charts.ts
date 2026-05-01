@@ -40,7 +40,7 @@ export const CHART_GRID = {
  */
 export const CHART_CURSOR = {
   /** Highlight cursor for bar/area charts */
-  highlight: { fill: "hsl(var(--muted))", opacity: 0.2 },
+  highlight: { fill: "var(--muted)", opacity: 0.2 },
   /** No cursor for line charts */
   none: false,
 } as const;

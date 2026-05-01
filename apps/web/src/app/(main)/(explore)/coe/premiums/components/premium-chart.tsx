@@ -96,7 +96,7 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
         >
           <Label className="sr-only">Select time period</Label>
           <Select.Trigger>
-            <CalendarIcon className="size-4 text-default-500" />
+            <CalendarIcon className="size-4 text-muted" />
             <Select.Value />
             <Select.Indicator />
           </Select.Trigger>
@@ -121,7 +121,7 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <MonthXAxis tickFormatter={formatDateToMonthYear} />
             <PriceYAxis label="Quota Premium (S$)" hide />

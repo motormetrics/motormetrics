@@ -24,7 +24,7 @@ export function CtaSection() {
         >
           {/* Gradient line separator */}
           <motion.div
-            className="h-px w-48 bg-gradient-to-r from-transparent via-primary/50 to-transparent"
+            className="h-px w-48 bg-gradient-to-r from-transparent via-accent/50 to-transparent"
             variants={staggerItemVariants}
             aria-hidden="true"
           />
@@ -34,11 +34,11 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Label className="text-primary uppercase tracking-widest">
+            <Typography.Label className="text-accent uppercase tracking-widest">
               Ready to Explore?
             </Typography.Label>
             <Typography.H2>Dive Into the Data</Typography.H2>
-            <Typography.TextLg className="max-w-xl text-default-600">
+            <Typography.TextLg className="max-w-xl text-muted">
               Explore Singapore&apos;s car registration trends, COE bidding
               results, and market insights — all in one place.
             </Typography.TextLg>

@@ -65,7 +65,7 @@ export function ComparisonBarChart({
             <CartesianGrid
               horizontal={false}
               strokeDasharray="3 3"
-              className="stroke-default-200"
+              className="stroke-border"
             />
             <XAxis
               type="number"
@@ -81,7 +81,7 @@ export function ComparisonBarChart({
               width={110}
             />
             <ChartTooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
+              cursor={{ fill: "var(--muted)", opacity: 0.2 }}
               content={<ChartTooltipContent />}
             />
             <ChartLegend content={<ChartLegendContent />} />

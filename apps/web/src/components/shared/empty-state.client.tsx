@@ -22,7 +22,7 @@ export function AnimatedEmptyStateWrapper({
       variants={fadeInUpVariants}
       initial="hidden"
       animate="visible"
-      className={`flex flex-col items-center justify-center gap-6 rounded-3xl bg-default-50/50 px-8 py-12 ${className ?? ""}`}
+      className={`flex flex-col items-center justify-center gap-6 rounded-3xl bg-default/50 px-8 py-12 ${className ?? ""}`}
     >
       {children}
     </motion.div>

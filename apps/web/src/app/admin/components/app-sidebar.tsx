@@ -132,19 +132,19 @@ export const AppSidebar = () => {
   return (
     <aside className="sticky top-0 hidden h-screen w-72 shrink-0 flex-col border-r bg-background lg:flex">
       <div className="flex items-center gap-2 border-b px-5 py-4">
-        <div className="flex size-9 items-center justify-center rounded-xl bg-primary">
-          <LayoutDashboard className="size-4 text-primary-foreground" />
+        <div className="flex size-9 items-center justify-center rounded-xl bg-accent">
+          <LayoutDashboard className="size-4 text-accent-foreground" />
         </div>
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate font-semibold">MotorMetrics Admin</span>
-          <span className="truncate text-default-500 text-xs">
+          <span className="truncate text-muted text-xs">
             {session?.user?.email || "Dashboard"}
           </span>
         </div>
       </div>
 
       <ScrollShadow className="flex-1 px-3 py-4">
-        <div className="mb-2 px-3 font-medium text-default-500 text-xs uppercase tracking-wide">
+        <div className="mb-2 px-3 font-medium text-muted text-xs uppercase tracking-wide">
           Navigation
         </div>
         <nav className="flex flex-col gap-1">
@@ -152,7 +152,7 @@ export const AppSidebar = () => {
             if (item.items) {
               return (
                 <div key={item.title} className="flex flex-col gap-1">
-                  <div className="flex items-center gap-2 px-3 py-2 font-medium text-default-500 text-sm">
+                  <div className="flex items-center gap-2 px-3 py-2 font-medium text-muted text-sm">
                     <item.icon className="size-4" />
                     <span>{item.title}</span>
                   </div>
@@ -166,8 +166,8 @@ export const AppSidebar = () => {
                           href={subItem.url as Route}
                           className={`flex items-center gap-2 rounded-full px-3 py-2 text-sm transition-colors ${
                             isActive
-                              ? "bg-primary text-primary-foreground"
-                              : "text-default-500 hover:bg-surface-secondary hover:text-foreground"
+                              ? "bg-accent text-accent-foreground"
+                              : "text-muted hover:bg-surface hover:text-foreground"
                           }`}
                         >
                           <subItem.icon className="size-4" />
@@ -188,8 +188,8 @@ export const AppSidebar = () => {
                 href={item.url as Route}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-sm transition-colors ${
                   isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "text-default-500 hover:bg-surface-secondary hover:text-foreground"
+                    ? "bg-accent text-accent-foreground"
+                    : "text-muted hover:bg-surface hover:text-foreground"
                 }`}
               >
                 <item.icon className="size-4" />

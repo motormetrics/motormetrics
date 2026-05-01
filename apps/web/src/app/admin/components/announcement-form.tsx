@@ -64,11 +64,11 @@ export function AnnouncementForm() {
         </Card.Header>
         <Card.Content>
           {currentAnnouncement ? (
-            <div className="rounded-md border bg-primary p-4 text-center text-primary-foreground">
+            <div className="rounded-md border bg-accent p-4 text-center text-accent-foreground">
               {currentAnnouncement}
             </div>
           ) : (
-            <div className="rounded-md border bg-surface-secondary p-4 text-center text-default-500">
+            <div className="rounded-md border bg-surface p-4 text-center text-muted">
               No announcement is currently active
             </div>
           )}
@@ -119,7 +119,7 @@ export function AnnouncementForm() {
               onChange={(e) => setAnnouncementText(e.target.value)}
               className="text-base"
             />
-            <p className="text-default-500 text-sm">
+            <p className="text-muted text-sm">
               Keep it concise and clear. This will appear at the top of every
               page.
             </p>
@@ -129,7 +129,7 @@ export function AnnouncementForm() {
           {isEnabled && announcementText && (
             <div className="flex flex-col gap-2">
               <Label>Preview</Label>
-              <div className="rounded-md border bg-primary p-4 text-center text-primary-foreground">
+              <div className="rounded-md border bg-accent p-4 text-center text-accent-foreground">
                 {announcementText}
               </div>
             </div>
