@@ -1,8 +1,3 @@
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@motormetrics/ui/components/sidebar";
 import { AppSidebar } from "@web/app/admin/components/app-sidebar";
 import { type ReactNode, Suspense } from "react";
 
@@ -10,18 +5,18 @@ export default function DashboardLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (
-    <SidebarProvider>
+    <div className="min-h-screen lg:flex">
       <Suspense>
         <AppSidebar />
       </Suspense>
-      <SidebarInset>
-        <header className="sticky top-0 z-10 border-b bg-background px-6 py-4">
-          <SidebarTrigger />
+      <div className="min-w-0 flex-1">
+        <header className="sticky top-0 z-10 border-b bg-background px-6 py-4 lg:hidden">
+          <span className="font-semibold">MotorMetrics Admin</span>
         </header>
         <main className="p-6">
           <Suspense>{children}</Suspense>
         </main>
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
+    </div>
   );
 }

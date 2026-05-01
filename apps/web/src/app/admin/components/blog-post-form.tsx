@@ -1,35 +1,17 @@
 "use client";
 
-import type { SelectPost } from "@motormetrics/database";
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@motormetrics/ui/components/alert-dialog";
-import { Button } from "@motormetrics/ui/components/button";
-import {
+  Button,
   Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
-import { Input } from "@motormetrics/ui/components/input";
-import { Label } from "@motormetrics/ui/components/label";
-import {
+  Input,
+  Label,
+  ListBox,
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@motormetrics/ui/components/select";
-import { Textarea } from "@motormetrics/ui/components/textarea";
+  TextArea,
+  TextField,
+} from "@heroui/react";
+import type { SelectPost } from "@motormetrics/database";
 import {
   createBlogPost,
   regeneratePost,
@@ -210,189 +192,202 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       {canRegenerate && (
         <Card>
-          <CardHeader>
+          <Card.Header>
             <div className="flex items-center gap-2">
               <RefreshCw className="size-5 text-muted-foreground" />
               <div className="flex flex-col gap-1">
-                <CardTitle>AI Regeneration</CardTitle>
-                <CardDescription>
+                <Card.Title>AI Regeneration</Card.Title>
+                <Card.Description>
                   Fetch fresh data for{" "}
                   <strong>
                     {defaultValues.month} ({defaultValues.dataType})
                   </strong>{" "}
                   and regenerate content using AI. The existing post will be
                   replaced.
-                </CardDescription>
+                </Card.Description>
               </div>
             </div>
-          </CardHeader>
-          <CardContent>
+          </Card.Header>
+          <Card.Content>
             <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={isRegenerating}
-                >
-                  {isRegenerating ? (
-                    <>
-                      <Loader2 className="mr-2 size-4 animate-spin" />
-                      Regenerating...
-                    </>
-                  ) : (
-                    <>
-                      <RefreshCw className="mr-2 size-4" />
-                      Regenerate Content
-                    </>
-                  )}
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Regenerate Blog Post?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This will fetch fresh data for{" "}
-                    <strong>
-                      {defaultValues.month} ({defaultValues.dataType})
-                    </strong>{" "}
-                    and generate new content using AI. The current content will
-                    be replaced.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleRegenerate}>
-                    Regenerate
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
+              <Button
+                type="button"
+                variant="outline"
+                isDisabled={isRegenerating}
+              >
+                {isRegenerating ? (
+                  <>
+                    <Loader2 className="mr-2 size-4 animate-spin" />
+                    Regenerating...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="mr-2 size-4" />
+                    Regenerate Content
+                  </>
+                )}
+              </Button>
+              <AlertDialog.Backdrop>
+                <AlertDialog.Container>
+                  <AlertDialog.Dialog className="sm:max-w-[440px]">
+                    <AlertDialog.CloseTrigger />
+                    <AlertDialog.Header>
+                      <AlertDialog.Icon status="warning" />
+                      <AlertDialog.Heading>
+                        Regenerate Blog Post?
+                      </AlertDialog.Heading>
+                    </AlertDialog.Header>
+                    <AlertDialog.Body>
+                      This will fetch fresh data for{" "}
+                      <strong>
+                        {defaultValues.month} ({defaultValues.dataType})
+                      </strong>{" "}
+                      and generate new content using AI. The current content
+                      will be replaced.
+                    </AlertDialog.Body>
+                    <AlertDialog.Footer>
+                      <Button slot="close" variant="tertiary">
+                        Cancel
+                      </Button>
+                      <Button slot="close" onPress={handleRegenerate}>
+                        Regenerate
+                      </Button>
+                    </AlertDialog.Footer>
+                  </AlertDialog.Dialog>
+                </AlertDialog.Container>
+              </AlertDialog.Backdrop>
             </AlertDialog>
-          </CardContent>
+          </Card.Content>
         </Card>
       )}
 
       <Card>
-        <CardHeader>
-          <CardTitle>Post Details</CardTitle>
-          <CardDescription>
+        <Card.Header>
+          <Card.Title>Post Details</Card.Title>
+          <Card.Description>
             Basic information about the blog post
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="title">Title</Label>
+          </Card.Description>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-4">
+          <TextField isRequired className="flex flex-col gap-2">
+            <Label>Title</Label>
             <Input
-              id="title"
+              name="title"
               placeholder="Enter post title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              required
             />
-          </div>
+          </TextField>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="excerpt">Excerpt</Label>
+          <TextField className="flex flex-col gap-2">
+            <Label>Excerpt</Label>
             <Input
-              id="excerpt"
+              name="excerpt"
               placeholder="Short summary for meta description"
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
             />
-          </div>
+          </TextField>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="content">Content</Label>
-            <Textarea
-              id="content"
+          <TextField isRequired className="flex flex-col gap-2">
+            <Label>Content</Label>
+            <TextArea
+              name="content"
               placeholder="Markdown content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={16}
-              required
             />
-          </div>
+          </TextField>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="tags">Tags</Label>
+          <TextField className="flex flex-col gap-2">
+            <Label>Tags</Label>
             <Input
-              id="tags"
+              name="tags"
               placeholder="Comma-separated tags (e.g. Cars, Monthly Update)"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
             />
-          </div>
-        </CardContent>
+          </TextField>
+        </Card.Content>
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle>Metadata</CardTitle>
-          <CardDescription>
+        <Card.Header>
+          <Card.Title>Metadata</Card.Title>
+          <Card.Description>
             Optional data source and publication settings
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+          </Card.Description>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="month">Month</Label>
+            <TextField className="flex flex-col gap-2">
+              <Label>Month</Label>
               <Input
-                id="month"
+                name="month"
                 placeholder="YYYY-MM"
                 value={month}
                 onChange={(e) => setMonth(e.target.value)}
               />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="dataType">Data Type</Label>
+            </TextField>
+            <TextField className="flex flex-col gap-2">
+              <Label>Data Type</Label>
               <Input
-                id="dataType"
+                name="dataType"
                 placeholder="e.g. cars, coe, parf"
                 value={dataType}
                 onChange={(e) => setDataType(e.target.value)}
               />
-            </div>
+            </TextField>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="status">Status</Label>
-            <Select
-              value={status}
-              onValueChange={(v) => setStatus(v as "draft" | "published")}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="draft">Draft</SelectItem>
-                <SelectItem value="published">Published</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
+          <Select
+            value={status}
+            onChange={(v) => setStatus(v as "draft" | "published")}
+          >
+            <Label>Status</Label>
+            <Select.Trigger>
+              <Select.Value />
+              <Select.Indicator />
+            </Select.Trigger>
+            <Select.Popover>
+              <ListBox>
+                <ListBox.Item id="draft" textValue="Draft">
+                  Draft
+                  <ListBox.ItemIndicator />
+                </ListBox.Item>
+                <ListBox.Item id="published" textValue="Published">
+                  Published
+                  <ListBox.ItemIndicator />
+                </ListBox.Item>
+              </ListBox>
+            </Select.Popover>
+          </Select>
+        </Card.Content>
       </Card>
 
       <Card>
-        <CardHeader>
+        <Card.Header>
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
-              <CardTitle>Highlights</CardTitle>
-              <CardDescription>
+              <Card.Title>Highlights</Card.Title>
+              <Card.Description>
                 Key statistics displayed on the blog post
-              </CardDescription>
+              </Card.Description>
             </div>
             <Button
               type="button"
               variant="outline"
               size="sm"
-              onClick={addHighlight}
+              onPress={addHighlight}
             >
               <Plus className="mr-1 size-4" />
               Add
             </Button>
           </div>
-        </CardHeader>
+        </Card.Header>
         {highlights.length > 0 && (
-          <CardContent className="flex flex-col gap-4">
+          <Card.Content className="flex flex-col gap-4">
             {highlights.map((highlight, index) => (
               <div
                 key={highlight.id}
@@ -406,13 +401,14 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
                     type="button"
                     variant="ghost"
                     size="sm"
-                    onClick={() => removeHighlight(highlight.id)}
+                    onPress={() => removeHighlight(highlight.id)}
                   >
                     <Trash2 className="size-4" />
                   </Button>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
                   <Input
+                    name={`highlight-${highlight.id}-value`}
                     placeholder="Value (e.g. 52.6%)"
                     value={highlight.value}
                     onChange={(e) =>
@@ -420,6 +416,7 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
                     }
                   />
                   <Input
+                    name={`highlight-${highlight.id}-label`}
                     placeholder="Label"
                     value={highlight.label}
                     onChange={(e) =>
@@ -427,6 +424,7 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
                     }
                   />
                   <Input
+                    name={`highlight-${highlight.id}-detail`}
                     placeholder="Detail"
                     value={highlight.detail}
                     onChange={(e) =>
@@ -436,12 +434,12 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
                 </div>
               </div>
             ))}
-          </CardContent>
+          </Card.Content>
         )}
       </Card>
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={isSubmitting}>
+        <Button type="submit" isDisabled={isSubmitting}>
           {isSubmitting ? (
             <Loader2 className="mr-2 size-4 animate-spin" />
           ) : (

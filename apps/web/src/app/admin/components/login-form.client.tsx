@@ -1,8 +1,6 @@
 "use client";
 
-import { Button } from "@motormetrics/ui/components/button";
-import { Input } from "@motormetrics/ui/components/input";
-import { Label } from "@motormetrics/ui/components/label";
+import { Button, Input, Label, TextField } from "@heroui/react";
 import { authClient } from "@web/app/admin/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useState } from "react";
@@ -67,8 +65,8 @@ export function LoginFormClient({
         <Button
           variant="outline"
           type="button"
-          onClick={handleGoogleSignIn}
-          disabled={isLoading}
+          onPress={handleGoogleSignIn}
+          isDisabled={isLoading}
         >
           {googleButtonContent}
         </Button>
@@ -81,30 +79,34 @@ export function LoginFormClient({
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email">{emailLabel}</Label>
+        <TextField
+          isRequired
+          isDisabled={isLoading}
+          className="flex flex-col gap-2"
+          type="email"
+        >
+          <Label>{emailLabel}</Label>
           <Input
-            id="email"
-            type="email"
+            name="email"
             placeholder="m@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={isLoading}
           />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="password">{passwordLabel}</Label>
+        </TextField>
+        <TextField
+          isRequired
+          isDisabled={isLoading}
+          className="flex flex-col gap-2"
+          type="password"
+        >
+          <Label>{passwordLabel}</Label>
           <Input
-            id="password"
-            type="password"
+            name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
-            disabled={isLoading}
           />
-        </div>
-        <Button type="submit" disabled={isLoading}>
+        </TextField>
+        <Button type="submit" isDisabled={isLoading}>
           {isLoading ? loadingButtonText : loginButtonText}
         </Button>
       </div>

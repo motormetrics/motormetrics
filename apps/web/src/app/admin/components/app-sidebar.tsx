@@ -1,18 +1,6 @@
 "use client";
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-} from "@motormetrics/ui/components/sidebar";
+import { Button, ScrollShadow } from "@heroui/react";
 import { authClient } from "@web/app/admin/lib/auth-client";
 import {
   Activity,
@@ -34,6 +22,10 @@ import type { Route } from "next";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
+
+function isRouteActive(pathname: string, url: string) {
+  return pathname === url || (url !== "/admin" && pathname.startsWith(url));
+}
 
 const data = {
   navigation: [
@@ -138,79 +130,82 @@ export const AppSidebar = () => {
   };
 
   return (
-    <Sidebar variant="inset">
-      <SidebarHeader>
-        <div className="flex items-center gap-2 px-3 py-2">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
-            <LayoutDashboard className="size-4 text-primary-foreground" />
-          </div>
-          <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">MotorMetrics Admin</span>
-            <span className="truncate text-muted-foreground text-xs">
-              {session?.user?.email || "Dashboard"}
-            </span>
-          </div>
+    <aside className="sticky top-0 hidden h-screen w-72 shrink-0 flex-col border-r bg-background lg:flex">
+      <div className="flex items-center gap-2 border-b px-5 py-4">
+        <div className="flex size-9 items-center justify-center rounded-xl bg-primary">
+          <LayoutDashboard className="size-4 text-primary-foreground" />
         </div>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {data.navigation.map((item) => {
-                if (item.items) {
-                  return (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                      <SidebarMenu className="ml-6">
-                        {item.items.map((subItem) => {
-                          const isActive = pathname === subItem.url;
-                          return (
-                            <SidebarMenuItem key={subItem.title}>
-                              <SidebarMenuButton asChild isActive={isActive}>
-                                <Link href={subItem.url as Route}>
-                                  <subItem.icon />
-                                  <span>{subItem.title}</span>
-                                </Link>
-                              </SidebarMenuButton>
-                            </SidebarMenuItem>
-                          );
-                        })}
-                      </SidebarMenu>
-                    </SidebarMenuItem>
-                  );
-                }
+        <div className="grid flex-1 text-left text-sm leading-tight">
+          <span className="truncate font-semibold">MotorMetrics Admin</span>
+          <span className="truncate text-muted-foreground text-xs">
+            {session?.user?.email || "Dashboard"}
+          </span>
+        </div>
+      </div>
 
-                const isActive = pathname === item.url;
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={isActive}>
-                      <Link href={item.url as Route}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleSignOut}>
-              <LogOut />
-              <span>Sign Out</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-      <SidebarRail />
-    </Sidebar>
+      <ScrollShadow className="flex-1 px-3 py-4">
+        <div className="mb-2 px-3 font-medium text-muted-foreground text-xs uppercase tracking-wide">
+          Navigation
+        </div>
+        <nav className="flex flex-col gap-1">
+          {data.navigation.map((item) => {
+            if (item.items) {
+              return (
+                <div key={item.title} className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2 px-3 py-2 font-medium text-muted-foreground text-sm">
+                    <item.icon className="size-4" />
+                    <span>{item.title}</span>
+                  </div>
+                  <div className="ml-5 flex flex-col gap-1 border-l pl-3">
+                    {item.items.map((subItem) => {
+                      const isActive = isRouteActive(pathname, subItem.url);
+
+                      return (
+                        <Link
+                          key={subItem.title}
+                          href={subItem.url as Route}
+                          className={`flex items-center gap-2 rounded-full px-3 py-2 text-sm transition-colors ${
+                            isActive
+                              ? "bg-primary text-primary-foreground"
+                              : "text-muted-foreground hover:bg-surface-secondary hover:text-foreground"
+                          }`}
+                        >
+                          <subItem.icon className="size-4" />
+                          <span>{subItem.title}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            }
+
+            const isActive = isRouteActive(pathname, item.url);
+
+            return (
+              <Link
+                key={item.title}
+                href={item.url as Route}
+                className={`flex items-center gap-2 rounded-full px-3 py-2 text-sm transition-colors ${
+                  isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-surface-secondary hover:text-foreground"
+                }`}
+              >
+                <item.icon className="size-4" />
+                <span>{item.title}</span>
+              </Link>
+            );
+          })}
+        </nav>
+      </ScrollShadow>
+
+      <div className="border-t p-3">
+        <Button fullWidth variant="ghost" onPress={handleSignOut}>
+          <LogOut className="size-4" />
+          Sign Out
+        </Button>
+      </div>
+    </aside>
   );
 };

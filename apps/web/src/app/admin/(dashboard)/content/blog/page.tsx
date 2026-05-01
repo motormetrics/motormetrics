@@ -1,10 +1,4 @@
-import { Button } from "@motormetrics/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
+import { Button, Card } from "@heroui/react";
 import { mdxComponents } from "@web/app/(main)/(site)/blog/components/mdx-components";
 import { getAllPosts } from "@web/app/admin/actions/blog";
 import { BlogPostsTable } from "@web/app/admin/components/blog-posts-table";
@@ -50,12 +44,12 @@ export default async function BlogManagementPage() {
             View and regenerate blog posts generated from market data.
           </p>
         </div>
-        <Button asChild>
-          <Link href="/admin/content/blog/create">
+        <Link href="/admin/content/blog/create">
+          <Button>
             <Plus className="mr-2 size-4" />
             Create Post
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </div>
 
       {/* Posts Table */}
@@ -65,10 +59,10 @@ export default async function BlogManagementPage() {
 
       {/* Instructions */}
       <Card>
-        <CardHeader>
-          <CardTitle>Instructions</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4 text-muted-foreground text-sm">
+        <Card.Header>
+          <Card.Title>Instructions</Card.Title>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-4 text-muted-foreground text-sm">
           <div className="flex items-start gap-2">
             <span className="font-medium text-foreground">🤖</span>
             <span>
@@ -97,7 +91,7 @@ export default async function BlogManagementPage() {
               automatically revalidated after regeneration.
             </span>
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
     </div>
   );

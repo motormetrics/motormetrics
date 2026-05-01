@@ -1,17 +1,14 @@
 "use client";
 
-import { Badge } from "@motormetrics/ui/components/badge";
-import { Button } from "@motormetrics/ui/components/button";
 import {
+  Button,
   Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
-import { Input } from "@motormetrics/ui/components/input";
-import { Label } from "@motormetrics/ui/components/label";
-import { Separator } from "@motormetrics/ui/components/separator";
+  Chip,
+  Input,
+  Label,
+  Separator,
+  TextField,
+} from "@heroui/react";
 import { AlertCircle, Eye, EyeOff, Save } from "lucide-react";
 import { useState } from "react";
 
@@ -51,18 +48,21 @@ export function AnnouncementForm() {
     <>
       {/* Current Status */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+        <Card.Header>
+          <Card.Title className="flex items-center justify-between">
             Current Status
-            <Badge variant={currentAnnouncement ? "default" : "secondary"}>
+            <Chip
+              color={currentAnnouncement ? "success" : "default"}
+              variant="secondary"
+            >
               {currentAnnouncement ? "Active" : "No Announcement"}
-            </Badge>
-          </CardTitle>
-          <CardDescription>
+            </Chip>
+          </Card.Title>
+          <Card.Description>
             Current announcement displayed on the website
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </Card.Description>
+        </Card.Header>
+        <Card.Content>
           {currentAnnouncement ? (
             <div className="rounded-md border bg-primary p-4 text-center text-primary-foreground">
               {currentAnnouncement}
@@ -72,20 +72,20 @@ export function AnnouncementForm() {
               No announcement is currently active
             </div>
           )}
-        </CardContent>
+        </Card.Content>
       </Card>
 
       <Separator />
 
       {/* Announcement Editor */}
       <Card>
-        <CardHeader>
-          <CardTitle>Edit Announcement</CardTitle>
-          <CardDescription>
+        <Card.Header>
+          <Card.Title>Edit Announcement</Card.Title>
+          <Card.Description>
             Create or modify the announcement that will be displayed to users
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-6">
+          </Card.Description>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-6">
           {/* Enable/Disable Toggle */}
           <div className="flex items-center justify-between">
             <Label
@@ -95,9 +95,9 @@ export function AnnouncementForm() {
               Enable Announcement
             </Label>
             <Button
-              variant={isEnabled ? "default" : "outline"}
+              variant={isEnabled ? "primary" : "outline"}
               size="sm"
-              onClick={toggleEnabled}
+              onPress={toggleEnabled}
               className="flex items-center gap-2"
             >
               {isEnabled ? (
@@ -110,21 +110,20 @@ export function AnnouncementForm() {
           </div>
 
           {/* Announcement Text Input */}
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="announcement-text">Announcement Text</Label>
+          <TextField isDisabled={!isEnabled} className="flex flex-col gap-2">
+            <Label>Announcement Text</Label>
             <Input
-              id="announcement-text"
+              name="announcement-text"
               placeholder="Enter your announcement message..."
               value={announcementText}
               onChange={(e) => setAnnouncementText(e.target.value)}
               className="text-base"
-              disabled={!isEnabled}
             />
             <p className="text-muted-foreground text-sm">
               Keep it concise and clear. This will appear at the top of every
               page.
             </p>
-          </div>
+          </TextField>
 
           {/* Preview */}
           {isEnabled && announcementText && (
@@ -150,15 +149,15 @@ export function AnnouncementForm() {
           {/* Save Button */}
           <div className="flex justify-end">
             <Button
-              onClick={handleSave}
-              disabled={isSaving || (isEnabled && !announcementText.trim())}
+              onPress={handleSave}
+              isDisabled={isSaving || (isEnabled && !announcementText.trim())}
               className="flex items-center gap-2"
             >
               <Save className="size-4" />
               {isSaving ? "Saving..." : "Save Changes"}
             </Button>
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
     </>
   );

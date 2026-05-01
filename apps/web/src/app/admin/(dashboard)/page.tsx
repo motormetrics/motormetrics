@@ -1,11 +1,4 @@
-import { Badge } from "@motormetrics/ui/components/badge";
-import { Button } from "@motormetrics/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
+import { Button, Card, Chip } from "@heroui/react";
 import { WorkflowMonitor } from "@web/app/admin/components/workflow-monitor";
 import { Database, RefreshCw, Server, Settings, Wrench } from "lucide-react";
 import Link from "next/link";
@@ -19,64 +12,66 @@ const Dashboard = () => {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium text-sm">System Status</CardTitle>
+          <Card.Header className="flex flex-row items-center justify-between pb-2">
+            <Card.Title className="font-medium text-sm">
+              System Status
+            </Card.Title>
             <Server className="size-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center space-x-2">
-              <Badge variant="default" className="bg-green-500">
+          </Card.Header>
+          <Card.Content>
+            <div className="flex items-center gap-2">
+              <Chip color="success" variant="primary">
                 Operational
-              </Badge>
+              </Chip>
             </div>
             <p className="mt-2 text-muted-foreground text-xs">
               All systems running normally
             </p>
-          </CardContent>
+          </Card.Content>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium text-sm">
+          <Card.Header className="flex flex-row items-center justify-between pb-2">
+            <Card.Title className="font-medium text-sm">
               Maintenance Mode
-            </CardTitle>
+            </Card.Title>
             <Wrench className="size-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center space-x-2">
-              <Badge variant="secondary">Inactive</Badge>
+          </Card.Header>
+          <Card.Content>
+            <div className="flex items-center gap-2">
+              <Chip>Inactive</Chip>
             </div>
             <p className="mt-2 text-muted-foreground text-xs">
               Services running normally
             </p>
-          </CardContent>
+          </Card.Content>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="font-medium text-sm">Database</CardTitle>
+          <Card.Header className="flex flex-row items-center justify-between pb-2">
+            <Card.Title className="font-medium text-sm">Database</Card.Title>
             <Database className="size-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center space-x-2">
-              <Badge variant="default" className="bg-green-500">
+          </Card.Header>
+          <Card.Content>
+            <div className="flex items-center gap-2">
+              <Chip color="success" variant="primary">
                 Connected
-              </Badge>
+              </Chip>
             </div>
             <p className="mt-2 text-muted-foreground text-xs">
               PostgreSQL connection active
             </p>
-          </CardContent>
+          </Card.Content>
         </Card>
       </div>
 
       <WorkflowMonitor />
 
       <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+        <Card.Header>
+          <Card.Title>Quick Actions</Card.Title>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Button variant="outline" className="flex h-20 flex-col gap-2">
               <RefreshCw className="size-6" />
@@ -138,7 +133,7 @@ const Dashboard = () => {
               </Button>
             </Link>
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
     </div>
   );

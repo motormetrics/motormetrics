@@ -1,12 +1,4 @@
-import { Badge } from "@motormetrics/ui/components/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
-import { Separator } from "@motormetrics/ui/components/separator";
+import { Card, Chip, Separator } from "@heroui/react";
 import {
   AlertTriangle,
   Bell,
@@ -36,20 +28,20 @@ const SettingsPage = () => {
         {/* Maintenance Settings */}
         <Link href="/settings/maintenance">
           <Card className="cursor-pointer transition-colors hover:bg-muted/50">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
+            <Card.Header>
+              <Card.Title className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Wrench className="size-5" />
                   Maintenance Mode
                 </div>
-                <Badge variant="secondary">Inactive</Badge>
-              </CardTitle>
-              <CardDescription>
+                <Chip>Inactive</Chip>
+              </Card.Title>
+              <Card.Description>
                 Enable maintenance mode to temporarily disable site access for
                 updates and repairs.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </Card.Description>
+            </Card.Header>
+            <Card.Content>
               <div className="flex flex-col gap-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Status:</span>
@@ -62,22 +54,22 @@ const SettingsPage = () => {
                   <span>Never</span>
                 </div>
               </div>
-            </CardContent>
+            </Card.Content>
           </Card>
         </Link>
 
         {/* Site Configuration */}
         <Card className="cursor-pointer opacity-60">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+          <Card.Header>
+            <Card.Title className="flex items-center gap-2">
               <Globe className="size-5" />
               Site Configuration
-            </CardTitle>
-            <CardDescription>
+            </Card.Title>
+            <Card.Description>
               Manage global site settings, domains, and basic configuration.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Environment:</span>
@@ -88,22 +80,22 @@ const SettingsPage = () => {
                 <span>motormetrics.app</span>
               </div>
             </div>
-          </CardContent>
+          </Card.Content>
         </Card>
 
         {/* Database Settings */}
         <Card className="cursor-pointer opacity-60">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+          <Card.Header>
+            <Card.Title className="flex items-center gap-2">
               <Database className="size-5" />
               Database Settings
-            </CardTitle>
-            <CardDescription>
+            </Card.Title>
+            <Card.Description>
               Configure database connections, backup schedules, and data
               retention policies.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Connection:</span>
@@ -114,22 +106,22 @@ const SettingsPage = () => {
                 <span>2 hours ago</span>
               </div>
             </div>
-          </CardContent>
+          </Card.Content>
         </Card>
 
         {/* Security Settings */}
         <Card className="cursor-pointer opacity-60">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+          <Card.Header>
+            <Card.Title className="flex items-center gap-2">
               <Lock className="size-5" />
               Security Settings
-            </CardTitle>
-            <CardDescription>
+            </Card.Title>
+            <Card.Description>
               Manage authentication, API keys, rate limiting, and security
               policies.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">2FA Required:</span>
@@ -140,21 +132,21 @@ const SettingsPage = () => {
                 <span>1000/hour</span>
               </div>
             </div>
-          </CardContent>
+          </Card.Content>
         </Card>
 
         {/* User Management */}
         <Card className="cursor-pointer opacity-60">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+          <Card.Header>
+            <Card.Title className="flex items-center gap-2">
               <Users className="size-5" />
               User Management
-            </CardTitle>
-            <CardDescription>
+            </Card.Title>
+            <Card.Description>
               Configure user roles, permissions, and access control settings.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Total Users:</span>
@@ -165,21 +157,21 @@ const SettingsPage = () => {
                 <span>1</span>
               </div>
             </div>
-          </CardContent>
+          </Card.Content>
         </Card>
 
         {/* Notifications */}
         <Card className="cursor-pointer opacity-60">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+          <Card.Header>
+            <Card.Title className="flex items-center gap-2">
               <Bell className="size-5" />
               Notifications
-            </CardTitle>
-            <CardDescription>
+            </Card.Title>
+            <Card.Description>
               Configure email alerts, webhooks, and notification preferences.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Email Alerts:</span>
@@ -190,20 +182,20 @@ const SettingsPage = () => {
                 <span>2 configured</span>
               </div>
             </div>
-          </CardContent>
+          </Card.Content>
         </Card>
       </div>
 
       <Separator />
 
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+        <Card.Header>
+          <Card.Title className="flex items-center gap-2">
             <AlertTriangle className="size-5 text-amber-500" />
             Important Notes
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4 text-muted-foreground text-sm">
+          </Card.Title>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-4 text-muted-foreground text-sm">
           <div className="flex items-start gap-2">
             <span className="font-medium text-foreground">⚠️</span>
             <span>
@@ -224,7 +216,7 @@ const SettingsPage = () => {
               changes.
             </span>
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
     </div>
   );

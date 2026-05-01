@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
+import { Card } from "@heroui/react";
 import { AnnouncementForm } from "@web/app/admin/components/announcement-form";
 import { ArrowLeft, MessageSquare } from "lucide-react";
 import Link from "next/link";
@@ -36,10 +31,10 @@ export default function AnnouncementsPage() {
 
       {/* Instructions */}
       <Card>
-        <CardHeader>
-          <CardTitle>Instructions</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4 text-muted-foreground text-sm">
+        <Card.Header>
+          <Card.Title>Instructions</Card.Title>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-4 text-muted-foreground text-sm">
           <div className="flex items-start gap-2">
             <span className="font-medium text-foreground">1.</span>
             <span>
@@ -68,7 +63,7 @@ export default function AnnouncementsPage() {
               caching.
             </span>
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
     </div>
   );

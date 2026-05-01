@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
+import { Card } from "@heroui/react";
 import { FileText, MessageSquare } from "lucide-react";
 import Link from "next/link";
 
@@ -20,51 +14,53 @@ const Page = () => (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <Link href="/content/announcements" className="group">
         <Card className="h-full transition-colors hover:bg-muted/50">
-          <CardHeader>
+          <Card.Header>
             <div className="flex items-center gap-2">
               <MessageSquare className="size-5 text-primary" />
-              <CardTitle className="text-lg">Announcements</CardTitle>
+              <Card.Title className="text-lg">Announcements</Card.Title>
             </div>
-            <CardDescription>
+            <Card.Description>
               Manage site-wide announcements displayed to users
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
             <p className="text-muted-foreground text-sm">
               Create, edit, and schedule announcements that appear on the main
               website.
             </p>
-          </CardContent>
+          </Card.Content>
         </Card>
       </Link>
 
       <Link href="/admin/content/blog" className="group">
         <Card className="h-full transition-colors hover:bg-muted/50">
-          <CardHeader>
+          <Card.Header>
             <div className="flex items-center gap-2">
               <FileText className="size-5 text-primary" />
-              <CardTitle className="text-lg">Blog Posts</CardTitle>
+              <Card.Title className="text-lg">Blog Posts</Card.Title>
             </div>
-            <CardDescription>Manage blog content and articles</CardDescription>
-          </CardHeader>
-          <CardContent>
+            <Card.Description>
+              Manage blog content and articles
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
             <p className="text-muted-foreground text-sm">
               Create, view, and regenerate blog posts from market data.
             </p>
-          </CardContent>
+          </Card.Content>
         </Card>
       </Link>
 
       <Card className="h-full opacity-50">
-        <CardHeader>
-          <CardTitle className="text-lg">Banners</CardTitle>
-          <CardDescription>Coming soon</CardDescription>
-        </CardHeader>
-        <CardContent>
+        <Card.Header>
+          <Card.Title className="text-lg">Banners</Card.Title>
+          <Card.Description>Coming soon</Card.Description>
+        </Card.Header>
+        <Card.Content>
           <p className="text-muted-foreground text-sm">
             Manage promotional banners and notices.
           </p>
-        </CardContent>
+        </Card.Content>
       </Card>
     </div>
   </div>

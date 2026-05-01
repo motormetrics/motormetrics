@@ -1,18 +1,15 @@
 "use client";
 
-import { Badge } from "@motormetrics/ui/components/badge";
-import { Button } from "@motormetrics/ui/components/button";
 import {
+  Button,
   Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@motormetrics/ui/components/card";
-import { Input } from "@motormetrics/ui/components/input";
-import { Label } from "@motormetrics/ui/components/label";
-import { Separator } from "@motormetrics/ui/components/separator";
-import { Switch } from "@motormetrics/ui/components/switch";
+  Chip,
+  Input,
+  Label,
+  Separator,
+  Switch,
+  TextField,
+} from "@heroui/react";
 import {
   type MaintenanceConfig,
   updateMaintenanceConfig,
@@ -114,18 +111,23 @@ export function MaintenanceFormClient({
     <>
       {/* Current Status */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+        <Card.Header>
+          <Card.Title className="flex items-center justify-between">
             {labels.currentStatus.title}
-            <Badge variant={isMaintenanceEnabled ? "destructive" : "default"}>
+            <Chip
+              color={isMaintenanceEnabled ? "danger" : "success"}
+              variant="primary"
+            >
               {isMaintenanceEnabled
                 ? labels.currentStatus.underMaintenance
                 : labels.currentStatus.normalOperation}
-            </Badge>
-          </CardTitle>
-          <CardDescription>{labels.currentStatus.description}</CardDescription>
-        </CardHeader>
-        <CardContent>
+            </Chip>
+          </Card.Title>
+          <Card.Description>
+            {labels.currentStatus.description}
+          </Card.Description>
+        </Card.Header>
+        <Card.Content>
           <div className="flex items-center justify-center rounded-lg border p-6">
             <div className="text-center">
               <div className="mb-2 flex items-center justify-center gap-2">
@@ -134,8 +136,9 @@ export function MaintenanceFormClient({
               <div className="font-medium text-lg">
                 {labels.currentStatus.webApplication}
               </div>
-              <Badge
-                variant="outline"
+              <Chip
+                variant="secondary"
+                color={isMaintenanceEnabled ? "warning" : "success"}
                 className={
                   isMaintenanceEnabled
                     ? "mt-2 bg-orange-50 text-orange-700"
@@ -145,7 +148,7 @@ export function MaintenanceFormClient({
                 {isMaintenanceEnabled
                   ? labels.currentStatus.maintenanceMode
                   : labels.currentStatus.onlineOperational}
-              </Badge>
+              </Chip>
             </div>
           </div>
           {isMaintenanceEnabled && maintenanceMessage && (
@@ -156,18 +159,20 @@ export function MaintenanceFormClient({
               </p>
             </div>
           )}
-        </CardContent>
+        </Card.Content>
       </Card>
 
       <Separator />
 
       {/* Maintenance Configuration */}
       <Card>
-        <CardHeader>
-          <CardTitle>{labels.configuration.title}</CardTitle>
-          <CardDescription>{labels.configuration.description}</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-6">
+        <Card.Header>
+          <Card.Title>{labels.configuration.title}</Card.Title>
+          <Card.Description>
+            {labels.configuration.description}
+          </Card.Description>
+        </Card.Header>
+        <Card.Content className="flex flex-col gap-6">
           {/* Enable/Disable Toggle */}
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
@@ -182,21 +187,23 @@ export function MaintenanceFormClient({
               </p>
             </div>
             <Switch
-              id="maintenance-toggle"
-              checked={isMaintenanceEnabled}
-              onCheckedChange={setIsMaintenanceEnabled}
-            />
+              aria-label={labels.configuration.enableToggle.label}
+              isSelected={isMaintenanceEnabled}
+              onChange={setIsMaintenanceEnabled}
+            >
+              <Switch.Control>
+                <Switch.Thumb />
+              </Switch.Control>
+            </Switch>
           </div>
 
           {isMaintenanceEnabled && (
             <>
               {/* Maintenance Message */}
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="maintenance-message">
-                  {labels.configuration.messageInput.label}
-                </Label>
+              <TextField className="flex flex-col gap-2">
+                <Label>{labels.configuration.messageInput.label}</Label>
                 <Input
-                  id="maintenance-message"
+                  name="maintenance-message"
                   placeholder={labels.configuration.messageInput.placeholder}
                   value={maintenanceMessage}
                   onChange={(e) => setMaintenanceMessage(e.target.value)}
@@ -205,7 +212,7 @@ export function MaintenanceFormClient({
                 <p className="text-muted-foreground text-sm">
                   {labels.configuration.messageInput.helpText}
                 </p>
-              </div>
+              </TextField>
 
               {/* Service Scope Info */}
               <div className="rounded-lg border bg-muted/50 p-4">
@@ -249,8 +256,8 @@ export function MaintenanceFormClient({
           {/* Save Button */}
           <div className="flex justify-end">
             <Button
-              onClick={handleSave}
-              disabled={isSaving || !isFormValid()}
+              onPress={handleSave}
+              isDisabled={isSaving || !isFormValid()}
               className="flex items-center gap-2"
             >
               <Save className="size-4" />
@@ -259,7 +266,7 @@ export function MaintenanceFormClient({
                 : labels.configuration.saveButton.default}
             </Button>
           </div>
-        </CardContent>
+        </Card.Content>
       </Card>
     </>
   );
