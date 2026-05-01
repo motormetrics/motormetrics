@@ -118,7 +118,7 @@ Route-specific server actions (mutations only):
 **Keep Centralised When:**
 
 - Component used by 3+ different routes
-- Part of design system (use HeroUI components from `@heroui/react` and shared tokens from `@motormetrics/theme`)
+- Part of design system (use HeroUI components from `@heroui/react` and tokens in `src/app/globals.css`)
 - Shared business logic (`queries/`, `lib/`)
 - Server actions used across multiple routes (`actions/`)
 - Generic utilities (`components/shared/`)
@@ -782,7 +782,7 @@ When refactoring existing code:
 
 A professional colour scheme optimised for HeroUI integration and automotive industry data visualisation (see GitHub issue #406). See `design-language-system` skill for comprehensive colour guidelines, chart implementation patterns, and migration checklists.
 
-**Dark Mode**: Dark CSS variables are defined in `@motormetrics/theme/dark.css`, imported by `globals.css`. Use HeroUI surface tokens such as `bg-surface` and `bg-surface-secondary` instead of hardcoded `bg-white` for card/panel backgrounds.
+**Dark Mode**: Dark CSS variables are defined in `src/app/globals.css`. Use HeroUI surface tokens such as `bg-surface` and `bg-surface-secondary` instead of hardcoded `bg-white` for card/panel backgrounds.
 
 **Brand Colour Palette**:
 
@@ -796,7 +796,7 @@ A professional colour scheme optimised for HeroUI integration and automotive ind
 
 **CSS Variable Mapping**:
 
-Base runtime tokens live in `@motormetrics/theme/light.css` and `@motormetrics/theme/dark.css`. `globals.css` bridges those tokens into Tailwind v4 utility classes with `@theme inline`, so utilities like `bg-primary`, `text-default-500`, `bg-surface`, and `border-default-200` resolve to the active theme values.
+Base runtime tokens live in `src/app/globals.css`, which bridges those tokens into Tailwind v4 utility classes with `@theme inline`, so utilities like `bg-primary`, `text-default-500`, `bg-surface`, and `border-default-200` resolve to the active theme values.
 
 ```css
 @theme inline {
@@ -1126,7 +1126,7 @@ The codebase has consolidated on **HeroUI as the primary component library**:
 - **UI Components**: Use HeroUI v3 components imported from `@heroui/react`
 - **Chart Components**: Use local Recharts wrappers from `@web/components/charts/chart`
 - **Component Selection**: Leverage HeroUI's professional design system for analytics interfaces, tables, forms, and navigation
-- **Customisation**: Apply HeroUI v3 CSS variables and `@motormetrics/theme` tokens to match Singapore car market branding
+- **Customisation**: Apply HeroUI v3 CSS variables and local web tokens to match Singapore car market branding
 - **Performance**: Take advantage of HeroUI's tree-shakeable, optimised components
 - **Migration Complete**: shadcn/ui has been removed; HeroUI v3 and local chart wrappers are the UI foundation
 

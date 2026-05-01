@@ -1,8 +1,4 @@
-/**
- * Chart Design Tokens
- *
- * Centralized chart tokens for consistent data visualisation across the application.
- */
+// TODO(sgcarstrends-anq): Remove these local chart tokens after migrating charts to HeroUI Pro charts.
 
 /**
  * Chart height tokens for standardized chart sizing (3-tier system)
@@ -69,9 +65,6 @@ export const CHART_COLOURS = [
   "hsl(212 17% 76%)", // chart-6 - Pale Slate
 ] as const;
 
-/**
- * Type exports for type safety
- */
 export type ChartHeight = keyof typeof CHART_HEIGHTS;
 export type ChartMargin = keyof typeof CHART_MARGINS;
 export type ChartGrid = keyof typeof CHART_GRID;

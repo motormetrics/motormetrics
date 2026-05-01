@@ -235,9 +235,6 @@ importers:
       '@motormetrics/database':
         specifier: workspace:*
         version: link:../../packages/database
-      '@motormetrics/theme':
-        specifier: workspace:*
-        version: link:../../packages/theme
       '@motormetrics/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -517,15 +514,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 4.1.0(@opentelemetry/api@1.9.0)(@types/node@22.19.3)(@vitest/ui@4.1.0)(jsdom@26.1.0)(vite@7.3.0(@types/node@22.19.3)(jiti@2.6.1)(lightningcss@1.30.2)(yaml@2.8.2))
-
-  packages/theme:
-    devDependencies:
-      tailwindcss:
-        specifier: 'catalog:'
-        version: 4.1.18
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
 
   packages/types: {}
 

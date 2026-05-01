@@ -108,7 +108,6 @@ motormetrics/
 │   │   └── migrations/      # Database migration files
 │   ├── logos/        # Car logo management with Vercel Blob storage
 │   ├── types/        # Shared TypeScript types
-│   ├── theme/        # Shared design tokens and chart/spacing constants
 │   └── utils/        # Shared utility functions and Redis configuration
 ```
 

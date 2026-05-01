@@ -1,6 +1,5 @@
 "use client";
 
-import { CHART_MARGINS } from "@motormetrics/theme/charts";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
   ChartContainer,
@@ -9,6 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@web/components/charts/chart";
+import { CHART_MARGINS } from "@web/components/charts/tokens";
 import { ChartWidget } from "@web/components/charts/widget";
 import { formatNumber } from "@web/utils/charts";
 import { useMemo } from "react";

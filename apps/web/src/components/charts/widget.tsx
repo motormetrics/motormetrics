@@ -2,7 +2,7 @@
 
 import { Card, cn } from "@heroui/react";
 
-import { CHART_HEIGHTS, type ChartHeight } from "@motormetrics/theme/charts";
+import { CHART_HEIGHTS, type ChartHeight } from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { fadeInUpVariants } from "@web/config/animations";
 import { motion, useReducedMotion } from "framer-motion";

@@ -3,13 +3,13 @@
 import { Card, cn } from "@heroui/react";
 
 import type { SelectCarCost } from "@motormetrics/database";
-import { CHART_HEIGHTS } from "@motormetrics/theme/charts";
 import { VES_BAND_ORDER } from "@web/app/(main)/(explore)/cars/costs/constants";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@web/components/charts/chart";
+import { CHART_HEIGHTS } from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { Cell, Pie, PieChart } from "recharts";
 

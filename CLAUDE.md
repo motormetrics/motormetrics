@@ -127,7 +127,6 @@ All commands use pnpm as the package manager.
     - **src/infra/storage**: Vercel Blob service with Redis caching
     - **src/utils**: Brand name normalization utilities
 - **packages/types**: Shared TypeScript type definitions
-- **packages/theme**: Shared design tokens, chart constants, and spacing constants
 - **packages/utils**: Shared utility functions and Redis configuration
 
 ## Monorepo Build System
@@ -156,7 +155,7 @@ The project uses **pnpm with catalog** for centralised dependency version manage
 
 - Strict type checking enabled (noImplicitAny, strictNullChecks)
 - Avoid `any` type - prefer `unknown` with type guards
-- Use workspace imports: `@motormetrics/database`, `@motormetrics/theme`, `@motormetrics/utils`, `@motormetrics/types`
+- Use workspace imports: `@motormetrics/database`, `@motormetrics/utils`, `@motormetrics/types`
 
 ### Biome
 
@@ -248,7 +247,6 @@ PostgreSQL with Drizzle ORM using **camelCase** column naming:
 - **`@motormetrics/database`**: Drizzle ORM schemas and migrations
 - **`@motormetrics/types`**: Shared TypeScript interfaces
 - **`@motormetrics/utils`**: Utility functions and centralised Redis client
-- **`@motormetrics/theme`**: Shared design tokens, chart constants, and spacing constants
 - **`@motormetrics/logos`**: Car logo management with Vercel Blob storage, automatic scraping, Redis caching, and brand name normalization
 
 *See component CLAUDE.md files for architecture details (workflows, blog generation, social media integration).*

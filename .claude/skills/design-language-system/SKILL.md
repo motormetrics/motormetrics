@@ -234,7 +234,7 @@ const chartData = data.map((item, index) => ({
 
 ## HeroUI Theme Integration
 
-The colour system is integrated with HeroUI v3 via CSS variables in `@motormetrics/theme` and `apps/web/src/app/globals.css`:
+The colour system is integrated with HeroUI v3 via CSS variables in `apps/web/src/app/globals.css`:
 
 ```css
 :root {
@@ -261,7 +261,7 @@ Use the `default` scale for UI element states:
 
 ## Dark Mode
 
-Dark CSS variables are defined in `packages/theme/src/dark.css` and imported by `apps/web/src/app/globals.css`.
+Dark CSS variables are defined in `apps/web/src/app/globals.css`.
 
 **Dark mode readiness guidelines:**
 
@@ -337,8 +337,7 @@ OG images require inline styles and cannot use CSS variables:
 ## Related Files
 
 - `apps/web/src/app/globals.css` - CSS variable definitions
-- `packages/theme/src/light.css` - Light theme tokens
-- `packages/theme/src/dark.css` - Dark theme tokens
+- `apps/web/src/components/charts/tokens.ts` - Temporary local Recharts chart tokens
 - `apps/web/CLAUDE.md` - Colour System section
 
 ## Accessibility (WCAG AA)

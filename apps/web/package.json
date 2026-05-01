@@ -29,7 +29,6 @@
     "@langfuse/otel": "catalog:",
     "@motormetrics/ai": "workspace:*",
     "@motormetrics/database": "workspace:*",
-    "@motormetrics/theme": "workspace:*",
     "@motormetrics/types": "workspace:*",
     "@motormetrics/utils": "workspace:*",
     "@neondatabase/serverless": "1.0.1",

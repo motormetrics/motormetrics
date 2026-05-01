@@ -3,11 +3,6 @@
 import { Card, cn } from "@heroui/react";
 
 import type { SelectCarCost } from "@motormetrics/database";
-import {
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-} from "@motormetrics/theme/charts";
 import { formatCurrency } from "@motormetrics/utils";
 import {
   FUEL_TYPE_LABELS,
@@ -18,6 +13,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@web/components/charts/chart";
+import {
+  CHART_CURSOR,
+  CHART_GRID,
+  CHART_HEIGHTS,
+} from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 

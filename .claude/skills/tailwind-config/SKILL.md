@@ -9,17 +9,13 @@ allowed-tools: Read, Edit, Grep, Glob
 ## Configuration Structure
 
 ```
-packages/theme/
-├── src/light.css            # Light design tokens
-└── src/dark.css             # Dark design tokens
-
 apps/web/
-└── src/app/globals.css      # Tailwind, HeroUI, and theme imports
+└── src/app/globals.css      # Tailwind, HeroUI, and theme tokens
 ```
 
 ## CSS Variables
 
-Defined in `packages/theme/src/light.css` and `packages/theme/src/dark.css`, then mapped in `apps/web/src/app/globals.css`:
+Defined and mapped in `apps/web/src/app/globals.css`:
 
 ```css
 @layer base {
@@ -126,7 +122,7 @@ Use `size-*` instead of `h-* w-*` for equal dimensions:
 @custom-variant dark (&:is(.dark *));
 ```
 
-This is configured in `apps/web/src/app/globals.css`. Dark CSS variables are defined in `packages/theme/src/dark.css`.
+This is configured in `apps/web/src/app/globals.css`, which also defines dark CSS variables.
 
 **Theme switching** uses `next-themes` with `attribute="class"` to toggle `.dark` on `<html>`:
 
@@ -135,7 +131,7 @@ import { useTheme } from "next-themes";
 const { resolvedTheme, setTheme } = useTheme();
 ```
 
-**Status**: Dark mode CSS infrastructure is ready via shared theme tokens.
+**Status**: Dark mode CSS infrastructure is ready via web-local theme tokens.
 
 ## Debugging
 

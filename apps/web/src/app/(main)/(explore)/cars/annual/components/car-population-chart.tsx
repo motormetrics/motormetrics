@@ -2,13 +2,13 @@
 
 import { Card } from "@heroui/react";
 
-import { CHART_CURSOR, CHART_GRID } from "@motormetrics/theme/charts";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@web/components/charts/chart";
+import { CHART_CURSOR, CHART_GRID } from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";

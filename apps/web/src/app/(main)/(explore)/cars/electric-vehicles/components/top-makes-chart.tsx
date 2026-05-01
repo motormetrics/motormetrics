@@ -1,17 +1,16 @@
 "use client";
 
 import { Card, cn } from "@heroui/react";
-
-import {
-  CHART_CURSOR,
-  CHART_GRID,
-  CHART_HEIGHTS,
-} from "@motormetrics/theme/charts";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@web/components/charts/chart";
+import {
+  CHART_CURSOR,
+  CHART_GRID,
+  CHART_HEIGHTS,
+} from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import type { EvTopMake } from "@web/queries/cars/electric-vehicles";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";

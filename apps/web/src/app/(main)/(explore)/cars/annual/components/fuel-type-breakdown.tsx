@@ -2,7 +2,6 @@
 
 import { Card, cn } from "@heroui/react";
 
-import { CHART_HEIGHTS } from "@motormetrics/theme/charts";
 import {
   FUEL_GROUP_COLORS,
   FUEL_GROUP_MAP,
@@ -14,6 +13,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@web/components/charts/chart";
+import { CHART_HEIGHTS } from "@web/components/charts/tokens";
 import Typography from "@web/components/typography";
 import { useMemo } from "react";
 import { Cell, Pie, PieChart } from "recharts";

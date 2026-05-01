@@ -1,10 +1,162 @@
 @import "tailwindcss";
 @import "@heroui/styles";
-@import "@motormetrics/theme/light.css";
-@import "@motormetrics/theme/dark.css";
-@import "@motormetrics/theme/charts.css";
 
 @plugin "@tailwindcss/typography";
+
+@layer base {
+  :root {
+    color-scheme: light;
+
+    /* Primitive Colors (Do not change between light and dark) */
+    --white: oklch(100% 0 0);
+    --black: oklch(0% 0 0);
+    --snow: oklch(0.9911 0 0);
+    --eclipse: oklch(0.3103 0.0197 264.23);
+
+    /* Spacing scale */
+    --spacing: 0.25rem;
+
+    /* Border */
+    --border-width: 1px;
+    --field-border-width: 0px;
+    --disabled-opacity: 0.5;
+
+    /* Ring offset - Used for focus ring */
+    --ring-offset-width: 2px;
+
+    /* Cursor */
+    --cursor-interactive: pointer;
+    --cursor-disabled: not-allowed;
+
+    /* Radius */
+    --radius: 0.5rem;
+    --field-radius: calc(var(--radius) * 1.5);
+
+    /* Base Colors */
+    --background: oklch(0.9592 0.0072 253.27);
+    --foreground: var(--eclipse);
+
+    /* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
+    --surface: var(--white);
+    --surface-foreground: var(--foreground);
+
+    /* Overlay: Used for floating/overlay components (tooltips, popovers, modals, menus) */
+    --overlay: var(--white);
+    --overlay-foreground: var(--foreground);
+
+    --muted: oklch(0.5564 0.0398 256.82);
+    --scrollbar: oklch(0.9258 0.0132 255.03);
+
+    --default: oklch(0.9258 0.0132 255.03);
+    --default-foreground: var(--foreground);
+
+    --accent: oklch(0.2894 0.1433 272.9);
+    --accent-foreground: var(--white);
+
+    /* Form Field Defaults - Colors */
+    --field-background: var(--white);
+    --field-foreground: var(--foreground);
+    --field-placeholder: var(--muted);
+    --field-border: transparent;
+
+    /* Status Colors */
+    --success: oklch(0.7205 0.192 149.49);
+    --success-foreground: var(--foreground);
+
+    --warning: oklch(0.7697 0.1645 70.61);
+    --warning-foreground: var(--foreground);
+
+    --danger: oklch(0.5786 0.2137 27.17);
+    --danger-foreground: var(--white);
+
+    /* Component Colors */
+    --segment: var(--white);
+    --segment-foreground: var(--foreground);
+
+    /* Misc Colors */
+    --border: oklch(0.9258 0.0132 255.03);
+    --separator: oklch(0.9258 0.0132 255.03);
+    --focus: var(--accent);
+    --link: var(--foreground);
+
+    /* Backdrop */
+    --backdrop: rgba(0, 0, 0, 0.5);
+
+    /* Shadows */
+    --surface-shadow:
+      0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+      0 0 1px 0 rgba(0, 0, 0, 0.06);
+    --overlay-shadow:
+      0 4px 16px 0 rgba(24, 24, 27, 0.08), 0 8px 24px 0 rgba(24, 24, 27, 0.09);
+    --field-shadow:
+      0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+      0 0 1px 0 rgba(0, 0, 0, 0.06);
+
+    /* Skeleton Default Global Animation */
+    --skeleton-animation: shimmer;
+
+    /* MotorMetrics chart tokens. Kept separate from HeroUI theme variables. */
+    --chart-1: oklch(0.2894 0.1433 272.9);
+    --chart-2: oklch(0.4018 0.1119 263.29);
+    --chart-3: oklch(0.5138 0.102 263.13);
+    --chart-4: oklch(0.5872 0.0334 248.17);
+    --chart-5: oklch(0.7159 0.0358 256.79);
+    --chart-6: oklch(0.8064 0.0226 251.2);
+    --chart-grid: var(--border);
+  }
+
+  .dark,
+  [data-theme="dark"] {
+    color-scheme: dark;
+
+    /* Base Colors */
+    --background: oklch(0.1371 0.036 258.53);
+    --foreground: oklch(0.9838 0.0035 247.86);
+
+    /* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
+    --surface: oklch(0.28 0.0369 259.97);
+    --surface-foreground: var(--foreground);
+
+    /* Overlay: Used for floating/overlay components (tooltips, popovers, modals, menus) */
+    --overlay: oklch(0.3037 0.0413 259.96);
+    --overlay-foreground: var(--foreground);
+
+    --muted: oklch(0.7107 0.0351 256.79);
+    --scrollbar: oklch(0.7107 0.0351 256.79);
+
+    --default: oklch(0.28 0.0369 259.97);
+    --default-foreground: var(--foreground);
+
+    /* Form Field Defaults - Colors (only the ones that are different from light theme) */
+    --field-background: var(--default);
+    --field-foreground: var(--foreground);
+
+    /* Status Colors */
+    --warning: oklch(0.7697 0.1645 70.61);
+    --warning-foreground: var(--background);
+
+    --danger: oklch(0.3959 0.1331 25.72);
+    --danger-foreground: var(--foreground);
+
+    /* Component Colors */
+    --segment: oklch(0.28 0.0369 259.97);
+    --segment-foreground: var(--foreground);
+
+    /* Misc Colors */
+    --border: oklch(0.28 0.0369 259.97);
+    --separator: oklch(0.28 0.0369 259.97);
+    --focus: var(--accent);
+    --link: var(--foreground);
+
+    /* Backdrop */
+    --backdrop: rgba(0, 0, 0, 0.6);
+
+    /* Shadows */
+    --surface-shadow: 0 0 0 0 transparent inset;
+    --overlay-shadow: 0 0 0 0 transparent inset;
+    --field-shadow: 0 0 0 0 transparent inset;
+  }
+}
 
 @theme inline {
   --color-background: var(--background);
