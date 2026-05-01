@@ -1,3 +1,9 @@
+## [4.66.6](https://github.com/motormetrics/motormetrics/compare/v4.66.5...v4.66.6) (2026-05-01)
+
+### Bug Fixes
+
+* **web:** use HeroUI table content wrapper ([c763bcd](https://github.com/motormetrics/motormetrics/commit/c763bcd9834f9c5323c8294b670e8e7b39659df0))
+
 ## [4.66.5](https://github.com/motormetrics/motormetrics/compare/v4.66.4...v4.66.5) (2026-04-29)
 
 ### Bug Fixes
