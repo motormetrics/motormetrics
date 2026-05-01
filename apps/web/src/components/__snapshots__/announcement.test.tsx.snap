@@ -1,17 +1,17 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Announcement > should prioritise path-specific announcements 1`] = `
-<div>
+<aside
+  class="bg-accent text-accent-foreground"
+>
   <div
-    data-testid="alert"
+    class="w-full px-4 py-3 text-center sm:px-6 lg:px-8"
   >
-    <div>
-      <div
-        data-testid="alert-title"
-      >
-        Cars update
-      </div>
-    </div>
+    <p
+      class="font-medium text-sm"
+    >
+      Cars update
+    </p>
   </div>
-</div>
+</aside>
 `;

@@ -1,25 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { Announcement } from "@web/components/announcement";
 import type { Announcement as AnnouncementType } from "@web/types";
+import { createElement } from "react";
 import { vi } from "vitest";
 
 const announcementsFixture: AnnouncementType[] = [];
 let mockPathname = "/";
-
-vi.mock("@heroui/react", () => {
-  const Alert = ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="alert">{children}</div>
-  );
-
-  Alert.Content = ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  );
-  Alert.Title = ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="alert-title">{children}</div>
-  );
-
-  return { Alert };
-});
 
 vi.mock("@web/config", () => ({
   get announcements() {
@@ -44,25 +30,23 @@ describe("Announcement", () => {
     );
     mockPathname = "/cars/makes";
 
-    render(<Announcement />);
+    render(createElement(Announcement));
 
     expect(document.body.firstChild).toMatchSnapshot();
-    expect(screen.getByTestId("alert-title")).toHaveTextContent(/Cars update/);
+    expect(screen.getByText("Cars update")).toBeInTheDocument();
   });
 
   it("should fall back to global announcements", () => {
     announcementsFixture.push({ content: "Global notice" });
     mockPathname = "/unknown";
 
-    render(<Announcement />);
+    render(createElement(Announcement));
 
-    expect(screen.getByTestId("alert-title")).toHaveTextContent(
-      "Global notice",
-    );
+    expect(screen.getByText("Global notice")).toBeInTheDocument();
   });
 
   it("should render nothing when configured list is empty", () => {
-    const { container } = render(<Announcement />);
+    const { container } = render(createElement(Announcement));
     expect(container).toBeEmptyDOMElement();
   });
 
@@ -70,7 +54,7 @@ describe("Announcement", () => {
     announcementsFixture.push({ content: "Cars update", paths: ["/cars"] });
     mockPathname = "/coe";
 
-    const { container } = render(<Announcement />);
+    const { container } = render(createElement(Announcement));
 
     expect(container).toBeEmptyDOMElement();
   });
