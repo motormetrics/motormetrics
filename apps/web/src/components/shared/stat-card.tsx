@@ -2,7 +2,7 @@
 
 import { Card, cn } from "@heroui/react";
 
-import { BarChartByType } from "@web/app/(main)/(explore)/cars/registrations/bar-chart-by-type";
+import { BarChartByType } from "@web/app/(main)/(dashboard)/cars/registrations/bar-chart-by-type";
 import Typography from "@web/components/typography";
 import { FUEL_TYPE } from "@web/config";
 import type { RegistrationStat } from "@web/types/cars";

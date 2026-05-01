@@ -88,7 +88,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 src/
 ├── app/                           # Next.js App Router - pages, layouts, API routes
 │   ├── (main)/                   # Main site layout group
-│   │   ├── (explore)/            # Explore route group (cars, COE data)
+│   │   ├── (dashboard)/          # Data dashboard route group (cars, COE data)
 │   │   │   ├── cars/             # Car data routes (registrations, fuel-types, etc.)
 │   │   │   │   └── components/   # Cars route-specific components (co-located)
 │   │   │   └── coe/              # COE data routes (results, premiums, pqp)

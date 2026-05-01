@@ -3,7 +3,7 @@ import type { RegistrationStat } from "@web/types/cars";
 import { StatCard } from "./stat-card";
 
 vi.mock(
-  "@web/app/(main)/(explore)/cars/registrations/bar-chart-by-type",
+  "@web/app/(main)/(dashboard)/cars/registrations/bar-chart-by-type",
   () => ({
     BarChartByType: ({ data }: { data: RegistrationStat[] }) => (
       <div data-testid="bar-chart">

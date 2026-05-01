@@ -1,6 +1,6 @@
 import type { SelectPost } from "@motormetrics/database";
 import { render, screen } from "@testing-library/react";
-import { RecentPosts } from "@web/app/(main)/(explore)/components/recent-posts";
+import { RecentPosts } from "@web/app/(main)/(dashboard)/components/recent-posts";
 
 vi.mock("@heroui/react", () => ({
   Button: ({

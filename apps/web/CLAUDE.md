@@ -44,8 +44,8 @@ pnpm format             # Format code with Biome
 src/
 ├── app/                           # Next.js App Router - pages, layouts, API routes
 │   ├── (main)/                    # Main site layout group
-│   │   ├── (explore)/             # Explore route group (cars, COE data)
-│   │   │   ├── components/        # Explore-level shared components (co-located)
+│   │   ├── (dashboard)/           # Data dashboard route group (cars, COE data)
+│   │   │   ├── components/        # Dashboard-level shared components (co-located)
 │   │   │   ├── cars/              # Car data routes
 │   │   │   │   ├── registrations/ # Car registrations (/cars/registrations)
 │   │   │   │   ├── fuel-types/    # Fuel type breakdowns (/cars/fuel-types)
@@ -100,12 +100,12 @@ This application follows **Vercel/Next.js co-location best practices** with rout
 
 Route-specific components live alongside their consuming routes:
 
-- **Explore**: `app/(main)/(explore)/components/` - Recent posts, section tabs, charts, animated sections
+- **Dashboard**: `app/(main)/(dashboard)/components/` - Recent posts, section tabs, charts, animated sections
 - **Blog**: `app/(main)/blog/components/` - Progress bar, view counter, related posts, blog list
-- **Cars**: `app/(main)/(explore)/cars/components/` - Category tabs, make selectors, trend charts
-- **Cars Registrations**: `app/(main)/(explore)/cars/registrations/components/` - Registration-specific components
-- **COE**: `app/(main)/(explore)/coe/components/` - COE categories, premium charts, PQP components
-- **Deregistrations**: `app/(main)/(explore)/cars/deregistrations/components/` - Category charts, trends, breakdown tables
+- **Cars**: `app/(main)/(dashboard)/cars/components/` - Category tabs, make selectors, trend charts
+- **Cars Registrations**: `app/(main)/(dashboard)/cars/registrations/components/` - Registration-specific components
+- **COE**: `app/(main)/(dashboard)/coe/components/` - COE categories, premium charts, PQP components
+- **Deregistrations**: `app/(main)/(dashboard)/cars/deregistrations/components/` - Category charts, trends, breakdown tables
 
 #### Co-located Actions (`actions/`)
 
@@ -136,7 +136,7 @@ Route-specific server actions (mutations only):
 ```typescript
 // ✅ Co-located components via path alias
 import {ProgressBar} from "@web/app/(main)/blog/components/progress-bar";
-import {VehiclePopulationMetrics} from "@web/app/(main)/(explore)/cars/annual/components/vehicle-population-metrics";
+import {VehiclePopulationMetrics} from "@web/app/(main)/(dashboard)/cars/annual/components/vehicle-population-metrics";
 
 // ✅ Shared queries and actions via path alias
 import {getCarRegistrations} from "@web/queries/cars";

@@ -72,7 +72,7 @@ This Skill ensures all UI components follow the project's Typography system and 
 ```
 Typography & Spacing Violations Found:
 
-src/app/(main)/(explore)/coe/components/category-card.tsx:15
+src/app/(main)/(dashboard)/coe/components/category-card.tsx:15
 ❌ <h3 className="text-2xl">Category A</h3>
 ✅ <Typography.H3>Category A</Typography.H3>
 
