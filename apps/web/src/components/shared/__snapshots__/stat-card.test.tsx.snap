@@ -3,7 +3,7 @@
 exports[`StatCard > should render with hero variant 1`] = `
 <div>
   <div
-    class="card card--default rounded-3xl shadow-md p-6"
+    class="card card--default"
     data-slot="card"
   >
     <div
@@ -11,12 +11,12 @@ exports[`StatCard > should render with hero variant 1`] = `
       data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
       >
         Test Title
       </h4>
       <p
-        class="text-default-600 text-sm leading-6"
+        class="text-muted text-sm leading-6"
       >
         Test Description
       </p>
@@ -47,7 +47,7 @@ exports[`StatCard > should render with hero variant 1`] = `
 exports[`StatCard > should render with required props 1`] = `
 <div>
   <div
-    class="card card--default rounded-2xl p-3"
+    class="card card--default"
     data-slot="card"
   >
     <div
@@ -55,12 +55,12 @@ exports[`StatCard > should render with required props 1`] = `
       data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
       >
         Test Title
       </h4>
       <p
-        class="text-default-600 text-sm leading-6"
+        class="text-muted text-sm leading-6"
       >
         Test Description
       </p>

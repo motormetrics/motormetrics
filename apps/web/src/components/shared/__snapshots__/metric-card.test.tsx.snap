@@ -3,7 +3,7 @@
 exports[`MetricCard > should combine metric value and comparison 1`] = `
 <div>
   <div
-    class="card card--default rounded-2xl p-3"
+    class="card card--default"
     data-slot="card"
   >
     <div
@@ -11,7 +11,7 @@ exports[`MetricCard > should combine metric value and comparison 1`] = `
       data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
       >
         COE Premiums
       </h4>
@@ -21,7 +21,7 @@ exports[`MetricCard > should combine metric value and comparison 1`] = `
       data-slot="card-content"
     >
       <div
-        class="font-semibold tabular-nums text-4xl text-primary"
+        class="font-semibold tabular-nums text-4xl text-accent"
       >
         <span>
           0
@@ -36,7 +36,7 @@ exports[`MetricCard > should combine metric value and comparison 1`] = `
         class="flex items-center gap-2"
       >
         <span
-          class="chip chip--success chip--soft"
+          class="chip chip--success chip--primary"
           data-slot="chip"
         >
           <svg
@@ -74,7 +74,7 @@ exports[`MetricCard > should combine metric value and comparison 1`] = `
 exports[`MetricCard > should render with hero variant 1`] = `
 <div>
   <div
-    class="card card--default rounded-3xl shadow-md p-6 border-l-4 border-primary"
+    class="card card--default border-l-4 border-accent"
     data-slot="card"
   >
     <div
@@ -82,7 +82,7 @@ exports[`MetricCard > should render with hero variant 1`] = `
       data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
       >
         Total Registrations
       </h4>
@@ -92,7 +92,7 @@ exports[`MetricCard > should render with hero variant 1`] = `
       data-slot="card-content"
     >
       <div
-        class="font-semibold tabular-nums text-5xl text-primary"
+        class="font-semibold tabular-nums text-5xl text-accent"
       >
         <span>
           0
@@ -107,7 +107,7 @@ exports[`MetricCard > should render with hero variant 1`] = `
         class="flex items-center gap-2"
       >
         <span
-          class="chip chip--success chip--soft"
+          class="chip chip--success chip--primary"
           data-slot="chip"
         >
           <svg

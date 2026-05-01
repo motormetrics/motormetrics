@@ -69,7 +69,7 @@ exports[`Skeleton components > should render SectionSkeleton without title 1`] =
 exports[`Skeleton components > should render SkeletonBentoCard 1`] = `
 <div>
   <div
-    class="card card--default p-6 rounded-3xl"
+    class="card card--default"
     data-slot="card"
   >
     <div
@@ -114,7 +114,7 @@ exports[`Skeleton components > should render SkeletonChart 1`] = `
 exports[`Skeleton components > should render SkeletonChartWidget 1`] = `
 <div>
   <div
-    class="card card--default p-3 rounded-2xl"
+    class="card card--default"
     data-slot="card"
   >
     <div
@@ -148,7 +148,7 @@ exports[`Skeleton components > should render SkeletonHeading 1`] = `
 exports[`Skeleton components > should render SkeletonMetricCard 1`] = `
 <div>
   <div
-    class="card card--default p-3 rounded-2xl"
+    class="card card--default"
     data-slot="card"
   >
     <div

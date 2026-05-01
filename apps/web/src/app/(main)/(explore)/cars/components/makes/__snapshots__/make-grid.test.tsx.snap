@@ -10,7 +10,7 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
       href="/cars/makes/audi"
     >
       <div
-        class="card card--default h-full p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+        class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
         data-slot="card"
       >
         <div
@@ -27,7 +27,7 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
                 class="flex size-16 shrink-0 items-center justify-center"
               >
                 <span
-                  class="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-lg text-primary-foreground"
+                  class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                 >
                   A
                 </span>
@@ -51,7 +51,7 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
       href="/cars/makes/bmw"
     >
       <div
-        class="card card--default h-full p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+        class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
         data-slot="card"
       >
         <div
@@ -68,7 +68,7 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
                 class="flex size-16 shrink-0 items-center justify-center"
               >
                 <span
-                  class="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-lg text-primary-foreground"
+                  class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                 >
                   B
                 </span>
@@ -92,7 +92,7 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
       href="/cars/makes/mercedes-benz"
     >
       <div
-        class="card card--default h-full p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+        class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
         data-slot="card"
       >
         <div
@@ -109,7 +109,7 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
                 class="flex size-16 shrink-0 items-center justify-center"
               >
                 <span
-                  class="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-lg text-primary-foreground"
+                  class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                 >
                   M
                 </span>
@@ -133,7 +133,7 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
       href="/cars/makes/volkswagen"
     >
       <div
-        class="card card--default h-full p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+        class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
         data-slot="card"
       >
         <div
@@ -150,7 +150,7 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
                 class="flex size-16 shrink-0 items-center justify-center"
               >
                 <span
-                  class="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-lg text-primary-foreground"
+                  class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                 >
                   V
                 </span>

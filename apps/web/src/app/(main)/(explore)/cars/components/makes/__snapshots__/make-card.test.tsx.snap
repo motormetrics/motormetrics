@@ -7,7 +7,7 @@ exports[`MakeCard > should render the make name 1`] = `
     href="/cars/makes/bmw"
   >
     <div
-      class="card card--default h-full p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+      class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
       data-slot="card"
     >
       <div

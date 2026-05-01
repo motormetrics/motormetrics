@@ -3,7 +3,7 @@
 exports[`Cars Category Charts > TopMakesChart > should render chart title and description 1`] = `
 <div>
   <div
-    class="card card--default p-3"
+    class="card card--default"
     data-slot="card"
   >
     <div
@@ -11,13 +11,13 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
       data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
       >
         Top Makes - 
         Petrol
       </h4>
       <p
-        class="text-default-600 text-sm leading-6"
+        class="text-muted text-sm leading-6"
       >
         Most popular brands in this category
       </p>
@@ -40,7 +40,7 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
             tabindex="0"
           >
             <span
-              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
+              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
               data-slot="chip"
             >
               <span>
@@ -57,7 +57,7 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
             tabindex="0"
           >
             <span
-              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
+              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
               data-slot="chip"
             >
               <span>
@@ -74,7 +74,7 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
             tabindex="0"
           >
             <span
-              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-primary first-of-type:text-primary-foreground"
+              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
               data-slot="chip"
             >
               <span>
@@ -85,7 +85,7 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
           </a>
         </div>
         <div
-          class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none h-[300px] w-full"
+          class="flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-default [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-default [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none h-[300px] w-full"
           data-chart="chart-_r_0_"
         >
           <style>

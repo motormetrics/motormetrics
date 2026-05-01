@@ -14,7 +14,7 @@ exports[`Navbar > should render correctly 1`] = `
         <button
           aria-expanded="false"
           aria-label="Open menu"
-          class="rounded-full p-2 text-foreground transition-colors hover:bg-surface-secondary md:hidden"
+          class="rounded-full p-2 text-foreground transition-colors hover:bg-surface md:hidden"
           type="button"
         >
           <svg
@@ -88,7 +88,7 @@ exports[`Navbar > should render correctly 1`] = `
         </li>
         <li>
           <a
-            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-surface-secondary text-foreground hover:bg-surface-tertiary"
+            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-surface text-foreground hover:bg-surface-tertiary"
             href="/about"
           >
             About
@@ -96,7 +96,7 @@ exports[`Navbar > should render correctly 1`] = `
         </li>
         <li>
           <a
-            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-surface-secondary text-foreground hover:bg-surface-tertiary"
+            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-surface text-foreground hover:bg-surface-tertiary"
             href="/blog"
           >
             Blog
@@ -104,7 +104,7 @@ exports[`Navbar > should render correctly 1`] = `
         </li>
         <li>
           <a
-            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-surface-secondary text-foreground hover:bg-surface-tertiary"
+            class="rounded-full px-4 py-2 font-medium text-sm transition-all duration-200 bg-surface text-foreground hover:bg-surface-tertiary"
             href="/learn"
           >
             Learn

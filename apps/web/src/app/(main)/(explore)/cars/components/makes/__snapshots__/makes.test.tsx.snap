@@ -17,7 +17,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           Test Makes
         </h2>
         <span
-          class="chip chip--accent chip--sm chip--soft"
+          class="chip chip--accent chip--sm chip--primary"
           data-slot="chip"
         >
           <span
@@ -163,12 +163,12 @@ exports[`Makes > should render the section with title and count 1`] = `
           ALL
         </span>
         <span
-          class="text-default-400"
+          class="text-muted"
         >
           ·
         </span>
         <span
-          class="text-default-500 text-sm"
+          class="text-muted text-sm"
         >
           4
            
@@ -200,7 +200,7 @@ exports[`Makes > should render the section with title and count 1`] = `
                     class="flex size-16 shrink-0 items-center justify-center"
                   >
                     <span
-                      class="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-lg text-primary-foreground"
+                      class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                     >
                       A
                     </span>
@@ -241,7 +241,7 @@ exports[`Makes > should render the section with title and count 1`] = `
                     class="flex size-16 shrink-0 items-center justify-center"
                   >
                     <span
-                      class="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-lg text-primary-foreground"
+                      class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                     >
                       B
                     </span>
@@ -282,7 +282,7 @@ exports[`Makes > should render the section with title and count 1`] = `
                     class="flex size-16 shrink-0 items-center justify-center"
                   >
                     <span
-                      class="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-lg text-primary-foreground"
+                      class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                     >
                       M
                     </span>
@@ -323,7 +323,7 @@ exports[`Makes > should render the section with title and count 1`] = `
                     class="flex size-16 shrink-0 items-center justify-center"
                   >
                     <span
-                      class="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-lg text-primary-foreground"
+                      class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-lg"
                     >
                       P
                     </span>

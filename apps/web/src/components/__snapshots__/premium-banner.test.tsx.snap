@@ -14,7 +14,7 @@ exports[`PremiumBanner > should populate the global banner with sorted categorie
         Category A
       </div>
       <span
-        class="chip chip--accent chip--soft"
+        class="chip chip--accent chip--primary"
         data-slot="chip"
       >
         <span
@@ -34,7 +34,7 @@ exports[`PremiumBanner > should populate the global banner with sorted categorie
         Category B
       </div>
       <span
-        class="chip chip--accent chip--soft"
+        class="chip chip--accent chip--primary"
         data-slot="chip"
       >
         <span

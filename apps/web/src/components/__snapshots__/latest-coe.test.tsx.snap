@@ -14,7 +14,7 @@ exports[`LatestCoe > should render all COE results 1`] = `
         class="flex items-center gap-2"
       >
         <h4
-          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
         >
           Category A
         </h4>
@@ -28,7 +28,7 @@ exports[`LatestCoe > should render all COE results 1`] = `
         class="grid grid-cols-2 items-center gap-2"
       >
         <div
-          class="bg-gradient-to-br from-primary to-primary/70 bg-clip-text font-bold text-2xl text-transparent"
+          class="bg-gradient-to-br from-accent to-accent/70 bg-clip-text font-bold text-2xl text-transparent"
         >
           <span>
             95000
@@ -49,7 +49,7 @@ exports[`LatestCoe > should render all COE results 1`] = `
         class="flex items-center gap-2"
       >
         <h4
-          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
         >
           Category B
         </h4>
@@ -63,7 +63,7 @@ exports[`LatestCoe > should render all COE results 1`] = `
         class="grid grid-cols-2 items-center gap-2"
       >
         <div
-          class="bg-gradient-to-br from-primary to-primary/70 bg-clip-text font-bold text-2xl text-transparent"
+          class="bg-gradient-to-br from-accent to-accent/70 bg-clip-text font-bold text-2xl text-transparent"
         >
           <span>
             105000

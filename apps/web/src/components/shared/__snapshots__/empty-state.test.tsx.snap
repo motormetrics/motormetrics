@@ -3,13 +3,13 @@
 exports[`EmptyState > should render default title and description 1`] = `
 <div>
   <div
-    class="flex flex-col items-center justify-center gap-6 rounded-3xl bg-default-50/50 px-8 py-12 "
+    class="flex flex-col items-center justify-center gap-6 rounded-3xl bg-default/50 px-8 py-12 "
   >
     <div
-      class="flex size-16 items-center justify-center rounded-2xl bg-default-100"
+      class="flex size-16 items-center justify-center rounded-2xl bg-default"
     >
       <svg
-        class="lucide lucide-file-question size-8 text-default-400"
+        class="lucide lucide-file-question size-8 text-muted"
         fill="none"
         height="24"
         stroke="currentColor"
@@ -40,7 +40,7 @@ exports[`EmptyState > should render default title and description 1`] = `
         No Data Available
       </h3>
       <p
-        class="text-sm leading-6 max-w-sm text-default-500"
+        class="text-sm leading-6 max-w-sm text-muted"
       >
         The requested data could not be found. Please try a different selection.
       </p>

@@ -6,7 +6,7 @@ exports[`MetricsComparison > should indicate positive growth 1`] = `
     class="flex items-center gap-2"
   >
     <span
-      class="chip chip--success chip--soft"
+      class="chip chip--success chip--primary"
       data-slot="chip"
     >
       <svg

@@ -34,7 +34,7 @@ exports[`Footer > should render asynchronous footer content with version informa
             />
           </svg>
           <p
-            class="text-default-600 text-sm leading-6"
+            class="text-muted text-sm leading-6"
           >
             Your go-to source for Singapore car market data and trends. We make sense of the numbers so you don't have to.
           </p>
@@ -48,7 +48,7 @@ exports[`Footer > should render asynchronous footer content with version informa
             >
               <button
                 aria-label="GitHub"
-                class="button button--icon-only button--sm button--tertiary rounded-full text-default-500 transition-colors hover:text-primary"
+                class="button button--icon-only button--sm button--tertiary rounded-full text-muted transition-colors hover:text-accent"
                 data-rac=""
                 data-react-aria-pressable="true"
                 data-slot="button"
@@ -81,7 +81,7 @@ exports[`Footer > should render asynchronous footer content with version informa
             >
               <button
                 aria-label="Instagram"
-                class="button button--icon-only button--sm button--tertiary rounded-full text-default-500 transition-colors hover:text-primary"
+                class="button button--icon-only button--sm button--tertiary rounded-full text-muted transition-colors hover:text-accent"
                 data-rac=""
                 data-react-aria-pressable="true"
                 data-slot="button"
@@ -114,7 +114,7 @@ exports[`Footer > should render asynchronous footer content with version informa
             >
               <button
                 aria-label="Telegram"
-                class="button button--icon-only button--sm button--tertiary rounded-full text-default-500 transition-colors hover:text-primary"
+                class="button button--icon-only button--sm button--tertiary rounded-full text-muted transition-colors hover:text-accent"
                 data-rac=""
                 data-react-aria-pressable="true"
                 data-slot="button"
@@ -146,7 +146,7 @@ exports[`Footer > should render asynchronous footer content with version informa
           class="flex flex-col gap-4"
         >
           <h4
-            class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+            class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
           >
             Navigation
           </h4>
@@ -154,41 +154,41 @@ exports[`Footer > should render asynchronous footer content with version informa
             class="flex flex-col gap-2"
           >
             <a
-              class="block text-default-600 transition-colors hover:text-primary"
+              class="block text-muted transition-colors hover:text-accent"
               href="/"
             >
               <p
-                class="text-default-600 text-sm leading-6"
+                class="text-muted text-sm leading-6"
               >
                 Overview
               </p>
             </a>
             <a
-              class="block text-default-600 transition-colors hover:text-primary"
+              class="block text-muted transition-colors hover:text-accent"
               href="/about"
             >
               <p
-                class="text-default-600 text-sm leading-6"
+                class="text-muted text-sm leading-6"
               >
                 About
               </p>
             </a>
             <a
-              class="block text-default-600 transition-colors hover:text-primary"
+              class="block text-muted transition-colors hover:text-accent"
               href="/blog"
             >
               <p
-                class="text-default-600 text-sm leading-6"
+                class="text-muted text-sm leading-6"
               >
                 Blog
               </p>
             </a>
             <a
-              class="block text-default-600 transition-colors hover:text-primary"
+              class="block text-muted transition-colors hover:text-accent"
               href="/learn"
             >
               <p
-                class="text-default-600 text-sm leading-6"
+                class="text-muted text-sm leading-6"
               >
                 Learn
               </p>
@@ -206,10 +206,10 @@ exports[`Footer > should render asynchronous footer content with version informa
         class="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0"
       >
         <div
-          class="text-center text-default-600 md:text-left"
+          class="text-center text-muted md:text-left"
         >
           <p
-            class="text-default-600 text-sm leading-6"
+            class="text-muted text-sm leading-6"
           >
             © 
             2026
@@ -219,12 +219,12 @@ exports[`Footer > should render asynchronous footer content with version informa
             0.0.0-test
           </p>
           <p
-            class="text-default-600 text-sm leading-6"
+            class="text-muted text-sm leading-6"
           >
             Data provided by
              
             <a
-              class="text-primary hover:underline"
+              class="text-accent hover:underline"
               href="https://datamall.lta.gov.sg"
               rel="noopener noreferrer"
               target="_blank"
@@ -237,21 +237,21 @@ exports[`Footer > should render asynchronous footer content with version informa
           class="flex gap-4"
         >
           <a
-            class="text-default-600 transition-colors hover:text-primary"
+            class="text-muted transition-colors hover:text-accent"
             href="/legal/privacy-policy"
           >
             <p
-              class="text-default-600 text-sm leading-6"
+              class="text-muted text-sm leading-6"
             >
               Privacy Policy
             </p>
           </a>
           <a
-            class="text-default-600 transition-colors hover:text-primary"
+            class="text-muted transition-colors hover:text-accent"
             href="/legal/terms-of-service"
           >
             <p
-              class="text-default-600 text-sm leading-6"
+              class="text-muted text-sm leading-6"
             >
               Terms of Service
             </p>

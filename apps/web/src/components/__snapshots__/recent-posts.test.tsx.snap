@@ -3,9 +3,7 @@
 exports[`RecentPosts > should render title and view all link 1`] = `
 <div>
   <section>
-    <div
-      class="p-6"
-    >
+    <div>
       <div
         class="mb-5 flex items-center justify-between"
       >

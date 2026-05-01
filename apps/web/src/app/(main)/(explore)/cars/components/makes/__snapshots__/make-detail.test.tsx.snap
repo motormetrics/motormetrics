@@ -6,13 +6,13 @@ exports[`MakeDetail > should render metric cards 1`] = `
     class="flex flex-col gap-6"
   >
     <div
-      class="flex items-center gap-4 border-default-100 border-b pb-6"
+      class="flex items-center gap-4 border-border border-b pb-6"
     >
       <div
         class="flex size-16 items-center justify-center"
       >
         <span
-          class="flex size-full items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground text-xl"
+          class="flex size-full items-center justify-center rounded-full bg-accent font-semibold text-accent-foreground text-xl"
         >
           B
         </span>
@@ -26,7 +26,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
           BMW
         </h2>
         <p
-          class="text-default-600 text-sm leading-6"
+          class="text-muted text-sm leading-6"
         >
           Vehicle Registrations
         </p>
@@ -36,13 +36,13 @@ exports[`MakeDetail > should render metric cards 1`] = `
       class="grid grid-cols-3 gap-4"
     >
       <div
-        class="flex flex-col gap-2 rounded-2xl bg-default-100 p-4"
+        class="flex flex-col gap-2 rounded-2xl bg-default p-4"
       >
         <div
           class="flex items-center gap-2"
         >
           <svg
-            class="lucide lucide-car size-3.5 text-primary"
+            class="lucide lucide-car size-3.5 text-accent"
             fill="none"
             height="24"
             stroke="currentColor"
@@ -71,19 +71,19 @@ exports[`MakeDetail > should render metric cards 1`] = `
             />
           </svg>
           <span
-            class="text-xs leading-tight text-primary"
+            class="text-xs leading-tight text-accent"
           >
             Total
           </span>
         </div>
         <span
-          class="font-bold text-primary text-xl tabular-nums"
+          class="font-bold text-accent text-xl tabular-nums"
         >
           100
         </span>
       </div>
       <div
-        class="flex flex-col gap-2 rounded-2xl bg-default-100 p-4"
+        class="flex flex-col gap-2 rounded-2xl bg-default p-4"
       >
         <div
           class="flex items-center gap-2"
@@ -120,13 +120,13 @@ exports[`MakeDetail > should render metric cards 1`] = `
         </span>
       </div>
       <div
-        class="flex flex-col gap-2 rounded-2xl bg-default-100 p-4"
+        class="flex flex-col gap-2 rounded-2xl bg-default p-4"
       >
         <div
           class="flex items-center gap-2"
         >
           <svg
-            class="lucide lucide-calendar size-3.5 text-default-500"
+            class="lucide lucide-calendar size-3.5 text-muted"
             fill="none"
             height="24"
             stroke="currentColor"
@@ -165,7 +165,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
         >
           2
           <span
-            class="ml-1 font-normal text-default-400 text-sm"
+            class="ml-1 font-normal text-muted text-sm"
           >
             mo
           </span>
@@ -173,7 +173,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
       </div>
     </div>
     <div
-      class="card card--default p-3"
+      class="card card--default"
       data-slot="card"
     >
       <div
@@ -181,7 +181,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
         data-slot="card-header"
       >
         <h4
-          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
         >
           Historical Trend
         </h4>
@@ -201,7 +201,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
       </div>
     </div>
     <div
-      class="card card--default p-3"
+      class="card card--default"
       data-slot="card"
     >
       <div
@@ -209,7 +209,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
         data-slot="card-header"
       >
         <h4
-          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
         >
           Registration vs COE Premium
         </h4>
@@ -229,7 +229,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
       </div>
     </div>
     <div
-      class="card card--default p-3"
+      class="card card--default"
       data-slot="card"
     >
       <div
@@ -237,7 +237,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
         data-slot="card-header"
       >
         <h4
-          class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
         >
           Summary
         </h4>

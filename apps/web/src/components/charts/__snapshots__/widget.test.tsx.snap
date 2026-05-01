@@ -6,7 +6,7 @@ exports[`ChartWidget > should render title and children when not empty 1`] = `
     data-testid="motion-wrapper"
   >
     <div
-      class="card card--default rounded-2xl p-3"
+      class="card card--default"
       data-slot="card"
     >
       <div
@@ -17,7 +17,7 @@ exports[`ChartWidget > should render title and children when not empty 1`] = `
           class="flex flex-col gap-1"
         >
           <h4
-            class="scroll-m-20 font-medium text-default-900 text-xl tracking-tight"
+            class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
           >
             Test Chart
           </h4>
