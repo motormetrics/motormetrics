@@ -29,8 +29,8 @@ export function RegistrationTrend({ data }: RegistrationTrendProps) {
   } satisfies ChartConfig;
 
   return (
-    <Card className="rounded-2xl p-3">
-      <Card.Header className="flex flex-col items-start gap-2 pb-4">
+    <Card>
+      <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Yearly Registration Trend</Typography.H4>
         <Typography.TextSm className="text-default-600">
           Historical vehicle registration data from {data[0]?.year} to{" "}

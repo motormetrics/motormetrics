@@ -1,5 +1,4 @@
 import { Card, cn, Skeleton as HeroUISkeleton } from "@heroui/react";
-import { RADIUS } from "@motormetrics/theme/spacing";
 
 interface SkeletonProps {
   className?: string;
@@ -29,7 +28,7 @@ export function SkeletonChart({ className }: SkeletonProps) {
  */
 export function SkeletonMetricCard() {
   return (
-    <Card className={cn("p-3", RADIUS.card)}>
+    <Card>
       <Card.Header>
         <HeroUISkeleton className="h-6 w-3/4 rounded-lg" />
       </Card.Header>
@@ -48,7 +47,7 @@ export function SkeletonMetricCard() {
  */
 export function SkeletonChartWidget({ className }: SkeletonProps) {
   return (
-    <Card className={cn("p-3", RADIUS.card, className)}>
+    <Card className={cn(className)}>
       <Card.Header>
         <HeroUISkeleton className="h-6 w-48 rounded-lg" />
       </Card.Header>
@@ -79,7 +78,7 @@ export function SkeletonPageHeader() {
  */
 export function SkeletonBentoCard({ className }: SkeletonProps) {
   return (
-    <Card className={cn("p-6", RADIUS.cardLarge, className)}>
+    <Card className={cn(className)}>
       <Card.Header className="flex flex-col items-start gap-2">
         <HeroUISkeleton className="h-6 w-40 rounded-lg" />
         <HeroUISkeleton className="h-4 w-full rounded-lg" />

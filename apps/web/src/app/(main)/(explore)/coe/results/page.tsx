@@ -183,7 +183,7 @@ async function COEResultsContent({
 
       {/* Historical Data Table - Full Width */}
       <AnimatedSection order={4}>
-        <Card className="p-3">
+        <Card>
           <Card.Header className="flex flex-col items-start gap-2">
             <Typography.H4>Historical Data</Typography.H4>
             <Typography.TextSm>

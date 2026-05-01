@@ -169,12 +169,12 @@ export function CostRangeCard({ data }: CostRangeCardProps) {
       {groups.map((group) => (
         <Card
           key={group.fuelType}
-          className="group relative overflow-hidden p-3 transition-shadow duration-300 hover:shadow-lg"
+          className="group relative overflow-hidden transition-shadow duration-300 hover:shadow-lg"
         >
           {/* Accent bar at top */}
           <div className="absolute top-0 right-0 left-0 h-1 bg-primary" />
 
-          <Card.Header className="flex flex-col items-start gap-1 pt-4">
+          <Card.Header className="flex flex-col items-start gap-1">
             <Typography.H4>
               {FUEL_TYPE_LABELS[group.fuelType] ?? group.fuelType}
             </Typography.H4>
@@ -183,7 +183,7 @@ export function CostRangeCard({ data }: CostRangeCardProps) {
             </Typography.Caption>
           </Card.Header>
 
-          <Card.Content className="flex flex-col gap-6 pt-0">
+          <Card.Content className="flex flex-col gap-6">
             <RangeSection
               lowestModel={group.lowestModel}
               lowestPrice={group.lowestPrice}

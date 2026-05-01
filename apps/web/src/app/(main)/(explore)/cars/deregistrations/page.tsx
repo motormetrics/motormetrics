@@ -292,8 +292,8 @@ async function DeregistrationsContent({
       {/* Metrics Bar - All in one row */}
       <AnimatedSection order={3}>
         <section>
-          <Card className="bg-default-50 p-3">
-            <Card.Content className="p-4">
+          <Card className="bg-default-50">
+            <Card.Content>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-7">
                 {/* Total */}
                 <div className="col-span-2 border-default-200 sm:col-span-1 sm:border-r sm:pr-4">

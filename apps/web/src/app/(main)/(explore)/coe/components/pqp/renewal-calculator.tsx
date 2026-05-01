@@ -83,8 +83,8 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
   );
 
   return (
-    <Card className="p-3">
-      <Card.Header className="flex-col items-start gap-2 p-4">
+    <Card>
+      <Card.Header className="flex-col items-start gap-2">
         <div className="flex items-center gap-2">
           <Calculator className="size-5" />
           <Typography.H4>PQP vs Bidding Calculator</Typography.H4>
@@ -122,7 +122,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
               <Tabs.Panel key={key} id={key}>
                 <div className="flex flex-col gap-4">
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <Card className="p-3">
+                    <Card>
                       <Card.Content className="text-center">
                         <Typography.TextSm className="mb-1 font-medium text-default-600">
                           Current PQP Rate
@@ -136,7 +136,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                       </Card.Content>
                     </Card>
 
-                    <Card className="p-3">
+                    <Card>
                       <Card.Content className="text-center">
                         <Typography.TextSm className="mb-1 font-medium text-default-600">
                           Current COE Price
@@ -158,7 +158,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
         {selectedRecord && (
           <div className="flex flex-col gap-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Card className="p-3">
+              <Card>
                 <Card.Content className="text-center">
                   <Typography.TextSm className="font-medium text-default-500">
                     PQP 5-Year Renewal (Estimate)
@@ -181,7 +181,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                 </Card.Content>
               </Card>
 
-              <Card className="p-3">
+              <Card>
                 <Card.Content className="text-center">
                   <Typography.TextSm className="font-medium text-default-500">
                     PQP 10-Year Renewal (Estimate)

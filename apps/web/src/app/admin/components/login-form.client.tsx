@@ -73,7 +73,7 @@ export function LoginFormClient({
       </div>
 
       <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-border after:border-t">
-        <span className="relative z-10 bg-surface px-2 text-muted">
+        <span className="relative z-10 bg-surface px-2 text-default-500">
           {dividerText}
         </span>
       </div>

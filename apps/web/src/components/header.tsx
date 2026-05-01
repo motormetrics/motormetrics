@@ -61,7 +61,7 @@ export function Header() {
                   className={cn(
                     "rounded-full px-4 py-2 font-medium text-sm transition-all duration-200",
                     active
-                      ? "bg-accent text-accent-foreground shadow-sm"
+                      ? "bg-primary text-primary-foreground shadow-sm"
                       : "bg-surface-secondary text-foreground hover:bg-surface-tertiary",
                   )}
                   aria-current={active ? "page" : undefined}

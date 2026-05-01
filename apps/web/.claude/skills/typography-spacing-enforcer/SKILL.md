@@ -36,7 +36,7 @@ This Skill ensures all UI components follow the project's Typography system and 
   - `text-foreground` (primary text)
   - `text-default-900` (strong emphasis)
   - `text-default-600` (secondary text)
-  - `text-muted-foreground` (metadata)
+  - `text-default-500` (metadata)
 
 ### Spacing Violations
 

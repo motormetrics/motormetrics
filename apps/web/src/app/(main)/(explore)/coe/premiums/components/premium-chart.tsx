@@ -79,7 +79,7 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
   const periodLabel = PERIOD_LABELS[period].toLowerCase();
 
   return (
-    <Card className="p-3">
+    <Card>
       <Card.Header className="flex flex-col gap-2 border-b lg:flex-row lg:items-center lg:justify-between">
         <div className="grid flex-1 gap-1">
           <Typography.H4>Quota Premium ($)</Typography.H4>
@@ -96,7 +96,7 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
         >
           <Label className="sr-only">Select time period</Label>
           <Select.Trigger>
-            <CalendarIcon className="size-4 text-muted" />
+            <CalendarIcon className="size-4 text-default-500" />
             <Select.Value />
             <Select.Indicator />
           </Select.Trigger>
@@ -112,7 +112,7 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
           </Select.Popover>
         </Select>
       </Card.Header>
-      <Card.Content className="p-6">
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <LineChart
             data={filteredData}

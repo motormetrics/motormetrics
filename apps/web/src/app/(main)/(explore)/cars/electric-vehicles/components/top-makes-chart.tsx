@@ -7,7 +7,6 @@ import {
   CHART_GRID,
   CHART_HEIGHTS,
 } from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import {
   ChartContainer,
   ChartTooltip,
@@ -30,7 +29,7 @@ export function TopMakesChart({ data, month }: TopMakesChartProps) {
   const numberFormatter = new Intl.NumberFormat("en-SG");
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
+    <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Top EV Makes</Typography.H4>
         <Typography.TextSm className="text-default-500">

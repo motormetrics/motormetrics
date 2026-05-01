@@ -4,7 +4,6 @@ import { Card, cn } from "@heroui/react";
 
 import type { SelectCarCost } from "@motormetrics/database";
 import { CHART_HEIGHTS } from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { VES_BAND_ORDER } from "@web/app/(main)/(explore)/cars/costs/constants";
 import {
   ChartContainer,
@@ -48,7 +47,7 @@ export function VesDistributionChart({ data }: VesDistributionChartProps) {
   );
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
+    <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>VES Band Distribution</Typography.H4>
         <Typography.TextSm className="text-default-500">

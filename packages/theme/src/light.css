@@ -35,16 +35,6 @@
   --default-700: hsl(215 25% 27%);
   --default-800: hsl(217 33% 17%);
   --default-900: hsl(222 47% 11%);
-  --heroui-default-50: 210 40% 98%;
-  --heroui-default-100: 210 40% 96%;
-  --heroui-default-200: 214 32% 91%;
-  --heroui-default-300: 213 27% 84%;
-  --heroui-default-400: 215 20% 65%;
-  --heroui-default-500: 215 16% 47%;
-  --heroui-default-600: 215 19% 35%;
-  --heroui-default-700: 215 25% 27%;
-  --heroui-default-800: 217 33% 17%;
-  --heroui-default-900: 222 47% 11%;
 
   /* Muted - Light Blue-Gray */
   --muted: hsl(213 32% 95%); /* #F0F4F8 */

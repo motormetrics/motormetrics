@@ -41,7 +41,7 @@ export function YearSelector({
     >
       <Label className="sr-only">Year</Label>
       <ComboBox.InputGroup>
-        <Calendar className="ml-3 size-4 text-muted" />
+        <Calendar className="ml-3 size-4 text-default-500" />
         <Input placeholder="Select Year" />
         <ComboBox.Trigger />
       </ComboBox.InputGroup>

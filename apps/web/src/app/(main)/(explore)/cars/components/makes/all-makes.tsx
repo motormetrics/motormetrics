@@ -84,6 +84,7 @@ export function AllMakes({
               size="sm"
               className="shrink-0 rounded-full"
               variant={selectedLetter === letter ? "primary" : "tertiary"}
+              aria-pressed={selectedLetter === letter}
               onPress={() => handleSelectionChange(letter)}
             >
               {letter}

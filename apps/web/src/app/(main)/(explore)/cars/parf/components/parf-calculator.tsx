@@ -62,7 +62,7 @@ export function PARFCalculator() {
 
   return (
     <Card>
-      <Card.Content className="flex flex-col gap-6 p-6">
+      <Card.Content className="flex flex-col gap-6">
         <Typography.H4>Calculate Your PARF Rebate</Typography.H4>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -98,7 +98,7 @@ export function PARFCalculator() {
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Card className="border border-default-200 bg-default-50 shadow-none">
-            <Card.Content className="flex flex-col gap-4 p-6">
+            <Card.Content className="flex flex-col gap-4">
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-default-400" />
                 <Typography.Caption className="font-semibold text-default-500 uppercase tracking-wider">
@@ -139,7 +139,7 @@ export function PARFCalculator() {
           </Card>
 
           <Card className="border border-accent/20 bg-accent-soft shadow-none">
-            <Card.Content className="flex flex-col gap-4 p-6">
+            <Card.Content className="flex flex-col gap-4">
               <div className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-primary" />
                 <Typography.Caption className="font-semibold text-primary uppercase tracking-wider">

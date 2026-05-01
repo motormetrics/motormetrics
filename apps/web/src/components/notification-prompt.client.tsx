@@ -68,15 +68,17 @@ export function NotificationPromptClient({
       <Alert
         status="accent"
         className={cn([
-          "bg-surface shadow-sm",
+          "bg-surface text-foreground shadow-sm",
           "rounded-md rounded-l-none border border-l-8",
-          "border-accent-soft border-l-accent",
+          "border-primary/20 border-l-primary",
         ])}
       >
         <Alert.Indicator />
         <Alert.Content>
-          <Alert.Title>{title}</Alert.Title>
-          <Alert.Description>{description}</Alert.Description>
+          <Alert.Title className="text-foreground">{title}</Alert.Title>
+          <Alert.Description className="text-foreground/80">
+            {description}
+          </Alert.Description>
           <div className="mt-3 flex gap-2">
             <Button onPress={handleGranted} size="sm" variant="primary">
               {allowLabel}

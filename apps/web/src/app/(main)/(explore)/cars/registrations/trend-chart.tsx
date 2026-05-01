@@ -79,7 +79,7 @@ export const TrendChart = ({ data }: TrendChartProps) => {
         </BarChart>
       </ChartContainer>
       <div className="flex flex-col gap-4">
-        <div className="text-muted text-sm">
+        <div className="text-default-500 text-sm">
           <h4 className="mb-2 font-semibold text-foreground">Market Leaders</h4>
           <p>
             This chart shows the top 10 car makes by registration count.
@@ -94,19 +94,19 @@ export const TrendChart = ({ data }: TrendChartProps) => {
             <div className="font-semibold text-foreground text-lg">
               {topMake?.make || "N/A"}
             </div>
-            <div className="text-muted text-xs">Top Make</div>
+            <div className="text-default-500 text-xs">Top Make</div>
           </div>
           <div className="text-center">
             <div className="font-semibold text-foreground text-lg">
               {totalRegistrations.toLocaleString()}
             </div>
-            <div className="text-muted text-xs">Total Shown</div>
+            <div className="text-default-500 text-xs">Total Shown</div>
           </div>
           <div className="text-center">
             <div className="font-semibold text-foreground text-lg">
               {chartData.length}
             </div>
-            <div className="text-muted text-xs">Makes Displayed</div>
+            <div className="text-default-500 text-xs">Makes Displayed</div>
           </div>
         </div>
       </div>

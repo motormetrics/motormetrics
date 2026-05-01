@@ -60,7 +60,7 @@ export function TopMakes({ data }: TopMakesProps) {
         const href = `/cars/fuel-types/${slugify(fuelType)}`;
 
         return (
-          <Card key={fuelType} className="p-3">
+          <Card key={fuelType}>
             <Card.Header>
               <Typography.H4>{fuelType}</Typography.H4>
             </Card.Header>

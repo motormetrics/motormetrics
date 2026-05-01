@@ -49,7 +49,7 @@ export function KeyInsights({ insights }: KeyInsightsProps) {
   }
 
   return (
-    <Card className="overflow-hidden p-3">
+    <Card className="overflow-hidden">
       <Card.Content>
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2 text-primary">

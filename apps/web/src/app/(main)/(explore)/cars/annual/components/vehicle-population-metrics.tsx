@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, Chip, cn } from "@heroui/react";
+import { Card, Chip } from "@heroui/react";
 
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
 import { useMemo } from "react";
@@ -58,7 +57,7 @@ export function VehiclePopulationMetrics({
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-      <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
+      <Card>
         <Card.Header>
           <Typography.H4>Total Fleet Size</Typography.H4>
         </Card.Header>
@@ -69,7 +68,7 @@ export function VehiclePopulationMetrics({
         </Card.Content>
       </Card>
 
-      <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
+      <Card>
         <Card.Header>
           <Typography.H4>Year-on-Year Change</Typography.H4>
         </Card.Header>
@@ -92,7 +91,7 @@ export function VehiclePopulationMetrics({
         </Card.Content>
       </Card>
 
-      <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
+      <Card>
         <Card.Header>
           <Typography.H4>EV Share</Typography.H4>
         </Card.Header>

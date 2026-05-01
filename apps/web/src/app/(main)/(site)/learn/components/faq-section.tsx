@@ -209,7 +209,7 @@ export function FAQSection() {
               {/* Still Have Questions? */}
               <motion.div variants={staggerItemVariants}>
                 <Card className="border border-primary/20 bg-primary/5">
-                  <Card.Content className="flex flex-row items-start gap-4 p-6">
+                  <Card.Content className="flex flex-row items-start gap-4">
                     <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                       <MessageCircleQuestion className="size-5 text-primary" />
                     </div>

@@ -23,7 +23,7 @@ const TrendIndicator = ({ change, label }: TrendIndicatorProps) => {
         )}
         {formatPercent(Math.abs(change), { maximumFractionDigits: 1 })}
       </Chip>
-      <span className="text-muted text-sm">{label}</span>
+      <span className="text-default-500 text-sm">{label}</span>
     </div>
   );
 };

@@ -19,7 +19,7 @@ const SettingsPage = () => {
           <Settings className="size-8" />
           Settings
         </h1>
-        <p className="text-muted">
+        <p className="text-default-500">
           Manage system settings and configuration options.
         </p>
       </div>
@@ -44,11 +44,11 @@ const SettingsPage = () => {
             <Card.Content>
               <div className="flex flex-col gap-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-muted">Status:</span>
+                  <span className="text-default-500">Status:</span>
                   <span className="text-green-600">Normal Operation</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted">Last Maintenance:</span>
+                  <span className="text-default-500">Last Maintenance:</span>
                   <span>Never</span>
                 </div>
               </div>
@@ -70,11 +70,11 @@ const SettingsPage = () => {
           <Card.Content>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted">Environment:</span>
+                <span className="text-default-500">Environment:</span>
                 <span>Production</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted">Domain:</span>
+                <span className="text-default-500">Domain:</span>
                 <span>motormetrics.app</span>
               </div>
             </div>
@@ -96,11 +96,11 @@ const SettingsPage = () => {
           <Card.Content>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted">Connection:</span>
+                <span className="text-default-500">Connection:</span>
                 <span className="text-green-600">Active</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted">Last Backup:</span>
+                <span className="text-default-500">Last Backup:</span>
                 <span>2 hours ago</span>
               </div>
             </div>
@@ -122,11 +122,11 @@ const SettingsPage = () => {
           <Card.Content>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted">2FA Required:</span>
+                <span className="text-default-500">2FA Required:</span>
                 <span className="text-green-600">Enabled</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted">API Rate Limit:</span>
+                <span className="text-default-500">API Rate Limit:</span>
                 <span>1000/hour</span>
               </div>
             </div>
@@ -147,11 +147,11 @@ const SettingsPage = () => {
           <Card.Content>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted">Total Users:</span>
+                <span className="text-default-500">Total Users:</span>
                 <span>3</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted">Admin Users:</span>
+                <span className="text-default-500">Admin Users:</span>
                 <span>1</span>
               </div>
             </div>
@@ -172,11 +172,11 @@ const SettingsPage = () => {
           <Card.Content>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted">Email Alerts:</span>
+                <span className="text-default-500">Email Alerts:</span>
                 <span className="text-green-600">Enabled</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted">Webhooks:</span>
+                <span className="text-default-500">Webhooks:</span>
                 <span>2 configured</span>
               </div>
             </div>
@@ -193,7 +193,7 @@ const SettingsPage = () => {
             Important Notes
           </Card.Title>
         </Card.Header>
-        <Card.Content className="flex flex-col gap-4 text-muted text-sm">
+        <Card.Content className="flex flex-col gap-4 text-default-500 text-sm">
           <div className="flex items-start gap-2">
             <span className="font-medium text-foreground">⚠️</span>
             <span>

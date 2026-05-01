@@ -182,7 +182,7 @@ export function MaintenanceFormClient({
               >
                 {labels.configuration.enableToggle.label}
               </Label>
-              <p className="text-muted text-sm">
+              <p className="text-default-500 text-sm">
                 {labels.configuration.enableToggle.description}
               </p>
             </div>
@@ -209,7 +209,7 @@ export function MaintenanceFormClient({
                   onChange={(e) => setMaintenanceMessage(e.target.value)}
                   className="text-base"
                 />
-                <p className="text-muted text-sm">
+                <p className="text-default-500 text-sm">
                   {labels.configuration.messageInput.helpText}
                 </p>
               </TextField>
@@ -222,7 +222,7 @@ export function MaintenanceFormClient({
                     {labels.configuration.serviceScope.label}
                   </Label>
                 </div>
-                <p className="text-muted text-sm">
+                <p className="text-default-500 text-sm">
                   {labels.configuration.serviceScope.description}
                 </p>
               </div>

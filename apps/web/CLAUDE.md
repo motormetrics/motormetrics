@@ -549,7 +549,7 @@ A modern, semantic typography system for consistent visual hierarchy across the 
 **UI Labels**:
 
 - `Typography.Label`: Form labels, navigation items, tabs (font-medium text-sm text-foreground)
-- `Typography.Caption`: Metadata text, timestamps, footnotes (text-xs text-muted-foreground leading-tight)
+- `Typography.Caption`: Metadata text, timestamps, footnotes (text-xs text-default-500 leading-tight)
 
 **Content Elements** (legacy, for backward compatibility):
 
@@ -557,7 +557,7 @@ A modern, semantic typography system for consistent visual hierarchy across the 
 - `Typography.Blockquote`: Quoted text with left border
 - `Typography.List`: Unordered lists with disc markers
 - `Typography.InlineCode`: Inline code snippets (font-medium monospace)
-- `Typography.Lead`: Lead paragraphs (text-xl text-muted-foreground)
+- `Typography.Lead`: Lead paragraphs (text-xl text-default-500)
 
 **Usage Examples**:
 
@@ -608,7 +608,7 @@ All Typography components include default colours from HeroUI's semantic colour 
 - `text-foreground`: Theme-adaptive primary text colour (auto-adjusts for light/dark mode)
 - `text-default-900`: Darkest shade for strong emphasis (H4 headings)
 - `text-default-600`: Medium shade for secondary text (TextSm for links, footer text)
-- `text-muted-foreground`: Muted colour for metadata and captions (Caption, Lead components)
+- `text-default-500`: Muted colour for metadata and captions (Caption, Lead components)
 
 These defaults provide proper visual hierarchy while allowing override via `className` prop when specific colours like
 `text-primary` are needed for emphasis.
@@ -623,14 +623,14 @@ These defaults provide proper visual hierarchy while allowing override via `clas
 
 **Enforcement Rules**:
 
-- ✅ Always use `Typography.H4` for CardHeader titles (not raw `<h3>`)
-- ✅ Always use `Typography.TextSm` for CardHeader descriptions (not raw `<p>`)
+- ✅ Always use `Typography.H4` for `Card.Header` titles (not raw `<h3>`)
+- ✅ Always use `Typography.TextSm` for `Card.Header` descriptions (not raw `<p>`)
 - ✅ Use `Typography.H2` for section headings in blog components
 - ✅ Use `Typography.H3` for card titles and subsections
 - ❌ Avoid raw heading tags (`<h1>`, `<h2>`, `<h3>`, `<h4>`) outside of MDX content
 - ⚠️ Exception: Raw tags allowed only for MDX blog content and image overlay text
 
-**CardHeader Pattern** (standard for all cards):
+**Card Header Pattern** (standard for all cards):
 
 ```tsx
 import { Card } from "@heroui/react";
@@ -794,20 +794,16 @@ A professional colour scheme optimised for HeroUI integration and automotive ind
 | Background | Powder Blue | `#B0E0E6` | `hsl(187, 52%, 80%)` | Chart areas, subtle textures |
 | Text | Dark Slate Gray | `#2F4F4F` | `hsl(180, 25%, 25%)` | Body text, icons |
 
-**CSS Variable Mapping** (in `globals.css`):
+**CSS Variable Mapping**:
+
+Base runtime tokens live in `@motormetrics/theme/light.css` and `@motormetrics/theme/dark.css`. `globals.css` bridges those tokens into Tailwind v4 utility classes with `@theme inline`, so utilities like `bg-primary`, `text-default-500`, `bg-surface`, and `border-default-200` resolve to the active theme values.
 
 ```css
-:root {
-  --primary: hsl(240, 63%, 27%);           /* Navy Blue */
-  --primary-foreground: hsl(0, 0%, 100%);  /* White text on primary */
-  --secondary: hsl(210, 13%, 50%);         /* Slate Gray */
-  --secondary-foreground: hsl(0, 0%, 100%);
-  --accent: hsl(180, 100%, 50%);           /* Cyan */
-  --accent-foreground: hsl(180, 25%, 25%);
-  --muted: hsl(187, 52%, 80%);             /* Powder Blue */
-  --muted-foreground: hsl(180, 25%, 25%);
-  --foreground: hsl(180, 25%, 25%);        /* Dark Slate Gray */
-  --background: hsl(0, 0%, 100%);          /* White */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-surface: var(--surface);
+  --color-default-500: var(--default-500);
 }
 ```
 
@@ -817,7 +813,7 @@ A professional colour scheme optimised for HeroUI integration and automotive ind
 - `text-foreground` - Dark Slate Gray for body text
 - `text-default-900` - Strong emphasis (H4 headings)
 - `text-default-600` - Secondary text (TextSm)
-- `text-muted-foreground` - Captions/metadata
+- `text-default-500` - Captions/metadata
 
 **Opacity Scale**:
 
@@ -881,18 +877,18 @@ A pill-based, sidebar-free design system for professional automotive analytics d
 
 **Card Design**:
 
-- Large rounded corners: `rounded-2xl` or `rounded-3xl`
-- Soft shadows: `shadow-sm` or custom subtle shadow
-- White/light backgrounds with generous padding (`p-6`)
+- Use HeroUI Card defaults for base radius, padding, background, and shadow
+- Add custom shadows, borders, or backgrounds only when they communicate hierarchy
+- Use explicit `Card.Content` padding only for intentional edge-to-edge or specialised layouts
 - Optional coloured accent borders or backgrounds
 
 ```tsx
-<Card className="rounded-2xl shadow-sm">
-  <CardHeader className="flex flex-col items-start gap-2">
+<Card>
+  <Card.Header className="flex flex-col items-start gap-2">
     <Typography.H4>Card Title</Typography.H4>
     <Typography.TextSm>Description</Typography.TextSm>
-  </CardHeader>
-  <CardBody>{/* Content */}</CardBody>
+  </Card.Header>
+  <Card.Content>{/* Content */}</Card.Content>
 </Card>
 ```
 

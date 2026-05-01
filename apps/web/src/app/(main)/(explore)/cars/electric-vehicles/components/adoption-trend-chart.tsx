@@ -7,7 +7,6 @@ import {
   CHART_GRID,
   CHART_HEIGHTS,
 } from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { EV_COLORS } from "@web/app/(main)/(explore)/cars/electric-vehicles/constants";
 import {
   ChartContainer,
@@ -32,7 +31,7 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
   const numberFormatter = new Intl.NumberFormat("en-SG");
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
+    <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>EV Adoption Trend</Typography.H4>
         <Typography.TextSm className="text-default-500">

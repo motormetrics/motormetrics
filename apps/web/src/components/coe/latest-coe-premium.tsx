@@ -30,13 +30,13 @@ const calculateTrend = (data: { value: number }[]): Trend | undefined => {
 const getTrendColour = (trend?: Trend): string => {
   switch (trend) {
     case "up":
-      return "hsl(var(--heroui-danger))";
+      return "var(--danger)";
     case "down":
-      return "hsl(var(--heroui-success))";
+      return "var(--success)";
     case "neutral":
-      return "hsl(var(--heroui-warning))";
+      return "var(--warning)";
     default:
-      return "hsl(var(--heroui-primary))";
+      return "var(--primary)";
   }
 };
 
@@ -53,7 +53,7 @@ export function LatestCoePremium({ results, trends }: LatestCoePremiumProps) {
         return (
           <Card
             key={result.vehicleClass}
-            className="rounded-2xl p-3 transition-shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+            className="transition-shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
           >
             <Card.Header>
               <div className="flex items-center gap-2">

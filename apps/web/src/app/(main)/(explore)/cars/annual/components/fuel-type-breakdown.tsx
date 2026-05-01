@@ -3,7 +3,6 @@
 import { Card, cn } from "@heroui/react";
 
 import { CHART_HEIGHTS } from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import {
   FUEL_GROUP_COLORS,
   FUEL_GROUP_MAP,
@@ -69,7 +68,7 @@ export function FuelTypeBreakdown({ data }: FuelTypeBreakdownProps) {
   );
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
+    <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Fuel Type Mix ({effectiveYear})</Typography.H4>
         <Typography.TextSm className="text-default-500">

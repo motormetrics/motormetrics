@@ -53,7 +53,7 @@ export async function PlacementsSection() {
           {placements.map(({ icon: Icon, title, description, highlight }) => (
             <Card
               key={title}
-              className="group h-full border-default-200 p-3 shadow-sm transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+              className="group h-full border-default-200 shadow-sm transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
             >
               <Card.Header className="flex flex-col items-start gap-3 pb-2">
                 <div className="flex items-center gap-3">

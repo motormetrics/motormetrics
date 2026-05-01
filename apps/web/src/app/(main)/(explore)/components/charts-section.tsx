@@ -10,7 +10,7 @@ async function YearlyChartContent() {
 
   return (
     <Card>
-      <Card.Content className="p-6">
+      <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <div>
             <Typography.H3>Yearly Registrations</Typography.H3>
@@ -56,7 +56,7 @@ async function TopMakesContent() {
 
   return (
     <Card>
-      <Card.Content className="p-6">
+      <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <Typography.H3>Top Makes</Typography.H3>
           <Link href="/cars/makes">
@@ -99,7 +99,7 @@ async function TopMakesContent() {
 function YearlyChartSkeleton() {
   return (
     <Card>
-      <Card.Content className="p-6">
+      <Card.Content>
         <Skeleton className="mb-5 h-6 w-40 rounded-lg" />
         <div className="flex h-[160px] items-end gap-4">
           {[0, 1, 2, 3, 4, 5].map((num) => (
@@ -118,7 +118,7 @@ function YearlyChartSkeleton() {
 function TopMakesSkeleton() {
   return (
     <Card>
-      <Card.Content className="p-6">
+      <Card.Content>
         <Skeleton className="mb-5 h-6 w-24 rounded-lg" />
         <div className="flex flex-col gap-4">
           {[0, 1, 2, 3, 4].map((num) => (

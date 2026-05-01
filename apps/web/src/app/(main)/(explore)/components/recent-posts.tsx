@@ -12,7 +12,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
   if (!posts || posts.length === 0) {
     return (
       <Card>
-        <Card.Content className="p-6">
+        <Card.Content>
           <div className="mb-5 flex items-center justify-between">
             <Typography.H3>Recent Posts</Typography.H3>
             <Link href="/blog" aria-label="View all blog posts">
@@ -31,7 +31,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
 
   return (
     <Card>
-      <Card.Content className="p-6">
+      <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <Typography.H3>Recent Posts</Typography.H3>
           <Link href="/blog" aria-label="View all blog posts">

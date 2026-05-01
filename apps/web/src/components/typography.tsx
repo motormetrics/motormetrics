@@ -215,7 +215,7 @@ const Caption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <span
     ref={ref}
-    className={cn("text-muted text-xs leading-tight", className)}
+    className={cn("text-default-500 text-xs leading-tight", className)}
     {...props}
   />
 ));
@@ -279,7 +279,7 @@ const Lead = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-muted text-xl leading-relaxed", className)}
+    className={cn("text-default-500 text-xl leading-relaxed", className)}
     {...props}
   />
 ));

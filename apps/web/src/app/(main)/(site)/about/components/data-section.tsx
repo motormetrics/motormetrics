@@ -39,7 +39,7 @@ export function DataSection() {
       <div
         className="pointer-events-none absolute inset-0 opacity-50"
         style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--muted-foreground) 15%, transparent) 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--default-500) 15%, transparent) 1px, transparent 0)`,
           backgroundSize: "24px 24px",
         }}
         aria-hidden="true"
@@ -68,8 +68,8 @@ export function DataSection() {
               </Typography.Text>
 
               {/* LTA Badge */}
-              <Card className="border-default-200 p-3">
-                <Card.Content className="flex flex-row items-center gap-4 p-4">
+              <Card className="border-default-200">
+                <Card.Content className="flex flex-row items-center gap-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-default-200">
                     <Database className="h-6 w-6 text-default-600" />
                   </div>
@@ -102,8 +102,8 @@ export function DataSection() {
             >
               {features.map((feature) => (
                 <motion.div key={feature.title} variants={staggerItemVariants}>
-                  <Card className="group h-full border-default-200/80 p-3 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-                    <Card.Content className="flex flex-col gap-4 p-6">
+                  <Card className="group h-full border-default-200/80 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+                    <Card.Content className="flex flex-col gap-4">
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-default-200 transition-colors group-hover:bg-primary/10">
                         <feature.icon className="h-6 w-6 text-default-600 transition-colors group-hover:text-primary" />
                       </div>

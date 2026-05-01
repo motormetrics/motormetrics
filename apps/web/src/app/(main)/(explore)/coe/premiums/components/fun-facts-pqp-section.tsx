@@ -28,7 +28,7 @@ async function FunFactsPqpContent() {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {/* Fun Facts Card */}
-      <Card className="p-3">
+      <Card>
         <Card.Header className="flex flex-col items-start gap-2">
           <Typography.H4>Category A vs B</Typography.H4>
           <Typography.TextSm>
@@ -59,7 +59,7 @@ async function FunFactsPqpContent() {
       </Card>
 
       {/* Latest PQP Rates Card */}
-      <Card className="p-3">
+      <Card>
         <Card.Header className="flex flex-col items-start gap-2">
           <Typography.H4>Latest PQP Rates</Typography.H4>
           <Typography.TextSm>

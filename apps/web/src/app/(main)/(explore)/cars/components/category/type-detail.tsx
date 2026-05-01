@@ -192,7 +192,7 @@ async function TypeDetailContent({
 
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <Card className="bg-surface p-4">
+          <Card className="bg-surface">
             <Card.Header className="flex flex-row items-center justify-between gap-2">
               <Typography.H4>Registrations</Typography.H4>
               <Chip size="sm" variant="soft">

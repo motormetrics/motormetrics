@@ -24,8 +24,8 @@ export async function CtaSection() {
           </div>
 
           {/* Contact card */}
-          <Card className="w-full max-w-md border-default-200 p-3 shadow-sm">
-            <Card.Content className="flex flex-col items-center gap-4 p-6 text-center">
+          <Card className="w-full max-w-md border-default-200 shadow-sm">
+            <Card.Content className="flex flex-col items-center gap-4 text-center">
               <div className="rounded-xl bg-primary/10 p-3">
                 <Mail className="size-6 text-primary" />
               </div>

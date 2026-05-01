@@ -75,6 +75,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
   return (
     <html
       lang="en"
+      data-theme="light"
       className={cn("scroll-smooth antialiased", geistSans.className)}
     >
       <body className="bg-background text-foreground">

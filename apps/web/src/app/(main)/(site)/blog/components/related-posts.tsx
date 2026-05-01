@@ -38,7 +38,7 @@ export async function RelatedPosts({
               className="group block h-full"
             >
               <Card className="h-full border-default-200 transition-colors hover:border-default-400">
-                <Card.Content className="flex flex-col gap-4 p-4">
+                <Card.Content className="flex flex-col gap-4">
                   {/* Category Label */}
                   <Chip
                     size="sm"

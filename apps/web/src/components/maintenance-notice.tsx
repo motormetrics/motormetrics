@@ -44,7 +44,7 @@ export function MaintenanceNotice() {
 
         {/* Status Section */}
         <AnimatedSection>
-          <Card className="rounded-2xl p-3">
+          <Card>
             <Card.Content>
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
@@ -87,8 +87,8 @@ export function MaintenanceNotice() {
           <Typography.H2>What&apos;s Under the Hood?</Typography.H2>
           <AnimatedCardGrid>
             <AnimatedCard>
-              <Card className="rounded-2xl p-3">
-                <Card.Content className="flex flex-row items-start gap-4 p-4">
+              <Card>
+                <Card.Content className="flex flex-row items-start gap-4">
                   <Zap className="mt-1 size-6 flex-shrink-0 text-primary" />
                   <div>
                     <Typography.H3>Performance Boost</Typography.H3>
@@ -101,8 +101,8 @@ export function MaintenanceNotice() {
               </Card>
             </AnimatedCard>
             <AnimatedCard>
-              <Card className="rounded-2xl p-3">
-                <Card.Content className="flex flex-row items-start gap-4 p-4">
+              <Card>
+                <Card.Content className="flex flex-row items-start gap-4">
                   <Shield className="mt-1 size-6 flex-shrink-0 text-primary" />
                   <div>
                     <Typography.H3>Security Updates</Typography.H3>
@@ -115,8 +115,8 @@ export function MaintenanceNotice() {
               </Card>
             </AnimatedCard>
             <AnimatedCard>
-              <Card className="rounded-2xl p-3">
-                <Card.Content className="flex flex-row items-start gap-4 p-4">
+              <Card>
+                <Card.Content className="flex flex-row items-start gap-4">
                   <TrendingUp className="mt-1 size-6 flex-shrink-0 text-primary" />
                   <div>
                     <Typography.H3>New Features</Typography.H3>
@@ -128,8 +128,8 @@ export function MaintenanceNotice() {
               </Card>
             </AnimatedCard>
             <AnimatedCard>
-              <Card className="rounded-2xl p-3">
-                <Card.Content className="flex flex-row items-start gap-4 p-4">
+              <Card>
+                <Card.Content className="flex flex-row items-start gap-4">
                   <Wrench className="mt-1 size-6 flex-shrink-0 text-primary" />
                   <div>
                     <Typography.H3>Bug Fixes</Typography.H3>
@@ -162,7 +162,7 @@ export function MaintenanceNotice() {
               <Mail className="size-4" />
               support@motormetrics.app
             </Link>
-            <span className="hidden text-muted sm:inline">|</span>
+            <span className="hidden text-default-500 sm:inline">|</span>
             <Link
               href={SOCIAL_URLS.twitter}
               className="flex items-center gap-2 font-medium text-primary text-sm"

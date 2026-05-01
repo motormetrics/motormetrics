@@ -1,9 +1,8 @@
 "use client";
 
-import { Card, cn } from "@heroui/react";
+import { Card } from "@heroui/react";
 
 import { CHART_CURSOR, CHART_GRID } from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { useEffectiveYear } from "@web/app/(main)/(explore)/cars/annual/hooks/use-effective-year";
 import {
   ChartContainer,
@@ -48,7 +47,7 @@ export function CarPopulationChart({
   };
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
+    <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>
           Top {TOP_N} Makes ({effectiveYear})

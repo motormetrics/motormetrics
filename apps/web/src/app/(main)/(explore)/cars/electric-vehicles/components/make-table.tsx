@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  Card,
-  cn,
-  Pagination,
-  type SortDescriptor,
-  Table,
-} from "@heroui/react";
+import { Card, Pagination, type SortDescriptor, Table } from "@heroui/react";
 
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import Typography from "@web/components/typography";
 import type { EvMakeDetail } from "@web/queries/cars";
 import { sortByDescriptor } from "@web/utils/sort";
@@ -78,7 +71,7 @@ export function MakeTable({ data, month }: MakeTableProps) {
   );
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
+    <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>EV Registrations by Make</Typography.H4>
         <Typography.TextSm className="text-default-500">

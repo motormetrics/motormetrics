@@ -29,7 +29,7 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
 
         return (
           <motion.div key={item.category} variants={staggerItemVariants}>
-            <Card className="p-3">
+            <Card>
               <Card.Header>
                 <div className="font-bold text-lg">{item.category}</div>
               </Card.Header>
@@ -73,7 +73,7 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
                     ) : null}
                     <AnimatedNumber value={Math.abs(item.differencePercent)} />%
                   </Chip>
-                  <span className="text-muted text-sm">
+                  <span className="text-default-500 text-sm">
                     PQP{" "}
                     {isPQPLower ? "below" : isPQPHigher ? "above" : "equals"}{" "}
                     premium

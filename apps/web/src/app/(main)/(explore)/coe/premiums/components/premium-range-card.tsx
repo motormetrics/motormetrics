@@ -146,17 +146,17 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
         return (
           <Card
             key={stat.category}
-            className="group relative overflow-hidden p-3 transition-shadow duration-300 hover:shadow-lg"
+            className="group relative overflow-hidden transition-shadow duration-300 hover:shadow-lg"
           >
             {/* Accent bar at top */}
             <div className="absolute top-0 right-0 left-0 h-1 bg-primary" />
 
-            <Card.Header className="flex flex-col items-start gap-1 pt-4">
+            <Card.Header className="flex flex-col items-start gap-1">
               <Typography.H4>{stat.category}</Typography.H4>
               <Typography.Caption>Premium range analysis</Typography.Caption>
             </Card.Header>
 
-            <Card.Content className="flex flex-col gap-6 pt-0">
+            <Card.Content className="flex flex-col gap-6">
               {/* YTD Range */}
               {stat.ytd ? (
                 <RangeSection

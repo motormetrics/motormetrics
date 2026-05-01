@@ -26,7 +26,7 @@ export function GlossarySection() {
         className="pointer-events-none absolute inset-0 opacity-50"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--muted-foreground) 15%, transparent) 1px, transparent 0)",
+            "radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--default-500) 15%, transparent) 1px, transparent 0)",
           backgroundSize: "24px 24px",
         }}
         aria-hidden="true"

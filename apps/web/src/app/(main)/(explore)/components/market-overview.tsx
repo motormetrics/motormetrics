@@ -7,7 +7,7 @@ export async function MarketOverview() {
 
   return (
     <Card>
-      <Card.Content className="p-6">
+      <Card.Content>
         <div className="mb-4 flex items-center justify-between">
           <Typography.H3>Market Overview</Typography.H3>
           <Chip color="accent" size="sm">
@@ -16,7 +16,7 @@ export async function MarketOverview() {
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Card className="bg-default-100 shadow-none">
-            <Card.Content className="p-4">
+            <Card.Content>
               <p className="text-default-500 text-sm">Total Cars</p>
               <p className="mt-1 font-bold text-2xl text-primary tabular-nums">
                 {summary.total.toLocaleString()}
@@ -24,7 +24,7 @@ export async function MarketOverview() {
             </Card.Content>
           </Card>
           <Card className="bg-default-100 shadow-none">
-            <Card.Content className="p-4">
+            <Card.Content>
               <p className="text-default-500 text-sm">Electric</p>
               <p className="mt-1 font-bold text-2xl text-primary tabular-nums">
                 {summary.electric.toLocaleString()}
@@ -32,7 +32,7 @@ export async function MarketOverview() {
             </Card.Content>
           </Card>
           <Card className="bg-default-100 shadow-none">
-            <Card.Content className="p-4">
+            <Card.Content>
               <p className="text-default-500 text-sm">Hybrid</p>
               <p className="mt-1 font-bold text-2xl text-primary tabular-nums">
                 {summary.hybrid.toLocaleString()}

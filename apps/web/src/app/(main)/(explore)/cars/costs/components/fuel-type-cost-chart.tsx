@@ -8,7 +8,6 @@ import {
   CHART_GRID,
   CHART_HEIGHTS,
 } from "@motormetrics/theme/charts";
-import { CARD_PADDING, RADIUS } from "@motormetrics/theme/spacing";
 import { formatCurrency } from "@motormetrics/utils";
 import {
   FUEL_TYPE_LABELS,
@@ -51,7 +50,7 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
   });
 
   return (
-    <Card className={cn(RADIUS.card, CARD_PADDING.standard)}>
+    <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Avg Selling Price by Fuel Type</Typography.H4>
         <Typography.TextSm className="text-default-500">

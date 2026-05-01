@@ -18,8 +18,8 @@ interface CategoryTrendsTableProps {
 
 export function CategoryTrendsTable({ data }: CategoryTrendsTableProps) {
   return (
-    <Card className="p-3">
-      <Card.Content className="p-4">
+    <Card>
+      <Card.Content>
         <Typography.Caption className="mb-3 font-medium uppercase tracking-wider">
           Category Trends (12 months)
         </Typography.Caption>

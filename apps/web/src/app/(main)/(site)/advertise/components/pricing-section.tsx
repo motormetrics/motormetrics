@@ -66,7 +66,7 @@ export async function PricingSection() {
           {plans.map((plan) => (
             <Card
               key={plan.name}
-              className={`relative h-full p-3 shadow-sm transition-all duration-500 ${
+              className={`relative h-full shadow-sm transition-all duration-500 ${
                 plan.featured
                   ? "border-primary shadow-lg shadow-primary/10"
                   : "border-default-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
@@ -84,7 +84,7 @@ export async function PricingSection() {
                   </Chip>
                 </div>
               )}
-              <Card.Header className="flex flex-col items-start gap-2 pb-2">
+              <Card.Header className="flex flex-col items-start gap-2">
                 <Typography.H3 className="text-xl">{plan.name}</Typography.H3>
                 <div className="flex items-baseline gap-1">
                   <span className="font-bold text-4xl text-foreground tracking-tight">
@@ -97,7 +97,7 @@ export async function PricingSection() {
                 </Typography.TextSm>
               </Card.Header>
               <Separator />
-              <Card.Content className="gap-3 py-4">
+              <Card.Content className="gap-3">
                 {plan.features.map((feature) => (
                   <div key={feature} className="flex items-center gap-2">
                     <Check className="size-4 shrink-0 text-primary" />

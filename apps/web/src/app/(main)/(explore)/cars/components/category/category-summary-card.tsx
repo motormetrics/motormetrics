@@ -18,7 +18,7 @@ export function CategorySummaryCard({
   const isPositive = hasComparison ? total >= previousTotal : true;
 
   return (
-    <Card className="col-span-12 border-2 border-primary p-3 lg:col-span-4">
+    <Card className="col-span-12 border-2 border-primary lg:col-span-4">
       <Card.Content>
         <div className="flex flex-col gap-4">
           <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">

@@ -3,7 +3,7 @@
 exports[`LatestCoe > should render all COE results 1`] = `
 <div>
   <div
-    class="card card--default rounded-2xl p-3 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+    class="card card--default transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
     data-slot="card"
   >
     <div
@@ -38,7 +38,7 @@ exports[`LatestCoe > should render all COE results 1`] = `
     </div>
   </div>
   <div
-    class="card card--default rounded-2xl p-3 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
+    class="card card--default transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
     data-slot="card"
   >
     <div

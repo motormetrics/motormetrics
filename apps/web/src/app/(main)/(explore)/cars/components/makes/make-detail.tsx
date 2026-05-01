@@ -103,7 +103,7 @@ export function MakeDetail({
       </div>
 
       {/* Historical Trend Chart */}
-      <Card className="p-3">
+      <Card>
         <Card.Header className="flex flex-row items-baseline justify-between">
           <Typography.H4>Historical Trend</Typography.H4>
           <Typography.Caption>Past registrations</Typography.Caption>
@@ -160,7 +160,7 @@ export function MakeDetail({
       )}
 
       {/* COE Comparison Chart */}
-      <Card className="p-3">
+      <Card>
         <Card.Header className="flex flex-col items-start gap-2">
           <Typography.H4>Registration vs COE Premium</Typography.H4>
         </Card.Header>
@@ -174,7 +174,7 @@ export function MakeDetail({
       </Card>
 
       {/* Summary Table */}
-      <Card className="p-3">
+      <Card>
         <Card.Header className="flex flex-row items-baseline justify-between">
           <Typography.H4>Summary</Typography.H4>
           <Typography.Caption>Fuel & vehicle types by month</Typography.Caption>

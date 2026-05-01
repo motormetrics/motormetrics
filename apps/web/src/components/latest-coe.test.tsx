@@ -97,7 +97,7 @@ describe("LatestCoe", () => {
 
     expect(screen.getByTestId("sparkline")).toHaveAttribute(
       "data-colour",
-      "hsl(var(--heroui-danger))",
+      "var(--danger)",
     );
   });
 
@@ -117,7 +117,7 @@ describe("LatestCoe", () => {
 
     expect(screen.getByTestId("sparkline")).toHaveAttribute(
       "data-colour",
-      "hsl(var(--heroui-success))",
+      "var(--success)",
     );
   });
 
@@ -137,7 +137,7 @@ describe("LatestCoe", () => {
 
     expect(screen.getByTestId("sparkline")).toHaveAttribute(
       "data-colour",
-      "hsl(var(--heroui-warning))",
+      "var(--warning)",
     );
   });
 
@@ -154,7 +154,7 @@ describe("LatestCoe", () => {
 
     expect(screen.getByTestId("sparkline")).toHaveAttribute(
       "data-colour",
-      "hsl(var(--heroui-primary))",
+      "var(--primary)",
     );
   });
 });

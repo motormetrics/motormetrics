@@ -66,7 +66,7 @@ export function BlogListClient({ posts, counts, query }: BlogListClientProps) {
   if (posts.length === 0) {
     return (
       <div className="py-12 text-center">
-        <p className="text-muted">
+        <p className="text-default-500">
           {query
             ? `No results found for "${query}".`
             : "No blog posts available."}

@@ -23,7 +23,7 @@ interface TrendsChartProps {
 
 export function TrendsChart({ data }: TrendsChartProps) {
   const chartConfig = {
-    total: { label: "Deregistrations", color: "hsl(var(--heroui-primary))" },
+    total: { label: "Deregistrations", color: "var(--primary)" },
   } as const;
 
   const formattedData = data.map((item) => ({
@@ -33,8 +33,8 @@ export function TrendsChart({ data }: TrendsChartProps) {
 
   if (data.length === 0) {
     return (
-      <Card className="p-3">
-        <Card.Content className="p-4">
+      <Card>
+        <Card.Content>
           <Typography.TextSm>No trend data available</Typography.TextSm>
         </Card.Content>
       </Card>
@@ -42,8 +42,8 @@ export function TrendsChart({ data }: TrendsChartProps) {
   }
 
   return (
-    <Card className="p-3">
-      <Card.Content className="p-4">
+    <Card>
+      <Card.Content>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">
           <AreaChart
             data={formattedData}
@@ -58,12 +58,12 @@ export function TrendsChart({ data }: TrendsChartProps) {
               <linearGradient id="trendsGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="0%"
-                  stopColor="hsl(var(--heroui-primary))"
+                  stopColor="var(--primary)"
                   stopOpacity={0.3}
                 />
                 <stop
                   offset="100%"
-                  stopColor="hsl(var(--heroui-primary))"
+                  stopColor="var(--primary)"
                   stopOpacity={0}
                 />
               </linearGradient>
@@ -78,7 +78,7 @@ export function TrendsChart({ data }: TrendsChartProps) {
               tickLine={false}
               axisLine={false}
               className="text-xs"
-              tick={{ fill: "hsl(var(--heroui-default-500))" }}
+              tick={{ fill: "var(--default-500)" }}
             />
             <YAxis
               tickLine={false}
@@ -86,7 +86,7 @@ export function TrendsChart({ data }: TrendsChartProps) {
               width={60}
               tickFormatter={formatNumber}
               className="text-xs"
-              tick={{ fill: "hsl(var(--heroui-default-500))" }}
+              tick={{ fill: "var(--default-500)" }}
             />
             <ChartTooltip
               cursor={{ fill: "hsl(var(--muted))", opacity: 0.2 }}
@@ -99,7 +99,7 @@ export function TrendsChart({ data }: TrendsChartProps) {
             <Area
               type="monotone"
               dataKey="total"
-              stroke="hsl(var(--heroui-primary))"
+              stroke="var(--primary)"
               strokeWidth={2}
               fill="url(#trendsGradient)"
             />

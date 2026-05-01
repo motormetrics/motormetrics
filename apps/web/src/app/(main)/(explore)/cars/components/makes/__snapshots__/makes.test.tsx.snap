@@ -63,6 +63,7 @@ exports[`Makes > should render the section with title and count 1`] = `
         class="flex flex-1 gap-1 overflow-x-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         <button
+          aria-pressed="true"
           class="button button--sm button--primary shrink-0 rounded-full"
           data-rac=""
           data-react-aria-pressable="true"
@@ -74,6 +75,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           ALL
         </button>
         <button
+          aria-pressed="false"
           class="button button--sm button--tertiary shrink-0 rounded-full"
           data-rac=""
           data-react-aria-pressable="true"
@@ -85,6 +87,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           A
         </button>
         <button
+          aria-pressed="false"
           class="button button--sm button--tertiary shrink-0 rounded-full"
           data-rac=""
           data-react-aria-pressable="true"
@@ -96,6 +99,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           B
         </button>
         <button
+          aria-pressed="false"
           class="button button--sm button--tertiary shrink-0 rounded-full"
           data-rac=""
           data-react-aria-pressable="true"
@@ -107,6 +111,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           M
         </button>
         <button
+          aria-pressed="false"
           class="button button--sm button--tertiary shrink-0 rounded-full"
           data-rac=""
           data-react-aria-pressable="true"
@@ -178,7 +183,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           href="/cars/makes/audi"
         >
           <div
-            class="card card--default h-full p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             data-slot="card"
           >
             <div
@@ -219,7 +224,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           href="/cars/makes/bmw"
         >
           <div
-            class="card card--default h-full p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             data-slot="card"
           >
             <div
@@ -260,7 +265,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           href="/cars/makes/mercedes-benz"
         >
           <div
-            class="card card--default h-full p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             data-slot="card"
           >
             <div
@@ -301,7 +306,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           href="/cars/makes/porsche"
         >
           <div
-            class="card card--default h-full p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            class="card card--default h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             data-slot="card"
           >
             <div

@@ -38,7 +38,7 @@ async function CoeSectionContent() {
 
   return (
     <Card>
-      <Card.Content className="p-6">
+      <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <Typography.H3>Latest COE Results</Typography.H3>
           <Link href="/coe" aria-label="View all COE results">
@@ -62,7 +62,7 @@ async function CoeSectionContent() {
                 key={result.vehicleClass}
                 className="bg-surface-secondary shadow-none"
               >
-                <Card.Content className="p-4">
+                <Card.Content>
                   <div className="mb-2 flex items-center justify-between">
                     <span className="font-medium text-default-500 text-xs">
                       {result.vehicleClass}
@@ -96,12 +96,12 @@ async function CoeSectionContent() {
 function CoeSectionSkeleton() {
   return (
     <Card>
-      <Card.Content className="p-6">
+      <Card.Content>
         <Skeleton className="mb-5 h-6 w-40 rounded-lg" />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {[0, 1, 2, 3, 4].map((i) => (
             <Card key={i} className="bg-default-100 shadow-none">
-              <Card.Content className="p-4">
+              <Card.Content>
                 <Skeleton className="mb-2 h-4 w-12 rounded-lg" />
                 <Skeleton className="h-6 w-20 rounded-lg" />
               </Card.Content>

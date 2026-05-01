@@ -71,9 +71,9 @@ export function QuickNavSection() {
                 className="block h-full text-foreground no-underline"
               >
                 <Card
-                  className={`h-full border-default-200/80 p-3 transition-all duration-500 ${item.hoverBorder} hover:shadow-lg hover:shadow-primary/5`}
+                  className={`h-full border-default-200/80 transition-all duration-500 ${item.hoverBorder} hover:shadow-lg hover:shadow-primary/5`}
                 >
-                  <Card.Content className="flex flex-col gap-4 p-6">
+                  <Card.Content className="flex flex-col gap-4">
                     <div
                       className={`flex size-12 items-center justify-center rounded-xl ${item.containerBg} transition-colors`}
                     >

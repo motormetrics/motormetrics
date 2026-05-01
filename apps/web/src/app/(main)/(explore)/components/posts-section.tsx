@@ -11,7 +11,7 @@ async function PostsSectionContent() {
 function PostsSectionSkeleton() {
   return (
     <Card>
-      <Card.Content className="p-6">
+      <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <Skeleton className="h-6 w-28 rounded-lg" />
           <Skeleton className="h-4 w-16 rounded-lg" />

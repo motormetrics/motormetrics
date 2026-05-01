@@ -116,8 +116,8 @@ export function DataSourcesSection() {
               </Typography.Text>
 
               {/* LTA Badge */}
-              <Card className="border-default-200 p-3">
-                <Card.Content className="flex flex-row items-center gap-4 p-4">
+              <Card className="border-default-200">
+                <Card.Content className="flex flex-row items-center gap-4">
                   <div className="flex size-12 items-center justify-center rounded-lg bg-default-200">
                     <Database className="size-6 text-default-600" />
                   </div>
@@ -150,8 +150,8 @@ export function DataSourcesSection() {
             >
               {features.map((feature) => (
                 <motion.div key={feature.title} variants={staggerItemVariants}>
-                  <Card className="group h-full border-default-200/80 p-3 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
-                    <Card.Content className="flex flex-col gap-4 p-6">
+                  <Card className="group h-full border-default-200/80 transition-all duration-500 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+                    <Card.Content className="flex flex-col gap-4">
                       <div
                         className={`flex size-12 items-center justify-center rounded-xl ${feature.containerBg} transition-colors`}
                       >

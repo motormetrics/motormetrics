@@ -16,7 +16,7 @@ interface SparklineProps {
   colour?: string;
 }
 
-const DEFAULT_COLOUR = "hsl(var(--heroui-primary))";
+const DEFAULT_COLOUR = "var(--primary)";
 
 export function Sparkline({
   data,

@@ -22,7 +22,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
           <PenLine className="size-8" />
           Edit Blog Post
         </h1>
-        <p className="text-muted">
+        <p className="text-default-500">
           Update the content and settings for this blog post.
         </p>
       </div>

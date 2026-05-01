@@ -244,7 +244,7 @@ export function BlogPostsTable({
         id: "model",
         header: "Model",
         cell: ({ row }) => (
-          <span className="text-muted text-sm">
+          <span className="text-default-500 text-sm">
             {row.original.metadata?.modelId || "N/A"}
           </span>
         ),
@@ -259,7 +259,7 @@ export function BlogPostsTable({
           />
         ),
         cell: ({ row }) => (
-          <span className="text-muted text-sm">
+          <span className="text-default-500 text-sm">
             {formatTokens(row.original)}
           </span>
         ),
@@ -273,7 +273,7 @@ export function BlogPostsTable({
           />
         ),
         cell: ({ row }) => (
-          <span className="text-muted text-sm">
+          <span className="text-default-500 text-sm">
             {formatDate(row.original.createdAt)}
           </span>
         ),
@@ -288,7 +288,7 @@ export function BlogPostsTable({
             deletingId === post.id;
 
           if (isLoading) {
-            return <Loader2 className="size-4 animate-spin text-muted" />;
+            return <Loader2 className="size-4 animate-spin text-default-500" />;
           }
 
           return (
@@ -426,7 +426,7 @@ export function BlogPostsTable({
             aria-label="Search blog posts"
             className="relative max-w-sm"
           >
-            <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted" />
+            <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-default-500" />
             <Input
               placeholder="Search by title, month, or type..."
               value={globalFilter}
@@ -478,7 +478,7 @@ export function BlogPostsTable({
                     ))
                   ) : (
                     <Table.Row>
-                      <Table.Cell className="h-24 text-center text-muted">
+                      <Table.Cell className="h-24 text-center text-default-500">
                         No blog posts found.
                       </Table.Cell>
                     </Table.Row>
@@ -490,7 +490,7 @@ export function BlogPostsTable({
 
           {/* Pagination */}
           <div className="flex flex-col items-center gap-2 lg:flex-row lg:justify-between">
-            <p className="text-muted text-sm">
+            <p className="text-default-500 text-sm">
               {table.getFilteredRowModel().rows.length} row
               {table.getFilteredRowModel().rows.length !== 1 ? "s" : ""}
             </p>
@@ -624,7 +624,7 @@ export function BlogPostsTable({
                           Estimated cost: ~
                           {estimateTokenCost(confirmDialog.post.metadata.usage)}
                         </span>
-                        <span className="text-muted text-xs">
+                        <span className="text-default-500 text-xs">
                           Based on Gemini Flash pricing. Actual cost may vary.
                         </span>
                       </div>

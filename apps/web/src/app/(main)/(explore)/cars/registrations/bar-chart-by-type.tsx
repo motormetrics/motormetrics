@@ -75,7 +75,7 @@ export const BarChartByType = ({ data }: BarChartByTypeProps) => {
         </BarChart>
       </ChartContainer>
       <div className="flex flex-col gap-4">
-        <div className="text-muted text-sm">
+        <div className="text-default-500 text-sm">
           <h4 className="mb-2 font-semibold text-foreground">
             Vehicle Type Distribution
           </h4>
@@ -92,19 +92,19 @@ export const BarChartByType = ({ data }: BarChartByTypeProps) => {
             <div className="font-semibold text-foreground text-lg">
               {topType?.label || "N/A"}
             </div>
-            <div className="text-muted text-xs">Most Popular</div>
+            <div className="text-default-500 text-xs">Most Popular</div>
           </div>
           <div className="text-center">
             <div className="font-semibold text-foreground text-lg">
               {totalRegistrations.toLocaleString()}
             </div>
-            <div className="text-muted text-xs">Total Registrations</div>
+            <div className="text-default-500 text-xs">Total Registrations</div>
           </div>
           <div className="text-center">
             <div className="font-semibold text-foreground text-lg">
               {chartData.length}
             </div>
-            <div className="text-muted text-xs">Vehicle Types</div>
+            <div className="text-default-500 text-xs">Vehicle Types</div>
           </div>
         </div>
       </div>

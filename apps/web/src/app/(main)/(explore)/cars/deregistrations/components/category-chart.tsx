@@ -68,7 +68,7 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
   }));
 
   const chartConfig = {
-    total: { label: "Deregistrations", color: "hsl(var(--heroui-primary))" },
+    total: { label: "Deregistrations", color: "var(--primary)" },
   } as const;
 
   const handleBarClick = async (entry: CategoryWithPercentage) => {
@@ -82,7 +82,7 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
   };
 
   return (
-    <Card className="p-3">
+    <Card>
       <Card.Header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex flex-col gap-1">
           <Typography.H3>Deregistrations by Category</Typography.H3>
@@ -132,9 +132,9 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
               <linearGradient id="selectedGradient" x1="0" y1="0" x2="1" y2="0">
                 <stop
                   offset="0%"
-                  stopColor="hsl(var(--heroui-primary) / 0.4)"
+                  stopColor="color-mix(in srgb, var(--primary) 40%, transparent)"
                 />
-                <stop offset="100%" stopColor="hsl(var(--heroui-primary))" />
+                <stop offset="100%" stopColor="var(--primary)" />
               </linearGradient>
             </defs>
             <CartesianGrid
@@ -147,7 +147,7 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
               tickLine={false}
               axisLine={false}
               tickFormatter={formatNumber}
-              tick={{ fill: "hsl(var(--heroui-default-500))" }}
+              tick={{ fill: "var(--default-500)" }}
             />
             <YAxis
               type="category"
@@ -155,7 +155,7 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
               tickLine={false}
               axisLine={false}
               width={180}
-              tick={{ fill: "hsl(var(--heroui-default-600))" }}
+              tick={{ fill: "var(--default-600)" }}
               tickFormatter={(value: string) =>
                 value.replace("Vehicles Exempted From VQS", "VQS Exempted")
               }

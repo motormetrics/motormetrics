@@ -12,7 +12,7 @@ interface CarOverviewTrendsProps {
 export function CarOverviewTrends({ cars, total }: CarOverviewTrendsProps) {
   return (
     <div className="grid grid-cols-1 gap-4">
-      <Card className="p-3">
+      <Card>
         <Card.Header className="flex flex-col items-start gap-2">
           <Typography.H4>By Make</Typography.H4>
           <Typography.TextSm>Top 10 makes</Typography.TextSm>
@@ -22,7 +22,7 @@ export function CarOverviewTrends({ cars, total }: CarOverviewTrendsProps) {
         </Card.Content>
       </Card>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card className="p-3">
+        <Card>
           <Card.Header className="flex flex-col items-start gap-2">
             <Typography.H4>Stats</Typography.H4>
             <Typography.TextSm>

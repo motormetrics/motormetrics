@@ -47,8 +47,8 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
         </div>
 
         {/* Chart */}
-        <Card className="p-3">
-          <Card.Header className="flex flex-col items-start gap-2 pb-4">
+        <Card>
+          <Card.Header className="flex flex-col items-start gap-2">
             <Typography.H4>Daily Visitors</Typography.H4>
             <Typography.TextSm className="text-default-600">
               Unique visitors and page views per day

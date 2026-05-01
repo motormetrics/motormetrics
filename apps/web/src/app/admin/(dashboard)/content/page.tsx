@@ -6,7 +6,7 @@ const Page = () => (
   <div className="flex flex-col gap-6">
     <div>
       <h1 className="font-bold text-3xl tracking-tight">Content Management</h1>
-      <p className="text-muted">
+      <p className="text-default-500">
         Manage website content, announcements, and user-facing information.
       </p>
     </div>
@@ -24,7 +24,7 @@ const Page = () => (
             </Card.Description>
           </Card.Header>
           <Card.Content>
-            <p className="text-muted text-sm">
+            <p className="text-default-500 text-sm">
               Create, edit, and schedule announcements that appear on the main
               website.
             </p>
@@ -44,7 +44,7 @@ const Page = () => (
             </Card.Description>
           </Card.Header>
           <Card.Content>
-            <p className="text-muted text-sm">
+            <p className="text-default-500 text-sm">
               Create, view, and regenerate blog posts from market data.
             </p>
           </Card.Content>
@@ -57,7 +57,7 @@ const Page = () => (
           <Card.Description>Coming soon</Card.Description>
         </Card.Header>
         <Card.Content>
-          <p className="text-muted text-sm">
+          <p className="text-default-500 text-sm">
             Manage promotional banners and notices.
           </p>
         </Card.Content>

@@ -14,7 +14,6 @@ export default defineConfig({
       exclude: [
         "src/app",
         "src/components/analytics.tsx",
-        "src/components/ui",
         "src/config",
         "src/functions",
         // Exclude src/lib subdirectories except updater

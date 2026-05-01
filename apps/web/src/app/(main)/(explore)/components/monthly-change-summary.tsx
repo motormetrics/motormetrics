@@ -35,7 +35,7 @@ export async function MonthlyChangeSummary() {
 
   return (
     <Card className="border-2 border-primary">
-      <Card.Content className="p-6">
+      <Card.Content>
         <div className="mb-4 flex items-center justify-between">
           <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
             <CalendarDays className="size-6 text-primary" />

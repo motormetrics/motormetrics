@@ -107,7 +107,7 @@ const RoundCard = ({
 
   if (isPlaceholder) {
     return (
-      <Card className="border-2 border-dashed bg-default-50/50 p-3 shadow-none">
+      <Card className="border-2 border-dashed bg-default-50/50 shadow-none">
         <Card.Header className="flex flex-row items-center gap-2 pb-2">
           <Chip size="sm" color="accent">
             {formatOrdinal(roundNumber)} Round
@@ -131,7 +131,7 @@ const RoundCard = ({
   }
 
   return (
-    <Card className="p-3">
+    <Card>
       <Card.Header className="flex flex-row items-center gap-2 pb-2">
         <Chip size="sm" color="accent">
           {formatOrdinal(roundNumber)} Round

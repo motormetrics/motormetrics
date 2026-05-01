@@ -44,7 +44,7 @@ export function CoeCategories() {
   );
 
   return (
-    <Card className="p-3">
+    <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>COE Categories</Typography.H4>
         <Typography.TextSm className="inline-flex items-center gap-2">

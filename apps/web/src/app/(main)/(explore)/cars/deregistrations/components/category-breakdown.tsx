@@ -17,15 +17,15 @@ interface CategoryBreakdownProps {
 
 export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
   const chartConfig = {
-    total: { label: "Deregistrations", color: "hsl(var(--heroui-primary))" },
+    total: { label: "Deregistrations", color: "var(--primary)" },
   } as const;
 
   // Sort by total descending for better visualization
   const sortedData = [...data].sort((a, b) => b.total - a.total);
 
   return (
-    <Card className="h-full p-3">
-      <Card.Content className="p-4">
+    <Card className="h-full">
+      <Card.Content>
         <h3 className="mb-3 font-medium text-default-500 text-xs uppercase tracking-wider">
           Distribution
         </h3>
@@ -34,14 +34,14 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
             <CartesianGrid
               horizontal={false}
               strokeDasharray="3 3"
-              stroke="hsl(var(--heroui-default-200))"
+              stroke="var(--default-200)"
             />
             <XAxis
               type="number"
               tickLine={false}
               axisLine={false}
               tickFormatter={formatNumber}
-              tick={{ fill: "hsl(var(--heroui-default-500))" }}
+              tick={{ fill: "var(--default-500)" }}
             />
             <YAxis
               type="category"
@@ -49,7 +49,7 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
               tickLine={false}
               axisLine={false}
               width={100}
-              tick={{ fill: "hsl(var(--heroui-default-600))" }}
+              tick={{ fill: "var(--default-600)" }}
               tickFormatter={(value: string) =>
                 value
                   .replace("Category ", "")

@@ -35,7 +35,7 @@ export function MakeCard({
 
   return (
     <Link href={href} className="block h-full no-underline">
-      <Card className="h-full p-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <Card className="h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
         <Card.Content>
           <div className="flex flex-col gap-2">
             <div className="flex items-start gap-2">
