@@ -34,7 +34,7 @@ export function CategorySummaryCard({
             <div className="flex items-center gap-2">
               <Chip
                 color={isPositive ? "success" : "danger"}
-                variant="soft"
+                variant="primary"
                 size="sm"
               >
                 {isPositive ? (

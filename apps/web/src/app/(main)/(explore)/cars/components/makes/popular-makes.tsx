@@ -30,7 +30,7 @@ export function PopularMakes({
             Popular Makes
           </h2>
         </div>
-        <Chip variant="soft" color="accent" size="sm">
+        <Chip variant="primary" color="accent" size="sm">
           Top {makes.length}
         </Chip>
       </div>

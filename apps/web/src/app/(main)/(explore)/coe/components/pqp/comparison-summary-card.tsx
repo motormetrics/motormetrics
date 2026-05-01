@@ -55,7 +55,7 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
               <Card.Footer>
                 <div className="flex items-center gap-2">
                   <Chip
-                    variant="soft"
+                    variant="primary"
                     color={
                       isPQPLower
                         ? "success"

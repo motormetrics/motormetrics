@@ -55,7 +55,7 @@ export function AllMakes({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h2 className="font-semibold text-foreground text-lg">{title}</h2>
-          <Chip variant="soft" color="accent" size="sm">
+          <Chip variant="primary" color="accent" size="sm">
             {sortedMakes.length}
           </Chip>
         </div>

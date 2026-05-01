@@ -68,7 +68,7 @@ const CategoryRow = ({
         {change !== null && change !== 0 && (
           <Chip
             size="sm"
-            variant="soft"
+            variant="primary"
             color={change > 0 ? "danger" : "success"}
             className="h-6 px-1.5 font-medium text-xs tabular-nums"
           >

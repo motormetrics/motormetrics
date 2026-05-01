@@ -70,7 +70,7 @@ function RangeSection({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Chip size="sm" variant="soft" className="font-medium">
+        <Chip size="sm" variant="primary" className="font-medium">
           Price Range
         </Chip>
         <span className="text-muted text-xs">

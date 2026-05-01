@@ -144,7 +144,7 @@ export function CostTable({ data }: CostTableProps) {
         return (
           <Chip
             size="sm"
-            variant="soft"
+            variant="primary"
             color={FUEL_TYPE_COLORS[item.fuelType ?? ""] ?? "default"}
           >
             {FUEL_TYPE_LABELS[item.fuelType ?? ""] ?? item.fuelType}
@@ -154,7 +154,7 @@ export function CostTable({ data }: CostTableProps) {
         return (
           <Chip
             size="sm"
-            variant="soft"
+            variant="primary"
             color={VES_BAND_COLORS[item.vesBanding] ?? "default"}
           >
             {item.vesBanding}

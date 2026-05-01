@@ -57,7 +57,11 @@ export const columns: ColumnDef<COEResult>[] = [
       const isHigh = ratio > 1.5;
 
       return (
-        <Chip size="sm" variant="soft" color={isHigh ? "warning" : "default"}>
+        <Chip
+          size="sm"
+          variant="primary"
+          color={isHigh ? "warning" : "default"}
+        >
           {ratio.toFixed(1)}x
         </Chip>
       );

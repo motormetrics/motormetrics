@@ -182,7 +182,7 @@ export default async function GuidePage({ params }: PageProps) {
 
         {/* Header */}
         <header className="flex flex-col gap-4">
-          <Chip variant="soft" color="accent" size="sm">
+          <Chip variant="primary" color="accent" size="sm">
             <BookOpen className="size-3" />
             {guide.term}
           </Chip>

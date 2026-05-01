@@ -3,7 +3,7 @@
 exports[`NewChip > should render with default props 1`] = `
 <div>
   <span
-    class="chip chip--accent chip--sm chip--secondary"
+    class="chip chip--accent chip--sm chip--primary"
     data-slot="chip"
   >
     <span

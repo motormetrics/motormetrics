@@ -195,7 +195,7 @@ async function TypeDetailContent({
           <Card className="bg-surface">
             <Card.Header className="flex flex-row items-center justify-between gap-2">
               <Typography.H4>Registrations</Typography.H4>
-              <Chip size="sm" variant="soft">
+              <Chip size="sm" variant="primary">
                 {formattedMonth}
               </Chip>
             </Card.Header>

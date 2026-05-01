@@ -68,7 +68,7 @@ const RangeSection = ({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Chip size="sm" variant="soft" className="font-medium">
+        <Chip size="sm" variant="primary" className="font-medium">
           {label}
         </Chip>
         <span className="text-muted text-xs">
@@ -172,7 +172,7 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
                 <div className="flex flex-col gap-2">
                   <Chip
                     size="sm"
-                    variant="soft"
+                    variant="primary"
                     className="rounded-full font-medium"
                   >
                     {currentYear} YTD

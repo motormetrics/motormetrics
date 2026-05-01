@@ -72,7 +72,7 @@ export function Cover({ category, className }: CoverProps) {
           {tagline && (
             <Chip
               size="sm"
-              variant="soft"
+              variant="primary"
               className="bg-white/15 text-white/80 text-xs backdrop-blur-sm"
             >
               {tagline}

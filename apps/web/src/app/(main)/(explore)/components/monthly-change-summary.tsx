@@ -56,7 +56,7 @@ export async function MonthlyChangeSummary() {
         </p>
         <div className="mt-4 flex items-center gap-2">
           <Chip
-            variant="soft"
+            variant="primary"
             color={isPositive ? "success" : "danger"}
             size="sm"
           >

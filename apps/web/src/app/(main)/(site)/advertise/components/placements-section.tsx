@@ -62,7 +62,7 @@ export async function PlacementsSection() {
                   </div>
                   <Chip
                     size="sm"
-                    variant="soft"
+                    variant="primary"
                     color="accent"
                     className="font-medium text-xs"
                   >

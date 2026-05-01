@@ -34,7 +34,7 @@ export function HeroSection() {
           >
             <Chip
               color="accent"
-              variant="soft"
+              variant="primary"
               className="border-accent/20 bg-accent/5 font-medium text-foreground text-sm tracking-wide backdrop-blur-sm"
             >
               Advertising Opportunities

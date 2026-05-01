@@ -9,7 +9,7 @@ export function ComingSoon({ children }: ComingSoonProps) {
       {children}
       <Chip
         color="accent"
-        variant="soft"
+        variant="primary"
         size="sm"
         className="absolute top-0 left-0 translate-x-1/2 -translate-y-1/2 rotate-3 transform text-nowrap"
       >

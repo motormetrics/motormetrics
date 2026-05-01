@@ -82,7 +82,7 @@ export function VehiclePopulationMetrics({
               className="rounded-full"
               color={yoyChange >= 0 ? "success" : "danger"}
               size="sm"
-              variant="soft"
+              variant="primary"
             >
               {yoyChange >= 0 ? "+" : ""}
               {yoyPercentage.toFixed(1)}%

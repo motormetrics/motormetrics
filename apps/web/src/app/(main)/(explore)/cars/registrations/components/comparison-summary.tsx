@@ -47,7 +47,7 @@ export function ComparisonSummary({ monthA, monthB }: ComparisonSummaryProps) {
         </div>
         <div className="flex items-center gap-2">
           <Chip
-            variant="soft"
+            variant="primary"
             color={isNeutral ? "default" : isPositive ? "success" : "danger"}
           >
             {isNeutral ? null : isPositive ? (

@@ -26,7 +26,7 @@ const features = [
       </>
     ),
     chip: (
-      <Chip size="sm" color="accent" variant="soft">
+      <Chip size="sm" color="accent" variant="primary">
         Official Government Data
       </Chip>
     ),
@@ -62,19 +62,19 @@ const features = [
     ),
     chips: (
       <div className="flex flex-wrap gap-2">
-        <Chip size="sm" variant="soft">
+        <Chip size="sm" variant="primary">
           Car Registrations
         </Chip>
-        <Chip size="sm" variant="soft">
+        <Chip size="sm" variant="primary">
           COE Bidding Results
         </Chip>
-        <Chip size="sm" variant="soft">
+        <Chip size="sm" variant="primary">
           Vehicle Deregistrations
         </Chip>
-        <Chip size="sm" variant="soft">
+        <Chip size="sm" variant="primary">
           Vehicle Population
         </Chip>
-        <Chip size="sm" variant="soft">
+        <Chip size="sm" variant="primary">
           PQP Rates
         </Chip>
       </div>

@@ -43,7 +43,7 @@ export function BlogHero({
       <div className="container relative mx-auto flex flex-col justify-end px-6 md:px-12">
         <Chip
           size="sm"
-          variant="soft"
+          variant="primary"
           className="mb-3 bg-white/15 font-bold text-white/80 text-xs uppercase tracking-[0.3em]"
         >
           {categoryLabel}

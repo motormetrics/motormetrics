@@ -20,7 +20,7 @@ export function PremiumBanner({ data = [] }: PremiumBannerProps) {
         {data.toSorted(sortByCategory).map(({ vehicleClass, premium }) => (
           <div key={vehicleClass} className="flex items-center gap-2">
             <div className="font-semibold text-sm">{vehicleClass}</div>
-            <Chip color="accent" variant="soft">
+            <Chip color="accent" variant="primary">
               {formatCurrency(premium)}
             </Chip>
           </div>

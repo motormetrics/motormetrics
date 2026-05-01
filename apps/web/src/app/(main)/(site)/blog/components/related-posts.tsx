@@ -43,7 +43,7 @@ export async function RelatedPosts({
                   <Chip
                     size="sm"
                     color={category.color}
-                    variant="soft"
+                    variant="primary"
                     className="h-5 px-1 font-bold text-[10px]"
                   >
                     {category.label}

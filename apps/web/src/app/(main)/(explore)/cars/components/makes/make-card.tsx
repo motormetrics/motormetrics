@@ -67,7 +67,7 @@ export function MakeCard({
                     <div className="flex flex-wrap items-center gap-2">
                       <Chip
                         color="accent"
-                        variant="soft"
+                        variant="primary"
                         size="sm"
                         className="rounded-full"
                       >
@@ -76,7 +76,7 @@ export function MakeCard({
                       {!!yoyChange && (
                         <Chip
                           color={yoyChange >= 0 ? "success" : "danger"}
-                          variant="soft"
+                          variant="primary"
                           size="sm"
                         >
                           {yoyChange >= 0 ? (

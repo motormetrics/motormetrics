@@ -15,7 +15,7 @@ interface TrendIndicatorProps {
 const TrendIndicator = ({ change, label }: TrendIndicatorProps) => {
   return (
     <div className="flex items-center gap-2">
-      <Chip variant="soft" color={change >= 0 ? "success" : "danger"}>
+      <Chip variant="primary" color={change >= 0 ? "success" : "danger"}>
         {change >= 0 ? (
           <ArrowUpRight className="size-4" />
         ) : (

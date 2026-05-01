@@ -55,7 +55,7 @@ export function Card({ post }: CardProps) {
               <span className="size-1 rounded-full bg-default" />
               <span>{readingTime} min read</span>
               {isNew && (
-                <Chip color="warning" variant="soft" size="sm">
+                <Chip color="warning" variant="primary" size="sm">
                   NEW
                 </Chip>
               )}
