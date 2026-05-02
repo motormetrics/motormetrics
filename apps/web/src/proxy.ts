@@ -112,7 +112,7 @@ export async function proxy(request: NextRequest) {
   const nonce = crypto.randomBytes(16).toString("base64");
   const cspHeader = `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' *.motormetrics.app *.vercel-scripts.com vercel.live;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' *.motormetrics.app *.vercel-scripts.com vercel.live;
       style-src 'self' 'unsafe-inline';
       img-src 'self' blob: data: *.unsplash.com;
       connect-src *;
