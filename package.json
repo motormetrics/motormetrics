@@ -47,16 +47,15 @@
     "conventional-changelog-conventionalcommits": "9.1.0",
     "husky": "9.1.7",
     "lint-staged": "16.2.7",
-    "portless": "0.9.4",
     "semantic-release": "24.2.9",
     "turbo": "2.9.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
-  "packageManager": "pnpm@11.0.3",
   "lint-staged": {
     "*.{js,ts,tsx,jsx,json,jsonc}": [
       "pnpm biome check --write --no-errors-on-unmatched"
     ]
-  }
+  },
+  "packageManager": "pnpm@11.0.3"
 }

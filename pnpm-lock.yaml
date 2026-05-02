@@ -131,9 +131,6 @@ importers:
       lint-staged:
         specifier: 16.2.7
         version: 16.2.7
-      portless:
-        specifier: 0.9.4
-        version: 0.9.4
       semantic-release:
         specifier: 24.2.9
         version: 24.2.9(typescript@5.9.3)
@@ -7952,12 +7949,6 @@ packages:
   playwright@1.57.0:
     resolution: {integrity: sha512-ilYQj1s8sr2ppEJ2YVadYBN0Mb3mdo9J0wQ+UuDhzYqURwSoW4n1Xs5vs7ORwgDGmyEh33tRMeS8KhdkMoLXQw==}
     engines: {node: '>=18'}
-    hasBin: true
-
-  portless@0.9.4:
-    resolution: {integrity: sha512-+ylrgmxDd807CldqrFc2Qak4FrUka/3ijwYtGW3dCRm0L6FvxAxONe1tlMqpyxR/CVy58lYNX0GiY6OH8R3Kmg==}
-    engines: {node: '>=20'}
-    os: [darwin, linux, win32]
     hasBin: true
 
   postcss-selector-parser@6.0.10:
@@ -17302,8 +17293,6 @@ snapshots:
       playwright-core: 1.57.0
     optionalDependencies:
       fsevents: 2.3.2
-
-  portless@0.9.4: {}
 
   postcss-selector-parser@6.0.10:
     dependencies:

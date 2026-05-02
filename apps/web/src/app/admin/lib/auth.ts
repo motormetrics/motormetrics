@@ -6,12 +6,13 @@ import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
     usePlural: true,
   }),
-  trustedOrigins: ["https://*.motormetrics.app"],
+  trustedOrigins: ["https://*.motormetrics.app", "http://localhost:3000"],
   advanced: {
     trustedProxyHeaders: true,
     allowedHosts: [
