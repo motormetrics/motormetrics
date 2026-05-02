@@ -108,7 +108,6 @@
     "postcss": "8.5.10",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
-    "vite-tsconfig-paths": "catalog:",
     "vitest": "catalog:"
   }
 }
