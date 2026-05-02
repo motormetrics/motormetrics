@@ -23,6 +23,7 @@
     "vercel-build": "turbo run @motormetrics/database#migrate && next build"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "1.6.0",
     "@gravity-ui/icons": "2.18.0",
     "@heroui-pro/react": "1.0.0-beta.2",
     "@heroui/react": "catalog:",
