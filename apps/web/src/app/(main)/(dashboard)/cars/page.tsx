@@ -1,11 +1,6 @@
-import { cn, Link } from "@heroui/react";
-import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
-import { ExploreCard } from "@web/app/(main)/(dashboard)/components/explore-card";
+import { CarsOverview } from "@web/app/(main)/(dashboard)/cars/components/cars-overview";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { navLinks } from "@web/config/navigation";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateDataCatalogSchema } from "@web/lib/metadata";
 import type { Metadata } from "next";
@@ -37,49 +32,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Define card layout with variants
-const cardLayout: Record<
-  string,
-  { variant: "hero" | "standard" | "tool"; colSpan: string }
-> = {
-  "/cars/registrations": {
-    variant: "hero",
-    colSpan: "col-span-12 md:col-span-6 lg:col-span-4",
-  },
-  "/cars/deregistrations": {
-    variant: "standard",
-    colSpan: "col-span-12 md:col-span-6 lg:col-span-4",
-  },
-  "/cars/makes": {
-    variant: "standard",
-    colSpan: "col-span-12 md:col-span-6 lg:col-span-4",
-  },
-  "/cars/fuel-types": {
-    variant: "standard",
-    colSpan: "col-span-12 md:col-span-6 lg:col-span-4",
-  },
-  "/cars/vehicle-types": {
-    variant: "standard",
-    colSpan: "col-span-12 md:col-span-6 lg:col-span-4",
-  },
-  "/cars/electric-vehicles": {
-    variant: "hero",
-    colSpan: "col-span-12 md:col-span-6 lg:col-span-4",
-  },
-  "/cars/annual": {
-    variant: "standard",
-    colSpan: "col-span-12 md:col-span-6 lg:col-span-4",
-  },
-  "/cars/parf": {
-    variant: "tool",
-    colSpan: "col-span-12 md:col-span-6 lg:col-span-4",
-  },
-  "/cars/costs": {
-    variant: "tool",
-    colSpan: "col-span-12 md:col-span-6 lg:col-span-4",
-  },
-};
-
 export default function Page() {
   return (
     <div className="flex flex-col gap-8">
@@ -94,61 +46,7 @@ export default function Page() {
           ),
         }}
       />
-      <div className="flex flex-col gap-2">
-        <Typography.H1>Cars</Typography.H1>
-        <Typography.TextLg>
-          Explore Singapore vehicle data across registrations, deregistrations,
-          and more. Looking for COE data?{" "}
-          <Link
-            href="/coe"
-            className="text-accent underline-offset-4 hover:underline"
-          >
-            View COE premiums and results
-          </Link>
-          .
-        </Typography.TextLg>
-      </div>
-
-      <AnimatedGrid className="grid grid-cols-12 gap-4">
-        {navLinks.cars.map(
-          (
-            { title, url, icon: Icon, description, badge, iconColor },
-            index,
-          ) => {
-            const layout = cardLayout[url] ?? {
-              variant: "standard" as const,
-              colSpan: "col-span-12 md:col-span-6 lg:col-span-4",
-            };
-            const isHero = layout.variant === "hero";
-
-            return (
-              <AnimatedSection
-                key={url}
-                className={layout.colSpan}
-                order={index}
-              >
-                <ExploreCard
-                  title={title}
-                  description={description ?? ""}
-                  href={url}
-                  icon={
-                    Icon && (
-                      <Icon
-                        className={cn(
-                          isHero ? "size-6" : "size-5",
-                          iconColor ?? "text-accent",
-                        )}
-                      />
-                    )
-                  }
-                  badge={badge}
-                  variant={layout.variant}
-                />
-              </AnimatedSection>
-            );
-          },
-        )}
-      </AnimatedGrid>
+      <CarsOverview />
     </div>
   );
 }
