@@ -49,9 +49,11 @@ const nextConfig: NextConfig = {
     fetches: {
       fullUrl: true,
     },
-    browserToTerminal: true,
+    browserToTerminal: "warn",
   },
   experimental: {
+    appNewScrollHandler: true,
+    cachedNavigations: true,
     mcpServer: true,
     turbopackFileSystemCacheForBuild: true,
     typedEnv: true,
