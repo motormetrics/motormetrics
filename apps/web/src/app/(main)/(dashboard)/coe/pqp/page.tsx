@@ -8,9 +8,7 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
-import { Infobox } from "@web/components/shared/infobox";
 import { MonthSelector } from "@web/components/shared/month-selector";
-import { PAGE_CONTEXTS } from "@web/components/shared/page-contexts";
 import { StructuredData } from "@web/components/structured-data";
 import { UnreleasedFeature } from "@web/components/unreleased-feature";
 import { LAST_UPDATED_COE_KEY, SITE_TITLE, SITE_URL } from "@web/config";
@@ -157,10 +155,6 @@ async function PQPRatesContent({
         }}
       />
       <AnimatedSection order={1}>
-        <Infobox {...PAGE_CONTEXTS.pqp} />
-      </AnimatedSection>
-
-      <AnimatedSection order={2}>
         <Suspense>
           <ComparisonSummaryCard data={overview.comparison} />
         </Suspense>

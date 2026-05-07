@@ -14,9 +14,7 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
-import { Infobox } from "@web/components/shared/infobox";
 import { MonthSelector } from "@web/components/shared/month-selector";
-import { PAGE_CONTEXTS } from "@web/components/shared/page-contexts";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import Typography from "@web/components/typography";
@@ -277,10 +275,6 @@ async function DeregistrationsContent({
           ]),
         }}
       />
-      <AnimatedSection order={1}>
-        <Infobox {...PAGE_CONTEXTS.deregistrations} />
-      </AnimatedSection>
-
       {/* Interactive Category Chart */}
       <AnimatedSection order={2}>
         <Suspense fallback={<SkeletonCard className="h-[520px] w-full" />}>
