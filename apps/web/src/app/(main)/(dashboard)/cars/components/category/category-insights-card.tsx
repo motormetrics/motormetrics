@@ -33,15 +33,20 @@ export function CategoryInsightsCard({
   const trend = changeRatio > 0 ? "up" : changeRatio < 0 ? "down" : "neutral";
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <Typography.H4>Market Insights</Typography.H4>
-        <Chip color="accent" size="sm">
+    <section className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-4 shadow-surface md:p-5">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-1">
+          <Typography.H4>{title} Snapshot</Typography.H4>
+          <Typography.TextSm>
+            Registration mix for the latest available {formattedMonth} dataset.
+          </Typography.TextSm>
+        </div>
+        <Chip className="w-fit" color="accent" size="sm" variant="soft">
           {formattedMonth}
         </Chip>
       </div>
 
-      <KPIGroup>
+      <KPIGroup className="max-md:flex-col max-md:[&_.kpi-group__separator]:h-px max-md:[&_.kpi-group__separator]:w-full">
         <KPI>
           <KPI.Header>
             <KPI.Icon status="success">
@@ -51,7 +56,7 @@ export function CategoryInsightsCard({
           </KPI.Header>
           <KPI.Content>
             <KPI.Value
-              className="text-4xl text-accent"
+              className="text-3xl text-accent"
               locale="en-SG"
               maximumFractionDigits={0}
               value={total}
@@ -83,11 +88,11 @@ export function CategoryInsightsCard({
             <KPI.Icon status="success">
               <Layers />
             </KPI.Icon>
-            <KPI.Title>Active Categories</KPI.Title>
+            <KPI.Title>Active {title}s</KPI.Title>
           </KPI.Header>
           <KPI.Content>
             <KPI.Value
-              className="text-2xl"
+              className="text-2xl text-foreground"
               locale="en-SG"
               maximumFractionDigits={0}
               value={categoriesCount}
@@ -105,10 +110,10 @@ export function CategoryInsightsCard({
             <KPI.Icon status="success">
               <Award />
             </KPI.Icon>
-            <KPI.Title>Top Performer</KPI.Title>
+            <KPI.Title>Leading {title}</KPI.Title>
           </KPI.Header>
           <KPI.Content>
-            <span className="font-bold text-2xl text-foreground">
+            <span className="font-semibold text-2xl text-foreground">
               {topPerformer.name}
             </span>
           </KPI.Content>
@@ -124,11 +129,11 @@ export function CategoryInsightsCard({
             <KPI.Icon status="warning">
               <PieChart />
             </KPI.Icon>
-            <KPI.Title>Market Share</KPI.Title>
+            <KPI.Title>Leader Share</KPI.Title>
           </KPI.Header>
           <KPI.Content>
             <KPI.Value
-              className="text-2xl"
+              className="text-2xl text-foreground"
               maximumFractionDigits={1}
               style="percent"
               value={topPerformer.percentage / 100}
@@ -139,6 +144,6 @@ export function CategoryInsightsCard({
           </KPI.Footer>
         </KPI>
       </KPIGroup>
-    </div>
+    </section>
   );
 }
