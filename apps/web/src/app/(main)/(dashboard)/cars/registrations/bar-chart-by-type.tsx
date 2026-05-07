@@ -1,4 +1,4 @@
-import { BarChart } from "@heroui-pro/react";
+import { BarChart, NumberValue } from "@heroui-pro/react";
 import type { RegistrationStat } from "@web/types/cars";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 
@@ -57,8 +57,17 @@ export const BarChartByType = ({ data }: BarChartByTypeProps) => {
           </h4>
           <p>
             This chart displays vehicle registrations categorised by type.
-            {topType &&
-              `${topType.label} vehicles account for ${topType.count.toLocaleString()} registrations`}
+            {topType ? (
+              <>
+                {topType.label} vehicles account for{" "}
+                <NumberValue
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  value={topType.count}
+                />{" "}
+                registrations
+              </>
+            ) : null}
             , showing consumer preferences across different vehicle categories
             in Singapore.
           </p>
@@ -72,13 +81,21 @@ export const BarChartByType = ({ data }: BarChartByTypeProps) => {
           </div>
           <div className="text-center">
             <div className="font-semibold text-foreground text-lg">
-              {totalRegistrations.toLocaleString()}
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={totalRegistrations}
+              />
             </div>
             <div className="text-muted text-xs">Total Registrations</div>
           </div>
           <div className="text-center">
             <div className="font-semibold text-foreground text-lg">
-              {chartData.length}
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={chartData.length}
+              />
             </div>
             <div className="text-muted text-xs">Vehicle Types</div>
           </div>

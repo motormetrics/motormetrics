@@ -1,4 +1,5 @@
 import { Card, Chip } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 import type { SelectCarCost } from "@motormetrics/database";
 import { formatCurrency } from "@motormetrics/utils";
 import {
@@ -74,7 +75,14 @@ function RangeSection({
           Price Range
         </Chip>
         <span className="text-muted text-xs">
-          Spread: {formatCurrency(spread)}
+          Spread:{" "}
+          <NumberValue
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={spread}
+          />
         </span>
       </div>
 
@@ -94,9 +102,14 @@ function RangeSection({
               Low
             </span>
           </div>
-          <span className="font-semibold text-accent text-lg tabular-nums">
-            {formatCurrency(lowestPrice)}
-          </span>
+          <NumberValue
+            className="font-semibold text-accent text-lg"
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={lowestPrice}
+          />
           <Typography.Caption>{lowestModel}</Typography.Caption>
         </div>
 
@@ -108,9 +121,14 @@ function RangeSection({
             </span>
             <div className="h-2 w-2 rounded-full bg-accent" />
           </div>
-          <span className="font-semibold text-accent text-lg tabular-nums">
-            {formatCurrency(highestPrice)}
-          </span>
+          <NumberValue
+            className="font-semibold text-accent text-lg"
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={highestPrice}
+          />
           <Typography.Caption>{highestModel}</Typography.Caption>
         </div>
       </div>

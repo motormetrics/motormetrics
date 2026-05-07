@@ -1,9 +1,8 @@
 "use client";
 
 import { Alert, Card, Input, Label, ListBox, Select } from "@heroui/react";
-import { KPI, KPIGroup } from "@heroui-pro/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 
-import { Currency } from "@web/components/shared/currency";
 import Typography from "@web/components/typography";
 import { ArrowDown } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -113,18 +112,38 @@ export function PARFCalculator() {
                 <div className="flex justify-between">
                   <span className="text-muted">Uncapped Amount</span>
                   <span className="font-medium">
-                    <Currency value={result.oldUncapped} />
+                    <NumberValue
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
+                      value={result.oldUncapped}
+                    />
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Cap</span>
                   <span className="font-medium">
-                    <Currency value={OLD_CAP} />
+                    <NumberValue
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
+                      value={OLD_CAP}
+                    />
                   </span>
                 </div>
                 {result.oldCapped ? (
                   <Typography.Caption className="text-warning">
-                    Cap of <Currency value={OLD_CAP} /> applied
+                    Cap of{" "}
+                    <NumberValue
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
+                      value={OLD_CAP}
+                    />{" "}
+                    applied
                   </Typography.Caption>
                 ) : null}
               </div>
@@ -156,18 +175,38 @@ export function PARFCalculator() {
                 <div className="flex justify-between">
                   <span className="text-muted">Uncapped Amount</span>
                   <span className="font-medium">
-                    <Currency value={result.newUncapped} />
+                    <NumberValue
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
+                      value={result.newUncapped}
+                    />
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Cap</span>
                   <span className="font-medium">
-                    <Currency value={NEW_CAP} />
+                    <NumberValue
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
+                      value={NEW_CAP}
+                    />
                   </span>
                 </div>
                 {result.newCapped ? (
                   <Typography.Caption className="text-warning">
-                    Cap of <Currency value={NEW_CAP} /> applied
+                    Cap of{" "}
+                    <NumberValue
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
+                      value={NEW_CAP}
+                    />{" "}
+                    applied
                   </Typography.Caption>
                 ) : null}
               </div>
@@ -185,7 +224,14 @@ export function PARFCalculator() {
                 <span>
                   You would receive{" "}
                   <strong>
-                    <Currency value={result.difference} /> less
+                    <NumberValue
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
+                      value={result.difference}
+                    />{" "}
+                    less
                   </strong>{" "}
                   under the new Budget 2026 rates.
                 </span>

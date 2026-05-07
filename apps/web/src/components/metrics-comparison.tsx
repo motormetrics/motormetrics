@@ -1,5 +1,4 @@
-import { TrendChip } from "@heroui-pro/react";
-import { formatPercent } from "@web/utils/charts";
+import { NumberValue, TrendChip } from "@heroui-pro/react";
 
 interface StatsCompareProps {
   current: number;
@@ -17,7 +16,11 @@ const TrendIndicator = ({ change, label }: TrendIndicatorProps) => {
   return (
     <div className="flex items-center gap-2">
       <TrendChip trend={trend} variant="primary">
-        {formatPercent(Math.abs(change), { maximumFractionDigits: 1 })}
+        <NumberValue
+          maximumFractionDigits={1}
+          style="percent"
+          value={Math.abs(change)}
+        />
       </TrendChip>
       <span className="text-muted text-sm">{label}</span>
     </div>

@@ -1,4 +1,5 @@
 import { Card, Chip } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 import { formatCurrency, formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { PremiumRangeStats } from "@web/lib/coe/calculations";
@@ -72,7 +73,14 @@ const RangeSection = ({
           {label}
         </Chip>
         <span className="text-muted text-xs">
-          Spread: {formatCurrency(spread)}
+          Spread:{" "}
+          <NumberValue
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={spread}
+          />
         </span>
       </div>
 
@@ -92,9 +100,14 @@ const RangeSection = ({
               Low
             </span>
           </div>
-          <span className="font-semibold text-accent text-lg tabular-nums">
-            {formatCurrency(lowest)}
-          </span>
+          <NumberValue
+            className="font-semibold text-accent text-lg"
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={lowest}
+          />
           {lowestDate && (
             <Typography.Caption>
               {formatDateToMonthYear(lowestDate)}
@@ -110,9 +123,14 @@ const RangeSection = ({
             </span>
             <div className="h-2 w-2 rounded-full bg-accent" />
           </div>
-          <span className="font-semibold text-accent text-lg tabular-nums">
-            {formatCurrency(highest)}
-          </span>
+          <NumberValue
+            className="font-semibold text-accent text-lg"
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={highest}
+          />
           {highestDate && (
             <Typography.Caption>
               {formatDateToMonthYear(highestDate)}

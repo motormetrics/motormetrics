@@ -61,7 +61,7 @@ export function EvMetrics({ summary }: EvMetricsProps) {
           <KPI.Title>Top EV Make</KPI.Title>
         </KPI.Header>
         <KPI.Content>
-          <span className="font-semibold text-4xl text-accent tabular-nums">
+          <span className="font-semibold text-4xl text-accent">
             {summary.topMake}
           </span>
         </KPI.Content>

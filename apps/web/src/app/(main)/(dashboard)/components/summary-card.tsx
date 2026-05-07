@@ -1,5 +1,5 @@
 import { Button, Link } from "@heroui/react";
-import { KPI } from "@heroui-pro/react";
+import { KPI, NumberValue } from "@heroui-pro/react";
 import { getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight, BarChart3 } from "lucide-react";
 
@@ -41,8 +41,12 @@ export async function SummaryCard() {
           value={totalRegistrations}
         />
         <KPI.Trend trend={trend} variant="primary">
-          {isPositive ? "+" : ""}
-          {(Math.abs(changeRatio) * 100).toFixed(1)}%
+          <NumberValue
+            maximumFractionDigits={1}
+            signDisplay="exceptZero"
+            style="percent"
+            value={isPositive ? Math.abs(changeRatio) : -Math.abs(changeRatio)}
+          />
         </KPI.Trend>
       </KPI.Content>
       <KPI.Footer>

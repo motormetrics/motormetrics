@@ -3,9 +3,8 @@
 import { Card } from "@heroui/react";
 import { AreaChart } from "@heroui-pro/react";
 
-import { formatDateToMonthYear } from "@motormetrics/utils";
+import { formatDateToMonthYear, formatNumber } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
-import { formatNumber } from "@web/utils/charts";
 
 interface MonthlyTotal {
   month: string;

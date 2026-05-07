@@ -1,6 +1,6 @@
 "use client";
 
-import { KPI, TrendChip } from "@heroui-pro/react";
+import { KPI, NumberValue, TrendChip } from "@heroui-pro/react";
 
 import {
   staggerContainerVariants,
@@ -71,7 +71,11 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
                         <ArrowUpRight />
                       </TrendChip.Indicator>
                     ) : null}
-                    {Math.abs(item.differencePercent).toFixed(1)}%
+                    <NumberValue
+                      maximumFractionDigits={1}
+                      style="percent"
+                      value={Math.abs(item.differencePercent) / 100}
+                    />
                   </TrendChip>
                   <span className="text-muted text-sm">
                     PQP{" "}

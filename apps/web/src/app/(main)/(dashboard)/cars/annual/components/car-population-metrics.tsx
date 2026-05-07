@@ -1,6 +1,6 @@
 "use client";
 
-import { KPI, KPIGroup } from "@heroui-pro/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
@@ -80,8 +80,12 @@ export function CarPopulationMetrics({
           />
           {previousYearTotal && previousYearTotal.total > 0 && (
             <KPI.Trend trend={trend} variant="primary">
-              {yoyChange >= 0 ? "+" : ""}
-              {Math.abs(yoyPercentage).toFixed(1)}%
+              <NumberValue
+                maximumFractionDigits={1}
+                signDisplay="exceptZero"
+                style="percent"
+                value={yoyPercentage / 100}
+              />
             </KPI.Trend>
           )}
         </KPI.Content>
@@ -94,9 +98,7 @@ export function CarPopulationMetrics({
           <KPI.Title>Top Make</KPI.Title>
         </KPI.Header>
         <KPI.Content>
-          <span className="font-semibold text-4xl tabular-nums">
-            {topMake?.make ?? "—"}
-          </span>
+          <span className="font-semibold text-4xl">{topMake?.make ?? "—"}</span>
         </KPI.Content>
         {topMake && (
           <KPI.Footer>
@@ -107,7 +109,13 @@ export function CarPopulationMetrics({
                 maximumFractionDigits={0}
                 value={topMake.total}
               />{" "}
-              cars ({totalMakes} makes total)
+              cars (
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={totalMakes}
+              />{" "}
+              makes total)
             </Typography.TextSm>
           </KPI.Footer>
         )}

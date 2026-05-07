@@ -1,9 +1,9 @@
 "use client";
 
 import { Card } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 
 import Typography from "@web/components/typography";
-import { formatNumber } from "@web/utils/charts";
 
 interface CategorySparklineData {
   category: string;
@@ -68,12 +68,21 @@ export function CategoryTrendsTable({ data }: CategoryTrendsTableProps) {
                   </div>
                 </div>
                 <div className="col-span-2 text-right font-medium text-sm">
-                  {formatNumber(cat.total)}
+                  <NumberValue
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    value={cat.total}
+                  />
                 </div>
                 <div
                   className={`col-span-1 text-right text-xs ${isUp ? "text-danger" : "text-success"}`}
                 >
-                  {isUp ? "▲" : "▼"} {Math.abs(change)}
+                  {isUp ? "▲" : "▼"}{" "}
+                  <NumberValue
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    value={Math.abs(change)}
+                  />
                 </div>
               </div>
             );

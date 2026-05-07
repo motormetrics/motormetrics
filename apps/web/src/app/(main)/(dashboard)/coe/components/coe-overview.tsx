@@ -1,5 +1,5 @@
 import { Button, Card, Chip, Link, Separator } from "@heroui/react";
-import { KPI, KPIGroup } from "@heroui-pro/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import {
@@ -30,16 +30,6 @@ const formatMonth = (month: string | null) => {
     year: "numeric",
   }).format(new Date(`${month}-01T00:00:00+08:00`));
 };
-
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("en-SG", {
-    currency: "SGD",
-    maximumFractionDigits: 0,
-    style: "currency",
-  }).format(value);
-
-const formatNumber = (value: number) =>
-  new Intl.NumberFormat("en-SG").format(value);
 
 const categoryLabel = (category: string) =>
   category.replace("Category ", "Cat ");
@@ -84,14 +74,21 @@ function PremiumRow({
       </div>
       <div className="min-w-0">
         <p className="truncate font-medium">{title}</p>
-        <p className="text-background/60 text-xs tabular-nums">
-          {formatNumber(quota)} quota available
+        <p className="text-background/60 text-xs">
+          <NumberValue locale="en-SG" maximumFractionDigits={0} value={quota}>
+            <NumberValue.Suffix> quota available</NumberValue.Suffix>
+          </NumberValue>
         </p>
       </div>
       <div className="flex flex-col items-end gap-1">
-        <span className="font-semibold text-lg tabular-nums">
-          {formatCurrency(premium)}
-        </span>
+        <NumberValue
+          className="font-semibold text-lg"
+          currency="SGD"
+          locale="en-SG"
+          maximumFractionDigits={0}
+          style="currency"
+          value={premium}
+        />
         <TrendBadge trend={trend}>
           {calculateChangePercent(premium, previousPremium)}
         </TrendBadge>
@@ -138,7 +135,7 @@ function MetricCard({
 }: {
   label: string;
   meta: string;
-  value: string;
+  value: ReactNode;
 }) {
   return (
     <KPI>
@@ -146,9 +143,7 @@ function MetricCard({
         <KPI.Title>{label}</KPI.Title>
       </KPI.Header>
       <KPI.Content>
-        <span className="font-semibold text-2xl text-foreground tabular-nums">
-          {value}
-        </span>
+        <span className="font-semibold text-2xl text-foreground">{value}</span>
       </KPI.Content>
       <KPI.Footer>
         <span className="text-muted text-xs">{meta}</span>
@@ -224,13 +219,25 @@ export async function CoeOverview() {
             <MetricCard
               label="Total quota"
               meta="Latest bidding round"
-              value={formatNumber(totalQuota)}
+              value={
+                <NumberValue
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  value={totalQuota}
+                />
+              }
             />
             <KPIGroup.Separator />
             <MetricCard
               label="Bids received"
               meta={`${pressureRatio.toFixed(1)}x quota pressure`}
-              value={formatNumber(totalBids)}
+              value={
+                <NumberValue
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  value={totalBids}
+                />
+              }
             />
             <KPIGroup.Separator />
             <MetricCard
@@ -240,13 +247,29 @@ export async function CoeOverview() {
                   ? categoryLabel(highestCategory)
                   : "Latest round"
               }
-              value={formatCurrency(highestPremium)}
+              value={
+                <NumberValue
+                  currency="SGD"
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  style="currency"
+                  value={highestPremium}
+                />
+              }
             />
             <KPIGroup.Separator />
             <MetricCard
               label="PQP benchmark"
               meta="Category A renewal"
-              value={formatCurrency(pqpA?.pqpRate ?? 0)}
+              value={
+                <NumberValue
+                  currency="SGD"
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  style="currency"
+                  value={pqpA?.pqpRate ?? 0}
+                />
+              }
             />
           </KPIGroup>
         </AnimatedSection>
@@ -344,22 +367,36 @@ export async function CoeOverview() {
                             : "neutral"
                       }
                     >
-                      {(summary?.differencePercent ?? 0) > 0 ? "+" : ""}
-                      {(summary?.differencePercent ?? 0).toFixed(1)}%
+                      <NumberValue
+                        maximumFractionDigits={1}
+                        signDisplay="exceptZero"
+                        style="percent"
+                        value={(summary?.differencePercent ?? 0) / 100}
+                      />
                     </TrendBadge>
                   </div>
                   <div className="grid grid-cols-2 gap-3 pt-4">
                     <div>
                       <span className="text-muted text-xs">Premium</span>
-                      <p className="font-semibold text-lg tabular-nums">
-                        {formatCurrency(summary?.coePremium ?? 0)}
-                      </p>
+                      <NumberValue
+                        className="font-semibold text-lg"
+                        currency="SGD"
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        style="currency"
+                        value={summary?.coePremium ?? 0}
+                      />
                     </div>
                     <div>
                       <span className="text-muted text-xs">PQP</span>
-                      <p className="font-semibold text-lg tabular-nums">
-                        {formatCurrency(summary?.pqpRate ?? 0)}
-                      </p>
+                      <NumberValue
+                        className="font-semibold text-lg"
+                        currency="SGD"
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        style="currency"
+                        value={summary?.pqpRate ?? 0}
+                      />
                     </div>
                   </div>
                 </div>

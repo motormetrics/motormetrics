@@ -1,13 +1,9 @@
 "use client";
 
 import { Chip } from "@heroui/react";
-import { KPI, TrendChip } from "@heroui-pro/react";
+import { KPI, NumberValue, TrendChip } from "@heroui-pro/react";
 
-import {
-  formatGrowthRate,
-  formatPercentage,
-  slugify,
-} from "@motormetrics/utils";
+import { formatGrowthRate, slugify } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { Make } from "@web/types";
 import Image from "next/image";
@@ -63,9 +59,12 @@ export function MakeCard({
                 {!!count && !!share && (
                   <div className="flex flex-col gap-2">
                     <div className="flex items-baseline gap-2">
-                      <span className="font-bold text-xl tabular-nums leading-none">
-                        {count.toLocaleString()}
-                      </span>
+                      <NumberValue
+                        className="font-bold text-xl leading-none"
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        value={count}
+                      />
                       <Typography.Caption>regs</Typography.Caption>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -75,7 +74,13 @@ export function MakeCard({
                         size="sm"
                         className="rounded-full"
                       >
-                        {formatPercentage(share)} share
+                        <NumberValue
+                          maximumFractionDigits={1}
+                          style="percent"
+                          value={share / 100}
+                        >
+                          <NumberValue.Suffix> share</NumberValue.Suffix>
+                        </NumberValue>
                       </Chip>
                       {!!yoyChange && (
                         <TrendChip trend={trendDirection} variant="primary">

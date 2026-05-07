@@ -1,9 +1,9 @@
 "use client";
 
 import { Card, Label, ListBox, Select } from "@heroui/react";
-import { ChartTooltip, LineChart } from "@heroui-pro/react";
+import { ChartTooltip, LineChart, NumberValue } from "@heroui-pro/react";
 
-import { formatCurrency, formatDateToMonthYear } from "@motormetrics/utils";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import { numberFormat } from "@ruchernchong/number-format";
 import {
   type Period,
@@ -139,7 +139,13 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
                       />
                       <ChartTooltip.Label>{entry.name}</ChartTooltip.Label>
                       <ChartTooltip.Value>
-                        {formatCurrency(Number(entry.value))}
+                        <NumberValue
+                          currency="SGD"
+                          locale="en-SG"
+                          maximumFractionDigits={0}
+                          style="currency"
+                          value={Number(entry.value)}
+                        />
                       </ChartTooltip.Value>
                     </ChartTooltip.Item>
                   ))}

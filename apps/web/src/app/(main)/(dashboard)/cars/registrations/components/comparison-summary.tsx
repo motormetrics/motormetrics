@@ -1,12 +1,11 @@
 "use client";
 
 import { Card } from "@heroui/react";
-import { KPI, KPIGroup, TrendChip } from "@heroui-pro/react";
+import { KPI, KPIGroup, NumberValue, TrendChip } from "@heroui-pro/react";
 
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { Registration } from "@web/types/cars";
-import { formatNumber, formatPercent } from "@web/utils/charts";
 
 interface ComparisonSummaryProps {
   monthA: Registration;
@@ -58,11 +57,17 @@ export function ComparisonSummary({ monthA, monthB }: ComparisonSummaryProps) {
         </KPIGroup>
         <div className="flex items-center gap-2">
           <TrendChip trend={trend} variant="primary">
-            {formatPercent(Math.abs(change), { maximumFractionDigits: 1 })}
+            <NumberValue
+              maximumFractionDigits={1}
+              style="percent"
+              value={Math.abs(change)}
+            />
           </TrendChip>
           <span className="text-muted text-sm">
             {diff >= 0 ? "+" : ""}
-            {formatNumber(diff)} registrations
+            <NumberValue locale="en-SG" maximumFractionDigits={0} value={diff}>
+              <NumberValue.Suffix> registrations</NumberValue.Suffix>
+            </NumberValue>
           </span>
         </div>
       </Card.Content>

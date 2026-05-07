@@ -2,9 +2,9 @@
 
 import { Card } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
+import { formatNumber } from "@motormetrics/utils";
 
 import Typography from "@web/components/typography";
-import { formatNumber } from "@web/utils/charts";
 
 interface TypeBreakdownChartProps {
   data: { name: string; value: number }[];

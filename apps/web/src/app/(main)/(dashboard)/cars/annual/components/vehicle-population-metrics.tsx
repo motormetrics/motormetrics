@@ -1,6 +1,6 @@
 "use client";
 
-import { KPI, KPIGroup } from "@heroui-pro/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
@@ -86,8 +86,12 @@ export function VehiclePopulationMetrics({
           />
           {previousTotal > 0 && (
             <KPI.Trend trend={trend} variant="primary">
-              {yoyChange >= 0 ? "+" : ""}
-              {Math.abs(yoyPercentage).toFixed(1)}%
+              <NumberValue
+                maximumFractionDigits={1}
+                signDisplay="exceptZero"
+                style="percent"
+                value={yoyPercentage / 100}
+              />
             </KPI.Trend>
           )}
         </KPI.Content>

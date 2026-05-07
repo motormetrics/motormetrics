@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 
 import { incrementPostView } from "@web/app/(main)/(site)/blog/actions/views";
 import { useEffect, useEffectEvent, useState } from "react";
@@ -28,7 +29,11 @@ export function ViewCounter({
 
   return (
     <span className={cn("text-muted", className)}>
-      {views.toLocaleString()} {views === 1 ? "view" : "views"}
+      <NumberValue locale="en-SG" maximumFractionDigits={0} value={views}>
+        <NumberValue.Suffix>
+          {views === 1 ? " view" : " views"}
+        </NumberValue.Suffix>
+      </NumberValue>
     </span>
   );
 }

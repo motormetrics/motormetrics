@@ -1,5 +1,5 @@
 import { Button, Link } from "@heroui/react";
-import { KPI } from "@heroui-pro/react";
+import { KPI, NumberValue } from "@heroui-pro/react";
 import { getCarsComparison, getCarsLatestMonth } from "@web/queries/cars";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
 
@@ -16,7 +16,6 @@ export async function MonthlyChangeSummary() {
 
   const changeAmount = currentTotal - previousTotal;
   const changeRatio = previousTotal > 0 ? changeAmount / previousTotal : 0;
-  const isPositive = changeAmount >= 0;
   const trend = changeRatio > 0 ? "up" : changeRatio < 0 ? "down" : "neutral";
 
   // Format the month for display (e.g., "2025-01" -> "Jan 2025")
@@ -54,8 +53,12 @@ export async function MonthlyChangeSummary() {
           value={changeRatio}
         />
         <KPI.Trend trend={trend} variant="primary">
-          {isPositive ? "+" : ""}
-          {Math.abs(changeAmount).toLocaleString("en-SG")}
+          <NumberValue
+            locale="en-SG"
+            maximumFractionDigits={0}
+            signDisplay="exceptZero"
+            value={changeAmount}
+          />
         </KPI.Trend>
       </KPI.Content>
       <KPI.Footer>

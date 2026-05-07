@@ -38,7 +38,7 @@ export function HighlightStatsCard({
             <Typography.Caption className="text-accent-foreground/70">
               {label}
             </Typography.Caption>
-            <p className="font-semibold text-3xl tabular-nums">{value}</p>
+            <p className="font-semibold text-3xl">{value}</p>
             {description ? (
               <p className="text-accent-foreground/70 text-sm">{description}</p>
             ) : null}

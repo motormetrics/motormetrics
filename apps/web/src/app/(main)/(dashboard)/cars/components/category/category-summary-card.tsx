@@ -1,4 +1,4 @@
-import { KPI } from "@heroui-pro/react";
+import { KPI, NumberValue } from "@heroui-pro/react";
 import { BarChart3 } from "lucide-react";
 
 interface CategorySummaryCardProps {
@@ -36,8 +36,14 @@ export function CategorySummaryCard({
         />
         {hasComparison && (
           <KPI.Trend trend={trend} variant="primary">
-            {isPositive ? "+" : ""}
-            {(Math.abs(changeRatio) * 100).toFixed(1)}%
+            <NumberValue
+              maximumFractionDigits={1}
+              signDisplay="exceptZero"
+              style="percent"
+              value={
+                isPositive ? Math.abs(changeRatio) : -Math.abs(changeRatio)
+              }
+            />
           </KPI.Trend>
         )}
       </KPI.Content>

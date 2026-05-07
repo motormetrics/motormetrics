@@ -1,4 +1,4 @@
-import { KPI, KPIGroup } from "@heroui-pro/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import type { SelectDeregistration } from "@motormetrics/database";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CategoryBreakdown } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/category-breakdown";
@@ -31,7 +31,6 @@ import {
   getDeregistrationsByCategory,
   getDeregistrationsTotalByMonth,
 } from "@web/queries/deregistrations";
-import { formatNumber } from "@web/utils/charts";
 import {
   fetchMonthsForDeregistrations,
   getMonthOrLatest,
@@ -310,9 +309,11 @@ async function DeregistrationsContent({
                     className={`text-xs ${totalDeregistrations > previousTotal ? "text-danger" : "text-success"}`}
                   >
                     {totalDeregistrations > previousTotal ? "▲" : "▼"}{" "}
-                    {formatNumber(
-                      Math.abs(totalDeregistrations - previousTotal),
-                    )}
+                    <NumberValue
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      value={Math.abs(totalDeregistrations - previousTotal)}
+                    />
                   </span>
                 </KPI.Footer>
               ) : null}
@@ -343,7 +344,11 @@ async function DeregistrationsContent({
                         style={{ backgroundColor: cat.colour }}
                       />
                       <span className="text-muted text-xs">
-                        {((cat.total / totalDeregistrations) * 100).toFixed(0)}%
+                        <NumberValue
+                          maximumFractionDigits={0}
+                          style="percent"
+                          value={cat.total / totalDeregistrations}
+                        />
                       </span>
                     </div>
                   </KPI.Footer>

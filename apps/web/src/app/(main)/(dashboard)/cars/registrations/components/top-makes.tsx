@@ -1,4 +1,5 @@
 import { Card, Link } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { FuelType } from "@web/types/cars";
@@ -72,8 +73,12 @@ export function TopMakes({ data }: TopMakesProps) {
                       <span className="font-medium text-muted">
                         {make.toUpperCase()}
                       </span>
-                      <span className="text-muted tabular-nums">
-                        {count.toLocaleString()}
+                      <span className="text-muted">
+                        <NumberValue
+                          locale="en-SG"
+                          maximumFractionDigits={0}
+                          value={count}
+                        />
                       </span>
                     </div>
                     <div className="h-1.5 overflow-hidden rounded-full bg-default">

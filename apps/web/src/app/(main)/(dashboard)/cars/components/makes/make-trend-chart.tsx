@@ -1,6 +1,6 @@
 "use client";
 
-import { LineChart } from "@heroui-pro/react";
+import { LineChart, NumberValue } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 
 interface MakeTrendChartProps {
@@ -71,8 +71,17 @@ export function MakeTrendChart({ data }: MakeTrendChartProps) {
           <Typography.H4>Registration Trends</Typography.H4>
           <Typography.TextSm>
             This chart shows monthly registration trends over time.
-            {peakMonth &&
-              `Peak registrations occurred in ${peakMonth.month} with ${peakMonth.count.toLocaleString()} vehicles`}
+            {peakMonth ? (
+              <>
+                Peak registrations occurred in {peakMonth.month} with{" "}
+                <NumberValue
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  value={peakMonth.count}
+                />{" "}
+                vehicles
+              </>
+            ) : null}
             , helping identify seasonal patterns and market performance.
           </Typography.TextSm>
         </div>
@@ -83,12 +92,22 @@ export function MakeTrendChart({ data }: MakeTrendChartProps) {
           </div>
           <div className="text-center">
             <Typography.TextLg>
-              {totalRegistrations.toLocaleString()}
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={totalRegistrations}
+              />
             </Typography.TextLg>
             <Typography.Caption>Total Period</Typography.Caption>
           </div>
           <div className="text-center">
-            <Typography.TextLg>{chartData.length}</Typography.TextLg>
+            <Typography.TextLg>
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={chartData.length}
+              />
+            </Typography.TextLg>
             <Typography.Caption>Months Tracked</Typography.Caption>
           </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart } from "@heroui-pro/react";
+import { BarChart, NumberValue } from "@heroui-pro/react";
 
 interface MakeData {
   make: string;
@@ -58,8 +58,17 @@ export const TrendChart = ({ data }: TrendChartProps) => {
           <h4 className="mb-2 font-semibold text-foreground">Market Leaders</h4>
           <p>
             This chart shows the top 10 car makes by registration count.
-            {topMake &&
-              `${topMake.make} leads with ${topMake.count.toLocaleString()} registrations`}
+            {topMake ? (
+              <>
+                {topMake.make} leads with{" "}
+                <NumberValue
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  value={topMake.count}
+                />{" "}
+                registrations
+              </>
+            ) : null}
             , representing the most popular vehicle brands among Singapore
             consumers.
           </p>
@@ -73,13 +82,21 @@ export const TrendChart = ({ data }: TrendChartProps) => {
           </div>
           <div className="text-center">
             <div className="font-semibold text-foreground text-lg">
-              {totalRegistrations.toLocaleString()}
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={totalRegistrations}
+              />
             </div>
             <div className="text-muted text-xs">Total Shown</div>
           </div>
           <div className="text-center">
             <div className="font-semibold text-foreground text-lg">
-              {chartData.length}
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={chartData.length}
+              />
             </div>
             <div className="text-muted text-xs">Makes Displayed</div>
           </div>

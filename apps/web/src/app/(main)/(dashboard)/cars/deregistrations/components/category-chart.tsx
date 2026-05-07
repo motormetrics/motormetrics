@@ -1,17 +1,16 @@
 "use client";
 
 import { Card, ComboBox, Input, Label, ListBox } from "@heroui/react";
-import { BarChart, ChartTooltip } from "@heroui-pro/react";
+import { BarChart, ChartTooltip, NumberValue } from "@heroui-pro/react";
 
 import type { SelectDeregistration } from "@motormetrics/database";
-import { formatDateToMonthYear } from "@motormetrics/utils";
+import { formatDateToMonthYear, formatNumber } from "@motormetrics/utils";
 import {
   type CategoryWithPercentage,
   toPercentageDistribution,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/constants";
 import { deregistrationsSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
 import Typography from "@web/components/typography";
-import { formatNumber, formatPercentage } from "@web/utils/charts";
 import { useQueryStates } from "nuqs";
 import type React from "react";
 import { useMemo } from "react";
@@ -80,14 +79,27 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
           <Typography.H3>Deregistrations by Category</Typography.H3>
           {selectedCategory ? (
             <Typography.Text className="text-muted">
-              {formatNumber(selectedCategory.total)} deregistrations in{" "}
-              {selectedCategory.category} (
-              {formatPercentage(selectedCategory.percentage)})
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={selectedCategory.total}
+              />{" "}
+              deregistrations in {selectedCategory.category} (
+              <NumberValue
+                maximumFractionDigits={1}
+                style="percent"
+                value={selectedCategory.percentage / 100}
+              />
+              )
             </Typography.Text>
           ) : (
             <Typography.Text className="text-muted">
-              {formatNumber(totalDeregistrations)} total deregistrations for{" "}
-              {formatDateToMonthYear(currentMonth)}
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={totalDeregistrations}
+              />{" "}
+              total deregistrations for {formatDateToMonthYear(currentMonth)}
             </Typography.Text>
           )}
         </div>
@@ -165,8 +177,18 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
                     <ChartTooltip.Indicator color={entry.payload.colour} />
                     <ChartTooltip.Label>{entry.name}</ChartTooltip.Label>
                     <ChartTooltip.Value>
-                      {formatNumber(entry.value as number)} (
-                      {formatPercentage(percentage)})
+                      <NumberValue
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        value={entry.value as number}
+                      />{" "}
+                      (
+                      <NumberValue
+                        maximumFractionDigits={1}
+                        style="percent"
+                        value={percentage / 100}
+                      />
+                      )
                     </ChartTooltip.Value>
                   </ChartTooltip.Item>
                 </ChartTooltip>

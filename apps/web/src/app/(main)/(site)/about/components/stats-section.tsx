@@ -1,8 +1,8 @@
 "use client";
 
 import { Card } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 
-import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
@@ -30,12 +30,21 @@ const StatItem = ({ value, suffix = "", label }: StatItemProps) => {
         <Card.Content className="flex flex-col gap-2">
           <div className="font-semibold text-4xl text-foreground tracking-tight lg:text-5xl">
             {isInView ? (
-              <>
-                <AnimatedNumber value={value} />
-                {suffix}
-              </>
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={value}
+              >
+                {suffix ? (
+                  <NumberValue.Suffix>{suffix}</NumberValue.Suffix>
+                ) : null}
+              </NumberValue>
             ) : (
-              <span className="tabular-nums">0{suffix}</span>
+              <NumberValue locale="en-SG" maximumFractionDigits={0} value={0}>
+                {suffix ? (
+                  <NumberValue.Suffix>{suffix}</NumberValue.Suffix>
+                ) : null}
+              </NumberValue>
             )}
           </div>
           <div className="text-muted text-sm">{label}</div>

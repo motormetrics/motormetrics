@@ -1,5 +1,5 @@
 import { Button, Card, Link, Separator } from "@heroui/react";
-import { KPI, KPIGroup } from "@heroui-pro/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { HighlightStatsCard } from "@web/components/highlight-stats-card";
@@ -36,9 +36,6 @@ const formatMonth = (month: string | null) => {
   }).format(new Date(`${month}-01T00:00:00+08:00`));
 };
 
-const formatNumber = (value: number) =>
-  new Intl.NumberFormat("en-SG").format(value);
-
 const getChangePercent = (current: number, previous: number) => {
   if (previous <= 0) return 0;
 
@@ -66,7 +63,9 @@ function MarketBar({
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-3 text-sm">
         <span className="truncate font-medium text-foreground">{label}</span>
-        <span className="text-muted tabular-nums">{formatNumber(value)}</span>
+        <span className="text-muted">
+          <NumberValue locale="en-SG" maximumFractionDigits={0} value={value} />
+        </span>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-default">
         <div
@@ -177,8 +176,12 @@ export async function CarsOverview() {
                   value={currentData?.total ?? 0}
                 />
                 <KPI.Trend trend={getTrend(monthlyChange)} variant="primary">
-                  {monthlyChange > 0 ? "+" : ""}
-                  {monthlyChange.toFixed(1)}%
+                  <NumberValue
+                    maximumFractionDigits={1}
+                    signDisplay="exceptZero"
+                    style="percent"
+                    value={monthlyChange / 100}
+                  />
                 </KPI.Trend>
               </KPI.Content>
               <KPI.Footer>
@@ -231,15 +234,23 @@ export async function CarsOverview() {
                 <KPI.Title>Market leader</KPI.Title>
               </KPI.Header>
               <KPI.Content>
-                <span className="font-semibold text-2xl tabular-nums">
+                <span className="font-semibold text-2xl">
                   {topMake?.make ?? "N/A"}
                 </span>
               </KPI.Content>
               <KPI.Footer>
                 <span className="text-muted text-xs">
-                  {topMake
-                    ? `${formatNumber(topMake.total)} registrations`
-                    : "Latest month"}
+                  {topMake ? (
+                    <NumberValue
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      value={topMake.total}
+                    >
+                      <NumberValue.Suffix> registrations</NumberValue.Suffix>
+                    </NumberValue>
+                  ) : (
+                    "Latest month"
+                  )}
                 </span>
               </KPI.Footer>
             </KPI>
@@ -261,9 +272,12 @@ export async function CarsOverview() {
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="rounded-2xl bg-default p-4">
                   <span className="text-muted text-xs">Total</span>
-                  <p className="font-semibold text-3xl text-accent tabular-nums">
-                    {formatNumber(currentData?.total ?? 0)}
-                  </p>
+                  <NumberValue
+                    className="font-semibold text-3xl text-accent"
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    value={currentData?.total ?? 0}
+                  />
                 </div>
                 <div className="rounded-2xl bg-default p-4">
                   <span className="text-muted text-xs">Dominant fuel</span>

@@ -1,4 +1,5 @@
 import { Button, Card, Link, Skeleton } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
@@ -33,8 +34,12 @@ async function YearlyChartContent() {
                 key={item.year}
                 className="flex flex-1 flex-col items-center gap-2"
               >
-                <span className="font-medium text-muted text-xs tabular-nums">
-                  {(item.total / 1000).toFixed(1)}K
+                <span className="font-medium text-muted text-xs">
+                  <NumberValue
+                    maximumFractionDigits={1}
+                    notation="compact"
+                    value={item.total}
+                  />
                 </span>
                 <div
                   className={`w-full rounded-t-xl transition-colors ${isLatest ? "bg-[var(--chart-1)]" : "bg-default hover:bg-default"}`}
@@ -74,8 +79,12 @@ async function TopMakesContent() {
               <div className="flex-1">
                 <div className="mb-1 flex items-center justify-between">
                   <span className="font-medium text-sm">{item.make}</span>
-                  <span className="text-muted text-xs tabular-nums">
-                    {item.value.toLocaleString()}
+                  <span className="text-muted text-xs">
+                    <NumberValue
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      value={item.value}
+                    />
                   </span>
                 </div>
                 <div className="h-1.5 overflow-hidden rounded-full bg-default">

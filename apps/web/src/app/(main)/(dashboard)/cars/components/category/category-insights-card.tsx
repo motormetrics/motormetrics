@@ -1,5 +1,5 @@
 import { Chip } from "@heroui/react";
-import { KPI, KPIGroup } from "@heroui-pro/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import { Award, BarChart3, Layers, PieChart } from "lucide-react";
@@ -58,8 +58,14 @@ export function CategoryInsightsCard({
             />
             {hasComparison ? (
               <KPI.Trend trend={trend} variant="primary">
-                {isPositive ? "+" : ""}
-                {(Math.abs(changeRatio) * 100).toFixed(1)}%
+                <NumberValue
+                  maximumFractionDigits={1}
+                  signDisplay="exceptZero"
+                  style="percent"
+                  value={
+                    isPositive ? Math.abs(changeRatio) : -Math.abs(changeRatio)
+                  }
+                />
               </KPI.Trend>
             ) : null}
           </KPI.Content>

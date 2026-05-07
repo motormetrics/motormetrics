@@ -1,9 +1,8 @@
 "use client";
 
 import { Alert, Card, Tabs } from "@heroui/react";
-import { KPI, KPIGroup } from "@heroui-pro/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 
-import { Currency } from "@web/components/shared/currency";
 import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
 import { Bike, Calculator, Car, type LucideIcon, Truck } from "lucide-react";
@@ -193,7 +192,11 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                     }`}
                   >
                     {selectedRecord.pqpSavings5Year > 0 ? "Saves" : "Costs"}{" "}
-                    <Currency
+                    <NumberValue
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
                       value={Math.abs(selectedRecord.pqpSavings5Year)}
                     />
                   </span>
@@ -222,7 +225,11 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                     }`}
                   >
                     {selectedRecord.pqpSavings10Year > 0 ? "Saves" : "Costs"}{" "}
-                    <Currency
+                    <NumberValue
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
                       value={Math.abs(selectedRecord.pqpSavings10Year)}
                     />
                   </span>
