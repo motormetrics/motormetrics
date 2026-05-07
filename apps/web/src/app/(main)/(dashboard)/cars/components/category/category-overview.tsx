@@ -16,7 +16,6 @@ import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
 import { CategoryInsightsCard } from "./category-insights-card";
-import { CategorySummaryCard } from "./category-summary-card";
 import { CategoryTabsPanel } from "./category-tabs-panel";
 
 export interface CategoryConfig {
@@ -122,18 +121,14 @@ async function CategoryOverviewContent({
         <>
           <AnimatedSection order={1}>
             <Suspense fallback={<SkeletonCard className="h-[300px] w-full" />}>
-              <div className="grid grid-cols-12 gap-6">
-                <CategorySummaryCard
-                  total={cars.total}
-                  previousTotal={previousTotal}
-                />
-                <CategoryInsightsCard
-                  categoriesCount={categoryData.length}
-                  topPerformer={marketShare.dominantType}
-                  month={month}
-                  title={config.tabTitle}
-                />
-              </div>
+              <CategoryInsightsCard
+                categoriesCount={categoryData.length}
+                previousTotal={previousTotal}
+                topPerformer={marketShare.dominantType}
+                month={month}
+                title={config.tabTitle}
+                total={cars.total}
+              />
             </Suspense>
           </AnimatedSection>
           <AnimatedSection order={2}>

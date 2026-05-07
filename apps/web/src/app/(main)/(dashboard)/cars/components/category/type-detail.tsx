@@ -1,7 +1,7 @@
-import { Card, Chip, Link } from "@heroui/react";
+import { Link } from "@heroui/react";
+import { KPI } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CarOverviewTrends } from "@web/app/(main)/(dashboard)/cars/registrations/components/overview-trends";
-import { AnimatedNumber } from "@web/components/animated-number";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
@@ -190,20 +190,22 @@ async function TypeDetailContent({
         </Link>
       </Typography.Text>
 
-      <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <Card className="bg-surface">
-            <Card.Header className="flex flex-row items-center justify-between gap-2">
-              <Typography.H4>Registrations</Typography.H4>
-              <Chip size="sm" variant="primary">
-                {formattedMonth}
-              </Chip>
-            </Card.Header>
-            <Card.Content className="font-bold text-4xl text-accent">
-              <AnimatedNumber value={cars.total} />
-            </Card.Content>
-          </Card>
-        </div>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <KPI>
+          <KPI.Header>
+            <KPI.Title>Registrations</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <KPI.Value
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={cars.total}
+            />
+          </KPI.Content>
+          <KPI.Footer>
+            <span className="text-muted text-xs">{formattedMonth}</span>
+          </KPI.Footer>
+        </KPI>
       </div>
       <CarOverviewTrends cars={cars.data} total={cars.total} />
     </>

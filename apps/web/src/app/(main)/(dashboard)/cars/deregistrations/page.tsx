@@ -1,4 +1,4 @@
-import { Card } from "@heroui/react";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 import type { SelectDeregistration } from "@motormetrics/database";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CategoryBreakdown } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/category-breakdown";
@@ -38,7 +38,7 @@ import {
 } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import { createSerializer, type SearchParams } from "nuqs/server";
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
 
 const _serialize = createSerializer(deregistrationsSearchParams);
@@ -292,42 +292,51 @@ async function DeregistrationsContent({
       {/* Metrics Bar - All in one row */}
       <AnimatedSection order={3}>
         <section>
-          <Card className="bg-default">
-            <Card.Content>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-7">
-                {/* Total */}
-                <div className="col-span-2 border-border sm:col-span-1 sm:border-r sm:pr-4">
-                  <div className="flex flex-col gap-2">
-                    <span className="font-medium text-muted text-xs uppercase tracking-wider">
-                      Total
-                    </span>
-                    <div className="font-bold text-3xl text-foreground">
-                      {formatNumber(totalDeregistrations)}
-                    </div>
-                    {previousMonthTotal !== undefined && (
-                      <span
-                        className={`text-xs ${totalDeregistrations > previousTotal ? "text-danger" : "text-success"}`}
-                      >
-                        {totalDeregistrations > previousTotal ? "▲" : "▼"}{" "}
-                        {formatNumber(
-                          Math.abs(totalDeregistrations - previousTotal),
-                        )}
-                      </span>
+          <KPIGroup>
+            <KPI>
+              <KPI.Header>
+                <KPI.Title>Total</KPI.Title>
+              </KPI.Header>
+              <KPI.Content>
+                <KPI.Value
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  value={totalDeregistrations}
+                />
+              </KPI.Content>
+              {previousMonthTotal !== undefined ? (
+                <KPI.Footer>
+                  <span
+                    className={`text-xs ${totalDeregistrations > previousTotal ? "text-danger" : "text-success"}`}
+                  >
+                    {totalDeregistrations > previousTotal ? "▲" : "▼"}{" "}
+                    {formatNumber(
+                      Math.abs(totalDeregistrations - previousTotal),
                     )}
-                  </div>
-                </div>
+                  </span>
+                </KPI.Footer>
+              ) : null}
+            </KPI>
 
-                {/* Category metrics */}
-                {categoryCardsData.map((cat) => (
-                  <div key={cat.category} className="flex flex-col gap-2">
-                    <span className="truncate font-medium text-muted text-xs uppercase tracking-wider">
+            {categoryCardsData.map((cat) => (
+              <Fragment key={cat.category}>
+                <KPIGroup.Separator />
+                <KPI>
+                  <KPI.Header>
+                    <KPI.Title>
                       {cat.category
                         .replace("Category ", "Cat ")
                         .replace("Vehicles Exempted From VQS", "VQS")}
-                    </span>
-                    <div className="font-bold text-foreground text-xl">
-                      {formatNumber(cat.total)}
-                    </div>
+                    </KPI.Title>
+                  </KPI.Header>
+                  <KPI.Content>
+                    <KPI.Value
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      value={cat.total}
+                    />
+                  </KPI.Content>
+                  <KPI.Footer>
                     <div className="flex items-center gap-2">
                       <div
                         className="h-1.5 w-8 rounded-full"
@@ -337,11 +346,11 @@ async function DeregistrationsContent({
                         {((cat.total / totalDeregistrations) * 100).toFixed(0)}%
                       </span>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </Card.Content>
-          </Card>
+                  </KPI.Footer>
+                </KPI>
+              </Fragment>
+            ))}
+          </KPIGroup>
         </section>
       </AnimatedSection>
 

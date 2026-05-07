@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  Alert,
-  Card,
-  Input,
-  Label,
-  ListBox,
-  Select,
-  Separator,
-} from "@heroui/react";
+import { Alert, Card, Input, Label, ListBox, Select } from "@heroui/react";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 
 import { Currency } from "@web/components/shared/currency";
 import Typography from "@web/components/typography";
@@ -96,89 +89,91 @@ export function PARFCalculator() {
           </Select>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Card className="border border-border bg-default shadow-none">
-            <Card.Content className="flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-muted" />
-                <Typography.Caption className="font-semibold text-muted uppercase tracking-wider">
-                  Before Budget 2026
-                </Typography.Caption>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Typography.Caption>PARF Rebate</Typography.Caption>
-                <span className="font-bold text-3xl text-muted tracking-tight">
-                  <Currency value={result.oldRebate} />
-                </span>
-              </div>
-              <Separator />
-              <div className="flex flex-col gap-2">
-                <div className="flex justify-between text-sm">
+        <KPIGroup>
+          <KPI>
+            <KPI.Header>
+              <KPI.Title>Before Budget 2026</KPI.Title>
+            </KPI.Header>
+            <KPI.Content>
+              <KPI.Value
+                className="text-muted"
+                currency="SGD"
+                locale="en-SG"
+                maximumFractionDigits={0}
+                style="currency"
+                value={result.oldRebate}
+              />
+            </KPI.Content>
+            <KPI.Footer>
+              <div className="flex w-full flex-col gap-2 text-sm">
+                <div className="flex justify-between">
                   <span className="text-muted">Rebate Rate</span>
                   <span className="font-medium">{bracket.oldRate * 100}%</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between">
                   <span className="text-muted">Uncapped Amount</span>
                   <span className="font-medium">
                     <Currency value={result.oldUncapped} />
                   </span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between">
                   <span className="text-muted">Cap</span>
                   <span className="font-medium">
                     <Currency value={OLD_CAP} />
                   </span>
                 </div>
+                {result.oldCapped ? (
+                  <Typography.Caption className="text-warning">
+                    Cap of <Currency value={OLD_CAP} /> applied
+                  </Typography.Caption>
+                ) : null}
               </div>
-              {result.oldCapped && (
-                <Typography.Caption className="text-warning">
-                  Cap of <Currency value={OLD_CAP} /> applied
-                </Typography.Caption>
-              )}
-            </Card.Content>
-          </Card>
+            </KPI.Footer>
+          </KPI>
 
-          <Card className="border border-accent/20 bg-accent-soft shadow-none">
-            <Card.Content className="flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-accent" />
-                <Typography.Caption className="font-semibold text-accent uppercase tracking-wider">
-                  After Budget 2026
-                </Typography.Caption>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Typography.Caption>PARF Rebate</Typography.Caption>
-                <span className="font-bold text-3xl text-accent tracking-tight">
-                  <Currency value={result.newRebate} />
-                </span>
-              </div>
-              <Separator />
-              <div className="flex flex-col gap-2">
-                <div className="flex justify-between text-sm">
+          <KPIGroup.Separator />
+
+          <KPI>
+            <KPI.Header>
+              <KPI.Title>After Budget 2026</KPI.Title>
+            </KPI.Header>
+            <KPI.Content>
+              <KPI.Value
+                className="text-accent"
+                currency="SGD"
+                locale="en-SG"
+                maximumFractionDigits={0}
+                style="currency"
+                value={result.newRebate}
+              />
+            </KPI.Content>
+            <KPI.Footer>
+              <div className="flex w-full flex-col gap-2 text-sm">
+                <div className="flex justify-between">
                   <span className="text-muted">Rebate Rate</span>
                   <span className="font-medium">{bracket.newRate * 100}%</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between">
                   <span className="text-muted">Uncapped Amount</span>
                   <span className="font-medium">
                     <Currency value={result.newUncapped} />
                   </span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between">
                   <span className="text-muted">Cap</span>
                   <span className="font-medium">
                     <Currency value={NEW_CAP} />
                   </span>
                 </div>
+                {result.newCapped ? (
+                  <Typography.Caption className="text-warning">
+                    Cap of <Currency value={NEW_CAP} /> applied
+                  </Typography.Caption>
+                ) : null}
               </div>
-              {result.newCapped && (
-                <Typography.Caption className="text-warning">
-                  Cap of <Currency value={NEW_CAP} /> applied
-                </Typography.Caption>
-              )}
-            </Card.Content>
-          </Card>
-        </div>
+            </KPI.Footer>
+          </KPI>
+        </KPIGroup>
 
         {result.difference > 0 && (
           <Alert status="danger" className="border border-danger/40">

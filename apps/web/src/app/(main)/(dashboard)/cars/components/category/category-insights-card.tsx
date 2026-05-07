@@ -2,28 +2,38 @@ import { Chip } from "@heroui/react";
 import { KPI, KPIGroup } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
-import { Award, Layers, PieChart } from "lucide-react";
+import { Award, BarChart3, Layers, PieChart } from "lucide-react";
 
 interface CategoryInsightsCardProps {
   categoriesCount: number;
+  previousTotal?: number | null;
   topPerformer: {
     name: string;
     percentage: number;
   };
   month: string;
   title: string;
+  total?: number;
 }
 
 export function CategoryInsightsCard({
   categoriesCount,
+  previousTotal,
   topPerformer,
   month,
   title,
+  total = 0,
 }: CategoryInsightsCardProps) {
   const formattedMonth = formatDateToMonthYear(month);
+  const hasComparison = previousTotal != null && previousTotal > 0;
+  const changeRatio = hasComparison
+    ? (total - previousTotal) / previousTotal
+    : 0;
+  const isPositive = hasComparison ? total >= previousTotal : true;
+  const trend = changeRatio > 0 ? "up" : changeRatio < 0 ? "down" : "neutral";
 
   return (
-    <div className="col-span-12 flex flex-col gap-6 rounded-3xl border border-border bg-white p-6 lg:col-span-8">
+    <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <Typography.H4>Market Insights</Typography.H4>
         <Chip color="accent" size="sm">
@@ -32,6 +42,36 @@ export function CategoryInsightsCard({
       </div>
 
       <KPIGroup>
+        <KPI>
+          <KPI.Header>
+            <KPI.Icon status="success">
+              <BarChart3 />
+            </KPI.Icon>
+            <KPI.Title>Total Registrations</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <KPI.Value
+              className="text-4xl text-accent"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={total}
+            />
+            {hasComparison ? (
+              <KPI.Trend trend={trend} variant="primary">
+                {isPositive ? "+" : ""}
+                {(Math.abs(changeRatio) * 100).toFixed(1)}%
+              </KPI.Trend>
+            ) : null}
+          </KPI.Content>
+          {hasComparison ? (
+            <KPI.Footer>
+              <span className="text-muted text-xs">vs last month</span>
+            </KPI.Footer>
+          ) : null}
+        </KPI>
+
+        <KPIGroup.Separator />
+
         <KPI>
           <KPI.Header>
             <KPI.Icon status="success">

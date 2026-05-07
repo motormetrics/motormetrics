@@ -1,4 +1,5 @@
-import { Button, Card, Chip, Link, Separator } from "@heroui/react";
+import { Button, Card, Link, Separator } from "@heroui/react";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { HighlightStatsCard } from "@web/components/highlight-stats-card";
@@ -49,50 +50,6 @@ const getTrend = (value: number) => {
   if (value < 0) return "down" as const;
   return "neutral" as const;
 };
-
-function TrendBadge({ value }: { value: number }) {
-  const trend = getTrend(value);
-
-  return (
-    <Chip
-      color={
-        trend === "up" ? "success" : trend === "down" ? "danger" : "default"
-      }
-      size="sm"
-      variant="soft"
-    >
-      {value > 0 ? "+" : ""}
-      {value.toFixed(1)}%
-    </Chip>
-  );
-}
-
-function OverviewMetric({
-  label,
-  meta,
-  trend,
-  value,
-}: {
-  label: string;
-  meta: string;
-  trend?: number;
-  value: string;
-}) {
-  return (
-    <Card className="bg-surface/70 shadow-none">
-      <Card.Content className="gap-3">
-        <Typography.Caption>{label}</Typography.Caption>
-        <div className="flex items-end justify-between gap-3">
-          <span className="font-semibold text-2xl text-foreground tabular-nums">
-            {value}
-          </span>
-          {trend !== undefined ? <TrendBadge value={trend} /> : null}
-        </div>
-        <span className="text-muted text-xs">{meta}</span>
-      </Card.Content>
-    </Card>
-  );
-}
 
 function MarketBar({
   label,
@@ -207,52 +164,86 @@ export async function CarsOverview() {
       </div>
 
       <AnimatedGrid className="grid grid-cols-12 gap-4">
-        <AnimatedSection
-          className="col-span-12 md:col-span-6 lg:col-span-3"
-          order={0}
-        >
-          <OverviewMetric
-            label="Latest registrations"
-            meta={formatMonth(latestMonth)}
-            trend={monthlyChange}
-            value={formatNumber(currentData?.total ?? 0)}
-          />
-        </AnimatedSection>
-        <AnimatedSection
-          className="col-span-12 md:col-span-6 lg:col-span-3"
-          order={1}
-        >
-          <OverviewMetric
-            label="EV and hybrid share"
-            meta={
-              evSummary ? `Top EV make: ${evSummary.topMake}` : "Latest EV mix"
-            }
-            value={`${(evSummary?.evSharePercent ?? 0).toFixed(1)}%`}
-          />
-        </AnimatedSection>
-        <AnimatedSection
-          className="col-span-12 md:col-span-6 lg:col-span-3"
-          order={2}
-        >
-          <OverviewMetric
-            label="Annual total"
-            meta={`${yearlySummary.year} registration volume`}
-            value={formatNumber(yearlySummary.total)}
-          />
-        </AnimatedSection>
-        <AnimatedSection
-          className="col-span-12 md:col-span-6 lg:col-span-3"
-          order={3}
-        >
-          <OverviewMetric
-            label="Market leader"
-            meta={
-              topMake
-                ? `${formatNumber(topMake.total)} registrations`
-                : "Latest month"
-            }
-            value={topMake?.make ?? "N/A"}
-          />
+        <AnimatedSection className="col-span-12" order={0}>
+          <KPIGroup>
+            <KPI>
+              <KPI.Header>
+                <KPI.Title>Latest registrations</KPI.Title>
+              </KPI.Header>
+              <KPI.Content>
+                <KPI.Value
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  value={currentData?.total ?? 0}
+                />
+                <KPI.Trend trend={getTrend(monthlyChange)} variant="primary">
+                  {monthlyChange > 0 ? "+" : ""}
+                  {monthlyChange.toFixed(1)}%
+                </KPI.Trend>
+              </KPI.Content>
+              <KPI.Footer>
+                <span className="text-muted text-xs">
+                  {formatMonth(latestMonth)}
+                </span>
+              </KPI.Footer>
+            </KPI>
+            <KPIGroup.Separator />
+            <KPI>
+              <KPI.Header>
+                <KPI.Title>EV and hybrid share</KPI.Title>
+              </KPI.Header>
+              <KPI.Content>
+                <KPI.Value
+                  maximumFractionDigits={1}
+                  style="percent"
+                  value={(evSummary?.evSharePercent ?? 0) / 100}
+                />
+              </KPI.Content>
+              <KPI.Footer>
+                <span className="text-muted text-xs">
+                  {evSummary
+                    ? `Top EV make: ${evSummary.topMake}`
+                    : "Latest EV mix"}
+                </span>
+              </KPI.Footer>
+            </KPI>
+            <KPIGroup.Separator />
+            <KPI>
+              <KPI.Header>
+                <KPI.Title>Annual total</KPI.Title>
+              </KPI.Header>
+              <KPI.Content>
+                <KPI.Value
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  value={yearlySummary.total}
+                />
+              </KPI.Content>
+              <KPI.Footer>
+                <span className="text-muted text-xs">
+                  {yearlySummary.year} registration volume
+                </span>
+              </KPI.Footer>
+            </KPI>
+            <KPIGroup.Separator />
+            <KPI>
+              <KPI.Header>
+                <KPI.Title>Market leader</KPI.Title>
+              </KPI.Header>
+              <KPI.Content>
+                <span className="font-semibold text-2xl tabular-nums">
+                  {topMake?.make ?? "N/A"}
+                </span>
+              </KPI.Content>
+              <KPI.Footer>
+                <span className="text-muted text-xs">
+                  {topMake
+                    ? `${formatNumber(topMake.total)} registrations`
+                    : "Latest month"}
+                </span>
+              </KPI.Footer>
+            </KPI>
+          </KPIGroup>
         </AnimatedSection>
 
         <AnimatedSection className="col-span-12 lg:col-span-7" order={4}>

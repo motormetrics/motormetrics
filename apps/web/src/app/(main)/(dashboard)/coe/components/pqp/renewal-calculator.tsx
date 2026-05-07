@@ -1,6 +1,7 @@
 "use client";
 
 import { Alert, Card, Tabs } from "@heroui/react";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 
 import { Currency } from "@web/components/shared/currency";
 import Typography from "@web/components/typography";
@@ -121,33 +122,47 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
             return (
               <Tabs.Panel key={key} id={key}>
                 <div className="flex flex-col gap-4">
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <Card>
-                      <Card.Content className="text-center">
-                        <Typography.TextSm className="mb-1 font-medium text-muted">
-                          Current PQP Rate
-                        </Typography.TextSm>
-                        <p className="font-bold text-xl">
-                          <Currency value={currentPQPRate} />
-                        </p>
-                        <p className="text-muted text-xs">
+                  <KPIGroup>
+                    <KPI>
+                      <KPI.Header>
+                        <KPI.Title>Current PQP Rate</KPI.Title>
+                      </KPI.Header>
+                      <KPI.Content>
+                        <KPI.Value
+                          currency="SGD"
+                          locale="en-SG"
+                          maximumFractionDigits={0}
+                          style="currency"
+                          value={currentPQPRate}
+                        />
+                      </KPI.Content>
+                      <KPI.Footer>
+                        <span className="text-muted text-xs">
                           Latest available rate
-                        </p>
-                      </Card.Content>
-                    </Card>
-
-                    <Card>
-                      <Card.Content className="text-center">
-                        <Typography.TextSm className="mb-1 font-medium text-muted">
-                          Current COE Price
-                        </Typography.TextSm>
-                        <p className="font-bold text-xl">
-                          <Currency value={currentCOEPremium} />
-                        </p>
-                        <p className="text-muted text-xs">Latest COE premium</p>
-                      </Card.Content>
-                    </Card>
-                  </div>
+                        </span>
+                      </KPI.Footer>
+                    </KPI>
+                    <KPIGroup.Separator />
+                    <KPI>
+                      <KPI.Header>
+                        <KPI.Title>Current COE Price</KPI.Title>
+                      </KPI.Header>
+                      <KPI.Content>
+                        <KPI.Value
+                          currency="SGD"
+                          locale="en-SG"
+                          maximumFractionDigits={0}
+                          style="currency"
+                          value={currentCOEPremium}
+                        />
+                      </KPI.Content>
+                      <KPI.Footer>
+                        <span className="text-muted text-xs">
+                          Latest COE premium
+                        </span>
+                      </KPI.Footer>
+                    </KPI>
+                  </KPIGroup>
                 </div>
               </Tabs.Panel>
             );
@@ -155,16 +170,22 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
         </Tabs>
         {selectedRecord && (
           <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <Card>
-                <Card.Content className="text-center">
-                  <Typography.TextSm className="font-medium text-muted">
-                    PQP 5-Year Renewal (Estimate)
-                  </Typography.TextSm>
-                  <p className="font-bold text-2xl">
-                    <Currency value={selectedRecord.pqpCost5Year} />
-                  </p>
-                  <p
+            <KPIGroup>
+              <KPI>
+                <KPI.Header>
+                  <KPI.Title>PQP 5-Year Renewal (Estimate)</KPI.Title>
+                </KPI.Header>
+                <KPI.Content>
+                  <KPI.Value
+                    currency="SGD"
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    style="currency"
+                    value={selectedRecord.pqpCost5Year}
+                  />
+                </KPI.Content>
+                <KPI.Footer>
+                  <span
                     className={`text-sm ${
                       selectedRecord.pqpSavings5Year > 0
                         ? "text-success"
@@ -175,19 +196,25 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                     <Currency
                       value={Math.abs(selectedRecord.pqpSavings5Year)}
                     />
-                  </p>
-                </Card.Content>
-              </Card>
-
-              <Card>
-                <Card.Content className="text-center">
-                  <Typography.TextSm className="font-medium text-muted">
-                    PQP 10-Year Renewal (Estimate)
-                  </Typography.TextSm>
-                  <p className="font-bold text-2xl">
-                    <Currency value={selectedRecord.pqpCost10Year} />
-                  </p>
-                  <p
+                  </span>
+                </KPI.Footer>
+              </KPI>
+              <KPIGroup.Separator />
+              <KPI>
+                <KPI.Header>
+                  <KPI.Title>PQP 10-Year Renewal (Estimate)</KPI.Title>
+                </KPI.Header>
+                <KPI.Content>
+                  <KPI.Value
+                    currency="SGD"
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    style="currency"
+                    value={selectedRecord.pqpCost10Year}
+                  />
+                </KPI.Content>
+                <KPI.Footer>
+                  <span
                     className={`text-sm ${
                       selectedRecord.pqpSavings10Year > 0
                         ? "text-success"
@@ -198,10 +225,10 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
                     <Currency
                       value={Math.abs(selectedRecord.pqpSavings10Year)}
                     />
-                  </p>
-                </Card.Content>
-              </Card>
-            </div>
+                  </span>
+                </KPI.Footer>
+              </KPI>
+            </KPIGroup>
 
             <Alert status="accent" className="border border-accent/40">
               <Alert.Content>
