@@ -52,6 +52,7 @@ export function CategoryTrendsTable({ data }: CategoryTrendsTableProps) {
                     {cat.trend.map((point, i) => {
                       const max = Math.max(...cat.trend.map((p) => p.value));
                       const height = max > 0 ? (point.value / max) * 100 : 0;
+
                       return (
                         <div
                           key={`${cat.category}-${i}`}

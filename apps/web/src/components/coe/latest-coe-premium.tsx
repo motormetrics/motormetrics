@@ -1,10 +1,6 @@
 "use client";
 
-import { Card } from "@heroui/react";
-import { AreaChart } from "@heroui-pro/react";
-
-import { AnimatedNumber } from "@web/components/animated-number";
-import Typography from "@web/components/typography";
+import { KpiWithChartInline } from "@web/components/kpi-with-chart-inline";
 import type { CoeMonthlyPremium } from "@web/queries/coe";
 import type { COECategory, COEResult } from "@web/types";
 
@@ -50,65 +46,22 @@ export function LatestCoePremium({ results, trends }: LatestCoePremiumProps) {
         }));
         const trend = calculateTrend(sparklineData);
         const trendColour = getTrendColour(trend);
-        const gradientId = `coe-${result.vehicleClass}-sparkline`.replace(
-          /[^a-zA-Z0-9-]/g,
-          "",
-        );
 
         return (
-          <Card
+          <KpiWithChartInline
             key={result.vehicleClass}
-            className="transition-shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
-          >
-            <Card.Header>
-              <div className="flex items-center gap-2">
-                <Typography.H4>{result.vehicleClass}</Typography.H4>
-              </div>
-            </Card.Header>
-            <Card.Content>
-              <div className="grid grid-cols-2 items-center gap-2">
-                <div className="bg-gradient-to-br from-accent to-accent/70 bg-clip-text font-bold text-2xl text-transparent">
-                  <AnimatedNumber value={result.premium} format="currency" />
-                </div>
-                {sparklineData.length > 0 && (
-                  <AreaChart
-                    data={sparklineData}
-                    height={64}
-                    margin={{ bottom: 0, left: 0, right: 0, top: 2 }}
-                  >
-                    <defs>
-                      <linearGradient
-                        id={gradientId}
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="0%"
-                          stopColor={trendColour}
-                          stopOpacity={0.1}
-                        />
-                        <stop
-                          offset="100%"
-                          stopColor={trendColour}
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <AreaChart.Area
-                      dataKey="value"
-                      dot={false}
-                      fill={`url(#${gradientId})`}
-                      stroke={trendColour}
-                      strokeWidth={2}
-                      type="monotone"
-                    />
-                  </AreaChart>
-                )}
-              </div>
-            </Card.Content>
-          </Card>
+            title={result.vehicleClass}
+            value={result.premium}
+            valueProps={{
+              currency: "SGD",
+              locale: "en-SG",
+              maximumFractionDigits: 0,
+              style: "currency",
+            }}
+            chartColor={trendColour}
+            chartData={sparklineData}
+            chartProps={{ height: 70, strokeWidth: 1.5 }}
+          />
         );
       })}
     </>

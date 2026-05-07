@@ -1,7 +1,6 @@
-import { Card, cn } from "@heroui/react";
-import { AnimatedNumber } from "@web/components/animated-number";
+import { cn } from "@heroui/react";
+import { KPI } from "@heroui-pro/react";
 import { MetricsComparison } from "@web/components/metrics-comparison";
-import Typography from "@web/components/typography";
 
 type MetricCardVariant = "default" | "hero" | "metric";
 
@@ -31,25 +30,24 @@ export function MetricCard({
   className,
 }: MetricCardProps) {
   return (
-    <Card className={cn(variantStyles[variant], className)}>
-      <Card.Header>
-        <Typography.H4>{title}</Typography.H4>
-      </Card.Header>
-      <Card.Content>
-        <div
+    <KPI className={cn(variantStyles[variant], className)}>
+      <KPI.Header>
+        <KPI.Title>{title}</KPI.Title>
+      </KPI.Header>
+      <KPI.Content>
+        <KPI.Value
           className={cn(
-            "font-semibold tabular-nums",
-            variant === "hero"
-              ? "text-5xl text-accent"
-              : "text-4xl text-accent",
+            "text-accent",
+            variant === "hero" ? "text-5xl" : "text-4xl",
           )}
-        >
-          <AnimatedNumber value={value} />
-        </div>
-      </Card.Content>
-      <Card.Footer>
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={value}
+        />
+      </KPI.Content>
+      <KPI.Footer>
         <MetricsComparison current={current} previousMonth={previousMonth} />
-      </Card.Footer>
-    </Card>
+      </KPI.Footer>
+    </KPI>
   );
 }

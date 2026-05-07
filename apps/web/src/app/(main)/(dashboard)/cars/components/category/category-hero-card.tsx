@@ -1,9 +1,7 @@
-import { Card } from "@heroui/react";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
 import { getRankingEmoji } from "@web/lib/cars/calculations";
-import { formatPercentage } from "@web/utils/charts";
 import { Award, BarChart3, PieChart } from "lucide-react";
 
 interface CategoryHeroCardProps {
@@ -28,61 +26,71 @@ export function CategoryHeroCard({
   const formattedMonth = formatDateToMonthYear(month);
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <Card>
-        <Card.Content>
-          <div className="flex flex-col gap-4">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-accent/10">
-              <BarChart3 className="size-5 text-accent" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Typography.Caption>Total Registrations</Typography.Caption>
-              <p className="font-bold text-3xl text-accent tabular-nums">
-                <AnimatedNumber value={count} />
-              </p>
-              <Typography.TextSm>{formattedMonth}</Typography.TextSm>
-            </div>
-          </div>
-        </Card.Content>
-      </Card>
+    <KPIGroup>
+      <KPI>
+        <KPI.Header>
+          <KPI.Icon status="success">
+            <BarChart3 />
+          </KPI.Icon>
+          <KPI.Title>Total Registrations</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <KPI.Value
+            className="text-3xl text-accent"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            value={count}
+          />
+        </KPI.Content>
+        <KPI.Footer>
+          <Typography.TextSm>{formattedMonth}</Typography.TextSm>
+        </KPI.Footer>
+      </KPI>
 
-      <Card>
-        <Card.Content>
-          <div className="flex flex-col gap-4">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-warning/10">
-              <PieChart className="size-5 text-warning" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Typography.Caption>Market Share</Typography.Caption>
-              <p className="font-bold text-3xl text-foreground">
-                {formatPercentage(marketSharePercentage)}
-              </p>
-              <Typography.TextSm>of all registrations</Typography.TextSm>
-            </div>
-          </div>
-        </Card.Content>
-      </Card>
+      <KPIGroup.Separator />
 
-      <Card>
-        <Card.Content>
-          <div className="flex flex-col gap-4">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-success/10">
-              <Award className="size-5 text-success" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Typography.Caption>Category Ranking</Typography.Caption>
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl">{getRankingEmoji(rank)}</span>
-                <p className="font-bold text-3xl text-foreground">#{rank}</p>
-              </div>
-              <Typography.TextSm>
-                of {totalCategories}{" "}
-                {typeName.toLowerCase().includes("fuel") ? "fuel" : ""} types
-              </Typography.TextSm>
-            </div>
+      <KPI>
+        <KPI.Header>
+          <KPI.Icon status="warning">
+            <PieChart />
+          </KPI.Icon>
+          <KPI.Title>Market Share</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <KPI.Value
+            className="text-3xl text-foreground"
+            maximumFractionDigits={1}
+            style="percent"
+            value={marketSharePercentage / 100}
+          />
+        </KPI.Content>
+        <KPI.Footer>
+          <Typography.TextSm>of all registrations</Typography.TextSm>
+        </KPI.Footer>
+      </KPI>
+
+      <KPIGroup.Separator />
+
+      <KPI>
+        <KPI.Header>
+          <KPI.Icon status="success">
+            <Award />
+          </KPI.Icon>
+          <KPI.Title>Category Ranking</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl">{getRankingEmoji(rank)}</span>
+            <span className="font-bold text-3xl text-foreground">#{rank}</span>
           </div>
-        </Card.Content>
-      </Card>
-    </div>
+        </KPI.Content>
+        <KPI.Footer>
+          <Typography.TextSm>
+            of {totalCategories}{" "}
+            {typeName.toLowerCase().includes("fuel") ? "fuel" : ""} types
+          </Typography.TextSm>
+        </KPI.Footer>
+      </KPI>
+    </KPIGroup>
   );
 }

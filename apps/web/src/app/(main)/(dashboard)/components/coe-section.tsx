@@ -1,34 +1,10 @@
 import { Button, Card, Link, Skeleton } from "@heroui/react";
-import { AnimatedNumber } from "@web/components/animated-number";
+import { KPI, TrendChip } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults } from "@web/queries/coe";
 import { ArrowDownIcon, ArrowUpIcon, ArrowUpRight } from "lucide-react";
 import { Suspense } from "react";
-import {
-  calculateChangePercent,
-  calculateTrend,
-  type Trend,
-} from "./coe-trend-utils";
-
-function TrendBadge({ trend }: { trend: Exclude<Trend, "neutral"> }) {
-  const isUp = trend === "up";
-  const Icon = isUp ? ArrowUpIcon : ArrowDownIcon;
-
-  return (
-    <span
-      className={`inline-flex size-5 items-center justify-center rounded-full ${
-        isUp
-          ? "bg-danger text-danger-foreground"
-          : "bg-success text-success-foreground"
-      }`}
-    >
-      <Icon aria-hidden className="size-3" />
-      <span className="sr-only">
-        {isUp ? "Price increased" : "Price decreased"}
-      </span>
-    </span>
-  );
-}
+import { calculateChangePercent, calculateTrend } from "./coe-trend-utils";
 
 async function CoeSectionContent() {
   const { latest, previous } = await getLatestAndPreviousCoeResults();
@@ -58,33 +34,37 @@ async function CoeSectionContent() {
             );
 
             return (
-              <Card
-                key={result.vehicleClass}
-                className="bg-surface shadow-none"
-              >
-                <Card.Content>
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="font-medium text-muted text-xs">
-                      {result.vehicleClass}
-                    </span>
-                    {trend !== "neutral" && <TrendBadge trend={trend} />}
-                  </div>
-                  <p className="font-bold text-foreground text-lg tabular-nums">
-                    <AnimatedNumber value={result.premium} format="currency" />
-                  </p>
-                  <p
-                    className={`mt-1 font-medium text-xs ${
-                      trend === "up"
-                        ? "text-danger"
-                        : trend === "down"
-                          ? "text-success"
-                          : "text-muted"
-                    }`}
-                  >
-                    {changePercent}
-                  </p>
-                </Card.Content>
-              </Card>
+              <KPI key={result.vehicleClass}>
+                <KPI.Header>
+                  <KPI.Title>{result.vehicleClass}</KPI.Title>
+                </KPI.Header>
+                <KPI.Content>
+                  <KPI.Value
+                    className="text-lg"
+                    currency="SGD"
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    style="currency"
+                    value={result.premium}
+                  />
+                  {trend !== "neutral" && (
+                    <TrendChip
+                      trend={trend === "up" ? "down" : "up"}
+                      variant="primary"
+                    >
+                      <TrendChip.Indicator>
+                        {trend === "up" ? <ArrowUpIcon /> : <ArrowDownIcon />}
+                      </TrendChip.Indicator>
+                      {changePercent}
+                    </TrendChip>
+                  )}
+                </KPI.Content>
+                {trend === "neutral" && (
+                  <KPI.Footer>
+                    <span className="text-muted text-xs">{changePercent}</span>
+                  </KPI.Footer>
+                )}
+              </KPI>
             );
           })}
         </div>

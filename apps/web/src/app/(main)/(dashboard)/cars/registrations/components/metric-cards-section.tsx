@@ -1,3 +1,4 @@
+import { KPIGroup } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { MetricCard } from "@web/components/shared/metric-card";
 import { SkeletonMetricCard } from "@web/components/shared/skeleton";
@@ -68,13 +69,14 @@ async function MetricCardsContent({ month }: MetricCardsSectionProps) {
           ]),
         }}
       />
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <KPIGroup>
         <MetricCard
           title="Total Registrations"
           value={cars.total}
           current={cars.total}
           previousMonth={comparison.previousMonth.total}
         />
+        <KPIGroup.Separator />
         <MetricCard
           title={`Top Fuel Type: ${topTypes.topFuelType.name}`}
           value={topTypes.topFuelType.total}
@@ -85,6 +87,7 @@ async function MetricCardsContent({ month }: MetricCardsSectionProps) {
             )?.count ?? 0
           }
         />
+        <KPIGroup.Separator />
         <MetricCard
           title={`Top Vehicle Type: ${formatVehicleType(topTypes.topVehicleType.name)}`}
           value={topTypes.topVehicleType.total}
@@ -96,18 +99,20 @@ async function MetricCardsContent({ month }: MetricCardsSectionProps) {
             )?.count ?? 0
           }
         />
-      </div>
+      </KPIGroup>
     </>
   );
 }
 
 function MetricCardsSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <KPIGroup>
       <SkeletonMetricCard />
+      <KPIGroup.Separator />
       <SkeletonMetricCard />
+      <KPIGroup.Separator />
       <SkeletonMetricCard />
-    </div>
+    </KPIGroup>
   );
 }
 

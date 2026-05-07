@@ -1,12 +1,7 @@
-import { Button, Card, Chip, Link } from "@heroui/react";
-import { AnimatedNumber } from "@web/components/animated-number";
+import { Button, Link } from "@heroui/react";
+import { KPI } from "@heroui-pro/react";
 import { getCarsComparison, getCarsLatestMonth } from "@web/queries/cars";
-import {
-  ArrowUpRight,
-  CalendarDays,
-  TrendingDown,
-  TrendingUp,
-} from "lucide-react";
+import { ArrowUpRight, CalendarDays } from "lucide-react";
 
 export async function MonthlyChangeSummary() {
   const latestMonth = await getCarsLatestMonth();
@@ -20,11 +15,9 @@ export async function MonthlyChangeSummary() {
   const previousTotal = comparison.previousMonth.total;
 
   const changeAmount = currentTotal - previousTotal;
-  const changePercent =
-    previousTotal > 0
-      ? ((changeAmount / previousTotal) * 100).toFixed(1)
-      : "0.0";
+  const changeRatio = previousTotal > 0 ? changeAmount / previousTotal : 0;
   const isPositive = changeAmount >= 0;
+  const trend = changeRatio > 0 ? "up" : changeRatio < 0 ? "down" : "neutral";
 
   // Format the month for display (e.g., "2025-01" -> "Jan 2025")
   const [year, month] = latestMonth.split("-");
@@ -34,43 +27,40 @@ export async function MonthlyChangeSummary() {
   );
 
   return (
-    <Card className="border-2 border-accent">
-      <Card.Content>
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10">
-            <CalendarDays className="size-6 text-accent" />
-          </div>
-          <Link
-            href={`/cars?month=${latestMonth}`}
-            aria-label="View monthly car registration details"
-          >
-            <Button isIconOnly variant="tertiary">
-              <ArrowUpRight className="size-6" />
-            </Button>
-          </Link>
+    <KPI className="border-2 border-accent">
+      <KPI.Header>
+        <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10">
+          <CalendarDays className="size-6 text-accent" />
         </div>
-        <p className="text-muted text-sm">Monthly Change ({displayMonth})</p>
-        <p className="mt-1 font-bold text-4xl text-accent tabular-nums">
+        <Link
+          aria-label="View monthly car registration details"
+          className="ml-auto"
+          href={`/cars?month=${latestMonth}`}
+        >
+          <Button isIconOnly variant="tertiary">
+            <ArrowUpRight className="size-6" />
+          </Button>
+        </Link>
+      </KPI.Header>
+      <KPI.Header>
+        <KPI.Title>Monthly Change ({displayMonth})</KPI.Title>
+      </KPI.Header>
+      <KPI.Content>
+        <KPI.Value
+          className="text-4xl text-accent"
+          maximumFractionDigits={1}
+          signDisplay="exceptZero"
+          style="percent"
+          value={changeRatio}
+        />
+        <KPI.Trend trend={trend} variant="primary">
           {isPositive ? "+" : ""}
-          <AnimatedNumber value={Number(changePercent)} />%
-        </p>
-        <div className="mt-4 flex items-center gap-2">
-          <Chip
-            variant="primary"
-            color={isPositive ? "success" : "danger"}
-            size="sm"
-          >
-            {isPositive ? (
-              <TrendingUp className="size-4" />
-            ) : (
-              <TrendingDown className="size-4" />
-            )}
-            {isPositive ? "+" : ""}
-            {changeAmount.toLocaleString()}
-          </Chip>
-          <span className="text-muted text-xs">vs previous month</span>
-        </div>
-      </Card.Content>
-    </Card>
+          {Math.abs(changeAmount).toLocaleString("en-SG")}
+        </KPI.Trend>
+      </KPI.Content>
+      <KPI.Footer>
+        <span className="text-muted text-xs">vs previous month</span>
+      </KPI.Footer>
+    </KPI>
   );
 }

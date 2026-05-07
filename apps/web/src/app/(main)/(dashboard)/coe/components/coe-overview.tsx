@@ -1,4 +1,5 @@
 import { Button, Card, Chip, Link, Separator } from "@heroui/react";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import {
@@ -140,15 +141,19 @@ function MetricCard({
   value: string;
 }) {
   return (
-    <Card className="bg-surface/70 shadow-none">
-      <Card.Content className="gap-3">
-        <Typography.Caption>{label}</Typography.Caption>
+    <KPI>
+      <KPI.Header>
+        <KPI.Title>{label}</KPI.Title>
+      </KPI.Header>
+      <KPI.Content>
         <span className="font-semibold text-2xl text-foreground tabular-nums">
           {value}
         </span>
+      </KPI.Content>
+      <KPI.Footer>
         <span className="text-muted text-xs">{meta}</span>
-      </Card.Content>
-    </Card>
+      </KPI.Footer>
+    </KPI>
   );
 }
 
@@ -214,50 +219,39 @@ export async function CoeOverview() {
       </div>
 
       <AnimatedGrid className="grid grid-cols-12 gap-4">
-        <AnimatedSection
-          className="col-span-12 md:col-span-6 lg:col-span-3"
-          order={0}
-        >
-          <MetricCard
-            label="Total quota"
-            meta="Latest bidding round"
-            value={formatNumber(totalQuota)}
-          />
-        </AnimatedSection>
-        <AnimatedSection
-          className="col-span-12 md:col-span-6 lg:col-span-3"
-          order={1}
-        >
-          <MetricCard
-            label="Bids received"
-            meta={`${pressureRatio.toFixed(1)}x quota pressure`}
-            value={formatNumber(totalBids)}
-          />
-        </AnimatedSection>
-        <AnimatedSection
-          className="col-span-12 md:col-span-6 lg:col-span-3"
-          order={2}
-        >
-          <MetricCard
-            label="Highest premium"
-            meta={
-              highestCategory ? categoryLabel(highestCategory) : "Latest round"
-            }
-            value={formatCurrency(highestPremium)}
-          />
-        </AnimatedSection>
-        <AnimatedSection
-          className="col-span-12 md:col-span-6 lg:col-span-3"
-          order={3}
-        >
-          <MetricCard
-            label="PQP benchmark"
-            meta="Category A renewal"
-            value={formatCurrency(pqpA?.pqpRate ?? 0)}
-          />
+        <AnimatedSection className="col-span-12" order={0}>
+          <KPIGroup>
+            <MetricCard
+              label="Total quota"
+              meta="Latest bidding round"
+              value={formatNumber(totalQuota)}
+            />
+            <KPIGroup.Separator />
+            <MetricCard
+              label="Bids received"
+              meta={`${pressureRatio.toFixed(1)}x quota pressure`}
+              value={formatNumber(totalBids)}
+            />
+            <KPIGroup.Separator />
+            <MetricCard
+              label="Highest premium"
+              meta={
+                highestCategory
+                  ? categoryLabel(highestCategory)
+                  : "Latest round"
+              }
+              value={formatCurrency(highestPremium)}
+            />
+            <KPIGroup.Separator />
+            <MetricCard
+              label="PQP benchmark"
+              meta="Category A renewal"
+              value={formatCurrency(pqpA?.pqpRate ?? 0)}
+            />
+          </KPIGroup>
         </AnimatedSection>
 
-        <AnimatedSection className="col-span-12 lg:col-span-8" order={4}>
+        <AnimatedSection className="col-span-12 lg:col-span-8" order={1}>
           <Card className="h-full overflow-hidden bg-foreground text-background">
             <Card.Header className="relative flex-row items-start justify-between gap-4">
               <div className="flex flex-col gap-1">

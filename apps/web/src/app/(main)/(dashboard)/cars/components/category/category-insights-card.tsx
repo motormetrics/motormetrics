@@ -1,7 +1,7 @@
 import { Chip } from "@heroui/react";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
-import { formatPercentage } from "@web/utils/charts";
 import { Award, Layers, PieChart } from "lucide-react";
 
 interface CategoryInsightsCardProps {
@@ -31,46 +31,68 @@ export function CategoryInsightsCard({
         </Chip>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="flex flex-col gap-4 rounded-2xl bg-default p-4">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-accent/10">
-            <Layers className="size-5 text-accent" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Typography.Caption>Active Categories</Typography.Caption>
-            <p className="font-bold text-2xl text-foreground">
-              {categoriesCount}
-            </p>
+      <KPIGroup>
+        <KPI>
+          <KPI.Header>
+            <KPI.Icon status="success">
+              <Layers />
+            </KPI.Icon>
+            <KPI.Title>Active Categories</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <KPI.Value
+              className="text-2xl"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={categoriesCount}
+            />
+          </KPI.Content>
+          <KPI.Footer>
             <Typography.TextSm>{title} types</Typography.TextSm>
-          </div>
-        </div>
+          </KPI.Footer>
+        </KPI>
 
-        <div className="flex flex-col gap-4 rounded-2xl bg-default p-4">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-success/10">
-            <Award className="size-5 text-success" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Typography.Caption>Top Performer</Typography.Caption>
-            <p className="font-bold text-2xl text-foreground">
+        <KPIGroup.Separator />
+
+        <KPI>
+          <KPI.Header>
+            <KPI.Icon status="success">
+              <Award />
+            </KPI.Icon>
+            <KPI.Title>Top Performer</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <span className="font-bold text-2xl text-foreground">
               {topPerformer.name}
-            </p>
+            </span>
+          </KPI.Content>
+          <KPI.Footer>
             <Typography.TextSm>Leading category</Typography.TextSm>
-          </div>
-        </div>
+          </KPI.Footer>
+        </KPI>
 
-        <div className="flex flex-col gap-4 rounded-2xl bg-default p-4">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-warning/10">
-            <PieChart className="size-5 text-warning" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Typography.Caption>Market Share</Typography.Caption>
-            <p className="font-bold text-2xl text-foreground">
-              {formatPercentage(topPerformer.percentage)}
-            </p>
+        <KPIGroup.Separator />
+
+        <KPI>
+          <KPI.Header>
+            <KPI.Icon status="warning">
+              <PieChart />
+            </KPI.Icon>
+            <KPI.Title>Market Share</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <KPI.Value
+              className="text-2xl"
+              maximumFractionDigits={1}
+              style="percent"
+              value={topPerformer.percentage / 100}
+            />
+          </KPI.Content>
+          <KPI.Footer>
             <Typography.TextSm>{topPerformer.name}</Typography.TextSm>
-          </div>
-        </div>
-      </div>
+          </KPI.Footer>
+        </KPI>
+      </KPIGroup>
     </div>
   );
 }
