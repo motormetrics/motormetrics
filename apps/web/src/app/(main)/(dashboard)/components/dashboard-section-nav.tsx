@@ -11,11 +11,11 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type DashboardNavItem = NavigationItem & {
+type DashboardSectionNavItem = NavigationItem & {
   sectionName: string;
 };
 
-export function DashboardNav() {
+export function DashboardSectionNav() {
   const pathname = usePathname();
 
   const activeSection =
@@ -45,8 +45,9 @@ export function DashboardNav() {
                       variant: isActive ? "primary" : "outline",
                     }),
                     "h-9 shrink-0 gap-1.5 rounded-full px-4",
+                    isActive ? "pointer-events-none" : null,
                   )}
-                  aria-current={isActive ? "page" : undefined}
+                  aria-current={pathname === href ? "page" : undefined}
                   href={href}
                 >
                   <Icon className="size-4" />
@@ -72,6 +73,7 @@ export function DashboardNav() {
                         variant: isActive ? "secondary" : "tertiary",
                       }),
                       "h-8 shrink-0 gap-1.5 rounded-full px-3",
+                      isActive ? "pointer-events-none" : null,
                     )}
                     aria-current={isActive ? "page" : undefined}
                     href={url}
@@ -90,7 +92,9 @@ export function DashboardNav() {
   );
 }
 
-const getSectionItems = (section: NavigationSection): DashboardNavItem[] => {
+const getSectionItems = (
+  section: NavigationSection,
+): DashboardSectionNavItem[] => {
   if (section.href === "/") {
     return section.children.map((item) => ({
       ...item,
