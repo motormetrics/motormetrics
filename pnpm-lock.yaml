@@ -211,12 +211,9 @@ importers:
 
   apps/web:
     dependencies:
-      '@gravity-ui/icons':
-        specifier: 2.18.0
-        version: 2.18.0(react@19.2.4)
       '@heroui-pro/react':
-        specifier: 1.0.0-beta.2
-        version: 1.0.0-beta.2
+        specifier: 1.0.0-beta.3
+        version: 1.0.0-beta.3
       '@heroui/react':
         specifier: 'catalog:'
         version: 3.0.3(@react-spectrum/provider@3.11.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.1.18)
@@ -2008,16 +2005,8 @@ packages:
       tailwindcss:
         optional: true
 
-  '@gravity-ui/icons@2.18.0':
-    resolution: {integrity: sha512-JoRc/4Ch9GLaufZfpGd2ePRRisMXEjMI+r3y8kPKyYIAdQZz07jpIXEgsft1gvBxjSht2MS2uu5+vfhe1WP0ow==}
-    peerDependencies:
-      react: '*'
-    peerDependenciesMeta:
-      react:
-        optional: true
-
-  '@heroui-pro/react@1.0.0-beta.2':
-    resolution: {integrity: sha512-kB/9uFP30MN4F2hU4ONmGlqIVEptPkRSotd2w3bxoRzuZR4Z/9rqTguMFaIABxQJ8NWOXuIGOZLo2OCJU8llTA==}
+  '@heroui-pro/react@1.0.0-beta.3':
+    resolution: {integrity: sha512-DVvi+4X1jFNpf174yA7MyfXaD8gDPYdTuNJo+iVswnePWS6Xn/Vtx181OFSUOcytmCipenYKY8reuuBDDrUzVw==}
 
   '@heroui/react@3.0.3':
     resolution: {integrity: sha512-UJPOxg3IbS5KtI2GLP7S56KrSBn/r4xQyntCVpnPzgoT7JuciB4dq7IhckuDNHcrdIPO45JrKHGJz2hiYxaRGg==}
@@ -11018,13 +11007,7 @@ snapshots:
     optionalDependencies:
       tailwindcss: 4.1.18
 
-  '@gravity-ui/icons@2.18.0(react@19.2.4)':
-    dependencies:
-      tslib: 2.8.1
-    optionalDependencies:
-      react: 19.2.4
-
-  '@heroui-pro/react@1.0.0-beta.2':
+  '@heroui-pro/react@1.0.0-beta.3':
     dependencies:
       chalk: 5.6.2
       heroui-pro: 1.0.0-beta.4
