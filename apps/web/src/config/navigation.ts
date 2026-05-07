@@ -110,6 +110,7 @@ export const navLinks: NavLinks = {
       icon: Fuel,
       description: "Breakdown by petrol, diesel, hybrid and electric",
       iconColor: "text-green-500",
+      matchPrefix: true,
     },
     {
       title: "Vehicle Types",
@@ -117,6 +118,7 @@ export const navLinks: NavLinks = {
       icon: Car,
       description: "Analysis of saloons, hatchbacks, SUVs and more",
       iconColor: "text-purple-500",
+      matchPrefix: true,
     },
     {
       title: "Annual",
