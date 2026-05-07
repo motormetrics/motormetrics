@@ -41,7 +41,7 @@ export function CategoryOverview({
         title={
           <DashboardPageTitle
             title={config.title}
-            subtitle={`Breakdown of registrations by ${config.tabTitle.toLowerCase()} for the selected month.`}
+            subtitle={`Quick view of ${config.tabTitle.toLowerCase()} share, leaders, and registration mix for the selected month.`}
           />
         }
         meta={
@@ -118,9 +118,9 @@ async function CategoryOverviewContent({
     <>
       <StructuredData data={structuredData} />
       {categoryData.length > 0 ? (
-        <>
+        <div className="flex flex-col gap-8">
           <AnimatedSection order={1}>
-            <Suspense fallback={<SkeletonCard className="h-[300px] w-full" />}>
+            <Suspense fallback={<SkeletonCard className="h-[240px] w-full" />}>
               <CategoryInsightsCard
                 categoriesCount={categoryData.length}
                 previousTotal={previousTotal}
@@ -132,7 +132,7 @@ async function CategoryOverviewContent({
             </Suspense>
           </AnimatedSection>
           <AnimatedSection order={2}>
-            <Suspense fallback={<SkeletonCard className="h-[620px] w-full" />}>
+            <Suspense fallback={<SkeletonCard className="h-[560px] w-full" />}>
               <CategoryTabsPanel
                 types={categoryData}
                 month={month}
@@ -142,9 +142,9 @@ async function CategoryOverviewContent({
               />
             </Suspense>
           </AnimatedSection>
-        </>
+        </div>
       ) : (
-        <div className="py-8 text-center">
+        <div className="rounded-2xl border border-border bg-surface p-8 text-center">
           <Typography.Text>
             No {config.title.toLowerCase()} data available for {formattedMonth}
           </Typography.Text>
