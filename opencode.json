@@ -11,6 +11,13 @@
     "heroui-react": {
       "type": "local",
       "command": ["bunx", "-y", "@heroui/react-mcp@latest"]
+    },
+    "posthog": {
+      "type": "remote",
+      "url": "https://mcp.posthog.com/mcp",
+      "headers": {
+        "Authorization": "Bearer {env:POSTHOG_PERSONAL_API_KEY}"
+      }
     }
   }
 }
