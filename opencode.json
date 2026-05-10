@@ -18,6 +18,14 @@
       "headers": {
         "Authorization": "Bearer {env:POSTHOG_PERSONAL_API_KEY}"
       }
+    },
+    "sonarqube": {
+      "type": "remote",
+      "url": "https://api.sonarcloud.io/mcp",
+      "headers": {
+        "Authorization": "Bearer {env:SONARQUBE_TOKEN}",
+        "SONARQUBE_ORG": "motormetrics"
+      }
     }
   }
 }
