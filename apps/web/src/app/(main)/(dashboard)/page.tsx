@@ -2,7 +2,8 @@ import { Card, Chip, ProgressBar, Separator } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue, Segment } from "@heroui-pro/react";
 import type { SelectPost } from "@motormetrics/database";
 import { YearlyRegistrationsChart } from "@web/app/(main)/(dashboard)/components/yearly-registrations-chart";
-import { MonthSelector } from "@web/components/shared/month-selector";
+// TODO: Temporary removed
+// import { MonthSelector } from "@web/components/shared/month-selector";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_URLS } from "@web/config/socials";
@@ -283,13 +284,14 @@ function QuickGlanceHeader({
         <p className="max-w-2xl text-muted leading-7">{description}</p>
       </div>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-        {latestMonth ? (
-          <MonthSelector
-            latestMonth={latestMonth}
-            months={months}
-            wasAdjusted={wasAdjusted}
-          />
-        ) : null}
+        {/*TODO: Temporary removed*/}
+        {/*{latestMonth && (*/}
+        {/*  <MonthSelector*/}
+        {/*    latestMonth={latestMonth}*/}
+        {/*    months={months}*/}
+        {/*    wasAdjusted={wasAdjusted}*/}
+        {/*  />*/}
+        {/*)}*/}
         <Segment defaultSelectedKey="month">
           <Segment.Item id="month">Month</Segment.Item>
           <Segment.Item id="quarter">Quarter</Segment.Item>
