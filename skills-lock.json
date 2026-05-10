@@ -22,15 +22,69 @@
       "skillPath": "skills/heroui-react/SKILL.md",
       "computedHash": "c9e1bb41fbc3cee782faae08bd465ae05cd685a6ed7cc3392464fdf29b3ab467"
     },
+    "instrument-feature-flags": {
+      "source": "posthog/skills",
+      "sourceType": "github",
+      "skillPath": "skills/omnibus/instrument-feature-flags/SKILL.md",
+      "computedHash": "af4c775dbfca98b023d92551f26e4c25119f20fb171e18fda7d56acea1b1246e"
+    },
+    "instrument-product-analytics": {
+      "source": "posthog/skills",
+      "sourceType": "github",
+      "skillPath": "skills/omnibus/instrument-product-analytics/SKILL.md",
+      "computedHash": "b8bba6f4200520284630680618a005bf56c8cdd6bb6c65c6ebaa4f6e06166d26"
+    },
+    "integration-nextjs-app-router": {
+      "source": "posthog/skills",
+      "sourceType": "github",
+      "skillPath": "skills/posthog/all/skills/integration-nextjs-app-router/SKILL.md",
+      "computedHash": "2d399ac3d7b90fefa4349f08ac395471d8fdf8b00761363997da44bfa2d127e2"
+    },
+    "llm-analytics-setup": {
+      "source": "posthog/skills",
+      "sourceType": "github",
+      "skillPath": "skills/posthog/all/skills/llm-analytics-setup/SKILL.md",
+      "computedHash": "88324e2e224c697ca112ed9c9757fd3d4a2154f5e57e6b59d1e2da80efa180a8"
+    },
     "page-cro": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "computedHash": "9505748dba2319487b285f8ab8c1e5417fce38a512d596e1c9e2e87b34b196e1"
     },
+    "posthog-debugger": {
+      "source": "posthog/skills",
+      "sourceType": "github",
+      "skillPath": "skills/team/customer-success/posthog-debugger/SKILL.md",
+      "computedHash": "5e6b67c06f073c84fef0a68f2b0e2d566243d1a4ce1a627ca56c62eb398397dc"
+    },
+    "posthog-instrumentation": {
+      "source": "posthog/posthog-for-claude",
+      "sourceType": "github",
+      "skillPath": "skills/posthog-instrumentation/SKILL.md",
+      "computedHash": "a9a30a63accd756ef41009f987ac75812ab1e855b30ea5d6153e0fed16ebf22d"
+    },
+    "posthog-survey-creator": {
+      "source": "posthog/skills",
+      "sourceType": "github",
+      "skillPath": "skills/team/customer-success/posthog-survey-creator/SKILL.md",
+      "computedHash": "b0b2c62c0c8304d902bbfc44722e54c89c58bd96c5c7d65ef4bc57b7c141355e"
+    },
+    "querying-posthog-data": {
+      "source": "posthog/skills",
+      "sourceType": "github",
+      "skillPath": "skills/omnibus/querying-posthog-data/SKILL.md",
+      "computedHash": "290ebd09de4236368fed7328a65fa30b9aee2babebaa38501420256df742d272"
+    },
     "social-content": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "computedHash": "85ffbc05cf88939ba3ff643a315928185af16181470349dfbaad2880047c9900"
+    },
+    "survey-sdk-audit": {
+      "source": "posthog/posthog",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/survey-sdk-audit/SKILL.md",
+      "computedHash": "ab1e4ebf1fbf157aa33b81b8242aa7db0d906acd4105d44069537fb0aa47839c"
     },
     "turborepo": {
       "source": "vercel/turborepo",

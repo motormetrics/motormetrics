@@ -1,6 +1,4 @@
-import { Chip } from "@heroui/react";
-import { formatPercent } from "@web/utils/charts";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { NumberValue, TrendChip } from "@heroui-pro/react";
 
 interface StatsCompareProps {
   current: number;
@@ -13,16 +11,17 @@ interface TrendIndicatorProps {
 }
 
 const TrendIndicator = ({ change, label }: TrendIndicatorProps) => {
+  const trend = change > 0 ? "up" : change < 0 ? "down" : "neutral";
+
   return (
     <div className="flex items-center gap-2">
-      <Chip variant="primary" color={change >= 0 ? "success" : "danger"}>
-        {change >= 0 ? (
-          <ArrowUpRight className="size-4" />
-        ) : (
-          <ArrowDownRight className="size-4" />
-        )}
-        {formatPercent(Math.abs(change), { maximumFractionDigits: 1 })}
-      </Chip>
+      <TrendChip trend={trend} variant="primary">
+        <NumberValue
+          maximumFractionDigits={1}
+          style="percent"
+          value={Math.abs(change)}
+        />
+      </TrendChip>
       <span className="text-muted text-sm">{label}</span>
     </div>
   );
@@ -32,7 +31,8 @@ export function MetricsComparison({
   current,
   previousMonth,
 }: StatsCompareProps) {
-  const monthChange = (current - previousMonth) / previousMonth;
+  const monthChange =
+    previousMonth > 0 ? (current - previousMonth) / previousMonth : 0;
 
   return <TrendIndicator change={monthChange} label="vs last month" />;
 }

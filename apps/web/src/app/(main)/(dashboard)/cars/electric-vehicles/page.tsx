@@ -8,8 +8,6 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
 import { EmptyState } from "@web/components/shared/empty-state";
-import { Infobox } from "@web/components/shared/infobox";
-import { PAGE_CONTEXTS } from "@web/components/shared/page-contexts";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -111,26 +109,22 @@ export default async function ElectricVehiclesPage() {
         />
 
         <AnimatedSection order={1}>
-          <Infobox {...PAGE_CONTEXTS.electricVehicles} />
-        </AnimatedSection>
-
-        <AnimatedSection order={2}>
           <EvMetrics summary={summary} />
         </AnimatedSection>
 
-        <AnimatedSection order={3}>
+        <AnimatedSection order={2}>
           <AdoptionTrendChart data={monthlyTrend} />
         </AnimatedSection>
 
-        <AnimatedSection order={4}>
+        <AnimatedSection order={3}>
           <MarketShareChart data={marketShare} />
         </AnimatedSection>
 
-        <AnimatedSection order={5}>
+        <AnimatedSection order={4}>
           <TopMakesChart data={topMakes} month={summary.month} />
         </AnimatedSection>
 
-        <AnimatedSection order={6}>
+        <AnimatedSection order={5}>
           <MakeTable data={makeDetails} month={summary.month} />
         </AnimatedSection>
       </section>

@@ -25,7 +25,7 @@
   "dependencies": {
     "@better-auth/drizzle-adapter": "1.6.0",
     "@gravity-ui/icons": "2.18.0",
-    "@heroui-pro/react": "1.0.0-beta.2",
+    "@heroui-pro/react": "1.0.0-beta.3",
     "@heroui/react": "catalog:",
     "@heroui/styles": "catalog:",
     "@icons-pack/react-simple-icons": "10.2.0",
@@ -74,7 +74,6 @@
     "remark-toc": "9.0.0",
     "schema-dts": "1.1.5",
     "sonner": "catalog:",
-    "streamdown": "2.3.0",
     "tailwind-merge": "3.4.0",
     "tailwind-variants": "3.2.2",
     "twitter-api-v2": "1.28.0",

@@ -5,3 +5,7 @@ env_http_headers = { "x-heroui-personal-token" = "HEROUI_PERSONAL_TOKEN" }
 [mcp_servers.heroui-react]
 command = "bunx"
 args = ["-y", "@heroui/react-mcp@latest"]
+
+[mcp_servers.posthog]
+url = "https://mcp.posthog.com/mcp"
+env_http_headers = { "Authorization" = "POSTHOG_PERSONAL_API_KEY" }

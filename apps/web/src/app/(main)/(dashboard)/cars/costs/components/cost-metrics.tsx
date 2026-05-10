@@ -1,6 +1,5 @@
-import { Card } from "@heroui/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import type { SelectCarCost } from "@motormetrics/database";
-import { formatCurrency } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 
 interface CostMetricsProps {
@@ -24,36 +23,67 @@ export function CostMetrics({ data }: CostMetricsProps) {
             sorted[mid].sellingPriceWithCoe) /
           2;
 
-  const metrics = [
-    {
-      title: "Models Quoted",
-      value: `${quotedModels.length} of ${data.length}`,
-      description: "Models with AD selling prices",
-    },
-    {
-      title: "Median Price",
-      value: sorted.length > 0 ? formatCurrency(median) : "-",
-      description: `Middle price point across ${sorted.length} models`,
-    },
-  ];
-
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      {metrics.map((metric) => (
-        <Card key={metric.title}>
-          <Card.Header>
-            <Typography.H4>{metric.title}</Typography.H4>
-          </Card.Header>
-          <Card.Content className="flex flex-col gap-2">
-            <span className="font-bold text-4xl text-accent tabular-nums">
-              {metric.value}
+    <KPIGroup>
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Models Quoted</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <div className="flex items-baseline gap-2">
+            <KPI.Value
+              className="text-4xl text-accent"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={quotedModels.length}
+            />
+            <span className="text-muted text-sm">
+              of{" "}
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={data.length}
+              />
             </span>
-            <Typography.TextSm className="text-muted">
-              {metric.description}
-            </Typography.TextSm>
-          </Card.Content>
-        </Card>
-      ))}
-    </div>
+          </div>
+        </KPI.Content>
+        <KPI.Footer>
+          <Typography.TextSm className="text-muted">
+            Models with AD selling prices
+          </Typography.TextSm>
+        </KPI.Footer>
+      </KPI>
+      <KPIGroup.Separator />
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Median Price</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          {sorted.length > 0 ? (
+            <KPI.Value
+              className="text-4xl text-accent"
+              currency="SGD"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              style="currency"
+              value={median}
+            />
+          ) : (
+            <span className="font-bold text-4xl text-accent">-</span>
+          )}
+        </KPI.Content>
+        <KPI.Footer>
+          <Typography.TextSm className="text-muted">
+            Middle price point across{" "}
+            <NumberValue
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={sorted.length}
+            />{" "}
+            models
+          </Typography.TextSm>
+        </KPI.Footer>
+      </KPI>
+    </KPIGroup>
   );
 }

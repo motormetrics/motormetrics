@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@heroui/react";
-import { AreaChart, ChartTooltip } from "@heroui-pro/react";
+import { AreaChart, ChartTooltip, NumberValue } from "@heroui-pro/react";
 
 import Typography from "@web/components/typography";
 
@@ -99,7 +99,11 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
                           />
                           <ChartTooltip.Label>{entry.name}</ChartTooltip.Label>
                           <ChartTooltip.Value>
-                            {Number(entry.value).toLocaleString()}
+                            <NumberValue
+                              locale="en-SG"
+                              maximumFractionDigits={0}
+                              value={Number(entry.value)}
+                            />
                           </ChartTooltip.Value>
                         </ChartTooltip.Item>
                       ))}

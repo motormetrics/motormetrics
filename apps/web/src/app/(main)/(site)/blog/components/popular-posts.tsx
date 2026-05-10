@@ -1,6 +1,7 @@
 "use client";
 
 import { Link } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 
 import type { SelectPost } from "@motormetrics/database";
 import {
@@ -18,13 +19,6 @@ interface PostWithViews extends SelectPost {
 interface PopularPostsProps {
   posts: PostWithViews[];
 }
-
-const formatViewCount = (count: number): string => {
-  return new Intl.NumberFormat("en", {
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(count);
-};
 
 export function PopularPosts({ posts }: PopularPostsProps) {
   if (posts.length === 0) {
@@ -71,8 +65,14 @@ export function PopularPosts({ posts }: PopularPostsProps) {
                 </span>
                 <div className="flex items-center gap-2 text-muted">
                   <TrendingUp className="size-3 text-orange-500" />
-                  <span className="text-xs tabular-nums">
-                    {formatViewCount(post.viewCount)} views
+                  <span className="text-xs">
+                    <NumberValue
+                      maximumFractionDigits={1}
+                      notation="compact"
+                      value={post.viewCount}
+                    >
+                      <NumberValue.Suffix> views</NumberValue.Suffix>
+                    </NumberValue>
                   </span>
                 </div>
               </div>

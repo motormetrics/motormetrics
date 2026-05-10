@@ -1,55 +1,76 @@
-import { Card } from "@heroui/react";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { EvLatestSummary } from "@web/queries/cars/electric-vehicles";
+import { Fragment } from "react";
 
 interface EvMetricsProps {
   summary: EvLatestSummary;
 }
 
 export function EvMetrics({ summary }: EvMetricsProps) {
-  const numberFormatter = new Intl.NumberFormat("en-SG");
-
   const metrics = [
     {
       title: "Total EV Registrations",
-      value: numberFormatter.format(summary.totalEv),
+      value: summary.totalEv,
       description: formatDateToMonthYear(summary.month),
+      format: "number" as const,
     },
     {
       title: "EV Market Share",
-      value: `${summary.evSharePercent.toFixed(1)}%`,
+      value: summary.evSharePercent / 100,
       description: "of all new registrations",
+      format: "percent" as const,
     },
     {
       title: "BEV Count",
-      value: numberFormatter.format(summary.bevCount),
+      value: summary.bevCount,
       description: "Battery electric vehicles",
-    },
-    {
-      title: "Top EV Make",
-      value: summary.topMake,
-      description: "Most registered EV brand",
+      format: "number" as const,
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <KPIGroup>
       {metrics.map((metric) => (
-        <Card key={metric.title}>
-          <Card.Header>
-            <Typography.H4>{metric.title}</Typography.H4>
-          </Card.Header>
-          <Card.Content className="flex flex-col gap-2">
-            <span className="font-semibold text-4xl text-accent tabular-nums">
-              {metric.value}
-            </span>
-            <Typography.TextSm className="text-muted">
-              {metric.description}
-            </Typography.TextSm>
-          </Card.Content>
-        </Card>
+        <Fragment key={metric.title}>
+          <KPI>
+            <KPI.Header>
+              <KPI.Title>{metric.title}</KPI.Title>
+            </KPI.Header>
+            <KPI.Content>
+              <KPI.Value
+                className="text-4xl text-accent"
+                locale="en-SG"
+                maximumFractionDigits={metric.format === "percent" ? 1 : 0}
+                style={metric.format === "percent" ? "percent" : "decimal"}
+                value={metric.value}
+              />
+            </KPI.Content>
+            <KPI.Footer>
+              <Typography.TextSm className="text-muted">
+                {metric.description}
+              </Typography.TextSm>
+            </KPI.Footer>
+          </KPI>
+          <KPIGroup.Separator />
+        </Fragment>
       ))}
-    </div>
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Top EV Make</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <span className="font-semibold text-4xl text-accent">
+            {summary.topMake}
+          </span>
+        </KPI.Content>
+        <KPI.Footer>
+          <Typography.TextSm className="text-muted">
+            Most registered EV brand
+          </Typography.TextSm>
+        </KPI.Footer>
+      </KPI>
+    </KPIGroup>
   );
 }

@@ -1,17 +1,12 @@
 "use client";
 
 import { Button, Chip } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 
-import { formatCurrency, formatOrdinal } from "@motormetrics/utils";
+import { formatOrdinal } from "@motormetrics/utils";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { COEResult } from "@web/types";
 import { ArrowUpDown } from "lucide-react";
-
-const formatPercent = (value: number) =>
-  Intl.NumberFormat("en-SG", {
-    style: "percent",
-    maximumFractionDigits: 1,
-  }).format(value);
 
 export const columns: ColumnDef<COEResult>[] = [
   {
@@ -34,7 +29,15 @@ export const columns: ColumnDef<COEResult>[] = [
   {
     accessorKey: "premium",
     header: "Quota Premium (S$)",
-    cell: ({ row }) => formatCurrency(row.getValue<number>("premium")),
+    cell: ({ row }) => (
+      <NumberValue
+        currency="SGD"
+        locale="en-SG"
+        maximumFractionDigits={0}
+        style="currency"
+        value={row.getValue<number>("premium")}
+      />
+    ),
   },
   {
     accessorKey: "biddingNo",
@@ -45,7 +48,13 @@ export const columns: ColumnDef<COEResult>[] = [
   {
     accessorKey: "quota",
     header: "Quota",
-    cell: ({ row }) => row.getValue<number>("quota").toLocaleString(),
+    cell: ({ row }) => (
+      <NumberValue
+        locale="en-SG"
+        maximumFractionDigits={0}
+        value={row.getValue<number>("quota")}
+      />
+    ),
   },
   {
     id: "demand",
@@ -62,7 +71,9 @@ export const columns: ColumnDef<COEResult>[] = [
           variant="primary"
           color={isHigh ? "warning" : "default"}
         >
-          {ratio.toFixed(1)}x
+          <NumberValue maximumFractionDigits={1} value={ratio}>
+            <NumberValue.Suffix>x</NumberValue.Suffix>
+          </NumberValue>
         </Chip>
       );
     },
@@ -75,7 +86,9 @@ export const columns: ColumnDef<COEResult>[] = [
       const bidsSuccess = row.original.bidsSuccess;
       const rate = quota > 0 ? bidsSuccess / quota : 0;
 
-      return formatPercent(rate);
+      return (
+        <NumberValue maximumFractionDigits={1} style="percent" value={rate} />
+      );
     },
   },
 ];

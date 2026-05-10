@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Chip } from "@heroui/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
@@ -29,8 +29,6 @@ export function VehiclePopulationMetrics({
   const effectiveYear = useEffectiveYear(
     yearlyTotals.map((item) => Number(item.year)),
   );
-  const numberFormatter = new Intl.NumberFormat("en-SG");
-
   const currentYearData = yearlyTotals.find(
     (item) => Number(item.year) === effectiveYear,
   );
@@ -43,6 +41,7 @@ export function VehiclePopulationMetrics({
   const yoyChange = totalFleet - previousTotal;
   const yoyPercentage =
     previousTotal > 0 ? (yoyChange / previousTotal) * 100 : 0;
+  const trend = yoyChange > 0 ? "up" : yoyChange < 0 ? "down" : "neutral";
 
   const electricTotal = useMemo(() => {
     return fuelTypeData
@@ -56,54 +55,74 @@ export function VehiclePopulationMetrics({
   const evShare = totalFleet > 0 ? (electricTotal / totalFleet) * 100 : 0;
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-      <Card>
-        <Card.Header>
-          <Typography.H4>Total Fleet Size</Typography.H4>
-        </Card.Header>
-        <Card.Content>
-          <span className="font-semibold text-4xl text-accent tabular-nums">
-            {numberFormatter.format(totalFleet)}
-          </span>
-        </Card.Content>
-      </Card>
+    <KPIGroup>
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Total Fleet Size</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <KPI.Value
+            className="text-4xl text-accent"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            value={totalFleet}
+          />
+        </KPI.Content>
+      </KPI>
 
-      <Card>
-        <Card.Header>
-          <Typography.H4>Year-on-Year Change</Typography.H4>
-        </Card.Header>
-        <Card.Content className="flex flex-col gap-2">
-          <span className="font-semibold text-4xl tabular-nums">
-            {yoyChange >= 0 ? "+" : ""}
-            {numberFormatter.format(yoyChange)}
-          </span>
+      <KPIGroup.Separator />
+
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Year-on-Year Change</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <KPI.Value
+            className="text-4xl"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            signDisplay="exceptZero"
+            value={yoyChange}
+          />
           {previousTotal > 0 && (
-            <Chip
-              className="rounded-full"
-              color={yoyChange >= 0 ? "success" : "danger"}
-              size="sm"
-              variant="primary"
-            >
-              {yoyChange >= 0 ? "+" : ""}
-              {yoyPercentage.toFixed(1)}%
-            </Chip>
+            <KPI.Trend trend={trend} variant="primary">
+              <NumberValue
+                maximumFractionDigits={1}
+                signDisplay="exceptZero"
+                style="percent"
+                value={yoyPercentage / 100}
+              />
+            </KPI.Trend>
           )}
-        </Card.Content>
-      </Card>
+        </KPI.Content>
+      </KPI>
 
-      <Card>
-        <Card.Header>
-          <Typography.H4>EV Share</Typography.H4>
-        </Card.Header>
-        <Card.Content className="flex flex-col gap-2">
-          <span className="font-semibold text-4xl tabular-nums">
-            {evShare.toFixed(1)}%
-          </span>
+      <KPIGroup.Separator />
+
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>EV Share</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <KPI.Value
+            className="text-4xl"
+            maximumFractionDigits={1}
+            style="percent"
+            value={evShare / 100}
+          />
+        </KPI.Content>
+        <KPI.Footer>
           <Typography.TextSm className="text-muted">
-            {numberFormatter.format(electricTotal)} electric vehicles
+            <KPI.Value
+              className="font-normal text-sm"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={electricTotal}
+            />{" "}
+            electric vehicles
           </Typography.TextSm>
-        </Card.Content>
-      </Card>
-    </div>
+        </KPI.Footer>
+      </KPI>
+    </KPIGroup>
   );
 }

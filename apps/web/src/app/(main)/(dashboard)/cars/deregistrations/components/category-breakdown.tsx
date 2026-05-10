@@ -1,10 +1,10 @@
 "use client";
 
 import { Card } from "@heroui/react";
-import { BarChart, ChartTooltip } from "@heroui-pro/react";
+import { BarChart, ChartTooltip, NumberValue } from "@heroui-pro/react";
+import { formatNumber } from "@motormetrics/utils";
 
 import type { CategoryWithPercentage } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/constants";
-import { formatNumber, formatPercentage } from "@web/utils/charts";
 
 interface CategoryBreakdownProps {
   data: CategoryWithPercentage[];
@@ -61,8 +61,18 @@ export function CategoryBreakdown({ data }: CategoryBreakdownProps) {
                     <ChartTooltip.Indicator color={entry.payload.colour} />
                     <ChartTooltip.Label>{entry.name}</ChartTooltip.Label>
                     <ChartTooltip.Value>
-                      {formatNumber(entry.value as number)} (
-                      {formatPercentage(percentage)})
+                      <NumberValue
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        value={entry.value as number}
+                      />{" "}
+                      (
+                      <NumberValue
+                        maximumFractionDigits={1}
+                        style="percent"
+                        value={percentage / 100}
+                      />
+                      )
                     </ChartTooltip.Value>
                   </ChartTooltip.Item>
                 </ChartTooltip>

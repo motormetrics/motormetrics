@@ -11,9 +11,9 @@ import {
   type SortDescriptor,
   Table,
 } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 
 import type { SelectCarCost } from "@motormetrics/database";
-import { formatCurrency } from "@motormetrics/utils";
 import { CostLegend } from "@web/app/(main)/(dashboard)/cars/costs/components/cost-legend";
 import { FUEL_TYPE_LABELS } from "@web/app/(main)/(dashboard)/cars/costs/constants";
 import Typography from "@web/components/typography";
@@ -161,9 +161,25 @@ export function CostTable({ data }: CostTableProps) {
           </Chip>
         );
       case "omv":
-        return formatCurrency(item.omv);
+        return (
+          <NumberValue
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={item.omv}
+          />
+        );
       case "arf":
-        return formatCurrency(item.arf);
+        return (
+          <NumberValue
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={item.arf}
+          />
+        );
       case "vesSurchargeRebate":
         return (
           <span
@@ -172,27 +188,69 @@ export function CostTable({ data }: CostTableProps) {
               item.vesSurchargeRebate < 0 ? "text-success" : "text-danger",
             )}
           >
-            {formatCurrency(item.vesSurchargeRebate)}
+            <NumberValue
+              currency="SGD"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              style="currency"
+              value={item.vesSurchargeRebate}
+            />
           </span>
         );
       case "coePremium":
-        return formatCurrency(item.coePremium);
+        return (
+          <NumberValue
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={item.coePremium}
+          />
+        );
       case "totalBasicCostWithoutCoe":
-        return formatCurrency(item.totalBasicCostWithoutCoe);
+        return (
+          <NumberValue
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={item.totalBasicCostWithoutCoe}
+          />
+        );
       case "totalBasicCostWithCoe":
         return (
           <span className="font-semibold">
-            {formatCurrency(item.totalBasicCostWithCoe)}
+            <NumberValue
+              currency="SGD"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              style="currency"
+              value={item.totalBasicCostWithCoe}
+            />
           </span>
         );
       case "sellingPriceWithoutCoe":
-        return item.sellingPriceWithoutCoe
-          ? formatCurrency(item.sellingPriceWithoutCoe)
-          : "-";
+        return item.sellingPriceWithoutCoe ? (
+          <NumberValue
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={item.sellingPriceWithoutCoe}
+          />
+        ) : (
+          "-"
+        );
       case "sellingPriceWithCoe":
         return item.sellingPriceWithCoe ? (
           <span className="font-semibold">
-            {formatCurrency(item.sellingPriceWithCoe)}
+            <NumberValue
+              currency="SGD"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              style="currency"
+              value={item.sellingPriceWithCoe}
+            />
           </span>
         ) : (
           "-"

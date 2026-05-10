@@ -14,6 +14,12 @@
     "motormetrics": {
       "command": "bunx",
       "args": ["-y", "@motormetrics/mcp"]
+    },
+    "posthog": {
+      "url": "https://mcp.posthog.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${POSTHOG_PERSONAL_API_KEY}"
+      }
     }
   }
 }

@@ -1,10 +1,9 @@
 import { Button, Card, Link, ProgressBar } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import { AnimatedNumber } from "@web/components/animated-number";
 import { SkeletonBentoCard } from "@web/components/shared/skeleton";
 import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults, getPqpRates } from "@web/queries/coe";
-import { formatPercent } from "@web/utils/charts";
 import { Suspense } from "react";
 
 async function FunFactsPqpContent() {
@@ -40,16 +39,20 @@ async function FunFactsPqpContent() {
             <div className="flex flex-col gap-2">
               <ProgressBar value={categoryAPercentage * 100} size="lg" />
               <div className="text-center">
-                <span className="font-bold text-2xl text-accent tabular-nums">
-                  {formatPercent(categoryAPercentage, {
-                    maximumFractionDigits: 1,
-                  })}
+                <span className="font-bold text-2xl text-accent">
+                  <NumberValue
+                    maximumFractionDigits={1}
+                    style="percent"
+                    value={categoryAPercentage}
+                  />
                 </span>
                 <Typography.TextSm className="text-muted">
                   Category A is{" "}
-                  {formatPercent(categoryAPercentage, {
-                    maximumFractionDigits: 0,
-                  })}{" "}
+                  <NumberValue
+                    maximumFractionDigits={0}
+                    style="percent"
+                    value={categoryAPercentage}
+                  />{" "}
                   of Category B
                 </Typography.TextSm>
               </div>
@@ -83,8 +86,14 @@ async function FunFactsPqpContent() {
                   <Typography.TextSm className="text-muted">
                     {category}
                   </Typography.TextSm>
-                  <span className="font-bold text-accent text-xl tabular-nums">
-                    <AnimatedNumber value={rate} format="currency" />
+                  <span className="font-bold text-accent text-xl">
+                    <NumberValue
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
+                      value={rate}
+                    />
                   </span>
                 </div>
               ))}

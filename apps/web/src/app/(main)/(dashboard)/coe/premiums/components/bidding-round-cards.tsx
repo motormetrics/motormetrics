@@ -1,10 +1,6 @@
 import { Card, Chip } from "@heroui/react";
-import {
-  formatCurrency,
-  formatDateToMonthYear,
-  formatOrdinal,
-} from "@motormetrics/utils";
-import { AnimatedNumber } from "@web/components/animated-number";
+import { NumberValue } from "@heroui-pro/react";
+import { formatDateToMonthYear, formatOrdinal } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { COEResult } from "@web/types";
 import { ArrowDownIcon, ArrowUpIcon, ClockIcon } from "lucide-react";
@@ -57,27 +53,33 @@ const CategoryRow = ({
       </div>
       <div className="flex items-center gap-2">
         <span
-          className={`font-semibold text-accent tabular-nums ${isPrimary ? "text-lg" : "text-sm"}`}
+          className={`font-semibold text-accent ${isPrimary ? "text-lg" : "text-sm"}`}
         >
-          {isPrimary ? (
-            <AnimatedNumber value={premium} format="currency" />
-          ) : (
-            formatCurrency(premium)
-          )}
+          <NumberValue
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={premium}
+          />
         </span>
         {change !== null && change !== 0 && (
           <Chip
             size="sm"
             variant="primary"
             color={change > 0 ? "danger" : "success"}
-            className="h-6 px-1.5 font-medium text-xs tabular-nums"
+            className="h-6 px-1.5 font-medium text-xs"
           >
             {change > 0 ? (
               <ArrowUpIcon className="size-3" />
             ) : (
               <ArrowDownIcon className="size-3" />
             )}
-            {Math.abs(change).toFixed(1)}%
+            <NumberValue
+              maximumFractionDigits={1}
+              style="percent"
+              value={Math.abs(change) / 100}
+            />
           </Chip>
         )}
       </div>

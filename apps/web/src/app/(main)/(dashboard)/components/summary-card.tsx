@@ -1,12 +1,7 @@
-import { Button, Card, Chip, Link } from "@heroui/react";
-import { AnimatedNumber } from "@web/components/animated-number";
+import { Button, Link } from "@heroui/react";
+import { KPI, NumberValue } from "@heroui-pro/react";
 import { getYearlyRegistrations } from "@web/queries/cars";
-import {
-  ArrowUpRight,
-  BarChart3,
-  TrendingDown,
-  TrendingUp,
-} from "lucide-react";
+import { ArrowUpRight, BarChart3 } from "lucide-react";
 
 export async function SummaryCard() {
   const yearlyData = await getYearlyRegistrations();
@@ -16,50 +11,47 @@ export async function SummaryCard() {
   const totalRegistrations = currentYear?.total ?? 0;
   const previousTotal = previousYear?.total ?? 0;
   const displayYear = currentYear?.year ?? "No data";
-  const changePercent =
+  const changeRatio =
     previousTotal > 0
-      ? (((totalRegistrations - previousTotal) / previousTotal) * 100).toFixed(
-          1,
-        )
-      : "0.0";
+      ? (totalRegistrations - previousTotal) / previousTotal
+      : 0;
   const isPositive = totalRegistrations >= previousTotal;
+  const trend = changeRatio > 0 ? "up" : changeRatio < 0 ? "down" : "neutral";
 
   return (
-    <Card className="border-2 border-accent">
-      <Card.Content>
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10">
-            <BarChart3 className="size-6 text-accent" />
-          </div>
-          <Link href="/cars">
-            <Button isIconOnly variant="tertiary">
-              <ArrowUpRight className="size-6" />
-            </Button>
-          </Link>
+    <KPI className="border-2 border-accent">
+      <KPI.Header>
+        <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10">
+          <BarChart3 className="size-6 text-accent" />
         </div>
-        <p className="text-muted text-sm">
-          Total Registrations ({displayYear})
-        </p>
-        <p className="mt-1 font-bold text-4xl text-accent tabular-nums">
-          <AnimatedNumber value={totalRegistrations} />
-        </p>
-        <div className="mt-4 flex items-center gap-2">
-          <Chip
-            variant="primary"
-            color={isPositive ? "success" : "danger"}
-            size="sm"
-          >
-            {isPositive ? (
-              <TrendingUp className="size-4" />
-            ) : (
-              <TrendingDown className="size-4" />
-            )}
-            {isPositive ? "+" : ""}
-            {changePercent}%
-          </Chip>
-          <span className="text-muted text-xs">vs previous year</span>
-        </div>
-      </Card.Content>
-    </Card>
+        <Link className="ml-auto" href="/cars">
+          <Button isIconOnly variant="tertiary">
+            <ArrowUpRight className="size-6" />
+          </Button>
+        </Link>
+      </KPI.Header>
+      <KPI.Header>
+        <KPI.Title>Total Registrations ({displayYear})</KPI.Title>
+      </KPI.Header>
+      <KPI.Content>
+        <KPI.Value
+          className="text-4xl text-accent"
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={totalRegistrations}
+        />
+        <KPI.Trend trend={trend} variant="primary">
+          <NumberValue
+            maximumFractionDigits={1}
+            signDisplay="exceptZero"
+            style="percent"
+            value={isPositive ? Math.abs(changeRatio) : -Math.abs(changeRatio)}
+          />
+        </KPI.Trend>
+      </KPI.Content>
+      <KPI.Footer>
+        <span className="text-muted text-xs">vs previous year</span>
+      </KPI.Footer>
+    </KPI>
   );
 }

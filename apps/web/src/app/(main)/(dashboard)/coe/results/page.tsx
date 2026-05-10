@@ -6,9 +6,7 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
-import { Infobox } from "@web/components/shared/infobox";
 import { MonthSelector } from "@web/components/shared/month-selector";
-import { PAGE_CONTEXTS } from "@web/components/shared/page-contexts";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { TrendTable } from "@web/components/tables/coe-results-table";
@@ -157,10 +155,6 @@ async function COEResultsContent({
           ]),
         }}
       />
-      <AnimatedSection order={1}>
-        <Infobox {...PAGE_CONTEXTS.coe} />
-      </AnimatedSection>
-
       {/* Bidding Rounds for Current Month */}
       {firstRound.length > 0 && (
         <AnimatedSection order={2}>

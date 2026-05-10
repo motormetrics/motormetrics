@@ -1,4 +1,5 @@
 import { Card, Link } from "@heroui/react";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 import type { CarLogo } from "@logos/types";
 import type { SelectCar } from "@motormetrics/database";
 import { slugify } from "@motormetrics/utils";
@@ -65,40 +66,61 @@ export function MakeDetail({
       </div>
 
       {/* Metric cards */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
-          <div className="flex items-center gap-2">
-            <Car className="size-3.5 text-accent" />
-            <Typography.Caption className="text-accent">
-              Total
-            </Typography.Caption>
-          </div>
-          <span className="font-bold text-accent text-xl tabular-nums">
-            {cars.total.toLocaleString()}
-          </span>
-        </div>
-        <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="size-3.5 text-success" />
-            <Typography.Caption className="text-success">
-              This Month
-            </Typography.Caption>
-          </div>
-          <span className="font-bold text-foreground text-xl tabular-nums">
-            {cars.monthTotal.toLocaleString()}
-          </span>
-        </div>
-        <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
-          <div className="flex items-center gap-2">
-            <Calendar className="size-3.5 text-muted" />
-            <Typography.Caption>Tracked</Typography.Caption>
-          </div>
-          <span className="font-bold text-foreground text-xl tabular-nums">
-            {cars.monthsTracked}
-            <span className="ml-1 font-normal text-muted text-sm">mo</span>
-          </span>
-        </div>
-      </div>
+      <KPIGroup>
+        <KPI>
+          <KPI.Header>
+            <KPI.Icon status="success">
+              <Car />
+            </KPI.Icon>
+            <KPI.Title>Total</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <KPI.Value
+              className="text-accent text-xl"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={cars.total}
+            />
+          </KPI.Content>
+        </KPI>
+        <KPIGroup.Separator />
+        <KPI>
+          <KPI.Header>
+            <KPI.Icon status="success">
+              <TrendingUp />
+            </KPI.Icon>
+            <KPI.Title>This Month</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <KPI.Value
+              className="text-xl"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={cars.monthTotal}
+            />
+          </KPI.Content>
+        </KPI>
+        <KPIGroup.Separator />
+        <KPI>
+          <KPI.Header>
+            <KPI.Icon status="warning">
+              <Calendar />
+            </KPI.Icon>
+            <KPI.Title>Tracked</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <div className="flex items-baseline gap-1">
+              <KPI.Value
+                className="text-xl"
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={cars.monthsTracked}
+              />
+              <span className="font-normal text-muted text-sm">mo</span>
+            </div>
+          </KPI.Content>
+        </KPI>
+      </KPIGroup>
 
       {/* Historical Trend Chart */}
       <Card>

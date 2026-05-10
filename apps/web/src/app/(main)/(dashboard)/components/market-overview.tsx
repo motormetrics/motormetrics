@@ -1,4 +1,5 @@
-import { Card, Chip } from "@heroui/react";
+import { Chip } from "@heroui/react";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 import { getCategorySummaryByYear } from "@web/queries/cars";
 
@@ -6,41 +7,56 @@ export async function MarketOverview() {
   const summary = await getCategorySummaryByYear();
 
   return (
-    <Card>
-      <Card.Content>
-        <div className="mb-4 flex items-center justify-between">
-          <Typography.H3>Market Overview</Typography.H3>
-          <Chip color="accent" size="sm">
-            {summary.year}
-          </Chip>
-        </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Card className="bg-default shadow-none">
-            <Card.Content>
-              <p className="text-muted text-sm">Total Cars</p>
-              <p className="mt-1 font-bold text-2xl text-accent tabular-nums">
-                {summary.total.toLocaleString()}
-              </p>
-            </Card.Content>
-          </Card>
-          <Card className="bg-default shadow-none">
-            <Card.Content>
-              <p className="text-muted text-sm">Electric</p>
-              <p className="mt-1 font-bold text-2xl text-accent tabular-nums">
-                {summary.electric.toLocaleString()}
-              </p>
-            </Card.Content>
-          </Card>
-          <Card className="bg-default shadow-none">
-            <Card.Content>
-              <p className="text-muted text-sm">Hybrid</p>
-              <p className="mt-1 font-bold text-2xl text-accent tabular-nums">
-                {summary.hybrid.toLocaleString()}
-              </p>
-            </Card.Content>
-          </Card>
-        </div>
-      </Card.Content>
-    </Card>
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <Typography.H3>Market Overview</Typography.H3>
+        <Chip color="accent" size="sm">
+          {summary.year}
+        </Chip>
+      </div>
+      <KPIGroup>
+        <KPI>
+          <KPI.Header>
+            <KPI.Title>Total Cars</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <KPI.Value
+              className="text-2xl text-accent"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={summary.total}
+            />
+          </KPI.Content>
+        </KPI>
+        <KPIGroup.Separator />
+        <KPI>
+          <KPI.Header>
+            <KPI.Title>Electric</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <KPI.Value
+              className="text-2xl text-accent"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={summary.electric}
+            />
+          </KPI.Content>
+        </KPI>
+        <KPIGroup.Separator />
+        <KPI>
+          <KPI.Header>
+            <KPI.Title>Hybrid</KPI.Title>
+          </KPI.Header>
+          <KPI.Content>
+            <KPI.Value
+              className="text-2xl text-accent"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={summary.hybrid}
+            />
+          </KPI.Content>
+        </KPI>
+      </KPIGroup>
+    </div>
   );
 }

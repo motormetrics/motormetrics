@@ -1,4 +1,4 @@
-import Typography from "@web/components/typography";
+import { KPI, KPIGroup } from "@heroui-pro/react";
 import type { MakesSummary as MakesSummaryType } from "@web/types";
 
 interface MakesSummaryProps {
@@ -7,25 +7,45 @@ interface MakesSummaryProps {
 
 export function MakesSummary({ summary }: MakesSummaryProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-      <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
-        <Typography.Caption>Total Makes</Typography.Caption>
-        <span className="font-bold text-2xl text-accent tabular-nums">
-          {summary.totalMakes.toLocaleString()}
-        </span>
-      </div>
-      <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
-        <Typography.Caption>Total Registrations</Typography.Caption>
-        <span className="font-bold text-2xl text-accent tabular-nums">
-          {summary.totalRegistrations.toLocaleString()}
-        </span>
-      </div>
-      <div className="flex flex-col gap-2 rounded-2xl bg-default p-4">
-        <Typography.Caption>Market Leader</Typography.Caption>
-        <span className="font-bold text-2xl text-accent">
-          {summary.marketLeader}
-        </span>
-      </div>
-    </div>
+    <KPIGroup>
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Total Makes</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <KPI.Value
+            className="text-2xl text-accent"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            value={summary.totalMakes}
+          />
+        </KPI.Content>
+      </KPI>
+      <KPIGroup.Separator />
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Total Registrations</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <KPI.Value
+            className="text-2xl text-accent"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            value={summary.totalRegistrations}
+          />
+        </KPI.Content>
+      </KPI>
+      <KPIGroup.Separator />
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Market Leader</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <span className="font-bold text-2xl text-accent">
+            {summary.marketLeader}
+          </span>
+        </KPI.Content>
+      </KPI>
+    </KPIGroup>
   );
 }

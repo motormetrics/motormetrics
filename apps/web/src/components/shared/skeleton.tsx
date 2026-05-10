@@ -28,16 +28,12 @@ export function SkeletonChart({ className }: SkeletonProps) {
  */
 export function SkeletonMetricCard() {
   return (
-    <Card>
-      <Card.Header>
-        <HeroUISkeleton className="h-6 w-3/4 rounded-lg" />
-      </Card.Header>
-      <Card.Content>
+    <Card className="flex-1">
+      <Card.Content className="flex flex-col gap-4">
+        <HeroUISkeleton className="h-5 w-3/4 rounded-lg" />
         <HeroUISkeleton className="h-10 w-32 rounded-lg" />
+        <HeroUISkeleton className="h-5 w-28 rounded-lg" />
       </Card.Content>
-      <Card.Footer>
-        <HeroUISkeleton className="h-5 w-24 rounded-lg" />
-      </Card.Footer>
     </Card>
   );
 }

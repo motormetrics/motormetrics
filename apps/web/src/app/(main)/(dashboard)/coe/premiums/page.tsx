@@ -6,8 +6,6 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
-import { Infobox } from "@web/components/shared/infobox";
-import { PAGE_CONTEXTS } from "@web/components/shared/page-contexts";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
@@ -79,10 +77,6 @@ export default function COEOverviewPage() {
       />
 
       <AnimatedSection order={1}>
-        <Infobox {...PAGE_CONTEXTS.coe} />
-      </AnimatedSection>
-
-      <AnimatedSection order={2}>
         <LatestResultsSection />
       </AnimatedSection>
 

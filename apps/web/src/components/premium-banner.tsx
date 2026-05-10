@@ -1,8 +1,8 @@
 "use client";
 
 import { Chip } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 
-import { formatCurrency } from "@motormetrics/utils";
 import useStore from "@web/app/store";
 import type { COEResult } from "@web/types";
 import { useEffect } from "react";
@@ -21,7 +21,13 @@ export function PremiumBanner({ data = [] }: PremiumBannerProps) {
           <div key={vehicleClass} className="flex items-center gap-2">
             <div className="font-semibold text-sm">{vehicleClass}</div>
             <Chip color="accent" variant="primary">
-              {formatCurrency(premium)}
+              <NumberValue
+                currency="SGD"
+                locale="en-SG"
+                maximumFractionDigits={0}
+                style="currency"
+                value={premium}
+              />
             </Chip>
           </div>
         ))}

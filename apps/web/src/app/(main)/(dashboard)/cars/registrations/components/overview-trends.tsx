@@ -1,7 +1,7 @@
 import { Card, Link, ProgressBar } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
 import { TrendChart } from "@web/app/(main)/(dashboard)/cars/registrations/trend-chart";
-import { AnimatedNumber } from "@web/components/animated-number";
 import Typography from "@web/components/typography";
 
 interface CarOverviewTrendsProps {
@@ -26,7 +26,14 @@ export function CarOverviewTrends({ cars, total }: CarOverviewTrendsProps) {
           <Card.Header className="flex flex-col items-start gap-2">
             <Typography.H4>Stats</Typography.H4>
             <Typography.TextSm>
-              <Typography.Label>{total}</Typography.Label> registrations
+              <Typography.Label>
+                <NumberValue
+                  locale="en-SG"
+                  maximumFractionDigits={0}
+                  value={total}
+                />
+              </Typography.Label>{" "}
+              registrations
             </Typography.TextSm>
           </Card.Header>
           <Card.Content>
@@ -41,7 +48,11 @@ export function CarOverviewTrends({ cars, total }: CarOverviewTrendsProps) {
                   >
                     <Link href={`/cars/makes/${slugify(make)}`}>{make}</Link>
                     <div className="flex items-center gap-2">
-                      <AnimatedNumber value={count} />
+                      <NumberValue
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        value={count}
+                      />
                       <ProgressBar
                         aria-label={`${make} market share`}
                         className="w-32"

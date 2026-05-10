@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, Chip } from "@heroui/react";
+import { KPI, NumberValue, TrendChip } from "@heroui-pro/react";
 
-import { AnimatedNumber } from "@web/components/animated-number";
 import {
   staggerContainerVariants,
   staggerItemVariants,
@@ -26,59 +25,66 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
       {data.map((item) => {
         const isPQPLower = item.differencePercent > 0;
         const isPQPHigher = item.differencePercent < 0;
+        const trend = isPQPLower ? "up" : isPQPHigher ? "down" : "neutral";
 
         return (
           <motion.div key={item.category} variants={staggerItemVariants}>
-            <Card>
-              <Card.Header>
+            <KPI>
+              <KPI.Header>
                 <div className="font-bold text-lg">{item.category}</div>
-              </Card.Header>
-              <Card.Content>
+              </KPI.Header>
+              <KPI.Content>
                 <div className="flex flex-col gap-4">
                   <div>
                     <div className="text-muted text-sm">Latest Premium</div>
-                    <div className="font-bold text-2xl text-accent">
-                      <AnimatedNumber
-                        value={item.latestPremium}
-                        format="currency"
-                      />
-                    </div>
+                    <KPI.Value
+                      className="text-2xl text-accent"
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
+                      value={item.latestPremium}
+                    />
                   </div>
                   <div>
                     <div className="text-muted text-sm">PQP Rate</div>
-                    <div className="font-bold text-2xl">
-                      <AnimatedNumber value={item.pqpRate} format="currency" />
-                    </div>
+                    <KPI.Value
+                      className="text-2xl"
+                      currency="SGD"
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      style="currency"
+                      value={item.pqpRate}
+                    />
                   </div>
                 </div>
-              </Card.Content>
-              <Card.Footer>
+              </KPI.Content>
+              <KPI.Footer>
                 <div className="flex items-center gap-2">
-                  <Chip
-                    variant="primary"
-                    color={
-                      isPQPLower
-                        ? "success"
-                        : isPQPHigher
-                          ? "danger"
-                          : "default"
-                    }
-                  >
+                  <TrendChip trend={trend} variant="primary">
                     {isPQPLower ? (
-                      <ArrowDownRight className="size-4" />
+                      <TrendChip.Indicator>
+                        <ArrowDownRight />
+                      </TrendChip.Indicator>
                     ) : isPQPHigher ? (
-                      <ArrowUpRight className="size-4" />
+                      <TrendChip.Indicator>
+                        <ArrowUpRight />
+                      </TrendChip.Indicator>
                     ) : null}
-                    <AnimatedNumber value={Math.abs(item.differencePercent)} />%
-                  </Chip>
+                    <NumberValue
+                      maximumFractionDigits={1}
+                      style="percent"
+                      value={Math.abs(item.differencePercent) / 100}
+                    />
+                  </TrendChip>
                   <span className="text-muted text-sm">
                     PQP{" "}
                     {isPQPLower ? "below" : isPQPHigher ? "above" : "equals"}{" "}
                     premium
                   </span>
                 </div>
-              </Card.Footer>
-            </Card>
+              </KPI.Footer>
+            </KPI>
           </motion.div>
         );
       })}

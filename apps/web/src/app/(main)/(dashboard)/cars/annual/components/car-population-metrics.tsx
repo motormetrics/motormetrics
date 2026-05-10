@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Chip } from "@heroui/react";
+import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
 import Typography from "@web/components/typography";
@@ -29,8 +29,6 @@ export function CarPopulationMetrics({
   const effectiveYear = useEffectiveYear(
     yearlyTotals.map((item) => Number(item.year)),
   );
-  const numberFormatter = new Intl.NumberFormat("en-SG");
-
   const currentYearMakes = useMemo(
     () =>
       makeData
@@ -65,62 +63,97 @@ export function CarPopulationMetrics({
     previousYearTotal && previousYearTotal.total > 0
       ? (yoyChange / previousYearTotal.total) * 100
       : 0;
+  const trend = yoyChange > 0 ? "up" : yoyChange < 0 ? "down" : "neutral";
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-      <Card>
-        <Card.Header>
-          <Typography.H4>Total Cars</Typography.H4>
-        </Card.Header>
-        <Card.Content className="flex flex-col gap-2">
-          <span className="font-semibold text-4xl text-accent tabular-nums">
-            {numberFormatter.format(grandTotal)}
-          </span>
+    <KPIGroup>
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Total Cars</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <KPI.Value
+            className="text-4xl text-accent"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            value={grandTotal}
+          />
           {previousYearTotal && previousYearTotal.total > 0 && (
-            <Chip
-              className="rounded-full"
-              color={yoyChange >= 0 ? "success" : "danger"}
-              size="sm"
-              variant="primary"
-            >
-              {yoyChange >= 0 ? "+" : ""}
-              {yoyPercentage.toFixed(1)}%
-            </Chip>
+            <KPI.Trend trend={trend} variant="primary">
+              <NumberValue
+                maximumFractionDigits={1}
+                signDisplay="exceptZero"
+                style="percent"
+                value={yoyPercentage / 100}
+              />
+            </KPI.Trend>
           )}
-        </Card.Content>
-      </Card>
+        </KPI.Content>
+      </KPI>
 
-      <Card>
-        <Card.Header>
-          <Typography.H4>Top Make</Typography.H4>
-        </Card.Header>
-        <Card.Content className="flex flex-col gap-2">
-          <span className="font-semibold text-4xl tabular-nums">
-            {topMake?.make ?? "—"}
-          </span>
-          {topMake && (
+      <KPIGroup.Separator />
+
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Top Make</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <span className="font-semibold text-4xl">{topMake?.make ?? "—"}</span>
+        </KPI.Content>
+        {topMake && (
+          <KPI.Footer>
             <Typography.TextSm className="text-muted">
-              {numberFormatter.format(topMake.total)} cars ({totalMakes} makes
-              total)
+              <KPI.Value
+                className="font-normal text-sm"
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={topMake.total}
+              />{" "}
+              cars (
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={totalMakes}
+              />{" "}
+              makes total)
             </Typography.TextSm>
-          )}
-        </Card.Content>
-      </Card>
+          </KPI.Footer>
+        )}
+      </KPI>
 
-      <Card>
-        <Card.Header>
-          <Typography.H4>Top 5 Concentration</Typography.H4>
-        </Card.Header>
-        <Card.Content className="flex flex-col gap-2">
-          <span className="font-semibold text-4xl tabular-nums">
-            {top5Share.toFixed(1)}%
-          </span>
+      <KPIGroup.Separator />
+
+      <KPI>
+        <KPI.Header>
+          <KPI.Title>Top 5 Concentration</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <KPI.Value
+            className="text-4xl"
+            maximumFractionDigits={1}
+            style="percent"
+            value={top5Share / 100}
+          />
+        </KPI.Content>
+        <KPI.Footer>
           <Typography.TextSm className="text-muted">
-            {numberFormatter.format(top5Total)} of{" "}
-            {numberFormatter.format(grandTotal)} cars
+            <KPI.Value
+              className="font-normal text-sm"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={top5Total}
+            />{" "}
+            of{" "}
+            <KPI.Value
+              className="font-normal text-sm"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={grandTotal}
+            />{" "}
+            cars
           </Typography.TextSm>
-        </Card.Content>
-      </Card>
-    </div>
+        </KPI.Footer>
+      </KPI>
+    </KPIGroup>
   );
 }

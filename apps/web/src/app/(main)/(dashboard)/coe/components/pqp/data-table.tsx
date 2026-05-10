@@ -1,8 +1,8 @@
 "use client";
 
 import { Pagination, type SortDescriptor, Table } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 
-import { Currency } from "@web/components/shared/currency";
 import type { Pqp } from "@web/types/coe";
 import { type Key, useCallback, useMemo, useState } from "react";
 
@@ -61,7 +61,15 @@ export function DataTable({ rows, columns, rowsPerPage = 10 }: DataTableProps) {
       case "Category B":
       case "Category C":
       case "Category D":
-        return <Currency value={cellValue as number} />;
+        return (
+          <NumberValue
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={cellValue as number}
+          />
+        );
       default:
         return cellValue;
     }

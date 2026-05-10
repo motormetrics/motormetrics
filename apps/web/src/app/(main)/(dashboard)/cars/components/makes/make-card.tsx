@@ -1,16 +1,11 @@
 "use client";
 
-import { Card, Chip } from "@heroui/react";
-import { AreaChart } from "@heroui-pro/react";
+import { Chip } from "@heroui/react";
+import { KPI, NumberValue, TrendChip } from "@heroui-pro/react";
 
-import {
-  formatGrowthRate,
-  formatPercentage,
-  slugify,
-} from "@motormetrics/utils";
+import { formatGrowthRate, slugify } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { Make } from "@web/types";
-import { TrendingDown, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -32,12 +27,16 @@ export function MakeCard({
   yoyChange,
 }: MakeCardProps) {
   const href = `/cars/makes/${slugify(make)}`;
-  const gradientId = `make-${slugify(make)}-sparkline`;
+  const trendDirection = yoyChange
+    ? yoyChange > 0
+      ? "up"
+      : "down"
+    : "neutral";
 
   return (
     <Link href={href} className="block h-full no-underline">
-      <Card className="h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-        <Card.Content>
+      <KPI className="h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <KPI.Content>
           <div className="flex flex-col gap-2">
             <div className="flex items-start gap-2">
               <div className="flex size-16 shrink-0 items-center justify-center">
@@ -60,9 +59,12 @@ export function MakeCard({
                 {!!count && !!share && (
                   <div className="flex flex-col gap-2">
                     <div className="flex items-baseline gap-2">
-                      <span className="font-bold text-xl tabular-nums leading-none">
-                        {count.toLocaleString()}
-                      </span>
+                      <NumberValue
+                        className="font-bold text-xl leading-none"
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        value={count}
+                      />
                       <Typography.Caption>regs</Typography.Caption>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -72,62 +74,35 @@ export function MakeCard({
                         size="sm"
                         className="rounded-full"
                       >
-                        {formatPercentage(share)} share
+                        <NumberValue
+                          maximumFractionDigits={1}
+                          style="percent"
+                          value={share / 100}
+                        >
+                          <NumberValue.Suffix> share</NumberValue.Suffix>
+                        </NumberValue>
                       </Chip>
                       {!!yoyChange && (
-                        <Chip
-                          color={yoyChange >= 0 ? "success" : "danger"}
-                          variant="primary"
-                          size="sm"
-                        >
-                          {yoyChange >= 0 ? (
-                            <TrendingUp className="size-3" />
-                          ) : (
-                            <TrendingDown className="size-3" />
-                          )}
+                        <TrendChip trend={trendDirection} variant="primary">
                           {formatGrowthRate(yoyChange)}
-                        </Chip>
+                        </TrendChip>
                       )}
                     </div>
                   </div>
                 )}
               </div>
             </div>
-            {trend && trend.length > 0 && (
-              <div className="h-10 w-full">
-                <AreaChart
-                  data={trend}
-                  height={40}
-                  margin={{ bottom: 0, left: 0, right: 0, top: 2 }}
-                >
-                  <defs>
-                    <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                      <stop
-                        offset="0%"
-                        stopColor="var(--accent)"
-                        stopOpacity={0.1}
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor="var(--accent)"
-                        stopOpacity={0}
-                      />
-                    </linearGradient>
-                  </defs>
-                  <AreaChart.Area
-                    dataKey="value"
-                    dot={false}
-                    fill={`url(#${gradientId})`}
-                    stroke="var(--accent)"
-                    strokeWidth={2}
-                    type="monotone"
-                  />
-                </AreaChart>
-              </div>
-            )}
+            {trend && trend.length > 0 ? (
+              <KPI.Chart
+                color="var(--color-accent)"
+                data={trend}
+                height={40}
+                strokeWidth={2}
+              />
+            ) : null}
           </div>
-        </Card.Content>
-      </Card>
+        </KPI.Content>
+      </KPI>
     </Link>
   );
 }

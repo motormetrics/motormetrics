@@ -99,21 +99,17 @@ function SummaryCardSkeleton() {
 
 function MarketOverviewSkeleton() {
   return (
-    <Card>
-      <Card.Content>
-        <Skeleton className="mb-4 h-6 w-36 rounded-lg" />
-        <div className="grid grid-cols-3 gap-4">
-          {[0, 1, 2].map((i) => (
-            <Card key={i} className="bg-default shadow-none">
-              <Card.Content>
-                <Skeleton className="h-4 w-16 rounded-lg" />
-                <Skeleton className="mt-2 h-7 w-20 rounded-lg" />
-              </Card.Content>
-            </Card>
-          ))}
-        </div>
-      </Card.Content>
-    </Card>
+    <div className="flex flex-col gap-4">
+      <Skeleton className="h-6 w-36 rounded-lg" />
+      <div className="grid grid-cols-3 gap-4">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="rounded-2xl bg-default p-4">
+            <Skeleton className="h-4 w-16 rounded-lg" />
+            <Skeleton className="mt-2 h-7 w-20 rounded-lg" />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
