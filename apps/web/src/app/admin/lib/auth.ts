@@ -1,18 +1,30 @@
+import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import * as schema from "@motormetrics/database";
 import { db } from "@motormetrics/database";
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
-  baseURL: process.env.BETTER_AUTH_URL,
+  baseURL: {
+    allowedHosts: [
+      "motormetrics.app",
+      "*.motormetrics.app",
+      "*.vercel.app",
+      "localhost:3000",
+    ],
+    protocol: "auto",
+  },
   database: drizzleAdapter(db, {
     provider: "pg",
     schema,
     usePlural: true,
   }),
-  trustedOrigins: ["https://*.motormetrics.app", "http://localhost:3000"],
+  trustedOrigins: [
+    "https://*.motormetrics.app",
+    "https://*.vercel.app",
+    "http://localhost:3000",
+  ],
   advanced: {
     trustedProxyHeaders: true,
     allowedHosts: [
