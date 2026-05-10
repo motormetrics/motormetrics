@@ -198,7 +198,7 @@ const dashboardItems: NavigationItem[] = [
 
 export const navigationSections: NavigationSection[] = [
   {
-    name: "Overview",
+    name: "Quick Glance",
     href: "/",
     icon: LayoutDashboard,
     children: dashboardItems,
@@ -213,7 +213,7 @@ export type NavItem = {
 };
 
 export const NAV_ITEMS = [
-  { href: "/", label: "Overview" },
+  { href: "/", label: "Dashboard" },
   { href: "/about", label: "About" },
   { href: "/blog", label: "Blog" },
   { href: "/learn", label: "Learn" },
