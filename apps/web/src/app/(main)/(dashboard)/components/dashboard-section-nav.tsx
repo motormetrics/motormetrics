@@ -1,15 +1,15 @@
 "use client";
 
-import { cn, ScrollShadow } from "@heroui/react";
-import { buttonVariants } from "@heroui/styles";
+import { ScrollShadow } from "@heroui/react";
+import { Segment } from "@heroui-pro/react";
 import { NewChip } from "@web/components/shared/chips";
 import {
   type NavigationItem,
   type NavigationSection,
   navigationSections,
 } from "@web/config/navigation";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import type React from "react";
 
 type DashboardSectionNavItem = NavigationItem & {
   sectionName: string;
@@ -17,6 +17,7 @@ type DashboardSectionNavItem = NavigationItem & {
 
 export function DashboardSectionNav() {
   const pathname = usePathname();
+  const router = useRouter();
 
   const activeSection =
     navigationSections.find((section) => isSectionActive(pathname, section)) ??
@@ -24,71 +25,73 @@ export function DashboardSectionNav() {
   const activeSectionItems = activeSection
     ? getSectionItems(activeSection)
     : [];
+  const activeItem = activeSectionItems.find((item) =>
+    isItemActive(pathname, item),
+  );
+
+  const handleSectionChange = (key: React.Key) => {
+    const section = navigationSections.find((item) => item.href === key);
+
+    if (!section || section.href === pathname) {
+      return;
+    }
+
+    router.push(section.href);
+  };
+
+  const handleSectionItemChange = (key: React.Key) => {
+    const item = activeSectionItems.find(
+      (sectionItem) => sectionItem.url === key,
+    );
+
+    if (!item || item.url === pathname) {
+      return;
+    }
+
+    router.push(item.url);
+  };
 
   return (
-    <nav
-      aria-label="Dashboard navigation"
-      className="border-border/70 border-b bg-background/90 px-4 py-3 backdrop-blur-xl"
-    >
-      <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-3">
-        <ScrollShadow hideScrollBar orientation="horizontal">
-          <div className="flex gap-2">
-            {navigationSections.map(({ href, icon: Icon, name }) => {
-              const isActive = activeSection?.href === href;
+    <div className="container mx-auto flex flex-col gap-2 p-6">
+      <ScrollShadow hideScrollBar orientation="horizontal">
+        <Segment
+          aria-label="Dashboard sections"
+          selectedKey={activeSection?.href ?? "/"}
+          variant="ghost"
+          onSelectionChange={handleSectionChange}
+        >
+          {navigationSections.map(({ href, icon: Icon, name }) => {
+            return (
+              <Segment.Item key={href} id={href}>
+                <Icon className="size-4" />
+                {name}
+              </Segment.Item>
+            );
+          })}
+        </Segment>
+      </ScrollShadow>
 
+      {activeSectionItems.length > 1 && (
+        <ScrollShadow hideScrollBar orientation="horizontal">
+          <Segment
+            aria-label={`${activeSection?.name ?? "Dashboard"} navigation`}
+            selectedKey={activeItem?.url ?? activeSection?.href ?? "/"}
+            variant="ghost"
+            onSelectionChange={handleSectionItemChange}
+          >
+            {activeSectionItems.map(({ badge, icon: Icon, title, url }) => {
               return (
-                <Link
-                  key={href}
-                  className={cn(
-                    buttonVariants({
-                      size: "sm",
-                      variant: isActive ? "primary" : "outline",
-                    }),
-                    "h-9 shrink-0 gap-1.5 rounded-full px-4",
-                    isActive ? "pointer-events-none" : null,
-                  )}
-                  aria-current={pathname === href ? "page" : undefined}
-                  href={href}
-                >
-                  <Icon className="size-4" />
-                  {name}
-                </Link>
+                <Segment.Item key={url} id={url}>
+                  {Icon && <Icon className="size-3.5" />}
+                  {title}
+                  {badge && <NewChip />}
+                </Segment.Item>
               );
             })}
-          </div>
+          </Segment>
         </ScrollShadow>
-
-        {activeSectionItems.length > 1 ? (
-          <ScrollShadow hideScrollBar orientation="horizontal">
-            <div className="flex gap-2 border-border border-t pt-3">
-              {activeSectionItems.map(({ badge, icon: Icon, title, url }) => {
-                const isActive = isItemActive(pathname, { title, url });
-
-                return (
-                  <Link
-                    key={url}
-                    className={cn(
-                      buttonVariants({
-                        size: "sm",
-                        variant: isActive ? "secondary" : "tertiary",
-                      }),
-                      "h-8 shrink-0 gap-1.5 rounded-full px-3",
-                      isActive ? "pointer-events-none" : null,
-                    )}
-                    aria-current={isActive ? "page" : undefined}
-                    href={url}
-                  >
-                    {Icon ? <Icon className="size-3.5" /> : null}
-                    {title}
-                    {badge ? <NewChip /> : null}
-                  </Link>
-                );
-              })}
-            </div>
-          </ScrollShadow>
-        ) : null}
-      </div>
-    </nav>
+      )}
+    </div>
   );
 }
 
