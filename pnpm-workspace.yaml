@@ -18,7 +18,7 @@ allowBuilds:
 
 catalog:
   "@ai-sdk/gateway": 3.0.114
-  "@ai-sdk/google": 3.0.64
+  "@ai-sdk/google": 3.0.73
   "@heroui/react": 3.0.4
   "@heroui/styles": 3.0.4
   "@langfuse/otel": 4.5.1
