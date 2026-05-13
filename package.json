@@ -40,7 +40,7 @@
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "11.0.6",
-    "@semantic-release/release-notes-generator": "14.1.0",
+    "@semantic-release/release-notes-generator": "14.1.1",
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "conventional-changelog-conventionalcommits": "9.1.0",
