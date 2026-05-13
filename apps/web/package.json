@@ -65,7 +65,7 @@
     "react": "catalog:",
     "react-aria-components": "1.17.0",
     "react-dom": "catalog:",
-    "react-resizable-panels": "4.10.0",
+    "react-resizable-panels": "4.11.1",
     "reading-time": "1.5.0",
     "recharts": "3.7.0",
     "rehype-autolink-headings": "7.1.0",
