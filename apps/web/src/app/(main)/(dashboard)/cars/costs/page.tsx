@@ -1,3 +1,4 @@
+import { Text } from "@heroui/react";
 import { CostMetrics } from "@web/app/(main)/(dashboard)/cars/costs/components/cost-metrics";
 import { CostRangeCard } from "@web/app/(main)/(dashboard)/cars/costs/components/cost-range-card";
 import { CostTable } from "@web/app/(main)/(dashboard)/cars/costs/components/cost-table";
@@ -8,7 +9,6 @@ import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
 import { EmptyState } from "@web/components/shared/empty-state";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { getLatestCarCosts } from "@web/queries/car-costs";
 import { DollarSign } from "lucide-react";
@@ -80,7 +80,7 @@ export default async function CarCostsPage() {
 
             <AnimatedSection order={2}>
               <div className="flex flex-col gap-4">
-                <Typography.H2>Price Ranges by Fuel Type</Typography.H2>
+                <Text type="h2">Price Ranges by Fuel Type</Text>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   <CostRangeCard data={data} />
                 </div>

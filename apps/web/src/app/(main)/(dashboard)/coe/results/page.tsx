@@ -1,4 +1,4 @@
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { BiddingRoundCards } from "@web/app/(main)/(dashboard)/coe/premiums/components/bidding-round-cards";
 import { COEPremiumChart } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-chart";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params";
@@ -10,7 +10,6 @@ import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { TrendTable } from "@web/components/tables/coe-results-table";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { loadResultsPageData } from "@web/lib/coe/page-data";
@@ -179,10 +178,10 @@ async function COEResultsContent({
       <AnimatedSection order={4}>
         <Card>
           <Card.Header className="flex flex-col items-start gap-2">
-            <Typography.H4>Historical Data</Typography.H4>
-            <Typography.TextSm>
+            <Text type="h4">Historical Data</Text>
+            <Text type="body-sm" color="muted">
               Complete list of historical COE prices
-            </Typography.TextSm>
+            </Text>
           </Card.Header>
           <Card.Content>
             <Suspense fallback={<SkeletonCard className="h-[420px] w-full" />}>

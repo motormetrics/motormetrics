@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Label, ListBox, Select } from "@heroui/react";
+import { Card, Label, ListBox, Select, Text } from "@heroui/react";
 import { ChartTooltip, LineChart, NumberValue } from "@heroui-pro/react";
 
 import { formatDateToMonthYear } from "@motormetrics/utils";
@@ -9,7 +9,6 @@ import {
   type Period,
   periods,
 } from "@web/app/(main)/(dashboard)/coe/search-params";
-import Typography from "@web/components/typography";
 import type { COEBiddingResult } from "@web/types";
 import { CalendarIcon } from "lucide-react";
 import {
@@ -70,10 +69,10 @@ export function COEPremiumChart({ data }: COEPremiumChartProps) {
     <Card>
       <Card.Header className="flex flex-col gap-2 border-b lg:flex-row lg:items-center lg:justify-between">
         <div className="grid flex-1 gap-1">
-          <Typography.H4>Quota Premium ($)</Typography.H4>
-          <Typography.TextSm>
+          <Text type="h4">Quota Premium ($)</Text>
+          <Text type="body-sm" color="muted">
             {`Showing ${periodLabel} of COE prices`}
-          </Typography.TextSm>
+          </Text>
         </div>
         <Select
           aria-label="Select time period"

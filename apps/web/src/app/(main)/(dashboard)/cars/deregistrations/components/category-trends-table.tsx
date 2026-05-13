@@ -1,9 +1,7 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-
-import Typography from "@web/components/typography";
 
 interface CategorySparklineData {
   category: string;
@@ -20,9 +18,13 @@ export function CategoryTrendsTable({ data }: CategoryTrendsTableProps) {
   return (
     <Card>
       <Card.Content>
-        <Typography.Caption className="mb-3 font-medium uppercase tracking-wider">
+        <Text
+          type="body-xs"
+          color="muted"
+          className="mb-3 font-medium uppercase tracking-wider"
+        >
           Category Trends (12 months)
-        </Typography.Caption>
+        </Text>
         <div className="flex flex-col gap-2">
           {data.map((cat) => {
             const firstValue = cat.trend[0]?.value ?? 0;

@@ -1,6 +1,5 @@
-import { Chip } from "@heroui/react";
+import { Chip, Text } from "@heroui/react";
 import { KPI, KPIGroup } from "@heroui-pro/react";
-import Typography from "@web/components/typography";
 import { getCategorySummaryByYear } from "@web/queries/cars";
 
 export async function MarketOverview() {
@@ -9,7 +8,7 @@ export async function MarketOverview() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Typography.H3>Market Overview</Typography.H3>
+        <Text type="h3">Market Overview</Text>
         <Chip color="accent" size="sm">
           {summary.year}
         </Chip>

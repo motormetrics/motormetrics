@@ -12,17 +12,23 @@ exports[`PageNotFound > renders the 404 error message 1`] = `
         class="mb-8 flex flex-col items-center"
       >
         <h1
-          class="scroll-m-20 font-semibold text-4xl tracking-tight lg:text-5xl text-accent"
+          class="text text--h1"
+          data-slot="text"
+          data-type="h1"
         >
           404
         </h1>
         <h2
-          class="scroll-m-20 font-semibold text-3xl text-foreground tracking-tight first:mt-0"
+          class="text text--h2"
+          data-slot="text"
+          data-type="h2"
         >
           Page Not Found
         </h2>
         <p
-          class="text-foreground text-lg leading-relaxed"
+          class="text text--body"
+          data-slot="text"
+          data-type="body"
         >
           The page you're looking for doesn't exist or has been moved.
         </p>
@@ -97,7 +103,9 @@ exports[`PageNotFound > renders the 404 error message 1`] = `
         </button>
       </div>
       <p
-        class="text-muted text-sm leading-6"
+        class="text text--body-sm"
+        data-slot="text"
+        data-type="body-sm"
       >
         Need help? Visit our
          

@@ -1,4 +1,4 @@
-import Typography from "@web/components/typography";
+import { Text } from "@heroui/react";
 import { format } from "date-fns";
 
 interface LastUpdatedProps {
@@ -7,11 +7,11 @@ interface LastUpdatedProps {
 
 export function LastUpdated({ lastUpdated }: LastUpdatedProps) {
   return (
-    <Typography.Caption>
+    <Text type="body-xs" color="muted">
       Last updated:{" "}
       <span className="underline">
         {format(lastUpdated, "dd MMM yyyy, h:mma")}
       </span>
-    </Typography.Caption>
+    </Text>
   );
 }

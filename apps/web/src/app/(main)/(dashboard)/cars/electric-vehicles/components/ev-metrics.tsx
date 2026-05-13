@@ -1,6 +1,6 @@
+import { Text } from "@heroui/react";
 import { KPI, KPIGroup } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import type { EvLatestSummary } from "@web/queries/cars/electric-vehicles";
 import { Fragment } from "react";
 
@@ -48,9 +48,9 @@ export function EvMetrics({ summary }: EvMetricsProps) {
               />
             </KPI.Content>
             <KPI.Footer>
-              <Typography.TextSm className="text-muted">
+              <Text type="body-sm" color="muted">
                 {metric.description}
-              </Typography.TextSm>
+              </Text>
             </KPI.Footer>
           </KPI>
           <KPIGroup.Separator />
@@ -66,9 +66,9 @@ export function EvMetrics({ summary }: EvMetricsProps) {
           </span>
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm className="text-muted">
+          <Text type="body-sm" color="muted">
             Most registered EV brand
-          </Typography.TextSm>
+          </Text>
         </KPI.Footer>
       </KPI>
     </KPIGroup>

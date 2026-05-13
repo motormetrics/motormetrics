@@ -1,7 +1,6 @@
-import { Button, Card, Link } from "@heroui/react";
+import { Button, Card, Link, Text } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database";
 import { Post } from "@web/app/(main)/(site)/blog/components/post";
-import Typography from "@web/components/typography";
 import { ArrowUpRight } from "lucide-react";
 
 interface RecentPostsProps {
@@ -14,7 +13,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
       <Card>
         <Card.Content>
           <div className="mb-5 flex items-center justify-between">
-            <Typography.H3>Recent Posts</Typography.H3>
+            <Text type="h3">Recent Posts</Text>
             <Link href="/blog" aria-label="View all blog posts">
               <Button isIconOnly variant="tertiary">
                 <ArrowUpRight className="size-6" />
@@ -33,7 +32,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
     <Card>
       <Card.Content>
         <div className="mb-5 flex items-center justify-between">
-          <Typography.H3>Recent Posts</Typography.H3>
+          <Text type="h3">Recent Posts</Text>
           <Link href="/blog" aria-label="View all blog posts">
             <Button isIconOnly variant="tertiary">
               <ArrowUpRight className="size-6" />

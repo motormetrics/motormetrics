@@ -366,9 +366,8 @@ tracking.
 
 ### Component Patterns
 
-**Typography System**: Semantic typography components in `src/components/typography.tsx` implementing a modern design
-philosophy inspired by Vercel, Linear, and Stripe. Uses lighter font weights (semibold for primary headings, medium for
-secondary headings/labels, normal for body text) with hierarchy driven by size and spacing.
+**Typography System**: Use HeroUI's `Text` component from `@heroui/react` for semantic typography. Prefer HeroUI
+defaults and add visual overrides only when needed for hierarchy, layout, or authored content.
 See [Typography System](#typography-system) section below.
 
 **UI Components**: HeroUI v3 is the primary component library, imported from `@heroui/react` with compound component patterns.
@@ -519,126 +518,50 @@ See `framer-motion-animations` skill for detailed patterns and migration guidanc
 
 ### Typography System
 
-A modern, semantic typography system for consistent visual hierarchy across the application.
-
-**Design Philosophy**:
-
-- Lighter font weights relying on size and spacing for hierarchy
-- Inspired by Vercel, Linear, and Stripe design systems
-- Principles: Semibold (600) for primary headings, Medium (500) for secondary headings/labels, Normal (400) for body
-  text
-- Bold reserved for data emphasis (numbers, metrics)
-- **HeroUI Semantic Colours**: All components include default theme-adaptive colours that can be overridden via
-  `className`
+Use HeroUI's `Text` component directly from `@heroui/react` for semantic typography. Prefer HeroUI defaults and only add `className` when a component needs layout, spacing, or a deliberate visual override.
 
 **Component Reference**:
 
-**Headings**:
-
-- `Typography.H1`: Page titles, primary headings (font-semibold text-4xl text-foreground lg:text-5xl)
-- `Typography.H2`: Section titles, major sections (font-semibold text-3xl text-foreground)
-- `Typography.H3`: Subsection titles, card titles (font-medium text-2xl text-foreground)
-- `Typography.H4`: Small headings, nested sections (font-medium text-xl text-default-900)
-
-**Body Text**:
-
-- `Typography.TextLg`: Large body text, lead paragraphs (text-lg text-foreground leading-relaxed)
-- `Typography.Text`: Standard body text, paragraphs (text-base text-foreground leading-7)
-- `Typography.TextSm`: Small body text, secondary descriptions (text-sm text-default-600 leading-6)
-
-**UI Labels**:
-
-- `Typography.Label`: Form labels, navigation items, tabs (font-medium text-sm text-foreground)
-- `Typography.Caption`: Metadata text, timestamps, footnotes (text-xs text-default-500 leading-tight)
-
-**Content Elements** (legacy, for backward compatibility):
-
-- `Typography.P`: Paragraphs with bottom margin (not-first:mt-6)
-- `Typography.Blockquote`: Quoted text with left border
-- `Typography.List`: Unordered lists with disc markers
-- `Typography.InlineCode`: Inline code snippets (font-medium monospace)
-- `Typography.Lead`: Lead paragraphs (text-xl text-default-500)
+| Need | Component |
+|------|-----------|
+| Page heading | `<Text type="h1">` |
+| Section heading | `<Text type="h2">` |
+| Card/subsection title | `<Text type="h3">` or `<Text type="h4">` |
+| Body copy | `<Text type="body">` |
+| Secondary copy | `<Text type="body-sm" color="muted">` |
+| Caption/metadata | `<Text type="body-xs" color="muted">` |
+| Inline code | `<Text.Code>` |
+| Rich authored content | `<Text.Prose>` or route-specific MDX mappings |
 
 **Usage Examples**:
 
 ```tsx
-import Typography from "@web/components/typography";
+import { Text } from "@heroui/react";
 
-// Page heading
-<Typography.H1>COE Overview</Typography.H1>
-
-// Section heading
-<Typography.H2>Fun Facts</Typography.H2>
-
-// Card title
-<Typography.H3>Category A vs B</Typography.H3>
-
-// Lead paragraph
-<Typography.TextLg>Explore COE trends and analysis.</Typography.TextLg>
-
-// Body text
-<Typography.Text>The latest COE results show...</Typography.Text>
-
-// Small helper text
-<Typography.TextSm>Updated daily from LTA</Typography.TextSm>
-
-// Form label
-<Typography.Label>Select Month</Typography.Label>
-
-// Metadata/timestamp
-<Typography.Caption>Last updated: 29 Oct 2025</Typography.Caption>
+<Text type="h1">COE Overview</Text>
+<Text type="h2">Fun Facts</Text>
+<Text type="h3">Category A vs B</Text>
+<Text type="body">The latest COE results show...</Text>
+<Text type="body-sm" color="muted">Updated daily from LTA</Text>
+<Text type="body-xs" color="muted">Last updated: 29 Oct 2025</Text>
+<Text.Code>quotaPremium</Text.Code>
 ```
-
-**When to Use Each Component**:
-
-- Use `H1` for exactly one primary page title
-- Use `H2` for major section groupings
-- Use `H3` for card titles and subsections
-- Use `H4` for nested section headers
-- Use `TextLg` for introductions and emphasised content
-- Use `Text` for standard body content and descriptions
-- Use `TextSm` for secondary info and helper text
-- Use `Label` for form fields and UI controls
-- Use `Caption` for timestamps, sources, and footnotes
-
-**HeroUI Semantic Colour System**:
-
-All Typography components include default colours from HeroUI's semantic colour palette:
-
-- `text-foreground`: Theme-adaptive primary text colour (auto-adjusts for light/dark mode)
-- `text-default-900`: Darkest shade for strong emphasis (H4 headings)
-- `text-default-600`: Medium shade for secondary text (TextSm for links, footer text)
-- `text-default-500`: Muted colour for metadata and captions (Caption, Lead components)
-
-These defaults provide proper visual hierarchy while allowing override via `className` prop when specific colours like
-`text-primary` are needed for emphasis.
-
-**Migration Notes**:
-
-- Legacy components (`Small`, `Muted`) have been replaced with semantic alternatives (`Label`, `Caption`)
-- Existing `P` component maintained for backward compatibility
-- Removed border-bottom from `H2` for cleaner appearance
-- Font weight reductions (H1/H2 remain semibold; H3/H4 changed to medium) for modern hierarchy
-- All components now include HeroUI semantic colour defaults for consistent theming
 
 **Enforcement Rules**:
 
-- ✅ Always use `Typography.H4` for `Card.Header` titles (not raw `<h3>`)
-- ✅ Always use `Typography.TextSm` for `Card.Header` descriptions (not raw `<p>`)
-- ✅ Use `Typography.H2` for section headings in blog components
-- ✅ Use `Typography.H3` for card titles and subsections
-- ❌ Avoid raw heading tags (`<h1>`, `<h2>`, `<h3>`, `<h4>`) outside of MDX content
-- ⚠️ Exception: Raw tags allowed only for MDX blog content and image overlay text
+- Use `Text` instead of the deleted local typography wrapper.
+- Prefer `type`, `color`, `weight`, `align`, and `truncate` props over Tailwind text classes.
+- Avoid raw heading tags outside MDX content and image overlay text.
+- Use `Text.Code` for inline code.
 
 **Card Header Pattern** (standard for all cards):
 
 ```tsx
-import { Card } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Card, Text } from "@heroui/react";
 
 <Card.Header className="flex flex-col items-start gap-2">
-  <Typography.H4>Card Title</Typography.H4>
-  <Typography.TextSm>Card description text</Typography.TextSm>
+  <Text type="h4">Card Title</Text>
+  <Text type="body-sm" color="muted">Card description text</Text>
 </Card.Header>
 ```
 
@@ -883,10 +806,12 @@ A pill-based, sidebar-free design system for professional automotive analytics d
 - Optional coloured accent borders or backgrounds
 
 ```tsx
+import { Card, Text } from "@heroui/react";
+
 <Card>
   <Card.Header className="flex flex-col items-start gap-2">
-    <Typography.H4>Card Title</Typography.H4>
-    <Typography.TextSm>Description</Typography.TextSm>
+    <Text type="h4">Card Title</Text>
+    <Text type="body-sm" color="muted">Description</Text>
   </Card.Header>
   <Card.Content>{/* Content */}</Card.Content>
 </Card>
@@ -920,8 +845,10 @@ A pill-based, sidebar-free design system for professional automotive analytics d
 - Subtle background cards for metric groups
 
 ```tsx
+import { Chip, Text } from "@heroui/react";
+
 <div className="flex flex-col gap-1">
-  <Typography.Caption>Total Registrations</Typography.Caption>
+  <Text type="body-xs" color="muted">Total Registrations</Text>
   <div className="flex items-baseline gap-2">
     <span className="font-bold text-3xl">46,500</span>
     <Chip className="rounded-full" color="success" size="sm">+2.5%</Chip>

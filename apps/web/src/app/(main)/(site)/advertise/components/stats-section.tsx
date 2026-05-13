@@ -1,9 +1,8 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 
-import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
   staggerItemVariants,
@@ -54,12 +53,10 @@ function StatItem({ value, suffix = "", label, description }: StatItemProps) {
               </NumberValue>
             )}
           </div>
-          <Typography.Text className="font-medium text-foreground">
-            {label}
-          </Typography.Text>
-          <Typography.TextSm className="text-muted">
+          <Text type="body">{label}</Text>
+          <Text type="body-sm" color="muted">
             {description}
-          </Typography.TextSm>
+          </Text>
         </Card.Content>
         {/* Subtle accent line */}
         <div
@@ -95,17 +92,15 @@ export function StatsSection({ stats }: { stats: TrafficStats }) {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col gap-4">
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Text type="body-sm" weight="medium">
             Audience Metrics
-          </Typography.Label>
-          <Typography.H2 className="max-w-lg lg:text-4xl">
-            Transparent, public analytics
-          </Typography.H2>
-          <Typography.TextLg className="max-w-2xl text-muted">
+          </Text>
+          <Text type="h2">Transparent, public analytics</Text>
+          <Text type="body">
             Real traffic data from the last 30 days. Our audience comprises car
             buyers, owners, and enthusiasts actively evaluating the Singapore
             market.
-          </Typography.TextLg>
+          </Text>
         </div>
 
         {/* Stats grid */}

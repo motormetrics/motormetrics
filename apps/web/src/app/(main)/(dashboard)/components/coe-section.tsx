@@ -1,6 +1,5 @@
-import { Button, Link, Skeleton } from "@heroui/react";
+import { Button, Link, Skeleton, Text } from "@heroui/react";
 import { KPI, KPIGroup, TrendChip } from "@heroui-pro/react";
-import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults } from "@web/queries/coe";
 import { ArrowUpRight } from "lucide-react";
 import { Fragment, Suspense } from "react";
@@ -15,7 +14,7 @@ async function CoeSectionContent() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Typography.H3>Latest COE Results</Typography.H3>
+        <Text type="h3">Latest COE Results</Text>
         <Link href="/coe" aria-label="View all COE results">
           <Button isIconOnly variant="tertiary">
             <ArrowUpRight className="size-6" />

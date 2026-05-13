@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
 import {
   FUEL_GROUP_COLORS,
@@ -9,7 +9,6 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/annual/constants";
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
 import { searchParams } from "@web/app/(main)/(dashboard)/cars/annual/search-params";
-import Typography from "@web/components/typography";
 import { useQueryStates } from "nuqs";
 import { useMemo } from "react";
 
@@ -94,11 +93,11 @@ export function VehiclePopulationChart({
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>Vehicle Population by Fuel Type</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">Vehicle Population by Fuel Type</Text>
+        <Text type="body-sm" color="muted">
           {numberFormatter.format(selectedYearTotal)} vehicles on the road in{" "}
           {effectiveYear}
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <div className="flex flex-col gap-4">
@@ -156,10 +155,10 @@ export function VehiclePopulationChart({
         </div>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-muted">
+        <Text type="body-sm" color="muted">
           Click on a bar to select a year. Hybrid includes Petrol-Electric,
           Plug-In, and Diesel-Electric vehicles.
-        </Typography.TextSm>
+        </Text>
       </Card.Footer>
     </Card>
   );

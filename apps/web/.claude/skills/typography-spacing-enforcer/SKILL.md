@@ -1,11 +1,11 @@
 ---
 name: typography-spacing-enforcer
-description: Enforce Typography system and modern spacing conventions. Use when implementing new UI components to ensure design consistency with project standards.
+description: Enforce HeroUI Text usage and modern spacing conventions. Use when implementing new UI components to ensure design consistency with project standards.
 ---
 
 # Typography & Spacing Enforcer Skill
 
-This Skill ensures all UI components follow the project's Typography system and modern spacing conventions for consistent design.
+This Skill ensures all UI components follow the project's HeroUI Text conventions and modern spacing conventions for consistent design.
 
 ## When to Activate
 
@@ -20,11 +20,11 @@ This Skill ensures all UI components follow the project's Typography system and 
 
 **Raw HTML Headings**:
 - ❌ `<h1>`, `<h2>`, `<h3>`, `<h4>`
-- ✅ `Typography.H1`, `Typography.H2`, `Typography.H3`, `Typography.H4`
+- ✅ `<Text type="h1">`, `<Text type="h2">`, `<Text type="h3">`, `<Text type="h4">`
 
 **Raw Paragraph Tags**:
 - ❌ `<p className="text-lg">...</p>`
-- ✅ `Typography.TextLg`, `Typography.Text`, `Typography.TextSm`
+- ✅ `<Text type="body">`, `<Text type="body-sm" color="muted">`
 
 **Incorrect Heading Hierarchy**:
 - Multiple H1 elements on a page
@@ -64,7 +64,7 @@ This Skill ensures all UI components follow the project's Typography system and 
 1. **Scan Component Files**: Use Grep to find violations
 2. **Report Violations**: List each issue with file:line reference
 3. **Provide Auto-Fix Suggestions**: Show before/after code examples
-4. **Check Typography Imports**: Ensure `Typography` is imported from `@web/components/typography`
+4. **Check Text Imports**: Ensure `Text` is imported from `@heroui/react`
 5. **Check Size Utility Usage**: Detect `h-* w-*` patterns with equal values and suggest `size-*`
 
 ## Example Output
@@ -74,7 +74,7 @@ Typography & Spacing Violations Found:
 
 src/app/(main)/(dashboard)/coe/components/category-card.tsx:15
 ❌ <h3 className="text-2xl">Category A</h3>
-✅ <Typography.H3>Category A</Typography.H3>
+✅ <Text type="h3">Category A</Text>
 
 src/components/charts/trend-chart.tsx:42
 ❌ <div className="space-y-4">
@@ -99,19 +99,18 @@ src/components/icons/search-icon.tsx:8
 ## Typography Components Reference
 
 **Headings**:
-- `Typography.H1` - Page titles (text-4xl, font-semibold)
-- `Typography.H2` - Section titles (text-3xl, font-semibold)
-- `Typography.H3` - Card titles (text-2xl, font-medium)
-- `Typography.H4` - Nested sections (text-xl, font-medium)
+- `<Text type="h1">` - Page titles
+- `<Text type="h2">` - Section titles
+- `<Text type="h3">` - Card titles and subsections
+- `<Text type="h4">` - Nested sections and compact card titles
 
 **Body Text**:
-- `Typography.TextLg` - Lead paragraphs (text-lg)
-- `Typography.Text` - Standard body (text-base)
-- `Typography.TextSm` - Secondary info (text-sm)
+- `<Text type="body">` - Standard body
+- `<Text type="body-sm" color="muted">` - Secondary info
 
 **UI Labels**:
-- `Typography.Label` - Form labels, tabs (font-medium, text-sm)
-- `Typography.Caption` - Metadata, timestamps (text-xs)
+- `<Text type="body-sm" weight="medium">` - Labels and tabs
+- `<Text type="body-xs" color="muted">` - Metadata and timestamps
 
 ## Tools Used
 

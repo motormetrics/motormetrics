@@ -4,6 +4,13 @@ import { CategoryInsightsCard } from "./category-insights-card";
 import { CategorySummaryCard } from "./category-summary-card";
 import { TopMakesChart } from "./top-makes-chart";
 
+const hasText = (text: string) => (_: string, element: Element | null) =>
+  element?.textContent === text;
+
+const expectText = (text: string) => {
+  expect(screen.getAllByText(hasText(text)).length).toBeGreaterThan(0);
+};
+
 describe("Cars Category Charts", () => {
   describe("TopMakesChart", () => {
     const defaultProps = {
@@ -37,9 +44,13 @@ describe("Cars Category Charts", () => {
     it("should render top 3 ranking chips", () => {
       render(<TopMakesChart {...defaultProps} />);
 
-      expect(screen.getByText("Toyota")).toBeInTheDocument();
-      expect(screen.getByText("Honda")).toBeInTheDocument();
-      expect(screen.getByText("BMW")).toBeInTheDocument();
+      expect(
+        screen.getByRole("link", { name: "#1 Toyota" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("link", { name: "#2 Honda" }),
+      ).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "#3 BMW" })).toBeInTheDocument();
     });
 
     it("should render empty state when makes array is empty", () => {
@@ -107,7 +118,7 @@ describe("Cars Category Charts", () => {
     it("should render market insights heading", () => {
       render(<CategoryInsightsCard {...defaultProps} />);
 
-      expect(screen.getByText("Market Insights")).toBeInTheDocument();
+      expectText("Fuel Type Snapshot");
     });
 
     it("should render formatted month", () => {
@@ -119,22 +130,22 @@ describe("Cars Category Charts", () => {
     it("should render categories count", () => {
       render(<CategoryInsightsCard {...defaultProps} />);
 
-      expect(screen.getByText("Active Categories")).toBeInTheDocument();
+      expectText("Active Fuel Types");
       expect(screen.getByText("5")).toBeInTheDocument();
-      expect(screen.getByText("Fuel Type types")).toBeInTheDocument();
+      expectText("Fuel Type types");
     });
 
     it("should render top performer name", () => {
       render(<CategoryInsightsCard {...defaultProps} />);
 
-      expect(screen.getByText("Top Performer")).toBeInTheDocument();
+      expectText("Leading Fuel Type");
       expect(screen.getAllByText("Petrol").length).toBeGreaterThan(0);
     });
 
     it("should render market share percentage", () => {
       render(<CategoryInsightsCard {...defaultProps} />);
 
-      expect(screen.getByText("Market Share")).toBeInTheDocument();
+      expect(screen.getByText("Leader Share")).toBeInTheDocument();
       expect(screen.getByText("45.5%")).toBeInTheDocument();
     });
   });
@@ -169,7 +180,7 @@ describe("Cars Category Charts", () => {
 
       expect(screen.getByText("Category Ranking")).toBeInTheDocument();
       expect(screen.getByText("#1")).toBeInTheDocument();
-      expect(screen.getByText("of 5 types")).toBeInTheDocument();
+      expectText("of 5 categories");
     });
 
     it("should handle zero totalRegistrations without division error", () => {
@@ -182,22 +193,22 @@ describe("Cars Category Charts", () => {
       expect(screen.getByText("0%")).toBeInTheDocument();
     });
 
-    it("should display ranking emoji for top 3 positions", () => {
+    it("should display ranking labels for top 3 positions", () => {
       const { rerender } = render(<CategoryHeroCard {...defaultProps} />);
 
-      expect(screen.getByText("🥇")).toBeInTheDocument();
+      expect(screen.getByText("#1")).toBeInTheDocument();
 
       rerender(<CategoryHeroCard {...defaultProps} rank={2} />);
-      expect(screen.getByText("🥈")).toBeInTheDocument();
+      expect(screen.getByText("#2")).toBeInTheDocument();
 
       rerender(<CategoryHeroCard {...defaultProps} rank={3} />);
-      expect(screen.getByText("🥉")).toBeInTheDocument();
+      expect(screen.getByText("#3")).toBeInTheDocument();
     });
 
     it("should include fuel in category description for fuel types", () => {
-      render(<CategoryHeroCard {...defaultProps} typeName="Fuel Type A" />);
+      render(<CategoryHeroCard {...defaultProps} categoryTitle="fuel type" />);
 
-      expect(screen.getByText("of 5 fuel types")).toBeInTheDocument();
+      expectText("of 5 fuel types");
     });
   });
 });

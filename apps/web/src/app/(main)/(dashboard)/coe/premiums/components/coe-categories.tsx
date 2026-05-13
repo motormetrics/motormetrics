@@ -1,9 +1,8 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 
 import { CategoryInfo } from "@web/app/(main)/(dashboard)/cars/registrations/components/category-info";
-import Typography from "@web/components/typography";
 import type { COECategory } from "@web/types";
 import {
   Bike,
@@ -46,8 +45,12 @@ export function CoeCategories() {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>COE Categories</Typography.H4>
-        <Typography.TextSm className="inline-flex items-center gap-2">
+        <Text type="h4">COE Categories</Text>
+        <Text
+          type="body-sm"
+          color="muted"
+          className="inline-flex items-center gap-2"
+        >
           <span>Filter based on Category</span>
           <span
             className="cursor-help"
@@ -55,7 +58,7 @@ export function CoeCategories() {
           >
             <HelpCircleIcon className="size-4" aria-hidden="true" />
           </span>
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <div className="grid grid-cols-1 gap-4">

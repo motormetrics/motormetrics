@@ -1,7 +1,7 @@
+import { Text } from "@heroui/react";
 import { LatestCoePremium } from "@web/components/coe/latest-coe-premium";
 import { GridSkeleton, SectionSkeleton } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,
@@ -57,7 +57,7 @@ async function LatestResultsContent() {
         }}
       />
       <div className="flex flex-col gap-4">
-        <Typography.H2>Latest COE Results</Typography.H2>
+        <Text type="h2">Latest COE Results</Text>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <LatestCoePremium results={latestResults} trends={coeTrends} />
         </div>

@@ -1,10 +1,9 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
 
 import { formatDateToMonthYear, formatNumber } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import type { Registration } from "@web/types/cars";
 
 interface ComparisonBarChartProps {
@@ -43,8 +42,12 @@ export function ComparisonBarChart({
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>{title}</Typography.H4>
-        {description && <Typography.TextSm>{description}</Typography.TextSm>}
+        <Text type="h4">{title}</Text>
+        {description && (
+          <Text type="body-sm" color="muted">
+            {description}
+          </Text>
+        )}
       </Card.Header>
       <Card.Content>
         <div className="flex flex-col gap-4">

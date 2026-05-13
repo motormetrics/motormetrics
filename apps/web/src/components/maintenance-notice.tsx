@@ -1,5 +1,4 @@
-import { Card, Chip, Link, Separator } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Card, Chip, Link, Separator, Text } from "@heroui/react";
 import { SOCIAL_URLS } from "@web/config/socials";
 import {
   Clock,
@@ -31,14 +30,14 @@ export function MaintenanceNotice() {
             <Settings className="size-20 text-accent" />
           </AnimatedIconWrapper>
           <AnimatedText>
-            <Typography.H1>Pit Stop in ProgressBar</Typography.H1>
+            <Text type="h1">Pit Stop in ProgressBar</Text>
           </AnimatedText>
           <AnimatedText>
-            <Typography.TextLg>
+            <Text type="body">
               Just like a Formula 1 pit stop, we&apos;re fine-tuning our engines
               to deliver the fastest and most reliable Singapore car market
               insights!
-            </Typography.TextLg>
+            </Text>
           </AnimatedText>
         </AnimatedSection>
 
@@ -50,7 +49,7 @@ export function MaintenanceNotice() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Clock className="size-5 text-accent" />
-                    <Typography.Text>Estimated Completion</Typography.Text>
+                    <Text type="body">Estimated Completion</Text>
                   </div>
                   <Chip variant="primary" color="accent" size="lg">
                     2 hours
@@ -71,12 +70,14 @@ export function MaintenanceNotice() {
                       style={{ animationDelay: "0.4s" }}
                     />
                   </div>
-                  <Typography.TextSm>Maintenance in progress</Typography.TextSm>
+                  <Text type="body-sm" color="muted">
+                    Maintenance in progress
+                  </Text>
                 </div>
-                <Typography.TextSm>
+                <Text type="body-sm" color="muted">
                   We are upgrading our data processing systems for faster
                   analysis
-                </Typography.TextSm>
+                </Text>
               </div>
             </Card.Content>
           </Card>
@@ -84,18 +85,18 @@ export function MaintenanceNotice() {
 
         {/* What We're Doing Section */}
         <AnimatedSection className="flex flex-col gap-4">
-          <Typography.H2>What&apos;s Under the Hood?</Typography.H2>
+          <Text type="h2">What&apos;s Under the Hood?</Text>
           <AnimatedCardGrid>
             <AnimatedCard>
               <Card>
                 <Card.Content className="flex flex-row items-start gap-4">
                   <Zap className="mt-1 size-6 flex-shrink-0 text-accent" />
                   <div>
-                    <Typography.H3>Performance Boost</Typography.H3>
-                    <Typography.TextSm>
+                    <Text type="h3">Performance Boost</Text>
+                    <Text type="body-sm" color="muted">
                       Turbocharging our database for lightning-fast COE trend
                       analysis
-                    </Typography.TextSm>
+                    </Text>
                   </div>
                 </Card.Content>
               </Card>
@@ -105,11 +106,11 @@ export function MaintenanceNotice() {
                 <Card.Content className="flex flex-row items-start gap-4">
                   <Shield className="mt-1 size-6 flex-shrink-0 text-accent" />
                   <div>
-                    <Typography.H3>Security Updates</Typography.H3>
-                    <Typography.TextSm>
+                    <Text type="h3">Security Updates</Text>
+                    <Text type="body-sm" color="muted">
                       Installing the latest security patches to protect your
                       data
-                    </Typography.TextSm>
+                    </Text>
                   </div>
                 </Card.Content>
               </Card>
@@ -119,10 +120,10 @@ export function MaintenanceNotice() {
                 <Card.Content className="flex flex-row items-start gap-4">
                   <TrendingUp className="mt-1 size-6 flex-shrink-0 text-accent" />
                   <div>
-                    <Typography.H3>New Features</Typography.H3>
-                    <Typography.TextSm>
+                    <Text type="h3">New Features</Text>
+                    <Text type="body-sm" color="muted">
                       Adding advanced analytics for better market predictions
-                    </Typography.TextSm>
+                    </Text>
                   </div>
                 </Card.Content>
               </Card>
@@ -132,10 +133,10 @@ export function MaintenanceNotice() {
                 <Card.Content className="flex flex-row items-start gap-4">
                   <Wrench className="mt-1 size-6 flex-shrink-0 text-accent" />
                   <div>
-                    <Typography.H3>Bug Fixes</Typography.H3>
-                    <Typography.TextSm>
+                    <Text type="h3">Bug Fixes</Text>
+                    <Text type="body-sm" color="muted">
                       Fixing minor issues to ensure smooth sailing ahead
-                    </Typography.TextSm>
+                    </Text>
                   </div>
                 </Card.Content>
               </Card>
@@ -149,11 +150,11 @@ export function MaintenanceNotice() {
 
         {/* Contact Section */}
         <AnimatedSection className="flex flex-col gap-4 text-center">
-          <Typography.H3>Need Immediate Assistance?</Typography.H3>
-          <Typography.Text>
+          <Text type="h3">Need Immediate Assistance?</Text>
+          <Text type="body">
             While we&apos;re upgrading, our support team is still available for
             urgent inquiries
-          </Typography.Text>
+          </Text>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="mailto:support@motormetrics.app"
@@ -177,12 +178,12 @@ export function MaintenanceNotice() {
 
         {/* Footer Message */}
         <AnimatedSection className="text-center">
-          <Typography.TextSm>
+          <Text type="body-sm" color="muted">
             Thanks for your patience as we race towards a better experience!
-          </Typography.TextSm>
-          <Typography.Caption>
+          </Text>
+          <Text type="body-xs" color="muted">
             This page will automatically refresh when maintenance is complete
-          </Typography.Caption>
+          </Text>
         </AnimatedSection>
       </AnimatedContainer>
     </MaintenancePollingWrapper>

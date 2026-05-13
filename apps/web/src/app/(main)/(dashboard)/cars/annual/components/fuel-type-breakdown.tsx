@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { PieChart } from "@heroui-pro/react";
 
 import {
@@ -9,7 +9,6 @@ import {
   FUEL_GROUPS,
 } from "@web/app/(main)/(dashboard)/cars/annual/constants";
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
-import Typography from "@web/components/typography";
 import { useMemo } from "react";
 
 interface FuelTypeData {
@@ -57,10 +56,10 @@ export function FuelTypeBreakdown({ data }: FuelTypeBreakdownProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>Fuel Type Mix ({effectiveYear})</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">Fuel Type Mix ({effectiveYear})</Text>
+        <Text type="body-sm" color="muted">
           Distribution of vehicles by fuel type
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <PieChart className="mx-auto" height={300}>

@@ -1,11 +1,10 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { PieChart } from "@heroui-pro/react";
 
 import type { SelectCarCost } from "@motormetrics/database";
 import { VES_BAND_ORDER } from "@web/app/(main)/(dashboard)/cars/costs/constants";
-import Typography from "@web/components/typography";
 
 interface VesDistributionChartProps {
   data: SelectCarCost[];
@@ -36,10 +35,10 @@ export function VesDistributionChart({ data }: VesDistributionChartProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>VES Band Distribution</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">VES Band Distribution</Text>
+        <Text type="body-sm" color="muted">
           Number of models per VES band
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <PieChart className="mx-auto" height={300}>

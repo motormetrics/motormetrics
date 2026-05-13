@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, Table } from "@heroui/react";
+import { Card, Table, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import { ArrowDown, Table as TableIcon } from "lucide-react";
 
 const BRACKETS = [
@@ -26,7 +25,7 @@ export function PARFComparisonTable() {
       <Card.Content className="flex flex-col gap-0 p-0">
         <div className="flex items-center gap-2 px-6 py-4">
           <TableIcon className="size-4 text-accent" />
-          <Typography.H4>PARF Rebate Rate Comparison</Typography.H4>
+          <Text type="h4">PARF Rebate Rate Comparison</Text>
         </div>
         <Table>
           <Table.ScrollContainer>

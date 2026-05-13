@@ -1,9 +1,8 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 
-import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
   staggerItemVariants,
@@ -72,12 +71,10 @@ export function StatsSection() {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col gap-4">
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Text type="body-sm" weight="medium">
             By the Numbers
-          </Typography.Label>
-          <Typography.H2 className="max-w-lg lg:text-4xl">
-            Singapore car market data at a glance
-          </Typography.H2>
+          </Text>
+          <Text type="h2">Singapore car market data at a glance</Text>
         </div>
 
         {/* Stats grid - asymmetric */}

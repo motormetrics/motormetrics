@@ -1,6 +1,6 @@
+import { Text } from "@heroui/react";
 import { PremiumRangeCard } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-range-card";
 import { GridSkeleton, SectionSkeleton } from "@web/components/shared/skeleton";
-import Typography from "@web/components/typography";
 import { calculatePremiumRangeStats } from "@web/lib/coe/calculations";
 import { getCoeResults } from "@web/queries/coe";
 import { Suspense } from "react";
@@ -22,7 +22,7 @@ async function PremiumRangesContent() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Typography.H2>Premium Ranges</Typography.H2>
+      <Text type="h2">Premium Ranges</Text>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         <PremiumRangeCard stats={premiumRangeStats} />
       </div>

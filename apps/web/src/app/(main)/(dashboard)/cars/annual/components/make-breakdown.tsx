@@ -1,9 +1,14 @@
 "use client";
 
-import { Card, Pagination, type SortDescriptor, Table } from "@heroui/react";
+import {
+  Card,
+  Pagination,
+  type SortDescriptor,
+  Table,
+  Text,
+} from "@heroui/react";
 
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
-import Typography from "@web/components/typography";
 import { sortByDescriptor } from "@web/utils/sort";
 import { type Key, useCallback, useMemo, useState } from "react";
 
@@ -84,10 +89,10 @@ export function MakeBreakdown({ data, availableYears }: MakeBreakdownProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>All Makes ({effectiveYear})</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">All Makes ({effectiveYear})</Text>
+        <Text type="body-sm" color="muted">
           {yearData.length} makes registered
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <Table>

@@ -1,7 +1,6 @@
-import { Card, Chip } from "@heroui/react";
+import { Card, Chip, Text } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear, formatOrdinal } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import type { COEResult } from "@web/types";
 import { ArrowDownIcon, ArrowUpIcon, ClockIcon } from "lucide-react";
 
@@ -120,12 +119,16 @@ const RoundCard = ({
             <ClockIcon className="size-6 text-muted" />
           </div>
           <div className="flex flex-col items-center gap-1 text-center">
-            <Typography.TextSm className="font-medium text-muted">
+            <Text
+              type="body-sm"
+              color="muted"
+              className="font-medium text-muted"
+            >
               Results Pending
-            </Typography.TextSm>
-            <Typography.Caption>
+            </Text>
+            <Text type="body-xs" color="muted">
               2nd round bidding typically occurs mid-month
-            </Typography.Caption>
+            </Text>
           </div>
         </Card.Content>
       </Card>
@@ -204,7 +207,7 @@ export function BiddingRoundCards({
     <div className="flex flex-col gap-4">
       {/* Section Header */}
       <div className="flex items-center gap-2">
-        <Typography.H3>Bidding Rounds</Typography.H3>
+        <Text type="h3">Bidding Rounds</Text>
         {formattedMonth && (
           <Chip size="sm" color="accent">
             {formattedMonth}

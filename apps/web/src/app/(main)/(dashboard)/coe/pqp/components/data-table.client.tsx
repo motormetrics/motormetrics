@@ -1,9 +1,8 @@
 "use client";
 
-import { Pagination, type SortDescriptor, Table } from "@heroui/react";
+import { Pagination, type SortDescriptor, Table, Text } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 
-import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
 import { type Key, useCallback, useMemo, useState } from "react";
 
@@ -83,10 +82,10 @@ export function DataTable({ rows, columns, rowsPerPage = 10 }: DataTableProps) {
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <Typography.H3>Historical PQP Rates</Typography.H3>
-        <Typography.TextSm>
+        <Text type="h3">Historical PQP Rates</Text>
+        <Text type="body-sm" color="muted">
           Latest {rows.length} monthly renewal baselines for {categoryLabels}.
-        </Typography.TextSm>
+        </Text>
       </div>
       <Table>
         <Table.ScrollContainer>

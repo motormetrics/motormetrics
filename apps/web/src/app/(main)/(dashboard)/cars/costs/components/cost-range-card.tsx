@@ -1,4 +1,4 @@
-import { Card, Chip } from "@heroui/react";
+import { Card, Chip, Text } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import type { SelectCarCost } from "@motormetrics/database";
 import { formatCurrency } from "@motormetrics/utils";
@@ -6,7 +6,6 @@ import {
   FUEL_TYPE_LABELS,
   FUEL_TYPE_ORDER,
 } from "@web/app/(main)/(dashboard)/cars/costs/constants";
-import Typography from "@web/components/typography";
 
 interface CostRangeCardProps {
   data: SelectCarCost[];
@@ -110,7 +109,9 @@ function RangeSection({
             style="currency"
             value={lowestPrice}
           />
-          <Typography.Caption>{lowestModel}</Typography.Caption>
+          <Text type="body-xs" color="muted">
+            {lowestModel}
+          </Text>
         </div>
 
         {/* High value */}
@@ -129,7 +130,9 @@ function RangeSection({
             style="currency"
             value={highestPrice}
           />
-          <Typography.Caption>{highestModel}</Typography.Caption>
+          <Text type="body-xs" color="muted">
+            {highestModel}
+          </Text>
         </div>
       </div>
     </div>
@@ -193,12 +196,12 @@ export function CostRangeCard({ data }: CostRangeCardProps) {
           <div className="absolute top-0 right-0 left-0 h-1 bg-accent" />
 
           <Card.Header className="flex flex-col items-start gap-1">
-            <Typography.H4>
+            <Text type="h4">
               {FUEL_TYPE_LABELS[group.fuelType] ?? group.fuelType}
-            </Typography.H4>
-            <Typography.Caption>
+            </Text>
+            <Text type="body-xs" color="muted">
               Selling price range (w/ COE)
-            </Typography.Caption>
+            </Text>
           </Card.Header>
 
           <Card.Content className="flex flex-col gap-6">

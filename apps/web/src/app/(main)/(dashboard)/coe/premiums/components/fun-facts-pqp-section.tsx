@@ -1,8 +1,7 @@
-import { Button, Card, Link, ProgressBar } from "@heroui/react";
+import { Button, Card, Link, ProgressBar, Text } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { SkeletonBentoCard } from "@web/components/shared/skeleton";
-import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults, getPqpRates } from "@web/queries/coe";
 import { Suspense } from "react";
 
@@ -29,10 +28,10 @@ async function FunFactsPqpContent() {
       {/* Fun Facts Card */}
       <Card>
         <Card.Header className="flex flex-col items-start gap-2">
-          <Typography.H4>Category A vs B</Typography.H4>
-          <Typography.TextSm>
+          <Text type="h4">Category A vs B</Text>
+          <Text type="body-sm" color="muted">
             Will the premium quota of Category A ever surpass Category B?
-          </Typography.TextSm>
+          </Text>
         </Card.Header>
         <Card.Content>
           <div className="flex flex-col gap-4">
@@ -46,7 +45,7 @@ async function FunFactsPqpContent() {
                     value={categoryAPercentage}
                   />
                 </span>
-                <Typography.TextSm className="text-muted">
+                <Text type="body-sm" color="muted">
                   Category A is{" "}
                   <NumberValue
                     maximumFractionDigits={0}
@@ -54,7 +53,7 @@ async function FunFactsPqpContent() {
                     value={categoryAPercentage}
                   />{" "}
                   of Category B
-                </Typography.TextSm>
+                </Text>
               </div>
             </div>
           </div>
@@ -64,11 +63,11 @@ async function FunFactsPqpContent() {
       {/* Latest PQP Rates Card */}
       <Card>
         <Card.Header className="flex flex-col items-start gap-2">
-          <Typography.H4>Latest PQP Rates</Typography.H4>
-          <Typography.TextSm>
+          <Text type="h4">Latest PQP Rates</Text>
+          <Text type="body-sm" color="muted">
             {latestPqpMonth &&
               `Prevailing Quota Premium for ${formatDateToMonthYear(latestPqpMonth)}`}
-          </Typography.TextSm>
+          </Text>
         </Card.Header>
         <Card.Content>
           <div className="grid grid-cols-2 gap-4">
@@ -83,9 +82,9 @@ async function FunFactsPqpContent() {
               )
               .map(([category, rate]) => (
                 <div key={category} className="flex flex-col gap-1">
-                  <Typography.TextSm className="text-muted">
+                  <Text type="body-sm" color="muted">
                     {category}
-                  </Typography.TextSm>
+                  </Text>
                   <span className="font-bold text-accent text-xl">
                     <NumberValue
                       currency="SGD"
@@ -100,9 +99,9 @@ async function FunFactsPqpContent() {
           </div>
         </Card.Content>
         <Card.Footer className="flex-col items-start gap-2">
-          <Typography.Caption>
+          <Text type="body-xs" color="muted">
             Note: There is no PQP for Category E
-          </Typography.Caption>
+          </Text>
           <Link href="/coe/pqp" className="w-full">
             <Button variant="primary" fullWidth>
               View All PQP Rates

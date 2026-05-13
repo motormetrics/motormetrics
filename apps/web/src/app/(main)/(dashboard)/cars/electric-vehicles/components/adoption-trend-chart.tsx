@@ -1,9 +1,8 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { AreaChart } from "@heroui-pro/react";
 import { EV_COLORS } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
-import Typography from "@web/components/typography";
 import type { EvMonthlyTrend } from "@web/queries/cars/electric-vehicles";
 
 interface AdoptionTrendChartProps {
@@ -17,10 +16,10 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>EV Adoption Trend</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">EV Adoption Trend</Text>
+        <Text type="body-sm" color="muted">
           Monthly BEV, PHEV, and Hybrid registrations over time
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <div className="flex flex-col gap-4">
@@ -99,11 +98,11 @@ export function AdoptionTrendChart({ data }: AdoptionTrendChartProps) {
         </div>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-muted">
+        <Text type="body-sm" color="muted">
           Stacked area chart showing combined electrified vehicle registrations.
           BEV = Battery Electric, PHEV = Plug-In Hybrid, Hybrid = Conventional
           Hybrid.
-        </Typography.TextSm>
+        </Text>
       </Card.Footer>
     </Card>
   );

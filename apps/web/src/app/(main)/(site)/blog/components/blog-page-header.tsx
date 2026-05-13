@@ -1,6 +1,6 @@
 "use client";
 
-import Typography from "@web/components/typography";
+import { Text } from "@heroui/react";
 import { fadeInUpVariants } from "@web/config/animations";
 import { motion } from "framer-motion";
 
@@ -17,10 +17,8 @@ export function BlogPageHeader({ title, description }: BlogPageHeaderProps) {
       initial="hidden"
       animate="visible"
     >
-      <Typography.H1>{title}</Typography.H1>
-      <Typography.TextLg className="text-muted">
-        {description}
-      </Typography.TextLg>
+      <Text type="h1">{title}</Text>
+      <Text type="body">{description}</Text>
     </motion.div>
   );
 }

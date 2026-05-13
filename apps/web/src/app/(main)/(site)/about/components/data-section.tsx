@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, Link } from "@heroui/react";
+import { Card, Link, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
   staggerContainerVariants,
@@ -56,16 +55,14 @@ export function DataSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-accent uppercase tracking-widest">
+              <Text type="body-sm" weight="medium">
                 Data Transparency
-              </Typography.Label>
-              <Typography.H2 className="lg:text-4xl">
-                Where the data comes from
-              </Typography.H2>
-              <Typography.Text className="text-muted">
+              </Text>
+              <Text type="h2">Where the data comes from</Text>
+              <Text type="body">
                 Here&apos;s where the data comes from and how it&apos;s
                 processed.
-              </Typography.Text>
+              </Text>
 
               {/* LTA Badge */}
               <Card className="border-border">
@@ -108,10 +105,10 @@ export function DataSection() {
                         <feature.icon className="h-6 w-6 text-muted transition-colors group-hover:text-accent" />
                       </div>
                       <div className="flex flex-col gap-2">
-                        <Typography.H4>{feature.title}</Typography.H4>
-                        <Typography.TextSm>
+                        <Text type="h4">{feature.title}</Text>
+                        <Text type="body-sm" color="muted">
                           {feature.description}
-                        </Typography.TextSm>
+                        </Text>
                       </div>
                     </Card.Content>
                   </Card>

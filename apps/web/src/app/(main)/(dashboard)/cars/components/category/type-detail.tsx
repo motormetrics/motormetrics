@@ -1,4 +1,4 @@
-import { Link } from "@heroui/react";
+import { Link, Text } from "@heroui/react";
 import { KPI } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CarOverviewTrends } from "@web/app/(main)/(dashboard)/cars/registrations/components/overview-trends";
@@ -8,7 +8,6 @@ import { DashboardPageTitle } from "@web/components/dashboard-page-title";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { loadCarsTypePageData } from "@web/lib/cars/page-data";
 import { loadLastUpdated } from "@web/lib/common";
@@ -176,7 +175,7 @@ async function TypeDetailContent({
         }}
       />
 
-      <Typography.Text>
+      <Text type="body">
         {cars.total > 0
           ? `${displayName} vehicles accounted for ${cars.total.toLocaleString()} registrations in ${formattedMonth}.`
           : `No ${displayName} vehicle registrations were recorded in ${formattedMonth}.`}{" "}
@@ -188,7 +187,7 @@ async function TypeDetailContent({
           {config.category === "fuel-types" ? "fuel types" : "vehicle types"}{" "}
           &rarr;
         </Link>
-      </Typography.Text>
+      </Text>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <KPI>

@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, Link } from "@heroui/react";
+import { Card, Link, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
   staggerItemVariants,
@@ -80,8 +79,10 @@ export function QuickNavSection() {
                       <item.icon className={`size-6 ${item.iconColor}`} />
                     </div>
                     <div className="flex flex-col gap-2">
-                      <Typography.H4>{item.title}</Typography.H4>
-                      <Typography.TextSm>{item.description}</Typography.TextSm>
+                      <Text type="h4">{item.title}</Text>
+                      <Text type="body-sm" color="muted">
+                        {item.description}
+                      </Text>
                     </div>
                   </Card.Content>
                 </Card>

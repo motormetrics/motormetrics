@@ -1,9 +1,7 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { AreaChart, ChartTooltip, NumberValue } from "@heroui-pro/react";
-
-import Typography from "@web/components/typography";
 
 interface DailyTraffic {
   date: string;
@@ -21,21 +19,19 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col gap-4">
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Text type="body-sm" weight="medium">
             Traffic Trend
-          </Typography.Label>
-          <Typography.H2 className="max-w-lg lg:text-4xl">
-            Daily visitors over the last 30 days
-          </Typography.H2>
+          </Text>
+          <Text type="h2">Daily visitors over the last 30 days</Text>
         </div>
 
         {/* Chart */}
         <Card>
           <Card.Header className="flex flex-col items-start gap-2">
-            <Typography.H4>Daily Visitors</Typography.H4>
-            <Typography.TextSm className="text-muted">
+            <Text type="h4">Daily Visitors</Text>
+            <Text type="body-sm" color="muted">
               Unique visitors and page views per day
-            </Typography.TextSm>
+            </Text>
           </Card.Header>
           <Card.Content className="pt-2">
             <AreaChart

@@ -1,7 +1,7 @@
 "use client";
 
+import { Text } from "@heroui/react";
 import { LineChart, NumberValue } from "@heroui-pro/react";
-import Typography from "@web/components/typography";
 
 interface MakeTrendChartProps {
   data: Array<{
@@ -68,8 +68,8 @@ export function MakeTrendChart({ data }: MakeTrendChartProps) {
       </LineChart>
       <div className="flex flex-col gap-4">
         <div>
-          <Typography.H4>Registration Trends</Typography.H4>
-          <Typography.TextSm>
+          <Text type="h4">Registration Trends</Text>
+          <Text type="body-sm" color="muted">
             This chart shows monthly registration trends over time.
             {peakMonth ? (
               <>
@@ -83,32 +83,38 @@ export function MakeTrendChart({ data }: MakeTrendChartProps) {
               </>
             ) : null}
             , helping identify seasonal patterns and market performance.
-          </Typography.TextSm>
+          </Text>
         </div>
         <div className="grid grid-cols-1 gap-4 rounded-lg bg-surface/30 p-4 sm:grid-cols-3">
           <div className="text-center">
-            <Typography.TextLg>{peakMonth?.month || "N/A"}</Typography.TextLg>
-            <Typography.Caption>Peak Month</Typography.Caption>
+            <Text type="body">{peakMonth?.month || "N/A"}</Text>
+            <Text type="body-xs" color="muted">
+              Peak Month
+            </Text>
           </div>
           <div className="text-center">
-            <Typography.TextLg>
+            <Text type="body">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
                 value={totalRegistrations}
               />
-            </Typography.TextLg>
-            <Typography.Caption>Total Period</Typography.Caption>
+            </Text>
+            <Text type="body-xs" color="muted">
+              Total Period
+            </Text>
           </div>
           <div className="text-center">
-            <Typography.TextLg>
+            <Text type="body">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
                 value={chartData.length}
               />
-            </Typography.TextLg>
-            <Typography.Caption>Months Tracked</Typography.Caption>
+            </Text>
+            <Text type="body-xs" color="muted">
+              Months Tracked
+            </Text>
           </div>
         </div>
       </div>

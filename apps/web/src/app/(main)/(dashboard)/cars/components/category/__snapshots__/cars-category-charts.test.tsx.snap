@@ -3,7 +3,7 @@
 exports[`Cars Category Charts > TopMakesChart > should render chart title and description 1`] = `
 <div>
   <div
-    class="card card--default"
+    class="card card--default border border-border bg-surface shadow-none"
     data-slot="card"
   >
     <div
@@ -11,13 +11,17 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
       data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+        class="text text--h4"
+        data-slot="text"
+        data-type="h4"
       >
         Top Makes - 
         Petrol
       </h4>
       <p
-        class="text-muted text-sm leading-6"
+        class="text text--body-sm"
+        data-slot="text"
+        data-type="body-sm"
       >
         Most popular brands in this category
       </p>
@@ -27,10 +31,10 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
       data-slot="card-content"
     >
       <div
-        class="flex flex-col gap-6"
+        class="flex flex-col gap-5"
       >
         <div
-          class="flex gap-2"
+          class="flex flex-wrap gap-2"
         >
           <a
             class="link"
@@ -40,13 +44,15 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
             tabindex="0"
           >
             <span
-              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
+              class="chip chip--default chip--sm chip--soft cursor-pointer bg-accent text-accent-foreground"
               data-slot="chip"
             >
-              <span>
-                🥇
+              <span
+                class="chip__label"
+                data-slot="chip-label"
+              >
+                #1 Toyota
               </span>
-              Toyota
             </span>
           </a>
           <a
@@ -57,13 +63,15 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
             tabindex="0"
           >
             <span
-              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
+              class="chip chip--default chip--sm chip--soft cursor-pointer"
               data-slot="chip"
             >
-              <span>
-                🥈
+              <span
+                class="chip__label"
+                data-slot="chip-label"
+              >
+                #2 Honda
               </span>
-              Honda
             </span>
           </a>
           <a
@@ -74,13 +82,15 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
             tabindex="0"
           >
             <span
-              class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
+              class="chip chip--default chip--sm chip--soft cursor-pointer"
               data-slot="chip"
             >
-              <span>
-                🥉
+              <span
+                class="chip__label"
+                data-slot="chip-label"
+              >
+                #3 BMW
               </span>
-              BMW
             </span>
           </a>
         </div>

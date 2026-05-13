@@ -1,10 +1,8 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
 import { formatNumber } from "@motormetrics/utils";
-
-import Typography from "@web/components/typography";
 
 interface TypeBreakdownChartProps {
   data: { name: string; value: number }[];
@@ -25,8 +23,12 @@ export function TypeBreakdownChart({
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>{title}</Typography.H4>
-        {description && <Typography.TextSm>{description}</Typography.TextSm>}
+        <Text type="h4">{title}</Text>
+        {description && (
+          <Text type="body-sm" color="muted">
+            {description}
+          </Text>
+        )}
       </Card.Header>
       <Card.Content>
         <BarChart data={chartData} height={200} layout="vertical">

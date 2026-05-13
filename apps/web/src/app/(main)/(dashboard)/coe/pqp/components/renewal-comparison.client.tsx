@@ -1,9 +1,8 @@
 "use client";
 
-import { Alert } from "@heroui/react";
+import { Alert, Text } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue, Segment } from "@heroui-pro/react";
 
-import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
 import { useMemo, useState } from "react";
 
@@ -89,11 +88,11 @@ export function RenewalComparison({
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <Typography.H3>PQP vs Bidding Comparison</Typography.H3>
-        <Typography.TextSm>
+        <Text type="h3">PQP vs Bidding Comparison</Text>
+        <Text type="body-sm" color="muted">
           Compare renewal estimates against the latest market premium for each
           visible COE category.
-        </Typography.TextSm>
+        </Text>
       </div>
       <div className="flex flex-col gap-4">
         <Segment

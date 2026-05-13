@@ -10,13 +10,13 @@ import {
   Select,
   type SortDescriptor,
   Table,
+  Text,
 } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 
 import type { SelectCarCost } from "@motormetrics/database";
 import { CostLegend } from "@web/app/(main)/(dashboard)/cars/costs/components/cost-legend";
 import { FUEL_TYPE_LABELS } from "@web/app/(main)/(dashboard)/cars/costs/constants";
-import Typography from "@web/components/typography";
 import { sortByDescriptor } from "@web/utils/sort";
 import { parseAsString, useQueryState } from "nuqs";
 import { type Key, useCallback, useMemo, useState } from "react";
@@ -263,10 +263,10 @@ export function CostTable({ data }: CostTableProps) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <Typography.H4>All Models</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">All Models</Text>
+        <Text type="body-sm" color="muted">
           {filteredData.length} models found
-        </Typography.TextSm>
+        </Text>
       </div>
       <CostLegend />
       <div className="flex w-full flex-col gap-4 sm:flex-row">

@@ -1,7 +1,6 @@
-import { Card, Link } from "@heroui/react";
+import { Card, Link, Text } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import type { FuelType } from "@web/types/cars";
 
 // interface Category {
@@ -63,7 +62,7 @@ export function TopMakes({ data }: TopMakesProps) {
         return (
           <Card key={fuelType}>
             <Card.Header>
-              <Typography.H4>{fuelType}</Typography.H4>
+              <Text type="h4">{fuelType}</Text>
             </Card.Header>
             <Card.Content>
               {makes.map(({ make, count }) => (

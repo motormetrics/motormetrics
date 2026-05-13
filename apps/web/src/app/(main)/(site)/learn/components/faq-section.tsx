@@ -1,8 +1,7 @@
 "use client";
 
-import { Accordion, Card } from "@heroui/react";
+import { Accordion, Card, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import { SITE_TITLE } from "@web/config";
 import {
   fadeInUpVariants,
@@ -154,16 +153,14 @@ export function FAQSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-accent uppercase tracking-widest">
+              <Text type="body-sm" weight="medium">
                 Common Questions
-              </Typography.Label>
-              <Typography.H2 className="lg:text-4xl">
-                Frequently Asked Questions
-              </Typography.H2>
-              <Typography.Text className="text-muted">
+              </Text>
+              <Text type="h2">Frequently Asked Questions</Text>
+              <Text type="body">
                 Everything you need to know about Singapore&apos;s vehicle
                 market, from COE bidding to PARF rebates.
-              </Typography.Text>
+              </Text>
             </motion.div>
           </div>
 
@@ -184,7 +181,7 @@ export function FAQSection() {
                 >
                   <div className="flex items-center gap-3">
                     <section.icon className={`size-5 ${section.iconColor}`} />
-                    <Typography.H3>{section.title}</Typography.H3>
+                    <Text type="h3">{section.title}</Text>
                   </div>
                   <Accordion>
                     {section.items.map(({ answer, question }) => (
@@ -197,7 +194,7 @@ export function FAQSection() {
                         </Accordion.Heading>
                         <Accordion.Panel>
                           <Accordion.Body>
-                            <Typography.Text>{answer}</Typography.Text>
+                            <Text type="body">{answer}</Text>
                           </Accordion.Body>
                         </Accordion.Panel>
                       </Accordion.Item>
@@ -214,14 +211,14 @@ export function FAQSection() {
                       <MessageCircleQuestion className="size-5 text-accent" />
                     </div>
                     <div className="flex flex-col gap-2">
-                      <Typography.H4>Still Have Questions?</Typography.H4>
-                      <Typography.TextSm>
+                      <Text type="h4">Still Have Questions?</Text>
+                      <Text type="body-sm" color="muted">
                         If you have additional questions about Singapore&apos;s
                         automotive market or need help understanding specific
                         data points, feel free to explore our comprehensive car
                         registration and COE data through the navigation menu
                         above.
-                      </Typography.TextSm>
+                      </Text>
                     </div>
                   </Card.Content>
                 </Card>

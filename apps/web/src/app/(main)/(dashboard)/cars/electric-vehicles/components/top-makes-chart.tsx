@@ -1,8 +1,7 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
-import Typography from "@web/components/typography";
 import type { EvTopMake } from "@web/queries/cars/electric-vehicles";
 
 interface TopMakesChartProps {
@@ -17,10 +16,10 @@ export function TopMakesChart({ data, month }: TopMakesChartProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>Top EV Makes</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">Top EV Makes</Text>
+        <Text type="body-sm" color="muted">
           Top 10 electrified vehicle makes for {month}
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <BarChart data={chartData} height={400} layout="vertical">
@@ -60,9 +59,9 @@ export function TopMakesChart({ data, month }: TopMakesChartProps) {
         </BarChart>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-muted">
+        <Text type="body-sm" color="muted">
           Includes BEV, PHEV, and hybrid registrations combined.
-        </Typography.TextSm>
+        </Text>
       </Card.Footer>
     </Card>
   );

@@ -1,5 +1,4 @@
-import { Button, Popover } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Button, Popover, Text } from "@heroui/react";
 import { InfoIcon } from "lucide-react";
 
 export function InfoPopover() {
@@ -18,7 +17,7 @@ export function InfoPopover() {
       </Popover.Trigger>
       <Popover.Content className="max-w-md" placement="bottom end">
         <div className="flex flex-col gap-4 p-4">
-          <Typography.H4>Understanding PQP Rates</Typography.H4>
+          <Text type="h4">Understanding PQP Rates</Text>
           <div className="flex flex-col gap-4 text-sm">
             <p>
               Certificate of Entitlement (COE) Prevailing Quota Premium (PQP)

@@ -1,6 +1,5 @@
-import { Button, Card, Chip, Link, Separator } from "@heroui/react";
+import { Button, Card, Chip, Link, Separator, Text } from "@heroui/react";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -186,18 +185,16 @@ export default async function GuidePage({ params }: PageProps) {
             <BookOpen className="size-3" />
             {guide.term}
           </Chip>
-          <Typography.H1>{guide.title}</Typography.H1>
-          <Typography.TextLg className="text-muted">
-            {guide.excerpt}
-          </Typography.TextLg>
-          <Typography.Caption>
+          <Text type="h1">{guide.title}</Text>
+          <Text type="body">{guide.excerpt}</Text>
+          <Text type="body-xs" color="muted">
             Last updated:{" "}
             {new Date(guide.lastUpdated).toLocaleDateString("en-SG", {
               day: "numeric",
               month: "long",
               year: "numeric",
             })}
-          </Typography.Caption>
+          </Text>
         </header>
 
         <Separator />
@@ -209,7 +206,7 @@ export default async function GuidePage({ params }: PageProps) {
         {guide.relatedLinks.length > 0 && (
           <Card className="shadow-sm">
             <Card.Header>
-              <Typography.H4>Explore Data</Typography.H4>
+              <Text type="h4">Explore Data</Text>
             </Card.Header>
             <Card.Content className="flex flex-row flex-wrap gap-2">
               {guide.relatedLinks.map((link) => (

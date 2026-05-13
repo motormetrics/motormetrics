@@ -1,4 +1,4 @@
-import { Button, Card, Chip, Link, Separator } from "@heroui/react";
+import { Button, Card, Chip, Link, Separator, Text } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
@@ -7,7 +7,6 @@ import {
   calculateTrend,
 } from "@web/app/(main)/(dashboard)/components/coe-trend-utils";
 import { HighlightStatsCard } from "@web/components/highlight-stats-card";
-import Typography from "@web/components/typography";
 import {
   getLatestAndPreviousCoeResults,
   getPQPOverview,
@@ -186,12 +185,12 @@ export async function CoeOverview() {
     <div className="flex flex-col gap-8">
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-3">
-          <Typography.H1>COE Overview</Typography.H1>
-          <Typography.TextLg className="max-w-3xl text-muted">
+          <Text type="h1">COE Overview</Text>
+          <Text type="body">
             A high-level view of the latest bidding round, premium movement,
             demand pressure, and renewal benchmarks before you jump into the
             detailed COE pages.
-          </Typography.TextLg>
+          </Text>
         </div>
         <HighlightStatsCard
           actionHref="/coe/results"
@@ -355,9 +354,9 @@ export async function CoeOverview() {
                   className="rounded-2xl bg-default p-4"
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <Typography.Label>
+                    <Text type="body-sm" weight="medium">
                       {summary?.category ?? "N/A"}
-                    </Typography.Label>
+                    </Text>
                     <TrendBadge
                       trend={
                         (summary?.difference ?? 0) > 0

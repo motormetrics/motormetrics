@@ -7,11 +7,9 @@ exports[`RecentPosts > should render title and view all link 1`] = `
       <div
         class="mb-5 flex items-center justify-between"
       >
-        <h3
-          class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
-        >
+        <span>
           Recent Posts
-        </h3>
+        </span>
         <a
           aria-label="View all blog posts"
           href="/blog"

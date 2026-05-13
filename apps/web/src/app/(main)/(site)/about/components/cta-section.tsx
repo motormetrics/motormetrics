@@ -1,8 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Button, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
   staggerItemVariants,
@@ -28,14 +27,14 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Label className="text-accent uppercase tracking-widest">
+            <Text type="body-sm" weight="medium">
               Stay Updated
-            </Typography.Label>
-            <Typography.H2>Follow for the Latest Updates</Typography.H2>
-            <Typography.TextLg className="max-w-xl text-muted">
+            </Text>
+            <Text type="h2">Follow for the Latest Updates</Text>
+            <Text type="body">
               Get notified when new COE results, car registration data, and
               market insights are published.
-            </Typography.TextLg>
+            </Text>
           </motion.div>
 
           {/* Social links */}

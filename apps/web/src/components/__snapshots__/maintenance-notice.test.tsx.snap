@@ -41,7 +41,9 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
         style="opacity: 0;"
       >
         <h1
-          class="scroll-m-20 font-semibold text-4xl text-foreground tracking-tight lg:text-5xl"
+          class="text text--h1"
+          data-slot="text"
+          data-type="h1"
         >
           Pit Stop in ProgressBar
         </h1>
@@ -50,7 +52,9 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
         style="opacity: 0;"
       >
         <p
-          class="text-foreground text-lg leading-relaxed"
+          class="text text--body"
+          data-slot="text"
+          data-type="body"
         >
           Just like a Formula 1 pit stop, we're fine-tuning our engines to deliver the fastest and most reliable Singapore car market insights!
         </p>
@@ -98,7 +102,9 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
                   />
                 </svg>
                 <p
-                  class="text-base text-foreground leading-7"
+                  class="text text--body"
+                  data-slot="text"
+                  data-type="body"
                 >
                   Estimated Completion
                 </p>
@@ -135,13 +141,17 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
                 />
               </div>
               <p
-                class="text-muted text-sm leading-6"
+                class="text text--body-sm"
+                data-slot="text"
+                data-type="body-sm"
               >
                 Maintenance in progress
               </p>
             </div>
             <p
-              class="text-muted text-sm leading-6"
+              class="text text--body-sm"
+              data-slot="text"
+              data-type="body-sm"
             >
               We are upgrading our data processing systems for faster analysis
             </p>
@@ -154,7 +164,9 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
       style="opacity: 0;"
     >
       <h2
-        class="scroll-m-20 font-semibold text-3xl text-foreground tracking-tight first:mt-0"
+        class="text text--h2"
+        data-slot="text"
+        data-type="h2"
       >
         What's Under the Hood?
       </h2>
@@ -191,12 +203,16 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
               </svg>
               <div>
                 <h3
-                  class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+                  class="text text--h3"
+                  data-slot="text"
+                  data-type="h3"
                 >
                   Performance Boost
                 </h3>
                 <p
-                  class="text-muted text-sm leading-6"
+                  class="text text--body-sm"
+                  data-slot="text"
+                  data-type="body-sm"
                 >
                   Turbocharging our database for lightning-fast COE trend analysis
                 </p>
@@ -233,12 +249,16 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
               </svg>
               <div>
                 <h3
-                  class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+                  class="text text--h3"
+                  data-slot="text"
+                  data-type="h3"
                 >
                   Security Updates
                 </h3>
                 <p
-                  class="text-muted text-sm leading-6"
+                  class="text text--body-sm"
+                  data-slot="text"
+                  data-type="body-sm"
                 >
                   Installing the latest security patches to protect your data
                 </p>
@@ -278,12 +298,16 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
               </svg>
               <div>
                 <h3
-                  class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+                  class="text text--h3"
+                  data-slot="text"
+                  data-type="h3"
                 >
                   New Features
                 </h3>
                 <p
-                  class="text-muted text-sm leading-6"
+                  class="text text--body-sm"
+                  data-slot="text"
+                  data-type="body-sm"
                 >
                   Adding advanced analytics for better market predictions
                 </p>
@@ -320,12 +344,16 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
               </svg>
               <div>
                 <h3
-                  class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+                  class="text text--h3"
+                  data-slot="text"
+                  data-type="h3"
                 >
                   Bug Fixes
                 </h3>
                 <p
-                  class="text-muted text-sm leading-6"
+                  class="text text--body-sm"
+                  data-slot="text"
+                  data-type="body-sm"
                 >
                   Fixing minor issues to ensure smooth sailing ahead
                 </p>
@@ -350,12 +378,16 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
       style="opacity: 0;"
     >
       <h3
-        class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+        class="text text--h3"
+        data-slot="text"
+        data-type="h3"
       >
         Need Immediate Assistance?
       </h3>
       <p
-        class="text-base text-foreground leading-7"
+        class="text text--body"
+        data-slot="text"
+        data-type="body"
       >
         While we're upgrading, our support team is still available for urgent inquiries
       </p>
@@ -433,15 +465,19 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
       style="opacity: 0;"
     >
       <p
-        class="text-muted text-sm leading-6"
+        class="text text--body-sm"
+        data-slot="text"
+        data-type="body-sm"
       >
         Thanks for your patience as we race towards a better experience!
       </p>
-      <span
-        class="text-muted text-xs leading-tight"
+      <p
+        class="text text--body-xs"
+        data-slot="text"
+        data-type="body-xs"
       >
         This page will automatically refresh when maintenance is complete
-      </span>
+      </p>
     </div>
   </div>
 </div>

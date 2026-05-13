@@ -21,12 +21,16 @@ exports[`MakeDetail > should render metric cards 1`] = `
         class="flex flex-col gap-1"
       >
         <h2
-          class="scroll-m-20 font-semibold text-3xl text-foreground tracking-tight first:mt-0"
+          class="text text--h2"
+          data-slot="text"
+          data-type="h2"
         >
           BMW
         </h2>
         <p
-          class="text-muted text-sm leading-6"
+          class="text text--body-sm"
+          data-slot="text"
+          data-type="body-sm"
         >
           Vehicle Registrations
         </p>
@@ -242,15 +246,19 @@ exports[`MakeDetail > should render metric cards 1`] = `
         data-slot="card-header"
       >
         <h4
-          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+          class="text text--h4"
+          data-slot="text"
+          data-type="h4"
         >
           Historical Trend
         </h4>
-        <span
-          class="text-muted text-xs leading-tight"
+        <p
+          class="text text--body-xs"
+          data-slot="text"
+          data-type="body-xs"
         >
           Past registrations
-        </span>
+        </p>
       </div>
       <div
         class="card__content"
@@ -270,7 +278,9 @@ exports[`MakeDetail > should render metric cards 1`] = `
         data-slot="card-header"
       >
         <h4
-          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+          class="text text--h4"
+          data-slot="text"
+          data-type="h4"
         >
           Registration vs COE Premium
         </h4>
@@ -282,11 +292,13 @@ exports[`MakeDetail > should render metric cards 1`] = `
         <div>
           CoeComparisonChart
         </div>
-        <span
-          class="text-muted text-xs leading-tight"
+        <p
+          class="text text--body-xs"
+          data-slot="text"
+          data-type="body-xs"
         >
           Bars show monthly registrations (left axis), lines show COE Category A and B premiums (right axis).
-        </span>
+        </p>
       </div>
     </div>
     <div
@@ -298,15 +310,19 @@ exports[`MakeDetail > should render metric cards 1`] = `
         data-slot="card-header"
       >
         <h4
-          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+          class="text text--h4"
+          data-slot="text"
+          data-type="h4"
         >
           Summary
         </h4>
-        <span
-          class="text-muted text-xs leading-tight"
+        <p
+          class="text text--body-xs"
+          data-slot="text"
+          data-type="body-xs"
         >
           Fuel & vehicle types by month
-        </span>
+        </p>
       </div>
       <div
         class="card__content p-0"

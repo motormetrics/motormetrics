@@ -1,5 +1,4 @@
-import { Card, Chip } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Card, Chip, Text } from "@heroui/react";
 import { Layout, Rows3, StickyNote } from "lucide-react";
 import { cacheLife } from "next/cache";
 
@@ -36,16 +35,14 @@ export async function PlacementsSection() {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col gap-4">
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Text type="body-sm" weight="medium">
             Ad Placements
-          </Typography.Label>
-          <Typography.H2 className="max-w-lg lg:text-4xl">
-            Placements on every listing page
-          </Typography.H2>
-          <Typography.TextLg className="max-w-2xl text-muted">
+          </Text>
+          <Text type="h2">Placements on every listing page</Text>
+          <Text type="body">
             Choose from three placement types designed to reach users at
             different points in their browsing journey.
-          </Typography.TextLg>
+          </Text>
         </div>
 
         {/* Placement cards */}
@@ -69,12 +66,10 @@ export async function PlacementsSection() {
                     {highlight}
                   </Chip>
                 </div>
-                <Typography.H3 className="text-xl">{title}</Typography.H3>
+                <Text type="h3">{title}</Text>
               </Card.Header>
               <Card.Content className="pt-0">
-                <Typography.Text className="text-muted">
-                  {description}
-                </Typography.Text>
+                <Text type="body">{description}</Text>
               </Card.Content>
             </Card>
           ))}

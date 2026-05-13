@@ -1,8 +1,7 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { AreaChart } from "@heroui-pro/react";
-import Typography from "@web/components/typography";
 import type { EvMarketShare } from "@web/queries/cars/electric-vehicles";
 
 interface MarketShareChartProps {
@@ -15,10 +14,10 @@ export function MarketShareChart({ data }: MarketShareChartProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>EV Market Share</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">EV Market Share</Text>
+        <Text type="body-sm" color="muted">
           Percentage of electrified vehicles among all new registrations
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <AreaChart data={chartData} height={400}>
@@ -59,10 +58,10 @@ export function MarketShareChart({ data }: MarketShareChartProps) {
         </AreaChart>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-muted">
+        <Text type="body-sm" color="muted">
           Includes BEV, PHEV, and conventional hybrid vehicles as a share of
           total new registrations each month.
-        </Typography.TextSm>
+        </Text>
       </Card.Footer>
     </Card>
   );

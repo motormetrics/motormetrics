@@ -1,7 +1,6 @@
-import { Chip } from "@heroui/react";
+import { Chip, Text } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import { Award, BarChart3, Layers, PieChart } from "lucide-react";
 
 interface CategoryInsightsCardProps {
@@ -36,10 +35,10 @@ export function CategoryInsightsCard({
     <section className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-4 shadow-surface md:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-1">
-          <Typography.H4>{title} Snapshot</Typography.H4>
-          <Typography.TextSm>
+          <Text type="h4">{title} Snapshot</Text>
+          <Text type="body-sm" color="muted">
             Registration mix for the latest available {formattedMonth} dataset.
-          </Typography.TextSm>
+          </Text>
         </div>
         <Chip className="w-fit" color="accent" size="sm" variant="soft">
           {formattedMonth}
@@ -99,7 +98,9 @@ export function CategoryInsightsCard({
             />
           </KPI.Content>
           <KPI.Footer>
-            <Typography.TextSm>{title} types</Typography.TextSm>
+            <Text type="body-sm" color="muted">
+              {title} types
+            </Text>
           </KPI.Footer>
         </KPI>
 
@@ -118,7 +119,9 @@ export function CategoryInsightsCard({
             </span>
           </KPI.Content>
           <KPI.Footer>
-            <Typography.TextSm>Leading category</Typography.TextSm>
+            <Text type="body-sm" color="muted">
+              Leading category
+            </Text>
           </KPI.Footer>
         </KPI>
 
@@ -140,7 +143,9 @@ export function CategoryInsightsCard({
             />
           </KPI.Content>
           <KPI.Footer>
-            <Typography.TextSm>{topPerformer.name}</Typography.TextSm>
+            <Text type="body-sm" color="muted">
+              {topPerformer.name}
+            </Text>
           </KPI.Footer>
         </KPI>
       </KPIGroup>
