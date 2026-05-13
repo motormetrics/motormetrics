@@ -31,7 +31,8 @@
     },
     "test": {
       "dependsOn": ["^test"],
-      "inputs": ["$TURBO_DEFAULT$", "test/**/*.ts", "tests/**/*.ts"]
+      "inputs": ["$TURBO_DEFAULT$", "test/**/*.ts", "tests/**/*.ts"],
+      "outputs": ["coverage/**"]
     },
     "test:watch": {
       "cache": false,

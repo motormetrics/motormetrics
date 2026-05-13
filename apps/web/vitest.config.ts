@@ -12,6 +12,7 @@ export default defineConfig({
     // detectAsyncLeaks: true, // Available for targeted debugging; too noisy with framer-motion animation leaks
     coverage: {
       enabled: true,
+      provider: "v8",
       include: ["src"],
       exclude: [
         "src/app",
