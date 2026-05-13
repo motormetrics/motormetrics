@@ -132,8 +132,8 @@ importers:
         specifier: 24.2.9
         version: 24.2.9(typescript@5.9.3)
       turbo:
-        specifier: 2.9.0
-        version: 2.9.0
+        specifier: 2.9.12
+        version: 2.9.12
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -4030,33 +4030,33 @@ packages:
   '@tokenizer/token@0.3.0':
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
 
-  '@turbo/darwin-64@2.9.0':
-    resolution: {integrity: sha512-owaWYafOebw2en9INuP321/fSN82pIQl38VLgIDd6YJ7+jUasEkORQEkWUC8aAqsIsukLhbGdPnklzUqBwBijQ==}
+  '@turbo/darwin-64@2.9.12':
+    resolution: {integrity: sha512-eu3eFRmE9NjgZ0wPdRJ44l+LGSeIky+tz5ZQd8zQkw/Yqi+BM7wq+8nbabeoiVUcICi/IZweMOKl/MCmkrd1+g==}
     cpu: [x64]
     os: [darwin]
 
-  '@turbo/darwin-arm64@2.9.0':
-    resolution: {integrity: sha512-1Jj+CXYexJraJ/vvNg5fN9cyVKx/KJyDcWVHvqZWc3aMCC/M4+HxUtnrMu1MEttv5gA4vKOGwa2FCJ9VmfSUGg==}
+  '@turbo/darwin-arm64@2.9.12':
+    resolution: {integrity: sha512-RUkAE404z/J8NsyrUosMcBaXT6M4bRFxTQrmkDQBLQVXaC8Jl0e9bMvYDSX0GW7Ffm2m3j9y7RXgR1foeUAM9w==}
     cpu: [arm64]
     os: [darwin]
 
-  '@turbo/linux-64@2.9.0':
-    resolution: {integrity: sha512-OcCTATltui6jKitb+PaYwiIkLi3bjBP9+9e7gyh0jbivXKoeIFQniMMXbXScQY28zidHw300Ym5itxBMsT/tGw==}
+  '@turbo/linux-64@2.9.12':
+    resolution: {integrity: sha512-InIUtH7cw/vqXNX1Gr7QgWfmw3ct08pV5CpfdEOR48z2u2rzdmpIuk00B/Q2xCb0PMWtKgiMQynfuphmEuUyTQ==}
     cpu: [x64]
     os: [linux]
 
-  '@turbo/linux-arm64@2.9.0':
-    resolution: {integrity: sha512-+NaycIHwYmwt5WLa6V5OZGgtvPwUTwenA7cYLHo+QBsGW7uGROPvOpFU0WED2C5KcGvlu4GP9ks3Ih6Cg5oZew==}
+  '@turbo/linux-arm64@2.9.12':
+    resolution: {integrity: sha512-lC6nD//Xh67fmJM0LKaLsg74Wry0aYrgMklpiNgCbUaMdPIOqj0A00iri3NU7Lb7pZHx8ViisgpeDKlpSgFUCA==}
     cpu: [arm64]
     os: [linux]
 
-  '@turbo/windows-64@2.9.0':
-    resolution: {integrity: sha512-HCFf7WXdGWzCQw76/34l/BdYC9tzOihYAQX6ks34WY6MnhpPPAO9YbfV1c/SBcTIjpnQhoAGEBBYrQQ9h7R18w==}
+  '@turbo/windows-64@2.9.12':
+    resolution: {integrity: sha512-conYri8VUl72JOdYnLDPYwzqbPcY5ECoHmo9FWoKznemhaAIilj4maHqs9Uar0aKfNoZIULniy+6iWaLtLO34A==}
     cpu: [x64]
     os: [win32]
 
-  '@turbo/windows-arm64@2.9.0':
-    resolution: {integrity: sha512-/pdxvCMtom9qYplukZzacCL96Vht/datjiRYc3M1geknY+mg8+f047xLxe98PwNhX1sZyovea4RtH8bNU7JLGA==}
+  '@turbo/windows-arm64@2.9.12':
+    resolution: {integrity: sha512-XoR4bsg62/L/esRVcmoMESEiNZ36+YmyjYGLpoqk8nwMgXzzVjNOgX0lRSz5w/U/ajLGv3nhMsS0Q2QOdvp2AQ==}
     cpu: [arm64]
     os: [win32]
 
@@ -8702,8 +8702,8 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  turbo@2.9.0:
-    resolution: {integrity: sha512-T1PcaG7rej+JLqCyIwwu9NqKiWsoTrEsiSMj4aS9xlPsXoAZw+N8yZjKRdh1WwcQPrAeB0qswgPDoHG59hF4CQ==}
+  turbo@2.9.12:
+    resolution: {integrity: sha512-lCPgus1NuTiBdaITWqzSH/Ff6HVL8HHGBtOXHg1dHRfcshN79XkygSdh0M6g8b0td91ILLG5MTkLOkp5UvyPJw==}
     hasBin: true
 
   tw-animate-css@1.4.0:
@@ -12768,22 +12768,22 @@ snapshots:
 
   '@tokenizer/token@0.3.0': {}
 
-  '@turbo/darwin-64@2.9.0':
+  '@turbo/darwin-64@2.9.12':
     optional: true
 
-  '@turbo/darwin-arm64@2.9.0':
+  '@turbo/darwin-arm64@2.9.12':
     optional: true
 
-  '@turbo/linux-64@2.9.0':
+  '@turbo/linux-64@2.9.12':
     optional: true
 
-  '@turbo/linux-arm64@2.9.0':
+  '@turbo/linux-arm64@2.9.12':
     optional: true
 
-  '@turbo/windows-64@2.9.0':
+  '@turbo/windows-64@2.9.12':
     optional: true
 
-  '@turbo/windows-arm64@2.9.0':
+  '@turbo/windows-arm64@2.9.12':
     optional: true
 
   '@tybys/wasm-util@0.10.2':
@@ -17971,14 +17971,14 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  turbo@2.9.0:
+  turbo@2.9.12:
     optionalDependencies:
-      '@turbo/darwin-64': 2.9.0
-      '@turbo/darwin-arm64': 2.9.0
-      '@turbo/linux-64': 2.9.0
-      '@turbo/linux-arm64': 2.9.0
-      '@turbo/windows-64': 2.9.0
-      '@turbo/windows-arm64': 2.9.0
+      '@turbo/darwin-64': 2.9.12
+      '@turbo/darwin-arm64': 2.9.12
+      '@turbo/linux-64': 2.9.12
+      '@turbo/linux-arm64': 2.9.12
+      '@turbo/windows-64': 2.9.12
+      '@turbo/windows-arm64': 2.9.12
 
   tw-animate-css@1.4.0: {}
 
