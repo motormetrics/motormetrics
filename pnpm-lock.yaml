@@ -55,7 +55,7 @@ catalogs:
       specifier: 0.45.2
       version: 0.45.2
     next:
-      specifier: ^16.2.6
+      specifier: 16.2.6
       version: 16.2.6
     react:
       specifier: 19.2.4
@@ -80,7 +80,7 @@ catalogs:
       version: 4.3.6
 
 overrides:
-  form-data@>=4.0.0 <4.0.4: '>=4.0.4'
+  form-data@>=4.0.0 <4.0.4: 4.0.5
 
 importers:
 
