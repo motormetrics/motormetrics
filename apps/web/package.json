@@ -33,7 +33,7 @@
     "@motormetrics/database": "workspace:*",
     "@motormetrics/types": "workspace:*",
     "@motormetrics/utils": "workspace:*",
-    "@neondatabase/serverless": "1.0.1",
+    "@neondatabase/serverless": "1.1.0",
     "@number-flow/react": "0.6.0",
     "@opentelemetry/sdk-trace-node": "2.2.0",
     "@ruchernchong/number-format": "2.3.5",
