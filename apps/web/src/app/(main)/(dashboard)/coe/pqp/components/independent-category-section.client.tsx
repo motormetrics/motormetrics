@@ -4,8 +4,8 @@ import { KPI, KPIGroup, LineChart, Widget } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { numberFormat } from "@ruchernchong/number-format";
 
-import { DataTable } from "@web/app/(main)/(dashboard)/coe/components/pqp/data-table";
 import type { Pqp } from "@web/types/coe";
+import { DataTable } from "./data-table.client";
 
 type IndependentPqpCategory = keyof Pick<
   Pqp.Rates,
