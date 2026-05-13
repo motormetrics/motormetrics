@@ -20,6 +20,6 @@
     "drizzle-orm": "catalog:"
   },
   "devDependencies": {
-    "drizzle-kit": "0.31.4"
+    "drizzle-kit": "0.31.10"
   }
 }
