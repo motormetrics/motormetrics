@@ -1,10 +1,8 @@
 "use client";
 
-import { Card } from "@heroui/react";
-import { ComposedChart } from "@heroui-pro/react";
+import { ComposedChart, Widget } from "@heroui-pro/react";
 
 import { numberFormat } from "@ruchernchong/number-format";
-import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
 
 interface ComparisonMixedChartProps {
@@ -17,16 +15,20 @@ export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
   }));
 
   return (
-    <Card>
-      <Card.Header>
-        <div className="flex flex-col gap-1">
-          <Typography.H4>Latest COE Premium vs PQP Rate</Typography.H4>
-          <Typography.TextSm className="text-muted">
-            Comparison of latest COE bidding premium against current PQP rates
-          </Typography.TextSm>
-        </div>
-      </Card.Header>
-      <Card.Content>
+    <Widget>
+      <Widget.Header>
+        <Widget.Title>Premium vs PQP</Widget.Title>
+        <Widget.Description>
+          Latest bidding premium against the current renewal baseline.
+        </Widget.Description>
+        <Widget.Legend>
+          <Widget.LegendItem color="var(--chart-1)">
+            Latest COE Premium
+          </Widget.LegendItem>
+          <Widget.LegendItem color="var(--chart-2)">PQP Rate</Widget.LegendItem>
+        </Widget.Legend>
+      </Widget.Header>
+      <Widget.Content>
         <ComposedChart data={chartData} height={300} width="100%">
           <ComposedChart.Grid vertical={false} strokeDasharray="3 3" />
           <ComposedChart.XAxis dataKey="category" />
@@ -57,28 +59,12 @@ export function ComparisonMixedChart({ data }: ComparisonMixedChartProps) {
             strokeDasharray="8 4"
           />
         </ComposedChart>
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-          {[
-            { color: "var(--chart-1)", label: "Latest COE Premium" },
-            { color: "var(--chart-2)", label: "PQP Rate (Baseline)" },
-          ].map((item) => (
-            <div key={item.label} className="flex items-center gap-1.5">
-              <span
-                className="size-2.5 rounded-full"
-                style={{ backgroundColor: item.color }}
-              />
-              <span className="text-muted text-xs">{item.label}</span>
-            </div>
-          ))}
-        </div>
-      </Card.Content>
-      <Card.Footer>
-        <p className="text-muted text-sm">
-          Latest COE premium (bars) vs PQP baseline (dashed line). Bars above
-          line indicate strong demand; bars below suggest favourable renewal
-          conditions.
-        </p>
-      </Card.Footer>
-    </Card>
+      </Widget.Content>
+      <Widget.Footer>
+        Latest COE premium (bars) vs PQP baseline (dashed line). Bars above line
+        indicate strong demand; bars below suggest favourable renewal
+        conditions.
+      </Widget.Footer>
+    </Widget>
   );
 }

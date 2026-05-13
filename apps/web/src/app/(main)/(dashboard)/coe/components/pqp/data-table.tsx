@@ -3,6 +3,7 @@
 import { Pagination, type SortDescriptor, Table } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 
+import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
 import { type Key, useCallback, useMemo, useState } from "react";
 
@@ -18,8 +19,12 @@ export function DataTable({ rows, columns, rowsPerPage = 10 }: DataTableProps) {
     column: "month",
     direction: "descending",
   });
+  const categoryLabels = columns
+    .filter((column) => column.key !== "month")
+    .map((column) => column.label)
+    .join(" and ");
 
-  const pages = Math.ceil(rows.length / rowsPerPage);
+  const pages = Math.max(1, Math.ceil(rows.length / rowsPerPage));
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
@@ -76,40 +81,56 @@ export function DataTable({ rows, columns, rowsPerPage = 10 }: DataTableProps) {
   }, []);
 
   return (
-    <Table>
-      <Table.ScrollContainer>
-        <Table.Content
-          sortDescriptor={sortDescriptor}
-          onSortChange={setSortDescriptor}
-        >
-          <Table.Header>
-            {columns.map((column, index) => (
-              <Table.Column
-                key={column.key}
-                id={column.key}
-                isRowHeader={index === 0}
-                allowsSorting={column.sortable}
-              >
-                {column.label}
-              </Table.Column>
-            ))}
-          </Table.Header>
-          <Table.Body>
-            {sortedItems.map((item) => (
-              <Table.Row key={item.key} id={item.key}>
-                {columns.map((column) => (
-                  <Table.Cell key={column.key}>
-                    {renderCell(item, column.key)}
-                  </Table.Cell>
-                ))}
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Content>
-      </Table.ScrollContainer>
-      <Table.Footer>
-        <div className="flex w-full justify-center">
+    <section className="flex flex-col gap-4">
+      <div className="flex flex-col gap-1">
+        <Typography.H3>Historical PQP Rates</Typography.H3>
+        <Typography.TextSm>
+          Latest {rows.length} monthly renewal baselines for {categoryLabels}.
+        </Typography.TextSm>
+      </div>
+      <Table>
+        <Table.ScrollContainer>
+          <Table.Content
+            aria-label="Historical PQP rates"
+            sortDescriptor={sortDescriptor}
+            onSortChange={setSortDescriptor}
+          >
+            <Table.Header>
+              {columns.map((column, index) => (
+                <Table.Column
+                  key={column.key}
+                  id={column.key}
+                  isRowHeader={index === 0}
+                  allowsSorting={column.sortable}
+                >
+                  {column.label}
+                </Table.Column>
+              ))}
+            </Table.Header>
+            <Table.Body>
+              {sortedItems.map((item, idx) => (
+                <Table.Row
+                  key={item.key}
+                  id={item.key}
+                  className={
+                    idx === sortedItems.length - 1 ? "[&_td]:border-b-0" : ""
+                  }
+                >
+                  {columns.map((column) => (
+                    <Table.Cell key={column.key}>
+                      {renderCell(item, column.key)}
+                    </Table.Cell>
+                  ))}
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+        <Table.Footer>
           <Pagination size="sm">
+            <Pagination.Summary>
+              Page {page} of {pages}
+            </Pagination.Summary>
             <Pagination.Content>
               <Pagination.Item>
                 <Pagination.Previous
@@ -145,8 +166,8 @@ export function DataTable({ rows, columns, rowsPerPage = 10 }: DataTableProps) {
               </Pagination.Item>
             </Pagination.Content>
           </Pagination>
-        </div>
-      </Table.Footer>
-    </Table>
+        </Table.Footer>
+      </Table>
+    </section>
   );
 }
