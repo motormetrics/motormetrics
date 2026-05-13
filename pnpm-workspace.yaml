@@ -27,7 +27,7 @@ catalog:
   "@types/react": 19.2.10
   "@types/react-dom": 19.2.3
   "@upstash/redis": 1.37.0
-  "@vercel/related-projects": 1.0.1
+  "@vercel/related-projects": 1.1.0
   "@vitest/coverage-v8": 4.1.6
   "@vitest/ui": 4.1.6
   ai: 6.0.182
