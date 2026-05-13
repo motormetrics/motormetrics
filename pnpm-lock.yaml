@@ -13,11 +13,11 @@ catalogs:
       specifier: 3.0.64
       version: 3.0.64
     '@heroui/react':
-      specifier: 3.0.3
-      version: 3.0.3
+      specifier: 3.0.4
+      version: 3.0.4
     '@heroui/styles':
-      specifier: 3.0.3
-      version: 3.0.3
+      specifier: 3.0.4
+      version: 3.0.4
     '@langfuse/otel':
       specifier: 4.5.1
       version: 4.5.1
@@ -222,10 +222,10 @@ importers:
         version: 1.0.0-beta.3
       '@heroui/react':
         specifier: 'catalog:'
-        version: 3.0.3(@react-spectrum/provider@3.11.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.1.18)
+        version: 3.0.4(@react-spectrum/provider@3.11.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.1.18)
       '@heroui/styles':
         specifier: 'catalog:'
-        version: 3.0.3(tailwind-merge@3.4.0)(tailwindcss@4.1.18)
+        version: 3.0.4(tailwind-merge@3.4.0)(tailwindcss@4.1.18)
       '@icons-pack/react-simple-icons':
         specifier: 10.2.0
         version: 10.2.0(react@19.2.4)
@@ -2032,15 +2032,15 @@ packages:
   '@heroui-pro/react@1.0.0-beta.3':
     resolution: {integrity: sha512-DVvi+4X1jFNpf174yA7MyfXaD8gDPYdTuNJo+iVswnePWS6Xn/Vtx181OFSUOcytmCipenYKY8reuuBDDrUzVw==}
 
-  '@heroui/react@3.0.3':
-    resolution: {integrity: sha512-UJPOxg3IbS5KtI2GLP7S56KrSBn/r4xQyntCVpnPzgoT7JuciB4dq7IhckuDNHcrdIPO45JrKHGJz2hiYxaRGg==}
+  '@heroui/react@3.0.4':
+    resolution: {integrity: sha512-6y6aXZ9v8W/dNDKA3yP0+VnY3OQUeg8164YnOXVaFd1U8+WbXka1hwPgi3PK/qmMv8W81SdiVnmEZUXjHbXpfw==}
     peerDependencies:
       react: '>=19.0.0'
       react-dom: '>=19.0.0'
       tailwindcss: '>=4.0.0'
 
-  '@heroui/styles@3.0.3':
-    resolution: {integrity: sha512-DtN5QWfLVxy6DSDNgtUuHVU/h4G+dfoDHHxGVZRW6plCEh1Rc5Yc7YW7b8JBiYCknSRx/fqLXpas3Fe5Q5XJSw==}
+  '@heroui/styles@3.0.4':
+    resolution: {integrity: sha512-3zi0cu8PPmMbUdRg7AO486w9uA7ZHuV6m8ab23RQHChJ97q3s/tM13r74l7A963Dif+0ZWpQRiicsUvWuaAcDg==}
     peerDependencies:
       tailwindcss: '>=4.0.0'
 
@@ -10805,9 +10805,9 @@ snapshots:
       chalk: 5.6.2
       heroui-pro: 1.0.0-beta.9
 
-  '@heroui/react@3.0.3(@react-spectrum/provider@3.11.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.1.18)':
+  '@heroui/react@3.0.4(@react-spectrum/provider@3.11.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.1.18)':
     dependencies:
-      '@heroui/styles': 3.0.3(tailwind-merge@3.4.0)(tailwindcss@4.1.18)
+      '@heroui/styles': 3.0.4(tailwind-merge@3.4.0)(tailwindcss@4.1.18)
       '@radix-ui/react-avatar': 1.1.11(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@react-aria/i18n': 3.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@react-aria/ssr': 3.10.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -10827,7 +10827,7 @@ snapshots:
       - '@types/react'
       - '@types/react-dom'
 
-  '@heroui/styles@3.0.3(tailwind-merge@3.4.0)(tailwindcss@4.1.18)':
+  '@heroui/styles@3.0.4(tailwind-merge@3.4.0)(tailwindcss@4.1.18)':
     dependencies:
       tailwind-variants: 3.2.2(tailwind-merge@3.4.0)(tailwindcss@4.1.18)
       tailwindcss: 4.1.18
