@@ -2,7 +2,9 @@ import { redis } from "@motormetrics/utils";
 import { ComparisonMixedChart } from "@web/app/(main)/(dashboard)/coe/components/pqp/comparison-mixed-chart";
 import { ComparisonSummaryCard } from "@web/app/(main)/(dashboard)/coe/components/pqp/comparison-summary-card";
 import { DataTable } from "@web/app/(main)/(dashboard)/coe/components/pqp/data-table";
-import { RenewalCalculator } from "@web/app/(main)/(dashboard)/coe/components/pqp/renewal-calculator";
+import { IndependentCategorySection } from "@web/app/(main)/(dashboard)/coe/components/pqp/independent-category-section";
+import { RenewalComparison } from "@web/app/(main)/(dashboard)/coe/components/pqp/renewal-comparison";
+import { PqpSecondaryDisclosure } from "@web/app/(main)/(dashboard)/coe/components/pqp/secondary-disclosure";
 import { TrendsChart } from "@web/app/(main)/(dashboard)/coe/components/pqp/trends-chart";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
@@ -30,6 +32,14 @@ const title = "PQP Rates for COE Renewal";
 const description =
   "Latest Prevailing Quota Premium (PQP) rates for COE renewal in Singapore. These rates show the average COE prices over the last 3 months.";
 const images = `${SITE_URL}/opengraph-image.png`;
+const primaryCategories = ["Category A", "Category B"] satisfies Array<
+  keyof Pqp.Rates
+>;
+type SecondaryCategory = keyof Pick<Pqp.Rates, "Category C" | "Category D">;
+const secondaryCategoryGroups = [
+  ["Category C"],
+  ["Category D"],
+] satisfies Array<[SecondaryCategory]>;
 
 interface PageProps {
   searchParams: Promise<SearchParams>;
@@ -64,12 +74,12 @@ export default async function PQPRatesPage({
   searchParams: searchParamsPromise,
 }: PageProps) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8">
       <DashboardPageHeader
         title={
           <DashboardPageTitle
             title="PQP Rates"
-            subtitle="Prevailing Quota Premium rates for COE renewal in Singapore."
+            subtitle="Renewal-focused view of Prevailing Quota Premium rates and latest COE bidding signals."
           />
         }
         meta={
@@ -79,7 +89,7 @@ export default async function PQPRatesPage({
         }
       />
       <Suspense>
-        <PQPRatesContent searchParams={searchParamsPromise} />
+        <PQPRatesContent />
       </Suspense>
     </div>
   );
@@ -108,24 +118,29 @@ async function PQPRatesHeaderMeta({
   );
 }
 
-async function PQPRatesContent({
-  searchParams: searchParamsPromise,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const [overview, _lastUpdated, _months] = await Promise.all([
-    getPQPOverview(),
-    redis.get<number>(LAST_UPDATED_COE_KEY),
-    fetchMonthsForCOE(),
-  ]);
+async function PQPRatesContent() {
+  const overview = await getPQPOverview();
 
-  const columns: Pqp.TableColumn[] = [
-    { key: "month", label: "Month", sortable: true },
-    { key: "Category A", label: "Category A" },
-    { key: "Category B", label: "Category B" },
-    { key: "Category C", label: "Category C" },
-    { key: "Category D", label: "Category D" },
-  ];
+  const primaryColumns = getPqpColumns(primaryCategories);
+  const primaryComparison = filterByCategories(
+    overview.comparison,
+    primaryCategories,
+  );
+  const primaryCategorySummaries = filterByCategories(
+    overview.categorySummaries,
+    primaryCategories,
+  );
+  const secondaryCategorySections = secondaryCategoryGroups.map(
+    (categories) => ({
+      category: categories[0],
+      categorySummaries: filterByCategories(
+        overview.categorySummaries,
+        categories,
+      ),
+      columns: getPqpColumns(categories),
+      key: categories.join("-"),
+    }),
+  );
 
   const structuredData: WithContext<WebPage> = {
     "@context": "https://schema.org",
@@ -154,34 +169,74 @@ async function PQPRatesContent({
           ]),
         }}
       />
-      <AnimatedSection order={1}>
-        <Suspense>
-          <ComparisonSummaryCard data={overview.comparison} />
-        </Suspense>
-      </AnimatedSection>
+      <div className="flex flex-col gap-8">
+        <AnimatedSection order={1}>
+          <Suspense>
+            <ComparisonSummaryCard data={primaryComparison} />
+          </Suspense>
+        </AnimatedSection>
 
-      <AnimatedSection order={3}>
-        <Suspense>
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <TrendsChart data={overview.trendData} />
-            <ComparisonMixedChart data={overview.comparison} />
-          </div>
-        </Suspense>
-      </AnimatedSection>
+        <AnimatedSection order={2}>
+          <Suspense>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <TrendsChart
+                categories={primaryCategories}
+                data={overview.trendData}
+              />
+              <ComparisonMixedChart data={primaryComparison} />
+            </div>
+          </Suspense>
+        </AnimatedSection>
 
-      <AnimatedSection order={4}>
-        <Suspense>
-          <DataTable rows={overview.tableRows} columns={columns} />
-        </Suspense>
-      </AnimatedSection>
+        <AnimatedSection order={3}>
+          <Suspense>
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.85fr)] xl:items-start">
+              <DataTable rows={overview.tableRows} columns={primaryColumns} />
+              <UnreleasedFeature>
+                <RenewalComparison
+                  categories={primaryCategories}
+                  data={primaryCategorySummaries}
+                />
+              </UnreleasedFeature>
+            </div>
+          </Suspense>
+        </AnimatedSection>
 
-      <AnimatedSection order={5}>
-        <Suspense>
-          <UnreleasedFeature>
-            <RenewalCalculator data={overview.categorySummaries} />
-          </UnreleasedFeature>
-        </Suspense>
-      </AnimatedSection>
+        <AnimatedSection order={5}>
+          <Suspense>
+            <PqpSecondaryDisclosure>
+              {secondaryCategorySections.map(
+                ({ category, categorySummaries, columns, key }) => (
+                  <IndependentCategorySection
+                    key={key}
+                    category={category}
+                    columns={columns}
+                    summary={categorySummaries[0]}
+                    tableRows={overview.tableRows}
+                    trendData={overview.trendData}
+                  />
+                ),
+              )}
+            </PqpSecondaryDisclosure>
+          </Suspense>
+        </AnimatedSection>
+      </div>
     </>
   );
+}
+
+function getPqpColumns(categories: Array<keyof Pqp.Rates>): Pqp.TableColumn[] {
+  return [
+    { key: "month", label: "Month", sortable: true },
+    ...categories.map((category) => ({ key: category, label: category })),
+  ];
+}
+
+function filterByCategories<T extends { category: string }>(
+  data: T[],
+  categories: Array<keyof Pqp.Rates>,
+) {
+  const categorySet = new Set<string>(categories);
+
+  return data.filter((item) => categorySet.has(item.category));
 }

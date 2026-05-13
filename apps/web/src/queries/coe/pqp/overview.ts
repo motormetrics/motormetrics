@@ -268,17 +268,13 @@ export async function getPQPOverview(): Promise<Pqp.Overview> {
     },
   );
 
-  const comparison: Pqp.Comparison[] = categorySummaries
-    .filter(
-      (row) => row.category === "Category A" || row.category === "Category B",
-    )
-    .map((row) => ({
-      category: row.category,
-      latestPremium: row.coePremium,
-      pqpRate: row.pqpRate,
-      difference: row.difference,
-      differencePercent: row.differencePercent,
-    }));
+  const comparison: Pqp.Comparison[] = categorySummaries.map((row) => ({
+    category: row.category,
+    latestPremium: row.coePremium,
+    pqpRate: row.pqpRate,
+    difference: row.difference,
+    differencePercent: row.differencePercent,
+  }));
 
   const latestMonth = tableRows[0]?.month ?? null;
 

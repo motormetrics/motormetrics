@@ -63,6 +63,20 @@ describe("PQP queries", () => {
         difference: 0,
         differencePercent: 0,
       },
+      {
+        category: "Category C",
+        latestPremium: 0,
+        pqpRate: 0,
+        difference: 0,
+        differencePercent: 0,
+      },
+      {
+        category: "Category D",
+        latestPremium: 0,
+        pqpRate: 0,
+        difference: 0,
+        differencePercent: 0,
+      },
     ]);
     const categoryA = result.categorySummaries.find(
       (row) => row.category === "Category A",

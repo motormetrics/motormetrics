@@ -1,14 +1,14 @@
 "use client";
 
-import { Alert, Card, Tabs } from "@heroui/react";
-import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
+import { Alert } from "@heroui/react";
+import { KPI, KPIGroup, NumberValue, Segment } from "@heroui-pro/react";
 
 import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
-import { Bike, Calculator, Car, type LucideIcon, Truck } from "lucide-react";
 import { useMemo, useState } from "react";
 
-interface PQPCalculatorProps {
+interface RenewalComparisonProps {
+  categories?: Array<keyof Pqp.Rates>;
   data: Pqp.CategorySummary[];
 }
 
@@ -16,7 +16,6 @@ interface CoeCategory {
   key: keyof Pqp.Rates;
   label: string;
   description: string;
-  icon: LucideIcon;
 }
 
 const coeCategories: CoeCategory[] = [
@@ -24,27 +23,25 @@ const coeCategories: CoeCategory[] = [
     key: "Category A",
     label: "Category A",
     description: "≤1600cc, ≤130bhp",
-    icon: Car,
   },
   {
     key: "Category B",
     label: "Category B",
     description: ">1600cc or >130bhp",
-    icon: Car,
   },
   {
     key: "Category C",
     label: "Category C",
     description: "Goods Vehicles & Buses",
-    icon: Truck,
   },
   {
     key: "Category D",
     label: "Category D",
     description: "Motorcycles",
-    icon: Bike,
   },
 ];
+
+const defaultCategories = coeCategories.map(({ key }) => key);
 
 const buildRecommendation = (
   savings5Year: number,
@@ -59,7 +56,13 @@ const buildRecommendation = (
   return "Current market bidding appears more cost-effective than PQP renewal. However, consider bidding uncertainty and your risk tolerance.";
 };
 
-export function RenewalCalculator({ data }: PQPCalculatorProps) {
+export function RenewalComparison({
+  categories = defaultCategories,
+  data,
+}: RenewalComparisonProps) {
+  const visibleCategories = coeCategories.filter(({ key }) =>
+    categories.includes(key),
+  );
   const renewalRecords = useMemo<Pqp.RenewalRecord[]>(() => {
     return data.map((record) => ({
       category: record.category as keyof Pqp.Rates,
@@ -76,99 +79,74 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
     }));
   }, [data]);
 
-  const [selectedCategory, setSelectedCategory] =
-    useState<keyof Pqp.Rates>("Category A");
+  const [selectedCategory, setSelectedCategory] = useState<keyof Pqp.Rates>(
+    categories[0] ?? "Category A",
+  );
   const selectedRecord = renewalRecords.find(
     ({ category }) => category === selectedCategory,
   );
 
   return (
-    <Card>
-      <Card.Header className="flex-col items-start gap-2">
-        <div className="flex items-center gap-2">
-          <Calculator className="size-5" />
-          <Typography.H4>PQP vs Bidding Calculator</Typography.H4>
-        </div>
-        <Typography.TextSm className="text-muted">
-          Compare costs between PQP renewal and current market bidding
+    <section className="flex flex-col gap-4">
+      <div className="flex flex-col gap-1">
+        <Typography.H3>PQP vs Bidding Comparison</Typography.H3>
+        <Typography.TextSm>
+          Compare renewal estimates against the latest market premium for each
+          visible COE category.
         </Typography.TextSm>
-      </Card.Header>
-      <Card.Content className="gap-4">
-        <Tabs
+      </div>
+      <div className="flex flex-col gap-4">
+        <Segment
+          aria-label="COE categories"
           selectedKey={selectedCategory}
+          variant="ghost"
           onSelectionChange={(key) =>
             setSelectedCategory(key as keyof Pqp.Rates)
           }
         >
-          <Tabs.ListContainer>
-            <Tabs.List aria-label="COE categories">
-              {coeCategories.map(({ key, icon: Icon, label }) => (
-                <Tabs.Tab key={key} id={key}>
-                  <Icon className="size-4" />
-                  <span>{label}</span>
-                  <Tabs.Indicator />
-                </Tabs.Tab>
-              ))}
-            </Tabs.List>
-          </Tabs.ListContainer>
-          {coeCategories.map(({ key }) => {
-            const categoryRecord = renewalRecords.find(
-              ({ category }) => category === key,
-            );
-            const currentPQPRate = categoryRecord?.pqpRate ?? 0;
-            const currentCOEPremium = categoryRecord?.coePremium ?? 0;
-
-            return (
-              <Tabs.Panel key={key} id={key}>
-                <div className="flex flex-col gap-4">
-                  <KPIGroup>
-                    <KPI>
-                      <KPI.Header>
-                        <KPI.Title>Current PQP Rate</KPI.Title>
-                      </KPI.Header>
-                      <KPI.Content>
-                        <KPI.Value
-                          currency="SGD"
-                          locale="en-SG"
-                          maximumFractionDigits={0}
-                          style="currency"
-                          value={currentPQPRate}
-                        />
-                      </KPI.Content>
-                      <KPI.Footer>
-                        <span className="text-muted text-xs">
-                          Latest available rate
-                        </span>
-                      </KPI.Footer>
-                    </KPI>
-                    <KPIGroup.Separator />
-                    <KPI>
-                      <KPI.Header>
-                        <KPI.Title>Current COE Price</KPI.Title>
-                      </KPI.Header>
-                      <KPI.Content>
-                        <KPI.Value
-                          currency="SGD"
-                          locale="en-SG"
-                          maximumFractionDigits={0}
-                          style="currency"
-                          value={currentCOEPremium}
-                        />
-                      </KPI.Content>
-                      <KPI.Footer>
-                        <span className="text-muted text-xs">
-                          Latest COE premium
-                        </span>
-                      </KPI.Footer>
-                    </KPI>
-                  </KPIGroup>
-                </div>
-              </Tabs.Panel>
-            );
-          })}
-        </Tabs>
+          {visibleCategories.map(({ key, label }) => (
+            <Segment.Item key={key} id={key}>
+              <Segment.Separator />
+              {label}
+            </Segment.Item>
+          ))}
+        </Segment>
         {selectedRecord && (
           <div className="flex flex-col gap-4">
+            <KPIGroup>
+              <KPI>
+                <KPI.Header>
+                  <KPI.Title>Current PQP Rate</KPI.Title>
+                </KPI.Header>
+                <KPI.Content>
+                  <KPI.Value
+                    currency="SGD"
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    style="currency"
+                    value={selectedRecord.pqpRate}
+                  />
+                </KPI.Content>
+                <KPI.Footer>Latest available rate</KPI.Footer>
+              </KPI>
+              <KPIGroup.Separator />
+              <KPI>
+                <KPI.Header>
+                  <KPI.Title>Current COE Price</KPI.Title>
+                </KPI.Header>
+                <KPI.Content>
+                  <KPI.Value
+                    currency="SGD"
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    style="currency"
+                    value={selectedRecord.coePremium}
+                  />
+                </KPI.Content>
+                <KPI.Footer>Latest COE premium</KPI.Footer>
+              </KPI>
+            </KPIGroup>
+
             <KPIGroup>
               <KPI>
                 <KPI.Header>
@@ -237,7 +215,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
               </KPI>
             </KPIGroup>
 
-            <Alert status="accent" className="border border-accent/40">
+            <Alert status="accent">
               <Alert.Content>
                 <Alert.Title>Note</Alert.Title>
                 <Alert.Description>
@@ -264,7 +242,7 @@ export function RenewalCalculator({ data }: PQPCalculatorProps) {
             </div>
           </div>
         )}
-      </Card.Content>
-    </Card>
+      </div>
+    </section>
   );
 }
