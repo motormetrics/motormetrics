@@ -28,8 +28,8 @@ catalog:
   "@types/react-dom": 19.2.3
   "@upstash/redis": 1.37.0
   "@vercel/related-projects": 1.0.1
-  "@vitest/coverage-v8": 4.1.0
-  "@vitest/ui": 4.1.0
+  "@vitest/coverage-v8": 4.1.6
+  "@vitest/ui": 4.1.6
   ai: 6.0.182
   date-fns: 3.6.0
   drizzle-orm: 0.45.2
@@ -40,7 +40,7 @@ catalog:
   tailwindcss: 4.1.18
   tsx: 4.21.0
   typescript: 5.9.3
-  vitest: 4.1.0
+  vitest: 4.1.6
   zod: 4.3.6
 
 overrides:
