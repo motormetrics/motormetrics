@@ -41,7 +41,7 @@
     "@tanstack/react-table": "8.21.3",
     "@upstash/ratelimit": "2.0.8",
     "@upstash/redis": "catalog:",
-    "@vercel/analytics": "1.6.1",
+    "@vercel/analytics": "2.0.1",
     "@vercel/config": "0.0.30",
     "@vercel/functions": "3.4.0",
     "@vercel/related-projects": "1.0.0",
