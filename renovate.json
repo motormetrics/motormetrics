@@ -5,6 +5,12 @@
   "schedule": ["before 9am on Monday"],
   "packageRules": [
     {
+      "description": "Keep .node-version on the Node major line",
+      "matchManagers": ["nodenv"],
+      "matchDepNames": ["node"],
+      "rangeStrategy": "replace"
+    },
+    {
       "description": "Auto-merge patch updates for devDependencies",
       "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["patch"],
