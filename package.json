@@ -12,7 +12,6 @@
     "typecheck": "turbo typecheck",
     "start": "turbo start",
     "test": "turbo test",
-    "test:coverage": "turbo test:coverage",
     "test:watch": "turbo test:watch",
     "migrate": "turbo migrate",
     "migrate:check": "turbo migrate:check",

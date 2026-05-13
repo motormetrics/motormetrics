@@ -9,6 +9,8 @@ export default defineConfig({
     environment: "node",
     detectAsyncLeaks: true,
     coverage: {
+      enabled: true,
+      provider: "v8",
       include: ["src/**/*.ts"],
       exclude: ["src/**/*.test.ts", "src/types"],
     },

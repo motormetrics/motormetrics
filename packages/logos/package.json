@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
     "lint": "biome check .",
     "format": "biome format --write",
     "typecheck": "tsc --noEmit"

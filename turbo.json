@@ -39,10 +39,6 @@
       "persistent": true,
       "interactive": true
     },
-    "test:coverage": {
-      "inputs": ["$TURBO_DEFAULT$", "test/**/*.ts", "tests/**/*.ts"],
-      "outputs": ["coverage/**"]
-    },
     "test:integration": {
       "dependsOn": ["^test:integration"],
       "inputs": [
