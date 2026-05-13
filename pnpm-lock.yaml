@@ -486,8 +486,8 @@ importers:
         specifier: 2.2.0
         version: 2.2.0(@opentelemetry/api@1.9.1)
       '@vercel/blob':
-        specifier: 2.3.0
-        version: 2.3.0
+        specifier: 2.3.3
+        version: 2.3.3
       ai:
         specifier: 'catalog:'
         version: 6.0.182(zod@4.3.6)
@@ -517,8 +517,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@vercel/blob':
-        specifier: 2.3.0
-        version: 2.3.0
+        specifier: 2.3.3
+        version: 2.3.3
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -4211,8 +4211,8 @@ packages:
       vue-router:
         optional: true
 
-  '@vercel/blob@2.3.0':
-    resolution: {integrity: sha512-oYWiJbWRQ7gz9Mj0X/NHFJ3OcLMOBzq/2b3j6zeNrQmtFo6dHwU8FAwNpxVIYddVMd+g8eqEi7iRueYx8FtM0Q==}
+  '@vercel/blob@2.3.3':
+    resolution: {integrity: sha512-MtD7VLo6hU07eHR7bmk5SIMD290q574UaNYTe46qeyRT+hWrCy26CoAqfd7PnIefVXvRehRZBzukxuTO9iGTVg==}
     engines: {node: '>=20.0.0'}
 
   '@vercel/cli-auth@0.0.1':
@@ -12917,7 +12917,7 @@ snapshots:
       next: 16.2.6(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.57.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react: 19.2.4
 
-  '@vercel/blob@2.3.0':
+  '@vercel/blob@2.3.3':
     dependencies:
       async-retry: 1.3.3
       is-buffer: 2.0.5
