@@ -1,11 +1,4 @@
 import { redis } from "@motormetrics/utils";
-import { ComparisonMixedChart } from "@web/app/(main)/(dashboard)/coe/components/pqp/comparison-mixed-chart";
-import { ComparisonSummaryCard } from "@web/app/(main)/(dashboard)/coe/components/pqp/comparison-summary-card";
-import { DataTable } from "@web/app/(main)/(dashboard)/coe/components/pqp/data-table";
-import { IndependentCategorySection } from "@web/app/(main)/(dashboard)/coe/components/pqp/independent-category-section";
-import { RenewalComparison } from "@web/app/(main)/(dashboard)/coe/components/pqp/renewal-comparison";
-import { PqpSecondaryDisclosure } from "@web/app/(main)/(dashboard)/coe/components/pqp/secondary-disclosure";
-import { TrendsChart } from "@web/app/(main)/(dashboard)/coe/components/pqp/trends-chart";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
@@ -26,6 +19,13 @@ import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
+import { ComparisonMixedChart } from "./components/comparison-mixed-chart.client";
+import { ComparisonSummaryCard } from "./components/comparison-summary-card.client";
+import { DataTable } from "./components/data-table.client";
+import { IndependentCategorySection } from "./components/independent-category-section.client";
+import { RenewalComparison } from "./components/renewal-comparison.client";
+import { PqpSecondaryDisclosure } from "./components/secondary-disclosure.client";
+import { TrendsChart } from "./components/trends-chart.client";
 import { loadSearchParams } from "./search-params";
 
 const title = "PQP Rates for COE Renewal";
