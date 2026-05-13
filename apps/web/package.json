@@ -79,7 +79,7 @@
     "twitter-api-v2": "1.28.0",
     "workflow": "4.2.0",
     "zod": "catalog:",
-    "zustand": "5.0.9"
+    "zustand": "5.0.13"
   },
   "devDependencies": {
     "@babel/core": "7.28.5",
