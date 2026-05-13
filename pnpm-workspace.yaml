@@ -30,7 +30,7 @@ catalog:
   "@vercel/related-projects": 1.0.1
   "@vitest/coverage-v8": 4.1.0
   "@vitest/ui": 4.1.0
-  ai: 6.0.168
+  ai: 6.0.182
   date-fns: 3.6.0
   drizzle-orm: 0.45.2
   next: 16.2.6
