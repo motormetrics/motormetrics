@@ -132,7 +132,7 @@ ${recentPosts.map((post) => `- [${post.title}](${SITE_URL}/blog/${post.slug})`).
 - [API Architecture](https://docs.motormetrics.app/architecture/api): Hono framework structure
 - [Database Schema](https://docs.motormetrics.app/architecture/database): PostgreSQL schema
 - [Workflows](https://docs.motormetrics.app/architecture/workflows): Data processing automation
-- [Infrastructure](https://docs.motormetrics.app/architecture/infrastructure): AWS deployment with SST
+- [Infrastructure](https://docs.motormetrics.app/architecture/infrastructure): Vercel deployment architecture
 - [Social Integration](https://docs.motormetrics.app/architecture/social): Social media automation
 
 ## About & Information

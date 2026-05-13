@@ -1,5 +1,5 @@
 import path from "node:path";
-import { AWS_LAMBDA_TEMP_DIR } from "@web/config/workflow";
+import { WORKFLOW_TEMP_DIR } from "@web/config/workflow";
 import AdmZip from "adm-zip";
 
 export const downloadFile = async (url: string, csvFile?: string) => {
@@ -28,7 +28,7 @@ export const downloadFile = async (url: string, csvFile?: string) => {
         fileNames.push(entry.entryName);
 
         // Extract to file system with full path
-        zip.extractEntryTo(entry, AWS_LAMBDA_TEMP_DIR, true, true);
+        zip.extractEntryTo(entry, WORKFLOW_TEMP_DIR, true, true);
       }
     }
 
@@ -66,10 +66,10 @@ export async function fetchAndExtractZip(
   for (const entry of zip.getEntries()) {
     if (!entry.isDirectory) {
       console.log("Found file in ZIP:", entry.entryName);
-      zip.extractEntryTo(entry, AWS_LAMBDA_TEMP_DIR, true, true);
+      zip.extractEntryTo(entry, WORKFLOW_TEMP_DIR, true, true);
       extracted.set(
         path.basename(entry.entryName),
-        path.join(AWS_LAMBDA_TEMP_DIR, entry.entryName),
+        path.join(WORKFLOW_TEMP_DIR, entry.entryName),
       );
     }
   }

@@ -4,7 +4,6 @@
 /build/
 /dist/
 .open-next/
-.sst/
 
 # Environment files
 .env.*
@@ -32,7 +31,6 @@
 
 # Framework files
 next-env.d.ts
-sst-env.d.ts
 
 # Changesets
 .changeset/pre.json

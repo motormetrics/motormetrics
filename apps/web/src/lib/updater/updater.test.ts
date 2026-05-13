@@ -1,6 +1,6 @@
 import path from "node:path";
-import { db } from "@motormetrics/database";
-import { AWS_LAMBDA_TEMP_DIR } from "@web/config/workflow";
+import { db, type Table } from "@motormetrics/database";
+import { WORKFLOW_TEMP_DIR } from "@web/config/workflow";
 import {
   type UpdaterConfig,
   type UpdaterOptions,
@@ -40,11 +40,25 @@ const mockTable = {
   month: "month",
   make: "make",
   fuel_type: "fuel_type",
-} as any;
+} as unknown as Table;
+
+type TestRecord = {
+  month: string;
+  make: string;
+  fuel_type: string;
+};
+
+const createInsertMock = (returnedRows: unknown[] = [{}, {}]) => ({
+  values: vi.fn().mockReturnThis(),
+  onConflictDoNothing: vi.fn().mockReturnThis(),
+  returning: vi.fn().mockResolvedValue(returnedRows),
+});
+
+type InsertMock = ReturnType<typeof createInsertMock>;
 
 describe("update", () => {
   let mockChecksum: Checksum;
-  let updaterConfig: UpdaterConfig<any>;
+  let updaterConfig: UpdaterConfig<TestRecord>;
   let updaterOptions: UpdaterOptions;
 
   const mockData = [
@@ -59,7 +73,7 @@ describe("update", () => {
     mockChecksum = {
       getCachedChecksum: vi.fn(),
       cacheChecksum: vi.fn(),
-    } as any;
+    } as unknown as Checksum;
 
     // Setup basic config
     updaterConfig = {
@@ -79,12 +93,8 @@ describe("update", () => {
     vi.mocked(processCsv).mockResolvedValue(mockData);
 
     // Mock database insert with onConflictDoNothing chain
-    const mockInsert = {
-      values: vi.fn().mockReturnThis(),
-      onConflictDoNothing: vi.fn().mockReturnThis(),
-      returning: vi.fn().mockResolvedValue([{}, {}]),
-    };
-    vi.mocked(db.insert).mockReturnValue(mockInsert as any);
+    const mockInsert = createInsertMock();
+    vi.mocked(db.insert).mockReturnValue(mockInsert as never);
 
     vi.mocked(db.$cache.invalidate).mockResolvedValue(undefined);
   });
@@ -111,7 +121,7 @@ describe("update", () => {
       undefined,
     );
     expect(calculateChecksum).toHaveBeenCalledWith(
-      path.join(AWS_LAMBDA_TEMP_DIR, "test-file.csv"),
+      path.join(WORKFLOW_TEMP_DIR, "test-file.csv"),
     );
     expect(mockChecksum.cacheChecksum).toHaveBeenCalledWith(
       "test-file.csv",
@@ -140,7 +150,7 @@ describe("update", () => {
 
     await update(updaterConfig, updaterOptions);
 
-    const insertMock = vi.mocked(db.insert).mock.results[0].value as any;
+    const insertMock = vi.mocked(db.insert).mock.results[0].value as InsertMock;
     expect(insertMock.values).toHaveBeenCalled();
     expect(insertMock.onConflictDoNothing).toHaveBeenCalled();
     expect(insertMock.returning).toHaveBeenCalled();
@@ -149,12 +159,8 @@ describe("update", () => {
   it("should return 0 when all records conflict", async () => {
     vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue("different123");
 
-    const mockInsert = {
-      values: vi.fn().mockReturnThis(),
-      onConflictDoNothing: vi.fn().mockReturnThis(),
-      returning: vi.fn().mockResolvedValue([]),
-    };
-    vi.mocked(db.insert).mockReturnValue(mockInsert as any);
+    const mockInsert = createInsertMock([]);
+    vi.mocked(db.insert).mockReturnValue(mockInsert as never);
 
     const result = await update(updaterConfig, updaterOptions);
 
@@ -179,16 +185,12 @@ describe("update", () => {
     vi.mocked(processCsv).mockResolvedValue(largeDataSet);
     vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue(null);
 
-    const mockInsert = {
-      values: vi.fn().mockReturnThis(),
-      onConflictDoNothing: vi.fn().mockReturnThis(),
-      returning: vi
-        .fn()
-        .mockResolvedValueOnce([{}, {}])
-        .mockResolvedValueOnce([{}, {}])
-        .mockResolvedValueOnce([{}]),
-    };
-    vi.mocked(db.insert).mockReturnValue(mockInsert as any);
+    const mockInsert = createInsertMock();
+    mockInsert.returning
+      .mockResolvedValueOnce([{}, {}])
+      .mockResolvedValueOnce([{}, {}])
+      .mockResolvedValueOnce([{}]);
+    vi.mocked(db.insert).mockReturnValue(mockInsert as never);
 
     const result = await update(updaterConfig, updaterOptions);
 

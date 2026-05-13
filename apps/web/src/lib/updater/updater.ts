@@ -1,6 +1,6 @@
 import path from "node:path";
 import { db, getTableName, type Table } from "@motormetrics/database";
-import { AWS_LAMBDA_TEMP_DIR } from "@web/config/workflow";
+import { WORKFLOW_TEMP_DIR } from "@web/config/workflow";
 import { calculateChecksum } from "@web/lib/updater/services/calculate-checksum";
 import { downloadFile } from "@web/lib/updater/services/download-file";
 import {
@@ -48,7 +48,7 @@ export async function update<T>(
     destinationPath = config.filePath;
   } else {
     const extractedFileName = await downloadFile(url, csvFile);
-    destinationPath = path.join(AWS_LAMBDA_TEMP_DIR, extractedFileName);
+    destinationPath = path.join(WORKFLOW_TEMP_DIR, extractedFileName);
   }
   console.log("Destination path:", destinationPath);
 

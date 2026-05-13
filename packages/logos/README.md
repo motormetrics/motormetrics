@@ -98,7 +98,7 @@ The package uses **Vercel Blob** for logo storage with **Upstash Redis** for met
 
 - **Vercel Blob**: Stores logo images with public CDN access and 1-year cache headers
 - **Upstash Redis**: Caches logo metadata for 24 hours to minimize Blob API calls
-- **Compatible**: Works with SST/AWS Lambda and Vercel deployments
+- **Compatible**: Works with serverless and Vercel deployments
 
 **Environment Variables Required:**
 - `BLOB_READ_WRITE_TOKEN`: Vercel Blob authentication token

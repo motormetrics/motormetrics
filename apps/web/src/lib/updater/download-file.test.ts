@@ -4,8 +4,8 @@ import {
 } from "@web/lib/updater/services/download-file";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@web/config", () => ({
-  AWS_LAMBDA_TEMP_DIR: "/tmp",
+vi.mock("@web/config/workflow", () => ({
+  WORKFLOW_TEMP_DIR: "/tmp",
 }));
 
 // Mock fetch

@@ -11,7 +11,6 @@ export const db = drizzle({
   // cache: upstashCache({
   //   url: process.env.UPSTASH_REDIS_REST_URL as string,
   //   token: process.env.UPSTASH_REDIS_REST_TOKEN as string,
-  //   global: !process.env.SST_DEV,
   //   config: { ex: CACHE_TTL },
   // }),
   schema,

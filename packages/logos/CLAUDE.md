@@ -53,9 +53,9 @@ The package uses **Vercel Blob** for logo storage with **Upstash Redis** for met
 - **On-demand downloads**: Logos are automatically downloaded from external sources when requested
 
 This architecture provides:
-- Zero infrastructure setup (no S3 buckets, no DNS configuration)
+- Zero infrastructure setup (no custom buckets or DNS configuration)
 - Fast performance with Redis caching
-- Compatible with both SST/AWS Lambda and Vercel deployments
+- Compatible with serverless and Vercel deployments
 - Automatic CDN distribution via Vercel Blob
 
 ## Usage in Other Packages

@@ -48,10 +48,10 @@ All vehicle registration and COE data is sourced from Singapore's Land Transport
 ## Technical Stack and API Structure
 
 ### Technology Stack
-- **Frontend**: Next.js 15 with App Router, React 19, TypeScript
+- **Frontend**: Next.js 16 with App Router, React 19, TypeScript
 - **Styling**: Tailwind CSS v4, HeroUI components
 - **Backend**: PostgreSQL with Drizzle ORM
-- **Hosting**: AWS via SST (Serverless Stack)
+- **Hosting**: Vercel
 - **Analytics**: Custom analytics with Zustand state management
 
 ### API Endpoints

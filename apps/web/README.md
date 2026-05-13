@@ -21,7 +21,7 @@ Certificate of Entitlement) bidding results, and market trends.
 - **Zustand** for state management
 - **HeroUI** components with professional design system
 - **Vitest** for unit testing, **Playwright** for E2E testing
-- **SST** for AWS deployment
+- **Vercel** for deployment
 
 ## Getting Started
 
@@ -77,11 +77,6 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 ### Database
 - `pnpm migrate` - Run database migrations
 
-### Deployment
-- `pnpm deploy:dev` - Deploy to dev environment
-- `pnpm deploy:staging` - Deploy to staging environment
-- `pnpm deploy:prod` - Deploy to production environment
-
 ## Project Structure
 
 ```
@@ -125,13 +120,13 @@ src/
 
 ## Deployment
 
-Multi-stage deployment via SST on AWS with CloudFlare DNS:
+Automatic deployment via Vercel:
 
 - **dev**: [dev.motormetrics.app](https://dev.motormetrics.app)
 - **staging**: [staging.motormetrics.app](https://staging.motormetrics.app)
 - **prod**: [motormetrics.app](https://motormetrics.app)
 
-Infrastructure uses AWS Lambda with ARM64 architecture. The deployment process is automated through the configured CI/CD pipeline.
+Production deployments run on Vercel from the main branch, with preview deployments generated for pull requests.
 
 ## Repo Activity
 
