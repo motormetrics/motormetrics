@@ -36,7 +36,7 @@
     "@motormetrics/utils": "workspace:*",
     "@neondatabase/serverless": "1.0.1",
     "@number-flow/react": "0.6.0",
-    "@opentelemetry/sdk-trace-node": "2.2.0",
+    "@opentelemetry/sdk-trace-node": "2.7.1",
     "@ruchernchong/number-format": "2.3.5",
     "@tanstack/react-table": "8.21.3",
     "@upstash/ratelimit": "2.0.8",
