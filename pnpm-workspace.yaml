@@ -17,7 +17,7 @@ allowBuilds:
   sharp: false
 
 catalog:
-  "@ai-sdk/gateway": 3.0.104
+  "@ai-sdk/gateway": 3.0.114
   "@ai-sdk/google": 3.0.64
   "@heroui/react": 3.0.3
   "@heroui/styles": 3.0.3
