@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
 
 import type { SelectCarCost } from "@motormetrics/database";
@@ -9,7 +9,6 @@ import {
   FUEL_TYPE_LABELS,
   FUEL_TYPE_ORDER,
 } from "@web/app/(main)/(dashboard)/cars/costs/constants";
-import Typography from "@web/components/typography";
 
 interface FuelTypeCostChartProps {
   data: SelectCarCost[];
@@ -38,10 +37,10 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>Avg Selling Price by Fuel Type</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">Avg Selling Price by Fuel Type</Text>
+        <Text type="body-sm" color="muted">
           Average AD selling price (with COE) by fuel type
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <BarChart data={chartData} height={400} layout="vertical">
@@ -79,9 +78,9 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
         </BarChart>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-muted">
+        <Text type="body-sm" color="muted">
           Electric vehicles tend to have lower total costs due to VES rebates.
-        </Typography.TextSm>
+        </Text>
       </Card.Footer>
     </Card>
   );

@@ -1,9 +1,9 @@
 "use client";
 
+import { Text } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
-import Typography from "@web/components/typography";
 import { useMemo } from "react";
 
 interface YearlyTotal {
@@ -112,7 +112,7 @@ export function VehiclePopulationMetrics({
           />
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm className="text-muted">
+          <Text type="body-sm" color="muted">
             <KPI.Value
               className="font-normal text-sm"
               locale="en-SG"
@@ -120,7 +120,7 @@ export function VehiclePopulationMetrics({
               value={electricTotal}
             />{" "}
             electric vehicles
-          </Typography.TextSm>
+          </Text>
         </KPI.Footer>
       </KPI>
     </KPIGroup>

@@ -1,9 +1,7 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
-
-import Typography from "@web/components/typography";
 
 interface TopMake {
   make: string;
@@ -23,12 +21,12 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>
+        <Text type="h4">
           Top {topMakes.length} Car Makes ({year})
-        </Typography.H4>
-        <Typography.TextSm className="text-muted">
+        </Text>
+        <Text type="body-sm" color="muted">
           Most popular vehicle brands by registration volume
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content className="pt-2">
         <BarChart data={data} height={300} width="100%" layout="vertical">

@@ -1,9 +1,7 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { LineChart } from "@heroui-pro/react";
-
-import Typography from "@web/components/typography";
 
 interface YearTotal {
   year: number;
@@ -22,11 +20,11 @@ export function RegistrationTrend({ data }: RegistrationTrendProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>Yearly Registration Trend</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">Yearly Registration Trend</Text>
+        <Text type="body-sm" color="muted">
           Historical vehicle registration data from {data[0]?.year} to{" "}
           {data[data.length - 1]?.year}
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content className="pt-2">
         <LineChart data={chartData} height={300} width="100%">

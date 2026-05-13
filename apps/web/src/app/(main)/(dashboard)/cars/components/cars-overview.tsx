@@ -1,9 +1,8 @@
-import { Button, Card, Link, Separator } from "@heroui/react";
+import { Button, Card, Link, Separator, Text } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { HighlightStatsCard } from "@web/components/highlight-stats-card";
-import Typography from "@web/components/typography";
 import {
   getCarsComparison,
   getCarsData,
@@ -142,12 +141,12 @@ export async function CarsOverview() {
     <div className="flex flex-col gap-8">
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-3">
-          <Typography.H1>Cars Overview</Typography.H1>
-          <Typography.TextLg className="max-w-3xl text-muted">
+          <Text type="h1">Cars Overview</Text>
+          <Text type="body">
             A high-level read of Singapore vehicle registrations, market mix,
             lifecycle movement, and ownership tools. Use this page to orient
             yourself before drilling into the detailed datasets.
-          </Typography.TextLg>
+          </Text>
         </div>
         <HighlightStatsCard
           actionHref="/cars/registrations"
@@ -292,7 +291,9 @@ export async function CarsOverview() {
               </div>
               <div className="grid gap-5 md:grid-cols-2">
                 <div className="flex flex-col gap-4">
-                  <Typography.Label>Fuel mix</Typography.Label>
+                  <Text type="body-sm" weight="medium">
+                    Fuel mix
+                  </Text>
                   {(currentData?.fuelType ?? []).slice(0, 4).map((item) => (
                     <MarketBar
                       key={item.name}
@@ -303,7 +304,9 @@ export async function CarsOverview() {
                   ))}
                 </div>
                 <div className="flex flex-col gap-4">
-                  <Typography.Label>Vehicle type mix</Typography.Label>
+                  <Text type="body-sm" weight="medium">
+                    Vehicle type mix
+                  </Text>
                   {(currentData?.vehicleType ?? []).slice(0, 4).map((item) => (
                     <MarketBar
                       key={item.name}

@@ -60,12 +60,16 @@ vi.mock("@heroui/react", () => {
   ProgressBar.Fill = () => <div />;
 
   const Separator = () => <hr />;
+  const Text = ({ children }: { children: ReactNode }) => (
+    <span>{children}</span>
+  );
 
   return {
     Card,
     Chip,
     ProgressBar,
     Separator,
+    Text,
     cn: (...classes: (string | undefined)[]) =>
       classes.filter(Boolean).join(" "),
   };

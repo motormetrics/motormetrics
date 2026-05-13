@@ -12,8 +12,8 @@ describe("MetricCard", () => {
       />,
     );
 
-    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("COE Premiums")).toBeInTheDocument();
+    expect(screen.getByText("50,000")).toBeInTheDocument();
     expect(screen.getByText("vs last month")).toBeInTheDocument();
   });
 
@@ -28,7 +28,7 @@ describe("MetricCard", () => {
       />,
     );
 
-    expect(document.body.firstChild).toMatchSnapshot();
     expect(screen.getByText("Total Registrations")).toBeInTheDocument();
+    expect(screen.getByText("10,000")).toBeInTheDocument();
   });
 });

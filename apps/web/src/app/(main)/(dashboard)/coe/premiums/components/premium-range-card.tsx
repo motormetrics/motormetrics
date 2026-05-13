@@ -1,7 +1,6 @@
-import { Card, Chip } from "@heroui/react";
+import { Card, Chip, Text } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatCurrency, formatDateToMonthYear } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import type { PremiumRangeStats } from "@web/lib/coe/calculations";
 
 interface PremiumRangeCardProps {
@@ -109,9 +108,9 @@ const RangeSection = ({
             value={lowest}
           />
           {lowestDate && (
-            <Typography.Caption>
+            <Text type="body-xs" color="muted">
               {formatDateToMonthYear(lowestDate)}
-            </Typography.Caption>
+            </Text>
           )}
         </div>
 
@@ -132,9 +131,9 @@ const RangeSection = ({
             value={highest}
           />
           {highestDate && (
-            <Typography.Caption>
+            <Text type="body-xs" color="muted">
               {formatDateToMonthYear(highestDate)}
-            </Typography.Caption>
+            </Text>
           )}
         </div>
       </div>
@@ -170,8 +169,10 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
             <div className="absolute top-0 right-0 left-0 h-1 bg-accent" />
 
             <Card.Header className="flex flex-col items-start gap-1">
-              <Typography.H4>{stat.category}</Typography.H4>
-              <Typography.Caption>Premium range analysis</Typography.Caption>
+              <Text type="h4">{stat.category}</Text>
+              <Text type="body-xs" color="muted">
+                Premium range analysis
+              </Text>
             </Card.Header>
 
             <Card.Content className="flex flex-col gap-6">
@@ -195,9 +196,9 @@ export function PremiumRangeCard({ stats }: PremiumRangeCardProps) {
                   >
                     {currentYear} YTD
                   </Chip>
-                  <Typography.TextSm className="text-muted">
+                  <Text type="body-sm" color="muted">
                     No data available for {currentYear}
-                  </Typography.TextSm>
+                  </Text>
                 </div>
               )}
 

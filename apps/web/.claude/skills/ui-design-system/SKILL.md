@@ -63,13 +63,12 @@ This skill enforces consistent UI patterns across the MotorMetrics web applicati
 ### Cards
 
 ```tsx
-import { Card } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Card, Text } from "@heroui/react";
 
 <Card>
   <Card.Header className="flex flex-col items-start gap-2">
-    <Typography.H4>Card Title</Typography.H4>
-    <Typography.TextSm>Description text</Typography.TextSm>
+    <Text type="h4">Card Title</Text>
+    <Text type="body-sm" color="muted">Description text</Text>
   </Card.Header>
   <Card.Content>{/* Content */}</Card.Content>
 </Card>
@@ -98,8 +97,10 @@ import Typography from "@web/components/typography";
 ### Metrics Display
 
 ```tsx
+import { Chip, Text } from "@heroui/react";
+
 <div className="flex flex-col gap-1">
-  <Typography.Caption>Total Registrations</Typography.Caption>
+  <Text type="body-xs" color="muted">Total Registrations</Text>
   <div className="flex items-baseline gap-2">
     <span className="font-bold text-3xl">46,500</span>
     <Chip className="rounded-full" color="success" size="sm">+2.5%</Chip>
@@ -109,25 +110,23 @@ import Typography from "@web/components/typography";
 
 ## Typography Rules
 
-Always use Typography components from `@web/components/typography`:
+Use HeroUI `Text` directly from `@heroui/react`:
 
-| Component | Usage | Styles |
-|-----------|-------|--------|
-| `Typography.H1` | Page titles | `font-semibold text-4xl text-foreground` |
-| `Typography.H2` | Section titles | `font-semibold text-3xl text-foreground` |
-| `Typography.H3` | Subsection titles | `font-medium text-2xl text-foreground` |
-| `Typography.H4` | Card titles | `font-medium text-xl text-default-900` |
-| `Typography.TextLg` | Lead paragraphs | `text-lg text-foreground` |
-| `Typography.Text` | Body text | `text-base text-foreground` |
-| `Typography.TextSm` | Secondary text | `text-sm text-default-600` |
-| `Typography.Label` | Form labels | `font-medium text-sm text-foreground` |
-| `Typography.Caption` | Metadata | `text-xs text-default-500` |
+| Need | Component |
+|------|-----------|
+| Page titles | `<Text type="h1">` |
+| Section titles | `<Text type="h2">` |
+| Subsection/card titles | `<Text type="h3">` or `<Text type="h4">` |
+| Body text | `<Text type="body">` |
+| Secondary text | `<Text type="body-sm" color="muted">` |
+| Metadata | `<Text type="body-xs" color="muted">` |
+| Inline code | `<Text.Code>` |
 
 ### Enforcement Rules
 
-- ✅ Always use `Typography.H4` for `Card.Header` titles
-- ✅ Always use `Typography.TextSm` for `Card.Header` descriptions
-- ✅ Use `Typography.H2` for section headings
+- ✅ Use `<Text type="h4">` for `Card.Header` titles
+- ✅ Use `<Text type="body-sm" color="muted">` for `Card.Header` descriptions
+- ✅ Use `<Text type="h2">` for section headings
 - ❌ Avoid raw `<h1>`, `<h2>`, `<h3>`, `<h4>` tags outside MDX content
 - ⚠️ Exception: Raw tags allowed for MDX blog content and image overlays
 

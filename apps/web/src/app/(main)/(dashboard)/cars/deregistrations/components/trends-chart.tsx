@@ -1,10 +1,9 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { AreaChart } from "@heroui-pro/react";
 
 import { formatDateToMonthYear, formatNumber } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 
 interface MonthlyTotal {
   month: string;
@@ -25,7 +24,9 @@ export function TrendsChart({ data }: TrendsChartProps) {
     return (
       <Card>
         <Card.Content>
-          <Typography.TextSm>No trend data available</Typography.TextSm>
+          <Text type="body-sm" color="muted">
+            No trend data available
+          </Text>
         </Card.Content>
       </Card>
     );

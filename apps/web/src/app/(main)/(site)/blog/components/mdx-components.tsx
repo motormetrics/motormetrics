@@ -1,13 +1,22 @@
-import { Separator } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Separator, Text } from "@heroui/react";
 import type { Route } from "next";
 import NextLink from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
 
 type MdxLinkProps = ComponentPropsWithoutRef<"a">;
+type MdxHeadingProps = Omit<
+  ComponentPropsWithoutRef<typeof Text.Heading>,
+  "level"
+>;
 
 function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
-  const isInternalLink = href.startsWith("/") || href.startsWith("#");
+  if (!href) {
+    return <>{children}</>;
+  }
+
+  const isInternalLink =
+    (href.startsWith("/") && !href.startsWith("//")) || href.startsWith("#");
+  const isExternalWebLink = /^https?:\/\//i.test(href);
   const linkClassName = [
     "font-medium text-accent underline underline-offset-4",
     className,
@@ -17,7 +26,7 @@ function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
 
   if (isInternalLink) {
     return (
-      <NextLink href={href as Route} className={linkClassName} {...props}>
+      <NextLink {...props} href={href as Route} className={linkClassName}>
         {children}
       </NextLink>
     );
@@ -25,11 +34,11 @@ function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
 
   return (
     <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer nofollow"
-      className={linkClassName}
       {...props}
+      href={href}
+      target={isExternalWebLink ? "_blank" : undefined}
+      rel={isExternalWebLink ? "noopener noreferrer nofollow" : undefined}
+      className={linkClassName}
     >
       {children}
     </a>
@@ -39,30 +48,21 @@ function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
 /**
  * MDX Components Mapping
  *
- * Maps MDX/Markdown HTML elements to our custom Typography components
- * with NYT/Washington Post-inspired editorial styling.
+ * Maps MDX/Markdown HTML elements to HeroUI typography primitives and
+ * route-specific authored content elements.
  *
  * Used by MDXRemote in blog post rendering.
  */
 export const mdxComponents = {
-  // Headings - with generous spacing for editorial feel
-  h1: (props: ComponentPropsWithoutRef<"h1">) => <Typography.H1 {...props} />,
-  h2: (props: ComponentPropsWithoutRef<"h2">) => (
-    <Typography.H2 className="mt-12 mb-6" {...props} />
-  ),
-  h3: (props: ComponentPropsWithoutRef<"h3">) => (
-    <Typography.H3
-      className="mt-8 mb-4 border-accent border-l-4 pl-4"
-      {...props}
-    />
-  ),
-  h4: (props: ComponentPropsWithoutRef<"h4">) => (
-    <Typography.H4 className="mt-6 mb-3" {...props} />
-  ),
+  // Headings
+  h1: (props: MdxHeadingProps) => <Text.Heading level={1} {...props} />,
+  h2: (props: MdxHeadingProps) => <Text.Heading level={2} {...props} />,
+  h3: (props: MdxHeadingProps) => <Text.Heading level={3} {...props} />,
+  h4: (props: MdxHeadingProps) => <Text.Heading level={4} {...props} />,
 
   // Body text
-  p: (props: ComponentPropsWithoutRef<"p">) => (
-    <Typography.Text className="mb-6" {...props} />
+  p: (props: ComponentPropsWithoutRef<typeof Text.Paragraph>) => (
+    <Text.Paragraph {...props} />
   ),
 
   // Blockquotes - editorial style with subtle background
@@ -82,11 +82,6 @@ export const mdxComponents = {
   ),
   li: (props: ComponentPropsWithoutRef<"li">) => (
     <li className="text-base text-foreground leading-7" {...props} />
-  ),
-
-  // Code (inline)
-  code: (props: ComponentPropsWithoutRef<"code">) => (
-    <Typography.InlineCode {...props} />
   ),
 
   // Links - styled for blog content
@@ -123,14 +118,6 @@ export const mdxComponents = {
 
   // Horizontal rule
   hr: () => <Separator className="my-12" />,
-
-  // Pre-formatted code blocks
-  pre: (props: ComponentPropsWithoutRef<"pre">) => (
-    <pre
-      className="my-6 overflow-x-auto rounded-lg bg-default p-4 text-sm"
-      {...props}
-    />
-  ),
 
   // Strong/Bold - slightly heavier for emphasis
   strong: (props: ComponentPropsWithoutRef<"strong">) => (

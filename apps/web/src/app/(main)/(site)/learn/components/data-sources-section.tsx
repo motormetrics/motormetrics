@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, Chip, Link } from "@heroui/react";
+import { Card, Chip, Link, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
   staggerContainerVariants,
@@ -44,9 +43,9 @@ const features = [
       </>
     ),
     extra: (
-      <Typography.TextSm>
+      <Text type="body-sm" color="muted">
         COE bidding results are updated after each exercise (twice monthly).
-      </Typography.TextSm>
+      </Text>
     ),
   },
   {
@@ -104,16 +103,14 @@ export function DataSourcesSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-accent uppercase tracking-widest">
+              <Text type="body-sm" weight="medium">
                 Data Transparency
-              </Typography.Label>
-              <Typography.H2 className="lg:text-4xl">
-                Where Our Data Comes From
-              </Typography.H2>
-              <Typography.Text className="text-muted">
+              </Text>
+              <Text type="h2">Where Our Data Comes From</Text>
+              <Text type="body">
                 All data is sourced from official government channels and
                 updated regularly.
-              </Typography.Text>
+              </Text>
 
               {/* LTA Badge */}
               <Card className="border-border">
@@ -160,10 +157,10 @@ export function DataSourcesSection() {
                         />
                       </div>
                       <div className="flex flex-col gap-2">
-                        <Typography.H4>{feature.title}</Typography.H4>
-                        <Typography.TextSm>
+                        <Text type="h4">{feature.title}</Text>
+                        <Text type="body-sm" color="muted">
                           {feature.description}
-                        </Typography.TextSm>
+                        </Text>
                       </div>
                       {feature.extra}
                       {feature.chip}

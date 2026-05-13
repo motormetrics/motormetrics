@@ -1,3 +1,4 @@
+import { Text } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import type { SelectDeregistration } from "@motormetrics/database";
 import { formatDateToMonthYear } from "@motormetrics/utils";
@@ -17,7 +18,6 @@ import { DashboardPageTitle } from "@web/components/dashboard-page-title";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import {
@@ -210,7 +210,7 @@ async function DeregistrationsContent({
     const result = await getMonthOrLatest(parsedMonth, "deregistrations");
     month = result.month;
   } catch {
-    return <Typography.Text>No deregistration data available.</Typography.Text>;
+    return <Text type="body">No deregistration data available.</Text>;
   }
 
   const [categories, allDeregistrations] = await Promise.all([

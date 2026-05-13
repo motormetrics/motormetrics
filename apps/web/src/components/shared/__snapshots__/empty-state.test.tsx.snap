@@ -35,12 +35,16 @@ exports[`EmptyState > should render default title and description 1`] = `
       class="flex flex-col items-center gap-2 text-center"
     >
       <h3
-        class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+        class="text text--h3"
+        data-slot="text"
+        data-type="h3"
       >
         No Data Available
       </h3>
       <p
-        class="text-sm leading-6 max-w-sm text-muted"
+        class="text text--body-sm"
+        data-slot="text"
+        data-type="body-sm"
       >
         The requested data could not be found. Please try a different selection.
       </p>

@@ -1,10 +1,9 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
 
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
-import Typography from "@web/components/typography";
 import { useMemo } from "react";
 
 const TOP_N = 15;
@@ -40,12 +39,12 @@ export function CarPopulationChart({
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>
+        <Text type="h4">
           Top {TOP_N} Makes ({effectiveYear})
-        </Typography.H4>
-        <Typography.TextSm className="text-muted">
+        </Text>
+        <Text type="body-sm" color="muted">
           Car population by manufacturer
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <BarChart data={topMakes} height={500} layout="vertical">
@@ -86,9 +85,9 @@ export function CarPopulationChart({
         </BarChart>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-muted">
+        <Text type="body-sm" color="muted">
           Showing top {TOP_N} makes by car population for {effectiveYear}.
-        </Typography.TextSm>
+        </Text>
       </Card.Footer>
     </Card>
   );

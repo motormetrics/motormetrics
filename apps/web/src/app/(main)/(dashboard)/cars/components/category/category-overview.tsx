@@ -1,3 +1,4 @@
+import { Text } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
@@ -7,7 +8,6 @@ import { DashboardPageTitle } from "@web/components/dashboard-page-title";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { loadCarsCategoryPageData } from "@web/lib/cars/page-data";
 import { loadLastUpdated } from "@web/lib/common";
@@ -145,9 +145,9 @@ async function CategoryOverviewContent({
         </div>
       ) : (
         <div className="rounded-2xl border border-border bg-surface p-8 text-center">
-          <Typography.Text>
+          <Text type="body">
             No {config.title.toLowerCase()} data available for {formattedMonth}
-          </Typography.Text>
+          </Text>
         </div>
       )}
     </>

@@ -1,8 +1,7 @@
 "use client";
 
-import { Tabs } from "@heroui/react";
+import { Tabs, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import type { TypeItem } from "@web/types";
 import type { FuelType } from "@web/types/cars";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
@@ -42,11 +41,11 @@ export function CategoryTabsPanel({
     <section className="rounded-2xl border border-border bg-surface p-4 shadow-surface md:p-5">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <Typography.H4>{title} Breakdown</Typography.H4>
-          <Typography.TextSm>
+          <Text type="h4">{title} Breakdown</Text>
+          <Text type="body-sm" color="muted">
             Select a {title.toLowerCase()} to inspect its registration share and
             make mix.
-          </Typography.TextSm>
+          </Text>
         </div>
 
         <Tabs className="w-full" variant="secondary">
@@ -85,11 +84,11 @@ export function CategoryTabsPanel({
                     />
                   ) : (
                     <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-border border-dashed bg-surface-secondary p-8 text-center">
-                      <Typography.H4>Top Makes Unavailable</Typography.H4>
-                      <Typography.TextSm>
+                      <Text type="h4">Top Makes Unavailable</Text>
+                      <Text type="body-sm" color="muted">
                         Make-level data is not available for{" "}
                         {formatVehicleType(type.name)} in this view.
-                      </Typography.TextSm>
+                      </Text>
                     </div>
                   )}
                 </div>

@@ -34,7 +34,9 @@ exports[`Footer > should render asynchronous footer content with version informa
             />
           </svg>
           <p
-            class="text-muted text-sm leading-6"
+            class="text text--body-sm"
+            data-slot="text"
+            data-type="body-sm"
           >
             Your go-to source for Singapore car market data and trends. We make sense of the numbers so you don't have to.
           </p>
@@ -146,7 +148,9 @@ exports[`Footer > should render asynchronous footer content with version informa
           class="flex flex-col gap-4"
         >
           <h4
-            class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+            class="text text--h4"
+            data-slot="text"
+            data-type="h4"
           >
             Navigation
           </h4>
@@ -158,9 +162,11 @@ exports[`Footer > should render asynchronous footer content with version informa
               href="/"
             >
               <p
-                class="text-muted text-sm leading-6"
+                class="text text--body-sm"
+                data-slot="text"
+                data-type="body-sm"
               >
-                Overview
+                Dashboard
               </p>
             </a>
             <a
@@ -168,7 +174,9 @@ exports[`Footer > should render asynchronous footer content with version informa
               href="/about"
             >
               <p
-                class="text-muted text-sm leading-6"
+                class="text text--body-sm"
+                data-slot="text"
+                data-type="body-sm"
               >
                 About
               </p>
@@ -178,7 +186,9 @@ exports[`Footer > should render asynchronous footer content with version informa
               href="/blog"
             >
               <p
-                class="text-muted text-sm leading-6"
+                class="text text--body-sm"
+                data-slot="text"
+                data-type="body-sm"
               >
                 Blog
               </p>
@@ -188,7 +198,9 @@ exports[`Footer > should render asynchronous footer content with version informa
               href="/learn"
             >
               <p
-                class="text-muted text-sm leading-6"
+                class="text text--body-sm"
+                data-slot="text"
+                data-type="body-sm"
               >
                 Learn
               </p>
@@ -209,7 +221,9 @@ exports[`Footer > should render asynchronous footer content with version informa
           class="text-center text-muted md:text-left"
         >
           <p
-            class="text-muted text-sm leading-6"
+            class="text text--body-sm"
+            data-slot="text"
+            data-type="body-sm"
           >
             © 
             2026
@@ -219,7 +233,9 @@ exports[`Footer > should render asynchronous footer content with version informa
             0.0.0-test
           </p>
           <p
-            class="text-muted text-sm leading-6"
+            class="text text--body-sm"
+            data-slot="text"
+            data-type="body-sm"
           >
             Data provided by
              
@@ -241,7 +257,9 @@ exports[`Footer > should render asynchronous footer content with version informa
             href="/legal/privacy-policy"
           >
             <p
-              class="text-muted text-sm leading-6"
+              class="text text--body-sm"
+              data-slot="text"
+              data-type="body-sm"
             >
               Privacy Policy
             </p>
@@ -251,7 +269,9 @@ exports[`Footer > should render asynchronous footer content with version informa
             href="/legal/terms-of-service"
           >
             <p
-              class="text-muted text-sm leading-6"
+              class="text text--body-sm"
+              data-slot="text"
+              data-type="body-sm"
             >
               Terms of Service
             </p>

@@ -1,4 +1,4 @@
-import { Card, Link } from "@heroui/react";
+import { Card, Link, Text } from "@heroui/react";
 import { KPI, KPIGroup } from "@heroui-pro/react";
 import type { CarLogo } from "@logos/types";
 import type { SelectCar } from "@motormetrics/database";
@@ -9,7 +9,6 @@ import { TypeBreakdownChart } from "@web/app/(main)/(dashboard)/cars/components/
 import { EmptyState } from "@web/components/shared/empty-state";
 import { columns } from "@web/components/tables/columns/cars-make-columns";
 import { DataTable } from "@web/components/tables/data-table";
-import Typography from "@web/components/typography";
 import type { MakeCoeComparisonData } from "@web/queries/cars/makes/coe-comparison";
 import { Calendar, Car, TrendingUp } from "lucide-react";
 import Image from "next/image";
@@ -60,8 +59,10 @@ export function MakeDetail({
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <Typography.H2>{cars.make}</Typography.H2>
-          <Typography.TextSm>Vehicle Registrations</Typography.TextSm>
+          <Text type="h2">{cars.make}</Text>
+          <Text type="body-sm" color="muted">
+            Vehicle Registrations
+          </Text>
         </div>
       </div>
 
@@ -125,8 +126,10 @@ export function MakeDetail({
       {/* Historical Trend Chart */}
       <Card>
         <Card.Header className="flex flex-row items-baseline justify-between">
-          <Typography.H4>Historical Trend</Typography.H4>
-          <Typography.Caption>Past registrations</Typography.Caption>
+          <Text type="h4">Historical Trend</Text>
+          <Text type="body-xs" color="muted">
+            Past registrations
+          </Text>
         </Card.Header>
         <Card.Content>
           <MakeTrendChart data={cars.historicalData.toReversed()} />
@@ -182,22 +185,24 @@ export function MakeDetail({
       {/* COE Comparison Chart */}
       <Card>
         <Card.Header className="flex flex-col items-start gap-2">
-          <Typography.H4>Registration vs COE Premium</Typography.H4>
+          <Text type="h4">Registration vs COE Premium</Text>
         </Card.Header>
         <Card.Content className="flex flex-col gap-4">
           <CoeComparisonChart data={coeComparison} />
-          <Typography.Caption>
+          <Text type="body-xs" color="muted">
             Bars show monthly registrations (left axis), lines show COE Category
             A and B premiums (right axis).
-          </Typography.Caption>
+          </Text>
         </Card.Content>
       </Card>
 
       {/* Summary Table */}
       <Card>
         <Card.Header className="flex flex-row items-baseline justify-between">
-          <Typography.H4>Summary</Typography.H4>
-          <Typography.Caption>Fuel & vehicle types by month</Typography.Caption>
+          <Text type="h4">Summary</Text>
+          <Text type="body-xs" color="muted">
+            Fuel & vehicle types by month
+          </Text>
         </Card.Header>
         <Card.Content className="p-0">
           <DataTable columns={columns} data={cars.data} />

@@ -1,8 +1,7 @@
 "use client";
 
-import { Link } from "@heroui/react";
+import { Link, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import { SITE_TITLE } from "@web/config";
 import {
   staggerContainerVariants,
@@ -36,17 +35,17 @@ export function CreatorSection() {
             className="mx-auto flex max-w-2xl flex-col items-center gap-8 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Label className="text-accent uppercase tracking-widest">
+            <Text type="body-sm" weight="medium">
               Behind the Data
-            </Typography.Label>
+            </Text>
 
             <div className="flex flex-col gap-6">
-              <Typography.H2 className="text-foreground">
+              <Text type="h2">
                 Built with{" "}
                 <Heart className="inline size-6 fill-red-500 text-red-500" /> in
                 Singapore
-              </Typography.H2>
-              <Typography.TextLg className="text-muted">
+              </Text>
+              <Text type="body">
                 {SITE_TITLE} is an independent project created by{" "}
                 <Link
                   href="https://ruchern.dev"
@@ -58,14 +57,14 @@ export function CreatorSection() {
                 </Link>
                 , a software engineer who wanted to make this data easier to
                 explore.
-              </Typography.TextLg>
+              </Text>
             </div>
 
-            <Typography.TextSm className="max-w-lg text-muted">
+            <Text type="body-sm" color="muted">
               This platform is maintained in spare time alongside a full-time
               job. If you find it useful, consider sharing it with others who
               might benefit.
-            </Typography.TextSm>
+            </Text>
           </motion.div>
         </motion.div>
       </div>

@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, Link } from "@heroui/react";
+import { Card, Link, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
   staggerContainerVariants,
@@ -41,16 +40,14 @@ export function GlossarySection() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Text type="body-sm" weight="medium">
             Terminology
-          </Typography.Label>
-          <Typography.H2 className="lg:text-4xl">
-            Glossary of Key Terms
-          </Typography.H2>
-          <Typography.Text className="max-w-2xl text-muted">
+          </Text>
+          <Text type="h2">Glossary of Key Terms</Text>
+          <Text type="body">
             Understanding Singapore&apos;s automotive terminology is essential
             for navigating the car market.
-          </Typography.Text>
+          </Text>
         </motion.div>
 
         {/* Categories */}
@@ -66,7 +63,7 @@ export function GlossarySection() {
             >
               <div className="flex items-center gap-3">
                 <category.icon className={`size-5 ${category.iconColor}`} />
-                <Typography.H3>{category.title}</Typography.H3>
+                <Text type="h3">{category.title}</Text>
               </div>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {category.terms.map(({ term, definition }) => {
@@ -77,14 +74,16 @@ export function GlossarySection() {
                     <Card className="h-full border-border/80 transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
                       <Card.Header className="pb-0">
                         <div className="flex w-full items-center justify-between">
-                          <Typography.H4>{term}</Typography.H4>
+                          <Text type="h4">{term}</Text>
                           {hasGuide && (
                             <ArrowRight className="size-4 text-accent" />
                           )}
                         </div>
                       </Card.Header>
                       <Card.Content>
-                        <Typography.TextSm>{definition}</Typography.TextSm>
+                        <Text type="body-sm" color="muted">
+                          {definition}
+                        </Text>
                       </Card.Content>
                     </Card>
                   );

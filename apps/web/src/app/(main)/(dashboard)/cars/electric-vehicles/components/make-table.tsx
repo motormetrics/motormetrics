@@ -1,8 +1,13 @@
 "use client";
 
-import { Card, Pagination, type SortDescriptor, Table } from "@heroui/react";
+import {
+  Card,
+  Pagination,
+  type SortDescriptor,
+  Table,
+  Text,
+} from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import type { EvMakeDetail } from "@web/queries/cars";
 import { sortByDescriptor } from "@web/utils/sort";
 import { type Key, useCallback, useMemo, useState } from "react";
@@ -73,10 +78,10 @@ export function MakeTable({ data, month }: MakeTableProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>EV Registrations by Make</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Text type="h4">EV Registrations by Make</Text>
+        <Text type="body-sm" color="muted">
           {data.length} makes with EV registrations in {month}
-        </Typography.TextSm>
+        </Text>
       </Card.Header>
       <Card.Content>
         <Table>

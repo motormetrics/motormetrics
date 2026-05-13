@@ -35,11 +35,13 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
               <div
                 class="flex min-w-0 flex-col gap-2"
               >
-                <span
-                  class="font-medium text-foreground text-sm leading-none truncate"
+                <p
+                  class="text text--weight-medium"
+                  data-slot="text"
+                  data-type="body-sm"
                 >
                   AUDI
-                </span>
+                </p>
               </div>
             </div>
           </div>
@@ -76,11 +78,13 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
               <div
                 class="flex min-w-0 flex-col gap-2"
               >
-                <span
-                  class="font-medium text-foreground text-sm leading-none truncate"
+                <p
+                  class="text text--weight-medium"
+                  data-slot="text"
+                  data-type="body-sm"
                 >
                   BMW
-                </span>
+                </p>
               </div>
             </div>
           </div>
@@ -117,11 +121,13 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
               <div
                 class="flex min-w-0 flex-col gap-2"
               >
-                <span
-                  class="font-medium text-foreground text-sm leading-none truncate"
+                <p
+                  class="text text--weight-medium"
+                  data-slot="text"
+                  data-type="body-sm"
                 >
                   MERCEDES BENZ
-                </span>
+                </p>
               </div>
             </div>
           </div>
@@ -158,11 +164,13 @@ exports[`MakeGrid > should render all makes in grid layout 1`] = `
               <div
                 class="flex min-w-0 flex-col gap-2"
               >
-                <span
-                  class="font-medium text-foreground text-sm leading-none truncate"
+                <p
+                  class="text text--weight-medium"
+                  data-slot="text"
+                  data-type="body-sm"
                 >
                   VOLKSWAGEN
-                </span>
+                </p>
               </div>
             </div>
           </div>

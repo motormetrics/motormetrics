@@ -1,10 +1,9 @@
 "use client";
 
-import { Card, Chip, cn, Link } from "@heroui/react";
+import { Card, Chip, cn, Link, Text } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
 
 import { formatNumber, slugify } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import { useMemo } from "react";
 
 interface Make {
@@ -42,12 +41,16 @@ export function TopMakesChart({
     return (
       <Card className="border border-border bg-surface shadow-none">
         <Card.Header className="flex flex-col items-start gap-2">
-          <Typography.H4>Top Makes</Typography.H4>
-          <Typography.TextSm>No make data available</Typography.TextSm>
+          <Text type="h4">Top Makes</Text>
+          <Text type="body-sm" color="muted">
+            No make data available
+          </Text>
         </Card.Header>
         <Card.Content>
           <div className="flex h-52 items-center justify-center rounded-xl bg-surface-secondary">
-            <Typography.TextSm>No data available</Typography.TextSm>
+            <Text type="body-sm" color="muted">
+              No data available
+            </Text>
           </div>
         </Card.Content>
       </Card>
@@ -57,8 +60,10 @@ export function TopMakesChart({
   return (
     <Card className="border border-border bg-surface shadow-none">
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>Top Makes - {title}</Typography.H4>
-        <Typography.TextSm>{description}</Typography.TextSm>
+        <Text type="h4">Top Makes - {title}</Text>
+        <Text type="body-sm" color="muted">
+          {description}
+        </Text>
       </Card.Header>
       <Card.Content>
         <div className="flex flex-col gap-5">
@@ -73,7 +78,7 @@ export function TopMakesChart({
                   size="sm"
                   variant="soft"
                 >
-                  #{index + 1} {item.name}
+                  {`#${index + 1} ${item.name}`}
                 </Chip>
               </Link>
             ))}

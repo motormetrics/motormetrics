@@ -1,6 +1,5 @@
-import { Button, Separator } from "@heroui/react";
+import { Button, Separator, Text } from "@heroui/react";
 import { BrandLogo } from "@web/components/brand-logo";
-import Typography from "@web/components/typography";
 import { UnreleasedFeature } from "@web/components/unreleased-feature";
 import { SITE_TITLE } from "@web/config";
 import {
@@ -22,10 +21,10 @@ export function Footer() {
           {/* Brand Section */}
           <div className="flex flex-col gap-4">
             <BrandLogo />
-            <Typography.TextSm>
+            <Text type="body-sm" color="muted">
               Your go-to source for Singapore car market data and trends. We
               make sense of the numbers so you don&apos;t have to.
-            </Typography.TextSm>
+            </Text>
             <div className="flex gap-2">
               {navLinks.socialMedia.map(({ title, url, icon: Icon }) => (
                 <a key={title} href={url} rel="me noreferrer" target="_blank">
@@ -45,7 +44,7 @@ export function Footer() {
 
           {/* Navigation Section */}
           <div className="flex flex-col gap-4">
-            <Typography.H4>Navigation</Typography.H4>
+            <Text type="h4">Navigation</Text>
             <div className="flex flex-col gap-2">
               {NAV_ITEMS.map((item) => (
                 <Link
@@ -53,7 +52,9 @@ export function Footer() {
                   href={item.href}
                   className="block text-muted transition-colors hover:text-accent"
                 >
-                  <Typography.TextSm>{item.label}</Typography.TextSm>
+                  <Text type="body-sm" color="muted">
+                    {item.label}
+                  </Text>
                 </Link>
               ))}
             </div>
@@ -66,7 +67,9 @@ export function Footer() {
                 className="flex items-center gap-2 text-muted transition-colors hover:text-accent"
               >
                 <Heart className="size-4" />
-                <Typography.TextSm>Support this project</Typography.TextSm>
+                <Text type="body-sm" color="muted">
+                  Support this project
+                </Text>
               </Link>
             </UnreleasedFeature>
           </div>
@@ -77,10 +80,10 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0">
           <div className="text-center text-muted md:text-left">
-            <Typography.TextSm>
+            <Text type="body-sm" color="muted">
               © {CURRENT_YEAR} {SITE_TITLE}. All rights reserved. • v{version}
-            </Typography.TextSm>
-            <Typography.TextSm>
+            </Text>
+            <Text type="body-sm" color="muted">
               Data provided by{" "}
               <Link
                 href="https://datamall.lta.gov.sg"
@@ -90,7 +93,7 @@ export function Footer() {
               >
                 LTA DataMall
               </Link>
-            </Typography.TextSm>
+            </Text>
           </div>
 
           <div className="flex gap-4">
@@ -98,13 +101,17 @@ export function Footer() {
               href="/legal/privacy-policy"
               className="text-muted transition-colors hover:text-accent"
             >
-              <Typography.TextSm>Privacy Policy</Typography.TextSm>
+              <Text type="body-sm" color="muted">
+                Privacy Policy
+              </Text>
             </Link>
             <Link
               href="/legal/terms-of-service"
               className="text-muted transition-colors hover:text-accent"
             >
-              <Typography.TextSm>Terms of Service</Typography.TextSm>
+              <Text type="body-sm" color="muted">
+                Terms of Service
+              </Text>
             </Link>
           </div>
         </div>

@@ -1,8 +1,7 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
   staggerContainerVariants,
@@ -73,16 +72,14 @@ export function GuidesSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-accent uppercase tracking-widest">
+              <Text type="body-sm" weight="medium">
                 Learn
-              </Typography.Label>
-              <Typography.H2 className="lg:text-4xl">
-                Guides &amp; Tutorials
-              </Typography.H2>
-              <Typography.Text className="text-muted">
+              </Text>
+              <Text type="h2">Guides &amp; Tutorials</Text>
+              <Text type="body">
                 Step-by-step guides to help you understand Singapore&apos;s
                 vehicle market and make the most of our platform.
-              </Typography.Text>
+              </Text>
             </motion.div>
           </div>
 
@@ -103,11 +100,11 @@ export function GuidesSection() {
                         {String(index + 1).padStart(2, "0")}
                       </div>
                       <div className="flex flex-col gap-4">
-                        <Typography.H3>{guide.title}</Typography.H3>
+                        <Text type="h3">{guide.title}</Text>
                         {guide.content.map((paragraph) => (
-                          <Typography.Text key={paragraph.slice(0, 40)}>
+                          <Text type="body" key={paragraph.slice(0, 40)}>
                             {paragraph}
-                          </Typography.Text>
+                          </Text>
                         ))}
                       </div>
                     </Card.Content>

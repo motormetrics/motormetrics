@@ -1,9 +1,16 @@
 "use client";
 
-import { Alert, Card, Input, Label, ListBox, Select } from "@heroui/react";
+import {
+  Alert,
+  Card,
+  Input,
+  Label,
+  ListBox,
+  Select,
+  Text,
+} from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 
-import Typography from "@web/components/typography";
 import { ArrowDown } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -55,7 +62,7 @@ export function PARFCalculator() {
   return (
     <Card>
       <Card.Content className="flex flex-col gap-6">
-        <Typography.H4>Calculate Your PARF Rebate</Typography.H4>
+        <Text type="h4">Calculate Your PARF Rebate</Text>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Input
@@ -134,7 +141,7 @@ export function PARFCalculator() {
                   </span>
                 </div>
                 {result.oldCapped ? (
-                  <Typography.Caption className="text-warning">
+                  <Text type="body-xs" color="muted">
                     Cap of{" "}
                     <NumberValue
                       currency="SGD"
@@ -144,7 +151,7 @@ export function PARFCalculator() {
                       value={OLD_CAP}
                     />{" "}
                     applied
-                  </Typography.Caption>
+                  </Text>
                 ) : null}
               </div>
             </KPI.Footer>
@@ -197,7 +204,7 @@ export function PARFCalculator() {
                   </span>
                 </div>
                 {result.newCapped ? (
-                  <Typography.Caption className="text-warning">
+                  <Text type="body-xs" color="muted">
                     Cap of{" "}
                     <NumberValue
                       currency="SGD"
@@ -207,7 +214,7 @@ export function PARFCalculator() {
                       value={NEW_CAP}
                     />{" "}
                     applied
-                  </Typography.Caption>
+                  </Text>
                 ) : null}
               </div>
             </KPI.Footer>

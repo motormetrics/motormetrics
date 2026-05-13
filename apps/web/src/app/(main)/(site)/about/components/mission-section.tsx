@@ -1,8 +1,7 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Text } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import { SITE_TITLE } from "@web/config";
 import { fadeInUpVariants } from "@web/config/animations";
 import { motion } from "framer-motion";
@@ -38,27 +37,27 @@ export function MissionSection() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Typography.H2 className="lg:text-4xl">Our Mission</Typography.H2>
+            <Text type="h2">Our Mission</Text>
             <div className="flex flex-col gap-4">
-              <Typography.TextLg className="text-muted">
+              <Text type="body">
                 Singapore&apos;s car market is uniquely complex. Between COE
                 premiums that swing wildly, registration quotas that change
                 monthly, and a maze of vehicle categories, making informed
                 decisions feels nearly impossible.
-              </Typography.TextLg>
-              <Typography.TextLg className="text-muted">
+              </Text>
+              <Text type="body">
                 We built {SITE_TITLE} to change that. By aggregating official
                 data from the Land Transport Authority and presenting it through
                 intuitive visualisations, we hope to make this data easier to
                 find and explore, rather than scattered across government
                 portals and industry reports.
-              </Typography.TextLg>
-              <Typography.TextLg className="text-muted">
+              </Text>
+              <Text type="body">
                 Whether you&apos;re a first-time buyer trying to time your
                 purchase, a dealer analysing market trends, or simply curious
                 about Singapore&apos;s automotive landscape—this site might
                 help.
-              </Typography.TextLg>
+              </Text>
             </div>
           </motion.div>
 
@@ -73,19 +72,19 @@ export function MissionSection() {
           >
             <Card className="border-none bg-transparent shadow-none">
               <Card.Content className="flex flex-col gap-2 p-0">
-                <Typography.H4>Data-Driven Decisions</Typography.H4>
-                <Typography.TextSm>
+                <Text type="h4">Data-Driven Decisions</Text>
+                <Text type="body-sm" color="muted">
                   Historical trends to help inform your decisions.
-                </Typography.TextSm>
+                </Text>
               </Card.Content>
             </Card>
             <Card className="border-none bg-transparent shadow-none">
               <Card.Content className="flex flex-col gap-2 p-0">
-                <Typography.H4>Always Up-to-Date</Typography.H4>
-                <Typography.TextSm>
+                <Text type="h4">Always Up-to-Date</Text>
+                <Text type="body-sm" color="muted">
                   Fresh data after every COE bidding round and monthly
                   registration release.
-                </Typography.TextSm>
+                </Text>
               </Card.Content>
             </Card>
           </motion.div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, ComboBox, Input, Label, ListBox } from "@heroui/react";
+import { Card, ComboBox, Input, Label, ListBox, Text } from "@heroui/react";
 import { BarChart, ChartTooltip, NumberValue } from "@heroui-pro/react";
 
 import type { SelectDeregistration } from "@motormetrics/database";
@@ -10,7 +10,6 @@ import {
   toPercentageDistribution,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/constants";
 import { deregistrationsSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
-import Typography from "@web/components/typography";
 import { useQueryStates } from "nuqs";
 import type React from "react";
 import { useMemo } from "react";
@@ -76,9 +75,9 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
     <Card>
       <Card.Header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex flex-col gap-1">
-          <Typography.H3>Deregistrations by Category</Typography.H3>
+          <Text type="h3">Deregistrations by Category</Text>
           {selectedCategory ? (
-            <Typography.Text className="text-muted">
+            <Text type="body">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
@@ -91,16 +90,16 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
                 value={selectedCategory.percentage / 100}
               />
               )
-            </Typography.Text>
+            </Text>
           ) : (
-            <Typography.Text className="text-muted">
+            <Text type="body">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
                 value={totalDeregistrations}
               />{" "}
               total deregistrations for {formatDateToMonthYear(currentMonth)}
-            </Typography.Text>
+            </Text>
           )}
         </div>
         <ComboBox
@@ -207,10 +206,10 @@ export function CategoryChart({ data, months }: CategoryChartProps) {
         </BarChart>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-muted">
+        <Text type="body-sm" color="muted">
           Click on a bar to select a category, or use the dropdown above to
           change the month
-        </Typography.TextSm>
+        </Text>
       </Card.Footer>
     </Card>
   );

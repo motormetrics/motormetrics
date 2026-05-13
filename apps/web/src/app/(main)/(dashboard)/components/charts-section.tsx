@@ -1,6 +1,5 @@
-import { Button, Card, Link, Skeleton } from "@heroui/react";
+import { Button, Card, Link, Skeleton, Text } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import Typography from "@web/components/typography";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
 import { Suspense } from "react";
@@ -14,7 +13,7 @@ async function YearlyChartContent() {
       <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <div>
-            <Typography.H3>Yearly Registrations</Typography.H3>
+            <Text type="h3">Yearly Registrations</Text>
             <p className="text-muted text-sm">
               Total registrations over the years
             </p>
@@ -63,7 +62,7 @@ async function TopMakesContent() {
     <Card>
       <Card.Content>
         <div className="mb-5 flex items-center justify-between">
-          <Typography.H3>Top Makes</Typography.H3>
+          <Text type="h3">Top Makes</Text>
           <Link href="/cars/makes">
             <Button isIconOnly variant="tertiary">
               <ArrowUpRight className="size-6" />

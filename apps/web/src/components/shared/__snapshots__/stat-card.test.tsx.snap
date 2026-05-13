@@ -11,12 +11,16 @@ exports[`StatCard > should render with hero variant 1`] = `
       data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+        class="text text--h4"
+        data-slot="text"
+        data-type="h4"
       >
         Test Title
       </h4>
       <p
-        class="text-muted text-sm leading-6"
+        class="text text--body-sm"
+        data-slot="text"
+        data-type="body-sm"
       >
         Test Description
       </p>
@@ -55,12 +59,16 @@ exports[`StatCard > should render with required props 1`] = `
       data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+        class="text text--h4"
+        data-slot="text"
+        data-type="h4"
       >
         Test Title
       </h4>
       <p
-        class="text-muted text-sm leading-6"
+        class="text text--body-sm"
+        data-slot="text"
+        data-type="body-sm"
       >
         Test Description
       </p>

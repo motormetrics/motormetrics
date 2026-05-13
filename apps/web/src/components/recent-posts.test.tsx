@@ -37,6 +37,9 @@ vi.mock("@heroui/react", () => ({
       {children}
     </a>
   ),
+  Text: ({ children }: { children?: React.ReactNode }) => (
+    <span>{children}</span>
+  ),
   cn: (...classes: unknown[]) => classes.flat().filter(Boolean).join(" "),
 }));
 

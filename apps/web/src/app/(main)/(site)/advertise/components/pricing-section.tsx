@@ -1,5 +1,4 @@
-import { Button, Card, Chip, Link, Separator } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Button, Card, Chip, Link, Separator, Text } from "@heroui/react";
 import { Check } from "lucide-react";
 import { cacheLife } from "next/cache";
 
@@ -50,15 +49,13 @@ export async function PricingSection() {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col items-center gap-4 text-center">
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Text type="body-sm" weight="medium">
             Simple Pricing
-          </Typography.Label>
-          <Typography.H2 className="lg:text-4xl">
-            Monthly plans that fit your budget
-          </Typography.H2>
-          <Typography.TextLg className="max-w-xl text-muted">
+          </Text>
+          <Text type="h2">Monthly plans that fit your budget</Text>
+          <Text type="body">
             Billed monthly. Cancel anytime. No long-term commitments.
-          </Typography.TextLg>
+          </Text>
         </div>
 
         {/* Pricing cards */}
@@ -85,23 +82,25 @@ export async function PricingSection() {
                 </div>
               )}
               <Card.Header className="flex flex-col items-start gap-2">
-                <Typography.H3 className="text-xl">{plan.name}</Typography.H3>
+                <Text type="h3">{plan.name}</Text>
                 <div className="flex items-baseline gap-1">
                   <span className="font-bold text-4xl text-foreground tracking-tight">
                     {plan.price}
                   </span>
                   <span className="text-muted text-sm">/month</span>
                 </div>
-                <Typography.TextSm className="text-muted">
+                <Text type="body-sm" color="muted">
                   {plan.description}
-                </Typography.TextSm>
+                </Text>
               </Card.Header>
               <Separator />
               <Card.Content className="gap-3">
                 {plan.features.map((feature) => (
                   <div key={feature} className="flex items-center gap-2">
                     <Check className="size-4 shrink-0 text-accent" />
-                    <Typography.TextSm>{feature}</Typography.TextSm>
+                    <Text type="body-sm" color="muted">
+                      {feature}
+                    </Text>
                   </div>
                 ))}
               </Card.Content>

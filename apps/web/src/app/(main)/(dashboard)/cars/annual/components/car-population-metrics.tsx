@@ -1,9 +1,9 @@
 "use client";
 
+import { Text } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
-import Typography from "@web/components/typography";
 import { useMemo } from "react";
 
 interface MakeData {
@@ -102,7 +102,7 @@ export function CarPopulationMetrics({
         </KPI.Content>
         {topMake && (
           <KPI.Footer>
-            <Typography.TextSm className="text-muted">
+            <Text type="body-sm" color="muted">
               <KPI.Value
                 className="font-normal text-sm"
                 locale="en-SG"
@@ -116,7 +116,7 @@ export function CarPopulationMetrics({
                 value={totalMakes}
               />{" "}
               makes total)
-            </Typography.TextSm>
+            </Text>
           </KPI.Footer>
         )}
       </KPI>
@@ -136,7 +136,7 @@ export function CarPopulationMetrics({
           />
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm className="text-muted">
+          <Text type="body-sm" color="muted">
             <KPI.Value
               className="font-normal text-sm"
               locale="en-SG"
@@ -151,7 +151,7 @@ export function CarPopulationMetrics({
               value={grandTotal}
             />{" "}
             cars
-          </Typography.TextSm>
+          </Text>
         </KPI.Footer>
       </KPI>
     </KPIGroup>
