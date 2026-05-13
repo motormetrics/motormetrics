@@ -1,6 +1,12 @@
 import type { VercelConfig } from "@vercel/config/v1";
 
 export const config: VercelConfig = {
+  git: {
+    deploymentEnabled: {
+      "dependabot/**": false,
+      "renovate/**": false,
+    },
+  },
   relatedProjects: ["prj_fyAvupEssH3LO4OQFDWplinVFlaI"],
   crons: [
     {
