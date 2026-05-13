@@ -76,7 +76,7 @@
     "sonner": "catalog:",
     "tailwind-merge": "3.4.0",
     "tailwind-variants": "3.2.2",
-    "twitter-api-v2": "1.28.0",
+    "twitter-api-v2": "1.29.0",
     "workflow": "4.2.0",
     "zod": "catalog:",
     "zustand": "5.0.9"
