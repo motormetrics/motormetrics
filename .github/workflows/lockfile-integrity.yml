@@ -25,6 +25,6 @@ jobs:
           fetch-depth: 0
 
       - name: Check for lockfile tampering
-        uses: tartinerlabs/lockfile-integrity@e72908eb62a2ae8a85ae1b707a73c16469651d0f # v1.0.0
+        uses: tartinerlabs/lockfile-integrity@595c3f499363a060840aa387d8eaae781e73b135 # v1.2.0
         with:
           base-ref: ${{ github.base_ref }}
