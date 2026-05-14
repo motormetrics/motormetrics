@@ -54,8 +54,8 @@ jobs:
       - name: Install dependencies
         run: pnpm ci
 
-      - name: Generate coverage
-        run: pnpm test:coverage
+      - name: Run tests with coverage
+        run: pnpm test
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@c7ee0f9df90b7aa20e8dcf9695dcfe2e7da5b4f2 # v7
