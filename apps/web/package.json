@@ -85,7 +85,7 @@
     "@babel/preset-env": "7.29.5",
     "@babel/preset-typescript": "7.28.5",
     "@playwright/test": "1.60.0",
-    "@react-email/render": "1.4.0",
+    "@react-email/render": "2.0.8",
     "@rolldown/plugin-babel": "0.2.3",
     "@tailwindcss/forms": "0.5.11",
     "@tailwindcss/postcss": "catalog:",
