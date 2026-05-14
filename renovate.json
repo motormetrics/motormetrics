@@ -1,8 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "rangeStrategy": "pin",
+  "extends": ["config:recommended", "security:minimumReleaseAgeNpm"],
+  "rangeStrategy": "replace",
   "schedule": ["before 9am on Monday"],
+  "timezone": "Asia/Singapore",
+  "internalChecksFilter": "strict",
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 1,
+  "dependencyDashboard": true,
   "packageRules": [
     {
       "description": "Keep .node-version on the Node major line",
@@ -11,30 +16,81 @@
       "rangeStrategy": "replace"
     },
     {
+      "description": "Require approval for major updates",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    },
+    {
       "description": "Auto-merge patch updates for devDependencies",
       "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["patch"],
       "automerge": true
     },
     {
-      "description": "Group @heroui packages",
-      "matchPackageNames": ["@heroui/*"],
-      "groupName": "heroui"
+      "description": "Group HeroUI packages",
+      "matchPackageNames": ["@heroui/*", "@heroui-pro/*"],
+      "groupName": "HeroUI"
+    },
+    {
+      "description": "Group Fumadocs packages",
+      "matchPackageNames": ["fumadocs-*"],
+      "groupName": "Fumadocs"
+    },
+    {
+      "description": "Group testing packages",
+      "matchPackageNames": [
+        "vitest",
+        "@vitest/*",
+        "@testing-library/*",
+        "@playwright/*",
+        "jsdom"
+      ],
+      "groupName": "Testing"
+    },
+    {
+      "description": "Group type definition packages",
+      "matchPackageNames": ["@types/*"],
+      "groupName": "Type definitions"
+    },
+    {
+      "description": "Group Better Auth packages",
+      "matchPackageNames": ["better-auth", "@better-auth/*"],
+      "groupName": "Better Auth"
+    },
+    {
+      "description": "Group Vercel packages",
+      "matchPackageNames": ["@vercel/*"],
+      "groupName": "Vercel"
     },
     {
       "description": "Group semantic-release packages",
       "matchPackageNames": ["semantic-release", "@semantic-release/*"],
-      "groupName": "semantic-release"
+      "groupName": "Semantic Release"
     },
     {
       "description": "Group @commitlint packages",
       "matchPackageNames": ["@commitlint/*"],
-      "groupName": "commitlint"
+      "groupName": "Commitlint"
     },
     {
-      "description": "Group vitest packages",
-      "matchPackageNames": ["vitest", "@vitest/*"],
-      "groupName": "vitest"
+      "description": "Group OpenTelemetry packages",
+      "matchPackageNames": ["@opentelemetry/*"],
+      "groupName": "OpenTelemetry"
+    },
+    {
+      "description": "Group Tailwind packages",
+      "matchPackageNames": ["tailwindcss", "@tailwindcss/*", "tailwind-*"],
+      "groupName": "Tailwind"
+    },
+    {
+      "description": "Group AI SDK packages",
+      "matchPackageNames": ["ai", "@ai-sdk/*"],
+      "groupName": "AI SDK"
+    },
+    {
+      "description": "Group Drizzle packages",
+      "matchPackageNames": ["drizzle-orm", "drizzle-kit"],
+      "groupName": "Drizzle"
     }
   ],
   "lockFileMaintenance": {
