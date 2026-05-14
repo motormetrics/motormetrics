@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 import { withWorkflow } from "workflow/next";
 
 const ONE_DAY = 60 * 60 * 24;
@@ -136,4 +137,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withWorkflow(nextConfig);
+const withNextIntl = createNextIntlPlugin();
+
+export default withWorkflow(withNextIntl(nextConfig));

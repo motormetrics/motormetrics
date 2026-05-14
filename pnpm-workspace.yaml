@@ -15,6 +15,7 @@ allowBuilds:
   heroui-pro: true
   protobufjs: false
   sharp: false
+  '@parcel/watcher': false
 
 catalog:
   "@ai-sdk/gateway": 3.0.114
