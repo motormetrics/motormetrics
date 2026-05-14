@@ -1,3 +1,13 @@
+## [4.67.0](https://github.com/motormetrics/motormetrics/compare/v4.66.6...v4.67.0) (2026-05-14)
+
+### Features
+
+* **web:** add dashboard overview pages ([cb89afc](https://github.com/motormetrics/motormetrics/commit/cb89afcc42437c618df269c4590ac52af4c25210))
+
+### Bug Fixes
+
+* **web:** allow eval in CSP ([83a6efa](https://github.com/motormetrics/motormetrics/commit/83a6efa39d6635bb593df0b7ac8acd5d5b93f1d1))
+
 ## [4.66.6](https://github.com/motormetrics/motormetrics/compare/v4.66.5...v4.66.6) (2026-05-01)
 
 ### Bug Fixes
