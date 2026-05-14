@@ -43,14 +43,4 @@ catalog:
   vitest: 4.1.6
   zod: 4.3.6
 
-overrides:
-  devalue@<5.6.4: "5.6.4"
-  esbuild@<=0.24.2: "0.28.0"
-  form-data@>=4.0.0 <4.0.4: "4.0.5"
-  postcss@<8.5.10: "8.5.14"
-  protobufjs@>=8.0.0 <=8.0.1: "8.0.2"
-  undici@>=7.0.0 <7.24.0: "7.24.0"
-
-peerDependencyRules:
-  allowedVersions:
-    tailwindcss: "4.3.0"
+savePrefix: ""
