@@ -1,3 +1,9 @@
+## [4.67.1](https://github.com/motormetrics/motormetrics/compare/v4.67.0...v4.67.1) (2026-05-14)
+
+### Bug Fixes
+
+* use valid test script in workflows ([25f8d84](https://github.com/motormetrics/motormetrics/commit/25f8d847aeb5b9045a0cc8db1d6ea5fe9a06c074))
+
 ## [4.67.0](https://github.com/motormetrics/motormetrics/compare/v4.66.6...v4.67.0) (2026-05-14)
 
 ### Features
