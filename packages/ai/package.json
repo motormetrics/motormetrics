@@ -14,8 +14,8 @@
     "@langfuse/otel": "catalog:",
     "@motormetrics/database": "workspace:*",
     "@motormetrics/utils": "workspace:*",
-    "@opentelemetry/sdk-trace-node": "2.2.0",
-    "@vercel/blob": "2.3.0",
+    "@opentelemetry/sdk-trace-node": "2.7.1",
+    "@vercel/blob": "2.3.3",
     "ai": "catalog:",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"
