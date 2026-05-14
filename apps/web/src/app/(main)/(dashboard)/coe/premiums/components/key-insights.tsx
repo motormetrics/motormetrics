@@ -58,9 +58,9 @@ export function KeyInsights({ insights }: KeyInsightsProps) {
           </div>
           <div className="h-6 w-px bg-divider" />
           <div className="flex flex-wrap items-center gap-4">
-            {insights.map((insight, index) => (
+            {insights.map((insight) => (
               <Chip
-                key={`${insight.type}-${insight.category}-${index}`}
+                key={`${insight.type}-${insight.category}-${insight.message}`}
                 color={getInsightColor(insight)}
               >
                 {getInsightIcon(insight)}

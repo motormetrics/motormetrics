@@ -70,14 +70,14 @@ describe("Cars Category Charts", () => {
     it("should render positive change indicator when current is higher", () => {
       render(<CategorySummaryCard total={5500} previousTotal={5000} />);
 
-      expect(screen.getByText("+10.0%")).toBeInTheDocument();
+      expect(screen.getByText("+10%")).toBeInTheDocument();
       expect(screen.getByText("vs last month")).toBeInTheDocument();
     });
 
     it("should render negative change indicator when current is lower", () => {
       render(<CategorySummaryCard total={4500} previousTotal={5000} />);
 
-      expect(screen.getByText("-10.0%")).toBeInTheDocument();
+      expect(screen.getByText("-10%")).toBeInTheDocument();
     });
 
     it("should not render comparison when previousTotal is null", () => {
@@ -160,7 +160,7 @@ describe("Cars Category Charts", () => {
       render(<CategoryHeroCard {...defaultProps} />);
 
       expect(screen.getByText("Market Share")).toBeInTheDocument();
-      expect(screen.getByText("30.0%")).toBeInTheDocument();
+      expect(screen.getByText("30%")).toBeInTheDocument();
       expect(screen.getByText("of all registrations")).toBeInTheDocument();
     });
 
@@ -179,7 +179,7 @@ describe("Cars Category Charts", () => {
       };
 
       expect(() => render(<CategoryHeroCard {...props} />)).not.toThrow();
-      expect(screen.getByText("0.0%")).toBeInTheDocument();
+      expect(screen.getByText("0%")).toBeInTheDocument();
     });
 
     it("should display ranking emoji for top 3 positions", () => {

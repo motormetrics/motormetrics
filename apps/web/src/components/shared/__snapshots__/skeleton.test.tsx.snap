@@ -148,31 +148,21 @@ exports[`Skeleton components > should render SkeletonHeading 1`] = `
 exports[`Skeleton components > should render SkeletonMetricCard 1`] = `
 <div>
   <div
-    class="card card--default"
+    class="card card--default flex-1"
     data-slot="card"
   >
     <div
-      class="card__header"
-      data-slot="card-header"
-    >
-      <div
-        class="skeleton skeleton--shimmer h-6 w-3/4 rounded-lg"
-      />
-    </div>
-    <div
-      class="card__content"
+      class="card__content flex flex-col gap-4"
       data-slot="card-content"
     >
       <div
+        class="skeleton skeleton--shimmer h-5 w-3/4 rounded-lg"
+      />
+      <div
         class="skeleton skeleton--shimmer h-10 w-32 rounded-lg"
       />
-    </div>
-    <div
-      class="card__footer"
-      data-slot="card-footer"
-    >
       <div
-        class="skeleton skeleton--shimmer h-5 w-24 rounded-lg"
+        class="skeleton skeleton--shimmer h-5 w-28 rounded-lg"
       />
     </div>
   </div>

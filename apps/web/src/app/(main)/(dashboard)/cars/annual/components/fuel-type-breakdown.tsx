@@ -80,8 +80,8 @@ export function FuelTypeBreakdown({ data }: FuelTypeBreakdownProps) {
             innerRadius={80}
             outerRadius={140}
             paddingAngle={2}
-            label={({ name, percent }: { name: string; percent?: number }) =>
-              `${name} ${((percent ?? 0) * 100).toFixed(1)}%`
+            label={({ name, percent }) =>
+              `${name ?? ""} ${((percent ?? 0) * 100).toFixed(1)}%`
             }
           >
             {groupedData.map((entry) => (

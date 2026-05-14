@@ -3,62 +3,80 @@
 exports[`MetricCard > should combine metric value and comparison 1`] = `
 <div>
   <div
-    class="card card--default"
-    data-slot="card"
+    class="card card--default kpi"
+    data-slot="kpi"
   >
     <div
-      class="card__header"
-      data-slot="card-header"
+      class="kpi__header"
+      data-slot="kpi-header"
     >
-      <h4
-        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+      <dt
+        class="kpi__title"
+        data-slot="kpi-title"
       >
         COE Premiums
-      </h4>
+      </dt>
     </div>
     <div
-      class="card__content"
-      data-slot="card-content"
+      class="kpi__content"
+      data-slot="kpi-content"
     >
-      <div
-        class="font-semibold tabular-nums text-4xl text-accent"
+      <dd
+        class="kpi__value text-accent text-4xl"
+        data-slot="kpi-value"
       >
-        <span>
-          0
-        </span>
-      </div>
+        50,000
+      </dd>
     </div>
     <div
-      class="card__footer"
-      data-slot="card-footer"
+      class="kpi__footer"
+      data-slot="kpi-footer"
     >
       <div
         class="flex items-center gap-2"
       >
         <span
-          class="chip chip--success chip--primary"
+          class="chip chip--success chip--sm chip--primary trend-chip trend-chip--sm"
           data-slot="chip"
+          data-trend="up"
         >
           <svg
-            class="lucide lucide-arrow-up-right size-4"
+            class="trend-chip__indicator"
+            data-slot="trend-chip-indicator"
             fill="none"
-            height="24"
             stroke="currentColor"
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
             viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M7 7h10v10"
-            />
-            <path
-              d="M7 17 17 7"
+              d="M12 19V5m-5 5 5-5 5 5"
             />
           </svg>
-          11.1%
+          <span
+            class="chip__label"
+            data-slot="chip-label"
+          >
+             
+            <span
+              class="trend-chip__value"
+              data-slot="trend-chip-value"
+            >
+              <span
+                class="number-value"
+                data-slot="number-value"
+              >
+                <span
+                  class="number-value__value"
+                  data-slot="number-value-value"
+                >
+                  11.1%
+                </span>
+              </span>
+            </span>
+             
+          </span>
         </span>
         <span
           class="text-muted text-sm"
@@ -74,62 +92,80 @@ exports[`MetricCard > should combine metric value and comparison 1`] = `
 exports[`MetricCard > should render with hero variant 1`] = `
 <div>
   <div
-    class="card card--default border-l-4 border-accent"
-    data-slot="card"
+    class="card card--default kpi border-l-4 border-accent"
+    data-slot="kpi"
   >
     <div
-      class="card__header"
-      data-slot="card-header"
+      class="kpi__header"
+      data-slot="kpi-header"
     >
-      <h4
-        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+      <dt
+        class="kpi__title"
+        data-slot="kpi-title"
       >
         Total Registrations
-      </h4>
+      </dt>
     </div>
     <div
-      class="card__content"
-      data-slot="card-content"
+      class="kpi__content"
+      data-slot="kpi-content"
     >
-      <div
-        class="font-semibold tabular-nums text-5xl text-accent"
+      <dd
+        class="kpi__value text-accent text-5xl"
+        data-slot="kpi-value"
       >
-        <span>
-          0
-        </span>
-      </div>
+        10,000
+      </dd>
     </div>
     <div
-      class="card__footer"
-      data-slot="card-footer"
+      class="kpi__footer"
+      data-slot="kpi-footer"
     >
       <div
         class="flex items-center gap-2"
       >
         <span
-          class="chip chip--success chip--primary"
+          class="chip chip--success chip--sm chip--primary trend-chip trend-chip--sm"
           data-slot="chip"
+          data-trend="up"
         >
           <svg
-            class="lucide lucide-arrow-up-right size-4"
+            class="trend-chip__indicator"
+            data-slot="trend-chip-indicator"
             fill="none"
-            height="24"
             stroke="currentColor"
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
             viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M7 7h10v10"
-            />
-            <path
-              d="M7 17 17 7"
+              d="M12 19V5m-5 5 5-5 5 5"
             />
           </svg>
-          11.1%
+          <span
+            class="chip__label"
+            data-slot="chip-label"
+          >
+             
+            <span
+              class="trend-chip__value"
+              data-slot="trend-chip-value"
+            >
+              <span
+                class="number-value"
+                data-slot="number-value"
+              >
+                <span
+                  class="number-value__value"
+                  data-slot="number-value-value"
+                >
+                  11.1%
+                </span>
+              </span>
+            </span>
+             
+          </span>
         </span>
         <span
           class="text-muted text-sm"

@@ -55,7 +55,7 @@ export function CategoryTrendsTable({ data }: CategoryTrendsTableProps) {
 
                       return (
                         <div
-                          key={`${cat.category}-${i}`}
+                          key={`${cat.category}-${point.value}-${height}`}
                           className="flex-1 rounded-t-sm transition-all"
                           style={{
                             height: `${Math.max(height, 4)}%`,

@@ -6,29 +6,47 @@ exports[`MetricsComparison > should indicate positive growth 1`] = `
     class="flex items-center gap-2"
   >
     <span
-      class="chip chip--success chip--primary"
+      class="chip chip--success chip--sm chip--primary trend-chip trend-chip--sm"
       data-slot="chip"
+      data-trend="up"
     >
       <svg
-        class="lucide lucide-arrow-up-right size-4"
+        class="trend-chip__indicator"
+        data-slot="trend-chip-indicator"
         fill="none"
-        height="24"
         stroke="currentColor"
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2"
         viewBox="0 0 24 24"
-        width="24"
-        xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M7 7h10v10"
-        />
-        <path
-          d="M7 17 17 7"
+          d="M12 19V5m-5 5 5-5 5 5"
         />
       </svg>
-      10%
+      <span
+        class="chip__label"
+        data-slot="chip-label"
+      >
+         
+        <span
+          class="trend-chip__value"
+          data-slot="trend-chip-value"
+        >
+          <span
+            class="number-value"
+            data-slot="number-value"
+          >
+            <span
+              class="number-value__value"
+              data-slot="number-value-value"
+            >
+              10%
+            </span>
+          </span>
+        </span>
+         
+      </span>
     </span>
     <span
       class="text-muted text-sm"

@@ -2,73 +2,35 @@
 
 exports[`LatestCoe > should render all COE results 1`] = `
 <div>
-  <div
-    class="card card--default transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
-    data-slot="card"
-  >
-    <div
-      class="card__header"
-      data-slot="card-header"
-    >
-      <div
-        class="flex items-center gap-2"
-      >
-        <h4
-          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
-        >
-          Category A
-        </h4>
+  <div>
+    <div>
+      <div>
+        Category A
       </div>
     </div>
-    <div
-      class="card__content"
-      data-slot="card-content"
-    >
+    <div>
       <div
-        class="grid grid-cols-2 items-center gap-2"
+        class="flex flex-col gap-1"
       >
-        <div
-          class="bg-gradient-to-br from-accent to-accent/70 bg-clip-text font-bold text-2xl text-transparent"
-        >
-          <span>
-            95000
-          </span>
-        </div>
+        <span>
+          95000
+        </span>
       </div>
     </div>
   </div>
-  <div
-    class="card card--default transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
-    data-slot="card"
-  >
-    <div
-      class="card__header"
-      data-slot="card-header"
-    >
-      <div
-        class="flex items-center gap-2"
-      >
-        <h4
-          class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
-        >
-          Category B
-        </h4>
+  <div>
+    <div>
+      <div>
+        Category B
       </div>
     </div>
-    <div
-      class="card__content"
-      data-slot="card-content"
-    >
+    <div>
       <div
-        class="grid grid-cols-2 items-center gap-2"
+        class="flex flex-col gap-1"
       >
-        <div
-          class="bg-gradient-to-br from-accent to-accent/70 bg-clip-text font-bold text-2xl text-transparent"
-        >
-          <span>
-            105000
-          </span>
-        </div>
+        <span>
+          105000
+        </span>
       </div>
     </div>
   </div>

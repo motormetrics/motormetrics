@@ -18,10 +18,15 @@ exports[`PremiumBanner > should populate the global banner with sorted categorie
         data-slot="chip"
       >
         <span
-          class="chip__label"
-          data-slot="chip-label"
+          class="number-value"
+          data-slot="number-value"
         >
-          $40,000
+          <span
+            class="number-value__value"
+            data-slot="number-value-value"
+          >
+            $40,000
+          </span>
         </span>
       </span>
     </div>
@@ -38,10 +43,15 @@ exports[`PremiumBanner > should populate the global banner with sorted categorie
         data-slot="chip"
       >
         <span
-          class="chip__label"
-          data-slot="chip-label"
+          class="number-value"
+          data-slot="number-value"
         >
-          $42,000
+          <span
+            class="number-value__value"
+            data-slot="number-value-value"
+          >
+            $42,000
+          </span>
         </span>
       </span>
     </div>
