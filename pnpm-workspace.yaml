@@ -31,7 +31,7 @@ catalog:
   "@vitest/coverage-v8": 4.1.6
   "@vitest/ui": 4.1.6
   ai: 6.0.182
-  date-fns: 3.6.0
+  date-fns: 4.1.0
   drizzle-orm: 0.45.2
   next: 16.2.6
   react: 19.2.6
