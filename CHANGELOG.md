@@ -1,3 +1,9 @@
+## [4.68.0](https://github.com/motormetrics/motormetrics/compare/v4.67.1...v4.68.0) (2026-05-15)
+
+### Features
+
+* **web:** set up next-intl ([b91a77f](https://github.com/motormetrics/motormetrics/commit/b91a77f29c39bdb01227803b655d171c710ab36b))
+
 ## [4.67.1](https://github.com/motormetrics/motormetrics/compare/v4.67.0...v4.67.1) (2026-05-14)
 
 ### Bug Fixes
