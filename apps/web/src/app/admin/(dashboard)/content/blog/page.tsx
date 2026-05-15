@@ -1,5 +1,5 @@
 import { Button, Card } from "@heroui/react";
-import { mdxComponents } from "@web/app/(main)/(site)/blog/components/mdx-components";
+import { mdxComponents } from "@web/app/[locale]/(main)/(site)/blog/components/mdx-components";
 import { getAllPosts } from "@web/app/admin/actions/blog";
 import { BlogPostsTable } from "@web/app/admin/components/blog-posts-table";
 import { ListSkeleton } from "@web/components/shared/skeleton";

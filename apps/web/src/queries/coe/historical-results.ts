@@ -1,5 +1,5 @@
 import { and, asc, coe, db, gte, lte, max, min } from "@motormetrics/database";
-import type { Period } from "@web/app/(main)/(dashboard)/coe/search-params";
+import type { Period } from "@web/app/[locale]/(main)/(dashboard)/coe/search-params";
 import { getDateRangeFromPeriod } from "@web/lib/coe/calculations";
 import type { COEResult } from "@web/types";
 import { cacheLife, cacheTag } from "next/cache";

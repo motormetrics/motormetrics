@@ -4,14 +4,18 @@ import { redis } from "@motormetrics/utils";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { auth } from "@web/app/admin/lib/auth";
+import { routing } from "@web/i18n/routing";
 import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
 
 // Rate limiter for Developer API (60 requests per minute)
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(60, "1 m"),
 });
+
+const handleI18nRouting = createMiddleware(routing);
 
 interface AppConfig {
   maintenance: {
@@ -144,16 +148,35 @@ export async function proxy(request: NextRequest) {
 
   requestHeaders.set("X-Robots-Tag", "all");
 
-  return NextResponse.next({
-    ...(!process.env.VERCEL && { headers: requestHeaders }),
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  const shouldHandleI18nRouting =
+    !pathname.startsWith("/api") &&
+    !pathname.startsWith("/trpc") &&
+    !pathname.startsWith("/admin") &&
+    !pathname.startsWith("/_next") &&
+    !pathname.startsWith("/_vercel") &&
+    !pathname.includes(".");
+
+  const response = shouldHandleI18nRouting
+    ? handleI18nRouting(request)
+    : NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
+
+  response.headers.set(
+    "Permissions-Policy",
+    requestHeaders.get("Permissions-Policy") ?? "",
+  );
+  response.headers.set(
+    "Content-Security-Policy",
+    requestHeaders.get("Content-Security-Policy") ?? "",
+  );
+  response.headers.set("X-Robots-Tag", "all");
+
+  return response;
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
-  ],
+  matcher: ["/api/v1/:path*", "/((?!api|trpc|_next|_vercel|.*\\..*).*)"],
 };

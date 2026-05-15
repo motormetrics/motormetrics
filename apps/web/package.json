@@ -18,6 +18,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit",
+    "i18n:check": "npx @lingual/i18n-check@latest --source en --locales messages",
     "auth:generate": "pnpm dlx auth@latest generate --config ./src/app/admin/lib/auth.ts --output ../../packages/database/src/schema/auth.ts --yes",
     "vercel-build": "turbo run @motormetrics/database#migrate && next build"
   },

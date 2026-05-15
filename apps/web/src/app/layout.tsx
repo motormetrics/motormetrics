@@ -8,7 +8,6 @@ import { SOCIAL_HANDLE } from "@web/config/socials";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import Script from "next/script";
-import { getLocale, getMessages } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, Suspense } from "react";
 import "./globals.css";
@@ -72,8 +71,14 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout = async ({ children }: { children: ReactNode }) => {
-  const [locale, messages] = await Promise.all([getLocale(), getMessages()]);
+const RootLayout = async ({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ locale?: string }>;
+}) => {
+  const { locale = "en" } = await params;
 
   return (
     <html
@@ -82,7 +87,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
       className={cn("scroll-smooth antialiased", geistSans.className)}
     >
       <body className="bg-background text-foreground">
-        <Providers locale={locale} messages={messages}>
+        <Providers>
           <NuqsAdapter>
             <Suspense fallback={null}>
               <LoadingIndicator />
