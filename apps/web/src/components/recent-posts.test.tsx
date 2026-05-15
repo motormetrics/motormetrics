@@ -1,6 +1,6 @@
 import type { SelectPost } from "@motormetrics/database";
 import { render, screen } from "@testing-library/react";
-import { RecentPosts } from "@web/app/(main)/(dashboard)/components/recent-posts";
+import { RecentPosts } from "@web/app/[locale]/(main)/(dashboard)/components/recent-posts";
 
 vi.mock("@heroui/react", () => ({
   Button: ({
@@ -48,7 +48,7 @@ vi.mock("framer-motion", () => ({
   },
 }));
 
-vi.mock("@web/app/(main)/(site)/blog/components/post", () => ({
+vi.mock("@web/app/[locale]/(main)/(site)/blog/components/post", () => ({
   Post: {
     Card: ({ post }: { post: SelectPost }) => (
       <article data-testid={`post-card-${post.id}`}>

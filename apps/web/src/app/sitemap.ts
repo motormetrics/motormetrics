@@ -1,5 +1,5 @@
 import { slugify } from "@motormetrics/utils";
-import { getAllGuideSlugs } from "@web/app/(main)/(site)/learn/lib/guides";
+import { getAllGuideSlugs } from "@web/app/[locale]/(main)/(site)/learn/lib/guides";
 import { SITE_LINKS, SITE_URL } from "@web/config";
 import { getDistinctMakes } from "@web/queries/cars";
 import { getAllPosts } from "@web/queries/posts";

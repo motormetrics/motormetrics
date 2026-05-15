@@ -1,5 +1,5 @@
 import { formatCurrency } from "@motormetrics/utils";
-import type { Period } from "@web/app/(main)/(dashboard)/coe/search-params";
+import type { Period } from "@web/app/[locale]/(main)/(dashboard)/coe/search-params";
 import type { CoeMarketShareData } from "@web/queries/coe";
 import type { COEBiddingResult, COEResult } from "@web/types";
 import { format, subMonths, subYears } from "date-fns";

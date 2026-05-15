@@ -71,10 +71,18 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout = async ({ children }: { children: ReactNode }) => {
+const RootLayout = async ({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ locale?: string }>;
+}) => {
+  const { locale = "en" } = await params;
+
   return (
     <html
-      lang="en"
+      lang={locale}
       data-theme="light"
       className={cn("scroll-smooth antialiased", geistSans.className)}
     >
