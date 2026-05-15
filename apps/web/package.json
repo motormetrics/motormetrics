@@ -18,7 +18,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit",
-    "i18n:check": "npx @lingual/i18n-check@latest --source en --locales messages",
+    "i18n:check": "i18n-check --source en --locales messages",
     "auth:generate": "pnpm dlx auth@latest generate --config ./src/app/admin/lib/auth.ts --output ../../packages/database/src/schema/auth.ts --yes",
     "vercel-build": "turbo run @motormetrics/database#migrate && next build"
   },
@@ -86,6 +86,7 @@
     "@babel/core": "7.29.0",
     "@babel/preset-env": "7.29.5",
     "@babel/preset-typescript": "7.28.5",
+    "@lingual/i18n-check": "0.9.5",
     "@playwright/test": "1.60.0",
     "@react-email/render": "1.4.0",
     "@rolldown/plugin-babel": "0.2.3",
