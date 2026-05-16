@@ -22,7 +22,7 @@ catalog:
   "@ai-sdk/google": 3.0.73
   "@heroui/react": 3.0.4
   "@heroui/styles": 3.0.4
-  "@langfuse/otel": 4.5.1
+  "@langfuse/otel": 4.6.1
   "@tailwindcss/postcss": 4.3.0
   "@types/node": 22.19.3
   "@types/react": 19.2.14
