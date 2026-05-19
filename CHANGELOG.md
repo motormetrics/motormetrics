@@ -1,3 +1,9 @@
+## [4.68.1](https://github.com/motormetrics/motormetrics/compare/v4.68.0...v4.68.1) (2026-05-19)
+
+### Bug Fixes
+
+* **deps:** update dependency schema-dts to v2 ([b487e57](https://github.com/motormetrics/motormetrics/commit/b487e57011badb91356e551f5b8aff5b18c3af11))
+
 ## [4.68.0](https://github.com/motormetrics/motormetrics/compare/v4.67.1...v4.68.0) (2026-05-15)
 
 ### Features
