@@ -34,7 +34,7 @@ export async function generateMetadata({
 
   const formattedMonth = formatDateToMonthYear(month);
 
-  const title = `${formattedMonth} Car Registrations`;
+  const title = "Singapore Car Registrations";
   const description = `Discover ${formattedMonth} car registrations in Singapore. See detailed stats by fuel type, vehicle type, and top brands.`;
 
   const { topTypes, carRegistration } = await loadCarsMetadataData(month);
@@ -46,7 +46,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `${SITE_URL}/cars/registrations?month=${month}`,
+      url: `${SITE_URL}/cars/registrations`,
       siteName: SITE_TITLE,
       locale: "en_SG",
       type: "website",
@@ -61,7 +61,7 @@ export async function generateMetadata({
       images,
     },
     alternates: {
-      canonical: `/cars/registrations?month=${month}`,
+      canonical: "/cars/registrations",
     },
     authors: [{ name: SITE_TITLE, url: SITE_URL }],
     creator: SITE_TITLE,
