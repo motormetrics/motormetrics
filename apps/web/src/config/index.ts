@@ -16,11 +16,12 @@ export const SITE_DESCRIPTION =
 // =============================================================================
 export const DOMAIN_NAME = "motormetrics.app";
 
+// Site URL is set per environment via NEXT_PUBLIC_SITE_URL so each domain
+// self-references (https://motormetrics.app in production,
+// https://staging.motormetrics.app in staging, http://localhost:3000 locally).
+// Falls back to the production domain when unset.
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.NEXT_PUBLIC_VERCEL_URL
-    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-    : `https://${DOMAIN_NAME}`);
+  process.env.NEXT_PUBLIC_SITE_URL ?? `https://${DOMAIN_NAME}`;
 
 export const LOGO_URL = `${SITE_URL}/icon.png`;
 
