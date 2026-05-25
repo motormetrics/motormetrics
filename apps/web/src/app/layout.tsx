@@ -16,7 +16,7 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const title = SITE_TITLE;
+const title = `${SITE_TITLE} (formerly SG Cars Trends)`;
 const description = SITE_DESCRIPTION;
 const url = new URL(SITE_URL);
 
