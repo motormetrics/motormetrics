@@ -18,7 +18,7 @@ import { GuidesSection } from "./components/guides-section";
 import { HeroSection } from "./components/hero-section";
 import { QuickNavSection } from "./components/quick-nav-section";
 
-const title = "Learn";
+const title = "Car & COE Guides";
 const description =
   "Educational hub for Singapore's automotive market — FAQs, glossary of key terms, data sources, and guides to understanding COE, PARF, and car registration trends.";
 

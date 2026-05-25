@@ -16,14 +16,14 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const title = SITE_TITLE;
+const title = `${SITE_TITLE} (formerly SG Cars Trends)`;
 const description = SITE_DESCRIPTION;
 const url = new URL(SITE_URL);
 
 export const metadata: Metadata = {
   metadataBase: url,
   title: {
-    template: `%s - ${title}`,
+    template: `%s - ${SITE_TITLE}`,
     default: title,
   },
   description,

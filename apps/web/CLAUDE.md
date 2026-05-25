@@ -646,6 +646,27 @@ import Typography from "@web/components/typography";
 
 Dashboard pages use professional, SEO-aligned H1 titles that match the `<title>` tag for search engine consistency.
 
+#### SEO `<title>` Tag Conventions
+
+The `<title>` tag is generated from the Next.js metadata template in `src/app/layout.tsx`:
+
+- **Template** (inner pages): `%s - MotorMetrics` — the short brand suffix keeps titles
+  within Google's ~60-character display limit. Do **not** add "(formerly SG Cars Trends)"
+  to per-page titles; it gets truncated and pushes keywords out of the snippet.
+- **Full brand** `MotorMetrics (formerly SG Cars Trends)` appears only where it has value:
+    - Homepage `/` and `/about` — via `title.absolute` (bypasses the template).
+    - All `openGraph.title` / `twitter.title` (social cards have no length penalty).
+- **Evergreen titles for "latest data" pages**: pages backed by a stable URL that renders
+  the latest month (`/cars/registrations`, `/cars/fuel-types`, `/cars/vehicle-types`,
+  `/cars/deregistrations`) use a fixed, keyword-focused `<title>` with **no month prefix**.
+  The month lives in the H1 and meta description instead. Their `alternates.canonical` and
+  `openGraph.url` must point to the **clean path** (no `?month=`) so all query-param
+  variants consolidate to one indexed page.
+- **Path segments** (`[make]`, `[type]`) get their own distinct title + canonical; **query
+  params** (`?month`, `?compareA`, `?category`) never create indexable variants.
+- Keep every indexed `<title>` ≤ 60 characters; content titles (`/blog/[slug]`,
+  `/learn/[slug]`) are left full rather than truncated.
+
 **Current Page Titles**:
 
 | Page | Route | H1 |
