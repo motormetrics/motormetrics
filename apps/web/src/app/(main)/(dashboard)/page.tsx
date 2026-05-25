@@ -18,7 +18,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Singapore Car Registration & COE Trends | Latest Statistics",
+  title: { absolute: `${SITE_TITLE} (formerly SG Cars Trends)` },
   description:
     "Track Singapore car registration trends, COE bidding results, and automotive market insights. Latest data from Land Transport Authority (LTA) with interactive charts, EV and hybrid statistics, and AI-powered analysis.",
   keywords: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     "LTA data",
   ],
   openGraph: {
-    title: "Singapore Car Registration & COE Trends",
+    title: `${SITE_TITLE} (formerly SG Cars Trends)`,
     description:
       "Track Singapore car registration trends and COE bidding results with interactive charts and latest market insights.",
     type: "website",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Singapore Car Registration & COE Trends",
+    title: `${SITE_TITLE} (formerly SG Cars Trends)`,
     description:
       "Track Singapore car registration trends and COE bidding results with interactive charts.",
   },

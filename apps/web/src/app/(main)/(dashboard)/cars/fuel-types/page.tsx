@@ -30,9 +30,9 @@ export async function generateMetadata({
   const { month } = await getMonthOrLatest(parsedMonth, "cars");
   const formattedMonth = formatDateToMonthYear(month);
 
-  const title = `${formattedMonth} Fuel Types`;
+  const title = "Car Registrations by Fuel Type";
   const description = config.description.replace("{month}", formattedMonth);
-  const canonical = `${config.urlPath}?month=${month}`;
+  const canonical = config.urlPath;
 
   return {
     title,

@@ -36,7 +36,7 @@ import { AnnualViewTabs } from "./components/annual-view-tabs";
 import { loadSearchParams } from "./search-params";
 
 export const metadata: Metadata = {
-  title: "Annual Vehicle Population | Singapore Trends",
+  title: "Annual Vehicle Population Singapore",
   description:
     "Annual motor vehicle population in Singapore by fuel type and car population by make. Track the growth of electric, hybrid, petrol, and diesel vehicles on Singapore roads.",
   openGraph: {

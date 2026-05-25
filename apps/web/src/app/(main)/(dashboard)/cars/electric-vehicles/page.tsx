@@ -26,7 +26,7 @@ import type { Metadata } from "next";
 import type { WebPage, WithContext } from "schema-dts";
 
 export const metadata: Metadata = {
-  title: "Electric Vehicles | Singapore EV Trends",
+  title: "Electric Vehicles in Singapore",
   description:
     "Track Singapore's electric vehicle adoption with BEV, PHEV, and hybrid registration trends, market share analysis, and top EV makes.",
   openGraph: {

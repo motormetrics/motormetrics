@@ -17,7 +17,7 @@ import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
 
 export const metadata: Metadata = {
-  title: "Car Cost Breakdown | New Car Prices in Singapore",
+  title: "Car Cost Breakdown Singapore",
   description:
     "See how new car prices in Singapore are composed — OMV, ARF, VES rebates/surcharges, and COE premiums for every model.",
   openGraph: {

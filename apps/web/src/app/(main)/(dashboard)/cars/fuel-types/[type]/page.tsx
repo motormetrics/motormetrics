@@ -1,13 +1,11 @@
 import { slugify } from "@motormetrics/utils";
 import {
-  loadTypeSearchParams,
   TypeDetail,
   type TypeDetailConfig,
 } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { checkFuelTypeIfExist, getDistinctFuelTypes } from "@web/queries/cars";
-import { getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 
@@ -24,18 +22,15 @@ interface PageProps {
 
 export async function generateMetadata({
   params,
-  searchParams,
-}: PageProps): Promise<Metadata> {
+}: Pick<PageProps, "params">): Promise<Metadata> {
   const { type } = await params;
-  const { month: parsedMonth } = await loadTypeSearchParams(searchParams);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
 
   const result = await checkFuelTypeIfExist(type);
   const displayName = result?.fuelType ?? type;
 
   const title = `${displayName} Cars in Singapore`;
   const description = `${displayName} car registrations in Singapore. Explore registration trends, statistics, and distribution by fuel type for each month.`;
-  const canonical = `/cars/fuel-types/${type}?month=${month}`;
+  const canonical = `/cars/fuel-types/${type}`;
   const images = `/api/og?title=${encodeURIComponent(displayName)}&subtitle=${encodeURIComponent("Stats by Fuel Type")}`;
 
   return {

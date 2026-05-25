@@ -97,7 +97,7 @@ const toCategorySparklines = (
   });
 };
 
-const title = "Vehicle Deregistrations";
+const title = "Vehicle Deregistrations Singapore";
 const description =
   "Monthly vehicle deregistration statistics in Singapore under the Vehicle Quota System (VQS). Track deregistration trends by category.";
 
@@ -105,16 +105,14 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-export async function generateMetadata({
-  searchParams,
-}: PageProps): Promise<Metadata> {
-  const { month: parsedMonth } = await loadSearchParams(searchParams);
+export function generateMetadata(): Metadata {
+  const canonical = "/cars/deregistrations";
 
-  const makeMetadata = (pageTitle: string, canonical: string): Metadata => ({
-    title: pageTitle,
+  return {
+    title,
     description,
     openGraph: {
-      title: pageTitle,
+      title,
       description,
       url: `${SITE_URL}${canonical}`,
       siteName: SITE_TITLE,
@@ -123,7 +121,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: pageTitle,
+      title,
       description,
       site: SOCIAL_HANDLE,
       creator: SOCIAL_HANDLE,
@@ -132,18 +130,7 @@ export async function generateMetadata({
     authors: [{ name: SITE_TITLE, url: SITE_URL }],
     creator: SITE_TITLE,
     publisher: SITE_TITLE,
-  });
-
-  try {
-    const { month } = await getMonthOrLatest(parsedMonth, "deregistrations");
-    const formattedMonth = formatDateToMonthYear(month);
-    return makeMetadata(
-      `${formattedMonth} ${title}`,
-      `/cars/deregistrations?month=${month}`,
-    );
-  } catch {
-    return makeMetadata(title, "/cars/deregistrations");
-  }
+  };
 }
 
 export default function DeregistrationsPage({ searchParams }: PageProps) {
