@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "ai-seo": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/ai-seo/SKILL.md",
+      "computedHash": "a6befed362ed7127d051db085bc8be9470abbe87f70a40ee9a05e201dd8c693f"
+    },
     "analytics-tracking": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
@@ -69,11 +75,23 @@
       "skillPath": "skills/team/customer-success/posthog-survey-creator/SKILL.md",
       "computedHash": "b0b2c62c0c8304d902bbfc44722e54c89c58bd96c5c7d65ef4bc57b7c141355e"
     },
+    "programmatic-seo": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/programmatic-seo/SKILL.md",
+      "computedHash": "0bbdcbacfbe46fd78d774041ee49afd313505bb435b775dc246f4b8e6981d797"
+    },
     "querying-posthog-data": {
       "source": "posthog/skills",
       "sourceType": "github",
       "skillPath": "skills/omnibus/querying-posthog-data/SKILL.md",
       "computedHash": "290ebd09de4236368fed7328a65fa30b9aee2babebaa38501420256df742d272"
+    },
+    "seo-audit": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/seo-audit/SKILL.md",
+      "computedHash": "f2dc52130189068981f21e1c0bdc4471ac7cd9b08d8a1320604411aa0f950385"
     },
     "social-content": {
       "source": "coreyhaines31/marketingskills",
