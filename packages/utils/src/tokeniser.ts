@@ -1,4 +1,6 @@
-export const tokeniser = (data: Record<string, unknown>[]): string => {
+export const tokeniser = (
+  data: Record<string, unknown>[] | null | undefined,
+): string => {
   if (!data || data.length === 0) {
     return "";
   }
