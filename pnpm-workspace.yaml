@@ -4,10 +4,10 @@ packages:
 
 allowBuilds:
   "@heroui-pro/react": true
-  '@nestjs/core': false
-  '@prisma/engines': false
-  '@swc/core': false
-  '@zowe/secrets-for-zowe-sdk': false
+  "@nestjs/core": false
+  "@prisma/engines": false
+  "@swc/core": false
+  "@zowe/secrets-for-zowe-sdk": false
   cbor-extract: false
   core-js: false
   esbuild: false
@@ -15,7 +15,7 @@ allowBuilds:
   heroui-pro: true
   protobufjs: false
   sharp: false
-  '@parcel/watcher': false
+  "@parcel/watcher": false
 
 catalog:
   "@ai-sdk/gateway": 3.0.114
