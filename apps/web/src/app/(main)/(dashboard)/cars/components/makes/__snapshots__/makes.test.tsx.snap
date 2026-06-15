@@ -43,6 +43,7 @@ exports[`Makes > should render the section with title and count 1`] = `
         type="button"
       >
         <svg
+          aria-hidden="true"
           class="lucide lucide-chevron-left size-4"
           fill="none"
           height="24"
@@ -134,6 +135,7 @@ exports[`Makes > should render the section with title and count 1`] = `
         type="button"
       >
         <svg
+          aria-hidden="true"
           class="lucide lucide-chevron-right size-4"
           fill="none"
           height="24"
