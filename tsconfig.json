@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "lib": ["ESNext"],
     "module": "ESNext",
     "target": "ESNext",
@@ -8,12 +7,13 @@
     "esModuleInterop": true,
     "moduleResolution": "bundler",
     "skipLibCheck": true,
+    "strict": true,
     "verbatimModuleSyntax": true,
     "paths": {
-      "@web/*": ["apps/web/src/*"],
-      "@logos/*": ["packages/logos/src/*"],
-      "@utils/*": ["packages/utils/src/*"]
-    }
-  },
-  "exclude": ["node_modules"]
+      "@web/*": ["./apps/web/src/*"],
+      "@logos/*": ["./packages/logos/src/*"],
+      "@utils/*": ["./packages/utils/src/*"]
+    },
+    "types": ["node"]
+  }
 }

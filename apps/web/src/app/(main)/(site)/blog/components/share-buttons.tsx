@@ -2,14 +2,9 @@
 
 import { Button } from "@heroui/react";
 
-import {
-  SiLinkedin,
-  SiTelegram,
-  SiWhatsapp,
-  SiX,
-} from "@icons-pack/react-simple-icons";
+import { SiTelegram, SiWhatsapp, SiX } from "@icons-pack/react-simple-icons";
 import { SITE_URL } from "@web/config";
-import { Check, Copy, Share2 } from "lucide-react";
+import { Check, Copy, Linkedin, Share2 } from "lucide-react";
 import { useState } from "react";
 
 interface ShareButtonsProps {
@@ -95,7 +90,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
             isIconOnly
             aria-label="Share on LinkedIn"
           >
-            <SiLinkedin className="size-4" />
+            <Linkedin className="size-4" />
           </Button>
         </a>
         <a

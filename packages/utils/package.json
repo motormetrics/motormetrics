@@ -18,5 +18,8 @@
     "@sindresorhus/slugify": "3.0.0",
     "@upstash/redis": "catalog:",
     "date-fns": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:"
   }
 }
