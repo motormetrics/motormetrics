@@ -18,7 +18,7 @@ permissions:
 jobs:
   run-migrations:
     name: Run Database Migrations
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     environment: ${{ inputs.environment }}
     # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
     concurrency:
