@@ -1,14 +1,10 @@
 "use client";
 
 import { Tabs } from "@heroui/react";
-
-import {
-  VIEWS,
-  type View,
-} from "@web/app/(main)/(dashboard)/cars/annual/constants";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
 import { type ReactNode, useTransition } from "react";
+import { VIEWS, type View } from "../constants";
 
 interface AnnualViewTabsProps {
   fuelTypeContent: ReactNode;
