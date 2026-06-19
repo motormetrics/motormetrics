@@ -70,6 +70,7 @@ export async function getEvMonthlyTrend(): Promise<EvMonthlyTrend[]> {
     if (!monthMap.has(row.month)) {
       monthMap.set(row.month, { month: row.month, BEV: 0, PHEV: 0, Hybrid: 0 });
     }
+    // biome-ignore lint/style/noNonNullAssertion: guarded by monthMap.has() check above
     const entry = monthMap.get(row.month)!;
 
     if (BEV_FUEL_TYPES.includes(row.fuelType)) {
@@ -194,6 +195,7 @@ export async function getEvMakeDetails(): Promise<EvMakeDetail[]> {
         total: 0,
       });
     }
+    // biome-ignore lint/style/noNonNullAssertion: guarded by makeMap.has() check above
     const entry = makeMap.get(row.make)!;
 
     if (BEV_FUEL_TYPES.includes(row.fuelType)) {

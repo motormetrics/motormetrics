@@ -2,11 +2,7 @@
 
 import { Button } from "@heroui/react";
 
-import {
-  SiTelegram,
-  SiWhatsapp,
-  SiX,
-} from "@icons-pack/react-simple-icons";
+import { SiTelegram, SiWhatsapp, SiX } from "@icons-pack/react-simple-icons";
 
 function LinkedinIcon({ className }: { className?: string }) {
   return (
@@ -20,6 +16,7 @@ function LinkedinIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
 import { SITE_URL } from "@web/config";
 import { Check, Copy, Share2 } from "lucide-react";
 import { useState } from "react";

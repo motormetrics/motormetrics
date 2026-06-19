@@ -1,6 +1,5 @@
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import type { SelectDeregistration } from "@motormetrics/database";
-import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CategoryBreakdown } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/category-breakdown";
 import { CategoryChart } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/category-chart";
 import { CategoryTrendsTable } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/category-trends-table";

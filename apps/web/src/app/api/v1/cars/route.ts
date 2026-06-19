@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 async function getCarsData(
   month: string | null,
-  page: number,
+  _page: number,
   limit: number,
   offset: number,
 ) {

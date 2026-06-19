@@ -6,6 +6,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("next/link", () => ({
+  // biome-ignore lint/suspicious/noExplicitAny: test mock requires loose typing
   default: ({ href, children, ...props }: any) => (
     <a
       href={typeof href === "object" ? `${href.pathname}?${href.query}` : href}
@@ -24,6 +25,7 @@ describe("LinkWithParams", () => {
   it("should render with basic props", () => {
     mockUseSearchParams.mockReturnValue({
       toString: () => "",
+      // biome-ignore lint/suspicious/noExplicitAny: test mock requires loose typing
     } as any);
 
     render(
@@ -40,6 +42,7 @@ describe("LinkWithParams", () => {
   it("should render with search params", () => {
     mockUseSearchParams.mockReturnValue({
       toString: () => "foo=bar",
+      // biome-ignore lint/suspicious/noExplicitAny: test mock requires loose typing
     } as any);
 
     render(

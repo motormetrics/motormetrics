@@ -12,6 +12,7 @@ vi.mock("next/navigation", () => ({
 describe("useMaintenance", () => {
   const mockReplace = vi.fn();
   const mockGet = vi.fn();
+  // biome-ignore lint/suspicious/noExplicitAny: test spy requires loose typing
   let intervalSpy: any;
   const createFetcher = (status: MaintenanceStatus) => {
     return async () => ({
@@ -25,10 +26,12 @@ describe("useMaintenance", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
+    // biome-ignore lint/suspicious/noExplicitAny: test mock requires loose typing
     (useRouter as any).mockReturnValue({
       replace: mockReplace,
     });
 
+    // biome-ignore lint/suspicious/noExplicitAny: test mock requires loose typing
     (useSearchParams as any).mockReturnValue({
       get: mockGet,
     });

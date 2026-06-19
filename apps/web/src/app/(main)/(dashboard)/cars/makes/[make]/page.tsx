@@ -124,7 +124,7 @@ async function CarMakeHeaderMeta({
   params: Promise<{ make: Make }>;
   searchParams: Promise<SearchParams>;
 }) {
-  const [{ make }, { month: parsedMonth }, months, lastUpdated] =
+  const [{ make: _make }, { month: parsedMonth }, months, lastUpdated] =
     await Promise.all([
       paramsPromise,
       loadSearchParams(searchParamsPromise),

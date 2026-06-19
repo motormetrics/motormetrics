@@ -109,7 +109,7 @@ async function PQPRatesHeaderMeta({
 }
 
 async function PQPRatesContent({
-  searchParams: searchParamsPromise,
+  searchParams: _searchParamsPromise,
 }: {
   searchParams: Promise<SearchParams>;
 }) {

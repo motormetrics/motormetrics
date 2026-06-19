@@ -178,9 +178,12 @@ export async function getMakeFuelTypeBreakdown(
     .groupBy(cars.fuelType)
     .orderBy(desc(sql<number>`sum(${cars.number})`));
 
-  return rows
-    .filter((row) => row.name)
-    .map((row) => ({ name: row.name!, value: row.value }));
+  return (
+    rows
+      .filter((row) => row.name)
+      // biome-ignore lint/style/noNonNullAssertion: guarded by .filter((row) => row.name) above
+      .map((row) => ({ name: row.name!, value: row.value }))
+  );
 }
 
 export async function getMakeVehicleTypeBreakdown(
@@ -209,9 +212,12 @@ export async function getMakeVehicleTypeBreakdown(
     .groupBy(cars.vehicleType)
     .orderBy(desc(sql<number>`sum(${cars.number})`));
 
-  return rows
-    .filter((row) => row.name)
-    .map((row) => ({ name: row.name!, value: row.value }));
+  return (
+    rows
+      .filter((row) => row.name)
+      // biome-ignore lint/style/noNonNullAssertion: guarded by .filter((row) => row.name) above
+      .map((row) => ({ name: row.name!, value: row.value }))
+  );
 }
 
 export async function getVehicleTypeData(
