@@ -51,6 +51,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
             data-status="success"
           >
             <svg
+              aria-hidden="true"
               class="lucide lucide-car"
               fill="none"
               height="24"
@@ -118,6 +119,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
             data-status="success"
           >
             <svg
+              aria-hidden="true"
               class="lucide lucide-trending-up"
               fill="none"
               height="24"
@@ -129,11 +131,11 @@ exports[`MakeDetail > should render metric cards 1`] = `
               width="24"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <polyline
-                points="22 7 13.5 15.5 8.5 10.5 2 17"
+              <path
+                d="M16 7h6v6"
               />
-              <polyline
-                points="16 7 22 7 22 13"
+              <path
+                d="m22 7-8.5 8.5-5-5L2 17"
               />
             </svg>
           </div>
@@ -175,6 +177,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
             data-status="warning"
           >
             <svg
+              aria-hidden="true"
               class="lucide lucide-calendar"
               fill="none"
               height="24"

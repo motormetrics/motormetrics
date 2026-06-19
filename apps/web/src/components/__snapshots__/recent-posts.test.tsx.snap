@@ -21,6 +21,7 @@ exports[`RecentPosts > should render title and view all link 1`] = `
             variant="tertiary"
           >
             <svg
+              aria-hidden="true"
               class="lucide lucide-arrow-up-right size-6"
               fill="none"
               height="24"
