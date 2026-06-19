@@ -9,6 +9,7 @@ exports[`CategoryInfo > should render with required props 1`] = `
     tabindex="0"
   >
     <svg
+      aria-hidden="true"
       class="lucide lucide-car size-6"
       fill="none"
       height="24"
