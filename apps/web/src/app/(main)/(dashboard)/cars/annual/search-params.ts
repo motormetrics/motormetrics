@@ -4,10 +4,10 @@ import {
   parseAsStringLiteral,
 } from "nuqs/server";
 
-const currentYear = new Date().getFullYear();
+export type { View } from "@web/app/(main)/(dashboard)/cars/annual/constants";
+export { VIEWS } from "@web/app/(main)/(dashboard)/cars/annual/constants";
 
-export const VIEWS = ["fuel-type", "make"] as const;
-export type View = (typeof VIEWS)[number];
+const currentYear = new Date().getFullYear();
 
 export const searchParams = {
   year: parseAsInteger.withDefault(currentYear),

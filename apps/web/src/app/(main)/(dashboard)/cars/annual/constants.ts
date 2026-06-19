@@ -1,3 +1,6 @@
+export const VIEWS = ["fuel-type", "make"] as const;
+export type View = (typeof VIEWS)[number];
+
 export const FUEL_GROUP_MAP: Record<string, string> = {
   Petrol: "Petrol",
   Diesel: "Diesel",
