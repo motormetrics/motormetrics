@@ -19,7 +19,7 @@ concurrency:
 jobs:
   checks:
     name: ${{ matrix.check }}
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     permissions:
       contents: read
     env:
