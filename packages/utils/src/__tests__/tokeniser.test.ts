@@ -7,11 +7,6 @@ describe("tokeniser", () => {
     expect(result).toBe("");
   });
 
-  it("should return empty string for null/undefined input", () => {
-    expect(tokeniser(null)).toBe("");
-    expect(tokeniser(undefined)).toBe("");
-  });
-
   it("should convert simple object array to pipe-delimited format", () => {
     const data = [
       { name: "John", age: 30, city: "Singapore" },

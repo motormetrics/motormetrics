@@ -20,6 +20,7 @@
     "drizzle-orm": "catalog:"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
     "drizzle-kit": "0.31.10"
   }
 }

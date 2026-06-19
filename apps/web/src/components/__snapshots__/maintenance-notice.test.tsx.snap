@@ -15,6 +15,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
       >
         <div>
           <svg
+            aria-hidden="true"
             class="lucide lucide-settings size-20 text-accent"
             fill="none"
             height="24"
@@ -27,7 +28,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+              d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
             />
             <circle
               cx="12"
@@ -77,6 +78,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
                 class="flex items-center gap-2"
               >
                 <svg
+                  aria-hidden="true"
                   class="lucide lucide-clock size-5 text-accent"
                   fill="none"
                   height="24"
@@ -93,8 +95,8 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
                     cy="12"
                     r="10"
                   />
-                  <polyline
-                    points="12 6 12 12 16 14"
+                  <path
+                    d="M12 6v6l4 2"
                   />
                 </svg>
                 <p
@@ -174,6 +176,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
               data-slot="card-content"
             >
               <svg
+                aria-hidden="true"
                 class="lucide lucide-zap mt-1 size-6 flex-shrink-0 text-accent"
                 fill="none"
                 height="24"
@@ -216,6 +219,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
               data-slot="card-content"
             >
               <svg
+                aria-hidden="true"
                 class="lucide lucide-shield mt-1 size-6 flex-shrink-0 text-accent"
                 fill="none"
                 height="24"
@@ -258,6 +262,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
               data-slot="card-content"
             >
               <svg
+                aria-hidden="true"
                 class="lucide lucide-trending-up mt-1 size-6 flex-shrink-0 text-accent"
                 fill="none"
                 height="24"
@@ -269,11 +274,11 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
                 width="24"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <polyline
-                  points="22 7 13.5 15.5 8.5 10.5 2 17"
+                <path
+                  d="M16 7h6v6"
                 />
-                <polyline
-                  points="16 7 22 7 22 13"
+                <path
+                  d="m22 7-8.5 8.5-5-5L2 17"
                 />
               </svg>
               <div>
@@ -303,6 +308,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
               data-slot="card-content"
             >
               <svg
+                aria-hidden="true"
                 class="lucide lucide-wrench mt-1 size-6 flex-shrink-0 text-accent"
                 fill="none"
                 height="24"
@@ -315,7 +321,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                  d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"
                 />
               </svg>
               <div>
@@ -370,6 +376,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           tabindex="0"
         >
           <svg
+            aria-hidden="true"
             class="lucide lucide-mail size-4"
             fill="none"
             height="24"
@@ -381,15 +388,15 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
             width="24"
             xmlns="http://www.w3.org/2000/svg"
           >
+            <path
+              d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"
+            />
             <rect
               height="16"
               rx="2"
               width="20"
               x="2"
               y="4"
-            />
-            <path
-              d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
             />
           </svg>
           support@motormetrics.app
@@ -409,6 +416,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           target="_blank"
         >
           <svg
+            aria-hidden="true"
             class="lucide lucide-message-circle size-4"
             fill="none"
             height="24"
@@ -421,7 +429,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"
+              d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"
             />
           </svg>
           Follow updates on Twitter

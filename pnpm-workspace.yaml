@@ -24,7 +24,7 @@ catalog:
   "@heroui/styles": 3.0.4
   "@langfuse/otel": 5.3.0
   "@tailwindcss/postcss": 4.3.0
-  "@types/node": 22.19.3
+  "@types/node": 24.13.2
   "@types/react": 19.2.14
   "@types/react-dom": 19.2.3
   "@upstash/redis": 1.38.0
