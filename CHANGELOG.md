@@ -1,3 +1,19 @@
+## [4.69.0](https://github.com/motormetrics/motormetrics/compare/v4.68.1...v4.69.0) (2026-06-19)
+
+### Features
+
+* **web:** add Upstash AI tracking ([07431dc](https://github.com/motormetrics/motormetrics/commit/07431dc499b10c44f0f8df01fe07930a2cec5ed1))
+
+### Bug Fixes
+
+* **deps:** update dependency @icons-pack/react-simple-icons to v13 ([6e66b7b](https://github.com/motormetrics/motormetrics/commit/6e66b7b058aa090282cf83b8199e3a56540608c9))
+* **deps:** update dependency lucide-react to v0.577.0 ([0809a9c](https://github.com/motormetrics/motormetrics/commit/0809a9c370a4577d64b9b480bf8e1993b4193883))
+* resolve monorepo build failures ([239246d](https://github.com/motormetrics/motormetrics/commit/239246d5ab22d77d649626d44eb50d665ccb8c32))
+* **web:** add "formerly SG Cars Trends" to title ([9cb429e](https://github.com/motormetrics/motormetrics/commit/9cb429e4662b1c3f80948d0095f8a18522c97a12))
+* **web:** add /cars/costs to sitemap ([4829a03](https://github.com/motormetrics/motormetrics/commit/4829a037516e73aec74f52a6f64606a16b23afe4))
+* **web:** set canonical site URL per environment via NEXT_PUBLIC_SITE_URL ([482cc6b](https://github.com/motormetrics/motormetrics/commit/482cc6b9eed43e08d81de96bb377e7b877e75119))
+* **web:** shorten SEO titles and use evergreen canonicals ([b1be4e7](https://github.com/motormetrics/motormetrics/commit/b1be4e7197281502655b521bb7132a739f869c90))
+
 ## [4.68.1](https://github.com/motormetrics/motormetrics/compare/v4.68.0...v4.68.1) (2026-05-19)
 
 ### Bug Fixes
