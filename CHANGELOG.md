@@ -1,3 +1,9 @@
+## [4.69.1](https://github.com/motormetrics/motormetrics/compare/v4.69.0...v4.69.1) (2026-06-21)
+
+### Bug Fixes
+
+* **web:** add BotID auth protection ([a641ddb](https://github.com/motormetrics/motormetrics/commit/a641ddb850ee5ba72018cd448b54d379bb85348a))
+
 ## [4.69.0](https://github.com/motormetrics/motormetrics/compare/v4.68.1...v4.69.0) (2026-06-19)
 
 ### Features
