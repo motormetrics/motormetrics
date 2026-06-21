@@ -5,6 +5,7 @@ import { Providers } from "@web/app/providers";
 import LoadingIndicator from "@web/components/loading-indicator";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
+import { BotIdClient } from "botid/client";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import Script from "next/script";
@@ -19,6 +20,15 @@ const geistSans = Geist({
 const title = `${SITE_TITLE} (formerly SG Cars Trends)`;
 const description = SITE_DESCRIPTION;
 const url = new URL(SITE_URL);
+const protectedRoutes = [
+  {
+    path: "/api/auth/:path*",
+    method: "POST",
+    advancedOptions: {
+      checkLevel: "basic" as const,
+    },
+  },
+];
 
 export const metadata: Metadata = {
   metadataBase: url,
@@ -77,6 +87,9 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
       lang="en"
       className={cn("scroll-smooth antialiased", geistSans.className)}
     >
+      <head>
+        <BotIdClient protect={protectedRoutes} />
+      </head>
       <body className="bg-background">
         <Providers>
           <NuqsAdapter>
