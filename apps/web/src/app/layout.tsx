@@ -8,7 +8,6 @@ import { SOCIAL_HANDLE } from "@web/config/socials";
 import { BotIdClient } from "botid/client";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
-import Script from "next/script";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, Suspense } from "react";
 import "./globals.css";
@@ -102,12 +101,6 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
         <Analytics />
         <SpeedInsights />
       </body>
-      <Script
-        defer
-        src="https://analytics.motormetrics.app/script.js"
-        data-website-id="b98dda44-ccc9-4a73-87d4-dcbe561aedb8"
-        data-domains="motormetrics.app"
-      />
     </html>
   );
 };

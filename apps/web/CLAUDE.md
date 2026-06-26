@@ -1142,7 +1142,7 @@ Deployed via Vercel with automatic deployments:
 - **TypeScript**: Strict mode enabled
 - **Turbopack**: Enabled for faster builds and development
 - **Feature Flags**: Controlled via `NEXT_PUBLIC_FEATURE_FLAG_UNRELEASED`
-- **Analytics**: Integrated with Umami analytics
+- **Analytics**: Vercel Analytics (pageviews/Web Vitals) and PostHog (product events)
 
 ## UI Component Strategy
 
