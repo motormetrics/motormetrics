@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
   cacheComponents: true,
+  partialPrefetching: true,
   cacheLife: {
     max: {
       stale: ONE_DAY * 30,
@@ -57,6 +58,7 @@ const nextConfig: NextConfig = {
     appNewScrollHandler: true,
     mcpServer: true,
     turbopackFileSystemCacheForBuild: true,
+    turbopackRustReactCompiler: true,
     typedEnv: true,
   },
   skipTrailingSlashRedirect: true,
