@@ -1,3 +1,10 @@
+## [4.70.0](https://github.com/motormetrics/motormetrics/compare/v4.69.1...v4.70.0) (2026-07-02)
+
+### Features
+
+* **infra:** upgrade Turborepo to 2.10.2 with full alignment ([2e0acdd](https://github.com/motormetrics/motormetrics/commit/2e0acdd360009df81fb9f6f8f4abc047c277df73))
+* **web:** upgrade next to 16.3.0-preview.5 ([02e9243](https://github.com/motormetrics/motormetrics/commit/02e92439a285e4b3491fcd07380796874631d708))
+
 ## [4.69.1](https://github.com/motormetrics/motormetrics/compare/v4.69.0...v4.69.1) (2026-06-21)
 
 ### Bug Fixes
