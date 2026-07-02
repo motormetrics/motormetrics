@@ -55,7 +55,6 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     appNewScrollHandler: true,
-    cachedNavigations: true,
     mcpServer: true,
     turbopackFileSystemCacheForBuild: true,
     typedEnv: true,
