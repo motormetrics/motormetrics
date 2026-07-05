@@ -8,7 +8,14 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!!coverage"]
+    "includes": [
+      "**",
+      "!!.agents",
+      "!!.claude",
+      "!!.codex",
+      "!!.github/skills",
+      "!!coverage"
+    ]
   },
   "formatter": {
     "enabled": true,
