@@ -1,5 +1,5 @@
 ---
-version: "0.1.0"
+version: "alpha"
 name: MotorMetrics
 description: >-
   Singapore vehicle data platform. Geist-derived visual identity built on OKLCH
@@ -14,8 +14,11 @@ colors:
   accent: "oklch(0.2894 0.1433 272.9)"
   accent-foreground: "oklch(100% 0 0)"
   success: "oklch(0.7205 0.192 149.49)"
+  success-foreground: "oklch(0.3103 0.0197 264.23)"
   warning: "oklch(0.7697 0.1645 70.61)"
+  warning-foreground: "oklch(0.3103 0.0197 264.23)"
   danger: "oklch(0.5786 0.2137 27.17)"
+  danger-foreground: "oklch(100% 0 0)"
   border: "oklch(0.9258 0.0132 255.03)"
   separator: "oklch(0.9258 0.0132 255.03)"
   focus: "oklch(0.2894 0.1433 272.9)"
@@ -27,8 +30,60 @@ colors:
   chart-6: "oklch(0.8064 0.0226 251.2)"
   chart-grid: "{colors.border}"
 typography:
-  sans: "var(--font-geist-sans)"
-  mono: "var(--font-geist-mono)"
+  h1:
+    fontFamily: "Geist Sans"
+    fontSize: 36px
+    fontWeight: 600
+    lineHeight: 40px
+    letterSpacing: -0.025em
+  h2:
+    fontFamily: "Geist Sans"
+    fontSize: 30px
+    fontWeight: 600
+    lineHeight: 36px
+    letterSpacing: -0.025em
+  h3:
+    fontFamily: "Geist Sans"
+    fontSize: 24px
+    fontWeight: 500
+    lineHeight: 32px
+    letterSpacing: -0.025em
+  h4:
+    fontFamily: "Geist Sans"
+    fontSize: 20px
+    fontWeight: 500
+    lineHeight: 28px
+    letterSpacing: -0.025em
+  body-lg:
+    fontFamily: "Geist Sans"
+    fontSize: 18px
+    fontWeight: 400
+    lineHeight: 1.625
+  body:
+    fontFamily: "Geist Sans"
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 28px
+  body-sm:
+    fontFamily: "Geist Sans"
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 24px
+  label:
+    fontFamily: "Geist Sans"
+    fontSize: 14px
+    fontWeight: 500
+    lineHeight: 1
+  caption:
+    fontFamily: "Geist Sans"
+    fontSize: 12px
+    fontWeight: 400
+    lineHeight: 1.25
+  caption-mono:
+    fontFamily: "Geist Mono"
+    fontSize: 14px
+    fontWeight: 500
+    lineHeight: 20px
 rounded:
   base: "0.5rem"
   field: "0.75rem"
@@ -39,17 +94,44 @@ components:
   button:
     backgroundColor: "{colors.accent}"
     textColor: "{colors.accent-foreground}"
+    typography: "{typography.label}"
     rounded: "{rounded.pill}"
+    height: 40px
+    padding: "0 20px"
+  button-danger:
+    backgroundColor: "{colors.danger}"
+    textColor: "{colors.danger-foreground}"
+    typography: "{typography.label}"
+    rounded: "{rounded.pill}"
+    height: 40px
   card:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.foreground}"
     rounded: "{rounded.base}"
   chip:
     rounded: "{rounded.pill}"
+  chip-success:
+    backgroundColor: "{colors.success}"
+    textColor: "{colors.success-foreground}"
+    rounded: "{rounded.pill}"
+  chip-warning:
+    backgroundColor: "{colors.warning}"
+    textColor: "{colors.warning-foreground}"
+    rounded: "{rounded.pill}"
+  chip-danger:
+    backgroundColor: "{colors.danger}"
+    textColor: "{colors.danger-foreground}"
+    rounded: "{rounded.pill}"
   field:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.foreground}"
+    typography: "{typography.body}"
     rounded: "{rounded.field}"
+    height: 40px
+  modal:
+    backgroundColor: "{colors.overlay}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.base}"
 ---
 
 # MotorMetrics Design System
@@ -135,19 +217,24 @@ size and weight restraint:
 - **Normal (400)** — body text (`Text*`, `Caption`)
 - **Bold** — reserved for data emphasis (metric numbers)
 
-Canonical scale lives in `apps/web/src/components/typography.tsx` (`Typography.*`):
+The front-matter `typography` tokens carry concrete `fontFamily`, `fontSize`,
+`fontWeight`, `lineHeight`, and `letterSpacing` for each level. The canonical
+component scale lives in `apps/web/src/components/typography.tsx` (`Typography.*`):
 
-| Component | Element | Classes |
-|-----------|---------|---------|
-| `H1` | Page title (one per page) | `font-semibold text-4xl lg:text-5xl tracking-tight text-foreground` |
-| `H2` | Section title | `font-semibold text-3xl tracking-tight text-foreground` |
-| `H3` | Card title / subsection | `font-medium text-2xl tracking-tight text-foreground` |
-| `H4` | Nested heading | `font-medium text-xl tracking-tight text-foreground` |
-| `TextLg` | Lead paragraph | `text-lg leading-relaxed text-foreground` |
-| `Text` | Body | `text-base leading-7 text-foreground` |
-| `TextSm` | Helper text | `text-sm leading-6 text-muted` |
-| `Label` | Form / nav label | `font-medium text-sm leading-none text-foreground` |
-| `Caption` | Metadata / timestamps | `text-xs leading-tight text-muted` |
+| Component | Token | Element | Classes |
+|-----------|-------|---------|---------|
+| `H1` | `h1` | Page title (one per page) | `font-semibold text-4xl lg:text-5xl tracking-tight text-foreground` |
+| `H2` | `h2` | Section title | `font-semibold text-3xl tracking-tight text-foreground` |
+| `H3` | `h3` | Card title / subsection | `font-medium text-2xl tracking-tight text-foreground` |
+| `H4` | `h4` | Nested heading | `font-medium text-xl tracking-tight text-foreground` |
+| `TextLg` | `body-lg` | Lead paragraph | `text-lg leading-relaxed text-foreground` |
+| `Text` | `body` | Body | `text-base leading-7 text-foreground` |
+| `TextSm` | `body-sm` | Helper text | `text-sm leading-6 text-muted` |
+| `Label` | `label` | Form / nav label | `font-medium text-sm leading-none text-foreground` |
+| `Caption` | `caption` | Metadata / timestamps | `text-xs leading-tight text-muted` |
+
+`caption-mono` pairs Geist Mono with the caption metrics for inline code
+(`InlineCode`) and tabular figures where numbers must align.
 
 Use `Typography.*` rather than raw heading tags everywhere except MDX blog
 content and image-overlay text.
@@ -210,20 +297,26 @@ radius/padding/shadow; override only to communicate hierarchy.
 > mapping in `globals.css` and semantic classes/props (`bg-accent`,
 > `text-foreground`, `color="accent"`). HeroUI Pro components inherit the same
 > semantic token set as OSS (there is no separate Pro palette); charts use the
-> `--chart-1…6` ramp. This is why many colour tokens here are not bound to a
-> single component — they're consumed app-wide, not per-component.
+> `--chart-1…6` ramp. This is why several colour tokens here are not bound to a
+> single component — they're consumed app-wide (e.g. `muted`, `default`,
+> `border`, `separator`, `focus`, and the `--chart-*` ramp), not per-component.
 
 - **Button** — `rounded-full` pill. `color="accent"` (filled brand; HeroUI's
   `primary` variant resolves to `--accent`), `variant="bordered"` (outline),
-  `variant="light"` (ghost). Disabled at `--disabled-opacity: 0.5`.
+  `variant="light"` (ghost). `button-danger` binds the destructive variant
+  (`--danger` fill, `--danger-foreground` label). Disabled at
+  `--disabled-opacity: 0.5`.
 - **Card** — HeroUI defaults (`--surface` background, `--foreground` text, base
   radius, `--surface-shadow`); `Card.Header` uses `Typography.H4` +
   `Typography.TextSm`.
 - **Chip** — `rounded-full` status badge; `color="success|warning|danger"` with a
-  leading dot. Never signal state by colour alone — pair with text/icon. (Colour
-  is status-driven, so the token map leaves `chip` radius-only.)
+  leading dot. Never signal state by colour alone — pair with text/icon. The
+  token map binds `chip-success` / `chip-warning` / `chip-danger` to the status
+  pairs; the base `chip` is radius-only.
 - **Field (Input/Select)** — `--field-radius` (12px), `--field-border-width: 0`,
   `--field-background` white (light) / `--default` (dark).
+- **Modal/Popover** — `--overlay` background, `--foreground` text, base radius,
+  `--overlay-shadow`. The token map binds `modal` to the overlay pair.
 - **Focus** — every interactive element shows a focus ring: `--ring-offset-width: 2px`
   with `--focus` (= accent) colour.
 
