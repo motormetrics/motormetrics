@@ -5,10 +5,10 @@ exports[`Announcement > should prioritise path-specific announcements 1`] = `
   class="bg-accent text-accent-foreground"
 >
   <div
-    class="w-full px-6 py-3 text-center"
+    class="mx-auto w-full max-w-7xl px-4 py-2 text-center sm:px-6"
   >
     <p
-      class="font-medium text-sm"
+      class="text-pretty font-medium text-xs sm:text-sm"
     >
       Cars update
     </p>

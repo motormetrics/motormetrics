@@ -31,14 +31,13 @@ export function HighlightStatsCard({
 }: HighlightStatsCardProps) {
   return (
     <Card className={cn("bg-accent text-accent-foreground", className)}>
-      <Card.Content className="relative gap-5">
-        <div className="absolute inset-0 bg-[radial-gradient(currentColor_1px,transparent_1px)] bg-size-[18px_18px] opacity-20" />
-        <div className="relative flex items-center justify-between gap-4">
+      <Card.Content className="gap-5">
+        <div className="flex items-center justify-between gap-4">
           <div>
             <Typography.Caption className="text-accent-foreground/70">
               {label}
             </Typography.Caption>
-            <p className="font-semibold text-3xl">{value}</p>
+            <p className="font-semibold text-3xl tabular-nums">{value}</p>
             {description ? (
               <p className="text-accent-foreground/70 text-sm">{description}</p>
             ) : null}
@@ -55,13 +54,13 @@ export function HighlightStatsCard({
             <ArrowUpRight className="size-4" />
           </Link>
         </div>
-        <div className="relative grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-3">
           {stats.map((stat) => (
             <div key={stat.label}>
               <span className="text-accent-foreground/70 text-xs">
                 {stat.label}
               </span>
-              <p className="font-medium text-lg">{stat.value}</p>
+              <p className="font-medium text-lg tabular-nums">{stat.value}</p>
             </div>
           ))}
         </div>

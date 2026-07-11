@@ -1,71 +1,88 @@
-// biome-ignore-all format: Playwright chained method formatting
 import { expect, test } from "@playwright/test";
 
-test.describe.skip("Homepage/Dashboard", () => {
+test.describe("Homepage dashboard", () => {
   test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem(
+        "motormetrics:notification-prompt-dismissed",
+        "true",
+      );
+    });
     await page.goto("/");
   });
 
-  test("should display page title and main heading", async ({ page }) => {
+  test("presents the market overview in a clear hierarchy", async ({
+    page,
+  }) => {
     await expect(page).toHaveTitle(/MotorMetrics/);
-    await expect(page.locator("h1")).toContainText(
-      "Singapore Cars Registration Trends",
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Overview" }),
+    ).toBeVisible();
+    await expect(page.getByText(/Total Registrations/)).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Latest COE Results" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Recent Posts" }),
+    ).toBeVisible();
+  });
+
+  test("exposes accessible labels for icon-only destination links", async ({
+    page,
+  }) => {
+    await expect(
+      page.getByRole("link", { name: "View car registration overview" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "View all COE results" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "View all blog posts" }),
+    ).toBeVisible();
+  });
+
+  test("does not overflow the mobile viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.reload();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Overview", exact: true }),
+    ).toBeVisible();
+
+    const hasPageOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth,
     );
+    expect(hasPageOverflow).toBe(false);
+
+    await expect(
+      page.getByRole("navigation", { name: "Dashboard navigation" }),
+    ).toBeVisible();
   });
+});
 
-  test("should display key statistics cards", async ({ page }) => {
-    const statsCards = page
-      .locator('.stats-card, .stat-card, [role="group"]')
-      .filter({ hasText: "Total Cars Registered" });
-    await expect(statsCards).toHaveCount(4);
-
-    await expect(page.locator("text=Total Cars Registered")).toBeVisible();
-    await expect(page.locator("text=This Month")).toBeVisible();
-    await expect(page.locator("text=Last Month")).toBeVisible();
-    await expect(page.locator("text=Year to Date")).toBeVisible();
+test("notification prompt is delayed, dismissible, and remembered", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    window.localStorage.removeItem(
+      "motormetrics:notification-prompt-dismissed",
+    );
+    Object.defineProperty(window, "Notification", {
+      configurable: true,
+      value: {
+        permission: "default",
+        requestPermission: async () => "default",
+      },
+    });
   });
-
-  test("should display total registrations chart", async ({ page }) => {
-    await expect(page.locator("text=Total Registrations")).toBeVisible();
-
-    const chartContainer = page
-      .locator('.chart-container, [aria-label*="chart"], canvas, svg')
-      .first();
-    await expect(chartContainer).toBeVisible();
+  await page.goto("/");
+  await expect(page.getByText("Get data update alerts")).toBeVisible({
+    timeout: 5_000,
   });
+  await page.getByRole("button", { name: "Not now" }).click();
+  await expect(page.getByText("Get data update alerts")).toBeHidden();
 
-  test("should display top 5 car makes section", async ({ page }) => {
-    await expect(page.locator("text=Top 5 Makes")).toBeVisible();
-
-    const topMakesSection = page
-      .locator("section")
-      .filter({ hasText: "Top 5 Makes" });
-    await expect(topMakesSection).toBeVisible();
-  });
-
-  test("should navigate to cars page from navigation", async ({ page }) => {
-    await page.click("text=Cars");
-    await expect(page).toHaveURL("/cars");
-  });
-
-  test("should navigate to COE page from navigation", async ({ page }) => {
-    await page.click("text=COE");
-    await expect(page).toHaveURL("/coe");
-  });
-
-  test("should display loading states properly", async ({ page }) => {
-    await page.goto("/", { waitUntil: "networkidle" });
-
-    const statsCards = page
-      .locator('.stats-card, .stat-card, [role="group"]')
-      .filter({ hasText: "Total Cars Registered" });
-    await expect(statsCards.first()).toBeVisible();
-  });
-
-  test("should be responsive on mobile viewport", async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
-
-    await expect(page.locator("h1")).toBeVisible();
-    await expect(page.locator('[data-testid="stats-card"]')).toBeVisible();
-  });
+  const dismissal = await page.evaluate(() =>
+    window.localStorage.getItem("motormetrics:notification-prompt-dismissed"),
+  );
+  expect(dismissal).toBe("true");
 });

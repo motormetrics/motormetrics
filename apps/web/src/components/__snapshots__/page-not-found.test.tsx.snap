@@ -12,17 +12,17 @@ exports[`PageNotFound > renders the 404 error message 1`] = `
         class="mb-8 flex flex-col items-center"
       >
         <h1
-          class="scroll-m-20 font-semibold text-4xl tracking-tight lg:text-5xl text-accent"
+          class="scroll-m-20 text-balance font-semibold text-4xl tracking-tight lg:text-5xl text-accent"
         >
           404
         </h1>
         <h2
-          class="scroll-m-20 font-semibold text-3xl text-foreground tracking-tight first:mt-0"
+          class="scroll-m-20 text-balance font-semibold text-3xl text-foreground tracking-tight first:mt-0"
         >
           Page Not Found
         </h2>
         <p
-          class="text-foreground text-lg leading-relaxed"
+          class="text-pretty text-foreground text-lg leading-relaxed"
         >
           The page you're looking for doesn't exist or has been moved.
         </p>

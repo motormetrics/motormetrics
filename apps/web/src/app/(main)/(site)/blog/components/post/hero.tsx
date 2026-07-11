@@ -23,7 +23,7 @@ export function Hero({ post }: HeroProps) {
 
   return (
     <Link href={`/blog/${post.slug}`} className="block no-underline">
-      <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+      <Card className="overflow-hidden">
         <Card.Content className="grid grid-cols-1 gap-0 p-0 md:grid-cols-5">
           {post.heroImage ? (
             <div className="relative aspect-2/1 overflow-hidden md:col-span-2 md:aspect-4/3">
@@ -49,7 +49,7 @@ export function Hero({ post }: HeroProps) {
               <span className="size-1 rounded-full bg-default" />
               <span>{readingTime} min read</span>
             </div>
-            <h2 className="line-clamp-3 font-bold text-2xl leading-tight md:text-3xl">
+            <h2 className="line-clamp-3 text-balance font-semibold text-2xl leading-tight md:text-3xl">
               {post.title}
             </h2>
             {excerpt && (

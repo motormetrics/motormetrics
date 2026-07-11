@@ -6,7 +6,9 @@ export default function SiteLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <>
-      <main className="container mx-auto px-6 py-8">{children}</main>
+      <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:py-10">
+        {children}
+      </main>
       <Footer />
     </>
   );

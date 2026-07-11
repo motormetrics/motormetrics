@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Button, Link, Tooltip } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
 
 import { SiTelegram, SiWhatsapp, SiX } from "@icons-pack/react-simple-icons";
 import { SITE_URL } from "@web/config";
@@ -37,92 +38,104 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
     <div className="flex items-center gap-2">
       {/* Native share on mobile */}
       <div className="flex md:hidden">
-        <Button
-          size="sm"
-          variant="tertiary"
-          isIconOnly
-          onPress={nativeShare}
-          aria-label="Share"
-        >
-          <Share2 className="size-4" />
-        </Button>
+        <Tooltip delay={300}>
+          <Button
+            className="size-10"
+            variant="tertiary"
+            isIconOnly
+            onPress={nativeShare}
+            aria-label="Share article"
+          >
+            <Share2 className="size-4" />
+          </Button>
+          <Tooltip.Content>Share article</Tooltip.Content>
+        </Tooltip>
       </div>
 
       {/* Individual buttons on desktop */}
       <div className="hidden items-center gap-2 md:flex">
-        <Button
-          size="sm"
-          variant="tertiary"
-          isIconOnly
-          onPress={copyLink}
-          aria-label={copied ? "Copied!" : "Copy link"}
-        >
-          {copied ? (
-            <Check className="size-4 text-success" />
-          ) : (
-            <Copy className="size-4" />
-          )}
-        </Button>
-        <a
-          href={xUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          title="Share on X"
-        >
+        <Tooltip delay={300}>
           <Button
-            size="sm"
+            className="size-10"
             variant="tertiary"
             isIconOnly
-            aria-label="Share on X"
+            onPress={copyLink}
+            aria-label={copied ? "Link copied" : "Copy link"}
           >
-            <SiX className="size-4" />
+            {copied ? (
+              <Check className="size-4 text-success" />
+            ) : (
+              <Copy className="size-4" />
+            )}
           </Button>
-        </a>
-        <a
-          href={linkedinUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          title="Share on LinkedIn"
-        >
-          <Button
-            size="sm"
-            variant="tertiary"
-            isIconOnly
+          <Tooltip.Content>
+            {copied ? "Link copied" : "Copy link"}
+          </Tooltip.Content>
+        </Tooltip>
+        <Tooltip delay={300}>
+          <Link
             aria-label="Share on LinkedIn"
+            className={buttonVariants({
+              className: "size-10",
+              isIconOnly: true,
+              variant: "tertiary",
+            })}
+            href={linkedinUrl}
+            rel="noopener noreferrer"
+            target="_blank"
           >
             <Linkedin className="size-4" />
-          </Button>
-        </a>
-        <a
-          href={telegramUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          title="Share on Telegram"
-        >
-          <Button
-            size="sm"
-            variant="tertiary"
-            isIconOnly
+          </Link>
+          <Tooltip.Content>Share on LinkedIn</Tooltip.Content>
+        </Tooltip>
+        <Tooltip delay={300}>
+          <Link
             aria-label="Share on Telegram"
+            className={buttonVariants({
+              className: "size-10",
+              isIconOnly: true,
+              variant: "tertiary",
+            })}
+            href={telegramUrl}
+            rel="noopener noreferrer"
+            target="_blank"
           >
             <SiTelegram className="size-4" />
-          </Button>
-        </a>
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          title="Share on WhatsApp"
-        >
-          <Button
-            size="sm"
-            variant="tertiary"
-            isIconOnly
+          </Link>
+          <Tooltip.Content>Share on Telegram</Tooltip.Content>
+        </Tooltip>
+        <Tooltip delay={300}>
+          <Link
             aria-label="Share on WhatsApp"
+            className={buttonVariants({
+              className: "size-10",
+              isIconOnly: true,
+              variant: "tertiary",
+            })}
+            href={whatsappUrl}
+            rel="noopener noreferrer"
+            target="_blank"
           >
             <SiWhatsapp className="size-4" />
-          </Button>
-        </a>
+          </Link>
+          <Tooltip.Content>Share on WhatsApp</Tooltip.Content>
+        </Tooltip>
+        <Tooltip delay={300}>
+          <Link
+            aria-label="Share on X"
+            className={buttonVariants({
+              className: "size-10",
+              isIconOnly: true,
+              variant: "tertiary",
+            })}
+            href={xUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <SiX className="size-4" />
+          </Link>
+          <Tooltip.Content>Share on X</Tooltip.Content>
+        </Tooltip>
       </div>
     </div>
   );

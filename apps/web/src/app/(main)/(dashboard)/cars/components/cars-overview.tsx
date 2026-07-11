@@ -1,4 +1,4 @@
-import { Button, Card, Link, Separator } from "@heroui/react";
+import { Button, Card, Link, ScrollShadow } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
@@ -90,7 +90,7 @@ function OverviewLink({
 }) {
   return (
     <Link className="block no-underline" href={href}>
-      <div className="flex h-full items-center gap-3 rounded-2xl border border-separator bg-surface p-4 transition-colors hover:bg-default/50">
+      <div className="flex h-full cursor-[var(--cursor-interactive)] items-center gap-3 rounded-xl bg-default p-4 hover:bg-default/80">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-default text-foreground">
           <Icon className="size-4" />
         </div>
@@ -164,97 +164,103 @@ export async function CarsOverview() {
 
       <AnimatedGrid className="grid grid-cols-12 gap-4">
         <AnimatedSection className="col-span-12" order={0}>
-          <KPIGroup>
-            <KPI>
-              <KPI.Header>
-                <KPI.Title>Latest registrations</KPI.Title>
-              </KPI.Header>
-              <KPI.Content>
-                <KPI.Value
-                  locale="en-SG"
-                  maximumFractionDigits={0}
-                  value={currentData?.total ?? 0}
-                />
-                <KPI.Trend trend={getTrend(monthlyChange)} variant="primary">
-                  <NumberValue
-                    maximumFractionDigits={1}
-                    signDisplay="exceptZero"
-                    style="percent"
-                    value={monthlyChange / 100}
+          <ScrollShadow
+            className="-mx-4 px-4 pb-1 sm:mx-0 sm:px-0"
+            hideScrollBar
+            orientation="horizontal"
+          >
+            <KPIGroup className="min-w-[48rem] sm:min-w-0">
+              <KPI>
+                <KPI.Header>
+                  <KPI.Title>Latest registrations</KPI.Title>
+                </KPI.Header>
+                <KPI.Content>
+                  <KPI.Value
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    value={currentData?.total ?? 0}
                   />
-                </KPI.Trend>
-              </KPI.Content>
-              <KPI.Footer>
-                <span className="text-muted text-xs">
-                  {formatMonth(latestMonth)}
-                </span>
-              </KPI.Footer>
-            </KPI>
-            <KPIGroup.Separator />
-            <KPI>
-              <KPI.Header>
-                <KPI.Title>EV and hybrid share</KPI.Title>
-              </KPI.Header>
-              <KPI.Content>
-                <KPI.Value
-                  maximumFractionDigits={1}
-                  style="percent"
-                  value={(evSummary?.evSharePercent ?? 0) / 100}
-                />
-              </KPI.Content>
-              <KPI.Footer>
-                <span className="text-muted text-xs">
-                  {evSummary
-                    ? `Top EV make: ${evSummary.topMake}`
-                    : "Latest EV mix"}
-                </span>
-              </KPI.Footer>
-            </KPI>
-            <KPIGroup.Separator />
-            <KPI>
-              <KPI.Header>
-                <KPI.Title>Annual total</KPI.Title>
-              </KPI.Header>
-              <KPI.Content>
-                <KPI.Value
-                  locale="en-SG"
-                  maximumFractionDigits={0}
-                  value={yearlySummary.total}
-                />
-              </KPI.Content>
-              <KPI.Footer>
-                <span className="text-muted text-xs">
-                  {yearlySummary.year} registration volume
-                </span>
-              </KPI.Footer>
-            </KPI>
-            <KPIGroup.Separator />
-            <KPI>
-              <KPI.Header>
-                <KPI.Title>Market leader</KPI.Title>
-              </KPI.Header>
-              <KPI.Content>
-                <span className="font-semibold text-2xl">
-                  {topMake?.make ?? "N/A"}
-                </span>
-              </KPI.Content>
-              <KPI.Footer>
-                <span className="text-muted text-xs">
-                  {topMake ? (
+                  <KPI.Trend trend={getTrend(monthlyChange)} variant="primary">
                     <NumberValue
-                      locale="en-SG"
-                      maximumFractionDigits={0}
-                      value={topMake.total}
-                    >
-                      <NumberValue.Suffix> registrations</NumberValue.Suffix>
-                    </NumberValue>
-                  ) : (
-                    "Latest month"
-                  )}
-                </span>
-              </KPI.Footer>
-            </KPI>
-          </KPIGroup>
+                      maximumFractionDigits={1}
+                      signDisplay="exceptZero"
+                      style="percent"
+                      value={monthlyChange / 100}
+                    />
+                  </KPI.Trend>
+                </KPI.Content>
+                <KPI.Footer>
+                  <span className="text-muted text-xs">
+                    {formatMonth(latestMonth)}
+                  </span>
+                </KPI.Footer>
+              </KPI>
+              <KPIGroup.Separator />
+              <KPI>
+                <KPI.Header>
+                  <KPI.Title>EV and hybrid share</KPI.Title>
+                </KPI.Header>
+                <KPI.Content>
+                  <KPI.Value
+                    maximumFractionDigits={1}
+                    style="percent"
+                    value={(evSummary?.evSharePercent ?? 0) / 100}
+                  />
+                </KPI.Content>
+                <KPI.Footer>
+                  <span className="text-muted text-xs">
+                    {evSummary
+                      ? `Top EV make: ${evSummary.topMake}`
+                      : "Latest EV mix"}
+                  </span>
+                </KPI.Footer>
+              </KPI>
+              <KPIGroup.Separator />
+              <KPI>
+                <KPI.Header>
+                  <KPI.Title>Annual total</KPI.Title>
+                </KPI.Header>
+                <KPI.Content>
+                  <KPI.Value
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    value={yearlySummary.total}
+                  />
+                </KPI.Content>
+                <KPI.Footer>
+                  <span className="text-muted text-xs">
+                    {yearlySummary.year} registration volume
+                  </span>
+                </KPI.Footer>
+              </KPI>
+              <KPIGroup.Separator />
+              <KPI>
+                <KPI.Header>
+                  <KPI.Title>Market leader</KPI.Title>
+                </KPI.Header>
+                <KPI.Content>
+                  <span className="font-semibold text-2xl">
+                    {topMake?.make ?? "N/A"}
+                  </span>
+                </KPI.Content>
+                <KPI.Footer>
+                  <span className="text-muted text-xs">
+                    {topMake ? (
+                      <NumberValue
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        value={topMake.total}
+                      >
+                        <NumberValue.Suffix> registrations</NumberValue.Suffix>
+                      </NumberValue>
+                    ) : (
+                      "Latest month"
+                    )}
+                  </span>
+                </KPI.Footer>
+              </KPI>
+            </KPIGroup>
+          </ScrollShadow>
         </AnimatedSection>
 
         <AnimatedSection className="col-span-12 lg:col-span-7" order={4}>
@@ -270,7 +276,7 @@ export async function CarsOverview() {
             </Card.Header>
             <Card.Content className="gap-6">
               <div className="grid gap-4 sm:grid-cols-3">
-                <div className="rounded-2xl bg-default p-4">
+                <div className="rounded-xl bg-default p-4">
                   <span className="text-muted text-xs">Total</span>
                   <NumberValue
                     className="font-semibold text-3xl text-accent"
@@ -279,11 +285,11 @@ export async function CarsOverview() {
                     value={currentData?.total ?? 0}
                   />
                 </div>
-                <div className="rounded-2xl bg-default p-4">
+                <div className="rounded-xl bg-default p-4">
                   <span className="text-muted text-xs">Dominant fuel</span>
                   <p className="font-semibold text-xl">{topFuelType}</p>
                 </div>
-                <div className="rounded-2xl bg-default p-4">
+                <div className="rounded-xl bg-default p-4">
                   <span className="text-muted text-xs">
                     Dominant vehicle type
                   </span>
@@ -334,14 +340,12 @@ export async function CarsOverview() {
                   icon={BarChart3}
                   label="Registration trends"
                 />
-                <Separator />
                 <OverviewLink
                   description="Brand rankings and make-specific pages"
                   href="/cars/makes"
                   icon={CarFront}
                   label="Makes and market share"
                 />
-                <Separator />
                 <OverviewLink
                   description="BEV, PHEV, and hybrid adoption"
                   href="/cars/electric-vehicles"

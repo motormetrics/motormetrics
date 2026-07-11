@@ -1,6 +1,6 @@
 import { toast } from "@heroui/react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { vi } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NotificationPrompt } from "./notification-prompt";
 
 vi.mock("@heroui/react", () => {
@@ -29,6 +29,16 @@ vi.mock("@heroui/react", () => {
   };
 });
 
+const storage = new Map<string, string>();
+const localStorageMock = {
+  clear: vi.fn(() => storage.clear()),
+  getItem: vi.fn((key: string) => storage.get(key) ?? null),
+  key: vi.fn(() => null),
+  length: 0,
+  removeItem: vi.fn((key: string) => storage.delete(key)),
+  setItem: vi.fn((key: string, value: string) => storage.set(key, value)),
+};
+
 function getFirstToastOptions() {
   const call = vi.mocked(toast).mock.calls[0];
 
@@ -39,142 +49,143 @@ function getFirstToastOptions() {
   return call[1];
 }
 
+async function renderDelayedPrompt() {
+  const result = render(<NotificationPrompt />);
+  await act(async () => {
+    vi.advanceTimersByTime(2_000);
+  });
+  return result;
+}
+
 describe("NotificationPrompt Component", () => {
   let originalNotification: typeof global.Notification;
 
-  beforeAll(() => {
-    originalNotification = global.Notification;
-  });
-
-  afterAll(() => {
-    global.Notification = originalNotification;
-  });
-
   beforeEach(() => {
+    vi.useFakeTimers();
     vi.clearAllMocks();
+    storage.clear();
+    Object.defineProperty(window, "localStorage", {
+      configurable: true,
+      value: localStorageMock,
+    });
+    originalNotification = global.Notification;
     global.Notification = {
       requestPermission: vi.fn().mockResolvedValue("default"),
       permission: "default",
     } as unknown as typeof global.Notification;
   });
 
-  it("should render nothing directly because the prompt is shown as a toast", () => {
-    const { container } = render(<NotificationPrompt />);
+  afterEach(() => {
+    global.Notification = originalNotification;
+    vi.useRealTimers();
+  });
 
+  it("renders nothing directly", () => {
+    const { container } = render(<NotificationPrompt />);
     expect(container.firstChild).toBeNull();
   });
 
-  it("should show a persistent toast when notification permission is default", async () => {
-    render(<NotificationPrompt />);
+  it("shows a delayed, temporary prompt when permission is undecided", async () => {
+    await renderDelayedPrompt();
 
-    await waitFor(() => {
-      expect(toast).toHaveBeenCalledWith(
-        "Enable Notifications?",
-        expect.objectContaining({ timeout: 0, variant: "accent" }),
-      );
-    });
+    expect(toast).toHaveBeenCalledWith(
+      "Get data update alerts",
+      expect.objectContaining({ timeout: 8_000, variant: "default" }),
+    );
 
     const options = getFirstToastOptions();
     render(options.description as React.ReactElement);
 
     expect(
       screen.getByText(
-        "Stay updated with the latest news and alerts by enabling browser notifications",
+        "Enable browser notifications when new vehicle and COE data is published.",
       ),
     ).toBeInTheDocument();
-    const buttons = screen.getAllByTestId("button");
-    expect(buttons[0]).toHaveTextContent("Allow");
-    expect(buttons[1]).toHaveTextContent("Deny");
+    expect(screen.getByText("Enable")).toBeInTheDocument();
+    expect(screen.getByText("Not now")).toBeInTheDocument();
   });
 
-  it("should not show a toast when notification permission is granted", async () => {
+  it.each([
+    "granted",
+    "denied",
+  ] as const)("does not prompt when permission is %s", async (permission) => {
     global.Notification = {
-      requestPermission: vi.fn().mockResolvedValue("default"),
-      permission: "granted",
+      requestPermission: vi.fn(),
+      permission,
     } as unknown as typeof global.Notification;
 
-    const { container } = render(<NotificationPrompt />);
-
-    expect(container.firstChild).toBeNull();
-    await waitFor(() => expect(toast).not.toHaveBeenCalled());
+    await renderDelayedPrompt();
+    expect(toast).not.toHaveBeenCalled();
   });
 
-  it("should not show a toast when notification permission is denied", async () => {
-    global.Notification = {
-      requestPermission: vi.fn().mockResolvedValue("default"),
-      permission: "denied",
-    } as unknown as typeof global.Notification;
-
-    render(<NotificationPrompt />);
-
-    await waitFor(() => expect(toast).not.toHaveBeenCalled());
+  it("does not prompt after a previous dismissal", async () => {
+    storage.set("motormetrics:notification-prompt-dismissed", "true");
+    await renderDelayedPrompt();
+    expect(toast).not.toHaveBeenCalled();
   });
 
-  it("should request permission when Allow button is clicked", async () => {
+  it("requests permission only when Enable is pressed", async () => {
     vi.mocked(global.Notification.requestPermission).mockResolvedValue(
       "granted",
     );
+    await renderDelayedPrompt();
+    render(getFirstToastOptions().description as React.ReactElement);
 
-    render(<NotificationPrompt />);
+    await act(async () => {
+      fireEvent.click(screen.getAllByTestId("button")[0]);
+    });
 
-    await waitFor(() => expect(toast).toHaveBeenCalled());
-    const options = getFirstToastOptions();
-    render(options.description as React.ReactElement);
-
-    const buttons = screen.getAllByTestId("button");
-    fireEvent.click(buttons[0]);
-
-    await waitFor(() => {
-      expect(global.Notification.requestPermission).toHaveBeenCalled();
-      expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
-      expect(toast.success).toHaveBeenCalledWith("Notifications Enabled!", {
-        description:
-          "You will now receive updates and alerts whenever new data is published",
-      });
+    expect(global.Notification.requestPermission).toHaveBeenCalledOnce();
+    expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
+    expect(toast.success).toHaveBeenCalledWith("Notifications enabled", {
+      description: "You will receive an alert when new data is published.",
     });
   });
 
-  it("should request permission when Deny button is clicked", async () => {
+  it("dismisses without requesting permission", async () => {
+    await renderDelayedPrompt();
+    render(getFirstToastOptions().description as React.ReactElement);
+
+    fireEvent.click(screen.getAllByTestId("button")[1]);
+
+    expect(global.Notification.requestPermission).not.toHaveBeenCalled();
+    expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      "motormetrics:notification-prompt-dismissed",
+      "true",
+    );
+  });
+
+  it("shows guidance when the browser declines permission", async () => {
     vi.mocked(global.Notification.requestPermission).mockResolvedValue(
       "denied",
     );
+    await renderDelayedPrompt();
+    render(getFirstToastOptions().description as React.ReactElement);
 
-    render(<NotificationPrompt />);
+    await act(async () => {
+      fireEvent.click(screen.getAllByTestId("button")[0]);
+    });
 
-    await waitFor(() => expect(toast).toHaveBeenCalled());
-    const options = getFirstToastOptions();
-    render(options.description as React.ReactElement);
-
-    const buttons = screen.getAllByTestId("button");
-    fireEvent.click(buttons[1]);
-
-    await waitFor(() => {
-      expect(global.Notification.requestPermission).toHaveBeenCalled();
-      expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
-      expect(toast.warning).toHaveBeenCalledWith("Notifications Disabled!", {
-        description:
-          "You will not receive updates and alerts whenever new data is published",
-      });
+    expect(toast.warning).toHaveBeenCalledWith("Notifications remain off", {
+      description:
+        "You can enable browser notifications later from your browser settings.",
     });
   });
 
-  it("should not reopen the prompt when toast is closed", async () => {
-    render(<NotificationPrompt />);
+  it("remembers when the toast closes", async () => {
+    await renderDelayedPrompt();
+    getFirstToastOptions().onClose?.();
 
-    await waitFor(() => expect(toast).toHaveBeenCalled());
-    const options = getFirstToastOptions();
-    options.onClose?.();
-
-    await waitFor(() => expect(toast).toHaveBeenCalledTimes(1));
+    expect(localStorageMock.setItem).toHaveBeenCalledWith(
+      "motormetrics:notification-prompt-dismissed",
+      "true",
+    );
   });
 
-  it("should not show a toast when Notification API is unavailable", () => {
-    const original = global.Notification;
+  it("does not prompt when the Notification API is unavailable", async () => {
     delete (global as Partial<typeof globalThis>).Notification;
-
-    render(<NotificationPrompt />);
+    await renderDelayedPrompt();
     expect(toast).not.toHaveBeenCalled();
-
-    global.Notification = original;
   });
 });

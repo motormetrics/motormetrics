@@ -30,7 +30,7 @@ const H1 = React.forwardRef<
   <h1
     ref={ref}
     className={cn(
-      "scroll-m-20 font-semibold text-4xl text-foreground tracking-tight lg:text-5xl",
+      "scroll-m-20 text-balance font-semibold text-4xl text-foreground tracking-tight lg:text-5xl",
       className,
     )}
     {...props}
@@ -54,7 +54,7 @@ const H2 = React.forwardRef<
   <h2
     ref={ref}
     className={cn(
-      "scroll-m-20 font-semibold text-3xl text-foreground tracking-tight first:mt-0",
+      "scroll-m-20 text-balance font-semibold text-3xl text-foreground tracking-tight first:mt-0",
       className,
     )}
     {...props}
@@ -78,7 +78,7 @@ const H3 = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "scroll-m-20 font-medium text-2xl text-foreground tracking-tight",
+      "scroll-m-20 text-balance font-medium text-2xl text-foreground tracking-tight",
       className,
     )}
     {...props}
@@ -126,7 +126,10 @@ const TextLg = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-foreground text-lg leading-relaxed", className)}
+    className={cn(
+      "text-pretty text-foreground text-lg leading-relaxed",
+      className,
+    )}
     {...props}
   />
 ));
@@ -148,7 +151,7 @@ const Text = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-base text-foreground leading-7", className)}
+    className={cn("text-pretty text-base text-foreground leading-7", className)}
     {...props}
   />
 ));

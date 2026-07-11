@@ -1,4 +1,4 @@
-import { Button, Card, Chip, Link, Separator } from "@heroui/react";
+import { Button, Card, Chip, Link, ScrollShadow } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
@@ -110,7 +110,7 @@ function OverviewLink({
 }) {
   return (
     <Link className="block no-underline" href={href}>
-      <div className="flex items-center gap-3 rounded-2xl border border-separator bg-surface p-4 transition-colors hover:bg-default/50">
+      <div className="flex cursor-[var(--cursor-interactive)] items-center gap-3 rounded-xl bg-default p-4 hover:bg-default/80">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-default text-foreground">
           <Icon className="size-4" />
         </div>
@@ -143,7 +143,9 @@ function MetricCard({
         <KPI.Title>{label}</KPI.Title>
       </KPI.Header>
       <KPI.Content>
-        <span className="font-semibold text-2xl text-foreground">{value}</span>
+        <span className="font-semibold text-2xl text-foreground tabular-nums">
+          {value}
+        </span>
       </KPI.Content>
       <KPI.Footer>
         <span className="text-muted text-xs">{meta}</span>
@@ -215,63 +217,69 @@ export async function CoeOverview() {
 
       <AnimatedGrid className="grid grid-cols-12 gap-4">
         <AnimatedSection className="col-span-12" order={0}>
-          <KPIGroup>
-            <MetricCard
-              label="Total quota"
-              meta="Latest bidding round"
-              value={
-                <NumberValue
-                  locale="en-SG"
-                  maximumFractionDigits={0}
-                  value={totalQuota}
-                />
-              }
-            />
-            <KPIGroup.Separator />
-            <MetricCard
-              label="Bids received"
-              meta={`${pressureRatio.toFixed(1)}x quota pressure`}
-              value={
-                <NumberValue
-                  locale="en-SG"
-                  maximumFractionDigits={0}
-                  value={totalBids}
-                />
-              }
-            />
-            <KPIGroup.Separator />
-            <MetricCard
-              label="Highest premium"
-              meta={
-                highestCategory
-                  ? categoryLabel(highestCategory)
-                  : "Latest round"
-              }
-              value={
-                <NumberValue
-                  currency="SGD"
-                  locale="en-SG"
-                  maximumFractionDigits={0}
-                  style="currency"
-                  value={highestPremium}
-                />
-              }
-            />
-            <KPIGroup.Separator />
-            <MetricCard
-              label="PQP benchmark"
-              meta="Category A renewal"
-              value={
-                <NumberValue
-                  currency="SGD"
-                  locale="en-SG"
-                  maximumFractionDigits={0}
-                  style="currency"
-                  value={pqpA?.pqpRate ?? 0}
-                />
-              }
-            />
-          </KPIGroup>
+          <ScrollShadow
+            className="-mx-4 px-4 pb-1 sm:mx-0 sm:px-0"
+            hideScrollBar
+            orientation="horizontal"
+          >
+            <KPIGroup className="min-w-[48rem] sm:min-w-0">
+              <MetricCard
+                label="Total quota"
+                meta="Latest bidding round"
+                value={
+                  <NumberValue
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    value={totalQuota}
+                  />
+                }
+              />
+              <KPIGroup.Separator />
+              <MetricCard
+                label="Bids received"
+                meta={`${pressureRatio.toFixed(1)}x quota pressure`}
+                value={
+                  <NumberValue
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    value={totalBids}
+                  />
+                }
+              />
+              <KPIGroup.Separator />
+              <MetricCard
+                label="Highest premium"
+                meta={
+                  highestCategory
+                    ? categoryLabel(highestCategory)
+                    : "Latest round"
+                }
+                value={
+                  <NumberValue
+                    currency="SGD"
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    style="currency"
+                    value={highestPremium}
+                  />
+                }
+              />
+              <KPIGroup.Separator />
+              <MetricCard
+                label="PQP benchmark"
+                meta="Category A renewal"
+                value={
+                  <NumberValue
+                    currency="SGD"
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    style="currency"
+                    value={pqpA?.pqpRate ?? 0}
+                  />
+                }
+              />
+            </KPIGroup>
+          </ScrollShadow>
         </AnimatedSection>
 
         <AnimatedSection className="col-span-12 lg:col-span-8" order={1}>
@@ -320,14 +328,12 @@ export async function CoeOverview() {
                   icon={BarChart3}
                   label="Premiums"
                 />
-                <Separator />
                 <OverviewLink
                   description="Historical bidding rounds and trends"
                   href="/coe/results"
                   icon={TrendingUp}
                   label="Results"
                 />
-                <Separator />
                 <OverviewLink
                   description="Renewal rates and PQP comparisons"
                   href="/coe/pqp"
@@ -352,7 +358,7 @@ export async function CoeOverview() {
               {[pqpA, pqpB].map((summary) => (
                 <div
                   key={summary?.category ?? "empty"}
-                  className="rounded-2xl bg-default p-4"
+                  className="rounded-xl bg-default p-4"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <Typography.Label>

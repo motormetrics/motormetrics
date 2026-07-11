@@ -21,7 +21,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
         class="flex flex-col gap-1"
       >
         <h2
-          class="scroll-m-20 font-semibold text-3xl text-foreground tracking-tight first:mt-0"
+          class="scroll-m-20 text-balance font-semibold text-3xl text-foreground tracking-tight first:mt-0"
         >
           BMW
         </h2>

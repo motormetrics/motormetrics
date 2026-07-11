@@ -2,79 +2,78 @@
 
 exports[`RecentPosts > should render title and view all link 1`] = `
 <div>
-  <section>
-    <div>
-      <div
-        class="mb-5 flex items-center justify-between"
+  <section
+    class="flex h-full flex-col gap-5"
+  >
+    <div
+      class="flex items-center justify-between"
+    >
+      <h3
+        class="scroll-m-20 text-balance font-medium text-2xl text-foreground tracking-tight"
       >
-        <h3
-          class="scroll-m-20 font-medium text-2xl text-foreground tracking-tight"
+        Recent Posts
+      </h3>
+      <a
+        aria-label="View all blog posts"
+        class="button button--icon-only button--md button--tertiary size-10"
+        href="/blog"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-arrow-up-right size-6"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          Recent Posts
-        </h3>
+          <path
+            d="M7 7h10v10"
+          />
+          <path
+            d="M7 17 17 7"
+          />
+        </svg>
+      </a>
+      <span>
+        View all blog posts
+      </span>
+    </div>
+    <div
+      class="grid grid-cols-1 gap-4 lg:grid-cols-3"
+    >
+      <article
+        data-testid="post-card-post-1"
+      >
         <a
-          aria-label="View all blog posts"
-          href="/blog"
+          href="/blog/first-post"
         >
-          <button
-            type="button"
-            variant="tertiary"
-          >
-            <svg
-              aria-hidden="true"
-              class="lucide lucide-arrow-up-right size-6"
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M7 7h10v10"
-              />
-              <path
-                d="M7 17 17 7"
-              />
-            </svg>
-          </button>
+          First Post
         </a>
-      </div>
-      <div
-        class="grid grid-cols-1 gap-4 lg:grid-cols-3"
+        <span
+          data-testid="post-date-post-1"
+        >
+          15 Jan 2024
+        </span>
+      </article>
+      <article
+        data-testid="post-card-post-2"
       >
-        <article
-          data-testid="post-card-post-1"
+        <a
+          href="/blog/second-post"
         >
-          <a
-            href="/blog/first-post"
-          >
-            First Post
-          </a>
-          <span
-            data-testid="post-date-post-1"
-          >
-            15 Jan 2024
-          </span>
-        </article>
-        <article
-          data-testid="post-card-post-2"
+          Second Post
+        </a>
+        <span
+          data-testid="post-date-post-2"
         >
-          <a
-            href="/blog/second-post"
-          >
-            Second Post
-          </a>
-          <span
-            data-testid="post-date-post-2"
-          >
-            20 Feb 2024
-          </span>
-        </article>
-      </div>
+          20 Feb 2024
+        </span>
+      </article>
     </div>
   </section>
 </div>

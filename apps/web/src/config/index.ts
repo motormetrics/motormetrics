@@ -148,7 +148,7 @@ export const MEDAL_MAPPING: Record<number, string> = {
 export const announcements: Announcement[] = [
   {
     content:
-      "SG Cars Trends is now MotorMetrics. If you have us bookmarked, please update it to https://motormetrics.app ✨",
+      "SG Cars Trends is now MotorMetrics. Please update your bookmark to motormetrics.app.",
   },
   // {
   //   content: "🚗 Latest car registration data now available!",

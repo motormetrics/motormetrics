@@ -26,7 +26,7 @@ export function BlogHero({
   const categoryLabel = tags && tags.length > 0 ? tags[0] : "Market Analysis";
 
   return (
-    <div className="relative mb-12 w-full overflow-hidden bg-linear-to-br from-accent to-accent/70 py-16 md:py-24">
+    <div className="relative mb-10 w-full overflow-hidden rounded-xl bg-accent py-12 md:py-16">
       {heroImage && (
         <>
           <Image
@@ -37,21 +37,21 @@ export function BlogHero({
             sizes="100vw"
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-linear-to-br from-accent/85 to-accent/70" />
+          <div className="absolute inset-0 bg-accent/80" />
         </>
       )}
-      <div className="container relative mx-auto flex flex-col justify-end px-6 md:px-12">
+      <div className="relative flex max-w-5xl flex-col justify-end px-6 md:px-10">
         <Chip
           size="sm"
-          variant="primary"
-          className="mb-3 bg-white/15 font-bold text-white/80 text-xs uppercase tracking-[0.3em]"
+          variant="soft"
+          className="mb-4 w-fit bg-white/15 font-medium text-white"
         >
           {categoryLabel}
         </Chip>
-        <h1 className="mb-3 max-w-4xl font-black text-2xl text-white leading-tight tracking-tight sm:text-4xl md:text-6xl md:leading-[0.95]">
+        <h1 className="mb-4 max-w-4xl text-balance font-semibold text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl">
           {title}
         </h1>
-        <div className="flex flex-wrap items-center gap-2 font-medium text-white/70 text-xs uppercase tracking-wider sm:gap-4 sm:text-sm">
+        <div className="flex flex-wrap items-center gap-2 font-medium text-sm text-white/80 sm:gap-4">
           <span>
             {publishedAt.toLocaleDateString("en-SG", {
               year: "numeric",

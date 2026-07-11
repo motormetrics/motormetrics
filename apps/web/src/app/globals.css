@@ -128,6 +128,10 @@
     --default: oklch(0.28 0.0369 259.97);
     --default-foreground: var(--foreground);
 
+    /* Keep interactive emphasis legible against dark surfaces. */
+    --accent: oklch(0.7107 0.135 263.13);
+    --accent-foreground: var(--background);
+
     /* Form Field Defaults - Colors (only the ones that are different from light theme) */
     --field-background: var(--default);
     --field-foreground: var(--foreground);

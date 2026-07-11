@@ -9,7 +9,7 @@ exports[`DashboardPageTitle > should render title with badge and subtitle 1`] = 
       class="flex items-center gap-2"
     >
       <h1
-        class="scroll-m-20 font-semibold text-4xl text-foreground tracking-tight lg:text-5xl"
+        class="scroll-m-20 text-balance font-semibold text-4xl text-foreground tracking-tight lg:text-5xl"
       >
         Car Registrations
       </h1>
@@ -20,7 +20,7 @@ exports[`DashboardPageTitle > should render title with badge and subtitle 1`] = 
       </span>
     </div>
     <p
-      class="text-lg leading-relaxed text-muted"
+      class="text-pretty text-lg leading-relaxed text-muted"
     >
       Latest monthly overview
     </p>

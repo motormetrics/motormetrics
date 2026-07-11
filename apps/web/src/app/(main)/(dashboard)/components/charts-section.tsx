@@ -1,4 +1,5 @@
-import { Button, Card, Link, Skeleton } from "@heroui/react";
+import { Card, Link, Skeleton, Tooltip } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
@@ -19,11 +20,20 @@ async function YearlyChartContent() {
               Total registrations over the years
             </p>
           </div>
-          <Link href="/cars/annual">
-            <Button isIconOnly variant="tertiary">
+          <Tooltip delay={300}>
+            <Link
+              aria-label="View annual registration data"
+              className={buttonVariants({
+                className: "size-10",
+                isIconOnly: true,
+                variant: "tertiary",
+              })}
+              href="/cars/annual"
+            >
               <ArrowUpRight className="size-6" />
-            </Button>
-          </Link>
+            </Link>
+            <Tooltip.Content>View annual registration data</Tooltip.Content>
+          </Tooltip>
         </div>
         <div className="flex h-[160px] items-end gap-4">
           {yearlyData.slice(-6).map((item, i, arr) => {
@@ -34,7 +44,7 @@ async function YearlyChartContent() {
                 key={item.year}
                 className="flex flex-1 flex-col items-center gap-2"
               >
-                <span className="font-medium text-muted text-xs">
+                <span className="font-medium text-muted text-xs tabular-nums">
                   <NumberValue
                     maximumFractionDigits={1}
                     notation="compact"
@@ -64,11 +74,20 @@ async function TopMakesContent() {
       <Card.Content>
         <div className="mb-5 flex items-center justify-between">
           <Typography.H3>Top Makes</Typography.H3>
-          <Link href="/cars/makes">
-            <Button isIconOnly variant="tertiary">
+          <Tooltip delay={300}>
+            <Link
+              aria-label="View all car makes"
+              className={buttonVariants({
+                className: "size-10",
+                isIconOnly: true,
+                variant: "tertiary",
+              })}
+              href="/cars/makes"
+            >
               <ArrowUpRight className="size-6" />
-            </Button>
-          </Link>
+            </Link>
+            <Tooltip.Content>View all car makes</Tooltip.Content>
+          </Tooltip>
         </div>
         <div className="flex flex-col gap-4">
           {topMakes.slice(0, 5).map((item, i) => (
@@ -79,7 +98,7 @@ async function TopMakesContent() {
               <div className="flex-1">
                 <div className="mb-1 flex items-center justify-between">
                   <span className="font-medium text-sm">{item.make}</span>
-                  <span className="text-muted text-xs">
+                  <span className="text-muted text-xs tabular-nums">
                     <NumberValue
                       locale="en-SG"
                       maximumFractionDigits={0}

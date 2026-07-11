@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Chip } from "@heroui/react";
+import { Button, Chip, Tooltip } from "@heroui/react";
 
 import type { Make, MakeStats } from "@web/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -63,16 +63,18 @@ export function AllMakes({
 
       {/* Letter filter tabs */}
       <div className="relative flex items-center gap-2">
-        <Button
-          isIconOnly
-          variant="outline"
-          size="sm"
-          className="rounded-full"
-          onPress={() => scroll("left")}
-          aria-label="Scroll left"
-        >
-          <ChevronLeft className="size-4" />
-        </Button>
+        <Tooltip delay={300}>
+          <Button
+            isIconOnly
+            variant="outline"
+            className="size-10"
+            onPress={() => scroll("left")}
+            aria-label="Scroll make filters left"
+          >
+            <ChevronLeft className="size-4" />
+          </Button>
+          <Tooltip.Content>Scroll make filters left</Tooltip.Content>
+        </Tooltip>
 
         <div
           ref={scrollContainerRef}
@@ -92,16 +94,18 @@ export function AllMakes({
           ))}
         </div>
 
-        <Button
-          isIconOnly
-          variant="outline"
-          size="sm"
-          className="rounded-full"
-          onPress={() => scroll("right")}
-          aria-label="Scroll right"
-        >
-          <ChevronRight className="size-4" />
-        </Button>
+        <Tooltip delay={300}>
+          <Button
+            isIconOnly
+            variant="outline"
+            className="size-10"
+            onPress={() => scroll("right")}
+            aria-label="Scroll make filters right"
+          >
+            <ChevronRight className="size-4" />
+          </Button>
+          <Tooltip.Content>Scroll make filters right</Tooltip.Content>
+        </Tooltip>
       </div>
 
       {/* Results info and grid */}

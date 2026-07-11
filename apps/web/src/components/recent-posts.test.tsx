@@ -37,6 +37,14 @@ vi.mock("@heroui/react", () => ({
       {children}
     </a>
   ),
+  Tooltip: Object.assign(
+    ({ children }: { children?: React.ReactNode }) => <>{children}</>,
+    {
+      Content: ({ children }: { children?: React.ReactNode }) => (
+        <span>{children}</span>
+      ),
+    },
+  ),
   cn: (...classes: unknown[]) => classes.flat().filter(Boolean).join(" "),
 }));
 

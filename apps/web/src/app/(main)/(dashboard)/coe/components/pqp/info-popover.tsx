@@ -1,4 +1,4 @@
-import { Button, Popover } from "@heroui/react";
+import { Button, Popover, Tooltip } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { InfoIcon } from "lucide-react";
 
@@ -6,15 +6,17 @@ export function InfoPopover() {
   return (
     <Popover>
       <Popover.Trigger>
-        <Button
-          isIconOnly
-          variant="tertiary"
-          size="sm"
-          className="rounded-full"
-          aria-label="About PQP Rates"
-        >
-          <InfoIcon className="size-5" aria-hidden="true" />
-        </Button>
+        <Tooltip delay={300}>
+          <Button
+            isIconOnly
+            variant="tertiary"
+            className="size-10"
+            aria-label="About PQP rates"
+          >
+            <InfoIcon className="size-5" aria-hidden="true" />
+          </Button>
+          <Tooltip.Content>About PQP rates</Tooltip.Content>
+        </Tooltip>
       </Popover.Trigger>
       <Popover.Content className="max-w-md" placement="bottom end">
         <div className="flex flex-col gap-4 p-4">

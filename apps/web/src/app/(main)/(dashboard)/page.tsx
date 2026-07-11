@@ -10,8 +10,8 @@ import { MarketOverview } from "@web/app/(main)/(dashboard)/components/market-ov
 import { MonthlyChangeSummary } from "@web/app/(main)/(dashboard)/components/monthly-change-summary";
 import { PostsSection } from "@web/app/(main)/(dashboard)/components/posts-section";
 import { SummaryCard } from "@web/app/(main)/(dashboard)/components/summary-card";
-import { WelcomeSection } from "@web/app/(main)/(dashboard)/components/welcome-section";
 import { StructuredData } from "@web/components/structured-data";
+import Typography from "@web/components/typography";
 import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_URLS } from "@web/config/socials";
 import type { Metadata } from "next";
@@ -83,7 +83,7 @@ const organisationSchema = {
 
 function SummaryCardSkeleton() {
   return (
-    <Card className="border-2 border-accent">
+    <Card>
       <Card.Content>
         <div className="mb-4 flex items-center justify-between">
           <Skeleton className="h-12 w-12 rounded-2xl" />
@@ -115,7 +115,7 @@ function MarketOverviewSkeleton() {
 
 function MonthlyChangeSummarySkeleton() {
   return (
-    <Card className="border-2 border-accent">
+    <Card>
       <Card.Content>
         <div className="mb-4 flex items-center justify-between">
           <Skeleton className="h-12 w-12 rounded-2xl" />
@@ -135,18 +135,21 @@ const HomePage = () => {
       <StructuredData data={webSiteSchema} />
       <StructuredData data={organisationSchema} />
       <section className="flex flex-col gap-8">
+        <div className="flex max-w-3xl flex-col gap-2">
+          <Typography.H1>Overview</Typography.H1>
+          <Typography.TextLg className="text-muted">
+            Singapore vehicle registrations and COE market movement at a glance.
+          </Typography.TextLg>
+        </div>
         {/* Bento Grid */}
         <AnimatedGrid className="grid grid-cols-12 gap-4">
-          {/* Row 1: Welcome + Summary Cards */}
-          <AnimatedSection className="col-span-12 lg:col-span-4">
-            <WelcomeSection />
-          </AnimatedSection>
-          <AnimatedSection className="col-span-12 lg:col-span-4">
+          {/* Row 1: Summary Cards */}
+          <AnimatedSection className="col-span-12 lg:col-span-6">
             <Suspense fallback={<SummaryCardSkeleton />}>
               <SummaryCard />
             </Suspense>
           </AnimatedSection>
-          <AnimatedSection className="col-span-12 lg:col-span-4">
+          <AnimatedSection className="col-span-12 lg:col-span-6">
             <Suspense fallback={<MonthlyChangeSummarySkeleton />}>
               <MonthlyChangeSummary />
             </Suspense>

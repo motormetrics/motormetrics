@@ -1,4 +1,5 @@
-import { Button, Separator } from "@heroui/react";
+import { Link as HeroLink, Tooltip } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
 import { BrandLogo } from "@web/components/brand-logo";
 import Typography from "@web/components/typography";
 import { UnreleasedFeature } from "@web/components/unreleased-feature";
@@ -16,9 +17,9 @@ const CURRENT_YEAR = new Date().getFullYear();
 
 export function Footer() {
   return (
-    <footer className="border-divider border-t bg-surface">
-      <div className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+    <footer className="border-separator border-t bg-surface">
+      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_minmax(14rem,0.5fr)]">
           {/* Brand Section */}
           <div className="flex flex-col gap-4">
             <BrandLogo />
@@ -28,17 +29,22 @@ export function Footer() {
             </Typography.TextSm>
             <div className="flex gap-2">
               {navLinks.socialMedia.map(({ title, url, icon: Icon }) => (
-                <a key={title} href={url} rel="me noreferrer" target="_blank">
-                  <Button
-                    isIconOnly
-                    variant="tertiary"
-                    size="sm"
-                    className="rounded-full text-muted transition-colors hover:text-accent"
+                <Tooltip key={title} delay={300}>
+                  <HeroLink
                     aria-label={title}
+                    className={buttonVariants({
+                      className: "size-10 text-muted hover:text-accent",
+                      isIconOnly: true,
+                      variant: "tertiary",
+                    })}
+                    href={url}
+                    rel="me noreferrer"
+                    target="_blank"
                   >
                     <Icon className="size-4" aria-hidden="true" />
-                  </Button>
-                </a>
+                  </HeroLink>
+                  <Tooltip.Content>{title}</Tooltip.Content>
+                </Tooltip>
               ))}
             </div>
           </div>
@@ -58,7 +64,6 @@ export function Footer() {
               ))}
             </div>
             <UnreleasedFeature>
-              <Separator />
               <Link
                 href={POLAR_DONATION_URL}
                 target="_blank"
@@ -72,10 +77,8 @@ export function Footer() {
           </div>
         </div>
 
-        <Separator className="my-8" />
-
         {/* Bottom Section */}
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0">
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-separator border-t pt-6 md:flex-row md:gap-0">
           <div className="text-center text-muted md:text-left">
             <Typography.TextSm>
               © {CURRENT_YEAR} {SITE_TITLE}. All rights reserved. • v{version}

@@ -30,8 +30,10 @@ export function Announcement() {
 
   return (
     <aside className="bg-accent text-accent-foreground">
-      <div className="w-full px-6 py-3 text-center">
-        <p className="font-medium text-sm">{activeAnnouncement.content}</p>
+      <div className="mx-auto w-full max-w-7xl px-4 py-2 text-center sm:px-6">
+        <p className="text-pretty font-medium text-xs sm:text-sm">
+          {activeAnnouncement.content}
+        </p>
       </div>
     </aside>
   );

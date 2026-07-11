@@ -30,7 +30,7 @@ export function Card({ post }: CardProps) {
 
   return (
     <Link href={`/blog/${post.slug}`} className="block h-full no-underline">
-      <HeroCard className="h-full overflow-hidden transition-shadow hover:shadow-lg">
+      <HeroCard className="h-full overflow-hidden">
         <HeroCard.Content className="gap-0 p-0">
           {post.heroImage ? (
             <div className="relative aspect-2/1 overflow-hidden">
@@ -55,12 +55,12 @@ export function Card({ post }: CardProps) {
               <span className="size-1 rounded-full bg-default" />
               <span>{readingTime} min read</span>
               {isNew && (
-                <Chip color="warning" variant="primary" size="sm">
-                  NEW
+                <Chip color="warning" variant="soft" size="sm">
+                  New
                 </Chip>
               )}
             </div>
-            <h3 className="line-clamp-2 font-bold text-lg leading-tight">
+            <h3 className="line-clamp-2 text-balance font-semibold text-lg leading-tight">
               {post.title}
             </h3>
             {excerpt && (

@@ -26,7 +26,7 @@ export function AppNavbar() {
   return (
     <Navbar
       aria-label="Main navigation"
-      className="border-separator border-b bg-background/90 backdrop-blur-xl"
+      className="border-separator border-b bg-background"
       isMenuOpen={isMenuOpen}
       maxWidth="2xl"
       navigate={router.push}
@@ -34,7 +34,10 @@ export function AppNavbar() {
       position="sticky"
     >
       <Navbar.Header>
-        <Navbar.MenuToggle className="md:hidden" />
+        <Navbar.MenuToggle
+          className="md:hidden"
+          aria-label="Toggle navigation menu"
+        />
 
         <Navbar.Brand>
           <BrandLogo />

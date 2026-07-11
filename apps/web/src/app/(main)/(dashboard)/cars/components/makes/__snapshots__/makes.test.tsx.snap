@@ -33,12 +33,12 @@ exports[`Makes > should render the section with title and count 1`] = `
       class="relative flex items-center gap-2"
     >
       <button
-        aria-label="Scroll left"
-        class="button button--icon-only button--sm button--outline rounded-full"
+        aria-label="Scroll make filters left"
+        class="button button--icon-only button--md button--outline size-10"
         data-rac=""
         data-react-aria-pressable="true"
         data-slot="button"
-        id="react-aria-_r_0_"
+        id="react-aria-_r_1_"
         tabindex="0"
         type="button"
       >
@@ -69,7 +69,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           data-rac=""
           data-react-aria-pressable="true"
           data-slot="button"
-          id="react-aria-_r_2_"
+          id="react-aria-_r_3_"
           tabindex="0"
           type="button"
         >
@@ -81,7 +81,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           data-rac=""
           data-react-aria-pressable="true"
           data-slot="button"
-          id="react-aria-_r_4_"
+          id="react-aria-_r_5_"
           tabindex="0"
           type="button"
         >
@@ -93,7 +93,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           data-rac=""
           data-react-aria-pressable="true"
           data-slot="button"
-          id="react-aria-_r_6_"
+          id="react-aria-_r_7_"
           tabindex="0"
           type="button"
         >
@@ -105,7 +105,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           data-rac=""
           data-react-aria-pressable="true"
           data-slot="button"
-          id="react-aria-_r_8_"
+          id="react-aria-_r_9_"
           tabindex="0"
           type="button"
         >
@@ -117,7 +117,7 @@ exports[`Makes > should render the section with title and count 1`] = `
           data-rac=""
           data-react-aria-pressable="true"
           data-slot="button"
-          id="react-aria-_r_a_"
+          id="react-aria-_r_b_"
           tabindex="0"
           type="button"
         >
@@ -125,12 +125,12 @@ exports[`Makes > should render the section with title and count 1`] = `
         </button>
       </div>
       <button
-        aria-label="Scroll right"
-        class="button button--icon-only button--sm button--outline rounded-full"
+        aria-label="Scroll make filters right"
+        class="button button--icon-only button--md button--outline size-10"
         data-rac=""
         data-react-aria-pressable="true"
         data-slot="button"
-        id="react-aria-_r_c_"
+        id="react-aria-_r_e_"
         tabindex="0"
         type="button"
       >

@@ -41,11 +41,8 @@ export function DashboardNav() {
   };
 
   return (
-    <nav
-      aria-label="Dashboard navigation"
-      className="border-separator/70 border-b bg-background/80 backdrop-blur-xl"
-    >
-      <div className="mx-auto flex w-full max-w-full flex-col gap-3 py-3 md:flex-row md:items-center md:gap-2 md:py-2">
+    <nav aria-label="Dashboard navigation">
+      <div className="flex w-full flex-col gap-3 border-separator border-b pb-4 md:flex-row md:items-center md:gap-2">
         <div className="hidden md:flex">
           <Segment
             selectedKey={activeSection?.href}
@@ -77,9 +74,9 @@ export function DashboardNav() {
                   className={cn(
                     buttonVariants({
                       size: "sm",
-                      variant: isActive ? "primary" : "outline",
+                      variant: isActive ? "secondary" : "ghost",
                     }),
-                    "h-8 shrink-0 gap-1.5 rounded-full px-3",
+                    "h-10 shrink-0 gap-1.5 rounded-xl px-3",
                     isActive ? "pointer-events-none" : null,
                   )}
                   href={href}
@@ -95,8 +92,8 @@ export function DashboardNav() {
         {hasSectionPages && activeItem ? (
           <Dropdown>
             <Button
-              className="h-9 w-full justify-between gap-2 rounded-full px-3 md:h-8 md:w-auto md:justify-center md:gap-1.5"
-              variant="outline"
+              className="h-10 w-full justify-between gap-2 rounded-xl px-3 md:w-auto md:justify-center md:gap-1.5"
+              variant="tertiary"
             >
               <span className="flex min-w-0 items-center gap-1.5">
                 {activeItem.icon ? (

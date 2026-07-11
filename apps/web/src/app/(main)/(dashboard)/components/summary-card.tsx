@@ -1,4 +1,5 @@
-import { Button, Link } from "@heroui/react";
+import { Link, Tooltip } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
 import { KPI, NumberValue } from "@heroui-pro/react";
 import { getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight, BarChart3 } from "lucide-react";
@@ -19,23 +20,32 @@ export async function SummaryCard() {
   const trend = changeRatio > 0 ? "up" : changeRatio < 0 ? "down" : "neutral";
 
   return (
-    <KPI className="border-2 border-accent">
+    <KPI>
       <KPI.Header>
-        <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10">
+        <div className="flex size-11 items-center justify-center rounded-xl bg-default text-accent">
           <BarChart3 className="size-6 text-accent" />
         </div>
-        <Link className="ml-auto" href="/cars">
-          <Button isIconOnly variant="tertiary">
+        <Tooltip delay={300}>
+          <Link
+            aria-label="View car registration overview"
+            className={buttonVariants({
+              className: "ml-auto size-10",
+              isIconOnly: true,
+              variant: "tertiary",
+            })}
+            href="/cars"
+          >
             <ArrowUpRight className="size-6" />
-          </Button>
-        </Link>
+          </Link>
+          <Tooltip.Content>View car registration overview</Tooltip.Content>
+        </Tooltip>
       </KPI.Header>
       <KPI.Header>
         <KPI.Title>Total Registrations ({displayYear})</KPI.Title>
       </KPI.Header>
       <KPI.Content>
         <KPI.Value
-          className="text-4xl text-accent"
+          className="text-4xl tabular-nums"
           locale="en-SG"
           maximumFractionDigits={0}
           value={totalRegistrations}

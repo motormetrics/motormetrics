@@ -1,4 +1,5 @@
-import { Button, Card, Link } from "@heroui/react";
+import { Link, Tooltip } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
 import type { SelectPost } from "@motormetrics/database";
 import { Post } from "@web/app/(main)/(site)/blog/components/post";
 import Typography from "@web/components/typography";
@@ -11,42 +12,56 @@ interface RecentPostsProps {
 export function RecentPosts({ posts }: RecentPostsProps) {
   if (!posts || posts.length === 0) {
     return (
-      <Card>
-        <Card.Content>
-          <div className="mb-5 flex items-center justify-between">
-            <Typography.H3>Recent Posts</Typography.H3>
-            <Link href="/blog" aria-label="View all blog posts">
-              <Button isIconOnly variant="tertiary">
-                <ArrowUpRight className="size-6" />
-              </Button>
+      <section className="flex h-full flex-col gap-5">
+        <div className="flex items-center justify-between">
+          <Typography.H3>Recent Posts</Typography.H3>
+          <Tooltip delay={300}>
+            <Link
+              aria-label="View all blog posts"
+              className={buttonVariants({
+                className: "size-10",
+                isIconOnly: true,
+                variant: "tertiary",
+              })}
+              href="/blog"
+            >
+              <ArrowUpRight className="size-6" />
             </Link>
-          </div>
-          <p className="py-8 text-center text-muted">
-            No recent posts available.
-          </p>
-        </Card.Content>
-      </Card>
+            <Tooltip.Content>View all blog posts</Tooltip.Content>
+          </Tooltip>
+        </div>
+        <p className="rounded-xl bg-surface py-10 text-center text-muted shadow-surface">
+          No recent posts available.
+        </p>
+      </section>
     );
   }
 
   return (
-    <Card>
-      <Card.Content>
-        <div className="mb-5 flex items-center justify-between">
-          <Typography.H3>Recent Posts</Typography.H3>
-          <Link href="/blog" aria-label="View all blog posts">
-            <Button isIconOnly variant="tertiary">
-              <ArrowUpRight className="size-6" />
-            </Button>
+    <section className="flex h-full flex-col gap-5">
+      <div className="flex items-center justify-between">
+        <Typography.H3>Recent Posts</Typography.H3>
+        <Tooltip delay={300}>
+          <Link
+            aria-label="View all blog posts"
+            className={buttonVariants({
+              className: "size-10",
+              isIconOnly: true,
+              variant: "tertiary",
+            })}
+            href="/blog"
+          >
+            <ArrowUpRight className="size-6" />
           </Link>
-        </div>
+          <Tooltip.Content>View all blog posts</Tooltip.Content>
+        </Tooltip>
+      </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          {posts.slice(0, 3).map((post) => (
-            <Post.Card key={post.id} post={post} />
-          ))}
-        </div>
-      </Card.Content>
-    </Card>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        {posts.slice(0, 3).map((post) => (
+          <Post.Card key={post.id} post={post} />
+        ))}
+      </div>
+    </section>
   );
 }
