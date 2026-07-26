@@ -1,3 +1,9 @@
+## [4.70.2](https://github.com/motormetrics/motormetrics/compare/v4.70.1...v4.70.2) (2026-07-26)
+
+### Reverts
+
+* Revert "fix(deps): update dependency lucide-react to v1" ([9ae9944](https://github.com/motormetrics/motormetrics/commit/9ae9944b6ab5f7a6b23ab323ff701e1d3d42689d))
+
 ## [4.70.1](https://github.com/motormetrics/motormetrics/compare/v4.70.0...v4.70.1) (2026-07-26)
 
 ### Bug Fixes
