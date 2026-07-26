@@ -18,8 +18,8 @@ concurrency:
 
 jobs:
   checks:
-    name: ${{ matrix.check }}
-    runs-on: blacksmith-4vcpu-ubuntu-2404-arm
+    name: Checks
+    runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     permissions:
       contents: read
     env:
@@ -33,10 +33,6 @@ jobs:
       UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
       BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
-
-    strategy:
-      matrix:
-        check: ["lint", "test", "build"]
 
     steps:
       - name: Checkout
@@ -56,5 +52,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run ${{ matrix.check }}
-        run: pnpm turbo run ${{ matrix.check }} --affected --filter=!@motormetrics/docs
+      - name: Run affected checks
+        run: pnpm turbo run test lint --affected --concurrency=100%
