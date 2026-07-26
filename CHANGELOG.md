@@ -1,3 +1,9 @@
+## [4.70.1](https://github.com/motormetrics/motormetrics/compare/v4.70.0...v4.70.1) (2026-07-26)
+
+### Bug Fixes
+
+* **deps:** update dependency lucide-react to v1 ([8ead53e](https://github.com/motormetrics/motormetrics/commit/8ead53ee38b88a8d3019c404b188871de71213db))
+
 ## [4.70.0](https://github.com/motormetrics/motormetrics/compare/v4.69.1...v4.70.0) (2026-07-02)
 
 ### Features
