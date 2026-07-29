@@ -138,6 +138,16 @@ For developers working on this codebase, detailed component-specific guidance is
 - **[Database Package](packages/database/CLAUDE.md)** - Schema management, migrations, and TypeScript integration
 - **[Logos Package](packages/logos/CLAUDE.md)** - Car logo management with Vercel Blob storage
 
+### Product Documentation
+
+Forward-looking product proposals and opportunity assessments are available in
+the [`docs/product/`](docs/product/) directory:
+
+- **[Mobile App Opportunity](docs/product/2026-07-29-mobile-app-opportunity.md)** -
+  Product thesis and validation path for a personalised vehicle companion
+- **[Advertiser Dashboard](docs/product/2026-04-05-advertiser-dashboard-design.md)** -
+  Design proposal for a self-serve advertising platform
+
 ### Architecture Documentation
 
 System architecture diagrams are available in the `docs/` directory:

@@ -41,3 +41,11 @@ It should also avoid sales-led car dealer cues, glossy automotive promotion, and
 Target WCAG AA for contrast, focus visibility, and interactive affordances. Do not communicate state by colour alone; pair colour with text, icons, or position. Preserve keyboard navigation and screen-reader labels for charts, filters, tables, calculators, and admin workflows.
 
 Motion should communicate loading, navigation, or state changes, and must remain usable with reduced-motion preferences. Data views should provide empty, loading, and error states that explain what happened and what the user can do next.
+
+## Future Opportunities
+
+The current product remains web-first. A future personalised vehicle companion
+could add saved vehicles, ownership timelines, and relevant alerts after those
+behaviours are validated on the web. See the
+[Mobile App Opportunity](../../docs/product/2026-07-29-mobile-app-opportunity.md)
+for the supporting thesis, boundaries, and validation path.
