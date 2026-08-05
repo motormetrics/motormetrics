@@ -1,3 +1,13 @@
+## [4.71.0](https://github.com/motormetrics/motormetrics/compare/v4.70.2...v4.71.0) (2026-08-05)
+
+### Features
+
+* **web:** add Next.js error boundaries with retry ([a23cd1d](https://github.com/motormetrics/motormetrics/commit/a23cd1d06f1e4f0549e907311201b4b990bee272))
+
+### Bug Fixes
+
+* **web:** count error UI coverage for Sonar ([14b8537](https://github.com/motormetrics/motormetrics/commit/14b85378ea25351bcb2287f6fdc41661bd40de35))
+
 ## [4.70.2](https://github.com/motormetrics/motormetrics/compare/v4.70.1...v4.70.2) (2026-07-26)
 
 ### Reverts
