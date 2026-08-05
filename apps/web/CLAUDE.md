@@ -35,7 +35,7 @@ pnpm format             # Format code with Biome
 - **State Management**: Zustand with persistence
 - **Styling**: Tailwind CSS v4 with HeroUI components
 - **Animations**: Framer Motion with shared variants (`@web/config/animations`)
-- **Testing**: Vitest for unit tests, Playwright for E2E
+- **Testing**: Vitest for unit tests, Playwright for E2E (including `@next/playwright` instant navigations)
 - **Deployment**: Vercel (Singapore region)
 
 ### Key Directories

@@ -87,6 +87,7 @@
     "@babel/core": "7.29.6",
     "@babel/preset-env": "7.29.5",
     "@babel/preset-typescript": "7.28.5",
+    "@next/playwright": "16.3.0",
     "@playwright/test": "1.60.0",
     "@react-email/render": "2.0.8",
     "@rolldown/plugin-babel": "0.2.3",
