@@ -8,10 +8,10 @@ import { useEffect } from "react";
 export default function AppError({
   error,
   retry,
-}: {
+}: Readonly<{
   error: Error & { digest?: string };
   retry: () => void;
-}) {
+}>) {
   useEffect(() => {
     console.error(error);
   }, [error]);

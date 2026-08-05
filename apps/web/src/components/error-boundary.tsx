@@ -5,11 +5,11 @@ import Typography from "@web/components/typography";
 import { AlertTriangle } from "lucide-react";
 import { catchError, type ErrorInfo } from "next/error";
 
-type SectionErrorFallbackProps = {
+type SectionErrorFallbackProps = Readonly<{
   title?: string;
-};
+}>;
 
-function SectionErrorFallback(
+export function SectionErrorFallback(
   { title = "This section failed to load" }: SectionErrorFallbackProps,
   { error, retry }: ErrorInfo,
 ) {
