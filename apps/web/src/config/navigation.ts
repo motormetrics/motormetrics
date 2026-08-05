@@ -216,5 +216,3 @@ export const NAV_ITEMS = [
   { href: "/blog", label: "Blog" },
   { href: "/learn", label: "Learn" },
 ] as const satisfies readonly NavItem[];
-
-export const POLAR_DONATION_URL = "https://polar.sh/motormetrics";

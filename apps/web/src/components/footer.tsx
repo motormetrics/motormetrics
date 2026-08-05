@@ -2,14 +2,8 @@ import { Link as HeroLink, Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { BrandLogo } from "@web/components/brand-logo";
 import Typography from "@web/components/typography";
-import { UnreleasedFeature } from "@web/components/unreleased-feature";
 import { SITE_TITLE } from "@web/config";
-import {
-  NAV_ITEMS,
-  navLinks,
-  POLAR_DONATION_URL,
-} from "@web/config/navigation";
-import { Heart } from "lucide-react";
+import { NAV_ITEMS, navLinks } from "@web/config/navigation";
 import Link from "next/link";
 import { version } from "../../package.json";
 
@@ -63,17 +57,6 @@ export function Footer() {
                 </Link>
               ))}
             </div>
-            <UnreleasedFeature>
-              <Link
-                href={POLAR_DONATION_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-muted transition-colors hover:text-accent"
-              >
-                <Heart className="size-4" />
-                <Typography.TextSm>Support this project</Typography.TextSm>
-              </Link>
-            </UnreleasedFeature>
           </div>
         </div>
 
