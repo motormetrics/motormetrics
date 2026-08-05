@@ -10,6 +10,7 @@ import { MarketOverview } from "@web/app/(main)/(dashboard)/components/market-ov
 import { MonthlyChangeSummary } from "@web/app/(main)/(dashboard)/components/monthly-change-summary";
 import { PostsSection } from "@web/app/(main)/(dashboard)/components/posts-section";
 import { SummaryCard } from "@web/app/(main)/(dashboard)/components/summary-card";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { StructuredData } from "@web/components/structured-data";
 import Typography from "@web/components/typography";
 import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
@@ -145,37 +146,51 @@ const HomePage = () => {
         <AnimatedGrid className="grid grid-cols-12 gap-4">
           {/* Row 1: Summary Cards */}
           <AnimatedSection className="col-span-12 lg:col-span-6">
-            <Suspense fallback={<SummaryCardSkeleton />}>
-              <SummaryCard />
-            </Suspense>
+            <SectionErrorBoundary title="Registration summary unavailable">
+              <Suspense fallback={<SummaryCardSkeleton />}>
+                <SummaryCard />
+              </Suspense>
+            </SectionErrorBoundary>
           </AnimatedSection>
           <AnimatedSection className="col-span-12 lg:col-span-6">
-            <Suspense fallback={<MonthlyChangeSummarySkeleton />}>
-              <MonthlyChangeSummary />
-            </Suspense>
+            <SectionErrorBoundary title="Monthly change unavailable">
+              <Suspense fallback={<MonthlyChangeSummarySkeleton />}>
+                <MonthlyChangeSummary />
+              </Suspense>
+            </SectionErrorBoundary>
           </AnimatedSection>
 
           {/* Row 2: COE Results */}
           <AnimatedSection className="col-span-12">
-            <CoeSection />
+            <SectionErrorBoundary title="COE results unavailable">
+              <CoeSection />
+            </SectionErrorBoundary>
           </AnimatedSection>
 
           {/* Row 3: Top Makes + Posts */}
           <AnimatedSection className="col-span-12 md:col-span-6 lg:col-span-4">
-            <TopMakesSection />
+            <SectionErrorBoundary title="Top makes unavailable">
+              <TopMakesSection />
+            </SectionErrorBoundary>
           </AnimatedSection>
           <AnimatedSection className="col-span-12 md:col-span-6 lg:col-span-8">
-            <PostsSection />
+            <SectionErrorBoundary title="Recent posts unavailable">
+              <PostsSection />
+            </SectionErrorBoundary>
           </AnimatedSection>
 
           {/* Row 4: Yearly Chart + Market Overview */}
           <AnimatedSection className="col-span-12 md:col-span-6 lg:col-span-4">
-            <YearlyChart />
+            <SectionErrorBoundary title="Yearly chart unavailable">
+              <YearlyChart />
+            </SectionErrorBoundary>
           </AnimatedSection>
           <AnimatedSection className="col-span-12 lg:col-span-8">
-            <Suspense fallback={<MarketOverviewSkeleton />}>
-              <MarketOverview />
-            </Suspense>
+            <SectionErrorBoundary title="Market overview unavailable">
+              <Suspense fallback={<MarketOverviewSkeleton />}>
+                <MarketOverview />
+              </Suspense>
+            </SectionErrorBoundary>
           </AnimatedSection>
         </AnimatedGrid>
       </section>
