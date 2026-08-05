@@ -6,6 +6,7 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
@@ -89,9 +90,11 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           </Suspense>
         }
       />
-      <Suspense fallback={<SkeletonCard className="h-[840px] w-full" />}>
-        <COEResultsContent searchParams={searchParams} />
-      </Suspense>
+      <SectionErrorBoundary title="COE results unavailable">
+        <Suspense fallback={<SkeletonCard className="h-[840px] w-full" />}>
+          <COEResultsContent searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -90,9 +91,11 @@ export default function Page({ searchParams }: PageProps) {
         </Suspense>
       </AnimatedSection>
 
-      <Suspense fallback={<SkeletonCard className="h-[720px] w-full" />}>
-        <CarsPageSections searchParams={searchParams} />
-      </Suspense>
+      <SectionErrorBoundary title="Registration data unavailable">
+        <Suspense fallback={<SkeletonCard className="h-[720px] w-full" />}>
+          <CarsPageSections searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
     </div>
   );
 }
