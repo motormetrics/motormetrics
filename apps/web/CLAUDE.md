@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # CLAUDE.md - Web Application
 
 This file provides guidance to Claude Code (claude.ai/code) when working with the web application in this repository.
