@@ -1,14 +1,61 @@
 {
   "hooks": {
-    "PostToolUse": [
+    "PostCompact": [
       {
-        "matcher": "Edit|Write|apply_patch",
         "hooks": [
           {
-            "type": "command",
+            "command": "bd codex-hook PostCompact",
+            "statusMessage": "Scheduling Beads context refresh",
+            "type": "command"
+          }
+        ],
+        "matcher": "manual|auto"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
             "command": "node \".agents/skills/impeccable/scripts/hook.mjs\"",
+            "statusMessage": "Checking UI changes",
             "timeout": 5,
-            "statusMessage": "Checking UI changes"
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit|Write|apply_patch"
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "command": "bd codex-hook PreCompact",
+            "statusMessage": "Checking Beads context",
+            "type": "command"
+          }
+        ],
+        "matcher": "manual|auto"
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "bd codex-hook SessionStart",
+            "statusMessage": "Loading Beads context",
+            "type": "command"
+          }
+        ],
+        "matcher": "startup|resume|clear"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "bd codex-hook UserPromptSubmit",
+            "statusMessage": "Refreshing Beads context",
+            "type": "command"
           }
         ]
       }

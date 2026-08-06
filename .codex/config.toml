@@ -14,3 +14,6 @@ env_http_headers = { "Authorization" = "POSTHOG_PERSONAL_API_KEY" }
 url = "https://api.sonarcloud.io/mcp"
 http_headers={ "SONARQUBE_ORG"="motormetrics" }
 env_http_headers = { "Authorization" = "SONARQUBE_TOKEN" }
+
+[features]
+hooks = true
