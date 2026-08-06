@@ -182,7 +182,7 @@ curl -X POST http://localhost:3000/api/workflows/cars
   - `apps/web/src/app/api/workflows/` - Workflow route handlers
   - `apps/web/src/config/platforms.ts` - Social media configuration
   - `apps/web/vercel.json` - Vercel Cron schedules
-  - `apps/web/AGENTS.md` - Web application documentation
+  - `apps/web/CLAUDE.md` - Web application documentation
 
 ## Best Practices
 

@@ -149,6 +149,6 @@ When reviewing component names:
 
 ## Related Files
 
-- `apps/web/AGENTS.md` - Web app component conventions
+- `apps/web/CLAUDE.md` - Web app component conventions
 - `apps/web/src/components/` - Web app components
 - `apps/web/src/app/admin/components/` - Admin interface components

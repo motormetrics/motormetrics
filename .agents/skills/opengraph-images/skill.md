@@ -354,6 +354,6 @@ When creating/updating OG images:
 
 ## Related Files
 
-- `apps/web/AGENTS.md` - Web app conventions
+- `apps/web/CLAUDE.md` - Web app conventions
 - `apps/web/assets/fonts/` - Geist font files
 - `apps/web/src/config/index.ts` - Site title and URL constants

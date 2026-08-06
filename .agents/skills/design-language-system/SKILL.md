@@ -367,7 +367,7 @@ primary: {
 
 - `apps/web/src/app/globals.css` - CSS variable definitions
 - `apps/web/src/app/hero.ts` - HeroUI theme configuration
-- `apps/web/AGENTS.md` - Colour System section
+- `apps/web/CLAUDE.md` - Colour System section
 - `packages/ui/src/styles/globals.css` - Shared UI package styles
 
 ## Accessibility (WCAG AA)
