@@ -108,7 +108,7 @@
     "@workflow/vitest": "4.0.5",
     "babel-plugin-react-compiler": "1.0.0",
     "jsdom": "26.1.0",
-    "postcss": "8.5.15",
+    "postcss": "8.5.23",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
