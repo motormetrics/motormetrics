@@ -15,6 +15,7 @@ export default defineConfig({
       provider: "v8",
       include: ["src"],
       exclude: [
+        "src/app/.well-known/**", // Generated Vercel Workflow routes
         // Exclude App Router surfaces from coverage, but keep route-level
         // error UI (error.tsx / global-error.tsx) measurable for Sonar new-code.
         // Parentheses are escaped so micromatch treats route groups literally.

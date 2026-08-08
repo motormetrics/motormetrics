@@ -66,8 +66,8 @@ export default async function BlogManagementPage() {
           <div className="flex items-start gap-2">
             <span className="font-medium text-foreground">🤖</span>
             <span>
-              <strong>AI Generation:</strong> Posts are generated using Google
-              Gemini 2.5 Flash with market data analysis.
+              <strong>AI Generation:</strong> Posts are generated through Vercel
+              AI Gateway with market data analysis.
             </span>
           </div>
           <div className="flex items-start gap-2">
