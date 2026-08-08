@@ -1,5 +1,7 @@
+import { OpenTelemetry } from "@ai-sdk/otel";
 import { LangfuseSpanProcessor } from "@langfuse/otel";
 import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
+import { registerTelemetry } from "ai";
 
 const toHex = (bytes: Uint8Array) =>
   Array.from(bytes)
@@ -25,4 +27,5 @@ export async function register() {
   });
 
   tracerProvider.register();
+  registerTelemetry(new OpenTelemetry({ runtimeContext: true }));
 }

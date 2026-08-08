@@ -2,9 +2,9 @@ import { openai } from "@ai-sdk/openai";
 import {
   gateway,
   generateText,
+  isStepCount,
   type LanguageModelUsage,
   Output,
-  stepCountIs,
 } from "ai";
 import { type BlogGenerationParams, INSTRUCTIONS, PROMPTS } from "./config";
 import { savePost } from "./save-post";
@@ -56,22 +56,27 @@ async function generateContent(
     output: Output.object({
       schema: postSchema,
     }),
-    stopWhen: stepCountIs(10),
-    system: INSTRUCTIONS[dataType],
+    stopWhen: isStepCount(10),
+    instructions: INSTRUCTIONS[dataType],
     prompt: `Generate a blog post for ${dataType.toUpperCase()} data from ${month}:\n\n${data}\n\n${PROMPTS[dataType]}`,
     providerOptions: {
       openai: {
         reasoningEffort: "max",
+        reasoningSummary: null,
       },
     },
-    experimental_telemetry: {
-      isEnabled: true,
+    telemetry: {
       functionId: `post-generation/${dataType}`,
-      metadata: {
-        month,
-        dataType,
-        tags: [dataType, month, "post-generation"],
+      includeRuntimeContext: {
+        month: true,
+        dataType: true,
+        tags: true,
       },
+    },
+    runtimeContext: {
+      month,
+      dataType,
+      tags: [dataType, month, "post-generation"],
     },
   });
 
@@ -80,8 +85,9 @@ async function generateContent(
   console.log(`[GENERATE] Finish reason: ${result.finishReason}`);
   console.log(`[GENERATE] Tool calls: ${result.toolCalls?.length ?? 0}`);
 
-  const { output, usage, response } = result;
-  const gatewayGenerationId = result.providerMetadata?.gateway?.generationId;
+  const { output, usage, finalStep } = result;
+  const { providerMetadata, response } = finalStep;
+  const gatewayGenerationId = providerMetadata?.gateway?.generationId;
   const generationId =
     typeof gatewayGenerationId === "string" ? gatewayGenerationId : undefined;
   let totalCost: number | undefined;
