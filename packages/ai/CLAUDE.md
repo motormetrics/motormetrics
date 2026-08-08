@@ -5,11 +5,13 @@
 The **critical feature** that prevents hallucinations:
 
 ```typescript
-tools: { code_execution: google.tools.codeExecution({}) }
+model: gateway("openai/gpt-5.6-luna"),
+tools: { code_interpreter: openai.tools.codeInterpreter({}) },
+providerOptions: { openai: { reasoningEffort: "max" } }
 ```
 
 **Why It Matters:**
-- Allows Gemini to execute Python code to analyse data
+- Allows GPT-5.6 Luna to execute Python code to analyse data
 - Performs accurate calculations (totals, percentages, aggregations)
 - Verifies data formatting before generating structured output
 - Eliminates guesswork and hallucinated numbers
@@ -30,6 +32,10 @@ tools: { code_execution: google.tools.codeExecution({}) }
 Call `shutdownTracing()` in a `finally` block after generation so pending spans are
 flushed before the process or request ends.
 
+The Gateway generation ID is read from provider metadata and used with
+`gateway.getGenerationInfo()` to persist the exact billed `totalCost`. Cost lookup
+failures must remain non-fatal so generated posts can still be saved.
+
 ## Post Persistence
 
 `savePost()` is idempotent: the insert targets the `month` + `dataType` unique
@@ -46,7 +52,26 @@ retries.
 ## Environment Variables
 
 **Required:**
-- `GOOGLE_GENERATIVE_AI_API_KEY`: Google Gemini API key
+- `AI_GATEWAY_API_KEY`: Vercel AI Gateway API key
+
+Blog generation, embeddings, and hero-image generation all use this Gateway
+credential. Do not add provider-specific API keys.
+
+## Embeddings and in-place replacement
+
+- Documents use `generateDocumentEmbedding()` with
+  `title: … | text: …`.
+- Queries use `generateQueryEmbedding()` with
+  `task: search result | query: …`.
+- Both use `google/gemini-embedding-2` through Gateway and return 768 dimensions.
+- Existing `posts.embedding` vectors are replaced in place; no schema migration
+  is needed because the dimension remains 768.
+- Pause post writes and semantic features, then run the guarded one-time reset:
+  `CONFIRM_EMBEDDING_RESET=replace-with-gemini-2 pnpm --filter @motormetrics/ai reset:embeddings`.
+- Run `pnpm --filter @motormetrics/ai backfill:embeddings` until it reports zero
+  remaining posts. The backfill only writes null rows, so it is resumable and
+  idempotent after the reset.
+- Never rerun the reset once backfilling has started.
 
 **Optional (for telemetry):**
 - `LANGFUSE_PUBLIC_KEY`: Langfuse public key
