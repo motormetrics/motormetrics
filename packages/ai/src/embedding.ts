@@ -30,7 +30,6 @@ export function formatQueryForEmbedding(query: string): string {
 async function generateEmbedding(
   value: string,
   functionId: "post-document-embedding" | "post-query-embedding",
-  metadata: Record<string, string>,
 ): Promise<number[]> {
   const { embedding } = await embed({
     model: gateway.embeddingModel(POST_EMBEDDING_MODEL_ID),
@@ -38,10 +37,8 @@ async function generateEmbedding(
     providerOptions: {
       google: { outputDimensionality: POST_EMBEDDING_DIMENSIONS },
     },
-    experimental_telemetry: {
-      isEnabled: true,
+    telemetry: {
       functionId,
-      metadata,
     },
   });
 
@@ -60,10 +57,6 @@ export async function generateDocumentEmbedding(
   return generateEmbedding(
     formatDocumentForEmbedding(post),
     "post-document-embedding",
-    {
-      title: post.title,
-      contentLength: String(post.content.length),
-    },
   );
 }
 
@@ -71,6 +64,5 @@ export async function generateQueryEmbedding(query: string): Promise<number[]> {
   return generateEmbedding(
     formatQueryForEmbedding(query),
     "post-query-embedding",
-    { queryLength: String(query.length) },
   );
 }
