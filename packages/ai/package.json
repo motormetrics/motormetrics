@@ -28,6 +28,8 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "tsx": "catalog:"
+    "@vitest/coverage-v8": "catalog:",
+    "tsx": "catalog:",
+    "vitest": "catalog:"
   }
 }
