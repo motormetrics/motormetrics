@@ -135,6 +135,41 @@ describe("backfillPostEmbeddings", () => {
     );
   });
 
+  it("stringifies non-Error failures and defaults remaining when count is empty", async () => {
+    const posts = [
+      { id: "post-c", title: "C", excerpt: null, content: "Body C" },
+    ];
+    const batchSelect = createBatchSelect([posts, []]);
+    const emptyCountSelect = {
+      from: vi.fn(),
+      where: vi.fn().mockResolvedValue([]),
+    };
+    emptyCountSelect.from.mockReturnValue(emptyCountSelect);
+    vi.mocked(db.select)
+      .mockReturnValueOnce(batchSelect as never)
+      .mockReturnValueOnce(batchSelect as never)
+      .mockReturnValueOnce(emptyCountSelect as never);
+    vi.mocked(generateDocumentEmbedding).mockRejectedValueOnce(
+      "gateway unavailable",
+    );
+    const onProgress = vi.fn();
+
+    await expect(
+      backfillPostEmbeddings({ batchSize: 1, onProgress }),
+    ).resolves.toEqual({
+      failed: 1,
+      processed: 1,
+      remaining: 0,
+      succeeded: 0,
+    });
+    expect(onProgress).toHaveBeenCalledWith(
+      expect.stringContaining("Failed post post-c: gateway unavailable"),
+    );
+    expect(onProgress).toHaveBeenCalledWith(
+      expect.stringContaining("Processed 1; succeeded 0; failed 1"),
+    );
+  });
+
   it("clears legacy embeddings only when reset is called explicitly", async () => {
     const updateChain = createUpdateChain();
     updateChain.returning.mockResolvedValueOnce([
