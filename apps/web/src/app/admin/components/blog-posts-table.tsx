@@ -31,7 +31,6 @@ import {
   regeneratePost,
 } from "@web/app/admin/actions/blog";
 import { regeneratePostHero } from "@web/app/admin/actions/regenerate-hero";
-import { estimateTokenCost } from "@web/app/admin/lib/token-cost";
 import {
   ArrowUpDown,
   ChevronLeft,
@@ -72,6 +71,13 @@ function formatTokens(post: PostWithMetadata): string {
   const input = post.metadata?.usage?.inputTokens ?? 0;
   const output = post.metadata?.usage?.outputTokens ?? 0;
   return `${totalTokens.toLocaleString()} (${input.toLocaleString()} + ${output.toLocaleString()})`;
+}
+
+function formatGenerationCost(post: PostWithMetadata): string {
+  const totalCost = post.metadata?.totalCost;
+  return typeof totalCost === "number"
+    ? `$${totalCost.toFixed(6)}`
+    : "Unavailable";
 }
 
 function SortableHeader({
@@ -613,7 +619,7 @@ export function BlogPostsTable({
                     {confirmDialog.post?.metadata?.usage && (
                       <div className="flex flex-col gap-1 rounded-md bg-surface p-3 text-sm">
                         <span className="font-medium">
-                          Estimated regeneration cost:
+                          Previous generation:
                         </span>
                         <span>
                           Previous usage:{" "}
@@ -621,11 +627,12 @@ export function BlogPostsTable({
                           tokens
                         </span>
                         <span>
-                          Estimated cost: ~
-                          {estimateTokenCost(confirmDialog.post.metadata.usage)}
+                          Recorded cost:{" "}
+                          {formatGenerationCost(confirmDialog.post)}
                         </span>
                         <span className="text-muted text-xs">
-                          Based on Gemini Flash pricing. Actual cost may vary.
+                          Exact cost reported by Vercel AI Gateway when
+                          available.
                         </span>
                       </div>
                     )}

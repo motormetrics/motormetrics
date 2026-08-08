@@ -175,7 +175,7 @@ Environment variables are managed in the Vercel dashboard:
 - `BLOB_READ_WRITE_TOKEN`: Vercel Blob for logo storage
 
 **AI Integration**
-- `GOOGLE_GENERATIVE_AI_API_KEY`: Google Gemini for blog generation
+- `AI_GATEWAY_API_KEY`: Vercel AI Gateway for blog generation, embeddings, and hero images
 
 **Social Media**
 - Discord, LinkedIn, Telegram, Twitter credentials
@@ -189,9 +189,10 @@ Environment variables are managed in the Vercel dashboard:
 - COE bidding results
 - Daily updates via Vercel Cron
 
-**Vercel AI SDK + Google Gemini**
+**Vercel AI SDK + Vercel AI Gateway**
 - Automated blog post generation
 - Market analysis content
+- Semantic search and related-post embeddings
 
 ### Databases
 

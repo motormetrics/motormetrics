@@ -7,10 +7,16 @@
   "license": "MIT",
   "main": "src/index.ts",
   "module": "src/index.ts",
-  "scripts": {},
+  "scripts": {
+    "backfill:embeddings": "tsx scripts/backfill-post-embeddings.ts",
+    "reset:embeddings": "tsx scripts/reset-post-embeddings.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@ai-sdk/gateway": "catalog:",
-    "@ai-sdk/google": "catalog:",
+    "@ai-sdk/openai": "catalog:",
     "@langfuse/otel": "catalog:",
     "@motormetrics/database": "workspace:*",
     "@motormetrics/utils": "workspace:*",
@@ -19,5 +25,9 @@
     "ai": "catalog:",
     "drizzle-orm": "catalog:",
     "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsx": "catalog:"
   }
 }

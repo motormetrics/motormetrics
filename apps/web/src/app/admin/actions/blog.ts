@@ -26,7 +26,9 @@ export interface PostWithMetadata {
   status: string;
   createdAt: Date;
   metadata: {
+    generationId?: string;
     modelId?: string;
+    totalCost?: number;
     usage?: LanguageModelUsage;
   } | null;
 }

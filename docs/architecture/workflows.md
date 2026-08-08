@@ -262,7 +262,7 @@ sequenceDiagram
 - `UPSTASH_REDIS_REST_*`: Redis configuration
 
 **AI Integration**:
-- `GOOGLE_GENERATIVE_AI_API_KEY`: Google Gemini API key (used by Vercel AI SDK)
+- `AI_GATEWAY_API_KEY`: Vercel AI Gateway credential used by Vercel AI SDK
 
 **Social Media**:
 - `LINKEDIN_*`: LinkedIn API credentials

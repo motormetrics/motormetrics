@@ -37,26 +37,31 @@ export async function searchPosts(query: string): Promise<SelectPost[]> {
     return keywordResults;
   }
 
-  const { generatePostEmbedding } = await import("@motormetrics/ai");
-  const embedding = await generatePostEmbedding({
-    title: query,
-    content: query,
-  });
+  try {
+    const { generateQueryEmbedding } = await import("@motormetrics/ai");
+    const embedding = await generateQueryEmbedding(query);
 
-  const similarity = sql<number>`1 - (${cosineDistance(posts.embedding, embedding)})`;
+    const similarity = sql<number>`1 - (${cosineDistance(posts.embedding, embedding)})`;
 
-  return db
-    .select()
-    .from(posts)
-    .where(
-      and(
-        isNotNull(posts.publishedAt),
-        isNotNull(posts.embedding),
-        gt(similarity, 0.3),
-      ),
-    )
-    .orderBy(desc(similarity))
-    .limit(20);
+    return db
+      .select()
+      .from(posts)
+      .where(
+        and(
+          isNotNull(posts.publishedAt),
+          isNotNull(posts.embedding),
+          gt(similarity, 0.3),
+        ),
+      )
+      .orderBy(desc(similarity))
+      .limit(20);
+  } catch (error) {
+    console.error(
+      "[POST_SEARCH] Semantic search unavailable:",
+      error instanceof Error ? error.message : String(error),
+    );
+    return keywordResults;
+  }
 }
 
 export async function getAllPosts() {

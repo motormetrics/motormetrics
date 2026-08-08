@@ -1,7 +1,7 @@
 import { db, eq, posts } from "@motormetrics/database";
 import { slugify } from "@motormetrics/utils";
 import type { LanguageModelUsage } from "ai";
-import { generatePostEmbedding } from "./embedding";
+import { generateDocumentEmbedding } from "./embedding";
 import type { Highlight } from "./schemas";
 
 const getPostPublishRevalidationTags = (slug: string): string[] => {
@@ -18,9 +18,11 @@ export interface PostParams {
   month: string;
   dataType: "cars" | "coe" | "deregistrations" | "electric-vehicles";
   responseMetadata: {
+    generationId?: string;
     responseId: string;
     modelId: string;
     timestamp: Date;
+    totalCost?: number;
     usage?: LanguageModelUsage;
   };
 }
@@ -65,13 +67,13 @@ export const savePost = async (data: PostParams) => {
   );
 
   try {
-    const embedding = await generatePostEmbedding({
+    const embedding = await generateDocumentEmbedding({
       title: data.title,
       excerpt: data.excerpt,
       content: data.content,
     });
     await db.update(posts).set({ embedding }).where(eq(posts.id, post.id));
-    console.log(`[BLOG_SAVE] Embedding generated for post ${post.id}`);
+    console.log(`[BLOG_SAVE] Gemini 2 embedding generated for post ${post.id}`);
   } catch (error) {
     console.error(
       "[BLOG_SAVE] Failed to generate embedding:",

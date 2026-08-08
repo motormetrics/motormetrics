@@ -181,7 +181,7 @@ This project uses **pnpm catalog** for centralised dependency version management
 - React ecosystem: `react` (^19.2.3), `react-dom` (^19.2.3), `next` (^16.1.0)
 - TypeScript & types: `typescript` (^5.8.3), `@types/node` (^22.16.4), `@types/react` (^19.2.0), `@types/react-dom` (^19.2.0)
 - Testing tools: `vitest` (^4.0.15), `@vitest/coverage-v8` (^4.0.15)
-- AI & LLM: `ai` (^6.0.1), `@ai-sdk/google` (^3.0.6), `@langfuse/otel` (^4.4.2)
+- AI & LLM: `ai`, `@ai-sdk/gateway`, `@ai-sdk/openai`, `@langfuse/otel`
 - Utilities: `date-fns` (^3.6.0), `zod` (^4.1.13), `sonner` (2.0.7)
 
 **Root-level dependencies** (not in catalog):
