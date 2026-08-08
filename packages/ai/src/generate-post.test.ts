@@ -5,17 +5,17 @@ const {
   gatewayMock,
   getGenerationInfoMock,
   generateTextMock,
+  isStepCountMock,
   outputObjectMock,
   savePostMock,
-  stepCountIsMock,
 } = vi.hoisted(() => ({
   codeInterpreterMock: vi.fn(),
   gatewayMock: vi.fn(),
   getGenerationInfoMock: vi.fn(),
   generateTextMock: vi.fn(),
+  isStepCountMock: vi.fn(),
   outputObjectMock: vi.fn(),
   savePostMock: vi.fn(),
-  stepCountIsMock: vi.fn(),
 }));
 
 vi.mock("@ai-sdk/openai", () => ({
@@ -31,8 +31,8 @@ vi.mock("ai", () => ({
     getGenerationInfo: getGenerationInfoMock,
   }),
   generateText: generateTextMock,
+  isStepCount: isStepCountMock,
   Output: { object: outputObjectMock },
-  stepCountIs: stepCountIsMock,
 }));
 
 vi.mock("./save-post", () => ({ savePost: savePostMock }));
@@ -46,7 +46,7 @@ describe("blog generation model configuration", () => {
     gatewayMock.mockReturnValue("gateway-language-model");
     codeInterpreterMock.mockReturnValue("code-interpreter-tool");
     outputObjectMock.mockReturnValue("structured-output");
-    stepCountIsMock.mockReturnValue("step-limit");
+    isStepCountMock.mockReturnValue("step-limit");
     getGenerationInfoMock.mockResolvedValue({ totalCost: 0.0042 });
     generateTextMock.mockResolvedValue({
       output: {
@@ -57,13 +57,15 @@ describe("blog generation model configuration", () => {
         highlights: [],
       },
       usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
-      providerMetadata: {
-        gateway: { generationId: "generation-1" },
-      },
-      response: {
-        id: "response-1",
-        modelId: "gpt-5.6-luna",
-        timestamp: new Date("2026-08-08T00:00:00Z"),
+      finalStep: {
+        providerMetadata: {
+          gateway: { generationId: "generation-1" },
+        },
+        response: {
+          id: "response-1",
+          modelId: "gpt-5.6-luna",
+          timestamp: new Date("2026-08-08T00:00:00Z"),
+        },
       },
       steps: [],
       finishReason: "stop",
@@ -86,7 +88,7 @@ describe("blog generation model configuration", () => {
     expect(gatewayMock).toHaveBeenCalledWith("openai/gpt-5.6-luna");
     expect(codeInterpreterMock).toHaveBeenCalledWith({});
     expect(outputObjectMock).toHaveBeenCalledWith({ schema: postSchema });
-    expect(stepCountIsMock).toHaveBeenCalledWith(10);
+    expect(isStepCountMock).toHaveBeenCalledWith(10);
     expect(generateTextMock).toHaveBeenCalledWith(
       expect.objectContaining({
         model: "gateway-language-model",
@@ -94,7 +96,15 @@ describe("blog generation model configuration", () => {
         output: "structured-output",
         stopWhen: "step-limit",
         providerOptions: {
-          openai: { reasoningEffort: "max" },
+          openai: { reasoningEffort: "max", reasoningSummary: null },
+        },
+        telemetry: expect.objectContaining({
+          functionId: "post-generation/cars",
+        }),
+        runtimeContext: {
+          month: "2026-07",
+          dataType: "cars",
+          tags: ["cars", "2026-07", "post-generation"],
         },
       }),
     );
