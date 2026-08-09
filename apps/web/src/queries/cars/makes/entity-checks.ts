@@ -1,4 +1,4 @@
-import { cars, db, ilike } from "@motormetrics/database";
+import { db } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 function normalisePattern(input: string) {
@@ -6,25 +6,23 @@ function normalisePattern(input: string) {
 }
 
 interface EntityCheckConfig {
-  column: typeof cars.make | typeof cars.fuelType | typeof cars.vehicleType;
+  // RQB v2 keys `where`/`columns` by field name, so the column object the v1
+  // builder needed is no longer required here.
   fieldName: "make" | "fuelType" | "vehicleType";
   normalise: boolean;
 }
 
 const MAKE_CHECK: EntityCheckConfig = {
-  column: cars.make,
   fieldName: "make",
   normalise: false,
 };
 
 const FUEL_TYPE_CHECK: EntityCheckConfig = {
-  column: cars.fuelType,
   fieldName: "fuelType",
   normalise: true,
 };
 
 const VEHICLE_TYPE_CHECK: EntityCheckConfig = {
-  column: cars.vehicleType,
   fieldName: "vehicleType",
   normalise: true,
 };
@@ -32,8 +30,8 @@ const VEHICLE_TYPE_CHECK: EntityCheckConfig = {
 function findEntity(config: EntityCheckConfig, value: string) {
   const pattern = config.normalise ? normalisePattern(value) : value;
   return db.query.cars.findFirst({
-    where: ilike(config.column, pattern),
-    columns: { [config.fieldName]: true } as Record<string, true>,
+    where: { [config.fieldName]: { ilike: pattern } },
+    columns: { [config.fieldName]: true },
   });
 }
 

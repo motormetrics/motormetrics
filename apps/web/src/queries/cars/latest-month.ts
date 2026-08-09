@@ -1,4 +1,4 @@
-import { cars, db, desc } from "@motormetrics/database";
+import { db } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**
@@ -11,7 +11,7 @@ export async function getCarsLatestMonth(): Promise<string | null> {
 
   const result = await db.query.cars.findFirst({
     columns: { month: true },
-    orderBy: desc(cars.month),
+    orderBy: { month: "desc" },
   });
 
   return result?.month ?? null;

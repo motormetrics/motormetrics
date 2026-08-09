@@ -1,13 +1,13 @@
 import {
   index,
   integer,
-  pgTable,
+  snakeCase,
   text,
   unique,
   uuid,
 } from "drizzle-orm/pg-core";
 
-export const coe = pgTable(
+export const coe = snakeCase.table(
   "coe",
   {
     id: uuid().defaultRandom().primaryKey(),
@@ -30,7 +30,7 @@ export const coe = pgTable(
   ],
 );
 
-export const pqp = pgTable(
+export const pqp = snakeCase.table(
   "pqp",
   {
     id: uuid().defaultRandom().primaryKey(),

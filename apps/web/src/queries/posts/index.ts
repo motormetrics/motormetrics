@@ -1,6 +1,5 @@
 import {
   and,
-  asc,
   cosineDistance,
   count,
   db,
@@ -8,9 +7,7 @@ import {
   eq,
   gt,
   ilike,
-  inArray,
   isNotNull,
-  lt,
   or,
   posts,
   type SelectPost,
@@ -70,8 +67,8 @@ export async function getAllPosts() {
   cacheTag("posts:list");
 
   return db.query.posts.findMany({
-    where: isNotNull(posts.publishedAt),
-    orderBy: desc(posts.publishedAt),
+    where: { publishedAt: { isNotNull: true } },
+    orderBy: { publishedAt: "desc" },
   });
 }
 
@@ -81,8 +78,8 @@ export async function getRecentPosts(limit = 3) {
   cacheTag("posts:recent");
 
   return db.query.posts.findMany({
-    where: isNotNull(posts.publishedAt),
-    orderBy: desc(posts.publishedAt),
+    where: { publishedAt: { isNotNull: true } },
+    orderBy: { publishedAt: "desc" },
     limit,
   });
 }
@@ -93,7 +90,7 @@ export async function getPostBySlug(slug: string) {
   cacheTag(`posts:slug:${slug}`);
 
   return db.query.posts.findFirst({
-    where: and(eq(posts.slug, slug), isNotNull(posts.publishedAt)),
+    where: { slug, publishedAt: { isNotNull: true } },
   });
 }
 
@@ -107,8 +104,8 @@ export async function getPostsByIds(postIds: string[]) {
   }
 
   return db.query.posts.findMany({
-    where: and(inArray(posts.id, postIds), isNotNull(posts.publishedAt)),
-    orderBy: desc(posts.publishedAt),
+    where: { id: { in: postIds }, publishedAt: { isNotNull: true } },
+    orderBy: { publishedAt: "desc" },
   });
 }
 
@@ -130,11 +127,8 @@ export async function getPreviousPost(publishedAt: Date) {
   cacheTag("posts:list");
 
   return db.query.posts.findFirst({
-    where: and(
-      isNotNull(posts.publishedAt),
-      lt(posts.publishedAt, publishedAt),
-    ),
-    orderBy: desc(posts.publishedAt),
+    where: { publishedAt: { isNotNull: true, lt: publishedAt } },
+    orderBy: { publishedAt: "desc" },
   });
 }
 
@@ -144,11 +138,8 @@ export async function getNextPost(publishedAt: Date) {
   cacheTag("posts:list");
 
   return db.query.posts.findFirst({
-    where: and(
-      isNotNull(posts.publishedAt),
-      gt(posts.publishedAt, publishedAt),
-    ),
-    orderBy: asc(posts.publishedAt),
+    where: { publishedAt: { isNotNull: true, gt: publishedAt } },
+    orderBy: { publishedAt: "asc" },
   });
 }
 

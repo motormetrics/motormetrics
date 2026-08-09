@@ -4,7 +4,7 @@ import { revalidateTag } from "next/cache";
 
 export async function deletePost(id: string) {
   const existing = await db.query.posts.findFirst({
-    where: eq(posts.id, id),
+    where: { id },
   });
 
   if (!existing) {

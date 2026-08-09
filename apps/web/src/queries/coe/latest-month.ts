@@ -1,4 +1,4 @@
-import { coe, db, desc, max } from "@motormetrics/database";
+import { coe, db, max } from "@motormetrics/database";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**
@@ -21,5 +21,5 @@ export async function getCOELatestMonth(): Promise<string | null> {
  * Used by workflows to check if we should generate a post.
  */
 export async function getCOELatestRecord() {
-  return db.query.coe.findFirst({ orderBy: desc(coe.month) });
+  return db.query.coe.findFirst({ orderBy: { month: "desc" } });
 }

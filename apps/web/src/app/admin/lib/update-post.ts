@@ -33,7 +33,7 @@ export async function updatePost(input: UpdatePostInput) {
 
   // Fetch existing post for old slug (cache invalidation)
   const existing = await db.query.posts.findFirst({
-    where: eq(posts.id, validated.id),
+    where: { id: validated.id },
   });
 
   if (!existing) {

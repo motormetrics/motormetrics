@@ -2,13 +2,13 @@ import {
   doublePrecision,
   index,
   integer,
-  pgTable,
+  snakeCase,
   text,
   unique,
   uuid,
 } from "drizzle-orm/pg-core";
 
-export const carCosts = pgTable(
+export const carCosts = snakeCase.table(
   "car_costs",
   {
     id: uuid().defaultRandom().primaryKey(),
