@@ -1,3 +1,13 @@
+## [4.72.0](https://github.com/motormetrics/motormetrics/compare/v4.71.2...v4.72.0) (2026-08-09)
+
+### Features
+
+* **ai:** upgrade AI SDK to v7 with OpenTelemetry ([aabb265](https://github.com/motormetrics/motormetrics/commit/aabb265e2274e462731eee9eee3ada22f4e9055b))
+
+### Bug Fixes
+
+* **web:** upgrade Workflow for AI SDK 7 builds ([1df1b13](https://github.com/motormetrics/motormetrics/commit/1df1b1343d2f04c002a93e9faa69da3aa858c359))
+
 ## [4.71.2](https://github.com/motormetrics/motormetrics/compare/v4.71.1...v4.71.2) (2026-08-09)
 
 ### Bug Fixes
