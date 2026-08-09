@@ -32,9 +32,11 @@ providerOptions: { openai: { reasoningEffort: "max" } }
 Call `shutdownTracing()` in a `finally` block after generation so pending spans are
 flushed before the process or request ends.
 
-The Gateway generation ID is read from provider metadata and used with
-`gateway.getGenerationInfo()` to persist the exact billed `totalCost`. Cost lookup
-failures must remain non-fatal so generated posts can still be saved.
+Gateway generation IDs are collected from every `result.steps[]` entry (plus
+top-level / final-step provider metadata) and looked up with
+`gateway.getGenerationInfo()` so multi-step Code Interpreter runs sum into the
+exact billed `totalCost`. Cost lookup failures must remain non-fatal so generated
+posts can still be saved.
 
 ## Post Persistence
 

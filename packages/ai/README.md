@@ -12,8 +12,9 @@ provider traffic is routed through Vercel AI Gateway.
 | Hero images | `openai/gpt-image-2` |
 
 Blog generation uses `max` reasoning, OpenAI Code Interpreter, the existing Zod
-post schema, and Langfuse telemetry. The Gateway generation ID and exact billed
-cost are persisted when available. Gemini 2 embeddings use 768 dimensions.
+post schema, and Langfuse telemetry. Distinct Gateway generation IDs across all
+model steps are looked up and summed into the exact billed cost when available.
+Gemini 2 embeddings use 768 dimensions.
 
 ## Usage
 
@@ -58,7 +59,7 @@ import {
 
 const documentEmbedding = await generateDocumentEmbedding({
   title: post.title,
-  text: post.content,
+  content: post.content,
 });
 
 const queryEmbedding = await generateQueryEmbedding("electric car trends");
