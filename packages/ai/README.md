@@ -51,6 +51,10 @@ globalThis.fetch = fetch;
 
 ### Generate embeddings
 
+`generateBlogContent()` returns metadata (`postId`, `title`, `slug`, `excerpt`)
+after saving; it does not include `content`. Pass a saved post (or any object
+with `title` and `content`) into the document embedding helper:
+
 ```typescript
 import {
   generateDocumentEmbedding,
@@ -58,8 +62,8 @@ import {
 } from "@motormetrics/ai";
 
 const documentEmbedding = await generateDocumentEmbedding({
-  title: post.title,
-  content: post.content,
+  title: savedPost.title,
+  content: savedPost.content,
 });
 
 const queryEmbedding = await generateQueryEmbedding("electric car trends");
@@ -78,7 +82,12 @@ Required:
 
 ```bash
 AI_GATEWAY_API_KEY=
+DATABASE_URL=
 ```
+
+`generateBlogContent()` / `regenerateBlogContent()` import the Neon client and
+call `savePost()`, so `DATABASE_URL` is required for the generate-and-save flow
+outside an already configured web deployment.
 
 Required for hero-image upload (when not running on Vercel with a linked Blob
 store that injects the token automatically):

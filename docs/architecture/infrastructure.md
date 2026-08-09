@@ -54,7 +54,7 @@ graph TB
         %% Data Sources
         subgraph "Data Sources"
             LTA[LTA DataMall APIs]
-            GeminiAI[Vercel AI SDK + Google Gemini]
+            GeminiAI[Vercel AI SDK + AI Gateway]
         end
 
         %% Databases
