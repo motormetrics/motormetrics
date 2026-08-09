@@ -18,7 +18,7 @@ providerOptions: { openai: { reasoningEffort: "max" } }
 
 **In Single-Call Flow:**
 - Combined with `output: Output.object({ schema: postSchema })`
-- `stopWhen: stepCountIs(10)` ensures tool execution completes before structured output
+- `stopWhen: isStepCount(10)` ensures tool execution completes before structured output
 - Single API call handles both Code Execution and validated generation
 
 ## Langfuse Telemetry
@@ -38,6 +38,12 @@ top-level / final-step provider metadata) and looked up with
 `gateway.getGenerationInfo()` so multi-step Code Interpreter runs sum into the
 exact billed `totalCost` only when every lookup succeeds. Any failed lookup
 omits `totalCost` while still saving the post.
+
+AI SDK 7 telemetry is registered once in `apps/web/src/instrumentation.ts` using
+`@ai-sdk/otel`. Generation and embedding calls use the stable `telemetry` option;
+their `functionId` continues to flow to Langfuse. Blog generation passes month,
+data type, and tags through AI SDK 7 runtime context so they are recorded as span
+attributes without exposing unrelated runtime data.
 
 ## Post Persistence
 

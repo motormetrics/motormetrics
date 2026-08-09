@@ -74,7 +74,7 @@ describe("Gemini 2 post embeddings", () => {
     expect(embedMock).toHaveBeenCalledWith(
       expect.objectContaining({
         value: "task: search result | query: hybrid registrations",
-        experimental_telemetry: expect.objectContaining({
+        telemetry: expect.objectContaining({
           functionId: "post-query-embedding",
         }),
       }),
