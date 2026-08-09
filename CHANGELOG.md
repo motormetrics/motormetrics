@@ -1,3 +1,10 @@
+## [4.71.1](https://github.com/motormetrics/motormetrics/compare/v4.71.0...v4.71.1) (2026-08-09)
+
+### Bug Fixes
+
+* **ai:** omit partial Gateway multi-step costs ([d972210](https://github.com/motormetrics/motormetrics/commit/d972210aafaac8c920afbb17b87a8d3973ceb901))
+* **ai:** sum Gateway costs across generation steps ([a2d0c6e](https://github.com/motormetrics/motormetrics/commit/a2d0c6e3def50f3dd12623a52e72df8292db4086))
+
 ## [4.71.0](https://github.com/motormetrics/motormetrics/compare/v4.70.2...v4.71.0) (2026-08-05)
 
 ### Features
