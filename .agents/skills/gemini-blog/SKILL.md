@@ -29,16 +29,16 @@ packages/ai/
 ## Key Functions
 
 ```typescript
-// Standalone generation
-import { generateBlogContent } from "@sgcarstrends/ai";
+// Generate and persist (returns saved-post metadata, not the raw Zod object)
+import { generateBlogContent } from "@motormetrics/ai";
 
-const { object } = await generateBlogContent({
+const post = await generateBlogContent({
   data: tokenisedData,     // Pipe-delimited data
   month: "October 2024",
   dataType: "cars",        // "cars" or "coe"
 });
 
-// object.title, object.excerpt, object.content, object.tags, object.highlights
+// post.postId, post.title, post.slug, post.excerpt
 ```
 
 ## Schemas
@@ -78,12 +78,14 @@ Edit `packages/ai/src/config.ts`:
 
 **Low Quality Output:** Check Step 1 analysis logs, verify Code Execution Tool runs Python
 **Schema Validation Errors:** Check Zod constraints (max lengths, array bounds)
-**API Errors:** Verify `GOOGLE_GENERATIVE_AI_API_KEY`, check quota
+**API Errors:** Verify `AI_GATEWAY_API_KEY`, check Gateway quota/billing
 
 ## Environment Variables
 
 ```env
-GOOGLE_GENERATIVE_AI_API_KEY=...    # Required
+AI_GATEWAY_API_KEY=...              # Required (Vercel AI Gateway)
+DATABASE_URL=...                    # Required for generate-and-save (Neon/Postgres)
+BLOB_READ_WRITE_TOKEN=...           # Required for local hero-image upload
 LANGFUSE_PUBLIC_KEY=pk-lf-...       # Optional telemetry
 LANGFUSE_SECRET_KEY=sk-lf-...
 ```

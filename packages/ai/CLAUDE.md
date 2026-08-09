@@ -5,11 +5,13 @@
 The **critical feature** that prevents hallucinations:
 
 ```typescript
-tools: { code_execution: google.tools.codeExecution({}) }
+model: gateway("openai/gpt-5.6-luna"),
+tools: { code_interpreter: openai.tools.codeInterpreter({}) },
+providerOptions: { openai: { reasoningEffort: "max" } }
 ```
 
 **Why It Matters:**
-- Allows Gemini to execute Python code to analyse data
+- Allows GPT-5.6 Luna to execute Python code to analyse data
 - Performs accurate calculations (totals, percentages, aggregations)
 - Verifies data formatting before generating structured output
 - Eliminates guesswork and hallucinated numbers
@@ -27,8 +29,15 @@ tools: { code_execution: google.tools.codeExecution({}) }
 - `dataType`: Either "cars" or "coe"
 - `tags`: [dataType, month, "post-generation"]
 
-Call `shutdownTracing()` in a `finally` block after generation so pending spans are
-flushed before the process or request ends.
+Langfuse telemetry is wired through the web app OpenTelemetry instrumentation
+(`apps/web/src/instrumentation.ts`); there is no package-level
+`shutdownTracing()` export.
+
+Gateway generation IDs are collected from every `result.steps[]` entry (plus
+top-level / final-step provider metadata) and looked up with
+`gateway.getGenerationInfo()` so multi-step Code Interpreter runs sum into the
+exact billed `totalCost` only when every lookup succeeds. Any failed lookup
+omits `totalCost` while still saving the post.
 
 ## Post Persistence
 
@@ -46,7 +55,31 @@ retries.
 ## Environment Variables
 
 **Required:**
-- `GOOGLE_GENERATIVE_AI_API_KEY`: Google Gemini API key
+- `AI_GATEWAY_API_KEY`: Vercel AI Gateway API key
+- `DATABASE_URL`: PostgreSQL connection string (required by
+  `generateBlogContent()` / `regenerateBlogContent()` via `savePost()`)
+- `BLOB_READ_WRITE_TOKEN`: Vercel Blob token for hero-image upload (injected
+  automatically on Vercel when a Blob store is linked; required locally)
+
+Blog generation, embeddings, and hero-image generation all use the Gateway
+credential. Generate-and-save also needs the database URL. Hero-image upload
+additionally needs Blob access. Do not add provider-specific API keys.
+
+## Embeddings and in-place replacement
+
+- Documents use `generateDocumentEmbedding()` with
+  `title: … | text: …`.
+- Queries use `generateQueryEmbedding()` with
+  `task: search result | query: …`.
+- Both use `google/gemini-embedding-2` through Gateway and return 768 dimensions.
+- Existing `posts.embedding` vectors are replaced in place; no schema migration
+  is needed because the dimension remains 768.
+- Pause post writes and semantic features, then run the guarded one-time reset:
+  `CONFIRM_EMBEDDING_RESET=replace-with-gemini-2 pnpm --filter @motormetrics/ai reset:embeddings`.
+- Run `pnpm --filter @motormetrics/ai backfill:embeddings` until it reports zero
+  remaining posts. The backfill only writes null rows, so it is resumable and
+  idempotent after the reset.
+- Never rerun the reset once backfilling has started.
 
 **Optional (for telemetry):**
 - `LANGFUSE_PUBLIC_KEY`: Langfuse public key

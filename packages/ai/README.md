@@ -1,248 +1,152 @@
-# /ai
+# @motormetrics/ai
 
-AI-powered blog post generation for the MotorMetrics platform using Vercel AI SDK with Google Gemini.
+AI-powered blog generation, embeddings, and hero images for MotorMetrics. All
+provider traffic is routed through Vercel AI Gateway.
 
-## Features
+## Models
 
-- 🤖 **AI-Powered Analysis**: Automated blog post generation using Google Gemini 2.5 Flash
-- 🧮 **Code Execution Tool**: Accurate data calculations and transformations via Python execution
-- 📊 **Data-Driven Insights**: Comprehensive analysis of car registration and COE bidding trends
-- 📝 **SEO-Optimised Content**: Markdown-formatted posts with proper structure and keywords
-- 📈 **Observability**: Full Langfuse telemetry for token usage, costs, and performance tracking
-- ♻️ **Idempotent Persistence**: Prevents duplicate posts with conflict handling
-- 🔄 **Reusable Logic**: Single source of truth shared across Vercel WDK workflows and Admin app
+| Workload | Gateway model |
+| --- | --- |
+| Blog generation | `openai/gpt-5.6-luna` |
+| Post and query embeddings | `google/gemini-embedding-2` |
+| Hero images | `openai/gpt-image-2` |
 
-## Installation
-
-This package is part of the MotorMetrics monorepo and uses workspace dependencies:
-
-```bash
-pnpm add @motormetrics/ai
-```
+Blog generation uses `max` reasoning, OpenAI Code Interpreter, the existing Zod
+post schema, and Langfuse telemetry. Distinct Gateway generation IDs across all
+model steps are looked up and summed into the exact billed cost only when every
+step lookup succeeds. Gemini 2 embeddings use 768 dimensions.
 
 ## Usage
 
-### Standalone Blog Generation
-
-Generate blog content without workflow context (e.g., in Admin app):
-
-```typescript
-import { generateBlogContent, shutdownTracing } from "@motormetrics/ai";
-import { tokeniser } from "@motormetrics/utils";
-
-try {
-  // Fetch and tokenise data
-  const cars = await getCarsAggregatedByMonth("October 2024");
-  const data = tokeniser(cars);
-
-  // Generate blog content
-  const { object, usage, response } = await generateBlogContent({
-    data,
-    month: "October 2024",
-    dataType: "cars",
-  });
-
-  console.log(object.title);      // SEO-optimised title
-  console.log(object.excerpt);    // Meta description
-  console.log(object.content);    // Markdown content
-  console.log(object.tags);       // Category tags
-  console.log(object.highlights); // Key statistics
-  console.log(usage);             // Token usage statistics
-} finally {
-  // Flush telemetry spans
-  await shutdownTracing();
-}
-```
-
-### Workflow Integration (Vercel WDK)
-
-Generate and save blog posts within Vercel WDK workflows:
+### Generate and save a post
 
 ```typescript
 import { generateBlogContent } from "@motormetrics/ai";
-import { tokeniser } from "@motormetrics/utils";
+
+const post = await generateBlogContent({
+  data: tokenisedData,
+  month: "October 2024",
+  dataType: "cars",
+});
+
+console.log(post.postId, post.title, post.slug);
+```
+
+`generateBlogContent()` and `regenerateBlogContent()` keep the same public
+signature and both persist the generated post. Persistence is idempotent for a
+given `month` and `dataType`.
+
+When called from a Vercel WDK workflow, assign WDK's durable fetch before making
+the AI call:
+
+```typescript
 import { fetch } from "workflow";
 
-export async function carsWorkflow(payload: { month?: string }) {
-  "use workflow";
-
-  // Enable WDK's durable fetch for AI SDK
-  globalThis.fetch = fetch;
-
-  // Fetch and tokenise data
-  const cars = await getCarsAggregatedByMonth("October 2024");
-  const data = tokeniser(cars);
-
-  // Generate blog post (as a step)
-  const post = await generateCarsPost(data, "October 2024");
-
-  return { postId: post.postId, title: post.title };
-}
-
-async function generateCarsPost(data: string, month: string) {
-  "use step";
-  return generateBlogContent({ data, month, dataType: "cars" });
-}
+globalThis.fetch = fetch;
 ```
 
-**Note:** Set `globalThis.fetch = fetch` (from the `workflow` package) before calling AI functions to enable durable fetch with automatic retries.
+### Generate embeddings
 
-## API Reference
-
-### `generateBlogContent(params: BlogGenerationParams)`
-
-Generate blog content using Google Gemini with Code Execution Tool.
-
-**Parameters:**
+`generateBlogContent()` returns metadata (`postId`, `title`, `slug`, `excerpt`)
+after saving; it does not include `content`. Pass a saved post (or any object
+with `title` and `content`) into the document embedding helper:
 
 ```typescript
-interface BlogGenerationParams {
-  data: string; // Pipe-delimited data from tokeniser
-  month: string; // Month/year (e.g., "October 2024")
-  dataType: "cars" | "coe"; // Data type
-}
+import {
+  generateDocumentEmbedding,
+  generateQueryEmbedding,
+} from "@motormetrics/ai";
+
+const documentEmbedding = await generateDocumentEmbedding({
+  title: savedPost.title,
+  content: savedPost.content,
+});
+
+const queryEmbedding = await generateQueryEmbedding("electric car trends");
 ```
 
-**Returns:**
+Document inputs are formatted as `title: … | text: …`. Query inputs are
+formatted as `task: search result | query: …`; this distinction is required by
+Gemini Embedding 2 for retrieval quality.
 
-```typescript
-interface GenerateBlogContentResult {
-  object: GeneratedPost;  // Zod-validated structured output
-  usage: {
-    inputTokens: number;
-    outputTokens: number;
-    totalTokens: number;
-  };
-  response: {
-    id: string;
-    modelId: string;
-    timestamp: Date;
-  };
-}
+Embedding failures remain non-fatal in post create/update and search flows, so
+keyword search and post persistence can continue gracefully.
 
-// GeneratedPost structure (from postSchema)
-interface GeneratedPost {
-  title: string;      // SEO title, max 100 chars
-  excerpt: string;    // 2-3 sentence summary, max 500 chars
-  content: string;    // Full markdown blog post (without H1 title)
-  tags: string[];     // 3-5 tags in Title Case
-  highlights: Array<{
-    value: string;    // Metric value, e.g. "52.60%", "$125,000"
-    label: string;    // Short label, e.g. "Electric Vehicles Lead"
-    detail: string;   // Context, e.g. "2,081 units registered"
-  }>;
-}
-```
+## Environment variables
 
-### `regenerateBlogContent(params: BlogGenerationParams)`
-
-Regenerates an existing blog post. Same parameters and return type as `generateBlogContent()`.
-
-### Helper Functions
-
-```typescript
-// Fetch aggregated car registration data
-getCarsAggregatedByMonth(month: string): Promise<CarRecord[]>
-
-// Fetch COE bidding results
-getCoeForMonth(month: string): Promise<CoeRecord[]>
-
-// Save blog post to database
-savePost(params: SavePostParams): Promise<Post>
-
-// Initialise Langfuse tracing
-startTracing(): void
-
-// Shutdown tracing and flush spans
-shutdownTracing(): Promise<void>
-```
-
-## Environment Variables
-
-**Required:**
+Required:
 
 ```bash
-GOOGLE_GENERATIVE_AI_API_KEY=your-gemini-api-key
+AI_GATEWAY_API_KEY=
+DATABASE_URL=
 ```
 
-**Optional (for telemetry):**
+`generateBlogContent()` / `regenerateBlogContent()` import the Neon client and
+call `savePost()`, so `DATABASE_URL` is required for the generate-and-save flow
+outside an already configured web deployment.
+
+Required for hero-image upload (when not running on Vercel with a linked Blob
+store that injects the token automatically):
 
 ```bash
-LANGFUSE_PUBLIC_KEY=pk-lf-...
-LANGFUSE_SECRET_KEY=sk-lf-...
+BLOB_READ_WRITE_TOKEN=
+```
+
+`generateHeroImage()` always uploads via `@vercel/blob`, so local runs and
+non-Vercel environments need `BLOB_READ_WRITE_TOKEN` even after Gateway auth is
+configured.
+
+Optional Langfuse observability:
+
+```bash
+LANGFUSE_PUBLIC_KEY=
+LANGFUSE_SECRET_KEY=
 LANGFUSE_HOST=https://cloud.langfuse.com
 ```
 
-## How It Works
+No direct provider API key is required.
 
-### 2-Step Generation Flow
+## Embedding migration rollout
 
-The package uses a two-step approach for accuracy and type-safety:
+Gemini Embedding 2 vectors are incompatible with legacy Gemini Embedding 001
+vectors, even though both are stored at 768 dimensions. This migration replaces
+the existing `posts.embedding` values in place and requires a short semantic
+search maintenance window.
 
-**Step 1: Analysis with Code Execution Tool**
-```typescript
-tools: { code_execution: google.tools.codeExecution({}) }
+1. Pause blog generation, admin post edits, semantic search, and related-post
+   ranking.
+2. Clear the legacy vectors once:
+
+   ```bash
+   CONFIRM_EMBEDDING_RESET=replace-with-gemini-2 \
+     pnpm --filter @motormetrics/ai reset:embeddings
+   ```
+
+   This is intentionally destructive and must not be repeated after backfilling
+   has started.
+3. Backfill existing posts with Gemini 2 vectors:
+
+   ```bash
+   pnpm --filter @motormetrics/ai backfill:embeddings
+   ```
+
+   Set `EMBEDDING_BACKFILL_BATCH_SIZE` to change the default batch size of 25.
+   The job updates only rows where `embedding` is null, so it is resumable and
+   idempotent after the one-time reset.
+4. Confirm the command reports `remaining: 0`, deploy the Gemini 2 release, and
+   resume post writes and semantic features.
+
+No database schema migration is required because both models use 768 dimensions.
+
+## Development
+
+```bash
+pnpm --filter @motormetrics/ai test
+pnpm --filter @motormetrics/ai typecheck
 ```
 
-Allows Gemini to execute Python code for:
-- ✅ Accurate data analysis and calculations
-- ✅ Proper table generation with verified numbers
-- ✅ No hallucinated statistics
-- ✅ Reliable percentage calculations
-
-**Step 2: Structured Output Generation**
-```typescript
-output: schema(postSchema)
-```
-
-Generates Zod-validated structured output ensuring:
-- ✅ Consistent title, excerpt, content, tags, highlights format
-- ✅ Type-safe response matching `postSchema`
-- ✅ Validated field constraints (title max 100 chars, 3-10 highlights, etc.)
-
-**Why Two Steps:**
-- Separation ensures both accuracy (Step 1) AND type-safety (Step 2)
-- Code Execution Tool prevents hallucinations in analysis
-- Structured output ensures consistent, validated format
-
-### System Instructions
-
-Comprehensive prompts ensure high-quality output:
-
-**Cars Analysis (76 lines):**
-
-- Data structure explanation
-- Required markdown sections
-- Table formatting rules
-- SEO optimisation guidelines
-- Writing style requirements
-
-**COE Analysis (83 lines):**
-
-- Bidding data structure
-- Two bidding exercise tables
-- Over-subscription calculations
-- Premium movement analysis
-- Buyer implications
-
-### Langfuse Telemetry
-
-Automatic observability tracking:
-
-- Token usage (prompt, completion, total)
-- API costs per generation
-- Latency and performance metrics
-- Model responses and errors
-
-View traces at [cloud.langfuse.com](https://cloud.langfuse.com)
-
-## Dependencies
-
-- `@ai-sdk/google` - Google Gemini integration
-- `ai` - Vercel AI SDK
-- `@langfuse/otel` - Langfuse telemetry
-- `@motormetrics/database` - Database schemas
-- `@motormetrics/utils` - Utility functions
+Key dependencies are `ai`, `@ai-sdk/gateway`, `@ai-sdk/openai`, Langfuse, and
+the MotorMetrics database and utility packages.
 
 ## License
 
