@@ -29,16 +29,16 @@ packages/ai/
 ## Key Functions
 
 ```typescript
-// Standalone generation
+// Generate and persist (returns saved-post metadata, not the raw Zod object)
 import { generateBlogContent } from "@motormetrics/ai";
 
-const { object } = await generateBlogContent({
+const post = await generateBlogContent({
   data: tokenisedData,     // Pipe-delimited data
   month: "October 2024",
   dataType: "cars",        // "cars" or "coe"
 });
 
-// object.title, object.excerpt, object.content, object.tags, object.highlights
+// post.postId, post.title, post.slug, post.excerpt
 ```
 
 ## Schemas
@@ -84,6 +84,7 @@ Edit `packages/ai/src/config.ts`:
 
 ```env
 AI_GATEWAY_API_KEY=...              # Required (Vercel AI Gateway)
+DATABASE_URL=...                    # Required for generate-and-save (Neon/Postgres)
 BLOB_READ_WRITE_TOKEN=...           # Required for local hero-image upload
 LANGFUSE_PUBLIC_KEY=pk-lf-...       # Optional telemetry
 LANGFUSE_SECRET_KEY=sk-lf-...

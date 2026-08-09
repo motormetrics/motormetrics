@@ -29,8 +29,9 @@ providerOptions: { openai: { reasoningEffort: "max" } }
 - `dataType`: Either "cars" or "coe"
 - `tags`: [dataType, month, "post-generation"]
 
-Call `shutdownTracing()` in a `finally` block after generation so pending spans are
-flushed before the process or request ends.
+Langfuse telemetry is wired through the web app OpenTelemetry instrumentation
+(`apps/web/src/instrumentation.ts`); there is no package-level
+`shutdownTracing()` export.
 
 Gateway generation IDs are collected from every `result.steps[]` entry (plus
 top-level / final-step provider metadata) and looked up with
@@ -55,12 +56,14 @@ retries.
 
 **Required:**
 - `AI_GATEWAY_API_KEY`: Vercel AI Gateway API key
+- `DATABASE_URL`: PostgreSQL connection string (required by
+  `generateBlogContent()` / `regenerateBlogContent()` via `savePost()`)
 - `BLOB_READ_WRITE_TOKEN`: Vercel Blob token for hero-image upload (injected
   automatically on Vercel when a Blob store is linked; required locally)
 
 Blog generation, embeddings, and hero-image generation all use the Gateway
-credential. Hero-image upload additionally needs Blob access. Do not add
-provider-specific API keys.
+credential. Generate-and-save also needs the database URL. Hero-image upload
+additionally needs Blob access. Do not add provider-specific API keys.
 
 ## Embeddings and in-place replacement
 

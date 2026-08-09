@@ -21,19 +21,15 @@ step lookup succeeds. Gemini 2 embeddings use 768 dimensions.
 ### Generate and save a post
 
 ```typescript
-import { generateBlogContent, shutdownTracing } from "@motormetrics/ai";
+import { generateBlogContent } from "@motormetrics/ai";
 
-try {
-  const post = await generateBlogContent({
-    data: tokenisedData,
-    month: "October 2024",
-    dataType: "cars",
-  });
+const post = await generateBlogContent({
+  data: tokenisedData,
+  month: "October 2024",
+  dataType: "cars",
+});
 
-  console.log(post.postId, post.title, post.slug);
-} finally {
-  await shutdownTracing();
-}
+console.log(post.postId, post.title, post.slug);
 ```
 
 `generateBlogContent()` and `regenerateBlogContent()` keep the same public

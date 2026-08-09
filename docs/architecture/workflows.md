@@ -13,7 +13,7 @@ sequenceDiagram
     participant Redis as Redis Cache
     participant LTA as LTA DataMall
     participant DB as PostgreSQL DB
-    participant Gemini as Vercel AI SDK + Google Gemini
+    participant AI as Vercel AI SDK + AI Gateway
     participant Social as Social Media Platforms
     participant Users as End Users
 
@@ -43,8 +43,8 @@ sequenceDiagram
         Workflow->>+DB: Get latest month data
         DB-->>-Workflow: Car registration summary
         
-        Workflow->>+Gemini: Generate car blog post
-        Gemini-->>-Workflow: Generated blog content
+        Workflow->>+AI: Generate car blog post
+        AI-->>-Workflow: Generated blog content
         
         Workflow->>+DB: Save blog post
         DB-->>-Workflow: Post saved with slug
@@ -87,8 +87,8 @@ sequenceDiagram
         DB-->>-Workflow: COE bidding summary
         
         alt Both bidding exercises complete
-            Workflow->>+Gemini: Generate COE blog post
-            Gemini-->>-Workflow: Generated blog content
+            Workflow->>+AI: Generate COE blog post
+            AI-->>-Workflow: Generated blog content
             
             Workflow->>+DB: Save blog post
             DB-->>-Workflow: Post saved with slug
@@ -197,7 +197,7 @@ sequenceDiagram
 
 **Purpose**: Create AI-powered market insights from processed data
 
-**AI Integration**: Vercel AI SDK with Google Gemini for content generation
+**AI Integration**: Vercel AI SDK via AI Gateway (`openai/gpt-5.6-luna`) for content generation
 
 **Content Creation Process**:
 
