@@ -1,8 +1,11 @@
+import { openai } from "@ai-sdk/openai";
 import {
-  createGoogleGenerativeAI,
-  type GoogleGenerativeAIProviderOptions,
-} from "@ai-sdk/google";
-import { generateText, type LanguageModelUsage, Output, stepCountIs } from "ai";
+  gateway,
+  generateText,
+  type LanguageModelUsage,
+  Output,
+  stepCountIs,
+} from "ai";
 import { type BlogGenerationParams, INSTRUCTIONS, PROMPTS } from "./config";
 import { savePost } from "./save-post";
 import { type GeneratedPost, postSchema } from "./schemas";
@@ -26,21 +29,13 @@ export interface GenerateBlogContentResult {
   output: GeneratedPost;
   usage: LanguageModelUsage;
   response: {
+    generationId?: string;
     id: string;
     modelId: string;
     timestamp: Date;
+    totalCost?: number;
   };
 }
-
-/**
- * Create the Google Generative AI provider.
- *
- * When used within a WDK workflow, set `globalThis.fetch = fetch` (from "workflow")
- * before calling these functions to enable WDK's durable fetch with automatic retries.
- */
-const google = createGoogleGenerativeAI({
-  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
-});
 
 /**
  * Internal: AI content generation.
@@ -54,9 +49,9 @@ async function generateContent(
   console.log(`[GENERATE] ${dataType} blog generation started...`);
 
   const result = await generateText({
-    model: google("gemini-3-flash-preview"),
+    model: gateway("openai/gpt-5.6-luna"),
     tools: {
-      code_execution: google.tools.codeExecution({}),
+      code_interpreter: openai.tools.codeInterpreter({}),
     },
     output: Output.object({
       schema: postSchema,
@@ -65,12 +60,9 @@ async function generateContent(
     system: INSTRUCTIONS[dataType],
     prompt: `Generate a blog post for ${dataType.toUpperCase()} data from ${month}:\n\n${data}\n\n${PROMPTS[dataType]}`,
     providerOptions: {
-      google: {
-        thinkingConfig: {
-          thinkingLevel: "medium",
-          includeThoughts: true,
-        },
-      } satisfies GoogleGenerativeAIProviderOptions,
+      openai: {
+        reasoningEffort: "max",
+      },
     },
     experimental_telemetry: {
       isEnabled: true,
@@ -89,16 +81,88 @@ async function generateContent(
   console.log(`[GENERATE] Tool calls: ${result.toolCalls?.length ?? 0}`);
 
   const { output, usage, response } = result;
+  const generationIds = collectGatewayGenerationIds(result);
+  const generationId =
+    readGatewayGenerationId(result.providerMetadata) ?? generationIds.at(-1);
+  const totalCost = await sumGatewayGenerationCosts(generationIds);
 
   return {
     output,
     usage,
     response: {
+      generationId,
       id: response.id,
       modelId: response.modelId,
       timestamp: response.timestamp,
+      totalCost,
     },
   };
+}
+
+type GatewayProviderMetadata = {
+  gateway?: {
+    generationId?: unknown;
+  };
+};
+
+function readGatewayGenerationId(
+  providerMetadata: GatewayProviderMetadata | undefined,
+): string | undefined {
+  const generationId = providerMetadata?.gateway?.generationId;
+  return typeof generationId === "string" ? generationId : undefined;
+}
+
+/**
+ * Collect distinct Gateway generation IDs from every model step.
+ * Top-level `providerMetadata` only reflects the final step when Code
+ * Interpreter (or other tools) triggers multiple requests.
+ */
+function collectGatewayGenerationIds(result: {
+  providerMetadata?: GatewayProviderMetadata;
+  steps?: Array<{ providerMetadata?: GatewayProviderMetadata }>;
+}): string[] {
+  const generationIds = new Set<string>();
+
+  for (const step of result.steps ?? []) {
+    const stepGenerationId = readGatewayGenerationId(step.providerMetadata);
+    if (stepGenerationId) {
+      generationIds.add(stepGenerationId);
+    }
+  }
+
+  const topLevelGenerationId = readGatewayGenerationId(result.providerMetadata);
+  if (topLevelGenerationId) {
+    generationIds.add(topLevelGenerationId);
+  }
+
+  return [...generationIds];
+}
+
+async function sumGatewayGenerationCosts(
+  generationIds: string[],
+): Promise<number | undefined> {
+  if (generationIds.length === 0) {
+    return undefined;
+  }
+
+  let totalCost = 0;
+
+  for (const id of generationIds) {
+    try {
+      const generation = await gateway.getGenerationInfo({ id });
+      totalCost += generation.totalCost;
+    } catch (error) {
+      console.error(
+        "[GENERATE] Failed to retrieve Gateway generation cost:",
+        error instanceof Error ? error.message : String(error),
+      );
+      // Omit cost entirely when any lookup fails so we never persist a
+      // partial multi-step total that the admin UI would label as exact.
+      return undefined;
+    }
+  }
+
+  return totalCost;
 }
 
 async function saveGeneratedPost(
@@ -121,8 +185,10 @@ async function saveGeneratedPost(
     dataType,
     responseMetadata: {
       responseId: response.id,
+      generationId: response.generationId,
       modelId: response.modelId,
       timestamp: response.timestamp,
+      totalCost: response.totalCost,
       usage,
     },
   });

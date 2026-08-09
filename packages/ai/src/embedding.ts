@@ -1,38 +1,76 @@
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { embed } from "ai";
+import { embed, gateway } from "ai";
 
-const google = createGoogleGenerativeAI({
-  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
-});
+export const POST_EMBEDDING_MODEL_ID = "google/gemini-embedding-2";
+export const POST_EMBEDDING_DIMENSIONS = 768;
 
-export async function generatePostEmbedding(post: {
+const MAX_EMBEDDING_CONTENT_LENGTH = 2000;
+
+export interface PostEmbeddingInput {
   title: string;
   excerpt?: string | null;
   content: string;
-}): Promise<number[]> {
-  const parts: string[] = [post.title];
+}
+
+export function formatDocumentForEmbedding(post: PostEmbeddingInput): string {
+  const textParts: string[] = [];
 
   if (post.excerpt) {
-    parts.push(post.excerpt);
+    textParts.push(post.excerpt.trim());
   }
 
-  parts.push(post.content.slice(0, 2000));
+  textParts.push(post.content.trim().slice(0, MAX_EMBEDDING_CONTENT_LENGTH));
 
+  return `title: ${post.title.trim()} | text: ${textParts.join("\n\n")}`;
+}
+
+export function formatQueryForEmbedding(query: string): string {
+  return `task: search result | query: ${query.trim()}`;
+}
+
+async function generateEmbedding(
+  value: string,
+  functionId: "post-document-embedding" | "post-query-embedding",
+  metadata: Record<string, string>,
+): Promise<number[]> {
   const { embedding } = await embed({
-    model: google.textEmbeddingModel("gemini-embedding-001"),
-    value: parts.join("\n\n"),
+    model: gateway.embeddingModel(POST_EMBEDDING_MODEL_ID),
+    value,
     providerOptions: {
-      google: { outputDimensionality: 768 },
+      google: { outputDimensionality: POST_EMBEDDING_DIMENSIONS },
     },
     experimental_telemetry: {
       isEnabled: true,
-      functionId: "post-embedding",
-      metadata: {
-        title: post.title,
-        contentLength: String(post.content.length),
-      },
+      functionId,
+      metadata,
     },
   });
 
+  if (embedding.length !== POST_EMBEDDING_DIMENSIONS) {
+    throw new Error(
+      `Expected a ${POST_EMBEDDING_DIMENSIONS}-dimensional embedding, received ${embedding.length}`,
+    );
+  }
+
   return embedding;
+}
+
+export async function generateDocumentEmbedding(
+  post: PostEmbeddingInput,
+): Promise<number[]> {
+  return generateEmbedding(
+    formatDocumentForEmbedding(post),
+    "post-document-embedding",
+    {
+      title: post.title,
+      contentLength: String(post.content.length),
+    },
+  );
+}
+
+export async function generateQueryEmbedding(query: string): Promise<number[]> {
+  return generateEmbedding(
+    formatQueryForEmbedding(query),
+    "post-query-embedding",
+    { queryLength: String(query.length) },
+  );
 }

@@ -1,4 +1,4 @@
-import { generatePostEmbedding } from "@motormetrics/ai";
+import { generateDocumentEmbedding } from "@motormetrics/ai";
 import { db, eq, posts } from "@motormetrics/database";
 import { slugify } from "@motormetrics/utils";
 import { getPostPublishRevalidationTags } from "@web/lib/cache-tags/posts";
@@ -65,7 +65,7 @@ export async function updatePost(input: UpdatePostInput) {
     .returning();
 
   try {
-    const embedding = await generatePostEmbedding({
+    const embedding = await generateDocumentEmbedding({
       title: validated.title,
       excerpt: validated.excerpt,
       content: validated.content,
