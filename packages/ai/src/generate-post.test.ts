@@ -237,13 +237,15 @@ describe("blog generation model configuration", () => {
         highlights: [],
       },
       usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
-      providerMetadata: {
-        gateway: { generationId: "generation-final" },
-      },
-      response: {
-        id: "response-1",
-        modelId: "gpt-5.6-luna",
-        timestamp: new Date("2026-08-08T00:00:00Z"),
+      finalStep: {
+        providerMetadata: {
+          gateway: { generationId: "generation-final" },
+        },
+        response: {
+          id: "response-1",
+          modelId: "gpt-5.6-luna",
+          timestamp: new Date("2026-08-08T00:00:00Z"),
+        },
       },
       steps: [
         {
