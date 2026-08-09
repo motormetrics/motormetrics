@@ -211,4 +211,65 @@ describe("blog generation model configuration", () => {
     );
     consoleError.mockRestore();
   });
+
+  it("omits totalCost when any multi-step Gateway cost lookup fails", async () => {
+    getGenerationInfoMock
+      .mockResolvedValueOnce({ totalCost: 0.001 })
+      .mockRejectedValueOnce(new Error("Report unavailable"));
+    generateTextMock.mockResolvedValueOnce({
+      output: {
+        title: "July registration trends",
+        excerpt: "A monthly market summary.",
+        content: "## Market overview",
+        tags: ["Cars"],
+        highlights: [],
+      },
+      usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
+      providerMetadata: {
+        gateway: { generationId: "generation-final" },
+      },
+      response: {
+        id: "response-1",
+        modelId: "gpt-5.6-luna",
+        timestamp: new Date("2026-08-08T00:00:00Z"),
+      },
+      steps: [
+        {
+          providerMetadata: {
+            gateway: { generationId: "generation-tool" },
+          },
+        },
+        {
+          providerMetadata: {
+            gateway: { generationId: "generation-final" },
+          },
+        },
+      ],
+      finishReason: "stop",
+      toolCalls: [],
+    });
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    await generateBlogContent({
+      data: "make|count\nToyota|100",
+      month: "2026-07",
+      dataType: "cars",
+    });
+
+    expect(savePostMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        responseMetadata: expect.objectContaining({
+          generationId: "generation-final",
+          totalCost: undefined,
+        }),
+      }),
+    );
+    expect(consoleError).toHaveBeenCalledWith(
+      "[GENERATE] Failed to retrieve Gateway generation cost:",
+      "Report unavailable",
+    );
+    consoleError.mockRestore();
+  });
 });

@@ -146,22 +146,23 @@ async function sumGatewayGenerationCosts(
   }
 
   let totalCost = 0;
-  let retrievedCost = false;
 
   for (const id of generationIds) {
     try {
       const generation = await gateway.getGenerationInfo({ id });
       totalCost += generation.totalCost;
-      retrievedCost = true;
     } catch (error) {
       console.error(
         "[GENERATE] Failed to retrieve Gateway generation cost:",
         error instanceof Error ? error.message : String(error),
       );
+      // Omit cost entirely when any lookup fails so we never persist a
+      // partial multi-step total that the admin UI would label as exact.
+      return undefined;
     }
   }
 
-  return retrievedCost ? totalCost : undefined;
+  return totalCost;
 }
 
 async function saveGeneratedPost(
