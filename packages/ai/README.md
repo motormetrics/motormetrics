@@ -13,8 +13,8 @@ provider traffic is routed through Vercel AI Gateway.
 
 Blog generation uses `max` reasoning, OpenAI Code Interpreter, the existing Zod
 post schema, and Langfuse telemetry. Distinct Gateway generation IDs across all
-model steps are looked up and summed into the exact billed cost when available.
-Gemini 2 embeddings use 768 dimensions.
+model steps are looked up and summed into the exact billed cost only when every
+step lookup succeeds. Gemini 2 embeddings use 768 dimensions.
 
 ## Usage
 
@@ -79,6 +79,17 @@ Required:
 ```bash
 AI_GATEWAY_API_KEY=
 ```
+
+Required for hero-image upload (when not running on Vercel with a linked Blob
+store that injects the token automatically):
+
+```bash
+BLOB_READ_WRITE_TOKEN=
+```
+
+`generateHeroImage()` always uploads via `@vercel/blob`, so local runs and
+non-Vercel environments need `BLOB_READ_WRITE_TOKEN` even after Gateway auth is
+configured.
 
 Optional Langfuse observability:
 

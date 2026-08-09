@@ -35,8 +35,8 @@ flushed before the process or request ends.
 Gateway generation IDs are collected from every `result.steps[]` entry (plus
 top-level / final-step provider metadata) and looked up with
 `gateway.getGenerationInfo()` so multi-step Code Interpreter runs sum into the
-exact billed `totalCost`. Cost lookup failures must remain non-fatal so generated
-posts can still be saved.
+exact billed `totalCost` only when every lookup succeeds. Any failed lookup
+omits `totalCost` while still saving the post.
 
 ## Post Persistence
 
@@ -55,9 +55,12 @@ retries.
 
 **Required:**
 - `AI_GATEWAY_API_KEY`: Vercel AI Gateway API key
+- `BLOB_READ_WRITE_TOKEN`: Vercel Blob token for hero-image upload (injected
+  automatically on Vercel when a Blob store is linked; required locally)
 
-Blog generation, embeddings, and hero-image generation all use this Gateway
-credential. Do not add provider-specific API keys.
+Blog generation, embeddings, and hero-image generation all use the Gateway
+credential. Hero-image upload additionally needs Blob access. Do not add
+provider-specific API keys.
 
 ## Embeddings and in-place replacement
 
