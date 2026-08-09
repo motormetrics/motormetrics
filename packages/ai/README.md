@@ -113,6 +113,10 @@ vectors, even though both are stored at 768 dimensions. This migration replaces
 the existing `posts.embedding` values in place and requires a short semantic
 search maintenance window.
 
+Prerequisites: export `DATABASE_URL` (PostgreSQL) and `AI_GATEWAY_API_KEY`
+before running either migration command. Both scripts fail fast with a clear
+error if `DATABASE_URL` is missing.
+
 1. Pause blog generation, admin post edits, semantic search, and related-post
    ranking.
 2. Clear the legacy vectors once:
