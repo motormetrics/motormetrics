@@ -81,22 +81,10 @@ async function generateContent(
   console.log(`[GENERATE] Tool calls: ${result.toolCalls?.length ?? 0}`);
 
   const { output, usage, response } = result;
-  const gatewayGenerationId = result.providerMetadata?.gateway?.generationId;
+  const generationIds = collectGatewayGenerationIds(result);
   const generationId =
-    typeof gatewayGenerationId === "string" ? gatewayGenerationId : undefined;
-  let totalCost: number | undefined;
-
-  if (generationId) {
-    try {
-      const generation = await gateway.getGenerationInfo({ id: generationId });
-      totalCost = generation.totalCost;
-    } catch (error) {
-      console.error(
-        "[GENERATE] Failed to retrieve Gateway generation cost:",
-        error instanceof Error ? error.message : String(error),
-      );
-    }
-  }
+    readGatewayGenerationId(result.providerMetadata) ?? generationIds.at(-1);
+  const totalCost = await sumGatewayGenerationCosts(generationIds);
 
   return {
     output,
@@ -109,6 +97,71 @@ async function generateContent(
       totalCost,
     },
   };
+}
+
+type GatewayProviderMetadata = {
+  gateway?: {
+    generationId?: unknown;
+  };
+};
+
+function readGatewayGenerationId(
+  providerMetadata: GatewayProviderMetadata | undefined,
+): string | undefined {
+  const generationId = providerMetadata?.gateway?.generationId;
+  return typeof generationId === "string" ? generationId : undefined;
+}
+
+/**
+ * Collect distinct Gateway generation IDs from every model step.
+ * Top-level `providerMetadata` only reflects the final step when Code
+ * Interpreter (or other tools) triggers multiple requests.
+ */
+function collectGatewayGenerationIds(result: {
+  providerMetadata?: GatewayProviderMetadata;
+  steps?: Array<{ providerMetadata?: GatewayProviderMetadata }>;
+}): string[] {
+  const generationIds = new Set<string>();
+
+  for (const step of result.steps ?? []) {
+    const stepGenerationId = readGatewayGenerationId(step.providerMetadata);
+    if (stepGenerationId) {
+      generationIds.add(stepGenerationId);
+    }
+  }
+
+  const topLevelGenerationId = readGatewayGenerationId(result.providerMetadata);
+  if (topLevelGenerationId) {
+    generationIds.add(topLevelGenerationId);
+  }
+
+  return [...generationIds];
+}
+
+async function sumGatewayGenerationCosts(
+  generationIds: string[],
+): Promise<number | undefined> {
+  if (generationIds.length === 0) {
+    return undefined;
+  }
+
+  let totalCost = 0;
+  let retrievedCost = false;
+
+  for (const id of generationIds) {
+    try {
+      const generation = await gateway.getGenerationInfo({ id });
+      totalCost += generation.totalCost;
+      retrievedCost = true;
+    } catch (error) {
+      console.error(
+        "[GENERATE] Failed to retrieve Gateway generation cost:",
+        error instanceof Error ? error.message : String(error),
+      );
+    }
+  }
+
+  return retrievedCost ? totalCost : undefined;
 }
 
 async function saveGeneratedPost(

@@ -121,6 +121,66 @@ describe("blog generation model configuration", () => {
     expect(getGenerationInfoMock).toHaveBeenCalledWith({ id: "generation-1" });
   });
 
+  it("sums Gateway costs across every distinct step generation ID", async () => {
+    getGenerationInfoMock
+      .mockResolvedValueOnce({ totalCost: 0.001 })
+      .mockResolvedValueOnce({ totalCost: 0.003 });
+    generateTextMock.mockResolvedValueOnce({
+      output: {
+        title: "July registration trends",
+        excerpt: "A monthly market summary.",
+        content: "## Market overview",
+        tags: ["Cars"],
+        highlights: [],
+      },
+      usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
+      providerMetadata: {
+        gateway: { generationId: "generation-final" },
+      },
+      response: {
+        id: "response-1",
+        modelId: "gpt-5.6-luna",
+        timestamp: new Date("2026-08-08T00:00:00Z"),
+      },
+      steps: [
+        {
+          providerMetadata: {
+            gateway: { generationId: "generation-tool" },
+          },
+        },
+        {
+          providerMetadata: {
+            gateway: { generationId: "generation-final" },
+          },
+        },
+      ],
+      finishReason: "stop",
+      toolCalls: [],
+    });
+
+    await generateBlogContent({
+      data: "make|count\nToyota|100",
+      month: "2026-07",
+      dataType: "cars",
+    });
+
+    expect(getGenerationInfoMock).toHaveBeenCalledTimes(2);
+    expect(getGenerationInfoMock).toHaveBeenCalledWith({
+      id: "generation-tool",
+    });
+    expect(getGenerationInfoMock).toHaveBeenCalledWith({
+      id: "generation-final",
+    });
+    expect(savePostMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        responseMetadata: expect.objectContaining({
+          generationId: "generation-final",
+          totalCost: 0.004,
+        }),
+      }),
+    );
+  });
+
   it("still saves the post when Gateway cost lookup fails", async () => {
     getGenerationInfoMock.mockRejectedValueOnce(
       new Error("Report unavailable"),
