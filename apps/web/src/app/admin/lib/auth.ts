@@ -26,13 +26,9 @@ export const auth = betterAuth({
     "http://localhost:3000",
   ],
   advanced: {
+    // Required from 1.7: forwarded headers are no longer trusted by default,
+    // so baseURL.allowedHosts cannot resolve the Vercel host without this.
     trustedProxyHeaders: true,
-    allowedHosts: [
-      "motormetrics.app",
-      "*.motormetrics.app",
-      "*.vercel.app",
-      "localhost:3000",
-    ],
   },
   plugins: [
     admin(),

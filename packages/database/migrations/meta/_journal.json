@@ -141,6 +141,13 @@
       "when": 1776875469591,
       "tag": "0019_sparkling_magus",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1786298183018,
+      "tag": "0020_tough_darkhawk",
+      "breakpoints": true
     }
   ]
 }
