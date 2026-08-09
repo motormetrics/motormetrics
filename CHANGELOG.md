@@ -1,3 +1,9 @@
+## [4.71.2](https://github.com/motormetrics/motormetrics/compare/v4.71.1...v4.71.2) (2026-08-09)
+
+### Bug Fixes
+
+* **ai:** require DATABASE_URL for embedding scripts ([36ccecb](https://github.com/motormetrics/motormetrics/commit/36ccecb80fa77171d1598aa28b0d6abc4cfe841c))
+
 ## [4.71.1](https://github.com/motormetrics/motormetrics/compare/v4.71.0...v4.71.1) (2026-08-09)
 
 ### Bug Fixes
