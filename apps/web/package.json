@@ -18,7 +18,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit",
-    "auth:generate": "pnpm dlx auth@rc generate --config ./src/app/admin/lib/auth.ts --output ../../packages/database/src/schema/auth.ts --yes",
+    "auth:generate": "pnpm dlx auth@rc generate --config ./src/app/admin/lib/auth.ts --output ./.auth-schema.generated.ts --yes && echo '\\nGenerated to apps/web/.auth-schema.generated.ts. Diff it against packages/database/src/schema/auth.ts and hand-apply real changes, rather than overwriting: only import order should differ.'",
     "vercel-build": "turbo run @motormetrics/database#migrate && next build"
   },
   "dependencies": {

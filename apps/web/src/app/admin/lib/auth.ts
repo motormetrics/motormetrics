@@ -2,8 +2,13 @@
 // `relations()` blocks the default adapter entry point expects, so the adapter
 // has to come from the relations-v2 export to read them.
 import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
-import * as schema from "@motormetrics/database";
-import { db } from "@motormetrics/database";
+import {
+  accounts,
+  db,
+  sessions,
+  users,
+  verifications,
+} from "@motormetrics/database";
 import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
@@ -20,7 +25,10 @@ export const auth = betterAuth({
   },
   database: drizzleAdapter(db, {
     provider: "pg",
-    schema,
+    // Only the auth tables. This used to be the whole `@motormetrics/database`
+    // namespace, which also handed the adapter `db`, every query helper, and
+    // every unrelated table.
+    schema: { accounts, sessions, users, verifications },
     usePlural: true,
   }),
   trustedOrigins: [
