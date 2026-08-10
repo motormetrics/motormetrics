@@ -91,6 +91,7 @@ export const verifications = pgTable(
   },
   (table) => [index("verifications_identifier_idx").on(table.identifier)],
 );
+
 export const authRelations = defineRelationsPart(
   { users, sessions, accounts, verifications },
   (r) => ({

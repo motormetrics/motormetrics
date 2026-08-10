@@ -37,7 +37,3 @@ next-env.d.ts
 .env.local
 # heroui-agents-md
 .heroui-docs/
-
-# Scratch output from `pnpm auth:generate` — diff it against
-# packages/database/src/schema/auth.ts, never commit it.
-.auth-schema.generated.ts
