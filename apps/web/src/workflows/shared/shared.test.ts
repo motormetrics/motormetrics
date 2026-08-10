@@ -13,9 +13,6 @@ const { MockFatalError, MockRetryableError, writerWrite, writerReleaseLock } =
   vi.hoisted(() => {
     class MockFatalError extends Error {
       name = "FatalError";
-      constructor(message: string) {
-        super(message);
-      }
     }
 
     class MockRetryableError extends Error {
