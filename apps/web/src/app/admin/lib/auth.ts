@@ -1,4 +1,7 @@
-import { drizzleAdapter } from "@better-auth/drizzle-adapter";
+// Drizzle v1 exposes relations through `defineRelations` rather than the
+// `relations()` blocks the default adapter entry point expects, so the adapter
+// has to come from the relations-v2 export to read them.
+import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
 import * as schema from "@motormetrics/database";
 import { db } from "@motormetrics/database";
 import { betterAuth } from "better-auth/minimal";
