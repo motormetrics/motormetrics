@@ -22,9 +22,8 @@ jobs:
     runs-on: blacksmith-4vcpu-ubuntu-2404-arm
     permissions:
       contents: read
+      id-token: write
     env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
@@ -48,6 +47,11 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
+
+      - name: Setup Turborepo Remote Cache
+        uses: vercel/setup-turborepo-remote-cache-action@135046f5efcadb17337d9b29b8d5b4035ae64b10 # v1.0.0
+        with:
+          team: ${{ vars.TURBO_TEAM }}
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
