@@ -225,7 +225,6 @@ pnpm db:migrate            # Run database migrations
 pnpm db:migrate:check      # Check migration status
 pnpm db:generate           # Generate new migrations
 pnpm db:push               # Push schema changes
-pnpm db:drop               # Drop database
 ```
 
 ### Deployment

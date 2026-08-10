@@ -2,11 +2,19 @@
 
 ## Schema Change Workflow
 
-Modify schema files in `src/schema/` → `pnpm generate` → review the generated SQL in
-`migrations/` → `pnpm migrate` → `pnpm migrate:check` to validate consistency.
-Types update automatically via Drizzle inference; never hand-edit generated migrations
-or `migrations/meta/_journal.json`. Always generate and test a migration before
-production — never rely on `pnpm push` outside local development.
+Modify schema files in `src/schema/`, then `pnpm push` to apply them to the
+**development** Neon branch and iterate there. Once the shape has settled, `pnpm
+generate` and review the generated SQL in `migrations/`. Commit it — staging and
+production apply it on deploy, since `vercel-build` runs `db:migrate`. Types update
+automatically via Drizzle inference; never hand-edit generated migrations.
+
+**Do not run `pnpm migrate` against development.** `push` has already applied those
+changes, but without recording a row in `drizzle.__drizzle_migrations`, so `migrate`
+sees the new migration as pending and replays SQL against a schema that already has
+it — `ADD COLUMN` then fails as already-exists. The development ledger drifts from the
+repo by design and should never be "repaired" to match. To rehearse a migration, point
+`DATABASE_URL` at a fresh Neon branch of production and run `pnpm migrate` plus
+`pnpm migrate:check` there.
 
 ## Naming Conventions
 

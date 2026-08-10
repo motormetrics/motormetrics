@@ -320,16 +320,19 @@ While the schema doesn't use foreign key constraints, there are logical relation
 **Migration Workflow**:
 ```bash
 # 1. Modify schema files in packages/database/src/schema/
-# 2. Generate migration
-pnpm generate
+# 2. Apply to the development branch and iterate there
+pnpm db:push
 
-# 3. Review generated SQL in migrations/ directory
-# 4. Apply migration
-pnpm migrate
+# 3. Once the shape has settled, generate the migration
+pnpm db:generate
 
-# 5. Verify schema consistency
-pnpm migrate:check
+# 4. Review generated SQL in migrations/, then commit it —
+#    staging and production apply it on deploy via vercel-build.
 ```
+
+Do not run `pnpm db:migrate` against development: `push` has already applied the
+changes without recording a ledger row, so the migration replays and fails. See
+[packages/database/CLAUDE.md](../../packages/database/CLAUDE.md) for the full rules.
 
 ### Schema Evolution
 

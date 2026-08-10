@@ -92,6 +92,11 @@ Core cross-cutting variables:
 
 Vercel, Singapore region. Push to main deploys production; pull requests get preview URLs.
 
+`vercel-build` runs `db:migrate` before `next build`, so **every deploy applies pending
+migrations** — including previews, which target the shared `staging` Neon branch. An
+unmerged PR's migration therefore lands on staging permanently. The `development`
+branch is managed by `db:push` instead and receives no migrations.
+
 ## Domain Convention
 
 - **API**: `<service>.<environment>.motormetrics.app` (e.g., `api.motormetrics.app`)
