@@ -19,8 +19,8 @@ export function getCarsAggregatedByMonth(month: string) {
 export async function getCoeForMonth(month: string) {
   return db.query.coe.findMany({
     columns: { id: false },
-    where: eq(coe.month, month),
-    orderBy: [asc(coe.biddingNo), asc(coe.vehicleClass)],
+    where: { month },
+    orderBy: { biddingNo: "asc", vehicleClass: "asc" },
   });
 }
 

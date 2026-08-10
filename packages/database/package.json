@@ -9,7 +9,6 @@
   "module": "src/index.ts",
   "scripts": {
     "push": "drizzle-kit push",
-    "drop": "drizzle-kit drop",
     "generate": "drizzle-kit generate",
     "check": "drizzle-kit check",
     "migrate": "drizzle-kit migrate",
@@ -21,6 +20,6 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "drizzle-kit": "0.31.10"
+    "drizzle-kit": "catalog:"
   }
 }

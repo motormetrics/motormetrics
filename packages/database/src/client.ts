@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 // import { upstashCache } from "drizzle-orm/cache/upstash";
 import { drizzle } from "drizzle-orm/neon-http";
-import * as schema from "./schema";
+import { relations } from "./relations";
 
 // const CACHE_TTL = 24 * 60 * 60; // 24 hours in seconds
 
@@ -13,6 +13,9 @@ export const db = drizzle({
   //   token: process.env.UPSTASH_REDIS_REST_TOKEN as string,
   //   config: { ex: CACHE_TTL },
   // }),
-  schema,
-  casing: "snake_case",
+  // Drizzle v1 replaces the `schema` option with `relations` — the two are
+  // mutually exclusive, and `db.query` (RQB v2) is powered by this config.
+  // Casing is no longer set here either; it moved to the table level
+  // (`snakeCase.table`) in `src/schema`.
+  relations,
 });

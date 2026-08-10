@@ -1,4 +1,3 @@
-export type { Table } from "drizzle-orm";
 export {
   and,
   asc,
@@ -22,5 +21,6 @@ export {
   sql,
   sum,
 } from "drizzle-orm";
+export type { PgTable } from "drizzle-orm/pg-core";
 export { db } from "./client";
 export * from "./schema";

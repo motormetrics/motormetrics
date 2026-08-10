@@ -2,7 +2,7 @@
 
 import type { LanguageModelUsage } from "@motormetrics/ai";
 import type { SelectPost } from "@motormetrics/database";
-import { db, desc, eq, posts } from "@motormetrics/database";
+import { db } from "@motormetrics/database";
 import { auth } from "@web/app/admin/lib/auth";
 import {
   type CreatePostInput,
@@ -43,7 +43,7 @@ export async function getAllPosts(): Promise<PostWithMetadata[]> {
   }
 
   const allPosts = await db.query.posts.findMany({
-    orderBy: desc(posts.createdAt),
+    orderBy: { createdAt: "desc" },
   });
 
   return allPosts as PostWithMetadata[];
@@ -66,7 +66,7 @@ export async function getPostById(id: string): Promise<SelectPost | null> {
   }
 
   const post = await db.query.posts.findFirst({
-    where: eq(posts.id, id),
+    where: { id },
   });
 
   return post ?? null;

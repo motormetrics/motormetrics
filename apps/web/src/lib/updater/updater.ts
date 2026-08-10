@@ -1,5 +1,5 @@
 import path from "node:path";
-import { db, getTableName, type Table } from "@motormetrics/database";
+import { db, getTableName, type PgTable } from "@motormetrics/database";
 import { WORKFLOW_TEMP_DIR } from "@web/config/workflow";
 import { calculateChecksum } from "@web/lib/updater/services/calculate-checksum";
 import { downloadFile } from "@web/lib/updater/services/download-file";
@@ -10,7 +10,7 @@ import {
 import { Checksum } from "@web/utils/checksum";
 
 export interface UpdaterConfig<T> {
-  table: Table;
+  table: PgTable;
   url: string;
   csvFile?: string;
   filePath?: string;

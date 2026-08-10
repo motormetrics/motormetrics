@@ -28,7 +28,6 @@
     "db:check": "turbo run @motormetrics/database#check",
     "db:generate": "turbo run @motormetrics/database#generate",
     "db:push": "turbo run @motormetrics/database#push",
-    "db:drop": "turbo run @motormetrics/database#drop",
     "auth:generate": "turbo run auth:generate"
   },
   "devDependencies": {

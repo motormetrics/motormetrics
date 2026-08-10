@@ -1,13 +1,13 @@
 import {
   index,
   integer,
-  pgTable,
+  snakeCase,
   text,
   unique,
   uuid,
 } from "drizzle-orm/pg-core";
 
-export const vehiclePopulation = pgTable(
+export const vehiclePopulation = snakeCase.table(
   "vehicle_population",
   {
     id: uuid().defaultRandom().primaryKey(),

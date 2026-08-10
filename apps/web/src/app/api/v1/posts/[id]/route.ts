@@ -1,4 +1,4 @@
-import { db, eq, posts } from "@motormetrics/database";
+import { db } from "@motormetrics/database";
 import { deletePost } from "@web/app/admin/lib/delete-post";
 import { updatePost, updatePostSchema } from "@web/app/admin/lib/update-post";
 import type { NextRequest } from "next/server";
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
   const { id } = await params;
 
   const post = await db.query.posts.findFirst({
-    where: eq(posts.id, id),
+    where: { id },
   });
 
   if (!post) {

@@ -1,7 +1,7 @@
 import {
   index,
   jsonb,
-  pgTable,
+  snakeCase,
   text,
   timestamp,
   unique,
@@ -9,7 +9,7 @@ import {
   vector,
 } from "drizzle-orm/pg-core";
 
-export const posts = pgTable(
+export const posts = snakeCase.table(
   "posts",
   {
     id: uuid().primaryKey().defaultRandom(),

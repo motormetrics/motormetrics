@@ -1,4 +1,4 @@
-import { db, eq, posts } from "@motormetrics/database";
+import { db } from "@motormetrics/database";
 import {
   emitEvent,
   generatePostHero,
@@ -35,7 +35,7 @@ async function loadPost(postId: string) {
 
   console.log(`[REGENERATE-HERO] Loading post ${postId}`);
   const post = await db.query.posts.findFirst({
-    where: eq(posts.id, postId),
+    where: { id: postId },
   });
   if (!post) {
     throw new Error(`Post not found: ${postId}`);

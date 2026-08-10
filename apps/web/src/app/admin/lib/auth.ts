@@ -1,6 +1,14 @@
-import { drizzleAdapter } from "@better-auth/drizzle-adapter";
-import * as schema from "@motormetrics/database";
-import { db } from "@motormetrics/database";
+// Drizzle v1 exposes relations through `defineRelations` rather than the
+// `relations()` blocks the default adapter entry point expects, so the adapter
+// has to come from the relations-v2 export to read them.
+import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
+import {
+  accounts,
+  db,
+  sessions,
+  users,
+  verifications,
+} from "@motormetrics/database";
 import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
@@ -17,7 +25,10 @@ export const auth = betterAuth({
   },
   database: drizzleAdapter(db, {
     provider: "pg",
-    schema,
+    // Only the auth tables. This used to be the whole `@motormetrics/database`
+    // namespace, which also handed the adapter `db`, every query helper, and
+    // every unrelated table.
+    schema: { accounts, sessions, users, verifications },
     usePlural: true,
   }),
   trustedOrigins: [
@@ -26,13 +37,9 @@ export const auth = betterAuth({
     "http://localhost:3000",
   ],
   advanced: {
+    // Required from 1.7: forwarded headers are no longer trusted by default,
+    // so baseURL.allowedHosts cannot resolve the Vercel host without this.
     trustedProxyHeaders: true,
-    allowedHosts: [
-      "motormetrics.app",
-      "*.motormetrics.app",
-      "*.vercel.app",
-      "localhost:3000",
-    ],
   },
   plugins: [
     admin(),

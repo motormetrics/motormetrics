@@ -77,11 +77,6 @@
       "inputs": ["src/schema/**/*.ts", "drizzle.config.ts"],
       "interactive": true
     },
-    "drop": {
-      "cache": false,
-      "env": ["DATABASE_URL"],
-      "interactive": true
-    },
     "auth:generate": {
       "cache": false,
       "env": ["DATABASE_URL"]

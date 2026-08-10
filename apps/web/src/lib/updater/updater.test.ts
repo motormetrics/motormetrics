@@ -1,5 +1,5 @@
 import path from "node:path";
-import { db, type Table } from "@motormetrics/database";
+import { db, type PgTable } from "@motormetrics/database";
 import { WORKFLOW_TEMP_DIR } from "@web/config/workflow";
 import {
   type UpdaterConfig,
@@ -40,7 +40,7 @@ const mockTable = {
   month: "month",
   make: "make",
   fuel_type: "fuel_type",
-} as unknown as Table;
+} as unknown as PgTable;
 
 type TestRecord = {
   month: string;

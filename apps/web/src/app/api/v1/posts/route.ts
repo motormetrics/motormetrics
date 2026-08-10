@@ -1,4 +1,4 @@
-import { db, desc, eq, posts } from "@motormetrics/database";
+import { db } from "@motormetrics/database";
 import { createPost, createPostSchema } from "@web/app/admin/lib/create-post";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -11,13 +11,9 @@ export async function GET(request: NextRequest) {
   const status = request.nextUrl.searchParams.get("status");
   const limit = Number(request.nextUrl.searchParams.get("limit")) || 50;
 
-  const conditions = status
-    ? eq(posts.status, status as "draft" | "published")
-    : undefined;
-
   const results = await db.query.posts.findMany({
-    where: conditions,
-    orderBy: desc(posts.createdAt),
+    where: status ? { status: status as "draft" | "published" } : undefined,
+    orderBy: { createdAt: "desc" },
     limit,
   });
 
