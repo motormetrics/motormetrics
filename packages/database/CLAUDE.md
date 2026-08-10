@@ -2,11 +2,17 @@
 
 ## Schema Change Workflow
 
-Modify schema files in `src/schema/` → `pnpm generate` → review the generated SQL in
-`migrations/` → `pnpm migrate` → `pnpm migrate:check` to validate consistency.
-Types update automatically via Drizzle inference; never hand-edit generated migrations
-or `migrations/meta/_journal.json`. Always generate and test a migration before
-production — never rely on `pnpm push` outside local development.
+Modify schema files in `src/schema/`, then `pnpm push` to apply them to the
+**development** Neon branch and iterate there. Once the shape has settled, `pnpm
+generate` → review the generated SQL in `migrations/` → `pnpm migrate` →
+`pnpm migrate:check` to validate consistency. Types update automatically via Drizzle
+inference; never hand-edit generated migrations or `migrations/meta/_journal.json`.
+
+`push` is for **development only**. It mutates the schema without recording a row in
+`drizzle.__drizzle_migrations`, so the development ledger drifts from the repo by
+design and should never be "repaired" to match. Staging and production get schema
+changes solely through generated migrations applied by `migrate` — always generate and
+test a migration before production.
 
 ## Naming Conventions
 
