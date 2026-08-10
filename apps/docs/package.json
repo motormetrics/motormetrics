@@ -1,6 +1,6 @@
 {
   "name": "@motormetrics/docs",
-  "version": "4.72.0",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "build": "next build",

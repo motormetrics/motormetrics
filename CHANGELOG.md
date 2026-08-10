@@ -1,3 +1,22 @@
+## [5.0.0](https://github.com/motormetrics/motormetrics/compare/v4.72.0...v5.0.0) (2026-08-10)
+
+### ⚠ BREAKING CHANGES
+
+* **database:** drizzle-kit drop is removed, so the db:drop script is gone.
+
+### Features
+
+* **database:** upgrade Drizzle ORM to v1.0.0-rc.4 ([ef007b4](https://github.com/motormetrics/motormetrics/commit/ef007b479088dbb7f8d0c6988888c5bf866da8a6))
+* **web:** upgrade Better Auth to 1.7.0-rc.4 ([7a700b2](https://github.com/motormetrics/motormetrics/commit/7a700b258a096266bfbfea2e54ef51630a235775))
+
+### Bug Fixes
+
+* **web:** use the relations-v2 Drizzle adapter entry point ([578d70d](https://github.com/motormetrics/motormetrics/commit/578d70dbb0d9d1f9743ba733ec014bbcfcfabbed))
+
+### Reverts
+
+* **web:** keep auth:generate writing to the schema file ([25708b1](https://github.com/motormetrics/motormetrics/commit/25708b14da3da8378e7a202947d9cdbf29f0de71))
+
 ## [4.72.0](https://github.com/motormetrics/motormetrics/compare/v4.71.2...v4.72.0) (2026-08-09)
 
 ### Features
