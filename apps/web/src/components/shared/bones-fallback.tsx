@@ -26,7 +26,7 @@ import yearlyChartBones from "@web/bones/yearly-chart.bones.json";
 import type { BonesInput } from "./bones-skeleton";
 import { BonesSkeleton } from "./bones-skeleton";
 
-export const BONE_FALLBACKS = {
+const BONE_FALLBACKS = {
   "annual-header-meta": annualHeaderMetaBones,
   "blog-list": blogListBones,
   "cars-registrations-compare": carsRegistrationsCompareBones,
