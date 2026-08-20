@@ -2,5 +2,13 @@
   "out": "./src/bones",
   "breakpoints": [375, 768, 1280],
   "wait": 3000,
-  "skeletons": {}
+  "skeletons": {
+    "summary-card": { "route": "/" },
+    "monthly-change-summary": { "route": "/" },
+    "market-overview": { "route": "/" },
+    "coe-section": { "route": "/" },
+    "posts-section": { "route": "/" },
+    "yearly-chart": { "route": "/" },
+    "top-makes": { "route": "/" }
+  }
 }
