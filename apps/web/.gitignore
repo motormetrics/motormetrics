@@ -37,3 +37,7 @@ next-env.d.ts
 .env.local
 # heroui-agents-md
 .heroui-docs/
+
+# Boneyard client registry — bones JSON is committed; we render it as RSC
+/src/bones/registry.js
+/src/bones/registry.ts
