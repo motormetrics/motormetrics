@@ -1,7 +1,8 @@
 import type { CarLogo } from "@logos/types";
 import { redis, slugify } from "@motormetrics/utils";
 import { MakesDashboard } from "@web/app/(main)/(dashboard)/cars/components/makes/makes-dashboard";
-import { SkeletonCard } from "@web/components/shared/skeleton";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateItemListSchema } from "@web/lib/metadata";
@@ -63,7 +64,7 @@ async function CarMakesContent() {
   };
 
   return (
-    <>
+    <BonesCapture name="makes-content">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -86,13 +87,13 @@ async function CarMakesContent() {
         makeStatsMap={makeStatsMap}
         makesSummary={makesSummary}
       />
-    </>
+    </BonesCapture>
   );
 }
 
 export function MakesContentSection() {
   return (
-    <Suspense fallback={<SkeletonCard className="h-[560px] w-full" />}>
+    <Suspense fallback={<BonesFallback name="makes-content" />}>
       <CarMakesContent />
     </Suspense>
   );

@@ -1,0 +1,26 @@
+{
+  "breakpoints": {
+    "375": {
+      "name": "category-tabs",
+      "viewportWidth": 0,
+      "width": 0,
+      "height": 0,
+      "bones": []
+    },
+    "768": {
+      "name": "category-tabs",
+      "viewportWidth": 0,
+      "width": 0,
+      "height": 0,
+      "bones": []
+    },
+    "1280": {
+      "name": "category-tabs",
+      "viewportWidth": 0,
+      "width": 0,
+      "height": 0,
+      "bones": []
+    }
+  },
+  "_hash": "8f0eeb767b70827c8d4c7e0bc12c5a62"
+}
