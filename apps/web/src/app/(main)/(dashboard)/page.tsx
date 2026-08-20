@@ -1,4 +1,3 @@
-import { Card, Skeleton } from "@heroui/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import {
@@ -11,6 +10,7 @@ import { MonthlyChangeSummary } from "@web/app/(main)/(dashboard)/components/mon
 import { PostsSection } from "@web/app/(main)/(dashboard)/components/posts-section";
 import { SummaryCard } from "@web/app/(main)/(dashboard)/components/summary-card";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
 import { StructuredData } from "@web/components/structured-data";
 import Typography from "@web/components/typography";
 import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
@@ -82,54 +82,6 @@ const organisationSchema = {
   sameAs: [SOCIAL_URLS.instagram, SOCIAL_URLS.telegram, SOCIAL_URLS.github],
 } as const;
 
-function SummaryCardSkeleton() {
-  return (
-    <Card>
-      <Card.Content>
-        <div className="mb-4 flex items-center justify-between">
-          <Skeleton className="h-12 w-12 rounded-2xl" />
-          <Skeleton className="h-10 w-10 rounded-full" />
-        </div>
-        <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="mt-2 h-10 w-28 rounded-lg" />
-        <Skeleton className="mt-4 h-6 w-40 rounded-full" />
-      </Card.Content>
-    </Card>
-  );
-}
-
-function MarketOverviewSkeleton() {
-  return (
-    <div className="flex flex-col gap-4">
-      <Skeleton className="h-6 w-36 rounded-lg" />
-      <div className="grid grid-cols-3 gap-4">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="rounded-2xl bg-default p-4">
-            <Skeleton className="h-4 w-16 rounded-lg" />
-            <Skeleton className="mt-2 h-7 w-20 rounded-lg" />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function MonthlyChangeSummarySkeleton() {
-  return (
-    <Card>
-      <Card.Content>
-        <div className="mb-4 flex items-center justify-between">
-          <Skeleton className="h-12 w-12 rounded-2xl" />
-          <Skeleton className="h-10 w-10 rounded-full" />
-        </div>
-        <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="mt-2 h-10 w-28 rounded-lg" />
-        <Skeleton className="mt-4 h-6 w-40 rounded-full" />
-      </Card.Content>
-    </Card>
-  );
-}
-
 const HomePage = () => {
   return (
     <>
@@ -147,14 +99,16 @@ const HomePage = () => {
           {/* Row 1: Summary Cards */}
           <AnimatedSection className="col-span-12 lg:col-span-6">
             <SectionErrorBoundary title="Registration summary unavailable">
-              <Suspense fallback={<SummaryCardSkeleton />}>
+              <Suspense fallback={<BonesFallback name="summary-card" />}>
                 <SummaryCard />
               </Suspense>
             </SectionErrorBoundary>
           </AnimatedSection>
           <AnimatedSection className="col-span-12 lg:col-span-6">
             <SectionErrorBoundary title="Monthly change unavailable">
-              <Suspense fallback={<MonthlyChangeSummarySkeleton />}>
+              <Suspense
+                fallback={<BonesFallback name="monthly-change-summary" />}
+              >
                 <MonthlyChangeSummary />
               </Suspense>
             </SectionErrorBoundary>
@@ -187,7 +141,7 @@ const HomePage = () => {
           </AnimatedSection>
           <AnimatedSection className="col-span-12 lg:col-span-8">
             <SectionErrorBoundary title="Market overview unavailable">
-              <Suspense fallback={<MarketOverviewSkeleton />}>
+              <Suspense fallback={<BonesFallback name="market-overview" />}>
                 <MarketOverview />
               </Suspense>
             </SectionErrorBoundary>

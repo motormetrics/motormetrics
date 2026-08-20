@@ -1,6 +1,7 @@
 import { Link, Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { KPI, NumberValue } from "@heroui-pro/react";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { getCarsComparison, getCarsLatestMonth } from "@web/queries/cars";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
 
@@ -27,51 +28,53 @@ export async function MonthlyChangeSummary() {
   );
 
   return (
-    <KPI>
-      <KPI.Header>
-        <div className="flex size-11 items-center justify-center rounded-xl bg-default text-accent">
-          <CalendarDays className="size-6 text-accent" />
-        </div>
-        <Tooltip delay={300}>
-          <Link
-            aria-label="View monthly car registration details"
-            className={buttonVariants({
-              className: "ml-auto size-10",
-              isIconOnly: true,
-              variant: "tertiary",
-            })}
-            href={`/cars?month=${latestMonth}`}
-          >
-            <ArrowUpRight className="size-6" />
-          </Link>
-          <Tooltip.Content>
-            View monthly car registration details
-          </Tooltip.Content>
-        </Tooltip>
-      </KPI.Header>
-      <KPI.Header>
-        <KPI.Title>Monthly Change ({displayMonth})</KPI.Title>
-      </KPI.Header>
-      <KPI.Content>
-        <KPI.Value
-          className="text-4xl tabular-nums"
-          maximumFractionDigits={1}
-          signDisplay="exceptZero"
-          style="percent"
-          value={changeRatio}
-        />
-        <KPI.Trend trend={trend} variant="primary">
-          <NumberValue
-            locale="en-SG"
-            maximumFractionDigits={0}
+    <BonesCapture name="monthly-change-summary">
+      <KPI>
+        <KPI.Header>
+          <div className="flex size-11 items-center justify-center rounded-xl bg-default text-accent">
+            <CalendarDays className="size-6 text-accent" />
+          </div>
+          <Tooltip delay={300}>
+            <Link
+              aria-label="View monthly car registration details"
+              className={buttonVariants({
+                className: "ml-auto size-10",
+                isIconOnly: true,
+                variant: "tertiary",
+              })}
+              href={`/cars?month=${latestMonth}`}
+            >
+              <ArrowUpRight className="size-6" />
+            </Link>
+            <Tooltip.Content>
+              View monthly car registration details
+            </Tooltip.Content>
+          </Tooltip>
+        </KPI.Header>
+        <KPI.Header>
+          <KPI.Title>Monthly Change ({displayMonth})</KPI.Title>
+        </KPI.Header>
+        <KPI.Content>
+          <KPI.Value
+            className="text-4xl tabular-nums"
+            maximumFractionDigits={1}
             signDisplay="exceptZero"
-            value={changeAmount}
+            style="percent"
+            value={changeRatio}
           />
-        </KPI.Trend>
-      </KPI.Content>
-      <KPI.Footer>
-        <span className="text-muted text-xs">vs previous month</span>
-      </KPI.Footer>
-    </KPI>
+          <KPI.Trend trend={trend} variant="primary">
+            <NumberValue
+              locale="en-SG"
+              maximumFractionDigits={0}
+              signDisplay="exceptZero"
+              value={changeAmount}
+            />
+          </KPI.Trend>
+        </KPI.Content>
+        <KPI.Footer>
+          <span className="text-muted text-xs">vs previous month</span>
+        </KPI.Footer>
+      </KPI>
+    </BonesCapture>
   );
 }
