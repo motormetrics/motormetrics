@@ -17,10 +17,18 @@
     "category-tabs": { "route": "/cars/registrations" },
     "top-makes-fuel": { "route": "/cars/registrations" },
     "deregistrations-content": { "route": "/cars/deregistrations" },
+    "coe-results-content": { "route": "/coe/results" },
     "makes-content": { "route": "/cars/makes" },
     "make-detail": { "route": "/cars/makes/toyota" },
     "category-overview-content": { "route": "/cars/fuel-types" },
     "type-detail-content": { "route": "/cars/fuel-types/petrol" },
+    "latest-coe-results": { "route": "/coe/premiums" },
+    "key-insights": { "route": "/coe/premiums" },
+    "fun-facts-pqp": { "route": "/coe/premiums" },
+    "premium-ranges": { "route": "/coe/premiums" },
+    "coe-overview-header-meta": { "route": "/coe/premiums" },
+    "blog-list": { "route": "/blog" },
+    "popular-posts": { "route": "/blog" },
     "annual-header-meta": { "route": "/cars/annual" }
   }
 }
