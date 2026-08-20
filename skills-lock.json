@@ -12,6 +12,12 @@
       "sourceType": "github",
       "computedHash": "1ad3893d31e5df78cb4b4e16801f49acbdf82daed5f775748859ca7dc638d6d0"
     },
+    "boneyard": {
+      "source": "0xgf/boneyard",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/boneyard/SKILL.md",
+      "computedHash": "fc1d23e863407312d64b0db2ad0003c2b13a2e2ffb642cc0c878ca77736ba0c8"
+    },
     "content-strategy": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
