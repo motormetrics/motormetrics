@@ -1,7 +1,13 @@
+import path from "node:path";
 import { withBotId } from "botid/next/config";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 import { withWorkflow } from "workflow/next";
+
+const BONEYARD_CAPTURE_CLIENT =
+  "@web/components/shared/bones-capture-runtime.client";
+const BONEYARD_CAPTURE_STUB =
+  "./src/components/shared/bones-capture-runtime.stub.tsx";
 
 const ONE_DAY = 60 * 60 * 24;
 
@@ -60,6 +66,43 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForBuild: true,
     turbopackRustReactCompiler: true,
     typedEnv: true,
+  },
+  // Capture runtime is a next-dev Playwright hook. Production must not resolve
+  // `boneyard-js` (devDependency) or emit its client chunk.
+  ...(process.env.NODE_ENV === "production"
+    ? {
+        turbopack: {
+          resolveAlias: {
+            [BONEYARD_CAPTURE_CLIENT]: BONEYARD_CAPTURE_STUB,
+            "boneyard-js": BONEYARD_CAPTURE_STUB,
+            "boneyard-js/react": BONEYARD_CAPTURE_STUB,
+          },
+        },
+      }
+    : {}),
+  webpack: (config, { dev, dir }) => {
+    if (!dev) {
+      const stub = path.resolve(
+        dir,
+        "src/components/shared/bones-capture-runtime.stub.tsx",
+      );
+      config.resolve ??= {};
+      const alias = config.resolve.alias;
+      config.resolve.alias = {
+        ...(alias && !Array.isArray(alias) ? alias : {}),
+        [BONEYARD_CAPTURE_CLIENT]: stub,
+        [path.join(dir, "src/components/shared/bones-capture-runtime.client")]:
+          stub,
+        [path.join(
+          dir,
+          "src/components/shared/bones-capture-runtime.client.tsx",
+        )]: stub,
+        "boneyard-js": stub,
+        "boneyard-js/react": stub,
+      };
+    }
+
+    return config;
   },
   skipTrailingSlashRedirect: true,
   async redirects() {
