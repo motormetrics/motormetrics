@@ -1,7 +1,8 @@
 import { KPIGroup } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { MetricCard } from "@web/components/shared/metric-card";
-import { SkeletonMetricCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -51,7 +52,7 @@ async function MetricCardsContent({ month }: MetricCardsSectionProps) {
   };
 
   return (
-    <>
+    <BonesCapture name="metric-cards">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -100,25 +101,13 @@ async function MetricCardsContent({ month }: MetricCardsSectionProps) {
           }
         />
       </KPIGroup>
-    </>
-  );
-}
-
-function MetricCardsSkeleton() {
-  return (
-    <KPIGroup>
-      <SkeletonMetricCard />
-      <KPIGroup.Separator />
-      <SkeletonMetricCard />
-      <KPIGroup.Separator />
-      <SkeletonMetricCard />
-    </KPIGroup>
+    </BonesCapture>
   );
 }
 
 export function MetricCardsSection({ month }: MetricCardsSectionProps) {
   return (
-    <Suspense fallback={<MetricCardsSkeleton />}>
+    <Suspense fallback={<BonesFallback name="metric-cards" />}>
       <MetricCardsContent month={month} />
     </Suspense>
   );

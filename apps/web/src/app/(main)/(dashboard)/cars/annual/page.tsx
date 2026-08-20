@@ -8,8 +8,9 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { EmptyState } from "@web/components/shared/empty-state";
-import { SkeletonCard } from "@web/components/shared/skeleton";
 import { YearSelector } from "@web/components/shared/year-selector";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -97,7 +98,7 @@ async function AnnualPage({ searchParams }: PageProps) {
             />
           }
           meta={
-            <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+            <Suspense fallback={<BonesFallback name="annual-header-meta" />}>
               <AnnualHeaderMeta searchParams={searchParams} />
             </Suspense>
           }
@@ -135,13 +136,15 @@ async function AnnualHeaderMeta({
   const wasAdjusted = parsedYear !== null && !years.includes(parsedYear);
 
   return (
-    <DashboardPageMeta>
-      <YearSelector
-        years={years}
-        latestYear={latestYear}
-        wasAdjusted={wasAdjusted}
-      />
-    </DashboardPageMeta>
+    <BonesCapture name="annual-header-meta">
+      <DashboardPageMeta>
+        <YearSelector
+          years={years}
+          latestYear={latestYear}
+          wasAdjusted={wasAdjusted}
+        />
+      </DashboardPageMeta>
+    </BonesCapture>
   );
 }
 
