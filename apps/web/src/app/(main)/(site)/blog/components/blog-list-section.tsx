@@ -1,5 +1,6 @@
 import { BlogList } from "@web/app/(main)/(site)/blog/components/blog-list";
-import { ListSkeleton } from "@web/components/shared/skeleton";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { getAllPosts, searchPosts } from "@web/queries/posts";
 import { Suspense } from "react";
 
@@ -18,16 +19,16 @@ function fetchPosts(query: string) {
 async function BlogListContent({ query }: BlogListSectionProps) {
   const posts = await fetchPosts(query);
 
-  return <BlogList posts={posts} query={query} />;
-}
-
-function BlogListSkeleton() {
-  return <ListSkeleton count={3} />;
+  return (
+    <BonesCapture name="blog-list">
+      <BlogList posts={posts} query={query} />
+    </BonesCapture>
+  );
 }
 
 export function BlogListSection({ query }: BlogListSectionProps) {
   return (
-    <Suspense key={query} fallback={<BlogListSkeleton />}>
+    <Suspense key={query} fallback={<BonesFallback name="blog-list" />}>
       <BlogListContent query={query} />
     </Suspense>
   );

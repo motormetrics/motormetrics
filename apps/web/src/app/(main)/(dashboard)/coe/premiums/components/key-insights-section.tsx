@@ -1,5 +1,6 @@
 import { KeyInsights } from "@web/app/(main)/(dashboard)/coe/premiums/components/key-insights";
-import { SkeletonCard } from "@web/components/shared/skeleton";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import {
   calculateBiggestMovers,
   calculateNearRecords,
@@ -36,16 +37,16 @@ async function KeyInsightsContent() {
     return null;
   }
 
-  return <KeyInsights insights={keyInsights} />;
-}
-
-function KeyInsightsSkeleton() {
-  return <SkeletonCard className="h-16 w-full" />;
+  return (
+    <BonesCapture name="key-insights">
+      <KeyInsights insights={keyInsights} />
+    </BonesCapture>
+  );
 }
 
 export function KeyInsightsSection() {
   return (
-    <Suspense fallback={<KeyInsightsSkeleton />}>
+    <Suspense fallback={<BonesFallback name="key-insights" />}>
       <KeyInsightsContent />
     </Suspense>
   );

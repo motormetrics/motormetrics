@@ -1,5 +1,6 @@
 import { LatestCoePremium } from "@web/components/coe/latest-coe-premium";
-import { GridSkeleton, SectionSkeleton } from "@web/components/shared/skeleton";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -38,7 +39,7 @@ async function LatestResultsContent() {
   };
 
   return (
-    <>
+    <BonesCapture name="latest-coe-results">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -62,24 +63,13 @@ async function LatestResultsContent() {
           <LatestCoePremium results={latestResults} trends={coeTrends} />
         </div>
       </div>
-    </>
-  );
-}
-
-function LatestResultsSkeleton() {
-  return (
-    <SectionSkeleton>
-      <GridSkeleton
-        count={5}
-        columns="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-      />
-    </SectionSkeleton>
+    </BonesCapture>
   );
 }
 
 export function LatestResultsSection() {
   return (
-    <Suspense fallback={<LatestResultsSkeleton />}>
+    <Suspense fallback={<BonesFallback name="latest-coe-results" />}>
       <LatestResultsContent />
     </Suspense>
   );

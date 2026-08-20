@@ -7,6 +7,8 @@ import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
@@ -85,13 +87,13 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           />
         }
         meta={
-          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+          <Suspense fallback={<BonesFallback name="page-header-meta" />}>
             <COEResultsHeaderMeta searchParams={searchParams} />
           </Suspense>
         }
       />
       <SectionErrorBoundary title="COE results unavailable">
-        <Suspense fallback={<SkeletonCard className="h-[840px] w-full" />}>
+        <Suspense fallback={<BonesFallback name="coe-results-content" />}>
           <COEResultsContent searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -111,9 +113,11 @@ async function COEResultsHeaderMeta({
   );
 
   return (
-    <DashboardPageMeta lastUpdated={lastUpdated}>
-      <MonthSelector months={months} latestMonth={months[0]} />
-    </DashboardPageMeta>
+    <BonesCapture name="page-header-meta">
+      <DashboardPageMeta lastUpdated={lastUpdated}>
+        <MonthSelector months={months} latestMonth={months[0]} />
+      </DashboardPageMeta>
+    </BonesCapture>
   );
 }
 
@@ -140,7 +144,7 @@ async function COEResultsContent({
   };
 
   return (
-    <>
+    <BonesCapture name="coe-results-content">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -194,6 +198,6 @@ async function COEResultsContent({
           </Card.Content>
         </Card>
       </AnimatedSection>
-    </>
+    </BonesCapture>
   );
 }

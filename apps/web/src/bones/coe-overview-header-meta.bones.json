@@ -1,0 +1,26 @@
+{
+  "breakpoints": {
+    "375": {
+      "name": "coe-overview-header-meta",
+      "viewportWidth": 343,
+      "width": 343,
+      "height": 15,
+      "bones": [[22.9956, -1, 36.1653, 16, 8]]
+    },
+    "768": {
+      "name": "coe-overview-header-meta",
+      "viewportWidth": 720,
+      "width": 720,
+      "height": 15,
+      "bones": [[10.9549, -1, 17.2287, 16, 8]]
+    },
+    "1280": {
+      "name": "coe-overview-header-meta",
+      "viewportWidth": 203,
+      "width": 203,
+      "height": 15,
+      "bones": [[38.8696, -1, 61.1304, 16, 8]]
+    }
+  },
+  "_hash": "67f783b3f06f461d94327b94858dfbef"
+}

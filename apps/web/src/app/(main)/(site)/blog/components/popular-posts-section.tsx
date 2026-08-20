@@ -1,5 +1,6 @@
 import { PopularPosts } from "@web/app/(main)/(site)/blog/components/popular-posts";
-import { SkeletonCard } from "@web/components/shared/skeleton";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { UnreleasedFeature } from "@web/components/unreleased-feature";
 import { getPopularPostsWithData } from "@web/lib/data/posts";
 import { Suspense } from "react";
@@ -7,22 +8,17 @@ import { Suspense } from "react";
 async function PopularPostsContent() {
   const posts = await getPopularPostsWithData(5);
 
-  return <PopularPosts posts={posts} />;
-}
-
-function PopularPostsSkeleton() {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-      <SkeletonCard />
-      <SkeletonCard />
-    </div>
+    <BonesCapture name="popular-posts">
+      <PopularPosts posts={posts} />
+    </BonesCapture>
   );
 }
 
 export function PopularPostsSection() {
   return (
     <UnreleasedFeature>
-      <Suspense fallback={<PopularPostsSkeleton />}>
+      <Suspense fallback={<BonesFallback name="popular-posts" />}>
         <PopularPostsContent />
       </Suspense>
     </UnreleasedFeature>
