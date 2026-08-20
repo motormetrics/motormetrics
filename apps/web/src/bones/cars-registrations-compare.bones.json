@@ -1,0 +1,26 @@
+{
+  "breakpoints": {
+    "375": {
+      "name": "cars-registrations-compare",
+      "viewportWidth": 343,
+      "width": 343,
+      "height": 40,
+      "bones": [[53.6261, 0, 46.3739, 40, 24]]
+    },
+    "768": {
+      "name": "cars-registrations-compare",
+      "viewportWidth": 720,
+      "width": 720,
+      "height": 36,
+      "bones": [[77.908, 0, 22.092, 36, 24]]
+    },
+    "1280": {
+      "name": "cars-registrations-compare",
+      "viewportWidth": 1232,
+      "width": 1232,
+      "height": 36,
+      "bones": [[87.0891, 0, 12.9109, 36, 24]]
+    }
+  },
+  "_hash": "7fb403922ce3a4a4fddb545f22ed2815"
+}

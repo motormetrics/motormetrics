@@ -9,8 +9,9 @@ import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { MonthSelector } from "@web/components/shared/month-selector";
-import { SkeletonCard } from "@web/components/shared/skeleton";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { loadCarsMetadataData } from "@web/lib/cars/page-data";
@@ -79,20 +80,24 @@ export default function Page({ searchParams }: PageProps) {
           />
         }
         meta={
-          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+          <Suspense fallback={<BonesFallback name="page-header-meta" />}>
             <CarsPageHeaderMeta searchParams={searchParams} />
           </Suspense>
         }
       />
 
       <AnimatedSection order={1}>
-        <Suspense fallback={<SkeletonCard className="h-12 w-52" />}>
+        <Suspense
+          fallback={<BonesFallback name="cars-registrations-compare" />}
+        >
           <CarsCompareSection searchParams={searchParams} />
         </Suspense>
       </AnimatedSection>
 
       <SectionErrorBoundary title="Registration data unavailable">
-        <Suspense fallback={<SkeletonCard className="h-[720px] w-full" />}>
+        <Suspense
+          fallback={<BonesFallback name="cars-registrations-sections" />}
+        >
           <CarsPageSections searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -120,11 +125,13 @@ async function CarsCompareSection({
     false;
 
   return (
-    <TrendsCompareButton
-      currentMonth={month}
-      months={months}
-      comparisonData={comparisonData}
-    />
+    <BonesCapture name="cars-registrations-compare">
+      <TrendsCompareButton
+        currentMonth={month}
+        months={months}
+        comparisonData={comparisonData}
+      />
+    </BonesCapture>
   );
 }
 
@@ -137,17 +144,19 @@ async function CarsPageSections({
   const { month } = await getMonthOrLatest(parsedMonth, "cars");
 
   return (
-    <div className="flex flex-col gap-4">
-      <AnimatedSection order={3}>
-        <MetricCardsSection month={month} />
-      </AnimatedSection>
-      <AnimatedSection order={4}>
-        <CategoryTabsSection month={month} />
-      </AnimatedSection>
-      <AnimatedSection order={5}>
-        <TopMakesFuelSection month={month} />
-      </AnimatedSection>
-    </div>
+    <BonesCapture name="cars-registrations-sections">
+      <div className="flex flex-col gap-4">
+        <AnimatedSection order={3}>
+          <MetricCardsSection month={month} />
+        </AnimatedSection>
+        <AnimatedSection order={4}>
+          <CategoryTabsSection month={month} />
+        </AnimatedSection>
+        <AnimatedSection order={5}>
+          <TopMakesFuelSection month={month} />
+        </AnimatedSection>
+      </div>
+    </BonesCapture>
   );
 }
 
@@ -164,12 +173,14 @@ async function CarsPageHeaderMeta({
   ]);
 
   return (
-    <DashboardPageMeta lastUpdated={lastUpdated}>
-      <MonthSelector
-        months={months}
-        latestMonth={months[0]}
-        wasAdjusted={wasAdjusted}
-      />
-    </DashboardPageMeta>
+    <BonesCapture name="page-header-meta">
+      <DashboardPageMeta lastUpdated={lastUpdated}>
+        <MonthSelector
+          months={months}
+          latestMonth={months[0]}
+          wasAdjusted={wasAdjusted}
+        />
+      </DashboardPageMeta>
+    </BonesCapture>
   );
 }

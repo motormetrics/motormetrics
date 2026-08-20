@@ -4,6 +4,8 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
@@ -99,7 +101,7 @@ export default async function CarMakePage({
           />
         }
         meta={
-          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+          <Suspense fallback={<BonesFallback name="page-header-meta" />}>
             <CarMakeHeaderMeta
               params={params}
               searchParams={searchParamsPromise}
@@ -109,7 +111,7 @@ export default async function CarMakePage({
       />
 
       <AnimatedSection order={1}>
-        <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+        <Suspense fallback={<BonesFallback name="make-detail" />}>
           <CarMakeContent params={params} searchParams={searchParamsPromise} />
         </Suspense>
       </AnimatedSection>
@@ -124,23 +126,24 @@ async function CarMakeHeaderMeta({
   params: Promise<{ make: Make }>;
   searchParams: Promise<SearchParams>;
 }) {
-  const [{ make }, { month: parsedMonth }, months, lastUpdated] =
-    await Promise.all([
-      paramsPromise,
-      loadSearchParams(searchParamsPromise),
-      fetchMonthsForCars(),
-      redis.get<number>(LAST_UPDATED_CARS_KEY),
-    ]);
+  const [, { month: parsedMonth }, months, lastUpdated] = await Promise.all([
+    paramsPromise,
+    loadSearchParams(searchParamsPromise),
+    fetchMonthsForCars(),
+    redis.get<number>(LAST_UPDATED_CARS_KEY),
+  ]);
   const { wasAdjusted } = await getMonthOrLatest(parsedMonth, "cars");
 
   return (
-    <DashboardPageMeta lastUpdated={lastUpdated}>
-      <MonthSelector
-        months={months}
-        latestMonth={months[0]}
-        wasAdjusted={wasAdjusted}
-      />
-    </DashboardPageMeta>
+    <BonesCapture name="page-header-meta">
+      <DashboardPageMeta lastUpdated={lastUpdated}>
+        <MonthSelector
+          months={months}
+          latestMonth={months[0]}
+          wasAdjusted={wasAdjusted}
+        />
+      </DashboardPageMeta>
+    </BonesCapture>
   );
 }
 
@@ -220,7 +223,7 @@ async function CarMakeContent({
   );
 
   return (
-    <>
+    <BonesCapture name="make-detail">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -242,6 +245,6 @@ async function CarMakeContent({
           vehicleTypeBreakdown={vehicleTypeBreakdown}
         />
       </Suspense>
-    </>
+    </BonesCapture>
   );
 }

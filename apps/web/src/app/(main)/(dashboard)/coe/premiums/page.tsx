@@ -6,7 +6,8 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
-import { SkeletonCard } from "@web/components/shared/skeleton";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { loadLastUpdated } from "@web/lib/common";
@@ -70,7 +71,9 @@ export default function COEOverviewPage() {
           />
         }
         meta={
-          <Suspense fallback={<SkeletonCard className="h-8 w-28" />}>
+          <Suspense
+            fallback={<BonesFallback name="coe-overview-header-meta" />}
+          >
             <COEOverviewHeaderMeta />
           </Suspense>
         }
@@ -98,5 +101,9 @@ export default function COEOverviewPage() {
 async function COEOverviewHeaderMeta() {
   const lastUpdated = await loadLastUpdated("coe");
 
-  return <DashboardPageMeta lastUpdated={lastUpdated} />;
+  return (
+    <BonesCapture name="coe-overview-header-meta">
+      <DashboardPageMeta lastUpdated={lastUpdated} />
+    </BonesCapture>
+  );
 }

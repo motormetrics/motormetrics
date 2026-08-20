@@ -1,3 +1,5 @@
+export { BonesFallback } from "./bones-fallback";
+export { BonesCapture, BonesSkeleton } from "./bones-skeleton";
 export { NewChip } from "./chips";
 export { EmptyState } from "./empty-state";
 export { LastUpdated } from "./last-updated";
