@@ -1,5 +1,6 @@
 import { TopMakes } from "@web/app/(main)/(dashboard)/cars/registrations/components/top-makes";
-import { SkeletonCard } from "@web/components/shared/skeleton";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { getTopMakesByFuelType } from "@web/queries/cars/market-insights";
 import { Suspense } from "react";
 
@@ -10,16 +11,16 @@ interface TopMakesFuelSectionProps {
 async function TopMakesFuelContent({ month }: TopMakesFuelSectionProps) {
   const topMakes = await getTopMakesByFuelType(month);
 
-  return <TopMakes data={topMakes} />;
-}
-
-function TopMakesFuelSkeleton() {
-  return <SkeletonCard className="h-[320px] w-full" />;
+  return (
+    <BonesCapture name="top-makes-fuel">
+      <TopMakes data={topMakes} />
+    </BonesCapture>
+  );
 }
 
 export function TopMakesFuelSection({ month }: TopMakesFuelSectionProps) {
   return (
-    <Suspense fallback={<TopMakesFuelSkeleton />}>
+    <Suspense fallback={<BonesFallback name="top-makes-fuel" />}>
       <TopMakesFuelContent month={month} />
     </Suspense>
   );

@@ -4,6 +4,8 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
@@ -45,13 +47,13 @@ export function CategoryOverview({
           />
         }
         meta={
-          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+          <Suspense fallback={<BonesFallback name="page-header-meta" />}>
             <CategoryOverviewHeaderMeta searchParams={searchParams} />
           </Suspense>
         }
       />
 
-      <Suspense fallback={<SkeletonCard className="h-[720px] w-full" />}>
+      <Suspense fallback={<BonesFallback name="category-overview-content" />}>
         <CategoryOverviewContent config={config} searchParams={searchParams} />
       </Suspense>
     </div>
@@ -72,13 +74,15 @@ async function CategoryOverviewHeaderMeta({
   ]);
 
   return (
-    <DashboardPageMeta lastUpdated={lastUpdated}>
-      <MonthSelector
-        months={months}
-        latestMonth={months[0]}
-        wasAdjusted={wasAdjusted}
-      />
-    </DashboardPageMeta>
+    <BonesCapture name="page-header-meta">
+      <DashboardPageMeta lastUpdated={lastUpdated}>
+        <MonthSelector
+          months={months}
+          latestMonth={months[0]}
+          wasAdjusted={wasAdjusted}
+        />
+      </DashboardPageMeta>
+    </BonesCapture>
   );
 }
 
@@ -115,7 +119,7 @@ async function CategoryOverviewContent({
   };
 
   return (
-    <>
+    <BonesCapture name="category-overview-content">
       <StructuredData data={structuredData} />
       {categoryData.length > 0 ? (
         <>
@@ -150,6 +154,6 @@ async function CategoryOverviewContent({
           </Typography.Text>
         </div>
       )}
-    </>
+    </BonesCapture>
   );
 }

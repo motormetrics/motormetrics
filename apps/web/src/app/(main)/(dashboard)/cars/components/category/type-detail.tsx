@@ -5,6 +5,8 @@ import { CarOverviewTrends } from "@web/app/(main)/(dashboard)/cars/registration
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { BonesFallback } from "@web/components/shared/bones-fallback";
+import { BonesCapture } from "@web/components/shared/bones-skeleton";
 import { MonthSelector } from "@web/components/shared/month-selector";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
@@ -55,7 +57,7 @@ export async function TypeDetail({
     <div className="flex flex-col gap-4">
       <DashboardPageHeader
         meta={
-          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+          <Suspense fallback={<BonesFallback name="page-header-meta" />}>
             <TypeDetailHeaderMeta searchParams={searchParams} />
           </Suspense>
         }
@@ -93,13 +95,15 @@ async function TypeDetailHeaderMeta({
   ]);
 
   return (
-    <DashboardPageMeta lastUpdated={lastUpdated}>
-      <MonthSelector
-        months={months}
-        latestMonth={months[0]}
-        wasAdjusted={wasAdjusted}
-      />
-    </DashboardPageMeta>
+    <BonesCapture name="page-header-meta">
+      <DashboardPageMeta lastUpdated={lastUpdated}>
+        <MonthSelector
+          months={months}
+          latestMonth={months[0]}
+          wasAdjusted={wasAdjusted}
+        />
+      </DashboardPageMeta>
+    </BonesCapture>
   );
 }
 
@@ -156,7 +160,7 @@ async function TypeDetailContent({
   const formattedMonth = formatDateToMonthYear(month);
 
   return (
-    <>
+    <BonesCapture name="type-detail-content">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -208,6 +212,6 @@ async function TypeDetailContent({
         </KPI>
       </div>
       <CarOverviewTrends cars={cars.data} total={cars.total} />
-    </>
+    </BonesCapture>
   );
 }
