@@ -20,6 +20,7 @@ export const auth = betterAuth({
       "*.motormetrics.app",
       "*.vercel.app",
       "localhost:3000",
+      "motormetrics.localhost",
     ],
     protocol: "auto",
   },
@@ -35,6 +36,7 @@ export const auth = betterAuth({
     "https://*.motormetrics.app",
     "https://*.vercel.app",
     "http://localhost:3000",
+    "https://motormetrics.localhost",
   ],
   advanced: {
     // Required from 1.7: forwarded headers are no longer trusted by default,

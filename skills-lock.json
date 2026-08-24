@@ -75,6 +75,12 @@
       "sourceType": "github",
       "computedHash": "9505748dba2319487b285f8ab8c1e5417fce38a512d596e1c9e2e87b34b196e1"
     },
+    "portless": {
+      "source": "vercel-labs/portless",
+      "sourceType": "github",
+      "skillPath": "skills/portless/SKILL.md",
+      "computedHash": "4dd2cfba1475a35878d3936d4ce80047b800f7d7f65c9c6ddccb4638651d66a5"
+    },
     "posthog-debugger": {
       "source": "posthog/skills",
       "sourceType": "github",
