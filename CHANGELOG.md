@@ -1,3 +1,9 @@
+## [5.1.0](https://github.com/motormetrics/motormetrics/compare/v5.0.0...v5.1.0) (2026-08-24)
+
+### Features
+
+* **web:** hide blog from site navigation ([c45ebe5](https://github.com/motormetrics/motormetrics/commit/c45ebe5ba0ea9606da69088f663afcd30a6b5581))
+
 ## [5.0.0](https://github.com/motormetrics/motormetrics/compare/v4.72.0...v5.0.0) (2026-08-10)
 
 ### ⚠ BREAKING CHANGES
