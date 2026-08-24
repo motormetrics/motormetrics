@@ -158,16 +158,6 @@ exports[`Footer > should render asynchronous footer content with version informa
             </a>
             <a
               class="block text-muted transition-colors hover:text-accent"
-              href="/blog"
-            >
-              <p
-                class="text-muted text-sm leading-6"
-              >
-                Blog
-              </p>
-            </a>
-            <a
-              class="block text-muted transition-colors hover:text-accent"
               href="/learn"
             >
               <p

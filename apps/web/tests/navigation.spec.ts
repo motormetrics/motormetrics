@@ -25,14 +25,17 @@ test.describe("Public navigation", () => {
       }),
     ).toBeVisible();
 
-    await mainNavigation.getByRole("link", { name: "Blog" }).click();
-    await expect(page).toHaveURL("/blog");
-    await expect(
-      page.getByRole("heading", {
-        level: 1,
-        name: "Insights and Market Analysis",
-      }),
-    ).toBeVisible();
+    // TODO: Blog is hidden from site navigation pending a decision on the
+    // blog's future. Restore alongside the NAV_ITEMS entry. The /blog route
+    // itself is still covered by blog.spec.ts.
+    // await mainNavigation.getByRole("link", { name: "Blog" }).click();
+    // await expect(page).toHaveURL("/blog");
+    // await expect(
+    //   page.getByRole("heading", {
+    //     level: 1,
+    //     name: "Insights and Market Analysis",
+    //   }),
+    // ).toBeVisible();
 
     await mainNavigation.getByRole("link", { name: "Learn" }).click();
     await expect(page).toHaveURL("/learn");

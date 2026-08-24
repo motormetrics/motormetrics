@@ -213,6 +213,9 @@ export type NavItem = {
 export const NAV_ITEMS = [
   { href: "/", label: "Overview" },
   { href: "/about", label: "About" },
-  { href: "/blog", label: "Blog" },
+  // TODO: Blog hidden from site navigation pending a decision on the blog's
+  // future. Commented out rather than deleted so it can be restored in one
+  // line. The /blog route, sitemap entries and llms.txt are all still live.
+  // { href: "/blog", label: "Blog" },
   { href: "/learn", label: "Learn" },
 ] as const satisfies readonly NavItem[];

@@ -59,6 +59,8 @@ export function CtaSection() {
                 <ArrowRight className="size-4" />
               </Button>
             </Link>
+            {/* TODO: Blog CTA hidden pending a decision on the blog's future.
+                Commented out rather than deleted so it can be restored.
             <Link href="/blog" className="no-underline">
               <Button
                 variant="outline"
@@ -68,6 +70,7 @@ export function CtaSection() {
                 Read Our Blog
               </Button>
             </Link>
+            */}
           </motion.div>
         </motion.div>
       </div>
