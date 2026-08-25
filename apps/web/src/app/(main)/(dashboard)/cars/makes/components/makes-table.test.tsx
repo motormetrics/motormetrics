@@ -37,8 +37,25 @@ const rows: MakesTableRow[] = [
   },
 ];
 
-const renderTable = () =>
-  render(<MakesTable fuelTabs={null} rangeLabel="Year to date" rows={rows} />);
+/** 25 makes, so the 20-row collapse threshold is crossed. */
+const manyRows: MakesTableRow[] = Array.from({ length: 25 }, (_, index) => ({
+  count: 1000 - index * 10,
+  logoUrl: null,
+  make: `MAKE ${String(index + 1).padStart(2, "0")}`,
+  rank: index + 1,
+  share: 4,
+  slug: `make-${index + 1}`,
+  yoyChange: 5,
+}));
+
+const renderTable = (rowsToRender: MakesTableRow[] = rows) =>
+  render(
+    <MakesTable
+      fuelTabs={null}
+      rangeLabel="Year to date"
+      rows={rowsToRender}
+    />,
+  );
 
 const makeNames = () =>
   screen
@@ -156,5 +173,45 @@ describe("MakesTable", () => {
     const mazdaRow = screen.getAllByRole("link")[2];
 
     expect(within(mazdaRow).getByText("—")).toBeVisible();
+  });
+
+  it("should collapse a long list to the first twenty makes", () => {
+    renderTable(manyRows);
+
+    expect(makeNames()).toHaveLength(20);
+    expect(screen.getByText(/Year to date · top 20 of 25/)).toBeVisible();
+  });
+
+  it("should reveal the remaining makes when show all is pressed", async () => {
+    const user = userEvent.setup();
+    renderTable(manyRows);
+
+    await user.click(screen.getByRole("button", { name: "Show all 25 makes" }));
+
+    expect(makeNames()).toHaveLength(25);
+    expect(screen.getByRole("button", { name: "Show fewer" })).toBeVisible();
+  });
+
+  it("should not offer to expand a list that already fits", () => {
+    renderTable();
+
+    expect(screen.queryByRole("button", { name: /Show all/ })).toBeNull();
+  });
+
+  it("should withhold the change for a make below the volume threshold", () => {
+    renderTable([
+      {
+        count: 4,
+        logoUrl: null,
+        make: "ROLLS ROYCE",
+        rank: 1,
+        share: 0.1,
+        slug: "rolls-royce",
+        yoyChange: 100,
+      },
+    ]);
+
+    expect(screen.queryByText("+100.0%")).toBeNull();
+    expect(screen.getByTitle(/Too few registrations/)).toBeVisible();
   });
 });

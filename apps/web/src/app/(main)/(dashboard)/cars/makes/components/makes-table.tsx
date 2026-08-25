@@ -14,6 +14,22 @@ import type { MakeRow } from "./make-rows";
 /** The trend series only feeds the hero sparkline, so it never crosses over. */
 export type MakesTableRow = Omit<MakeRow, "trend">;
 
+/**
+ * Rows shown before the reader asks for the rest. Higher than the Cars
+ * overview's preview, since browsing makes is the whole point of this page,
+ * but still short of the full tail of marques on a handful of registrations.
+ */
+const COLLAPSED_ROWS = 20;
+
+/**
+ * Below this many registrations the year-over-year percentage is withheld.
+ *
+ * The arithmetic is right but the figure is not informative: two cars becoming
+ * four is a true +100%, and in the same chip as a real movement it invites the
+ * eye to read the loudest number as the biggest story.
+ */
+const MIN_COUNT_FOR_CHANGE = 20;
+
 type SortKey = "count" | "make" | "yoyChange";
 type SortDirection = "asc" | "desc";
 
@@ -86,6 +102,7 @@ export function MakesTable({
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("count");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const visibleRows = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -98,6 +115,15 @@ export function MakesTable({
       return sortDirection === "asc" ? order : -order;
     });
   }, [query, rows, sortDirection, sortKey]);
+
+  // A search is already a narrowing, so matches are never truncated on top of
+  // it — collapsing only applies to the unfiltered list.
+  const isSearching = query.trim().length > 0;
+  const isTruncated =
+    !isExpanded && !isSearching && visibleRows.length > COLLAPSED_ROWS;
+  const displayedRows = isTruncated
+    ? visibleRows.slice(0, COLLAPSED_ROWS)
+    : visibleRows;
 
   const toggleSort = (key: SortKey) => {
     if (key === sortKey) {
@@ -119,8 +145,10 @@ export function MakesTable({
             All makes
           </Typography.H3>
           <Typography.Caption className="font-semibold text-[var(--muted)]">
-            {rangeLabel} · {visibleRows.length}{" "}
-            {visibleRows.length === 1 ? "make" : "makes"}
+            {rangeLabel} ·{" "}
+            {isTruncated
+              ? `top ${displayedRows.length} of ${visibleRows.length}`
+              : `${visibleRows.length} ${visibleRows.length === 1 ? "make" : "makes"}`}
           </Typography.Caption>
         </div>
         <span className="ml-auto whitespace-nowrap font-semibold text-[13.5px] text-[var(--subtle)]">
@@ -184,7 +212,7 @@ export function MakesTable({
       </div>
 
       <div className="flex flex-col">
-        {visibleRows.map((row) => (
+        {displayedRows.map((row) => (
           <Link
             className={cn(
               GRID_CLASS,
@@ -234,8 +262,15 @@ export function MakesTable({
               </span>
             </span>
 
-            {row.yoyChange === null ? (
-              <span className="text-right font-semibold text-[var(--subtle)] text-sm">
+            {row.yoyChange === null || row.count < MIN_COUNT_FOR_CHANGE ? (
+              <span
+                className="text-right font-semibold text-[var(--subtle)] text-sm"
+                title={
+                  row.yoyChange === null
+                    ? "No registrations in the same period a year earlier"
+                    : `Too few registrations for a meaningful year-on-year change (under ${MIN_COUNT_FOR_CHANGE})`
+                }
+              >
                 —
               </span>
             ) : (
@@ -259,9 +294,21 @@ export function MakesTable({
         ) : null}
       </div>
 
+      {!isSearching && visibleRows.length > COLLAPSED_ROWS ? (
+        <button
+          aria-expanded={isExpanded}
+          className="mt-3 cursor-[var(--cursor-interactive)] self-center rounded-full bg-default px-6 py-3 font-bold text-[var(--muted-strong)] text-sm transition-colors hover:text-foreground"
+          onClick={() => setIsExpanded((current) => !current)}
+          type="button"
+        >
+          {isExpanded ? "Show fewer" : `Show all ${visibleRows.length} makes`}
+        </button>
+      ) : null}
+
       <Typography.Caption className="mt-3 px-4.5 font-medium text-[var(--subtle)]">
-        Change compares against the same period a year earlier. Select a row to
-        open the make.
+        Change compares against the same period a year earlier, and is withheld
+        below {MIN_COUNT_FOR_CHANGE} registrations. Select a row to open the
+        make.
       </Typography.Caption>
     </SurfaceCard>
   );
