@@ -25,6 +25,22 @@ const CHART_COLOURS = 6;
 /** Ranks up to this are picked out in the accent rather than the neutral. */
 const PODIUM = 3;
 
+/**
+ * Rows shown before the reader asks for the rest. The full list runs to every
+ * make on record, whose tail is dozens of marques on one or two registrations —
+ * a long scroll that buries the makes actually carrying the market.
+ */
+const COLLAPSED_ROWS = 10;
+
+/**
+ * Below this many registrations the year-over-year percentage is suppressed.
+ *
+ * The arithmetic is correct but the figure is not informative: two cars
+ * becoming four is a true +100%, and rendering it in the same chip as a real
+ * movement invites the eye to read the loudest number as the biggest story.
+ */
+const MIN_COUNT_FOR_CHANGE = 20;
+
 const numberFormatter = new Intl.NumberFormat("en-SG", {
   maximumFractionDigits: 0,
 });
@@ -93,6 +109,7 @@ export function DimensionTable({
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("count");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const labels = DIMENSION_LABELS[dimension];
 
@@ -117,6 +134,13 @@ export function DimensionTable({
         compareStats(first, second, sortKey, sortDirection),
       );
   }, [ranked, query, sortDirection, sortKey]);
+
+  // A search is already a narrowing, so matches are never truncated on top of
+  // it — collapsing only applies to the unfiltered list.
+  const isSearching = query.trim().length > 0;
+  const isTruncated =
+    !isExpanded && !isSearching && visible.length > COLLAPSED_ROWS;
+  const displayed = isTruncated ? visible.slice(0, COLLAPSED_ROWS) : visible;
 
   const toggleSort = (key: SortKey) => {
     if (key === sortKey) {
@@ -160,8 +184,10 @@ export function DimensionTable({
             {labels.title}
           </Typography.H3>
           <Typography.TextSm className="font-semibold text-muted">
-            Year to date through {monthLabel} · {visible.length}{" "}
-            {visible.length === 1 ? "row" : "rows"}
+            Year to date through {monthLabel} ·{" "}
+            {isTruncated
+              ? `top ${displayed.length} of ${visible.length}`
+              : `${visible.length} ${visible.length === 1 ? "row" : "rows"}`}
           </Typography.TextSm>
         </div>
         <div className="ml-auto flex gap-1.5 rounded-full bg-default p-1.5">
@@ -181,6 +207,7 @@ export function DimensionTable({
                   setQuery("");
                   setSortKey("count");
                   setSortDirection("desc");
+                  setIsExpanded(false);
                   setDimension(option);
                 }}
                 type="button"
@@ -281,7 +308,7 @@ export function DimensionTable({
           </tr>
         </thead>
         <tbody>
-          {visible.map((row) => (
+          {displayed.map((row) => (
             <tr className="group" key={row.name}>
               <td className={cn(CELL_CLASS, "rounded-l-[var(--radius)]")}>
                 <span className="flex min-w-0 items-center gap-3">
@@ -326,7 +353,14 @@ export function DimensionTable({
               </td>
               <td className={cn(CELL_CLASS, "rounded-r-[var(--radius)]")}>
                 <span className="flex justify-end">
-                  {row.yoyChange === null ? (
+                  {row.count < MIN_COUNT_FOR_CHANGE ? (
+                    <span
+                      className="font-bold text-[var(--subtle)] text-sm"
+                      title={`Too few registrations for a meaningful year-on-year change (under ${MIN_COUNT_FOR_CHANGE})`}
+                    >
+                      —
+                    </span>
+                  ) : row.yoyChange === null ? (
                     <span className="rounded-full bg-default px-3 py-2 font-bold text-[13px] text-muted">
                       New
                     </span>
@@ -345,6 +379,24 @@ export function DimensionTable({
           Nothing matches “{query}”.
         </Typography.TextSm>
       ) : null}
+
+      {!isSearching && visible.length > COLLAPSED_ROWS ? (
+        <button
+          aria-expanded={isExpanded}
+          className="cursor-[var(--cursor-interactive)] self-center rounded-full bg-default px-6 py-3 font-bold text-[var(--muted-strong)] text-sm transition-colors hover:text-foreground"
+          onClick={() => setIsExpanded((current) => !current)}
+          type="button"
+        >
+          {isExpanded
+            ? "Show fewer"
+            : `Show all ${visible.length} ${labels.tab.toLowerCase()}`}
+        </button>
+      ) : null}
+
+      <Typography.Caption className="px-4 font-medium text-[var(--subtle)]">
+        Change compares against the same period a year earlier, and is withheld
+        below {MIN_COUNT_FOR_CHANGE} registrations.
+      </Typography.Caption>
     </SurfaceCard>
   );
 }

@@ -19,9 +19,22 @@ const rows: DimensionStat[] = [
   { name: "BYD", count: 100, share: 10, trend: [], yoyChange: null },
 ];
 
-const renderTable = () =>
+/** 25 makes, so the 10-row collapse threshold is crossed. */
+const manyRows: DimensionStat[] = Array.from({ length: 25 }, (_, index) => ({
+  name: `MAKE ${String(index + 1).padStart(2, "0")}`,
+  count: 1000 - index * 10,
+  share: 4,
+  trend: [],
+  yoyChange: 5,
+}));
+
+const renderTable = (rowsToRender: DimensionStat[] = rows) =>
   render(
-    <DimensionTable dimension="make" monthLabel="October 2025" rows={rows} />,
+    <DimensionTable
+      dimension="make"
+      monthLabel="October 2025"
+      rows={rowsToRender}
+    />,
   );
 
 /** Row order as the reader sees it, header row excluded. */
@@ -126,5 +139,49 @@ describe("DimensionTable", () => {
     await user.click(tab);
 
     expect(setDimension).toHaveBeenCalledWith("fuelType");
+  });
+
+  it("should collapse a long list to the first ten rows", () => {
+    renderTable(manyRows);
+
+    expect(visibleNames()).toHaveLength(10);
+    expect(
+      screen.getByText(/Year to date through October 2025 · top 10 of 25/),
+    ).toBeVisible();
+  });
+
+  it("should reveal the remaining rows when show all is pressed", async () => {
+    const user = userEvent.setup();
+    renderTable(manyRows);
+
+    await user.click(screen.getByRole("button", { name: "Show all 25 makes" }));
+
+    expect(visibleNames()).toHaveLength(25);
+    expect(screen.getByRole("button", { name: "Show fewer" })).toBeVisible();
+  });
+
+  it("should not offer to expand a list that already fits", () => {
+    renderTable();
+
+    expect(screen.queryByRole("button", { name: /Show all/ })).toBeNull();
+  });
+
+  it("should show every match when searching, without truncating", async () => {
+    const user = userEvent.setup();
+    renderTable(manyRows);
+
+    await user.type(searchBox(), "MAKE");
+
+    expect(visibleNames()).toHaveLength(25);
+    expect(screen.queryByRole("button", { name: /Show all/ })).toBeNull();
+  });
+
+  it("should withhold the change for a row below the volume threshold", () => {
+    renderTable([
+      { name: "ROLLS ROYCE", count: 4, share: 0.1, trend: [], yoyChange: 100 },
+    ]);
+
+    expect(screen.queryByText("+100.0%")).toBeNull();
+    expect(screen.getByTitle(/Too few registrations/)).toBeVisible();
   });
 });
