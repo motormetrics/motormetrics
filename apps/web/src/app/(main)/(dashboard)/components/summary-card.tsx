@@ -2,40 +2,13 @@ import { Link, Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
+import { HeroCard } from "@web/components/v2/bento";
+import { sparkline } from "@web/components/v2/sparkline";
 import {
   getMonthlyRegistrationTotals,
   getYearlyRegistrations,
 } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
-
-/** Sparkline geometry for a series, normalised into a `width` x `height` box. */
-function sparkline(values: number[], width: number, height: number, pad = 8) {
-  if (values.length < 2) {
-    return null;
-  }
-
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const span = max - min || 1;
-  const points = values.map((value, index) => [
-    (index / (values.length - 1)) * (width - pad * 2) + pad,
-    height - pad - ((value - min) / span) * (height - pad * 2),
-  ]);
-
-  const line = points
-    .map(
-      ([x, y], index) => `${index ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`,
-    )
-    .join(" ");
-  const [lastX, lastY] = points.at(-1) ?? [0, 0];
-
-  return {
-    line,
-    area: `${line} L${width - pad} ${height} L${pad} ${height} Z`,
-    lastX: lastX.toFixed(1),
-    lastY: lastY.toFixed(1),
-  };
-}
 
 const formatMonth = (month: string, style: "long" | "short" = "long") => {
   const [year, monthPart] = month.split("-");
@@ -72,10 +45,7 @@ export async function SummaryCard() {
   );
 
   return (
-    <div
-      className="flex flex-col gap-4 rounded-[var(--radius-card)] p-8 text-[var(--accent-foreground)] shadow-surface"
-      style={{ background: "var(--accent-gradient)" }}
-    >
+    <HeroCard>
       <span className="w-fit rounded-full bg-[var(--accent-foreground)]/20 px-4 py-2 font-semibold text-sm">
         New registrations · {formatMonth(current.month)}
       </span>
@@ -164,6 +134,6 @@ export async function SummaryCard() {
           <Tooltip.Content>View car registration overview</Tooltip.Content>
         </Tooltip>
       </div>
-    </div>
+    </HeroCard>
   );
 }

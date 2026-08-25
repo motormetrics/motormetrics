@@ -16,7 +16,8 @@ import { PqpRail } from "@web/app/(main)/(dashboard)/components/pqp-rail";
 import { SummaryCard } from "@web/app/(main)/(dashboard)/components/summary-card";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
+import { Bento, RAIL_CLASS } from "@web/components/v2/bento";
+import { PageHead } from "@web/components/v2/page-head";
 import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_URLS } from "@web/config/socials";
 import type { Metadata } from "next";
@@ -106,18 +107,14 @@ const HomePage = () => {
       <StructuredData data={webSiteSchema} />
       <StructuredData data={organisationSchema} />
 
-      {/* Page head */}
-      <div className="flex flex-col gap-2">
-        <span className="font-semibold text-[var(--subtle)] text-sm">
-          Singapore car market&ensp;·&ensp;updated daily from LTA DataMall
-        </span>
-        <Typography.H1 className="font-bold text-[2.75rem] leading-[1.05] tracking-[-0.02em] lg:text-[3.25rem]">
-          Overview
-        </Typography.H1>
-      </div>
+      <PageHead
+        eyebrow={
+          <>Singapore car market&ensp;·&ensp;updated daily from LTA DataMall</>
+        }
+        title="Overview"
+      />
 
-      {/* Bento — 430px / fluid / 400px, matching Overview v2 */}
-      <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-2 2xl:grid-cols-[minmax(0,380px)_minmax(0,1fr)_minmax(0,380px)]">
+      <Bento>
         {/* Left column */}
         <AnimatedGrid className="flex flex-col gap-6">
           <AnimatedSection>
@@ -158,7 +155,7 @@ const HomePage = () => {
         </AnimatedGrid>
 
         {/* Right rail — warm sand well: PQP rates over a dark EV panel */}
-        <AnimatedGrid className="flex flex-col gap-6 rounded-[var(--radius-rail)] bg-[var(--surface-alt)] p-6 shadow-surface xl:col-span-2 xl:p-8 2xl:col-span-1">
+        <AnimatedGrid className={RAIL_CLASS}>
           <AnimatedSection>
             <SectionErrorBoundary title="PQP rates unavailable">
               <Suspense fallback={<CardSkeleton className="h-96" />}>
@@ -191,7 +188,7 @@ const HomePage = () => {
           </SectionErrorBoundary>
         </AnimatedSection>
         */}
-      </div>
+      </Bento>
     </>
   );
 };

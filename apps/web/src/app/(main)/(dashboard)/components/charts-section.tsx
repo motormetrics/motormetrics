@@ -2,12 +2,10 @@ import { Link, Skeleton, Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
+import { SurfaceCard } from "@web/components/v2/bento";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
 import { Suspense } from "react";
-
-const CARD =
-  "flex flex-col gap-6 rounded-[var(--radius-card)] bg-surface p-8 shadow-surface";
 
 async function YearlyChartContent() {
   const yearlyData = await getYearlyRegistrations();
@@ -16,7 +14,7 @@ async function YearlyChartContent() {
   const latest = series.at(-1);
 
   return (
-    <div className={CARD}>
+    <SurfaceCard>
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-2">
           <Typography.TextSm className="font-semibold text-[var(--muted-strong)]">
@@ -78,7 +76,7 @@ async function YearlyChartContent() {
           );
         })}
       </div>
-    </div>
+    </SurfaceCard>
   );
 }
 
@@ -87,7 +85,7 @@ async function TopMakesContent() {
   const maxValue = topMakes[0]?.value ?? 1;
 
   return (
-    <div className={CARD}>
+    <SurfaceCard>
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-1">
           <Typography.TextSm className="font-semibold text-[var(--muted-strong)]">
@@ -140,13 +138,13 @@ async function TopMakesContent() {
           </div>
         ))}
       </div>
-    </div>
+    </SurfaceCard>
   );
 }
 
 function YearlyChartSkeleton() {
   return (
-    <div className={CARD}>
+    <SurfaceCard>
       <Skeleton className="h-6 w-40 rounded-lg" />
       <div className="flex h-[130px] items-end gap-2">
         {[0, 1, 2, 3, 4, 5, 6, 7].map((num) => (
@@ -156,13 +154,13 @@ function YearlyChartSkeleton() {
           </div>
         ))}
       </div>
-    </div>
+    </SurfaceCard>
   );
 }
 
 function TopMakesSkeleton() {
   return (
-    <div className={CARD}>
+    <SurfaceCard>
       <Skeleton className="h-6 w-24 rounded-lg" />
       <div className="flex flex-col gap-4">
         {[0, 1, 2, 3, 4].map((num) => (
@@ -172,7 +170,7 @@ function TopMakesSkeleton() {
           </div>
         ))}
       </div>
-    </div>
+    </SurfaceCard>
   );
 }
 
