@@ -1,12 +1,9 @@
-"use client";
-
 import { cn } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
 import Typography from "@web/components/typography";
 import { SurfaceCard } from "@web/components/v2/bento";
 import { ChevronRight } from "lucide-react";
-import { useState } from "react";
 import { CategorySelect } from "./coe-controls";
 import type { CategoryKey } from "./search-params";
 
@@ -19,22 +16,12 @@ export interface CategoryRow {
   quota: number;
 }
 
-type SortKey = "category" | "change" | "premium" | "quota";
-type SortDirection = "asc" | "desc";
-
-const COLUMNS: { align: "left" | "right"; key: SortKey; label: string }[] = [
-  { align: "left", key: "category", label: "Category" },
-  { align: "right", key: "premium", label: "Premium" },
-  { align: "right", key: "quota", label: "Quota" },
-  { align: "right", key: "change", label: "Change" },
+const COLUMNS: { align: "left" | "right"; label: string }[] = [
+  { align: "left", label: "Category" },
+  { align: "right", label: "Premium" },
+  { align: "right", label: "Quota" },
+  { align: "right", label: "Change" },
 ];
-
-const SORT_NAMES: Record<SortKey, string> = {
-  category: "category",
-  change: "change",
-  premium: "premium",
-  quota: "quota",
-};
 
 /**
  * Fixed numeric columns so every row lines up — each row is its own grid, so
@@ -44,27 +31,15 @@ const SORT_NAMES: Record<SortKey, string> = {
 const GRID =
   "grid grid-cols-[minmax(0,1fr)_5.5rem_4rem_4.75rem_1rem] gap-2 2xl:grid-cols-[minmax(0,1fr)_7rem_5rem_5.5rem_1.5rem] 2xl:gap-3";
 
-const compareRows = (
-  first: CategoryRow,
-  second: CategoryRow,
-  key: SortKey,
-): number => {
-  switch (key) {
-    case "category":
-      return first.categoryKey.localeCompare(second.categoryKey);
-    case "change":
-      return first.changeRatio - second.changeRatio;
-    case "quota":
-      return first.quota - second.quota;
-    default:
-      return first.premium - second.premium;
-  }
-};
-
 /**
- * The five-category table. Sorting is local state rather than URL state: every
- * row is already on the client, so re-ordering needs no server round-trip —
- * unlike the category and range controls, which change what is fetched.
+ * The five-category table, always in category order.
+ *
+ * There is nothing to sort: A to E is the order the scheme itself defines and
+ * the order every published COE result is quoted in, and with five fixed rows
+ * a reader compares them by looking rather than by re-ordering. Sortable
+ * headers here only offered a way to lose that familiar sequence.
+ *
+ * The rows arrive already ordered, built from `COE_CATEGORIES`.
  */
 export function AllCategoriesTable({
   exercise,
@@ -75,26 +50,6 @@ export function AllCategoriesTable({
   rows: CategoryRow[];
   selected: CategoryKey;
 }) {
-  const [sort, setSort] = useState<{ direction: SortDirection; key: SortKey }>({
-    direction: "desc",
-    key: "premium",
-  });
-
-  const sorted = [...rows].sort((first, second) => {
-    const order = compareRows(first, second, sort.key);
-    return sort.direction === "asc" ? order : -order;
-  });
-
-  const toggleSort = (key: SortKey) =>
-    setSort((current) =>
-      current.key === key
-        ? {
-            direction: current.direction === "asc" ? "desc" : "asc",
-            key,
-          }
-        : { direction: key === "category" ? "asc" : "desc", key },
-    );
-
   return (
     <SurfaceCard className="gap-4">
       <div className="flex flex-wrap items-center gap-3.5">
@@ -106,10 +61,6 @@ export function AllCategoriesTable({
             {exercise} · five categories
           </Typography.TextSm>
         </div>
-        <Typography.Caption className="ml-auto whitespace-nowrap font-semibold text-[var(--subtle)]">
-          Sorted by {SORT_NAMES[sort.key]},{" "}
-          {sort.direction === "asc" ? "ascending" : "descending"}
-        </Typography.Caption>
       </div>
 
       <div className="flex flex-col">
@@ -119,32 +70,21 @@ export function AllCategoriesTable({
             "items-center border-separator border-b px-4 pt-4 pb-3",
           )}
         >
-          {COLUMNS.map((column) => {
-            const isActive = column.key === sort.key;
-            return (
-              <button
-                aria-label={`Sort by ${SORT_NAMES[column.key]}`}
-                aria-pressed={isActive}
-                className={cn(
-                  "font-bold text-[13px] uppercase tracking-[0.06em]",
-                  column.align === "right" ? "text-right" : "text-left",
-                  isActive
-                    ? "text-[var(--accent-strong)]"
-                    : "text-[var(--subtle)]",
-                )}
-                key={column.key}
-                onClick={() => toggleSort(column.key)}
-                type="button"
-              >
-                {column.label}
-                {isActive ? (sort.direction === "asc" ? " ↑" : " ↓") : ""}
-              </button>
-            );
-          })}
+          {COLUMNS.map((column) => (
+            <span
+              className={cn(
+                "font-bold text-[13px] text-[var(--subtle)] uppercase tracking-[0.06em]",
+                column.align === "right" ? "text-right" : "text-left",
+              )}
+              key={column.label}
+            >
+              {column.label}
+            </span>
+          ))}
           <span />
         </div>
 
-        {sorted.map((row) => {
+        {rows.map((row) => {
           const isActive = row.categoryKey === selected;
           return (
             <CategorySelect
