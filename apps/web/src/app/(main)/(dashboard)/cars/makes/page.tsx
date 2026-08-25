@@ -1,6 +1,4 @@
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
-import { DashboardPageHeader } from "@web/components/dashboard-page-header";
-import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { PageHead } from "@web/components/v2/page-head";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import type { Metadata } from "next";
@@ -41,19 +39,15 @@ export const metadata: Metadata = {
 
 export default function CarMakesPage({ searchParams }: PageProps) {
   return (
-    <div className="flex flex-col gap-4">
-      <DashboardPageHeader
-        title={
-          <DashboardPageTitle
-            title="Makes"
-            subtitle="List of car makes registered in Singapore."
-          />
+    <>
+      <PageHead
+        controls={<MakesHeaderMeta />}
+        eyebrow={
+          <>Car makes&ensp;·&ensp;registrations by brand, from LTA DataMall</>
         }
-        meta={<MakesHeaderMeta searchParams={searchParams} />}
+        title="Makes"
       />
-      <AnimatedSection order={1}>
-        <MakesContentSection />
-      </AnimatedSection>
-    </div>
+      <MakesContentSection searchParams={searchParams} />
+    </>
   );
 }

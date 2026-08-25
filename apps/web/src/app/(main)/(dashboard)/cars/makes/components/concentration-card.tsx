@@ -1,0 +1,58 @@
+import Typography from "@web/components/typography";
+import { SurfaceCard } from "@web/components/v2/bento";
+import { DonutGauge, type DonutSegment } from "@web/components/v2/donut-gauge";
+import type { SearchParams } from "nuqs/server";
+import { loadSearchParams } from "../search-params";
+import { loadMakeRows } from "./make-rows";
+
+/** How many makes the donut breaks out before folding the rest together. */
+const LEADERS = 5;
+
+export async function ConcentrationCard({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { fuel, range } = await loadSearchParams(searchParams);
+  const { rows, total } = await loadMakeRows(range, fuel);
+
+  if (rows.length === 0) {
+    return null;
+  }
+
+  const leaders = rows.slice(0, LEADERS);
+  const rest = rows.slice(LEADERS).reduce((sum, row) => sum + row.count, 0);
+
+  const segments: DonutSegment[] = leaders.map((row, index) => ({
+    color: `var(--chart-${index + 1})`,
+    label: row.make,
+    value: row.count,
+  }));
+  if (rest > 0) {
+    segments.push({
+      color: "var(--chart-6)",
+      label: "All other makes",
+      value: rest,
+    });
+  }
+
+  const leadersTotal = leaders.reduce((sum, row) => sum + row.count, 0);
+  const leadersShare = total > 0 ? (leadersTotal / total) * 100 : 0;
+
+  return (
+    <SurfaceCard className="gap-1">
+      <Typography.TextSm className="font-semibold text-[17px] text-[var(--muted-strong)]">
+        Concentration
+      </Typography.TextSm>
+      <Typography.H3 className="font-bold tracking-[-0.02em]">
+        Top five vs the rest
+      </Typography.H3>
+      <DonutGauge
+        caption="top five share"
+        centre={`${leadersShare.toFixed(0)}%`}
+        segments={segments}
+        title="Share of registrations held by the five largest makes"
+      />
+    </SurfaceCard>
+  );
+}
