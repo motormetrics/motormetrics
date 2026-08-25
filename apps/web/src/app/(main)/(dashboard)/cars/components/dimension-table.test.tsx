@@ -47,7 +47,7 @@ const visibleNames = () =>
 const searchBox = () => screen.getByRole("searchbox", { name: "Search makes" });
 
 describe("DimensionTable", () => {
-  it("should render every row with its rank, value, share and change", () => {
+  it("should render every row with its rank, value and share", () => {
     renderTable();
 
     expect(screen.getByText("Top makes")).toBeVisible();
@@ -59,13 +59,6 @@ describe("DimensionTable", () => {
     expect(cells[0]).toHaveTextContent("1TOYOTA");
     expect(cells[1]).toHaveTextContent("600");
     expect(cells[2]).toHaveTextContent("60.0%");
-    expect(cells[3]).toHaveTextContent("+12.5%");
-  });
-
-  it("should label a value with no comparable prior period as new", () => {
-    renderTable();
-
-    expect(screen.getByText("New")).toBeVisible();
   });
 
   it("should filter rows by the search query", async () => {
@@ -120,15 +113,6 @@ describe("DimensionTable", () => {
     expect(visibleNames()).toEqual(["2BMW", "3BYD", "1TOYOTA"]);
   });
 
-  it("should sort a value with no prior period last on change", async () => {
-    const user = userEvent.setup();
-    renderTable();
-
-    await user.click(screen.getByRole("button", { name: /^Change/ }));
-
-    expect(visibleNames()).toEqual(["1TOYOTA", "2BMW", "3BYD"]);
-  });
-
   it("should switch dimension through the URL when another tab is pressed", async () => {
     const user = userEvent.setup();
     renderTable();
@@ -150,20 +134,18 @@ describe("DimensionTable", () => {
     ).toBeVisible();
   });
 
-  it("should reveal the remaining rows when show all is pressed", async () => {
-    const user = userEvent.setup();
+  it("should link to the dimension's own page rather than expanding", () => {
     renderTable(manyRows);
 
-    await user.click(screen.getByRole("button", { name: "Show all 25 makes" }));
-
-    expect(visibleNames()).toHaveLength(25);
-    expect(screen.getByRole("button", { name: "Show fewer" })).toBeVisible();
+    expect(
+      screen.getByRole("link", { name: /Show all 25 makes/ }),
+    ).toHaveAttribute("href", "/cars/makes");
   });
 
   it("should not offer to expand a list that already fits", () => {
     renderTable();
 
-    expect(screen.queryByRole("button", { name: /Show all/ })).toBeNull();
+    expect(screen.queryByRole("link", { name: /Show all/ })).toBeNull();
   });
 
   it("should show every match when searching, without truncating", async () => {
@@ -173,15 +155,6 @@ describe("DimensionTable", () => {
     await user.type(searchBox(), "MAKE");
 
     expect(visibleNames()).toHaveLength(25);
-    expect(screen.queryByRole("button", { name: /Show all/ })).toBeNull();
-  });
-
-  it("should withhold the change for a row below the volume threshold", () => {
-    renderTable([
-      { name: "ROLLS ROYCE", count: 4, share: 0.1, trend: [], yoyChange: 100 },
-    ]);
-
-    expect(screen.queryByText("+100.0%")).toBeNull();
-    expect(screen.getByTitle(/Too few registrations/)).toBeVisible();
+    expect(screen.queryByRole("link", { name: /Show all/ })).toBeNull();
   });
 });

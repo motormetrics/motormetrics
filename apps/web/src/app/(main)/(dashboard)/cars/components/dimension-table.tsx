@@ -7,13 +7,13 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/components/dimensions";
 import Typography from "@web/components/typography";
 import { SurfaceCard } from "@web/components/v2/bento";
-import { DeltaChip } from "@web/components/v2/delta-chip";
 import type { CarDimension, DimensionStat } from "@web/queries/cars";
-import { Car, Search } from "lucide-react";
+import { ArrowRight, Car, Search } from "lucide-react";
+import Link from "next/link";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { useMemo, useState, useTransition } from "react";
 
-type SortKey = "name" | "count" | "yoyChange";
+type SortKey = "name" | "count";
 type SortDirection = "asc" | "desc";
 
 /** Shared padding and hover wash for every body cell. */
@@ -32,15 +32,6 @@ const PODIUM = 3;
  */
 const COLLAPSED_ROWS = 10;
 
-/**
- * Below this many registrations the year-over-year percentage is suppressed.
- *
- * The arithmetic is correct but the figure is not informative: two cars
- * becoming four is a true +100%, and rendering it in the same chip as a real
- * movement invites the eye to read the loudest number as the biggest story.
- */
-const MIN_COUNT_FOR_CHANGE = 20;
-
 const numberFormatter = new Intl.NumberFormat("en-SG", {
   maximumFractionDigits: 0,
 });
@@ -48,7 +39,6 @@ const numberFormatter = new Intl.NumberFormat("en-SG", {
 const SORT_LABELS: Record<SortKey, string> = {
   name: "name",
   count: "registrations",
-  yoyChange: "change",
 };
 
 interface RankedStat extends DimensionStat {
@@ -65,17 +55,6 @@ function compareStats(
 
   if (sortKey === "name") {
     return sign * first.name.localeCompare(second.name, "en-SG");
-  }
-
-  if (sortKey === "yoyChange") {
-    // A value with no comparable prior period sorts last in either direction,
-    // rather than being read as a change of zero.
-    if (first.yoyChange === null || second.yoyChange === null) {
-      return (
-        (first.yoyChange === null ? 1 : 0) - (second.yoyChange === null ? 1 : 0)
-      );
-    }
-    return sign * (first.yoyChange - second.yoyChange);
   }
 
   return sign * (first.count - second.count);
@@ -109,7 +88,6 @@ export function DimensionTable({
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("count");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const labels = DIMENSION_LABELS[dimension];
 
@@ -138,8 +116,7 @@ export function DimensionTable({
   // A search is already a narrowing, so matches are never truncated on top of
   // it — collapsing only applies to the unfiltered list.
   const isSearching = query.trim().length > 0;
-  const isTruncated =
-    !isExpanded && !isSearching && visible.length > COLLAPSED_ROWS;
+  const isTruncated = !isSearching && visible.length > COLLAPSED_ROWS;
   const displayed = isTruncated ? visible.slice(0, COLLAPSED_ROWS) : visible;
 
   const toggleSort = (key: SortKey) => {
@@ -167,8 +144,7 @@ export function DimensionTable({
       label: "Registrations",
       width: "w-[5.5rem]",
     },
-    { align: "left", key: "share", label: "Share", width: "w-[9rem]" },
-    { align: "right", key: "yoyChange", label: "Change", width: "w-[6.5rem]" },
+    { align: "left", key: "share", label: "Share", width: "w-[11rem]" },
   ];
 
   const headerClass = "font-bold text-xs uppercase tracking-[0.06em]";
@@ -207,7 +183,6 @@ export function DimensionTable({
                   setQuery("");
                   setSortKey("count");
                   setSortDirection("desc");
-                  setIsExpanded(false);
                   setDimension(option);
                 }}
                 type="button"
@@ -335,7 +310,7 @@ export function DimensionTable({
               >
                 {numberFormatter.format(row.count)}
               </td>
-              <td className={CELL_CLASS}>
+              <td className={cn(CELL_CLASS, "rounded-r-[var(--radius)]")}>
                 <span className="flex items-center gap-2.5">
                   <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-default">
                     <span
@@ -351,24 +326,6 @@ export function DimensionTable({
                   </span>
                 </span>
               </td>
-              <td className={cn(CELL_CLASS, "rounded-r-[var(--radius)]")}>
-                <span className="flex justify-end">
-                  {row.count < MIN_COUNT_FOR_CHANGE ? (
-                    <span
-                      className="font-bold text-[var(--subtle)] text-sm"
-                      title={`Too few registrations for a meaningful year-on-year change (under ${MIN_COUNT_FOR_CHANGE})`}
-                    >
-                      —
-                    </span>
-                  ) : row.yoyChange === null ? (
-                    <span className="rounded-full bg-default px-3 py-2 font-bold text-[13px] text-muted">
-                      New
-                    </span>
-                  ) : (
-                    <DeltaChip ratio={row.yoyChange / 100} />
-                  )}
-                </span>
-              </td>
             </tr>
           ))}
         </tbody>
@@ -380,23 +337,15 @@ export function DimensionTable({
         </Typography.TextSm>
       ) : null}
 
-      {!isSearching && visible.length > COLLAPSED_ROWS ? (
-        <button
-          aria-expanded={isExpanded}
-          className="cursor-[var(--cursor-interactive)] self-center rounded-full bg-default px-6 py-3 font-bold text-[var(--muted-strong)] text-sm transition-colors hover:text-foreground"
-          onClick={() => setIsExpanded((current) => !current)}
-          type="button"
+      {isTruncated ? (
+        <Link
+          className="flex items-center justify-center gap-2 self-center rounded-full bg-default px-6 py-3 font-bold text-[var(--muted-strong)] text-sm transition-colors hover:text-foreground"
+          href={labels.href}
         >
-          {isExpanded
-            ? "Show fewer"
-            : `Show all ${visible.length} ${labels.tab.toLowerCase()}`}
-        </button>
+          Show all {visible.length} {labels.tab.toLowerCase()}
+          <ArrowRight aria-hidden className="size-4 shrink-0" />
+        </Link>
       ) : null}
-
-      <Typography.Caption className="px-4 font-medium text-[var(--subtle)]">
-        Change compares against the same period a year earlier, and is withheld
-        below {MIN_COUNT_FOR_CHANGE} registrations.
-      </Typography.Caption>
     </SurfaceCard>
   );
 }
