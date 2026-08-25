@@ -1,8 +1,10 @@
+import { Skeleton } from "@heroui/react";
 import { PageHead } from "@web/components/v2/page-head";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
 import { MakesContentSection } from "./components/makes-content-section";
 import { MakesHeaderMeta } from "./components/makes-header-meta";
 
@@ -41,7 +43,11 @@ export default function CarMakesPage({ searchParams }: PageProps) {
   return (
     <>
       <PageHead
-        controls={<MakesHeaderMeta />}
+        controls={
+          <Suspense fallback={<Skeleton className="h-13 w-80 rounded-full" />}>
+            <MakesHeaderMeta />
+          </Suspense>
+        }
         eyebrow={
           <>Car makes&ensp;·&ensp;registrations by brand, from LTA DataMall</>
         }
