@@ -3,7 +3,7 @@
 exports[`RecentPosts > should render title and view all link 1`] = `
 <div>
   <section
-    class="flex h-full flex-col gap-5"
+    class="flex h-full flex-col gap-6"
   >
     <div
       class="flex items-center justify-between"
@@ -44,7 +44,7 @@ exports[`RecentPosts > should render title and view all link 1`] = `
       </span>
     </div>
     <div
-      class="grid grid-cols-1 gap-4 lg:grid-cols-3"
+      class="grid grid-cols-1 gap-4 xl:grid-cols-3 2xl:grid-cols-1"
     >
       <article
         data-testid="post-card-post-1"

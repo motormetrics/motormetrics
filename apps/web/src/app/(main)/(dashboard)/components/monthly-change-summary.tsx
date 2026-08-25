@@ -1,6 +1,7 @@
 import { Link, Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
-import { KPI, NumberValue } from "@heroui-pro/react";
+import { NumberValue } from "@heroui-pro/react";
+import Typography from "@web/components/typography";
 import { getCarsComparison, getCarsLatestMonth } from "@web/queries/cars";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
 
@@ -17,61 +18,63 @@ export async function MonthlyChangeSummary() {
 
   const changeAmount = currentTotal - previousTotal;
   const changeRatio = previousTotal > 0 ? changeAmount / previousTotal : 0;
-  const trend = changeRatio > 0 ? "up" : changeRatio < 0 ? "down" : "neutral";
 
-  // Format the month for display (e.g., "2025-01" -> "Jan 2025")
   const [year, month] = latestMonth.split("-");
   const displayMonth = new Date(Number(year), Number(month) - 1).toLocaleString(
     "en-SG",
-    { month: "short", year: "numeric" },
+    { month: "long", year: "numeric" },
   );
 
   return (
-    <KPI>
-      <KPI.Header>
-        <div className="flex size-11 items-center justify-center rounded-xl bg-default text-accent">
-          <CalendarDays className="size-6 text-accent" />
-        </div>
+    <div className="flex flex-col gap-4 rounded-[var(--radius)] bg-[var(--ink-surface)] p-7">
+      <div className="flex items-center gap-3">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent-on-dark)]/20 text-[var(--accent-on-dark)]">
+          <CalendarDays className="size-5" />
+        </span>
+        <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/85">
+          Monthly change
+        </Typography.TextSm>
         <Tooltip delay={300}>
           <Link
             aria-label="View monthly car registration details"
             className={buttonVariants({
-              className: "ml-auto size-10",
+              className:
+                "ml-auto size-10 rounded-full text-[var(--accent-foreground)]",
               isIconOnly: true,
               variant: "tertiary",
             })}
             href={`/cars?month=${latestMonth}`}
           >
-            <ArrowUpRight className="size-6" />
+            <ArrowUpRight className="size-5" />
           </Link>
           <Tooltip.Content>
             View monthly car registration details
           </Tooltip.Content>
         </Tooltip>
-      </KPI.Header>
-      <KPI.Header>
-        <KPI.Title>Monthly Change ({displayMonth})</KPI.Title>
-      </KPI.Header>
-      <KPI.Content>
-        <KPI.Value
-          className="text-4xl tabular-nums"
-          maximumFractionDigits={1}
-          signDisplay="exceptZero"
-          style="percent"
-          value={changeRatio}
-        />
-        <KPI.Trend trend={trend} variant="primary">
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="font-extrabold text-5xl text-[var(--accent-on-dark)] tabular-nums tracking-[-0.03em]">
+          <NumberValue
+            maximumFractionDigits={1}
+            signDisplay="exceptZero"
+            style="percent"
+            value={changeRatio}
+          />
+        </span>
+        <span className="flex items-center gap-2 rounded-full bg-[var(--accent-on-dark)]/20 px-4 py-2 font-bold text-[var(--accent-on-dark)] text-sm">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
             signDisplay="exceptZero"
             value={changeAmount}
           />
-        </KPI.Trend>
-      </KPI.Content>
-      <KPI.Footer>
-        <span className="text-muted text-xs">vs previous month</span>
-      </KPI.Footer>
-    </KPI>
+        </span>
+      </div>
+
+      <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/60">
+        registrations vs previous month · {displayMonth}
+      </Typography.TextSm>
+    </div>
   );
 }
