@@ -210,12 +210,47 @@ export type NavItem = {
   label: string;
 };
 
-export const NAV_ITEMS = [
+/** Pills in the shell navigation, in comp order. */
+export const PRIMARY_NAV_ITEMS = [
   { href: "/", label: "Overview" },
-  { href: "/about", label: "About" },
-  // TODO: Blog hidden from site navigation pending a decision on the blog's
-  // future. Commented out rather than deleted so it can be restored in one
-  // line. The /blog route, sitemap entries and llms.txt are all still live.
-  // { href: "/blog", label: "Blog" },
+  { href: "/cars", label: "Cars" },
+  { href: "/coe", label: "COE" },
+  { href: "/cars/electric-vehicles", label: "Electric" },
   { href: "/learn", label: "Learn" },
+] as const satisfies readonly NavItem[];
+
+export interface NavGroup {
+  title: string;
+  items: NavigationItem[];
+}
+
+/**
+ * Everything the pills do not surface, grouped behind the shell nav's "More"
+ * menu. Electric is omitted because it has its own pill.
+ */
+export const MORE_NAV_GROUPS: NavGroup[] = [
+  {
+    title: "Cars",
+    items: navLinks.cars.filter(({ url }) => url !== "/cars/electric-vehicles"),
+  },
+  { title: "COE", items: navLinks.coe },
+  {
+    title: "Company",
+    items: [
+      { title: "About", url: "/about" },
+      { title: "Advertise", url: "/advertise" },
+      // TODO: Blog hidden from site navigation pending a decision on the blog's
+      // future. Commented out rather than deleted so it can be restored in one
+      // line. The /blog route, sitemap entries and llms.txt are all still live.
+      // { title: "Blog", url: "/blog" },
+    ],
+  },
+];
+
+export const FOOTER_NAV_ITEMS = [
+  { href: "/about", label: "About" },
+  { href: "/learn", label: "Learn" },
+  { href: "/advertise", label: "Advertise" },
+  { href: "/legal/privacy-policy", label: "Privacy" },
+  { href: "/legal/terms-of-service", label: "Terms" },
 ] as const satisfies readonly NavItem[];

@@ -7,7 +7,7 @@ import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { BotIdClient } from "botid/client";
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Urbanist } from "next/font/google";
 import { getLocale, getMessages } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, Suspense } from "react";
@@ -15,6 +15,13 @@ import "./globals.css";
 
 const geistSans = Geist({
   subsets: ["latin"],
+});
+
+// Loaded as a CSS variable only. Applied by the Overview v2 skin, which covers
+// every route under (main); /admin and /store stay on Geist.
+const urbanist = Urbanist({
+  subsets: ["latin"],
+  variable: "--font-urbanist",
 });
 
 const title = `${SITE_TITLE} (formerly SG Cars Trends)`;
@@ -88,7 +95,11 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
     <html
       lang={locale}
       data-theme="light"
-      className={cn("scroll-smooth antialiased", geistSans.className)}
+      className={cn(
+        "scroll-smooth antialiased",
+        geistSans.className,
+        urbanist.variable,
+      )}
     >
       <head>
         <BotIdClient protect={protectedRoutes} />

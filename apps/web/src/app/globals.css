@@ -240,3 +240,134 @@
     transform: translate(-50%, -50%) scale(1.1);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Overview v2 skin — applied to the whole site via data-skin on (main)/layout.
+   Token overrides only: every value below is an existing theme variable, so
+   the standard utilities (bg-surface, text-muted, bg-accent, border-border)
+   pick these up with no new classes. Remove the data-skin attribute in
+   (main)/layout.tsx to revert the site to the global navy theme.
+   --------------------------------------------------------------------------- */
+@layer base {
+  /* The :has() half is not redundant: React Aria renders popovers, modals and
+     toasts through a portal on <body>, outside the skinned wrapper, so they
+     would otherwise keep the global navy theme. Matching <body> whenever a
+     skinned subtree exists puts the portal root on the same tokens, while
+     /admin and /store — which never render the wrapper — stay on navy. */
+  [data-skin="overview-v2"],
+  body:has([data-skin="overview-v2"]) {
+    /* Canvas + ink */
+    --background: #f7f5ef;
+    --foreground: #232a2e;
+
+    /* Surfaces */
+    --surface: #ffffff;
+    --surface-foreground: var(--foreground);
+    --surface-alt: #efece3; /* warm sand — right rail */
+    --ink-surface: #232a2e; /* dark feature panel */
+    --overlay: #ffffff;
+    --overlay-foreground: var(--foreground);
+
+    /* Neutrals */
+    --muted: #7b888d;
+    --muted-strong: #5a6a70;
+    --subtle: #96a2a7;
+    --default: #f0f3f4;
+    --default-foreground: var(--foreground);
+
+    /* Accent — calm slate blue, carries all emphasis */
+    --accent: #4e7c9b;
+    --accent-foreground: #ffffff;
+    --accent-strong: #33586f;
+    --accent-deep: #16323f;
+    --accent-soft: #dce7ec;
+    --accent-on-dark: #9cc4da;
+    --accent-gradient: radial-gradient(
+      120% 100% at 15% 0%,
+      #6a97b5 0%,
+      #4e7c9b 42%,
+      #3c6480 100%
+    );
+
+    /* Status — always paired with a dot or label, never colour alone */
+    --success: #57b45f;
+    --success-foreground: #2f6b3a;
+    --success-soft: #dff1df;
+    --warning: #e9a63c;
+    --warning-foreground: #96601c;
+    --warning-soft: #fbebd3;
+    --danger: #e96e6e;
+    --danger-foreground: #b4453f;
+    --danger-soft: #fbe3e3;
+
+    /* Lines */
+    --border: #e5e1d5;
+    --separator: #e5e1d5;
+    --focus: var(--accent);
+    --link: var(--accent-strong);
+
+    /* Geometry — v2 is markedly rounder */
+    --radius: 1.375rem; /* 22px — controls, inner cards */
+    --field-radius: 1.375rem;
+    --radius-lg: 2rem; /* 32px — dark feature panel */
+    --radius-card: 2.25rem; /* 36px — bento cards */
+    --radius-rail: 2.5rem; /* 40px — right rail */
+
+    /* Elevation — soft, ink-tinted, never black */
+    --surface-shadow:
+      0 4px 16px 0 rgba(35, 42, 46, 0.07), 0 1px 3px 0 rgba(35, 42, 46, 0.05);
+    --overlay-shadow: 0 14px 36px 0 rgba(35, 42, 46, 0.16);
+    --field-shadow: 0 1px 2px 0 rgba(35, 42, 46, 0.05);
+
+    /* Categorical chart palette — distinct hues, not one ramp, so series stay
+       separable. Ordered to keep adjacent series far apart in hue. */
+    --chart-1: #33586f;
+    --chart-2: #c9803f;
+    --chart-3: #5f8ba8;
+    --chart-4: #7a9e63;
+    --chart-5: #9cc4da;
+    --chart-6: #b0728f;
+    --chart-grid: var(--border);
+
+    font-family: var(--font-urbanist), ui-sans-serif, system-ui, sans-serif;
+
+    /* `@theme inline` emits the --color-* aliases on :root, so they resolve
+       against :root's values and inherit that snapshot into this subtree.
+       Tailwind utilities are unaffected (they inline var(--accent) and friends),
+       but HeroUI's BEM component CSS reads the aliases directly — without this
+       remap a `.button--primary` inside the skin keeps the navy accent.
+       Re-declaring the aliases here re-resolves them against the values above. */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-surface: var(--surface);
+    --color-surface-foreground: var(--surface-foreground);
+    --color-overlay: var(--overlay);
+    --color-overlay-foreground: var(--overlay-foreground);
+    --color-default: var(--default);
+    --color-default-foreground: var(--default-foreground);
+    --color-muted: var(--muted);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-danger: var(--danger);
+    --color-danger-foreground: var(--danger-foreground);
+    --color-border: var(--border);
+    --color-separator: var(--separator);
+    --color-focus: var(--focus);
+    --color-link: var(--link);
+    --radius-field: var(--field-radius);
+    --shadow-surface: var(--surface-shadow);
+    --shadow-overlay: var(--overlay-shadow);
+    --shadow-field: var(--field-shadow);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-chart-6: var(--chart-6);
+    --color-chart-grid: var(--chart-grid);
+  }
+}
