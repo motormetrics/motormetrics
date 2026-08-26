@@ -84,9 +84,6 @@ export default function CarsPage({ searchParams }: PageProps) {
             <CarsMonthPicker searchParams={searchParams} />
           </Suspense>
         }
-        eyebrow={
-          <>New car registrations&ensp;·&ensp;updated daily from LTA DataMall</>
-        }
         title="Cars"
       />
 
