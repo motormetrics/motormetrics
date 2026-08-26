@@ -1,6 +1,6 @@
+import { Breadcrumbs } from "@web/components/shared/breadcrumbs";
+import { SharePill } from "@web/components/shared/share-pill";
 import Typography from "@web/components/typography";
-import { Breadcrumbs } from "@web/components/v2/breadcrumbs";
-import { SharePill } from "@web/components/v2/share-pill";
 import type { ReactNode } from "react";
 
 /**

@@ -1,9 +1,9 @@
 import { Link, Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
+import { InkPanel } from "@web/components/shared/bento";
+import { sparkline } from "@web/components/shared/sparkline";
 import Typography from "@web/components/typography";
-import { InkPanel } from "@web/components/v2/bento";
-import { sparkline } from "@web/components/v2/sparkline";
 import {
   getEvLatestSummary,
   getEvMonthlyTrend,

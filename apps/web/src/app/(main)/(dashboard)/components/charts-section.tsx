@@ -1,8 +1,8 @@
 import { Link, Skeleton, Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
+import { SurfaceCard } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
 import { Suspense } from "react";
