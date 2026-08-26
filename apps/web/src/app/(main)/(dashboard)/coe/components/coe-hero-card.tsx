@@ -1,8 +1,8 @@
 import { NumberValue } from "@heroui-pro/react";
+import { HeroCard } from "@web/components/shared/bento";
+import { DeltaChip } from "@web/components/shared/delta-chip";
+import { sparkline } from "@web/components/shared/sparkline";
 import Typography from "@web/components/typography";
-import { HeroCard } from "@web/components/v2/bento";
-import { DeltaChip } from "@web/components/v2/delta-chip";
-import { sparkline } from "@web/components/v2/sparkline";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
 import { CategoryTabs } from "./coe-controls";

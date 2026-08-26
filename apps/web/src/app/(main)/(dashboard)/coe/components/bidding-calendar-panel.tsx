@@ -1,5 +1,5 @@
+import { InkPanel } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { InkPanel } from "@web/components/v2/bento";
 import { getCoeResults } from "@web/queries/coe";
 import { CalendarDays } from "lucide-react";
 import {

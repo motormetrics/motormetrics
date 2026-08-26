@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@heroui/react";
+import { SurfaceCard } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
 import { useState } from "react";
 
 export interface PremiumColumn {

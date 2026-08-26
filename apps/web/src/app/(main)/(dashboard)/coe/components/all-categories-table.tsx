@@ -1,8 +1,8 @@
 import { cn } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
+import { SurfaceCard } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
 import { ChevronRight } from "lucide-react";
 import { CategorySelect } from "./coe-controls";
 import type { CategoryKey } from "./search-params";

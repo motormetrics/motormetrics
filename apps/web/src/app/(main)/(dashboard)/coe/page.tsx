@@ -11,9 +11,9 @@ import { PqpCeilingRail } from "@web/app/(main)/(dashboard)/coe/components/pqp-c
 import { PremiumsByExerciseCard } from "@web/app/(main)/(dashboard)/coe/components/premiums-by-exercise-card";
 import { QuotaAllocationCard } from "@web/app/(main)/(dashboard)/coe/components/quota-allocation-card";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { Bento, BentoColumn, Rail } from "@web/components/shared/bento";
+import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
-import { Bento, BentoColumn, Rail } from "@web/components/v2/bento";
-import { PageHead } from "@web/components/v2/page-head";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateDataCatalogSchema } from "@web/lib/metadata";

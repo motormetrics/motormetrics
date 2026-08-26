@@ -1,6 +1,6 @@
 import { NumberValue } from "@heroui-pro/react";
+import { SurfaceCard } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
 import { CategorySelect } from "./coe-controls";
