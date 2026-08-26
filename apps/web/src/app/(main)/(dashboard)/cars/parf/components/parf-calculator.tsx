@@ -158,7 +158,7 @@ export function PARFCalculator() {
             </KPI.Header>
             <KPI.Content>
               <KPI.Value
-                className="text-accent"
+                className="text-accent-strong"
                 currency="SGD"
                 locale="en-SG"
                 maximumFractionDigits={0}

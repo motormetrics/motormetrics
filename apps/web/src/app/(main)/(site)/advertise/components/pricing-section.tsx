@@ -1,7 +1,8 @@
-import { Button, Card, Chip, Link, Separator } from "@heroui/react";
+import { Button, Card, Chip, Separator } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { Check } from "lucide-react";
 import { cacheLife } from "next/cache";
+import Link from "next/link";
 
 const plans = [
   {
@@ -50,7 +51,7 @@ export async function PricingSection() {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col items-center gap-4 text-center">
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Typography.Label className="text-accent-strong uppercase tracking-widest">
             Simple Pricing
           </Typography.Label>
           <Typography.H2 className="lg:text-4xl">
@@ -100,7 +101,7 @@ export async function PricingSection() {
               <Card.Content className="gap-3">
                 {plan.features.map((feature) => (
                   <div key={feature} className="flex items-center gap-2">
-                    <Check className="size-4 shrink-0 text-accent" />
+                    <Check className="size-4 shrink-0 text-accent-strong" />
                     <Typography.TextSm>{feature}</Typography.TextSm>
                   </div>
                 ))}

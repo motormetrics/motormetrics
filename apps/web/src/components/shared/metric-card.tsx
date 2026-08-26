@@ -37,7 +37,7 @@ export function MetricCard({
       <KPI.Content>
         <KPI.Value
           className={cn(
-            "text-accent",
+            "text-accent-strong",
             variant === "hero" ? "text-5xl" : "text-4xl",
           )}
           locale="en-SG"

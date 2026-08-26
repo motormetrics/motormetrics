@@ -1,6 +1,7 @@
 "use client";
 
-import { cn, Link } from "@heroui/react";
+import { cn } from "@heroui/react";
+import Link from "next/link";
 
 import { useEffect, useState } from "react";
 
@@ -103,8 +104,8 @@ export function TableOfContents() {
               className={cn(
                 "text-xs transition-opacity",
                 activeId === heading.id
-                  ? "text-accent"
-                  : "text-accent/60 group-hover:text-accent",
+                  ? "text-accent-strong"
+                  : "text-accent-strong/60 group-hover:text-accent-strong",
               )}
             >
               {String(idx + 1).padStart(2, "0")}

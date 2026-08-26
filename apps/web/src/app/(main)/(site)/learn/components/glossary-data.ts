@@ -20,7 +20,7 @@ export const GLOSSARY_CATEGORIES: GlossaryCategoryData[] = [
   {
     title: "Core Terms",
     icon: BookOpen,
-    iconColor: "text-accent",
+    iconColor: "text-accent-strong",
     terms: [
       {
         term: "COE",
@@ -141,7 +141,7 @@ export const GLOSSARY_CATEGORIES: GlossaryCategoryData[] = [
   {
     title: "Market Terms",
     icon: TrendingUp,
-    iconColor: "text-accent",
+    iconColor: "text-accent-strong",
     terms: [
       {
         term: "Quota Premium",

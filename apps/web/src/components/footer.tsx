@@ -1,100 +1,69 @@
-import { Link as HeroLink, Tooltip } from "@heroui/react";
-import { buttonVariants } from "@heroui/styles";
-import { BrandLogo } from "@web/components/brand-logo";
 import Typography from "@web/components/typography";
 import { SITE_TITLE } from "@web/config";
-import { NAV_ITEMS, navLinks } from "@web/config/navigation";
+import { FOOTER_NAV_ITEMS, navLinks } from "@web/config/navigation";
+import { TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { version } from "../../package.json";
 
-const CURRENT_YEAR = new Date().getFullYear();
+const COPYRIGHT_YEAR = new Date().getFullYear();
 
 export function Footer() {
   return (
-    <footer className="border-separator border-t bg-surface">
-      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_minmax(14rem,0.5fr)]">
-          {/* Brand Section */}
-          <div className="flex flex-col gap-4">
-            <BrandLogo />
-            <Typography.TextSm>
-              Your go-to source for Singapore car market data and trends. We
-              make sense of the numbers so you don&apos;t have to.
-            </Typography.TextSm>
-            <div className="flex gap-2">
-              {navLinks.socialMedia.map(({ title, url, icon: Icon }) => (
-                <Tooltip key={title} delay={300}>
-                  <HeroLink
-                    aria-label={title}
-                    className={buttonVariants({
-                      className: "size-10 text-muted hover:text-accent",
-                      isIconOnly: true,
-                      variant: "tertiary",
-                    })}
-                    href={url}
-                    rel="me noreferrer"
-                    target="_blank"
-                  >
-                    <Icon className="size-4" aria-hidden="true" />
-                  </HeroLink>
-                  <Tooltip.Content>{title}</Tooltip.Content>
-                </Tooltip>
-              ))}
-            </div>
-          </div>
+    <footer className="mt-auto flex flex-wrap items-center gap-x-7 gap-y-4 border-separator border-t pt-6">
+      <Link
+        aria-label={`${SITE_TITLE} home`}
+        className="flex items-center gap-3 text-foreground"
+        href="/"
+      >
+        <TrendingUp className="size-5" strokeWidth={2.5} />
+        <span className="font-extrabold text-base">
+          Motor<span className="text-accent-strong">Metrics</span>
+        </span>
+      </Link>
 
-          {/* Navigation Section */}
-          <div className="flex flex-col gap-4">
-            <Typography.H4>Navigation</Typography.H4>
-            <div className="flex flex-col gap-2">
-              {NAV_ITEMS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="block text-muted transition-colors hover:text-accent"
-                >
-                  <Typography.TextSm>{item.label}</Typography.TextSm>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Section */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-separator border-t pt-6 md:flex-row md:gap-0">
-          <div className="text-center text-muted md:text-left">
-            <Typography.TextSm>
-              © {CURRENT_YEAR} {SITE_TITLE}. All rights reserved. • v{version}
-            </Typography.TextSm>
-            <Typography.TextSm>
-              Data provided by{" "}
+      <nav aria-label="Footer navigation">
+        <ul className="flex flex-wrap items-center gap-5">
+          {FOOTER_NAV_ITEMS.map(({ href, label }) => (
+            <li key={href}>
               <Link
-                href="https://datamall.lta.gov.sg"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-accent hover:underline"
+                className="font-semibold text-muted text-sm transition-colors hover:text-accent-strong"
+                href={href}
               >
-                LTA DataMall
+                {label}
               </Link>
-            </Typography.TextSm>
-          </div>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-          <div className="flex gap-4">
+      <ul className="flex items-center gap-4">
+        {navLinks.socialMedia.map(({ icon: Icon, title, url }) => (
+          <li key={title}>
             <Link
-              href="/legal/privacy-policy"
-              className="text-muted transition-colors hover:text-accent"
+              aria-label={title}
+              className="block text-muted transition-colors hover:text-accent-strong"
+              href={url}
+              rel="me noreferrer"
+              target="_blank"
             >
-              <Typography.TextSm>Privacy Policy</Typography.TextSm>
+              <Icon aria-hidden="true" className="size-4" />
             </Link>
-            <Link
-              href="/legal/terms-of-service"
-              className="text-muted transition-colors hover:text-accent"
-            >
-              <Typography.TextSm>Terms of Service</Typography.TextSm>
-            </Link>
-          </div>
-        </div>
-      </div>
+          </li>
+        ))}
+      </ul>
+
+      <Typography.Caption className="ml-auto font-medium text-muted">
+        © {COPYRIGHT_YEAR} {SITE_TITLE} · Data provided by{" "}
+        <Link
+          className="transition-colors hover:text-accent-strong"
+          href="https://datamall.lta.gov.sg"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          LTA DataMall
+        </Link>{" "}
+        · v{version}
+      </Typography.Caption>
     </footer>
   );
 }

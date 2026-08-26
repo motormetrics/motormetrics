@@ -1,6 +1,32 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { queueSelect, resetDbMocks } from "../../test-utils";
-import { getMakeRegistrationStats } from "./registration-stats";
+import {
+  getComparisonWindows,
+  getMakeRegistrationStats,
+} from "./registration-stats";
+
+describe("getComparisonWindows", () => {
+  it("should end both windows on the same month rather than running the previous year to December", () => {
+    expect(getComparisonWindows("2025-08")).toEqual({
+      current: { start: "2025-01", end: "2025-08" },
+      previous: { start: "2024-01", end: "2024-08" },
+    });
+  });
+
+  it("should zero-pad a single-digit month on both sides", () => {
+    expect(getComparisonWindows("2025-03")).toEqual({
+      current: { start: "2025-01", end: "2025-03" },
+      previous: { start: "2024-01", end: "2024-03" },
+    });
+  });
+
+  it("should span the full year once the latest month is December", () => {
+    expect(getComparisonWindows("2025-12")).toEqual({
+      current: { start: "2025-01", end: "2025-12" },
+      previous: { start: "2024-01", end: "2024-12" },
+    });
+  });
+});
 
 describe("getMakeRegistrationStats", () => {
   beforeEach(() => {
@@ -54,6 +80,18 @@ describe("getMakeRegistrationStats", () => {
 
     const honda = result.find((r) => r.make === "HONDA");
     expect(honda?.yoyChange).toBeCloseTo(-16.67, 1); // (500-600)/600 * 100
+  });
+
+  it("should report no change for a make whose volume is flat across the two windows", async () => {
+    queueSelect([{ latestMonth: "2025-08" }]);
+    // January to August 2025, and the same eight months of 2024.
+    queueSelect([{ make: "TOYOTA", count: 800 }]);
+    queueSelect([]);
+    queueSelect([{ make: "TOYOTA", count: 800 }]);
+
+    const result = await getMakeRegistrationStats();
+
+    expect(result[0].yoyChange).toBeCloseTo(0, 5);
   });
 
   it("should return null yoyChange when make has no previous year data", async () => {

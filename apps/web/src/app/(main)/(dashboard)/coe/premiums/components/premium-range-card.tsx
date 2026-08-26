@@ -101,7 +101,7 @@ const RangeSection = ({
             </span>
           </div>
           <NumberValue
-            className="font-semibold text-accent text-lg"
+            className="font-semibold text-accent-strong text-lg"
             currency="SGD"
             locale="en-SG"
             maximumFractionDigits={0}
@@ -124,7 +124,7 @@ const RangeSection = ({
             <div className="h-2 w-2 rounded-full bg-accent" />
           </div>
           <NumberValue
-            className="font-semibold text-accent text-lg"
+            className="font-semibold text-accent-strong text-lg"
             currency="SGD"
             locale="en-SG"
             maximumFractionDigits={0}

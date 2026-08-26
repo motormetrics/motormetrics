@@ -93,7 +93,7 @@ exports[`MakeDetail > should render metric cards 1`] = `
           data-slot="kpi-content"
         >
           <dd
-            class="kpi__value text-accent text-xl"
+            class="kpi__value text-accent-strong text-xl"
             data-slot="kpi-value"
           >
             100

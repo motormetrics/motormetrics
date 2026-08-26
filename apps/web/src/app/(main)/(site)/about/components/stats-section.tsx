@@ -72,7 +72,7 @@ export function StatsSection() {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col gap-4">
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Typography.Label className="text-accent-strong uppercase tracking-widest">
             By the Numbers
           </Typography.Label>
           <Typography.H2 className="max-w-lg lg:text-4xl">

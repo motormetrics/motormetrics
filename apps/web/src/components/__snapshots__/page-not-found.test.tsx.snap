@@ -12,7 +12,7 @@ exports[`PageNotFound > renders the 404 error message 1`] = `
         class="mb-8 flex flex-col items-center"
       >
         <h1
-          class="scroll-m-20 text-balance font-semibold text-4xl tracking-tight lg:text-5xl text-accent"
+          class="scroll-m-20 text-balance font-semibold text-4xl tracking-tight lg:text-5xl text-accent-strong"
         >
           404
         </h1>
@@ -104,7 +104,7 @@ exports[`PageNotFound > renders the 404 error message 1`] = `
         Need help? Visit our
          
         <a
-          class="text-accent hover:underline"
+          class="text-accent-strong hover:underline"
           href="/learn"
         >
           learn page
@@ -113,7 +113,7 @@ exports[`PageNotFound > renders the 404 error message 1`] = `
         or go back to the
          
         <a
-          class="text-accent hover:underline"
+          class="text-accent-strong hover:underline"
           href="/"
         >
           homepage

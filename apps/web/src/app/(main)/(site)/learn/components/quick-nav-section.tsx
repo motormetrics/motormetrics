@@ -1,7 +1,6 @@
 "use client";
 
-import { Card, Link } from "@heroui/react";
-
+import { Card } from "@heroui/react";
 import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
@@ -9,6 +8,7 @@ import {
 } from "@web/config/animations";
 import { motion } from "framer-motion";
 import { BookOpen, Database, GraduationCap, HelpCircle } from "lucide-react";
+import Link from "next/link";
 
 const navItems = [
   {
@@ -16,7 +16,7 @@ const navItems = [
     description: "Common questions about COE, PARF, and car registration",
     href: "#faq",
     icon: HelpCircle,
-    iconColor: "text-accent",
+    iconColor: "text-accent-strong",
     containerBg: "bg-accent/10",
     hoverBorder: "hover:border-accent/30",
   },

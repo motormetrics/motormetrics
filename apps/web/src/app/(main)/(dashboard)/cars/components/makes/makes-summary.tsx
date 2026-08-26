@@ -14,7 +14,7 @@ export function MakesSummary({ summary }: MakesSummaryProps) {
         </KPI.Header>
         <KPI.Content>
           <KPI.Value
-            className="text-2xl text-accent"
+            className="text-2xl text-accent-strong"
             locale="en-SG"
             maximumFractionDigits={0}
             value={summary.totalMakes}
@@ -28,7 +28,7 @@ export function MakesSummary({ summary }: MakesSummaryProps) {
         </KPI.Header>
         <KPI.Content>
           <KPI.Value
-            className="text-2xl text-accent"
+            className="text-2xl text-accent-strong"
             locale="en-SG"
             maximumFractionDigits={0}
             value={summary.totalRegistrations}
@@ -41,7 +41,7 @@ export function MakesSummary({ summary }: MakesSummaryProps) {
           <KPI.Title>Market Leader</KPI.Title>
         </KPI.Header>
         <KPI.Content>
-          <span className="font-bold text-2xl text-accent">
+          <span className="font-bold text-2xl text-accent-strong">
             {summary.marketLeader}
           </span>
         </KPI.Content>

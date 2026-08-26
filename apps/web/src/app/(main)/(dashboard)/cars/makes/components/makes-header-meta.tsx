@@ -1,44 +1,48 @@
-import { redis } from "@motormetrics/utils";
-import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
-import { MonthSelector } from "@web/components/shared/month-selector";
-import { SkeletonCard } from "@web/components/shared/skeleton";
-import { LAST_UPDATED_CARS_KEY } from "@web/config";
-import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
-import type { SearchParams } from "nuqs/server";
-import { Suspense } from "react";
-import { loadSearchParams } from "../search-params";
+"use client";
 
-async function CarMakesHeaderMeta({
-  searchParams: searchParamsPromise,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const [{ month: parsedMonth }, months, lastUpdated] = await Promise.all([
-    loadSearchParams(searchParamsPromise),
-    fetchMonthsForCars(),
-    redis.get<number>(LAST_UPDATED_CARS_KEY),
-  ]);
-  const { wasAdjusted } = await getMonthOrLatest(parsedMonth, "cars");
+import { cn } from "@heroui/react";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { useTransition } from "react";
+import { RANGE_LABELS, RANGES } from "../search-params";
 
-  return (
-    <DashboardPageMeta lastUpdated={lastUpdated}>
-      <MonthSelector
-        months={months}
-        latestMonth={months[0]}
-        wasAdjusted={wasAdjusted}
-      />
-    </DashboardPageMeta>
+/**
+ * Range tabs in the page head.
+ *
+ * URL state with `shallow: false` so the server re-renders every bento block
+ * against the new period — the blocks stay server components and no registration
+ * data crosses into the client bundle.
+ */
+export function MakesHeaderMeta() {
+  const [, startTransition] = useTransition();
+  const [range, setRange] = useQueryState(
+    "range",
+    parseAsStringLiteral(RANGES)
+      .withDefault("ytd")
+      .withOptions({ shallow: false, startTransition }),
   );
-}
 
-export function MakesHeaderMeta({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
   return (
-    <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-      <CarMakesHeaderMeta searchParams={searchParams} />
-    </Suspense>
+    <fieldset className="m-0 flex flex-wrap gap-1.5 rounded-full border-none bg-default p-1.5">
+      <legend className="sr-only">Registration period</legend>
+      {RANGES.map((option) => {
+        const isActive = option === range;
+        return (
+          <button
+            aria-pressed={isActive}
+            className={cn(
+              "cursor-pointer whitespace-nowrap rounded-full px-4 py-2.5 text-sm transition-colors",
+              isActive
+                ? "bg-surface font-extrabold text-foreground shadow-surface"
+                : "font-semibold text-muted hover:text-foreground",
+            )}
+            key={option}
+            onClick={() => setRange(option)}
+            type="button"
+          >
+            {RANGE_LABELS[option]}
+          </button>
+        );
+      })}
+    </fieldset>
   );
 }

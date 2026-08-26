@@ -1,8 +1,9 @@
-import { Card, Link } from "@heroui/react";
+import { Card } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import type { FuelType } from "@web/types/cars";
+import Link from "next/link";
 
 // interface Category {
 //   title: string;
@@ -92,7 +93,7 @@ export function TopMakes({ data }: TopMakesProps) {
               ))}
             </Card.Content>
             <Card.Footer>
-              <Link href={href} className="underline">
+              <Link href={href} className="link underline">
                 View More
               </Link>
             </Card.Footer>

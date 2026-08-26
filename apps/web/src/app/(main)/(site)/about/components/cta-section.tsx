@@ -28,7 +28,7 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Label className="text-accent uppercase tracking-widest">
+            <Typography.Label className="text-accent-strong uppercase tracking-widest">
               Stay Updated
             </Typography.Label>
             <Typography.H2>Follow for the Latest Updates</Typography.H2>

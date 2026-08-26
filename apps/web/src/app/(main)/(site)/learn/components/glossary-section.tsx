@@ -1,7 +1,6 @@
 "use client";
 
-import { Card, Link } from "@heroui/react";
-
+import { Card } from "@heroui/react";
 import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
@@ -10,6 +9,7 @@ import {
 } from "@web/config/animations";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { getAllGuideSlugs } from "../lib/guides";
 import { GLOSSARY_CATEGORIES } from "./glossary-data";
 
@@ -41,7 +41,7 @@ export function GlossarySection() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Typography.Label className="text-accent-strong uppercase tracking-widest">
             Terminology
           </Typography.Label>
           <Typography.H2 className="lg:text-4xl">
@@ -79,7 +79,7 @@ export function GlossarySection() {
                         <div className="flex w-full items-center justify-between">
                           <Typography.H4>{term}</Typography.H4>
                           {hasGuide && (
-                            <ArrowRight className="size-4 text-accent" />
+                            <ArrowRight className="size-4 text-accent-strong" />
                           )}
                         </div>
                       </Card.Header>

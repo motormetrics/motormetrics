@@ -138,3 +138,33 @@ export async function getCarsComparison(month: string): Promise<Comparison> {
     },
   };
 }
+
+export interface MonthlyTotal {
+  month: string;
+  total: number;
+}
+
+/**
+ * Monthly registration totals, oldest first. Backs the Overview hero sparkline,
+ * which needs a month-over-month series rather than the yearly totals used by
+ * the annual chart.
+ */
+export async function getMonthlyRegistrationTotals(
+  limit = 12,
+): Promise<MonthlyTotal[]> {
+  "use cache";
+  cacheLife("max");
+  cacheTag("cars:monthly-totals");
+
+  const results = await db
+    .select({
+      month: cars.month,
+      total: sql<number>`sum(${cars.number})`.mapWith(Number),
+    })
+    .from(cars)
+    .groupBy(cars.month)
+    .orderBy(desc(cars.month))
+    .limit(limit);
+
+  return results.reverse();
+}

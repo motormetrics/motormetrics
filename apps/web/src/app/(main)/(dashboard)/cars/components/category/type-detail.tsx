@@ -1,4 +1,3 @@
-import { Link } from "@heroui/react";
 import { KPI } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { CarOverviewTrends } from "@web/app/(main)/(dashboard)/cars/registrations/components/overview-trends";
@@ -18,6 +17,7 @@ import {
   checkVehicleTypeIfExist,
 } from "@web/queries/cars";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { SearchParams } from "nuqs/server";
 import { createLoader, parseAsString } from "nuqs/server";
@@ -182,7 +182,7 @@ async function TypeDetailContent({
           : `No ${displayName} vehicle registrations were recorded in ${formattedMonth}.`}{" "}
         <Link
           href={`/cars/${config.category}`}
-          className="text-accent hover:underline"
+          className="text-accent-strong hover:underline"
         >
           View all{" "}
           {config.category === "fuel-types" ? "fuel types" : "vehicle types"}{" "}

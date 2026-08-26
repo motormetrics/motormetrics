@@ -22,7 +22,7 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
         <ComposedChart.Grid
           vertical={false}
           strokeDasharray="3 3"
-          className="stroke-border"
+          className="stroke-chart-grid"
         />
         <ComposedChart.XAxis
           dataKey="month"

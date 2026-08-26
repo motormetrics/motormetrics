@@ -22,7 +22,7 @@ exports[`MetricCard > should combine metric value and comparison 1`] = `
       data-slot="kpi-content"
     >
       <dd
-        class="kpi__value text-accent text-4xl"
+        class="kpi__value text-accent-strong text-4xl"
         data-slot="kpi-value"
       >
         50,000
@@ -111,7 +111,7 @@ exports[`MetricCard > should render with hero variant 1`] = `
       data-slot="kpi-content"
     >
       <dd
-        class="kpi__value text-accent text-5xl"
+        class="kpi__value text-accent-strong text-5xl"
         data-slot="kpi-value"
       >
         10,000

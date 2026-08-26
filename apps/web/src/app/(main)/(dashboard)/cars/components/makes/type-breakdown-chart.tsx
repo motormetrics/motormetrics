@@ -33,7 +33,7 @@ export function TypeBreakdownChart({
           <BarChart.Grid
             horizontal={false}
             strokeDasharray="3 3"
-            className="stroke-border"
+            className="stroke-chart-grid"
           />
           <BarChart.XAxis
             type="number"

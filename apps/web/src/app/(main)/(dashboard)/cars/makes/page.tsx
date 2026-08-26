@@ -1,10 +1,10 @@
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
-import { DashboardPageHeader } from "@web/components/dashboard-page-header";
-import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { Skeleton } from "@heroui/react";
+import { PageHead } from "@web/components/shared/page-head";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
 import { MakesContentSection } from "./components/makes-content-section";
 import { MakesHeaderMeta } from "./components/makes-header-meta";
 
@@ -41,19 +41,16 @@ export const metadata: Metadata = {
 
 export default function CarMakesPage({ searchParams }: PageProps) {
   return (
-    <div className="flex flex-col gap-4">
-      <DashboardPageHeader
-        title={
-          <DashboardPageTitle
-            title="Makes"
-            subtitle="List of car makes registered in Singapore."
-          />
+    <>
+      <PageHead
+        controls={
+          <Suspense fallback={<Skeleton className="h-13 w-80 rounded-full" />}>
+            <MakesHeaderMeta />
+          </Suspense>
         }
-        meta={<MakesHeaderMeta searchParams={searchParams} />}
+        title="Makes"
       />
-      <AnimatedSection order={1}>
-        <MakesContentSection />
-      </AnimatedSection>
-    </div>
+      <MakesContentSection searchParams={searchParams} />
+    </>
   );
 }

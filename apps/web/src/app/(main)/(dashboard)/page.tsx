@@ -1,4 +1,4 @@
-import { Card, Skeleton } from "@heroui/react";
+import { Skeleton } from "@heroui/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import {
@@ -6,13 +6,18 @@ import {
   YearlyChart,
 } from "@web/app/(main)/(dashboard)/components/charts-section";
 import { CoeSection } from "@web/app/(main)/(dashboard)/components/coe-section";
+import { EvMomentum } from "@web/app/(main)/(dashboard)/components/ev-momentum";
 import { MarketOverview } from "@web/app/(main)/(dashboard)/components/market-overview";
-import { MonthlyChangeSummary } from "@web/app/(main)/(dashboard)/components/monthly-change-summary";
-import { PostsSection } from "@web/app/(main)/(dashboard)/components/posts-section";
+import { PqpRail } from "@web/app/(main)/(dashboard)/components/pqp-rail";
+// TODO: Not present in the Overview v2 comp. Restore if the dashboard should
+// keep a monthly-change KPI and a recent-posts block alongside the v2 layout.
+// import { MonthlyChangeSummary } from "@web/app/(main)/(dashboard)/components/monthly-change-summary";
+// import { PostsSection } from "@web/app/(main)/(dashboard)/components/posts-section";
 import { SummaryCard } from "@web/app/(main)/(dashboard)/components/summary-card";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { Bento, RAIL_CLASS } from "@web/components/shared/bento";
+import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_URLS } from "@web/config/socials";
 import type { Metadata } from "next";
@@ -82,51 +87,15 @@ const organisationSchema = {
   sameAs: [SOCIAL_URLS.instagram, SOCIAL_URLS.telegram, SOCIAL_URLS.github],
 } as const;
 
-function SummaryCardSkeleton() {
+function CardSkeleton({ className = "" }: { className?: string }) {
   return (
-    <Card>
-      <Card.Content>
-        <div className="mb-4 flex items-center justify-between">
-          <Skeleton className="h-12 w-12 rounded-2xl" />
-          <Skeleton className="h-10 w-10 rounded-full" />
-        </div>
+    <div className={`rounded-4xl bg-surface p-7 shadow-surface ${className}`}>
+      <div className="flex flex-col gap-4">
         <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="mt-2 h-10 w-28 rounded-lg" />
-        <Skeleton className="mt-4 h-6 w-40 rounded-full" />
-      </Card.Content>
-    </Card>
-  );
-}
-
-function MarketOverviewSkeleton() {
-  return (
-    <div className="flex flex-col gap-4">
-      <Skeleton className="h-6 w-36 rounded-lg" />
-      <div className="grid grid-cols-3 gap-4">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="rounded-2xl bg-default p-4">
-            <Skeleton className="h-4 w-16 rounded-lg" />
-            <Skeleton className="mt-2 h-7 w-20 rounded-lg" />
-          </div>
-        ))}
+        <Skeleton className="h-12 w-40 rounded-lg" />
+        <Skeleton className="h-6 w-44 rounded-full" />
       </div>
     </div>
-  );
-}
-
-function MonthlyChangeSummarySkeleton() {
-  return (
-    <Card>
-      <Card.Content>
-        <div className="mb-4 flex items-center justify-between">
-          <Skeleton className="h-12 w-12 rounded-2xl" />
-          <Skeleton className="h-10 w-10 rounded-full" />
-        </div>
-        <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="mt-2 h-10 w-28 rounded-lg" />
-        <Skeleton className="mt-4 h-6 w-40 rounded-full" />
-      </Card.Content>
-    </Card>
   );
 }
 
@@ -135,65 +104,84 @@ const HomePage = () => {
     <>
       <StructuredData data={webSiteSchema} />
       <StructuredData data={organisationSchema} />
-      <section className="flex flex-col gap-8">
-        <div className="flex max-w-3xl flex-col gap-2">
-          <Typography.H1>Overview</Typography.H1>
-          <Typography.TextLg className="text-muted">
-            Singapore vehicle registrations and COE market movement at a glance.
-          </Typography.TextLg>
-        </div>
-        {/* Bento Grid */}
-        <AnimatedGrid className="grid grid-cols-12 gap-4">
-          {/* Row 1: Summary Cards */}
-          <AnimatedSection className="col-span-12 lg:col-span-6">
+
+      <PageHead title="Overview" />
+
+      <Bento>
+        {/* Left column */}
+        <AnimatedGrid className="flex flex-col gap-6">
+          <AnimatedSection>
             <SectionErrorBoundary title="Registration summary unavailable">
-              <Suspense fallback={<SummaryCardSkeleton />}>
+              <Suspense fallback={<CardSkeleton className="h-[420px]" />}>
                 <SummaryCard />
               </Suspense>
             </SectionErrorBoundary>
           </AnimatedSection>
-          <AnimatedSection className="col-span-12 lg:col-span-6">
-            <SectionErrorBoundary title="Monthly change unavailable">
-              <Suspense fallback={<MonthlyChangeSummarySkeleton />}>
-                <MonthlyChangeSummary />
-              </Suspense>
-            </SectionErrorBoundary>
-          </AnimatedSection>
-
-          {/* Row 2: COE Results */}
-          <AnimatedSection className="col-span-12">
-            <SectionErrorBoundary title="COE results unavailable">
-              <CoeSection />
-            </SectionErrorBoundary>
-          </AnimatedSection>
-
-          {/* Row 3: Top Makes + Posts */}
-          <AnimatedSection className="col-span-12 md:col-span-6 lg:col-span-4">
-            <SectionErrorBoundary title="Top makes unavailable">
-              <TopMakesSection />
-            </SectionErrorBoundary>
-          </AnimatedSection>
-          <AnimatedSection className="col-span-12 md:col-span-6 lg:col-span-8">
-            <SectionErrorBoundary title="Recent posts unavailable">
-              <PostsSection />
-            </SectionErrorBoundary>
-          </AnimatedSection>
-
-          {/* Row 4: Yearly Chart + Market Overview */}
-          <AnimatedSection className="col-span-12 md:col-span-6 lg:col-span-4">
+          <AnimatedSection>
             <SectionErrorBoundary title="Yearly chart unavailable">
               <YearlyChart />
             </SectionErrorBoundary>
           </AnimatedSection>
-          <AnimatedSection className="col-span-12 lg:col-span-8">
-            <SectionErrorBoundary title="Market overview unavailable">
-              <Suspense fallback={<MarketOverviewSkeleton />}>
-                <MarketOverview />
+        </AnimatedGrid>
+
+        {/* Middle column */}
+        <AnimatedGrid className="flex flex-col gap-6">
+          <AnimatedSection>
+            <SectionErrorBoundary title="COE results unavailable">
+              <CoeSection />
+            </SectionErrorBoundary>
+          </AnimatedSection>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <AnimatedSection>
+              <SectionErrorBoundary title="Top makes unavailable">
+                <TopMakesSection />
+              </SectionErrorBoundary>
+            </AnimatedSection>
+            <AnimatedSection>
+              <SectionErrorBoundary title="Market overview unavailable">
+                <Suspense fallback={<CardSkeleton className="h-[430px]" />}>
+                  <MarketOverview />
+                </Suspense>
+              </SectionErrorBoundary>
+            </AnimatedSection>
+          </div>
+        </AnimatedGrid>
+
+        {/* Right rail — warm sand well: PQP rates over a dark EV panel */}
+        <AnimatedGrid className={RAIL_CLASS}>
+          <AnimatedSection>
+            <SectionErrorBoundary title="PQP rates unavailable">
+              <Suspense fallback={<CardSkeleton className="h-96" />}>
+                <PqpRail />
+              </Suspense>
+            </SectionErrorBoundary>
+          </AnimatedSection>
+          <AnimatedSection>
+            <SectionErrorBoundary title="Electric momentum unavailable">
+              <Suspense fallback={<CardSkeleton className="h-96" />}>
+                <EvMomentum />
               </Suspense>
             </SectionErrorBoundary>
           </AnimatedSection>
         </AnimatedGrid>
-      </section>
+
+        {/* TODO: Neither block appears in Overview v2. Commented out rather than
+            deleted so they can be restored if the dashboard should diverge from
+            the comp.
+        <AnimatedSection>
+          <SectionErrorBoundary title="Monthly change unavailable">
+            <Suspense fallback={<CardSkeleton className="h-40" />}>
+              <MonthlyChangeSummary />
+            </Suspense>
+          </SectionErrorBoundary>
+        </AnimatedSection>
+        <AnimatedSection>
+          <SectionErrorBoundary title="Recent posts unavailable">
+            <PostsSection />
+          </SectionErrorBoundary>
+        </AnimatedSection>
+        */}
+      </Bento>
     </>
   );
 };

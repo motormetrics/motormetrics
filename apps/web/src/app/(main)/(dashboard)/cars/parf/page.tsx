@@ -1,4 +1,3 @@
-import { Link } from "@heroui/react";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
@@ -7,6 +6,7 @@ import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import type { Metadata } from "next";
+import Link from "next/link";
 import type { WebPage, WithContext } from "schema-dts";
 import { PARFSections } from "./components/parf-sections";
 
@@ -76,7 +76,7 @@ export default function PARFCalculatorPage() {
             href="https://www.lta.gov.sg/content/ltagov/en/newsroom/2026/2/news-releases/revision-parf-rebate-schedule-cap.html"
             target="_blank"
             rel="noreferrer"
-            className="text-accent underline"
+            className="text-accent-strong underline"
           >
             LTA
           </Link>

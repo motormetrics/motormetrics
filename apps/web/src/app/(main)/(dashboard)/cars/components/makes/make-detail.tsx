@@ -1,4 +1,4 @@
-import { Card, Link } from "@heroui/react";
+import { Card } from "@heroui/react";
 import { KPI, KPIGroup } from "@heroui-pro/react";
 import type { CarLogo } from "@logos/types";
 import type { SelectCar } from "@motormetrics/database";
@@ -13,6 +13,7 @@ import Typography from "@web/components/typography";
 import type { MakeCoeComparisonData } from "@web/queries/cars/makes/coe-comparison";
 import { Calendar, Car, TrendingUp } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface MakeDetailProps {
   cars: {
@@ -76,7 +77,7 @@ export function MakeDetail({
           </KPI.Header>
           <KPI.Content>
             <KPI.Value
-              className="text-accent text-xl"
+              className="text-accent-strong text-xl"
               locale="en-SG"
               maximumFractionDigits={0}
               value={cars.total}
@@ -148,7 +149,7 @@ export function MakeDetail({
                   <Link
                     key={name}
                     href={`/cars/fuel-types/${slugify(name)}`}
-                    className="text-accent text-sm hover:underline"
+                    className="text-accent-strong text-sm hover:underline"
                   >
                     {name}
                   </Link>
@@ -168,7 +169,7 @@ export function MakeDetail({
                   <Link
                     key={name}
                     href={`/cars/vehicle-types/${slugify(name)}`}
-                    className="text-accent text-sm hover:underline"
+                    className="text-accent-strong text-sm hover:underline"
                   >
                     {name}
                   </Link>

@@ -36,7 +36,7 @@ export async function PlacementsSection() {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col gap-4">
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Typography.Label className="text-accent-strong uppercase tracking-widest">
             Ad Placements
           </Typography.Label>
           <Typography.H2 className="max-w-lg lg:text-4xl">
@@ -58,7 +58,7 @@ export async function PlacementsSection() {
               <Card.Header className="flex flex-col items-start gap-3 pb-2">
                 <div className="flex items-center gap-3">
                   <div className="rounded-xl bg-accent/10 p-2.5">
-                    <Icon className="size-5 text-accent" />
+                    <Icon className="size-5 text-accent-strong" />
                   </div>
                   <Chip
                     size="sm"

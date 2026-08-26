@@ -21,7 +21,7 @@ export function CategorySummaryCard({
     <KPI className="col-span-12 border-2 border-accent lg:col-span-4">
       <KPI.Header>
         <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/10">
-          <BarChart3 className="size-6 text-accent" />
+          <BarChart3 className="size-6 text-accent-strong" />
         </div>
       </KPI.Header>
       <KPI.Header>
@@ -29,7 +29,7 @@ export function CategorySummaryCard({
       </KPI.Header>
       <KPI.Content>
         <KPI.Value
-          className="text-4xl text-accent"
+          className="text-4xl text-accent-strong"
           locale="en-SG"
           maximumFractionDigits={0}
           value={total}

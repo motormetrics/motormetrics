@@ -1,9 +1,10 @@
-import { Link, Tooltip } from "@heroui/react";
+import { Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import type { SelectPost } from "@motormetrics/database";
 import { Post } from "@web/app/(main)/(site)/blog/components/post";
 import Typography from "@web/components/typography";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 interface RecentPostsProps {
   posts: SelectPost[];
@@ -12,7 +13,7 @@ interface RecentPostsProps {
 export function RecentPosts({ posts }: RecentPostsProps) {
   if (!posts || posts.length === 0) {
     return (
-      <section className="flex h-full flex-col gap-5">
+      <section className="flex h-full flex-col gap-6">
         <div className="flex items-center justify-between">
           <Typography.H3>Recent Posts</Typography.H3>
           <Tooltip delay={300}>
@@ -38,7 +39,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
   }
 
   return (
-    <section className="flex h-full flex-col gap-5">
+    <section className="flex h-full flex-col gap-6">
       <div className="flex items-center justify-between">
         <Typography.H3>Recent Posts</Typography.H3>
         <Tooltip delay={300}>
@@ -57,7 +58,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
         </Tooltip>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3 2xl:grid-cols-1">
         {posts.slice(0, 3).map((post) => (
           <Post.Card key={post.id} post={post} />
         ))}

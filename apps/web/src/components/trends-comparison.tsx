@@ -131,10 +131,10 @@ export function TrendsComparison({
       <Drawer.Content placement="bottom">
         <Drawer.Dialog>
           <Drawer.Header className="flex flex-col items-center pb-2">
-            <div className="mb-4 h-1 w-12 rounded-full bg-gray-300" />
+            <div className="mb-4 h-1 w-12 rounded-full bg-default" />
             <div className="flex w-full flex-col gap-4 text-center">
               <h2 className="font-bold text-xl">Trends Comparison</h2>
-              <p className="text-gray-600 text-sm">
+              <p className="text-muted text-sm">
                 Compare data across different periods
               </p>
             </div>

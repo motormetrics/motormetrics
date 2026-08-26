@@ -9,6 +9,36 @@ export interface MakeRegistrationStat {
   yoyChange: number | null;
 }
 
+interface ComparisonWindow {
+  start: string;
+  end: string;
+}
+
+/**
+ * The two windows a year-over-year comparison has to use: January through the
+ * latest month with data, and exactly the same span a year earlier.
+ *
+ * Both windows end on the same month number. Running the previous side to
+ * December while the current side stopped at the latest month is what made
+ * `yoyChange` read roughly −33% in August for a make whose volume had not moved
+ * at all, because it measured a part-complete year against a complete one.
+ *
+ * Exported so the windows can be asserted directly — the query builder is
+ * mocked in tests, which leaves the `where` clauses otherwise unobservable.
+ */
+export function getComparisonWindows(latestMonth: string): {
+  current: ComparisonWindow;
+  previous: ComparisonWindow;
+} {
+  const [year, monthNumber] = latestMonth.split("-").map(Number);
+  const paddedMonth = String(monthNumber).padStart(2, "0");
+
+  return {
+    current: { start: `${year}-01`, end: `${year}-${paddedMonth}` },
+    previous: { start: `${year - 1}-01`, end: `${year - 1}-${paddedMonth}` },
+  };
+}
+
 /**
  * Get registration count, market share, and rolling 12-month trend per make.
  */
@@ -28,9 +58,9 @@ export async function getMakeRegistrationStats(): Promise<
     return [];
   }
 
-  const year = latestMonth.split("-")[0];
+  const { current, previous } = getComparisonWindows(latestMonth);
 
-  // Annual totals for the latest year (for count + share)
+  // Year-to-date totals for the latest year (for count + share)
   const annualRows = await db
     .select({
       make: cars.make,
@@ -38,7 +68,7 @@ export async function getMakeRegistrationStats(): Promise<
     })
     .from(cars)
     .where(
-      sql`${cars.month} >= ${`${year}-01`} and ${cars.month} <= ${`${year}-12`}`,
+      sql`${cars.month} >= ${current.start} and ${cars.month} <= ${current.end}`,
     )
     .groupBy(cars.make);
 
@@ -74,9 +104,7 @@ export async function getMakeRegistrationStats(): Promise<
     {},
   );
 
-  const prevYear = String(Number(year) - 1);
-
-  // Annual totals for the previous year (for YoY comparison)
+  // The same January-to-month span a year earlier (for YoY comparison)
   const prevYearRows = await db
     .select({
       make: cars.make,
@@ -84,7 +112,7 @@ export async function getMakeRegistrationStats(): Promise<
     })
     .from(cars)
     .where(
-      sql`${cars.month} >= ${`${prevYear}-01`} and ${cars.month} <= ${`${prevYear}-12`}`,
+      sql`${cars.month} >= ${previous.start} and ${cars.month} <= ${previous.end}`,
     )
     .groupBy(cars.make);
 

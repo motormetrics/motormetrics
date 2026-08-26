@@ -1,7 +1,6 @@
 "use client";
 
-import { Card, Link } from "@heroui/react";
-
+import { Card } from "@heroui/react";
 import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
@@ -10,6 +9,7 @@ import {
 } from "@web/config/animations";
 import { motion } from "framer-motion";
 import { Database, RefreshCw, Shield } from "lucide-react";
+import Link from "next/link";
 
 const features = [
   {
@@ -56,7 +56,7 @@ export function DataSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-accent uppercase tracking-widest">
+              <Typography.Label className="text-accent-strong uppercase tracking-widest">
                 Data Transparency
               </Typography.Label>
               <Typography.H2 className="lg:text-4xl">
@@ -81,7 +81,7 @@ export function DataSection() {
                       href="https://datamall.lta.gov.sg"
                       target="_blank"
                       rel="noreferrer"
-                      className="text-accent text-sm underline"
+                      className="text-accent-strong text-sm underline"
                     >
                       LTA DataMall
                     </Link>
@@ -105,7 +105,7 @@ export function DataSection() {
                   <Card className="group h-full border-border/80 transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
                     <Card.Content className="flex flex-col gap-4">
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-default transition-colors group-hover:bg-accent/10">
-                        <feature.icon className="h-6 w-6 text-muted transition-colors group-hover:text-accent" />
+                        <feature.icon className="h-6 w-6 text-muted transition-colors group-hover:text-accent-strong" />
                       </div>
                       <div className="flex flex-col gap-2">
                         <Typography.H4>{feature.title}</Typography.H4>

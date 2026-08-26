@@ -32,7 +32,6 @@ export interface NavigationItem {
   description?: string;
   show?: boolean;
   badge?: "beta" | "new";
-  iconColor?: string;
   matchPrefix?: boolean;
 }
 
@@ -86,14 +85,12 @@ export const navLinks: NavLinks = {
       url: "/cars/registrations",
       icon: FilePlus,
       description: "Monthly car registration statistics and trends",
-      iconColor: "text-blue-500",
     },
     {
       title: "Deregistrations",
       url: "/cars/deregistrations",
       icon: FileMinus,
       description: "Monthly vehicle deregistration statistics",
-      iconColor: "text-red-500",
     },
     {
       title: "Makes",
@@ -101,7 +98,6 @@ export const navLinks: NavLinks = {
       icon: CarFront,
       description: "Car makes statistics and market share analysis",
       badge: "beta",
-      iconColor: "text-pink-500",
       matchPrefix: true,
     },
     {
@@ -109,21 +105,18 @@ export const navLinks: NavLinks = {
       url: "/cars/fuel-types",
       icon: Fuel,
       description: "Breakdown by petrol, diesel, hybrid and electric",
-      iconColor: "text-green-500",
     },
     {
       title: "Vehicle Types",
       url: "/cars/vehicle-types",
       icon: Car,
       description: "Analysis of saloons, hatchbacks, SUVs and more",
-      iconColor: "text-purple-500",
     },
     {
       title: "Annual",
       url: "/cars/annual",
       icon: Calendar,
       description: "Yearly vehicle population and registration trends",
-      iconColor: "text-amber-500",
     },
     {
       title: "Electric Vehicles",
@@ -131,7 +124,6 @@ export const navLinks: NavLinks = {
       icon: Zap,
       description: "BEV, PHEV and hybrid adoption trends and market share",
       badge: "new",
-      iconColor: "text-emerald-500",
     },
     {
       title: "PARF Calculator",
@@ -147,7 +139,6 @@ export const navLinks: NavLinks = {
       description:
         "See how new car prices are composed — OMV, ARF, VES, and COE",
       badge: "new",
-      iconColor: "text-orange-500",
     },
   ],
   coe: [
@@ -210,12 +201,47 @@ export type NavItem = {
   label: string;
 };
 
-export const NAV_ITEMS = [
+/** Pills in the shell navigation, in comp order. */
+export const PRIMARY_NAV_ITEMS = [
   { href: "/", label: "Overview" },
-  { href: "/about", label: "About" },
-  // TODO: Blog hidden from site navigation pending a decision on the blog's
-  // future. Commented out rather than deleted so it can be restored in one
-  // line. The /blog route, sitemap entries and llms.txt are all still live.
-  // { href: "/blog", label: "Blog" },
+  { href: "/cars", label: "Cars" },
+  { href: "/coe", label: "COE" },
+  { href: "/cars/electric-vehicles", label: "Electric" },
   { href: "/learn", label: "Learn" },
+] as const satisfies readonly NavItem[];
+
+export interface NavGroup {
+  title: string;
+  items: NavigationItem[];
+}
+
+/**
+ * Everything the pills do not surface, grouped behind the shell nav's "More"
+ * menu. Electric is omitted because it has its own pill.
+ */
+export const MORE_NAV_GROUPS: NavGroup[] = [
+  {
+    title: "Cars",
+    items: navLinks.cars.filter(({ url }) => url !== "/cars/electric-vehicles"),
+  },
+  { title: "COE", items: navLinks.coe },
+  {
+    title: "Company",
+    items: [
+      { title: "About", url: "/about" },
+      { title: "Advertise", url: "/advertise" },
+      // TODO: Blog hidden from site navigation pending a decision on the blog's
+      // future. Commented out rather than deleted so it can be restored in one
+      // line. The /blog route, sitemap entries and llms.txt are all still live.
+      // { title: "Blog", url: "/blog" },
+    ],
+  },
+];
+
+export const FOOTER_NAV_ITEMS = [
+  { href: "/about", label: "About" },
+  { href: "/learn", label: "Learn" },
+  { href: "/advertise", label: "Advertise" },
+  { href: "/legal/privacy-policy", label: "Privacy" },
+  { href: "/legal/terms-of-service", label: "Terms" },
 ] as const satisfies readonly NavItem[];

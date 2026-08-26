@@ -1,9 +1,10 @@
-import { Button, Card, Link, ProgressBar } from "@heroui/react";
+import { Button, Card, ProgressBar } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { SkeletonBentoCard } from "@web/components/shared/skeleton";
 import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults, getPqpRates } from "@web/queries/coe";
+import Link from "next/link";
 import { Suspense } from "react";
 
 async function FunFactsPqpContent() {
@@ -39,7 +40,7 @@ async function FunFactsPqpContent() {
             <div className="flex flex-col gap-2">
               <ProgressBar value={categoryAPercentage * 100} size="lg" />
               <div className="text-center">
-                <span className="font-bold text-2xl text-accent">
+                <span className="font-bold text-2xl text-accent-strong">
                   <NumberValue
                     maximumFractionDigits={1}
                     style="percent"
@@ -86,7 +87,7 @@ async function FunFactsPqpContent() {
                   <Typography.TextSm className="text-muted">
                     {category}
                   </Typography.TextSm>
-                  <span className="font-bold text-accent text-xl">
+                  <span className="font-bold text-accent-strong text-xl">
                     <NumberValue
                       currency="SGD"
                       locale="en-SG"

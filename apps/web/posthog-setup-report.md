@@ -11,7 +11,7 @@ The wizard has completed a deep integration of PostHog analytics into the MotorM
 | `admin_blog_post_created` | Admin successfully creates a new blog post | `src/app/admin/components/blog-post-form.tsx` |
 | `admin_blog_post_updated` | Admin successfully updates an existing blog post | `src/app/admin/components/blog-post-form.tsx` |
 | `admin_blog_post_regenerated` | Admin triggers AI regeneration of a blog post | `src/app/admin/components/blog-post-form.tsx` |
-| `car_make_searched` | User selects a car make from the search autocomplete on the makes page | `src/app/(main)/(dashboard)/cars/components/makes/make-search.tsx` |
+| `car_make_searched` | User selects a car make on the makes page, by opening its row in the all-makes table | `src/app/(main)/(dashboard)/cars/makes/components/makes-table.tsx` |
 | `car_make_selected` | User selects a car make in the registrations page autocomplete | `src/app/(main)/(dashboard)/cars/registrations/components/make-selector.tsx` |
 | `blog_category_tab_changed` | User switches between blog category tabs (All, COE, Cars) | `src/app/(main)/(site)/blog/components/blog-list/client.tsx` |
 | `annual_view_tab_changed` | User switches between annual view tabs (By Fuel Type, By Make) | `src/app/(main)/(dashboard)/cars/annual/components/annual-view-tabs.tsx` |
