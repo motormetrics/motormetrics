@@ -5,10 +5,7 @@ import { TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { version } from "../../package.json";
 
-// The footer now renders inside the dashboard's prerender path, and Cache
-// Components rejects current-time reads there — module scope included — so the
-// copyright year is a constant rather than new Date().getFullYear().
-const COPYRIGHT_YEAR = 2026;
+const COPYRIGHT_YEAR = new Date().getFullYear();
 
 export function Footer() {
   return (
