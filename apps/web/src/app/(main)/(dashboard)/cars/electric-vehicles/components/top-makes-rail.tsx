@@ -1,16 +1,38 @@
 import { Link } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
-import { electrifiedMakes } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+import {
+  electrifiedMakes,
+  powertrainTotal,
+  resolveMonthIndex,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import Typography from "@web/components/typography";
+import { getEvMonthlyTrend } from "@web/queries/cars";
 import { getTopMakesByFuelType } from "@web/queries/cars/market-insights";
 
 const RAIL_SIZE = 6;
 
 export async function TopMakesRail({ month }: { month: string }) {
-  const fuelTypes = await getTopMakesByFuelType(month);
+  const [fuelTypes, trend] = await Promise.all([
+    getTopMakesByFuelType(month),
+    getEvMonthlyTrend(),
+  ]);
   const ranking = electrifiedMakes(fuelTypes);
-  const monthTotal = ranking.reduce((sum, item) => sum + item.count, 0) || 1;
+
+  /* `getTopMakesByFuelType` returns the top five makes per fuel type, so the
+   * tail is missing by construction. Summing the ranking therefore yields a
+   * subtotal, and dividing by it inflates every share: BYD read 31.7% of a
+   * 3,628 subtotal in March 2026 where its true share of the month's 4,754
+   * electrified registrations is 24.2%. Ranking survives the truncation;
+   * a denominator does not, so take it from the trend, which counts them all. */
+  const point =
+    trend[
+      resolveMonthIndex(
+        trend.map((entry) => entry.month),
+        month,
+      )
+    ];
+  const monthTotal = point ? powertrainTotal(point, "all") : 0;
 
   if (ranking.length === 0) {
     return null;
@@ -46,8 +68,10 @@ export async function TopMakesRail({ month }: { month: string }) {
                     locale="en-SG"
                     maximumFractionDigits={0}
                     value={item.count}
-                  />{" "}
-                  · {((item.count / monthTotal) * 100).toFixed(1)}% of EVs
+                  />
+                  {monthTotal > 0
+                    ? ` · ${((item.count / monthTotal) * 100).toFixed(1)}% of EVs`
+                    : " registered"}
                 </Typography.Caption>
               </span>
             </Link>
