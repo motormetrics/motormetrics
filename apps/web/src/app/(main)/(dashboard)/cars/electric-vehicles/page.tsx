@@ -102,11 +102,6 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
             <MonthControl searchParams={searchParams} />
           </Suspense>
         }
-        eyebrow={
-          <>
-            Battery-electric and hybrid registrations&ensp;·&ensp;LTA DataMall
-          </>
-        }
         title="Electric vehicles"
       />
 
