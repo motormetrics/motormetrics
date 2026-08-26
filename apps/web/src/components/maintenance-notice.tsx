@@ -1,4 +1,4 @@
-import { Card, Chip, Link, Separator } from "@heroui/react";
+import { Card, Chip, Separator } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { SOCIAL_URLS } from "@web/config/socials";
 import {
@@ -11,6 +11,7 @@ import {
   Wrench,
   Zap,
 } from "lucide-react";
+import Link from "next/link";
 import {
   AnimatedCard,
   AnimatedCardGrid,

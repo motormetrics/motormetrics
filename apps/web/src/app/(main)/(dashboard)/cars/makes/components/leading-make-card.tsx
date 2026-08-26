@@ -1,10 +1,10 @@
-import { Link } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 import { HeroCard } from "@web/components/v2/bento";
 import { DeltaChip } from "@web/components/v2/delta-chip";
 import { sparkline } from "@web/components/v2/sparkline";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 import { loadSearchParams, RANGE_LABELS } from "../search-params";
 import { MakeAvatar } from "./make-avatar";

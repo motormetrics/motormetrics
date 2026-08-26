@@ -1,8 +1,8 @@
 "use client";
 
-import { Chip, Link } from "@heroui/react";
-
+import { Chip } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database";
+import Link from "next/link";
 import { formatDate, getCategoryConfig, getReadingTime } from "./utils";
 
 interface CompactProps {

@@ -1,10 +1,11 @@
 "use client";
 
-import { Link, Tooltip } from "@heroui/react";
+import { Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 import { ArrowUpRight, Calculator } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { CostTrendChip } from "./cost-trend-chip";
 

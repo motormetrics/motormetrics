@@ -1,8 +1,8 @@
-import { Button, Link } from "@heroui/react";
-
+import { Button } from "@heroui/react";
 import { SitePageHero } from "@web/components/site-page-hero";
 import { SITE_TITLE } from "@web/config";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export function HeroSection() {
   return (

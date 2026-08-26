@@ -1,10 +1,9 @@
 "use client";
 
-import { Link } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-
 import type { SelectPost } from "@motormetrics/database";
 import { Flame, TrendingUp } from "lucide-react";
+import Link from "next/link";
 
 interface PostWithViews extends SelectPost {
   viewCount: number;

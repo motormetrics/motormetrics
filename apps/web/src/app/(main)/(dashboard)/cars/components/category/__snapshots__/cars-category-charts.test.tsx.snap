@@ -34,10 +34,7 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
         >
           <a
             class="link"
-            data-rac=""
-            data-react-aria-pressable="true"
             href="/cars/makes/toyota"
-            tabindex="0"
           >
             <span
               class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
@@ -51,10 +48,7 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
           </a>
           <a
             class="link"
-            data-rac=""
-            data-react-aria-pressable="true"
             href="/cars/makes/honda"
-            tabindex="0"
           >
             <span
               class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"
@@ -68,10 +62,7 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
           </a>
           <a
             class="link"
-            data-rac=""
-            data-react-aria-pressable="true"
             href="/cars/makes/bmw"
-            tabindex="0"
           >
             <span
               class="chip chip--default chip--secondary cursor-pointer first-of-type:bg-accent first-of-type:text-accent-foreground"

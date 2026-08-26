@@ -1,11 +1,11 @@
 "use client";
 
-import { Card, Chip, Link } from "@heroui/react";
+import { Card, Chip } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
-
 import { formatNumber, slugify } from "@motormetrics/utils";
 import Typography from "@web/components/typography";
 import { getRankingEmoji } from "@web/lib/cars/calculations";
+import Link from "next/link";
 import { useMemo } from "react";
 
 interface Make {
@@ -68,6 +68,7 @@ export function TopMakesChart({
             {topThree.map((item, index) => {
               return (
                 <Link
+                  className="link"
                   key={item.name}
                   href={`/cars/makes/${slugify(item.name)}`}
                 >

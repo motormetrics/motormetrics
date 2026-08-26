@@ -1,9 +1,10 @@
-import { Button, Card, Link, ProgressBar } from "@heroui/react";
+import { Button, Card, ProgressBar } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { SkeletonBentoCard } from "@web/components/shared/skeleton";
 import Typography from "@web/components/typography";
 import { getLatestAndPreviousCoeResults, getPqpRates } from "@web/queries/coe";
+import Link from "next/link";
 import { Suspense } from "react";
 
 async function FunFactsPqpContent() {

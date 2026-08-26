@@ -1,10 +1,10 @@
-import { Link } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import Typography from "@web/components/typography";
 import { getDimensionStats } from "@web/queries/cars";
+import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
 /**

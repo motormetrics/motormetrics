@@ -1,4 +1,4 @@
-import { Link, Tooltip } from "@heroui/react";
+import { Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import { InkPanel } from "@web/components/shared/bento";
@@ -10,6 +10,7 @@ import {
   getEvTopMakes,
 } from "@web/queries/cars";
 import { ArrowUpRight, Zap } from "lucide-react";
+import Link from "next/link";
 
 export async function EvMomentum() {
   const [summary, trend, topMakes] = await Promise.all([

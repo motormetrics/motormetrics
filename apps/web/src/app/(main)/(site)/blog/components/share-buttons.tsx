@@ -1,11 +1,11 @@
 "use client";
 
-import { Button, Link, Tooltip } from "@heroui/react";
+import { Button, Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
-
 import { SiTelegram, SiWhatsapp, SiX } from "@icons-pack/react-simple-icons";
 import { SITE_URL } from "@web/config";
 import { Check, Copy, Linkedin, Share2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 interface ShareButtonsProps {

@@ -1,4 +1,3 @@
-import { Link } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
 import {
@@ -9,6 +8,7 @@ import {
 import Typography from "@web/components/typography";
 import { getEvMonthlyTrend } from "@web/queries/cars";
 import { getTopMakesByFuelType } from "@web/queries/cars/market-insights";
+import Link from "next/link";
 
 const RAIL_SIZE = 6;
 

@@ -369,11 +369,8 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
         class="flex flex-col items-center justify-center gap-4 sm:flex-row"
       >
         <a
-          class="link flex items-center gap-2 font-medium text-accent text-sm"
-          data-rac=""
-          data-react-aria-pressable="true"
+          class="flex items-center gap-2 font-medium text-accent text-sm"
           href="mailto:support@motormetrics.app"
-          tabindex="0"
         >
           <svg
             aria-hidden="true"
@@ -407,12 +404,9 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           |
         </span>
         <a
-          class="link flex items-center gap-2 font-medium text-accent text-sm"
-          data-rac=""
-          data-react-aria-pressable="true"
+          class="flex items-center gap-2 font-medium text-accent text-sm"
           href="https://twitter.com/motormetrics"
           rel="noreferrer"
-          tabindex="0"
           target="_blank"
         >
           <svg

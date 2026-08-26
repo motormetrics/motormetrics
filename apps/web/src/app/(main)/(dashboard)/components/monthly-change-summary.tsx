@@ -1,9 +1,10 @@
-import { Link, Tooltip } from "@heroui/react";
+import { Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 import { getCarsComparison, getCarsLatestMonth } from "@web/queries/cars";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
+import Link from "next/link";
 
 export async function MonthlyChangeSummary() {
   const latestMonth = await getCarsLatestMonth();

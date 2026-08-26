@@ -1,11 +1,12 @@
 "use client";
 
-import { cn, Link } from "@heroui/react";
+import { cn } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import Typography from "@web/components/typography";
 import { SurfaceCard } from "@web/components/v2/bento";
 import { DeltaChip } from "@web/components/v2/delta-chip";
 import { Car, ChevronRight, Search } from "lucide-react";
+import Link from "next/link";
 import posthog from "posthog-js";
 import { type ReactNode, useMemo, useState } from "react";
 import { MakeAvatar } from "./make-avatar";
@@ -220,7 +221,7 @@ export function MakesTable({
             )}
             href={`/cars/makes/${row.slug}`}
             key={row.make}
-            onPress={() => trackMakeSelected(row.make)}
+            onClick={() => trackMakeSelected(row.make)}
           >
             <span className="flex min-w-0 items-center gap-2.5">
               <span

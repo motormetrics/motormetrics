@@ -1,7 +1,6 @@
 "use client";
 
-import { Card, Link } from "@heroui/react";
-
+import { Card } from "@heroui/react";
 import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
@@ -9,6 +8,7 @@ import {
 } from "@web/config/animations";
 import { motion } from "framer-motion";
 import { BookOpen, Database, GraduationCap, HelpCircle } from "lucide-react";
+import Link from "next/link";
 
 const navItems = [
   {

@@ -1,5 +1,6 @@
-import { Card, Chip, Link } from "@heroui/react";
+import { Card, Chip } from "@heroui/react";
 import { getRelatedPosts } from "@web/lib/data/posts";
+import Link from "next/link";
 import readingTime from "reading-time";
 import { getCategoryConfig } from "./post/utils";
 

@@ -1,7 +1,6 @@
 "use client";
 
-import { Card, Link } from "@heroui/react";
-
+import { Card } from "@heroui/react";
 import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
@@ -10,6 +9,7 @@ import {
 } from "@web/config/animations";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { getAllGuideSlugs } from "../lib/guides";
 import { GLOSSARY_CATEGORIES } from "./glossary-data";
 

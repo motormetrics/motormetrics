@@ -1,7 +1,6 @@
 "use client";
 
-import { Card, Chip, Link } from "@heroui/react";
-
+import { Card, Chip } from "@heroui/react";
 import Typography from "@web/components/typography";
 import {
   fadeInUpVariants,
@@ -10,6 +9,7 @@ import {
 } from "@web/config/animations";
 import { motion } from "framer-motion";
 import { AlertTriangle, Calendar, Database, RefreshCw } from "lucide-react";
+import Link from "next/link";
 
 const features = [
   {

@@ -1,4 +1,4 @@
-import { Link, Tooltip } from "@heroui/react";
+import { Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
@@ -16,6 +16,7 @@ import {
   getMonthlyRegistrationTotals,
 } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
 /**

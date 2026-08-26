@@ -1,4 +1,4 @@
-import { Card, Link } from "@heroui/react";
+import { Card } from "@heroui/react";
 import { KPI, KPIGroup } from "@heroui-pro/react";
 import type { CarLogo } from "@logos/types";
 import type { SelectCar } from "@motormetrics/database";
@@ -13,6 +13,7 @@ import Typography from "@web/components/typography";
 import type { MakeCoeComparisonData } from "@web/queries/cars/makes/coe-comparison";
 import { Calendar, Car, TrendingUp } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface MakeDetailProps {
   cars: {

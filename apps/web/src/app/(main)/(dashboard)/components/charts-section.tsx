@@ -1,10 +1,11 @@
-import { Link, Skeleton, Tooltip } from "@heroui/react";
+import { Skeleton, Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import { SurfaceCard } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
 
 async function YearlyChartContent() {

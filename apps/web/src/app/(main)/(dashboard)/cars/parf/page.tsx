@@ -1,4 +1,3 @@
-import { Link } from "@heroui/react";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { DashboardPageHeader } from "@web/components/dashboard-page-header";
 import { DashboardPageTitle } from "@web/components/dashboard-page-title";
@@ -7,6 +6,7 @@ import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import type { Metadata } from "next";
+import Link from "next/link";
 import type { WebPage, WithContext } from "schema-dts";
 import { PARFSections } from "./components/parf-sections";
 

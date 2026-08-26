@@ -1,7 +1,8 @@
-import { Button, Card, Chip, Link, Separator } from "@heroui/react";
+import { Button, Card, Chip, Separator } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { Check } from "lucide-react";
 import { cacheLife } from "next/cache";
+import Link from "next/link";
 
 const plans = [
   {

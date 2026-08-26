@@ -1,7 +1,5 @@
 "use client";
 
-import { Link } from "@heroui/react";
-
 import Typography from "@web/components/typography";
 import { SITE_TITLE } from "@web/config";
 import {
@@ -10,6 +8,7 @@ import {
 } from "@web/config/animations";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
+import Link from "next/link";
 
 export function CreatorSection() {
   return (

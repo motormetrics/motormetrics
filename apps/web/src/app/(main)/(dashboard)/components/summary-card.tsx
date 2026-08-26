@@ -1,4 +1,4 @@
-import { Link, Tooltip } from "@heroui/react";
+import { Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import { HeroCard } from "@web/components/shared/bento";
@@ -9,6 +9,7 @@ import {
   getYearlyRegistrations,
 } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 const formatMonth = (month: string, style: "long" | "short" = "long") => {
   const [year, monthPart] = month.split("-");

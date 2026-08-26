@@ -1,9 +1,10 @@
-import { Link, Tooltip } from "@heroui/react";
+import { Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import type { SelectPost } from "@motormetrics/database";
 import { Post } from "@web/app/(main)/(site)/blog/components/post";
 import Typography from "@web/components/typography";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
 interface RecentPostsProps {
   posts: SelectPost[];
