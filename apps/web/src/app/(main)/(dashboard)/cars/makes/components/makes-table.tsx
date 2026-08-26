@@ -2,9 +2,9 @@
 
 import { cn } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
+import { SurfaceCard } from "@web/components/shared/bento";
+import { DeltaChip } from "@web/components/shared/delta-chip";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
-import { DeltaChip } from "@web/components/v2/delta-chip";
 import { Car, ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
 import posthog from "posthog-js";

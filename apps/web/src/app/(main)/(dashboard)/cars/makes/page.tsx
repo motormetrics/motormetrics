@@ -1,5 +1,5 @@
 import { Skeleton } from "@heroui/react";
-import { PageHead } from "@web/components/v2/page-head";
+import { PageHead } from "@web/components/shared/page-head";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import type { Metadata } from "next";

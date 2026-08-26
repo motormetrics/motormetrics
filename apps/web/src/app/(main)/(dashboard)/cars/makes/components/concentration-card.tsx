@@ -1,6 +1,9 @@
+import { SurfaceCard } from "@web/components/shared/bento";
+import {
+  DonutGauge,
+  type DonutSegment,
+} from "@web/components/shared/donut-gauge";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
-import { DonutGauge, type DonutSegment } from "@web/components/v2/donut-gauge";
 import type { SearchParams } from "nuqs/server";
 import { loadSearchParams } from "../search-params";
 import { loadMakeRows } from "./make-rows";

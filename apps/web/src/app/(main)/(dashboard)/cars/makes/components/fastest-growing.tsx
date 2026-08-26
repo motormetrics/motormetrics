@@ -1,6 +1,6 @@
 import { NumberValue } from "@heroui-pro/react";
+import { DeltaChip } from "@web/components/shared/delta-chip";
 import Typography from "@web/components/typography";
-import { DeltaChip } from "@web/components/v2/delta-chip";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 import { loadSearchParams } from "../search-params";

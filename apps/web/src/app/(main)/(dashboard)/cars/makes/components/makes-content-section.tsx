@@ -1,8 +1,8 @@
 import { Skeleton } from "@heroui/react";
 import { slugify } from "@motormetrics/utils";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { Bento, BentoColumn, Rail } from "@web/components/shared/bento";
 import { StructuredData } from "@web/components/structured-data";
-import { Bento, BentoColumn, Rail } from "@web/components/v2/bento";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateItemListSchema } from "@web/lib/metadata";
 import { getGroupedMakes } from "@web/queries/cars";
