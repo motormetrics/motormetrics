@@ -48,9 +48,6 @@ export default function CarMakesPage({ searchParams }: PageProps) {
             <MakesHeaderMeta />
           </Suspense>
         }
-        eyebrow={
-          <>Car makes&ensp;·&ensp;registrations by brand, from LTA DataMall</>
-        }
         title="Makes"
       />
       <MakesContentSection searchParams={searchParams} />
