@@ -107,12 +107,7 @@ const HomePage = () => {
       <StructuredData data={webSiteSchema} />
       <StructuredData data={organisationSchema} />
 
-      <PageHead
-        eyebrow={
-          <>Singapore car market&ensp;·&ensp;updated daily from LTA DataMall</>
-        }
-        title="Overview"
-      />
+      <PageHead title="Overview" />
 
       <Bento>
         {/* Left column */}
