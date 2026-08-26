@@ -269,9 +269,9 @@
     --overlay-foreground: var(--foreground);
 
     /* Neutrals */
-    --muted: #7b888d;
-    --muted-strong: #5a6a70;
-    --subtle: #96a2a7;
+    --muted: #505a5d;
+    --muted-strong: #3d474b;
+    --subtle: #5f6b71;
     --default: #f0f3f4;
     --default-foreground: var(--foreground);
 
