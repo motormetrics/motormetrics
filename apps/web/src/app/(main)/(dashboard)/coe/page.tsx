@@ -100,11 +100,6 @@ export default function Page({ searchParams }: PageProps) {
             <RangeTabs />
           </Suspense>
         }
-        eyebrow={
-          <Suspense fallback="Certificate of Entitlement">
-            <LatestExerciseEyebrow />
-          </Suspense>
-        }
         title="COE overview"
       />
 
