@@ -2,8 +2,8 @@ import { Link } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { DeltaPill } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/delta-pill";
 import { ELECTRIC_POPULATION_FUEL_TYPE } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
+import { InkPanel } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { InkPanel } from "@web/components/v2/bento";
 import {
   getVehiclePopulationByYearAndFuelType,
   getVehiclePopulationYearlyTotals,

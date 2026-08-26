@@ -7,8 +7,8 @@ import {
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { ELECTRIC_POPULATION_FUEL_TYPE } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
+import { sparkline } from "@web/components/shared/sparkline";
 import Typography from "@web/components/typography";
-import { sparkline } from "@web/components/v2/sparkline";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 import {
   getVehiclePopulationByYearAndFuelType,

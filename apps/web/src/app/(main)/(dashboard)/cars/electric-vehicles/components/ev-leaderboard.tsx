@@ -1,8 +1,8 @@
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { batteryElectricMakes } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+import { SurfaceCard } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
 import { getTopMakesByFuelType } from "@web/queries/cars/market-insights";
 import { getCarLogo } from "@web/queries/logos";
 import Image from "next/image";

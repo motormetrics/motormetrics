@@ -10,11 +10,11 @@ import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehi
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { Bento, RAIL_CLASS } from "@web/components/shared/bento";
 import { EmptyState } from "@web/components/shared/empty-state";
 import { MonthSelector } from "@web/components/shared/month-selector";
+import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
-import { Bento, RAIL_CLASS } from "@web/components/v2/bento";
-import { PageHead } from "@web/components/v2/page-head";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,

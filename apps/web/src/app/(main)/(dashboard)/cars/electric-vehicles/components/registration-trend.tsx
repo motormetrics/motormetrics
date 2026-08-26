@@ -16,10 +16,10 @@ import {
   RANGES,
   type Range,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
+import { SurfaceCard } from "@web/components/shared/bento";
+import { DeltaChip } from "@web/components/shared/delta-chip";
+import { sparkline } from "@web/components/shared/sparkline";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
-import { DeltaChip } from "@web/components/v2/delta-chip";
-import { sparkline } from "@web/components/v2/sparkline";
 import { getEvMonthlyTrend } from "@web/queries/cars";
 import { Zap } from "lucide-react";
 

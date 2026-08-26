@@ -3,8 +3,8 @@ import {
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+import { SurfaceCard } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 
 /** Months of history the column chart shows, matching the comp's eight bars. */

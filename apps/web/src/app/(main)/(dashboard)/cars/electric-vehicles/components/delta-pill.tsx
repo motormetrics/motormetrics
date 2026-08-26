@@ -1,7 +1,7 @@
 import { cn } from "@heroui/react";
 
 /**
- * Delta pill for the two cases `components/v2/delta-chip.tsx` cannot cover.
+ * Delta pill for the two cases `components/shared/delta-chip.tsx` cannot cover.
  *
  * `DeltaChip` hard-codes a `%` suffix, and a market share moving from 29.5% to
  * 30.4% has risen 0.9 percentage points, not 0.9% — labelling that `%` would be

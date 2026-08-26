@@ -9,8 +9,8 @@ import {
   COMBUSTION_COLOUR,
   POWERTRAIN_SEGMENTS,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
+import { SurfaceCard } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 
 /** Below this share a segment has no room for its own label inside the bar. */
