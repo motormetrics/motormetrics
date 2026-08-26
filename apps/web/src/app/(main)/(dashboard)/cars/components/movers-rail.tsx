@@ -32,6 +32,11 @@ export async function MoversRail({
     .sort((first, second) => (second.yoyChange ?? 0) - (first.yoyChange ?? 0))
     .slice(0, MOVERS_SHOWN);
 
+  /* The list is sorted descending, so amber only appears in the rare month
+   * where fewer than five makes grew at all. Explaining it otherwise is a
+   * legend for a colour that is not on screen. */
+  const hasDecline = movers.some((mover) => (mover.yoyChange ?? 0) < 0);
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
@@ -85,8 +90,8 @@ export async function MoversRail({
           </ul>
 
           <Typography.Caption className="text-[var(--subtle)]">
-            Change against the same period in {previousYear} · amber marks a
-            decline in volume
+            Change against the same period in {previousYear}
+            {hasDecline ? " · amber marks a decline in volume" : ""}
           </Typography.Caption>
         </>
       )}
