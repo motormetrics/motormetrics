@@ -5,8 +5,8 @@ import {
   CAR_DIMENSIONS,
   DIMENSION_LABELS,
 } from "@web/app/(main)/(dashboard)/cars/components/dimensions";
+import { SurfaceCard } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
 import type { CarDimension, DimensionStat } from "@web/queries/cars";
 import { ArrowRight, Car, Search } from "lucide-react";
 import Link from "next/link";

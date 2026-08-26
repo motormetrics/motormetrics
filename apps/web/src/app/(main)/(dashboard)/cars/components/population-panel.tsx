@@ -1,6 +1,6 @@
 import { NumberValue } from "@heroui-pro/react";
+import { InkPanel } from "@web/components/shared/bento";
 import Typography from "@web/components/typography";
-import { InkPanel } from "@web/components/v2/bento";
 import {
   getVehiclePopulationByYearAndFuelType,
   getVehiclePopulationYearlyTotals,

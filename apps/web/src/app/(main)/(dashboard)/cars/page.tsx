@@ -8,9 +8,9 @@ import { RegistrationsHero } from "@web/app/(main)/(dashboard)/cars/components/r
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { Bento, RAIL_CLASS } from "@web/components/shared/bento";
+import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
-import { Bento, RAIL_CLASS } from "@web/components/v2/bento";
-import { PageHead } from "@web/components/v2/page-head";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateDataCatalogSchema } from "@web/lib/metadata";

@@ -7,10 +7,10 @@ import {
   formatMonthName,
 } from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
+import { HeroCard } from "@web/components/shared/bento";
+import { DeltaChip } from "@web/components/shared/delta-chip";
+import { sparkline } from "@web/components/shared/sparkline";
 import Typography from "@web/components/typography";
-import { HeroCard } from "@web/components/v2/bento";
-import { DeltaChip } from "@web/components/v2/delta-chip";
-import { sparkline } from "@web/components/v2/sparkline";
 import {
   getDimensionStats,
   getMonthlyRegistrationTotals,

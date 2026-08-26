@@ -4,9 +4,12 @@ import {
   formatMonthName,
 } from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
+import { SurfaceCard } from "@web/components/shared/bento";
+import {
+  DonutGauge,
+  type DonutSegment,
+} from "@web/components/shared/donut-gauge";
 import Typography from "@web/components/typography";
-import { SurfaceCard } from "@web/components/v2/bento";
-import { DonutGauge, type DonutSegment } from "@web/components/v2/donut-gauge";
 import { getCarsData } from "@web/queries/cars";
 import type { SearchParams } from "nuqs/server";
 
