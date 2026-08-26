@@ -7,6 +7,17 @@ import { loadSearchParams } from "../search-params";
 import { MakeAvatar } from "./make-avatar";
 import { loadMakeRows } from "./make-rows";
 
+/**
+ * Makes considered for the rail, by volume. The rows arrive sorted by
+ * registrations, so this takes the busiest marques and ranks only those.
+ *
+ * Ranking all 53 on percentage alone hands the rail to whichever make went
+ * from one registration to nine — a true +800%, and the loudest number on a
+ * page whose table withholds that very figure one column over. Matches the
+ * pool the Cars overview movers rail uses.
+ */
+const CANDIDATE_POOL = 20;
+
 /** Pills the comp fits in the rail before the dark panel. */
 const MOVERS = 5;
 
@@ -19,6 +30,7 @@ export async function FastestGrowing({
   const { rows } = await loadMakeRows(range, fuel);
 
   const movers = rows
+    .slice(0, CANDIDATE_POOL)
     .filter((row) => row.yoyChange !== null)
     .sort((a, b) => (b.yoyChange ?? 0) - (a.yoyChange ?? 0))
     .slice(0, MOVERS);
