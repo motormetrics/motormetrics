@@ -44,8 +44,8 @@ export function CategoryTabs({ selected }: { selected: CategoryKey }) {
             className={cn(
               "size-[38px] shrink-0 rounded-full font-extrabold text-[15px] transition-colors",
               isActive
-                ? "bg-[var(--accent-foreground)] text-[var(--accent-strong)]"
-                : "bg-[var(--accent-foreground)]/20 text-[var(--accent-foreground)] hover:bg-[var(--accent-foreground)]/30",
+                ? "bg-accent-foreground text-accent"
+                : "bg-accent-foreground/20 text-accent-foreground hover:bg-accent-foreground/30",
             )}
             key={key}
             onClick={() => setCategory(key)}
@@ -104,7 +104,7 @@ export function RangeTabs() {
   return (
     <fieldset
       className={cn(
-        "flex gap-1.5 rounded-full bg-[var(--surface-alt)] p-[5px]",
+        "flex gap-1.5 rounded-full bg-default p-[5px]",
         isPending && "opacity-70",
       )}
     >
@@ -118,7 +118,7 @@ export function RangeTabs() {
               "whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
               isActive
                 ? "bg-surface font-extrabold text-foreground shadow-surface"
-                : "font-semibold text-[var(--muted-strong)] hover:text-foreground",
+                : "font-semibold text-muted hover:text-foreground",
             )}
             key={option}
             onClick={() => setRange(option)}

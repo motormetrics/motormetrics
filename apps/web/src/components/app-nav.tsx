@@ -44,7 +44,7 @@ export function AppNav() {
       <div className="flex flex-wrap items-center gap-4">
         <Link
           aria-label="MotorMetrics home"
-          className="flex size-13 shrink-0 items-center justify-center rounded-full bg-accent text-[var(--accent-foreground)]"
+          className="flex size-13 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground"
           href="/"
         >
           <TrendingUp className="size-6" strokeWidth={2.5} />
@@ -59,8 +59,8 @@ export function AppNav() {
                 className={cn(
                   "rounded-full px-7 py-3.5 font-semibold text-base transition-shadow",
                   isActive
-                    ? "bg-accent font-bold text-[var(--accent-foreground)]"
-                    : "bg-surface text-[var(--muted-strong)] hover:text-foreground hover:shadow-surface",
+                    ? "bg-accent font-bold text-accent-foreground"
+                    : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
                 )}
                 href={href}
                 key={href}
@@ -75,8 +75,8 @@ export function AppNav() {
               className={cn(
                 "h-auto gap-2 rounded-full px-6 py-3.5 font-semibold text-base transition-shadow",
                 isMoreActive
-                  ? "bg-[var(--accent-soft)] font-bold text-[var(--accent-strong)]"
-                  : "bg-surface text-[var(--muted-strong)] hover:text-foreground hover:shadow-surface",
+                  ? "bg-accent/15 font-bold text-accent"
+                  : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
               )}
               variant="tertiary"
             >
@@ -111,7 +111,7 @@ export function AppNav() {
         </div>
 
         <Link
-          className="ml-auto rounded-full bg-[var(--ink-surface)] px-6 py-3.5 font-bold text-[var(--accent-foreground)] text-sm transition-colors hover:bg-[var(--muted-strong)]"
+          className="ml-auto rounded-full bg-foreground px-6 py-3.5 font-bold text-accent-foreground text-sm transition-colors hover:bg-muted"
           href={SOCIAL_URLS.telegram}
           rel="noopener noreferrer"
           target="_blank"

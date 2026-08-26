@@ -51,9 +51,7 @@ interface PageProps {
 
 function CardSkeleton({ className = "" }: { className?: string }) {
   return (
-    <div
-      className={`rounded-[var(--radius-card)] bg-surface p-7 shadow-surface ${className}`}
-    >
+    <div className={`rounded-4xl bg-surface p-7 shadow-surface ${className}`}>
       <div className="flex flex-col gap-4">
         <Skeleton className="h-4 w-32 rounded-lg" />
         <Skeleton className="h-12 w-40 rounded-lg" />

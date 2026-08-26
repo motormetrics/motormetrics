@@ -2,6 +2,7 @@ import { Tooltip } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import { HeroCard } from "@web/components/shared/bento";
+import { DeltaChip } from "@web/components/shared/delta-chip";
 import { sparkline } from "@web/components/shared/sparkline";
 import Typography from "@web/components/typography";
 import {
@@ -47,7 +48,7 @@ export async function SummaryCard() {
 
   return (
     <HeroCard>
-      <span className="w-fit rounded-full bg-[var(--accent-foreground)]/20 px-4 py-2 font-semibold text-sm">
+      <span className="w-fit rounded-full bg-accent-foreground/20 px-4 py-2 font-bold text-sm">
         New registrations · {formatMonth(current.month)}
       </span>
 
@@ -59,21 +60,10 @@ export async function SummaryCard() {
             value={current.total}
           />
         </span>
-        <span className="flex items-center gap-2 rounded-full bg-[var(--accent-deep)]/85 px-4 py-2 font-bold text-sm">
-          <span
-            aria-hidden
-            className="size-2 rounded-full bg-[var(--accent-foreground)]"
-          />
-          <NumberValue
-            maximumFractionDigits={1}
-            signDisplay="exceptZero"
-            style="percent"
-            value={changeRatio}
-          />
-        </span>
+        <DeltaChip ratio={changeRatio} tone="inverse" />
       </div>
 
-      <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/85">
+      <Typography.TextSm className="font-semibold text-accent-foreground/85">
         cars registered vs{" "}
         {previous ? formatMonth(previous.month, "short") : "previous month"}
       </Typography.TextSm>
@@ -105,9 +95,9 @@ export async function SummaryCard() {
         </svg>
       ) : null}
 
-      <div className="flex items-center gap-4 rounded-[var(--radius)] bg-[var(--ink-surface)]/45 px-6 py-5">
+      <div className="flex items-center gap-4 rounded-field bg-foreground/45 px-6 py-5">
         <div className="flex flex-col gap-1">
-          <Typography.TextSm className="font-bold text-[var(--accent-foreground)] text-lg">
+          <Typography.TextSm className="font-bold text-accent-foreground text-lg">
             <NumberValue
               locale="en-SG"
               maximumFractionDigits={0}
@@ -115,7 +105,7 @@ export async function SummaryCard() {
             />{" "}
             year to date
           </Typography.TextSm>
-          <Typography.Caption className="text-[var(--accent-foreground)]/70">
+          <Typography.Caption className="text-accent-foreground/70">
             cars registered in {yearToDate?.year ?? "—"}
           </Typography.Caption>
         </div>
@@ -124,7 +114,7 @@ export async function SummaryCard() {
             aria-label="View car registration overview"
             className={buttonVariants({
               className:
-                "ml-auto size-12 shrink-0 rounded-full bg-[var(--accent)] text-[var(--accent-foreground)]",
+                "ml-auto size-12 shrink-0 rounded-full bg-accent text-accent-foreground",
               isIconOnly: true,
               variant: "tertiary",
             })}

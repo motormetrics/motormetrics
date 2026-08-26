@@ -22,10 +22,10 @@ const SPARK_HEIGHT = 100;
 function InsetFigure({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <Typography.Caption className="font-semibold text-[var(--accent-foreground)]/70">
+      <Typography.Caption className="font-semibold text-accent-foreground/70">
         {label}
       </Typography.Caption>
-      <span className="font-extrabold text-[var(--accent-foreground)] text-xl tabular-nums">
+      <span className="font-extrabold text-accent-foreground text-xl tabular-nums">
         {value}
       </span>
     </div>
@@ -75,7 +75,7 @@ export async function CoeHeroCard({
   return (
     <HeroCard>
       <div className="flex flex-wrap items-center gap-2.5">
-        <span className="rounded-full bg-[var(--accent-foreground)]/20 px-4 py-2 font-bold text-sm">
+        <span className="rounded-full bg-accent-foreground/20 px-4 py-2 font-bold text-sm">
           {category}
         </span>
         <div className="ml-auto">
@@ -102,7 +102,7 @@ export async function CoeHeroCard({
         />
       </div>
 
-      <Typography.TextLg className="font-semibold text-[var(--accent-foreground)]/85">
+      <Typography.TextLg className="font-semibold text-accent-foreground/85">
         {CATEGORY_DESCRIPTIONS[category]} · {comparison}
       </Typography.TextLg>
 
@@ -133,7 +133,7 @@ export async function CoeHeroCard({
         </svg>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-5 rounded-[var(--radius)] bg-[var(--ink-surface)]/70 px-[22px] py-[18px]">
+      <div className="flex flex-wrap items-center gap-5 rounded-field bg-foreground/70 px-[22px] py-[18px]">
         <InsetFigure
           label="Quota"
           value={(figures?.quota ?? 0).toLocaleString("en-SG")}

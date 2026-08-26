@@ -138,32 +138,32 @@ export function MakesTable({
   return (
     <SurfaceCard className="gap-0">
       <div className="flex flex-wrap items-center gap-3.5">
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-[var(--accent-foreground)]">
+        <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
           <Car className="size-5.5" />
         </span>
         <div className="flex flex-col">
           <Typography.H3 className="font-bold tracking-[-0.02em]">
             All makes
           </Typography.H3>
-          <Typography.Caption className="font-semibold text-[var(--muted)]">
+          <Typography.Caption className="font-semibold text-muted">
             {rangeLabel} ·{" "}
             {isTruncated
               ? `top ${displayedRows.length} of ${visibleRows.length}`
               : `${visibleRows.length} ${visibleRows.length === 1 ? "make" : "makes"}`}
           </Typography.Caption>
         </div>
-        <span className="ml-auto whitespace-nowrap font-semibold text-[13.5px] text-[var(--subtle)]">
+        <span className="ml-auto whitespace-nowrap font-semibold text-[13.5px] text-muted">
           Sorted by {SORT_LABELS[sortKey]},{" "}
           {sortDirection === "asc" ? "ascending" : "descending"}
         </span>
       </div>
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
-        <span className="flex min-w-56 flex-1 items-center gap-2.5 rounded-full bg-background px-5 py-3 text-[var(--subtle)]">
+        <span className="flex min-w-56 flex-1 items-center gap-2.5 rounded-full bg-background px-5 py-3 text-muted">
           <Search aria-hidden className="size-4.5 shrink-0" />
           <input
             aria-label="Search makes"
-            className="w-full border-none bg-transparent font-semibold text-[15px] text-foreground outline-none placeholder:text-[var(--subtle)]"
+            className="w-full border-none bg-transparent font-semibold text-[15px] text-foreground outline-none placeholder:text-muted"
             onChange={(event) => setQuery(event.target.value)}
             placeholder={`Search ${rows.length} makes …`}
             type="text"
@@ -176,7 +176,7 @@ export function MakesTable({
       <div
         className={cn(
           GRID_CLASS,
-          "mt-3.5 border-[var(--border)] border-b px-4.5 pt-4 pb-3",
+          "mt-3.5 border-border border-b px-4.5 pt-4 pb-3",
         )}
       >
         {COLUMNS.map((column) => {
@@ -185,7 +185,7 @@ export function MakesTable({
             "font-bold text-[13px] uppercase tracking-[0.06em]",
             column.align === "right" ? "text-right" : "text-left",
             column.label === "Share" && "hidden sm:block",
-            isActive ? "text-[var(--accent-strong)]" : "text-[var(--subtle)]",
+            isActive ? "text-accent" : "text-muted",
           );
 
           if (column.key === null) {
@@ -217,7 +217,7 @@ export function MakesTable({
           <Link
             className={cn(
               GRID_CLASS,
-              "rounded-[var(--radius)] px-4.5 py-4 no-underline transition-colors hover:bg-background",
+              "rounded-field px-4.5 py-4 no-underline transition-colors hover:bg-background",
             )}
             href={`/cars/makes/${row.slug}`}
             key={row.make}
@@ -228,8 +228,8 @@ export function MakesTable({
                 className={cn(
                   "inline-flex size-7.5 shrink-0 items-center justify-center rounded-full font-extrabold text-[13px]",
                   row.rank <= 3
-                    ? "bg-[var(--accent-soft)] text-[var(--accent-strong)]"
-                    : "bg-default text-[var(--muted)]",
+                    ? "bg-accent/15 text-accent"
+                    : "bg-default text-muted",
                 )}
               >
                 {row.rank}
@@ -258,14 +258,14 @@ export function MakesTable({
                   }}
                 />
               </span>
-              <span className="w-11 text-right font-bold text-[13.5px] text-[var(--muted-strong)] tabular-nums">
+              <span className="w-11 text-right font-bold text-[13.5px] text-muted tabular-nums">
                 {row.share.toFixed(1)}%
               </span>
             </span>
 
             {row.yoyChange === null || row.count < MIN_COUNT_FOR_CHANGE ? (
               <span
-                className="text-right font-semibold text-[var(--subtle)] text-sm"
+                className="text-right font-semibold text-muted text-sm"
                 title={
                   row.yoyChange === null
                     ? "No registrations in the same period a year earlier"
@@ -283,13 +283,13 @@ export function MakesTable({
 
             <ChevronRight
               aria-hidden
-              className="size-4.5 justify-self-end text-[var(--subtle)]"
+              className="size-4.5 justify-self-end text-muted"
             />
           </Link>
         ))}
 
         {visibleRows.length === 0 ? (
-          <span className="px-4.5 py-9 font-semibold text-[15px] text-[var(--subtle)]">
+          <span className="px-4.5 py-9 font-semibold text-[15px] text-muted">
             Nothing matches “{query}”.
           </span>
         ) : null}
@@ -298,7 +298,7 @@ export function MakesTable({
       {!isSearching && visibleRows.length > COLLAPSED_ROWS ? (
         <button
           aria-expanded={isExpanded}
-          className="mt-3 cursor-[var(--cursor-interactive)] self-center rounded-full bg-default px-6 py-3 font-bold text-[var(--muted-strong)] text-sm transition-colors hover:text-foreground"
+          className="mt-3 cursor-pointer self-center rounded-full bg-default px-6 py-3 font-bold text-muted text-sm transition-colors hover:text-foreground"
           onClick={() => setIsExpanded((current) => !current)}
           type="button"
         >
@@ -306,7 +306,7 @@ export function MakesTable({
         </button>
       ) : null}
 
-      <Typography.Caption className="mt-3 px-4.5 font-medium text-[var(--subtle)]">
+      <Typography.Caption className="mt-3 px-4.5 font-medium text-muted">
         Change compares against the same period a year earlier, and is withheld
         below {MIN_COUNT_FOR_CHANGE} registrations. Select a row to open the
         make.

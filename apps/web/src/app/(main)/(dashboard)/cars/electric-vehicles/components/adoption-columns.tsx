@@ -50,7 +50,7 @@ export function AdoptionColumns({
             <span
               className={cn(
                 "text-center font-bold text-xs tabular-nums",
-                isSelected ? "text-[var(--chart-1)]" : "text-[var(--subtle)]",
+                isSelected ? "text-chart-1" : "text-muted",
               )}
             >
               {column.share.toFixed(0)}%
@@ -62,7 +62,7 @@ export function AdoptionColumns({
                 style={{
                   background: isSelected
                     ? "var(--chart-1)"
-                    : "var(--accent-soft)",
+                    : "color-mix(in oklab, var(--accent) 15%, transparent)",
                   height: `${tallest > 0 ? (column.share / tallest) * 100 : 0}%`,
                 }}
               />
@@ -71,8 +71,8 @@ export function AdoptionColumns({
               className={cn(
                 "text-center text-[12.5px]",
                 isSelected
-                  ? "font-extrabold text-[var(--chart-1)]"
-                  : "font-semibold text-[var(--subtle)]",
+                  ? "font-extrabold text-chart-1"
+                  : "font-semibold text-muted",
               )}
             >
               {label.slice(0, 3)}

@@ -73,7 +73,7 @@ export function AllCategoriesTable({
           {COLUMNS.map((column) => (
             <span
               className={cn(
-                "font-bold text-[13px] text-[var(--subtle)] uppercase tracking-[0.06em]",
+                "font-bold text-[13px] text-muted uppercase tracking-[0.06em]",
                 column.align === "right" ? "text-right" : "text-left",
               )}
               key={column.label}
@@ -90,8 +90,8 @@ export function AllCategoriesTable({
             <CategorySelect
               category={row.categoryKey}
               className={cn(
-                "rounded-[var(--radius)] transition-colors",
-                isActive ? "bg-[var(--accent-soft)]" : "hover:bg-background",
+                "rounded-field transition-colors",
+                isActive ? "bg-accent/15" : "hover:bg-background",
               )}
               isActive={isActive}
               key={row.category}
@@ -103,8 +103,8 @@ export function AllCategoriesTable({
                     className={cn(
                       "flex size-[38px] shrink-0 items-center justify-center rounded-full font-extrabold text-[15px]",
                       isActive
-                        ? "bg-accent text-[var(--accent-foreground)]"
-                        : "bg-[var(--accent-soft)] text-[var(--accent-strong)]",
+                        ? "bg-accent text-accent-foreground"
+                        : "bg-accent/15 text-accent",
                     )}
                   >
                     {row.categoryKey}
@@ -127,7 +127,7 @@ export function AllCategoriesTable({
                     value={row.premium}
                   />
                 </span>
-                <span className="text-right font-bold text-[15px] text-[var(--muted-strong)] tabular-nums">
+                <span className="text-right font-bold text-[15px] text-muted tabular-nums">
                   <NumberValue
                     locale="en-SG"
                     maximumFractionDigits={0}
@@ -139,7 +139,7 @@ export function AllCategoriesTable({
                 </span>
                 <ChevronRight
                   aria-hidden
-                  className="size-[18px] justify-self-end text-[var(--subtle)]"
+                  className="size-[18px] justify-self-end text-muted"
                 />
               </div>
             </CategorySelect>
@@ -147,7 +147,7 @@ export function AllCategoriesTable({
         })}
       </div>
 
-      <Typography.Caption className="px-4 font-medium text-[var(--subtle)]">
+      <Typography.Caption className="px-4 font-medium text-muted">
         Premiums are the quota premium at the close of the exercise. Select a
         category for its bidding history.
       </Typography.Caption>

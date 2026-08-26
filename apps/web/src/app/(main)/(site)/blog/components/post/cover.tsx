@@ -28,9 +28,7 @@ export function Cover({ category, className }: CoverProps) {
     <div
       className={cn(
         "relative overflow-hidden bg-gradient-to-br",
-        isCoe
-          ? "from-[var(--chart-1)] to-[var(--chart-3)]"
-          : "from-[var(--chart-2)] to-[var(--chart-5)]",
+        isCoe ? "from-chart-1 to-chart-3" : "from-chart-2 to-chart-5",
         className,
       )}
     >

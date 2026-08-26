@@ -39,7 +39,7 @@ export async function QuotaAllocationCard({
   return (
     <SurfaceCard className="gap-4">
       <div className="flex flex-col gap-1">
-        <Typography.TextLg className="font-semibold text-[var(--muted-strong)]">
+        <Typography.TextLg className="font-semibold text-muted">
           Quota allocation
         </Typography.TextLg>
         <Typography.H3 className="font-bold text-[1.625rem] tracking-[-0.02em]">
@@ -91,7 +91,7 @@ export async function QuotaAllocationCard({
         })}
       </div>
 
-      <Typography.Caption className="font-medium text-[var(--subtle)]">
+      <Typography.Caption className="font-medium text-muted">
         COEs available in this bidding exercise
       </Typography.Caption>
     </SurfaceCard>

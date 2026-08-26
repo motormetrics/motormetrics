@@ -35,10 +35,10 @@ export function DeltaPill({
       className={cn(
         "inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3 py-2 font-bold text-[13px] tabular-nums",
         tone === "on-dark"
-          ? "bg-[var(--accent-on-dark)]/20 text-[var(--accent-on-dark)]"
+          ? "bg-chart-5/20 text-chart-5"
           : isUp
-            ? "bg-[var(--success-soft)] text-[var(--success-foreground)]"
-            : "bg-[var(--warning-soft)] text-[var(--warning-foreground)]",
+            ? "bg-success/15 text-success-foreground"
+            : "bg-warning/15 text-warning-foreground",
         className,
       )}
     >
@@ -47,10 +47,10 @@ export function DeltaPill({
         className={cn(
           "size-2 shrink-0 rounded-full",
           tone === "on-dark"
-            ? "bg-[var(--accent-on-dark)]"
+            ? "bg-chart-5"
             : isUp
-              ? "bg-[var(--success)]"
-              : "bg-[var(--warning)]",
+              ? "bg-success"
+              : "bg-warning",
         )}
       />
       {label}

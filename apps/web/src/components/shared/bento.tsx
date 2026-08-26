@@ -49,7 +49,7 @@ export function SurfaceCard({
   return (
     <div
       className={cn(
-        "flex flex-col gap-6 rounded-[var(--radius-card)] bg-surface p-8 shadow-surface",
+        "flex flex-col gap-6 rounded-4xl bg-surface p-8 shadow-surface",
         className,
       )}
     >
@@ -67,7 +67,7 @@ export function SurfaceCard({
  * stagger context and so cannot be nested inside another element.
  */
 export const RAIL_CLASS =
-  "flex flex-col gap-6 rounded-[var(--radius-rail)] bg-[var(--surface-alt)] p-6 shadow-surface xl:col-span-2 xl:p-8 2xl:col-span-1";
+  "flex flex-col gap-6 rounded-4xl bg-default p-6 shadow-surface xl:col-span-2 xl:p-8 2xl:col-span-1";
 
 export function Rail({
   children,
@@ -90,7 +90,7 @@ export function InkPanel({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 rounded-[var(--radius-lg)] bg-[var(--ink-surface)] p-7",
+        "flex flex-col gap-3 rounded-4xl bg-foreground p-7",
         className,
       )}
     >
@@ -113,7 +113,7 @@ export function HeroCard({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 rounded-[var(--radius-card)] p-8 text-[var(--accent-foreground)] shadow-surface",
+        "flex flex-col gap-4 rounded-4xl p-8 text-accent-foreground shadow-surface",
         className,
       )}
       style={{ background: "var(--accent-gradient)" }}

@@ -59,7 +59,7 @@ export function PremiumsChart({
             {category} · hover a column for the premium
           </Typography.TextSm>
         </div>
-        <span className="ml-auto whitespace-nowrap rounded-full bg-[var(--accent-soft)] px-3.5 py-[7px] font-bold text-[13px] text-[var(--accent-strong)]">
+        <span className="ml-auto whitespace-nowrap rounded-full bg-accent/15 px-3.5 py-[7px] font-bold text-[13px] text-accent">
           {periodLabel}
         </span>
       </div>
@@ -84,23 +84,23 @@ export function PremiumsChart({
               type="button"
             >
               {isHovered ? (
-                <div className="absolute bottom-full left-1/2 z-30 mb-2.5 flex min-w-[190px] -translate-x-1/2 flex-col gap-2 rounded-[1.125rem] bg-[var(--ink-surface)] px-4 py-3.5 shadow-overlay">
-                  <span className="font-extrabold text-[var(--accent-foreground)] text-sm">
+                <div className="absolute bottom-full left-1/2 z-30 mb-2.5 flex min-w-[190px] -translate-x-1/2 flex-col gap-2 rounded-[1.125rem] bg-foreground px-4 py-3.5 shadow-overlay">
+                  <span className="font-extrabold text-accent-foreground text-sm">
                     {column.label} · {category}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-[13px] text-[var(--accent-foreground)]/80">
+                    <span className="font-semibold text-[13px] text-accent-foreground/80">
                       Premium
                     </span>
-                    <span className="ml-auto font-bold text-[13px] text-[var(--accent-foreground)] tabular-nums">
+                    <span className="ml-auto font-bold text-[13px] text-accent-foreground tabular-nums">
                       {formatMoney(column.premium)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-[13px] text-[var(--accent-foreground)]/80">
+                    <span className="font-semibold text-[13px] text-accent-foreground/80">
                       Change
                     </span>
-                    <span className="ml-auto font-bold text-[13px] text-[var(--accent-foreground)] tabular-nums">
+                    <span className="ml-auto font-bold text-[13px] text-accent-foreground tabular-nums">
                       {formatChange(column.changeRatio)}
                     </span>
                   </div>

@@ -44,7 +44,7 @@ export async function ConcentrationCard({
 
   return (
     <SurfaceCard className="gap-1">
-      <Typography.TextSm className="font-semibold text-[17px] text-[var(--muted-strong)]">
+      <Typography.TextSm className="font-semibold text-[17px] text-muted">
         Concentration
       </Typography.TextSm>
       <Typography.H3 className="font-bold tracking-[-0.02em]">

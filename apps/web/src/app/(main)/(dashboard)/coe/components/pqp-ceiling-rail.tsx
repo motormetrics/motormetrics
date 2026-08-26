@@ -48,10 +48,10 @@ export async function PqpCeilingRail() {
       <div className="flex flex-col gap-2">
         {rows.map((row) => (
           <div
-            className="flex items-center gap-3.5 rounded-[var(--radius)] bg-surface px-[18px] py-4"
+            className="flex items-center gap-3.5 rounded-field bg-surface px-[18px] py-4"
             key={row.category}
           >
-            <span className="flex size-[42px] shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] font-extrabold text-[var(--accent-strong)] text-base">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent text-lg">
               {toCategoryKey(row.category)}
             </span>
             <div className="flex min-w-0 flex-col gap-px">
@@ -75,7 +75,7 @@ export async function PqpCeilingRail() {
         ))}
       </div>
 
-      <Typography.Caption className="font-medium text-[var(--subtle)]">
+      <Typography.Caption className="font-medium text-muted">
         Three-month moving average of quota premiums · used to renew a COE
       </Typography.Caption>
     </div>

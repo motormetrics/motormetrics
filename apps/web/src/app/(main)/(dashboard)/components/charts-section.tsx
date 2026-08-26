@@ -18,7 +18,7 @@ async function YearlyChartContent() {
     <SurfaceCard>
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-2">
-          <Typography.TextSm className="font-semibold text-[var(--muted-strong)]">
+          <Typography.TextSm className="font-semibold text-muted">
             Yearly registrations
           </Typography.TextSm>
           <span className="font-extrabold text-4xl tabular-nums tracking-[-0.02em]">
@@ -62,13 +62,13 @@ async function YearlyChartContent() {
                   height: `${(item.total / maxTotal) * 100}%`,
                   backgroundColor: isLatest
                     ? "var(--chart-1)"
-                    : "var(--accent-soft)",
+                    : "color-mix(in oklab, var(--accent) 15%, transparent)",
                 }}
               />
               <span
                 className="text-center font-semibold text-xs"
                 style={{
-                  color: isLatest ? "var(--chart-1)" : "var(--subtle)",
+                  color: isLatest ? "var(--chart-1)" : "var(--muted)",
                 }}
               >
                 {item.year}
@@ -89,7 +89,7 @@ async function TopMakesContent() {
     <SurfaceCard>
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-1">
-          <Typography.TextSm className="font-semibold text-[var(--muted-strong)]">
+          <Typography.TextSm className="font-semibold text-muted">
             Registrations
           </Typography.TextSm>
           <Typography.H3 className="font-bold tracking-[-0.02em]">

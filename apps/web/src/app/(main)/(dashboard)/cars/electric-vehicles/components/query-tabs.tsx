@@ -61,9 +61,7 @@ export function QueryTabs<Value extends string>({
               isActive &&
                 variant === "pill" &&
                 "bg-accent text-accent-foreground",
-              !isActive &&
-                variant === "segmented" &&
-                "text-[var(--muted-strong)]",
+              !isActive && variant === "segmented" && "text-muted",
               !isActive &&
                 variant === "pill" &&
                 "bg-background text-foreground/75",

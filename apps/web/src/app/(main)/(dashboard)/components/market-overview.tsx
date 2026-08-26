@@ -31,9 +31,9 @@ export async function MarketOverview() {
   });
 
   return (
-    <div className="flex flex-col gap-6 rounded-[var(--radius-card)] bg-surface p-8 shadow-surface">
+    <div className="flex flex-col gap-6 rounded-4xl bg-surface p-8 shadow-surface">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm className="font-semibold text-[var(--muted-strong)]">
+        <Typography.TextSm className="font-semibold text-muted">
           Market overview
         </Typography.TextSm>
         <Typography.H3 className="font-bold tracking-[-0.02em]">
@@ -93,7 +93,7 @@ export async function MarketOverview() {
         ))}
       </div>
 
-      <Typography.Caption className="text-[var(--subtle)]">
+      <Typography.Caption className="text-muted">
         {summary.year} year to date
       </Typography.Caption>
     </div>

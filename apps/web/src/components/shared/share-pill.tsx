@@ -69,7 +69,7 @@ export function SharePill({ title }: { title: string }) {
   return (
     <Dropdown>
       <Button
-        className="h-auto gap-2.5 rounded-full bg-accent px-6 py-3.5 font-bold text-[var(--accent-foreground)] text-sm transition-[filter] hover:brightness-105"
+        className="h-auto gap-2.5 rounded-full bg-accent px-6 py-3.5 font-bold text-accent-foreground text-sm transition-[filter] hover:brightness-105"
         variant="tertiary"
       >
         <Share2 className="size-4 shrink-0" strokeWidth={2} />
@@ -85,7 +85,7 @@ export function SharePill({ title }: { title: string }) {
                 key={label}
                 textValue={label}
               >
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
                   <Icon className="size-4" />
                 </span>
                 <Label>{label}</Label>
@@ -98,14 +98,14 @@ export function SharePill({ title }: { title: string }) {
               id={COPY_KEY}
               textValue={copied ? "Link copied" : "Copy link"}
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
                 {copied ? (
                   <Check className="size-4 text-success" />
                 ) : (
                   <Link2 className="size-4" />
                 )}
               </span>
-              <Label className="font-bold text-[var(--accent-strong)]">
+              <Label className="font-bold text-accent">
                 {copied ? "Link copied" : "Copy link"}
               </Label>
             </Dropdown.Item>

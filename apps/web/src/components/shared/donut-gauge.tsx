@@ -77,7 +77,7 @@ export function DonutGauge({
           <span className="font-extrabold text-[2.0625rem] tabular-nums tracking-[-0.02em]">
             {centre}
           </span>
-          <span className="font-semibold text-[13.5px] text-[var(--muted)]">
+          <span className="font-semibold text-[13.5px] text-muted">
             {caption}
           </span>
         </div>

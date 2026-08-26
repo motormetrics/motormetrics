@@ -66,20 +66,20 @@ export async function EvShareHero({ month }: { month: string }) {
     .reduce((sum, row) => sum + row.total, 0);
 
   return (
-    <div className="flex flex-col gap-5 rounded-[var(--radius-card)] bg-[var(--ink-surface)] p-8 shadow-surface">
+    <div className="flex flex-col gap-5 rounded-4xl bg-foreground p-8 shadow-surface">
       <div className="flex flex-col items-start gap-2.5">
-        <span className="rounded-full bg-[var(--accent-on-dark)]/20 px-4 py-2 font-bold text-[var(--accent-on-dark)] text-sm">
+        <span className="rounded-full bg-chart-5/20 px-4 py-2 font-bold text-chart-5 text-sm">
           EV share · {formatDateToMonthYear(point.month)}
         </span>
 
         <div className="flex flex-wrap items-center gap-4">
-          <span className="font-extrabold text-[3.5rem] text-[var(--accent-on-dark)] tabular-nums tracking-[-0.03em] lg:text-[4.5rem]">
+          <span className="font-extrabold text-[3.5rem] text-chart-5 tabular-nums tracking-[-0.03em] lg:text-[4.5rem]">
             {share.toFixed(1)}%
           </span>
           <DeltaPill tone="on-dark" value={share - previousShare} />
         </div>
 
-        <Typography.TextLg className="font-semibold text-[var(--accent-foreground)]/70">
+        <Typography.TextLg className="font-semibold text-accent-foreground/70">
           of new car registrations ·{" "}
           <NumberValue
             locale="en-SG"
@@ -97,11 +97,11 @@ export async function EvShareHero({ month }: { month: string }) {
           viewBox={`0 0 ${SPARK_WIDTH} ${SPARK_HEIGHT}`}
         >
           <title>{`Battery-electric share of new car registrations over the last ${history.length} months`}</title>
-          <path d={spark.area} fill="var(--accent-on-dark)" opacity={0.16} />
+          <path d={spark.area} fill="var(--chart-5)" opacity={0.16} />
           <path
             d={spark.line}
             fill="none"
-            stroke="var(--accent-on-dark)"
+            stroke="var(--chart-5)"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={3.5}
@@ -109,18 +109,18 @@ export async function EvShareHero({ month }: { month: string }) {
           <circle
             cx={spark.lastX}
             cy={spark.lastY}
-            fill="var(--ink-surface)"
+            fill="var(--foreground)"
             r={6}
-            stroke="var(--accent-on-dark)"
+            stroke="var(--chart-5)"
             strokeWidth={3.5}
           />
         </svg>
       ) : null}
 
       {populationYear && electricFleet > 0 ? (
-        <div className="flex items-center gap-3.5 rounded-[var(--radius)] bg-[var(--accent-foreground)]/[0.06] px-6 py-5">
+        <div className="flex items-center gap-3.5 rounded-field bg-accent-foreground/[0.06] px-6 py-5">
           <div className="flex min-w-0 flex-col gap-0.5">
-            <span className="font-bold text-[var(--accent-foreground)] text-xl tabular-nums">
+            <span className="font-bold text-accent-foreground text-xl tabular-nums">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
@@ -128,7 +128,7 @@ export async function EvShareHero({ month }: { month: string }) {
               />{" "}
               EVs on the road
             </span>
-            <Typography.Caption className="text-[var(--accent-foreground)]/65">
+            <Typography.Caption className="text-accent-foreground/65">
               {fleetTotal > 0
                 ? `${((electricFleet / fleetTotal) * 100).toFixed(1)}% of the vehicle population`
                 : "share of the vehicle population"}{" "}
@@ -137,7 +137,7 @@ export async function EvShareHero({ month }: { month: string }) {
           </div>
           <Link
             aria-label="View the annual vehicle population"
-            className="ml-auto flex size-11 shrink-0 items-center justify-center rounded-full bg-accent text-[var(--accent-deep)] transition-[filter] hover:brightness-110"
+            className="ml-auto flex size-11 shrink-0 items-center justify-center rounded-full bg-accent-foreground text-accent transition-[filter] hover:brightness-110"
             href="/cars/annual"
           >
             <ArrowUpRight className="size-5" />

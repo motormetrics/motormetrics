@@ -34,7 +34,7 @@ const structuredData: WithContext<WebPage> = {
 function CardSkeleton({ className }: { className?: string }) {
   return (
     <div
-      className={`rounded-[var(--radius-card)] bg-surface p-8 shadow-surface ${className ?? ""}`}
+      className={`rounded-4xl bg-surface p-8 shadow-surface ${className ?? ""}`}
     >
       <div className="flex flex-col gap-4">
         <Skeleton className="h-4 w-32 rounded-lg" />

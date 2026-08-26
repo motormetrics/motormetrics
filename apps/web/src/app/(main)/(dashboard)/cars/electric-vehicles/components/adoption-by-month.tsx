@@ -35,7 +35,7 @@ export async function AdoptionByMonth({ month }: { month: string }) {
   return (
     <SurfaceCard className="gap-4 p-7">
       <div className="flex flex-col gap-1">
-        <Typography.Text className="font-semibold text-[var(--muted-strong)]">
+        <Typography.Text className="font-semibold text-muted">
           Adoption
         </Typography.Text>
         <Typography.H3 className="font-bold tracking-[-0.02em]">
@@ -48,7 +48,7 @@ export async function AdoptionByMonth({ month }: { month: string }) {
         selectedMonth={trend[index]?.month ?? month}
       />
 
-      <Typography.Caption className="text-[var(--subtle)]">
+      <Typography.Caption className="text-muted">
         Battery-electric share of all new car registrations
       </Typography.Caption>
     </SurfaceCard>

@@ -26,7 +26,7 @@ async function CoeSectionContent() {
 
 function CoeSectionSkeleton() {
   return (
-    <div className="flex flex-col gap-6 rounded-[var(--radius-card)] bg-surface p-8 shadow-surface">
+    <div className="flex flex-col gap-6 rounded-4xl bg-surface p-8 shadow-surface">
       <div className="flex items-center gap-4">
         <Skeleton className="size-12 rounded-full" />
         <Skeleton className="h-8 w-48 rounded-lg" />

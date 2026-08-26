@@ -42,7 +42,7 @@ export async function FastestGrowing({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm className="font-semibold text-[var(--muted)] text-base">
+        <Typography.TextSm className="font-semibold text-base text-muted">
           Movers · year on year
         </Typography.TextSm>
         <Typography.H3 className="font-bold tracking-[-0.02em]">
@@ -53,7 +53,7 @@ export async function FastestGrowing({
       <div className="flex flex-col gap-2">
         {movers.map((row) => (
           <Link
-            className="flex items-center gap-3.5 rounded-[var(--radius)] bg-surface px-4 py-3.5 no-underline transition-shadow hover:shadow-surface"
+            className="flex items-center gap-3.5 rounded-field bg-surface px-4 py-3.5 no-underline transition-shadow hover:shadow-surface"
             href={`/cars/makes/${row.slug}`}
             key={row.make}
           >
@@ -62,7 +62,7 @@ export async function FastestGrowing({
               <span className="truncate font-bold text-[17px] text-foreground">
                 {row.make}
               </span>
-              <span className="font-medium text-[13.5px] text-[var(--muted)] tabular-nums">
+              <span className="font-medium text-[13.5px] text-muted tabular-nums">
                 <NumberValue
                   locale="en-SG"
                   maximumFractionDigits={0}

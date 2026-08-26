@@ -51,20 +51,20 @@ export function Breadcrumbs() {
         {crumbs.map(({ href, label }, index) => (
           <li className="flex items-center gap-2" key={href}>
             {index > 0 ? (
-              <span aria-hidden className="text-[var(--subtle)] text-sm">
+              <span aria-hidden className="text-muted text-sm">
                 /
               </span>
             ) : null}
             {index === lastIndex ? (
               <span
                 aria-current="page"
-                className="font-semibold text-[var(--muted-strong)] text-sm"
+                className="font-semibold text-muted text-sm"
               >
                 {label}
               </span>
             ) : (
               <Link
-                className="font-medium text-[var(--subtle)] text-sm transition-colors hover:text-foreground"
+                className="font-medium text-muted text-sm transition-colors hover:text-foreground"
                 href={href as Route}
               >
                 {label}

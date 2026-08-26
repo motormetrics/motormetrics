@@ -159,10 +159,10 @@ export async function RegistrationTrend({
             />
           </svg>
           <div className="flex justify-between">
-            <Typography.Caption className="font-semibold text-[var(--subtle)]">
+            <Typography.Caption className="font-semibold text-muted">
               {formatDateToMonthYear(visibleMonths.at(0)?.month ?? "")}
             </Typography.Caption>
-            <Typography.Caption className="font-semibold text-[var(--subtle)]">
+            <Typography.Caption className="font-semibold text-muted">
               {monthLabel}
             </Typography.Caption>
           </div>

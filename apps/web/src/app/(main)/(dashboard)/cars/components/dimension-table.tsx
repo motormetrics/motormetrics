@@ -152,7 +152,7 @@ export function DimensionTable({
   return (
     <SurfaceCard className="gap-5">
       <div className="flex flex-wrap items-center gap-4">
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-[var(--accent-foreground)]">
+        <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
           <Car aria-hidden className="size-5" />
         </span>
         <div className="flex flex-col">
@@ -173,10 +173,10 @@ export function DimensionTable({
               <button
                 aria-pressed={isActive}
                 className={cn(
-                  "cursor-[var(--cursor-interactive)] whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors",
+                  "cursor-pointer whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors",
                   isActive
                     ? "bg-surface font-extrabold text-foreground shadow-surface"
-                    : "font-semibold text-[var(--muted-strong)] hover:text-foreground",
+                    : "font-semibold text-muted hover:text-foreground",
                 )}
                 key={option}
                 onClick={() => {
@@ -195,18 +195,18 @@ export function DimensionTable({
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <label className="flex min-w-56 flex-1 items-center gap-2.5 rounded-full bg-background px-5 py-3 text-[var(--subtle)]">
+        <label className="flex min-w-56 flex-1 items-center gap-2.5 rounded-full bg-background px-5 py-3 text-muted">
           <Search aria-hidden className="size-4 shrink-0" />
           <span className="sr-only">{labels.searchLabel}</span>
           <input
-            className="w-full border-none bg-transparent font-semibold text-foreground text-sm outline-none placeholder:text-[var(--subtle)]"
+            className="w-full border-none bg-transparent font-semibold text-foreground text-sm outline-none placeholder:text-muted"
             onChange={(event) => setQuery(event.target.value)}
             placeholder={`${labels.searchLabel} …`}
             type="search"
             value={query}
           />
         </label>
-        <span className="whitespace-nowrap font-semibold text-[13.5px] text-[var(--subtle)]">
+        <span className="whitespace-nowrap font-semibold text-[13.5px] text-muted">
           Sorted by {SORT_LABELS[sortKey]},{" "}
           {sortDirection === "asc" ? "ascending" : "descending"}
         </span>
@@ -227,7 +227,7 @@ export function DimensionTable({
               const alignment =
                 header.align === "right" ? "text-right" : "text-left";
               const cellClass = cn(
-                "border-[var(--border)] border-b px-4 pt-4 pb-3",
+                "border-border border-b px-4 pt-4 pb-3",
                 header.width,
                 alignment,
               );
@@ -235,11 +235,7 @@ export function DimensionTable({
               if (header.key === "share") {
                 return (
                   <th
-                    className={cn(
-                      cellClass,
-                      headerClass,
-                      "text-[var(--subtle)]",
-                    )}
+                    className={cn(cellClass, headerClass, "text-muted")}
                     key={header.key}
                     scope="col"
                   >
@@ -266,10 +262,8 @@ export function DimensionTable({
                   <button
                     className={cn(
                       headerClass,
-                      "cursor-[var(--cursor-interactive)]",
-                      isActive
-                        ? "text-[var(--accent-strong)]"
-                        : "text-[var(--subtle)]",
+                      "cursor-pointer",
+                      isActive ? "text-accent" : "text-muted",
                     )}
                     onClick={() => toggleSort(columnKey)}
                     type="button"
@@ -285,13 +279,13 @@ export function DimensionTable({
         <tbody>
           {displayed.map((row) => (
             <tr className="group" key={row.name}>
-              <td className={cn(CELL_CLASS, "rounded-l-[var(--radius)]")}>
+              <td className={cn(CELL_CLASS, "rounded-l-field")}>
                 <span className="flex min-w-0 items-center gap-3">
                   <span
                     className={cn(
                       "inline-flex size-8 shrink-0 items-center justify-center rounded-full font-extrabold text-xs",
                       row.rank <= PODIUM
-                        ? "bg-[var(--accent-soft)] text-[var(--accent-strong)]"
+                        ? "bg-accent/15 text-accent"
                         : "bg-default text-muted",
                     )}
                   >
@@ -310,7 +304,7 @@ export function DimensionTable({
               >
                 {numberFormatter.format(row.count)}
               </td>
-              <td className={cn(CELL_CLASS, "rounded-r-[var(--radius)]")}>
+              <td className={cn(CELL_CLASS, "rounded-r-field")}>
                 <span className="flex items-center gap-2.5">
                   <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-default">
                     <span
@@ -321,7 +315,7 @@ export function DimensionTable({
                       }}
                     />
                   </span>
-                  <span className="w-11 text-right font-bold text-[13.5px] text-[var(--muted-strong)] tabular-nums">
+                  <span className="w-11 text-right font-bold text-[13.5px] text-muted tabular-nums">
                     {row.share.toFixed(1)}%
                   </span>
                 </span>
@@ -332,14 +326,14 @@ export function DimensionTable({
       </table>
 
       {visible.length === 0 ? (
-        <Typography.TextSm className="px-4 py-9 font-semibold text-[var(--subtle)]">
+        <Typography.TextSm className="px-4 py-9 font-semibold text-muted">
           Nothing matches “{query}”.
         </Typography.TextSm>
       ) : null}
 
       {isTruncated ? (
         <Link
-          className="flex items-center justify-center gap-2 self-center rounded-full bg-default px-6 py-3 font-bold text-[var(--muted-strong)] text-sm transition-colors hover:text-foreground"
+          className="flex items-center justify-center gap-2 self-center rounded-full bg-default px-6 py-3 font-bold text-muted text-sm transition-colors hover:text-foreground"
           href={labels.href}
         >
           Show all {visible.length} {labels.tab.toLowerCase()}

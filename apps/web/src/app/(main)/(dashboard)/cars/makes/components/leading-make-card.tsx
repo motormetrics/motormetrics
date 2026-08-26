@@ -27,13 +27,13 @@ export async function LeadingMakeCard({
 
   return (
     <HeroCard>
-      <span className="w-fit rounded-full bg-[var(--accent-foreground)]/20 px-4 py-2 font-bold text-sm">
+      <span className="w-fit rounded-full bg-accent-foreground/20 px-4 py-2 font-bold text-sm">
         Leading make · {RANGE_LABELS[range]}
       </span>
 
       <div className="mt-2 flex items-center gap-3.5">
         <MakeAvatar logoUrl={leader.logoUrl} make={leader.make} size={56} />
-        <span className="font-bold text-[1.6875rem] text-[var(--accent-foreground)]/90 tracking-[-0.02em]">
+        <span className="font-bold text-[1.6875rem] text-accent-foreground/90 tracking-[-0.02em]">
           {leader.make}
         </span>
       </div>
@@ -51,7 +51,7 @@ export async function LeadingMakeCard({
         )}
       </div>
 
-      <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/85 text-lg">
+      <Typography.TextSm className="font-semibold text-accent-foreground/85 text-lg">
         registrations · {leader.share.toFixed(1)}% of the market
       </Typography.TextSm>
 
@@ -83,18 +83,18 @@ export async function LeadingMakeCard({
       ) : null}
 
       <Link
-        className="mt-3 flex items-center gap-3.5 rounded-[var(--radius)] bg-[var(--ink-surface)]/70 px-5 py-4 no-underline transition-[filter] hover:brightness-110"
+        className="mt-3 flex items-center gap-3.5 rounded-field bg-foreground/70 px-5 py-4 no-underline transition-[filter] hover:brightness-110"
         href={`/cars/makes/${leader.slug}`}
       >
         <span className="flex flex-col gap-0.5">
-          <span className="font-bold text-[var(--accent-foreground)] text-xl">
+          <span className="font-bold text-accent-foreground text-xl">
             Open {leader.make}
           </span>
-          <span className="font-medium text-[var(--accent-foreground)]/70 text-sm">
+          <span className="font-medium text-accent-foreground/70 text-sm">
             Models, fuel mix and monthly trend
           </span>
         </span>
-        <span className="ml-auto flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-[var(--accent-deep)]">
+        <span className="ml-auto flex size-11 shrink-0 items-center justify-center rounded-full bg-accent-foreground text-accent">
           <ArrowUpRight className="size-5" />
         </span>
       </Link>

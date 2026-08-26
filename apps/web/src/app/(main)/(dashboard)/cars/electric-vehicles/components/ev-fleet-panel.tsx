@@ -67,16 +67,16 @@ export async function EvFleetPanel() {
   return (
     <InkPanel>
       <div className="flex items-center gap-2.5">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent-on-dark)]/20 text-[var(--accent-on-dark)]">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-chart-5/20 text-chart-5">
           <BatteryCharging className="size-5" />
         </span>
-        <Typography.Text className="font-semibold text-[var(--accent-foreground)]/85">
+        <Typography.Text className="font-semibold text-accent-foreground/85">
           EV fleet on the road
         </Typography.Text>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-[var(--accent-on-dark)] tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-chart-5 tabular-nums tracking-[-0.03em]">
           <NumberValue locale="en-SG" maximumFractionDigits={0} value={fleet} />
         </span>
         {previousFleet > 0 ? (
@@ -84,7 +84,7 @@ export async function EvFleetPanel() {
         ) : null}
       </div>
 
-      <Typography.TextSm className="font-medium text-[var(--accent-foreground)]/60">
+      <Typography.TextSm className="font-medium text-accent-foreground/60">
         battery-electric vehicles on Singapore roads · {fleetShare.toFixed(1)}%
         of the vehicle population in {latest.year}
       </Typography.TextSm>
@@ -95,20 +95,20 @@ export async function EvFleetPanel() {
             <span
               className={`flex size-10 shrink-0 items-center justify-center rounded-full font-extrabold text-[13.5px] ${
                 index === VES_BANDS.length - 1
-                  ? "bg-[var(--accent-foreground)]/10 text-[var(--accent-foreground)]"
-                  : "bg-[var(--accent-on-dark)]/20 text-[var(--accent-on-dark)]"
+                  ? "bg-accent-foreground/10 text-accent-foreground"
+                  : "bg-chart-5/20 text-chart-5"
               }`}
             >
               {row.band}
             </span>
-            <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/85">
+            <Typography.TextSm className="font-semibold text-accent-foreground/85">
               {row.note}
             </Typography.TextSm>
           </li>
         ))}
       </ul>
 
-      <Typography.Caption className="text-[var(--accent-foreground)]/45">
+      <Typography.Caption className="text-accent-foreground/45">
         Vehicular Emissions Scheme bands most EVs qualify for
       </Typography.Caption>
 

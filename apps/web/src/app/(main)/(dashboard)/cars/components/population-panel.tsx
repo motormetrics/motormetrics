@@ -53,15 +53,15 @@ export async function PopulationPanel() {
   return (
     <InkPanel>
       <div className="flex items-center gap-2.5">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-[0.875rem] bg-[var(--accent-on-dark)]/20 text-[var(--accent-on-dark)]">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-chart-5/20 text-chart-5">
           <Car aria-hidden className="size-5" />
         </span>
-        <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/85">
+        <Typography.TextSm className="font-semibold text-accent-foreground/85">
           Vehicles on the road
         </Typography.TextSm>
       </div>
 
-      <span className="font-extrabold text-5xl text-[var(--accent-on-dark)] tabular-nums tracking-[-0.03em]">
+      <span className="font-extrabold text-5xl text-chart-5 tabular-nums tracking-[-0.03em]">
         <NumberValue
           locale="en-SG"
           maximumFractionDigits={0}
@@ -69,7 +69,7 @@ export async function PopulationPanel() {
         />
       </span>
 
-      <Typography.TextSm className="font-medium text-[var(--accent-foreground)]/60">
+      <Typography.TextSm className="font-medium text-accent-foreground/60">
         All vehicles registered in Singapore · {latest.year}
         {changeRatio !== null && previous ? (
           <>
@@ -89,16 +89,16 @@ export async function PopulationPanel() {
         {rows.map((row) => (
           <li className="flex flex-col gap-1.5" key={row.label}>
             <div className="flex items-center gap-3">
-              <span className="font-semibold text-[14.5px] text-[var(--accent-foreground)]/85">
+              <span className="font-semibold text-[14.5px] text-accent-foreground/85">
                 {row.label}
               </span>
-              <span className="ml-auto font-bold text-[14.5px] text-[var(--accent-foreground)] tabular-nums">
+              <span className="ml-auto font-bold text-[14.5px] text-accent-foreground tabular-nums">
                 {((row.total / latest.total) * 100).toFixed(1)}%
               </span>
             </div>
-            <span className="block h-2 overflow-hidden rounded-full bg-[var(--accent-foreground)]/10">
+            <span className="block h-2 overflow-hidden rounded-full bg-accent-foreground/10">
               <span
-                className="block h-full rounded-full bg-[var(--accent-on-dark)]"
+                className="block h-full rounded-full bg-chart-5"
                 style={{
                   opacity: row.label === "Electric" ? 1 : 0.45,
                   width: `${((row.total / largestTotal) * 100).toFixed(1)}%`,

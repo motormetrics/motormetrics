@@ -24,7 +24,7 @@ export async function EvLeaderboard({ month }: { month: string }) {
   return (
     <SurfaceCard className="gap-4 p-7">
       <div className="flex flex-col gap-1">
-        <Typography.Text className="font-semibold text-[var(--muted-strong)]">
+        <Typography.Text className="font-semibold text-muted">
           Leaderboard
         </Typography.Text>
         <Typography.H3 className="font-bold tracking-[-0.02em]">
@@ -39,7 +39,7 @@ export async function EvLeaderboard({ month }: { month: string }) {
           return (
             <li className="flex flex-col gap-1.5" key={item.make}>
               <div className="flex items-center gap-2.5">
-                <span className="flex size-[26px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-[var(--accent-soft)] font-extrabold text-[11px] text-[var(--accent-strong)]">
+                <span className="flex size-[26px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/15 font-extrabold text-[11px] text-accent">
                   {logo?.url ? (
                     <Image
                       alt=""
@@ -77,7 +77,7 @@ export async function EvLeaderboard({ month }: { month: string }) {
         })}
       </ul>
 
-      <Typography.Caption className="text-[var(--subtle)]">
+      <Typography.Caption className="text-muted">
         Battery-electric registrations · {formatDateToMonthYear(month)}
       </Typography.Caption>
     </SurfaceCard>

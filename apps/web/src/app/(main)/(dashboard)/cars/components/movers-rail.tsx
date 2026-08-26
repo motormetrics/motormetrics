@@ -49,7 +49,7 @@ export async function MoversRail({
       </div>
 
       {movers.length === 0 ? (
-        <Typography.TextSm className="text-[var(--subtle)]">
+        <Typography.TextSm className="text-muted">
           No make has a comparable period in {previousYear} to measure against.
         </Typography.TextSm>
       ) : (
@@ -58,12 +58,12 @@ export async function MoversRail({
             {movers.map((mover) => (
               <li key={mover.name}>
                 <Link
-                  className="flex items-center gap-3.5 rounded-[var(--radius)] bg-surface px-4 py-3.5 no-underline transition-shadow hover:shadow-surface"
+                  className="flex items-center gap-3.5 rounded-field bg-surface px-4 py-3.5 no-underline transition-shadow hover:shadow-surface"
                   href={`/cars/makes/${slugify(mover.name)}`}
                 >
                   <span
                     aria-hidden
-                    className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] font-extrabold text-[var(--accent-strong)] text-lg"
+                    className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent text-lg"
                   >
                     {mover.name.charAt(0)}
                   </span>
@@ -89,7 +89,7 @@ export async function MoversRail({
             ))}
           </ul>
 
-          <Typography.Caption className="text-[var(--subtle)]">
+          <Typography.Caption className="text-muted">
             Change against the same period in {previousYear}
             {hasDecline ? " · amber marks a decline in volume" : ""}
           </Typography.Caption>

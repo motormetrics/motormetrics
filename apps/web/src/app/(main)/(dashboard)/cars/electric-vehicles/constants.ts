@@ -47,7 +47,7 @@ export const POWERTRAIN_SEGMENTS: PowertrainSegment[] = [
     tab: "Plug-in hybrid",
   },
   {
-    colour: "var(--accent-on-dark)",
+    colour: "var(--chart-5)",
     key: "hybrid",
     label: "Hybrid",
     tab: "Hybrid",
@@ -60,7 +60,8 @@ export const POWERTRAIN_TABS: { key: Powertrain; label: string }[] = [
 ];
 
 /** Colour of everything that is neither battery-electric nor hybrid. */
-export const COMBUSTION_COLOUR = "var(--accent-soft)";
+export const COMBUSTION_COLOUR =
+  "color-mix(in oklab, var(--accent) 15%, transparent)";
 
 export const RANGE_NOTES: Record<Range, string> = {
   "1Y": "12 months",

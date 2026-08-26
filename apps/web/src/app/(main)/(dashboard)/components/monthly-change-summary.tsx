@@ -27,20 +27,19 @@ export async function MonthlyChangeSummary() {
   );
 
   return (
-    <div className="flex flex-col gap-4 rounded-[var(--radius)] bg-[var(--ink-surface)] p-7">
+    <div className="flex flex-col gap-4 rounded-field bg-foreground p-7">
       <div className="flex items-center gap-3">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent-on-dark)]/20 text-[var(--accent-on-dark)]">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-chart-5/20 text-chart-5">
           <CalendarDays className="size-5" />
         </span>
-        <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/85">
+        <Typography.TextSm className="font-semibold text-accent-foreground/85">
           Monthly change
         </Typography.TextSm>
         <Tooltip delay={300}>
           <Link
             aria-label="View monthly car registration details"
             className={buttonVariants({
-              className:
-                "ml-auto size-10 rounded-full text-[var(--accent-foreground)]",
+              className: "ml-auto size-10 rounded-full text-accent-foreground",
               isIconOnly: true,
               variant: "tertiary",
             })}
@@ -55,7 +54,7 @@ export async function MonthlyChangeSummary() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-[var(--accent-on-dark)] tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-chart-5 tabular-nums tracking-[-0.03em]">
           <NumberValue
             maximumFractionDigits={1}
             signDisplay="exceptZero"
@@ -63,7 +62,7 @@ export async function MonthlyChangeSummary() {
             value={changeRatio}
           />
         </span>
-        <span className="flex items-center gap-2 rounded-full bg-[var(--accent-on-dark)]/20 px-4 py-2 font-bold text-[var(--accent-on-dark)] text-sm">
+        <span className="flex items-center gap-2 rounded-full bg-chart-5/20 px-4 py-2 font-bold text-chart-5 text-sm">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
@@ -73,7 +72,7 @@ export async function MonthlyChangeSummary() {
         </span>
       </div>
 
-      <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/60">
+      <Typography.TextSm className="font-semibold text-accent-foreground/60">
         registrations vs previous month · {displayMonth}
       </Typography.TextSm>
     </div>

@@ -26,7 +26,7 @@ export function Footer() {
           {FOOTER_NAV_ITEMS.map(({ href, label }) => (
             <li key={href}>
               <Link
-                className="font-semibold text-[var(--muted)] text-sm transition-colors hover:text-[var(--accent-strong)]"
+                className="font-semibold text-muted text-sm transition-colors hover:text-accent"
                 href={href}
               >
                 {label}
@@ -41,7 +41,7 @@ export function Footer() {
           <li key={title}>
             <Link
               aria-label={title}
-              className="block text-[var(--muted)] transition-colors hover:text-[var(--accent-strong)]"
+              className="block text-muted transition-colors hover:text-accent"
               href={url}
               rel="me noreferrer"
               target="_blank"
@@ -52,10 +52,10 @@ export function Footer() {
         ))}
       </ul>
 
-      <Typography.Caption className="ml-auto font-medium text-[var(--subtle)]">
+      <Typography.Caption className="ml-auto font-medium text-muted">
         © {COPYRIGHT_YEAR} {SITE_TITLE} · Data provided by{" "}
         <Link
-          className="transition-colors hover:text-[var(--accent-strong)]"
+          className="transition-colors hover:text-accent"
           href="https://datamall.lta.gov.sg"
           rel="noopener noreferrer"
           target="_blank"

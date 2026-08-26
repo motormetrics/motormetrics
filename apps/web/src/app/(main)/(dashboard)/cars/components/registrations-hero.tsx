@@ -62,7 +62,7 @@ export async function RegistrationsHero({
 
   return (
     <HeroCard>
-      <span className="w-fit rounded-full bg-[var(--accent-foreground)]/20 px-4 py-2 font-bold text-sm">
+      <span className="w-fit rounded-full bg-accent-foreground/20 px-4 py-2 font-bold text-sm">
         Registered · {formatMonthLabel(month)}
       </span>
 
@@ -77,7 +77,7 @@ export async function RegistrationsHero({
         <DeltaChip ratio={changeRatio} tone="inverse" />
       </div>
 
-      <Typography.Text className="font-semibold text-[var(--accent-foreground)]/85">
+      <Typography.Text className="font-semibold text-accent-foreground/85">
         cars registered vs{" "}
         {previous ? formatMonthName(previous.month) : "the previous month"} ·{" "}
         <NumberValue
@@ -116,9 +116,9 @@ export async function RegistrationsHero({
       ) : null}
 
       {leader ? (
-        <div className="flex items-center gap-4 rounded-[var(--radius)] bg-[var(--accent-deep)]/70 px-6 py-5">
+        <div className="flex items-center gap-4 rounded-field bg-foreground/70 px-6 py-5">
           <div className="flex min-w-0 flex-col gap-0.5">
-            <Typography.TextLg className="font-bold text-[var(--accent-foreground)]">
+            <Typography.TextLg className="font-bold text-accent-foreground">
               {leader.name} leads with{" "}
               <NumberValue
                 locale="en-SG"
@@ -126,7 +126,7 @@ export async function RegistrationsHero({
                 value={leader.count}
               />
             </Typography.TextLg>
-            <Typography.Caption className="text-[var(--accent-foreground)]/70">
+            <Typography.Caption className="text-accent-foreground/70">
               {leader.share.toFixed(1)}% of registrations year to date
             </Typography.Caption>
           </div>
@@ -135,7 +135,7 @@ export async function RegistrationsHero({
               aria-label={`View registrations for ${leader.name}`}
               className={buttonVariants({
                 className:
-                  "ml-auto size-12 shrink-0 rounded-full bg-[var(--accent)] text-[var(--accent-deep)]",
+                  "ml-auto size-12 shrink-0 rounded-full bg-accent-foreground text-accent",
                 isIconOnly: true,
                 variant: "tertiary",
               })}

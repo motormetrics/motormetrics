@@ -263,25 +263,21 @@
     /* Surfaces */
     --surface: #ffffff;
     --surface-foreground: var(--foreground);
-    --surface-alt: #efece3; /* warm sand — right rail */
-    --ink-surface: #232a2e; /* dark feature panel */
     --overlay: #ffffff;
     --overlay-foreground: var(--foreground);
 
     /* Neutrals */
     --muted: #505a5d;
-    --muted-strong: #3d474b;
-    --subtle: #5f6b71;
-    --default: #f0f3f4;
+    --default: #efece3; /* warm sand — right rail, pill groups, bar tracks */
     --default-foreground: var(--foreground);
 
-    /* Accent — calm slate blue, carries all emphasis */
-    --accent: #4e7c9b;
+    /* Accent — calm slate blue, carries all emphasis. Dark enough for AA body
+       text on both the cream canvas and white cards (7.5:1); softer fills come
+       from opacity modifiers (bg-accent/15) rather than a separate token.
+       On the dark feature panel, --chart-5 is the legible accent. */
+    --accent: #33586f;
     --accent-foreground: #ffffff;
-    --accent-strong: #33586f;
-    --accent-deep: #16323f;
-    --accent-soft: #dce7ec;
-    --accent-on-dark: #9cc4da;
+    /* No HeroUI equivalent: Tailwind cannot express the comp's radial stop list. */
     --accent-gradient: radial-gradient(
       120% 100% at 15% 0%,
       #6a97b5 0%,
@@ -292,26 +288,23 @@
     /* Status — always paired with a dot or label, never colour alone */
     --success: #57b45f;
     --success-foreground: #2f6b3a;
-    --success-soft: #dff1df;
     --warning: #e9a63c;
     --warning-foreground: #96601c;
-    --warning-soft: #fbebd3;
     --danger: #e96e6e;
     --danger-foreground: #b4453f;
-    --danger-soft: #fbe3e3;
 
     /* Lines */
     --border: #e5e1d5;
     --separator: #e5e1d5;
     --focus: var(--accent);
-    --link: var(--accent-strong);
+    --link: var(--accent);
 
-    /* Geometry — v2 is markedly rounder */
+    /* Geometry — v2 is markedly rounder. Deliberately does NOT redeclare
+       Tailwind's --radius-* names: those back the rounded-* utilities, so a
+       --radius-lg override here silently resized every rounded-lg in the app.
+       Cards/rail/panel use rounded-4xl; controls use rounded-field. */
     --radius: 1.375rem; /* 22px — controls, inner cards */
     --field-radius: 1.375rem;
-    --radius-lg: 2rem; /* 32px — dark feature panel */
-    --radius-card: 2.25rem; /* 36px — bento cards */
-    --radius-rail: 2.5rem; /* 40px — right rail */
 
     /* Elevation — soft, ink-tinted, never black */
     --surface-shadow:
@@ -325,7 +318,7 @@
     --chart-2: #c9803f;
     --chart-3: #5f8ba8;
     --chart-4: #7a9e63;
-    --chart-5: #9cc4da;
+    --chart-5: #9cc4da; /* doubles as the accent on the dark feature panel */
     --chart-6: #b0728f;
     --chart-grid: var(--border);
 

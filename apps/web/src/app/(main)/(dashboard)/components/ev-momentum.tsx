@@ -36,18 +36,17 @@ export async function EvMomentum() {
   return (
     <InkPanel>
       <div className="flex items-center gap-3">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent-on-dark)]/20 text-[var(--accent-on-dark)]">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-chart-5/20 text-chart-5">
           <Zap className="size-5" />
         </span>
-        <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/85">
+        <Typography.TextSm className="font-semibold text-accent-foreground/85">
           Electric momentum
         </Typography.TextSm>
         <Tooltip delay={300}>
           <Link
             aria-label="View electric vehicle data"
             className={buttonVariants({
-              className:
-                "ml-auto size-10 rounded-full text-[var(--accent-foreground)]",
+              className: "ml-auto size-10 rounded-full text-accent-foreground",
               isIconOnly: true,
               variant: "tertiary",
             })}
@@ -60,10 +59,10 @@ export async function EvMomentum() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-[var(--accent-on-dark)] tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-chart-5 tabular-nums tracking-[-0.03em]">
           {summary.evSharePercent.toFixed(1)}%
         </span>
-        <span className="rounded-full bg-[var(--accent-on-dark)]/20 px-4 py-2 font-bold text-[var(--accent-on-dark)] text-sm tabular-nums">
+        <span className="rounded-full bg-chart-5/20 px-4 py-2 font-bold text-chart-5 text-sm tabular-nums">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
@@ -72,7 +71,7 @@ export async function EvMomentum() {
         </span>
       </div>
 
-      <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/60">
+      <Typography.TextSm className="font-semibold text-accent-foreground/60">
         Electrified share (BEV, PHEV, hybrid) · {displayMonth}
       </Typography.TextSm>
 
@@ -83,11 +82,11 @@ export async function EvMomentum() {
           viewBox="0 0 340 84"
         >
           <title>{`Electric registrations over the last ${series.length} months`}</title>
-          <path d={spark.area} fill="var(--accent-on-dark)" opacity={0.14} />
+          <path d={spark.area} fill="var(--chart-5)" opacity={0.14} />
           <path
             d={spark.line}
             fill="none"
-            stroke="var(--accent-on-dark)"
+            stroke="var(--chart-5)"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={3}
@@ -95,9 +94,9 @@ export async function EvMomentum() {
           <circle
             cx={spark.lastX}
             cy={spark.lastY}
-            fill="var(--ink-surface)"
+            fill="var(--foreground)"
             r={6}
-            stroke="var(--accent-on-dark)"
+            stroke="var(--chart-5)"
             strokeWidth={3}
           />
         </svg>
@@ -106,20 +105,20 @@ export async function EvMomentum() {
       <div className="flex flex-col gap-3">
         {topMakes.map((make, index) => (
           <div className="flex items-center gap-3" key={make.make}>
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[var(--accent-foreground)]/10 font-extrabold text-[var(--accent-foreground)] text-xs">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent-foreground/10 font-extrabold text-accent-foreground text-xs">
               {index + 1}
             </span>
-            <span className="font-bold text-[var(--accent-foreground)] text-sm">
+            <span className="font-bold text-accent-foreground text-sm">
               {make.make}
             </span>
-            <span className="ml-auto font-bold text-[var(--accent-foreground)]/85 text-sm tabular-nums">
+            <span className="ml-auto font-bold text-accent-foreground/85 text-sm tabular-nums">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
                 value={make.count}
               />
             </span>
-            <span className="w-12 text-right font-semibold text-[var(--accent-foreground)]/50 text-xs tabular-nums">
+            <span className="w-12 text-right font-semibold text-accent-foreground/50 text-xs tabular-nums">
               {((make.count / evTotal) * 100).toFixed(1)}%
             </span>
           </div>

@@ -59,10 +59,10 @@ export async function PqpRail() {
       <div className="flex flex-col gap-2">
         {rows.map((row) => (
           <div
-            className="flex items-center gap-3 rounded-[var(--radius)] bg-surface p-4"
+            className="flex items-center gap-3 rounded-field bg-surface p-4"
             key={row.category}
           >
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] font-extrabold text-[var(--accent-strong)] text-lg">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent text-lg">
               {row.letter}
             </span>
             <div className="flex min-w-0 flex-col gap-0.5">
@@ -86,7 +86,7 @@ export async function PqpRail() {
         ))}
       </div>
 
-      <Typography.Caption className="text-[var(--subtle)]">
+      <Typography.Caption className="text-muted">
         3-month moving average of premiums · renew 5 or 10 years
       </Typography.Caption>
     </div>

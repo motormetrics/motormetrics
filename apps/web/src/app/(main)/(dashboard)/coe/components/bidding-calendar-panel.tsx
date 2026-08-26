@@ -36,19 +36,19 @@ export async function BiddingCalendarPanel() {
   return (
     <InkPanel>
       <div className="flex items-center gap-2.5">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent-on-dark)]/20 text-[var(--accent-on-dark)]">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-chart-5/20 text-chart-5">
           <CalendarDays className="size-[19px]" />
         </span>
-        <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/85">
+        <Typography.TextSm className="font-semibold text-accent-foreground/85">
           Bidding calendar
         </Typography.TextSm>
       </div>
 
-      <span className="font-extrabold text-[2.875rem] text-[var(--accent-on-dark)] leading-tight tracking-[-0.03em]">
+      <span className="font-extrabold text-[2.875rem] text-chart-5 leading-tight tracking-[-0.03em]">
         {formatMonth(upcoming.month)}
       </span>
 
-      <Typography.TextSm className="font-medium text-[var(--accent-foreground)]/60">
+      <Typography.TextSm className="font-medium text-accent-foreground/60">
         Premiums are published at the close of each exercise, and the PQP
         ceiling is reset from the three most recent months.
       </Typography.TextSm>
@@ -56,13 +56,13 @@ export async function BiddingCalendarPanel() {
       <div className="flex flex-col gap-2.5">
         {schedule.map((entry) => (
           <div
-            className="flex items-center gap-3 border-[var(--accent-foreground)]/10 border-t pt-2.5"
+            className="flex items-center gap-3 border-accent-foreground/10 border-t pt-2.5"
             key={entry.label}
           >
-            <Typography.TextSm className="font-semibold text-[var(--accent-foreground)]/85">
+            <Typography.TextSm className="font-semibold text-accent-foreground/85">
               {entry.label}
             </Typography.TextSm>
-            <Typography.Caption className="ml-auto text-right font-medium text-[var(--accent-foreground)]/60">
+            <Typography.Caption className="ml-auto text-right font-medium text-accent-foreground/60">
               {entry.note}
             </Typography.Caption>
           </div>

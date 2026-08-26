@@ -57,7 +57,7 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
   return (
     <SurfaceCard className="gap-5">
       <div className="flex flex-col gap-1.5">
-        <Typography.Text className="font-semibold text-[var(--muted-strong)]">
+        <Typography.Text className="font-semibold text-muted">
           Electrified total
         </Typography.Text>
 
@@ -83,7 +83,7 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
               background: segment.colour,
               color:
                 segment.colour === COMBUSTION_COLOUR
-                  ? "var(--accent-strong)"
+                  ? "var(--accent)"
                   : "var(--accent-foreground)",
               flex: `${segment.share.toFixed(2)} 1 0`,
             }}

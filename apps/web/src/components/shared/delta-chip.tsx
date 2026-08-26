@@ -32,12 +32,12 @@ export function DeltaChip({
       className={cn(
         "inline-flex shrink-0 items-center whitespace-nowrap rounded-full py-2 font-bold",
         isInverse
-          ? "bg-[var(--accent-deep)]/85 px-[15px] text-[15px] text-[var(--accent-foreground)]"
+          ? "bg-foreground/85 px-[15px] text-[15px] text-accent-foreground"
           : cn(
               "gap-2 px-3 text-[13px]",
               isUp
-                ? "bg-[var(--success-soft)] text-[var(--success-foreground)]"
-                : "bg-[var(--warning-soft)] text-[var(--warning-foreground)]",
+                ? "bg-success/15 text-success-foreground"
+                : "bg-warning/15 text-warning-foreground",
             ),
         className,
       )}
@@ -47,7 +47,7 @@ export function DeltaChip({
           aria-hidden
           className={cn(
             "size-2 shrink-0 rounded-full",
-            isUp ? "bg-[var(--success)]" : "bg-[var(--warning)]",
+            isUp ? "bg-success" : "bg-warning",
           )}
         />
       )}

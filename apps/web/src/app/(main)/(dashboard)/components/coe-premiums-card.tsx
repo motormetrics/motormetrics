@@ -72,9 +72,9 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
   const changeRatio = previous > 0 ? (current - previous) / previous : 0;
 
   return (
-    <div className="flex flex-col gap-6 rounded-[var(--radius-card)] bg-surface p-8 shadow-surface">
+    <div className="flex flex-col gap-6 rounded-4xl bg-surface p-8 shadow-surface">
       <div className="flex flex-wrap items-center gap-4">
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent text-[var(--accent-foreground)]">
+        <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
           <Calculator className="size-6" />
         </span>
         <div className="flex flex-col">
@@ -94,8 +94,8 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
                 aria-pressed={isActive}
                 className={`size-11 rounded-full font-extrabold text-base transition-colors ${
                   isActive
-                    ? "bg-accent text-[var(--accent-foreground)]"
-                    : "bg-default text-[var(--muted-strong)] hover:bg-[var(--accent-soft)]"
+                    ? "bg-accent text-accent-foreground"
+                    : "bg-default text-muted hover:bg-accent/15"
                 }`}
                 key={item.category}
                 onClick={() => setSelected(item.category)}
@@ -168,10 +168,10 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
             />
           </svg>
           <div className="flex justify-between">
-            <Typography.Caption className="font-semibold text-[var(--subtle)]">
+            <Typography.Caption className="font-semibold text-muted">
               {formatMonth(active.points[0]?.month ?? "")}
             </Typography.Caption>
-            <Typography.Caption className="font-semibold text-[var(--subtle)]">
+            <Typography.Caption className="font-semibold text-muted">
               {formatMonth(active.points.at(-1)?.month ?? "")}
             </Typography.Caption>
           </div>

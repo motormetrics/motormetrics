@@ -49,7 +49,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
       >
         <li>
           <a
-            class="font-semibold text-[var(--muted)] text-sm transition-colors hover:text-[var(--accent-strong)]"
+            class="font-semibold text-muted text-sm transition-colors hover:text-accent"
             href="/about"
           >
             About
@@ -57,7 +57,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
         </li>
         <li>
           <a
-            class="font-semibold text-[var(--muted)] text-sm transition-colors hover:text-[var(--accent-strong)]"
+            class="font-semibold text-muted text-sm transition-colors hover:text-accent"
             href="/learn"
           >
             Learn
@@ -65,7 +65,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
         </li>
         <li>
           <a
-            class="font-semibold text-[var(--muted)] text-sm transition-colors hover:text-[var(--accent-strong)]"
+            class="font-semibold text-muted text-sm transition-colors hover:text-accent"
             href="/advertise"
           >
             Advertise
@@ -73,7 +73,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
         </li>
         <li>
           <a
-            class="font-semibold text-[var(--muted)] text-sm transition-colors hover:text-[var(--accent-strong)]"
+            class="font-semibold text-muted text-sm transition-colors hover:text-accent"
             href="/legal/privacy-policy"
           >
             Privacy
@@ -81,7 +81,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
         </li>
         <li>
           <a
-            class="font-semibold text-[var(--muted)] text-sm transition-colors hover:text-[var(--accent-strong)]"
+            class="font-semibold text-muted text-sm transition-colors hover:text-accent"
             href="/legal/terms-of-service"
           >
             Terms
@@ -95,7 +95,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
       <li>
         <a
           aria-label="GitHub"
-          class="block text-[var(--muted)] transition-colors hover:text-[var(--accent-strong)]"
+          class="block text-muted transition-colors hover:text-accent"
           href="/github"
           rel="me noreferrer"
           target="_blank"
@@ -121,7 +121,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
       <li>
         <a
           aria-label="Instagram"
-          class="block text-[var(--muted)] transition-colors hover:text-[var(--accent-strong)]"
+          class="block text-muted transition-colors hover:text-accent"
           href="/instagram"
           rel="me noreferrer"
           target="_blank"
@@ -147,7 +147,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
       <li>
         <a
           aria-label="Telegram"
-          class="block text-[var(--muted)] transition-colors hover:text-[var(--accent-strong)]"
+          class="block text-muted transition-colors hover:text-accent"
           href="/telegram"
           rel="me noreferrer"
           target="_blank"
@@ -172,7 +172,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
       </li>
     </ul>
     <span
-      class="text-xs leading-tight ml-auto font-medium text-[var(--subtle)]"
+      class="text-xs leading-tight ml-auto font-medium text-muted"
     >
       © 
       2026
@@ -181,7 +181,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
        · Data provided by
        
       <a
-        class="transition-colors hover:text-[var(--accent-strong)]"
+        class="transition-colors hover:text-accent"
         href="https://datamall.lta.gov.sg"
         rel="noopener noreferrer"
         target="_blank"
