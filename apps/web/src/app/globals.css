@@ -4,201 +4,282 @@
 
 @plugin "@tailwindcss/typography";
 
+/* ---------------------------------------------------------------------------
+   MotorMetrics theme.
+
+   Source of truth: the Claude Design "MotorMetrics Design System" tokens,
+   vendored at _ds/motormetrics-design-system-183fc5f3-.../tokens/*.css in
+   Claude Design project 7b59ec10-a54e-49dd-a94e-64315ef10b4c, and rendered by
+   `Design System Theme.dc.html`.
+
+   Claude Design is a generic design system and does not know this app is on
+   HeroUI, so a few of its tokens are renamed on the way in. Those renames are
+   this file's job, not Claude Design's — see DESIGN.md for the mapping table:
+
+     --surface-alt         -> --surface-secondary   (HeroUI ships the bridge)
+     --success-foreground  -> --success-soft-foreground   (see "Status" below)
+     --warning-foreground  -> --warning-soft-foreground
+     --radius-sm/lg/xl     -> the rounded-* ladder        (see the @theme note)
+     --scrollbar           -> --scrollbar-thumb     (--scrollbar is legacy)
+
+   Everything here sits on :root so that HeroUI's *calculated* tier derives
+   from these values. In 3.0.4 that tier is emitted on :root as
+   --color-accent-hover, --color-accent-soft-foreground, --color-default-hover,
+   --color-danger-hover, --color-border-secondary, --color-field-focus and so
+   on, each a color-mix() over the base tokens, and the component CSS reads
+   those names directly (button.css: --button-bg-hover: var(--color-accent-hover)).
+   Because they are computed on :root, a palette applied further down the tree
+   cannot reach them — which is why the previous [data-skin] block left primary
+   buttons hovering navy despite overriding --color-accent. Keep the palette
+   here and let HeroUI derive the rest; do not hand-copy that tier or it drifts
+   on the next upgrade.
+   --------------------------------------------------------------------------- */
+
 @layer base {
   :root {
     color-scheme: light;
 
-    /* Primitive Colors (Do not change between light and dark) */
-    --white: oklch(100% 0 0);
-    --black: oklch(0% 0 0);
-    --snow: oklch(0.9911 0 0);
-    --eclipse: oklch(0.3103 0.0197 264.23);
+    /* Primitives — do not vary by theme */
+    --white: #ffffff;
+    --black: #000000;
+    --eclipse: #232a2e; /* slate-ink */
 
-    /* Spacing scale */
-    --spacing: 0.25rem;
-
-    /* Border */
-    --border-width: 1px;
-    --field-border-width: 0px;
-    --disabled-opacity: 0.5;
-
-    /* Ring offset - Used for focus ring */
-    --ring-offset-width: 2px;
-
-    /* Cursor */
-    --cursor-interactive: pointer;
-    --cursor-disabled: not-allowed;
-
-    /* Radius */
-    --radius: 0.5rem;
-    --field-radius: calc(var(--radius) * 1.5);
-
-    /* Base Colors */
-    --background: oklch(0.9592 0.0072 253.27);
+    /* Base */
+    --background: #f7f5ef; /* warm cream canvas */
     --foreground: var(--eclipse);
 
-    /* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
+    /* Surfaces */
     --surface: var(--white);
     --surface-foreground: var(--foreground);
-
-    /* Overlay: Used for floating/overlay components (tooltips, popovers, modals, menus) */
+    --surface-secondary: #efece3; /* warm sand — rails, wells */
+    --surface-secondary-foreground: var(--foreground);
     --overlay: var(--white);
     --overlay-foreground: var(--foreground);
+    --ink-surface: #232a2e; /* dark feature panel */
+    --ink-surface-foreground: var(--white);
 
-    --muted: oklch(0.5564 0.0398 256.82);
-    --scrollbar: oklch(0.9258 0.0132 255.03);
-
-    --default: oklch(0.9258 0.0132 255.03);
+    /* Neutrals. The three text greys are tuned to clear WCAG AA (4.5:1)
+       against --surface-secondary #efece3, the darkest light surface and so
+       the binding constraint; clearing it also clears --background and
+       --surface. Ramp: 4.64 -> 6.00 -> 8.08 -> 12.33 (--foreground). */
+    --muted: #505a5d; /* secondary body text — 6.00:1 */
+    --muted-strong: #3d474b; /* label text — 8.08:1 */
+    --subtle: #5f6b71; /* faintest meta labels — 4.64:1 */
+    --default: #f0f3f4; /* neutral fill — chips, icon wells, tracks */
+    --default-hover: #dce7ec;
     --default-foreground: var(--foreground);
+    --scrollbar-thumb: #dce7ec;
 
-    --accent: oklch(0.2894 0.1433 272.9);
+    /* Accent — a calm slate blue, carrying all emphasis.
+       --accent fills; --accent-strong is the text/link tone (#4e7c9b as text
+       is 4.11:1 on the canvas, below AA). */
+    --accent: #4e7c9b;
     --accent-foreground: var(--white);
+    --accent-strong: #33586f;
+    --accent-deep: #16323f;
+    --accent-soft: #dce7ec;
+    --accent-soft-2: #e2edf3;
+    --accent-on-dark: #9cc4da;
+    --accent-border: #3c6480;
+    --accent-raise: linear-gradient(
+      180deg,
+      #5f8ba8 0%,
+      #4e7c9b 55%,
+      #3c6480 100%
+    );
+    /* No HeroUI equivalent: Tailwind cannot express this radial stop list. */
+    --accent-gradient: radial-gradient(
+      120% 100% at 15% 0%,
+      #6a97b5 0%,
+      #4e7c9b 42%,
+      #3c6480 100%
+    );
 
-    /* Form Field Defaults - Colors */
+    /* Brand mark — deliberately distinct from the accent (the TrendingUp
+       glyph + "Metrics" wordmark), held over from the SG Cars Trends identity. */
+    --brand-blue: #2563eb;
+
+    /* Status. Reserved for meaning and always paired with a dot or label,
+       never colour alone.
+
+       Note the split: HeroUI's `-foreground` means "text ON that solid fill",
+       so it must contrast with --success et al. Claude Design's status text
+       colours are the tinted-chip tones, which belong in HeroUI's
+       `-soft-foreground` slots (bg-success-soft + text-success-soft-foreground).
+
+       All three fills take the ink, not white. These are light, saturated
+       tones: white measures 2.59 / 2.10 / 3.03:1 on them, the ink 5.62 / 6.92
+       / 4.80:1. Claude Design specifies --danger-foreground: #FFFFFF, which is
+       the 3.03:1 case — raised upstream. */
+    --success: #57b45f;
+    --success-foreground: var(--eclipse);
+    --success-soft: #dff1df;
+    --success-soft-foreground: #2f6b3a;
+
+    --warning: #e9a63c;
+    --warning-foreground: var(--eclipse);
+    --warning-soft: #fbebd3;
+    --warning-soft-foreground: #96601c;
+
+    --danger: #e96e6e;
+    --danger-foreground: var(--eclipse);
+    --danger-soft: #fbe3e3;
+    --danger-soft-foreground: #b4453f;
+
+    /* Lines */
+    --border: #e5e1d5;
+    --separator: #e5e1d5;
+    --focus: var(--accent);
+    --link: var(--accent-strong);
+
+    /* Form fields */
     --field-background: var(--white);
     --field-foreground: var(--foreground);
     --field-placeholder: var(--muted);
     --field-border: transparent;
 
-    /* Status Colors */
-    --success: oklch(0.7205 0.192 149.49);
-    --success-foreground: var(--foreground);
-
-    --warning: oklch(0.7697 0.1645 70.61);
-    --warning-foreground: var(--foreground);
-
-    --danger: oklch(0.5786 0.2137 27.17);
-    --danger-foreground: var(--white);
-
-    /* Component Colors */
-    --segment: var(--white);
-    --segment-foreground: var(--foreground);
-
-    /* Misc Colors */
-    --border: oklch(0.9258 0.0132 255.03);
-    --separator: oklch(0.9258 0.0132 255.03);
-    --focus: var(--accent);
-    --link: var(--foreground);
-
     /* Backdrop */
-    --backdrop: rgba(0, 0, 0, 0.5);
+    --backdrop: rgba(22, 32, 37, 0.45);
 
-    /* Shadows */
+    /* Geometry. --radius drives HeroUI's own components (Button, Input, Card);
+       Claude Design puts everyday controls at 22px. The rounded-* ladder is
+       restated in @theme below — see the note there for why it has to be. */
+    --radius: 1.375rem; /* 22px — controls, inner cards, rows */
+    --field-radius: 1.375rem;
+
+    /* Elevation — soft, ink-tinted, never black */
     --surface-shadow:
-      0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
-      0 0 1px 0 rgba(0, 0, 0, 0.06);
-    --overlay-shadow:
-      0 4px 16px 0 rgba(24, 24, 27, 0.08), 0 8px 24px 0 rgba(24, 24, 27, 0.09);
-    --field-shadow:
-      0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
-      0 0 1px 0 rgba(0, 0, 0, 0.06);
+      0 4px 16px 0 rgba(35, 42, 46, 0.07), 0 1px 3px 0 rgba(35, 42, 46, 0.05);
+    --overlay-shadow: 0 14px 36px 0 rgba(35, 42, 46, 0.16);
+    --field-shadow: 0 1px 2px 0 rgba(35, 42, 46, 0.05);
+    --hover-shadow: 0 3px 10px 0 rgba(35, 42, 46, 0.08);
 
-    /* Skeleton Default Global Animation */
-    --skeleton-animation: shimmer;
+    /* Chart palette — one categorical set of distinct hues, ordered to keep
+       adjacent series far apart. Not a sequential ramp: in every chart here the
+       magnitude is already carried by bar length, arc length or an adjacent
+       number, so colour is free to carry identity — which make, which fuel
+       type — and a monochrome ramp would only make series harder to tell apart.
+       Charts cap at six series.
 
-    /* MotorMetrics chart tokens. Kept separate from HeroUI theme variables. */
-    --chart-1: oklch(0.2894 0.1433 272.9);
-    --chart-2: oklch(0.4018 0.1119 263.29);
-    --chart-3: oklch(0.5138 0.102 263.13);
-    --chart-4: oklch(0.5872 0.0334 248.17);
-    --chart-5: oklch(0.7159 0.0358 256.79);
-    --chart-6: oklch(0.8064 0.0226 251.2);
+       Note --chart-2 (2.90:1), --chart-4 (2.79:1) and --chart-5 (1.70:1) sit
+       below WCAG 1.4.11's 3:1 against --background. That guideline covers
+       graphics *required* to understand the content; every chart here labels
+       each series in text with its value, so colour is associative rather than
+       load-bearing. Keep the text labels — they are what makes this palette
+       defensible.
+
+       Claude Design ships only a sequential ramp and no categorical palette;
+       raised upstream. */
+    --chart-1: #33586f; /* slate */
+    --chart-2: #c9803f; /* ochre */
+    --chart-3: #5f8ba8; /* blue */
+    --chart-4: #7a9e63; /* green */
+    --chart-5: #9cc4da; /* pale blue */
+    --chart-6: #b0728f; /* mauve */
     --chart-grid: var(--border);
   }
 
+  /* Authored so the palette is correct and testable by setting the attribute
+     by hand. No theme provider or toggle ships yet, so :root is what renders. */
   .dark,
   [data-theme="dark"] {
     color-scheme: dark;
 
-    /* Base Colors */
-    --background: oklch(0.1371 0.036 258.53);
-    --foreground: oklch(0.9838 0.0035 247.86);
+    /* Base */
+    --background: #1a2024;
+    --foreground: #f1f0ea;
 
-    /* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
-    --surface: oklch(0.28 0.0369 259.97);
+    /* Surfaces */
+    --surface: #232a2e;
     --surface-foreground: var(--foreground);
-
-    /* Overlay: Used for floating/overlay components (tooltips, popovers, modals, menus) */
-    --overlay: oklch(0.3037 0.0413 259.96);
+    --surface-secondary: #2a3237;
+    --surface-secondary-foreground: var(--foreground);
+    --overlay: #2a3237;
     --overlay-foreground: var(--foreground);
+    --ink-surface: #12181b;
+    --ink-surface-foreground: var(--white);
 
-    --muted: oklch(0.7107 0.0351 256.79);
-    --scrollbar: oklch(0.7107 0.0351 256.79);
-
-    --default: oklch(0.28 0.0369 259.97);
+    /* Neutrals — checked against --surface-secondary #2a3237, the lightest
+       dark surface and so the binding constraint here. */
+    --muted: #9aa6ab; /* 5.23:1 */
+    --muted-strong: #b7c1c5; /* 7.11:1 */
+    --subtle: #939da1; /* 4.71:1 */
+    --default: #2e373c;
+    --default-hover: #3a4448;
     --default-foreground: var(--foreground);
+    --scrollbar-thumb: #3a4448;
 
-    /* Keep interactive emphasis legible against dark surfaces. */
-    --accent: oklch(0.7107 0.135 263.13);
-    --accent-foreground: var(--background);
+    /* Accent — lightened for dark surfaces. --accent-foreground is NOT in the
+       Claude Design dark block; inheriting the light theme's white would put
+       2.81:1 on #6fa0c0, so it takes the ink instead (5.18:1). Raised
+       upstream. */
+    --accent: #6fa0c0;
+    --accent-foreground: var(--eclipse);
+    --accent-strong: #4e7c9b;
+    --accent-soft: rgba(111, 160, 192, 0.18);
+    --accent-soft-2: rgba(111, 160, 192, 0.14);
+    --accent-border: color-mix(in oklch, black 10%, var(--accent));
 
-    /* Form Field Defaults - Colors (only the ones that are different from light theme) */
+    /* Status — solids carry over; only the tints and their text change. */
+    --success-foreground: var(--eclipse);
+    --success-soft: rgba(87, 180, 95, 0.16);
+    --success-soft-foreground: #8ed396;
+
+    --warning-foreground: var(--eclipse);
+    --warning-soft: rgba(233, 166, 60, 0.16);
+    --warning-soft-foreground: #f0c079;
+
+    --danger: #e96e6e;
+    --danger-foreground: var(--eclipse);
+    --danger-soft: rgba(233, 110, 110, 0.16);
+    --danger-soft-foreground: #f0a0a0;
+
+    /* Lines */
+    --border: #333c41;
+    --separator: #333c41;
+
+    /* Form fields */
     --field-background: var(--default);
-    --field-foreground: var(--foreground);
-
-    /* Status Colors */
-    --warning: oklch(0.7697 0.1645 70.61);
-    --warning-foreground: var(--background);
-
-    --danger: oklch(0.3959 0.1331 25.72);
-    --danger-foreground: var(--foreground);
-
-    /* Component Colors */
-    --segment: oklch(0.28 0.0369 259.97);
-    --segment-foreground: var(--foreground);
-
-    /* Misc Colors */
-    --border: oklch(0.28 0.0369 259.97);
-    --separator: oklch(0.28 0.0369 259.97);
-    --focus: var(--accent);
-    --link: var(--foreground);
 
     /* Backdrop */
     --backdrop: rgba(0, 0, 0, 0.6);
 
-    /* Shadows */
+    /* Elevation — the surface tiers flatten; hierarchy comes from tone. */
     --surface-shadow: 0 0 0 0 transparent inset;
-    --overlay-shadow: 0 0 0 0 transparent inset;
+    --overlay-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.4);
     --field-shadow: 0 0 0 0 transparent inset;
+    --hover-shadow: 0 0 0 0 transparent inset;
+
+    /* Same hues on the dark canvas. Only the slate needs lifting to clear 3:1
+       against --surface-secondary; the rest already do. */
+    --chart-1: #5a7e96;
+    --chart-grid: var(--border);
   }
 }
 
+/* Project-specific tokens only. HeroUI token names need no alias here —
+   @heroui/styles already bridges the whole semantic set (including
+   --color-surface-secondary and the --color-*-soft* family) via
+   themes/shared/theme.css. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-surface: var(--surface);
-  --color-surface-foreground: var(--surface-foreground);
-  --color-overlay: var(--overlay);
-  --color-overlay-foreground: var(--overlay-foreground);
-  --color-default: var(--default);
-  --color-default-foreground: var(--default-foreground);
-  --color-muted: var(--muted);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
-  --color-danger: var(--danger);
-  --color-danger-foreground: var(--danger-foreground);
-  --color-segment: var(--segment);
-  --color-segment-foreground: var(--segment-foreground);
-  --color-border: var(--border);
-  --color-separator: var(--separator);
-  --color-focus: var(--focus);
-  --color-link: var(--link);
-  --color-backdrop: var(--backdrop);
-  --color-field: var(--field-background, var(--default));
-  --color-field-foreground: var(--field-foreground, var(--foreground));
-  --color-field-placeholder: var(--field-placeholder, var(--muted));
-  --color-field-border: var(--field-border, var(--border));
-  --radius-field: var(--field-radius, calc(var(--radius) * 1.5));
-  --border-width-field: var(--field-border-width, var(--border-width));
-  --shadow-surface: var(--surface-shadow);
-  --shadow-overlay: var(--overlay-shadow);
-  --shadow-field: var(--field-shadow);
+  --font-sans: var(--font-urbanist);
+
+  --color-ink-surface: var(--ink-surface);
+  --color-ink-surface-foreground: var(--ink-surface-foreground);
+
+  --color-muted-strong: var(--muted-strong);
+  --color-subtle: var(--subtle);
+
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-soft-2: var(--accent-soft-2);
+  --color-accent-on-dark: var(--accent-on-dark);
+  --color-accent-border: var(--accent-border);
+
+  --color-brand-blue: var(--brand-blue);
+
+  --shadow-hover: var(--hover-shadow);
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -206,6 +287,29 @@
   --color-chart-5: var(--chart-5);
   --color-chart-6: var(--chart-6);
   --color-chart-grid: var(--chart-grid);
+}
+
+/* Radius ladder.
+   This has to be stated in full rather than inherited. HeroUI overrides only
+   part of Tailwind's radius scale — sm/md/xl/2xl/3xl are redefined as
+   calc(var(--radius) * n) while xs/lg/4xl fall through to Tailwind's own
+   fixed defaults. Those two halves only agree when --radius is Tailwind's 8px.
+   Claude Design puts --radius at 22px, which pulled the ladder apart: it was
+   shipping rounded-lg at 8px (Tailwind default) but rounded-sm at 11px
+   (22 x 0.5), so `lg` was rounder than `sm`, and rounded-2xl reached 44px.
+
+   The steps below are monotonic and land on Claude Design's ladder:
+   14px small chips and icon wells, 22px controls and inner cards (= --radius),
+   32px panels, 36px bento cards, 40px the rail. Pills use rounded-full. */
+@theme {
+  --radius-xs: 0.5rem; /* 8px */
+  --radius-sm: 0.875rem; /* 14px — small chips, icon wells */
+  --radius-md: 1.125rem; /* 18px */
+  --radius-lg: 1.375rem; /* 22px — controls, inner cards, rows (= --radius) */
+  --radius-xl: 1.625rem; /* 26px */
+  --radius-2xl: 2rem; /* 32px — panels */
+  --radius-3xl: 2.25rem; /* 36px — bento cards */
+  --radius-4xl: 2.5rem; /* 40px — the rail */
 }
 
 /* Reusable keyframe animations */
@@ -238,129 +342,5 @@
   50% {
     opacity: 0.8;
     transform: translate(-50%, -50%) scale(1.1);
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Overview v2 skin — applied to the whole site via data-skin on (main)/layout.
-   Token overrides only: every value below is an existing theme variable, so
-   the standard utilities (bg-surface, text-muted, bg-accent, border-border)
-   pick these up with no new classes. Remove the data-skin attribute in
-   (main)/layout.tsx to revert the site to the global navy theme.
-   --------------------------------------------------------------------------- */
-@layer base {
-  /* The :has() half is not redundant: React Aria renders popovers, modals and
-     toasts through a portal on <body>, outside the skinned wrapper, so they
-     would otherwise keep the global navy theme. Matching <body> whenever a
-     skinned subtree exists puts the portal root on the same tokens, while
-     /admin and /store — which never render the wrapper — stay on navy. */
-  [data-skin="overview-v2"],
-  body:has([data-skin="overview-v2"]) {
-    /* Canvas + ink */
-    --background: #f7f5ef;
-    --foreground: #232a2e;
-
-    /* Surfaces */
-    --surface: #ffffff;
-    --surface-foreground: var(--foreground);
-    --overlay: #ffffff;
-    --overlay-foreground: var(--foreground);
-
-    /* Neutrals */
-    --muted: #505a5d;
-    --default: #efece3; /* warm sand — right rail, pill groups, bar tracks */
-    --default-foreground: var(--foreground);
-
-    /* Accent — calm slate blue, carries all emphasis. Dark enough for AA body
-       text on both the cream canvas and white cards (7.5:1); softer fills come
-       from opacity modifiers (bg-accent/15) rather than a separate token.
-       On the dark feature panel, --chart-5 is the legible accent. */
-    --accent: #33586f;
-    --accent-foreground: #ffffff;
-    /* No HeroUI equivalent: Tailwind cannot express the comp's radial stop list. */
-    --accent-gradient: radial-gradient(
-      120% 100% at 15% 0%,
-      #6a97b5 0%,
-      #4e7c9b 42%,
-      #3c6480 100%
-    );
-
-    /* Status — always paired with a dot or label, never colour alone */
-    --success: #57b45f;
-    --success-foreground: #2f6b3a;
-    --warning: #e9a63c;
-    --warning-foreground: #96601c;
-    --danger: #e96e6e;
-    --danger-foreground: #b4453f;
-
-    /* Lines */
-    --border: #e5e1d5;
-    --separator: #e5e1d5;
-    --focus: var(--accent);
-    --link: var(--accent);
-
-    /* Geometry — v2 is markedly rounder. Deliberately does NOT redeclare
-       Tailwind's --radius-* names: those back the rounded-* utilities, so a
-       --radius-lg override here silently resized every rounded-lg in the app.
-       Cards/rail/panel use rounded-4xl; controls use rounded-field. */
-    --radius: 1.375rem; /* 22px — controls, inner cards */
-    --field-radius: 1.375rem;
-
-    /* Elevation — soft, ink-tinted, never black */
-    --surface-shadow:
-      0 4px 16px 0 rgba(35, 42, 46, 0.07), 0 1px 3px 0 rgba(35, 42, 46, 0.05);
-    --overlay-shadow: 0 14px 36px 0 rgba(35, 42, 46, 0.16);
-    --field-shadow: 0 1px 2px 0 rgba(35, 42, 46, 0.05);
-
-    /* Categorical chart palette — distinct hues, not one ramp, so series stay
-       separable. Ordered to keep adjacent series far apart in hue. */
-    --chart-1: #33586f;
-    --chart-2: #c9803f;
-    --chart-3: #5f8ba8;
-    --chart-4: #7a9e63;
-    --chart-5: #9cc4da; /* doubles as the accent on the dark feature panel */
-    --chart-6: #b0728f;
-    --chart-grid: var(--border);
-
-    font-family: var(--font-urbanist), ui-sans-serif, system-ui, sans-serif;
-
-    /* `@theme inline` emits the --color-* aliases on :root, so they resolve
-       against :root's values and inherit that snapshot into this subtree.
-       Tailwind utilities are unaffected (they inline var(--accent) and friends),
-       but HeroUI's BEM component CSS reads the aliases directly — without this
-       remap a `.button--primary` inside the skin keeps the navy accent.
-       Re-declaring the aliases here re-resolves them against the values above. */
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --color-surface: var(--surface);
-    --color-surface-foreground: var(--surface-foreground);
-    --color-overlay: var(--overlay);
-    --color-overlay-foreground: var(--overlay-foreground);
-    --color-default: var(--default);
-    --color-default-foreground: var(--default-foreground);
-    --color-muted: var(--muted);
-    --color-accent: var(--accent);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-success: var(--success);
-    --color-success-foreground: var(--success-foreground);
-    --color-warning: var(--warning);
-    --color-warning-foreground: var(--warning-foreground);
-    --color-danger: var(--danger);
-    --color-danger-foreground: var(--danger-foreground);
-    --color-border: var(--border);
-    --color-separator: var(--separator);
-    --color-focus: var(--focus);
-    --color-link: var(--link);
-    --radius-field: var(--field-radius);
-    --shadow-surface: var(--surface-shadow);
-    --shadow-overlay: var(--overlay-shadow);
-    --shadow-field: var(--field-shadow);
-    --color-chart-1: var(--chart-1);
-    --color-chart-2: var(--chart-2);
-    --color-chart-3: var(--chart-3);
-    --color-chart-4: var(--chart-4);
-    --color-chart-5: var(--chart-5);
-    --color-chart-6: var(--chart-6);
-    --color-chart-grid: var(--chart-grid);
   }
 }

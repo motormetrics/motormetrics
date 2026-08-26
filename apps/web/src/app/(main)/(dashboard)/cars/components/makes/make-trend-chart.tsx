@@ -50,7 +50,7 @@ export function MakeTrendChart({ data }: MakeTrendChartProps) {
         <LineChart.Grid
           vertical={false}
           strokeDasharray="3 3"
-          className="stroke-border"
+          className="stroke-chart-grid"
         />
         <LineChart.XAxis dataKey="month" tickMargin={8} />
         <LineChart.Tooltip

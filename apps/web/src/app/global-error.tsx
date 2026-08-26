@@ -37,12 +37,12 @@ export default function GlobalError({
               </p>
             </div>
             {error.digest ? (
-              <p className="text-default-500 text-xs leading-tight">
+              <p className="text-muted text-xs leading-tight">
                 Error ID: {error.digest}
               </p>
             ) : null}
             <button
-              className="cursor-pointer rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground"
+              className="cursor-pointer rounded-full bg-accent px-6 py-3 font-medium text-accent-foreground"
               onClick={() => retry()}
               type="button"
             >

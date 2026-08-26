@@ -41,11 +41,11 @@ export function PopularPosts({ posts }: PopularPostsProps) {
 
             {/* Content */}
             <div className="flex flex-1 flex-col gap-2">
-              <span className="line-clamp-2 font-medium text-foreground text-sm leading-snug transition-colors group-hover:text-accent">
+              <span className="line-clamp-2 font-medium text-foreground text-sm leading-snug transition-colors group-hover:text-accent-strong">
                 {post.title}
               </span>
               <div className="flex items-center gap-2 text-muted">
-                <TrendingUp className="size-3 text-accent" />
+                <TrendingUp className="size-3 text-accent-strong" />
                 <span className="text-xs tabular-nums">
                   <NumberValue
                     maximumFractionDigits={1}

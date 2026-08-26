@@ -1,11 +1,11 @@
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import { DeltaPill } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/delta-pill";
 import {
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { ELECTRIC_POPULATION_FUEL_TYPE } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
+import { DeltaChip } from "@web/components/shared/delta-chip";
 import { sparkline } from "@web/components/shared/sparkline";
 import Typography from "@web/components/typography";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
@@ -68,15 +68,15 @@ export async function EvShareHero({ month }: { month: string }) {
   return (
     <div className="flex flex-col gap-5 rounded-4xl bg-foreground p-8 shadow-surface">
       <div className="flex flex-col items-start gap-2.5">
-        <span className="rounded-full bg-chart-5/20 px-4 py-2 font-bold text-chart-5 text-sm">
+        <span className="rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm">
           EV share · {formatDateToMonthYear(point.month)}
         </span>
 
         <div className="flex flex-wrap items-center gap-4">
-          <span className="font-extrabold text-[3.5rem] text-chart-5 tabular-nums tracking-[-0.03em] lg:text-[4.5rem]">
+          <span className="font-extrabold text-[3.5rem] text-accent-on-dark tabular-nums tracking-[-0.03em] lg:text-[4.5rem]">
             {share.toFixed(1)}%
           </span>
-          <DeltaPill tone="on-dark" value={share - previousShare} />
+          <DeltaChip tone="on-dark" unit="pp" value={share - previousShare} />
         </div>
 
         <Typography.TextLg className="font-semibold text-accent-foreground/70">
@@ -97,11 +97,11 @@ export async function EvShareHero({ month }: { month: string }) {
           viewBox={`0 0 ${SPARK_WIDTH} ${SPARK_HEIGHT}`}
         >
           <title>{`Battery-electric share of new car registrations over the last ${history.length} months`}</title>
-          <path d={spark.area} fill="var(--chart-5)" opacity={0.16} />
+          <path d={spark.area} fill="var(--accent-on-dark)" opacity={0.16} />
           <path
             d={spark.line}
             fill="none"
-            stroke="var(--chart-5)"
+            stroke="var(--accent-on-dark)"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={3.5}
@@ -111,7 +111,7 @@ export async function EvShareHero({ month }: { month: string }) {
             cy={spark.lastY}
             fill="var(--foreground)"
             r={6}
-            stroke="var(--chart-5)"
+            stroke="var(--accent-on-dark)"
             strokeWidth={3.5}
           />
         </svg>
@@ -137,7 +137,7 @@ export async function EvShareHero({ month }: { month: string }) {
           </div>
           <Link
             aria-label="View the annual vehicle population"
-            className="ml-auto flex size-11 shrink-0 items-center justify-center rounded-full bg-accent-foreground text-accent transition-[filter] hover:brightness-110"
+            className="ml-auto flex size-11 shrink-0 items-center justify-center rounded-full bg-accent-foreground text-accent-strong transition-[filter] hover:brightness-110"
             href="/cars/annual"
           >
             <ArrowUpRight className="size-5" />

@@ -32,7 +32,7 @@ export function CostMetrics({ data }: CostMetricsProps) {
         <KPI.Content>
           <div className="flex items-baseline gap-2">
             <KPI.Value
-              className="text-4xl text-accent"
+              className="text-4xl text-accent-strong"
               locale="en-SG"
               maximumFractionDigits={0}
               value={quotedModels.length}
@@ -61,7 +61,7 @@ export function CostMetrics({ data }: CostMetricsProps) {
         <KPI.Content>
           {sorted.length > 0 ? (
             <KPI.Value
-              className="text-4xl text-accent"
+              className="text-4xl text-accent-strong"
               currency="SGD"
               locale="en-SG"
               maximumFractionDigits={0}
@@ -69,7 +69,7 @@ export function CostMetrics({ data }: CostMetricsProps) {
               value={median}
             />
           ) : (
-            <span className="font-bold text-4xl text-accent">-</span>
+            <span className="font-bold text-4xl text-accent-strong">-</span>
           )}
         </KPI.Content>
         <KPI.Footer>

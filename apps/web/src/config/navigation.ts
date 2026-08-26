@@ -32,7 +32,6 @@ export interface NavigationItem {
   description?: string;
   show?: boolean;
   badge?: "beta" | "new";
-  iconColor?: string;
   matchPrefix?: boolean;
 }
 
@@ -86,14 +85,12 @@ export const navLinks: NavLinks = {
       url: "/cars/registrations",
       icon: FilePlus,
       description: "Monthly car registration statistics and trends",
-      iconColor: "text-blue-500",
     },
     {
       title: "Deregistrations",
       url: "/cars/deregistrations",
       icon: FileMinus,
       description: "Monthly vehicle deregistration statistics",
-      iconColor: "text-red-500",
     },
     {
       title: "Makes",
@@ -101,7 +98,6 @@ export const navLinks: NavLinks = {
       icon: CarFront,
       description: "Car makes statistics and market share analysis",
       badge: "beta",
-      iconColor: "text-pink-500",
       matchPrefix: true,
     },
     {
@@ -109,21 +105,18 @@ export const navLinks: NavLinks = {
       url: "/cars/fuel-types",
       icon: Fuel,
       description: "Breakdown by petrol, diesel, hybrid and electric",
-      iconColor: "text-green-500",
     },
     {
       title: "Vehicle Types",
       url: "/cars/vehicle-types",
       icon: Car,
       description: "Analysis of saloons, hatchbacks, SUVs and more",
-      iconColor: "text-purple-500",
     },
     {
       title: "Annual",
       url: "/cars/annual",
       icon: Calendar,
       description: "Yearly vehicle population and registration trends",
-      iconColor: "text-amber-500",
     },
     {
       title: "Electric Vehicles",
@@ -131,7 +124,6 @@ export const navLinks: NavLinks = {
       icon: Zap,
       description: "BEV, PHEV and hybrid adoption trends and market share",
       badge: "new",
-      iconColor: "text-emerald-500",
     },
     {
       title: "PARF Calculator",
@@ -147,7 +139,6 @@ export const navLinks: NavLinks = {
       description:
         "See how new car prices are composed — OMV, ARF, VES, and COE",
       badge: "new",
-      iconColor: "text-orange-500",
     },
   ],
   coe: [

@@ -85,7 +85,7 @@ export function SharePill({ title }: { title: string }) {
                 key={label}
                 textValue={label}
               >
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent-strong">
                   <Icon className="size-4" />
                 </span>
                 <Label>{label}</Label>
@@ -98,14 +98,14 @@ export function SharePill({ title }: { title: string }) {
               id={COPY_KEY}
               textValue={copied ? "Link copied" : "Copy link"}
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent-strong">
                 {copied ? (
                   <Check className="size-4 text-success" />
                 ) : (
                   <Link2 className="size-4" />
                 )}
               </span>
-              <Label className="font-bold text-accent">
+              <Label className="font-bold text-accent-strong">
                 {copied ? "Link copied" : "Copy link"}
               </Label>
             </Dropdown.Item>

@@ -71,7 +71,7 @@ export async function FastestGrowing({
                 registered
               </span>
             </span>
-            <DeltaChip className="ml-auto" ratio={(row.yoyChange ?? 0) / 100} />
+            <DeltaChip className="ml-auto" value={row.yoyChange ?? 0} />
           </Link>
         ))}
       </div>

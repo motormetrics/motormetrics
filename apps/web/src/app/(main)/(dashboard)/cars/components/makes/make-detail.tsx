@@ -77,7 +77,7 @@ export function MakeDetail({
           </KPI.Header>
           <KPI.Content>
             <KPI.Value
-              className="text-accent text-xl"
+              className="text-accent-strong text-xl"
               locale="en-SG"
               maximumFractionDigits={0}
               value={cars.total}
@@ -149,7 +149,7 @@ export function MakeDetail({
                   <Link
                     key={name}
                     href={`/cars/fuel-types/${slugify(name)}`}
-                    className="text-accent text-sm hover:underline"
+                    className="text-accent-strong text-sm hover:underline"
                   >
                     {name}
                   </Link>
@@ -169,7 +169,7 @@ export function MakeDetail({
                   <Link
                     key={name}
                     href={`/cars/vehicle-types/${slugify(name)}`}
-                    className="text-accent text-sm hover:underline"
+                    className="text-accent-strong text-sm hover:underline"
                   >
                     {name}
                   </Link>

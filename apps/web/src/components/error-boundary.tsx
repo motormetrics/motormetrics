@@ -27,9 +27,7 @@ export function SectionErrorFallback(
         <AlertTriangle aria-hidden className="size-5 text-danger" />
         <Typography.H4>{title}</Typography.H4>
       </div>
-      <Typography.TextSm className="text-default-600">
-        {message}
-      </Typography.TextSm>
+      <Typography.TextSm className="text-muted">{message}</Typography.TextSm>
       <Button onPress={() => retry()} size="sm" variant="primary">
         Try again
       </Button>

@@ -33,7 +33,7 @@ export function ComparisonSummary({ monthA, monthB }: ComparisonSummaryProps) {
             </KPI.Header>
             <KPI.Content>
               <KPI.Value
-                className="text-4xl text-accent"
+                className="text-4xl text-accent-strong"
                 locale="en-SG"
                 maximumFractionDigits={0}
                 value={monthA.total}

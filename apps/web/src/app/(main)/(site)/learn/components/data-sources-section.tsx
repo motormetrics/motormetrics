@@ -14,7 +14,7 @@ import Link from "next/link";
 const features = [
   {
     icon: Database,
-    iconColor: "text-accent",
+    iconColor: "text-accent-strong",
     containerBg: "bg-accent/10",
     title: "Primary Data Source",
     description: (
@@ -104,7 +104,7 @@ export function DataSourcesSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-accent uppercase tracking-widest">
+              <Typography.Label className="text-accent-strong uppercase tracking-widest">
                 Data Transparency
               </Typography.Label>
               <Typography.H2 className="lg:text-4xl">
@@ -129,7 +129,7 @@ export function DataSourcesSection() {
                       href="https://datamall.lta.gov.sg"
                       target="_blank"
                       rel="noreferrer"
-                      className="text-accent text-sm underline"
+                      className="text-accent-strong text-sm underline"
                     >
                       LTA DataMall
                     </Link>

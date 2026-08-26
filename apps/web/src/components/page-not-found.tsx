@@ -7,7 +7,7 @@ export function PageNotFound() {
     <div className="container mx-auto px-6 py-16">
       <div className="flex min-h-[60vh] flex-col items-center justify-center">
         <div className="mb-8 flex flex-col items-center">
-          <Typography.H1 className="text-accent">404</Typography.H1>
+          <Typography.H1 className="text-accent-strong">404</Typography.H1>
           <Typography.H2>Page Not Found</Typography.H2>
           <Typography.TextLg>
             The page you&apos;re looking for doesn&apos;t exist or has been
@@ -19,11 +19,11 @@ export function PageNotFound() {
 
         <Typography.TextSm>
           Need help? Visit our{" "}
-          <Link href="/learn" className="text-accent hover:underline">
+          <Link href="/learn" className="text-accent-strong hover:underline">
             learn page
           </Link>{" "}
           or go back to the{" "}
-          <Link href="/" className="text-accent hover:underline">
+          <Link href="/" className="text-accent-strong hover:underline">
             homepage
           </Link>
           .

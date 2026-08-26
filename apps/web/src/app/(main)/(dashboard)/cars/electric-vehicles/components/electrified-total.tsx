@@ -1,6 +1,5 @@
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import { DeltaPill } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/delta-pill";
 import {
   buildRegistrationSplit,
   resolveMonthIndex,
@@ -10,6 +9,7 @@ import {
   POWERTRAIN_SEGMENTS,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { SurfaceCard } from "@web/components/shared/bento";
+import { DeltaChip } from "@web/components/shared/delta-chip";
 import Typography from "@web/components/typography";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 
@@ -65,7 +65,7 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
           <span className="font-extrabold text-[2.875rem] tabular-nums tracking-[-0.02em]">
             {electrifiedShare.toFixed(1)}%
           </span>
-          <DeltaPill value={electrifiedShare - previousShare} />
+          <DeltaChip unit="pp" value={electrifiedShare - previousShare} />
         </div>
 
         <Typography.TextSm className="font-semibold text-muted">

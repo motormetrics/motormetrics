@@ -75,7 +75,7 @@ export function AppNav() {
               className={cn(
                 "h-auto gap-2 rounded-full px-6 py-3.5 font-semibold text-base transition-shadow",
                 isMoreActive
-                  ? "bg-accent/15 font-bold text-accent"
+                  ? "bg-accent/15 font-bold text-accent-strong"
                   : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
               )}
               variant="tertiary"

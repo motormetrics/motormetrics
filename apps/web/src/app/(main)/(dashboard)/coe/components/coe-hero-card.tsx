@@ -97,7 +97,7 @@ export async function CoeHeroCard({
             inversion the light cards need through CostTrendChip does not apply
             — and a status colour would be unreadable on the gradient anyway. */}
         <DeltaChip
-          ratio={changeRatio(premium, previousPremium)}
+          value={changeRatio(premium, previousPremium) * 100}
           tone="inverse"
         />
       </div>

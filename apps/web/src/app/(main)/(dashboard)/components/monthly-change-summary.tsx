@@ -29,7 +29,7 @@ export async function MonthlyChangeSummary() {
   return (
     <div className="flex flex-col gap-4 rounded-field bg-foreground p-7">
       <div className="flex items-center gap-3">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-chart-5/20 text-chart-5">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <CalendarDays className="size-5" />
         </span>
         <Typography.TextSm className="font-semibold text-accent-foreground/85">
@@ -54,7 +54,7 @@ export async function MonthlyChangeSummary() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-chart-5 tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
           <NumberValue
             maximumFractionDigits={1}
             signDisplay="exceptZero"
@@ -62,7 +62,7 @@ export async function MonthlyChangeSummary() {
             value={changeRatio}
           />
         </span>
-        <span className="flex items-center gap-2 rounded-full bg-chart-5/20 px-4 py-2 font-bold text-chart-5 text-sm">
+        <span className="flex items-center gap-2 rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}

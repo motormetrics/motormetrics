@@ -36,7 +36,7 @@ export const FAQ_SECTIONS: FAQSectionData[] = [
   {
     title: "Certificate of Entitlement (COE)",
     icon: Landmark,
-    iconColor: "text-accent",
+    iconColor: "text-accent-strong",
     items: [
       {
         question: "What is COE in Singapore?",
@@ -129,7 +129,7 @@ export const FAQ_SECTIONS: FAQSectionData[] = [
   {
     title: `Using ${SITE_TITLE}`,
     icon: BarChart3,
-    iconColor: "text-accent",
+    iconColor: "text-accent-strong",
     items: [
       {
         question: "How can I access historical data?",
@@ -154,7 +154,7 @@ export function FAQSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-accent uppercase tracking-widest">
+              <Typography.Label className="text-accent-strong uppercase tracking-widest">
                 Common Questions
               </Typography.Label>
               <Typography.H2 className="lg:text-4xl">
@@ -211,7 +211,7 @@ export function FAQSection() {
                 <Card className="border border-accent/20 bg-accent/5">
                   <Card.Content className="flex flex-row items-start gap-4">
                     <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent/10">
-                      <MessageCircleQuestion className="size-5 text-accent" />
+                      <MessageCircleQuestion className="size-5 text-accent-strong" />
                     </div>
                     <div className="flex flex-col gap-2">
                       <Typography.H4>Still Have Questions?</Typography.H4>

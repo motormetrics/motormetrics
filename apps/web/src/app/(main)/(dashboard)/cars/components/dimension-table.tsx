@@ -263,7 +263,7 @@ export function DimensionTable({
                     className={cn(
                       headerClass,
                       "cursor-pointer",
-                      isActive ? "text-accent" : "text-muted",
+                      isActive ? "text-accent-strong" : "text-muted",
                     )}
                     onClick={() => toggleSort(columnKey)}
                     type="button"
@@ -285,7 +285,7 @@ export function DimensionTable({
                     className={cn(
                       "inline-flex size-8 shrink-0 items-center justify-center rounded-full font-extrabold text-xs",
                       row.rank <= PODIUM
-                        ? "bg-accent/15 text-accent"
+                        ? "bg-accent/15 text-accent-strong"
                         : "bg-default text-muted",
                     )}
                   >

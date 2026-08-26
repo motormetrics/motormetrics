@@ -59,7 +59,7 @@ export function PremiumsChart({
             {category} · hover a column for the premium
           </Typography.TextSm>
         </div>
-        <span className="ml-auto whitespace-nowrap rounded-full bg-accent/15 px-3.5 py-[7px] font-bold text-[13px] text-accent">
+        <span className="ml-auto whitespace-nowrap rounded-full bg-accent/15 px-3.5 py-[7px] font-bold text-[13px] text-accent-strong">
           {periodLabel}
         </span>
       </div>
@@ -113,7 +113,7 @@ export function PremiumsChart({
                   isHovered && "brightness-[1.08]",
                 )}
                 style={{
-                  background: isLatest ? "var(--accent)" : "var(--chart-5)",
+                  background: isLatest ? "var(--accent)" : "var(--accent-soft)",
                   height: `${((column.premium - baseline) / span) * (100 - MIN_BAR_PERCENT) + MIN_BAR_PERCENT}%`,
                 }}
               />

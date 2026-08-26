@@ -23,7 +23,7 @@ export function MakeAvatar({
   return (
     <span
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/15 font-extrabold text-accent leading-none",
+        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/15 font-extrabold text-accent-strong leading-none",
         className,
       )}
       style={{

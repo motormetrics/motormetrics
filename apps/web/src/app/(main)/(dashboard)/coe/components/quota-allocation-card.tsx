@@ -80,7 +80,9 @@ export async function QuotaAllocationCard({
                   <span
                     className="block h-full rounded-full transition-[width]"
                     style={{
-                      background: isActive ? "var(--accent)" : "var(--chart-5)",
+                      background: isActive
+                        ? "var(--accent)"
+                        : "var(--accent-soft)",
                       width: `${(row.quota / largestQuota) * 100}%`,
                     }}
                   />

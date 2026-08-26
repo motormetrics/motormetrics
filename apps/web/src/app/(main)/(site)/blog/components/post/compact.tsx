@@ -21,7 +21,7 @@ export function Compact({ post }: CompactProps) {
     >
       {/* Content */}
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="line-clamp-1 font-medium text-sm transition-colors group-hover:text-accent">
+        <span className="line-clamp-1 font-medium text-sm transition-colors group-hover:text-accent-strong">
           {post.title}
         </span>
         <span className="text-muted text-xs">

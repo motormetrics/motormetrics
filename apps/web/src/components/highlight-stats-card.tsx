@@ -44,7 +44,7 @@ export function HighlightStatsCard({
           </div>
           <Link
             className={buttonVariants({
-              className: "bg-accent-foreground text-accent",
+              className: "bg-accent-foreground text-accent-strong",
               size: "sm",
               variant: "tertiary",
             })}

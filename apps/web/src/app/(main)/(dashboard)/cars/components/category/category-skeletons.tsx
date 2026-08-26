@@ -1,7 +1,7 @@
 import { Skeleton } from "@heroui/react";
 export function CategorySummaryCardSkeleton() {
   return (
-    <div className="col-span-12 flex flex-col gap-4 rounded-3xl border-2 border-accent bg-white p-6 lg:col-span-4">
+    <div className="col-span-12 flex flex-col gap-4 rounded-3xl border-2 border-accent bg-surface p-6 lg:col-span-4">
       <div className="flex items-center justify-between">
         <Skeleton className="size-12 rounded-2xl" />
         <Skeleton className="size-10 rounded-full" />
@@ -17,7 +17,7 @@ export function CategorySummaryCardSkeleton() {
 
 export function CategoryInsightsCardSkeleton() {
   return (
-    <div className="col-span-12 flex flex-col gap-6 rounded-3xl border border-border bg-white p-6 lg:col-span-8">
+    <div className="col-span-12 flex flex-col gap-6 rounded-3xl border border-border bg-surface p-6 lg:col-span-8">
       <div className="flex items-center justify-between">
         <Skeleton className="h-6 w-36 rounded" />
         <Skeleton className="h-6 w-24 rounded-full" />

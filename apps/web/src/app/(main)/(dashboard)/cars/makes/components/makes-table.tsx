@@ -185,7 +185,7 @@ export function MakesTable({
             "font-bold text-[13px] uppercase tracking-[0.06em]",
             column.align === "right" ? "text-right" : "text-left",
             column.label === "Share" && "hidden sm:block",
-            isActive ? "text-accent" : "text-muted",
+            isActive ? "text-accent-strong" : "text-muted",
           );
 
           if (column.key === null) {
@@ -228,7 +228,7 @@ export function MakesTable({
                 className={cn(
                   "inline-flex size-7.5 shrink-0 items-center justify-center rounded-full font-extrabold text-[13px]",
                   row.rank <= 3
-                    ? "bg-accent/15 text-accent"
+                    ? "bg-accent/15 text-accent-strong"
                     : "bg-default text-muted",
                 )}
               >
@@ -275,10 +275,7 @@ export function MakesTable({
                 —
               </span>
             ) : (
-              <DeltaChip
-                className="justify-self-end"
-                ratio={row.yoyChange / 100}
-              />
+              <DeltaChip className="justify-self-end" value={row.yoyChange} />
             )}
 
             <ChevronRight

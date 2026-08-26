@@ -38,7 +38,7 @@ export function ComparisonSummaryCard({ data }: ComparisonSummaryCardProps) {
                   <div>
                     <div className="text-muted text-sm">Latest Premium</div>
                     <KPI.Value
-                      className="text-2xl text-accent"
+                      className="text-2xl text-accent-strong"
                       currency="SGD"
                       locale="en-SG"
                       maximumFractionDigits={0}

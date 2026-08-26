@@ -47,7 +47,7 @@ export async function LeadingMakeCard({
           />
         </span>
         {leader.yoyChange === null ? null : (
-          <DeltaChip ratio={leader.yoyChange / 100} tone="inverse" />
+          <DeltaChip tone="inverse" value={leader.yoyChange} />
         )}
       </div>
 
@@ -94,7 +94,7 @@ export async function LeadingMakeCard({
             Models, fuel mix and monthly trend
           </span>
         </span>
-        <span className="ml-auto flex size-11 shrink-0 items-center justify-center rounded-full bg-accent-foreground text-accent">
+        <span className="ml-auto flex size-11 shrink-0 items-center justify-center rounded-full bg-accent-foreground text-accent-strong">
           <ArrowUpRight className="size-5" />
         </span>
       </Link>

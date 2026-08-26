@@ -16,7 +16,7 @@ const Page = () => (
         <Card className="h-full transition-colors hover:bg-surface/50">
           <Card.Header>
             <div className="flex items-center gap-2">
-              <MessageSquare className="size-5 text-accent" />
+              <MessageSquare className="size-5 text-accent-strong" />
               <Card.Title className="text-lg">Announcements</Card.Title>
             </div>
             <Card.Description>
@@ -36,7 +36,7 @@ const Page = () => (
         <Card className="h-full transition-colors hover:bg-surface/50">
           <Card.Header>
             <div className="flex items-center gap-2">
-              <FileText className="size-5 text-accent" />
+              <FileText className="size-5 text-accent-strong" />
               <Card.Title className="text-lg">Blog Posts</Card.Title>
             </div>
             <Card.Description>

@@ -53,7 +53,7 @@ export function TrendsChart({ data }: TrendsChartProps) {
           <AreaChart.Grid
             vertical={false}
             strokeDasharray="3 3"
-            className="stroke-border"
+            className="stroke-chart-grid"
           />
           <AreaChart.XAxis
             dataKey="month"

@@ -74,7 +74,7 @@ export async function RegistrationsHero({
             value={current.total}
           />
         </span>
-        <DeltaChip ratio={changeRatio} tone="inverse" />
+        <DeltaChip tone="inverse" value={changeRatio * 100} />
       </div>
 
       <Typography.Text className="font-semibold text-accent-foreground/85">
@@ -135,7 +135,7 @@ export async function RegistrationsHero({
               aria-label={`View registrations for ${leader.name}`}
               className={buttonVariants({
                 className:
-                  "ml-auto size-12 shrink-0 rounded-full bg-accent-foreground text-accent",
+                  "ml-auto size-12 shrink-0 rounded-full bg-accent-foreground text-accent-strong",
                 isIconOnly: true,
                 variant: "tertiary",
               })}

@@ -29,7 +29,7 @@ export function MaintenanceNotice() {
         {/* Hero Section */}
         <AnimatedSection className="flex flex-col items-center gap-4 text-center">
           <AnimatedIconWrapper>
-            <Settings className="size-20 text-accent" />
+            <Settings className="size-20 text-accent-strong" />
           </AnimatedIconWrapper>
           <AnimatedText>
             <Typography.H1>Pit Stop in ProgressBar</Typography.H1>
@@ -50,7 +50,7 @@ export function MaintenanceNotice() {
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Clock className="size-5 text-accent" />
+                    <Clock className="size-5 text-accent-strong" />
                     <Typography.Text>Estimated Completion</Typography.Text>
                   </div>
                   <Chip variant="primary" color="accent" size="lg">
@@ -90,7 +90,7 @@ export function MaintenanceNotice() {
             <AnimatedCard>
               <Card>
                 <Card.Content className="flex flex-row items-start gap-4">
-                  <Zap className="mt-1 size-6 flex-shrink-0 text-accent" />
+                  <Zap className="mt-1 size-6 flex-shrink-0 text-accent-strong" />
                   <div>
                     <Typography.H3>Performance Boost</Typography.H3>
                     <Typography.TextSm>
@@ -104,7 +104,7 @@ export function MaintenanceNotice() {
             <AnimatedCard>
               <Card>
                 <Card.Content className="flex flex-row items-start gap-4">
-                  <Shield className="mt-1 size-6 flex-shrink-0 text-accent" />
+                  <Shield className="mt-1 size-6 flex-shrink-0 text-accent-strong" />
                   <div>
                     <Typography.H3>Security Updates</Typography.H3>
                     <Typography.TextSm>
@@ -118,7 +118,7 @@ export function MaintenanceNotice() {
             <AnimatedCard>
               <Card>
                 <Card.Content className="flex flex-row items-start gap-4">
-                  <TrendingUp className="mt-1 size-6 flex-shrink-0 text-accent" />
+                  <TrendingUp className="mt-1 size-6 flex-shrink-0 text-accent-strong" />
                   <div>
                     <Typography.H3>New Features</Typography.H3>
                     <Typography.TextSm>
@@ -131,7 +131,7 @@ export function MaintenanceNotice() {
             <AnimatedCard>
               <Card>
                 <Card.Content className="flex flex-row items-start gap-4">
-                  <Wrench className="mt-1 size-6 flex-shrink-0 text-accent" />
+                  <Wrench className="mt-1 size-6 flex-shrink-0 text-accent-strong" />
                   <div>
                     <Typography.H3>Bug Fixes</Typography.H3>
                     <Typography.TextSm>
@@ -158,7 +158,7 @@ export function MaintenanceNotice() {
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="mailto:support@motormetrics.app"
-              className="flex items-center gap-2 font-medium text-accent text-sm"
+              className="flex items-center gap-2 font-medium text-accent-strong text-sm"
             >
               <Mail className="size-4" />
               support@motormetrics.app
@@ -166,7 +166,7 @@ export function MaintenanceNotice() {
             <span className="hidden text-muted sm:inline">|</span>
             <Link
               href={SOCIAL_URLS.twitter}
-              className="flex items-center gap-2 font-medium text-accent text-sm"
+              className="flex items-center gap-2 font-medium text-accent-strong text-sm"
               target="_blank"
               rel="noreferrer"
             >

@@ -120,10 +120,12 @@ export async function RegistrationTrend({
             />
           </span>
           <DeltaChip
-            ratio={changeRatio(
-              value,
-              previous ? powertrainTotal(previous, powertrain) : 0,
-            )}
+            value={
+              changeRatio(
+                value,
+                previous ? powertrainTotal(previous, powertrain) : 0,
+              ) * 100
+            }
           />
         </div>
         <Typography.Text className="font-semibold text-muted">

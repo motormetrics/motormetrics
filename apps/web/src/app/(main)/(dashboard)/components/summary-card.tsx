@@ -60,7 +60,7 @@ export async function SummaryCard() {
             value={current.total}
           />
         </span>
-        <DeltaChip ratio={changeRatio} tone="inverse" />
+        <DeltaChip tone="inverse" value={changeRatio * 100} />
       </div>
 
       <Typography.TextSm className="font-semibold text-accent-foreground/85">

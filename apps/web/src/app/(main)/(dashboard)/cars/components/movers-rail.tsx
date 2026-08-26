@@ -63,7 +63,7 @@ export async function MoversRail({
                 >
                   <span
                     aria-hidden
-                    className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent text-lg"
+                    className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent-strong text-lg"
                   >
                     {mover.name.charAt(0)}
                   </span>
@@ -80,10 +80,7 @@ export async function MoversRail({
                       registered
                     </span>
                   </span>
-                  <DeltaChip
-                    className="ml-auto"
-                    ratio={(mover.yoyChange ?? 0) / 100}
-                  />
+                  <DeltaChip className="ml-auto" value={mover.yoyChange ?? 0} />
                 </Link>
               </li>
             ))}

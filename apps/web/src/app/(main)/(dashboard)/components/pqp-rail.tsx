@@ -62,7 +62,7 @@ export async function PqpRail() {
             className="flex items-center gap-3 rounded-field bg-surface p-4"
             key={row.category}
           >
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent text-lg">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent-strong text-lg">
               {row.letter}
             </span>
             <div className="flex min-w-0 flex-col gap-0.5">

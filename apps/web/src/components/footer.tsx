@@ -17,7 +17,7 @@ export function Footer() {
       >
         <TrendingUp className="size-5" strokeWidth={2.5} />
         <span className="font-extrabold text-base">
-          Motor<span className="text-accent">Metrics</span>
+          Motor<span className="text-accent-strong">Metrics</span>
         </span>
       </Link>
 
@@ -26,7 +26,7 @@ export function Footer() {
           {FOOTER_NAV_ITEMS.map(({ href, label }) => (
             <li key={href}>
               <Link
-                className="font-semibold text-muted text-sm transition-colors hover:text-accent"
+                className="font-semibold text-muted text-sm transition-colors hover:text-accent-strong"
                 href={href}
               >
                 {label}
@@ -41,7 +41,7 @@ export function Footer() {
           <li key={title}>
             <Link
               aria-label={title}
-              className="block text-muted transition-colors hover:text-accent"
+              className="block text-muted transition-colors hover:text-accent-strong"
               href={url}
               rel="me noreferrer"
               target="_blank"
@@ -55,7 +55,7 @@ export function Footer() {
       <Typography.Caption className="ml-auto font-medium text-muted">
         © {COPYRIGHT_YEAR} {SITE_TITLE} · Data provided by{" "}
         <Link
-          className="transition-colors hover:text-accent"
+          className="transition-colors hover:text-accent-strong"
           href="https://datamall.lta.gov.sg"
           rel="noopener noreferrer"
           target="_blank"

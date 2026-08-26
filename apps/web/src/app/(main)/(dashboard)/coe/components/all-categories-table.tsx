@@ -104,7 +104,7 @@ export function AllCategoriesTable({
                       "flex size-[38px] shrink-0 items-center justify-center rounded-full font-extrabold text-[15px]",
                       isActive
                         ? "bg-accent text-accent-foreground"
-                        : "bg-accent/15 text-accent",
+                        : "bg-accent/15 text-accent-strong",
                     )}
                   >
                     {row.categoryKey}

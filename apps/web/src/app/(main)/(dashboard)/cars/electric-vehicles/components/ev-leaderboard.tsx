@@ -39,7 +39,7 @@ export async function EvLeaderboard({ month }: { month: string }) {
           return (
             <li className="flex flex-col gap-1.5" key={item.make}>
               <div className="flex items-center gap-2.5">
-                <span className="flex size-[26px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/15 font-extrabold text-[11px] text-accent">
+                <span className="flex size-[26px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/15 font-extrabold text-[11px] text-accent-strong">
                   {logo?.url ? (
                     <Image
                       alt=""

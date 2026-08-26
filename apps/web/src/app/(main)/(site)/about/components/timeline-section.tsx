@@ -59,7 +59,7 @@ const TimelineItemComponent = ({ item, index }: TimelineItemComponentProps) => {
           className={cn(
             "relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 bg-surface font-medium text-sm transition-colors",
             item.highlight
-              ? "border-accent text-accent"
+              ? "border-accent text-accent-strong"
               : "border-border text-muted group-hover:border-accent/50",
           )}
         >
@@ -75,7 +75,7 @@ const TimelineItemComponent = ({ item, index }: TimelineItemComponentProps) => {
         <Typography.H3
           className={cn(
             "text-lg",
-            item.highlight ? "text-accent" : "text-foreground",
+            item.highlight ? "text-accent-strong" : "text-foreground",
           )}
         >
           {item.title}
@@ -101,7 +101,7 @@ export function TimelineSection() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            <Typography.Label className="text-accent uppercase tracking-widest">
+            <Typography.Label className="text-accent-strong uppercase tracking-widest">
               Our Journey
             </Typography.Label>
             <Typography.H2 className="lg:text-4xl">

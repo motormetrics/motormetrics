@@ -41,7 +41,7 @@ export function GlossarySection() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Typography.Label className="text-accent-strong uppercase tracking-widest">
             Terminology
           </Typography.Label>
           <Typography.H2 className="lg:text-4xl">
@@ -79,7 +79,7 @@ export function GlossarySection() {
                         <div className="flex w-full items-center justify-between">
                           <Typography.H4>{term}</Typography.H4>
                           {hasGuide && (
-                            <ArrowRight className="size-4 text-accent" />
+                            <ArrowRight className="size-4 text-accent-strong" />
                           )}
                         </div>
                       </Card.Header>

@@ -21,7 +21,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
       <div className="flex flex-col gap-12">
         {/* Section header */}
         <div className="flex flex-col gap-4">
-          <Typography.Label className="text-accent uppercase tracking-widest">
+          <Typography.Label className="text-accent-strong uppercase tracking-widest">
             Traffic Trend
           </Typography.Label>
           <Typography.H2 className="max-w-lg lg:text-4xl">
@@ -59,7 +59,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
               <AreaChart.Grid
                 vertical={false}
                 strokeDasharray="3 3"
-                className="stroke-border"
+                className="stroke-chart-grid"
               />
               <AreaChart.XAxis
                 dataKey="date"

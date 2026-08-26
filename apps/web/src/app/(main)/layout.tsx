@@ -9,13 +9,7 @@ export default function MainLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (
-    // The Overview v2 skin is token overrides only (see globals.css), so every
-    // route inside this group picks it up through the standard utilities.
-    // Remove data-skin to put the whole site back on the global navy theme.
-    <div
-      className="min-h-screen bg-background text-foreground"
-      data-skin="overview-v2"
-    >
+    <div className="min-h-screen bg-background text-foreground">
       <NotificationPrompt />
       <Announcement />
       <Banner />

@@ -56,7 +56,7 @@ export async function TopMakesRail({ month }: { month: string }) {
               className="flex items-center gap-3.5 rounded-field bg-surface px-4 py-3.5 text-foreground transition-shadow hover:shadow-surface"
               href={`/cars/makes/${slugify(item.make)}`}
             >
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent text-lg">
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent-strong text-lg">
                 {index + 1}
               </span>
               <span className="flex min-w-0 flex-col gap-px">

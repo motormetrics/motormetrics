@@ -44,7 +44,7 @@ export function CategoryTabs({ selected }: { selected: CategoryKey }) {
             className={cn(
               "size-[38px] shrink-0 rounded-full font-extrabold text-[15px] transition-colors",
               isActive
-                ? "bg-accent-foreground text-accent"
+                ? "bg-accent-foreground text-accent-strong"
                 : "bg-accent-foreground/20 text-accent-foreground hover:bg-accent-foreground/30",
             )}
             key={key}

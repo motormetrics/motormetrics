@@ -36,7 +36,7 @@ export async function EvMomentum() {
   return (
     <InkPanel>
       <div className="flex items-center gap-3">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-chart-5/20 text-chart-5">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <Zap className="size-5" />
         </span>
         <Typography.TextSm className="font-semibold text-accent-foreground/85">
@@ -59,10 +59,10 @@ export async function EvMomentum() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-chart-5 tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
           {summary.evSharePercent.toFixed(1)}%
         </span>
-        <span className="rounded-full bg-chart-5/20 px-4 py-2 font-bold text-chart-5 text-sm tabular-nums">
+        <span className="rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm tabular-nums">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
@@ -82,11 +82,11 @@ export async function EvMomentum() {
           viewBox="0 0 340 84"
         >
           <title>{`Electric registrations over the last ${series.length} months`}</title>
-          <path d={spark.area} fill="var(--chart-5)" opacity={0.14} />
+          <path d={spark.area} fill="var(--accent-on-dark)" opacity={0.14} />
           <path
             d={spark.line}
             fill="none"
-            stroke="var(--chart-5)"
+            stroke="var(--accent-on-dark)"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={3}
@@ -96,7 +96,7 @@ export async function EvMomentum() {
             cy={spark.lastY}
             fill="var(--foreground)"
             r={6}
-            stroke="var(--chart-5)"
+            stroke="var(--accent-on-dark)"
             strokeWidth={3}
           />
         </svg>

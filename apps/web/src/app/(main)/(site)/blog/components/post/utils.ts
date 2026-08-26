@@ -14,7 +14,7 @@ export const categoryConfig: Record<
 > = {
   coe: {
     label: "COE",
-    className: "text-accent",
+    className: "text-accent-strong",
     color: "accent",
   },
   cars: {

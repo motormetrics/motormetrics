@@ -53,7 +53,7 @@ const CategoryRow = ({
       </div>
       <div className="flex items-center gap-2">
         <span
-          className={`font-semibold text-accent ${isPrimary ? "text-lg" : "text-sm"}`}
+          className={`font-semibold text-accent-strong ${isPrimary ? "text-lg" : "text-sm"}`}
         >
           <NumberValue
             currency="SGD"

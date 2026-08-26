@@ -182,7 +182,7 @@ async function TypeDetailContent({
           : `No ${displayName} vehicle registrations were recorded in ${formattedMonth}.`}{" "}
         <Link
           href={`/cars/${config.category}`}
-          className="text-accent hover:underline"
+          className="text-accent-strong hover:underline"
         >
           View all{" "}
           {config.category === "fuel-types" ? "fuel types" : "vehicle types"}{" "}

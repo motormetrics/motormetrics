@@ -17,7 +17,7 @@ export async function ElectricOnlyMakes() {
   return (
     <InkPanel>
       <div className="flex items-center gap-2.5">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-chart-5/20 text-chart-5">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <Zap className="size-4.5" />
         </span>
         <Typography.TextSm className="font-semibold text-accent-foreground/85 text-base">
@@ -25,7 +25,7 @@ export async function ElectricOnlyMakes() {
         </Typography.TextSm>
       </div>
 
-      <span className="font-extrabold text-5xl text-chart-5 tabular-nums tracking-[-0.03em]">
+      <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
         {summary.sharePercent.toFixed(1)}%
       </span>
 
@@ -57,8 +57,8 @@ export async function ElectricOnlyMakes() {
                 style={{
                   backgroundColor:
                     index === 0
-                      ? "var(--chart-5)"
-                      : "color-mix(in oklab, var(--chart-5) 45%, transparent)",
+                      ? "var(--accent-on-dark)"
+                      : "color-mix(in oklab, var(--accent-on-dark) 45%, transparent)",
                   width: `${Math.max(2, (make.count / leadCount) * 100).toFixed(1)}%`,
                 }}
               />

@@ -36,7 +36,7 @@ export async function BiddingCalendarPanel() {
   return (
     <InkPanel>
       <div className="flex items-center gap-2.5">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-chart-5/20 text-chart-5">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <CalendarDays className="size-[19px]" />
         </span>
         <Typography.TextSm className="font-semibold text-accent-foreground/85">
@@ -44,7 +44,7 @@ export async function BiddingCalendarPanel() {
         </Typography.TextSm>
       </div>
 
-      <span className="font-extrabold text-[2.875rem] text-chart-5 leading-tight tracking-[-0.03em]">
+      <span className="font-extrabold text-[2.875rem] text-accent-on-dark leading-tight tracking-[-0.03em]">
         {formatMonth(upcoming.month)}
       </span>
 

@@ -36,7 +36,7 @@ export function CategoryHeroCard({
         </KPI.Header>
         <KPI.Content>
           <KPI.Value
-            className="text-3xl text-accent"
+            className="text-3xl text-accent-strong"
             locale="en-SG"
             maximumFractionDigits={0}
             value={count}

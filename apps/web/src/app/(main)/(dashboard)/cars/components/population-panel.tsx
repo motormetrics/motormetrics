@@ -53,7 +53,7 @@ export async function PopulationPanel() {
   return (
     <InkPanel>
       <div className="flex items-center gap-2.5">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-chart-5/20 text-chart-5">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <Car aria-hidden className="size-5" />
         </span>
         <Typography.TextSm className="font-semibold text-accent-foreground/85">
@@ -61,7 +61,7 @@ export async function PopulationPanel() {
         </Typography.TextSm>
       </div>
 
-      <span className="font-extrabold text-5xl text-chart-5 tabular-nums tracking-[-0.03em]">
+      <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
         <NumberValue
           locale="en-SG"
           maximumFractionDigits={0}
@@ -98,7 +98,7 @@ export async function PopulationPanel() {
             </div>
             <span className="block h-2 overflow-hidden rounded-full bg-accent-foreground/10">
               <span
-                className="block h-full rounded-full bg-chart-5"
+                className="block h-full rounded-full bg-accent-on-dark"
                 style={{
                   opacity: row.label === "Electric" ? 1 : 0.45,
                   width: `${((row.total / largestTotal) * 100).toFixed(1)}%`,

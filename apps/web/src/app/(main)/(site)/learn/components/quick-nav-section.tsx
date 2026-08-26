@@ -16,7 +16,7 @@ const navItems = [
     description: "Common questions about COE, PARF, and car registration",
     href: "#faq",
     icon: HelpCircle,
-    iconColor: "text-accent",
+    iconColor: "text-accent-strong",
     containerBg: "bg-accent/10",
     hoverBorder: "hover:border-accent/30",
   },

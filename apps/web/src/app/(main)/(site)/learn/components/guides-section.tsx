@@ -73,7 +73,7 @@ export function GuidesSection() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <Typography.Label className="text-accent uppercase tracking-widest">
+              <Typography.Label className="text-accent-strong uppercase tracking-widest">
                 Learn
               </Typography.Label>
               <Typography.H2 className="lg:text-4xl">

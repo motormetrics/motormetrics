@@ -35,14 +35,14 @@ export function CreatorSection() {
             className="mx-auto flex max-w-2xl flex-col items-center gap-8 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Label className="text-accent uppercase tracking-widest">
+            <Typography.Label className="text-accent-strong uppercase tracking-widest">
               Behind the Data
             </Typography.Label>
 
             <div className="flex flex-col gap-6">
               <Typography.H2 className="text-foreground">
                 Built with{" "}
-                <Heart className="inline size-6 fill-red-500 text-red-500" /> in
+                <Heart className="inline size-6 fill-danger text-danger" /> in
                 Singapore
               </Typography.H2>
               <Typography.TextLg className="text-muted">
@@ -51,7 +51,7 @@ export function CreatorSection() {
                   href="https://ruchern.dev"
                   target="_blank"
                   rel="noreferrer"
-                  className="font-medium text-accent transition-colors hover:text-accent/80"
+                  className="font-medium text-accent-strong transition-colors hover:text-accent-strong/80"
                 >
                   Ru Chern
                 </Link>
