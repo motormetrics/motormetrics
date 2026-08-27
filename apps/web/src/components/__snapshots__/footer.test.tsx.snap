@@ -66,14 +66,6 @@ exports[`Footer > should render the shell footer with navigation and version inf
         <li>
           <a
             class="font-semibold text-muted text-sm transition-colors hover:text-accent-strong"
-            href="/advertise"
-          >
-            Advertise
-          </a>
-        </li>
-        <li>
-          <a
-            class="font-semibold text-muted text-sm transition-colors hover:text-accent-strong"
             href="/legal/privacy-policy"
           >
             Privacy
