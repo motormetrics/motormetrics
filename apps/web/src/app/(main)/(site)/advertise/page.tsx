@@ -1,18 +1,17 @@
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
-import { advertiseFlags, advertisePage } from "@web/flags";
+import { advertisePage } from "@web/flags";
 import { getDailyTraffic, getTrafficStats } from "@web/lib/posthog";
-import { generatePermutations } from "flags/next";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { WebPage, WithContext } from "schema-dts";
-import { CtaSection } from "../components/cta-section";
-import { HeroSection } from "../components/hero-section";
-import { PlacementsSection } from "../components/placements-section";
-import { PricingSection } from "../components/pricing-section";
-import { StatsSection } from "../components/stats-section";
-import { TrafficChartSection } from "../components/traffic-chart-section";
+import { CtaSection } from "./components/cta-section";
+import { HeroSection } from "./components/hero-section";
+import { PlacementsSection } from "./components/placements-section";
+import { PricingSection } from "./components/pricing-section";
+import { StatsSection } from "./components/stats-section";
+import { TrafficChartSection } from "./components/traffic-chart-section";
 
 const title = "Advertise";
 const description = `Reach Singapore's most engaged car enthusiasts. See our traffic stats, ad placements, and pricing to promote your product on ${SITE_TITLE}.`;
@@ -42,22 +41,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-// `proxy.ts` rewrites /advertise to /advertise/<code>, where <code> carries the
-// precomputed flag values. Prerendering every permutation keeps the page static.
-export async function generateStaticParams() {
-  const codes = await generatePermutations(advertiseFlags);
+// The flag is read per request, so the route opts out of the static shell.
+export const instant = false;
 
-  return codes.map((code) => ({ code }));
-}
-
-export default async function AdvertisePage({
-  params,
-}: {
-  params: Promise<{ code: string }>;
-}) {
-  const { code } = await params;
-
-  if (!(await advertisePage(code, advertiseFlags))) {
+export default async function AdvertisePage() {
+  if (!(await advertisePage())) {
     notFound();
   }
   const [stats, dailyTraffic] = await Promise.all([

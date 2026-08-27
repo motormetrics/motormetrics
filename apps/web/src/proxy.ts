@@ -5,8 +5,6 @@ import { AgentAnalytics } from "@upstash/agent-analytics";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { auth } from "@web/app/admin/lib/auth";
-import { advertiseFlags } from "@web/flags";
-import { precompute } from "flags/next";
 import { headers } from "next/headers";
 import {
   type NextFetchEvent,
@@ -141,12 +139,6 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
   //     frame-src 'self' 'strict-dynamic';
   // `;
 
-  // /advertise is gated by a feature flag. Resolving it here and encoding the
-  // result into the rewritten path keeps the page statically prerendered
-  // instead of rendering it per request.
-  const advertiseCode =
-    pathname === "/advertise" ? await precompute(advertiseFlags) : null;
-
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-nonce", nonce);
   requestHeaders.set(
@@ -161,21 +153,12 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
 
   requestHeaders.set("X-Robots-Tag", "all");
 
-  const responseInit = {
+  return NextResponse.next({
     ...(!process.env.VERCEL && { headers: requestHeaders }),
     request: {
       headers: requestHeaders,
     },
-  };
-
-  if (advertiseCode) {
-    return NextResponse.rewrite(
-      new URL(`/advertise/${advertiseCode}`, request.url),
-      responseInit,
-    );
-  }
-
-  return NextResponse.next(responseInit);
+  });
 }
 
 export const config = {
