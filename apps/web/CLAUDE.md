@@ -173,6 +173,9 @@ Web-specific variables (see root `CLAUDE.md` for the cross-cutting ones):
 
 - `BLOB_READ_WRITE_TOKEN`: Vercel Blob storage for car logos (via `@motormetrics/logos`)
 - `NEXT_PUBLIC_FEATURE_FLAG_UNRELEASED`: feature flag for unreleased features
+- `FLAGS` / `FLAGS_SECRET`: Vercel Flags server SDK key and signing secret, used by the Flags SDK
+  (`src/flags.ts`). Both are set per environment on Vercel; run `vercel env pull` to sync locally.
+  Without them, flags fall back to their `defaultValue`
 - `VERCEL_ENV`: social media redirects and production-only features activate only when this is `"production"`
 - `NEXT_PUBLIC_VERCEL_URL`: client-side deployment URL, without the `https://` protocol. `SITE_URL` falls back to it
   when `NEXT_PUBLIC_SITE_URL` is unset
