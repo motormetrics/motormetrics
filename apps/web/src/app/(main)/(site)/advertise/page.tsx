@@ -45,7 +45,8 @@ export const metadata: Metadata = {
 export const instant = false;
 
 export default async function AdvertisePage() {
-  if (!(await advertisePage())) {
+  const showAdvertisePage = await advertisePage();
+  if (!showAdvertisePage) {
     notFound();
   }
   const [stats, dailyTraffic] = await Promise.all([
