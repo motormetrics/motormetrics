@@ -1,3 +1,41 @@
+## [5.2.0](https://github.com/motormetrics/motormetrics/compare/v5.1.0...v5.2.0) (2026-08-27)
+
+### Features
+
+* **web:** add breadcrumbs and a share pill to the page head ([65e7e1a](https://github.com/motormetrics/motormetrics/commit/65e7e1afa20b899fd948cf04a782f3d46e7cbe30))
+* **web:** collapse the all-makes table to twenty rows ([1dcd7d1](https://github.com/motormetrics/motormetrics/commit/1dcd7d184347589439848f902f0d330670772259))
+* **web:** collapse the cars dimension table to ten rows ([3ad7347](https://github.com/motormetrics/motormetrics/commit/3ad7347024f1f1048fa6a2417db28a0f99065d4b))
+* **web:** drop advertise from the footer snapshot ([8833c0b](https://github.com/motormetrics/motormetrics/commit/8833c0bd3b637145201539f40f497c9fc3e1e84a))
+* **web:** drop the advertise flag options list ([bca5a76](https://github.com/motormetrics/motormetrics/commit/bca5a760a648d06eaf8f0fc7f9c9a231c469cbcd))
+* **web:** drop the advertise flag precompute ([da6dede](https://github.com/motormetrics/motormetrics/commit/da6dede69f346da3cee6ca52122c8d464dc50d41))
+* **web:** drop the amber legend when nothing declined ([df87c8c](https://github.com/motormetrics/motormetrics/commit/df87c8c6615c027c69afc27fd68ac89a418c2a6a))
+* **web:** extract shared v2 overview primitives ([b73a115](https://github.com/motormetrics/motormetrics/commit/b73a11506a1f9bad0d4f586aea242bedc9f598ef))
+* **web:** gate the advertise page behind Vercel Flags ([cc4d03c](https://github.com/motormetrics/motormetrics/commit/cc4d03c5afff8a56882ab4aac1fc290779a41fb7))
+* **web:** keep the advertise page static behind its flag ([9b6e89a](https://github.com/motormetrics/motormetrics/commit/9b6e89ad9abdec0b430556293e15341cb6e84296))
+* **web:** meet AA contrast on the v2 text greys ([5b4101e](https://github.com/motormetrics/motormetrics/commit/5b4101e02a7bff6d0663573f3d711ed47d6adf92))
+* **web:** name the advertise flag result ([e1bcf1c](https://github.com/motormetrics/motormetrics/commit/e1bcf1c23c43e19c0ca8ba890ce32b00b1899216))
+* **web:** open Cars and COE pills as dropdown menus ([2cc589c](https://github.com/motormetrics/motormetrics/commit/2cc589ce7a3613d75003d818b369e8a78817ef44))
+* **web:** rebuild cars overview on the v2 comp ([833075d](https://github.com/motormetrics/motormetrics/commit/833075dc5f0c7311cc0637f49e6704deda6a05cb))
+* **web:** rebuild coe overview on the v2 comp ([c1417db](https://github.com/motormetrics/motormetrics/commit/c1417dbe75688a1520f5884430e519bb5619379f))
+* **web:** rebuild dashboard overview on the v2 comp ([b164d8a](https://github.com/motormetrics/motormetrics/commit/b164d8a5f8b7788e2fc3e40bc616ecca84e478b5))
+* **web:** rebuild electric vehicles on the v2 comp ([4702c36](https://github.com/motormetrics/motormetrics/commit/4702c364c461ec6794b28012fe20b3ed95d526a8))
+* **web:** rebuild makes overview on the v2 comp ([c06f9cc](https://github.com/motormetrics/motormetrics/commit/c06f9cc968b390af4f84fc6bb72c7a1af4aac5d9))
+* **web:** rebuild nav dropdowns on the MMNav comp ([0b7bd53](https://github.com/motormetrics/motormetrics/commit/0b7bd539348beb58a49c0be562a2d52ed36206df))
+* **web:** send the cars table tail to its own page ([782c227](https://github.com/motormetrics/motormetrics/commit/782c2271f6148aab20f134919ea0b8cde02fcef2))
+* **web:** stream the makes range tabs after prerender ([9139c8d](https://github.com/motormetrics/motormetrics/commit/9139c8d1de65ce0705d782fa6a38429e35528221))
+* **web:** use design shell for all main routes ([9556f94](https://github.com/motormetrics/motormetrics/commit/9556f942c28bc1931abb48f553e3a6482172195a))
+
+### Bug Fixes
+
+* **web:** compare like periods in make registration stats ([e6cf290](https://github.com/motormetrics/motormetrics/commit/e6cf2907fd139141607b3bbc8afc8a725346fd23))
+* **web:** derive the footer copyright year ([7f88097](https://github.com/motormetrics/motormetrics/commit/7f880976b9ae2f7e4d08a359063abc7939c36636))
+* **web:** match HeroUI theme variable names ([e786cda](https://github.com/motormetrics/motormetrics/commit/e786cda6865afe252b419bc61e2972b01af555c6))
+* **web:** match the inverse delta chip to the comp ([2845de4](https://github.com/motormetrics/motormetrics/commit/2845de447b460bd524605e1a90bb9442ef135f17))
+* **web:** navigate with next/link instead of HeroUI Link ([4bd3bb9](https://github.com/motormetrics/motormetrics/commit/4bd3bb904c604de42e43f5b38c5a68f096ce8056))
+* **web:** rank makes movers within the top twenty ([88beb90](https://github.com/motormetrics/motormetrics/commit/88beb905f89d9d54c6614fb8eb4da643db688b2e))
+* **web:** share EV makes against every registration ([918c7f5](https://github.com/motormetrics/motormetrics/commit/918c7f579b93fecf7fb98b49281066163190d9a3))
+* **web:** use the soft trend chip variant ([4eb1983](https://github.com/motormetrics/motormetrics/commit/4eb1983fd15ff3c1c3a55bb4dd85264fc36abf02))
+
 ## [5.1.0](https://github.com/motormetrics/motormetrics/compare/v5.0.0...v5.1.0) (2026-08-24)
 
 ### Features
