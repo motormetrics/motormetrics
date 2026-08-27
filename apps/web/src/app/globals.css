@@ -20,7 +20,6 @@
      --success-foreground  -> --success-soft-foreground   (see "Status" below)
      --warning-foreground  -> --warning-soft-foreground
      --radius-sm/lg/xl     -> the rounded-* ladder        (see the @theme note)
-     --scrollbar           -> --scrollbar-thumb     (--scrollbar is legacy)
 
    Everything here sits on :root so that HeroUI's *calculated* tier derives
    from these values. In 3.0.4 that tier is emitted on :root as
@@ -53,22 +52,36 @@
     --surface-foreground: var(--foreground);
     --surface-secondary: #efece3; /* warm sand — rails, wells */
     --surface-secondary-foreground: var(--foreground);
+    /* Third tier. HeroUI component CSS reads this directly, so leaving it out
+       left those parts on HeroUI's cool grey default against the warm ramp.
+       The step matches HeroUI's own secondary -> tertiary delta (-0.0151 L). */
+    --surface-tertiary: #eae7de;
+    --surface-tertiary-foreground: var(--foreground);
     --overlay: var(--white);
     --overlay-foreground: var(--foreground);
     --ink-surface: #232a2e; /* dark feature panel */
     --ink-surface-foreground: var(--white);
 
-    /* Neutrals. The three text greys are tuned to clear WCAG AA (4.5:1)
-       against --surface-secondary #efece3, the darkest light surface and so
-       the binding constraint; clearing it also clears --background and
-       --surface. Ramp: 4.64 -> 6.00 -> 8.08 -> 12.33 (--foreground). */
+    /* Segmented controls (Tabs). Also read directly by HeroUI component CSS.
+       The raised segment is the plain surface on the cream canvas. */
+    --segment: var(--surface);
+    --segment-foreground: var(--foreground);
+
+    /* Neutrals. The three text greys were tuned to clear WCAG AA (4.5:1)
+       against --surface-secondary #efece3; ratios below are measured there.
+       Adding --surface-tertiary #eae7de moved the binding constraint one step
+       darker, and --subtle lands at 4.44:1 on that tier — just under AA. It
+       clears --surface-secondary, --background and --surface, and the tier's
+       own pairing (--surface-tertiary-foreground) is 11.78:1, so this only
+       bites if --subtle text is placed on a tertiary surface. Lift --subtle to
+       clear 4.5 there if that combination ever ships. */
     --muted: #505a5d; /* secondary body text — 6.00:1 */
     --muted-strong: #3d474b; /* label text — 8.08:1 */
     --subtle: #5f6b71; /* faintest meta labels — 4.64:1 */
     --default: #f0f3f4; /* neutral fill — chips, icon wells, tracks */
     --default-hover: #dce7ec;
     --default-foreground: var(--foreground);
-    --scrollbar-thumb: #dce7ec;
+    --scrollbar: #dce7ec;
 
     /* Accent — a calm slate blue, carrying all emphasis.
        --accent fills; --accent-strong is the text/link tone (#4e7c9b as text
@@ -194,10 +207,18 @@
     --surface-foreground: var(--foreground);
     --surface-secondary: #2a3237;
     --surface-secondary-foreground: var(--foreground);
+    --surface-tertiary: #2e363b; /* +0.0151 L, matching HeroUI's dark step */
+    --surface-tertiary-foreground: var(--foreground);
     --overlay: #2a3237;
     --overlay-foreground: var(--foreground);
     --ink-surface: #12181b;
     --ink-surface-foreground: var(--white);
+
+    /* Segmented controls. The raised segment lifts off the dark canvas rather
+       than sitting flush, so it takes the hover fill. Pair text with
+       --segment-foreground (8.76:1); --muted and --subtle do not clear AA here. */
+    --segment: var(--default-hover);
+    --segment-foreground: var(--foreground);
 
     /* Neutrals — checked against --surface-secondary #2a3237, the lightest
        dark surface and so the binding constraint here. */
@@ -207,7 +228,7 @@
     --default: #2e373c;
     --default-hover: #3a4448;
     --default-foreground: var(--foreground);
-    --scrollbar-thumb: #3a4448;
+    --scrollbar: #3a4448;
 
     /* Accent — lightened for dark surfaces. --accent-foreground is NOT in the
        Claude Design dark block; inheriting the light theme's white would put
