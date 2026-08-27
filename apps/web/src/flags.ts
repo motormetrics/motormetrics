@@ -5,6 +5,5 @@ import { flag } from "flags/next";
 export const advertisePage = flag<boolean>({
   key: "advertise-page",
   defaultValue: false,
-  options: [{ value: false }, { value: true }],
   adapter: vercelAdapter(),
 });
