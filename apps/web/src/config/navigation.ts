@@ -234,7 +234,10 @@ export const MORE_NAV_SECTION_LABEL = "About this site";
  */
 export const MORE_NAV_ITEMS: NavigationItem[] = [
   { title: "About", url: "/about" },
-  { title: "Advertise", url: "/advertise" },
+  // TODO: Advertise hidden from site navigation while the page sits behind the
+  // `advertise-page` flag (off in production and preview), where the link would
+  // lead to a 404. Restore it in one line once the flag is enabled.
+  // { title: "Advertise", url: "/advertise" },
   // TODO: Blog hidden from site navigation pending a decision on the blog's
   // future. Commented out rather than deleted so it can be restored in one
   // line. The /blog route, sitemap entries and llms.txt are all still live.
@@ -244,7 +247,8 @@ export const MORE_NAV_ITEMS: NavigationItem[] = [
 export const FOOTER_NAV_ITEMS = [
   { href: "/about", label: "About" },
   { href: "/learn", label: "Learn" },
-  { href: "/advertise", label: "Advertise" },
+  // TODO: Restore alongside the MORE_NAV_ITEMS entry when `advertise-page` is on.
+  // { href: "/advertise", label: "Advertise" },
   { href: "/legal/privacy-policy", label: "Privacy" },
   { href: "/legal/terms-of-service", label: "Terms" },
 ] as const satisfies readonly NavItem[];

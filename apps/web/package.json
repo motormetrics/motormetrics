@@ -24,6 +24,7 @@
   "dependencies": {
     "@ai-sdk/otel": "catalog:",
     "@better-auth/drizzle-adapter": "catalog:",
+    "@flags-sdk/vercel": "1.4.6",
     "@gravity-ui/icons": "2.18.0",
     "@heroui-pro/react": "1.0.0-beta.3",
     "@heroui/react": "catalog:",
@@ -56,6 +57,7 @@
     "embla-carousel": "8.6.0",
     "embla-carousel-react": "8.6.0",
     "exceljs": "4.4.0",
+    "flags": "4.3.0",
     "framer-motion": "12.38.0",
     "lucide-react": "0.577.0",
     "match-sorter": "8.3.0",

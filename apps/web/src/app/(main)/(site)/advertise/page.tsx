@@ -1,6 +1,7 @@
 import { StructuredData } from "@web/components/structured-data";
-import { FEATURE_FLAG_UNRELEASED, SITE_TITLE, SITE_URL } from "@web/config";
+import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
+import { advertisePage } from "@web/flags";
 import { getDailyTraffic, getTrafficStats } from "@web/lib/posthog";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -40,8 +41,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// The flag is read per request, so the route opts out of the static shell.
+export const instant = false;
+
 export default async function AdvertisePage() {
-  if (!FEATURE_FLAG_UNRELEASED) {
+  const showAdvertisePage = await advertisePage();
+  if (!showAdvertisePage) {
     notFound();
   }
   const [stats, dailyTraffic] = await Promise.all([

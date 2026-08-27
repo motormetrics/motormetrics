@@ -4,7 +4,7 @@ exports[`CategoryInfo > should render with required props 1`] = `
 <div>
   <div
     aria-pressed="false"
-    class="flex items-center gap-2 rounded-xl border-2 border-transparent p-2 hover:bg-gray-100 pointer-events-auto cursor-pointer"
+    class="flex items-center gap-2 rounded-xl border-2 border-transparent p-2 hover:bg-default pointer-events-auto cursor-pointer"
     role="button"
     tabindex="0"
   >
