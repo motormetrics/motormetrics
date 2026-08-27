@@ -2,14 +2,14 @@
 
 import type { Key } from "@heroui/react";
 
-import { Button, cn, Dropdown, Header, Label, Separator } from "@heroui/react";
+import { Button, cn, Dropdown, Label } from "@heroui/react";
 import { BetaChip, NewChip } from "@web/components/shared/chips";
-import { MORE_NAV_GROUPS, PRIMARY_NAV_ITEMS } from "@web/config/navigation";
+import type { NavigationItem } from "@web/config/navigation";
+import { MORE_NAV_ITEMS, PRIMARY_NAV_ITEMS } from "@web/config/navigation";
 import { SOCIAL_URLS } from "@web/config/socials";
 import { ChevronDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Fragment } from "react";
 
 const matchesPath = (pathname: string, href: string) => {
   if (href === "/") {
@@ -26,16 +26,34 @@ const getActiveHref = (pathname: string) =>
     (a, b) => b.href.length - a.href.length,
   )[0]?.href;
 
+const pillClassName = (isActive: boolean) =>
+  cn(
+    "h-auto gap-2 rounded-full px-6 py-3.5 font-semibold text-base transition-shadow",
+    isActive
+      ? "bg-accent font-bold text-accent-foreground"
+      : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
+  );
+
+function NavMenuItems({ items }: { items: readonly NavigationItem[] }) {
+  return items.map(({ badge, icon: Icon, title, url }) => (
+    <Dropdown.Item id={url} key={url} textValue={title}>
+      {Icon ? <Icon className="size-4 shrink-0 text-muted" /> : null}
+      <Label className="flex min-w-0 flex-1 items-center gap-2">
+        <span className="truncate">{title}</span>
+        {badge === "new" ? <NewChip /> : null}
+        {badge === "beta" ? <BetaChip /> : null}
+      </Label>
+    </Dropdown.Item>
+  ));
+}
+
 export function AppNav() {
   const pathname = usePathname();
   const router = useRouter();
 
   const activeHref = getActiveHref(pathname);
   const isMoreActive =
-    !activeHref &&
-    MORE_NAV_GROUPS.some(({ items }) =>
-      items.some(({ url }) => matchesPath(pathname, url)),
-    );
+    !activeHref && MORE_NAV_ITEMS.some(({ url }) => matchesPath(pathname, url));
 
   const handleNavigate = (key: Key) => router.push(String(key));
 
@@ -51,32 +69,53 @@ export function AppNav() {
         </Link>
 
         <div className="flex flex-wrap items-center gap-2">
-          {PRIMARY_NAV_ITEMS.map(({ href, label }) => {
+          {PRIMARY_NAV_ITEMS.map(({ href, items, label }) => {
             const isActive = href === activeHref;
 
+            if (!items) {
+              return (
+                <Link
+                  className={cn(
+                    "rounded-full px-7 py-3.5 font-semibold text-base transition-shadow",
+                    isActive
+                      ? "bg-accent font-bold text-accent-foreground"
+                      : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
+                  )}
+                  href={href}
+                  key={href}
+                >
+                  {label}
+                </Link>
+              );
+            }
+
             return (
-              <Link
-                className={cn(
-                  "rounded-full px-7 py-3.5 font-semibold text-base transition-shadow",
-                  isActive
-                    ? "bg-accent font-bold text-accent-foreground"
-                    : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
-                )}
-                href={href}
-                key={href}
-              >
-                {label}
-              </Link>
+              <Dropdown key={href}>
+                <Button className={pillClassName(isActive)} variant="tertiary">
+                  {label}
+                  <ChevronDown className="size-4 shrink-0" strokeWidth={2.25} />
+                </Button>
+                <Dropdown.Popover className="min-w-64" placement="bottom start">
+                  <Dropdown.Menu onAction={handleNavigate}>
+                    <Dropdown.Item
+                      id={href}
+                      key={href}
+                      textValue={`${label} overview`}
+                    >
+                      <Label className="font-semibold">{`${label} overview`}</Label>
+                    </Dropdown.Item>
+                    <NavMenuItems items={items} />
+                  </Dropdown.Menu>
+                </Dropdown.Popover>
+              </Dropdown>
             );
           })}
 
           <Dropdown>
             <Button
               className={cn(
-                "h-auto gap-2 rounded-full px-6 py-3.5 font-semibold text-base transition-shadow",
-                isMoreActive
-                  ? "bg-accent/15 font-bold text-accent-strong"
-                  : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
+                pillClassName(false),
+                isMoreActive && "bg-accent/15 font-bold text-accent-strong",
               )}
               variant="tertiary"
             >
@@ -85,26 +124,7 @@ export function AppNav() {
             </Button>
             <Dropdown.Popover className="min-w-64" placement="bottom start">
               <Dropdown.Menu onAction={handleNavigate}>
-                {MORE_NAV_GROUPS.map(({ items, title }, index) => (
-                  <Fragment key={title}>
-                    {index > 0 ? <Separator /> : null}
-                    <Dropdown.Section>
-                      <Header>{title}</Header>
-                      {items.map(({ badge, icon: Icon, title: label, url }) => (
-                        <Dropdown.Item id={url} key={url} textValue={label}>
-                          {Icon ? (
-                            <Icon className="size-4 shrink-0 text-muted" />
-                          ) : null}
-                          <Label className="flex min-w-0 flex-1 items-center gap-2">
-                            <span className="truncate">{label}</span>
-                            {badge === "new" ? <NewChip /> : null}
-                            {badge === "beta" ? <BetaChip /> : null}
-                          </Label>
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Section>
-                  </Fragment>
-                ))}
+                <NavMenuItems items={MORE_NAV_ITEMS} />
               </Dropdown.Menu>
             </Dropdown.Popover>
           </Dropdown>

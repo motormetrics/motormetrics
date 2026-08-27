@@ -1,6 +1,6 @@
 "use client";
 
-import { MORE_NAV_GROUPS, PRIMARY_NAV_ITEMS } from "@web/config/navigation";
+import { MORE_NAV_ITEMS, PRIMARY_NAV_ITEMS } from "@web/config/navigation";
 import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,13 +11,12 @@ import { usePathname } from "next/navigation";
  */
 const LABELS_BY_HREF: Record<string, string> = {
   ...Object.fromEntries(
-    PRIMARY_NAV_ITEMS.map(({ href, label }) => [href, label]),
+    PRIMARY_NAV_ITEMS.flatMap(({ href, items, label }) => [
+      [href, label] as const,
+      ...(items ?? []).map(({ title, url }) => [url, title] as const),
+    ]),
   ),
-  ...Object.fromEntries(
-    MORE_NAV_GROUPS.flatMap(({ items }) =>
-      items.map(({ title, url }) => [url, title]),
-    ),
-  ),
+  ...Object.fromEntries(MORE_NAV_ITEMS.map(({ title, url }) => [url, title])),
 };
 
 /** "electric-vehicles" -> "Electric vehicles"; also covers `[make]` values. */

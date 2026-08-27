@@ -199,43 +199,33 @@ export const navigationSections: NavigationSection[] = [
 export type NavItem = {
   href: Route;
   label: string;
+  /**
+   * Pages inside this section. A pill with items opens a dropdown listing them
+   * (plus a link back to `href`); a pill without items is a plain link.
+   */
+  items?: NavigationItem[];
 };
 
 /** Pills in the shell navigation, in comp order. */
-export const PRIMARY_NAV_ITEMS = [
+export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
   { href: "/", label: "Overview" },
-  { href: "/cars", label: "Cars" },
-  { href: "/coe", label: "COE" },
+  { href: "/cars", label: "Cars", items: navLinks.cars },
+  { href: "/coe", label: "COE", items: navLinks.coe },
   { href: "/cars/electric-vehicles", label: "Electric" },
   { href: "/learn", label: "Learn" },
-] as const satisfies readonly NavItem[];
-
-export interface NavGroup {
-  title: string;
-  items: NavigationItem[];
-}
+];
 
 /**
- * Everything the pills do not surface, grouped behind the shell nav's "More"
- * menu. Electric is omitted because it has its own pill.
+ * Everything the pills do not surface, behind the shell nav's "More" menu. The
+ * Cars and COE sections are not listed here because their own pills open them.
  */
-export const MORE_NAV_GROUPS: NavGroup[] = [
-  {
-    title: "Cars",
-    items: navLinks.cars.filter(({ url }) => url !== "/cars/electric-vehicles"),
-  },
-  { title: "COE", items: navLinks.coe },
-  {
-    title: "Company",
-    items: [
-      { title: "About", url: "/about" },
-      { title: "Advertise", url: "/advertise" },
-      // TODO: Blog hidden from site navigation pending a decision on the blog's
-      // future. Commented out rather than deleted so it can be restored in one
-      // line. The /blog route, sitemap entries and llms.txt are all still live.
-      // { title: "Blog", url: "/blog" },
-    ],
-  },
+export const MORE_NAV_ITEMS: NavigationItem[] = [
+  { title: "About", url: "/about" },
+  { title: "Advertise", url: "/advertise" },
+  // TODO: Blog hidden from site navigation pending a decision on the blog's
+  // future. Commented out rather than deleted so it can be restored in one
+  // line. The /blog route, sitemap entries and llms.txt are all still live.
+  // { title: "Blog", url: "/blog" },
 ];
 
 export const FOOTER_NAV_ITEMS = [
