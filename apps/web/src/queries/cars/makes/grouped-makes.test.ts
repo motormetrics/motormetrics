@@ -120,6 +120,14 @@ describe("getGroupedMakes", () => {
     expect(result.groupedMakes.B).toEqual(["BMW"]);
   });
 
+  it("should sort # last when a number make is found after a letter make", async () => {
+    zrangeMock.mockResolvedValue(["BMW", "3M", "AUDI"]);
+
+    const result = await getGroupedMakes();
+
+    expect(result.letters).toEqual(["ALL", "A", "B", "#"]);
+  });
+
   it("should handle whitespace in make names", async () => {
     zrangeMock.mockResolvedValue([" AUDI ", "BMW", "  MERCEDES BENZ  "]);
 
