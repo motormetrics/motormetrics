@@ -2,10 +2,14 @@
 
 import type { Key } from "@heroui/react";
 
-import { Button, cn, Dropdown, Label } from "@heroui/react";
+import { Button, cn, Dropdown, Header, Label } from "@heroui/react";
 import { BetaChip, NewChip } from "@web/components/shared/chips";
 import type { NavigationItem } from "@web/config/navigation";
-import { MORE_NAV_ITEMS, PRIMARY_NAV_ITEMS } from "@web/config/navigation";
+import {
+  MORE_NAV_ITEMS,
+  MORE_NAV_SECTION_LABEL,
+  PRIMARY_NAV_ITEMS,
+} from "@web/config/navigation";
 import { SOCIAL_URLS } from "@web/config/socials";
 import { ChevronDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
@@ -34,10 +38,35 @@ const pillClassName = (isActive: boolean) =>
       : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
   );
 
+// Menu chrome from the MMNav comp: rows are 14px-radius pills rather than the
+// 32px HeroUI default, and section labels are small uppercase eyebrows.
+const menuItemClassName =
+  "rounded-sm px-3.5 py-2.75 font-semibold text-[15px] text-muted-strong";
+
+const menuHeaderClassName =
+  "col-span-full px-3.5 pt-2 pb-1.5 font-bold text-[12.5px] text-subtle uppercase tracking-[0.06em]";
+
+// The comp runs a long menu in two columns. Short menus stay in one so the
+// popover never opens wider than the handful of rows it holds.
+const menuGrid = (itemCount: number) =>
+  cn("grid gap-x-2.5 gap-y-0.5", itemCount > 4 ? "grid-cols-2" : "grid-cols-1");
+
+const menuClassName = (itemCount: number) =>
+  cn(menuGrid(itemCount), "p-2.5", itemCount > 4 && "min-w-112");
+
+// A section is a grid item of the menu, and re-declares the same columns so its
+// own rows line up with the ones outside it.
+const menuSectionClassName = (itemCount: number) =>
+  cn(menuGrid(itemCount), "col-span-full");
+
 function NavMenuItems({ items }: { items: readonly NavigationItem[] }) {
-  return items.map(({ badge, icon: Icon, title, url }) => (
-    <Dropdown.Item id={url} key={url} textValue={title}>
-      {Icon ? <Icon className="size-4 shrink-0 text-muted" /> : null}
+  return items.map(({ badge, title, url }) => (
+    <Dropdown.Item
+      className={menuItemClassName}
+      id={url}
+      key={url}
+      textValue={title}
+    >
       <Label className="flex min-w-0 flex-1 items-center gap-2">
         <span className="truncate">{title}</span>
         {badge === "new" ? <NewChip /> : null}
@@ -69,7 +98,7 @@ export function AppNav() {
         </Link>
 
         <div className="flex flex-wrap items-center gap-2">
-          {PRIMARY_NAV_ITEMS.map(({ href, items, label }) => {
+          {PRIMARY_NAV_ITEMS.map(({ href, items, label, sectionLabel }) => {
             const isActive = href === activeHref;
 
             if (!items) {
@@ -95,16 +124,33 @@ export function AppNav() {
                   {label}
                   <ChevronDown className="size-4 shrink-0" strokeWidth={2.25} />
                 </Button>
-                <Dropdown.Popover className="min-w-64" placement="bottom start">
-                  <Dropdown.Menu onAction={handleNavigate}>
-                    <Dropdown.Item
-                      id={href}
-                      key={href}
-                      textValue={`${label} overview`}
+                <Dropdown.Popover
+                  className="rounded-lg"
+                  placement="bottom start"
+                >
+                  <Dropdown.Menu
+                    className={menuClassName(items.length + 1)}
+                    onAction={handleNavigate}
+                  >
+                    <Dropdown.Section
+                      className={menuSectionClassName(items.length + 1)}
                     >
-                      <Label className="font-semibold">{`${label} overview`}</Label>
-                    </Dropdown.Item>
-                    <NavMenuItems items={items} />
+                      <Header className={menuHeaderClassName}>
+                        {sectionLabel}
+                      </Header>
+                      {/* Reads "Overview" but announces "Cars overview" — the
+                          eyebrow names the group, not the section it links to. */}
+                      <Dropdown.Item
+                        aria-label={`${label} overview`}
+                        className={menuItemClassName}
+                        id={href}
+                        key={href}
+                        textValue={`${label} overview`}
+                      >
+                        <Label>Overview</Label>
+                      </Dropdown.Item>
+                      <NavMenuItems items={items} />
+                    </Dropdown.Section>
                   </Dropdown.Menu>
                 </Dropdown.Popover>
               </Dropdown>
@@ -115,16 +161,26 @@ export function AppNav() {
             <Button
               className={cn(
                 pillClassName(false),
-                isMoreActive && "bg-accent/15 font-bold text-accent-strong",
+                isMoreActive && "bg-accent-soft-2 font-bold text-accent-deep",
               )}
               variant="tertiary"
             >
               More
               <ChevronDown className="size-4 shrink-0" strokeWidth={2.25} />
             </Button>
-            <Dropdown.Popover className="min-w-64" placement="bottom start">
-              <Dropdown.Menu onAction={handleNavigate}>
-                <NavMenuItems items={MORE_NAV_ITEMS} />
+            <Dropdown.Popover className="rounded-lg" placement="bottom start">
+              <Dropdown.Menu
+                className={menuClassName(MORE_NAV_ITEMS.length)}
+                onAction={handleNavigate}
+              >
+                <Dropdown.Section
+                  className={menuSectionClassName(MORE_NAV_ITEMS.length)}
+                >
+                  <Header className={menuHeaderClassName}>
+                    {MORE_NAV_SECTION_LABEL}
+                  </Header>
+                  <NavMenuItems items={MORE_NAV_ITEMS} />
+                </Dropdown.Section>
               </Dropdown.Menu>
             </Dropdown.Popover>
           </Dropdown>

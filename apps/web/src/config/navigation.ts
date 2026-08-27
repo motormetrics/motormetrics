@@ -204,16 +204,29 @@ export type NavItem = {
    * (plus a link back to `href`); a pill without items is a plain link.
    */
   items?: NavigationItem[];
+  /**
+   * Eyebrow above `items` in the dropdown. Names what the group is rather than
+   * repeating the pill, which already sits directly above it.
+   */
+  sectionLabel?: string;
 };
 
 /** Pills in the shell navigation, in comp order. */
 export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
   { href: "/", label: "Overview" },
-  { href: "/cars", label: "Cars", items: navLinks.cars },
-  { href: "/coe", label: "COE", items: navLinks.coe },
+  {
+    href: "/cars",
+    label: "Cars",
+    items: navLinks.cars,
+    sectionLabel: "Vehicle data",
+  },
+  { href: "/coe", label: "COE", items: navLinks.coe, sectionLabel: "COE data" },
   { href: "/cars/electric-vehicles", label: "Electric" },
   { href: "/learn", label: "Learn" },
 ];
+
+/** Eyebrow above MORE_NAV_ITEMS, matching `sectionLabel` on the pills. */
+export const MORE_NAV_SECTION_LABEL = "About this site";
 
 /**
  * Everything the pills do not surface, behind the shell nav's "More" menu. The
