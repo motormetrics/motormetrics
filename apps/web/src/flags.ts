@@ -10,5 +10,16 @@ export const advertisePage = flag<boolean>({
   key: "advertise-page",
   description: "Show the /advertise page",
   defaultValue: false,
+  options: [
+    { value: false, label: "Hidden" },
+    { value: true, label: "Visible" },
+  ],
   adapter: vercelAdapter(),
 });
+
+/**
+ * Precomputed in `proxy.ts`: the proxy resolves these flags once and encodes the
+ * result into the rewritten URL, so /advertise stays statically prerendered
+ * instead of rendering per request.
+ */
+export const advertiseFlags = [advertisePage] as const;
