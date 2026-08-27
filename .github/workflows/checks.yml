@@ -32,6 +32,10 @@ jobs:
       UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
       BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+      # --affected defaults to a local `main` branch, which does not exist on a
+      # PR or merge queue checkout. Pin the range to the event payload instead.
+      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+      TURBO_SCM_HEAD: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
 
     steps:
       - name: Checkout
