@@ -11,7 +11,9 @@ export function Banner() {
 
   return (
     <div className="flex items-center overflow-x-auto whitespace-nowrap border-t bg-default shadow-md">
-      <div className="px-6 py-4 lg:container lg:mx-auto">{bannerContent}</div>
+      <div className="mx-auto w-full max-w-page px-4 py-4 sm:px-6 lg:px-9">
+        {bannerContent}
+      </div>
     </div>
   );
 }
