@@ -14,7 +14,12 @@ export default function MainLayout({
       <Announcement />
       <Banner />
 
-      <div className="mx-auto flex min-h-screen w-full max-w-[1560px] flex-col gap-8 px-4 py-8 sm:px-6 lg:px-9 lg:py-9">
+      {/*
+        Every page draws the same column — `max-w-page`, defined once in
+        `globals.css`. The nav and footer sit inside it, so they line up with
+        the content beneath them, and the two bars above use the same measure.
+      */}
+      <div className="mx-auto flex min-h-screen w-full max-w-page flex-col gap-8 px-4 py-8 sm:px-6 lg:px-9 lg:py-9">
         <AppNav />
         <main className="flex flex-1 flex-col gap-8">{children}</main>
         <Footer />
