@@ -53,7 +53,7 @@ export async function SummaryCard() {
       </span>
 
       <div className="flex flex-wrap items-center gap-4">
-        <span className="font-extrabold text-6xl tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-6xl tabular-nums tracking-tight">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
@@ -63,7 +63,7 @@ export async function SummaryCard() {
         <DeltaChip tone="inverse" value={changeRatio * 100} />
       </div>
 
-      <Typography.TextSm className="font-semibold text-accent-foreground/85">
+      <Typography.TextSm className="text-accent-foreground/85">
         cars registered vs{" "}
         {previous ? formatMonth(previous.month, "short") : "previous month"}
       </Typography.TextSm>
@@ -97,14 +97,14 @@ export async function SummaryCard() {
 
       <div className="flex items-center gap-4 rounded-field bg-foreground/45 px-6 py-5">
         <div className="flex flex-col gap-1">
-          <Typography.TextSm className="font-bold text-accent-foreground text-lg">
+          <Typography.TextLg className="text-accent-foreground">
             <NumberValue
               locale="en-SG"
               maximumFractionDigits={0}
               value={yearToDate?.total ?? 0}
             />{" "}
             year to date
-          </Typography.TextSm>
+          </Typography.TextLg>
           <Typography.Caption className="text-accent-foreground/70">
             cars registered in {yearToDate?.year ?? "—"}
           </Typography.Caption>

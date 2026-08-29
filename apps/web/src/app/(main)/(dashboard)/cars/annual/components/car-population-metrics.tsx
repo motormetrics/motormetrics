@@ -102,7 +102,7 @@ export function CarPopulationMetrics({
         </KPI.Content>
         {topMake && (
           <KPI.Footer>
-            <Typography.TextSm className="text-muted">
+            <Typography.TextSm>
               <KPI.Value
                 className="font-normal text-sm"
                 locale="en-SG"
@@ -136,7 +136,7 @@ export function CarPopulationMetrics({
           />
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm className="text-muted">
+          <Typography.TextSm>
             <KPI.Value
               className="font-normal text-sm"
               locale="en-SG"

@@ -387,7 +387,7 @@ async function TypeDetailContent({
       <ReportFilterBar
         label="Period"
         trailing={
-          <Typography.TextSm className="font-medium">
+          <Typography.TextSm>
             Figures are new registrations, not the fleet on the road
           </Typography.TextSm>
         }
@@ -406,7 +406,7 @@ async function TypeDetailContent({
           <Typography.Text className="font-bold text-accent-strong text-lg group-hover:underline">
             The full electric picture →
           </Typography.Text>
-          <Typography.TextSm className="font-medium text-muted-strong">
+          <Typography.TextSm className="text-muted-strong">
             Adoption, charging and the makes leading it, on one page
           </Typography.TextSm>
         </Link>
@@ -576,8 +576,8 @@ async function TypeDetailContent({
                     <span
                       className={
                         isSelected
-                          ? "w-48 shrink-0 font-extrabold text-[0.96875rem] text-accent-strong"
-                          : "w-48 shrink-0 font-semibold text-[0.96875rem]"
+                          ? "w-48 shrink-0 font-extrabold text-accent-strong text-base"
+                          : "w-48 shrink-0 font-semibold text-base"
                       }
                     >
                       {displayValue(config.category, peer.name)}
@@ -588,7 +588,7 @@ async function TypeDetailContent({
                         share={share(peer.count, peerLeader)}
                       />
                     </div>
-                    <span className="w-20 text-right font-extrabold text-[0.96875rem] tabular-nums">
+                    <span className="w-20 text-right font-extrabold text-base tabular-nums">
                       <Count value={peer.count} />
                     </span>
                   </div>
@@ -635,18 +635,16 @@ async function TypeDetailContent({
         </div>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
-            How this is counted
-          </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          <Typography.H3 className="text-lg">How this is counted</Typography.H3>
+          <Typography.Text>
             A car counts in the month it is registered, under the {terms.noun}{" "}
             LTA records against it.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Text>
+          <Typography.Text>
             {config.category === "fuel-types"
               ? "Fuel types are LTA's own values, kept unmerged: Petrol-Electric and Petrol-Electric (Plug-In) are counted separately rather than grouped."
               : "Vehicle types are LTA's own values, shortened only for display — the underlying figures are unchanged."}
-          </Typography.TextSm>
+          </Typography.Text>
           <Link
             className="font-bold text-accent-strong text-base"
             href={`/cars/${config.category}`}

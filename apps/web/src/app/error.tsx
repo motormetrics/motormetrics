@@ -22,7 +22,7 @@ export default function AppError({
         <AlertTriangle aria-hidden className="size-12 text-danger" />
         <div className="flex flex-col gap-2">
           <Typography.H1>Something went wrong</Typography.H1>
-          <Typography.TextLg className="text-muted">
+          <Typography.TextLg>
             We couldn&apos;t load this page. You can try again, or head back to
             the homepage.
           </Typography.TextLg>

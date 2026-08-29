@@ -140,17 +140,15 @@ export function MakesTable({
           <Car className="size-5.5" />
         </span>
         <div className="flex flex-col">
-          <Typography.H3 className="font-bold tracking-[-0.02em]">
-            All makes
-          </Typography.H3>
-          <Typography.Caption className="font-semibold text-muted">
+          <Typography.H3>All makes</Typography.H3>
+          <Typography.Caption>
             {rangeLabel} ·{" "}
             {isTruncated
               ? `top ${displayedRows.length} of ${visibleRows.length}`
               : `${visibleRows.length} ${visibleRows.length === 1 ? "make" : "makes"}`}
           </Typography.Caption>
         </div>
-        <span className="ml-auto whitespace-nowrap font-semibold text-[13.5px] text-muted">
+        <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
           Sorted by {SORT_LABELS[sortKey]},{" "}
           {sortDirection === "asc" ? "ascending" : "descending"}
         </span>
@@ -161,7 +159,7 @@ export function MakesTable({
           <Search aria-hidden className="size-4.5 shrink-0" />
           <input
             aria-label="Search makes"
-            className="w-full border-none bg-transparent font-semibold text-[15px] text-foreground outline-none placeholder:text-muted"
+            className="w-full border-none bg-transparent font-semibold text-foreground text-sm outline-none placeholder:text-muted"
             onChange={(event) => setQuery(event.target.value)}
             placeholder={`Search ${rows.length} makes …`}
             type="text"
@@ -179,7 +177,7 @@ export function MakesTable({
         {COLUMNS.map((column) => {
           const isActive = column.key !== null && column.key === sortKey;
           const className = cn(
-            "font-bold text-[13px] uppercase tracking-[0.06em]",
+            "font-bold text-xs uppercase tracking-wider",
             column.align === "right" ? "text-right" : "text-left",
             column.label === "Share" && "hidden sm:block",
             isActive ? "text-accent-strong" : "text-muted",
@@ -223,7 +221,7 @@ export function MakesTable({
             <span className="flex min-w-0 items-center gap-2.5">
               <span
                 className={cn(
-                  "inline-flex size-7.5 shrink-0 items-center justify-center rounded-full font-extrabold text-[13px]",
+                  "inline-flex size-7.5 shrink-0 items-center justify-center rounded-full font-extrabold text-sm",
                   row.rank <= 3
                     ? "bg-accent/15 text-accent-strong"
                     : "bg-default text-muted",
@@ -255,7 +253,7 @@ export function MakesTable({
                   }}
                 />
               </span>
-              <span className="w-11 text-right font-bold text-[13.5px] text-muted tabular-nums">
+              <span className="w-11 text-right font-bold text-muted text-sm tabular-nums">
                 {row.share.toFixed(1)}%
               </span>
             </span>
@@ -283,7 +281,7 @@ export function MakesTable({
         ))}
 
         {visibleRows.length === 0 ? (
-          <span className="px-4.5 py-9 font-semibold text-[15px] text-muted">
+          <span className="px-4.5 py-9 font-semibold text-muted text-sm">
             Nothing matches “{query}”.
           </span>
         ) : null}
@@ -300,7 +298,7 @@ export function MakesTable({
         </button>
       ) : null}
 
-      <Typography.Caption className="mt-3 px-4.5 font-medium text-muted">
+      <Typography.Caption className="mt-3 px-4.5">
         Change compares against the same period a year earlier, and is withheld
         below {MIN_COUNT_FOR_CHANGE} registrations. Select a row to open the
         make.

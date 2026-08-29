@@ -43,9 +43,7 @@ export function CarPopulationChart({
         <Typography.H4>
           Top {TOP_N} Makes ({effectiveYear})
         </Typography.H4>
-        <Typography.TextSm className="text-muted">
-          Car population by manufacturer
-        </Typography.TextSm>
+        <Typography.TextSm>Car population by manufacturer</Typography.TextSm>
       </Card.Header>
       <Card.Content>
         <BarChart data={topMakes} height={500} layout="vertical">
@@ -86,7 +84,7 @@ export function CarPopulationChart({
         </BarChart>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-muted">
+        <Typography.TextSm>
           Showing top {TOP_N} makes by car population for {effectiveYear}.
         </Typography.TextSm>
       </Card.Footer>

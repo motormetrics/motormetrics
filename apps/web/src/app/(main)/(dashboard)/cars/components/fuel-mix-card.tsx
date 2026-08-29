@@ -52,12 +52,8 @@ export async function FuelMixCard({
   return (
     <SurfaceCard>
       <div className="flex flex-col gap-1">
-        <Typography.TextSm className="font-semibold text-muted">
-          Fuel mix
-        </Typography.TextSm>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
-          By fuel type
-        </Typography.H3>
+        <Typography.TextSm>Fuel mix</Typography.TextSm>
+        <Typography.H3>By fuel type</Typography.H3>
       </div>
 
       {segments.length > 0 ? (
@@ -74,7 +70,7 @@ export async function FuelMixCard({
           title={`Registrations by fuel type, ${formatMonthLabel(month)}`}
         />
       ) : (
-        <Typography.TextSm className="text-muted">
+        <Typography.TextSm>
           No registrations recorded for {formatMonthLabel(month)}.
         </Typography.TextSm>
       )}

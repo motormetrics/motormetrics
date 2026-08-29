@@ -35,7 +35,7 @@ export function EmptyState({
 
       <div className="flex flex-col items-center gap-2 text-center">
         <Typography.H3>{title}</Typography.H3>
-        <Typography.TextSm className="max-w-sm text-muted">
+        <Typography.TextSm className="max-w-sm">
           {description}
         </Typography.TextSm>
       </div>

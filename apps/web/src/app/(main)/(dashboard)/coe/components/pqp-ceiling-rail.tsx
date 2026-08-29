@@ -37,12 +37,10 @@ export async function PqpCeilingRail() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm className="font-semibold text-muted">
+        <Typography.TextSm>
           Current rates · {formatMonth(latestMonth)}
         </Typography.TextSm>
-        <Typography.H3 className="font-bold text-[1.6875rem] tracking-[-0.02em]">
-          PQP ceiling
-        </Typography.H3>
+        <Typography.H3 className="text-3xl">PQP ceiling</Typography.H3>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -55,7 +53,7 @@ export async function PqpCeilingRail() {
               {toCategoryKey(row.category)}
             </span>
             <div className="flex min-w-0 flex-col gap-px">
-              <span className="font-extrabold text-[17px] tabular-nums">
+              <span className="font-extrabold text-lg tabular-nums">
                 <NumberValue
                   currency="SGD"
                   locale="en-SG"
@@ -64,7 +62,7 @@ export async function PqpCeilingRail() {
                   value={row.rate}
                 />
               </span>
-              <Typography.Caption className="truncate font-medium text-muted">
+              <Typography.Caption className="truncate">
                 {CATEGORY_DESCRIPTIONS[row.category]}
               </Typography.Caption>
             </div>
@@ -75,7 +73,7 @@ export async function PqpCeilingRail() {
         ))}
       </div>
 
-      <Typography.Caption className="font-medium text-muted">
+      <Typography.Caption>
         Three-month moving average of quota premiums · used to renew a COE
       </Typography.Caption>
     </div>

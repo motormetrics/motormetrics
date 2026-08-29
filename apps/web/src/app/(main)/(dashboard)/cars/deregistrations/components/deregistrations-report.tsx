@@ -300,19 +300,19 @@ export async function DeregistrationsReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
+          <Typography.H3 className="text-lg">
             What a deregistration is
           </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          <Typography.Text>
             A vehicle is deregistered when it is scrapped or exported, which is
             what releases its COE back into the quota. Deregistrations in one
             month therefore set much of the supply bid for in later exercises.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Text>
+          <Typography.Text>
             The categories are the COE ones the vehicle held, so a
             deregistration is counted against the quota it returns to rather
             than the body type of the car.
-          </Typography.TextSm>
+          </Typography.Text>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/results"

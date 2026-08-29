@@ -18,17 +18,15 @@ async function YearlyChartContent() {
     <SurfaceCard>
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-2">
-          <Typography.TextSm className="font-semibold text-muted">
-            Yearly registrations
-          </Typography.TextSm>
-          <span className="font-extrabold text-4xl tabular-nums tracking-[-0.02em]">
+          <Typography.TextSm>Yearly registrations</Typography.TextSm>
+          <span className="font-extrabold text-4xl tabular-nums tracking-tight">
             <NumberValue
               locale="en-SG"
               maximumFractionDigits={0}
               value={latest?.total ?? 0}
             />
           </span>
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.TextSm>
             registered in {latest?.year ?? "—"}
           </Typography.TextSm>
         </div>
@@ -89,12 +87,8 @@ async function TopMakesContent() {
     <SurfaceCard>
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-1">
-          <Typography.TextSm className="font-semibold text-muted">
-            Registrations
-          </Typography.TextSm>
-          <Typography.H3 className="font-bold tracking-[-0.02em]">
-            Top makes
-          </Typography.H3>
+          <Typography.TextSm>Registrations</Typography.TextSm>
+          <Typography.H3>Top makes</Typography.H3>
         </div>
         <Tooltip delay={300}>
           <Link
@@ -116,9 +110,7 @@ async function TopMakesContent() {
         {topMakes.slice(0, 5).map((item, index) => (
           <div className="flex flex-col gap-2" key={item.make}>
             <div className="flex items-center gap-4">
-              <Typography.TextSm className="font-semibold">
-                {item.make}
-              </Typography.TextSm>
+              <Typography.TextSm>{item.make}</Typography.TextSm>
               <span className="ml-auto font-extrabold text-sm tabular-nums">
                 <NumberValue
                   locale="en-SG"

@@ -70,19 +70,19 @@ export async function EvFleetPanel() {
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <BatteryCharging className="size-5" />
         </span>
-        <Typography.Text className="font-semibold text-accent-foreground/85">
+        <Typography.Text className="text-accent-foreground/85">
           EV fleet on the road
         </Typography.Text>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
           <NumberValue locale="en-SG" maximumFractionDigits={0} value={fleet} />
         </span>
         {previousFleet > 0 ? <DeltaChip tone="on-dark" value={growth} /> : null}
       </div>
 
-      <Typography.TextSm className="font-medium text-accent-foreground/60">
+      <Typography.TextSm className="text-accent-foreground/60">
         battery-electric vehicles on Singapore roads · {fleetShare.toFixed(1)}%
         of the vehicle population in {latest.year}
       </Typography.TextSm>
@@ -91,7 +91,7 @@ export async function EvFleetPanel() {
         {VES_BANDS.map((row, index) => (
           <li className="flex items-center gap-3" key={row.band}>
             <span
-              className={`flex size-10 shrink-0 items-center justify-center rounded-full font-extrabold text-[13.5px] ${
+              className={`flex size-10 shrink-0 items-center justify-center rounded-full font-extrabold text-sm ${
                 index === VES_BANDS.length - 1
                   ? "bg-accent-foreground/10 text-accent-foreground"
                   : "bg-accent-on-dark/20 text-accent-on-dark"
@@ -99,7 +99,7 @@ export async function EvFleetPanel() {
             >
               {row.band}
             </span>
-            <Typography.TextSm className="font-semibold text-accent-foreground/85">
+            <Typography.TextSm className="text-accent-foreground/85">
               {row.note}
             </Typography.TextSm>
           </li>

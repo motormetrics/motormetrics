@@ -34,7 +34,7 @@ export function Compact({ post }: CompactProps) {
         size="sm"
         color={category.color}
         variant="primary"
-        className="h-5 shrink-0 px-1 font-semibold text-[10px]"
+        className="h-5 shrink-0 px-1 font-semibold text-xs"
       >
         {category.label.split(" ")[0]}
       </Chip>

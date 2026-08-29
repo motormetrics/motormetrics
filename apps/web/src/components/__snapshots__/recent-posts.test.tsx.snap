@@ -9,7 +9,7 @@ exports[`RecentPosts > should render title and view all link 1`] = `
       class="flex items-center justify-between"
     >
       <h3
-        class="scroll-m-20 text-balance font-medium text-2xl text-foreground tracking-tight"
+        class="scroll-m-20 text-balance font-bold text-2xl text-foreground tracking-tight"
       >
         Recent Posts
       </h3>

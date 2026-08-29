@@ -74,12 +74,10 @@ export function DonutGauge({
           </g>
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-          <span className="font-extrabold text-[2.0625rem] tabular-nums tracking-[-0.02em]">
+          <span className="font-extrabold text-3xl tabular-nums tracking-tight">
             {centre}
           </span>
-          <span className="font-semibold text-[13.5px] text-muted">
-            {caption}
-          </span>
+          <span className="font-semibold text-muted text-sm">{caption}</span>
         </div>
       </div>
 
@@ -91,10 +89,10 @@ export function DonutGauge({
               className="size-[11px] shrink-0 rounded-full"
               style={{ background: segment.color }}
             />
-            <span className="font-semibold text-[15.5px] text-foreground/85">
+            <span className="font-semibold text-base text-foreground/85">
               {segment.label}
             </span>
-            <span className="ml-auto font-bold text-[15.5px] tabular-nums">
+            <span className="ml-auto font-bold text-base tabular-nums">
               {((segment.value / total) * 100).toFixed(1)}%
             </span>
           </li>

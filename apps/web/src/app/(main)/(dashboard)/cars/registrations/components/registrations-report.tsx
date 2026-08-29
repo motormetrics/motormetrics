@@ -308,17 +308,15 @@ export async function RegistrationsReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
-            How this is counted
-          </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          <Typography.H3 className="text-lg">How this is counted</Typography.H3>
+          <Typography.Text>
             A car counts in the month it is registered, which can lag the
             bidding exercise that won its COE by several weeks.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Text>
+          <Typography.Text>
             Figures cover cars only. Other vehicle classes are counted
             separately under their own categories.
-          </Typography.TextSm>
+          </Typography.Text>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/cars/makes"

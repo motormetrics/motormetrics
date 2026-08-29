@@ -79,7 +79,7 @@ export default function PARFCalculatorPage() {
       <PARFCalculator />
       <PARFComparisonTable />
 
-      <Typography.TextSm className="font-medium text-muted">
+      <Typography.TextSm>
         Figures are for illustration only. The PARF rebate is subject to the
         vehicle&apos;s actual ARF paid and its age at deregistration. The new
         rates apply to vehicles registered with COEs obtained from the 2nd

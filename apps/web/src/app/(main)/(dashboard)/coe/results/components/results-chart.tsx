@@ -39,7 +39,7 @@ export function ResultsChart({
   if (categories.length === 0) {
     return (
       <div className="flex h-[340px] items-center justify-center border-border border-y">
-        <Typography.TextSm className="font-medium text-muted">
+        <Typography.TextSm>
           Pick at least one category to plot.
         </Typography.TextSm>
       </div>

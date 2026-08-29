@@ -53,7 +53,7 @@ export function PeriodTabs() {
           <button
             aria-pressed={isActive}
             className={cn(
-              "cursor-pointer whitespace-nowrap rounded-full px-[18px] py-2.5 text-[0.90625rem] transition-colors",
+              "cursor-pointer whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
               isActive
                 ? "bg-accent font-bold text-accent-foreground"
                 : "bg-surface font-semibold text-muted hover:text-foreground",
@@ -94,7 +94,7 @@ export function MeasureTabs() {
           <button
             aria-pressed={isActive}
             className={cn(
-              "cursor-pointer rounded-full px-4 py-[7px] text-[0.84375rem] transition-colors",
+              "cursor-pointer rounded-full px-4 py-[7px] text-sm transition-colors",
               isActive
                 ? "bg-surface font-extrabold text-foreground shadow-surface"
                 : "font-semibold text-muted hover:text-foreground",

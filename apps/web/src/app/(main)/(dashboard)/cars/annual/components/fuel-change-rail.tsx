@@ -26,12 +26,8 @@ export function FuelChangeRail({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm className="font-semibold text-muted">
-          Year on year
-        </Typography.TextSm>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
-          Fuel type change
-        </Typography.H3>
+        <Typography.TextSm>Year on year</Typography.TextSm>
+        <Typography.H3>Fuel type change</Typography.H3>
       </div>
 
       <ul className="flex flex-col gap-2">
@@ -47,16 +43,16 @@ export function FuelChangeRail({
               key={row.label}
             >
               <div className="flex items-center gap-2.5">
-                <span className="truncate font-bold text-[15.5px]">
+                <span className="truncate font-bold text-base">
                   {row.label}
                 </span>
                 {change === null ? null : (
-                  <span className="shrink-0 font-bold text-[13px] text-muted tabular-nums">
+                  <span className="shrink-0 font-bold text-muted text-sm tabular-nums">
                     {change >= 0 ? "+" : "−"}
                     {Math.abs(change * 100).toFixed(1)}%
                   </span>
                 )}
-                <span className="ml-auto font-extrabold text-[15.5px] tabular-nums">
+                <span className="ml-auto font-extrabold text-base tabular-nums">
                   <NumberValue
                     locale="en-SG"
                     maximumFractionDigits={0}
@@ -79,9 +75,7 @@ export function FuelChangeRail({
       </ul>
 
       {previousYear === null ? null : (
-        <Typography.Caption className="text-muted">
-          Change on {previousYear}
-        </Typography.Caption>
+        <Typography.Caption>Change on {previousYear}</Typography.Caption>
       )}
     </div>
   );

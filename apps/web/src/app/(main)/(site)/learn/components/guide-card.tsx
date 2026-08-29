@@ -18,15 +18,13 @@ export function GuideCard({ guide }: { guide: Guide }) {
       className="group flex h-full flex-col gap-3.5 rounded-2xl bg-surface p-7 text-foreground no-underline shadow-surface transition-shadow hover:shadow-hover"
       href={`/learn/${guide.slug}`}
     >
-      <span className="self-start rounded-full bg-surface-secondary px-3.5 py-1.5 font-bold text-[0.8125rem] text-muted">
+      <span className="self-start rounded-full bg-surface-secondary px-3.5 py-1.5 font-bold text-muted text-sm">
         {guide.term}
       </span>
-      <Typography.H3 className="font-bold text-[1.375rem] leading-[1.24] tracking-[-0.01em]">
-        {guide.title}
-      </Typography.H3>
-      <Typography.TextSm className="font-medium text-base text-muted leading-[1.55]">
+      <Typography.H3 className="leading-tight">{guide.title}</Typography.H3>
+      <Typography.Text className="text-muted leading-normal">
         {guide.excerpt}
-      </Typography.TextSm>
+      </Typography.Text>
       <div className="mt-auto flex items-center gap-2.5 pt-3.5">
         <span className="font-semibold text-muted text-sm">
           {getReadingMinutes(guide.content)} min read

@@ -23,7 +23,7 @@ export function RegistrationTrend({ data }: RegistrationTrendProps) {
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Yearly Registration Trend</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Typography.TextSm>
           Historical vehicle registration data from {data[0]?.year} to{" "}
           {data[data.length - 1]?.year}
         </Typography.TextSm>

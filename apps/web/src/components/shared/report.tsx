@@ -85,7 +85,7 @@ export function ReportEyebrow({
   return (
     <span
       className={cn(
-        "font-bold text-[0.8125rem] text-muted uppercase tracking-[0.08em]",
+        "font-bold text-muted text-xs uppercase tracking-wider",
         className,
       )}
     >
@@ -121,18 +121,14 @@ export function ReportHeadline({
   return (
     <div className={cn("flex flex-wrap items-end gap-12", className)}>
       <div className="flex flex-col gap-2">
-        <Typography.TextSm className="font-semibold text-base text-muted-strong">
-          {label}
-        </Typography.TextSm>
+        <Typography.Text className="text-muted-strong">{label}</Typography.Text>
         <div className="flex items-center gap-4">
-          <span className="font-extrabold text-[3.5rem] tabular-nums leading-none tracking-[-0.03em] lg:text-[4.5rem]">
+          <span className="font-extrabold text-6xl tabular-nums leading-none tracking-tight lg:text-7xl">
             {value}
           </span>
           {delta}
         </div>
-        {sub ? (
-          <Typography.TextSm className="font-medium">{sub}</Typography.TextSm>
-        ) : null}
+        {sub ? <Typography.TextSm>{sub}</Typography.TextSm> : null}
       </div>
       {stats ? <div className="ml-auto flex flex-wrap">{stats}</div> : null}
     </div>
@@ -151,8 +147,8 @@ export function ReportStat({
 }) {
   return (
     <div className="flex flex-col gap-1.5 border-border border-l px-6">
-      <span className="font-semibold text-[0.8125rem] text-muted">{label}</span>
-      <span className="font-extrabold text-2xl tabular-nums tracking-[-0.02em]">
+      <span className="font-semibold text-muted text-sm">{label}</span>
+      <span className="font-extrabold text-2xl tabular-nums tracking-tight">
         {value}
       </span>
       {note ? (
@@ -180,14 +176,8 @@ export function ReportSection({
   return (
     <section className={cn("flex flex-col gap-4", className)}>
       <div className="flex flex-wrap items-baseline gap-4">
-        <Typography.H2 className="font-bold text-[1.6875rem] tracking-[-0.02em]">
-          {title}
-        </Typography.H2>
-        {caption ? (
-          <Typography.TextSm className="font-medium text-base">
-            {caption}
-          </Typography.TextSm>
-        ) : null}
+        <Typography.H2>{title}</Typography.H2>
+        {caption ? <Typography.Text>{caption}</Typography.Text> : null}
       </div>
       {children}
     </section>

@@ -40,12 +40,12 @@ export function CreatorSection() {
             </Typography.Label>
 
             <div className="flex flex-col gap-6">
-              <Typography.H2 className="text-foreground">
+              <Typography.H2>
                 Built with{" "}
                 <Heart className="inline size-6 fill-danger text-danger" /> in
                 Singapore
               </Typography.H2>
-              <Typography.TextLg className="text-muted">
+              <Typography.TextLg>
                 {SITE_TITLE} is an independent project created by{" "}
                 <Link
                   href="https://ruchern.dev"
@@ -60,7 +60,7 @@ export function CreatorSection() {
               </Typography.TextLg>
             </div>
 
-            <Typography.TextSm className="max-w-lg text-muted">
+            <Typography.TextSm className="max-w-lg">
               This platform is maintained in spare time alongside a full-time
               job. If you find it useful, consider sharing it with others who
               might benefit.

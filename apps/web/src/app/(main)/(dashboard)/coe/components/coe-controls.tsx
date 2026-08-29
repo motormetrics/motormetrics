@@ -42,7 +42,7 @@ export function CategoryTabs({ selected }: { selected: CategoryKey }) {
             aria-label={`Category ${key}`}
             aria-pressed={isActive}
             className={cn(
-              "size-[38px] shrink-0 rounded-full font-extrabold text-[15px] transition-colors",
+              "size-[38px] shrink-0 rounded-full font-extrabold text-sm transition-colors",
               isActive
                 ? "bg-accent-foreground text-accent-strong"
                 : "bg-accent-foreground/20 text-accent-foreground hover:bg-accent-foreground/30",

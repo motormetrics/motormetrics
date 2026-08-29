@@ -37,9 +37,7 @@ export function VesDistributionChart({ data }: VesDistributionChartProps) {
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>VES Band Distribution</Typography.H4>
-        <Typography.TextSm className="text-muted">
-          Number of models per VES band
-        </Typography.TextSm>
+        <Typography.TextSm>Number of models per VES band</Typography.TextSm>
       </Card.Header>
       <Card.Content>
         <PieChart className="mx-auto" height={300}>

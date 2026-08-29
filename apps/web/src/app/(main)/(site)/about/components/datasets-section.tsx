@@ -67,10 +67,8 @@ export function DatasetsSection() {
   return (
     <section className="flex flex-col gap-7">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
-        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
-          What we track
-        </Typography.H2>
-        <Typography.Text className="max-w-[38rem] text-[1.1875rem] leading-[1.65]">
+        <Typography.H2 className="text-4xl">What we track</Typography.H2>
+        <Typography.Text className="max-w-prose text-lg">
           Six datasets, each with its own history and filters.
         </Typography.Text>
       </div>
@@ -82,12 +80,10 @@ export function DatasetsSection() {
                 <span className="flex size-12 items-center justify-center rounded-full bg-accent-soft text-accent-strong">
                   <Icon className="size-5.5" />
                 </span>
-                <Typography.H3 className="font-bold text-[1.3125rem] tracking-[-0.01em]">
-                  {title}
-                </Typography.H3>
-                <Typography.TextSm className="font-medium text-base leading-[1.5]">
+                <Typography.H3 className="text-xl">{title}</Typography.H3>
+                <Typography.Text className="leading-normal">
                   {description}
-                </Typography.TextSm>
+                </Typography.Text>
               </Card.Content>
             </Card>
           </Link>

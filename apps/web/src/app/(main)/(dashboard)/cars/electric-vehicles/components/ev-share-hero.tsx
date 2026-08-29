@@ -73,13 +73,13 @@ export async function EvShareHero({ month }: { month: string }) {
         </span>
 
         <div className="flex flex-wrap items-center gap-4">
-          <span className="font-extrabold text-[3.5rem] text-accent-on-dark tabular-nums tracking-[-0.03em] lg:text-[4.5rem]">
+          <span className="font-extrabold text-6xl text-accent-on-dark tabular-nums tracking-tight lg:text-7xl">
             {share.toFixed(1)}%
           </span>
           <DeltaChip tone="on-dark" unit="pp" value={share - previousShare} />
         </div>
 
-        <Typography.TextLg className="font-semibold text-accent-foreground/70">
+        <Typography.TextLg className="text-accent-foreground/70">
           of new car registrations ·{" "}
           <NumberValue
             locale="en-SG"

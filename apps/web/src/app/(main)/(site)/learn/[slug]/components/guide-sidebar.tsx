@@ -41,9 +41,7 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
           aria-label="On this page"
           className="flex flex-col gap-3.5 rounded-2xl bg-surface-secondary p-7"
         >
-          <Typography.H3 className="font-bold text-base">
-            In this guide
-          </Typography.H3>
+          <Typography.H3 className="text-base">In this guide</Typography.H3>
           <ol className="flex flex-col gap-0.5">
             {headings.map(({ id, title }) => (
               <li key={id}>
@@ -61,9 +59,7 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
 
       {terms.length > 0 ? (
         <div className="flex flex-col gap-3.5 rounded-2xl bg-surface p-7 shadow-surface">
-          <Typography.H3 className="font-bold text-base">
-            Key terms
-          </Typography.H3>
+          <Typography.H3 className="text-base">Key terms</Typography.H3>
           {terms.map(({ definition, term }) => {
             const slug = term.toLowerCase();
 
@@ -84,7 +80,7 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
                     {term}
                   </span>
                 )}
-                <Typography.Caption className="font-medium text-muted leading-[1.5]">
+                <Typography.Caption className="leading-normal">
                   {definition}
                 </Typography.Caption>
               </div>
@@ -95,9 +91,9 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
 
       {guide.relatedLinks.length > 0 ? (
         <InkPanel className="rounded-2xl">
-          <Typography.TextSm className="font-semibold text-accent-foreground/85 text-base">
+          <Typography.Text className="text-accent-foreground/85">
             Check the current figures
-          </Typography.TextSm>
+          </Typography.Text>
           {guide.relatedLinks.map(({ href, label }) => (
             <Link
               className="font-bold text-accent-on-dark text-sm no-underline transition-colors hover:text-accent-foreground"

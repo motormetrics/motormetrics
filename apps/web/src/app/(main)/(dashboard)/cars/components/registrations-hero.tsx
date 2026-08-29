@@ -67,7 +67,7 @@ export async function RegistrationsHero({
       </span>
 
       <div className="flex flex-wrap items-center gap-4">
-        <span className="font-extrabold text-6xl tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-6xl tabular-nums tracking-tight">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
@@ -77,7 +77,7 @@ export async function RegistrationsHero({
         <DeltaChip tone="inverse" value={changeRatio * 100} />
       </div>
 
-      <Typography.Text className="font-semibold text-accent-foreground/85">
+      <Typography.Text className="text-accent-foreground/85">
         cars registered vs{" "}
         {previous ? formatMonthName(previous.month) : "the previous month"} ·{" "}
         <NumberValue
@@ -118,7 +118,7 @@ export async function RegistrationsHero({
       {leader ? (
         <div className="flex items-center gap-4 rounded-field bg-foreground/70 px-6 py-5">
           <div className="flex min-w-0 flex-col gap-0.5">
-            <Typography.TextLg className="font-bold text-accent-foreground">
+            <Typography.TextLg className="text-accent-foreground">
               {leader.name} leads with{" "}
               <NumberValue
                 locale="en-SG"

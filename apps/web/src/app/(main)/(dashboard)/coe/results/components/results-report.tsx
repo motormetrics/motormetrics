@@ -115,7 +115,7 @@ export async function ResultsReport({
       <ReportFilterBar
         label="Series"
         trailing={
-          <Typography.TextSm className="font-medium text-muted">
+          <Typography.TextSm>
             Tap a category to add or remove it from the chart
           </Typography.TextSm>
         }
@@ -125,7 +125,7 @@ export async function ResultsReport({
 
       <ReportHeadline
         delta={
-          <span className="inline-flex items-center whitespace-nowrap rounded-full bg-accent-soft-2 px-4 py-2 font-bold text-[0.875rem] text-accent-strong">
+          <span className="inline-flex items-center whitespace-nowrap rounded-full bg-accent-soft-2 px-4 py-2 font-bold text-accent-strong text-sm">
             bids per quota
           </span>
         }
@@ -159,7 +159,7 @@ export async function ResultsReport({
 
       <div className="flex flex-col gap-3.5">
         <ResultsChart categories={plotted} data={chartData} />
-        <Typography.TextSm className="font-medium text-muted">
+        <Typography.TextSm>
           Category D premiums sit an order of magnitude below the car categories
           — add it to the chart and the other lines flatten.
         </Typography.TextSm>
@@ -201,11 +201,11 @@ export async function ResultsReport({
                 return (
                   <ReportCell align="end" key={category}>
                     <div className="flex flex-col items-end gap-0.5">
-                      <span className="font-extrabold text-[1.03125rem]">
+                      <span className="font-extrabold text-base">
                         {premium === undefined ? "—" : formatCurrency(premium)}
                       </span>
                       <PremiumDelta
-                        className="text-[0.78125rem]"
+                        className="text-xs"
                         ratio={
                           premium !== undefined && earlierPremium
                             ? changeRatio(premium, earlierPremium)
@@ -266,7 +266,7 @@ export async function ResultsReport({
                       <span className="flex-1">
                         <ShareBar isLeader share={rate} />
                       </span>
-                      <span className="w-10 text-right font-bold text-[0.84375rem] text-muted-strong tabular-nums">
+                      <span className="w-10 text-right font-bold text-muted-strong text-sm tabular-nums">
                         {rate.toFixed(0)}%
                       </span>
                     </div>
@@ -278,18 +278,18 @@ export async function ResultsReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
+          <Typography.H3 className="text-lg">
             How an exercise runs
           </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          <Typography.Text>
             Bidding opens at 12pm on the first Monday and third Monday of each
             month and closes at 4pm on the third day. The premium is the lowest
             successful bid, so everyone who wins pays the same price.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Text>
+          <Typography.Text>
             Quotas are set quarterly from deregistrations and the allowed growth
             in the vehicle population.
-          </Typography.TextSm>
+          </Typography.Text>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/premiums"

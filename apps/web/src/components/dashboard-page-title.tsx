@@ -18,9 +18,7 @@ export function DashboardPageTitle({
         <Typography.H1>{title}</Typography.H1>
         {badge}
       </div>
-      {subtitle && (
-        <Typography.TextLg className="text-muted">{subtitle}</Typography.TextLg>
-      )}
+      {subtitle && <Typography.TextLg>{subtitle}</Typography.TextLg>}
     </div>
   );
 }

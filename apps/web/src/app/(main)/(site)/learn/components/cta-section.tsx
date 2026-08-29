@@ -38,7 +38,7 @@ export function CtaSection() {
               Ready to Explore?
             </Typography.Label>
             <Typography.H2>Dive Into the Data</Typography.H2>
-            <Typography.TextLg className="max-w-xl text-muted">
+            <Typography.TextLg className="max-w-xl">
               Explore Singapore&apos;s car registration trends, COE bidding
               results, and market insights — all in one place.
             </Typography.TextLg>

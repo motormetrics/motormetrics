@@ -15,7 +15,7 @@ export function CategoryBadge({
   return (
     <span
       className={cn(
-        "inline-flex size-10 items-center justify-center rounded-full font-extrabold text-[1.0625rem]",
+        "inline-flex size-10 items-center justify-center rounded-full font-extrabold text-base",
         isActive
           ? "bg-accent text-accent-foreground"
           : "bg-surface-secondary text-accent-strong",

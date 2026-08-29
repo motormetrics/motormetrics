@@ -57,18 +57,18 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
   return (
     <SurfaceCard className="gap-5">
       <div className="flex flex-col gap-1.5">
-        <Typography.Text className="font-semibold text-muted">
+        <Typography.Text className="text-muted">
           Electrified total
         </Typography.Text>
 
         <div className="flex flex-wrap items-center gap-3.5">
-          <span className="font-extrabold text-[2.875rem] tabular-nums tracking-[-0.02em]">
+          <span className="font-extrabold text-5xl tabular-nums tracking-tight">
             {electrifiedShare.toFixed(1)}%
           </span>
           <DeltaChip unit="pp" value={electrifiedShare - previousShare} />
         </div>
 
-        <Typography.TextSm className="font-semibold text-muted">
+        <Typography.TextSm>
           battery-electric, plug-in and conventional hybrid combined ·{" "}
           {formatDateToMonthYear(point.month)}
         </Typography.TextSm>
@@ -77,7 +77,7 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
       <div className="flex h-10 overflow-hidden rounded-full">
         {split.map((segment) => (
           <span
-            className="inline-flex items-center justify-center font-extrabold text-[13px] tabular-nums"
+            className="inline-flex items-center justify-center font-extrabold text-sm tabular-nums"
             key={segment.label}
             style={{
               background: segment.colour,
@@ -103,7 +103,7 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
               className="size-[11px] shrink-0 rounded-full"
               style={{ background: segment.colour }}
             />
-            <Typography.TextSm className="font-semibold text-foreground/85">
+            <Typography.TextSm className="text-foreground/85">
               {segment.label}
             </Typography.TextSm>
             <span className="ml-auto font-bold text-sm tabular-nums">

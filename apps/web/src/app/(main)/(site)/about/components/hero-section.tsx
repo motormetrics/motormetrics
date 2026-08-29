@@ -17,10 +17,10 @@ export function HeroSection() {
       <span className="self-start rounded-full bg-accent-soft px-4 py-2 font-bold text-accent-strong text-sm">
         Singapore car market data
       </span>
-      <Typography.H1 className="max-w-[56rem] font-bold text-[3rem] leading-[1.02] tracking-[-0.03em] lg:text-[4.75rem]">
+      <Typography.H1 className="max-w-4xl text-5xl leading-none lg:text-7xl">
         Making sense of Singapore&apos;s car market
       </Typography.H1>
-      <Typography.TextLg className="max-w-[45rem] font-medium text-[1.375rem] text-muted leading-[1.5]">
+      <Typography.TextLg className="max-w-3xl text-2xl leading-normal">
         Vehicle registration data and COE bidding results, presented in a way
         that is easier to understand. No spreadsheets required.
       </Typography.TextLg>

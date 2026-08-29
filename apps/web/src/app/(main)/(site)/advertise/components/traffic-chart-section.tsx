@@ -22,12 +22,10 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-wrap items-baseline gap-4">
-        <Typography.H2 className="font-bold text-[1.6875rem] tracking-[-0.02em]">
-          Daily visitors
-        </Typography.H2>
-        <Typography.TextSm className="font-medium text-base">
+        <Typography.H2>Daily visitors</Typography.H2>
+        <Typography.Text>
           Last 30 days · unique visitors per day
-        </Typography.TextSm>
+        </Typography.Text>
       </div>
       <AreaChart
         data={data as unknown as Record<string, string | number>[]}

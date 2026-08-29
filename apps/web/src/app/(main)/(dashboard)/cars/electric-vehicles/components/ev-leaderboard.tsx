@@ -24,12 +24,8 @@ export async function EvLeaderboard({ month }: { month: string }) {
   return (
     <SurfaceCard className="gap-4 p-7">
       <div className="flex flex-col gap-1">
-        <Typography.Text className="font-semibold text-muted">
-          Leaderboard
-        </Typography.Text>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
-          EV makes
-        </Typography.H3>
+        <Typography.Text className="text-muted">Leaderboard</Typography.Text>
+        <Typography.H3>EV makes</Typography.H3>
       </div>
 
       <ul className="flex flex-col gap-3.5">
@@ -39,7 +35,7 @@ export async function EvLeaderboard({ month }: { month: string }) {
           return (
             <li className="flex flex-col gap-1.5" key={item.make}>
               <div className="flex items-center gap-2.5">
-                <span className="flex size-[26px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/15 font-extrabold text-[11px] text-accent-strong">
+                <span className="flex size-[26px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/15 font-extrabold text-accent-strong text-xs">
                   {logo?.url ? (
                     <Image
                       alt=""
@@ -52,7 +48,7 @@ export async function EvLeaderboard({ month }: { month: string }) {
                     item.make.charAt(0)
                   )}
                 </span>
-                <Typography.TextSm className="truncate font-semibold text-foreground/85">
+                <Typography.TextSm className="truncate text-foreground/85">
                   {item.make}
                 </Typography.TextSm>
                 <span className="ml-auto font-extrabold text-sm tabular-nums">
@@ -77,7 +73,7 @@ export async function EvLeaderboard({ month }: { month: string }) {
         })}
       </ul>
 
-      <Typography.Caption className="text-muted">
+      <Typography.Caption>
         Battery-electric registrations · {formatDateToMonthYear(month)}
       </Typography.Caption>
     </SurfaceCard>

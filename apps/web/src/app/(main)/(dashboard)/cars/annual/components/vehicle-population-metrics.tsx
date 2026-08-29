@@ -112,7 +112,7 @@ export function VehiclePopulationMetrics({
           />
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm className="text-muted">
+          <Typography.TextSm>
             <KPI.Value
               className="font-normal text-sm"
               locale="en-SG"

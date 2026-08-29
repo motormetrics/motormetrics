@@ -85,7 +85,7 @@ export function MakeBreakdown({ data, availableYears }: MakeBreakdownProps) {
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>All Makes ({effectiveYear})</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Typography.TextSm>
           {yearData.length} makes registered
         </Typography.TextSm>
       </Card.Header>

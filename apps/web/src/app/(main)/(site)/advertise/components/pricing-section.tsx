@@ -52,10 +52,8 @@ export async function PricingSection() {
   return (
     <section className="flex scroll-mt-24 flex-col gap-7" id="pricing">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
-        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
-          Packages
-        </Typography.H2>
-        <Typography.Text className="max-w-[38rem] text-[1.1875rem] leading-[1.65]">
+        <Typography.H2 className="text-4xl">Packages</Typography.H2>
+        <Typography.Text className="max-w-prose text-lg">
           Booked by the month. No long-term commitment.
         </Typography.Text>
       </div>
@@ -67,9 +65,7 @@ export async function PricingSection() {
           >
             <Card.Content className="flex h-full flex-col gap-3.5">
               <div className="flex items-center gap-3">
-                <Typography.H3 className="font-bold text-[1.375rem] tracking-[-0.01em]">
-                  {name}
-                </Typography.H3>
+                <Typography.H3>{name}</Typography.H3>
                 {featured ? (
                   <Chip
                     className="ml-auto font-bold"
@@ -82,23 +78,23 @@ export async function PricingSection() {
                 ) : null}
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="font-extrabold text-[2.5rem] tabular-nums leading-none tracking-[-0.03em]">
+                <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight">
                   {price}
                 </span>
                 <span className="font-semibold text-muted text-sm">
                   per month
                 </span>
               </div>
-              <Typography.TextSm className="font-medium text-base leading-[1.55]">
+              <Typography.Text className="leading-normal">
                 {note}
-              </Typography.TextSm>
+              </Typography.Text>
               <div className="flex flex-col gap-2.5 pt-1">
                 {features.map((feature) => (
                   <div className="flex items-start gap-2.5" key={feature}>
                     <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent-strong">
                       <Check className="size-3" strokeWidth={3} />
                     </span>
-                    <span className="font-semibold text-[0.9375rem] text-muted-strong leading-[1.45]">
+                    <span className="font-semibold text-muted-strong text-sm leading-normal">
                       {feature}
                     </span>
                   </div>
@@ -120,7 +116,7 @@ export async function PricingSection() {
           </Card>
         ))}
       </div>
-      <Typography.Caption className="font-medium text-subtle">
+      <Typography.Caption className="text-subtle">
         Rates are in Singapore dollars. Creative must be static — no autoplay,
         no interstitials.
       </Typography.Caption>

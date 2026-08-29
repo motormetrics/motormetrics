@@ -42,10 +42,10 @@ export async function CtaSection() {
         <span className="self-start rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm">
           What we will not run
         </span>
-        <Typography.H2 className="font-bold text-[2rem] text-ink-surface-foreground tracking-[-0.02em] lg:text-[2.25rem]">
+        <Typography.H2 className="text-ink-surface-foreground lg:text-4xl">
           Rules that protect the data
         </Typography.H2>
-        <Typography.Text className="max-w-[33rem] text-[1.09375rem] text-ink-surface-foreground/70 leading-[1.6]">
+        <Typography.Text className="max-w-prose text-ink-surface-foreground/70 text-lg">
           Advertising sits around the charts, never inside them. We decline
           anything that could be mistaken for a figure we publish.
         </Typography.Text>
@@ -58,7 +58,7 @@ export async function CtaSection() {
               <span className="shrink-0 font-extrabold text-accent-on-dark text-sm tabular-nums">
                 {number}
               </span>
-              <span className="font-medium text-[0.96875rem] text-ink-surface-foreground/75 leading-[1.5]">
+              <span className="font-medium text-base text-ink-surface-foreground/75 leading-normal">
                 {note}
               </span>
             </div>
@@ -67,10 +67,10 @@ export async function CtaSection() {
       </div>
 
       <div className="flex flex-col gap-4 rounded-2xl bg-ink-surface-foreground/[0.06] p-8">
-        <Typography.H3 className="font-bold text-[1.3125rem] text-ink-surface-foreground">
+        <Typography.H3 className="text-ink-surface-foreground text-xl">
           Book a placement
         </Typography.H3>
-        <Typography.Text className="font-medium text-[0.9375rem] text-ink-surface-foreground/60 leading-[1.55]">
+        <Typography.Text className="text-ink-surface-foreground/60 text-sm leading-normal">
           Tell us the pages and the months you have in mind. We reply with
           availability, the rate and the creative spec.
         </Typography.Text>
@@ -83,7 +83,7 @@ export async function CtaSection() {
             Send an enquiry
           </Button>
         </a>
-        <Typography.Caption className="font-medium text-ink-surface-foreground/40">
+        <Typography.Caption className="text-ink-surface-foreground/40">
           Or write to {ADVERTISE_EMAIL}
         </Typography.Caption>
       </div>

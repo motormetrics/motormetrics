@@ -63,12 +63,8 @@ export function PopulationFuelMix({
   return (
     <SurfaceCard>
       <div className="flex flex-col gap-1">
-        <Typography.TextSm className="font-semibold text-muted">
-          Fuel mix
-        </Typography.TextSm>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
-          {entity.name} by fuel type
-        </Typography.H3>
+        <Typography.TextSm>Fuel mix</Typography.TextSm>
+        <Typography.H3>{entity.name} by fuel type</Typography.H3>
       </div>
 
       {segments.length > 0 ? (
@@ -79,7 +75,7 @@ export function PopulationFuelMix({
           title={`${entity.name} by fuel type, ${year}`}
         />
       ) : (
-        <Typography.TextSm className="text-muted">
+        <Typography.TextSm>
           LTA published the {year} count for {entity.name} without a fuel split.
         </Typography.TextSm>
       )}

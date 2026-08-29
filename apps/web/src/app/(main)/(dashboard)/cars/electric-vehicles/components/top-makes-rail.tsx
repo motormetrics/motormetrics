@@ -41,12 +41,10 @@ export async function TopMakesRail({ month }: { month: string }) {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Typography.Text className="font-semibold text-muted">
+        <Typography.Text className="text-muted">
           Top EV makes · tap to compare
         </Typography.Text>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
-          {formatDateToMonthYear(month)} ranking
-        </Typography.H3>
+        <Typography.H3>{formatDateToMonthYear(month)} ranking</Typography.H3>
       </div>
 
       <ol className="flex flex-col gap-2">
@@ -60,10 +58,8 @@ export async function TopMakesRail({ month }: { month: string }) {
                 {index + 1}
               </span>
               <span className="flex min-w-0 flex-col gap-px">
-                <span className="truncate font-bold text-[17px]">
-                  {item.make}
-                </span>
-                <Typography.Caption className="text-muted tabular-nums">
+                <span className="truncate font-bold text-lg">{item.make}</span>
+                <Typography.Caption className="tabular-nums">
                   <NumberValue
                     locale="en-SG"
                     maximumFractionDigits={0}

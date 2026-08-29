@@ -430,16 +430,11 @@ export async function CategoryReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
+          <Typography.H3 className="text-lg">
             How LTA classifies {config.singularLabel.toLowerCase()}s
           </Typography.H3>
           {config.notes.map((note) => (
-            <Typography.TextSm
-              className="font-medium text-base leading-relaxed"
-              key={note}
-            >
-              {note}
-            </Typography.TextSm>
+            <Typography.Text key={note}>{note}</Typography.Text>
           ))}
           {config.relatedLinks.map(({ href, label }) => (
             <Link

@@ -32,7 +32,7 @@ export async function MonthlyChangeSummary() {
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <CalendarDays className="size-5" />
         </span>
-        <Typography.TextSm className="font-semibold text-accent-foreground/85">
+        <Typography.TextSm className="text-accent-foreground/85">
           Monthly change
         </Typography.TextSm>
         <Tooltip delay={300}>
@@ -54,7 +54,7 @@ export async function MonthlyChangeSummary() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
           <NumberValue
             maximumFractionDigits={1}
             signDisplay="exceptZero"
@@ -72,7 +72,7 @@ export async function MonthlyChangeSummary() {
         </span>
       </div>
 
-      <Typography.TextSm className="font-semibold text-accent-foreground/60">
+      <Typography.TextSm className="text-accent-foreground/60">
         registrations vs previous month · {displayMonth}
       </Typography.TextSm>
     </div>

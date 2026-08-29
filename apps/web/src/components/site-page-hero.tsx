@@ -16,7 +16,7 @@ export function SitePageHero({
     <section className="py-12 sm:py-16 lg:py-20">
       <div className="flex max-w-3xl flex-col items-start gap-5">
         <Typography.H1>{title}</Typography.H1>
-        <Typography.TextLg className="max-w-[70ch] text-muted">
+        <Typography.TextLg className="max-w-prose">
           {description}
         </Typography.TextLg>
         {actions ? (

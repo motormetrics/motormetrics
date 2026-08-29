@@ -37,7 +37,7 @@ export function PopulationHero({
       </span>
 
       <div className="flex flex-wrap items-center gap-4">
-        <span className="font-extrabold text-6xl tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-6xl tabular-nums tracking-tight">
           <NumberValue locale="en-SG" maximumFractionDigits={0} value={total} />
         </span>
         {change === null ? null : (
@@ -45,7 +45,7 @@ export function PopulationHero({
         )}
       </div>
 
-      <Typography.Text className="font-semibold text-accent-foreground/85">
+      <Typography.Text className="text-accent-foreground/85">
         registered {noun}
         {change === null || previousYear === null ? null : (
           <>
@@ -84,7 +84,7 @@ export function PopulationHero({
 
       <div className="flex items-center gap-4 rounded-field bg-foreground/70 px-6 py-5">
         <div className="flex min-w-0 flex-col gap-0.5">
-          <Typography.TextLg className="font-bold text-accent-foreground">
+          <Typography.TextLg className="text-accent-foreground">
             Growth capped at 0%
           </Typography.TextLg>
           <Typography.Caption className="text-accent-foreground/70">

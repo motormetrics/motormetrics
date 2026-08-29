@@ -33,10 +33,8 @@ export async function PlacementsSection() {
   return (
     <section className="flex scroll-mt-24 flex-col gap-7" id="placements">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
-        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
-          Placements
-        </Typography.H2>
-        <Typography.Text className="max-w-[38rem] text-[1.1875rem] leading-[1.65]">
+        <Typography.H2 className="text-4xl">Placements</Typography.H2>
+        <Typography.Text className="max-w-prose text-lg">
           Three units, all static, all outside the charts.
         </Typography.Text>
       </div>
@@ -50,14 +48,12 @@ export async function PlacementsSection() {
               <span className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-accent-soft text-accent-strong">
                 <Icon className="size-5" />
               </span>
-              <span className="font-bold text-[1.1875rem] tracking-[-0.01em]">
-                {title}
-              </span>
+              <span className="font-bold text-lg tracking-tight">{title}</span>
             </div>
-            <Typography.Text className="max-w-[34rem] text-base leading-[1.55]">
+            <Typography.Text className="max-w-prose leading-normal">
               {description}
             </Typography.Text>
-            <span className="shrink-0 font-bold text-[0.8125rem] text-muted uppercase tracking-[0.08em] sm:ml-auto">
+            <span className="shrink-0 font-bold text-muted text-xs uppercase tracking-wider sm:ml-auto">
               {where}
             </span>
           </div>

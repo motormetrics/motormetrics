@@ -5,20 +5,22 @@ import React from "react";
  * Typography System
  *
  * Modern, elegant design inspired by Vercel, Linear, and Stripe.
- * Uses lighter font weights and relies on size/spacing for hierarchy.
+ * Hierarchy comes from size and spacing; the weight ramp is deliberately flat.
  *
  * Principles:
- * - Semibold (600) for primary headings
- * - Medium (500) for secondary headings and labels
- * - Normal (400) for body text
- * - Bold reserved for data emphasis (numbers, metrics)
+ * - Bold (700) for H1-H3, semibold (600) for H4
+ * - Medium (500) for UI labels
+ * - Normal (400) for body text, including TextSm and Caption
+ * - Every step is a stock Tailwind utility. Do not reach for arbitrary values
+ *   (text-[2.125rem], tracking-[-0.02em]) at the call site: snap to the nearest
+ *   step, or change the default here if the whole scale wants it.
  */
 
 /**
  * H1 - Page titles
  *
  * Use for: Primary page heading (one per page)
- * Weight: Semibold (600)
+ * Weight: Bold (700)
  *
  * @example
  * <Typography.H1>COE Overview</Typography.H1>
@@ -30,7 +32,7 @@ const H1 = React.forwardRef<
   <h1
     ref={ref}
     className={cn(
-      "scroll-m-20 text-balance font-semibold text-4xl text-foreground tracking-tight lg:text-5xl",
+      "scroll-m-20 text-balance font-bold text-4xl text-foreground leading-tight tracking-tight lg:text-5xl",
       className,
     )}
     {...props}
@@ -42,7 +44,7 @@ H1.displayName = "H1";
  * H2 - Section titles
  *
  * Use for: Major sections, card groups
- * Weight: Semibold (600)
+ * Weight: Bold (700)
  *
  * @example
  * <Typography.H2>Fun Facts</Typography.H2>
@@ -54,7 +56,7 @@ const H2 = React.forwardRef<
   <h2
     ref={ref}
     className={cn(
-      "scroll-m-20 text-balance font-semibold text-3xl text-foreground tracking-tight first:mt-0",
+      "scroll-m-20 text-balance font-bold text-3xl text-foreground tracking-tight first:mt-0",
       className,
     )}
     {...props}
@@ -66,7 +68,7 @@ H2.displayName = "H2";
  * H3 - Subsection titles
  *
  * Use for: Card titles, subsections
- * Weight: Medium (500) - lighter for better hierarchy
+ * Weight: Bold (700)
  *
  * @example
  * <Typography.H3>Category A vs B</Typography.H3>
@@ -78,7 +80,7 @@ const H3 = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "scroll-m-20 text-balance font-medium text-2xl text-foreground tracking-tight",
+      "scroll-m-20 text-balance font-bold text-2xl text-foreground tracking-tight",
       className,
     )}
     {...props}
@@ -90,7 +92,7 @@ H3.displayName = "H3";
  * H4 - Small headings
  *
  * Use for: Nested sections, list headers
- * Weight: Medium (500)
+ * Weight: Semibold (600)
  *
  * @example
  * <Typography.H4>Latest PQP Rates</Typography.H4>
@@ -102,7 +104,7 @@ const H4 = React.forwardRef<
   <h4
     ref={ref}
     className={cn(
-      "scroll-m-20 font-medium text-foreground text-xl tracking-tight",
+      "scroll-m-20 font-semibold text-foreground text-xl tracking-tight",
       className,
     )}
     {...props}
@@ -116,6 +118,8 @@ H4.displayName = "H4";
  * Use for: Introductions, lead paragraphs, emphasized content
  * Font size: 18px (text-lg)
  * Weight: Normal (400)
+ * Colour: muted — a lede sits under a heading, not level with it. Pass
+ * `text-foreground` where it should carry full weight.
  *
  * @example
  * <Typography.TextLg>Explore COE trends and analysis.</Typography.TextLg>
@@ -126,10 +130,7 @@ const TextLg = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn(
-      "text-pretty text-foreground text-lg leading-relaxed",
-      className,
-    )}
+    className={cn("text-pretty text-lg text-muted leading-relaxed", className)}
     {...props}
   />
 ));
@@ -151,7 +152,10 @@ const Text = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-pretty text-base text-foreground leading-7", className)}
+    className={cn(
+      "text-pretty text-base text-foreground leading-relaxed",
+      className,
+    )}
     {...props}
   />
 ));

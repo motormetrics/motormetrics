@@ -26,7 +26,7 @@ export function TopMakesChart({ topMakes, year }: TopMakesChartProps) {
         <Typography.H4>
           Top {topMakes.length} Car Makes ({year})
         </Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Typography.TextSm>
           Most popular vehicle brands by registration volume
         </Typography.TextSm>
       </Card.Header>

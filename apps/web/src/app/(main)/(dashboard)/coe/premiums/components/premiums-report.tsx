@@ -83,10 +83,8 @@ function PremiumRangeBar({
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-baseline gap-4">
-        <span className="font-bold text-[0.96875rem] text-foreground">
-          {label}
-        </span>
-        <span className="ml-auto whitespace-nowrap font-semibold text-[0.84375rem] text-muted">
+        <span className="font-bold text-base text-foreground">{label}</span>
+        <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
           spread {formatCurrency(high - low)}
         </span>
       </div>
@@ -96,7 +94,7 @@ function PremiumRangeBar({
           style={{ left: `${left.toFixed(1)}%`, width: `${width.toFixed(1)}%` }}
         />
       </div>
-      <div className="flex font-bold text-[0.9375rem] text-muted-strong tabular-nums">
+      <div className="flex font-bold text-muted-strong text-sm tabular-nums">
         <span>{formatCurrency(low)}</span>
         <span className="ml-auto">{formatCurrency(high)}</span>
       </div>
@@ -335,7 +333,7 @@ export async function PremiumsReport({
                     <span className="flex-1">
                       <ShareBar isLeader share={rate} />
                     </span>
-                    <span className="w-10 text-right font-bold text-[0.84375rem] text-muted-strong tabular-nums">
+                    <span className="w-10 text-right font-bold text-muted-strong text-sm tabular-nums">
                       {rate.toFixed(0)}%
                     </span>
                   </div>
@@ -365,18 +363,16 @@ export async function PremiumsReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
-            How to read this
-          </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          <Typography.H3 className="text-lg">How to read this</Typography.H3>
+          <Typography.Text>
             A premium is the price of the last successful bid in an exercise, so
             it is set by demand rather than announced in advance. A decrease is
             shown in green.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Text>
+          <Typography.Text>
             Renewing an existing COE uses the PQP instead — the three-month
             moving average of premiums in that category.
-          </Typography.TextSm>
+          </Typography.Text>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/pqp"

@@ -40,16 +40,12 @@ export async function MoversRail({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm className="font-semibold text-muted">
-          Movers · year on year
-        </Typography.TextSm>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
-          Fastest growing
-        </Typography.H3>
+        <Typography.TextSm>Movers · year on year</Typography.TextSm>
+        <Typography.H3>Fastest growing</Typography.H3>
       </div>
 
       {movers.length === 0 ? (
-        <Typography.TextSm className="text-muted">
+        <Typography.TextSm>
           No make has a comparable period in {previousYear} to measure against.
         </Typography.TextSm>
       ) : (
@@ -71,7 +67,7 @@ export async function MoversRail({
                     <span className="truncate font-bold text-foreground text-lg">
                       {mover.name}
                     </span>
-                    <span className="font-medium text-[13.5px] text-muted tabular-nums">
+                    <span className="font-medium text-muted text-sm tabular-nums">
                       <NumberValue
                         locale="en-SG"
                         maximumFractionDigits={0}
@@ -86,7 +82,7 @@ export async function MoversRail({
             ))}
           </ul>
 
-          <Typography.Caption className="text-muted">
+          <Typography.Caption>
             Change against the same period in {previousYear}
             {hasDecline ? " · amber marks a decline in volume" : ""}
           </Typography.Caption>

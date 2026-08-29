@@ -48,12 +48,8 @@ export async function PqpRail() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm className="font-semibold text-muted">
-          PQP premiums · for COE renewals
-        </Typography.TextSm>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
-          {formatMonth(latestMonth)} rates
-        </Typography.H3>
+        <Typography.TextSm>PQP premiums · for COE renewals</Typography.TextSm>
+        <Typography.H3>{formatMonth(latestMonth)} rates</Typography.H3>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -75,7 +71,7 @@ export async function PqpRail() {
                   value={row.value}
                 />
               </span>
-              <Typography.Caption className="truncate text-muted">
+              <Typography.Caption className="truncate">
                 {row.name}
               </Typography.Caption>
             </div>
@@ -86,7 +82,7 @@ export async function PqpRail() {
         ))}
       </div>
 
-      <Typography.Caption className="text-muted">
+      <Typography.Caption>
         3-month moving average of premiums · renew 5 or 10 years
       </Typography.Caption>
     </div>

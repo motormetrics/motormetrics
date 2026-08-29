@@ -23,11 +23,7 @@ export function PageHeader({
       <div className="flex flex-col justify-between gap-2 lg:flex-row lg:items-center">
         <div className="flex flex-col">
           <Typography.H1>{title}</Typography.H1>
-          {subtitle && (
-            <Typography.TextLg className="text-muted">
-              {subtitle}
-            </Typography.TextLg>
-          )}
+          {subtitle && <Typography.TextLg>{subtitle}</Typography.TextLg>}
         </div>
         <div className="flex flex-col items-start gap-2">
           {!!lastUpdated && <LastUpdated lastUpdated={lastUpdated} />}

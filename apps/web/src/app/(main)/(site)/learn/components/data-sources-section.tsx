@@ -55,7 +55,7 @@ export function DataSourcesSection() {
       id="data-sources"
     >
       <div className="flex flex-col gap-3">
-        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
+        <Typography.H2 className="text-4xl">
           Where the data comes from
         </Typography.H2>
         <a
@@ -75,9 +75,7 @@ export function DataSourcesSection() {
             key={title}
           >
             <ReportEyebrow>{title}</ReportEyebrow>
-            <Typography.TextSm className="font-medium text-base text-muted leading-[1.6]">
-              {detail}
-            </Typography.TextSm>
+            <Typography.Text className="text-muted">{detail}</Typography.Text>
           </div>
         ))}
       </div>

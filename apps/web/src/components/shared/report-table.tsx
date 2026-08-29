@@ -26,7 +26,7 @@ export function ReportTable({
             {columns.map(({ align, label, width }) => (
               <th
                 className={cn(
-                  "border-border border-b px-3.5 pb-3 font-bold text-[0.78125rem] text-muted uppercase tracking-[0.06em]",
+                  "border-border border-b px-3.5 pb-3 font-bold text-muted text-xs uppercase tracking-wider",
                   align === "end" ? "text-right" : "text-left",
                 )}
                 key={label || width}
@@ -126,7 +126,7 @@ export function DeltaText({
   return (
     <span
       className={cn(
-        "font-bold text-[0.96875rem] tabular-nums",
+        "font-bold text-base tabular-nums",
         isUp ? "text-success-soft-foreground" : "text-warning-soft-foreground",
       )}
     >

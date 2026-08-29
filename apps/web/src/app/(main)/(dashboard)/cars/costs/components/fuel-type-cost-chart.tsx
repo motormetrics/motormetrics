@@ -39,7 +39,7 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
         <Typography.H4>Avg Selling Price by Fuel Type</Typography.H4>
-        <Typography.TextSm className="text-muted">
+        <Typography.TextSm>
           Average AD selling price (with COE) by fuel type
         </Typography.TextSm>
       </Card.Header>
@@ -79,7 +79,7 @@ export function FuelTypeCostChart({ data }: FuelTypeCostChartProps) {
         </BarChart>
       </Card.Content>
       <Card.Footer>
-        <Typography.TextSm className="text-muted">
+        <Typography.TextSm>
           Electric vehicles tend to have lower total costs due to VES rebates.
         </Typography.TextSm>
       </Card.Footer>

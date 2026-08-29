@@ -29,17 +29,11 @@ export function PageHead({
 }) {
   return (
     <div className="flex flex-wrap items-end gap-6">
-      <div
-        className={cn("flex flex-col gap-2", description && "max-w-[41rem]")}
-      >
+      <div className={cn("flex flex-col gap-2", description && "max-w-prose")}>
         <Breadcrumbs />
-        <Typography.H1 className="font-bold text-[2.75rem] leading-[1.05] tracking-[-0.02em] lg:text-[3.25rem]">
-          {title}
-        </Typography.H1>
+        <Typography.H1>{title}</Typography.H1>
         {description ? (
-          <Typography.TextLg className="font-medium text-[1.0625rem] text-muted leading-normal">
-            {description}
-          </Typography.TextLg>
+          <Typography.TextLg>{description}</Typography.TextLg>
         ) : null}
       </div>
       <div className="ml-auto flex flex-wrap items-center gap-3">

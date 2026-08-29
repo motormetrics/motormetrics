@@ -22,7 +22,7 @@ export async function RelatedPosts({
   return (
     <section className="border-foreground border-t-2 pt-8">
       {/* Section header - matches KeyHighlights style */}
-      <h2 className="mb-6 font-bold text-foreground/60 text-xs uppercase tracking-[0.3em]">
+      <h2 className="mb-6 font-bold text-foreground/60 text-xs uppercase tracking-widest">
         Related Posts
       </h2>
 
@@ -45,7 +45,7 @@ export async function RelatedPosts({
                     size="sm"
                     color={category.color}
                     variant="primary"
-                    className="h-5 px-1 font-bold text-[10px]"
+                    className="h-5 px-1 font-bold text-xs"
                   >
                     {category.label}
                   </Chip>

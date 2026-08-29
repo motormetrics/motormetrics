@@ -31,14 +31,14 @@ export function PQPComparisonChart({ data }: { data: PQPComparisonPoint[] }) {
   return (
     <div className="flex flex-col gap-3.5">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-        <span className="inline-flex items-center gap-2.5 font-bold text-[0.875rem]">
+        <span className="inline-flex items-center gap-2.5 font-bold text-sm">
           <span
             className="size-3.5 rounded"
             style={{ backgroundColor: "var(--chart-1)" }}
           />
           Latest closing premium
         </span>
-        <span className="inline-flex items-center gap-2.5 font-bold text-[0.875rem]">
+        <span className="inline-flex items-center gap-2.5 font-bold text-sm">
           <span
             className="h-[3px] w-5.5 rounded-full"
             style={{ backgroundColor: "var(--chart-2)" }}

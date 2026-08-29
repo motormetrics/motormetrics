@@ -44,12 +44,8 @@ export async function ConcentrationCard({
 
   return (
     <SurfaceCard className="gap-1">
-      <Typography.TextSm className="font-semibold text-[17px] text-muted">
-        Concentration
-      </Typography.TextSm>
-      <Typography.H3 className="font-bold tracking-[-0.02em]">
-        Top five vs the rest
-      </Typography.H3>
+      <Typography.TextSm className="text-lg">Concentration</Typography.TextSm>
+      <Typography.H3>Top five vs the rest</Typography.H3>
       <DonutGauge
         caption="top five share"
         centre={`${leadersShare.toFixed(0)}%`}

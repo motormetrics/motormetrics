@@ -78,12 +78,8 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
           <Calculator className="size-6" />
         </span>
         <div className="flex flex-col">
-          <Typography.H3 className="font-bold tracking-[-0.02em]">
-            COE premiums
-          </Typography.H3>
-          <Typography.TextSm className="font-semibold text-muted">
-            Latest bidding exercise
-          </Typography.TextSm>
+          <Typography.H3>COE premiums</Typography.H3>
+          <Typography.TextSm>Latest bidding exercise</Typography.TextSm>
         </div>
 
         <div className="ml-auto flex items-center gap-2">
@@ -124,7 +120,7 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center gap-4">
-          <span className="font-extrabold text-5xl tabular-nums tracking-[-0.03em]">
+          <span className="font-extrabold text-5xl tabular-nums tracking-tight">
             <NumberValue
               currency="SGD"
               locale="en-SG"
@@ -135,9 +131,7 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
           </span>
           <CostTrendChip changeRatio={changeRatio} />
         </div>
-        <Typography.TextSm className="font-semibold text-muted">
-          {active.category}
-        </Typography.TextSm>
+        <Typography.TextSm>{active.category}</Typography.TextSm>
       </div>
 
       {chart ? (
@@ -168,10 +162,10 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
             />
           </svg>
           <div className="flex justify-between">
-            <Typography.Caption className="font-semibold text-muted">
+            <Typography.Caption>
               {formatMonth(active.points[0]?.month ?? "")}
             </Typography.Caption>
-            <Typography.Caption className="font-semibold text-muted">
+            <Typography.Caption>
               {formatMonth(active.points.at(-1)?.month ?? "")}
             </Typography.Caption>
           </div>

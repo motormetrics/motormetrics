@@ -11,7 +11,7 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
       data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+        class="scroll-m-20 font-semibold text-foreground text-xl tracking-tight"
       >
         Top Makes - 
         Petrol

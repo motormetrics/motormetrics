@@ -45,7 +45,7 @@ export function LearnStats() {
           className="flex flex-col gap-1.5 border-border border-t-2 pt-7"
           key={label}
         >
-          <span className="font-extrabold text-[2.625rem] tabular-nums leading-none tracking-[-0.03em]">
+          <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight">
             {value}
           </span>
           <span className="font-semibold text-muted text-sm">{label}</span>

@@ -358,7 +358,7 @@ export async function MakeReport({
                   {String(rowRank).padStart(2, "0")}
                 </ReportCell>
                 <ReportCell>
-                  <span className="inline-flex items-center whitespace-nowrap rounded-full bg-surface-secondary px-3 py-1.5 font-bold text-[0.8125rem] text-muted-strong">
+                  <span className="inline-flex items-center whitespace-nowrap rounded-full bg-surface-secondary px-3 py-1.5 font-bold text-muted-strong text-sm">
                     {rowFuelType}
                   </span>
                 </ReportCell>
@@ -504,7 +504,7 @@ export async function MakeReport({
                     <span className="w-[8.125rem] shrink-0 font-bold">
                       {name}
                     </span>
-                    <Typography.TextSm className="font-medium">
+                    <Typography.TextSm>
                       {leading.length > 1
                         ? `${leading.join(" and ")} carry the volume`
                         : `all of it ${leading[0]}`}
@@ -520,18 +520,16 @@ export async function MakeReport({
         </div>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
-            Reading a make page
-          </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          <Typography.H3 className="text-lg">Reading a make page</Typography.H3>
+          <Typography.Text>
             Registrations are counted by make as recorded at registration, so
             rebadged and parallel-imported cars appear under the same name as
             authorised-dealer stock.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Text>
+          <Typography.Text>
             LTA reports registrations by make, fuel type and vehicle type — not
             by model, so there are no model-level figures anywhere on the site.
-          </Typography.TextSm>
+          </Typography.Text>
           <Link className="font-bold text-accent-strong" href="/cars/makes">
             All makes →
           </Link>

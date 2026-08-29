@@ -20,13 +20,11 @@ export function FAQSection() {
       id="faq"
     >
       <div className="flex flex-col gap-3 lg:sticky lg:top-9 lg:self-start">
-        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
-          Frequently asked
-        </Typography.H2>
-        <Typography.TextSm className="font-medium text-base text-muted leading-[1.55]">
+        <Typography.H2 className="text-4xl">Frequently asked</Typography.H2>
+        <Typography.Text className="text-muted leading-normal">
           The questions that come up most often about bidding, rebates and where
           the figures on this site come from.
-        </Typography.TextSm>
+        </Typography.Text>
       </div>
 
       <div className="flex flex-col gap-9">
@@ -44,7 +42,7 @@ export function FAQSection() {
                   </Accordion.Heading>
                   <Accordion.Panel>
                     <Accordion.Body>
-                      <Typography.Text className="text-muted leading-[1.6]">
+                      <Typography.Text className="text-muted">
                         {answer}
                       </Typography.Text>
                     </Accordion.Body>

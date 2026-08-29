@@ -21,13 +21,11 @@ export function GlossarySection() {
       id="glossary"
     >
       <div className="flex flex-col gap-3">
-        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
-          Glossary
-        </Typography.H2>
-        <Typography.TextSm className="font-medium text-base text-muted leading-[1.55]">
+        <Typography.H2 className="text-4xl">Glossary</Typography.H2>
+        <Typography.Text className="text-muted leading-normal">
           The abbreviations that appear on every invoice, quotation and bidding
           result, in one place.
-        </Typography.TextSm>
+        </Typography.Text>
       </div>
 
       <div className="flex flex-col gap-10">
@@ -46,17 +44,17 @@ export function GlossarySection() {
                   >
                     {hasGuide ? (
                       <Link
-                        className="font-bold text-[1.0625rem] text-accent-strong no-underline transition-colors hover:text-accent-deep"
+                        className="font-bold text-accent-strong text-base no-underline transition-colors hover:text-accent-deep"
                         href={`/learn/${slug}`}
                       >
                         {term} →
                       </Link>
                     ) : (
-                      <span className="font-bold text-[1.0625rem] text-accent-strong">
+                      <span className="font-bold text-accent-strong text-base">
                         {term}
                       </span>
                     )}
-                    <Typography.TextSm className="font-medium text-muted leading-[1.55]">
+                    <Typography.TextSm className="leading-normal">
                       {definition}
                     </Typography.TextSm>
                   </div>

@@ -11,10 +11,10 @@ export function HeroSection() {
       <span className="self-start rounded-full bg-accent-soft px-4 py-2 font-bold text-accent-strong text-sm">
         Advertise with us
       </span>
-      <Typography.H1 className="max-w-[52rem] font-bold text-[2.75rem] leading-[1.04] tracking-[-0.03em] lg:text-[4.125rem]">
+      <Typography.H1 className="max-w-4xl text-5xl leading-none lg:text-6xl">
         Reach people at the moment they are pricing a car
       </Typography.H1>
-      <Typography.TextLg className="max-w-[42rem] font-medium text-[1.3125rem] text-muted leading-[1.55]">
+      <Typography.TextLg className="max-w-prose text-xl leading-normal">
         Readers arrive with a specific question: what a COE closed at, what a
         renewal costs, which makes are moving. Placements sit beside that
         answer, not on top of it.

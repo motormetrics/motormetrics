@@ -73,10 +73,7 @@ const TimelineItemComponent = ({ item, index }: TimelineItemComponentProps) => {
       {/* Content */}
       <div className="flex flex-col gap-2 pb-12">
         <Typography.H3
-          className={cn(
-            "text-lg",
-            item.highlight ? "text-accent-strong" : "text-foreground",
-          )}
+          className={cn("text-lg", item.highlight ? "text-accent-strong" : "")}
         >
           {item.title}
         </Typography.H3>

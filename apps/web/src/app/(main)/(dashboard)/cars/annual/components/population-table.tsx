@@ -128,20 +128,18 @@ export function PopulationTable({
     { align: "right", key: "change", label: "Change", width: "w-28" },
   ];
 
-  const headerClass = "font-bold text-xs uppercase tracking-[0.06em]";
+  const headerClass = "font-bold text-xs uppercase tracking-wider";
 
   return (
     <SurfaceCard className="gap-5">
       <div className="flex flex-wrap items-center gap-3.5">
         <div className="flex flex-col">
-          <Typography.H3 className="font-bold text-2xl tracking-[-0.02em]">
-            {labels.title}
-          </Typography.H3>
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.H3>{labels.title}</Typography.H3>
+          <Typography.TextSm>
             {year} · {sorted.length} {labels.plural}
           </Typography.TextSm>
         </div>
-        <span className="ml-auto whitespace-nowrap font-semibold text-[13.5px] text-muted">
+        <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
           Sorted by {SORT_LABELS[sortKey]},{" "}
           {sortDirection === "asc" ? "ascending" : "descending"}
         </span>
@@ -253,7 +251,7 @@ export function PopulationTable({
                         }}
                       />
                     </span>
-                    <span className="w-11 text-right font-bold text-[13.5px] text-muted tabular-nums">
+                    <span className="w-11 text-right font-bold text-muted text-sm tabular-nums">
                       {row.share.toFixed(1)}%
                     </span>
                   </span>
@@ -287,7 +285,7 @@ export function PopulationTable({
         </button>
       ) : null}
 
-      <Typography.TextSm className="px-4 font-medium text-muted">
+      <Typography.TextSm className="px-4">
         Population counts are taken at 31 December each year.
         {previousYear === null ? null : ` Change is against ${previousYear}.`}
       </Typography.TextSm>

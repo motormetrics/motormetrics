@@ -147,7 +147,7 @@ export function DimensionTable({
     { align: "left", key: "share", label: "Share", width: "w-[11rem]" },
   ];
 
-  const headerClass = "font-bold text-xs uppercase tracking-[0.06em]";
+  const headerClass = "font-bold text-xs uppercase tracking-wider";
 
   return (
     <SurfaceCard className="gap-5">
@@ -156,10 +156,8 @@ export function DimensionTable({
           <Car aria-hidden className="size-5" />
         </span>
         <div className="flex flex-col">
-          <Typography.H3 className="font-bold tracking-[-0.02em]">
-            {labels.title}
-          </Typography.H3>
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.H3>{labels.title}</Typography.H3>
+          <Typography.TextSm>
             Year to date through {monthLabel} ·{" "}
             {isTruncated
               ? `top ${displayed.length} of ${visible.length}`
@@ -206,7 +204,7 @@ export function DimensionTable({
             value={query}
           />
         </label>
-        <span className="whitespace-nowrap font-semibold text-[13.5px] text-muted">
+        <span className="whitespace-nowrap font-semibold text-muted text-sm">
           Sorted by {SORT_LABELS[sortKey]},{" "}
           {sortDirection === "asc" ? "ascending" : "descending"}
         </span>
@@ -315,7 +313,7 @@ export function DimensionTable({
                       }}
                     />
                   </span>
-                  <span className="w-11 text-right font-bold text-[13.5px] text-muted tabular-nums">
+                  <span className="w-11 text-right font-bold text-muted text-sm tabular-nums">
                     {row.share.toFixed(1)}%
                   </span>
                 </span>
@@ -326,7 +324,7 @@ export function DimensionTable({
       </table>
 
       {visible.length === 0 ? (
-        <Typography.TextSm className="px-4 py-9 font-semibold text-muted">
+        <Typography.TextSm className="px-4 py-9">
           Nothing matches “{query}”.
         </Typography.TextSm>
       ) : null}

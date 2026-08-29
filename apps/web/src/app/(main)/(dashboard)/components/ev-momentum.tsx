@@ -39,7 +39,7 @@ export async function EvMomentum() {
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <Zap className="size-5" />
         </span>
-        <Typography.TextSm className="font-semibold text-accent-foreground/85">
+        <Typography.TextSm className="text-accent-foreground/85">
           Electric momentum
         </Typography.TextSm>
         <Tooltip delay={300}>
@@ -59,7 +59,7 @@ export async function EvMomentum() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
           {summary.evSharePercent.toFixed(1)}%
         </span>
         <span className="rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm tabular-nums">
@@ -71,7 +71,7 @@ export async function EvMomentum() {
         </span>
       </div>
 
-      <Typography.TextSm className="font-semibold text-accent-foreground/60">
+      <Typography.TextSm className="text-accent-foreground/60">
         Electrified share (BEV, PHEV, hybrid) · {displayMonth}
       </Typography.TextSm>
 

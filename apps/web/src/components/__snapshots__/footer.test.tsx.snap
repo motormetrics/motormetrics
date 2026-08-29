@@ -164,7 +164,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
       </li>
     </ul>
     <span
-      class="text-xs leading-tight ml-auto font-medium text-muted"
+      class="text-muted text-xs leading-tight ml-auto"
     >
       © 
       2026

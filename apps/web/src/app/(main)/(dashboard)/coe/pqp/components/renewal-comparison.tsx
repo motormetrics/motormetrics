@@ -79,8 +79,8 @@ export function RenewalComparison({
               <span
                 className={
                   row.saving >= 0
-                    ? "font-bold text-[0.96875rem] text-success-soft-foreground tabular-nums"
-                    : "font-bold text-[0.96875rem] text-warning-soft-foreground tabular-nums"
+                    ? "font-bold text-base text-success-soft-foreground tabular-nums"
+                    : "font-bold text-base text-warning-soft-foreground tabular-nums"
                 }
               >
                 {row.saving >= 0 ? "Saves " : "Costs "}
@@ -90,7 +90,7 @@ export function RenewalComparison({
           </ReportRow>
         ))}
       </ReportTable>
-      <Typography.TextSm className="font-medium text-muted">
+      <Typography.TextSm>
         Estimates only. Both figures exclude processing and registration fees,
         the PQP is a three-month moving average that moves every month, and a
         bid may close anywhere either side of the last premium.

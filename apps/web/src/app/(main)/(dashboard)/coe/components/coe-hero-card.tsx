@@ -22,7 +22,7 @@ const SPARK_HEIGHT = 100;
 function InsetFigure({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <Typography.Caption className="font-semibold text-accent-foreground/70">
+      <Typography.Caption className="text-accent-foreground/70">
         {label}
       </Typography.Caption>
       <span className="font-extrabold text-accent-foreground text-xl tabular-nums">
@@ -84,7 +84,7 @@ export async function CoeHeroCard({
       </div>
 
       <div className="flex flex-wrap items-center gap-4">
-        <span className="font-extrabold text-6xl tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-6xl tabular-nums tracking-tight">
           <NumberValue
             currency="SGD"
             locale="en-SG"
@@ -102,7 +102,7 @@ export async function CoeHeroCard({
         />
       </div>
 
-      <Typography.TextLg className="font-semibold text-accent-foreground/85">
+      <Typography.TextLg className="text-accent-foreground/85">
         {CATEGORY_DESCRIPTIONS[category]} · {comparison}
       </Typography.TextLg>
 

@@ -85,10 +85,8 @@ export async function RegistrationTrend({
           <Zap className="size-5" />
         </span>
         <div className="flex min-w-0 flex-col">
-          <Typography.H3 className="font-bold text-2xl tracking-[-0.02em]">
-            {heading.title}
-          </Typography.H3>
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.H3>{heading.title}</Typography.H3>
+          <Typography.TextSm>
             {RANGE_NOTES[range]} to {monthLabel}
           </Typography.TextSm>
         </div>
@@ -112,7 +110,7 @@ export async function RegistrationTrend({
 
       <div className="flex flex-col gap-1">
         <div className="flex flex-wrap items-center gap-3.5">
-          <span className="font-extrabold text-5xl tabular-nums tracking-[-0.03em] lg:text-[3.75rem]">
+          <span className="font-extrabold text-5xl tabular-nums tracking-tight lg:text-6xl">
             <NumberValue
               locale="en-SG"
               maximumFractionDigits={0}
@@ -128,7 +126,7 @@ export async function RegistrationTrend({
             }
           />
         </div>
-        <Typography.Text className="font-semibold text-muted">
+        <Typography.Text className="text-muted">
           {heading.subject} registered in {monthLabel}
         </Typography.Text>
       </div>
@@ -161,12 +159,10 @@ export async function RegistrationTrend({
             />
           </svg>
           <div className="flex justify-between">
-            <Typography.Caption className="font-semibold text-muted">
+            <Typography.Caption>
               {formatDateToMonthYear(visibleMonths.at(0)?.month ?? "")}
             </Typography.Caption>
-            <Typography.Caption className="font-semibold text-muted">
-              {monthLabel}
-            </Typography.Caption>
+            <Typography.Caption>{monthLabel}</Typography.Caption>
           </div>
         </div>
       ) : null}

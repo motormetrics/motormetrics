@@ -58,7 +58,7 @@ export function PARFComparisonTable() {
           );
         })}
       </ReportTable>
-      <Typography.TextSm className="font-medium text-muted">
+      <Typography.TextSm>
         Rates apply to the ARF paid on the vehicle, and the rebate is capped
         whichever bracket it falls in.
       </Typography.TextSm>

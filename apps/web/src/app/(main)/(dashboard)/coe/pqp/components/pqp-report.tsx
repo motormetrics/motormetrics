@@ -187,7 +187,7 @@ export async function PQPReport({
 
       <div className="flex flex-col gap-3.5">
         <PQPChart data={chartData} series={series} />
-        <Typography.TextSm className="font-medium text-muted">
+        <Typography.TextSm>
           Rates are quoted for a {term}-year renewal. The comps draw the closing
           premium alongside the rate; that series is not in this query yet.
         </Typography.TextSm>
@@ -198,7 +198,7 @@ export async function PQPReport({
         title="PQP against the closing premium"
       >
         <PQPComparisonChart data={comparisonData} />
-        <Typography.TextSm className="font-medium text-muted">
+        <Typography.TextSm>
           A bar above the dashed line means the market is bidding above the
           renewal rate; a bar below it means renewing is the dearer of the two.
         </Typography.TextSm>
@@ -232,7 +232,7 @@ export async function PQPReport({
               <ReportRow isActive={key === category} key={key}>
                 <ReportCell>
                   <span
-                    className="inline-flex size-10 items-center justify-center rounded-full font-extrabold text-[1.0625rem]"
+                    className="inline-flex size-10 items-center justify-center rounded-full font-extrabold text-base"
                     style={{
                       backgroundColor:
                         key === category
@@ -315,11 +315,11 @@ export async function PQPReport({
                   return (
                     <ReportCell align="end" key={key}>
                       <div className="flex flex-col items-end gap-0.5">
-                        <span className="font-extrabold text-[1.03125rem]">
+                        <span className="font-extrabold text-base">
                           {rate > 0 ? formatCurrency(rate * termFactor) : "—"}
                         </span>
                         {monthChange === null ? null : (
-                          <span className="text-[0.78125rem]">
+                          <span className="text-xs">
                             <DeltaText value={-monthChange} />
                           </span>
                         )}
@@ -356,19 +356,17 @@ export async function PQPReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
-            How the PQP is set
-          </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          <Typography.H3 className="text-lg">How the PQP is set</Typography.H3>
+          <Typography.Text>
             LTA averages the closing premiums in that category over the last
             three months, across both exercises, and publishes it as the rate
             for the coming month. It therefore lags the market rather than
             leading it.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Text>
+          <Typography.Text>
             A five-year renewal costs half the PQP, but the car cannot be
             renewed again after that term.
-          </Typography.TextSm>
+          </Typography.Text>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/premiums"

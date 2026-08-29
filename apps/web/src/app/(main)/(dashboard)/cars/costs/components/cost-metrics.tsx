@@ -48,9 +48,7 @@ export function CostMetrics({ data }: CostMetricsProps) {
           </div>
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm className="text-muted">
-            Models with AD selling prices
-          </Typography.TextSm>
+          <Typography.TextSm>Models with AD selling prices</Typography.TextSm>
         </KPI.Footer>
       </KPI>
       <KPIGroup.Separator />
@@ -73,7 +71,7 @@ export function CostMetrics({ data }: CostMetricsProps) {
           )}
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm className="text-muted">
+          <Typography.TextSm>
             Middle price point across{" "}
             <NumberValue
               locale="en-SG"

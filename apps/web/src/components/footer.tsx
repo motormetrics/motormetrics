@@ -52,7 +52,7 @@ export function Footer() {
         ))}
       </ul>
 
-      <Typography.Caption className="ml-auto font-medium text-muted">
+      <Typography.Caption className="ml-auto">
         © {COPYRIGHT_YEAR} {SITE_TITLE} · Data provided by{" "}
         <Link
           className="transition-colors hover:text-accent-strong"

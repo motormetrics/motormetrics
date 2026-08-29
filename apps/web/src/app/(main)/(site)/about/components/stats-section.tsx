@@ -19,12 +19,10 @@ export function StatsSection() {
           className="flex flex-col gap-1.5 border-border border-t-2 pt-7"
           key={label}
         >
-          <span className="font-extrabold text-[2.5rem] text-foreground tabular-nums leading-none tracking-[-0.03em] lg:text-[2.875rem]">
+          <span className="font-extrabold text-4xl text-foreground tabular-nums leading-none tracking-tight lg:text-5xl">
             {value}
           </span>
-          <Typography.TextSm className="font-semibold text-[0.9375rem]">
-            {label}
-          </Typography.TextSm>
+          <Typography.TextSm>{label}</Typography.TextSm>
         </div>
       ))}
     </section>
