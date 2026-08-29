@@ -1,180 +1,85 @@
-"use client";
-
-import { Card, Chip } from "@heroui/react";
+import { ReportEyebrow } from "@web/components/shared/report";
 import Typography from "@web/components/typography";
-import {
-  fadeInUpVariants,
-  staggerContainerVariants,
-  staggerItemVariants,
-} from "@web/config/animations";
-import { motion } from "framer-motion";
-import { AlertTriangle, Calendar, Database, RefreshCw } from "lucide-react";
-import Link from "next/link";
+import type { ReactNode } from "react";
 
-const features = [
+const FACTS: { detail: ReactNode; title: string }[] = [
   {
-    icon: Database,
-    iconColor: "text-accent-strong",
-    containerBg: "bg-accent/10",
-    title: "Primary Data Source",
-    description: (
+    detail: (
       <>
-        All vehicle registration and COE data is sourced directly from
-        Singapore&apos;s{" "}
-        <strong>Land Transport Authority (LTA) DataMall</strong>, the official
-        government open data platform for transport-related datasets.
+        Every registration, deregistration and COE figure on this site comes
+        from <strong className="font-bold">LTA DataMall</strong>, the Land
+        Transport Authority&apos;s open data platform. Nothing is modelled or
+        estimated.
       </>
     ),
-    chip: (
-      <Chip size="sm" color="accent" variant="primary">
-        Official Government Data
-      </Chip>
-    ),
+    title: "Primary source",
   },
   {
-    icon: RefreshCw,
-    iconColor: "text-success",
-    containerBg: "bg-success/10",
-    title: "Update Frequency",
-    description: (
+    detail: (
       <>
-        Data is updated <strong>monthly</strong> following LTA&apos;s official
-        release schedule. New data typically becomes available 2-3 weeks after
-        the end of each month.
+        Registration data is published{" "}
+        <strong className="font-bold">monthly</strong>, and usually lands two to
+        three weeks after the month it covers. COE results follow each bidding
+        exercise, twice a month.
       </>
     ),
-    extra: (
-      <Typography.TextSm>
-        COE bidding results are updated after each exercise (twice monthly).
-      </Typography.TextSm>
-    ),
+    title: "Update frequency",
   },
   {
-    icon: Calendar,
-    iconColor: "text-muted",
-    containerBg: "bg-muted/10",
-    title: "Data Coverage",
-    description: (
+    detail: (
       <>
-        Our dataset covers Singapore vehicle registration and COE data from{" "}
-        <strong>January 2015 to present</strong>, with monthly granularity.
+        Car registrations, COE bidding results, deregistrations, vehicle
+        population and PQP rates, from{" "}
+        <strong className="font-bold">January 2015</strong> to the present, at
+        monthly granularity.
       </>
     ),
-    chips: (
-      <div className="flex flex-wrap gap-2">
-        <Chip size="sm" variant="primary">
-          Car Registrations
-        </Chip>
-        <Chip size="sm" variant="primary">
-          COE Bidding Results
-        </Chip>
-        <Chip size="sm" variant="primary">
-          Vehicle Deregistrations
-        </Chip>
-        <Chip size="sm" variant="primary">
-          Vehicle Population
-        </Chip>
-        <Chip size="sm" variant="primary">
-          PQP Rates
-        </Chip>
-      </div>
-    ),
+    title: "Coverage",
   },
   {
-    icon: AlertTriangle,
-    iconColor: "text-warning",
-    containerBg: "bg-warning/10",
-    title: "Accuracy Disclaimer",
-    description:
-      "While we strive for accuracy, this platform is not affiliated with the Singapore government. Data is provided for informational purposes only. For official records and legal matters, please refer directly to LTA's official channels. Minor discrepancies may occur due to data processing and formatting.",
+    detail:
+      "This site is not affiliated with the Singapore government and is published for information only. For official records, refer to LTA directly. Minor discrepancies can arise from processing and formatting, and LTA revises past releases from time to time.",
+    title: "Accuracy",
   },
 ];
 
+/**
+ * Where the figures come from, in the same narrow-heading layout as the
+ * glossary and the FAQ. Cards would overstate four short paragraphs, so the
+ * facts are hairline-ruled rows.
+ */
 export function DataSourcesSection() {
   return (
-    <section id="data-sources" className="scroll-mt-24 py-20 lg:py-28">
-      <div className="container mx-auto">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Left column - Sticky header */}
-          <div className="lg:col-span-4">
-            <motion.div
-              className="sticky top-24 flex flex-col gap-6"
-              variants={fadeInUpVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              <Typography.Label className="text-accent-strong uppercase tracking-widest">
-                Data Transparency
-              </Typography.Label>
-              <Typography.H2 className="lg:text-4xl">
-                Where Our Data Comes From
-              </Typography.H2>
-              <Typography.Text className="text-muted">
-                All data is sourced from official government channels and
-                updated regularly.
-              </Typography.Text>
+    <section
+      className="grid scroll-mt-24 grid-cols-1 gap-10 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14"
+      id="data-sources"
+    >
+      <div className="flex flex-col gap-3">
+        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
+          Where the data comes from
+        </Typography.H2>
+        <a
+          className="font-bold text-accent-strong text-base no-underline transition-colors hover:text-accent-deep"
+          href="https://datamall.lta.gov.sg"
+          rel="noreferrer"
+          target="_blank"
+        >
+          LTA DataMall →
+        </a>
+      </div>
 
-              {/* LTA Badge */}
-              <Card className="border-border">
-                <Card.Content className="flex flex-row items-center gap-4">
-                  <div className="flex size-12 items-center justify-center rounded-lg bg-default">
-                    <Database className="size-6 text-muted" />
-                  </div>
-                  <div>
-                    <div className="font-medium text-foreground text-sm">
-                      Data Provider
-                    </div>
-                    <Link
-                      href="https://datamall.lta.gov.sg"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-accent-strong text-sm underline"
-                    >
-                      LTA DataMall
-                    </Link>
-                  </div>
-                </Card.Content>
-              </Card>
-            </motion.div>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        {FACTS.map(({ detail, title }) => (
+          <div
+            className="flex flex-col gap-2 border-border border-t pt-4"
+            key={title}
+          >
+            <ReportEyebrow>{title}</ReportEyebrow>
+            <Typography.TextSm className="font-medium text-base text-muted leading-[1.6]">
+              {detail}
+            </Typography.TextSm>
           </div>
-
-          {/* Right column - Feature cards */}
-          <div className="lg:col-span-8">
-            <motion.div
-              className="grid gap-6 sm:grid-cols-2"
-              variants={staggerContainerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              {features.map((feature) => (
-                <motion.div key={feature.title} variants={staggerItemVariants}>
-                  <Card className="group h-full border-border/80 transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
-                    <Card.Content className="flex flex-col gap-4">
-                      <div
-                        className={`flex size-12 items-center justify-center rounded-xl ${feature.containerBg} transition-colors`}
-                      >
-                        <feature.icon
-                          className={`size-6 ${feature.iconColor}`}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <Typography.H4>{feature.title}</Typography.H4>
-                        <Typography.TextSm>
-                          {feature.description}
-                        </Typography.TextSm>
-                      </div>
-                      {feature.extra}
-                      {feature.chip}
-                      {feature.chips}
-                    </Card.Content>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
+        ))}
       </div>
     </section>
   );

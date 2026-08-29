@@ -1,15 +1,4 @@
-"use client";
-
-import { Card } from "@heroui/react";
-import { NumberValue } from "@heroui-pro/react";
-
 import Typography from "@web/components/typography";
-import {
-  staggerContainerVariants,
-  staggerItemVariants,
-} from "@web/config/animations";
-import { motion } from "framer-motion";
-import { useState } from "react";
 
 interface TrafficStats {
   uniqueVisitors: number;
@@ -17,110 +6,48 @@ interface TrafficStats {
   pagesPerVisitor: number;
 }
 
-interface StatItemProps {
-  value: number;
-  suffix?: string;
-  label: string;
-  description: string;
-}
-
-function StatItem({ value, suffix = "", label, description }: StatItemProps) {
-  const [isInView, setIsInView] = useState(false);
-
-  return (
-    <motion.div
-      variants={staggerItemVariants}
-      onViewportEnter={() => setIsInView(true)}
-      viewport={{ once: true }}
-    >
-      <Card className="group border-border bg-surface shadow-sm transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
-        <Card.Content className="flex flex-col gap-2">
-          <div className="font-semibold text-4xl text-foreground tracking-tight lg:text-5xl">
-            {isInView ? (
-              <NumberValue
-                locale="en-SG"
-                maximumFractionDigits={0}
-                value={value}
-              >
-                {suffix ? (
-                  <NumberValue.Suffix>{suffix}</NumberValue.Suffix>
-                ) : null}
-              </NumberValue>
-            ) : (
-              <NumberValue locale="en-SG" maximumFractionDigits={0} value={0}>
-                {suffix ? (
-                  <NumberValue.Suffix>{suffix}</NumberValue.Suffix>
-                ) : null}
-              </NumberValue>
-            )}
-          </div>
-          <Typography.Text className="font-medium text-foreground">
-            {label}
-          </Typography.Text>
-          <Typography.TextSm className="text-muted">
-            {description}
-          </Typography.TextSm>
-        </Card.Content>
-        {/* Subtle accent line */}
-        <div
-          className="absolute right-6 bottom-0 left-6 h-0.5 scale-x-0 bg-gradient-to-r from-accent to-accent/60 transition-transform duration-300 group-hover:scale-x-100"
-          aria-hidden="true"
-        />
-      </Card>
-    </motion.div>
-  );
-}
-
+/**
+ * The comp shows four audience figures under hairline rules. Only three of them
+ * exist as measured numbers — the fourth in the comp is invented — so this runs
+ * the three PostHog reports and leaves it there.
+ */
 export function StatsSection({ stats }: { stats: TrafficStats }) {
-  const statItems = [
+  const items = [
     {
-      value: stats.uniqueVisitors,
-      label: "Unique Visitors",
-      description: "Monthly unique visitors across the platform",
+      label: "Page views in the last 30 days",
+      value: stats.pageViews.toLocaleString("en-SG", {
+        maximumFractionDigits: 0,
+      }),
     },
     {
-      value: stats.pageViews,
-      label: "Page Views",
-      description: "Total pages viewed in the last 30 days",
+      label: "Unique readers, no account required",
+      value: stats.uniqueVisitors.toLocaleString("en-SG", {
+        maximumFractionDigits: 0,
+      }),
     },
     {
-      value: stats.pagesPerVisitor,
-      label: "Pages per Visitor",
-      description: "Average engagement depth per session",
+      label: "Pages read per visitor, on average",
+      value: stats.pagesPerVisitor.toLocaleString("en-SG", {
+        maximumFractionDigits: 1,
+      }),
     },
   ];
 
   return (
-    <section id="stats" className="scroll-mt-20 py-20 lg:py-28">
-      <div className="flex flex-col gap-12">
-        {/* Section header */}
-        <div className="flex flex-col gap-4">
-          <Typography.Label className="text-accent-strong uppercase tracking-widest">
-            Audience Metrics
-          </Typography.Label>
-          <Typography.H2 className="max-w-lg lg:text-4xl">
-            Transparent, public analytics
-          </Typography.H2>
-          <Typography.TextLg className="max-w-2xl text-muted">
-            Real traffic data from the last 30 days. Our audience comprises car
-            buyers, owners, and enthusiasts actively evaluating the Singapore
-            market.
-          </Typography.TextLg>
-        </div>
-
-        {/* Stats grid */}
-        <motion.div
-          className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:gap-6"
-          variants={staggerContainerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+    <section className="grid scroll-mt-24 gap-6 sm:grid-cols-3" id="stats">
+      {items.map(({ label, value }) => (
+        <div
+          className="flex flex-col gap-1.5 border-border border-t-2 pt-7"
+          key={label}
         >
-          {statItems.map((stat) => (
-            <StatItem key={stat.label} {...stat} />
-          ))}
-        </motion.div>
-      </div>
+          <span className="font-extrabold text-[2.5rem] text-foreground tabular-nums leading-none tracking-[-0.03em] lg:text-[2.875rem]">
+            {value}
+          </span>
+          <Typography.TextSm className="font-semibold text-[0.9375rem]">
+            {label}
+          </Typography.TextSm>
+        </div>
+      ))}
     </section>
   );
 }

@@ -1,92 +1,49 @@
-"use client";
-
 import { Button } from "@heroui/react";
-
 import Typography from "@web/components/typography";
-import {
-  staggerContainerVariants,
-  staggerItemVariants,
-} from "@web/config/animations";
 import { navLinks } from "@web/config/navigation";
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
+/**
+ * The comp closes on a gradient panel inviting readers to subscribe. There is
+ * no mailing list, so the same panel carries the channels that do exist — the
+ * social accounts each release is posted to.
+ *
+ * `--accent-gradient` is fixed blue in both themes, so the copy takes
+ * `--ink-surface-foreground` (white either way) rather than a token that flips.
+ */
 export function CtaSection() {
   return (
-    <section className="py-20 lg:py-28">
-      <div className="container mx-auto">
-        <motion.div
-          className="flex flex-col items-center gap-10"
-          variants={staggerContainerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {/* Header */}
-          <motion.div
-            className="flex flex-col items-center gap-4 text-center"
-            variants={staggerItemVariants}
-          >
-            <Typography.Label className="text-accent-strong uppercase tracking-widest">
-              Stay Updated
-            </Typography.Label>
-            <Typography.H2>Follow for the Latest Updates</Typography.H2>
-            <Typography.TextLg className="max-w-xl text-muted">
-              Get notified when new COE results, car registration data, and
-              market insights are published.
-            </Typography.TextLg>
-          </motion.div>
-
-          {/* Social links */}
-          <motion.div
-            className="flex flex-wrap items-center justify-center gap-4"
-            variants={staggerItemVariants}
-          >
-            {navLinks.socialMedia.map(({ title, url, icon: Icon }) => (
-              <a
-                key={title}
-                href={url}
-                rel="me noreferrer"
-                target="_blank"
-                className="inline-flex h-10 items-center gap-2 rounded-full border border-border px-5 font-medium text-foreground text-sm transition-all hover:border-accent hover:bg-accent/5"
-              >
-                <Icon className="size-4" />
-                <span>{title}</span>
-              </a>
-            ))}
-          </motion.div>
-
-          {/* CTA buttons */}
-          <motion.div
-            className="flex flex-col items-center gap-4 pt-4 sm:flex-row sm:gap-6"
-            variants={staggerItemVariants}
-          >
-            <Link href="/" className="no-underline">
-              <Button
-                variant="primary"
-                size="lg"
-                className="gap-2 rounded-full px-8"
-              >
-                Explore the Dashboard
-                <ArrowRight className="size-4" />
-              </Button>
-            </Link>
-            {/* TODO: Blog CTA hidden pending a decision on the blog's future.
-                Commented out rather than deleted so it can be restored.
-            <Link href="/blog" className="no-underline">
-              <Button
-                variant="outline"
-                size="lg"
-                className="gap-2 rounded-full px-8 text-foreground"
-              >
-                Read Market Insights
-              </Button>
-            </Link>
-            */}
-          </motion.div>
-        </motion.div>
+    <section className="flex flex-col items-start gap-8 rounded-4xl bg-[image:var(--accent-gradient)] p-8 text-ink-surface-foreground lg:flex-row lg:items-center lg:p-14">
+      <div className="flex max-w-[35rem] flex-col gap-3">
+        <Typography.H2 className="font-bold text-[2rem] text-ink-surface-foreground tracking-[-0.02em] lg:text-[2.375rem]">
+          Get the numbers when they land
+        </Typography.H2>
+        <Typography.Text className="font-medium text-[1.125rem] text-ink-surface-foreground/85 leading-[1.55]">
+          New COE results and registration figures are posted as soon as they
+          publish. Nothing else.
+        </Typography.Text>
+        <div className="flex flex-wrap gap-3 pt-2">
+          {navLinks.socialMedia.map(({ icon: Icon, title, url }) => (
+            <a
+              className="inline-flex items-center gap-2 rounded-full border border-ink-surface-foreground/25 px-4 py-2 font-semibold text-ink-surface-foreground text-sm no-underline transition-colors hover:bg-ink-surface-foreground/10"
+              href={url}
+              key={title}
+              rel="me noreferrer"
+              target="_blank"
+            >
+              <Icon className="size-4" />
+              {title}
+            </a>
+          ))}
+        </div>
       </div>
+      <Link className="no-underline lg:ml-auto" href="/">
+        <Button className="rounded-full" size="lg" variant="secondary">
+          Explore the dashboard
+          <ArrowUpRight className="size-4" />
+        </Button>
+      </Link>
     </section>
   );
 }

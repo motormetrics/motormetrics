@@ -1,110 +1,70 @@
-"use client";
-
-import { Card } from "@heroui/react";
+import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
+import { getAllGuideSlugs } from "@web/app/(main)/(site)/learn/lib/guides";
+import { ReportEyebrow } from "@web/components/shared/report";
 import Typography from "@web/components/typography";
-import {
-  fadeInUpVariants,
-  staggerContainerVariants,
-  staggerItemVariants,
-} from "@web/config/animations";
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { getAllGuideSlugs } from "../lib/guides";
-import { GLOSSARY_CATEGORIES } from "./glossary-data";
 
 const guideSlugs = getAllGuideSlugs();
 
+/**
+ * The comp sets the glossary as a heading in a narrow left column against a
+ * two-up list of hairline-topped terms — no cards, the rules do the dividing.
+ *
+ * The comp draws one flat list; the data is grouped into five categories and
+ * the grouping is worth keeping, so each category opens with a small caps label
+ * over its own two-up list.
+ */
 export function GlossarySection() {
   return (
     <section
+      className="grid scroll-mt-24 grid-cols-1 gap-10 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14"
       id="glossary"
-      className="relative -mx-6 scroll-mt-24 overflow-hidden bg-default px-6 py-20 lg:py-28"
     >
-      {/* Dot pattern background */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-50"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--muted) 15%, transparent) 1px, transparent 0)",
-          backgroundSize: "24px 24px",
-        }}
-        aria-hidden="true"
-      />
+      <div className="flex flex-col gap-3">
+        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
+          Glossary
+        </Typography.H2>
+        <Typography.TextSm className="font-medium text-base text-muted leading-[1.55]">
+          The abbreviations that appear on every invoice, quotation and bidding
+          result, in one place.
+        </Typography.TextSm>
+      </div>
 
-      <div className="container relative mx-auto">
-        {/* Section header */}
-        <motion.div
-          className="flex flex-col items-center gap-4 pb-12 text-center"
-          variants={fadeInUpVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <Typography.Label className="text-accent-strong uppercase tracking-widest">
-            Terminology
-          </Typography.Label>
-          <Typography.H2 className="lg:text-4xl">
-            Glossary of Key Terms
-          </Typography.H2>
-          <Typography.Text className="max-w-2xl text-muted">
-            Understanding Singapore&apos;s automotive terminology is essential
-            for navigating the car market.
-          </Typography.Text>
-        </motion.div>
+      <div className="flex flex-col gap-10">
+        {GLOSSARY_CATEGORIES.map((category) => (
+          <div className="flex flex-col gap-5" key={category.title}>
+            <ReportEyebrow>{category.title}</ReportEyebrow>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              {category.terms.map(({ definition, term }) => {
+                const slug = term.toLowerCase();
+                const hasGuide = guideSlugs.includes(slug);
 
-        {/* Categories */}
-        <div className="flex flex-col gap-12">
-          {GLOSSARY_CATEGORIES.map((category) => (
-            <motion.div
-              key={category.title}
-              className="flex flex-col gap-6"
-              variants={staggerContainerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.1 }}
-            >
-              <div className="flex items-center gap-3">
-                <category.icon className={`size-5 ${category.iconColor}`} />
-                <Typography.H3>{category.title}</Typography.H3>
-              </div>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {category.terms.map(({ term, definition }) => {
-                  const slug = term.toLowerCase();
-                  const hasGuide = guideSlugs.includes(slug);
-
-                  const card = (
-                    <Card className="h-full border-border/80 transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
-                      <Card.Header className="pb-0">
-                        <div className="flex w-full items-center justify-between">
-                          <Typography.H4>{term}</Typography.H4>
-                          {hasGuide && (
-                            <ArrowRight className="size-4 text-accent-strong" />
-                          )}
-                        </div>
-                      </Card.Header>
-                      <Card.Content>
-                        <Typography.TextSm>{definition}</Typography.TextSm>
-                      </Card.Content>
-                    </Card>
-                  );
-
-                  return (
-                    <motion.div key={term} variants={staggerItemVariants}>
-                      {hasGuide ? (
-                        <Link href={`/learn/${slug}`} className="block h-full">
-                          {card}
-                        </Link>
-                      ) : (
-                        card
-                      )}
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                return (
+                  <div
+                    className="flex flex-col gap-1 border-border border-t pt-4"
+                    key={term}
+                  >
+                    {hasGuide ? (
+                      <Link
+                        className="font-bold text-[1.0625rem] text-accent-strong no-underline transition-colors hover:text-accent-deep"
+                        href={`/learn/${slug}`}
+                      >
+                        {term} →
+                      </Link>
+                    ) : (
+                      <span className="font-bold text-[1.0625rem] text-accent-strong">
+                        {term}
+                      </span>
+                    )}
+                    <Typography.TextSm className="font-medium text-muted leading-[1.55]">
+                      {definition}
+                    </Typography.TextSm>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
