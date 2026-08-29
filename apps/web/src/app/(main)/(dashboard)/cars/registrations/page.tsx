@@ -1,20 +1,15 @@
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import { CategoryTabsSection } from "@web/app/(main)/(dashboard)/cars/registrations/components/category-tabs-section";
-import { MetricCardsSection } from "@web/app/(main)/(dashboard)/cars/registrations/components/metric-cards-section";
-import { TopMakesFuelSection } from "@web/app/(main)/(dashboard)/cars/registrations/components/top-makes-section";
+import { RegistrationsReport } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-report";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
 import { TrendsCompareButton } from "@web/app/(main)/(dashboard)/cars/registrations/trends-compare-button";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
-import { DashboardPageHeader } from "@web/components/dashboard-page-header";
-import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
-import { DashboardPageTitle } from "@web/components/dashboard-page-title";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthSelector } from "@web/components/shared/month-selector";
+import { PageHead } from "@web/components/shared/page-head";
+import { Report, ReportSection } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { loadCarsMetadataData } from "@web/lib/cars/page-data";
-import { loadLastUpdated } from "@web/lib/common";
 import { getComparisonData } from "@web/queries/cars/compare";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
@@ -70,33 +65,37 @@ export async function generateMetadata({
 
 export default function Page({ searchParams }: PageProps) {
   return (
-    <div className="flex flex-col gap-8">
-      <DashboardPageHeader
-        title={
-          <DashboardPageTitle
-            title="Car Registrations"
-            subtitle="Monthly new car registrations in Singapore by fuel type and vehicle type."
-          />
-        }
-        meta={
+    <Report>
+      <PageHead
+        controls={
           <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
             <CarsPageHeaderMeta searchParams={searchParams} />
           </Suspense>
         }
+        description="Every car registered in Singapore, counted in the month of registration — which can lag the bidding exercise that won its COE by several weeks."
+        title="Car registrations"
       />
 
-      <AnimatedSection order={1}>
-        <Suspense fallback={<SkeletonCard className="h-12 w-52" />}>
-          <CarsCompareSection searchParams={searchParams} />
-        </Suspense>
-      </AnimatedSection>
-
       <SectionErrorBoundary title="Registration data unavailable">
-        <Suspense fallback={<SkeletonCard className="h-[720px] w-full" />}>
-          <CarsPageSections searchParams={searchParams} />
+        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+          <RegistrationsReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
-    </div>
+
+      {/* The comp has no month-comparison block. Kept because it is working
+          functionality rather than styling, and parked at the foot so it does
+          not interrupt the report above it. */}
+      <ReportSection
+        caption="Pick two months to see how registrations moved between them"
+        title="Compare months"
+      >
+        <SectionErrorBoundary title="Comparison unavailable">
+          <Suspense fallback={<SkeletonCard className="h-12 w-52" />}>
+            <CarsCompareSection searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </ReportSection>
+    </Report>
   );
 }
 
@@ -128,48 +127,22 @@ async function CarsCompareSection({
   );
 }
 
-async function CarsPageSections({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const { month: parsedMonth } = await loadSearchParams(searchParams);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
-
-  return (
-    <div className="flex flex-col gap-4">
-      <AnimatedSection order={3}>
-        <MetricCardsSection month={month} />
-      </AnimatedSection>
-      <AnimatedSection order={4}>
-        <CategoryTabsSection month={month} />
-      </AnimatedSection>
-      <AnimatedSection order={5}>
-        <TopMakesFuelSection month={month} />
-      </AnimatedSection>
-    </div>
-  );
-}
-
 async function CarsPageHeaderMeta({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
   const { month: parsedMonth } = await loadSearchParams(searchParams);
-  const [months, lastUpdated, { wasAdjusted }] = await Promise.all([
+  const [months, { wasAdjusted }] = await Promise.all([
     fetchMonthsForCars(),
-    loadLastUpdated("cars"),
     getMonthOrLatest(parsedMonth, "cars"),
   ]);
 
   return (
-    <DashboardPageMeta lastUpdated={lastUpdated}>
-      <MonthSelector
-        months={months}
-        latestMonth={months[0]}
-        wasAdjusted={wasAdjusted}
-      />
-    </DashboardPageMeta>
+    <MonthSelector
+      latestMonth={months[0]}
+      months={months}
+      wasAdjusted={wasAdjusted}
+    />
   );
 }
