@@ -7,6 +7,7 @@ import {
   resetDbMocks,
 } from "../test-utils";
 import { getCarPopulationYears } from "./available-years";
+import { getCarPopulationByMakeAndFuelType } from "./by-make-and-fuel-type";
 import { getCarPopulationByYearAndMake } from "./by-year-and-make";
 import { getCarPopulationYearlyTotals } from "./yearly-totals";
 
@@ -68,6 +69,36 @@ describe("car population queries", () => {
       ]);
       expect(cacheLifeMock).toHaveBeenCalledWith("max");
       expect(cacheTagMock).toHaveBeenCalledWith("cars:population:totals");
+    });
+  });
+
+  describe("getCarPopulationByMakeAndFuelType", () => {
+    it("should return population grouped by year, make and fuel type", async () => {
+      queueSelect([
+        { year: "2025", make: "TOYOTA", fuelType: "Petrol", total: 100000 },
+        { year: "2025", make: "TOYOTA", fuelType: "Electric", total: 5000 },
+      ]);
+
+      const result = await getCarPopulationByMakeAndFuelType();
+
+      expect(result).toEqual([
+        { year: "2025", make: "TOYOTA", fuelType: "Petrol", total: 100000 },
+        { year: "2025", make: "TOYOTA", fuelType: "Electric", total: 5000 },
+      ]);
+      expect(cacheLifeMock).toHaveBeenCalledWith("max");
+      expect(cacheTagMock).toHaveBeenCalledWith("cars:population:totals");
+    });
+
+    it("should keep the null fuel type of the years LTA published no split", async () => {
+      queueSelect([
+        { year: "2010", make: "TOYOTA", fuelType: null, total: 90000 },
+      ]);
+
+      const result = await getCarPopulationByMakeAndFuelType();
+
+      expect(result).toEqual([
+        { year: "2010", make: "TOYOTA", fuelType: null, total: 90000 },
+      ]);
     });
   });
 });

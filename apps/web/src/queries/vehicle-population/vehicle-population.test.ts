@@ -7,6 +7,7 @@ import {
   resetDbMocks,
 } from "../test-utils";
 import { getVehiclePopulationYears } from "./available-years";
+import { getVehiclePopulationByCategoryAndFuelType } from "./by-category-and-fuel-type";
 import { getVehiclePopulationByYearAndFuelType } from "./by-year-and-fuel-type";
 import { getVehiclePopulationYearlyTotals } from "./yearly-totals";
 
@@ -68,6 +69,42 @@ describe("vehicle population queries", () => {
       ]);
       expect(cacheLifeMock).toHaveBeenCalledWith("max");
       expect(cacheTagMock).toHaveBeenCalledWith("vehicle-population:totals");
+    });
+  });
+
+  describe("getVehiclePopulationByCategoryAndFuelType", () => {
+    it("should return population grouped by year, category and fuel type", async () => {
+      queueSelect([
+        { year: "2025", category: "Cars", fuelType: "Petrol", total: 500000 },
+        {
+          year: "2025",
+          category: "Motorcycles",
+          fuelType: "Petrol",
+          total: 130000,
+        },
+      ]);
+
+      const result = await getVehiclePopulationByCategoryAndFuelType();
+
+      expect(result).toEqual([
+        { year: "2025", category: "Cars", fuelType: "Petrol", total: 500000 },
+        {
+          year: "2025",
+          category: "Motorcycles",
+          fuelType: "Petrol",
+          total: 130000,
+        },
+      ]);
+      expect(cacheLifeMock).toHaveBeenCalledWith("max");
+      expect(cacheTagMock).toHaveBeenCalledWith("vehicle-population:totals");
+    });
+
+    it("should return an empty array when no data exists", async () => {
+      queueSelect([]);
+
+      await expect(
+        getVehiclePopulationByCategoryAndFuelType(),
+      ).resolves.toEqual([]);
     });
   });
 });
