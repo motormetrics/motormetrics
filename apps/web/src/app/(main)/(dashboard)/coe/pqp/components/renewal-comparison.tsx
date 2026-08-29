@@ -8,60 +8,67 @@ import {
 import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
 
+/** The two terms a COE can be renewed for, and what each costs of the PQP. */
+const TERMS = [
+  { key: "5", label: "5-year", factor: 0.5 },
+  { key: "10", label: "10-year", factor: 1 },
+];
+
 /**
- * What renewing costs against bidding, in money, for the category the page is
- * already reporting on.
+ * What renewing costs against bidding, in money.
  *
- * This was a card with its own category tab strip, sitting directly beneath the
- * page's own — the duplication is why it read as a different page. It now takes
- * the selection from the URL like every other block and renders as a ruled
- * section.
+ * Every category and both terms are on the page at once rather than keyed to
+ * the controls at the top: this section sits at the foot of a long page, and
+ * reading one row of it should not mean scrolling back up to the filter bar and
+ * down again. The row matching the current selection is tinted so the two stay
+ * connected.
  *
  * The bid column is the closing premium pro-rated to the term, which is the
  * only like comparison available: a premium buys ten years of COE, so half of
  * it is what five of those years cost.
  */
 export function RenewalComparison({
-  summary,
+  category,
+  summaries,
   term,
 }: {
-  summary: Pqp.CategorySummary;
-  /** The term the page is quoting, so the matching row can be marked. */
+  /** The category the page's controls are on, for the row tint. */
+  category: string;
+  summaries: Pqp.CategorySummary[];
+  /** The term the page's controls are on, for the row tint. */
   term: string;
 }) {
-  const rows = [
-    {
-      bid: summary.coePremium * 0.5,
-      renew: summary.pqpCost5Year,
-      saving: summary.savings5Year,
-      term: "5",
-      title: "5-year renewal",
-    },
-    {
-      bid: summary.coePremium,
-      renew: summary.pqpCost10Year,
-      saving: summary.savings10Year,
-      term: "10",
-      title: "10-year renewal",
-    },
-  ];
+  const rows = summaries.flatMap((summary) =>
+    TERMS.map(({ factor, key, label }) => ({
+      bid: summary.coePremium * factor,
+      category: summary.category,
+      key: `${summary.category}-${key}`,
+      label: `${summary.category} · ${label}`,
+      renew: summary.pqpRate * factor,
+      saving: summary.coePremium * factor - summary.pqpRate * factor,
+      term: key,
+    })),
+  );
 
   return (
     <ReportSection
-      caption={`${summary.category} · against the latest closing premium`}
+      caption="Against the latest closing premium, per category and term"
       title="What renewing costs against bidding"
     >
       <ReportTable
         columns={[
-          { label: "Term" },
+          { label: "Category and term" },
           { align: "end", label: "Renew at the PQP" },
           { align: "end", label: "Bid at the premium" },
           { align: "end", label: "Difference", width: "180px" },
         ]}
       >
         {rows.map((row) => (
-          <ReportRow isActive={row.term === term} key={row.term}>
-            <ReportCell className="font-bold text-base">{row.title}</ReportCell>
+          <ReportRow
+            isActive={row.category === category && row.term === term}
+            key={row.key}
+          >
+            <ReportCell className="font-bold text-base">{row.label}</ReportCell>
             <ReportCell align="end" className="font-extrabold text-lg">
               {formatCurrency(row.renew)}
             </ReportCell>

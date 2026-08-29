@@ -104,9 +104,6 @@ export async function PQPReport({
     comparison.map((row) => [row.category, row]),
   );
   const headlineComparison = comparisonByCategory.get(selected);
-  const selectedSummary = overview.categorySummaries.find(
-    (row) => row.category === selected,
-  );
 
   // The query returns the months newest first; the chart reads left to right.
   const ascending = [...trendData].sort((a, b) =>
@@ -387,11 +384,13 @@ export async function PQPReport({
         </aside>
       </div>
 
-      {selectedSummary ? (
-        <UnreleasedFeature>
-          <RenewalComparison summary={selectedSummary} term={term} />
-        </UnreleasedFeature>
-      ) : null}
+      <UnreleasedFeature>
+        <RenewalComparison
+          category={selected}
+          summaries={overview.categorySummaries}
+          term={term}
+        />
+      </UnreleasedFeature>
     </>
   );
 }
