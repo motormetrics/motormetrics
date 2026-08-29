@@ -41,10 +41,18 @@ const pillClassName = (isActive: boolean) =>
 // Menu chrome from the MMNav comp: rows are 14px-radius pills rather than the
 // 32px HeroUI default, and section labels are small uppercase eyebrows.
 const menuItemClassName =
-  "rounded-sm px-3.5 py-2.75 font-semibold text-[15px] text-muted-strong";
+  "rounded-sm px-3.5 py-2.25 font-semibold text-[15px] text-muted-strong";
 
+// HeroUI's .menu-section ships flat (gap-0), so the eyebrow reads as just
+// another row by default, and spacing alone cannot fix that — the rows sit on
+// a ~35px rhythm that a gap has to clearly beat before it registers as a
+// break. Nothing else in this UI carries a border, so the separation is tonal:
+// the eyebrow gets the warm surface tier while the rows keep the white
+// overlay. Negative margins bleed the band to the popover edge (the menu is
+// overflow-clip, so the radius still holds), and px-6 lands the label on the
+// same optical left edge as the row text.
 const menuHeaderClassName =
-  "col-span-full px-3.5 pt-2 pb-1.5 font-bold text-[12.5px] text-subtle uppercase tracking-[0.06em]";
+  "-mx-2.5 -mt-2.5 col-span-full mb-1.5 rounded-t-lg bg-surface-secondary px-6 py-3 font-bold text-[11.5px] text-subtle uppercase tracking-[0.12em]";
 
 // The comp runs a long menu in two columns. Short menus stay in one so the
 // popover never opens wider than the handful of rows it holds.
