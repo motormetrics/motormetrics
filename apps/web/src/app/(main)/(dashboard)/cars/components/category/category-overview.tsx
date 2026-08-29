@@ -1,111 +1,97 @@
 import { formatDateToMonthYear } from "@motormetrics/utils";
+import {
+  type CategoryConfig,
+  CategoryReport,
+} from "@web/app/(main)/(dashboard)/cars/components/category/category-report";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
-import { DashboardPageHeader } from "@web/components/dashboard-page-header";
-import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
-import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthSelector } from "@web/components/shared/month-selector";
+import { PageHead } from "@web/components/shared/page-head";
+import { Report } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { loadCarsCategoryPageData } from "@web/lib/cars/page-data";
-import { loadLastUpdated } from "@web/lib/common";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
-import { CategoryInsightsCard } from "./category-insights-card";
-import { CategoryTabsPanel } from "./category-tabs-panel";
 
-export interface CategoryConfig {
-  title: string;
-  apiDataField: "fuelType" | "vehicleType";
-  tabTitle: string;
-  description: string;
-  urlPath: string;
-}
+export type { CategoryConfig };
 
-interface CategoryOverviewProps {
-  config: CategoryConfig;
-  searchParams: Promise<SearchParams>;
-}
-
+/**
+ * The shared body of `/cars/fuel-types` and `/cars/vehicle-types`.
+ *
+ * Both routes are the same report over a different `cars` column, so the page
+ * files supply a `CategoryConfig` and nothing else. This is a report-family
+ * page: `Report` narrows the whole shell to the comps' 1240px measure, and the
+ * blocks beneath it are hairline-ruled rather than carded.
+ */
 export function CategoryOverview({
   config,
   searchParams,
-}: CategoryOverviewProps) {
+}: {
+  config: CategoryConfig;
+  searchParams: Promise<SearchParams>;
+}) {
   return (
-    <div className="flex flex-col gap-8">
-      <DashboardPageHeader
-        title={
-          <DashboardPageTitle
-            title={config.title}
-            subtitle={`Breakdown of registrations by ${config.tabTitle.toLowerCase()} for the selected month.`}
-          />
-        }
-        meta={
+    <Report>
+      <PageHead
+        controls={
           <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
             <CategoryOverviewHeaderMeta searchParams={searchParams} />
           </Suspense>
         }
+        description={config.lede}
+        title={config.title}
       />
 
-      <Suspense fallback={<SkeletonCard className="h-[720px] w-full" />}>
-        <CategoryOverviewContent config={config} searchParams={searchParams} />
-      </Suspense>
-    </div>
+      <SectionErrorBoundary title={`${config.title} unavailable`}>
+        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+          <CategoryStructuredData config={config} searchParams={searchParams} />
+          <CategoryReport config={config} searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
+    </Report>
   );
 }
 
 async function CategoryOverviewHeaderMeta({
-  searchParams: searchParamsPromise,
+  searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const { month: parsedMonth } = await loadSearchParams(searchParamsPromise);
+  const { month: parsedMonth } = await loadSearchParams(searchParams);
 
-  const [{ wasAdjusted }, months, lastUpdated] = await Promise.all([
+  const [{ wasAdjusted }, months] = await Promise.all([
     getMonthOrLatest(parsedMonth, "cars"),
     fetchMonthsForCars(),
-    loadLastUpdated("cars"),
   ]);
 
   return (
-    <DashboardPageMeta lastUpdated={lastUpdated}>
-      <MonthSelector
-        months={months}
-        latestMonth={months[0]}
-        wasAdjusted={wasAdjusted}
-      />
-    </DashboardPageMeta>
+    <MonthSelector
+      latestMonth={months[0]}
+      months={months}
+      wasAdjusted={wasAdjusted}
+    />
   );
 }
 
-async function CategoryOverviewContent({
+async function CategoryStructuredData({
   config,
-  searchParams: searchParamsPromise,
+  searchParams,
 }: {
   config: CategoryConfig;
   searchParams: Promise<SearchParams>;
 }) {
-  const { month: parsedMonth } = await loadSearchParams(searchParamsPromise);
+  const { month: parsedMonth } = await loadSearchParams(searchParams);
   const { month } = await getMonthOrLatest(parsedMonth, "cars");
-
-  const { cars, marketShare, previousTotal, topMakesByFuelType } =
-    await loadCarsCategoryPageData(month, config.apiDataField);
-
-  const categoryData = cars?.[config.apiDataField] || [];
-
   const formattedMonth = formatDateToMonthYear(month);
-  const title = `${formattedMonth} ${config.title}`;
-  const description = config.description.replace("{month}", formattedMonth);
 
   const structuredData: WithContext<WebPage> = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: title,
-    description,
+    name: `${formattedMonth} ${config.title}`,
+    description: config.description.replace("{month}", formattedMonth),
     url: `${SITE_URL}${config.urlPath}`,
     publisher: {
       "@type": "Organization",
@@ -114,42 +100,5 @@ async function CategoryOverviewContent({
     },
   };
 
-  return (
-    <>
-      <StructuredData data={structuredData} />
-      {categoryData.length > 0 ? (
-        <>
-          <AnimatedSection order={1}>
-            <Suspense fallback={<SkeletonCard className="h-[300px] w-full" />}>
-              <CategoryInsightsCard
-                categoriesCount={categoryData.length}
-                previousTotal={previousTotal}
-                topPerformer={marketShare.dominantType}
-                month={month}
-                title={config.tabTitle}
-                total={cars.total}
-              />
-            </Suspense>
-          </AnimatedSection>
-          <AnimatedSection order={2}>
-            <Suspense fallback={<SkeletonCard className="h-[620px] w-full" />}>
-              <CategoryTabsPanel
-                types={categoryData}
-                month={month}
-                title={config.tabTitle}
-                totalRegistrations={cars.total}
-                topMakesByFuelType={topMakesByFuelType}
-              />
-            </Suspense>
-          </AnimatedSection>
-        </>
-      ) : (
-        <div className="py-8 text-center">
-          <Typography.Text>
-            No {config.title.toLowerCase()} data available for {formattedMonth}
-          </Typography.Text>
-        </div>
-      )}
-    </>
-  );
+  return <StructuredData data={structuredData} />;
 }

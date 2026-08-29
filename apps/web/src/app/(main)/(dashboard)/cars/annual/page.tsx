@@ -1,15 +1,16 @@
-import { CarPopulationChart } from "@web/app/(main)/(dashboard)/cars/annual/components/car-population-chart";
-import { CarPopulationMetrics } from "@web/app/(main)/(dashboard)/cars/annual/components/car-population-metrics";
-import { FuelTypeBreakdown } from "@web/app/(main)/(dashboard)/cars/annual/components/fuel-type-breakdown";
-import { MakeBreakdown } from "@web/app/(main)/(dashboard)/cars/annual/components/make-breakdown";
-import { VehiclePopulationChart } from "@web/app/(main)/(dashboard)/cars/annual/components/vehicle-population-chart";
-import { VehiclePopulationMetrics } from "@web/app/(main)/(dashboard)/cars/annual/components/vehicle-population-metrics";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
-import { DashboardPageHeader } from "@web/components/dashboard-page-header";
-import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
-import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { Skeleton } from "@heroui/react";
+import { AnnualViewTabs } from "@web/app/(main)/(dashboard)/cars/annual/components/annual-view-tabs";
+import { PopulationOverview } from "@web/app/(main)/(dashboard)/cars/annual/components/population-overview";
+import {
+  buildPopulationSeries,
+  DIMENSION_LABELS,
+  type PopulationRow,
+} from "@web/app/(main)/(dashboard)/cars/annual/population-series";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/annual/search-params";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { Bento } from "@web/components/shared/bento";
 import { EmptyState } from "@web/components/shared/empty-state";
-import { SkeletonCard } from "@web/components/shared/skeleton";
+import { PageHead } from "@web/components/shared/page-head";
 import { YearSelector } from "@web/components/shared/year-selector";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -18,13 +19,11 @@ import {
   generateDatasetSchema,
 } from "@web/lib/metadata";
 import {
-  getCarPopulationByYearAndMake,
-  getCarPopulationYearlyTotals,
+  getCarPopulationByMakeAndFuelType,
   getCarPopulationYears,
 } from "@web/queries/car-population";
 import {
-  getVehiclePopulationByYearAndFuelType,
-  getVehiclePopulationYearlyTotals,
+  getVehiclePopulationByCategoryAndFuelType,
   getVehiclePopulationYears,
 } from "@web/queries/vehicle-population";
 import { BarChart3 } from "lucide-react";
@@ -32,13 +31,11 @@ import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
-import { AnnualViewTabs } from "./components/annual-view-tabs";
-import { loadSearchParams } from "./search-params";
 
 export const metadata: Metadata = {
   title: "Annual Vehicle Population Singapore",
   description:
-    "Annual motor vehicle population in Singapore by fuel type and car population by make. Track the growth of electric, hybrid, petrol, and diesel vehicles on Singapore roads.",
+    "Annual motor vehicle population in Singapore by vehicle type, fuel type and car make. Track the growth of electric, hybrid, petrol, and diesel vehicles on Singapore roads.",
   openGraph: {
     title: "Annual Vehicle Population - Singapore",
     description:
@@ -55,7 +52,7 @@ const structuredData: WithContext<WebPage> = {
   "@type": "WebPage",
   name: "Annual Vehicle Population",
   description:
-    "Motor vehicle population in Singapore by type of fuel used and car population by make, with interactive charts and year-over-year analysis",
+    "Motor vehicle population in Singapore by vehicle type and type of fuel used, and car population by make, with interactive charts and year-over-year analysis",
   url: `${SITE_URL}/cars/annual`,
   publisher: {
     "@type": "Organization",
@@ -68,7 +65,29 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-async function AnnualPage({ searchParams }: PageProps) {
+function CardSkeleton({ className = "" }: { className?: string }) {
+  return (
+    <div className={`rounded-4xl bg-surface p-7 shadow-surface ${className}`}>
+      <div className="flex flex-col gap-4">
+        <Skeleton className="h-4 w-32 rounded-lg" />
+        <Skeleton className="h-12 w-40 rounded-lg" />
+        <Skeleton className="h-6 w-44 rounded-full" />
+      </div>
+    </div>
+  );
+}
+
+function OverviewSkeleton() {
+  return (
+    <Bento>
+      <CardSkeleton className="h-[520px]" />
+      <CardSkeleton className="h-[720px]" />
+      <CardSkeleton className="h-[560px]" />
+    </Bento>
+  );
+}
+
+export default function AnnualPage({ searchParams }: PageProps) {
   return (
     <>
       <StructuredData data={structuredData} />
@@ -88,148 +107,92 @@ async function AnnualPage({ searchParams }: PageProps) {
           ]),
         }}
       />
-      <section className="flex flex-col gap-10">
-        <DashboardPageHeader
-          title={
-            <DashboardPageTitle
-              title="Vehicle Population"
-              subtitle="Annual motor vehicle population in Singapore."
-            />
-          }
-          meta={
-            <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-              <AnnualHeaderMeta searchParams={searchParams} />
-            </Suspense>
-          }
-        />
 
-        <Suspense>
-          <AnnualViewTabs
-            fuelTypeContent={<ByFuelTypeContent />}
-            makeContent={<ByMakeContent />}
-          />
+      <PageHead
+        controls={
+          <Suspense
+            fallback={<Skeleton className="h-14 w-[19rem] rounded-full" />}
+          >
+            <AnnualViewTabs />
+            <AnnualYearSelector searchParams={searchParams} />
+          </Suspense>
+        }
+        title="Vehicle population"
+      />
+
+      <SectionErrorBoundary title="Vehicle population unavailable">
+        <Suspense fallback={<OverviewSkeleton />}>
+          <PopulationSection searchParams={searchParams} />
         </Suspense>
-      </section>
+      </SectionErrorBoundary>
     </>
   );
 }
 
-async function AnnualHeaderMeta({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const { year: parsedYear, view } = await loadSearchParams(searchParams);
-
-  const availableYearsData =
+/** Years on offer come from whichever dataset the view is reading. */
+async function AnnualYearSelector({ searchParams }: PageProps) {
+  const { year, view } = await loadSearchParams(searchParams);
+  const availableYears =
     view === "make"
       ? await getCarPopulationYears()
       : await getVehiclePopulationYears();
 
-  if (availableYearsData.length === 0) {
+  if (availableYears.length === 0) {
     return null;
   }
 
-  const years = availableYearsData.map(({ year }) => Number(year));
+  const years = availableYears.map((entry) => Number(entry.year));
   const latestYear = years[0];
-  const wasAdjusted = parsedYear !== null && !years.includes(parsedYear);
 
   return (
-    <DashboardPageMeta>
-      <YearSelector
-        years={years}
-        latestYear={latestYear}
-        wasAdjusted={wasAdjusted}
-      />
-    </DashboardPageMeta>
+    <YearSelector
+      latestYear={latestYear}
+      wasAdjusted={!years.includes(year)}
+      years={years}
+    />
   );
 }
 
-async function ByFuelTypeContent() {
-  const [yearlyTotals, fuelTypeData, availableYearsData] = await Promise.all([
-    getVehiclePopulationYearlyTotals(),
-    getVehiclePopulationByYearAndFuelType(),
-    getVehiclePopulationYears(),
-  ]);
+/**
+ * Both annual datasets are annual counts of the same shape — a year, an entity
+ * and a fuel type — so the page flattens whichever the view selects into one
+ * series and hands it to the same bento.
+ */
+async function PopulationSection({ searchParams }: PageProps) {
+  const { view, year } = await loadSearchParams(searchParams);
+  const labels = DIMENSION_LABELS[view];
 
-  if (availableYearsData.length === 0) {
+  const rows: PopulationRow[] =
+    view === "make"
+      ? (await getCarPopulationByMakeAndFuelType()).map((row) => ({
+          fuelType: row.fuelType,
+          name: row.make,
+          total: row.total,
+          year: row.year,
+        }))
+      : (await getVehiclePopulationByCategoryAndFuelType()).map((row) => ({
+          fuelType: row.fuelType,
+          name: row.category,
+          total: row.total,
+          year: row.year,
+        }));
+
+  const data = buildPopulationSeries(rows, year, labels.overall);
+
+  if (!data) {
     return (
       <EmptyState
-        icon={
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
-            <BarChart3 className="size-8 text-muted" />
-          </div>
-        }
-        title="No Data Available Yet"
         description="Annual vehicle population data is not available at the moment. Please check back later."
-        showDefaultActions={false}
-      />
-    );
-  }
-
-  return (
-    <>
-      <AnimatedSection order={1}>
-        <VehiclePopulationMetrics
-          yearlyTotals={yearlyTotals}
-          fuelTypeData={fuelTypeData}
-        />
-      </AnimatedSection>
-
-      <AnimatedSection order={2}>
-        <VehiclePopulationChart
-          data={fuelTypeData}
-          availableYears={availableYearsData}
-        />
-      </AnimatedSection>
-
-      <AnimatedSection order={3}>
-        <FuelTypeBreakdown data={fuelTypeData} />
-      </AnimatedSection>
-    </>
-  );
-}
-
-async function ByMakeContent() {
-  const [yearlyTotals, makeData, availableYearsData] = await Promise.all([
-    getCarPopulationYearlyTotals(),
-    getCarPopulationByYearAndMake(),
-    getCarPopulationYears(),
-  ]);
-
-  if (availableYearsData.length === 0) {
-    return (
-      <EmptyState
         icon={
           <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
             <BarChart3 className="size-8 text-muted" />
           </div>
         }
-        title="No Data Available Yet"
-        description="Annual car population by make data is not available at the moment. Please check back later."
         showDefaultActions={false}
+        title="No Data Available Yet"
       />
     );
   }
 
-  return (
-    <>
-      <AnimatedSection order={1}>
-        <CarPopulationMetrics makeData={makeData} yearlyTotals={yearlyTotals} />
-      </AnimatedSection>
-
-      <AnimatedSection order={2}>
-        <CarPopulationChart
-          data={makeData}
-          availableYears={availableYearsData}
-        />
-      </AnimatedSection>
-
-      <AnimatedSection order={3}>
-        <MakeBreakdown data={makeData} availableYears={availableYearsData} />
-      </AnimatedSection>
-    </>
-  );
+  return <PopulationOverview data={data} labels={labels} />;
 }
-
-export default AnnualPage;

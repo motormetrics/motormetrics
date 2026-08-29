@@ -1,13 +1,15 @@
-import { redis, slugify } from "@motormetrics/utils";
-import { MakeDetail } from "@web/app/(main)/(dashboard)/cars/components/makes/make-detail";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
-import { DashboardPageHeader } from "@web/components/dashboard-page-header";
-import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
-import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { slugify } from "@motormetrics/utils";
+import { CoeComparisonChart } from "@web/app/(main)/(dashboard)/cars/components/makes/coe-comparison-chart";
+import { MakeSearch } from "@web/app/(main)/(dashboard)/cars/components/makes/make-search";
+import { MakeReport } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthSelector } from "@web/components/shared/month-selector";
+import { PageHead } from "@web/components/shared/page-head";
+import { Report, ReportSection } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
-import { LAST_UPDATED_CARS_KEY, SITE_TITLE, SITE_URL } from "@web/config";
+import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import {
   createWebPageStructuredData,
@@ -15,19 +17,13 @@ import {
 } from "@web/lib/metadata";
 import { getDistinctMakes } from "@web/queries/cars";
 import { getMakeCoeComparison } from "@web/queries/cars/makes/coe-comparison";
-import {
-  getMakeDetails,
-  getMakeMonthlyTotals,
-} from "@web/queries/cars/makes/entity-breakdowns";
 import { getMakeFromSlug } from "@web/queries/cars/makes/get-make-from-slug";
-import { getCarLogo } from "@web/queries/logos";
 import type { Make } from "@web/types";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
-import { loadSearchParams } from "./search-params";
 
 interface PageProps {
   params: Promise<{ make: Make }>;
@@ -89,139 +85,28 @@ export default async function CarMakePage({
   params,
   searchParams: searchParamsPromise,
 }: PageProps) {
-  return (
-    <div className="flex flex-col gap-4">
-      <DashboardPageHeader
-        title={
-          <DashboardPageTitle
-            title="Make Overview"
-            subtitle="Historical car registration trends and monthly breakdown by fuel and vehicle types in Singapore."
-          />
-        }
-        meta={
-          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-            <CarMakeHeaderMeta
-              params={params}
-              searchParams={searchParamsPromise}
-            />
-          </Suspense>
-        }
-      />
-
-      <AnimatedSection order={1}>
-        <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-          <CarMakeContent params={params} searchParams={searchParamsPromise} />
-        </Suspense>
-      </AnimatedSection>
-    </div>
-  );
-}
-
-async function CarMakeHeaderMeta({
-  params: paramsPromise,
-  searchParams: searchParamsPromise,
-}: {
-  params: Promise<{ make: Make }>;
-  searchParams: Promise<SearchParams>;
-}) {
-  const [{ make }, { month: parsedMonth }, months, lastUpdated] =
-    await Promise.all([
-      paramsPromise,
-      loadSearchParams(searchParamsPromise),
-      fetchMonthsForCars(),
-      redis.get<number>(LAST_UPDATED_CARS_KEY),
-    ]);
-  const { wasAdjusted } = await getMonthOrLatest(parsedMonth, "cars");
-
-  return (
-    <DashboardPageMeta lastUpdated={lastUpdated}>
-      <MonthSelector
-        months={months}
-        latestMonth={months[0]}
-        wasAdjusted={wasAdjusted}
-      />
-    </DashboardPageMeta>
-  );
-}
-
-async function CarMakeContent({
-  params: paramsPromise,
-  searchParams: searchParamsPromise,
-}: {
-  params: Promise<{ make: Make }>;
-  searchParams: Promise<SearchParams>;
-}) {
-  const [{ make }, { month: parsedMonth }] = await Promise.all([
-    paramsPromise,
-    loadSearchParams(searchParamsPromise),
-  ]);
-
+  // Resolved here rather than threaded down so the comp's make-name headline is
+  // the H1. Every make is prerendered by `generateStaticParams`, so this awaits
+  // at build rather than per request.
+  const { make } = await params;
   const exactMake = await getMakeFromSlug(make);
+
   if (!exactMake) {
     return notFound();
   }
 
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
-
-  const [coeComparison, makeDetails, monthlyTotals, logo] = await Promise.all([
-    getMakeCoeComparison(exactMake),
-    getMakeDetails(exactMake, month),
-    getMakeMonthlyTotals(exactMake),
-    getCarLogo(exactMake),
-  ]);
-
-  // Derive breakdowns from makeDetails.data to avoid 2 extra DB queries.
-  // makeDetails.data contains rows grouped by (month, fuelType, vehicleType) with a `count` field.
-  type MakeRow = {
-    fuelType?: string | null;
-    vehicleType?: string | null;
-    count?: number;
-  };
-  const fuelTypeMap = new Map<string, number>();
-  const vehicleTypeMap = new Map<string, number>();
-  for (const row of makeDetails.data as MakeRow[]) {
-    if (row.fuelType) {
-      fuelTypeMap.set(
-        row.fuelType,
-        (fuelTypeMap.get(row.fuelType) ?? 0) + (row.count ?? 0),
-      );
-    }
-    if (row.vehicleType) {
-      vehicleTypeMap.set(
-        row.vehicleType,
-        (vehicleTypeMap.get(row.vehicleType) ?? 0) + (row.count ?? 0),
-      );
-    }
-  }
-  const fuelTypeBreakdown = Array.from(fuelTypeMap, ([name, value]) => ({
-    name,
-    value,
-  })).sort((a, b) => b.value - a.value);
-  const vehicleTypeBreakdown = Array.from(vehicleTypeMap, ([name, value]) => ({
-    name,
-    value,
-  })).sort((a, b) => b.value - a.value);
-
-  const cars = {
-    make: exactMake,
-    total: monthlyTotals.reduce((sum, row) => sum + row.count, 0),
-    monthTotal: makeDetails.total,
-    data: makeDetails.data,
-    historicalData: monthlyTotals,
-    monthsTracked: monthlyTotals.length,
-  };
-
   const title = `${exactMake} Cars in Singapore`;
   const description = `${exactMake} cars overview. Historical car registration trends and monthly breakdown by fuel and vehicle types in Singapore.`;
-  const structuredData = createWebPageStructuredData(
-    title,
-    description,
-    `/cars/makes/${make}`,
-  );
 
   return (
-    <>
-      <StructuredData data={structuredData} />
+    <Report>
+      <StructuredData
+        data={createWebPageStructuredData(
+          title,
+          description,
+          `/cars/makes/${make}`,
+        )}
+      />
       <StructuredData
         data={{
           "@context": "https://schema.org",
@@ -233,15 +118,69 @@ async function CarMakeContent({
           ]),
         }}
       />
-      <Suspense fallback={<SkeletonCard className="h-[560px] w-full" />}>
-        <MakeDetail
-          cars={cars}
-          coeComparison={coeComparison}
-          logo={logo}
-          fuelTypeBreakdown={fuelTypeBreakdown}
-          vehicleTypeBreakdown={vehicleTypeBreakdown}
-        />
-      </Suspense>
+
+      <PageHead
+        controls={
+          <Suspense fallback={<SkeletonCard className="h-10 w-80" />}>
+            <CarMakeHeaderMeta searchParams={searchParamsPromise} />
+          </Suspense>
+        }
+        description={`${exactMake} registrations in Singapore, broken down by fuel type and vehicle type, month by month.`}
+        title={exactMake}
+      />
+
+      <SectionErrorBoundary title="Make data unavailable">
+        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+          <MakeReport make={exactMake} searchParams={searchParamsPromise} />
+        </Suspense>
+      </SectionErrorBoundary>
+
+      {/* The comp has no COE block. Kept because it is working functionality
+          rather than styling, and parked at the foot so it does not interrupt
+          the report above it. */}
+      <ReportSection
+        caption="Bars are monthly registrations; lines are the Category A and B premiums"
+        title="Registrations against COE premiums"
+      >
+        <SectionErrorBoundary title="COE comparison unavailable">
+          <Suspense fallback={<SkeletonCard className="h-[300px] w-full" />}>
+            <CarMakeCoeSection make={exactMake} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </ReportSection>
+    </Report>
+  );
+}
+
+async function CarMakeHeaderMeta({
+  searchParams: searchParamsPromise,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const [{ month: parsedMonth }, months, makes] = await Promise.all([
+    loadSearchParams(searchParamsPromise),
+    fetchMonthsForCars(),
+    getDistinctMakes(),
+  ]);
+  const { wasAdjusted } = await getMonthOrLatest(parsedMonth, "cars");
+
+  return (
+    <>
+      {/* The comp hangs a make picker off the H1 itself. `PageHead` takes a
+          plain string title, so it sits in the controls slot beside the month
+          picker instead. */}
+      <MakeSearch makes={makes.map(({ make }) => make)} />
+      <MonthSelector
+        latestMonth={months[0]}
+        months={months}
+        wasAdjusted={wasAdjusted}
+      />
     </>
   );
+}
+
+async function CarMakeCoeSection({ make }: { make: string }) {
+  const coeComparison = await getMakeCoeComparison(make);
+
+  return <CoeComparisonChart data={coeComparison} />;
 }

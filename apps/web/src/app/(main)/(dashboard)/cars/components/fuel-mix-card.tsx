@@ -56,7 +56,7 @@ export async function FuelMixCard({
           Fuel mix
         </Typography.TextSm>
         <Typography.H3 className="font-bold tracking-[-0.02em]">
-          By powertrain
+          By fuel type
         </Typography.H3>
       </div>
 
