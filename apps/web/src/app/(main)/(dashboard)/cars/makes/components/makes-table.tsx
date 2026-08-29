@@ -8,7 +8,7 @@ import Typography from "@web/components/typography";
 import { Car, ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
 import posthog from "posthog-js";
-import { type ReactNode, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { MakeAvatar } from "./make-avatar";
 import type { MakeRow } from "./make-rows";
 
@@ -16,11 +16,11 @@ import type { MakeRow } from "./make-rows";
 export type MakesTableRow = Omit<MakeRow, "trend">;
 
 /**
- * Rows shown before the reader asks for the rest. Higher than the Cars
- * overview's preview, since browsing makes is the whole point of this page,
- * but still short of the full tail of marques on a handful of registrations.
+ * Rows shown before the reader asks for the rest — the leading makes, well
+ * short of the long tail of marques on a handful of registrations. "Show all"
+ * expands to the full list.
  */
-const COLLAPSED_ROWS = 20;
+const COLLAPSED_ROWS = 10;
 
 /**
  * Below this many registrations the year-over-year percentage is withheld.
@@ -88,15 +88,13 @@ function compareRows(a: MakesTableRow, b: MakesTableRow, key: SortKey): number {
  * The "All makes" table.
  *
  * Search and column sort are view-only, so they live in local state here and
- * never touch the URL — only the range and fuel tabs, which change what the
- * server has to aggregate, do that.
+ * never touch the URL — only the range tabs, which change what the server has
+ * to aggregate, do that.
  */
 export function MakesTable({
-  fuelTabs,
   rangeLabel,
   rows,
 }: {
-  fuelTabs: ReactNode;
   rangeLabel: string;
   rows: MakesTableRow[];
 }) {
@@ -170,7 +168,6 @@ export function MakesTable({
             value={query}
           />
         </span>
-        {fuelTabs}
       </div>
 
       <div

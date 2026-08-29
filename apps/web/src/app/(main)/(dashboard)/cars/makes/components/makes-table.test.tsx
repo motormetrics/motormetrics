@@ -37,7 +37,7 @@ const rows: MakesTableRow[] = [
   },
 ];
 
-/** 25 makes, so the 20-row collapse threshold is crossed. */
+/** 25 makes, so the 10-row collapse threshold is crossed. */
 const manyRows: MakesTableRow[] = Array.from({ length: 25 }, (_, index) => ({
   count: 1000 - index * 10,
   logoUrl: null,
@@ -49,13 +49,7 @@ const manyRows: MakesTableRow[] = Array.from({ length: 25 }, (_, index) => ({
 }));
 
 const renderTable = (rowsToRender: MakesTableRow[] = rows) =>
-  render(
-    <MakesTable
-      fuelTabs={null}
-      rangeLabel="Year to date"
-      rows={rowsToRender}
-    />,
-  );
+  render(<MakesTable rangeLabel="Year to date" rows={rowsToRender} />);
 
 const makeNames = () =>
   screen
@@ -175,11 +169,11 @@ describe("MakesTable", () => {
     expect(within(mazdaRow).getByText("—")).toBeVisible();
   });
 
-  it("should collapse a long list to the first twenty makes", () => {
+  it("should collapse a long list to the first ten makes", () => {
     renderTable(manyRows);
 
-    expect(makeNames()).toHaveLength(20);
-    expect(screen.getByText(/Year to date · top 20 of 25/)).toBeVisible();
+    expect(makeNames()).toHaveLength(10);
+    expect(screen.getByText(/Year to date · top 10 of 25/)).toBeVisible();
   });
 
   it("should reveal the remaining makes when show all is pressed", async () => {
