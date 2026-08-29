@@ -3,7 +3,9 @@
 exports[`Typography > Headings > should render H1 1`] = `
 <div>
   <h1
-    class="scroll-m-20 text-balance font-bold text-4xl text-foreground leading-tight tracking-tight lg:text-5xl"
+    class="typography typography--align-start typography--color-default typography--h1"
+    data-slot="typography"
+    data-type="h1"
   >
     Page Title
   </h1>

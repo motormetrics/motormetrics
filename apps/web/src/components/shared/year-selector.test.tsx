@@ -14,7 +14,8 @@ vi.mock("nuqs", () => ({
   useQueryState: () => mockUseQueryState(),
 }));
 
-vi.mock("@heroui/react", () => {
+vi.mock("@heroui/react", async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
   const ComboBox = ({
     selectedKey,
     onSelectionChange,
@@ -49,6 +50,7 @@ vi.mock("@heroui/react", () => {
   ListBox.ItemIndicator = () => null;
 
   return {
+    ...actual,
     ComboBox,
     Input: () => null,
     Label: () => null,

@@ -63,33 +63,9 @@ describe("Typography", () => {
   });
 
   describe("Content Elements", () => {
-    it("should render P", () => {
-      render(<Typography.P>Paragraph content</Typography.P>);
-      expect(screen.getByText("Paragraph content")).toBeInTheDocument();
-    });
-
-    it("should render Blockquote", () => {
-      render(<Typography.Blockquote>Quoted text</Typography.Blockquote>);
-      expect(screen.getByText("Quoted text")).toBeInTheDocument();
-    });
-
-    it("should render List", () => {
-      render(
-        <Typography.List>
-          <li>Item 1</li>
-        </Typography.List>,
-      );
-      expect(screen.getByRole("list")).toBeInTheDocument();
-    });
-
     it("should render InlineCode", () => {
       render(<Typography.InlineCode>code snippet</Typography.InlineCode>);
       expect(screen.getByText("code snippet")).toBeInTheDocument();
-    });
-
-    it("should render Lead", () => {
-      render(<Typography.Lead>Lead paragraph</Typography.Lead>);
-      expect(screen.getByText("Lead paragraph")).toBeInTheDocument();
     });
   });
 

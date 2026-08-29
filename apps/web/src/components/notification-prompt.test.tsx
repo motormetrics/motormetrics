@@ -3,7 +3,8 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NotificationPrompt } from "./notification-prompt";
 
-vi.mock("@heroui/react", () => {
+vi.mock("@heroui/react", async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
   const toastMock = Object.assign(
     vi.fn(() => "notification-toast-id"),
     {
@@ -14,6 +15,7 @@ vi.mock("@heroui/react", () => {
   );
 
   return {
+    ...actual,
     Button: ({
       onPress,
       children,

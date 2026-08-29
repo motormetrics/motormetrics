@@ -2,9 +2,19 @@ import { Separator } from "@heroui/react";
 import Typography from "@web/components/typography";
 import type { Route } from "next";
 import NextLink from "next/link";
-import type { ComponentPropsWithoutRef } from "react";
+import type { ComponentPropsWithoutRef, JSX } from "react";
 
 type MdxLinkProps = ComponentPropsWithoutRef<"a">;
+
+/**
+ * MDX hands us raw HTML props, which still carry the deprecated presentational
+ * `color` and `align` attributes. HeroUI's Typography reserves both as its own
+ * props with narrower types, so they are dropped here rather than spread.
+ */
+type MdxProps<T extends keyof JSX.IntrinsicElements> = Omit<
+  ComponentPropsWithoutRef<T>,
+  "color" | "align"
+>;
 
 function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
   const isInternalLink = href.startsWith("/") || href.startsWith("#");
@@ -46,24 +56,22 @@ function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
  */
 export const mdxComponents = {
   // Headings - with generous spacing for editorial feel
-  h1: (props: ComponentPropsWithoutRef<"h1">) => <Typography.H1 {...props} />,
-  h2: (props: ComponentPropsWithoutRef<"h2">) => (
+  h1: (props: MdxProps<"h1">) => <Typography.H1 {...props} />,
+  h2: (props: MdxProps<"h2">) => (
     <Typography.H2 className="mt-12 mb-6" {...props} />
   ),
-  h3: (props: ComponentPropsWithoutRef<"h3">) => (
+  h3: (props: MdxProps<"h3">) => (
     <Typography.H3
       className="mt-8 mb-4 border-accent border-l-4 pl-4"
       {...props}
     />
   ),
-  h4: (props: ComponentPropsWithoutRef<"h4">) => (
+  h4: (props: MdxProps<"h4">) => (
     <Typography.H4 className="mt-6 mb-3" {...props} />
   ),
 
   // Body text
-  p: (props: ComponentPropsWithoutRef<"p">) => (
-    <Typography.Text className="mb-6" {...props} />
-  ),
+  p: (props: MdxProps<"p">) => <Typography.Text className="mb-6" {...props} />,
 
   // Blockquotes - editorial style with subtle background
   blockquote: (props: ComponentPropsWithoutRef<"blockquote">) => (
@@ -85,9 +93,7 @@ export const mdxComponents = {
   ),
 
   // Code (inline)
-  code: (props: ComponentPropsWithoutRef<"code">) => (
-    <Typography.InlineCode {...props} />
-  ),
+  code: (props: MdxProps<"code">) => <Typography.InlineCode {...props} />,
 
   // Links - styled for blog content
   a: MdxLink,
