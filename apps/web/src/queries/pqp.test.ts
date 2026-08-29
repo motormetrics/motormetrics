@@ -1,4 +1,7 @@
-import { getPQPOverview } from "@web/queries/coe/pqp/overview";
+import {
+  getPQPOverview,
+  PQP_REPORTED_CATEGORIES,
+} from "@web/queries/coe/pqp/overview";
 import { getPqpRates } from "@web/queries/coe/pqp/rates";
 import { describe, expect, it } from "vitest";
 import {
@@ -82,7 +85,10 @@ describe("PQP queries", () => {
     const result = await getPQPOverview();
 
     expect(result.tableRows).toEqual([]);
-    expect(result.categorySummaries).toHaveLength(4);
+    // One summary per reported category — A and B, until C and D are brought in.
+    expect(result.categorySummaries).toHaveLength(
+      PQP_REPORTED_CATEGORIES.length,
+    );
   });
 
   it("groups PQP rates by month and vehicle class", async () => {

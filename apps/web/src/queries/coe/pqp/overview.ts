@@ -11,14 +11,30 @@ import {
 import type { Pqp } from "@web/types/coe";
 import { cacheLife, cacheTag } from "next/cache";
 
-const PQP_CATEGORIES = [
+/** Every category LTA publishes a PQP for. */
+export const PQP_CATEGORIES = [
   "Category A",
   "Category B",
   "Category C",
   "Category D",
 ] as const;
 
-type PQPCategory = (typeof PQP_CATEGORIES)[number];
+export type PQPCategory = (typeof PQP_CATEGORIES)[number];
+
+/**
+ * The categories the PQP page reports on, and the only ones this query reads.
+ *
+ * C is goods vehicles and buses and D is motorcycles — neither is a car, which
+ * is what the rest of the site covers. This is the single switch for that
+ * decision: widen it (to `PQP_CATEGORIES`, or any subset) and the query, the
+ * page's category tabs, its tables and its URL parser all widen with it.
+ */
+export const PQP_REPORTED_CATEGORIES = [
+  "Category A",
+  "Category B",
+] as const satisfies readonly PQPCategory[];
+
+export type PQPReportedCategory = (typeof PQP_REPORTED_CATEGORIES)[number];
 
 const createEmptyRates = (): Pqp.Rates => ({
   "Category A": 0,
@@ -39,9 +55,16 @@ const toNumber = (value: number | string | null | undefined): number => {
 };
 
 /**
- * Server action to fetch aggregated PQP insights for the last 12 months
+ * Aggregated PQP insights for the last 12 months.
+ *
+ * `categories` narrows what is read from the database, not just what is
+ * returned. `Pqp.Rates` still carries a key per published category, so a month
+ * row reports 0 for any category outside the requested set rather than dropping
+ * the key — the shape stays stable whichever categories are asked for.
  */
-export async function getPQPOverview(): Promise<Pqp.Overview> {
+export async function getPQPOverview(
+  categories: readonly PQPCategory[] = PQP_REPORTED_CATEGORIES,
+): Promise<Pqp.Overview> {
   "use cache";
   cacheLife("max");
   cacheTag("coe:pqp");
@@ -118,7 +141,7 @@ export async function getPQPOverview(): Promise<Pqp.Overview> {
           .where(
             and(
               inArray(pqp.month, recentMonths),
-              inArray(pqp.vehicleClass, PQP_CATEGORIES),
+              inArray(pqp.vehicleClass, categories),
             ),
           ),
       );
@@ -148,7 +171,7 @@ export async function getPQPOverview(): Promise<Pqp.Overview> {
           .where(
             and(
               eq(pqp.month, latestPqpMonth),
-              inArray(pqp.vehicleClass, PQP_CATEGORIES),
+              inArray(pqp.vehicleClass, categories),
             ),
           ),
       );
@@ -210,7 +233,7 @@ export async function getPQPOverview(): Promise<Pqp.Overview> {
         and(
           eq(coe.month, latestCoeMonth),
           eq(coe.biddingNo, latestCoeBiddingNo),
-          inArray(coe.vehicleClass, PQP_CATEGORIES),
+          inArray(coe.vehicleClass, categories),
         ),
       );
 
@@ -243,7 +266,7 @@ export async function getPQPOverview(): Promise<Pqp.Overview> {
     a.month.localeCompare(b.month),
   );
 
-  const categorySummaries: Pqp.CategorySummary[] = PQP_CATEGORIES.map(
+  const categorySummaries: Pqp.CategorySummary[] = categories.map(
     (category) => {
       const coePremium = coePremiumMap.get(category) ?? 0;
       const pqpRate = pqpRateMap.get(category) ?? 0;
@@ -268,17 +291,13 @@ export async function getPQPOverview(): Promise<Pqp.Overview> {
     },
   );
 
-  const comparison: Pqp.Comparison[] = categorySummaries
-    .filter(
-      (row) => row.category === "Category A" || row.category === "Category B",
-    )
-    .map((row) => ({
-      category: row.category,
-      latestPremium: row.coePremium,
-      pqpRate: row.pqpRate,
-      difference: row.difference,
-      differencePercent: row.differencePercent,
-    }));
+  const comparison: Pqp.Comparison[] = categorySummaries.map((row) => ({
+    category: row.category,
+    latestPremium: row.coePremium,
+    pqpRate: row.pqpRate,
+    difference: row.difference,
+    differencePercent: row.differencePercent,
+  }));
 
   const latestMonth = tableRows[0]?.month ?? null;
 

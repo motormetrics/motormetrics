@@ -1,76 +1,74 @@
 "use client";
 
-import { Alert, Card, Input, Label, ListBox, Select } from "@heroui/react";
-import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
-
+import { Input, Label, ListBox, Select } from "@heroui/react";
+import { formatCurrency } from "@motormetrics/utils";
+import {
+  AGE_BRACKETS,
+  NEW_CAP,
+  OLD_CAP,
+} from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
+import { DeltaChip } from "@web/components/shared/delta-chip";
+import {
+  ReportEyebrow,
+  ReportHeadline,
+  ReportStat,
+} from "@web/components/shared/report";
 import Typography from "@web/components/typography";
-import { ArrowDown } from "lucide-react";
 import { useMemo, useState } from "react";
 
-interface AgeBracket {
-  key: string;
-  label: string;
-  oldRate: number;
-  newRate: number;
-}
-
-const AGE_BRACKETS: AgeBracket[] = [
-  { key: "0", label: "5 years or younger", oldRate: 0.75, newRate: 0.3 },
-  { key: "1", label: "More than 5 to 6 years", oldRate: 0.7, newRate: 0.25 },
-  { key: "2", label: "More than 6 to 7 years", oldRate: 0.65, newRate: 0.2 },
-  { key: "3", label: "More than 7 to 8 years", oldRate: 0.6, newRate: 0.15 },
-  { key: "4", label: "More than 8 to 9 years", oldRate: 0.55, newRate: 0.1 },
-  { key: "5", label: "More than 9 to 10 years", oldRate: 0.5, newRate: 0.05 },
-  { key: "6", label: "Over 10 years", oldRate: 0, newRate: 0 },
-];
-
-const OLD_CAP = 60_000;
-const NEW_CAP = 30_000;
-
+/**
+ * The calculator strip and the headline it drives.
+ *
+ * This is a report-family page, so the controls sit in the ruled bar the other
+ * detail pages use rather than in a card, and the answer is the oversized
+ * headline figure beneath it. The figure is the new rebate — what a reader
+ * would actually receive — with the shortfall against the old schedule carried
+ * in the delta beside it.
+ */
 export function PARFCalculator() {
   const [arfInput, setArfInput] = useState("80000");
-  const [selectedBracket, setSelectedBracket] = useState("0");
+  const [bracketKey, setBracketKey] = useState("0");
 
   const arf = Number(arfInput.replace(/[^0-9.]/g, "")) || 0;
-  const bracket = AGE_BRACKETS[Number(selectedBracket)] ?? AGE_BRACKETS[0];
+  const bracket = AGE_BRACKETS[Number(bracketKey)] ?? AGE_BRACKETS[0];
 
   const result = useMemo(() => {
     const oldUncapped = arf * bracket.oldRate;
     const newUncapped = arf * bracket.newRate;
     const oldRebate = Math.min(oldUncapped, OLD_CAP);
     const newRebate = Math.min(newUncapped, NEW_CAP);
-    const difference = oldRebate - newRebate;
 
     return {
-      oldUncapped,
-      newUncapped,
-      oldRebate,
-      newRebate,
-      difference,
-      oldCapped: oldUncapped > OLD_CAP,
       newCapped: newUncapped > NEW_CAP,
+      newRebate,
+      oldCapped: oldUncapped > OLD_CAP,
+      oldRebate,
+      shortfall: oldRebate - newRebate,
     };
   }, [arf, bracket]);
 
   return (
-    <Card>
-      <Card.Content className="flex flex-col gap-6">
-        <Typography.H4>Calculate Your PARF Rebate</Typography.H4>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+    <>
+      <div className="flex flex-wrap items-end gap-6 border-border border-y py-4">
+        <div className="flex flex-col gap-2">
+          <ReportEyebrow>ARF paid</ReportEyebrow>
           <Input
-            aria-label="ARF Amount Paid"
+            aria-label="ARF paid"
+            inputMode="numeric"
+            onChange={(event) => setArfInput(event.target.value)}
             placeholder="e.g. 40,000"
             type="text"
-            inputMode="numeric"
             value={arfInput}
-            onChange={(event) => setArfInput(event.target.value)}
           />
+        </div>
+        <div className="flex min-w-64 flex-col gap-2">
           <Select
-            value={selectedBracket}
-            onChange={(key) => key && setSelectedBracket(String(key))}
+            onChange={(key) => key && setBracketKey(String(key))}
+            value={bracketKey}
           >
-            <Label>Vehicle Age at Deregistration</Label>
+            <Label>
+              <ReportEyebrow>Age at deregistration</ReportEyebrow>
+            </Label>
             <Select.Trigger>
               <Select.Value />
               <Select.Indicator />
@@ -78,7 +76,7 @@ export function PARFCalculator() {
             <Select.Popover>
               <ListBox>
                 {AGE_BRACKETS.map(({ key, label }) => (
-                  <ListBox.Item key={key} id={key} textValue={label}>
+                  <ListBox.Item id={key} key={key} textValue={label}>
                     {label}
                     <ListBox.ItemIndicator />
                   </ListBox.Item>
@@ -87,169 +85,60 @@ export function PARFCalculator() {
             </Select.Popover>
           </Select>
         </div>
+      </div>
 
-        <KPIGroup>
-          <KPI>
-            <KPI.Header>
-              <KPI.Title>Before Budget 2026</KPI.Title>
-            </KPI.Header>
-            <KPI.Content>
-              <KPI.Value
-                className="text-muted"
-                currency="SGD"
-                locale="en-SG"
-                maximumFractionDigits={0}
-                style="currency"
-                value={result.oldRebate}
-              />
-            </KPI.Content>
-            <KPI.Footer>
-              <div className="flex w-full flex-col gap-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted">Rebate Rate</span>
-                  <span className="font-medium">{bracket.oldRate * 100}%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Uncapped Amount</span>
-                  <span className="font-medium">
-                    <NumberValue
-                      currency="SGD"
-                      locale="en-SG"
-                      maximumFractionDigits={0}
-                      style="currency"
-                      value={result.oldUncapped}
-                    />
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Cap</span>
-                  <span className="font-medium">
-                    <NumberValue
-                      currency="SGD"
-                      locale="en-SG"
-                      maximumFractionDigits={0}
-                      style="currency"
-                      value={OLD_CAP}
-                    />
-                  </span>
-                </div>
-                {result.oldCapped ? (
-                  <Typography.Caption className="text-warning">
-                    Cap of{" "}
-                    <NumberValue
-                      currency="SGD"
-                      locale="en-SG"
-                      maximumFractionDigits={0}
-                      style="currency"
-                      value={OLD_CAP}
-                    />{" "}
-                    applied
-                  </Typography.Caption>
-                ) : null}
-              </div>
-            </KPI.Footer>
-          </KPI>
+      <ReportHeadline
+        delta={
+          result.oldRebate > 0 ? (
+            <DeltaChip value={(-result.shortfall / result.oldRebate) * 100} />
+          ) : undefined
+        }
+        label="Rebate after Budget 2026"
+        stats={
+          <>
+            <ReportStat
+              label="Before Budget 2026"
+              note={
+                result.oldCapped
+                  ? `capped at ${formatCurrency(OLD_CAP)}`
+                  : `${(bracket.oldRate * 100).toFixed(0)}% of ARF`
+              }
+              value={formatCurrency(result.oldRebate)}
+            />
+            <ReportStat
+              label="Shortfall"
+              note="less in your hand"
+              value={formatCurrency(result.shortfall)}
+            />
+            <ReportStat
+              label="New rate"
+              note={
+                result.newCapped
+                  ? `capped at ${formatCurrency(NEW_CAP)}`
+                  : "of the ARF paid"
+              }
+              value={`${(bracket.newRate * 100).toFixed(0)}%`}
+            />
+          </>
+        }
+        sub={
+          bracket.oldRate === 0
+            ? "No PARF rebate is given for vehicles over 10 years old, under either schedule."
+            : `${formatCurrency(arf)} ARF · ${bracket.label.toLowerCase()} · rebate capped at ${formatCurrency(NEW_CAP)}`
+        }
+        value={formatCurrency(result.newRebate)}
+      />
 
-          <KPIGroup.Separator />
-
-          <KPI>
-            <KPI.Header>
-              <KPI.Title>After Budget 2026</KPI.Title>
-            </KPI.Header>
-            <KPI.Content>
-              <KPI.Value
-                className="text-accent-strong"
-                currency="SGD"
-                locale="en-SG"
-                maximumFractionDigits={0}
-                style="currency"
-                value={result.newRebate}
-              />
-            </KPI.Content>
-            <KPI.Footer>
-              <div className="flex w-full flex-col gap-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted">Rebate Rate</span>
-                  <span className="font-medium">{bracket.newRate * 100}%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Uncapped Amount</span>
-                  <span className="font-medium">
-                    <NumberValue
-                      currency="SGD"
-                      locale="en-SG"
-                      maximumFractionDigits={0}
-                      style="currency"
-                      value={result.newUncapped}
-                    />
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Cap</span>
-                  <span className="font-medium">
-                    <NumberValue
-                      currency="SGD"
-                      locale="en-SG"
-                      maximumFractionDigits={0}
-                      style="currency"
-                      value={NEW_CAP}
-                    />
-                  </span>
-                </div>
-                {result.newCapped ? (
-                  <Typography.Caption className="text-warning">
-                    Cap of{" "}
-                    <NumberValue
-                      currency="SGD"
-                      locale="en-SG"
-                      maximumFractionDigits={0}
-                      style="currency"
-                      value={NEW_CAP}
-                    />{" "}
-                    applied
-                  </Typography.Caption>
-                ) : null}
-              </div>
-            </KPI.Footer>
-          </KPI>
-        </KPIGroup>
-
-        {result.difference > 0 && (
-          <Alert status="danger" className="border border-danger/40">
-            <Alert.Indicator>
-              <ArrowDown className="size-4" />
-            </Alert.Indicator>
-            <Alert.Content>
-              <Alert.Title>
-                <span>
-                  You would receive{" "}
-                  <strong>
-                    <NumberValue
-                      currency="SGD"
-                      locale="en-SG"
-                      maximumFractionDigits={0}
-                      style="currency"
-                      value={result.difference}
-                    />{" "}
-                    less
-                  </strong>{" "}
-                  under the new Budget 2026 rates.
-                </span>
-              </Alert.Title>
-            </Alert.Content>
-          </Alert>
-        )}
-
-        {bracket.oldRate === 0 && (
-          <Alert className="border border-border">
-            <Alert.Content>
-              <Alert.Title>
-                No PARF rebate is given for vehicles over 10 years old.
-              </Alert.Title>
-            </Alert.Content>
-          </Alert>
-        )}
-      </Card.Content>
-    </Card>
+      {result.shortfall > 0 ? (
+        <Typography.TextSm className="font-medium text-base text-muted-strong">
+          On these figures the new schedule returns{" "}
+          <strong className="text-foreground">
+            {formatCurrency(result.shortfall)} less
+          </strong>{" "}
+          than the old one — {formatCurrency(result.newRebate)} against{" "}
+          {formatCurrency(result.oldRebate)}.
+        </Typography.TextSm>
+      ) : null}
+    </>
   );
 }
