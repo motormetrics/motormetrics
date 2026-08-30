@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
-import Typography from "@web/components/typography";
 import { getPqpRates } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
 import {
@@ -37,10 +37,12 @@ export async function PqpCeilingRail() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm>
+        <Typography.Paragraph color="muted" size="sm">
           Current rates · {formatMonth(latestMonth)}
-        </Typography.TextSm>
-        <Typography.H3 className="text-3xl">PQP ceiling</Typography.H3>
+        </Typography.Paragraph>
+        <Typography.Heading level={3} className="text-3xl">
+          PQP ceiling
+        </Typography.Heading>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -62,9 +64,13 @@ export async function PqpCeilingRail() {
                   value={row.rate}
                 />
               </span>
-              <Typography.Caption className="truncate">
+              <Typography.Paragraph
+                color="muted"
+                size="xs"
+                className="truncate"
+              >
                 {CATEGORY_DESCRIPTIONS[row.category]}
-              </Typography.Caption>
+              </Typography.Paragraph>
             </div>
             <div className="ml-auto shrink-0">
               <CostTrendChip changeRatio={row.changeRatio} />
@@ -73,9 +79,9 @@ export async function PqpCeilingRail() {
         ))}
       </div>
 
-      <Typography.Caption>
+      <Typography.Paragraph color="muted" size="xs">
         Three-month moving average of quota premiums · used to renew a COE
-      </Typography.Caption>
+      </Typography.Paragraph>
     </div>
   );
 }

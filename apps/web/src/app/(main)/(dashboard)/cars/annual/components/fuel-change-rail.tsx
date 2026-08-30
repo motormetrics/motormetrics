@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import type { PopulationEntity } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
-import Typography from "@web/components/typography";
 
 /** Fuel types listed before the rail runs longer than the column beside it. */
 const RAIL_ROWS = 6;
@@ -26,8 +26,10 @@ export function FuelChangeRail({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm>Year on year</Typography.TextSm>
-        <Typography.H3>Fuel type change</Typography.H3>
+        <Typography.Paragraph color="muted" size="sm">
+          Year on year
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>Fuel type change</Typography.Heading>
       </div>
 
       <ul className="flex flex-col gap-2">
@@ -75,7 +77,9 @@ export function FuelChangeRail({
       </ul>
 
       {previousYear === null ? null : (
-        <Typography.Caption>Change on {previousYear}</Typography.Caption>
+        <Typography.Paragraph color="muted" size="xs">
+          Change on {previousYear}
+        </Typography.Paragraph>
       )}
     </div>
   );

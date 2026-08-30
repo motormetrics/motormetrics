@@ -1,8 +1,7 @@
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { ChevronRight } from "lucide-react";
 import { CategorySelect } from "./coe-controls";
 import type { CategoryKey } from "./search-params";
@@ -54,8 +53,10 @@ export function AllCategoriesTable({
     <SurfaceCard className="gap-4">
       <div className="flex flex-wrap items-center gap-3.5">
         <div className="flex flex-col">
-          <Typography.H3>All categories</Typography.H3>
-          <Typography.TextSm>{exercise} · five categories</Typography.TextSm>
+          <Typography.Heading level={3}>All categories</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
+            {exercise} · five categories
+          </Typography.Paragraph>
         </div>
       </div>
 
@@ -143,10 +144,10 @@ export function AllCategoriesTable({
         })}
       </div>
 
-      <Typography.Caption className="px-4">
+      <Typography.Paragraph color="muted" size="xs" className="px-4">
         Premiums are the quota premium at the close of the exercise. Select a
         category for its bidding history.
-      </Typography.Caption>
+      </Typography.Paragraph>
     </SurfaceCard>
   );
 }

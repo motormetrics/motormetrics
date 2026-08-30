@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
 import {
   MeasureTabs,
@@ -22,7 +23,6 @@ import {
   ReportTable,
   ShareBar,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import {
   type CategoryMonthlyPoint,
   getCategoryMonthlySeries,
@@ -187,9 +187,9 @@ export async function CategoryReport({
 
   if (rows.length === 0) {
     return (
-      <Typography.Text>
+      <Typography.Paragraph>
         No {config.title.toLowerCase()} data available for {periodLabel}
-      </Typography.Text>
+      </Typography.Paragraph>
     );
   }
 
@@ -430,11 +430,11 @@ export async function CategoryReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="text-lg">
+          <Typography.Heading level={3} className="text-lg">
             How LTA classifies {config.singularLabel.toLowerCase()}s
-          </Typography.H3>
+          </Typography.Heading>
           {config.notes.map((note) => (
-            <Typography.Text key={note}>{note}</Typography.Text>
+            <Typography.Paragraph key={note}>{note}</Typography.Paragraph>
           ))}
           {config.relatedLinks.map(({ href, label }) => (
             <Link

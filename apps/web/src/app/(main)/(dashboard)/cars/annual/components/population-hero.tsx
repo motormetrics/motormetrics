@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
   changeRatio,
@@ -6,7 +7,6 @@ import {
 import { HeroCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { sparkline } from "@web/components/shared/sparkline";
-import Typography from "@web/components/typography";
 
 /**
  * The gradient hero: how many of the focused vehicle type or make were on the
@@ -45,7 +45,7 @@ export function PopulationHero({
         )}
       </div>
 
-      <Typography.Text className="text-accent-foreground/85">
+      <Typography.Paragraph className="text-accent-foreground/85">
         registered {noun}
         {change === null || previousYear === null ? null : (
           <>
@@ -53,7 +53,7 @@ export function PopulationHero({
             {change < 0 ? "down" : "up"} on {previousYear}
           </>
         )}
-      </Typography.Text>
+      </Typography.Paragraph>
 
       {spark ? (
         <svg
@@ -84,13 +84,20 @@ export function PopulationHero({
 
       <div className="flex items-center gap-4 rounded-field bg-foreground/70 px-6 py-5">
         <div className="flex min-w-0 flex-col gap-0.5">
-          <Typography.TextLg className="text-accent-foreground">
+          <Typography.Paragraph
+            color="muted"
+            className="text-accent-foreground"
+          >
             Growth capped at 0%
-          </Typography.TextLg>
-          <Typography.Caption className="text-accent-foreground/70">
+          </Typography.Paragraph>
+          <Typography.Paragraph
+            color="muted"
+            size="xs"
+            className="text-accent-foreground/70"
+          >
             LTA has held the vehicle growth rate for cars and motorcycles at 0%
             since February 2018
-          </Typography.Caption>
+          </Typography.Paragraph>
         </div>
       </div>
     </HeroCard>

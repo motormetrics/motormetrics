@@ -1,9 +1,9 @@
+import { Typography } from "@heroui/react";
 import { SurfaceCard } from "@web/components/shared/bento";
 import {
   DonutGauge,
   type DonutSegment,
 } from "@web/components/shared/donut-gauge";
-import Typography from "@web/components/typography";
 import type { SearchParams } from "nuqs/server";
 import { loadSearchParams } from "../search-params";
 import { loadMakeRows } from "./make-rows";
@@ -44,8 +44,10 @@ export async function ConcentrationCard({
 
   return (
     <SurfaceCard className="gap-1">
-      <Typography.TextSm className="text-lg">Concentration</Typography.TextSm>
-      <Typography.H3>Top five vs the rest</Typography.H3>
+      <Typography.Paragraph color="muted" size="sm" className="text-lg">
+        Concentration
+      </Typography.Paragraph>
+      <Typography.Heading level={3}>Top five vs the rest</Typography.Heading>
       <DonutGauge
         caption="top five share"
         centre={`${leadersShare.toFixed(0)}%`}

@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils";
 import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
@@ -31,7 +32,6 @@ import {
   ReportRow,
   ReportTable,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import { UnreleasedFeature } from "@web/components/unreleased-feature";
 import { getPQPOverview } from "@web/queries/coe";
 import type { Pqp } from "@web/types/coe";
@@ -88,7 +88,7 @@ export async function PQPReport({
   const { comparison, latestMonth, tableRows, trendData } = overview;
 
   if (!latestMonth || tableRows.length === 0) {
-    return <Typography.Text>No PQP data available.</Typography.Text>;
+    return <Typography.Paragraph>No PQP data available.</Typography.Paragraph>;
   }
 
   // A ten-year renewal costs the full PQP; a five-year renewal costs half. The
@@ -187,10 +187,10 @@ export async function PQPReport({
 
       <div className="flex flex-col gap-3.5">
         <PQPChart data={chartData} series={series} />
-        <Typography.TextSm>
+        <Typography.Paragraph color="muted" size="sm">
           Rates are quoted for a {term}-year renewal. The comps draw the closing
           premium alongside the rate; that series is not in this query yet.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
       <ReportSection
@@ -198,10 +198,10 @@ export async function PQPReport({
         title="PQP against the closing premium"
       >
         <PQPComparisonChart data={comparisonData} />
-        <Typography.TextSm>
+        <Typography.Paragraph color="muted" size="sm">
           A bar above the dashed line means the market is bidding above the
           renewal rate; a bar below it means renewing is the dearer of the two.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </ReportSection>
 
       <ReportSection
@@ -356,17 +356,19 @@ export async function PQPReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="text-lg">How the PQP is set</Typography.H3>
-          <Typography.Text>
+          <Typography.Heading level={3} className="text-lg">
+            How the PQP is set
+          </Typography.Heading>
+          <Typography.Paragraph>
             LTA averages the closing premiums in that category over the last
             three months, across both exercises, and publishes it as the rate
             for the coming month. It therefore lags the market rather than
             leading it.
-          </Typography.Text>
-          <Typography.Text>
+          </Typography.Paragraph>
+          <Typography.Paragraph>
             A five-year renewal costs half the PQP, but the car cannot be
             renewed again after that term.
-          </Typography.Text>
+          </Typography.Paragraph>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/premiums"

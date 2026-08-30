@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
@@ -19,7 +20,6 @@ import {
 import { SurfaceCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { sparkline } from "@web/components/shared/sparkline";
-import Typography from "@web/components/typography";
 import { getEvMonthlyTrend } from "@web/queries/cars";
 import { Zap } from "lucide-react";
 
@@ -85,10 +85,10 @@ export async function RegistrationTrend({
           <Zap className="size-5" />
         </span>
         <div className="flex min-w-0 flex-col">
-          <Typography.H3>{heading.title}</Typography.H3>
-          <Typography.TextSm>
+          <Typography.Heading level={3}>{heading.title}</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             {RANGE_NOTES[range]} to {monthLabel}
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
         <div className="ml-auto">
           <QueryTabs
@@ -126,9 +126,9 @@ export async function RegistrationTrend({
             }
           />
         </div>
-        <Typography.Text className="text-muted">
+        <Typography.Paragraph className="text-muted">
           {heading.subject} registered in {monthLabel}
-        </Typography.Text>
+        </Typography.Paragraph>
       </div>
 
       {chart ? (
@@ -159,10 +159,12 @@ export async function RegistrationTrend({
             />
           </svg>
           <div className="flex justify-between">
-            <Typography.Caption>
+            <Typography.Paragraph color="muted" size="xs">
               {formatDateToMonthYear(visibleMonths.at(0)?.month ?? "")}
-            </Typography.Caption>
-            <Typography.Caption>{monthLabel}</Typography.Caption>
+            </Typography.Paragraph>
+            <Typography.Paragraph color="muted" size="xs">
+              {monthLabel}
+            </Typography.Paragraph>
           </div>
         </div>
       ) : null}

@@ -1,10 +1,10 @@
+import { Typography } from "@heroui/react";
 import { AdoptionColumns } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-columns";
 import {
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 
 /** Months of history the column chart shows, matching the comp's eight bars. */
@@ -35,8 +35,10 @@ export async function AdoptionByMonth({ month }: { month: string }) {
   return (
     <SurfaceCard className="gap-4 p-7">
       <div className="flex flex-col gap-1">
-        <Typography.Text className="text-muted">Adoption</Typography.Text>
-        <Typography.H3>Share by month</Typography.H3>
+        <Typography.Paragraph className="text-muted">
+          Adoption
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>Share by month</Typography.Heading>
       </div>
 
       <AdoptionColumns
@@ -44,9 +46,9 @@ export async function AdoptionByMonth({ month }: { month: string }) {
         selectedMonth={trend[index]?.month ?? month}
       />
 
-      <Typography.Caption>
+      <Typography.Paragraph color="muted" size="xs">
         Battery-electric share of all new car registrations
-      </Typography.Caption>
+      </Typography.Paragraph>
     </SurfaceCard>
   );
 }

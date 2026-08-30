@@ -1,10 +1,9 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { SurfaceCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import Typography from "@web/components/typography";
 import { Car, ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
 import posthog from "posthog-js";
@@ -140,13 +139,13 @@ export function MakesTable({
           <Car className="size-5.5" />
         </span>
         <div className="flex flex-col">
-          <Typography.H3>All makes</Typography.H3>
-          <Typography.Caption>
+          <Typography.Heading level={3}>All makes</Typography.Heading>
+          <Typography.Paragraph color="muted" size="xs">
             {rangeLabel} ·{" "}
             {isTruncated
               ? `top ${displayedRows.length} of ${visibleRows.length}`
               : `${visibleRows.length} ${visibleRows.length === 1 ? "make" : "makes"}`}
-          </Typography.Caption>
+          </Typography.Paragraph>
         </div>
         <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
           Sorted by {SORT_LABELS[sortKey]},{" "}
@@ -298,11 +297,11 @@ export function MakesTable({
         </button>
       ) : null}
 
-      <Typography.Caption className="mt-3 px-4.5">
+      <Typography.Paragraph color="muted" size="xs" className="mt-3 px-4.5">
         Change compares against the same period a year earlier, and is withheld
         below {MIN_COUNT_FOR_CHANGE} registrations. Select a row to open the
         make.
-      </Typography.Caption>
+      </Typography.Paragraph>
     </SurfaceCard>
   );
 }

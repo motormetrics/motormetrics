@@ -1,7 +1,6 @@
-import { Chip } from "@heroui/react";
+import { Chip, Typography } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import { Award, BarChart3, Layers, PieChart } from "lucide-react";
 
 interface CategoryInsightsCardProps {
@@ -35,7 +34,7 @@ export function CategoryInsightsCard({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <Typography.H4>Market Insights</Typography.H4>
+        <Typography.Heading level={4}>Market Insights</Typography.Heading>
         <Chip color="accent" size="sm">
           {formattedMonth}
         </Chip>
@@ -94,7 +93,9 @@ export function CategoryInsightsCard({
             />
           </KPI.Content>
           <KPI.Footer>
-            <Typography.TextSm>{title} types</Typography.TextSm>
+            <Typography.Paragraph color="muted" size="sm">
+              {title} types
+            </Typography.Paragraph>
           </KPI.Footer>
         </KPI>
 
@@ -113,7 +114,9 @@ export function CategoryInsightsCard({
             </span>
           </KPI.Content>
           <KPI.Footer>
-            <Typography.TextSm>Leading category</Typography.TextSm>
+            <Typography.Paragraph color="muted" size="sm">
+              Leading category
+            </Typography.Paragraph>
           </KPI.Footer>
         </KPI>
 
@@ -135,7 +138,9 @@ export function CategoryInsightsCard({
             />
           </KPI.Content>
           <KPI.Footer>
-            <Typography.TextSm>{topPerformer.name}</Typography.TextSm>
+            <Typography.Paragraph color="muted" size="sm">
+              {topPerformer.name}
+            </Typography.Paragraph>
           </KPI.Footer>
         </KPI>
       </KPIGroup>

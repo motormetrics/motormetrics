@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import {
   ELECTRIC,
   type PopulationEntity,
@@ -7,7 +8,6 @@ import {
   DonutGauge,
   type DonutSegment,
 } from "@web/components/shared/donut-gauge";
-import Typography from "@web/components/typography";
 
 /**
  * Fuel types shown individually before the tail is folded into "Others". The
@@ -63,8 +63,12 @@ export function PopulationFuelMix({
   return (
     <SurfaceCard>
       <div className="flex flex-col gap-1">
-        <Typography.TextSm>Fuel mix</Typography.TextSm>
-        <Typography.H3>{entity.name} by fuel type</Typography.H3>
+        <Typography.Paragraph color="muted" size="sm">
+          Fuel mix
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>
+          {entity.name} by fuel type
+        </Typography.Heading>
       </div>
 
       {segments.length > 0 ? (
@@ -75,9 +79,9 @@ export function PopulationFuelMix({
           title={`${entity.name} by fuel type, ${year}`}
         />
       ) : (
-        <Typography.TextSm>
+        <Typography.Paragraph color="muted" size="sm">
           LTA published the {year} count for {entity.name} without a fuel split.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       )}
     </SurfaceCard>
   );

@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
 import {
   FuelTypeTabs,
@@ -30,7 +31,6 @@ import {
   ReportTable,
   ShareBar,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import {
   getMakeCrossTab,
   getMakeTotalsInRange,
@@ -504,11 +504,11 @@ export async function MakeReport({
                     <span className="w-[8.125rem] shrink-0 font-bold">
                       {name}
                     </span>
-                    <Typography.TextSm>
+                    <Typography.Paragraph color="muted" size="sm">
                       {leading.length > 1
                         ? `${leading.join(" and ")} carry the volume`
                         : `all of it ${leading[0]}`}
-                    </Typography.TextSm>
+                    </Typography.Paragraph>
                     <span className="ml-auto font-extrabold tabular-nums">
                       {percentage(count, makeTotal)}
                     </span>
@@ -520,16 +520,18 @@ export async function MakeReport({
         </div>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="text-lg">Reading a make page</Typography.H3>
-          <Typography.Text>
+          <Typography.Heading level={3} className="text-lg">
+            Reading a make page
+          </Typography.Heading>
+          <Typography.Paragraph>
             Registrations are counted by make as recorded at registration, so
             rebadged and parallel-imported cars appear under the same name as
             authorised-dealer stock.
-          </Typography.Text>
-          <Typography.Text>
+          </Typography.Paragraph>
+          <Typography.Paragraph>
             LTA reports registrations by make, fuel type and vehicle type — not
             by model, so there are no model-level figures anywhere on the site.
-          </Typography.Text>
+          </Typography.Paragraph>
           <Link className="font-bold text-accent-strong" href="/cars/makes">
             All makes →
           </Link>

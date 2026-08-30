@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
@@ -7,7 +8,6 @@ import {
 import { ELECTRIC_POPULATION_FUEL_TYPE } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { sparkline } from "@web/components/shared/sparkline";
-import Typography from "@web/components/typography";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 import {
   getVehiclePopulationByYearAndFuelType,
@@ -79,7 +79,10 @@ export async function EvShareHero({ month }: { month: string }) {
           <DeltaChip tone="on-dark" unit="pp" value={share - previousShare} />
         </div>
 
-        <Typography.TextLg className="text-accent-foreground/70">
+        <Typography.Paragraph
+          color="muted"
+          className="text-accent-foreground/70"
+        >
           of new car registrations ·{" "}
           <NumberValue
             locale="en-SG"
@@ -87,7 +90,7 @@ export async function EvShareHero({ month }: { month: string }) {
             value={point.BEV}
           />{" "}
           battery-electric cars this month
-        </Typography.TextLg>
+        </Typography.Paragraph>
       </div>
 
       {spark ? (
@@ -128,12 +131,16 @@ export async function EvShareHero({ month }: { month: string }) {
               />{" "}
               EVs on the road
             </span>
-            <Typography.Caption className="text-accent-foreground/65">
+            <Typography.Paragraph
+              color="muted"
+              size="xs"
+              className="text-accent-foreground/65"
+            >
               {fleetTotal > 0
                 ? `${((electricFleet / fleetTotal) * 100).toFixed(1)}% of the vehicle population`
                 : "share of the vehicle population"}{" "}
               · {populationYear}
-            </Typography.Caption>
+            </Typography.Paragraph>
           </div>
           <Link
             aria-label="View the annual vehicle population"

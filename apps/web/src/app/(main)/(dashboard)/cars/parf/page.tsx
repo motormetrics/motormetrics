@@ -1,9 +1,9 @@
+import { Typography } from "@heroui/react";
 import { PARFCalculator } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-calculator";
 import { PARFComparisonTable } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-comparison-table";
 import { PageHead } from "@web/components/shared/page-head";
 import { Report } from "@web/components/shared/report";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -79,7 +79,7 @@ export default function PARFCalculatorPage() {
       <PARFCalculator />
       <PARFComparisonTable />
 
-      <Typography.TextSm>
+      <Typography.Paragraph color="muted" size="sm">
         Figures are for illustration only. The PARF rebate is subject to the
         vehicle&apos;s actual ARF paid and its age at deregistration. The new
         rates apply to vehicles registered with COEs obtained from the 2nd
@@ -93,7 +93,7 @@ export default function PARFCalculatorPage() {
           LTA
         </Link>
         .
-      </Typography.TextSm>
+      </Typography.Paragraph>
     </Report>
   );
 }

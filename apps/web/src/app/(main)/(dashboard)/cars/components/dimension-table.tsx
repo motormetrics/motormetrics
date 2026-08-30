@@ -1,12 +1,11 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import {
   CAR_DIMENSIONS,
   DIMENSION_LABELS,
 } from "@web/app/(main)/(dashboard)/cars/components/dimensions";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import type { CarDimension, DimensionStat } from "@web/queries/cars";
 import { ArrowRight, Car, Search } from "lucide-react";
 import Link from "next/link";
@@ -156,13 +155,13 @@ export function DimensionTable({
           <Car aria-hidden className="size-5" />
         </span>
         <div className="flex flex-col">
-          <Typography.H3>{labels.title}</Typography.H3>
-          <Typography.TextSm>
+          <Typography.Heading level={3}>{labels.title}</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             Year to date through {monthLabel} ·{" "}
             {isTruncated
               ? `top ${displayed.length} of ${visible.length}`
               : `${visible.length} ${visible.length === 1 ? "row" : "rows"}`}
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
         <div className="ml-auto flex gap-1.5 rounded-full bg-default p-1.5">
           {CAR_DIMENSIONS.map((option) => {
@@ -324,9 +323,9 @@ export function DimensionTable({
       </table>
 
       {visible.length === 0 ? (
-        <Typography.TextSm className="px-4 py-9">
+        <Typography.Paragraph color="muted" size="sm" className="px-4 py-9">
           Nothing matches “{query}”.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       ) : null}
 
       {isTruncated ? (

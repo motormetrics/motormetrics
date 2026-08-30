@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { InkPanel } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import {
   getVehiclePopulationByYearAndFuelType,
   getVehiclePopulationYearlyTotals,
@@ -56,9 +56,13 @@ export async function PopulationPanel() {
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <Car aria-hidden className="size-5" />
         </span>
-        <Typography.TextSm className="text-accent-foreground/85">
+        <Typography.Paragraph
+          color="muted"
+          size="sm"
+          className="text-accent-foreground/85"
+        >
           Vehicles on the road
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
       <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
@@ -69,7 +73,11 @@ export async function PopulationPanel() {
         />
       </span>
 
-      <Typography.TextSm className="text-accent-foreground/60">
+      <Typography.Paragraph
+        color="muted"
+        size="sm"
+        className="text-accent-foreground/60"
+      >
         All vehicles registered in Singapore · {latest.year}
         {changeRatio !== null && previous ? (
           <>
@@ -83,7 +91,7 @@ export async function PopulationPanel() {
             on {previous.year}
           </>
         ) : null}
-      </Typography.TextSm>
+      </Typography.Paragraph>
 
       <ul className="flex flex-col gap-3">
         {rows.map((row) => (

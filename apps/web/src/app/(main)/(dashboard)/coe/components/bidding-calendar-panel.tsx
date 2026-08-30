@@ -1,5 +1,5 @@
+import { Typography } from "@heroui/react";
 import { InkPanel } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { getCoeResults } from "@web/queries/coe";
 import { CalendarDays } from "lucide-react";
 import {
@@ -39,19 +39,27 @@ export async function BiddingCalendarPanel() {
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <CalendarDays className="size-[19px]" />
         </span>
-        <Typography.TextSm className="text-accent-foreground/85">
+        <Typography.Paragraph
+          color="muted"
+          size="sm"
+          className="text-accent-foreground/85"
+        >
           Bidding calendar
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
       <span className="font-extrabold text-5xl text-accent-on-dark leading-tight tracking-tight">
         {formatMonth(upcoming.month)}
       </span>
 
-      <Typography.TextSm className="text-accent-foreground/60">
+      <Typography.Paragraph
+        color="muted"
+        size="sm"
+        className="text-accent-foreground/60"
+      >
         Premiums are published at the close of each exercise, and the PQP
         ceiling is reset from the three most recent months.
-      </Typography.TextSm>
+      </Typography.Paragraph>
 
       <div className="flex flex-col gap-2.5">
         {schedule.map((entry) => (
@@ -59,12 +67,20 @@ export async function BiddingCalendarPanel() {
             className="flex items-center gap-3 border-accent-foreground/10 border-t pt-2.5"
             key={entry.label}
           >
-            <Typography.TextSm className="text-accent-foreground/85">
+            <Typography.Paragraph
+              color="muted"
+              size="sm"
+              className="text-accent-foreground/85"
+            >
               {entry.label}
-            </Typography.TextSm>
-            <Typography.Caption className="ml-auto text-right text-accent-foreground/60">
+            </Typography.Paragraph>
+            <Typography.Paragraph
+              color="muted"
+              size="xs"
+              className="ml-auto text-right text-accent-foreground/60"
+            >
               {entry.note}
-            </Typography.Caption>
+            </Typography.Paragraph>
           </div>
         ))}
       </div>

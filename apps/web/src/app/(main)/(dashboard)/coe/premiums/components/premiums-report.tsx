@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils";
 import {
   biddingOrdinal,
@@ -34,7 +35,6 @@ import {
   ReportTable,
   ShareBar,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import { getCategoryExercises, getExercisePair } from "@web/queries/coe";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
@@ -363,16 +363,18 @@ export async function PremiumsReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="text-lg">How to read this</Typography.H3>
-          <Typography.Text>
+          <Typography.Heading level={3} className="text-lg">
+            How to read this
+          </Typography.Heading>
+          <Typography.Paragraph>
             A premium is the price of the last successful bid in an exercise, so
             it is set by demand rather than announced in advance. A decrease is
             shown in green.
-          </Typography.Text>
-          <Typography.Text>
+          </Typography.Paragraph>
+          <Typography.Paragraph>
             Renewing an existing COE uses the PQP instead — the three-month
             moving average of premiums in that category.
-          </Typography.Text>
+          </Typography.Paragraph>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/pqp"

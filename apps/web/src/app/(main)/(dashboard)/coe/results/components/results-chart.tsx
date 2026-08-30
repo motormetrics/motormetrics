@@ -1,8 +1,8 @@
 "use client";
 
+import { Typography } from "@heroui/react";
 import { LineChart } from "@heroui-pro/react";
 import { CATEGORY_COLOURS } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
-import Typography from "@web/components/typography";
 import type { COECategory } from "@web/types";
 
 const currencyFormatter = new Intl.NumberFormat("en-SG", {
@@ -39,9 +39,9 @@ export function ResultsChart({
   if (categories.length === 0) {
     return (
       <div className="flex h-[340px] items-center justify-center border-border border-y">
-        <Typography.TextSm>
+        <Typography.Paragraph color="muted" size="sm">
           Pick at least one category to plot.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
     );
   }

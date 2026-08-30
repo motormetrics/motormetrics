@@ -1,5 +1,5 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import Typography from "@web/components/typography";
 import { getCategorySummaryByYear } from "@web/queries/cars";
 
 const RADIUS = 74;
@@ -33,8 +33,10 @@ export async function MarketOverview() {
   return (
     <div className="flex flex-col gap-6 rounded-4xl bg-surface p-8 shadow-surface">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm>Market overview</Typography.TextSm>
-        <Typography.H3>By powertrain</Typography.H3>
+        <Typography.Paragraph color="muted" size="sm">
+          Market overview
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>By powertrain</Typography.Heading>
       </div>
 
       <div className="relative mx-auto size-[172px]">
@@ -65,7 +67,9 @@ export async function MarketOverview() {
               value={summary.total}
             />
           </span>
-          <Typography.Caption>registrations</Typography.Caption>
+          <Typography.Paragraph color="muted" size="xs">
+            registrations
+          </Typography.Paragraph>
         </div>
       </div>
 
@@ -77,7 +81,9 @@ export async function MarketOverview() {
               className="size-3 shrink-0 rounded-full"
               style={{ backgroundColor: slice.color }}
             />
-            <Typography.TextSm>{slice.label}</Typography.TextSm>
+            <Typography.Paragraph color="muted" size="sm">
+              {slice.label}
+            </Typography.Paragraph>
             <span className="ml-auto font-bold text-sm tabular-nums">
               {((slice.value / total) * 100).toFixed(1)}%
             </span>
@@ -85,7 +91,9 @@ export async function MarketOverview() {
         ))}
       </div>
 
-      <Typography.Caption>{summary.year} year to date</Typography.Caption>
+      <Typography.Paragraph color="muted" size="xs">
+        {summary.year} year to date
+      </Typography.Paragraph>
     </div>
   );
 }

@@ -1,9 +1,8 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import type { PopulationEntity } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { useState } from "react";
 
 /** Shortest column still reads as a column rather than as a sliver. */
@@ -43,10 +42,10 @@ export function PopulationByYearChart({
     <SurfaceCard className="gap-7">
       <div className="flex flex-wrap items-center gap-3.5">
         <div className="flex flex-col">
-          <Typography.H3>Population by year</Typography.H3>
-          <Typography.TextSm>
+          <Typography.Heading level={3}>Population by year</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             {entity.name} · hover a column for detail
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
       </div>
 

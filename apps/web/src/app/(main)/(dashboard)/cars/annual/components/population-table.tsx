@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import {
   changeRatio,
   type DimensionLabels,
@@ -8,7 +8,6 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { SurfaceCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import Typography from "@web/components/typography";
 import { useMemo, useState } from "react";
 
 type SortKey = "name" | "population" | "change";
@@ -134,10 +133,10 @@ export function PopulationTable({
     <SurfaceCard className="gap-5">
       <div className="flex flex-wrap items-center gap-3.5">
         <div className="flex flex-col">
-          <Typography.H3>{labels.title}</Typography.H3>
-          <Typography.TextSm>
+          <Typography.Heading level={3}>{labels.title}</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             {year} · {sorted.length} {labels.plural}
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
         <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
           Sorted by {SORT_LABELS[sortKey]},{" "}
@@ -285,10 +284,10 @@ export function PopulationTable({
         </button>
       ) : null}
 
-      <Typography.TextSm className="px-4">
+      <Typography.Paragraph color="muted" size="sm" className="px-4">
         Population counts are taken at 31 December each year.
         {previousYear === null ? null : ` Change is against ${previousYear}.`}
-      </Typography.TextSm>
+      </Typography.Paragraph>
     </SurfaceCard>
   );
 }

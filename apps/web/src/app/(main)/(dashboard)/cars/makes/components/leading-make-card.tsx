@@ -1,8 +1,8 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { HeroCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { sparkline } from "@web/components/shared/sparkline";
-import Typography from "@web/components/typography";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
@@ -51,9 +51,9 @@ export async function LeadingMakeCard({
         )}
       </div>
 
-      <Typography.TextLg className="text-accent-foreground/85">
+      <Typography.Paragraph color="muted" className="text-accent-foreground/85">
         registrations · {leader.share.toFixed(1)}% of the market
-      </Typography.TextLg>
+      </Typography.Paragraph>
 
       {spark ? (
         <svg

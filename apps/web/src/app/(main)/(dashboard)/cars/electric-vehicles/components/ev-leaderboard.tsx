@@ -1,8 +1,8 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { batteryElectricMakes } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { getTopMakesByFuelType } from "@web/queries/cars/market-insights";
 import { getCarLogo } from "@web/queries/logos";
 import Image from "next/image";
@@ -24,8 +24,10 @@ export async function EvLeaderboard({ month }: { month: string }) {
   return (
     <SurfaceCard className="gap-4 p-7">
       <div className="flex flex-col gap-1">
-        <Typography.Text className="text-muted">Leaderboard</Typography.Text>
-        <Typography.H3>EV makes</Typography.H3>
+        <Typography.Paragraph className="text-muted">
+          Leaderboard
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>EV makes</Typography.Heading>
       </div>
 
       <ul className="flex flex-col gap-3.5">
@@ -48,9 +50,13 @@ export async function EvLeaderboard({ month }: { month: string }) {
                     item.make.charAt(0)
                   )}
                 </span>
-                <Typography.TextSm className="truncate text-foreground/85">
+                <Typography.Paragraph
+                  color="muted"
+                  size="sm"
+                  className="truncate text-foreground/85"
+                >
                   {item.make}
-                </Typography.TextSm>
+                </Typography.Paragraph>
                 <span className="ml-auto font-extrabold text-sm tabular-nums">
                   <NumberValue
                     locale="en-SG"
@@ -73,9 +79,9 @@ export async function EvLeaderboard({ month }: { month: string }) {
         })}
       </ul>
 
-      <Typography.Caption>
+      <Typography.Paragraph color="muted" size="xs">
         Battery-electric registrations · {formatDateToMonthYear(month)}
-      </Typography.Caption>
+      </Typography.Paragraph>
     </SurfaceCard>
   );
 }

@@ -1,10 +1,9 @@
-import { Tooltip } from "@heroui/react";
+import { Tooltip, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import { HeroCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { sparkline } from "@web/components/shared/sparkline";
-import Typography from "@web/components/typography";
 import {
   getMonthlyRegistrationTotals,
   getYearlyRegistrations,
@@ -63,10 +62,14 @@ export async function SummaryCard() {
         <DeltaChip tone="inverse" value={changeRatio * 100} />
       </div>
 
-      <Typography.TextSm className="text-accent-foreground/85">
+      <Typography.Paragraph
+        color="muted"
+        size="sm"
+        className="text-accent-foreground/85"
+      >
         cars registered vs{" "}
         {previous ? formatMonth(previous.month, "short") : "previous month"}
-      </Typography.TextSm>
+      </Typography.Paragraph>
 
       {spark ? (
         <svg
@@ -97,17 +100,24 @@ export async function SummaryCard() {
 
       <div className="flex items-center gap-4 rounded-field bg-foreground/45 px-6 py-5">
         <div className="flex flex-col gap-1">
-          <Typography.TextLg className="text-accent-foreground">
+          <Typography.Paragraph
+            color="muted"
+            className="text-accent-foreground"
+          >
             <NumberValue
               locale="en-SG"
               maximumFractionDigits={0}
               value={yearToDate?.total ?? 0}
             />{" "}
             year to date
-          </Typography.TextLg>
-          <Typography.Caption className="text-accent-foreground/70">
+          </Typography.Paragraph>
+          <Typography.Paragraph
+            color="muted"
+            size="xs"
+            className="text-accent-foreground/70"
+          >
             cars registered in {yearToDate?.year ?? "—"}
-          </Typography.Caption>
+          </Typography.Paragraph>
         </div>
         <Tooltip delay={300}>
           <Link

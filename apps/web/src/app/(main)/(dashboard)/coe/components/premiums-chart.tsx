@@ -1,8 +1,7 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { useState } from "react";
 
 export interface PremiumColumn {
@@ -52,10 +51,12 @@ export function PremiumsChart({
     <SurfaceCard className="gap-7">
       <div className="flex flex-wrap items-center gap-3.5">
         <div className="flex flex-col">
-          <Typography.H3>Premiums by exercise</Typography.H3>
-          <Typography.TextSm>
+          <Typography.Heading level={3}>
+            Premiums by exercise
+          </Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             {category} · hover a column for the premium
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
         <span className="ml-auto whitespace-nowrap rounded-full bg-accent/15 px-3.5 py-[7px] font-bold text-accent-strong text-sm">
           {periodLabel}

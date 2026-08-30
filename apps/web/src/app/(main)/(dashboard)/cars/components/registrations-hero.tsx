@@ -1,4 +1,4 @@
-import { Tooltip } from "@heroui/react";
+import { Tooltip, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
@@ -10,7 +10,6 @@ import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params
 import { HeroCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { sparkline } from "@web/components/shared/sparkline";
-import Typography from "@web/components/typography";
 import {
   getDimensionStats,
   getMonthlyRegistrationTotals,
@@ -77,7 +76,7 @@ export async function RegistrationsHero({
         <DeltaChip tone="inverse" value={changeRatio * 100} />
       </div>
 
-      <Typography.Text className="text-accent-foreground/85">
+      <Typography.Paragraph className="text-accent-foreground/85">
         cars registered vs{" "}
         {previous ? formatMonthName(previous.month) : "the previous month"} ·{" "}
         <NumberValue
@@ -86,7 +85,7 @@ export async function RegistrationsHero({
           value={yearToDate}
         />{" "}
         year to date
-      </Typography.Text>
+      </Typography.Paragraph>
 
       {spark ? (
         <svg
@@ -118,17 +117,24 @@ export async function RegistrationsHero({
       {leader ? (
         <div className="flex items-center gap-4 rounded-field bg-foreground/70 px-6 py-5">
           <div className="flex min-w-0 flex-col gap-0.5">
-            <Typography.TextLg className="text-accent-foreground">
+            <Typography.Paragraph
+              color="muted"
+              className="text-accent-foreground"
+            >
               {leader.name} leads with{" "}
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
                 value={leader.count}
               />
-            </Typography.TextLg>
-            <Typography.Caption className="text-accent-foreground/70">
+            </Typography.Paragraph>
+            <Typography.Paragraph
+              color="muted"
+              size="xs"
+              className="text-accent-foreground/70"
+            >
               {leader.share.toFixed(1)}% of registrations year to date
-            </Typography.Caption>
+            </Typography.Paragraph>
           </div>
           <Tooltip delay={300}>
             <Link

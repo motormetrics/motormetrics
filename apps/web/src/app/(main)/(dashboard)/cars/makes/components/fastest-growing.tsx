@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import Typography from "@web/components/typography";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 import { loadSearchParams } from "../search-params";
@@ -42,10 +42,10 @@ export async function FastestGrowing({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Typography.Text className="text-muted">
+        <Typography.Paragraph className="text-muted">
           Movers · year on year
-        </Typography.Text>
-        <Typography.H3>Fastest growing</Typography.H3>
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>Fastest growing</Typography.Heading>
       </div>
 
       <div className="flex flex-col gap-2">

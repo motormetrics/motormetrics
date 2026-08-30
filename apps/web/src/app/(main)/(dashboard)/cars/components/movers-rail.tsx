@@ -1,8 +1,8 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import Typography from "@web/components/typography";
 import { getDimensionStats } from "@web/queries/cars";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
@@ -40,14 +40,16 @@ export async function MoversRail({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm>Movers · year on year</Typography.TextSm>
-        <Typography.H3>Fastest growing</Typography.H3>
+        <Typography.Paragraph color="muted" size="sm">
+          Movers · year on year
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>Fastest growing</Typography.Heading>
       </div>
 
       {movers.length === 0 ? (
-        <Typography.TextSm>
+        <Typography.Paragraph color="muted" size="sm">
           No make has a comparable period in {previousYear} to measure against.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       ) : (
         <>
           <ul className="flex flex-col gap-2">
@@ -82,10 +84,10 @@ export async function MoversRail({
             ))}
           </ul>
 
-          <Typography.Caption>
+          <Typography.Paragraph color="muted" size="xs">
             Change against the same period in {previousYear}
             {hasDecline ? " · amber marks a decline in volume" : ""}
-          </Typography.Caption>
+          </Typography.Paragraph>
         </>
       )}
     </div>

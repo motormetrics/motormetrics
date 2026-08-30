@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
 import { CategorySelect } from "./coe-controls";
@@ -39,8 +39,12 @@ export async function QuotaAllocationCard({
   return (
     <SurfaceCard className="gap-4">
       <div className="flex flex-col gap-1">
-        <Typography.TextLg>Quota allocation</Typography.TextLg>
-        <Typography.H3>{formatExercise(latest)}</Typography.H3>
+        <Typography.Paragraph color="muted">
+          Quota allocation
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>
+          {formatExercise(latest)}
+        </Typography.Heading>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -89,9 +93,9 @@ export async function QuotaAllocationCard({
         })}
       </div>
 
-      <Typography.Caption>
+      <Typography.Paragraph color="muted" size="xs">
         COEs available in this bidding exercise
-      </Typography.Caption>
+      </Typography.Paragraph>
     </SurfaceCard>
   );
 }

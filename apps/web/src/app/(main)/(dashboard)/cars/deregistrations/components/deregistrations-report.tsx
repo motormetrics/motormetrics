@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import type { SelectDeregistration } from "@motormetrics/database";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
@@ -19,7 +20,6 @@ import {
   ReportTable,
   ShareBar,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import { getDeregistrations } from "@web/queries/deregistrations";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { format, subMonths } from "date-fns";
@@ -135,9 +135,9 @@ export async function DeregistrationsReport({
 
   if (rows.length === 0) {
     return (
-      <Typography.Text>
+      <Typography.Paragraph>
         No deregistration data available for {formattedMonth}
-      </Typography.Text>
+      </Typography.Paragraph>
     );
   }
 
@@ -300,19 +300,19 @@ export async function DeregistrationsReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="text-lg">
+          <Typography.Heading level={3} className="text-lg">
             What a deregistration is
-          </Typography.H3>
-          <Typography.Text>
+          </Typography.Heading>
+          <Typography.Paragraph>
             A vehicle is deregistered when it is scrapped or exported, which is
             what releases its COE back into the quota. Deregistrations in one
             month therefore set much of the supply bid for in later exercises.
-          </Typography.Text>
-          <Typography.Text>
+          </Typography.Paragraph>
+          <Typography.Paragraph>
             The categories are the COE ones the vehicle held, so a
             deregistration is counted against the quota it returns to rather
             than the body type of the car.
-          </Typography.Text>
+          </Typography.Paragraph>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/results"

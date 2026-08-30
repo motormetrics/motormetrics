@@ -1,8 +1,8 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { HeroCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { sparkline } from "@web/components/shared/sparkline";
-import Typography from "@web/components/typography";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
 import { CategoryTabs } from "./coe-controls";
@@ -22,9 +22,13 @@ const SPARK_HEIGHT = 100;
 function InsetFigure({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <Typography.Caption className="text-accent-foreground/70">
+      <Typography.Paragraph
+        color="muted"
+        size="xs"
+        className="text-accent-foreground/70"
+      >
         {label}
-      </Typography.Caption>
+      </Typography.Paragraph>
       <span className="font-extrabold text-accent-foreground text-xl tabular-nums">
         {value}
       </span>
@@ -102,9 +106,9 @@ export async function CoeHeroCard({
         />
       </div>
 
-      <Typography.TextLg className="text-accent-foreground/85">
+      <Typography.Paragraph color="muted" className="text-accent-foreground/85">
         {CATEGORY_DESCRIPTIONS[category]} · {comparison}
-      </Typography.TextLg>
+      </Typography.Paragraph>
 
       {spark ? (
         <svg

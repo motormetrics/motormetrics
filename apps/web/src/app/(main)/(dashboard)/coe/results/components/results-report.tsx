@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils";
 import {
   biddingOrdinal,
@@ -28,7 +29,6 @@ import {
   ReportTable,
   ShareBar,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import { getCoeResultsByPeriod } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
 import Link from "next/link";
@@ -115,9 +115,9 @@ export async function ResultsReport({
       <ReportFilterBar
         label="Series"
         trailing={
-          <Typography.TextSm>
+          <Typography.Paragraph color="muted" size="sm">
             Tap a category to add or remove it from the chart
-          </Typography.TextSm>
+          </Typography.Paragraph>
         }
       >
         <SeriesFilter />
@@ -159,10 +159,10 @@ export async function ResultsReport({
 
       <div className="flex flex-col gap-3.5">
         <ResultsChart categories={plotted} data={chartData} />
-        <Typography.TextSm>
+        <Typography.Paragraph color="muted" size="sm">
           Category D premiums sit an order of magnitude below the car categories
           — add it to the chart and the other lines flatten.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
       <ReportSection
@@ -278,18 +278,18 @@ export async function ResultsReport({
         </ReportSection>
 
         <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="text-lg">
+          <Typography.Heading level={3} className="text-lg">
             How an exercise runs
-          </Typography.H3>
-          <Typography.Text>
+          </Typography.Heading>
+          <Typography.Paragraph>
             Bidding opens at 12pm on the first Monday and third Monday of each
             month and closes at 4pm on the third day. The premium is the lowest
             successful bid, so everyone who wins pays the same price.
-          </Typography.Text>
-          <Typography.Text>
+          </Typography.Paragraph>
+          <Typography.Paragraph>
             Quotas are set quarterly from deregistrations and the allowed growth
             in the vehicle population.
-          </Typography.Text>
+          </Typography.Paragraph>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/premiums"
