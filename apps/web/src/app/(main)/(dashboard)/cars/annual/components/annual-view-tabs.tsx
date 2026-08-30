@@ -1,60 +1,61 @@
 "use client";
 
-import { Tabs } from "@heroui/react";
-
+import { cn } from "@heroui/react";
+import { DIMENSION_LABELS } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import {
+  searchParams,
   VIEWS,
-  type View,
 } from "@web/app/(main)/(dashboard)/cars/annual/search-params";
-import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { useQueryStates } from "nuqs";
 import posthog from "posthog-js";
-import { type ReactNode, useTransition } from "react";
+import { useTransition } from "react";
 
-interface AnnualViewTabsProps {
-  fuelTypeContent: ReactNode;
-  makeContent: ReactNode;
-}
-
-export function AnnualViewTabs({
-  fuelTypeContent,
-  makeContent,
-}: AnnualViewTabsProps) {
-  const [, startTransition] = useTransition();
-  const [view, setView] = useQueryState(
-    "view",
-    parseAsStringLiteral(VIEWS)
-      .withDefault("fuel-type")
-      .withOptions({ shallow: false, startTransition }),
-  );
+/**
+ * The dimension pills beside the page title: which annual dataset the page is
+ * reading, and so which entity its table lists.
+ *
+ * Writes with `shallow: false` because the two views come from different
+ * tables; `startTransition` keeps the outgoing view on screen while the server
+ * fetches the other one. Changing view also clears the focused row, which
+ * belongs to the dimension being left behind.
+ */
+export function AnnualViewTabs() {
+  const [isPending, startTransition] = useTransition();
+  const [{ view }, setSearchParams] = useQueryStates(searchParams, {
+    shallow: false,
+    startTransition,
+  });
 
   return (
-    <Tabs
-      selectedKey={view}
-      onSelectionChange={(key) => {
-        posthog.capture("annual_view_tab_changed", { view: key as string });
-        setView(key as View);
-      }}
-      variant="secondary"
-      aria-label="Annual data view"
+    <fieldset
+      className={cn(
+        "flex gap-1.5 rounded-full bg-default p-[5px]",
+        isPending && "opacity-70",
+      )}
     >
-      <Tabs.ListContainer>
-        <Tabs.List aria-label="Annual data view">
-          <Tabs.Tab id="fuel-type">
-            By Fuel Type
-            <Tabs.Indicator />
-          </Tabs.Tab>
-          <Tabs.Tab id="make">
-            By Make
-            <Tabs.Indicator />
-          </Tabs.Tab>
-        </Tabs.List>
-      </Tabs.ListContainer>
-      <Tabs.Panel id="fuel-type">
-        <div className="flex flex-col gap-10 pt-4">{fuelTypeContent}</div>
-      </Tabs.Panel>
-      <Tabs.Panel id="make">
-        <div className="flex flex-col gap-10 pt-4">{makeContent}</div>
-      </Tabs.Panel>
-    </Tabs>
+      <legend className="sr-only">Population dimension</legend>
+      {VIEWS.map((option) => {
+        const isActive = option === view;
+        return (
+          <button
+            aria-pressed={isActive}
+            className={cn(
+              "whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
+              isActive
+                ? "bg-surface font-extrabold text-foreground shadow-surface"
+                : "font-semibold text-muted hover:text-foreground",
+            )}
+            key={option}
+            onClick={() => {
+              posthog.capture("annual_view_tab_changed", { view: option });
+              setSearchParams({ focus: null, view: option });
+            }}
+            type="button"
+          >
+            {DIMENSION_LABELS[option].tab}
+          </button>
+        );
+      })}
+    </fieldset>
   );
 }

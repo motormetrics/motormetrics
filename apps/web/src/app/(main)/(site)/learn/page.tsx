@@ -1,3 +1,13 @@
+import { DataSourcesSection } from "@web/app/(main)/(site)/learn/components/data-sources-section";
+import { FAQ_SECTIONS } from "@web/app/(main)/(site)/learn/components/faq-data";
+import { FAQSection } from "@web/app/(main)/(site)/learn/components/faq-section";
+import { FeaturedGuide } from "@web/app/(main)/(site)/learn/components/featured-guide";
+import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
+import { GlossarySection } from "@web/app/(main)/(site)/learn/components/glossary-section";
+import { GuidesSection } from "@web/app/(main)/(site)/learn/components/guides-section";
+import { LearnStats } from "@web/app/(main)/(site)/learn/components/learn-stats";
+import { PageHead } from "@web/components/shared/page-head";
+import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
@@ -8,15 +18,6 @@ import {
 } from "@web/lib/metadata";
 import type { Metadata } from "next";
 import type { WebPage, WithContext } from "schema-dts";
-import { CtaSection } from "./components/cta-section";
-import { DataSourcesSection } from "./components/data-sources-section";
-import { FAQ_SECTIONS } from "./components/faq-data";
-import { FAQSection } from "./components/faq-section";
-import { GLOSSARY_CATEGORIES } from "./components/glossary-data";
-import { GlossarySection } from "./components/glossary-section";
-import { GuidesSection } from "./components/guides-section";
-import { HeroSection } from "./components/hero-section";
-import { QuickNavSection } from "./components/quick-nav-section";
 
 const title = "Car & COE Guides";
 const description =
@@ -78,15 +79,19 @@ export default function LearnPage() {
       <StructuredData
         data={{ "@context": "https://schema.org", ...breadcrumbSchema }}
       />
-      <div className="flex flex-col">
-        <HeroSection />
-        <QuickNavSection />
-        <FAQSection />
-        <GlossarySection />
-        <DataSourcesSection />
+
+      <SitePage>
+        <PageHead
+          description="COE, ARF, OMV, PARF and PQP, in plain language — the rules that set the price of a car in Singapore, with worked examples."
+          title="Learn how car ownership costs actually work"
+        />
+        <LearnStats />
+        <FeaturedGuide />
         <GuidesSection />
-        <CtaSection />
-      </div>
+        <GlossarySection />
+        <FAQSection />
+        <DataSourcesSection />
+      </SitePage>
     </>
   );
 }

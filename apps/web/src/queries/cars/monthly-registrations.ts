@@ -1,4 +1,13 @@
-import { cars, db, desc, eq, gt, sql, sum } from "@motormetrics/database";
+import {
+  cars,
+  db,
+  desc,
+  eq,
+  gt,
+  ilike,
+  sql,
+  sum,
+} from "@motormetrics/database";
 import type { Comparison, Registration } from "@web/types/cars";
 import { format, subMonths } from "date-fns";
 import { cacheLife, cacheTag } from "next/cache";
@@ -163,6 +172,58 @@ export async function getMonthlyRegistrationTotals(
     })
     .from(cars)
     .groupBy(cars.month)
+    .orderBy(desc(cars.month))
+    .limit(limit);
+
+  return results.reverse();
+}
+
+/**
+ * Year-to-date registrations per fuel type, for the year-to-date column the
+ * registrations table carries beside each month's figure.
+ */
+export async function getYearToDateByFuelType(
+  year: number,
+): Promise<{ count: number; name: string }[]> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(`cars:year:${year}`);
+
+  return db
+    .select({
+      name: cars.fuelType,
+      count: sql<number>`sum(${cars.number})`.mapWith(Number),
+    })
+    .from(cars)
+    .where(ilike(cars.month, `${year}-%`))
+    .groupBy(cars.fuelType)
+    .having(gt(sum(cars.number), 0))
+    .orderBy(desc(sql<number>`sum(${cars.number})`));
+}
+
+/**
+ * The same series narrowed to one fuel type, as LTA records it — `Electric`,
+ * `Petrol-Electric (Plug-In)` and so on. Kept separate from
+ * `getMonthlyRegistrationTotals()` so each fuel type caches under its own tag
+ * rather than sharing the unfiltered one.
+ */
+export async function getMonthlyRegistrationTotalsByFuelType(
+  fuelType: string,
+  limit = 12,
+): Promise<MonthlyTotal[]> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(`cars:monthly-totals:${fuelType}`);
+
+  const results = await db
+    .select({
+      month: cars.month,
+      total: sql<number>`sum(${cars.number})`.mapWith(Number),
+    })
+    .from(cars)
+    .where(eq(cars.fuelType, fuelType))
+    .groupBy(cars.month)
+    .having(gt(sum(cars.number), 0))
     .orderBy(desc(cars.month))
     .limit(limit);
 

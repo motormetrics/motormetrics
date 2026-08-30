@@ -1,4 +1,4 @@
-import { Button, Card, Chip, Separator } from "@heroui/react";
+import { Button, Card, Chip, cn } from "@heroui/react";
 import Typography from "@web/components/typography";
 import { Check } from "lucide-react";
 import { cacheLife } from "next/cache";
@@ -6,16 +6,15 @@ import Link from "next/link";
 
 const plans = [
   {
-    name: "Starter",
-    price: "$400",
-    description: "Great for testing the waters",
+    cta: "Check availability",
     features: ["Floating banner", "30-day placement", "Basic analytics"],
     featured: false,
+    name: "Starter",
+    note: "A single static unit, to test the waters.",
+    price: "$400",
   },
   {
-    name: "Growth",
-    price: "$700",
-    description: "Best value for most advertisers",
+    cta: "Enquire about this",
     features: [
       "Floating banner",
       "Pinned cards",
@@ -24,11 +23,12 @@ const plans = [
       "Priority support",
     ],
     featured: true,
+    name: "Growth",
+    note: "The banner plus a pinned card on the pages that carry the most traffic.",
+    price: "$700",
   },
   {
-    name: "Premium",
-    price: "$1,000",
-    description: "Maximum visibility across the platform",
+    cta: "Check availability",
     features: [
       "Floating banner",
       "Pinned cards",
@@ -39,6 +39,9 @@ const plans = [
       "Custom creative review",
     ],
     featured: false,
+    name: "Premium",
+    note: "Every placement type, across the whole platform.",
+    price: "$1,000",
   },
 ];
 
@@ -47,84 +50,80 @@ export async function PricingSection() {
   cacheLife("days");
 
   return (
-    <section id="pricing" className="scroll-mt-20 py-20 lg:py-28">
-      <div className="flex flex-col gap-12">
-        {/* Section header */}
-        <div className="flex flex-col items-center gap-4 text-center">
-          <Typography.Label className="text-accent-strong uppercase tracking-widest">
-            Simple Pricing
-          </Typography.Label>
-          <Typography.H2 className="lg:text-4xl">
-            Monthly plans that fit your budget
-          </Typography.H2>
-          <Typography.TextLg className="max-w-xl text-muted">
-            Billed monthly. Cancel anytime. No long-term commitments.
-          </Typography.TextLg>
-        </div>
-
-        {/* Pricing cards */}
-        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 md:grid-cols-3 lg:gap-6">
-          {plans.map((plan) => (
-            <Card
-              key={plan.name}
-              className={`relative h-full shadow-sm transition-all duration-500 ${
-                plan.featured
-                  ? "border-accent shadow-accent/10 shadow-lg"
-                  : "border-border hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg"
-              }`}
-            >
-              {plan.featured && (
-                <div className="absolute top-4 right-4">
+    <section className="flex scroll-mt-24 flex-col gap-7" id="pricing">
+      <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
+        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
+          Packages
+        </Typography.H2>
+        <Typography.Text className="max-w-[38rem] text-[1.1875rem] leading-[1.65]">
+          Booked by the month. No long-term commitment.
+        </Typography.Text>
+      </div>
+      <div className="grid gap-6 lg:grid-cols-3">
+        {plans.map(({ cta, features, featured, name, note, price }) => (
+          <Card
+            className={cn("h-full", featured && "border-2 border-accent")}
+            key={name}
+          >
+            <Card.Content className="flex h-full flex-col gap-3.5">
+              <div className="flex items-center gap-3">
+                <Typography.H3 className="font-bold text-[1.375rem] tracking-[-0.01em]">
+                  {name}
+                </Typography.H3>
+                {featured ? (
                   <Chip
-                    size="sm"
+                    className="ml-auto font-bold"
                     color="accent"
+                    size="sm"
                     variant="primary"
-                    className="font-semibold text-xs"
                   >
-                    Recommended
+                    Most booked
                   </Chip>
-                </div>
-              )}
-              <Card.Header className="flex flex-col items-start gap-2">
-                <Typography.H3 className="text-xl">{plan.name}</Typography.H3>
-                <div className="flex items-baseline gap-1">
-                  <span className="font-bold text-4xl text-foreground tracking-tight">
-                    {plan.price}
-                  </span>
-                  <span className="text-muted text-sm">/month</span>
-                </div>
-                <Typography.TextSm className="text-muted">
-                  {plan.description}
-                </Typography.TextSm>
-              </Card.Header>
-              <Separator />
-              <Card.Content className="gap-3">
-                {plan.features.map((feature) => (
-                  <div key={feature} className="flex items-center gap-2">
-                    <Check className="size-4 shrink-0 text-accent-strong" />
-                    <Typography.TextSm>{feature}</Typography.TextSm>
+                ) : null}
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="font-extrabold text-[2.5rem] tabular-nums leading-none tracking-[-0.03em]">
+                  {price}
+                </span>
+                <span className="font-semibold text-muted text-sm">
+                  per month
+                </span>
+              </div>
+              <Typography.TextSm className="font-medium text-base leading-[1.55]">
+                {note}
+              </Typography.TextSm>
+              <div className="flex flex-col gap-2.5 pt-1">
+                {features.map((feature) => (
+                  <div className="flex items-start gap-2.5" key={feature}>
+                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent-strong">
+                      <Check className="size-3" strokeWidth={3} />
+                    </span>
+                    <span className="font-semibold text-[0.9375rem] text-muted-strong leading-[1.45]">
+                      {feature}
+                    </span>
                   </div>
                 ))}
-              </Card.Content>
-              <Card.Footer>
-                <Link href="#contact" className="w-full no-underline">
-                  <Button
-                    variant={plan.featured ? "primary" : "outline"}
-                    fullWidth
-                    className={
-                      plan.featured
-                        ? "rounded-full"
-                        : "rounded-full text-foreground"
-                    }
-                  >
-                    Get Started
-                  </Button>
-                </Link>
-              </Card.Footer>
-            </Card>
-          ))}
-        </div>
+              </div>
+              <Link
+                className="mt-auto w-full pt-3 no-underline"
+                href="#contact"
+              >
+                <Button
+                  className="rounded-full"
+                  fullWidth
+                  variant={featured ? "primary" : "secondary"}
+                >
+                  {cta}
+                </Button>
+              </Link>
+            </Card.Content>
+          </Card>
+        ))}
       </div>
+      <Typography.Caption className="font-medium text-subtle">
+        Rates are in Singapore dollars. Creative must be static — no autoplay,
+        no interstitials.
+      </Typography.Caption>
     </section>
   );
 }

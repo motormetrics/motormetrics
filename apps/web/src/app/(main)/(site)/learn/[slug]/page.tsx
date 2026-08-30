@@ -1,21 +1,23 @@
-import { Button, Card, Chip, Separator } from "@heroui/react";
+import { GuideHead } from "@web/app/(main)/(site)/learn/[slug]/components/guide-head";
+import { GuideSidebar } from "@web/app/(main)/(site)/learn/[slug]/components/guide-sidebar";
+import { RelatedGuides } from "@web/app/(main)/(site)/learn/[slug]/components/related-guides";
+import {
+  getAllGuideSlugs,
+  getGuideBySlug,
+} from "@web/app/(main)/(site)/learn/lib/guides";
+import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
-import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
-import Link from "next/link";
-import NextLink from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import type { Article, DefinedTerm, WithContext } from "schema-dts";
-import { GUIDES, getAllGuideSlugs, getGuideBySlug } from "../lib/guides";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -65,6 +67,12 @@ export async function generateStaticParams() {
   return getAllGuideSlugs().map((slug) => ({ slug }));
 }
 
+/**
+ * The article body, held at the comp's 700px reading measure.
+ *
+ * `prose` carries the markdown; the modifiers pull its greys onto the site's
+ * own tokens so the copy matches the type around it.
+ */
 async function GuideContent({
   slug,
   content,
@@ -77,7 +85,7 @@ async function GuideContent({
   cacheTag(`learn:${slug}`);
 
   return (
-    <article className="prose dark:prose-invert max-w-none">
+    <article className="prose dark:prose-invert max-w-[43.75rem] prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted prose-p:text-muted prose-strong:text-foreground prose-td:text-muted prose-th:text-foreground prose-p:leading-[1.7] prose-headings:tracking-[-0.02em]">
       <MDXRemote
         source={content}
         options={{
@@ -110,12 +118,6 @@ export default async function GuidePage({ params }: PageProps) {
   if (!guide) {
     notFound();
   }
-
-  // Find previous and next guides for navigation
-  const currentIndex = GUIDES.findIndex((g) => g.slug === slug);
-  const previousGuide = currentIndex > 0 ? GUIDES[currentIndex - 1] : null;
-  const nextGuide =
-    currentIndex < GUIDES.length - 1 ? GUIDES[currentIndex + 1] : null;
 
   const articleSchema: WithContext<Article> = {
     "@context": "https://schema.org",
@@ -171,111 +173,16 @@ export default async function GuidePage({ params }: PageProps) {
         data={{ "@context": "https://schema.org", ...breadcrumbSchema }}
       />
 
-      <div className="container mx-auto flex flex-col gap-8 px-6 py-8">
-        {/* Back to Learn link */}
-        <Link
-          href="/learn"
-          className="flex w-fit items-center gap-2 text-foreground text-sm"
-        >
-          <ArrowLeft className="size-4" />
-          Back to Learn
-        </Link>
+      <SitePage className="gap-14">
+        <GuideHead guide={guide} />
 
-        {/* Header */}
-        <header className="flex flex-col gap-4">
-          <Chip variant="primary" color="accent" size="sm">
-            <BookOpen className="size-3" />
-            {guide.term}
-          </Chip>
-          <Typography.H1>{guide.title}</Typography.H1>
-          <Typography.TextLg className="text-muted">
-            {guide.excerpt}
-          </Typography.TextLg>
-          <Typography.Caption>
-            Last updated:{" "}
-            {new Date(guide.lastUpdated).toLocaleDateString("en-SG", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </Typography.Caption>
-        </header>
-
-        <Separator />
-
-        {/* Main Content */}
-        <GuideContent slug={guide.slug} content={guide.content} />
-
-        {/* Related Links */}
-        {guide.relatedLinks.length > 0 && (
-          <Card className="shadow-sm">
-            <Card.Header>
-              <Typography.H4>Explore Data</Typography.H4>
-            </Card.Header>
-            <Card.Content className="flex flex-row flex-wrap gap-2">
-              {guide.relatedLinks.map((link) => (
-                <NextLink
-                  key={link.href}
-                  href={link.href}
-                  className="no-underline"
-                >
-                  <Button variant="primary" size="sm">
-                    {link.label}
-                  </Button>
-                </NextLink>
-              ))}
-            </Card.Content>
-          </Card>
-        )}
-
-        <Separator />
-
-        {/* Guide Navigation */}
-        <nav className="flex justify-between gap-4">
-          {previousGuide ? (
-            <NextLink
-              href={`/learn/${previousGuide.slug}`}
-              className="flex-1 no-underline"
-            >
-              <Button variant="outline" className="w-full justify-start">
-                <ArrowLeft className="size-4" />
-                <span className="flex flex-col items-start">
-                  <span className="text-muted text-xs">Previous</span>
-                  <span>{previousGuide.term}</span>
-                </span>
-              </Button>
-            </NextLink>
-          ) : (
-            <div className="flex-1" />
-          )}
-          {nextGuide ? (
-            <NextLink
-              href={`/learn/${nextGuide.slug}`}
-              className="flex-1 no-underline"
-            >
-              <Button variant="outline" className="w-full justify-end">
-                <span className="flex flex-col items-end">
-                  <span className="text-muted text-xs">Next</span>
-                  <span>{nextGuide.term}</span>
-                </span>
-                <ArrowRight className="size-4" />
-              </Button>
-            </NextLink>
-          ) : (
-            <div className="flex-1" />
-          )}
-        </nav>
-
-        {/* Back to Learn */}
-        <div className="flex justify-center pb-8">
-          <NextLink href="/learn" className="no-underline">
-            <Button variant="ghost">
-              <BookOpen className="size-4" />
-              Back to Learn Hub
-            </Button>
-          </NextLink>
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-14">
+          <GuideContent content={guide.content} slug={guide.slug} />
+          <GuideSidebar guide={guide} />
         </div>
-      </div>
+
+        <RelatedGuides guide={guide} />
+      </SitePage>
     </>
   );
 }

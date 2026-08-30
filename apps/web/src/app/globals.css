@@ -4,6 +4,12 @@
 
 @plugin "@tailwindcss/typography";
 
+/* One page measure. The nav, the content, the footer and the announcement and
+   banner bars all draw the same column, so they line up down the whole page. */
+@theme {
+  --container-page: 97.5rem; /* 1560px */
+}
+
 /* ---------------------------------------------------------------------------
    MotorMetrics theme.
 

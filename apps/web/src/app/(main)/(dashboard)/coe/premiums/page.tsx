@@ -1,18 +1,19 @@
-import { FunFactsPqpSection } from "@web/app/(main)/(dashboard)/coe/premiums/components/fun-facts-pqp-section";
-import { KeyInsightsSection } from "@web/app/(main)/(dashboard)/coe/premiums/components/key-insights-section";
-import { LatestResultsSection } from "@web/app/(main)/(dashboard)/coe/premiums/components/latest-results-section";
-import { PremiumRangesSection } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-ranges-section";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
-import { DashboardPageHeader } from "@web/components/dashboard-page-header";
-import { DashboardPageMeta } from "@web/components/dashboard-page-meta";
-import { DashboardPageTitle } from "@web/components/dashboard-page-title";
+import { PremiumsReport } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-report";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { MonthSelector } from "@web/components/shared/month-selector";
+import { PageHead } from "@web/components/shared/page-head";
+import { Report } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
-import { loadLastUpdated } from "@web/lib/common";
-import { getLatestCoeResults } from "@web/queries/coe";
+import { getCoeMonths, getLatestCoeResults } from "@web/queries/coe";
 import type { Metadata } from "next";
+import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
+
+interface PageProps {
+  searchParams: Promise<SearchParams>;
+}
 
 const title = "COE Premiums and Trends";
 const description =
@@ -59,44 +60,30 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function COEOverviewPage() {
+export default function COEPremiumsPage({ searchParams }: PageProps) {
   return (
-    <div className="flex flex-col gap-8">
-      <DashboardPageHeader
-        title={
-          <DashboardPageTitle
-            title="COE Overview"
-            subtitle="Latest Certificate of Entitlement bidding results and premium trends."
-          />
-        }
-        meta={
-          <Suspense fallback={<SkeletonCard className="h-8 w-28" />}>
-            <COEOverviewHeaderMeta />
+    <Report>
+      <PageHead
+        controls={
+          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+            <PremiumsHeaderMeta />
           </Suspense>
         }
+        description="Quota premiums close at the end of every bidding exercise. Pick a category to see its full history, quota and bidding activity."
+        title="COE premiums"
       />
 
-      <AnimatedSection order={1}>
-        <LatestResultsSection />
-      </AnimatedSection>
-
-      <AnimatedSection order={3}>
-        <KeyInsightsSection />
-      </AnimatedSection>
-
-      <AnimatedSection order={4}>
-        <FunFactsPqpSection />
-      </AnimatedSection>
-
-      <AnimatedSection order={5}>
-        <PremiumRangesSection />
-      </AnimatedSection>
-    </div>
+      <SectionErrorBoundary title="COE premiums unavailable">
+        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+          <PremiumsReport searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
+    </Report>
   );
 }
 
-async function COEOverviewHeaderMeta() {
-  const lastUpdated = await loadLastUpdated("coe");
+async function PremiumsHeaderMeta() {
+  const months = (await getCoeMonths()).map(({ month }) => month);
 
-  return <DashboardPageMeta lastUpdated={lastUpdated} />;
+  return <MonthSelector latestMonth={months[0]} months={months} />;
 }

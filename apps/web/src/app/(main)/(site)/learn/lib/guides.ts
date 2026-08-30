@@ -706,3 +706,47 @@ export function getGuideBySlug(slug: string): Guide | undefined {
 export function getAllGuideSlugs(): string[] {
   return GUIDES.map((guide) => guide.slug);
 }
+
+/** Words a minute, for the reading estimate the guide cards and heads carry. */
+const WORDS_PER_MINUTE = 200;
+
+/**
+ * Reading estimate for a guide, derived from its own body rather than stored
+ * alongside it — the figure would otherwise drift every time a guide is edited.
+ */
+export function getReadingMinutes(content: string): number {
+  const words = content.trim().split(/\s+/).length;
+
+  return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
+}
+
+export interface GuideHeading {
+  id: string;
+  title: string;
+}
+
+/**
+ * The `##` headings of a guide, for the sidebar contents.
+ *
+ * The ids are slugged the way `rehype-slug` slugs the rendered markdown, so the
+ * links land on the headings the article actually renders.
+ */
+export function getGuideHeadings(content: string): GuideHeading[] {
+  const headings: GuideHeading[] = [];
+  const pattern = /^## (.+)$/gm;
+
+  let match = pattern.exec(content);
+  while (match !== null) {
+    const title = match[1].trim();
+    headings.push({
+      id: title
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-"),
+      title,
+    });
+    match = pattern.exec(content);
+  }
+
+  return headings;
+}

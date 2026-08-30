@@ -5,7 +5,7 @@ exports[`Announcement > should prioritise path-specific announcements 1`] = `
   class="bg-accent text-accent-foreground"
 >
   <div
-    class="mx-auto w-full max-w-7xl px-4 py-2 text-center sm:px-6"
+    class="mx-auto w-full max-w-page px-4 py-2 text-center sm:px-6 lg:px-9"
   >
     <p
       class="text-pretty font-medium text-xs sm:text-sm"

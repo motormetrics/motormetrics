@@ -1,15 +1,23 @@
+import { CtaSection } from "@web/app/(main)/(site)/about/components/cta-section";
+import { DataSection } from "@web/app/(main)/(site)/about/components/data-section";
+import { DatasetsSection } from "@web/app/(main)/(site)/about/components/datasets-section";
+import { FAQS } from "@web/app/(main)/(site)/about/components/faq-data";
+import { FaqSection } from "@web/app/(main)/(site)/about/components/faq-section";
+import { HeroSection } from "@web/app/(main)/(site)/about/components/hero-section";
+import { MissionSection } from "@web/app/(main)/(site)/about/components/mission-section";
+import { StatsSection } from "@web/app/(main)/(site)/about/components/stats-section";
+import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE, SOCIAL_URLS } from "@web/config/socials";
 import type { Metadata } from "next";
-import type { Organization, Person, WebPage, WithContext } from "schema-dts";
-import { CreatorSection } from "./components/creator-section";
-import { CtaSection } from "./components/cta-section";
-import { DataSection } from "./components/data-section";
-import { HeroSection } from "./components/hero-section";
-import { MissionSection } from "./components/mission-section";
-import { StatsSection } from "./components/stats-section";
-import { TimelineSection } from "./components/timeline-section";
+import type {
+  FAQPage,
+  Organization,
+  Person,
+  WebPage,
+  WithContext,
+} from "schema-dts";
 
 const title = `About ${SITE_TITLE} (formerly SG Cars Trends)`;
 const description = `Learn about ${SITE_TITLE}, a platform for exploring Singapore car registration statistics, COE bidding results, and market data. Built to make car market information easier to find and understand.`;
@@ -85,21 +93,32 @@ export default async function AboutPage() {
     jobTitle: "Software Engineer",
   };
 
+  const faqSchema: WithContext<FAQPage> = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQS.map(({ answer, question }) => ({
+      "@type": "Question",
+      name: question,
+      acceptedAnswer: { "@type": "Answer", text: answer },
+    })),
+  };
+
   return (
     <>
       <StructuredData data={webPageSchema} />
       <StructuredData data={organizationSchema} />
       <StructuredData data={personSchema} />
+      <StructuredData data={faqSchema} />
 
-      <div className="flex flex-col">
+      <SitePage>
         <HeroSection />
         <StatsSection />
         <MissionSection />
+        <DatasetsSection />
         <DataSection />
-        <TimelineSection />
-        <CreatorSection />
+        <FaqSection />
         <CtaSection />
-      </div>
+      </SitePage>
     </>
   );
 }

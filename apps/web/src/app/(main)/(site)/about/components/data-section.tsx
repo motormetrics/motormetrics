@@ -1,125 +1,72 @@
-"use client";
-
-import { Card } from "@heroui/react";
 import Typography from "@web/components/typography";
-import {
-  fadeInUpVariants,
-  staggerContainerVariants,
-  staggerItemVariants,
-} from "@web/config/animations";
-import { motion } from "framer-motion";
-import { Database, RefreshCw, Shield } from "lucide-react";
 import Link from "next/link";
 
-const features = [
+/**
+ * The comp's ink panel — the one place on the page that inverts. It uses
+ * `--ink-surface` rather than `--foreground` so it stays dark in dark mode
+ * instead of flipping to cream.
+ */
+const provenance = [
   {
-    icon: Database,
-    title: "Official Government Source",
-    description:
-      "All data is sourced directly from the Land Transport Authority (LTA) DataMall, Singapore's official open data portal for transport statistics.",
+    detail: "Official government release, no third-party aggregation",
+    heading: "LTA DataMall",
+    label: "The single upstream source",
   },
   {
-    icon: RefreshCw,
-    title: "Monthly Updates",
-    description:
-      "Registration data is updated within days of each LTA release. COE results are refreshed after every bidding round—twice monthly.",
+    detail:
+      "Registrations land within days of each release; COE results after every bidding exercise",
+    heading: "Every release",
+    label: "Checked and published",
   },
   {
-    icon: Shield,
-    title: "Data Integrity",
-    description:
-      "Data is validated to match the source. Historical records are preserved without modification.",
+    detail: "Gaps are shown as gaps, never filled in",
+    heading: "No estimates",
+    label: "Numbers only",
   },
 ];
 
 export function DataSection() {
   return (
-    <section className="relative -mx-6 overflow-hidden bg-default px-6 py-20 lg:py-28">
-      {/* Subtle background pattern */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-50"
-        style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--muted) 15%, transparent) 1px, transparent 0)`,
-          backgroundSize: "24px 24px",
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="container relative mx-auto">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          {/* Left column - Header */}
-          <div className="lg:col-span-4">
-            <motion.div
-              className="sticky top-24 flex flex-col gap-6"
-              variants={fadeInUpVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              <Typography.Label className="text-accent-strong uppercase tracking-widest">
-                Data Transparency
-              </Typography.Label>
-              <Typography.H2 className="lg:text-4xl">
-                Where the data comes from
-              </Typography.H2>
-              <Typography.Text className="text-muted">
-                Here&apos;s where the data comes from and how it&apos;s
-                processed.
-              </Typography.Text>
-
-              {/* LTA Badge */}
-              <Card className="border-border">
-                <Card.Content className="flex flex-row items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-default">
-                    <Database className="h-6 w-6 text-muted" />
-                  </div>
-                  <div>
-                    <div className="font-medium text-foreground text-sm">
-                      Data Provider
-                    </div>
-                    <Link
-                      href="https://datamall.lta.gov.sg"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-accent-strong text-sm underline"
-                    >
-                      LTA DataMall
-                    </Link>
-                  </div>
-                </Card.Content>
-              </Card>
-            </motion.div>
+    <section className="flex flex-col gap-8 rounded-4xl bg-ink-surface p-8 text-ink-surface-foreground lg:p-14">
+      <div className="flex max-w-[40rem] flex-col gap-3.5">
+        <span className="self-start rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm">
+          Where the data comes from
+        </span>
+        <Typography.H2 className="font-bold text-[2rem] text-ink-surface-foreground tracking-[-0.02em] lg:text-[2.375rem]">
+          One source, checked at every release
+        </Typography.H2>
+        <Typography.Text className="text-[1.125rem] text-ink-surface-foreground/70 leading-[1.6]">
+          Every figure on this site comes from Singapore&apos;s Land Transport
+          Authority via{" "}
+          <Link
+            className="font-medium text-accent-on-dark"
+            href="https://datamall.lta.gov.sg"
+            rel="noreferrer"
+            target="_blank"
+          >
+            DataMall
+          </Link>
+          . We do not estimate, model or fill gaps. When LTA revises a release,
+          we revise with it.
+        </Typography.Text>
+      </div>
+      <div className="grid gap-5 lg:grid-cols-3">
+        {provenance.map(({ detail, heading, label }) => (
+          <div
+            className="flex flex-col gap-2 rounded-2xl bg-ink-surface-foreground/[0.06] p-6"
+            key={heading}
+          >
+            <span className="font-extrabold text-[1.75rem] text-accent-on-dark tracking-[-0.02em]">
+              {heading}
+            </span>
+            <span className="font-semibold text-[0.9375rem] text-ink-surface-foreground/75">
+              {label}
+            </span>
+            <span className="font-medium text-ink-surface-foreground/45 text-sm leading-[1.45]">
+              {detail}
+            </span>
           </div>
-
-          {/* Right column - Features grid */}
-          <div className="lg:col-span-8">
-            <motion.div
-              className="grid gap-6 sm:grid-cols-2"
-              variants={staggerContainerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              {features.map((feature) => (
-                <motion.div key={feature.title} variants={staggerItemVariants}>
-                  <Card className="group h-full border-border/80 transition-all duration-500 hover:border-accent/30 hover:shadow-accent/5 hover:shadow-lg">
-                    <Card.Content className="flex flex-col gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-default transition-colors group-hover:bg-accent/10">
-                        <feature.icon className="h-6 w-6 text-muted transition-colors group-hover:text-accent-strong" />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <Typography.H4>{feature.title}</Typography.H4>
-                        <Typography.TextSm>
-                          {feature.description}
-                        </Typography.TextSm>
-                      </div>
-                    </Card.Content>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
+        ))}
       </div>
     </section>
   );
