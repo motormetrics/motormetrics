@@ -34,11 +34,15 @@ export function ReportTable({
     // wrapping "Petrol-Electric (Plug-In)" over five lines while still
     // clipping the columns that refuse to wrap. Sized to its content it
     // scrolls cleanly, and `ScrollShadow` is what says so.
+    //
+    // The widest of these run seven columns and 770px against a 358px phone,
+    // so the fade has to be unmissable rather than a hairline — hence 40px,
+    // and the tighter cell padding below `sm` that buys back another column.
     <ScrollShadow
       className="w-full"
       hideScrollBar
       orientation="horizontal"
-      size={24}
+      size={40}
     >
       <table className="w-full min-w-max border-collapse tabular-nums">
         <thead>
@@ -46,7 +50,7 @@ export function ReportTable({
             {columns.map(({ align, label, width }) => (
               <th
                 className={cn(
-                  "border-border border-b px-3.5 pb-3",
+                  "border-border border-b px-2 pb-3 sm:px-3.5",
                   TABLE_HEADER_CLASS,
                   align === "end" ? "text-right" : "text-left",
                   // The widths callers pass size the share bars on a desktop
@@ -110,7 +114,7 @@ export function ReportCell({
   return (
     <td
       className={cn(
-        "border-border border-b px-3.5 py-4",
+        "border-border border-b px-2 py-4 sm:px-3.5",
         align === "end" && "text-right",
         className,
       )}

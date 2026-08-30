@@ -20,6 +20,17 @@ type SortDirection = "asc" | "desc";
 /** Ranks past this share the last chart colour rather than wrapping around. */
 const CHART_COLOURS = 6;
 
+/**
+ * 26rem is wider than this card gets on a phone — the card is 294px there —
+ * which left the registrations column cut mid-figure and the share column off
+ * screen entirely. Below `sm` the floor comes off and the share column is
+ * dropped, which is what makes the remaining two fit without scrolling.
+ */
+const TABLE_MIN_WIDTH_CLASS = "min-w-0 sm:min-w-[26rem]";
+
+/** The share column restates the count, so it is the one to drop on a phone. */
+const SHARE_COLUMN_CLASS = "hidden sm:table-cell";
+
 /** Ranks up to this are picked out in the accent rather than the neutral. */
 const PODIUM = 3;
 
@@ -192,7 +203,7 @@ export function DimensionTable({
         <Table.ScrollContainer>
           <Table.Content
             aria-label={`${labels.title}, year to date through ${monthLabel}`}
-            className="min-w-[26rem]"
+            className={TABLE_MIN_WIDTH_CLASS}
             onSortChange={setSortDescriptor}
             sortDescriptor={sortDescriptor}
           >
@@ -207,13 +218,18 @@ export function DimensionTable({
               <Table.Column allowsSorting id="count">
                 {({ sortDirection }) => (
                   <Table.SortableColumnHeader sortDirection={sortDirection}>
-                    Registrations
+                    {/* The full word holds this column at 112px, which is the
+                        last 19px standing between the table and a phone. */}
+                    <span className="sm:hidden">Regs</span>
+                    <span className="hidden sm:inline">Registrations</span>
                   </Table.SortableColumnHeader>
                 )}
               </Table.Column>
               {/* `share` is derived from `count`, so sorting on it would only
                   duplicate the registrations column. */}
-              <Table.Column id="share">Share</Table.Column>
+              <Table.Column className={SHARE_COLUMN_CLASS} id="share">
+                Share
+              </Table.Column>
             </Table.Header>
             <Table.Body>
               {displayed.map((row) => (
@@ -238,7 +254,7 @@ export function DimensionTable({
                   <Table.Cell className="text-right font-extrabold text-base tabular-nums">
                     {numberFormatter.format(row.count)}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className={SHARE_COLUMN_CLASS}>
                     <span className="flex items-center gap-2.5">
                       <span className="h-2.5 w-16 shrink-0 overflow-hidden rounded-full bg-default sm:w-24">
                         <span
