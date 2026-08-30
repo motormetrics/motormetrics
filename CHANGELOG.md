@@ -1,3 +1,9 @@
+## [5.4.1](https://github.com/motormetrics/motormetrics/compare/v5.4.0...v5.4.1) (2026-08-30)
+
+### Bug Fixes
+
+* **web:** restore the heading hierarchy on (site) pages ([62c9d6e](https://github.com/motormetrics/motormetrics/commit/62c9d6e8641763664b7dd68acfee41762abd0e32))
+
 ## [5.4.0](https://github.com/motormetrics/motormetrics/compare/v5.3.0...v5.4.0) (2026-08-30)
 
 ### Features
