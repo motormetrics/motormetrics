@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Button, Typography } from "@heroui/react";
 import { AlertTriangle } from "lucide-react";
 import { catchError, type ErrorInfo } from "next/error";
 
@@ -25,9 +24,11 @@ export function SectionErrorFallback(
     >
       <div className="flex items-center gap-3">
         <AlertTriangle aria-hidden className="size-5 text-danger" />
-        <Typography.H4>{title}</Typography.H4>
+        <Typography.Heading level={4}>{title}</Typography.Heading>
       </div>
-      <Typography.TextSm>{message}</Typography.TextSm>
+      <Typography.Paragraph color="muted" size="sm">
+        {message}
+      </Typography.Paragraph>
       <Button onPress={() => retry()} size="sm" variant="primary">
         Try again
       </Button>

@@ -1,4 +1,4 @@
-import Typography from "@web/components/typography";
+import { Typography } from "@heroui/react";
 import { FileQuestion } from "lucide-react";
 import type { ReactNode } from "react";
 import {
@@ -34,10 +34,10 @@ export function EmptyState({
       {icon ?? defaultIcon}
 
       <div className="flex flex-col items-center gap-2 text-center">
-        <Typography.H3>{title}</Typography.H3>
-        <Typography.TextSm className="max-w-sm">
+        <Typography.Heading level={3}>{title}</Typography.Heading>
+        <Typography.Paragraph color="muted" size="sm" className="max-w-sm">
           {description}
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
       {actions ?? (showDefaultActions && <DefaultActions />)}

@@ -1,5 +1,4 @@
-import { cn } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { cn, Typography } from "@heroui/react";
 import type { ReactNode } from "react";
 
 /**
@@ -121,14 +120,20 @@ export function ReportHeadline({
   return (
     <div className={cn("flex flex-wrap items-end gap-12", className)}>
       <div className="flex flex-col gap-2">
-        <Typography.Text className="text-muted-strong">{label}</Typography.Text>
+        <Typography.Paragraph className="text-muted-strong">
+          {label}
+        </Typography.Paragraph>
         <div className="flex items-center gap-4">
           <span className="font-extrabold text-6xl tabular-nums leading-none tracking-tight lg:text-7xl">
             {value}
           </span>
           {delta}
         </div>
-        {sub ? <Typography.TextSm>{sub}</Typography.TextSm> : null}
+        {sub ? (
+          <Typography.Paragraph color="muted" size="sm">
+            {sub}
+          </Typography.Paragraph>
+        ) : null}
       </div>
       {stats ? <div className="ml-auto flex flex-wrap">{stats}</div> : null}
     </div>
@@ -176,8 +181,10 @@ export function ReportSection({
   return (
     <section className={cn("flex flex-col gap-4", className)}>
       <div className="flex flex-wrap items-baseline gap-4">
-        <Typography.H2>{title}</Typography.H2>
-        {caption ? <Typography.Text>{caption}</Typography.Text> : null}
+        <Typography.Heading level={2}>{title}</Typography.Heading>
+        {caption ? (
+          <Typography.Paragraph>{caption}</Typography.Paragraph>
+        ) : null}
       </div>
       {children}
     </section>

@@ -1,4 +1,4 @@
-import Typography from "@web/components/typography";
+import { Typography } from "@heroui/react";
 import type { ReactNode } from "react";
 
 interface DashboardPageTitleProps {
@@ -15,10 +15,12 @@ export function DashboardPageTitle({
   return (
     <div className="flex flex-col">
       <div className="flex items-center gap-2">
-        <Typography.H1>{title}</Typography.H1>
+        <Typography.Heading level={1}>{title}</Typography.Heading>
         {badge}
       </div>
-      {subtitle && <Typography.TextLg>{subtitle}</Typography.TextLg>}
+      {subtitle && (
+        <Typography.Paragraph color="muted">{subtitle}</Typography.Paragraph>
+      )}
     </div>
   );
 }

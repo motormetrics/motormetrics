@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Button, Typography } from "@heroui/react";
 import { AlertTriangle } from "lucide-react";
 import { useEffect } from "react";
 
@@ -21,14 +20,18 @@ export default function AppError({
       <div className="flex max-w-lg flex-col items-center gap-6 text-center">
         <AlertTriangle aria-hidden className="size-12 text-danger" />
         <div className="flex flex-col gap-2">
-          <Typography.H1>Something went wrong</Typography.H1>
-          <Typography.TextLg>
+          <Typography.Heading level={1}>
+            Something went wrong
+          </Typography.Heading>
+          <Typography.Paragraph color="muted">
             We couldn&apos;t load this page. You can try again, or head back to
             the homepage.
-          </Typography.TextLg>
+          </Typography.Paragraph>
         </div>
         {error.digest ? (
-          <Typography.Caption>Error ID: {error.digest}</Typography.Caption>
+          <Typography.Paragraph color="muted" size="xs">
+            Error ID: {error.digest}
+          </Typography.Paragraph>
         ) : null}
         <Button onPress={() => retry()} size="lg" variant="primary">
           Try again

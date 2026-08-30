@@ -1,6 +1,5 @@
-import { Card, cn } from "@heroui/react";
+import { Card, cn, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
-import Typography from "@web/components/typography";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -34,9 +33,13 @@ export function HighlightStatsCard({
       <Card.Content className="gap-5">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <Typography.Caption className="text-accent-foreground/70">
+            <Typography.Paragraph
+              color="muted"
+              size="xs"
+              className="text-accent-foreground/70"
+            >
               {label}
-            </Typography.Caption>
+            </Typography.Paragraph>
             <p className="font-semibold text-3xl tabular-nums">{value}</p>
             {description ? (
               <p className="text-accent-foreground/70 text-sm">{description}</p>
