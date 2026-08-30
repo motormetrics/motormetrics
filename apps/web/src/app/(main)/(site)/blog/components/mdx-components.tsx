@@ -1,5 +1,4 @@
-import { Separator } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Separator, Typography } from "@heroui/react";
 import type { Route } from "next";
 import NextLink from "next/link";
 import type { ComponentPropsWithoutRef, JSX } from "react";
@@ -56,22 +55,25 @@ function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
  */
 export const mdxComponents = {
   // Headings - with generous spacing for editorial feel
-  h1: (props: MdxProps<"h1">) => <Typography.H1 {...props} />,
+  h1: (props: MdxProps<"h1">) => <Typography.Heading level={1} {...props} />,
   h2: (props: MdxProps<"h2">) => (
-    <Typography.H2 className="mt-12 mb-6" {...props} />
+    <Typography.Heading level={2} className="mt-12 mb-6" {...props} />
   ),
   h3: (props: MdxProps<"h3">) => (
-    <Typography.H3
+    <Typography.Heading
+      level={3}
       className="mt-8 mb-4 border-accent border-l-4 pl-4"
       {...props}
     />
   ),
   h4: (props: MdxProps<"h4">) => (
-    <Typography.H4 className="mt-6 mb-3" {...props} />
+    <Typography.Heading level={4} className="mt-6 mb-3" {...props} />
   ),
 
   // Body text
-  p: (props: MdxProps<"p">) => <Typography.Text className="mb-6" {...props} />,
+  p: (props: MdxProps<"p">) => (
+    <Typography.Paragraph className="mb-6" {...props} />
+  ),
 
   // Blockquotes - editorial style with subtle background
   blockquote: (props: ComponentPropsWithoutRef<"blockquote">) => (
@@ -93,7 +95,7 @@ export const mdxComponents = {
   ),
 
   // Code (inline)
-  code: (props: MdxProps<"code">) => <Typography.InlineCode {...props} />,
+  code: (props: MdxProps<"code">) => <Typography.Code {...props} />,
 
   // Links - styled for blog content
   a: MdxLink,

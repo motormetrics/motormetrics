@@ -1,4 +1,4 @@
-import Typography from "@web/components/typography";
+import { Typography } from "@heroui/react";
 
 interface TrafficStats {
   uniqueVisitors: number;
@@ -43,7 +43,9 @@ export function StatsSection({ stats }: { stats: TrafficStats }) {
           <span className="font-extrabold text-4xl text-foreground tabular-nums leading-none tracking-tight lg:text-5xl">
             {value}
           </span>
-          <Typography.TextSm>{label}</Typography.TextSm>
+          <Typography.Paragraph color="muted" size="sm">
+            {label}
+          </Typography.Paragraph>
         </div>
       ))}
     </section>

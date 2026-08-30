@@ -1,7 +1,7 @@
+import { Typography } from "@heroui/react";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import { getReadingMinutes } from "@web/app/(main)/(site)/learn/lib/guides";
 import { SharePill } from "@web/components/shared/share-pill";
-import Typography from "@web/components/typography";
 import Link from "next/link";
 
 /**
@@ -51,13 +51,16 @@ export function GuideHead({ guide }: { guide: Guide }) {
         {guide.term}
       </span>
 
-      <Typography.H1 className="text-5xl leading-none">
+      <Typography.Heading level={1} className="text-5xl leading-none">
         {guide.title}
-      </Typography.H1>
+      </Typography.Heading>
 
-      <Typography.TextLg className="max-w-prose leading-normal">
+      <Typography.Paragraph
+        color="muted"
+        className="max-w-prose leading-normal"
+      >
         {guide.excerpt}
-      </Typography.TextLg>
+      </Typography.Paragraph>
 
       <div className="flex flex-wrap items-center gap-3.5">
         <span className="font-semibold text-base text-muted">

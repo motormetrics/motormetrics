@@ -1,5 +1,4 @@
-import { Button } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Button, Typography } from "@heroui/react";
 import { Mail } from "lucide-react";
 import { cacheLife } from "next/cache";
 
@@ -42,13 +41,16 @@ export async function CtaSection() {
         <span className="self-start rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm">
           What we will not run
         </span>
-        <Typography.H2 className="text-ink-surface-foreground lg:text-4xl">
+        <Typography.Heading
+          level={2}
+          className="text-ink-surface-foreground lg:text-4xl"
+        >
           Rules that protect the data
-        </Typography.H2>
-        <Typography.Text className="max-w-prose text-ink-surface-foreground/70 text-lg">
+        </Typography.Heading>
+        <Typography.Paragraph className="max-w-prose text-ink-surface-foreground/70 text-lg">
           Advertising sits around the charts, never inside them. We decline
           anything that could be mistaken for a figure we publish.
-        </Typography.Text>
+        </Typography.Paragraph>
         <div className="flex flex-col gap-3 pt-1">
           {rules.map(({ note, number }) => (
             <div
@@ -67,13 +69,16 @@ export async function CtaSection() {
       </div>
 
       <div className="flex flex-col gap-4 rounded-2xl bg-ink-surface-foreground/[0.06] p-8">
-        <Typography.H3 className="text-ink-surface-foreground text-xl">
+        <Typography.Heading
+          level={3}
+          className="text-ink-surface-foreground text-xl"
+        >
           Book a placement
-        </Typography.H3>
-        <Typography.Text className="text-ink-surface-foreground/60 text-sm leading-normal">
+        </Typography.Heading>
+        <Typography.Paragraph className="text-ink-surface-foreground/60 text-sm leading-normal">
           Tell us the pages and the months you have in mind. We reply with
           availability, the rate and the creative spec.
-        </Typography.Text>
+        </Typography.Paragraph>
         <a
           className="self-start no-underline"
           href={`mailto:${ADVERTISE_EMAIL}`}
@@ -83,9 +88,13 @@ export async function CtaSection() {
             Send an enquiry
           </Button>
         </a>
-        <Typography.Caption className="text-ink-surface-foreground/40">
+        <Typography.Paragraph
+          color="muted"
+          size="xs"
+          className="text-ink-surface-foreground/40"
+        >
           Or write to {ADVERTISE_EMAIL}
-        </Typography.Caption>
+        </Typography.Paragraph>
       </div>
     </section>
   );

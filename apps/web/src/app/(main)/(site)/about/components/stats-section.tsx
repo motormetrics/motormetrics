@@ -1,4 +1,4 @@
-import Typography from "@web/components/typography";
+import { Typography } from "@heroui/react";
 
 /**
  * Four bare figures under hairline rules — the comp gives them no card and no
@@ -22,7 +22,9 @@ export function StatsSection() {
           <span className="font-extrabold text-4xl text-foreground tabular-nums leading-none tracking-tight lg:text-5xl">
             {value}
           </span>
-          <Typography.TextSm>{label}</Typography.TextSm>
+          <Typography.Paragraph color="muted" size="sm">
+            {label}
+          </Typography.Paragraph>
         </div>
       ))}
     </section>

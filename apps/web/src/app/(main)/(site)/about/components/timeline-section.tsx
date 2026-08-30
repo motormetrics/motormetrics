@@ -1,8 +1,7 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import { fadeInUpVariants } from "@web/config/animations";
 import { motion } from "framer-motion";
 
@@ -72,14 +71,15 @@ const TimelineItemComponent = ({ item, index }: TimelineItemComponentProps) => {
 
       {/* Content */}
       <div className="flex flex-col gap-2 pb-12">
-        <Typography.H3
+        <Typography.Heading
+          level={3}
           className={cn("text-lg", item.highlight ? "text-accent-strong" : "")}
         >
           {item.title}
-        </Typography.H3>
-        <Typography.Text className="max-w-md text-muted">
+        </Typography.Heading>
+        <Typography.Paragraph className="max-w-md text-muted">
           {item.description}
-        </Typography.Text>
+        </Typography.Paragraph>
       </div>
     </motion.div>
   );
@@ -98,16 +98,20 @@ export function TimelineSection() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            <Typography.Label className="text-accent-strong uppercase tracking-widest">
+            <Typography.Paragraph
+              size="sm"
+              weight="medium"
+              className="text-accent-strong uppercase tracking-widest"
+            >
               Our Journey
-            </Typography.Label>
-            <Typography.H2 className="lg:text-4xl">
+            </Typography.Paragraph>
+            <Typography.Heading level={2} className="lg:text-4xl">
               How this project started
-            </Typography.H2>
-            <Typography.Text className="text-muted">
+            </Typography.Heading>
+            <Typography.Paragraph className="text-muted">
               What started as a personal tool to track COE prices is now a free
               resource for anyone interested in Singapore&apos;s car market.
-            </Typography.Text>
+            </Typography.Paragraph>
           </motion.div>
         </div>
 

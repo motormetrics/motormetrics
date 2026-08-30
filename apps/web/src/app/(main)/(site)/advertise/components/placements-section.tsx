@@ -1,4 +1,4 @@
-import Typography from "@web/components/typography";
+import { Typography } from "@heroui/react";
 import { Layout, Rows3, StickyNote } from "lucide-react";
 import { cacheLife } from "next/cache";
 
@@ -33,10 +33,12 @@ export async function PlacementsSection() {
   return (
     <section className="flex scroll-mt-24 flex-col gap-7" id="placements">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
-        <Typography.H2 className="text-4xl">Placements</Typography.H2>
-        <Typography.Text className="max-w-prose text-lg">
+        <Typography.Heading level={2} className="text-4xl">
+          Placements
+        </Typography.Heading>
+        <Typography.Paragraph className="max-w-prose text-lg">
           Three units, all static, all outside the charts.
-        </Typography.Text>
+        </Typography.Paragraph>
       </div>
       <div className="flex flex-col">
         {placements.map(({ description, icon: Icon, title, where }) => (
@@ -50,9 +52,9 @@ export async function PlacementsSection() {
               </span>
               <span className="font-bold text-lg tracking-tight">{title}</span>
             </div>
-            <Typography.Text className="max-w-prose leading-normal">
+            <Typography.Paragraph className="max-w-prose leading-normal">
               {description}
-            </Typography.Text>
+            </Typography.Paragraph>
             <span className="shrink-0 font-bold text-muted text-xs uppercase tracking-wider sm:ml-auto">
               {where}
             </span>

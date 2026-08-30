@@ -1,7 +1,7 @@
+import { Typography } from "@heroui/react";
 import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
 import { getAllGuideSlugs } from "@web/app/(main)/(site)/learn/lib/guides";
 import { ReportEyebrow } from "@web/components/shared/report";
-import Typography from "@web/components/typography";
 import Link from "next/link";
 
 const guideSlugs = getAllGuideSlugs();
@@ -21,11 +21,13 @@ export function GlossarySection() {
       id="glossary"
     >
       <div className="flex flex-col gap-3">
-        <Typography.H2 className="text-4xl">Glossary</Typography.H2>
-        <Typography.Text className="text-muted leading-normal">
+        <Typography.Heading level={2} className="text-4xl">
+          Glossary
+        </Typography.Heading>
+        <Typography.Paragraph className="text-muted leading-normal">
           The abbreviations that appear on every invoice, quotation and bidding
           result, in one place.
-        </Typography.Text>
+        </Typography.Paragraph>
       </div>
 
       <div className="flex flex-col gap-10">
@@ -54,9 +56,13 @@ export function GlossarySection() {
                         {term}
                       </span>
                     )}
-                    <Typography.TextSm className="leading-normal">
+                    <Typography.Paragraph
+                      color="muted"
+                      size="sm"
+                      className="leading-normal"
+                    >
                       {definition}
-                    </Typography.TextSm>
+                    </Typography.Paragraph>
                   </div>
                 );
               })}

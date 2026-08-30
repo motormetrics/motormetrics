@@ -1,4 +1,4 @@
-import Typography from "@web/components/typography";
+import { Typography } from "@heroui/react";
 import Link from "next/link";
 
 /**
@@ -32,10 +32,13 @@ export function DataSection() {
         <span className="self-start rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm">
           Where the data comes from
         </span>
-        <Typography.H2 className="text-ink-surface-foreground lg:text-4xl">
+        <Typography.Heading
+          level={2}
+          className="text-ink-surface-foreground lg:text-4xl"
+        >
           One source, checked at every release
-        </Typography.H2>
-        <Typography.Text className="text-ink-surface-foreground/70 text-lg">
+        </Typography.Heading>
+        <Typography.Paragraph className="text-ink-surface-foreground/70 text-lg">
           Every figure on this site comes from Singapore&apos;s Land Transport
           Authority via{" "}
           <Link
@@ -48,7 +51,7 @@ export function DataSection() {
           </Link>
           . We do not estimate, model or fill gaps. When LTA revises a release,
           we revise with it.
-        </Typography.Text>
+        </Typography.Paragraph>
       </div>
       <div className="grid gap-5 lg:grid-cols-3">
         {provenance.map(({ detail, heading, label }) => (

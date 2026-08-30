@@ -1,8 +1,7 @@
 "use client";
 
-import { Accordion } from "@heroui/react";
+import { Accordion, Typography } from "@heroui/react";
 import { FAQS } from "@web/app/(main)/(site)/about/components/faq-data";
-import Typography from "@web/components/typography";
 import { ChevronDown } from "lucide-react";
 
 /**
@@ -12,7 +11,9 @@ import { ChevronDown } from "lucide-react";
 export function FaqSection() {
   return (
     <section className="grid items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-14">
-      <Typography.H2 className="text-4xl">Common questions</Typography.H2>
+      <Typography.Heading level={2} className="text-4xl">
+        Common questions
+      </Typography.Heading>
       <Accordion
         className="w-full"
         defaultExpandedKeys={[FAQS[0].question]}

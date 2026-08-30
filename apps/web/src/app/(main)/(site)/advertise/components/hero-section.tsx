@@ -1,6 +1,5 @@
-import { Button } from "@heroui/react";
+import { Button, Typography } from "@heroui/react";
 import { Breadcrumbs } from "@web/components/shared/breadcrumbs";
-import Typography from "@web/components/typography";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
@@ -11,14 +10,20 @@ export function HeroSection() {
       <span className="self-start rounded-full bg-accent-soft px-4 py-2 font-bold text-accent-strong text-sm">
         Advertise with us
       </span>
-      <Typography.H1 className="max-w-4xl text-5xl leading-none lg:text-6xl">
+      <Typography.Heading
+        level={1}
+        className="max-w-4xl text-5xl leading-none lg:text-6xl"
+      >
         Reach people at the moment they are pricing a car
-      </Typography.H1>
-      <Typography.TextLg className="max-w-prose text-xl leading-normal">
+      </Typography.Heading>
+      <Typography.Paragraph
+        color="muted"
+        className="max-w-prose text-xl leading-normal"
+      >
         Readers arrive with a specific question: what a COE closed at, what a
         renewal costs, which makes are moving. Placements sit beside that
         answer, not on top of it.
-      </Typography.TextLg>
+      </Typography.Paragraph>
       <div className="flex flex-wrap gap-3 pt-2">
         <Link className="no-underline" href="#contact">
           <Button className="rounded-full" size="lg" variant="primary">

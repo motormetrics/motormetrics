@@ -1,5 +1,5 @@
+import { Typography } from "@heroui/react";
 import { ReportEyebrow } from "@web/components/shared/report";
-import Typography from "@web/components/typography";
 import type { ReactNode } from "react";
 
 const FACTS: { detail: ReactNode; title: string }[] = [
@@ -55,9 +55,9 @@ export function DataSourcesSection() {
       id="data-sources"
     >
       <div className="flex flex-col gap-3">
-        <Typography.H2 className="text-4xl">
+        <Typography.Heading level={2} className="text-4xl">
           Where the data comes from
-        </Typography.H2>
+        </Typography.Heading>
         <a
           className="font-bold text-accent-strong text-base no-underline transition-colors hover:text-accent-deep"
           href="https://datamall.lta.gov.sg"
@@ -75,7 +75,9 @@ export function DataSourcesSection() {
             key={title}
           >
             <ReportEyebrow>{title}</ReportEyebrow>
-            <Typography.Text className="text-muted">{detail}</Typography.Text>
+            <Typography.Paragraph className="text-muted">
+              {detail}
+            </Typography.Paragraph>
           </div>
         ))}
       </div>

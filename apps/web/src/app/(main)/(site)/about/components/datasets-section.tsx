@@ -1,5 +1,4 @@
-import { Card } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Card, Typography } from "@heroui/react";
 import {
   BarChart3,
   Car,
@@ -67,10 +66,12 @@ export function DatasetsSection() {
   return (
     <section className="flex flex-col gap-7">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
-        <Typography.H2 className="text-4xl">What we track</Typography.H2>
-        <Typography.Text className="max-w-prose text-lg">
+        <Typography.Heading level={2} className="text-4xl">
+          What we track
+        </Typography.Heading>
+        <Typography.Paragraph className="max-w-prose text-lg">
           Six datasets, each with its own history and filters.
-        </Typography.Text>
+        </Typography.Paragraph>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {datasets.map(({ description, href, icon: Icon, title }) => (
@@ -80,10 +81,12 @@ export function DatasetsSection() {
                 <span className="flex size-12 items-center justify-center rounded-full bg-accent-soft text-accent-strong">
                   <Icon className="size-5.5" />
                 </span>
-                <Typography.H3 className="text-xl">{title}</Typography.H3>
-                <Typography.Text className="leading-normal">
+                <Typography.Heading level={3} className="text-xl">
+                  {title}
+                </Typography.Heading>
+                <Typography.Paragraph className="leading-normal">
                   {description}
-                </Typography.Text>
+                </Typography.Paragraph>
               </Card.Content>
             </Card>
           </Link>

@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import { getReadingMinutes } from "@web/app/(main)/(site)/learn/lib/guides";
-import Typography from "@web/components/typography";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -21,10 +21,12 @@ export function GuideCard({ guide }: { guide: Guide }) {
       <span className="self-start rounded-full bg-surface-secondary px-3.5 py-1.5 font-bold text-muted text-sm">
         {guide.term}
       </span>
-      <Typography.H3 className="leading-tight">{guide.title}</Typography.H3>
-      <Typography.Text className="text-muted leading-normal">
+      <Typography.Heading level={3} className="leading-tight">
+        {guide.title}
+      </Typography.Heading>
+      <Typography.Paragraph className="text-muted leading-normal">
         {guide.excerpt}
-      </Typography.Text>
+      </Typography.Paragraph>
       <div className="mt-auto flex items-center gap-2.5 pt-3.5">
         <span className="font-semibold text-muted text-sm">
           {getReadingMinutes(guide.content)} min read

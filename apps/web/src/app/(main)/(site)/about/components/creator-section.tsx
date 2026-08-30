@@ -1,6 +1,6 @@
 "use client";
 
-import Typography from "@web/components/typography";
+import { Typography } from "@heroui/react";
 import { SITE_TITLE } from "@web/config";
 import {
   staggerContainerVariants,
@@ -35,17 +35,21 @@ export function CreatorSection() {
             className="mx-auto flex max-w-2xl flex-col items-center gap-8 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Label className="text-accent-strong uppercase tracking-widest">
+            <Typography.Paragraph
+              size="sm"
+              weight="medium"
+              className="text-accent-strong uppercase tracking-widest"
+            >
               Behind the Data
-            </Typography.Label>
+            </Typography.Paragraph>
 
             <div className="flex flex-col gap-6">
-              <Typography.H2>
+              <Typography.Heading level={2}>
                 Built with{" "}
                 <Heart className="inline size-6 fill-danger text-danger" /> in
                 Singapore
-              </Typography.H2>
-              <Typography.TextLg>
+              </Typography.Heading>
+              <Typography.Paragraph color="muted">
                 {SITE_TITLE} is an independent project created by{" "}
                 <Link
                   href="https://ruchern.dev"
@@ -57,14 +61,14 @@ export function CreatorSection() {
                 </Link>
                 , a software engineer who wanted to make this data easier to
                 explore.
-              </Typography.TextLg>
+              </Typography.Paragraph>
             </div>
 
-            <Typography.TextSm className="max-w-lg">
+            <Typography.Paragraph color="muted" size="sm" className="max-w-lg">
               This platform is maintained in spare time alongside a full-time
               job. If you find it useful, consider sharing it with others who
               might benefit.
-            </Typography.TextSm>
+            </Typography.Paragraph>
           </motion.div>
         </motion.div>
       </div>
