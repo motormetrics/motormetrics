@@ -57,11 +57,11 @@ export async function LeadingMakeCard({
 
       {spark ? (
         <svg
+          aria-label={`${leader.make} registrations over the last ${leader.trend.length} months`}
           className="mt-1.5 h-[90px] w-full overflow-visible"
           role="img"
           viewBox="0 0 380 90"
         >
-          <title>{`${leader.make} registrations over the last ${leader.trend.length} months`}</title>
           <path d={spark.area} fill="currentColor" opacity={0.16} />
           <path
             d={spark.line}
