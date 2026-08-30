@@ -119,11 +119,16 @@ export function ReportHeadline({
 }) {
   return (
     <div className={cn("flex flex-wrap items-end gap-12", className)}>
-      <div className="flex flex-col gap-2">
+      {/* `min-w-0` so the label wraps instead of holding the column open —
+          a flex item will not shrink below its content otherwise, and the
+          longer labels run past a small phone. */}
+      <div className="flex min-w-0 flex-col gap-2">
         <Typography.Paragraph className="text-muted-strong">
           {label}
         </Typography.Paragraph>
-        <div className="flex items-center gap-4">
+        {/* Wraps only when the figure and its pill will not sit side by side,
+            which on these headlines is below about 360px. */}
+        <div className="flex flex-wrap items-center gap-4">
           <span className="font-extrabold text-6xl tabular-nums leading-none tracking-tight lg:text-7xl">
             {value}
           </span>

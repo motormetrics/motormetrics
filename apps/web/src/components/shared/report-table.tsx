@@ -1,6 +1,6 @@
-import { cn } from "@heroui/react";
+import { cn, ScrollShadow } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 /**
  * The column-header treatment shared by every table in the app.
@@ -29,8 +29,18 @@ export function ReportTable({
   columns: { align?: "end"; label: string; width?: string }[];
 }) {
   return (
-    <div className="w-full overflow-x-auto">
-      <table className="w-full border-collapse tabular-nums">
+    // `min-w-max` is what keeps the columns readable on a phone: with `w-full`
+    // alone the table is pinned to the container and compresses instead,
+    // wrapping "Petrol-Electric (Plug-In)" over five lines while still
+    // clipping the columns that refuse to wrap. Sized to its content it
+    // scrolls cleanly, and `ScrollShadow` is what says so.
+    <ScrollShadow
+      className="w-full"
+      hideScrollBar
+      orientation="horizontal"
+      size={24}
+    >
+      <table className="w-full min-w-max border-collapse tabular-nums">
         <thead>
           <tr>
             {columns.map(({ align, label, width }) => (
@@ -39,10 +49,23 @@ export function ReportTable({
                   "border-border border-b px-3.5 pb-3",
                   TABLE_HEADER_CLASS,
                   align === "end" ? "text-right" : "text-left",
+                  // The widths callers pass size the share bars on a desktop
+                  // and run to 300px, which on a phone is a third of the
+                  // scroll for a column that only restates the percentage
+                  // beside it. Below `sm` the column takes its content width
+                  // instead.
+                  // `min-w-16` keeps the bar visible once the explicit
+                  // width stops applying; the bar itself has no intrinsic
+                  // width, so the column would otherwise collapse.
+                  width && "min-w-16 sm:w-(--report-col-width)",
                 )}
                 key={label || width}
                 scope="col"
-                style={width ? { width } : undefined}
+                style={
+                  width
+                    ? ({ "--report-col-width": width } as CSSProperties)
+                    : undefined
+                }
               >
                 {label}
               </th>
@@ -51,7 +74,7 @@ export function ReportTable({
         </thead>
         <tbody>{children}</tbody>
       </table>
-    </div>
+    </ScrollShadow>
   );
 }
 
