@@ -37,12 +37,17 @@ const renderTable = (rowsToRender: DimensionStat[] = rows) =>
     />,
   );
 
-/** Row order as the reader sees it, header row excluded. */
+/**
+ * Row order as the reader sees it, header row excluded.
+ *
+ * A sortable HeroUI table is an ARIA grid, so the name column is the row's
+ * `rowheader` and the remaining columns are `gridcell` — there is no `cell`.
+ */
 const visibleNames = () =>
   screen
     .getAllByRole("row")
     .slice(1)
-    .map((row) => within(row).getAllByRole("cell")[0].textContent);
+    .map((row) => within(row).getAllByRole("rowheader")[0].textContent);
 
 const searchBox = () => screen.getByRole("searchbox", { name: "Search makes" });
 
@@ -55,10 +60,12 @@ describe("DimensionTable", () => {
       screen.getByText(/Year to date through October 2025 · 3 rows/),
     ).toBeVisible();
 
-    const cells = within(screen.getAllByRole("row")[1]).getAllByRole("cell");
-    expect(cells[0]).toHaveTextContent("1TOYOTA");
-    expect(cells[1]).toHaveTextContent("600");
-    expect(cells[2]).toHaveTextContent("60.0%");
+    const row = within(screen.getAllByRole("row")[1]);
+    expect(row.getAllByRole("rowheader")[0]).toHaveTextContent("1TOYOTA");
+
+    const cells = row.getAllByRole("gridcell");
+    expect(cells[0]).toHaveTextContent("600");
+    expect(cells[1]).toHaveTextContent("60.0%");
   });
 
   it("should filter rows by the search query", async () => {
@@ -89,7 +96,9 @@ describe("DimensionTable", () => {
 
     expect(visibleNames()).toEqual(["1TOYOTA", "2BMW", "3BYD"]);
 
-    await user.click(screen.getByRole("button", { name: /Registrations/ }));
+    await user.click(
+      screen.getByRole("columnheader", { name: /Registrations/ }),
+    );
 
     expect(visibleNames()).toEqual(["3BYD", "2BMW", "1TOYOTA"]);
     expect(
@@ -104,11 +113,7 @@ describe("DimensionTable", () => {
     const user = userEvent.setup();
     renderTable();
 
-    await user.click(
-      within(screen.getByRole("columnheader", { name: /^Make/ })).getByRole(
-        "button",
-      ),
-    );
+    await user.click(screen.getByRole("columnheader", { name: /^Make/ }));
 
     expect(visibleNames()).toEqual(["2BMW", "3BYD", "1TOYOTA"]);
   });
@@ -117,8 +122,8 @@ describe("DimensionTable", () => {
     const user = userEvent.setup();
     renderTable();
 
-    const tab = screen.getByRole("button", { name: "Fuel types" });
-    expect(tab).toHaveAttribute("aria-pressed", "false");
+    const tab = screen.getByRole("radio", { name: "Fuel types" });
+    expect(tab).not.toBeChecked();
 
     await user.click(tab);
 
