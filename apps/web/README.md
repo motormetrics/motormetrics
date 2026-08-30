@@ -123,10 +123,10 @@ src/
 Automatic deployment via Vercel:
 
 - **dev**: [dev.motormetrics.app](https://dev.motormetrics.app)
-- **staging**: [staging.motormetrics.app](https://staging.motormetrics.app)
 - **prod**: [motormetrics.app](https://motormetrics.app)
 
-Production deployments run on Vercel from the main branch, with preview deployments generated for pull requests.
+Production deploys from the `main` branch. Pull requests get preview deployments, which
+serve as the pre-production environment.
 
 ## Repo Activity
 

@@ -8,7 +8,6 @@ const ONE_DAY = 60 * 60 * 24;
 const LEGACY_DOMAIN_REDIRECTS = [
   ["sgcarstrends.com", "motormetrics.app"],
   ["www.sgcarstrends.com", "motormetrics.app"],
-  ["staging.sgcarstrends.com", "staging.motormetrics.app"],
   ["docs.sgcarstrends.com", "docs.motormetrics.app"],
   ["api.sgcarstrends.com", "api.motormetrics.app"],
 ] as const;
