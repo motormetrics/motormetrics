@@ -1,3 +1,14 @@
+## [5.5.0](https://github.com/motormetrics/motormetrics/compare/v5.4.1...v5.5.0) (2026-08-30)
+
+### Features
+
+* **web:** gate preview and production surfaces with named Vercel Flags ([2e41682](https://github.com/motormetrics/motormetrics/commit/2e416827efe16b04880b6438f632f4c9d9300643))
+
+### Bug Fixes
+
+* **web:** instantiate the Vercel Flags adapter per declaration ([5abd93b](https://github.com/motormetrics/motormetrics/commit/5abd93b4bc5ddd2b1a98d18113813bccdbda7a89))
+* **web:** keep Vercel Flag reads off the static shell ([0f7223a](https://github.com/motormetrics/motormetrics/commit/0f7223a987c5e768b2ced9a0ac7cf4eee36d6d48))
+
 ## [5.4.1](https://github.com/motormetrics/motormetrics/compare/v5.4.0...v5.4.1) (2026-08-30)
 
 ### Bug Fixes
