@@ -1,6 +1,11 @@
 "use client";
 
-import { MORE_NAV_ITEMS, PRIMARY_NAV_ITEMS } from "@web/config/navigation";
+import {
+  ADVERTISE_MORE_ITEM,
+  BLOG_MORE_ITEM,
+  MORE_NAV_ITEMS,
+  PRIMARY_NAV_ITEMS,
+} from "@web/config/navigation";
 import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,6 +22,8 @@ const LABELS_BY_HREF: Record<string, string> = {
     ]),
   ),
   ...Object.fromEntries(MORE_NAV_ITEMS.map(({ title, url }) => [url, title])),
+  [ADVERTISE_MORE_ITEM.url]: ADVERTISE_MORE_ITEM.title,
+  [BLOG_MORE_ITEM.url]: BLOG_MORE_ITEM.title,
 };
 
 /** "electric-vehicles" -> "Electric vehicles"; also covers `[make]` values. */

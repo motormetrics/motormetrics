@@ -1,9 +1,10 @@
 import { Announcement } from "@web/components/announcement";
 import { AppNav } from "@web/components/app-nav";
 import { Banner } from "@web/components/banner";
+import { FlaggedAppNav, FlaggedFooter } from "@web/components/flagged-chrome";
 import { Footer } from "@web/components/footer";
 import { NotificationPrompt } from "@web/components/notification-prompt";
-import type { ReactNode } from "react";
+import { type ReactNode, Suspense } from "react";
 
 export default function MainLayout({
   children,
@@ -20,9 +21,13 @@ export default function MainLayout({
         the content beneath them, and the two bars above use the same measure.
       */}
       <div className="mx-auto flex min-h-screen w-full max-w-page flex-col gap-8 px-4 py-8 sm:px-6 lg:px-9 lg:py-9">
-        <AppNav />
+        <Suspense fallback={<AppNav />}>
+          <FlaggedAppNav />
+        </Suspense>
         <main className="flex flex-1 flex-col gap-8">{children}</main>
-        <Footer />
+        <Suspense fallback={<Footer />}>
+          <FlaggedFooter />
+        </Suspense>
       </div>
     </div>
   );

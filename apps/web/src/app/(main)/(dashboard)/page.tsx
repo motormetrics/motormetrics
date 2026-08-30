@@ -19,7 +19,8 @@ import { Bento, RAIL_CLASS } from "@web/components/shared/bento";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_URLS } from "@web/config/socials";
+import { brandSameAs } from "@web/config/socials";
+import { socialLinks } from "@web/flags";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -76,16 +77,24 @@ const webSiteSchema = {
   },
 } as const;
 
-const organisationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: SITE_TITLE,
-  url: SITE_URL,
-  logo: LOGO_URL,
-  description:
-    "A platform for exploring Singapore car registration statistics, COE bidding results, and market data.",
-  sameAs: [SOCIAL_URLS.instagram, SOCIAL_URLS.telegram, SOCIAL_URLS.github],
-} as const;
+async function OrganizationStructuredData() {
+  const sameAs = brandSameAs(await socialLinks());
+
+  return (
+    <StructuredData
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: SITE_TITLE,
+        url: SITE_URL,
+        logo: LOGO_URL,
+        description:
+          "A platform for exploring Singapore car registration statistics, COE bidding results, and market data.",
+        ...(sameAs.length > 0 ? { sameAs } : {}),
+      }}
+    />
+  );
+}
 
 function CardSkeleton({ className = "" }: { className?: string }) {
   return (
@@ -103,7 +112,9 @@ const HomePage = () => {
   return (
     <>
       <StructuredData data={webSiteSchema} />
-      <StructuredData data={organisationSchema} />
+      <Suspense>
+        <OrganizationStructuredData />
+      </Suspense>
 
       <PageHead title="Overview" />
 
