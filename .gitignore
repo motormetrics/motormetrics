@@ -53,3 +53,4 @@
 .dolt/
 *.db
 .beads-credential-key
+.vercel
