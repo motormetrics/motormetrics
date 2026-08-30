@@ -1,3 +1,12 @@
+## [5.5.1](https://github.com/motormetrics/motormetrics/compare/v5.5.0...v5.5.1) (2026-08-30)
+
+### Bug Fixes
+
+* **web:** align (main) page controls and tables ([3e715fd](https://github.com/motormetrics/motormetrics/commit/3e715fdc029b766f5528b624b3cbf7b432232481))
+* **web:** correct two garbled report labels ([96bc02b](https://github.com/motormetrics/motormetrics/commit/96bc02bb01678e14e6c8576d0bd5d28d9c2e804a))
+* **web:** make the (main) pages usable on a phone ([39ffa39](https://github.com/motormetrics/motormetrics/commit/39ffa39d4e340630982c10726d94619fcee0e15f))
+* **web:** stop the report tables squashing on a phone ([51ca836](https://github.com/motormetrics/motormetrics/commit/51ca8365a582f5caddb5aae3bd52c99eedc7175e))
+
 ## [5.5.0](https://github.com/motormetrics/motormetrics/compare/v5.4.1...v5.5.0) (2026-08-30)
 
 ### Features
