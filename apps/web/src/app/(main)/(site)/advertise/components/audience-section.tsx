@@ -3,9 +3,7 @@ import { Typography } from "@heroui/react";
 export function AudienceSection() {
   return (
     <section className="grid items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-14">
-      <Typography.Heading level={2} className="text-4xl">
-        Who reads this
-      </Typography.Heading>
+      <Typography.Heading level={2}>Who reads this</Typography.Heading>
       <div className="flex flex-col gap-5">
         <Typography.Paragraph className="text-lg">
           Readers arrive mid-decision: buyers comparing COE categories, owners

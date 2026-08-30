@@ -19,9 +19,7 @@ export function FAQSection() {
       id="faq"
     >
       <div className="flex flex-col gap-3 lg:sticky lg:top-9 lg:self-start">
-        <Typography.Heading level={2} className="text-4xl">
-          Frequently asked
-        </Typography.Heading>
+        <Typography.Heading level={2}>Frequently asked</Typography.Heading>
         <Typography.Paragraph className="text-muted leading-normal">
           The questions that come up most often about bidding, rebates and where
           the figures on this site come from.

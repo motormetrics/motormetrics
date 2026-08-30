@@ -11,9 +11,7 @@ import { ChevronDown } from "lucide-react";
 export function FaqSection() {
   return (
     <section className="grid items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-14">
-      <Typography.Heading level={2} className="text-4xl">
-        Common questions
-      </Typography.Heading>
+      <Typography.Heading level={2}>Common questions</Typography.Heading>
       <Accordion
         className="w-full"
         defaultExpandedKeys={[FAQS[0].question]}

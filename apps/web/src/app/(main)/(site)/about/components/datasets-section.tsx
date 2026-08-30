@@ -66,9 +66,7 @@ export function DatasetsSection() {
   return (
     <section className="flex flex-col gap-7">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
-        <Typography.Heading level={2} className="text-4xl">
-          What we track
-        </Typography.Heading>
+        <Typography.Heading level={2}>What we track</Typography.Heading>
         <Typography.Paragraph className="max-w-prose text-lg">
           Six datasets, each with its own history and filters.
         </Typography.Paragraph>

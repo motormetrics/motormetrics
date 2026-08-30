@@ -34,9 +34,7 @@ export async function PlacementsSection() {
   return (
     <section className="flex scroll-mt-24 flex-col gap-7" id="placements">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
-        <Typography.Heading level={2} className="text-4xl">
-          Placements
-        </Typography.Heading>
+        <Typography.Heading level={2}>Placements</Typography.Heading>
         <Typography.Paragraph className="max-w-prose text-lg">
           Three units, all static, all outside the charts.
         </Typography.Paragraph>

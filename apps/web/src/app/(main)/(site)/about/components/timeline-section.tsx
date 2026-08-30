@@ -102,7 +102,7 @@ export function TimelineSection() {
             <ReportEyebrow className="text-accent-strong">
               Our Journey
             </ReportEyebrow>
-            <Typography.Heading level={2} className="lg:text-4xl">
+            <Typography.Heading level={2}>
               How this project started
             </Typography.Heading>
             <Typography.Paragraph className="text-muted">

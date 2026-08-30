@@ -10,9 +10,7 @@ import Link from "next/link";
 export function MissionSection() {
   return (
     <section className="grid items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-14">
-      <Typography.Heading level={2} className="text-4xl">
-        What we do
-      </Typography.Heading>
+      <Typography.Heading level={2}>What we do</Typography.Heading>
       <div className="flex flex-col gap-5">
         <Typography.Paragraph className="text-lg">
           Each time LTA publishes, we pull the latest figures from DataMall,

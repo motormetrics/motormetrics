@@ -32,9 +32,7 @@ export function RelatedGuides({ guide }: { guide: Guide }) {
 
   return (
     <section className="flex flex-col gap-7">
-      <Typography.Heading level={2} className="text-4xl">
-        Next in this series
-      </Typography.Heading>
+      <Typography.Heading level={2}>Next in this series</Typography.Heading>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filled.map((entry) => (
           <GuideCard guide={entry} key={entry.slug} />

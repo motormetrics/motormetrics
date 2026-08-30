@@ -51,9 +51,7 @@ export async function PricingSection() {
   return (
     <section className="flex scroll-mt-24 flex-col gap-7" id="pricing">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
-        <Typography.Heading level={2} className="text-4xl">
-          Packages
-        </Typography.Heading>
+        <Typography.Heading level={2}>Packages</Typography.Heading>
         <Typography.Paragraph className="max-w-prose text-lg">
           Booked by the month. No long-term commitment.
         </Typography.Paragraph>

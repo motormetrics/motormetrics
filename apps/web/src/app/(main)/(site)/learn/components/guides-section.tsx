@@ -13,9 +13,7 @@ export function GuidesSection() {
   return (
     <section className="flex scroll-mt-24 flex-col gap-7" id="guides">
       <div className="flex flex-wrap items-baseline gap-5">
-        <Typography.Heading level={2} className="text-4xl">
-          All guides
-        </Typography.Heading>
+        <Typography.Heading level={2}>All guides</Typography.Heading>
         <span className="font-semibold text-base text-muted">
           {GUIDES.length} {GUIDES.length === 1 ? "guide" : "guides"}
         </span>

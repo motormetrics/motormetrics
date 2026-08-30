@@ -55,7 +55,7 @@ export function DataSourcesSection() {
       id="data-sources"
     >
       <div className="flex flex-col gap-3">
-        <Typography.Heading level={2} className="text-4xl">
+        <Typography.Heading level={2}>
           Where the data comes from
         </Typography.Heading>
         <a

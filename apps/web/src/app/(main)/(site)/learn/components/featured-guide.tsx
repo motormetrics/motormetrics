@@ -32,7 +32,7 @@ export function FeaturedGuide() {
         </span>
         <Typography.Heading
           level={2}
-          className="text-4xl text-accent-foreground leading-tight"
+          className="text-accent-foreground leading-tight"
         >
           {guide.title}
         </Typography.Heading>
