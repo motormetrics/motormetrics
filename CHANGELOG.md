@@ -1,3 +1,19 @@
+## [5.4.0](https://github.com/motormetrics/motormetrics/compare/v5.3.0...v5.4.0) (2026-08-30)
+
+### Features
+
+* **web:** add report and site page layout primitives ([596d869](https://github.com/motormetrics/motormetrics/commit/596d86976d61033f42dfd3b08ecb83933278b176))
+* **web:** line the bars and legal pages up with the measure ([40ed4dc](https://github.com/motormetrics/motormetrics/commit/40ed4dc14f53ec1a065a951d4a48adadd0dc0aa8))
+* **web:** port remaining dashboard pages to the v2 comps ([4492df8](https://github.com/motormetrics/motormetrics/commit/4492df84df966ec14b7ce3b09f27d568b7fd2cee))
+* **web:** port the remaining detail pages to the v2 comps ([5dd6a6e](https://github.com/motormetrics/motormetrics/commit/5dd6a6e5e680fe4cf2efac74d9b349e68809c32b))
+* **web:** rebuild about, advertise and learn on the v2 comps ([410765e](https://github.com/motormetrics/motormetrics/commit/410765ebae7410aedc9d8c90b98ac09751e51122))
+* **web:** rebuild car registrations on the v2 comp ([87e7706](https://github.com/motormetrics/motormetrics/commit/87e77065184735f18b183d9f233578583ed36456))
+* **web:** trim the makes table to the leading ten ([5ce80a2](https://github.com/motormetrics/motormetrics/commit/5ce80a23a1df0099d2d8bb10c473b766d18c24b2))
+
+### Bug Fixes
+
+* **web:** show every renewal comparison at once ([d0b3fb4](https://github.com/motormetrics/motormetrics/commit/d0b3fb470bceacf64aa44733b23502c511c3b50a))
+
 ## [5.3.0](https://github.com/motormetrics/motormetrics/compare/v5.2.0...v5.3.0) (2026-08-30)
 
 ### Features
