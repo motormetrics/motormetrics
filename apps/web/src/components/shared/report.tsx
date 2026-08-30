@@ -49,17 +49,24 @@ export function ReportFilterBar({
   trailing?: ReactNode;
   trailingLabel?: string;
 }) {
+  // Below `sm` each label stacks over its own controls. As one wrapping row
+  // the two groups fell differently — a wide primary control pushed its pills
+  // onto the next line and left its label stranded above them, while a narrow
+  // trailing control stayed beside its own label. Binding each label to its
+  // controls is what makes the two read the same.
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center gap-4 border-border border-y py-4",
+        "flex flex-col gap-4 border-border border-y py-4 sm:flex-row sm:flex-wrap sm:items-center",
         className,
       )}
     >
-      <ReportEyebrow>{label}</ReportEyebrow>
-      <div className="flex flex-wrap items-center gap-2">{children}</div>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+        <ReportEyebrow>{label}</ReportEyebrow>
+        <div className="flex flex-wrap items-center gap-2">{children}</div>
+      </div>
       {trailing ? (
-        <div className="ml-auto flex flex-wrap items-center gap-3">
+        <div className="flex flex-col gap-2 sm:ml-auto sm:flex-row sm:items-center sm:gap-3">
           {trailingLabel ? (
             <ReportEyebrow>{trailingLabel}</ReportEyebrow>
           ) : null}
@@ -119,11 +126,16 @@ export function ReportHeadline({
 }) {
   return (
     <div className={cn("flex flex-wrap items-end gap-12", className)}>
-      <div className="flex flex-col gap-2">
+      {/* `min-w-0` so the label wraps instead of holding the column open —
+          a flex item will not shrink below its content otherwise, and the
+          longer labels run past a small phone. */}
+      <div className="flex min-w-0 flex-col gap-2">
         <Typography.Paragraph className="text-muted-strong">
           {label}
         </Typography.Paragraph>
-        <div className="flex items-center gap-4">
+        {/* Wraps only when the figure and its pill will not sit side by side,
+            which on these headlines is below about 360px. */}
+        <div className="flex flex-wrap items-center gap-4">
           <span className="font-extrabold text-6xl tabular-nums leading-none tracking-tight lg:text-7xl">
             {value}
           </span>
@@ -135,7 +147,15 @@ export function ReportHeadline({
           </Typography.Paragraph>
         ) : null}
       </div>
-      {stats ? <div className="ml-auto flex flex-wrap">{stats}</div> : null}
+      {/* Below `sm` the cells become a two-column grid. Wrapping a gapless
+          flex row stacked them flush — a cell's note ran straight into the
+          next cell's label — and left the rule that divides them dangling at
+          the start of every wrapped row. */}
+      {stats ? (
+        <div className="ml-auto grid w-full grid-cols-2 gap-x-6 gap-y-5 sm:flex sm:w-auto sm:flex-wrap sm:gap-0">
+          {stats}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -151,7 +171,7 @@ export function ReportStat({
   value: ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-1.5 border-border border-l px-6">
+    <div className="flex flex-col gap-1.5 border-border sm:border-l sm:px-6">
       <span className="font-semibold text-muted text-sm">{label}</span>
       <span className="font-extrabold text-2xl tabular-nums tracking-tight">
         {value}

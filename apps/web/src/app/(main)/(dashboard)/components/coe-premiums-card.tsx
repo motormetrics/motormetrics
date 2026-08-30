@@ -83,7 +83,10 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
           </Typography.Paragraph>
         </div>
 
-        <div className="ml-auto flex items-center gap-2">
+        {/* Six 44px circles plus their gaps want 304px, which is wider than a
+            320px phone can give this card — so they wrap rather than push the
+            page sideways. */}
+        <div className="ml-auto flex flex-wrap items-center gap-2">
           {series.map((item) => {
             const isActive = item.category === active.category;
             return (

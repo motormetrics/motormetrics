@@ -37,7 +37,10 @@ export function PageHead({
           </Typography.Paragraph>
         ) : null}
       </div>
-      <div className="ml-auto flex flex-wrap items-center gap-3">
+      {/* `min-w-0` so a control wider than the phone — the COE range tabs run
+          to 452px — clips into its own scroll area instead of stretching the
+          page. */}
+      <div className="flex min-w-0 max-w-full flex-wrap items-center gap-3 sm:ml-auto">
         {controls}
         <SharePill title={title} />
       </div>

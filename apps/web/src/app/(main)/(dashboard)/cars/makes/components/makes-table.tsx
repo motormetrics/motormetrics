@@ -37,12 +37,34 @@ const COLUMNS: {
   align: "left" | "right";
   key: SortKey | null;
   label: string;
+  /** Shown below `sm`, where the full word is wider than its column. */
+  shortLabel?: string;
 }[] = [
   { align: "left", key: "make", label: "Make" },
-  { align: "right", key: "count", label: "Registrations" },
+  { align: "right", key: "count", label: "Registrations", shortLabel: "Regs" },
   { align: "left", key: null, label: "Share" },
-  { align: "right", key: "yoyChange", label: "Change" },
+  { align: "right", key: "yoyChange", label: "Change", shortLabel: "YoY" },
 ];
+
+/** The label pair a header cell renders, one per breakpoint. */
+function ColumnLabel({
+  label,
+  shortLabel,
+}: {
+  label: string;
+  shortLabel?: string;
+}) {
+  if (!shortLabel) {
+    return <>{label}</>;
+  }
+
+  return (
+    <>
+      <span className="sm:hidden">{shortLabel}</span>
+      <span className="hidden sm:inline">{label}</span>
+    </>
+  );
+}
 
 const SORT_LABELS: Record<SortKey, string> = {
   count: "registrations",
@@ -50,8 +72,14 @@ const SORT_LABELS: Record<SortKey, string> = {
   yoyChange: "change",
 };
 
+/**
+ * Below `sm` the share bar and the chevron are dropped and the remaining
+ * columns tighten, because the first column is what pays for them: at the
+ * desktop widths it was left with about 90px, all of which the rank badge and
+ * the logo took, and every make name truncated to nothing.
+ */
 const GRID_CLASS =
-  "grid grid-cols-[minmax(0,1fr)_84px_92px_18px] items-center gap-3 sm:grid-cols-[minmax(0,1fr)_100px_minmax(90px,1fr)_96px_18px]";
+  "grid grid-cols-[minmax(0,1fr)_56px_52px] items-center gap-2 sm:grid-cols-[minmax(0,1fr)_100px_minmax(90px,1fr)_96px_18px] sm:gap-3";
 
 /**
  * Keeps the funnel that used to be fed by the makes-page search autocomplete.
@@ -62,6 +90,36 @@ const GRID_CLASS =
  * fires on navigation, not on typing: the search box above is a local filter,
  * and capturing keystrokes would flood the funnel and change what it means.
  */
+/**
+ * The change figure as bare coloured text.
+ *
+ * `DeltaChip` is 86px of pill against a 52px column on a phone, and it was
+ * overrunning the registrations figure beside it. The chip returns from `sm`,
+ * where the row has the width for it.
+ */
+function ChangeText({
+  className,
+  value,
+}: {
+  className?: string;
+  value: number;
+}) {
+  return (
+    <span
+      className={cn(
+        "text-right font-bold text-xs tabular-nums",
+        value >= 0
+          ? "text-success-soft-foreground"
+          : "text-warning-soft-foreground",
+        className,
+      )}
+    >
+      {value >= 0 ? "+" : "−"}
+      {Math.abs(value).toFixed(1)}%
+    </span>
+  );
+}
+
 function trackMakeSelected(make: string) {
   posthog.capture("car_make_searched", { make });
 }
@@ -170,7 +228,7 @@ export function MakesTable({
       <div
         className={cn(
           GRID_CLASS,
-          "mt-3.5 border-border border-b px-4.5 pt-4 pb-3",
+          "mt-3.5 items-end border-border border-b px-4.5 pt-4 pb-3",
         )}
       >
         {COLUMNS.map((column) => {
@@ -185,7 +243,10 @@ export function MakesTable({
           if (column.key === null) {
             return (
               <span className={className} key={column.label}>
-                {column.label}
+                <ColumnLabel
+                  label={column.label}
+                  shortLabel={column.shortLabel}
+                />
               </span>
             );
           }
@@ -198,12 +259,15 @@ export function MakesTable({
               onClick={() => toggleSort(sortKeyForColumn)}
               type="button"
             >
-              {column.label}
+              <ColumnLabel
+                label={column.label}
+                shortLabel={column.shortLabel}
+              />
               {isActive ? (sortDirection === "asc" ? " ↑" : " ↓") : ""}
             </button>
           );
         })}
-        <span />
+        <span className="hidden sm:block" />
       </div>
 
       <div className="flex flex-col">
@@ -220,7 +284,7 @@ export function MakesTable({
             <span className="flex min-w-0 items-center gap-2.5">
               <span
                 className={cn(
-                  "inline-flex size-7.5 shrink-0 items-center justify-center rounded-full font-extrabold text-sm",
+                  "inline-flex size-6 shrink-0 items-center justify-center rounded-full font-extrabold text-xs sm:size-7.5 sm:text-sm",
                   row.rank <= 3
                     ? "bg-accent/15 text-accent-strong"
                     : "bg-default text-muted",
@@ -228,13 +292,15 @@ export function MakesTable({
               >
                 {row.rank}
               </span>
-              <MakeAvatar logoUrl={row.logoUrl} make={row.make} size={26} />
-              <span className="truncate font-bold text-base text-foreground">
+              <span className="hidden shrink-0 sm:block">
+                <MakeAvatar logoUrl={row.logoUrl} make={row.make} size={26} />
+              </span>
+              <span className="truncate font-bold text-foreground text-sm sm:text-base">
                 {row.make}
               </span>
             </span>
 
-            <span className="text-right font-extrabold text-base text-foreground tabular-nums">
+            <span className="text-right font-extrabold text-foreground text-sm tabular-nums sm:text-base">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
@@ -269,12 +335,18 @@ export function MakesTable({
                 —
               </span>
             ) : (
-              <DeltaChip className="justify-self-end" value={row.yoyChange} />
+              <>
+                <ChangeText className="sm:hidden" value={row.yoyChange} />
+                <DeltaChip
+                  className="hidden justify-self-end sm:flex"
+                  value={row.yoyChange}
+                />
+              </>
             )}
 
             <ChevronRight
               aria-hidden
-              className="size-4.5 justify-self-end text-muted"
+              className="hidden size-4.5 justify-self-end text-muted sm:block"
             />
           </Link>
         ))}

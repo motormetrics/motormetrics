@@ -1,8 +1,8 @@
 "use client";
 
 import type { Key } from "@heroui/react";
-
 import { Button, cn, Dropdown, Header, Label } from "@heroui/react";
+import { Navbar } from "@heroui-pro/react";
 import { BetaChip, NewChip } from "@web/components/shared/chips";
 import {
   MORE_NAV_ITEMS,
@@ -59,7 +59,9 @@ const menuGrid = (itemCount: number) =>
   cn("grid gap-x-2.5 gap-y-0.5", itemCount > 4 ? "grid-cols-2" : "grid-cols-1");
 
 const menuClassName = (itemCount: number) =>
-  cn(menuGrid(itemCount), "p-2.5", itemCount > 4 && "min-w-112");
+  // `md:` because 112 (448px) is wider than a phone, and these popovers only
+  // ever open from the desktop pills.
+  cn(menuGrid(itemCount), "p-2.5", itemCount > 4 && "md:min-w-112");
 
 // A section is a grid item of the menu, and re-declares the same columns so its
 // own rows line up with the ones outside it.
@@ -83,6 +85,31 @@ function NavMenuItems({ items }: { items: readonly NavigationItem[] }) {
   ));
 }
 
+/** One row of the phone menu. Pressing it closes the menu on its own. */
+function MobileMenuLink({
+  badge,
+  href,
+  isCurrent,
+  label,
+}: {
+  badge?: NavigationItem["badge"];
+  href: string;
+  isCurrent: boolean;
+  label: string;
+}) {
+  return (
+    <Navbar.MenuItem
+      className="flex items-center gap-2 py-2.5 font-semibold text-base"
+      href={href}
+      isCurrent={isCurrent}
+    >
+      {label}
+      {badge === "new" ? <NewChip /> : null}
+      {badge === "beta" ? <BetaChip /> : null}
+    </Navbar.MenuItem>
+  );
+}
+
 export function AppNav({
   moreNavItems = MORE_NAV_ITEMS,
   showSocialLinks = false,
@@ -100,17 +127,28 @@ export function AppNav({
   const handleNavigate = (key: Key) => router.push(String(key));
 
   return (
-    <nav aria-label="Main navigation">
-      <div className="flex flex-wrap items-center gap-4">
-        <Link
-          aria-label="MotorMetrics home"
-          className="flex size-13 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground"
-          href="/"
-        >
-          <TrendingUp className="size-6" strokeWidth={2.5} />
-        </Link>
+    // `position="static"` and `maxWidth="full"` because the bar sits in flow
+    // inside the layout column, which already owns the page measure and gutter.
+    <Navbar
+      aria-label="Main navigation"
+      maxWidth="full"
+      navigate={(href) => router.push(href)}
+      position="static"
+    >
+      <Navbar.Header className="gap-4 px-0">
+        <Navbar.Brand>
+          <Link
+            aria-label="MotorMetrics home"
+            className="flex size-13 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground"
+            href="/"
+          >
+            <TrendingUp className="size-6" strokeWidth={2.5} />
+          </Link>
+        </Navbar.Brand>
 
-        <div className="flex flex-wrap items-center gap-2">
+        {/* Laid out in full the pills wrap onto three rows on a phone and eat
+            half the first screen, so below `md` they move into the menu. */}
+        <Navbar.Content className="hidden flex-wrap items-center gap-2 md:flex">
           {PRIMARY_NAV_ITEMS.map(({ href, items, label, sectionLabel }) => {
             const isActive = href === activeHref;
 
@@ -197,11 +235,13 @@ export function AppNav({
               </Dropdown.Menu>
             </Dropdown.Popover>
           </Dropdown>
-        </div>
+        </Navbar.Content>
+
+        <Navbar.Spacer />
 
         {showSocialLinks ? (
           <Link
-            className="ml-auto rounded-full bg-foreground px-6 py-3.5 font-bold text-accent-foreground text-sm transition-colors hover:bg-muted"
+            className="hidden rounded-full bg-foreground px-6 py-3.5 font-bold text-accent-foreground text-sm transition-colors hover:bg-muted md:block"
             href={SOCIAL_URLS.telegram}
             rel="noopener noreferrer"
             target="_blank"
@@ -209,10 +249,72 @@ export function AppNav({
             Get updates
           </Link>
         ) : null}
-      </div>
 
-      {/* TODO: The comp's search field and notification bell are decorative —
-          neither is reproduced here because there is nothing to wire them to. */}
-    </nav>
+        <Navbar.MenuToggle className="md:hidden" />
+      </Navbar.Header>
+
+      <Navbar.Menu className="gap-1">
+        {PRIMARY_NAV_ITEMS.map(({ href, items, label, sectionLabel }) => {
+          if (!items) {
+            return (
+              <MobileMenuLink
+                href={href}
+                isCurrent={href === activeHref}
+                key={href}
+                label={label}
+              />
+            );
+          }
+
+          // The pill's own dropdown flattens into an eyebrow plus its rows, so
+          // the whole tree is reachable without a second level of tapping.
+          return (
+            <div className="flex flex-col gap-1" key={href}>
+              <Header className={menuHeaderClassName}>{sectionLabel}</Header>
+              <MobileMenuLink
+                href={href}
+                isCurrent={href === activeHref}
+                label={`${label} overview`}
+              />
+              {items.map(({ badge, title, url }) => (
+                <MobileMenuLink
+                  badge={badge}
+                  href={url}
+                  isCurrent={matchesPath(pathname, url)}
+                  key={url}
+                  label={title}
+                />
+              ))}
+            </div>
+          );
+        })}
+
+        <div className="flex flex-col gap-1">
+          <Header className={menuHeaderClassName}>
+            {MORE_NAV_SECTION_LABEL}
+          </Header>
+          {moreNavItems.map(({ badge, title, url }) => (
+            <MobileMenuLink
+              badge={badge}
+              href={url}
+              isCurrent={matchesPath(pathname, url)}
+              key={url}
+              label={title}
+            />
+          ))}
+        </div>
+
+        {showSocialLinks ? (
+          <Link
+            className="mt-4 rounded-full bg-foreground px-6 py-3.5 text-center font-bold text-accent-foreground text-sm transition-colors hover:bg-muted"
+            href={SOCIAL_URLS.telegram}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Get updates
+          </Link>
+        ) : null}
+      </Navbar.Menu>
+    </Navbar>
   );
 }

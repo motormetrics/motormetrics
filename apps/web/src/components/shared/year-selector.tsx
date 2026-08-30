@@ -40,9 +40,12 @@ export function YearSelector({
       onSelectionChange={(key) => setYear(key ? Number(key) : null)}
     >
       <Label className="sr-only">Year</Label>
-      <ComboBox.InputGroup>
-        <Calendar className="ml-3 size-4 text-muted" />
-        <Input placeholder="Select Year" />
+      <ComboBox.InputGroup className="relative">
+        <Calendar
+          aria-hidden
+          className="pointer-events-none absolute top-1/2 left-3.5 z-10 size-4 -translate-y-1/2 text-muted"
+        />
+        <Input className="pl-10" placeholder="Select Year" />
         <ComboBox.Trigger />
       </ComboBox.InputGroup>
       <ComboBox.Popover>

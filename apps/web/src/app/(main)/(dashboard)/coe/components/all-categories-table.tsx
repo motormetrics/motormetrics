@@ -26,9 +26,13 @@ const COLUMNS: { align: "left" | "right"; label: string }[] = [
  * Fixed numeric columns so every row lines up — each row is its own grid, so
  * `auto` tracks would size independently and stagger. Kept narrow enough that
  * the category name still fits in the two-column layout below `2xl`.
+ *
+ * The narrowest step exists because the default tracks add up to 244px, which
+ * is wider than a 320px phone leaves this card once the page gutter and the
+ * card padding are taken out.
  */
 const GRID =
-  "grid grid-cols-[minmax(0,1fr)_5.5rem_4rem_4.75rem_1rem] gap-2 2xl:grid-cols-[minmax(0,1fr)_7rem_5rem_5.5rem_1.5rem] 2xl:gap-3";
+  "grid grid-cols-[minmax(0,1fr)_4.25rem_3.25rem_3.75rem_0.75rem] gap-1.5 sm:grid-cols-[minmax(0,1fr)_5.5rem_4rem_4.75rem_1rem] sm:gap-2 2xl:grid-cols-[minmax(0,1fr)_7rem_5rem_5.5rem_1.5rem] 2xl:gap-3";
 
 /**
  * The five-category table, always in category order.

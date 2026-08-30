@@ -98,9 +98,12 @@ export function TrendsComparison({
       onSelectionChange={(key) => key && onChange(key as string)}
     >
       <Label>{label}</Label>
-      <ComboBox.InputGroup>
-        <Calendar className="ml-3 size-4 text-muted" />
-        <Input placeholder={label} />
+      <ComboBox.InputGroup className="relative">
+        <Calendar
+          aria-hidden
+          className="pointer-events-none absolute top-1/2 left-3.5 z-10 size-4 -translate-y-1/2 text-muted"
+        />
+        <Input className="pl-10" placeholder={label} />
         <ComboBox.Trigger />
       </ComboBox.InputGroup>
       <ComboBox.Popover>
