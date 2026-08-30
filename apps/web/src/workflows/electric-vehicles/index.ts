@@ -24,13 +24,13 @@ interface ElectricVehiclesWorkflowResult {
  * Generates blog posts from EV registration data.
  */
 export async function electricVehiclesWorkflow(
-  payload: ElectricVehiclesWorkflowPayload,
+  payload?: ElectricVehiclesWorkflowPayload,
 ): Promise<ElectricVehiclesWorkflowResult> {
   "use workflow";
 
   globalThis.fetch = fetch;
 
-  const month = payload.month ?? (await getLatestMonth());
+  const month = payload?.month ?? (await getElectricVehiclesLatestMonth());
   if (!month) {
     return { message: "[EV] No car data found." };
   }
@@ -90,7 +90,7 @@ export async function electricVehiclesWorkflow(
   };
 }
 
-async function getLatestMonth(): Promise<string | null> {
+async function getElectricVehiclesLatestMonth(): Promise<string | null> {
   "use step";
   return getCarsLatestMonth();
 }

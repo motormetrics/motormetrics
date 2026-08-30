@@ -22,7 +22,7 @@ export async function carPopulationWorkflow(): Promise<{
     return { message: "No car population records processed." };
   }
 
-  const latestYear = await getLatestYear();
+  const latestYear = await getCarPopulationLatestYear();
   if (!latestYear) {
     return { message: "No car population data found." };
   }
@@ -49,7 +49,7 @@ async function processCarPopulationData(): Promise<UpdaterResult> {
   }
   return result;
 }
-async function getLatestYear(): Promise<string | null> {
+async function getCarPopulationLatestYear(): Promise<string | null> {
   "use step";
   const years = await getCarPopulationYears();
   return years[0]?.year ?? null;
