@@ -12,6 +12,7 @@ import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
 import { brandSameAs, SOCIAL_HANDLE } from "@web/config/socials";
 import { socialLinks } from "@web/flags";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import type {
   FAQPage,
   Organization,
@@ -46,23 +47,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function AboutPage() {
-  const showSocialLinks = await socialLinks();
-  const sameAs = brandSameAs(showSocialLinks);
-
-  const webPageSchema: WithContext<WebPage> = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: `${title} - ${SITE_TITLE}`,
-    description,
-    url: `${SITE_URL}/about`,
-    publisher: {
-      "@type": "Organization",
-      name: SITE_TITLE,
-      url: SITE_URL,
-    },
-  };
-
+async function OrganizationStructuredData() {
+  const sameAs = brandSameAs(await socialLinks());
   const organizationSchema: WithContext<Organization> = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -76,6 +62,23 @@ export default async function AboutPage() {
       "@type": "Person",
       name: "Ru Chern",
       url: "https://ruchern.dev",
+    },
+  };
+
+  return <StructuredData data={organizationSchema} />;
+}
+
+export default function AboutPage() {
+  const webPageSchema: WithContext<WebPage> = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `${title} - ${SITE_TITLE}`,
+    description,
+    url: `${SITE_URL}/about`,
+    publisher: {
+      "@type": "Organization",
+      name: SITE_TITLE,
+      url: SITE_URL,
     },
   };
 
@@ -110,7 +113,9 @@ export default async function AboutPage() {
   return (
     <>
       <StructuredData data={webPageSchema} />
-      <StructuredData data={organizationSchema} />
+      <Suspense>
+        <OrganizationStructuredData />
+      </Suspense>
       <StructuredData data={personSchema} />
       <StructuredData data={faqSchema} />
 

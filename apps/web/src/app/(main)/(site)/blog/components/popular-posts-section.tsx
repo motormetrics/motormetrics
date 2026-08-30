@@ -20,12 +20,18 @@ function PopularPostsSkeleton() {
   );
 }
 
-export async function PopularPostsSection() {
+async function FlaggedPopularPosts() {
   return (
     <Flagged enabled={await blogPopularPosts()}>
-      <Suspense fallback={<PopularPostsSkeleton />}>
-        <PopularPostsContent />
-      </Suspense>
+      <PopularPostsContent />
     </Flagged>
+  );
+}
+
+export function PopularPostsSection() {
+  return (
+    <Suspense fallback={<PopularPostsSkeleton />}>
+      <FlaggedPopularPosts />
+    </Suspense>
   );
 }

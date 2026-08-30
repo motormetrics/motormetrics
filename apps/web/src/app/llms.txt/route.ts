@@ -16,6 +16,7 @@ import { getLatestCoeResults } from "@web/queries/coe";
 import { getCOELatestMonth } from "@web/queries/coe/latest-month";
 import { getAllPosts } from "@web/queries/posts";
 import { cacheLife, cacheTag } from "next/cache";
+import { connection } from "next/server";
 
 async function generateLlmsTxt() {
   "use cache";
@@ -164,6 +165,7 @@ function socialChannelLines() {
 
 export async function GET() {
   const content = await generateLlmsTxt();
+  await connection();
   const body = (await socialLinks())
     ? `${content}${socialChannelLines()}\n`
     : content;
