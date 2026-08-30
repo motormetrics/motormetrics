@@ -1,12 +1,13 @@
 "use client";
 
-import { cn, Typography } from "@heroui/react";
+import type { SortDescriptor } from "@heroui/react";
+import { cn, ScrollShadow, Table, Typography } from "@heroui/react";
+import { Segment } from "@heroui-pro/react";
 import {
   CAR_DIMENSIONS,
   DIMENSION_LABELS,
 } from "@web/app/(main)/(dashboard)/cars/components/dimensions";
 import { SurfaceCard } from "@web/components/shared/bento";
-import { TABLE_HEADER_CLASS } from "@web/components/shared/report-table";
 import type { CarDimension, DimensionStat } from "@web/queries/cars";
 import { ArrowRight, Car, Search } from "lucide-react";
 import Link from "next/link";
@@ -15,9 +16,6 @@ import { useMemo, useState, useTransition } from "react";
 
 type SortKey = "name" | "count";
 type SortDirection = "asc" | "desc";
-
-/** Shared padding and hover wash for every body cell. */
-const CELL_CLASS = "px-4 py-4 align-middle group-hover:bg-background";
 
 /** Ranks past this share the last chart colour rather than wrapping around. */
 const CHART_COLOURS = 6;
@@ -86,8 +84,10 @@ export function DimensionTable({
       .withOptions({ shallow: false, startTransition }),
   );
   const [query, setQuery] = useState("");
-  const [sortKey, setSortKey] = useState<SortKey>("count");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: "count",
+    direction: "descending",
+  });
 
   const labels = DIMENSION_LABELS[dimension];
 
@@ -106,46 +106,22 @@ export function DimensionTable({
 
   const visible = useMemo(() => {
     const needle = query.trim().toLowerCase();
+    const sortKey = sortDescriptor.column as SortKey;
+    const sortDirection: SortDirection =
+      sortDescriptor.direction === "ascending" ? "asc" : "desc";
+
     return ranked
       .filter((row) => !needle || row.name.toLowerCase().includes(needle))
       .sort((first, second) =>
         compareStats(first, second, sortKey, sortDirection),
       );
-  }, [ranked, query, sortDirection, sortKey]);
+  }, [ranked, query, sortDescriptor]);
 
   // A search is already a narrowing, so matches are never truncated on top of
   // it — collapsing only applies to the unfiltered list.
   const isSearching = query.trim().length > 0;
   const isTruncated = !isSearching && visible.length > COLLAPSED_ROWS;
   const displayed = isTruncated ? visible.slice(0, COLLAPSED_ROWS) : visible;
-
-  const toggleSort = (key: SortKey) => {
-    if (key === sortKey) {
-      setSortDirection((current) => (current === "asc" ? "desc" : "asc"));
-      return;
-    }
-    setSortKey(key);
-    setSortDirection(key === "name" ? "asc" : "desc");
-  };
-
-  // `share` is derived from `count`, so sorting on it would only duplicate the
-  // registrations column — it is a header, not a control.
-  const headers: {
-    align: "left" | "right";
-    key: SortKey | "share";
-    label: string;
-    /** Omitted on the name column, which takes whatever is left over. */
-    width?: string;
-  }[] = [
-    { align: "left", key: "name", label: labels.column },
-    {
-      align: "right",
-      key: "count",
-      label: "Registrations",
-      width: "w-[5.5rem]",
-    },
-    { align: "left", key: "share", label: "Share", width: "w-[11rem]" },
-  ];
 
   return (
     <SurfaceCard className="gap-5">
@@ -162,32 +138,31 @@ export function DimensionTable({
               : `${visible.length} ${visible.length === 1 ? "row" : "rows"}`}
           </Typography.Paragraph>
         </div>
-        <div className="ml-auto flex gap-1.5 rounded-full bg-default p-1.5">
-          {CAR_DIMENSIONS.map((option) => {
-            const isActive = option === dimension;
-            return (
-              <button
-                aria-pressed={isActive}
-                className={cn(
-                  "cursor-pointer whitespace-nowrap rounded-full px-4 py-2 text-sm transition-colors",
-                  isActive
-                    ? "bg-surface font-extrabold text-foreground shadow-surface"
-                    : "font-semibold text-muted hover:text-foreground",
-                )}
-                key={option}
-                onClick={() => {
-                  setQuery("");
-                  setSortKey("count");
-                  setSortDirection("desc");
-                  setDimension(option);
-                }}
-                type="button"
-              >
+        {/* The three labels run to 307px side by side, wider than a small
+            phone leaves this card, and a segmented track cannot wrap — so it
+            scrolls within its own width instead of stretching the page. */}
+        <ScrollShadow
+          className="ml-auto max-w-full"
+          hideScrollBar
+          orientation="horizontal"
+          size={24}
+        >
+          <Segment
+            aria-label="Dimension"
+            onSelectionChange={(key) => {
+              setQuery("");
+              setSortDescriptor({ column: "count", direction: "descending" });
+              setDimension(key as CarDimension);
+            }}
+            selectedKey={dimension}
+          >
+            {CAR_DIMENSIONS.map((option) => (
+              <Segment.Item id={option} key={option}>
                 {DIMENSION_LABELS[option].tab}
-              </button>
-            );
-          })}
-        </div>
+              </Segment.Item>
+            ))}
+          </Segment>
+        </ScrollShadow>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
@@ -203,123 +178,88 @@ export function DimensionTable({
           />
         </label>
         <span className="whitespace-nowrap font-semibold text-muted text-sm">
-          Sorted by {SORT_LABELS[sortKey]},{" "}
-          {sortDirection === "asc" ? "ascending" : "descending"}
+          Sorted by {SORT_LABELS[sortDescriptor.column as SortKey]},{" "}
+          {sortDescriptor.direction === "ascending"
+            ? "ascending"
+            : "descending"}
         </span>
       </div>
 
-      <table
-        className={cn(
-          "w-full table-fixed border-separate border-spacing-0 transition-opacity",
-          isPending && "opacity-60",
-        )}
+      <Table
+        className={cn("transition-opacity", isPending && "opacity-60")}
+        variant="secondary"
       >
-        <caption className="sr-only">
-          {labels.title}, year to date through {monthLabel}
-        </caption>
-        <thead>
-          <tr>
-            {headers.map((header) => {
-              const alignment =
-                header.align === "right" ? "text-right" : "text-left";
-              const cellClass = cn(
-                "border-border border-b px-4 pt-4 pb-3",
-                header.width,
-                alignment,
-              );
-
-              if (header.key === "share") {
-                return (
-                  <th
-                    className={cn(cellClass, TABLE_HEADER_CLASS, "text-muted")}
-                    key={header.key}
-                    scope="col"
-                  >
-                    {header.label}
-                  </th>
-                );
-              }
-
-              const columnKey = header.key;
-              const isActive = columnKey === sortKey;
-              return (
-                <th
-                  aria-sort={
-                    isActive
-                      ? sortDirection === "asc"
-                        ? "ascending"
-                        : "descending"
-                      : "none"
-                  }
-                  className={cellClass}
-                  key={columnKey}
-                  scope="col"
-                >
-                  <button
-                    className={cn(
-                      TABLE_HEADER_CLASS,
-                      "cursor-pointer",
-                      isActive ? "text-accent-strong" : "text-muted",
-                    )}
-                    onClick={() => toggleSort(columnKey)}
-                    type="button"
-                  >
-                    {header.label}
-                    {isActive ? (sortDirection === "asc" ? " ↑" : " ↓") : ""}
-                  </button>
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {displayed.map((row) => (
-            <tr className="group" key={row.name}>
-              <td className={cn(CELL_CLASS, "rounded-l-field")}>
-                <span className="flex min-w-0 items-center gap-3">
-                  <span
-                    className={cn(
-                      "inline-flex size-8 shrink-0 items-center justify-center rounded-full font-extrabold text-xs",
-                      row.rank <= PODIUM
-                        ? "bg-accent/15 text-accent-strong"
-                        : "bg-default text-muted",
-                    )}
-                  >
-                    {row.rank}
-                  </span>
-                  <span className="truncate font-bold text-base">
-                    {row.name}
-                  </span>
-                </span>
-              </td>
-              <td
-                className={cn(
-                  CELL_CLASS,
-                  "text-right font-extrabold text-base tabular-nums",
+        <Table.ScrollContainer>
+          <Table.Content
+            aria-label={`${labels.title}, year to date through ${monthLabel}`}
+            className="min-w-[26rem]"
+            onSortChange={setSortDescriptor}
+            sortDescriptor={sortDescriptor}
+          >
+            <Table.Header>
+              <Table.Column allowsSorting id="name" isRowHeader>
+                {({ sortDirection }) => (
+                  <Table.SortableColumnHeader sortDirection={sortDirection}>
+                    {labels.column}
+                  </Table.SortableColumnHeader>
                 )}
-              >
-                {numberFormatter.format(row.count)}
-              </td>
-              <td className={cn(CELL_CLASS, "rounded-r-field")}>
-                <span className="flex items-center gap-2.5">
-                  <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-default">
-                    <span
-                      className="block h-full rounded-full"
-                      style={{
-                        background: `var(--chart-${Math.min(CHART_COLOURS, row.rank)})`,
-                        width: `${((row.count / largestCount) * 100).toFixed(1)}%`,
-                      }}
-                    />
-                  </span>
-                  <span className="w-11 text-right font-bold text-muted text-sm tabular-nums">
-                    {row.share.toFixed(1)}%
-                  </span>
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </Table.Column>
+              <Table.Column allowsSorting id="count">
+                {({ sortDirection }) => (
+                  <Table.SortableColumnHeader sortDirection={sortDirection}>
+                    Registrations
+                  </Table.SortableColumnHeader>
+                )}
+              </Table.Column>
+              {/* `share` is derived from `count`, so sorting on it would only
+                  duplicate the registrations column. */}
+              <Table.Column id="share">Share</Table.Column>
+            </Table.Header>
+            <Table.Body>
+              {displayed.map((row) => (
+                <Table.Row id={row.name} key={row.name}>
+                  <Table.Cell>
+                    <span className="flex min-w-0 items-center gap-3">
+                      <span
+                        className={cn(
+                          "inline-flex size-8 shrink-0 items-center justify-center rounded-full font-extrabold text-xs",
+                          row.rank <= PODIUM
+                            ? "bg-accent/15 text-accent-strong"
+                            : "bg-default text-muted",
+                        )}
+                      >
+                        {row.rank}
+                      </span>
+                      <span className="truncate font-bold text-base">
+                        {row.name}
+                      </span>
+                    </span>
+                  </Table.Cell>
+                  <Table.Cell className="text-right font-extrabold text-base tabular-nums">
+                    {numberFormatter.format(row.count)}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <span className="flex items-center gap-2.5">
+                      <span className="h-2.5 w-16 shrink-0 overflow-hidden rounded-full bg-default sm:w-24">
+                        <span
+                          className="block h-full rounded-full"
+                          style={{
+                            background: `var(--chart-${Math.min(CHART_COLOURS, row.rank)})`,
+                            width: `${((row.count / largestCount) * 100).toFixed(1)}%`,
+                          }}
+                        />
+                      </span>
+                      <span className="w-11 text-right font-bold text-muted text-sm tabular-nums">
+                        {row.share.toFixed(1)}%
+                      </span>
+                    </span>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+      </Table>
 
       {visible.length === 0 ? (
         <Typography.Paragraph color="muted" size="sm" className="px-4 py-9">

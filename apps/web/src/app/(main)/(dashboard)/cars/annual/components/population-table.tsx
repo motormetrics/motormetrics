@@ -1,6 +1,8 @@
 "use client";
 
-import { cn, Typography } from "@heroui/react";
+import type { SortDescriptor } from "@heroui/react";
+
+import { cn, Table, Typography } from "@heroui/react";
 import {
   changeRatio,
   type DimensionLabels,
@@ -8,14 +10,9 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { SurfaceCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import { TABLE_HEADER_CLASS } from "@web/components/shared/report-table";
 import { useMemo, useState } from "react";
 
 type SortKey = "name" | "population" | "change";
-type SortDirection = "asc" | "desc";
-
-/** Shared padding and hover wash for every body cell. */
-const CELL_CLASS = "px-4 py-4 align-middle";
 
 /** Ranks past this share the last chart colour rather than wrapping around. */
 const CHART_COLOURS = 6;
@@ -51,7 +48,9 @@ interface PopulationRank {
  *
  * A real `<table>` rather than the comp's CSS grid, because sortable headers
  * need `aria-sort` on a `columnheader` and overriding a table's `display`
- * strips those semantics in most browsers.
+ * strips those semantics in most browsers. HeroUI's `Table` supplies both that
+ * and the `ScrollContainer` the columns need on a phone — laid out in full the
+ * four columns want ~450px, which is wider than the viewport.
  */
 export function PopulationTable({
   entities,
@@ -69,8 +68,10 @@ export function PopulationTable({
   previousYear: string | null;
   year: string;
 }) {
-  const [sortKey, setSortKey] = useState<SortKey>("population");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: "population",
+    direction: "descending",
+  });
   const [isExpanded, setIsExpanded] = useState(false);
 
   const ranked = useMemo<PopulationRank[]>(() => {
@@ -91,7 +92,9 @@ export function PopulationTable({
   const largest = Math.max(...ranked.map((row) => row.population), 1);
 
   const sorted = useMemo(() => {
-    const sign = sortDirection === "asc" ? 1 : -1;
+    const sortKey = sortDescriptor.column as SortKey;
+    const sign = sortDescriptor.direction === "ascending" ? 1 : -1;
+
     return ranked.slice().sort((first, second) => {
       if (sortKey === "name") {
         return sign * first.name.localeCompare(second.name, "en-SG");
@@ -101,32 +104,10 @@ export function PopulationTable({
       }
       return sign * (first.population - second.population);
     });
-  }, [ranked, sortDirection, sortKey]);
+  }, [ranked, sortDescriptor]);
 
   const isTruncated = !isExpanded && sorted.length > COLLAPSED_ROWS;
   const displayed = isTruncated ? sorted.slice(0, COLLAPSED_ROWS) : sorted;
-
-  const toggleSort = (key: SortKey) => {
-    if (key === sortKey) {
-      setSortDirection((current) => (current === "asc" ? "desc" : "asc"));
-      return;
-    }
-    setSortKey(key);
-    setSortDirection(key === "name" ? "asc" : "desc");
-  };
-
-  const headers: {
-    align: "left" | "right";
-    key: SortKey | "share";
-    label: string;
-    /** Omitted on the name column, which takes whatever is left over. */
-    width?: string;
-  }[] = [
-    { align: "left", key: "name", label: labels.column },
-    { align: "right", key: "population", label: "Population", width: "w-28" },
-    { align: "left", key: "share", label: "Share", width: "w-[11rem]" },
-    { align: "right", key: "change", label: "Change", width: "w-28" },
-  ];
 
   return (
     <SurfaceCard className="gap-5">
@@ -138,140 +119,106 @@ export function PopulationTable({
           </Typography.Paragraph>
         </div>
         <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
-          Sorted by {SORT_LABELS[sortKey]},{" "}
-          {sortDirection === "asc" ? "ascending" : "descending"}
+          Sorted by {SORT_LABELS[sortDescriptor.column as SortKey]},{" "}
+          {sortDescriptor.direction === "ascending"
+            ? "ascending"
+            : "descending"}
         </span>
       </div>
 
-      <table className="w-full table-fixed border-separate border-spacing-0">
-        <caption className="sr-only">
-          {labels.title}, {year}
-        </caption>
-        <thead>
-          <tr>
-            {headers.map((header) => {
-              const alignment =
-                header.align === "right" ? "text-right" : "text-left";
-              const cellClass = cn(
-                "border-border border-b px-4 pt-4 pb-3",
-                header.width,
-                alignment,
-              );
-
-              if (header.key === "share") {
+      <Table variant="secondary">
+        <Table.ScrollContainer>
+          <Table.Content
+            aria-label={`${labels.title}, ${year}`}
+            className="min-w-[26rem]"
+            onSortChange={setSortDescriptor}
+            sortDescriptor={sortDescriptor}
+          >
+            <Table.Header>
+              <Table.Column allowsSorting id="name" isRowHeader>
+                {({ sortDirection }) => (
+                  <Table.SortableColumnHeader sortDirection={sortDirection}>
+                    {labels.column}
+                  </Table.SortableColumnHeader>
+                )}
+              </Table.Column>
+              <Table.Column allowsSorting id="population">
+                {({ sortDirection }) => (
+                  <Table.SortableColumnHeader sortDirection={sortDirection}>
+                    Population
+                  </Table.SortableColumnHeader>
+                )}
+              </Table.Column>
+              <Table.Column id="share">Share</Table.Column>
+              <Table.Column allowsSorting id="change">
+                {({ sortDirection }) => (
+                  <Table.SortableColumnHeader sortDirection={sortDirection}>
+                    Change
+                  </Table.SortableColumnHeader>
+                )}
+              </Table.Column>
+            </Table.Header>
+            <Table.Body>
+              {displayed.map((row) => {
+                const isFocused = row.name === focus;
                 return (
-                  <th
-                    className={cn(cellClass, TABLE_HEADER_CLASS, "text-muted")}
-                    key={header.key}
-                    scope="col"
+                  <Table.Row
+                    className={cn(isFocused && "bg-accent-soft-2")}
+                    id={row.name}
+                    key={row.name}
                   >
-                    {header.label}
-                  </th>
+                    <Table.Cell>
+                      <button
+                        aria-pressed={isFocused}
+                        className="flex min-w-0 cursor-pointer items-center gap-3 text-left"
+                        onClick={() => onSelect(isFocused ? null : row.name)}
+                        type="button"
+                      >
+                        <span
+                          aria-hidden
+                          className="size-3.5 shrink-0 rounded-full"
+                          style={{ background: row.colour }}
+                        />
+                        <span className="truncate font-bold text-base">
+                          {row.name}
+                        </span>
+                      </button>
+                    </Table.Cell>
+                    <Table.Cell className="text-right font-extrabold text-base tabular-nums">
+                      {numberFormatter.format(row.population)}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <span className="flex items-center gap-2.5">
+                        <span className="h-2.5 w-16 shrink-0 overflow-hidden rounded-full bg-default sm:w-24">
+                          <span
+                            className="block h-full rounded-full"
+                            style={{
+                              background: row.colour,
+                              width: `${((row.population / largest) * 100).toFixed(1)}%`,
+                            }}
+                          />
+                        </span>
+                        <span className="w-11 text-right font-bold text-muted text-sm tabular-nums">
+                          {row.share.toFixed(1)}%
+                        </span>
+                      </span>
+                    </Table.Cell>
+                    <Table.Cell className="text-right">
+                      {row.change === null ? (
+                        <span className="font-semibold text-muted text-sm">
+                          —
+                        </span>
+                      ) : (
+                        <DeltaChip value={row.change * 100} />
+                      )}
+                    </Table.Cell>
+                  </Table.Row>
                 );
-              }
-
-              const columnKey = header.key;
-              const isActive = columnKey === sortKey;
-              return (
-                <th
-                  aria-sort={
-                    isActive
-                      ? sortDirection === "asc"
-                        ? "ascending"
-                        : "descending"
-                      : "none"
-                  }
-                  className={cellClass}
-                  key={columnKey}
-                  scope="col"
-                >
-                  <button
-                    className={cn(
-                      TABLE_HEADER_CLASS,
-                      "cursor-pointer",
-                      isActive ? "text-accent-strong" : "text-muted",
-                    )}
-                    onClick={() => toggleSort(columnKey)}
-                    type="button"
-                  >
-                    {header.label}
-                    {isActive ? (sortDirection === "asc" ? " ↑" : " ↓") : ""}
-                  </button>
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {displayed.map((row) => {
-            const isFocused = row.name === focus;
-            // Backgrounds sit on the cells rather than the row so the focused
-            // wash keeps the rounded ends the comp draws.
-            const cellTone = isFocused
-              ? "bg-accent-soft-2 group-hover:bg-accent-soft-2"
-              : "group-hover:bg-background";
-            return (
-              <tr className="group" key={row.name}>
-                <td className={cn(CELL_CLASS, cellTone, "rounded-l-field")}>
-                  <button
-                    aria-pressed={isFocused}
-                    className="flex min-w-0 cursor-pointer items-center gap-3 text-left"
-                    onClick={() => onSelect(isFocused ? null : row.name)}
-                    type="button"
-                  >
-                    <span
-                      aria-hidden
-                      className="size-3.5 shrink-0 rounded-full"
-                      style={{ background: row.colour }}
-                    />
-                    <span className="truncate font-bold text-base">
-                      {row.name}
-                    </span>
-                  </button>
-                </td>
-                <td
-                  className={cn(
-                    CELL_CLASS,
-                    cellTone,
-                    "text-right font-extrabold text-base tabular-nums",
-                  )}
-                >
-                  {numberFormatter.format(row.population)}
-                </td>
-                <td className={cn(CELL_CLASS, cellTone)}>
-                  <span className="flex items-center gap-2.5">
-                    <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-default">
-                      <span
-                        className="block h-full rounded-full"
-                        style={{
-                          background: row.colour,
-                          width: `${((row.population / largest) * 100).toFixed(1)}%`,
-                        }}
-                      />
-                    </span>
-                    <span className="w-11 text-right font-bold text-muted text-sm tabular-nums">
-                      {row.share.toFixed(1)}%
-                    </span>
-                  </span>
-                </td>
-                <td
-                  className={cn(
-                    CELL_CLASS,
-                    cellTone,
-                    "rounded-r-field text-right",
-                  )}
-                >
-                  {row.change === null ? (
-                    <span className="font-semibold text-muted text-sm">—</span>
-                  ) : (
-                    <DeltaChip value={row.change * 100} />
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              })}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+      </Table>
 
       {isTruncated ? (
         <button
@@ -283,7 +230,7 @@ export function PopulationTable({
         </button>
       ) : null}
 
-      <Typography.Paragraph color="muted" size="sm" className="px-4">
+      <Typography.Paragraph className="px-4" color="muted" size="sm">
         Population counts are taken at 31 December each year.
         {previousYear === null ? null : ` Change is against ${previousYear}.`}
       </Typography.Paragraph>

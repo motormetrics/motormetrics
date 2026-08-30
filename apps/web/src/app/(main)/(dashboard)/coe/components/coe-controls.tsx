@@ -1,12 +1,14 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, ScrollShadow } from "@heroui/react";
+import { Segment } from "@heroui-pro/react";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { type ReactNode, useTransition } from "react";
 import {
   CATEGORY_KEYS,
   type CategoryKey,
   EXERCISE_RANGES,
+  type ExerciseRange,
   RANGE_LABELS,
 } from "./search-params";
 
@@ -91,7 +93,14 @@ export function CategorySelect({
   );
 }
 
-/** The range pills beside the page title. */
+/**
+ * The range pills beside the page title.
+ *
+ * The three labels run to 452px laid out in full, which is wider than a phone,
+ * and a segmented control cannot wrap without breaking its track — so the
+ * `Segment` rides in a horizontal `ScrollShadow` and scrolls within its own
+ * width rather than pushing the page sideways.
+ */
 export function RangeTabs() {
   const [isPending, startTransition] = useTransition();
   const [range, setRange] = useQueryState(
@@ -102,32 +111,24 @@ export function RangeTabs() {
   );
 
   return (
-    <fieldset
-      className={cn(
-        "flex gap-1.5 rounded-full bg-default p-[5px]",
-        isPending && "opacity-70",
-      )}
+    <ScrollShadow
+      className="max-w-full"
+      hideScrollBar
+      orientation="horizontal"
+      size={24}
     >
-      <legend className="sr-only">Exercise range</legend>
-      {EXERCISE_RANGES.map((option) => {
-        const isActive = option === range;
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
-              isActive
-                ? "bg-surface font-extrabold text-foreground shadow-surface"
-                : "font-semibold text-muted hover:text-foreground",
-            )}
-            key={option}
-            onClick={() => setRange(option)}
-            type="button"
-          >
+      <Segment
+        aria-label="Exercise range"
+        className={cn(isPending && "opacity-70")}
+        onSelectionChange={(key) => setRange(key as ExerciseRange)}
+        selectedKey={range}
+      >
+        {EXERCISE_RANGES.map((option) => (
+          <Segment.Item id={option} key={option}>
             {RANGE_LABELS[option]}
-          </button>
-        );
-      })}
-    </fieldset>
+          </Segment.Item>
+        ))}
+      </Segment>
+    </ScrollShadow>
   );
 }

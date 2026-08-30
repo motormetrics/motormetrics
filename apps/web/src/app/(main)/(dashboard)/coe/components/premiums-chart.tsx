@@ -63,7 +63,7 @@ export function PremiumsChart({
         </span>
       </div>
 
-      <div className="flex h-[300px] items-end gap-3">
+      <div className="flex h-[300px] items-end gap-1.5 sm:gap-3">
         {columns.map((column, index) => {
           const isLatest = index === columns.length - 1;
           const isHovered = hovered === column.key;
@@ -74,7 +74,11 @@ export function PremiumsChart({
           return (
             <button
               aria-label={`${column.label}: ${formatMoney(column.premium)}, ${formatChange(column.changeRatio)}`}
-              className="relative flex h-full flex-1 cursor-default flex-col items-center justify-end gap-2.5"
+              // `min-w-0` because a flex item will not shrink below its
+              // content, and every column carries a full-width tick label —
+              // the hidden ones are `invisible`, not unmounted, so without
+              // this the row is as wide as 12 or 24 labels laid end to end.
+              className="relative flex h-full min-w-0 flex-1 cursor-default flex-col items-center justify-end gap-2.5"
               key={column.key}
               onBlur={() => setHovered(null)}
               onFocus={() => setHovered(column.key)}
