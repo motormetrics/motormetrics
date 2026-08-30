@@ -9,6 +9,15 @@ interface CoeComparisonChartProps {
   data: MakeCoeComparisonData[];
 }
 
+/**
+ * Recharts calls a tick formatter as `(value, index)`, and `numberFormat`
+ * reads a second argument as its options — which for the zero tick renders
+ * "NaNundefined". Dropping the index is the whole fix.
+ */
+function formatPremiumTick(value: number): string {
+  return numberFormat(value);
+}
+
 export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
   const chartData = data.map((item) => ({ ...item }));
 
@@ -51,7 +60,7 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
             (dataMin: number) => Math.floor(dataMin / 10000) * 10000,
             (dataMax: number) => Math.ceil(dataMax / 10000) * 10000,
           ]}
-          tickFormatter={numberFormat}
+          tickFormatter={formatPremiumTick}
           label={{
             angle: 90,
             position: "insideRight",

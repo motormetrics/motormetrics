@@ -430,7 +430,9 @@ export async function CategoryReport({
           </div>
         </ReportSection>
 
-        <ReportNote title="How LTA classifies {config.singularLabel.toLowerCase()}s">
+        <ReportNote
+          title={`How LTA classifies ${config.singularLabel.toLowerCase()}s`}
+        >
           {config.notes.map((note) => (
             <Typography.Paragraph key={note}>{note}</Typography.Paragraph>
           ))}
