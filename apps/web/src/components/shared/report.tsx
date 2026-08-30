@@ -164,6 +164,32 @@ export function ReportStat({
 }
 
 /**
+ * The explanatory aside that closes a report page — "How this is counted",
+ * "How an exercise runs".
+ *
+ * The heading stays an `h3`. 18px sits below `h4`'s 20px, so the size argues
+ * for a lower level, but these pages run h1 (PageHead) then h2
+ * (`ReportSection`) and carry no other h3 — dropping to h4 would skip a level
+ * in the outline for a purely visual reason.
+ */
+export function ReportNote({
+  children,
+  title,
+}: {
+  children: ReactNode;
+  title: string;
+}) {
+  return (
+    <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
+      <Typography.Heading className="text-lg" level={3}>
+        {title}
+      </Typography.Heading>
+      {children}
+    </aside>
+  );
+}
+
+/**
  * A titled block — the comps run several down each detail page, each opening
  * with a heading and a muted caption qualifying the figures beneath it.
  */

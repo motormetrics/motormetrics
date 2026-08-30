@@ -10,6 +10,7 @@ import {
   Report,
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -403,9 +404,12 @@ async function TypeDetailContent({
           className="group flex flex-wrap items-baseline gap-3 rounded-xl border border-accent-border bg-accent-soft-2 px-6 py-5"
           href="/cars/electric-vehicles"
         >
-          <Typography.Paragraph className="font-bold text-accent-strong text-lg group-hover:underline">
+          <Typography.Heading
+            level={3}
+            className="text-accent-strong text-lg group-hover:underline"
+          >
             The full electric picture →
-          </Typography.Paragraph>
+          </Typography.Heading>
           <Typography.Paragraph
             color="muted"
             size="sm"
@@ -638,10 +642,7 @@ async function TypeDetailContent({
           </ReportSection>
         </div>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.Heading level={3} className="text-lg">
-            How this is counted
-          </Typography.Heading>
+        <ReportNote title="How this is counted">
           <Typography.Paragraph>
             A car counts in the month it is registered, under the {terms.noun}{" "}
             LTA records against it.
@@ -671,7 +672,7 @@ async function TypeDetailContent({
               Electric vehicles in depth →
             </Link>
           ) : null}
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { cn, Typography } from "@heroui/react";
+import { ReportEyebrow } from "@web/components/shared/report";
 
 import { fadeInUpVariants } from "@web/config/animations";
 import { motion } from "framer-motion";
@@ -98,13 +99,9 @@ export function TimelineSection() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            <Typography.Paragraph
-              size="sm"
-              weight="medium"
-              className="text-accent-strong uppercase tracking-widest"
-            >
+            <ReportEyebrow className="text-accent-strong">
               Our Journey
-            </Typography.Paragraph>
+            </ReportEyebrow>
             <Typography.Heading level={2} className="lg:text-4xl">
               How this project started
             </Typography.Heading>

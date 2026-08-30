@@ -9,6 +9,7 @@ import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistratio
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import {
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -299,10 +300,7 @@ export async function DeregistrationsReport({
           </ReportTable>
         </ReportSection>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.Heading level={3} className="text-lg">
-            What a deregistration is
-          </Typography.Heading>
+        <ReportNote title="What a deregistration is">
           <Typography.Paragraph>
             A vehicle is deregistered when it is scrapped or exported, which is
             what releases its COE back into the quota. Deregistrations in one
@@ -325,7 +323,7 @@ export async function DeregistrationsReport({
           >
             New registrations →
           </Link>
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

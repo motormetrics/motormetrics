@@ -3,6 +3,16 @@ import { NumberValue } from "@heroui-pro/react";
 import type { ReactNode } from "react";
 
 /**
+ * The column-header treatment shared by every table in the app.
+ *
+ * `ReportTable` applies it for you. The sortable tables — `population-table`,
+ * `dimension-table` — cannot use `ReportTable` because their headers are
+ * buttons, so they import this instead of restating the string.
+ */
+export const TABLE_HEADER_CLASS =
+  "font-bold text-muted text-xs uppercase tracking-wider";
+
+/**
  * The bare, rule-ruled table the report comps use. No card, no surface — the
  * hairlines carry the structure, so this is a plain semantic table with the
  * comp's type scale applied.
@@ -26,7 +36,8 @@ export function ReportTable({
             {columns.map(({ align, label, width }) => (
               <th
                 className={cn(
-                  "border-border border-b px-3.5 pb-3 font-bold text-muted text-xs uppercase tracking-wider",
+                  "border-border border-b px-3.5 pb-3",
+                  TABLE_HEADER_CLASS,
                   align === "end" ? "text-right" : "text-left",
                 )}
                 key={label || width}

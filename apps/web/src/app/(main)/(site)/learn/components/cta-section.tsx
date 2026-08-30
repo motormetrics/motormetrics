@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Typography } from "@heroui/react";
+import { ReportEyebrow } from "@web/components/shared/report";
 
 import {
   staggerContainerVariants,
@@ -33,13 +34,9 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Paragraph
-              size="sm"
-              weight="medium"
-              className="text-accent-strong uppercase tracking-widest"
-            >
+            <ReportEyebrow className="text-accent-strong">
               Ready to Explore?
-            </Typography.Paragraph>
+            </ReportEyebrow>
             <Typography.Heading level={2}>
               Dive Into the Data
             </Typography.Heading>

@@ -6,6 +6,7 @@ import {
   DIMENSION_LABELS,
 } from "@web/app/(main)/(dashboard)/cars/components/dimensions";
 import { SurfaceCard } from "@web/components/shared/bento";
+import { TABLE_HEADER_CLASS } from "@web/components/shared/report-table";
 import type { CarDimension, DimensionStat } from "@web/queries/cars";
 import { ArrowRight, Car, Search } from "lucide-react";
 import Link from "next/link";
@@ -146,8 +147,6 @@ export function DimensionTable({
     { align: "left", key: "share", label: "Share", width: "w-[11rem]" },
   ];
 
-  const headerClass = "font-bold text-xs uppercase tracking-wider";
-
   return (
     <SurfaceCard className="gap-5">
       <div className="flex flex-wrap items-center gap-4">
@@ -232,7 +231,7 @@ export function DimensionTable({
               if (header.key === "share") {
                 return (
                   <th
-                    className={cn(cellClass, headerClass, "text-muted")}
+                    className={cn(cellClass, TABLE_HEADER_CLASS, "text-muted")}
                     key={header.key}
                     scope="col"
                   >
@@ -258,7 +257,7 @@ export function DimensionTable({
                 >
                   <button
                     className={cn(
-                      headerClass,
+                      TABLE_HEADER_CLASS,
                       "cursor-pointer",
                       isActive ? "text-accent-strong" : "text-muted",
                     )}

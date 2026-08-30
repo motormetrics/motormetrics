@@ -19,6 +19,7 @@ import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params"
 import {
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -277,10 +278,7 @@ export async function ResultsReport({
           </ReportTable>
         </ReportSection>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.Heading level={3} className="text-lg">
-            How an exercise runs
-          </Typography.Heading>
+        <ReportNote title="How an exercise runs">
           <Typography.Paragraph>
             Bidding opens at 12pm on the first Monday and third Monday of each
             month and closes at 4pm on the third day. The premium is the lowest
@@ -302,7 +300,7 @@ export async function ResultsReport({
           >
             PQP renewal rates →
           </Link>
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

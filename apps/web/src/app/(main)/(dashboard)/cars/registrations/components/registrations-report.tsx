@@ -13,6 +13,7 @@ import { DeltaChip } from "@web/components/shared/delta-chip";
 import {
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -307,10 +308,7 @@ export async function RegistrationsReport({
           </ReportTable>
         </ReportSection>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.Heading level={3} className="text-lg">
-            How this is counted
-          </Typography.Heading>
+        <ReportNote title="How this is counted">
           <Typography.Paragraph>
             A car counts in the month it is registered, which can lag the
             bidding exercise that won its COE by several weeks.
@@ -337,7 +335,7 @@ export async function RegistrationsReport({
           >
             Vehicle types in full →
           </Link>
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

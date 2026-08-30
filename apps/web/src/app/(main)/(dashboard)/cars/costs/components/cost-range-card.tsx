@@ -6,6 +6,7 @@ import {
   FUEL_TYPE_LABELS,
   FUEL_TYPE_ORDER,
 } from "@web/app/(main)/(dashboard)/cars/costs/constants";
+import { ReportEyebrow } from "@web/components/shared/report";
 
 interface CostRangeCardProps {
   data: SelectCarCost[];
@@ -97,9 +98,7 @@ function RangeSection({
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-accent" />
-            <span className="text-muted text-xs uppercase tracking-wider">
-              Low
-            </span>
+            <ReportEyebrow>Low</ReportEyebrow>
           </div>
           <NumberValue
             className="font-semibold text-accent-strong text-lg"
@@ -117,9 +116,7 @@ function RangeSection({
         {/* High value */}
         <div className="flex flex-col gap-1 text-right">
           <div className="flex items-center justify-end gap-2">
-            <span className="text-muted text-xs uppercase tracking-wider">
-              High
-            </span>
+            <ReportEyebrow>High</ReportEyebrow>
             <div className="h-2 w-2 rounded-full bg-accent" />
           </div>
           <NumberValue

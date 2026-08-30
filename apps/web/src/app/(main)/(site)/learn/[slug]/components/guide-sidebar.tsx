@@ -41,7 +41,7 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
           aria-label="On this page"
           className="flex flex-col gap-3.5 rounded-2xl bg-surface-secondary p-7"
         >
-          <Typography.Heading level={3} className="text-base">
+          <Typography.Heading level={4} className="text-base">
             In this guide
           </Typography.Heading>
           <ol className="flex flex-col gap-0.5">
@@ -61,7 +61,7 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
 
       {terms.length > 0 ? (
         <div className="flex flex-col gap-3.5 rounded-2xl bg-surface p-7 shadow-surface">
-          <Typography.Heading level={3} className="text-base">
+          <Typography.Heading level={4} className="text-base">
             Key terms
           </Typography.Heading>
           {terms.map(({ definition, term }) => {

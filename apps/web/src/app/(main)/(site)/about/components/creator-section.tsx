@@ -1,6 +1,7 @@
 "use client";
 
 import { Typography } from "@heroui/react";
+import { ReportEyebrow } from "@web/components/shared/report";
 import { SITE_TITLE } from "@web/config";
 import {
   staggerContainerVariants,
@@ -35,13 +36,9 @@ export function CreatorSection() {
             className="mx-auto flex max-w-2xl flex-col items-center gap-8 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Paragraph
-              size="sm"
-              weight="medium"
-              className="text-accent-strong uppercase tracking-widest"
-            >
+            <ReportEyebrow className="text-accent-strong">
               Behind the Data
-            </Typography.Paragraph>
+            </ReportEyebrow>
 
             <div className="flex flex-col gap-6">
               <Typography.Heading level={2}>

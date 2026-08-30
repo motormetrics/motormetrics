@@ -8,6 +8,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { SurfaceCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
+import { TABLE_HEADER_CLASS } from "@web/components/shared/report-table";
 import { useMemo, useState } from "react";
 
 type SortKey = "name" | "population" | "change";
@@ -127,8 +128,6 @@ export function PopulationTable({
     { align: "right", key: "change", label: "Change", width: "w-28" },
   ];
 
-  const headerClass = "font-bold text-xs uppercase tracking-wider";
-
   return (
     <SurfaceCard className="gap-5">
       <div className="flex flex-wrap items-center gap-3.5">
@@ -162,7 +161,7 @@ export function PopulationTable({
               if (header.key === "share") {
                 return (
                   <th
-                    className={cn(cellClass, headerClass, "text-muted")}
+                    className={cn(cellClass, TABLE_HEADER_CLASS, "text-muted")}
                     key={header.key}
                     scope="col"
                   >
@@ -188,7 +187,7 @@ export function PopulationTable({
                 >
                   <button
                     className={cn(
-                      headerClass,
+                      TABLE_HEADER_CLASS,
                       "cursor-pointer",
                       isActive ? "text-accent-strong" : "text-muted",
                     )}

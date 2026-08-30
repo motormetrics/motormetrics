@@ -25,6 +25,7 @@ import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend
 import {
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -362,10 +363,7 @@ export async function PremiumsReport({
           </div>
         </ReportSection>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.Heading level={3} className="text-lg">
-            How to read this
-          </Typography.Heading>
+        <ReportNote title="How to read this">
           <Typography.Paragraph>
             A premium is the price of the last successful bid in an exercise, so
             it is set by demand rather than announced in advance. A decrease is
@@ -387,7 +385,7 @@ export async function PremiumsReport({
           >
             Bidding results by exercise →
           </Link>
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

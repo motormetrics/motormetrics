@@ -23,6 +23,7 @@ import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend
 import {
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -355,10 +356,7 @@ export async function PQPReport({
           </div>
         </ReportSection>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.Heading level={3} className="text-lg">
-            How the PQP is set
-          </Typography.Heading>
+        <ReportNote title="How the PQP is set">
           <Typography.Paragraph>
             LTA averages the closing premiums in that category over the last
             three months, across both exercises, and publishes it as the rate
@@ -381,7 +379,7 @@ export async function PQPReport({
           >
             PARF rebate calculator →
           </Link>
-        </aside>
+        </ReportNote>
       </div>
 
       <UnreleasedFeature>

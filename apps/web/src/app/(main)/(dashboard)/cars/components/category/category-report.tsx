@@ -12,6 +12,7 @@ import { DeltaChip } from "@web/components/shared/delta-chip";
 import {
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -429,10 +430,7 @@ export async function CategoryReport({
           </div>
         </ReportSection>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.Heading level={3} className="text-lg">
-            How LTA classifies {config.singularLabel.toLowerCase()}s
-          </Typography.Heading>
+        <ReportNote title="How LTA classifies {config.singularLabel.toLowerCase()}s">
           {config.notes.map((note) => (
             <Typography.Paragraph key={note}>{note}</Typography.Paragraph>
           ))}
@@ -445,7 +443,7 @@ export async function CategoryReport({
               {label} →
             </Link>
           ))}
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

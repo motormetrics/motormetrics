@@ -20,6 +20,7 @@ import { EmptyState } from "@web/components/shared/empty-state";
 import {
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -519,10 +520,7 @@ export async function MakeReport({
           </ReportSection>
         </div>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.Heading level={3} className="text-lg">
-            Reading a make page
-          </Typography.Heading>
+        <ReportNote title="Reading a make page">
           <Typography.Paragraph>
             Registrations are counted by make as recorded at registration, so
             rebadged and parallel-imported cars appear under the same name as
@@ -541,7 +539,7 @@ export async function MakeReport({
           >
             Fuel types →
           </Link>
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

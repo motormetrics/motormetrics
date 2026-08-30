@@ -1,4 +1,5 @@
 import { Typography } from "@heroui/react";
+import { ReportEyebrow } from "@web/components/shared/report";
 import { Layout, Rows3, StickyNote } from "lucide-react";
 import { cacheLife } from "next/cache";
 
@@ -55,9 +56,9 @@ export async function PlacementsSection() {
             <Typography.Paragraph className="max-w-prose leading-normal">
               {description}
             </Typography.Paragraph>
-            <span className="shrink-0 font-bold text-muted text-xs uppercase tracking-wider sm:ml-auto">
+            <ReportEyebrow className="shrink-0 sm:ml-auto">
               {where}
-            </span>
+            </ReportEyebrow>
           </div>
         ))}
       </div>
