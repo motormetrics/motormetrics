@@ -1,4 +1,4 @@
-import { Card, Chip } from "@heroui/react";
+import { Card, Chip, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import type { SelectCarCost } from "@motormetrics/database";
 import { formatCurrency } from "@motormetrics/utils";
@@ -6,7 +6,7 @@ import {
   FUEL_TYPE_LABELS,
   FUEL_TYPE_ORDER,
 } from "@web/app/(main)/(dashboard)/cars/costs/constants";
-import Typography from "@web/components/typography";
+import { ReportEyebrow } from "@web/components/shared/report";
 
 interface CostRangeCardProps {
   data: SelectCarCost[];
@@ -98,9 +98,7 @@ function RangeSection({
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-accent" />
-            <span className="text-muted text-xs uppercase tracking-wider">
-              Low
-            </span>
+            <ReportEyebrow>Low</ReportEyebrow>
           </div>
           <NumberValue
             className="font-semibold text-accent-strong text-lg"
@@ -110,15 +108,15 @@ function RangeSection({
             style="currency"
             value={lowestPrice}
           />
-          <Typography.Caption>{lowestModel}</Typography.Caption>
+          <Typography.Paragraph color="muted" size="xs">
+            {lowestModel}
+          </Typography.Paragraph>
         </div>
 
         {/* High value */}
         <div className="flex flex-col gap-1 text-right">
           <div className="flex items-center justify-end gap-2">
-            <span className="text-muted text-xs uppercase tracking-wider">
-              High
-            </span>
+            <ReportEyebrow>High</ReportEyebrow>
             <div className="h-2 w-2 rounded-full bg-accent" />
           </div>
           <NumberValue
@@ -129,7 +127,9 @@ function RangeSection({
             style="currency"
             value={highestPrice}
           />
-          <Typography.Caption>{highestModel}</Typography.Caption>
+          <Typography.Paragraph color="muted" size="xs">
+            {highestModel}
+          </Typography.Paragraph>
         </div>
       </div>
     </div>
@@ -193,12 +193,12 @@ export function CostRangeCard({ data }: CostRangeCardProps) {
           <div className="absolute top-0 right-0 left-0 h-1 bg-accent" />
 
           <Card.Header className="flex flex-col items-start gap-1">
-            <Typography.H4>
+            <Typography.Heading level={4}>
               {FUEL_TYPE_LABELS[group.fuelType] ?? group.fuelType}
-            </Typography.H4>
-            <Typography.Caption>
+            </Typography.Heading>
+            <Typography.Paragraph color="muted" size="xs">
               Selling price range (w/ COE)
-            </Typography.Caption>
+            </Typography.Paragraph>
           </Card.Header>
 
           <Card.Content className="flex flex-col gap-6">

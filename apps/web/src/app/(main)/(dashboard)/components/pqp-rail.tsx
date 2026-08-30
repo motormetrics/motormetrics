@@ -1,5 +1,5 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import Typography from "@web/components/typography";
 import { getPqpRates } from "@web/queries/coe";
 import { CostTrendChip } from "./cost-trend-chip";
 
@@ -48,12 +48,12 @@ export async function PqpRail() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <Typography.TextSm className="font-semibold text-muted">
+        <Typography.Paragraph color="muted" size="sm">
           PQP premiums · for COE renewals
-        </Typography.TextSm>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>
           {formatMonth(latestMonth)} rates
-        </Typography.H3>
+        </Typography.Heading>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -75,9 +75,13 @@ export async function PqpRail() {
                   value={row.value}
                 />
               </span>
-              <Typography.Caption className="truncate text-muted">
+              <Typography.Paragraph
+                color="muted"
+                size="xs"
+                className="truncate"
+              >
                 {row.name}
-              </Typography.Caption>
+              </Typography.Paragraph>
             </div>
             <div className="ml-auto shrink-0">
               <CostTrendChip changeRatio={row.changeRatio} />
@@ -86,9 +90,9 @@ export async function PqpRail() {
         ))}
       </div>
 
-      <Typography.Caption className="text-muted">
+      <Typography.Paragraph color="muted" size="xs">
         3-month moving average of premiums · renew 5 or 10 years
-      </Typography.Caption>
+      </Typography.Paragraph>
     </div>
   );
 }

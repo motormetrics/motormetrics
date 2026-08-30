@@ -1,10 +1,10 @@
+import { Typography } from "@heroui/react";
 import {
   GUIDES,
   getGuideBySlug,
   getReadingMinutes,
 } from "@web/app/(main)/(site)/learn/lib/guides";
 import { InkPanel } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { ArrowUpRight } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
@@ -27,15 +27,18 @@ export function FeaturedGuide() {
   return (
     <InkPanel className="gap-10 p-8 lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:items-center lg:gap-11 lg:p-12">
       <div className="flex flex-col gap-4">
-        <span className="self-start rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-[0.84375rem] text-accent-on-dark">
+        <span className="self-start rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm">
           Start here
         </span>
-        <Typography.H2 className="font-bold text-[2.25rem] text-accent-foreground leading-[1.14] tracking-[-0.02em]">
+        <Typography.Heading
+          level={2}
+          className="text-accent-foreground leading-tight"
+        >
           {guide.title}
-        </Typography.H2>
-        <Typography.Text className="max-w-[35rem] text-accent-foreground/70 leading-[1.6]">
+        </Typography.Heading>
+        <Typography.Paragraph className="max-w-prose text-accent-foreground/70">
           {guide.excerpt}
-        </Typography.Text>
+        </Typography.Paragraph>
         <div className="flex flex-wrap items-center gap-3.5 pt-2">
           <Link
             className="inline-flex items-center gap-2.5 rounded-full bg-accent px-7 py-3.5 font-bold text-accent-foreground text-base no-underline transition-[filter] hover:brightness-105"

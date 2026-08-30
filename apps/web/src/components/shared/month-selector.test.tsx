@@ -10,7 +10,8 @@ vi.mock("nuqs", () => ({
   useQueryState: vi.fn(() => ["2024-01", vi.fn()]),
 }));
 
-vi.mock("@heroui/react", () => {
+vi.mock("@heroui/react", async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
   const ComboBox = ({ children }: { children?: React.ReactNode }) => (
     <select aria-label="Month">{children}</select>
   );
@@ -30,6 +31,7 @@ vi.mock("@heroui/react", () => {
   ListBox.ItemIndicator = () => null;
 
   return {
+    ...actual,
     ComboBox,
     Header: () => null,
     Input: () => null,

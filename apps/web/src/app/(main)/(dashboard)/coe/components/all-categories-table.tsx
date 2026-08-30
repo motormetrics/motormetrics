@@ -1,8 +1,7 @@
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { ChevronRight } from "lucide-react";
 import { CategorySelect } from "./coe-controls";
 import type { CategoryKey } from "./search-params";
@@ -54,12 +53,10 @@ export function AllCategoriesTable({
     <SurfaceCard className="gap-4">
       <div className="flex flex-wrap items-center gap-3.5">
         <div className="flex flex-col">
-          <Typography.H3 className="font-bold text-2xl tracking-[-0.02em]">
-            All categories
-          </Typography.H3>
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.Heading level={3}>All categories</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             {exercise} · five categories
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
       </div>
 
@@ -73,7 +70,7 @@ export function AllCategoriesTable({
           {COLUMNS.map((column) => (
             <span
               className={cn(
-                "font-bold text-[13px] text-muted uppercase tracking-[0.06em]",
+                "font-bold text-muted text-xs uppercase tracking-wider",
                 column.align === "right" ? "text-right" : "text-left",
               )}
               key={column.label}
@@ -101,7 +98,7 @@ export function AllCategoriesTable({
                 <span className="flex min-w-0 items-center gap-3">
                   <span
                     className={cn(
-                      "flex size-[38px] shrink-0 items-center justify-center rounded-full font-extrabold text-[15px]",
+                      "flex size-[38px] shrink-0 items-center justify-center rounded-full font-extrabold text-sm",
                       isActive
                         ? "bg-accent text-accent-foreground"
                         : "bg-accent/15 text-accent-strong",
@@ -113,7 +110,7 @@ export function AllCategoriesTable({
                     <span className="truncate font-bold text-base">
                       {row.category}
                     </span>
-                    <span className="truncate font-medium text-[13px] text-muted">
+                    <span className="truncate font-medium text-muted text-sm">
                       {row.description}
                     </span>
                   </span>
@@ -127,7 +124,7 @@ export function AllCategoriesTable({
                     value={row.premium}
                   />
                 </span>
-                <span className="text-right font-bold text-[15px] text-muted tabular-nums">
+                <span className="text-right font-bold text-muted text-sm tabular-nums">
                   <NumberValue
                     locale="en-SG"
                     maximumFractionDigits={0}
@@ -147,10 +144,10 @@ export function AllCategoriesTable({
         })}
       </div>
 
-      <Typography.Caption className="px-4 font-medium text-muted">
+      <Typography.Paragraph color="muted" size="xs" className="px-4">
         Premiums are the quota premium at the close of the exercise. Select a
         category for its bidding history.
-      </Typography.Caption>
+      </Typography.Paragraph>
     </SurfaceCard>
   );
 }

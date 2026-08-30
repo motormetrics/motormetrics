@@ -1,8 +1,7 @@
 "use client";
 
-import { Tabs } from "@heroui/react";
+import { Tabs, Typography } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import type { TypeItem } from "@web/types";
 import type { FuelType } from "@web/types/cars";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
@@ -80,11 +79,11 @@ export function CategoryTabsPanel({
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-default p-8">
-                    <Typography.H4>Top Makes</Typography.H4>
-                    <Typography.TextSm>
+                    <Typography.Heading level={4}>Top Makes</Typography.Heading>
+                    <Typography.Paragraph color="muted" size="sm">
                       No detailed make data available for{" "}
                       {formatVehicleType(type.name)}
-                    </Typography.TextSm>
+                    </Typography.Paragraph>
                   </div>
                 )}
               </div>

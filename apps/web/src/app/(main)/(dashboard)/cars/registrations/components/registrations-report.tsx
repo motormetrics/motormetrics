@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
   FuelTypeTabs,
@@ -12,6 +13,7 @@ import { DeltaChip } from "@web/components/shared/delta-chip";
 import {
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -23,7 +25,6 @@ import {
   ReportTable,
   ShareBar,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import { getDistinctFuelTypes } from "@web/queries/cars";
 import {
   getCarsComparison,
@@ -307,18 +308,15 @@ export async function RegistrationsReport({
           </ReportTable>
         </ReportSection>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
-            How this is counted
-          </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+        <ReportNote title="How this is counted">
+          <Typography.Paragraph>
             A car counts in the month it is registered, which can lag the
             bidding exercise that won its COE by several weeks.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Paragraph>
+          <Typography.Paragraph>
             Figures cover cars only. Other vehicle classes are counted
             separately under their own categories.
-          </Typography.TextSm>
+          </Typography.Paragraph>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/cars/makes"
@@ -337,7 +335,7 @@ export async function RegistrationsReport({
           >
             Vehicle types in full →
           </Link>
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

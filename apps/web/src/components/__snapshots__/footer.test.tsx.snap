@@ -163,8 +163,10 @@ exports[`Footer > should render the shell footer with navigation and version inf
         </a>
       </li>
     </ul>
-    <span
-      class="text-xs leading-tight ml-auto font-medium text-muted"
+    <p
+      class="typography typography--align-start typography--color-muted typography--body-xs ml-auto"
+      data-slot="typography"
+      data-type="body-xs"
     >
       © 
       2026
@@ -183,7 +185,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
        
       · v
       0.0.0-test
-    </span>
+    </p>
   </footer>
 </div>
 `;

@@ -1,7 +1,7 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import type { PopulationEntity } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { InkPanel } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { Zap } from "lucide-react";
 
 /** Years of the electric run-up listed under the headline figure. */
@@ -38,12 +38,16 @@ export function ElectricFleetPanel({
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <Zap aria-hidden className="size-5" />
         </span>
-        <Typography.TextSm className="font-semibold text-accent-foreground/85">
+        <Typography.Paragraph
+          color="muted"
+          size="sm"
+          className="text-accent-foreground/85"
+        >
           Electric fleet
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
-      <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
+      <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
         <NumberValue
           locale="en-SG"
           maximumFractionDigits={0}
@@ -51,21 +55,25 @@ export function ElectricFleetPanel({
         />
       </span>
 
-      <Typography.TextSm className="font-medium text-accent-foreground/60">
+      <Typography.Paragraph
+        color="muted"
+        size="sm"
+        className="text-accent-foreground/60"
+      >
         electric {noun} on the road
         {population > 0
           ? ` · ${((electric / population) * 100).toFixed(1)}% of ${entity.name}`
           : null}
-      </Typography.TextSm>
+      </Typography.Paragraph>
 
       <ul className="mt-2 flex flex-col gap-3">
         {rows.map((row, index) => (
           <li className="flex flex-col gap-1.5" key={row.year}>
             <div className="flex items-center gap-3">
-              <span className="font-semibold text-[14.5px] text-accent-foreground/85">
+              <span className="font-semibold text-accent-foreground/85 text-sm">
                 {row.year}
               </span>
-              <span className="ml-auto font-bold text-[14.5px] text-accent-foreground tabular-nums">
+              <span className="ml-auto font-bold text-accent-foreground text-sm tabular-nums">
                 <NumberValue
                   locale="en-SG"
                   maximumFractionDigits={0}

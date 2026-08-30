@@ -1,7 +1,6 @@
-import { Tooltip } from "@heroui/react";
+import { Tooltip, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
-import Typography from "@web/components/typography";
 import { getCarsComparison, getCarsLatestMonth } from "@web/queries/cars";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
 import Link from "next/link";
@@ -32,9 +31,13 @@ export async function MonthlyChangeSummary() {
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <CalendarDays className="size-5" />
         </span>
-        <Typography.TextSm className="font-semibold text-accent-foreground/85">
+        <Typography.Paragraph
+          color="muted"
+          size="sm"
+          className="text-accent-foreground/85"
+        >
           Monthly change
-        </Typography.TextSm>
+        </Typography.Paragraph>
         <Tooltip delay={300}>
           <Link
             aria-label="View monthly car registration details"
@@ -54,7 +57,7 @@ export async function MonthlyChangeSummary() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
           <NumberValue
             maximumFractionDigits={1}
             signDisplay="exceptZero"
@@ -72,9 +75,13 @@ export async function MonthlyChangeSummary() {
         </span>
       </div>
 
-      <Typography.TextSm className="font-semibold text-accent-foreground/60">
+      <Typography.Paragraph
+        color="muted"
+        size="sm"
+        className="text-accent-foreground/60"
+      >
         registrations vs previous month · {displayMonth}
-      </Typography.TextSm>
+      </Typography.Paragraph>
     </div>
   );
 }

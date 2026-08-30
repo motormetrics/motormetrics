@@ -3,7 +3,8 @@ import type { ErrorInfo } from "next/error";
 import { describe, expect, it, vi } from "vitest";
 import { SectionErrorBoundary, SectionErrorFallback } from "./error-boundary";
 
-vi.mock("@heroui/react", () => ({
+vi.mock("@heroui/react", async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
   Button: ({
     children,
     onPress,

@@ -1,10 +1,9 @@
 "use client";
 
-import { Card } from "@heroui/react";
+import { Card, Typography } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue, TrendChip } from "@heroui-pro/react";
 
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import type { Registration } from "@web/types/cars";
 
 interface ComparisonSummaryProps {
@@ -23,7 +22,7 @@ export function ComparisonSummary({ monthA, monthB }: ComparisonSummaryProps) {
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>Total Registrations</Typography.H4>
+        <Typography.Heading level={4}>Total Registrations</Typography.Heading>
       </Card.Header>
       <Card.Content className="flex flex-col gap-4">
         <KPIGroup>

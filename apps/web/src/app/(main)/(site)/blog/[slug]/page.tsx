@@ -225,7 +225,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           {/* Excerpt / Executive Summary */}
           {post.excerpt && (
             <section>
-              <h2 className="mb-4 font-bold text-foreground/60 text-xs uppercase tracking-[0.3em]">
+              <h2 className="mb-4 font-bold text-foreground/60 text-xs uppercase tracking-widest">
                 Executive Summary
               </h2>
               <Card className="border-accent border-l-4 bg-transparent shadow-none">

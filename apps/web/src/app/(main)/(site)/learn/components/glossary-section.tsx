@@ -1,7 +1,7 @@
+import { Typography } from "@heroui/react";
 import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
 import { getAllGuideSlugs } from "@web/app/(main)/(site)/learn/lib/guides";
 import { ReportEyebrow } from "@web/components/shared/report";
-import Typography from "@web/components/typography";
 import Link from "next/link";
 
 const guideSlugs = getAllGuideSlugs();
@@ -21,13 +21,11 @@ export function GlossarySection() {
       id="glossary"
     >
       <div className="flex flex-col gap-3">
-        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
-          Glossary
-        </Typography.H2>
-        <Typography.TextSm className="font-medium text-base text-muted leading-[1.55]">
+        <Typography.Heading level={2}>Glossary</Typography.Heading>
+        <Typography.Paragraph className="text-muted leading-normal">
           The abbreviations that appear on every invoice, quotation and bidding
           result, in one place.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
       <div className="flex flex-col gap-10">
@@ -46,19 +44,23 @@ export function GlossarySection() {
                   >
                     {hasGuide ? (
                       <Link
-                        className="font-bold text-[1.0625rem] text-accent-strong no-underline transition-colors hover:text-accent-deep"
+                        className="font-bold text-accent-strong text-base no-underline transition-colors hover:text-accent-deep"
                         href={`/learn/${slug}`}
                       >
                         {term} →
                       </Link>
                     ) : (
-                      <span className="font-bold text-[1.0625rem] text-accent-strong">
+                      <span className="font-bold text-accent-strong text-base">
                         {term}
                       </span>
                     )}
-                    <Typography.TextSm className="font-medium text-muted leading-[1.55]">
+                    <Typography.Paragraph
+                      color="muted"
+                      size="sm"
+                      className="leading-normal"
+                    >
                       {definition}
-                    </Typography.TextSm>
+                    </Typography.Paragraph>
                   </div>
                 );
               })}

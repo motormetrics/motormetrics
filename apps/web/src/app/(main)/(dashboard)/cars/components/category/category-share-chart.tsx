@@ -53,7 +53,7 @@ export function CategoryShareChart({
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
         {series.map(({ color, key, label }) => (
           <span
-            className="inline-flex items-center gap-2.5 font-bold text-[0.875rem]"
+            className="inline-flex items-center gap-2.5 font-bold text-sm"
             key={key}
           >
             <span

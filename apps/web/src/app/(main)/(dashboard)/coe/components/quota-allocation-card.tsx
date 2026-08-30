@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
 import { CategorySelect } from "./coe-controls";
@@ -39,12 +39,12 @@ export async function QuotaAllocationCard({
   return (
     <SurfaceCard className="gap-4">
       <div className="flex flex-col gap-1">
-        <Typography.TextLg className="font-semibold text-muted">
+        <Typography.Paragraph color="muted">
           Quota allocation
-        </Typography.TextLg>
-        <Typography.H3 className="font-bold text-[1.625rem] tracking-[-0.02em]">
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>
           {formatExercise(latest)}
-        </Typography.H3>
+        </Typography.Heading>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -62,13 +62,13 @@ export async function QuotaAllocationCard({
                   <span
                     className={
                       isActive
-                        ? "font-extrabold text-[15px] text-foreground"
-                        : "font-semibold text-[15px] text-foreground/85"
+                        ? "font-extrabold text-foreground text-sm"
+                        : "font-semibold text-foreground/85 text-sm"
                     }
                   >
                     {row.category}
                   </span>
-                  <span className="ml-auto font-extrabold text-[15px] tabular-nums">
+                  <span className="ml-auto font-extrabold text-sm tabular-nums">
                     <NumberValue
                       locale="en-SG"
                       maximumFractionDigits={0}
@@ -93,9 +93,9 @@ export async function QuotaAllocationCard({
         })}
       </div>
 
-      <Typography.Caption className="font-medium text-muted">
+      <Typography.Paragraph color="muted" size="xs">
         COEs available in this bidding exercise
-      </Typography.Caption>
+      </Typography.Paragraph>
     </SurfaceCard>
   );
 }

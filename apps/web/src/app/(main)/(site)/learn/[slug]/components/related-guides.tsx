@@ -1,7 +1,7 @@
+import { Typography } from "@heroui/react";
 import { GuideCard } from "@web/app/(main)/(site)/learn/components/guide-card";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import { GUIDES } from "@web/app/(main)/(site)/learn/lib/guides";
-import Typography from "@web/components/typography";
 
 /** How many the comp's row holds. */
 const LIMIT = 3;
@@ -32,9 +32,7 @@ export function RelatedGuides({ guide }: { guide: Guide }) {
 
   return (
     <section className="flex flex-col gap-7">
-      <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
-        Next in this series
-      </Typography.H2>
+      <Typography.Heading level={2}>Next in this series</Typography.Heading>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filled.map((entry) => (
           <GuideCard guide={entry} key={entry.slug} />

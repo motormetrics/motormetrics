@@ -1,8 +1,8 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { HeroCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { sparkline } from "@web/components/shared/sparkline";
-import Typography from "@web/components/typography";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
@@ -33,13 +33,13 @@ export async function LeadingMakeCard({
 
       <div className="mt-2 flex items-center gap-3.5">
         <MakeAvatar logoUrl={leader.logoUrl} make={leader.make} size={56} />
-        <span className="font-bold text-[1.6875rem] text-accent-foreground/90 tracking-[-0.02em]">
+        <span className="font-bold text-3xl text-accent-foreground/90 tracking-tight">
           {leader.make}
         </span>
       </div>
 
       <div className="flex flex-wrap items-center gap-4">
-        <span className="font-extrabold text-6xl tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-6xl tabular-nums tracking-tight">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
@@ -51,9 +51,9 @@ export async function LeadingMakeCard({
         )}
       </div>
 
-      <Typography.TextSm className="font-semibold text-accent-foreground/85 text-lg">
+      <Typography.Paragraph color="muted" className="text-accent-foreground/85">
         registrations · {leader.share.toFixed(1)}% of the market
-      </Typography.TextSm>
+      </Typography.Paragraph>
 
       {spark ? (
         <svg

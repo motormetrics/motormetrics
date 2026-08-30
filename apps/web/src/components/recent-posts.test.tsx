@@ -2,7 +2,8 @@ import type { SelectPost } from "@motormetrics/database";
 import { render, screen } from "@testing-library/react";
 import { RecentPosts } from "@web/app/(main)/(dashboard)/components/recent-posts";
 
-vi.mock("@heroui/react", () => ({
+vi.mock("@heroui/react", async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
   Button: ({
     children,
     isIconOnly: _isIconOnly,

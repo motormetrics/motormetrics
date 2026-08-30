@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils";
 import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
@@ -22,6 +23,7 @@ import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend
 import {
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -31,7 +33,6 @@ import {
   ReportRow,
   ReportTable,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import { UnreleasedFeature } from "@web/components/unreleased-feature";
 import { getPQPOverview } from "@web/queries/coe";
 import type { Pqp } from "@web/types/coe";
@@ -88,7 +89,7 @@ export async function PQPReport({
   const { comparison, latestMonth, tableRows, trendData } = overview;
 
   if (!latestMonth || tableRows.length === 0) {
-    return <Typography.Text>No PQP data available.</Typography.Text>;
+    return <Typography.Paragraph>No PQP data available.</Typography.Paragraph>;
   }
 
   // A ten-year renewal costs the full PQP; a five-year renewal costs half. The
@@ -187,10 +188,10 @@ export async function PQPReport({
 
       <div className="flex flex-col gap-3.5">
         <PQPChart data={chartData} series={series} />
-        <Typography.TextSm className="font-medium text-muted">
+        <Typography.Paragraph color="muted" size="sm">
           Rates are quoted for a {term}-year renewal. The comps draw the closing
           premium alongside the rate; that series is not in this query yet.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
       <ReportSection
@@ -198,10 +199,10 @@ export async function PQPReport({
         title="PQP against the closing premium"
       >
         <PQPComparisonChart data={comparisonData} />
-        <Typography.TextSm className="font-medium text-muted">
+        <Typography.Paragraph color="muted" size="sm">
           A bar above the dashed line means the market is bidding above the
           renewal rate; a bar below it means renewing is the dearer of the two.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </ReportSection>
 
       <ReportSection
@@ -232,7 +233,7 @@ export async function PQPReport({
               <ReportRow isActive={key === category} key={key}>
                 <ReportCell>
                   <span
-                    className="inline-flex size-10 items-center justify-center rounded-full font-extrabold text-[1.0625rem]"
+                    className="inline-flex size-10 items-center justify-center rounded-full font-extrabold text-base"
                     style={{
                       backgroundColor:
                         key === category
@@ -315,11 +316,11 @@ export async function PQPReport({
                   return (
                     <ReportCell align="end" key={key}>
                       <div className="flex flex-col items-end gap-0.5">
-                        <span className="font-extrabold text-[1.03125rem]">
+                        <span className="font-extrabold text-base">
                           {rate > 0 ? formatCurrency(rate * termFactor) : "—"}
                         </span>
                         {monthChange === null ? null : (
-                          <span className="text-[0.78125rem]">
+                          <span className="text-xs">
                             <DeltaText value={-monthChange} />
                           </span>
                         )}
@@ -355,20 +356,17 @@ export async function PQPReport({
           </div>
         </ReportSection>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
-            How the PQP is set
-          </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+        <ReportNote title="How the PQP is set">
+          <Typography.Paragraph>
             LTA averages the closing premiums in that category over the last
             three months, across both exercises, and publishes it as the rate
             for the coming month. It therefore lags the market rather than
             leading it.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Paragraph>
+          <Typography.Paragraph>
             A five-year renewal costs half the PQP, but the car cannot be
             renewed again after that term.
-          </Typography.TextSm>
+          </Typography.Paragraph>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/premiums"
@@ -381,7 +379,7 @@ export async function PQPReport({
           >
             PARF rebate calculator →
           </Link>
-        </aside>
+        </ReportNote>
       </div>
 
       <UnreleasedFeature>

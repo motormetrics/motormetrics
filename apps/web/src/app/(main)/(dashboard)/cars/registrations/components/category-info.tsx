@@ -1,8 +1,7 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 
-import Typography from "@web/components/typography";
 import type { COECategory } from "@web/types";
 import type { LucideIcon } from "lucide-react";
 
@@ -54,8 +53,10 @@ export function CategoryInfo({
     >
       <Icon className="size-6" />
       <div>
-        <Typography.H4>{category}</Typography.H4>
-        <Typography.TextSm>{description}</Typography.TextSm>
+        <Typography.Heading level={4}>{category}</Typography.Heading>
+        <Typography.Paragraph color="muted" size="sm">
+          {description}
+        </Typography.Paragraph>
       </div>
     </div>
   );

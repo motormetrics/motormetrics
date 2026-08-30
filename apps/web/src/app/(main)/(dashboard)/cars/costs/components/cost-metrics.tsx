@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
 import type { SelectCarCost } from "@motormetrics/database";
-import Typography from "@web/components/typography";
 
 interface CostMetricsProps {
   data: SelectCarCost[];
@@ -48,9 +48,9 @@ export function CostMetrics({ data }: CostMetricsProps) {
           </div>
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm className="text-muted">
+          <Typography.Paragraph color="muted" size="sm">
             Models with AD selling prices
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </KPI.Footer>
       </KPI>
       <KPIGroup.Separator />
@@ -73,7 +73,7 @@ export function CostMetrics({ data }: CostMetricsProps) {
           )}
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm className="text-muted">
+          <Typography.Paragraph color="muted" size="sm">
             Middle price point across{" "}
             <NumberValue
               locale="en-SG"
@@ -81,7 +81,7 @@ export function CostMetrics({ data }: CostMetricsProps) {
               value={sorted.length}
             />{" "}
             models
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </KPI.Footer>
       </KPI>
     </KPIGroup>

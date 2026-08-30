@@ -1,10 +1,9 @@
 "use client";
 
-import { Chip } from "@heroui/react";
+import { Chip, Typography } from "@heroui/react";
 import { KPI, NumberValue, TrendChip } from "@heroui-pro/react";
 
 import { formatGrowthRate, slugify } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import type { Make } from "@web/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -55,7 +54,13 @@ export function MakeCard({
                 )}
               </div>
               <div className="flex min-w-0 flex-col gap-2">
-                <Typography.Label className="truncate">{make}</Typography.Label>
+                <Typography.Paragraph
+                  size="sm"
+                  weight="medium"
+                  className="truncate"
+                >
+                  {make}
+                </Typography.Paragraph>
                 {!!count && !!share && (
                   <div className="flex flex-col gap-2">
                     <div className="flex items-baseline gap-2">
@@ -65,7 +70,9 @@ export function MakeCard({
                         maximumFractionDigits={0}
                         value={count}
                       />
-                      <Typography.Caption>regs</Typography.Caption>
+                      <Typography.Paragraph color="muted" size="xs">
+                        regs
+                      </Typography.Paragraph>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
                       <Chip

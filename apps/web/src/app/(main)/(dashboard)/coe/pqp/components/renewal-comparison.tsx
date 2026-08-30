@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils";
 import { ReportSection } from "@web/components/shared/report";
 import {
@@ -5,7 +6,6 @@ import {
   ReportRow,
   ReportTable,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import type { Pqp } from "@web/types/coe";
 
 /** The two terms a COE can be renewed for, and what each costs of the PQP. */
@@ -79,8 +79,8 @@ export function RenewalComparison({
               <span
                 className={
                   row.saving >= 0
-                    ? "font-bold text-[0.96875rem] text-success-soft-foreground tabular-nums"
-                    : "font-bold text-[0.96875rem] text-warning-soft-foreground tabular-nums"
+                    ? "font-bold text-base text-success-soft-foreground tabular-nums"
+                    : "font-bold text-base text-warning-soft-foreground tabular-nums"
                 }
               >
                 {row.saving >= 0 ? "Saves " : "Costs "}
@@ -90,11 +90,11 @@ export function RenewalComparison({
           </ReportRow>
         ))}
       </ReportTable>
-      <Typography.TextSm className="font-medium text-muted">
+      <Typography.Paragraph color="muted" size="sm">
         Estimates only. Both figures exclude processing and registration fees,
         the PQP is a three-month moving average that moves every month, and a
         bid may close anywhere either side of the last premium.
-      </Typography.TextSm>
+      </Typography.Paragraph>
     </ReportSection>
   );
 }

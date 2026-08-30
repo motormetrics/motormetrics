@@ -1,4 +1,4 @@
-import Typography from "@web/components/typography";
+import { Typography } from "@heroui/react";
 import Link from "next/link";
 
 /**
@@ -28,14 +28,17 @@ const provenance = [
 export function DataSection() {
   return (
     <section className="flex flex-col gap-8 rounded-4xl bg-ink-surface p-8 text-ink-surface-foreground lg:p-14">
-      <div className="flex max-w-[40rem] flex-col gap-3.5">
+      <div className="flex max-w-prose flex-col gap-3.5">
         <span className="self-start rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm">
           Where the data comes from
         </span>
-        <Typography.H2 className="font-bold text-[2rem] text-ink-surface-foreground tracking-[-0.02em] lg:text-[2.375rem]">
+        <Typography.Heading
+          level={2}
+          className="text-ink-surface-foreground lg:text-4xl"
+        >
           One source, checked at every release
-        </Typography.H2>
-        <Typography.Text className="text-[1.125rem] text-ink-surface-foreground/70 leading-[1.6]">
+        </Typography.Heading>
+        <Typography.Paragraph className="text-ink-surface-foreground/70 text-lg">
           Every figure on this site comes from Singapore&apos;s Land Transport
           Authority via{" "}
           <Link
@@ -48,7 +51,7 @@ export function DataSection() {
           </Link>
           . We do not estimate, model or fill gaps. When LTA revises a release,
           we revise with it.
-        </Typography.Text>
+        </Typography.Paragraph>
       </div>
       <div className="grid gap-5 lg:grid-cols-3">
         {provenance.map(({ detail, heading, label }) => (
@@ -56,13 +59,13 @@ export function DataSection() {
             className="flex flex-col gap-2 rounded-2xl bg-ink-surface-foreground/[0.06] p-6"
             key={heading}
           >
-            <span className="font-extrabold text-[1.75rem] text-accent-on-dark tracking-[-0.02em]">
+            <span className="font-extrabold text-3xl text-accent-on-dark tracking-tight">
               {heading}
             </span>
-            <span className="font-semibold text-[0.9375rem] text-ink-surface-foreground/75">
+            <span className="font-semibold text-ink-surface-foreground/75 text-sm">
               {label}
             </span>
-            <span className="font-medium text-ink-surface-foreground/45 text-sm leading-[1.45]">
+            <span className="font-medium text-ink-surface-foreground/45 text-sm leading-normal">
               {detail}
             </span>
           </div>

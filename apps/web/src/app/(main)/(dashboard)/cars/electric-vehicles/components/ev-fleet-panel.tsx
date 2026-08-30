@@ -1,8 +1,8 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { ELECTRIC_POPULATION_FUEL_TYPE } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { InkPanel } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import Typography from "@web/components/typography";
 import {
   getVehiclePopulationByYearAndFuelType,
   getVehiclePopulationYearlyTotals,
@@ -70,28 +70,32 @@ export async function EvFleetPanel() {
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <BatteryCharging className="size-5" />
         </span>
-        <Typography.Text className="font-semibold text-accent-foreground/85">
+        <Typography.Paragraph className="text-accent-foreground/85">
           EV fleet on the road
-        </Typography.Text>
+        </Typography.Paragraph>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
           <NumberValue locale="en-SG" maximumFractionDigits={0} value={fleet} />
         </span>
         {previousFleet > 0 ? <DeltaChip tone="on-dark" value={growth} /> : null}
       </div>
 
-      <Typography.TextSm className="font-medium text-accent-foreground/60">
+      <Typography.Paragraph
+        color="muted"
+        size="sm"
+        className="text-accent-foreground/60"
+      >
         battery-electric vehicles on Singapore roads · {fleetShare.toFixed(1)}%
         of the vehicle population in {latest.year}
-      </Typography.TextSm>
+      </Typography.Paragraph>
 
       <ul className="flex flex-col gap-3">
         {VES_BANDS.map((row, index) => (
           <li className="flex items-center gap-3" key={row.band}>
             <span
-              className={`flex size-10 shrink-0 items-center justify-center rounded-full font-extrabold text-[13.5px] ${
+              className={`flex size-10 shrink-0 items-center justify-center rounded-full font-extrabold text-sm ${
                 index === VES_BANDS.length - 1
                   ? "bg-accent-foreground/10 text-accent-foreground"
                   : "bg-accent-on-dark/20 text-accent-on-dark"
@@ -99,16 +103,24 @@ export async function EvFleetPanel() {
             >
               {row.band}
             </span>
-            <Typography.TextSm className="font-semibold text-accent-foreground/85">
+            <Typography.Paragraph
+              color="muted"
+              size="sm"
+              className="text-accent-foreground/85"
+            >
               {row.note}
-            </Typography.TextSm>
+            </Typography.Paragraph>
           </li>
         ))}
       </ul>
 
-      <Typography.Caption className="text-accent-foreground/45">
+      <Typography.Paragraph
+        color="muted"
+        size="xs"
+        className="text-accent-foreground/45"
+      >
         Vehicular Emissions Scheme bands most EVs qualify for
-      </Typography.Caption>
+      </Typography.Paragraph>
 
       <Link
         className="inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3.5 font-bold text-accent-foreground text-sm transition-[filter] hover:brightness-110"

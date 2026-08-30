@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
 import {
@@ -5,7 +6,6 @@ import {
   powertrainTotal,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import Typography from "@web/components/typography";
 import { getEvMonthlyTrend } from "@web/queries/cars";
 import { getTopMakesByFuelType } from "@web/queries/cars/market-insights";
 import Link from "next/link";
@@ -41,12 +41,12 @@ export async function TopMakesRail({ month }: { month: string }) {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
-        <Typography.Text className="font-semibold text-muted">
+        <Typography.Paragraph className="text-muted">
           Top EV makes · tap to compare
-        </Typography.Text>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>
           {formatDateToMonthYear(month)} ranking
-        </Typography.H3>
+        </Typography.Heading>
       </div>
 
       <ol className="flex flex-col gap-2">
@@ -60,10 +60,12 @@ export async function TopMakesRail({ month }: { month: string }) {
                 {index + 1}
               </span>
               <span className="flex min-w-0 flex-col gap-px">
-                <span className="truncate font-bold text-[17px]">
-                  {item.make}
-                </span>
-                <Typography.Caption className="text-muted tabular-nums">
+                <span className="truncate font-bold text-lg">{item.make}</span>
+                <Typography.Paragraph
+                  color="muted"
+                  size="xs"
+                  className="tabular-nums"
+                >
                   <NumberValue
                     locale="en-SG"
                     maximumFractionDigits={0}
@@ -72,7 +74,7 @@ export async function TopMakesRail({ month }: { month: string }) {
                   {monthTotal > 0
                     ? ` · ${((item.count / monthTotal) * 100).toFixed(1)}% of EVs`
                     : " registered"}
-                </Typography.Caption>
+                </Typography.Paragraph>
               </span>
             </Link>
           </li>

@@ -77,7 +77,7 @@ export function TableOfContents() {
 
   return (
     <nav className="border-foreground border-b-2 pb-6">
-      <div className="mb-4 font-bold text-foreground/60 text-xs uppercase tracking-[0.3em]">
+      <div className="mb-4 font-bold text-foreground/60 text-xs uppercase tracking-widest">
         In This Report
       </div>
       <div className="flex flex-wrap gap-x-6 gap-y-2">

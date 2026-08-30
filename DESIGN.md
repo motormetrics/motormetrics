@@ -150,9 +150,9 @@ components:
 ## Overview
 
 MotorMetrics is minimal, high-contrast and data-first — lineage from Geist
-(Vercel), Linear and Stripe. Hierarchy comes from **size and spacing**, not heavy
-weights or decoration. Restrained colour: a single violet accent, neutral
-surfaces, and status colours reserved for meaning.
+(Vercel), Linear and Stripe. Hierarchy comes from **size and spacing** on a fixed
+scale, not from decoration or per-page tuning. Restrained colour: a single violet
+accent, neutral surfaces, and status colours reserved for meaning.
 
 Light and dark themes share identical token *names* with different *values*
 (`:root` vs `.dark` / `[data-theme="dark"]`). Components consume tokens through
@@ -212,10 +212,13 @@ Two families: **Geist Sans** (`--font-geist-sans`) for UI and prose, **Geist
 Mono** (`--font-geist-mono`) for code and tabular data. Hierarchy is driven by
 size and weight restraint:
 
-- **Semibold (600)** — primary headings (`H1`, `H2`)
-- **Medium (500)** — secondary headings and labels (`H3`, `H4`, `Label`)
+- **Bold (700)** — headings (`H1`, `H2`, `H3`) and data emphasis (metric numbers)
+- **Semibold (600)** — nested headings (`H4`)
+- **Medium (500)** — UI labels (`Label`)
 - **Normal (400)** — body text (`Text*`, `Caption`)
-- **Bold** — reserved for data emphasis (metric numbers)
+
+The weight ramp is flat by design: separation between levels comes from the size
+step, not from stacking weights on top of it.
 
 The front-matter `typography` tokens carry concrete `fontFamily`, `fontSize`,
 `fontWeight`, `lineHeight`, and `letterSpacing` for each level. The canonical
@@ -223,12 +226,12 @@ component scale lives in `apps/web/src/components/typography.tsx` (`Typography.*
 
 | Component | Token | Element | Classes |
 |-----------|-------|---------|---------|
-| `H1` | `h1` | Page title (one per page) | `font-semibold text-4xl lg:text-5xl tracking-tight text-foreground` |
-| `H2` | `h2` | Section title | `font-semibold text-3xl tracking-tight text-foreground` |
-| `H3` | `h3` | Card title / subsection | `font-medium text-2xl tracking-tight text-foreground` |
-| `H4` | `h4` | Nested heading | `font-medium text-xl tracking-tight text-foreground` |
-| `TextLg` | `body-lg` | Lead paragraph | `text-lg leading-relaxed text-foreground` |
-| `Text` | `body` | Body | `text-base leading-7 text-foreground` |
+| `H1` | `h1` | Page title (one per page) | `font-bold text-4xl lg:text-5xl leading-tight tracking-tight text-foreground` |
+| `H2` | `h2` | Section title | `font-bold text-3xl tracking-tight text-foreground` |
+| `H3` | `h3` | Card title / subsection | `font-bold text-2xl tracking-tight text-foreground` |
+| `H4` | `h4` | Nested heading | `font-semibold text-xl tracking-tight text-foreground` |
+| `TextLg` | `body-lg` | Lead paragraph | `text-lg leading-relaxed text-muted` |
+| `Text` | `body` | Body | `text-base leading-relaxed text-foreground` |
 | `TextSm` | `body-sm` | Helper text | `text-sm leading-6 text-muted` |
 | `Label` | `label` | Form / nav label | `font-medium text-sm leading-none text-foreground` |
 | `Caption` | `caption` | Metadata / timestamps | `text-xs leading-tight text-muted` |
@@ -238,6 +241,14 @@ component scale lives in `apps/web/src/components/typography.tsx` (`Typography.*
 
 Use `Typography.*` rather than raw heading tags everywhere except MDX blog
 content and image-overlay text.
+
+**Stay on the scale.** Do not pass an arbitrary type value at the call site —
+`text-[2.125rem]`, `tracking-[-0.02em]`, `leading-[1.65]` and friends. Snap to
+the nearest stock Tailwind step and accept the small difference; comps are a
+reference, not a specification to the pixel. If a whole level wants a different
+value, change the default in `typography.tsx` so every page moves together.
+Colour and layout classes (`text-muted`, `max-w-prose`, `truncate`) are fine to
+pass; size, weight, tracking and leading are the scale's business.
 
 ## Layout
 

@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { InkPanel } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { Zap } from "lucide-react";
 import { MakeAvatar } from "./make-avatar";
 import { loadElectricOnlyMakes } from "./make-rows";
@@ -20,18 +20,22 @@ export async function ElectricOnlyMakes() {
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <Zap className="size-4.5" />
         </span>
-        <Typography.TextSm className="font-semibold text-accent-foreground/85 text-base">
+        <Typography.Paragraph className="text-accent-foreground/85">
           Electric-only makes
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
-      <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
+      <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
         {summary.sharePercent.toFixed(1)}%
       </span>
 
-      <Typography.TextSm className="font-medium text-accent-foreground/60">
+      <Typography.Paragraph
+        color="muted"
+        size="sm"
+        className="text-accent-foreground/60"
+      >
         of registrations went to makes selling only battery-electric cars
-      </Typography.TextSm>
+      </Typography.Paragraph>
 
       <div className="mt-2 flex flex-col gap-3">
         {summary.makes.map((make, index) => (
@@ -39,11 +43,11 @@ export async function ElectricOnlyMakes() {
             <div className="flex items-center">
               <span className="flex min-w-0 items-center gap-2.5">
                 <MakeAvatar logoUrl={make.logoUrl} make={make.make} size={22} />
-                <span className="truncate font-semibold text-[14.5px] text-accent-foreground/85">
+                <span className="truncate font-semibold text-accent-foreground/85 text-sm">
                   {make.make}
                 </span>
               </span>
-              <span className="ml-auto font-bold text-[14.5px] text-accent-foreground tabular-nums">
+              <span className="ml-auto font-bold text-accent-foreground text-sm tabular-nums">
                 <NumberValue
                   locale="en-SG"
                   maximumFractionDigits={0}

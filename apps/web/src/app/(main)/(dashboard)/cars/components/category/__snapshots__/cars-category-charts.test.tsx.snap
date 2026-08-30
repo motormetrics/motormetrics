@@ -11,13 +11,17 @@ exports[`Cars Category Charts > TopMakesChart > should render chart title and de
       data-slot="card-header"
     >
       <h4
-        class="scroll-m-20 font-medium text-foreground text-xl tracking-tight"
+        class="typography typography--align-start typography--color-default typography--h4"
+        data-slot="typography"
+        data-type="h4"
       >
         Top Makes - 
         Petrol
       </h4>
       <p
-        class="text-muted text-sm leading-6"
+        class="typography typography--align-start typography--color-muted typography--body-sm"
+        data-slot="typography"
+        data-type="body-sm"
       >
         Most popular brands in this category
       </p>

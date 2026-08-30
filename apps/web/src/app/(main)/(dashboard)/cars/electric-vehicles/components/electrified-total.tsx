@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
@@ -10,7 +11,6 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { SurfaceCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import Typography from "@web/components/typography";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 
 /** Below this share a segment has no room for its own label inside the bar. */
@@ -57,27 +57,27 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
   return (
     <SurfaceCard className="gap-5">
       <div className="flex flex-col gap-1.5">
-        <Typography.Text className="font-semibold text-muted">
+        <Typography.Paragraph className="text-muted">
           Electrified total
-        </Typography.Text>
+        </Typography.Paragraph>
 
         <div className="flex flex-wrap items-center gap-3.5">
-          <span className="font-extrabold text-[2.875rem] tabular-nums tracking-[-0.02em]">
+          <span className="font-extrabold text-5xl tabular-nums tracking-tight">
             {electrifiedShare.toFixed(1)}%
           </span>
           <DeltaChip unit="pp" value={electrifiedShare - previousShare} />
         </div>
 
-        <Typography.TextSm className="font-semibold text-muted">
+        <Typography.Paragraph color="muted" size="sm">
           battery-electric, plug-in and conventional hybrid combined ·{" "}
           {formatDateToMonthYear(point.month)}
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
       <div className="flex h-10 overflow-hidden rounded-full">
         {split.map((segment) => (
           <span
-            className="inline-flex items-center justify-center font-extrabold text-[13px] tabular-nums"
+            className="inline-flex items-center justify-center font-extrabold text-sm tabular-nums"
             key={segment.label}
             style={{
               background: segment.colour,
@@ -103,9 +103,13 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
               className="size-[11px] shrink-0 rounded-full"
               style={{ background: segment.colour }}
             />
-            <Typography.TextSm className="font-semibold text-foreground/85">
+            <Typography.Paragraph
+              color="muted"
+              size="sm"
+              className="text-foreground/85"
+            >
               {segment.label}
-            </Typography.TextSm>
+            </Typography.Paragraph>
             <span className="ml-auto font-bold text-sm tabular-nums">
               <NumberValue
                 locale="en-SG"

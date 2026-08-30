@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import {
   changeRatio,
   type DimensionLabels,
@@ -8,7 +8,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { SurfaceCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import Typography from "@web/components/typography";
+import { TABLE_HEADER_CLASS } from "@web/components/shared/report-table";
 import { useMemo, useState } from "react";
 
 type SortKey = "name" | "population" | "change";
@@ -128,20 +128,16 @@ export function PopulationTable({
     { align: "right", key: "change", label: "Change", width: "w-28" },
   ];
 
-  const headerClass = "font-bold text-xs uppercase tracking-[0.06em]";
-
   return (
     <SurfaceCard className="gap-5">
       <div className="flex flex-wrap items-center gap-3.5">
         <div className="flex flex-col">
-          <Typography.H3 className="font-bold text-2xl tracking-[-0.02em]">
-            {labels.title}
-          </Typography.H3>
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.Heading level={3}>{labels.title}</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             {year} · {sorted.length} {labels.plural}
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
-        <span className="ml-auto whitespace-nowrap font-semibold text-[13.5px] text-muted">
+        <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
           Sorted by {SORT_LABELS[sortKey]},{" "}
           {sortDirection === "asc" ? "ascending" : "descending"}
         </span>
@@ -165,7 +161,7 @@ export function PopulationTable({
               if (header.key === "share") {
                 return (
                   <th
-                    className={cn(cellClass, headerClass, "text-muted")}
+                    className={cn(cellClass, TABLE_HEADER_CLASS, "text-muted")}
                     key={header.key}
                     scope="col"
                   >
@@ -191,7 +187,7 @@ export function PopulationTable({
                 >
                   <button
                     className={cn(
-                      headerClass,
+                      TABLE_HEADER_CLASS,
                       "cursor-pointer",
                       isActive ? "text-accent-strong" : "text-muted",
                     )}
@@ -253,7 +249,7 @@ export function PopulationTable({
                         }}
                       />
                     </span>
-                    <span className="w-11 text-right font-bold text-[13.5px] text-muted tabular-nums">
+                    <span className="w-11 text-right font-bold text-muted text-sm tabular-nums">
                       {row.share.toFixed(1)}%
                     </span>
                   </span>
@@ -287,10 +283,10 @@ export function PopulationTable({
         </button>
       ) : null}
 
-      <Typography.TextSm className="px-4 font-medium text-muted">
+      <Typography.Paragraph color="muted" size="sm" className="px-4">
         Population counts are taken at 31 December each year.
         {previousYear === null ? null : ` Change is against ${previousYear}.`}
-      </Typography.TextSm>
+      </Typography.Paragraph>
     </SurfaceCard>
   );
 }

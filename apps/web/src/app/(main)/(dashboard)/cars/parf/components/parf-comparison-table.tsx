@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils";
 import {
   AGE_BRACKETS,
@@ -11,7 +12,6 @@ import {
   ReportRow,
   ReportTable,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 
 /**
  * The full schedule either side of Budget 2026.
@@ -58,10 +58,10 @@ export function PARFComparisonTable() {
           );
         })}
       </ReportTable>
-      <Typography.TextSm className="font-medium text-muted">
+      <Typography.Paragraph color="muted" size="sm">
         Rates apply to the ARF paid on the vehicle, and the rebate is capped
         whichever bracket it falls in.
-      </Typography.TextSm>
+      </Typography.Paragraph>
     </ReportSection>
   );
 }

@@ -1,8 +1,7 @@
-import { Tooltip } from "@heroui/react";
+import { Tooltip, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import type { SelectPost } from "@motormetrics/database";
 import { Post } from "@web/app/(main)/(site)/blog/components/post";
-import Typography from "@web/components/typography";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
@@ -15,7 +14,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
     return (
       <section className="flex h-full flex-col gap-6">
         <div className="flex items-center justify-between">
-          <Typography.H3>Recent Posts</Typography.H3>
+          <Typography.Heading level={3}>Recent Posts</Typography.Heading>
           <Tooltip delay={300}>
             <Link
               aria-label="View all blog posts"
@@ -41,7 +40,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
   return (
     <section className="flex h-full flex-col gap-6">
       <div className="flex items-center justify-between">
-        <Typography.H3>Recent Posts</Typography.H3>
+        <Typography.Heading level={3}>Recent Posts</Typography.Heading>
         <Tooltip delay={300}>
           <Link
             aria-label="View all blog posts"

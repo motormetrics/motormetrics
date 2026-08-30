@@ -1,9 +1,8 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import type { PopulationEntity } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { useState } from "react";
 
 /** Shortest column still reads as a column rather than as a sliver. */
@@ -43,12 +42,10 @@ export function PopulationByYearChart({
     <SurfaceCard className="gap-7">
       <div className="flex flex-wrap items-center gap-3.5">
         <div className="flex flex-col">
-          <Typography.H3 className="font-bold text-2xl tracking-[-0.02em]">
-            Population by year
-          </Typography.H3>
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.Heading level={3}>Population by year</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             {entity.name} · hover a column for detail
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
       </div>
 
@@ -80,18 +77,18 @@ export function PopulationByYearChart({
                     {year} · {entity.name}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-[13px] text-accent-foreground/80">
+                    <span className="font-semibold text-accent-foreground/80 text-sm">
                       Population
                     </span>
-                    <span className="ml-auto font-bold text-[13px] text-accent-foreground tabular-nums">
+                    <span className="ml-auto font-bold text-accent-foreground text-sm tabular-nums">
                       {numberFormatter.format(value)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-[13px] text-accent-foreground/80">
+                    <span className="font-semibold text-accent-foreground/80 text-sm">
                       Change
                     </span>
-                    <span className="ml-auto font-bold text-[13px] text-accent-foreground tabular-nums">
+                    <span className="ml-auto font-bold text-accent-foreground text-sm tabular-nums">
                       {formatChange(change)}
                     </span>
                   </div>
@@ -110,7 +107,7 @@ export function PopulationByYearChart({
               />
               <span
                 className={cn(
-                  "text-[13px]",
+                  "text-sm",
                   isHovered
                     ? "font-extrabold text-foreground"
                     : "font-semibold text-muted",

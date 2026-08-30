@@ -53,7 +53,7 @@ export function QueryTabs<Value extends string>({
             className={cn(
               "cursor-pointer whitespace-nowrap rounded-full transition-colors",
               variant === "segmented"
-                ? "px-4 py-2 font-semibold text-[13.5px]"
+                ? "px-4 py-2 font-semibold text-sm"
                 : "px-[18px] py-2.5 font-semibold text-sm",
               isActive &&
                 variant === "segmented" &&

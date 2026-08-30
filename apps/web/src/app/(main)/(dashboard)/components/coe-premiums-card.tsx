@@ -1,9 +1,8 @@
 "use client";
 
-import { Tooltip } from "@heroui/react";
+import { Tooltip, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
-import Typography from "@web/components/typography";
 import { ArrowUpRight, Calculator } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -78,12 +77,10 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
           <Calculator className="size-6" />
         </span>
         <div className="flex flex-col">
-          <Typography.H3 className="font-bold tracking-[-0.02em]">
-            COE premiums
-          </Typography.H3>
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.Heading level={3}>COE premiums</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             Latest bidding exercise
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
 
         <div className="ml-auto flex items-center gap-2">
@@ -124,7 +121,7 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
 
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center gap-4">
-          <span className="font-extrabold text-5xl tabular-nums tracking-[-0.03em]">
+          <span className="font-extrabold text-5xl tabular-nums tracking-tight">
             <NumberValue
               currency="SGD"
               locale="en-SG"
@@ -135,9 +132,9 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
           </span>
           <CostTrendChip changeRatio={changeRatio} />
         </div>
-        <Typography.TextSm className="font-semibold text-muted">
+        <Typography.Paragraph color="muted" size="sm">
           {active.category}
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
       {chart ? (
@@ -168,12 +165,12 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
             />
           </svg>
           <div className="flex justify-between">
-            <Typography.Caption className="font-semibold text-muted">
+            <Typography.Paragraph color="muted" size="xs">
               {formatMonth(active.points[0]?.month ?? "")}
-            </Typography.Caption>
-            <Typography.Caption className="font-semibold text-muted">
+            </Typography.Paragraph>
+            <Typography.Paragraph color="muted" size="xs">
               {formatMonth(active.points.at(-1)?.month ?? "")}
-            </Typography.Caption>
+            </Typography.Paragraph>
           </div>
         </div>
       ) : null}

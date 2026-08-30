@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Button, Typography } from "@heroui/react";
+import { ReportEyebrow } from "@web/components/shared/report";
 
-import Typography from "@web/components/typography";
 import {
   staggerContainerVariants,
   staggerItemVariants,
@@ -34,14 +34,16 @@ export function CtaSection() {
             className="flex flex-col items-center gap-4 text-center"
             variants={staggerItemVariants}
           >
-            <Typography.Label className="text-accent-strong uppercase tracking-widest">
+            <ReportEyebrow className="text-accent-strong">
               Ready to Explore?
-            </Typography.Label>
-            <Typography.H2>Dive Into the Data</Typography.H2>
-            <Typography.TextLg className="max-w-xl text-muted">
+            </ReportEyebrow>
+            <Typography.Heading level={2}>
+              Dive Into the Data
+            </Typography.Heading>
+            <Typography.Paragraph color="muted" className="max-w-xl">
               Explore Singapore&apos;s car registration trends, COE bidding
               results, and market insights — all in one place.
-            </Typography.TextLg>
+            </Typography.Paragraph>
           </motion.div>
 
           {/* CTA buttons */}

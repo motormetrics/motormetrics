@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { InkPanel } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import {
   getVehiclePopulationByYearAndFuelType,
   getVehiclePopulationYearlyTotals,
@@ -56,12 +56,16 @@ export async function PopulationPanel() {
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <Car aria-hidden className="size-5" />
         </span>
-        <Typography.TextSm className="font-semibold text-accent-foreground/85">
+        <Typography.Paragraph
+          color="muted"
+          size="sm"
+          className="text-accent-foreground/85"
+        >
           Vehicles on the road
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
-      <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
+      <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
         <NumberValue
           locale="en-SG"
           maximumFractionDigits={0}
@@ -69,7 +73,11 @@ export async function PopulationPanel() {
         />
       </span>
 
-      <Typography.TextSm className="font-medium text-accent-foreground/60">
+      <Typography.Paragraph
+        color="muted"
+        size="sm"
+        className="text-accent-foreground/60"
+      >
         All vehicles registered in Singapore · {latest.year}
         {changeRatio !== null && previous ? (
           <>
@@ -83,16 +91,16 @@ export async function PopulationPanel() {
             on {previous.year}
           </>
         ) : null}
-      </Typography.TextSm>
+      </Typography.Paragraph>
 
       <ul className="flex flex-col gap-3">
         {rows.map((row) => (
           <li className="flex flex-col gap-1.5" key={row.label}>
             <div className="flex items-center gap-3">
-              <span className="font-semibold text-[14.5px] text-accent-foreground/85">
+              <span className="font-semibold text-accent-foreground/85 text-sm">
                 {row.label}
               </span>
-              <span className="ml-auto font-bold text-[14.5px] text-accent-foreground tabular-nums">
+              <span className="ml-auto font-bold text-accent-foreground text-sm tabular-nums">
                 {((row.total / latest.total) * 100).toFixed(1)}%
               </span>
             </div>

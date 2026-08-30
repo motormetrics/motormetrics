@@ -28,7 +28,7 @@ export function PostNavigation({ previous, next }: PostNavigationProps) {
               {/* Direction Label */}
               <div className="mb-3 flex items-center gap-2">
                 <ArrowLeft className="size-4 -translate-x-0 text-foreground/40 transition-transform duration-300 ease-out group-hover:-translate-x-1 group-hover:text-accent-strong" />
-                <span className="font-medium text-[10px] text-foreground/40 uppercase tracking-[0.25em] transition-colors duration-300 group-hover:text-accent-strong">
+                <span className="font-medium text-foreground/40 text-xs uppercase tracking-widest transition-colors duration-300 group-hover:text-accent-strong">
                   Previous
                 </span>
               </div>
@@ -55,7 +55,7 @@ export function PostNavigation({ previous, next }: PostNavigationProps) {
             >
               {/* Direction Label */}
               <div className="mb-3 flex items-center gap-2">
-                <span className="font-medium text-[10px] text-foreground/40 uppercase tracking-[0.25em] transition-colors duration-300 group-hover:text-accent-strong">
+                <span className="font-medium text-foreground/40 text-xs uppercase tracking-widest transition-colors duration-300 group-hover:text-accent-strong">
                   Next
                 </span>
                 <ArrowRight className="size-4 translate-x-0 text-foreground/40 transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:text-accent-strong" />

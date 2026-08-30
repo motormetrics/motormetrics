@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { KPI, KPIGroup } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import { getRankingEmoji } from "@web/lib/cars/calculations";
 import { Award, BarChart3, PieChart } from "lucide-react";
 
@@ -43,7 +43,9 @@ export function CategoryHeroCard({
           />
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm>{formattedMonth}</Typography.TextSm>
+          <Typography.Paragraph color="muted" size="sm">
+            {formattedMonth}
+          </Typography.Paragraph>
         </KPI.Footer>
       </KPI>
 
@@ -65,7 +67,9 @@ export function CategoryHeroCard({
           />
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm>of all registrations</Typography.TextSm>
+          <Typography.Paragraph color="muted" size="sm">
+            of all registrations
+          </Typography.Paragraph>
         </KPI.Footer>
       </KPI>
 
@@ -85,10 +89,10 @@ export function CategoryHeroCard({
           </div>
         </KPI.Content>
         <KPI.Footer>
-          <Typography.TextSm>
+          <Typography.Paragraph color="muted" size="sm">
             of {totalCategories}{" "}
             {typeName.toLowerCase().includes("fuel") ? "fuel" : ""} types
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </KPI.Footer>
       </KPI>
     </KPIGroup>

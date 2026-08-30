@@ -1,8 +1,7 @@
-import { Skeleton, Tooltip } from "@heroui/react";
+import { Skeleton, Tooltip, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { getTopMakesByYear, getYearlyRegistrations } from "@web/queries/cars";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
@@ -18,19 +17,19 @@ async function YearlyChartContent() {
     <SurfaceCard>
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-2">
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.Paragraph color="muted" size="sm">
             Yearly registrations
-          </Typography.TextSm>
-          <span className="font-extrabold text-4xl tabular-nums tracking-[-0.02em]">
+          </Typography.Paragraph>
+          <span className="font-extrabold text-4xl tabular-nums tracking-tight">
             <NumberValue
               locale="en-SG"
               maximumFractionDigits={0}
               value={latest?.total ?? 0}
             />
           </span>
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.Paragraph color="muted" size="sm">
             registered in {latest?.year ?? "—"}
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
         <Tooltip delay={300}>
           <Link
@@ -89,12 +88,10 @@ async function TopMakesContent() {
     <SurfaceCard>
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-1">
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.Paragraph color="muted" size="sm">
             Registrations
-          </Typography.TextSm>
-          <Typography.H3 className="font-bold tracking-[-0.02em]">
-            Top makes
-          </Typography.H3>
+          </Typography.Paragraph>
+          <Typography.Heading level={3}>Top makes</Typography.Heading>
         </div>
         <Tooltip delay={300}>
           <Link
@@ -116,9 +113,9 @@ async function TopMakesContent() {
         {topMakes.slice(0, 5).map((item, index) => (
           <div className="flex flex-col gap-2" key={item.make}>
             <div className="flex items-center gap-4">
-              <Typography.TextSm className="font-semibold">
+              <Typography.Paragraph color="muted" size="sm">
                 {item.make}
-              </Typography.TextSm>
+              </Typography.Paragraph>
               <span className="ml-auto font-extrabold text-sm tabular-nums">
                 <NumberValue
                   locale="en-SG"

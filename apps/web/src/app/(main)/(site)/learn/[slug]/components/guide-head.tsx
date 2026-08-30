@@ -1,7 +1,7 @@
+import { Typography } from "@heroui/react";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import { getReadingMinutes } from "@web/app/(main)/(site)/learn/lib/guides";
 import { SharePill } from "@web/components/shared/share-pill";
-import Typography from "@web/components/typography";
 import Link from "next/link";
 
 /**
@@ -17,7 +17,7 @@ import Link from "next/link";
  */
 export function GuideHead({ guide }: { guide: Guide }) {
   return (
-    <div className="flex max-w-[53.75rem] flex-col gap-5">
+    <div className="flex max-w-4xl flex-col gap-5">
       <nav aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-2">
           {[
@@ -51,13 +51,16 @@ export function GuideHead({ guide }: { guide: Guide }) {
         {guide.term}
       </span>
 
-      <Typography.H1 className="font-bold text-[2.75rem] leading-[1.06] tracking-[-0.03em] lg:text-[3.375rem]">
+      <Typography.Heading level={1} className="text-5xl leading-none">
         {guide.title}
-      </Typography.H1>
+      </Typography.Heading>
 
-      <Typography.TextLg className="max-w-[43.75rem] font-medium text-muted leading-[1.55]">
+      <Typography.Paragraph
+        color="muted"
+        className="max-w-prose leading-normal"
+      >
         {guide.excerpt}
-      </Typography.TextLg>
+      </Typography.Paragraph>
 
       <div className="flex flex-wrap items-center gap-3.5">
         <span className="font-semibold text-base text-muted">

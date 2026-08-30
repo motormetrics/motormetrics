@@ -1,9 +1,8 @@
 "use client";
 
-import { Accordion } from "@heroui/react";
+import { Accordion, Typography } from "@heroui/react";
 import { FAQ_SECTIONS } from "@web/app/(main)/(site)/learn/components/faq-data";
 import { ReportEyebrow } from "@web/components/shared/report";
-import Typography from "@web/components/typography";
 
 /**
  * The questions, laid out the way the comp lays out the glossary: a heading in
@@ -20,13 +19,11 @@ export function FAQSection() {
       id="faq"
     >
       <div className="flex flex-col gap-3 lg:sticky lg:top-9 lg:self-start">
-        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
-          Frequently asked
-        </Typography.H2>
-        <Typography.TextSm className="font-medium text-base text-muted leading-[1.55]">
+        <Typography.Heading level={2}>Frequently asked</Typography.Heading>
+        <Typography.Paragraph className="text-muted leading-normal">
           The questions that come up most often about bidding, rebates and where
           the figures on this site come from.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       </div>
 
       <div className="flex flex-col gap-9">
@@ -44,9 +41,9 @@ export function FAQSection() {
                   </Accordion.Heading>
                   <Accordion.Panel>
                     <Accordion.Body>
-                      <Typography.Text className="text-muted leading-[1.6]">
+                      <Typography.Paragraph className="text-muted">
                         {answer}
-                      </Typography.Text>
+                      </Typography.Paragraph>
                     </Accordion.Body>
                   </Accordion.Panel>
                 </Accordion.Item>

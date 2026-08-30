@@ -1,6 +1,6 @@
+import { Typography } from "@heroui/react";
 import { GuideCard } from "@web/app/(main)/(site)/learn/components/guide-card";
 import { GUIDES } from "@web/app/(main)/(site)/learn/lib/guides";
-import Typography from "@web/components/typography";
 
 /**
  * The comp's "All guides" grid.
@@ -13,9 +13,7 @@ export function GuidesSection() {
   return (
     <section className="flex scroll-mt-24 flex-col gap-7" id="guides">
       <div className="flex flex-wrap items-baseline gap-5">
-        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
-          All guides
-        </Typography.H2>
+        <Typography.Heading level={2}>All guides</Typography.Heading>
         <span className="font-semibold text-base text-muted">
           {GUIDES.length} {GUIDES.length === 1 ? "guide" : "guides"}
         </span>

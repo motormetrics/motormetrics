@@ -1,8 +1,7 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { useState } from "react";
 
 export interface PremiumColumn {
@@ -52,14 +51,14 @@ export function PremiumsChart({
     <SurfaceCard className="gap-7">
       <div className="flex flex-wrap items-center gap-3.5">
         <div className="flex flex-col">
-          <Typography.H3 className="font-bold text-2xl tracking-[-0.02em]">
+          <Typography.Heading level={3}>
             Premiums by exercise
-          </Typography.H3>
-          <Typography.TextSm className="font-semibold text-muted">
+          </Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             {category} · hover a column for the premium
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
-        <span className="ml-auto whitespace-nowrap rounded-full bg-accent/15 px-3.5 py-[7px] font-bold text-[13px] text-accent-strong">
+        <span className="ml-auto whitespace-nowrap rounded-full bg-accent/15 px-3.5 py-[7px] font-bold text-accent-strong text-sm">
           {periodLabel}
         </span>
       </div>
@@ -89,18 +88,18 @@ export function PremiumsChart({
                     {column.label} · {category}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-[13px] text-accent-foreground/80">
+                    <span className="font-semibold text-accent-foreground/80 text-sm">
                       Premium
                     </span>
-                    <span className="ml-auto font-bold text-[13px] text-accent-foreground tabular-nums">
+                    <span className="ml-auto font-bold text-accent-foreground text-sm tabular-nums">
                       {formatMoney(column.premium)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-[13px] text-accent-foreground/80">
+                    <span className="font-semibold text-accent-foreground/80 text-sm">
                       Change
                     </span>
-                    <span className="ml-auto font-bold text-[13px] text-accent-foreground tabular-nums">
+                    <span className="ml-auto font-bold text-accent-foreground text-sm tabular-nums">
                       {formatChange(column.changeRatio)}
                     </span>
                   </div>
@@ -119,7 +118,7 @@ export function PremiumsChart({
               />
               <span
                 className={cn(
-                  "whitespace-nowrap text-[12.5px]",
+                  "whitespace-nowrap text-xs",
                   isHovered
                     ? "font-extrabold text-foreground"
                     : "font-semibold text-muted",

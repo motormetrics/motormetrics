@@ -52,7 +52,7 @@ export function SeriesFilter() {
           <button
             aria-pressed={isActive}
             className={cn(
-              "inline-flex cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-full px-[18px] py-2.5 text-[0.90625rem] transition-colors",
+              "inline-flex cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
               isActive
                 ? "bg-surface font-bold text-foreground shadow-surface"
                 : "bg-surface-secondary font-semibold text-muted hover:text-foreground",

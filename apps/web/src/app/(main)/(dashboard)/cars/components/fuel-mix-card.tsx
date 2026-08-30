@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
   formatMonthLabel,
@@ -9,7 +10,6 @@ import {
   DonutGauge,
   type DonutSegment,
 } from "@web/components/shared/donut-gauge";
-import Typography from "@web/components/typography";
 import { getCarsData } from "@web/queries/cars";
 import type { SearchParams } from "nuqs/server";
 
@@ -52,12 +52,10 @@ export async function FuelMixCard({
   return (
     <SurfaceCard>
       <div className="flex flex-col gap-1">
-        <Typography.TextSm className="font-semibold text-muted">
+        <Typography.Paragraph color="muted" size="sm">
           Fuel mix
-        </Typography.TextSm>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
-          By fuel type
-        </Typography.H3>
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>By fuel type</Typography.Heading>
       </div>
 
       {segments.length > 0 ? (
@@ -74,9 +72,9 @@ export async function FuelMixCard({
           title={`Registrations by fuel type, ${formatMonthLabel(month)}`}
         />
       ) : (
-        <Typography.TextSm className="text-muted">
+        <Typography.Paragraph color="muted" size="sm">
           No registrations recorded for {formatMonthLabel(month)}.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       )}
     </SurfaceCard>
   );

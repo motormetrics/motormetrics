@@ -1,9 +1,8 @@
 "use client";
 
-import { Card, Chip } from "@heroui/react";
+import { Card, Chip, Typography } from "@heroui/react";
 import { BarChart } from "@heroui-pro/react";
 import { formatNumber, slugify } from "@motormetrics/utils";
-import Typography from "@web/components/typography";
 import { getRankingEmoji } from "@web/lib/cars/calculations";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -43,8 +42,10 @@ export function TopMakesChart({
     return (
       <Card>
         <Card.Header className="flex flex-col items-start gap-2">
-          <Typography.H4>Top Makes</Typography.H4>
-          <Typography.TextSm>No make data available</Typography.TextSm>
+          <Typography.Heading level={4}>Top Makes</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
+            No make data available
+          </Typography.Paragraph>
         </Card.Header>
         <Card.Content>
           <div className="flex h-60 items-center justify-center rounded-lg bg-default">
@@ -58,8 +59,10 @@ export function TopMakesChart({
   return (
     <Card>
       <Card.Header className="flex flex-col items-start gap-2">
-        <Typography.H4>Top Makes - {title}</Typography.H4>
-        <Typography.TextSm>{description}</Typography.TextSm>
+        <Typography.Heading level={4}>Top Makes - {title}</Typography.Heading>
+        <Typography.Paragraph color="muted" size="sm">
+          {description}
+        </Typography.Paragraph>
       </Card.Header>
       <Card.Content>
         <div className="flex flex-col gap-6">

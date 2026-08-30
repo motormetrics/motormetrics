@@ -1,9 +1,8 @@
-import { Tooltip } from "@heroui/react";
+import { Tooltip, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import { InkPanel } from "@web/components/shared/bento";
 import { sparkline } from "@web/components/shared/sparkline";
-import Typography from "@web/components/typography";
 import {
   getEvLatestSummary,
   getEvMonthlyTrend,
@@ -39,9 +38,13 @@ export async function EvMomentum() {
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <Zap className="size-5" />
         </span>
-        <Typography.TextSm className="font-semibold text-accent-foreground/85">
+        <Typography.Paragraph
+          color="muted"
+          size="sm"
+          className="text-accent-foreground/85"
+        >
           Electric momentum
-        </Typography.TextSm>
+        </Typography.Paragraph>
         <Tooltip delay={300}>
           <Link
             aria-label="View electric vehicle data"
@@ -59,7 +62,7 @@ export async function EvMomentum() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-[-0.03em]">
+        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
           {summary.evSharePercent.toFixed(1)}%
         </span>
         <span className="rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm tabular-nums">
@@ -71,9 +74,13 @@ export async function EvMomentum() {
         </span>
       </div>
 
-      <Typography.TextSm className="font-semibold text-accent-foreground/60">
+      <Typography.Paragraph
+        color="muted"
+        size="sm"
+        className="text-accent-foreground/60"
+      >
         Electrified share (BEV, PHEV, hybrid) · {displayMonth}
-      </Typography.TextSm>
+      </Typography.Paragraph>
 
       {spark ? (
         <svg

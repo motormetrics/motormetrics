@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, Label, ListBox, Select } from "@heroui/react";
+import { Input, Label, ListBox, Select, Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils";
 import {
   AGE_BRACKETS,
@@ -13,7 +13,6 @@ import {
   ReportHeadline,
   ReportStat,
 } from "@web/components/shared/report";
-import Typography from "@web/components/typography";
 import { useMemo, useState } from "react";
 
 /**
@@ -130,14 +129,14 @@ export function PARFCalculator() {
       />
 
       {result.shortfall > 0 ? (
-        <Typography.TextSm className="font-medium text-base text-muted-strong">
+        <Typography.Paragraph className="text-muted-strong">
           On these figures the new schedule returns{" "}
           <strong className="text-foreground">
             {formatCurrency(result.shortfall)} less
           </strong>{" "}
           than the old one — {formatCurrency(result.newRebate)} against{" "}
           {formatCurrency(result.oldRebate)}.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       ) : null}
     </>
   );

@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import type { SelectDeregistration } from "@motormetrics/database";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
@@ -8,6 +9,7 @@ import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistratio
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import {
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -19,7 +21,6 @@ import {
   ReportTable,
   ShareBar,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import { getDeregistrations } from "@web/queries/deregistrations";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { format, subMonths } from "date-fns";
@@ -135,9 +136,9 @@ export async function DeregistrationsReport({
 
   if (rows.length === 0) {
     return (
-      <Typography.Text>
+      <Typography.Paragraph>
         No deregistration data available for {formattedMonth}
-      </Typography.Text>
+      </Typography.Paragraph>
     );
   }
 
@@ -299,20 +300,17 @@ export async function DeregistrationsReport({
           </ReportTable>
         </ReportSection>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
-            What a deregistration is
-          </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+        <ReportNote title="What a deregistration is">
+          <Typography.Paragraph>
             A vehicle is deregistered when it is scrapped or exported, which is
             what releases its COE back into the quota. Deregistrations in one
             month therefore set much of the supply bid for in later exercises.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Paragraph>
+          <Typography.Paragraph>
             The categories are the COE ones the vehicle held, so a
             deregistration is counted against the quota it returns to rather
             than the body type of the car.
-          </Typography.TextSm>
+          </Typography.Paragraph>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/results"
@@ -325,7 +323,7 @@ export async function DeregistrationsReport({
           >
             New registrations →
           </Link>
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

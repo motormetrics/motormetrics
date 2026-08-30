@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import {
@@ -5,7 +6,6 @@ import {
   getGuideHeadings,
 } from "@web/app/(main)/(site)/learn/lib/guides";
 import { InkPanel } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import type { Route } from "next";
 import Link from "next/link";
 
@@ -41,9 +41,9 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
           aria-label="On this page"
           className="flex flex-col gap-3.5 rounded-2xl bg-surface-secondary p-7"
         >
-          <Typography.H3 className="font-bold text-base">
+          <Typography.Heading level={4} className="text-base">
             In this guide
-          </Typography.H3>
+          </Typography.Heading>
           <ol className="flex flex-col gap-0.5">
             {headings.map(({ id, title }) => (
               <li key={id}>
@@ -61,9 +61,9 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
 
       {terms.length > 0 ? (
         <div className="flex flex-col gap-3.5 rounded-2xl bg-surface p-7 shadow-surface">
-          <Typography.H3 className="font-bold text-base">
+          <Typography.Heading level={4} className="text-base">
             Key terms
-          </Typography.H3>
+          </Typography.Heading>
           {terms.map(({ definition, term }) => {
             const slug = term.toLowerCase();
 
@@ -84,9 +84,13 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
                     {term}
                   </span>
                 )}
-                <Typography.Caption className="font-medium text-muted leading-[1.5]">
+                <Typography.Paragraph
+                  color="muted"
+                  size="xs"
+                  className="leading-normal"
+                >
                   {definition}
-                </Typography.Caption>
+                </Typography.Paragraph>
               </div>
             );
           })}
@@ -95,9 +99,9 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
 
       {guide.relatedLinks.length > 0 ? (
         <InkPanel className="rounded-2xl">
-          <Typography.TextSm className="font-semibold text-accent-foreground/85 text-base">
+          <Typography.Paragraph className="text-accent-foreground/85">
             Check the current figures
-          </Typography.TextSm>
+          </Typography.Paragraph>
           {guide.relatedLinks.map(({ href, label }) => (
             <Link
               className="font-bold text-accent-on-dark text-sm no-underline transition-colors hover:text-accent-foreground"

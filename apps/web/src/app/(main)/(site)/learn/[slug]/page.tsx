@@ -85,7 +85,7 @@ async function GuideContent({
   cacheTag(`learn:${slug}`);
 
   return (
-    <article className="prose dark:prose-invert max-w-[43.75rem] prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted prose-p:text-muted prose-strong:text-foreground prose-td:text-muted prose-th:text-foreground prose-p:leading-[1.7] prose-headings:tracking-[-0.02em]">
+    <article className="prose dark:prose-invert max-w-prose prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted prose-p:text-muted prose-strong:text-foreground prose-td:text-muted prose-th:text-foreground prose-p:leading-relaxed prose-headings:tracking-tight">
       <MDXRemote
         source={content}
         options={{

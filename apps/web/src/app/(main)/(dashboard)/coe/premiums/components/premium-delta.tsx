@@ -23,19 +23,14 @@ export function PremiumDelta({
 }) {
   if (ratio === null) {
     return (
-      <span className={cn("font-bold text-[0.96875rem] text-muted", className)}>
-        —
-      </span>
+      <span className={cn("font-bold text-base text-muted", className)}>—</span>
     );
   }
 
   if (ratio === 0) {
     return (
       <span
-        className={cn(
-          "font-bold text-[0.96875rem] text-muted tabular-nums",
-          className,
-        )}
+        className={cn("font-bold text-base text-muted tabular-nums", className)}
       >
         0.0%
       </span>
@@ -47,7 +42,7 @@ export function PremiumDelta({
   return (
     <span
       className={cn(
-        "font-bold text-[0.96875rem] tabular-nums",
+        "font-bold text-base tabular-nums",
         isUp ? "text-warning-soft-foreground" : "text-success-soft-foreground",
         className,
       )}

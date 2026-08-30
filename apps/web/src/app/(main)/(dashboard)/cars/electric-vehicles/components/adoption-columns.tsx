@@ -69,7 +69,7 @@ export function AdoptionColumns({
             </span>
             <span
               className={cn(
-                "text-center text-[12.5px]",
+                "text-center text-xs",
                 isSelected
                   ? "font-extrabold text-chart-1"
                   : "font-semibold text-muted",

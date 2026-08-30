@@ -1,7 +1,6 @@
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { Breadcrumbs } from "@web/components/shared/breadcrumbs";
 import { SharePill } from "@web/components/shared/share-pill";
-import Typography from "@web/components/typography";
 import type { ReactNode } from "react";
 
 /**
@@ -29,17 +28,13 @@ export function PageHead({
 }) {
   return (
     <div className="flex flex-wrap items-end gap-6">
-      <div
-        className={cn("flex flex-col gap-2", description && "max-w-[41rem]")}
-      >
+      <div className={cn("flex flex-col gap-2", description && "max-w-prose")}>
         <Breadcrumbs />
-        <Typography.H1 className="font-bold text-[2.75rem] leading-[1.05] tracking-[-0.02em] lg:text-[3.25rem]">
-          {title}
-        </Typography.H1>
+        <Typography.Heading level={1}>{title}</Typography.Heading>
         {description ? (
-          <Typography.TextLg className="font-medium text-[1.0625rem] text-muted leading-normal">
+          <Typography.Paragraph color="muted">
             {description}
-          </Typography.TextLg>
+          </Typography.Paragraph>
         ) : null}
       </div>
       <div className="ml-auto flex flex-wrap items-center gap-3">

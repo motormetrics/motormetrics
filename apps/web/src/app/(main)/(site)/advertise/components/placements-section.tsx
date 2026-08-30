@@ -1,4 +1,5 @@
-import Typography from "@web/components/typography";
+import { Typography } from "@heroui/react";
+import { ReportEyebrow } from "@web/components/shared/report";
 import { Layout, Rows3, StickyNote } from "lucide-react";
 import { cacheLife } from "next/cache";
 
@@ -33,12 +34,10 @@ export async function PlacementsSection() {
   return (
     <section className="flex scroll-mt-24 flex-col gap-7" id="placements">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
-        <Typography.H2 className="font-bold text-[2.125rem] tracking-[-0.02em]">
-          Placements
-        </Typography.H2>
-        <Typography.Text className="max-w-[38rem] text-[1.1875rem] leading-[1.65]">
+        <Typography.Heading level={2}>Placements</Typography.Heading>
+        <Typography.Paragraph className="max-w-prose text-lg">
           Three units, all static, all outside the charts.
-        </Typography.Text>
+        </Typography.Paragraph>
       </div>
       <div className="flex flex-col">
         {placements.map(({ description, icon: Icon, title, where }) => (
@@ -50,16 +49,14 @@ export async function PlacementsSection() {
               <span className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-accent-soft text-accent-strong">
                 <Icon className="size-5" />
               </span>
-              <span className="font-bold text-[1.1875rem] tracking-[-0.01em]">
-                {title}
-              </span>
+              <span className="font-bold text-lg tracking-tight">{title}</span>
             </div>
-            <Typography.Text className="max-w-[34rem] text-base leading-[1.55]">
+            <Typography.Paragraph className="max-w-prose leading-normal">
               {description}
-            </Typography.Text>
-            <span className="shrink-0 font-bold text-[0.8125rem] text-muted uppercase tracking-[0.08em] sm:ml-auto">
+            </Typography.Paragraph>
+            <ReportEyebrow className="shrink-0 sm:ml-auto">
               {where}
-            </span>
+            </ReportEyebrow>
           </div>
         ))}
       </div>

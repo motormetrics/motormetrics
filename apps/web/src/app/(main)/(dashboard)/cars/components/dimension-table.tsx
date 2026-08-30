@@ -1,12 +1,12 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import {
   CAR_DIMENSIONS,
   DIMENSION_LABELS,
 } from "@web/app/(main)/(dashboard)/cars/components/dimensions";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
+import { TABLE_HEADER_CLASS } from "@web/components/shared/report-table";
 import type { CarDimension, DimensionStat } from "@web/queries/cars";
 import { ArrowRight, Car, Search } from "lucide-react";
 import Link from "next/link";
@@ -147,8 +147,6 @@ export function DimensionTable({
     { align: "left", key: "share", label: "Share", width: "w-[11rem]" },
   ];
 
-  const headerClass = "font-bold text-xs uppercase tracking-[0.06em]";
-
   return (
     <SurfaceCard className="gap-5">
       <div className="flex flex-wrap items-center gap-4">
@@ -156,15 +154,13 @@ export function DimensionTable({
           <Car aria-hidden className="size-5" />
         </span>
         <div className="flex flex-col">
-          <Typography.H3 className="font-bold tracking-[-0.02em]">
-            {labels.title}
-          </Typography.H3>
-          <Typography.TextSm className="font-semibold text-muted">
+          <Typography.Heading level={3}>{labels.title}</Typography.Heading>
+          <Typography.Paragraph color="muted" size="sm">
             Year to date through {monthLabel} ·{" "}
             {isTruncated
               ? `top ${displayed.length} of ${visible.length}`
               : `${visible.length} ${visible.length === 1 ? "row" : "rows"}`}
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </div>
         <div className="ml-auto flex gap-1.5 rounded-full bg-default p-1.5">
           {CAR_DIMENSIONS.map((option) => {
@@ -206,7 +202,7 @@ export function DimensionTable({
             value={query}
           />
         </label>
-        <span className="whitespace-nowrap font-semibold text-[13.5px] text-muted">
+        <span className="whitespace-nowrap font-semibold text-muted text-sm">
           Sorted by {SORT_LABELS[sortKey]},{" "}
           {sortDirection === "asc" ? "ascending" : "descending"}
         </span>
@@ -235,7 +231,7 @@ export function DimensionTable({
               if (header.key === "share") {
                 return (
                   <th
-                    className={cn(cellClass, headerClass, "text-muted")}
+                    className={cn(cellClass, TABLE_HEADER_CLASS, "text-muted")}
                     key={header.key}
                     scope="col"
                   >
@@ -261,7 +257,7 @@ export function DimensionTable({
                 >
                   <button
                     className={cn(
-                      headerClass,
+                      TABLE_HEADER_CLASS,
                       "cursor-pointer",
                       isActive ? "text-accent-strong" : "text-muted",
                     )}
@@ -315,7 +311,7 @@ export function DimensionTable({
                       }}
                     />
                   </span>
-                  <span className="w-11 text-right font-bold text-[13.5px] text-muted tabular-nums">
+                  <span className="w-11 text-right font-bold text-muted text-sm tabular-nums">
                     {row.share.toFixed(1)}%
                   </span>
                 </span>
@@ -326,9 +322,9 @@ export function DimensionTable({
       </table>
 
       {visible.length === 0 ? (
-        <Typography.TextSm className="px-4 py-9 font-semibold text-muted">
+        <Typography.Paragraph color="muted" size="sm" className="px-4 py-9">
           Nothing matches “{query}”.
-        </Typography.TextSm>
+        </Typography.Paragraph>
       ) : null}
 
       {isTruncated ? (

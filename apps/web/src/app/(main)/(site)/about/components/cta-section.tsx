@@ -1,5 +1,4 @@
-import { Button } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Button, Typography } from "@heroui/react";
 import { navLinks } from "@web/config/navigation";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
@@ -15,14 +14,17 @@ import Link from "next/link";
 export function CtaSection() {
   return (
     <section className="flex flex-col items-start gap-8 rounded-4xl bg-[image:var(--accent-gradient)] p-8 text-ink-surface-foreground lg:flex-row lg:items-center lg:p-14">
-      <div className="flex max-w-[35rem] flex-col gap-3">
-        <Typography.H2 className="font-bold text-[2rem] text-ink-surface-foreground tracking-[-0.02em] lg:text-[2.375rem]">
+      <div className="flex max-w-prose flex-col gap-3">
+        <Typography.Heading
+          level={2}
+          className="text-ink-surface-foreground lg:text-4xl"
+        >
           Get the numbers when they land
-        </Typography.H2>
-        <Typography.Text className="font-medium text-[1.125rem] text-ink-surface-foreground/85 leading-[1.55]">
+        </Typography.Heading>
+        <Typography.Paragraph className="text-ink-surface-foreground/85 text-lg leading-normal">
           New COE results and registration figures are posted as soon as they
           publish. Nothing else.
-        </Typography.Text>
+        </Typography.Paragraph>
         <div className="flex flex-wrap gap-3 pt-2">
           {navLinks.socialMedia.map(({ icon: Icon, title, url }) => (
             <a

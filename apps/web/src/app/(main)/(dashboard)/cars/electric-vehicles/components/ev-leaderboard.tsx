@@ -1,8 +1,8 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { batteryElectricMakes } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { SurfaceCard } from "@web/components/shared/bento";
-import Typography from "@web/components/typography";
 import { getTopMakesByFuelType } from "@web/queries/cars/market-insights";
 import { getCarLogo } from "@web/queries/logos";
 import Image from "next/image";
@@ -24,12 +24,10 @@ export async function EvLeaderboard({ month }: { month: string }) {
   return (
     <SurfaceCard className="gap-4 p-7">
       <div className="flex flex-col gap-1">
-        <Typography.Text className="font-semibold text-muted">
+        <Typography.Paragraph className="text-muted">
           Leaderboard
-        </Typography.Text>
-        <Typography.H3 className="font-bold tracking-[-0.02em]">
-          EV makes
-        </Typography.H3>
+        </Typography.Paragraph>
+        <Typography.Heading level={3}>EV makes</Typography.Heading>
       </div>
 
       <ul className="flex flex-col gap-3.5">
@@ -39,7 +37,7 @@ export async function EvLeaderboard({ month }: { month: string }) {
           return (
             <li className="flex flex-col gap-1.5" key={item.make}>
               <div className="flex items-center gap-2.5">
-                <span className="flex size-[26px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/15 font-extrabold text-[11px] text-accent-strong">
+                <span className="flex size-[26px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/15 font-extrabold text-accent-strong text-xs">
                   {logo?.url ? (
                     <Image
                       alt=""
@@ -52,9 +50,13 @@ export async function EvLeaderboard({ month }: { month: string }) {
                     item.make.charAt(0)
                   )}
                 </span>
-                <Typography.TextSm className="truncate font-semibold text-foreground/85">
+                <Typography.Paragraph
+                  color="muted"
+                  size="sm"
+                  className="truncate text-foreground/85"
+                >
                   {item.make}
-                </Typography.TextSm>
+                </Typography.Paragraph>
                 <span className="ml-auto font-extrabold text-sm tabular-nums">
                   <NumberValue
                     locale="en-SG"
@@ -77,9 +79,9 @@ export async function EvLeaderboard({ month }: { month: string }) {
         })}
       </ul>
 
-      <Typography.Caption className="text-muted">
+      <Typography.Paragraph color="muted" size="xs">
         Battery-electric registrations · {formatDateToMonthYear(month)}
-      </Typography.Caption>
+      </Typography.Paragraph>
     </SurfaceCard>
   );
 }

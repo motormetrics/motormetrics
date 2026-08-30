@@ -15,7 +15,7 @@ export function KeyHighlights({ highlights }: KeyHighlightsProps) {
 
   return (
     <section className="mb-12">
-      <h2 className="mb-6 font-bold text-foreground/60 text-xs uppercase tracking-[0.3em]">
+      <h2 className="mb-6 font-bold text-foreground/60 text-xs uppercase tracking-widest">
         Key Highlights
       </h2>
       <div className="grid grid-cols-1 gap-0 border-foreground border-t-2 md:grid-cols-2 lg:grid-cols-3">

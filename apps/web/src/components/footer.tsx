@@ -1,4 +1,4 @@
-import Typography from "@web/components/typography";
+import { Typography } from "@heroui/react";
 import { SITE_TITLE } from "@web/config";
 import { FOOTER_NAV_ITEMS, navLinks } from "@web/config/navigation";
 import { TrendingUp } from "lucide-react";
@@ -52,7 +52,7 @@ export function Footer() {
         ))}
       </ul>
 
-      <Typography.Caption className="ml-auto font-medium text-muted">
+      <Typography.Paragraph color="muted" size="xs" className="ml-auto">
         © {COPYRIGHT_YEAR} {SITE_TITLE} · Data provided by{" "}
         <Link
           className="transition-colors hover:text-accent-strong"
@@ -63,7 +63,7 @@ export function Footer() {
           LTA DataMall
         </Link>{" "}
         · v{version}
-      </Typography.Caption>
+      </Typography.Paragraph>
     </footer>
   );
 }

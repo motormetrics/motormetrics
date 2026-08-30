@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils";
 import {
   biddingOrdinal,
@@ -24,6 +25,7 @@ import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend
 import {
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -34,7 +36,6 @@ import {
   ReportTable,
   ShareBar,
 } from "@web/components/shared/report-table";
-import Typography from "@web/components/typography";
 import { getCategoryExercises, getExercisePair } from "@web/queries/coe";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
@@ -83,10 +84,8 @@ function PremiumRangeBar({
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-baseline gap-4">
-        <span className="font-bold text-[0.96875rem] text-foreground">
-          {label}
-        </span>
-        <span className="ml-auto whitespace-nowrap font-semibold text-[0.84375rem] text-muted">
+        <span className="font-bold text-base text-foreground">{label}</span>
+        <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
           spread {formatCurrency(high - low)}
         </span>
       </div>
@@ -96,7 +95,7 @@ function PremiumRangeBar({
           style={{ left: `${left.toFixed(1)}%`, width: `${width.toFixed(1)}%` }}
         />
       </div>
-      <div className="flex font-bold text-[0.9375rem] text-muted-strong tabular-nums">
+      <div className="flex font-bold text-muted-strong text-sm tabular-nums">
         <span>{formatCurrency(low)}</span>
         <span className="ml-auto">{formatCurrency(high)}</span>
       </div>
@@ -335,7 +334,7 @@ export async function PremiumsReport({
                     <span className="flex-1">
                       <ShareBar isLeader share={rate} />
                     </span>
-                    <span className="w-10 text-right font-bold text-[0.84375rem] text-muted-strong tabular-nums">
+                    <span className="w-10 text-right font-bold text-muted-strong text-sm tabular-nums">
                       {rate.toFixed(0)}%
                     </span>
                   </div>
@@ -364,19 +363,16 @@ export async function PremiumsReport({
           </div>
         </ReportSection>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
-            How to read this
-          </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+        <ReportNote title="How to read this">
+          <Typography.Paragraph>
             A premium is the price of the last successful bid in an exercise, so
             it is set by demand rather than announced in advance. A decrease is
             shown in green.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Paragraph>
+          <Typography.Paragraph>
             Renewing an existing COE uses the PQP instead — the three-month
             moving average of premiums in that category.
-          </Typography.TextSm>
+          </Typography.Paragraph>
           <Link
             className="font-bold text-accent-strong text-base"
             href="/coe/pqp"
@@ -389,7 +385,7 @@ export async function PremiumsReport({
           >
             Bidding results by exercise →
           </Link>
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

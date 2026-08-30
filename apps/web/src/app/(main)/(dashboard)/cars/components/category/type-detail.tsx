@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
 import { TypeChart } from "@web/app/(main)/(dashboard)/cars/components/category/type-chart";
 import { PeriodTabs } from "@web/app/(main)/(dashboard)/cars/components/category/type-filters";
@@ -9,6 +10,7 @@ import {
   Report,
   ReportFilterBar,
   ReportHeadline,
+  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -22,7 +24,6 @@ import {
 } from "@web/components/shared/report-table";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
-import Typography from "@web/components/typography";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import {
@@ -387,9 +388,9 @@ async function TypeDetailContent({
       <ReportFilterBar
         label="Period"
         trailing={
-          <Typography.TextSm className="font-medium">
+          <Typography.Paragraph color="muted" size="sm">
             Figures are new registrations, not the fleet on the road
-          </Typography.TextSm>
+          </Typography.Paragraph>
         }
       >
         <PeriodTabs defaultKey={DEFAULT_PERIOD} options={PERIOD_OPTIONS} />
@@ -403,12 +404,19 @@ async function TypeDetailContent({
           className="group flex flex-wrap items-baseline gap-3 rounded-xl border border-accent-border bg-accent-soft-2 px-6 py-5"
           href="/cars/electric-vehicles"
         >
-          <Typography.Text className="font-bold text-accent-strong text-lg group-hover:underline">
+          <Typography.Heading
+            level={3}
+            className="text-accent-strong text-lg group-hover:underline"
+          >
             The full electric picture →
-          </Typography.Text>
-          <Typography.TextSm className="font-medium text-muted-strong">
+          </Typography.Heading>
+          <Typography.Paragraph
+            color="muted"
+            size="sm"
+            className="text-muted-strong"
+          >
             Adoption, charging and the makes leading it, on one page
-          </Typography.TextSm>
+          </Typography.Paragraph>
         </Link>
       ) : null}
 
@@ -576,8 +584,8 @@ async function TypeDetailContent({
                     <span
                       className={
                         isSelected
-                          ? "w-48 shrink-0 font-extrabold text-[0.96875rem] text-accent-strong"
-                          : "w-48 shrink-0 font-semibold text-[0.96875rem]"
+                          ? "w-48 shrink-0 font-extrabold text-accent-strong text-base"
+                          : "w-48 shrink-0 font-semibold text-base"
                       }
                     >
                       {displayValue(config.category, peer.name)}
@@ -588,7 +596,7 @@ async function TypeDetailContent({
                         share={share(peer.count, peerLeader)}
                       />
                     </div>
-                    <span className="w-20 text-right font-extrabold text-[0.96875rem] tabular-nums">
+                    <span className="w-20 text-right font-extrabold text-base tabular-nums">
                       <Count value={peer.count} />
                     </span>
                   </div>
@@ -634,19 +642,16 @@ async function TypeDetailContent({
           </ReportSection>
         </div>
 
-        <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
-          <Typography.H3 className="font-bold text-[1.0625rem]">
-            How this is counted
-          </Typography.H3>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+        <ReportNote title="How this is counted">
+          <Typography.Paragraph>
             A car counts in the month it is registered, under the {terms.noun}{" "}
             LTA records against it.
-          </Typography.TextSm>
-          <Typography.TextSm className="font-medium text-base leading-relaxed">
+          </Typography.Paragraph>
+          <Typography.Paragraph>
             {config.category === "fuel-types"
               ? "Fuel types are LTA's own values, kept unmerged: Petrol-Electric and Petrol-Electric (Plug-In) are counted separately rather than grouped."
               : "Vehicle types are LTA's own values, shortened only for display — the underlying figures are unchanged."}
-          </Typography.TextSm>
+          </Typography.Paragraph>
           <Link
             className="font-bold text-accent-strong text-base"
             href={`/cars/${config.category}`}
@@ -667,7 +672,7 @@ async function TypeDetailContent({
               Electric vehicles in depth →
             </Link>
           ) : null}
-        </aside>
+        </ReportNote>
       </div>
     </>
   );

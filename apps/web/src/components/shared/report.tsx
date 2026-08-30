@@ -1,5 +1,4 @@
-import { cn } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { cn, Typography } from "@heroui/react";
 import type { ReactNode } from "react";
 
 /**
@@ -85,7 +84,7 @@ export function ReportEyebrow({
   return (
     <span
       className={cn(
-        "font-bold text-[0.8125rem] text-muted uppercase tracking-[0.08em]",
+        "font-bold text-muted text-xs uppercase tracking-wider",
         className,
       )}
     >
@@ -121,17 +120,19 @@ export function ReportHeadline({
   return (
     <div className={cn("flex flex-wrap items-end gap-12", className)}>
       <div className="flex flex-col gap-2">
-        <Typography.TextSm className="font-semibold text-base text-muted-strong">
+        <Typography.Paragraph className="text-muted-strong">
           {label}
-        </Typography.TextSm>
+        </Typography.Paragraph>
         <div className="flex items-center gap-4">
-          <span className="font-extrabold text-[3.5rem] tabular-nums leading-none tracking-[-0.03em] lg:text-[4.5rem]">
+          <span className="font-extrabold text-6xl tabular-nums leading-none tracking-tight lg:text-7xl">
             {value}
           </span>
           {delta}
         </div>
         {sub ? (
-          <Typography.TextSm className="font-medium">{sub}</Typography.TextSm>
+          <Typography.Paragraph color="muted" size="sm">
+            {sub}
+          </Typography.Paragraph>
         ) : null}
       </div>
       {stats ? <div className="ml-auto flex flex-wrap">{stats}</div> : null}
@@ -151,14 +152,40 @@ export function ReportStat({
 }) {
   return (
     <div className="flex flex-col gap-1.5 border-border border-l px-6">
-      <span className="font-semibold text-[0.8125rem] text-muted">{label}</span>
-      <span className="font-extrabold text-2xl tabular-nums tracking-[-0.02em]">
+      <span className="font-semibold text-muted text-sm">{label}</span>
+      <span className="font-extrabold text-2xl tabular-nums tracking-tight">
         {value}
       </span>
       {note ? (
         <span className="font-medium text-muted text-xs">{note}</span>
       ) : null}
     </div>
+  );
+}
+
+/**
+ * The explanatory aside that closes a report page — "How this is counted",
+ * "How an exercise runs".
+ *
+ * The heading stays an `h3`. 18px sits below `h4`'s 20px, so the size argues
+ * for a lower level, but these pages run h1 (PageHead) then h2
+ * (`ReportSection`) and carry no other h3 — dropping to h4 would skip a level
+ * in the outline for a purely visual reason.
+ */
+export function ReportNote({
+  children,
+  title,
+}: {
+  children: ReactNode;
+  title: string;
+}) {
+  return (
+    <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
+      <Typography.Heading className="text-lg" level={3}>
+        {title}
+      </Typography.Heading>
+      {children}
+    </aside>
   );
 }
 
@@ -180,13 +207,9 @@ export function ReportSection({
   return (
     <section className={cn("flex flex-col gap-4", className)}>
       <div className="flex flex-wrap items-baseline gap-4">
-        <Typography.H2 className="font-bold text-[1.6875rem] tracking-[-0.02em]">
-          {title}
-        </Typography.H2>
+        <Typography.Heading level={2}>{title}</Typography.Heading>
         {caption ? (
-          <Typography.TextSm className="font-medium text-base">
-            {caption}
-          </Typography.TextSm>
+          <Typography.Paragraph>{caption}</Typography.Paragraph>
         ) : null}
       </div>
       {children}
