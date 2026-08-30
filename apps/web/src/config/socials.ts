@@ -8,3 +8,14 @@ export const SOCIAL_URLS = {
   github: `https://github.com/${BRAND_HANDLE}`,
   twitter: `https://twitter.com/${BRAND_HANDLE}`,
 } as const;
+
+/** Instagram, Telegram, and GitHub — gated by the `social-links` flag. */
+export const BRAND_SOCIAL_PROFILE_URLS = [
+  SOCIAL_URLS.instagram,
+  SOCIAL_URLS.telegram,
+  SOCIAL_URLS.github,
+] as const;
+
+export function brandSameAs(enabled: boolean): string[] {
+  return enabled ? [...BRAND_SOCIAL_PROFILE_URLS] : [];
+}

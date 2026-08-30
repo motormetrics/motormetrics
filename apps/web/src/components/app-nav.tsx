@@ -4,10 +4,10 @@ import type { Key } from "@heroui/react";
 
 import { Button, cn, Dropdown, Header, Label } from "@heroui/react";
 import { BetaChip, NewChip } from "@web/components/shared/chips";
-import type { NavigationItem } from "@web/config/navigation";
 import {
   MORE_NAV_ITEMS,
   MORE_NAV_SECTION_LABEL,
+  type NavigationItem,
   PRIMARY_NAV_ITEMS,
 } from "@web/config/navigation";
 import { SOCIAL_URLS } from "@web/config/socials";
@@ -83,13 +83,19 @@ function NavMenuItems({ items }: { items: readonly NavigationItem[] }) {
   ));
 }
 
-export function AppNav() {
+export function AppNav({
+  moreNavItems = MORE_NAV_ITEMS,
+  showSocialLinks = false,
+}: {
+  moreNavItems?: readonly NavigationItem[];
+  showSocialLinks?: boolean;
+}) {
   const pathname = usePathname();
   const router = useRouter();
 
   const activeHref = getActiveHref(pathname);
   const isMoreActive =
-    !activeHref && MORE_NAV_ITEMS.some(({ url }) => matchesPath(pathname, url));
+    !activeHref && moreNavItems.some(({ url }) => matchesPath(pathname, url));
 
   const handleNavigate = (key: Key) => router.push(String(key));
 
@@ -177,30 +183,32 @@ export function AppNav() {
             </Button>
             <Dropdown.Popover className="rounded-lg" placement="bottom start">
               <Dropdown.Menu
-                className={menuClassName(MORE_NAV_ITEMS.length)}
+                className={menuClassName(moreNavItems.length)}
                 onAction={handleNavigate}
               >
                 <Dropdown.Section
-                  className={menuSectionClassName(MORE_NAV_ITEMS.length)}
+                  className={menuSectionClassName(moreNavItems.length)}
                 >
                   <Header className={menuHeaderClassName}>
                     {MORE_NAV_SECTION_LABEL}
                   </Header>
-                  <NavMenuItems items={MORE_NAV_ITEMS} />
+                  <NavMenuItems items={moreNavItems} />
                 </Dropdown.Section>
               </Dropdown.Menu>
             </Dropdown.Popover>
           </Dropdown>
         </div>
 
-        <Link
-          className="ml-auto rounded-full bg-foreground px-6 py-3.5 font-bold text-accent-foreground text-sm transition-colors hover:bg-muted"
-          href={SOCIAL_URLS.telegram}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Get updates
-        </Link>
+        {showSocialLinks ? (
+          <Link
+            className="ml-auto rounded-full bg-foreground px-6 py-3.5 font-bold text-accent-foreground text-sm transition-colors hover:bg-muted"
+            href={SOCIAL_URLS.telegram}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Get updates
+          </Link>
+        ) : null}
       </div>
 
       {/* TODO: The comp's search field and notification bell are decorative —

@@ -5,6 +5,7 @@ import {
   SITE_TITLE,
   SITE_URL,
 } from "@web/config";
+import { socialLinks } from "@web/flags";
 import {
   getDistinctFuelTypes,
   getDistinctVehicleTypes,
@@ -15,6 +16,7 @@ import { getLatestCoeResults } from "@web/queries/coe";
 import { getCOELatestMonth } from "@web/queries/coe/latest-month";
 import { getAllPosts } from "@web/queries/posts";
 import { cacheLife, cacheTag } from "next/cache";
+import { connection } from "next/server";
 
 async function generateLlmsTxt() {
   "use cache";
@@ -153,15 +155,22 @@ ${recentPosts.map((post) => `- [${post.title}](${SITE_URL}/blog/${post.slug})`).
 - [Privacy Policy](${SITE_URL}/legal/privacy-policy): Data privacy and usage policy
 - [Terms of Service](${SITE_URL}/legal/terms-of-service): Terms and conditions
 - [GitHub Repository](https://github.com/motormetrics/motormetrics): Open source codebase
-- [Instagram](${SITE_URL}/instagram): Follow us on Instagram
-- [Telegram](${SITE_URL}/telegram): Join our Telegram channel
 `;
+}
+
+function socialChannelLines() {
+  return `- [Instagram](${SITE_URL}/instagram): Follow us on Instagram
+- [Telegram](${SITE_URL}/telegram): Join our Telegram channel`;
 }
 
 export async function GET() {
   const content = await generateLlmsTxt();
+  await connection();
+  const body = (await socialLinks())
+    ? `${content}${socialChannelLines()}\n`
+    : content;
 
-  return new Response(content, {
+  return new Response(body, {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
     },

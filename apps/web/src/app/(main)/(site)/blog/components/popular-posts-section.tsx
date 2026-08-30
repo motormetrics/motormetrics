@@ -1,6 +1,7 @@
 import { PopularPosts } from "@web/app/(main)/(site)/blog/components/popular-posts";
+import { Flagged } from "@web/components/flagged";
 import { SkeletonCard } from "@web/components/shared/skeleton";
-import { UnreleasedFeature } from "@web/components/unreleased-feature";
+import { blogPopularPosts } from "@web/flags";
 import { getPopularPostsWithData } from "@web/lib/data/posts";
 import { Suspense } from "react";
 
@@ -19,12 +20,18 @@ function PopularPostsSkeleton() {
   );
 }
 
+async function FlaggedPopularPosts() {
+  return (
+    <Flagged enabled={await blogPopularPosts()}>
+      <PopularPostsContent />
+    </Flagged>
+  );
+}
+
 export function PopularPostsSection() {
   return (
-    <UnreleasedFeature>
-      <Suspense fallback={<PopularPostsSkeleton />}>
-        <PopularPostsContent />
-      </Suspense>
-    </UnreleasedFeature>
+    <Suspense fallback={<PopularPostsSkeleton />}>
+      <FlaggedPopularPosts />
+    </Suspense>
   );
 }

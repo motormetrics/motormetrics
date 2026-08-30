@@ -1,13 +1,23 @@
 import { Typography } from "@heroui/react";
 import { SITE_TITLE } from "@web/config";
-import { FOOTER_NAV_ITEMS, navLinks } from "@web/config/navigation";
+import {
+  FOOTER_NAV_ITEMS,
+  type NavItem,
+  navLinks,
+} from "@web/config/navigation";
 import { TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { version } from "../../package.json";
 
 const COPYRIGHT_YEAR = new Date().getFullYear();
 
-export function Footer() {
+export function Footer({
+  navItems = FOOTER_NAV_ITEMS,
+  showSocialLinks = false,
+}: {
+  navItems?: readonly NavItem[];
+  showSocialLinks?: boolean;
+}) {
   return (
     <footer className="mt-auto flex flex-wrap items-center gap-x-7 gap-y-4 border-separator border-t pt-6">
       <Link
@@ -23,7 +33,7 @@ export function Footer() {
 
       <nav aria-label="Footer navigation">
         <ul className="flex flex-wrap items-center gap-5">
-          {FOOTER_NAV_ITEMS.map(({ href, label }) => (
+          {navItems.map(({ href, label }) => (
             <li key={href}>
               <Link
                 className="font-semibold text-muted text-sm transition-colors hover:text-accent-strong"
@@ -36,21 +46,23 @@ export function Footer() {
         </ul>
       </nav>
 
-      <ul className="flex items-center gap-4">
-        {navLinks.socialMedia.map(({ icon: Icon, title, url }) => (
-          <li key={title}>
-            <Link
-              aria-label={title}
-              className="block text-muted transition-colors hover:text-accent-strong"
-              href={url}
-              rel="me noreferrer"
-              target="_blank"
-            >
-              <Icon aria-hidden="true" className="size-4" />
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {showSocialLinks ? (
+        <ul className="flex items-center gap-4">
+          {navLinks.socialMedia.map(({ icon: Icon, title, url }) => (
+            <li key={title}>
+              <Link
+                aria-label={title}
+                className="block text-muted transition-colors hover:text-accent-strong"
+                href={url}
+                rel="me noreferrer"
+                target="_blank"
+              >
+                <Icon aria-hidden="true" className="size-4" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       <Typography.Paragraph color="muted" size="xs" className="ml-auto">
         © {COPYRIGHT_YEAR} {SITE_TITLE} · Data provided by{" "}

@@ -9,8 +9,10 @@ import { StatsSection } from "@web/app/(main)/(site)/about/components/stats-sect
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE, SOCIAL_URLS } from "@web/config/socials";
+import { brandSameAs, SOCIAL_HANDLE } from "@web/config/socials";
+import { socialLinks } from "@web/flags";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import type {
   FAQPage,
   Organization,
@@ -45,7 +47,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function AboutPage() {
+async function OrganizationStructuredData() {
+  const sameAs = brandSameAs(await socialLinks());
+  const organizationSchema: WithContext<Organization> = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: SITE_TITLE,
+    url: SITE_URL,
+    logo: LOGO_URL,
+    description:
+      "A platform for exploring Singapore car registration statistics, COE bidding results, and market data.",
+    ...(sameAs.length > 0 ? { sameAs } : {}),
+    founder: {
+      "@type": "Person",
+      name: "Ru Chern",
+      url: "https://ruchern.dev",
+    },
+  };
+
+  return <StructuredData data={organizationSchema} />;
+}
+
+export default function AboutPage() {
   const webPageSchema: WithContext<WebPage> = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -56,22 +79,6 @@ export default async function AboutPage() {
       "@type": "Organization",
       name: SITE_TITLE,
       url: SITE_URL,
-    },
-  };
-
-  const organizationSchema: WithContext<Organization> = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: SITE_TITLE,
-    url: SITE_URL,
-    logo: LOGO_URL,
-    description:
-      "A platform for exploring Singapore car registration statistics, COE bidding results, and market data.",
-    sameAs: [SOCIAL_URLS.instagram, SOCIAL_URLS.telegram, SOCIAL_URLS.github],
-    founder: {
-      "@type": "Person",
-      name: "Ru Chern",
-      url: "https://ruchern.dev",
     },
   };
 
@@ -106,7 +113,9 @@ export default async function AboutPage() {
   return (
     <>
       <StructuredData data={webPageSchema} />
-      <StructuredData data={organizationSchema} />
+      <Suspense>
+        <OrganizationStructuredData />
+      </Suspense>
       <StructuredData data={personSchema} />
       <StructuredData data={faqSchema} />
 
