@@ -1,3 +1,14 @@
+## [5.3.0](https://github.com/motormetrics/motormetrics/compare/v5.2.0...v5.3.0) (2026-08-30)
+
+### Features
+
+* **web:** band the nav menu section headers ([96b1920](https://github.com/motormetrics/motormetrics/commit/96b1920f4f11020bf03a60447db4cd13b4989660))
+* **web:** keep the nav menu header band inside the popover ([b7b7c7f](https://github.com/motormetrics/motormetrics/commit/b7b7c7faf7daa77063e495b561604640f78f64dc))
+
+### Bug Fixes
+
+* **web:** drop the native tooltip on the leading make sparkline ([ce99153](https://github.com/motormetrics/motormetrics/commit/ce99153a56e0e79c09a54483da979ded90eeaeeb))
+
 ## [5.2.0](https://github.com/motormetrics/motormetrics/compare/v5.1.0...v5.2.0) (2026-08-27)
 
 ### Features

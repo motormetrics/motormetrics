@@ -1,7 +1,7 @@
 {
   "name": "@motormetrics/web",
   "description": "Web application for MotorMetrics",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "type": "module",
   "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
