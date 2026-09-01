@@ -1,3 +1,4 @@
+import { WORKFLOW_REGION } from "@web/config/workflow";
 import { vehiclePopulationWorkflow } from "@web/workflows/vehicle-population";
 import { start } from "workflow/api";
 
@@ -7,12 +8,12 @@ export async function GET(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const run = await start(vehiclePopulationWorkflow, []);
-
-  return new Response(run.getReadable(), {
-    headers: {
-      "Content-Type": "application/x-ndjson",
-      "X-Run-Id": run.runId,
-    },
+  const run = await start(vehiclePopulationWorkflow, {
+    region: WORKFLOW_REGION,
   });
+
+  return Response.json(
+    { message: "Workflow started", runId: run.runId },
+    { headers: { "X-Run-Id": run.runId } },
+  );
 }

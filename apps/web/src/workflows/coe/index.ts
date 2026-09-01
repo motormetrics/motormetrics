@@ -28,7 +28,7 @@ interface CoeWorkflowResult {
  * Processes COE bidding data and generates blog posts.
  */
 export async function coeWorkflow(
-  payload: CoeWorkflowPayload,
+  payload?: CoeWorkflowPayload,
 ): Promise<CoeWorkflowResult> {
   "use workflow";
 
@@ -50,9 +50,9 @@ export async function coeWorkflow(
 
   let month: string;
 
-  if (payload.month) {
+  if (payload?.month) {
     // When month is explicitly provided, use it directly and skip biddingNo guard
-    month = payload.month;
+    month = payload?.month;
   } else {
     const record = await getLatestRecord();
     if (!record) {

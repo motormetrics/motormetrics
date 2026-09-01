@@ -32,7 +32,7 @@ interface CarsWorkflowResult {
  * Processes car registration data and generates blog posts.
  */
 export async function carsWorkflow(
-  payload: CarsWorkflowPayload,
+  payload?: CarsWorkflowPayload,
 ): Promise<CarsWorkflowResult> {
   "use workflow";
 
@@ -57,7 +57,7 @@ export async function carsWorkflow(
   await syncMakesSortedSet();
   await emitEvent({ type: "step:complete", step: "syncMakesSortedSet" });
 
-  const month = payload.month ?? (await getLatestMonth());
+  const month = payload?.month ?? (await getCarsLatestRegistrationMonth());
   if (!month) {
     return { message: "[CARS] No car records found" };
   }
@@ -134,7 +134,7 @@ async function syncMakesSortedSet(): Promise<void> {
   await populateMakesSortedSet();
 }
 
-async function getLatestMonth(): Promise<string | null> {
+async function getCarsLatestRegistrationMonth(): Promise<string | null> {
   "use step";
   return getCarsLatestMonth();
 }

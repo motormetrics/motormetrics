@@ -31,7 +31,7 @@ interface DeregistrationsWorkflowResult {
  * Processes vehicle deregistration data, generates blog posts, and revalidates cache.
  */
 export async function deregistrationsWorkflow(
-  payload: DeregistrationsWorkflowPayload,
+  payload?: DeregistrationsWorkflowPayload,
 ): Promise<DeregistrationsWorkflowResult> {
   "use workflow";
 
@@ -49,7 +49,7 @@ export async function deregistrationsWorkflow(
     return { message: "No deregistration records processed." };
   }
 
-  const latestMonth = payload.month ?? (await getLatestMonth());
+  const latestMonth = payload?.month ?? (await getLatestDeregistrationMonth());
   if (!latestMonth) {
     return { message: "No deregistration data found." };
   }
@@ -130,7 +130,7 @@ async function processDeregistrationsData(): Promise<UpdaterResult> {
 
   return result;
 }
-async function getLatestMonth(): Promise<string | null> {
+async function getLatestDeregistrationMonth(): Promise<string | null> {
   "use step";
 
   const { month } = await getDeregistrationsLatestMonth();
