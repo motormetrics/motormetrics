@@ -1,11 +1,20 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@motormetrics/ai", () => ({
-  generateBlogContent: vi.fn(),
-  generateHeroImage: vi.fn(),
-  getEvDataForMonth: vi.fn(),
-  updatePostHeroImage: vi.fn(),
-}));
+vi.mock("@motormetrics/ai", async () => {
+  // classifyAIError is pure; use the real one so these keep covering the
+  // whole path from a provider error to the WDK error type.
+  const { classifyAIError } = await vi.importActual<
+    typeof import("@motormetrics/ai/src/errors")
+  >("@motormetrics/ai/src/errors");
+
+  return {
+    classifyAIError,
+    generateBlogContent: vi.fn(),
+    generateHeroImage: vi.fn(),
+    getEvDataForMonth: vi.fn(),
+    updatePostHeroImage: vi.fn(),
+  };
+});
 
 vi.mock("@web/queries/cars/latest-month", () => ({
   getCarsLatestMonth: vi.fn(),

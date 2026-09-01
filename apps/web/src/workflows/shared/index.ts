@@ -1,4 +1,8 @@
-import { generateHeroImage, updatePostHeroImage } from "@motormetrics/ai";
+import {
+  classifyAIError,
+  generateHeroImage,
+  updatePostHeroImage,
+} from "@motormetrics/ai";
 import { slugify } from "@motormetrics/utils";
 import { getPostsWorkflowRevalidationTags } from "@web/lib/cache-tags";
 import { revalidateTag } from "next/cache";
@@ -71,23 +75,35 @@ export async function generatePostHero(params: {
 }
 
 /**
- * Handle AI generation errors with appropriate WDK error types.
- * - 429 (rate limit) → RetryableError with 1 minute delay
- * - 401/403 (auth) → FatalError (cannot recover)
- * - Other errors → rethrown as-is
+ * Map an AI failure onto the WDK error types.
+ *
+ * The classification itself lives in `@motormetrics/ai`, next to the code that
+ * chooses the provider — which errors are possible follows from that choice.
+ * This function only owns the WDK mapping.
  */
 export function handleAIError(error: unknown): never {
-  const message = error instanceof Error ? error.message : String(error);
+  const { classification, reason, message } = classifyAIError(error);
 
-  if (message.includes("429")) {
+  if (reason === "rate-limited") {
     console.log("[WORKFLOW] AI rate limited, scheduling retry in 1m");
     throw new RetryableError("AI rate limited", { retryAfter: "1m" });
   }
 
-  if (message.includes("401") || message.includes("403")) {
-    console.log("[WORKFLOW] AI authentication failed");
+  if (reason === "authentication") {
+    console.error(`[WORKFLOW] AI authentication failed — ${message}`);
     throw new FatalError("AI authentication failed");
   }
 
+  if (classification === "retryable") {
+    console.log(`[WORKFLOW] AI call retryable — ${message}`);
+    throw new RetryableError("AI call failed", { retryAfter: "1m" });
+  }
+
+  if (classification === "fatal") {
+    console.error(`[WORKFLOW] AI call failed fatally — ${message}`);
+    throw new FatalError("AI call failed");
+  }
+
+  console.error(`[WORKFLOW] AI generation failed — ${message}`);
   throw error;
 }
