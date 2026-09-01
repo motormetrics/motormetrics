@@ -57,8 +57,12 @@
       "pnpm biome check --write --no-errors-on-unmatched"
     ]
   },
-  "packageManager": "pnpm@12.1.0",
   "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^12.0.0",
+      "onFail": "download"
+    },
     "runtime": {
       "name": "node",
       "version": "^26.0.0",
