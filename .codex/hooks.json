@@ -12,19 +12,6 @@
         "matcher": "manual|auto"
       }
     ],
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "node \".agents/skills/impeccable/scripts/hook.mjs\"",
-            "statusMessage": "Checking UI changes",
-            "timeout": 5,
-            "type": "command"
-          }
-        ],
-        "matcher": "Edit|Write|apply_patch"
-      }
-    ],
     "PreCompact": [
       {
         "hooks": [
