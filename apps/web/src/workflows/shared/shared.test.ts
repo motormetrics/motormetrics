@@ -46,6 +46,10 @@ vi.mock("workflow", () => ({
   })),
 }));
 
+import {
+  GatewayInternalServerError,
+  GatewayRateLimitError,
+} from "@ai-sdk/gateway";
 import { generateHeroImage, updatePostHeroImage } from "@motormetrics/ai";
 import {
   emitEvent,
@@ -233,26 +237,25 @@ describe("handleAIError", () => {
     consoleSpy.mockRestore();
   });
 
-  it("should throw FatalError for a 403 carried on statusCode only", () => {
+  it("should throw FatalError for a non-retryable Gateway error", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    const error = Object.assign(
-      new Error(
-        "Free tier users do not have access to this model. Upgrade to paid credits.",
-      ),
-      { statusCode: 403 },
-    );
+    // The free-tier restriction arrives as a 403 with no code in the message.
+    const error = new GatewayInternalServerError({
+      message: "Free tier users do not have access to this model.",
+      statusCode: 403,
+    });
 
+    expect(error.isRetryable).toBe(false);
     expect(() => handleAIError(error)).toThrow(MockFatalError);
 
     consoleSpy.mockRestore();
   });
 
-  it("should throw RetryableError for a 429 carried on statusCode only", () => {
+  it("should throw RetryableError for a retryable Gateway error", () => {
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    const error = Object.assign(new Error("Too many requests"), {
-      statusCode: 429,
-    });
+    const error = new GatewayRateLimitError({});
 
+    expect(error.isRetryable).toBe(true);
     expect(() => handleAIError(error)).toThrow(MockRetryableError);
 
     consoleSpy.mockRestore();
