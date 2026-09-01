@@ -29,7 +29,6 @@ const WORKFLOW_TYPES: WorkflowType[] = [
     name: "Car Population",
     description: "Car population breakdown",
   },
-  { id: "car-costs", name: "Car Costs", description: "Car cost update data" },
   {
     id: "electric-vehicles",
     name: "Electric Vehicles",

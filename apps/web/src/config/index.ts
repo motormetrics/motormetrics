@@ -164,5 +164,4 @@ export const announcements: Announcement[] = [
 // Cache Keys
 // =============================================================================
 export const LAST_UPDATED_CARS_KEY = "last_updated:cars";
-export const LAST_UPDATED_CAR_COSTS_KEY = "last_updated:car-costs";
 export const LAST_UPDATED_COE_KEY = "last_updated:coe";

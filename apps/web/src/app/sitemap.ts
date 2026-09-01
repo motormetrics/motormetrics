@@ -65,11 +65,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
     },
     {
-      url: `${SITE_URL}/cars/costs`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-    },
-    {
       url: `${SITE_URL}/cars/deregistrations`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,

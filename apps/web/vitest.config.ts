@@ -56,14 +56,9 @@ export default defineConfig({
         "**/visitors",
         "src/queries/coe/**", // Low priority for coverage
         "src/queries/posts/**", // Blog queries not prioritized for coverage
-        "src/queries/car-costs/**", // Low priority for coverage
-        "src/workflows/car-costs", // Workflow without tests yet
-        "src/workflows/car-costs/**", // Workflow without tests yet
         "src/workflows/car-population", // Workflow without tests yet
         "src/workflows/car-population/**", // Workflow without tests yet
         "src/workflows/shared/types.ts", // Pure type definitions
-        "src/lib/updater/xlsx-updater.ts", // XLSX updater without tests
-        "src/lib/updater/services/process-xlsx.ts", // XLSX processor without tests
 
         // Barrel files (pure re-exports, no logic)
         "src/components/coe/index.ts",

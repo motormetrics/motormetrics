@@ -13,7 +13,6 @@ import {
   Calendar,
   Car,
   CarFront,
-  DollarSign,
   FileMinus,
   FilePlus,
   FileText,
@@ -130,14 +129,6 @@ export const navLinks: NavLinks = {
       url: "/cars/parf",
       icon: Calculator,
       description: "Calculate PARF rebate under old and new rates",
-      badge: "new",
-    },
-    {
-      title: "Cost Breakdown",
-      url: "/cars/costs",
-      icon: DollarSign,
-      description:
-        "See how new car prices are composed — OMV, ARF, VES, and COE",
       badge: "new",
     },
   ],
