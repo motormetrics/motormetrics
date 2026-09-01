@@ -60,5 +60,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run affected checks
-        run: pnpm turbo run test lint --affected --concurrency=100%
+      # Parallel steps (GitHub Actions, 2026-06-25): one checkout + install, then
+      # lint, typecheck and test run concurrently.
+      # https://github.blog/changelog/2026-06-25-actions-steps-can-now-be-run-in-parallel/
+      # 33% each so the three turbo processes together roughly saturate the
+      # 4 vCPU runner rather than oversubscribing it. Unmeasured -- retune if
+      # the job gets slower than the single `turbo run test lint` it replaced.
+      - parallel:
+          - name: Lint
+            run: pnpm turbo run lint --affected --concurrency=33%
+
+          - name: Typecheck
+            run: pnpm turbo run typecheck --affected --concurrency=33%
+
+          - name: Test
+            run: pnpm turbo run test --affected --concurrency=33%
