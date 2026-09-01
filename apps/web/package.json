@@ -22,7 +22,6 @@
     "vercel-build": "turbo run @motormetrics/database#migrate && next build"
   },
   "dependencies": {
-    "@ai-sdk/gateway": "catalog:",
     "@ai-sdk/otel": "catalog:",
     "@better-auth/drizzle-adapter": "catalog:",
     "@flags-sdk/vercel": "1.4.6",

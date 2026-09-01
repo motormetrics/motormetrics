@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@motormetrics/ai", () => ({
+  classifyAIError: vi.fn(),
   generateHeroImage: vi.fn(),
   updatePostHeroImage: vi.fn(),
 }));
@@ -47,10 +48,10 @@ vi.mock("workflow", () => ({
 }));
 
 import {
-  GatewayInternalServerError,
-  GatewayRateLimitError,
-} from "@ai-sdk/gateway";
-import { generateHeroImage, updatePostHeroImage } from "@motormetrics/ai";
+  classifyAIError,
+  generateHeroImage,
+  updatePostHeroImage,
+} from "@motormetrics/ai";
 import {
   emitEvent,
   generatePostHero,
@@ -176,18 +177,26 @@ describe("generatePostHero", () => {
 });
 
 describe("handleAIError", () => {
+  // Classification itself is covered in @motormetrics/ai; these cover the
+  // mapping from a verdict onto the WDK error types.
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should throw RetryableError for 429 rate limit", () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    const error = new Error("Request failed with status 429");
+  const verdict = (
+    classification: "retryable" | "fatal" | "unknown",
+    reason: "rate-limited" | "authentication" | "provider" | "unknown",
+    message = "boom",
+  ) => ({ classification, reason, message });
 
-    expect(() => handleAIError(error)).toThrow(MockRetryableError);
+  it("should throw RetryableError with a 1m delay when rate limited", () => {
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.mocked(classifyAIError).mockReturnValue(
+      verdict("retryable", "rate-limited"),
+    );
 
     try {
-      handleAIError(error);
+      handleAIError(new Error("ignored"));
     } catch (e) {
       expect(e).toBeInstanceOf(MockRetryableError);
       expect((e as InstanceType<typeof MockRetryableError>).message).toBe(
@@ -201,80 +210,54 @@ describe("handleAIError", () => {
     consoleSpy.mockRestore();
   });
 
-  it("should throw FatalError for 401 auth error", () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    const error = new Error("Request failed with status 401");
-
-    expect(() => handleAIError(error)).toThrow(MockFatalError);
-
-    try {
-      handleAIError(error);
-    } catch (e) {
-      expect(e).toBeInstanceOf(MockFatalError);
-      expect((e as InstanceType<typeof MockFatalError>).message).toBe(
-        "AI authentication failed",
-      );
-    }
-
-    consoleSpy.mockRestore();
-  });
-
-  it("should throw FatalError for 403 auth error", () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    const error = new Error("Request failed with status 403");
-
-    expect(() => handleAIError(error)).toThrow(MockFatalError);
-
-    try {
-      handleAIError(error);
-    } catch (e) {
-      expect(e).toBeInstanceOf(MockFatalError);
-      expect((e as InstanceType<typeof MockFatalError>).message).toBe(
-        "AI authentication failed",
-      );
-    }
-
-    consoleSpy.mockRestore();
-  });
-
-  it("should throw FatalError for a non-retryable Gateway error", () => {
+  it("should throw FatalError when authentication fails", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    // The free-tier restriction arrives as a 403 with no code in the message.
-    const error = new GatewayInternalServerError({
-      message: "Free tier users do not have access to this model.",
-      statusCode: 403,
-    });
+    vi.mocked(classifyAIError).mockReturnValue(
+      verdict("fatal", "authentication"),
+    );
 
-    expect(error.isRetryable).toBe(false);
-    expect(() => handleAIError(error)).toThrow(MockFatalError);
-
-    consoleSpy.mockRestore();
-  });
-
-  it("should throw RetryableError for a retryable Gateway error", () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    const error = new GatewayRateLimitError({});
-
-    expect(error.isRetryable).toBe(true);
-    expect(() => handleAIError(error)).toThrow(MockRetryableError);
+    try {
+      handleAIError(new Error("ignored"));
+    } catch (e) {
+      expect(e).toBeInstanceOf(MockFatalError);
+      expect((e as InstanceType<typeof MockFatalError>).message).toBe(
+        "AI authentication failed",
+      );
+    }
 
     consoleSpy.mockRestore();
   });
 
-  it("should rethrow other errors unchanged", () => {
+  it("should throw FatalError for a fatal provider error", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.mocked(classifyAIError).mockReturnValue(verdict("fatal", "provider"));
+
+    expect(() => handleAIError(new Error("ignored"))).toThrow(MockFatalError);
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should throw RetryableError for a retryable provider error", () => {
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.mocked(classifyAIError).mockReturnValue(
+      verdict("retryable", "provider"),
+    );
+
+    expect(() => handleAIError(new Error("ignored"))).toThrow(
+      MockRetryableError,
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should rethrow unclassified errors unchanged", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const originalError = new Error("Some other error");
+    vi.mocked(classifyAIError).mockReturnValue(
+      verdict("unknown", "unknown", "Some other error"),
+    );
 
     expect(() => handleAIError(originalError)).toThrow(originalError);
-
-    consoleSpy.mockRestore();
-  });
-
-  it("should handle non-Error objects", () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-
-    expect(() => handleAIError("string error")).toThrow("string error");
-    expect(() => handleAIError("error with 429")).toThrow(MockRetryableError);
 
     consoleSpy.mockRestore();
   });

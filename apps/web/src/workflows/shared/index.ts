@@ -1,8 +1,10 @@
-import { GatewayError } from "@ai-sdk/gateway";
-import { generateHeroImage, updatePostHeroImage } from "@motormetrics/ai";
+import {
+  classifyAIError,
+  generateHeroImage,
+  updatePostHeroImage,
+} from "@motormetrics/ai";
 import { slugify } from "@motormetrics/utils";
 import { getPostsWorkflowRevalidationTags } from "@web/lib/cache-tags";
-import { APICallError } from "ai";
 import { revalidateTag } from "next/cache";
 import { FatalError, getWritable, RetryableError } from "workflow";
 
@@ -73,37 +75,33 @@ export async function generatePostHero(params: {
 }
 
 /**
- * Handle AI generation errors with appropriate WDK error types.
+ * Map an AI failure onto the WDK error types.
  *
- * The Gateway and the AI SDK classify retryability themselves, so prefer
- * their own `isRetryable` over inspecting status codes: a Gateway 403 for a
- * free-tier model carries `statusCode`, while a GatewayAuthenticationError
- * does not, and neither puts the code in the message text.
- *
- * The message checks remain as a fallback for provider errors that arrive as
- * plain Errors.
+ * The classification itself lives in `@motormetrics/ai`, next to the code that
+ * chooses the provider — which errors are possible follows from that choice.
+ * This function only owns the WDK mapping.
  */
 export function handleAIError(error: unknown): never {
-  const message = error instanceof Error ? error.message : String(error);
+  const { classification, reason, message } = classifyAIError(error);
 
-  if (GatewayError.isInstance(error) || APICallError.isInstance(error)) {
-    if (error.isRetryable) {
-      console.log(`[WORKFLOW] AI call retryable — ${message}`);
-      throw new RetryableError("AI call failed", { retryAfter: "1m" });
-    }
-
-    console.error(`[WORKFLOW] AI call failed fatally — ${message}`);
-    throw new FatalError("AI call failed");
-  }
-
-  if (message.includes("429")) {
+  if (reason === "rate-limited") {
     console.log("[WORKFLOW] AI rate limited, scheduling retry in 1m");
     throw new RetryableError("AI rate limited", { retryAfter: "1m" });
   }
 
-  if (message.includes("401") || message.includes("403")) {
+  if (reason === "authentication") {
     console.error(`[WORKFLOW] AI authentication failed — ${message}`);
     throw new FatalError("AI authentication failed");
+  }
+
+  if (classification === "retryable") {
+    console.log(`[WORKFLOW] AI call retryable — ${message}`);
+    throw new RetryableError("AI call failed", { retryAfter: "1m" });
+  }
+
+  if (classification === "fatal") {
+    console.error(`[WORKFLOW] AI call failed fatally — ${message}`);
+    throw new FatalError("AI call failed");
   }
 
   console.error(`[WORKFLOW] AI generation failed — ${message}`);
