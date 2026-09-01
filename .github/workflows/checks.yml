@@ -32,10 +32,13 @@ jobs:
       UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
       BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
+      # PRs only check what the diff touches. The merge queue is the last gate
+      # before main, so it runs the full suite.
+      AFFECTED: ${{ github.event_name == 'pull_request' && '--affected' || '' }}
       # --affected defaults to a local `main` branch, which does not exist on a
-      # PR or merge queue checkout. Pin the range to the event payload instead.
-      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
-      TURBO_SCM_HEAD: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
+      # PR checkout. Pin the range to the event payload instead.
+      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha }}
+      TURBO_SCM_HEAD: ${{ github.event.pull_request.head.sha }}
 
     steps:
       - name: Checkout
@@ -63,15 +66,12 @@ jobs:
       # Parallel steps (GitHub Actions, 2026-06-25): one checkout + install, then
       # lint, typecheck and test run concurrently.
       # https://github.blog/changelog/2026-06-25-actions-steps-can-now-be-run-in-parallel/
-      # 33% each so the three turbo processes together roughly saturate the
-      # 4 vCPU runner rather than oversubscribing it. Unmeasured -- retune if
-      # the job gets slower than the single `turbo run test lint` it replaced.
       - parallel:
           - name: Lint
-            run: pnpm turbo run lint --affected --concurrency=33%
+            run: pnpm turbo run lint $AFFECTED
 
           - name: Typecheck
-            run: pnpm turbo run typecheck --affected --concurrency=33%
+            run: pnpm turbo run typecheck $AFFECTED
 
           - name: Test
-            run: pnpm turbo run test --affected --concurrency=33%
+            run: pnpm turbo run test $AFFECTED
