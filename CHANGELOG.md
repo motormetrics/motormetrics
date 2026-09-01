@@ -1,3 +1,9 @@
+## [5.5.2](https://github.com/motormetrics/motormetrics/compare/v5.5.1...v5.5.2) (2026-09-01)
+
+### Bug Fixes
+
+* **web:** classify AI errors by status code ([72539bb](https://github.com/motormetrics/motormetrics/commit/72539bbe7e3850fd41a27273a36046223f25f9e5))
+
 ## [5.5.1](https://github.com/motormetrics/motormetrics/compare/v5.5.0...v5.5.1) (2026-08-30)
 
 ### Bug Fixes
