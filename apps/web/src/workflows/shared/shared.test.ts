@@ -233,6 +233,31 @@ describe("handleAIError", () => {
     consoleSpy.mockRestore();
   });
 
+  it("should throw FatalError for a 403 carried on statusCode only", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const error = Object.assign(
+      new Error(
+        "Free tier users do not have access to this model. Upgrade to paid credits.",
+      ),
+      { statusCode: 403 },
+    );
+
+    expect(() => handleAIError(error)).toThrow(MockFatalError);
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should throw RetryableError for a 429 carried on statusCode only", () => {
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const error = Object.assign(new Error("Too many requests"), {
+      statusCode: 429,
+    });
+
+    expect(() => handleAIError(error)).toThrow(MockRetryableError);
+
+    consoleSpy.mockRestore();
+  });
+
   it("should rethrow other errors unchanged", () => {
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
     const originalError = new Error("Some other error");
