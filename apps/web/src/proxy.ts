@@ -1,24 +1,17 @@
 import crypto from "node:crypto";
 import { and, db, eq, gt, sessions } from "@motormetrics/database";
 import { redis } from "@motormetrics/utils";
-import { AgentAnalytics } from "@upstash/agent-analytics";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { auth } from "@web/app/admin/lib/auth";
 import { headers } from "next/headers";
-import {
-  type NextFetchEvent,
-  type NextRequest,
-  NextResponse,
-} from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 // Rate limiter for Developer API (60 requests per minute)
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(60, "1 m"),
 });
-
-const analytics = new AgentAnalytics({ redis: Redis.fromEnv() });
 
 interface AppConfig {
   maintenance: {
@@ -27,10 +20,8 @@ interface AppConfig {
   };
 }
 
-export async function proxy(request: NextRequest, event: NextFetchEvent) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
-  event.waitUntil(analytics.track(request));
 
   if (pathname.startsWith("/api/v1")) {
     const ip = request.headers.get("x-forwarded-for") ?? "127.0.0.1";
