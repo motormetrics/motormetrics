@@ -18,6 +18,11 @@ export {
   type InsertDeregistration,
   type SelectDeregistration,
 } from "./deregistration";
+export {
+  evChargingPoints,
+  type InsertEvChargingPoint,
+  type SelectEvChargingPoint,
+} from "./ev-charging";
 export { type InsertPost, posts, type SelectPost } from "./posts";
 export {
   type InsertVehiclePopulation,
