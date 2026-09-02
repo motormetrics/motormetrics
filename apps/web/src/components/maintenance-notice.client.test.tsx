@@ -16,7 +16,7 @@ vi.mock("@web/hooks/use-maintenance", () => ({
   useMaintenance: () => mockUseMaintenance(),
 }));
 
-vi.mock("framer-motion", () => ({
+vi.mock("motion/react", () => ({
   motion: {
     div: ({
       children,

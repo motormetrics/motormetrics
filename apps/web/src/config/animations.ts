@@ -1,4 +1,4 @@
-import type { Variants } from "framer-motion";
+import type { Variants } from "motion/react";
 
 // Standard easing curve (Material Design standard)
 const EASE_OUT: [number, number, number, number] = [0.4, 0, 0.2, 1];

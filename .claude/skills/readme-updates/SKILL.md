@@ -35,7 +35,7 @@ pnpm dev
 
 ## Tech Stack
 
-- **Frontend**: Next.js 16, HeroUI, Recharts, Tailwind CSS
+- **Frontend**: Next.js 16, HeroUI v3 (+ HeroUI Pro), Tailwind CSS v4
 - **Backend**: Drizzle ORM, PostgreSQL, Upstash Redis
 - **Infrastructure**: Vercel
 - **AI**: Google Gemini, Vercel AI SDK

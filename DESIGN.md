@@ -2,91 +2,92 @@
 version: "alpha"
 name: MotorMetrics
 description: >-
-  Singapore vehicle data platform. Geist-derived visual identity built on OKLCH
-  tokens and HeroUI v3 (Tailwind CSS v4). Minimal, high-contrast, data-first.
+  Singapore vehicle data platform. Warm-cream canvas with a slate-blue accent,
+  built on hex tokens and HeroUI v3 (Tailwind CSS v4). Minimal, high-contrast,
+  data-first.
 colors:
-  background: "oklch(0.9592 0.0072 253.27)"
-  foreground: "oklch(0.3103 0.0197 264.23)"
-  surface: "oklch(100% 0 0)"
-  overlay: "oklch(100% 0 0)"
-  muted: "oklch(0.5564 0.0398 256.82)"
-  default: "oklch(0.9258 0.0132 255.03)"
-  accent: "oklch(0.2894 0.1433 272.9)"
-  accent-foreground: "oklch(100% 0 0)"
-  success: "oklch(0.7205 0.192 149.49)"
-  success-foreground: "oklch(0.3103 0.0197 264.23)"
-  warning: "oklch(0.7697 0.1645 70.61)"
-  warning-foreground: "oklch(0.3103 0.0197 264.23)"
-  danger: "oklch(0.5786 0.2137 27.17)"
-  danger-foreground: "oklch(100% 0 0)"
-  border: "oklch(0.9258 0.0132 255.03)"
-  separator: "oklch(0.9258 0.0132 255.03)"
-  focus: "oklch(0.2894 0.1433 272.9)"
-  chart-1: "oklch(0.2894 0.1433 272.9)"
-  chart-2: "oklch(0.4018 0.1119 263.29)"
-  chart-3: "oklch(0.5138 0.102 263.13)"
-  chart-4: "oklch(0.5872 0.0334 248.17)"
-  chart-5: "oklch(0.7159 0.0358 256.79)"
-  chart-6: "oklch(0.8064 0.0226 251.2)"
+  background: "#f7f5ef"
+  foreground: "#232a2e"
+  surface: "#ffffff"
+  overlay: "#ffffff"
+  muted: "#505a5d"
+  default: "#f0f3f4"
+  accent: "#4e7c9b"
+  accent-foreground: "#ffffff"
+  success: "#57b45f"
+  success-foreground: "#232a2e"
+  warning: "#e9a63c"
+  warning-foreground: "#232a2e"
+  danger: "#e96e6e"
+  danger-foreground: "#232a2e"
+  border: "#e5e1d5"
+  separator: "#e5e1d5"
+  focus: "#4e7c9b"
+  chart-1: "#33586f"
+  chart-2: "#c9803f"
+  chart-3: "#5f8ba8"
+  chart-4: "#7a9e63"
+  chart-5: "#9cc4da"
+  chart-6: "#b0728f"
   chart-grid: "{colors.border}"
 typography:
   h1:
-    fontFamily: "Geist Sans"
+    fontFamily: "Urbanist"
     fontSize: 36px
     fontWeight: 600
     lineHeight: 40px
     letterSpacing: -0.025em
   h2:
-    fontFamily: "Geist Sans"
+    fontFamily: "Urbanist"
     fontSize: 30px
     fontWeight: 600
     lineHeight: 36px
     letterSpacing: -0.025em
   h3:
-    fontFamily: "Geist Sans"
+    fontFamily: "Urbanist"
     fontSize: 24px
     fontWeight: 500
     lineHeight: 32px
     letterSpacing: -0.025em
   h4:
-    fontFamily: "Geist Sans"
+    fontFamily: "Urbanist"
     fontSize: 20px
     fontWeight: 500
     lineHeight: 28px
     letterSpacing: -0.025em
   body-lg:
-    fontFamily: "Geist Sans"
+    fontFamily: "Urbanist"
     fontSize: 18px
     fontWeight: 400
     lineHeight: 1.625
   body:
-    fontFamily: "Geist Sans"
+    fontFamily: "Urbanist"
     fontSize: 16px
     fontWeight: 400
     lineHeight: 28px
   body-sm:
-    fontFamily: "Geist Sans"
+    fontFamily: "Urbanist"
     fontSize: 14px
     fontWeight: 400
     lineHeight: 24px
   label:
-    fontFamily: "Geist Sans"
+    fontFamily: "Urbanist"
     fontSize: 14px
     fontWeight: 500
     lineHeight: 1
   caption:
-    fontFamily: "Geist Sans"
+    fontFamily: "Urbanist"
     fontSize: 12px
     fontWeight: 400
     lineHeight: 1.25
   caption-mono:
-    fontFamily: "Geist Mono"
+    fontFamily: "Urbanist"
     fontSize: 14px
     fontWeight: 500
     lineHeight: 20px
 rounded:
-  base: "0.5rem"
-  field: "0.75rem"
+  base: "1.375rem"
+  field: "1.375rem"
   pill: "9999px"
 spacing:
   base: "0.25rem"
@@ -141,18 +142,17 @@ components:
 > document transcribes those shipped values; if the two ever diverge,
 > `globals.css` wins and this file should be updated to match.
 >
-> **Known stale docs (do not trust for colour):** the colour tables in
-> `.claude/skills/design-language-system/SKILL.md` (HSL "Navy Blue" `#191970`)
-> and `apps/web/CLAUDE.md` (Cyan accent `#00FFFF`) predate the current OKLCH
-> palette. The shipped accent is a violet, `oklch(0.2894 0.1433 272.9)`.
-> Reconciling those files is tracked separately and out of scope for this doc.
+> This file is now the only prose description of the palette. The skills that used
+> to carry competing colour tables (`design-language-system`, `ui-design-system`,
+> with their "Navy Blue" `#191970` / Cyan `#00FFFF` values) have been deleted
+> rather than reconciled — there is no second source to keep in sync.
 
 ## Overview
 
 MotorMetrics is minimal, high-contrast and data-first — lineage from Geist
 (Vercel), Linear and Stripe. Hierarchy comes from **size and spacing** on a fixed
-scale, not from decoration or per-page tuning. Restrained colour: a single violet
-accent, neutral surfaces, and status colours reserved for meaning.
+scale, not from decoration or per-page tuning. Restrained colour: a single
+slate-blue accent on a warm cream canvas, and status colours reserved for meaning.
 
 Light and dark themes share identical token *names* with different *values*
 (`:root` vs `.dark` / `[data-theme="dark"]`). Components consume tokens through
@@ -162,8 +162,8 @@ HeroUI v3 semantic classes, never raw hex.
 
 Colour is referenced through semantic roles, surfaced as both CSS variables
 (`var(--accent)`) and HeroUI/Tailwind utilities (`bg-surface`, `text-foreground`,
-`text-muted`, `border-default`). Tokens are OKLCH for perceptual uniformity and
-wide-gamut accuracy.
+`text-muted`, `border-default`). Tokens are plain hex, authored from the Claude
+Design token set.
 
 > **Brand colour is `--accent`, not `primary`.** HeroUI v3 defines no `--primary`
 > token; its `primary`-named variants (e.g. `Button` `color="primary"`) resolve to
@@ -173,33 +173,35 @@ wide-gamut accuracy.
 
 | Role | Token | Light | Dark |
 |------|-------|-------|------|
-| Background | `--background` | `oklch(0.9592 0.0072 253.27)` | `oklch(0.1371 0.036 258.53)` |
-| Foreground | `--foreground` | `oklch(0.3103 0.0197 264.23)` (`--eclipse`) | `oklch(0.9838 0.0035 247.86)` |
-| Surface (cards) | `--surface` | `oklch(100% 0 0)` | `oklch(0.28 0.0369 259.97)` |
-| Overlay (popovers/modals) | `--overlay` | `oklch(100% 0 0)` | `oklch(0.3037 0.0413 259.96)` |
-| Muted | `--muted` | `oklch(0.5564 0.0398 256.82)` | `oklch(0.7107 0.0351 256.79)` |
-| Default (fills/borders) | `--default` | `oklch(0.9258 0.0132 255.03)` | `oklch(0.28 0.0369 259.97)` |
-| Accent | `--accent` | `oklch(0.2894 0.1433 272.9)` | same |
-| Success | `--success` | `oklch(0.7205 0.192 149.49)` | same |
-| Warning | `--warning` | `oklch(0.7697 0.1645 70.61)` | same |
-| Danger | `--danger` | `oklch(0.5786 0.2137 27.17)` | `oklch(0.3959 0.1331 25.72)` |
-| Border / Separator | `--border` / `--separator` | `oklch(0.9258 0.0132 255.03)` | `oklch(0.28 0.0369 259.97)` |
+| Background | `--background` | `#f7f5ef` (warm cream) | `#1a2024` |
+| Foreground | `--foreground` | `#232a2e` (`--eclipse`) | `#f1f0ea` |
+| Surface (cards) | `--surface` | `#ffffff` | `#232a2e` |
+| Surface secondary (rails, wells) | `--surface-secondary` | `#efece3` (warm sand) | `#2a3237` |
+| Overlay (popovers/modals) | `--overlay` | `#ffffff` | `#2a3237` |
+| Muted (secondary body text) | `--muted` | `#505a5d` (6.00:1) | `#9aa6ab` (5.23:1) |
+| Subtle (meta labels) | `--subtle` | `#5f6b71` (4.64:1) | `#939da1` (4.71:1) |
+| Default (neutral fill) | `--default` | `#f0f3f4` | `#2e373c` |
+| Accent | `--accent` | `#4e7c9b` (slate blue) | `#6fa0c0` |
+| Accent strong (text/links) | `--accent-strong` | `#33586f` | `#4e7c9b` |
+| Success | `--success` | `#57b45f` | same |
+| Warning | `--warning` | `#e9a63c` | same |
+| Danger | `--danger` | `#e96e6e` | same |
+| Border / Separator | `--border` / `--separator` | `#e5e1d5` | `#333c41` |
 | Focus | `--focus` | = `--accent` | = `--accent` |
 
-**Chart palette** — a six-step accent→neutral ramp for ranked data
-visualisation (`--chart-1` highest rank → `--chart-6` lowest), plus
-`--chart-grid` (= `--border`):
+**Chart palette** — six **categorical** hues for distinguishing series (not a
+ranked ramp), plus `--chart-grid` (= `--border`):
 
-| Token | Value |
-|-------|-------|
-| `--chart-1` | `oklch(0.2894 0.1433 272.9)` |
-| `--chart-2` | `oklch(0.4018 0.1119 263.29)` |
-| `--chart-3` | `oklch(0.5138 0.102 263.13)` |
-| `--chart-4` | `oklch(0.5872 0.0334 248.17)` |
-| `--chart-5` | `oklch(0.7159 0.0358 256.79)` |
-| `--chart-6` | `oklch(0.8064 0.0226 251.2)` |
+| Token | Value | Hue |
+|-------|-------|-----|
+| `--chart-1` | `#33586f` | slate |
+| `--chart-2` | `#c9803f` | ochre |
+| `--chart-3` | `#5f8ba8` | blue |
+| `--chart-4` | `#7a9e63` | green |
+| `--chart-5` | `#9cc4da` | pale blue |
+| `--chart-6` | `#b0728f` | mauve |
 
-Charts are capped at **six series** to match the ramp; single-highlight charts
+Charts are capped at **six series** to match the palette; single-highlight charts
 use `--chart-1` for the emphasised element and `bg-default` for the rest.
 
 **Rules.** Never hardcode hex in components. Use semantic classes
@@ -208,9 +210,9 @@ use `--chart-1` for the emphasised element and `bg-default` for the rest.
 
 ## Typography
 
-Two families: **Geist Sans** (`--font-geist-sans`) for UI and prose, **Geist
-Mono** (`--font-geist-mono`) for code and tabular data. Hierarchy is driven by
-size and weight restraint:
+One family: **Urbanist** (`--font-urbanist`, mapped onto `--font-sans`), loaded in
+`apps/web/src/app/layout.tsx` and used for UI, prose and tabular data alike.
+Hierarchy is driven by size and weight restraint:
 
 - **Bold (700)** — headings (`H1`, `H2`, `H3`) and data emphasis (metric numbers)
 - **Semibold (600)** — nested headings (`H4`)
@@ -221,23 +223,29 @@ The weight ramp is flat by design: separation between levels comes from the size
 step, not from stacking weights on top of it.
 
 The front-matter `typography` tokens carry concrete `fontFamily`, `fontSize`,
-`fontWeight`, `lineHeight`, and `letterSpacing` for each level. The canonical
-component scale lives in `apps/web/src/components/typography.tsx` (`Typography.*`):
+`fontWeight`, `lineHeight`, and `letterSpacing` for each level. The components come
+from HeroUI (`import { Typography } from "@heroui/react"`) — there is no local
+Typography module; the one that lived at `apps/web/src/components/typography.tsx`
+was deleted. Only three subcomponents are in use:
 
-| Component | Token | Element | Classes |
-|-----------|-------|---------|---------|
-| `H1` | `h1` | Page title (one per page) | `font-bold text-4xl lg:text-5xl leading-tight tracking-tight text-foreground` |
-| `H2` | `h2` | Section title | `font-bold text-3xl tracking-tight text-foreground` |
-| `H3` | `h3` | Card title / subsection | `font-bold text-2xl tracking-tight text-foreground` |
-| `H4` | `h4` | Nested heading | `font-semibold text-xl tracking-tight text-foreground` |
-| `TextLg` | `body-lg` | Lead paragraph | `text-lg leading-relaxed text-muted` |
-| `Text` | `body` | Body | `text-base leading-relaxed text-foreground` |
-| `TextSm` | `body-sm` | Helper text | `text-sm leading-6 text-muted` |
-| `Label` | `label` | Form / nav label | `font-medium text-sm leading-none text-foreground` |
-| `Caption` | `caption` | Metadata / timestamps | `text-xs leading-tight text-muted` |
+| Component | Token | Element | Notes |
+|-----------|-------|---------|-------|
+| `Typography.Heading level={1}` | `h1` | `<h1>` | Page title, one per page |
+| `Typography.Heading level={2}` | `h2` | `<h2>` | Section title |
+| `Typography.Heading level={3}` | `h3` | `<h3>` | Card title / subsection |
+| `Typography.Heading level={4}` | `h4` | `<h4>` | Nested heading, `Card.Header` titles |
+| `Typography.Paragraph size="lg"` | `body-lg` | `<p>` | Lead paragraph |
+| `Typography.Paragraph` | `body` | `<p>` | Body |
+| `Typography.Paragraph color="muted" size="sm"` | `body-sm` | `<p>` | Helper / description text |
+| `Typography.Paragraph color="muted" size="xs"` | `caption` | `<p>` | Metadata, timestamps |
+| `Typography.Code` | `caption-mono` | `<code>` | Inline code |
 
-`caption-mono` pairs Geist Mono with the caption metrics for inline code
-(`InlineCode`) and tabular figures where numbers must align.
+There is no `Typography.H1`–`H4`, `TextLg`, `Text`, `TextSm`, `Label` or `Caption` —
+those were the local module's API and are gone.
+
+`caption-mono` applies the caption metrics to inline code (`Typography.Code`) and
+to tabular figures where numbers must align. There is no separate mono family —
+Urbanist is the single typeface; use `tabular-nums` for figure alignment.
 
 Use `Typography.*` rather than raw heading tags everywhere except MDX blog
 content and image-overlay text.
@@ -318,8 +326,8 @@ radius/padding/shadow; override only to communicate hierarchy.
   (`--danger` fill, `--danger-foreground` label). Disabled at
   `--disabled-opacity: 0.5`.
 - **Card** — HeroUI defaults (`--surface` background, `--foreground` text, base
-  radius, `--surface-shadow`); `Card.Header` uses `Typography.H4` +
-  `Typography.TextSm`.
+  radius, `--surface-shadow`); `Card.Header` uses `Typography.Heading level={4}` +
+  `Typography.Paragraph color="muted" size="sm"`.
 - **Chip** — `rounded-full` status badge; `color="success|warning|danger"` with a
   leading dot. Never signal state by colour alone — pair with text/icon. The
   token map binds `chip-success` / `chip-warning` / `chip-danger` to the status

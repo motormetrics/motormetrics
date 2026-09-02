@@ -49,7 +49,7 @@ vi.mock("@heroui/react", async (importOriginal) => ({
   cn: (...classes: unknown[]) => classes.flat().filter(Boolean).join(" "),
 }));
 
-vi.mock("framer-motion", () => ({
+vi.mock("motion/react", () => ({
   motion: {
     div: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
       <div {...props}>{children}</div>

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { EmptyState } from "./empty-state";
 
-vi.mock("framer-motion", () => ({
+vi.mock("motion/react", () => ({
   motion: {
     div: ({
       children,

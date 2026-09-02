@@ -9,18 +9,13 @@ allowed-tools: Read, Edit, Grep, Glob
 ## Configuration Structure
 
 ```
-packages/ui/
-├── tailwind.config.ts       # Base config with shadcn/ui theming
-└── src/styles/globals.css   # CSS variables
-
 apps/web/
-├── tailwind.config.ts       # Extends UI package config
-└── src/app/globals.css      # App-specific styles
+└── src/app/globals.css      # Tailwind, HeroUI, and theme tokens
 ```
 
 ## CSS Variables
 
-Defined in `packages/ui/src/styles/globals.css`:
+Defined and mapped in `apps/web/src/app/globals.css`:
 
 ```css
 @layer base {
@@ -32,7 +27,7 @@ Defined in `packages/ui/src/styles/globals.css`:
     --secondary: 210 40% 96.1%;
     --muted: 210 40% 96.1%;
     --accent: 210 40% 96.1%;
-    --destructive: 0 84.2% 60.2%;
+    --danger: 0 84.2% 60.2%;
     --border: 214.3 31.8% 91.4%;
     --radius: 0.5rem;
   }
@@ -47,21 +42,20 @@ Defined in `packages/ui/src/styles/globals.css`:
 
 ## Adding Custom Colors
 
-```typescript
-// tailwind.config.ts
-export default {
-  theme: {
-    extend: {
-      colors: {
-        brand: {
-          primary: "#0070F3",
-          secondary: "#7928CA",
-        },
-      },
-    },
-  },
-};
+There is no `tailwind.config.ts` in this repo. Tailwind v4 is CSS-first, so theme values
+are declared in `@theme` inside `apps/web/src/app/globals.css`:
+
+```css
+/* globals.css */
+@theme {
+  --color-brand-primary: #0070f3;
+  --color-brand-secondary: #7928ca;
+}
 ```
+
+A `--color-*` entry generates the matching utilities (`bg-brand-primary`,
+`text-brand-primary`, …). Note the palette itself is not declared this way — those tokens
+sit on `:root` so HeroUI can derive its calculated tier from them. See `DESIGN.md`.
 
 ## Adding Animations
 
@@ -89,7 +83,7 @@ theme: {
   .text-balance {
     text-wrap: balance;
   }
-  .scrollbar-hide {
+  .scrollbar-hidden {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
@@ -102,7 +96,6 @@ theme: {
 plugins: [
   require("@tailwindcss/typography"),  // prose classes
   require("@tailwindcss/forms"),        // form resets
-  require("tailwindcss-animate"),       // animations
 ]
 ```
 
@@ -128,7 +121,7 @@ Use `size-*` instead of `h-* w-*` for equal dimensions:
 @custom-variant dark (&:is(.dark *));
 ```
 
-This is already configured in both `apps/web/src/app/globals.css` and `packages/ui/src/styles/globals.css`. Dark CSS variables are fully defined in `.dark` blocks in both files.
+This is configured in `apps/web/src/app/globals.css`, which also defines dark CSS variables.
 
 **Theme switching** uses `next-themes` with `attribute="class"` to toggle `.dark` on `<html>`:
 
@@ -137,7 +130,7 @@ import { useTheme } from "next-themes";
 const { resolvedTheme, setTheme } = useTheme();
 ```
 
-**Status**: Dark mode activation is deferred until after HeroUI v3 migration (#714, blocked by #587). The CSS infrastructure is ready.
+**Status**: Dark mode CSS infrastructure is ready via web-local theme tokens.
 
 ## Debugging
 
@@ -165,4 +158,4 @@ TAILWIND_MODE=watch npx tailwindcss -i ./src/styles/globals.css -o ./dist/output
 ## References
 
 - Tailwind CSS: https://tailwindcss.com
-- Design tokens: See `design-language-system` skill
+- Design tokens: See `DESIGN.md` at the repo root (values live in `apps/web/src/app/globals.css`)

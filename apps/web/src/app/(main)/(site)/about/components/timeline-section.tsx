@@ -1,10 +1,8 @@
-"use client";
-
 import { cn, Typography } from "@heroui/react";
 import { ReportEyebrow } from "@web/components/shared/report";
 
 import { fadeInUpVariants } from "@web/config/animations";
-import { motion } from "framer-motion";
+import * as motion from "motion/react-client";
 
 interface TimelineItem {
   date: string;

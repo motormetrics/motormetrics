@@ -42,21 +42,20 @@ Defined and mapped in `apps/web/src/app/globals.css`:
 
 ## Adding Custom Colors
 
-```typescript
-// tailwind.config.ts
-export default {
-  theme: {
-    extend: {
-      colors: {
-        brand: {
-          primary: "#0070F3",
-          secondary: "#7928CA",
-        },
-      },
-    },
-  },
-};
+There is no `tailwind.config.ts` in this repo. Tailwind v4 is CSS-first, so theme values
+are declared in `@theme` inside `apps/web/src/app/globals.css`:
+
+```css
+/* globals.css */
+@theme {
+  --color-brand-primary: #0070f3;
+  --color-brand-secondary: #7928ca;
+}
 ```
+
+A `--color-*` entry generates the matching utilities (`bg-brand-primary`,
+`text-brand-primary`, …). Note the palette itself is not declared this way — those tokens
+sit on `:root` so HeroUI can derive its calculated tier from them. See `DESIGN.md`.
 
 ## Adding Animations
 
@@ -159,4 +158,4 @@ TAILWIND_MODE=watch npx tailwindcss -i ./src/styles/globals.css -o ./dist/output
 ## References
 
 - Tailwind CSS: https://tailwindcss.com
-- Design tokens: See `design-language-system` skill
+- Design tokens: See `DESIGN.md` at the repo root (values live in `apps/web/src/app/globals.css`)

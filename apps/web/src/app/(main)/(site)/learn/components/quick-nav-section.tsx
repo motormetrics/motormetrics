@@ -1,12 +1,10 @@
-"use client";
-
 import { Card, Typography } from "@heroui/react";
 import {
   staggerContainerVariants,
   staggerItemVariants,
 } from "@web/config/animations";
-import { motion } from "framer-motion";
 import { BookOpen, Database, GraduationCap, HelpCircle } from "lucide-react";
+import * as motion from "motion/react-client";
 import Link from "next/link";
 
 const navItems = [

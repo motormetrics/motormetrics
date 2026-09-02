@@ -19,7 +19,7 @@ Certificate of Entitlement) bidding results, and market trends.
 - **Tailwind CSS v4** for styling
 - **Drizzle ORM** with PostgreSQL (Neon Database)
 - **Zustand** for state management
-- **HeroUI** components with professional design system
+- **HeroUI v3** (`@heroui/react`) and **HeroUI Pro** (`@heroui-pro/react`) components on Tailwind CSS v4
 - **Vitest** for unit testing, **Playwright** for E2E testing
 - **Vercel** for deployment
 
