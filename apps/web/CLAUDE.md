@@ -63,14 +63,16 @@ See the `component-naming` skill for the full checklist.
 > **Note**: This app uses `motion` (the successor package); `framer-motion` has been
 > removed. HeroUI v3 does not require it — it is kept for custom page and chart animations.
 >
-> Two entry points, and the choice is about the server/client boundary, not preference:
+> Always render elements from `motion/react-client`:
 >
-> - **`import * as motion from "motion/react-client"`** — for presentational components that
->   only render `motion.*` elements. Lets the file stay a **server component**; do not add
->   `"use client"`.
-> - **`import { motion } from "motion/react"`** — when the file needs `"use client"` anyway
->   (hooks like `useScroll`, event handlers) or imports a type such as `Variants`.
->   `motion/react-client` does not export hooks or types.
+> - **`import * as motion from "motion/react-client"`** — for every `motion.*` element, in server
+>   and client components alike. A purely presentational file needs no `"use client"`.
+> - **`import { useScroll } from "motion/react"`** / **`import type { Variants } from "motion/react"`**
+>   — only for hooks and types, which `motion/react-client` does not export. A file using a hook
+>   still needs `"use client"`. Never import `motion` itself from `motion/react`.
+>
+> Tests mock `motion/react-client` with the element map at the top level (`{ div: … }`), not
+> nested under `motion`.
 
 Shared variants live in `src/config/animations.ts`.
 

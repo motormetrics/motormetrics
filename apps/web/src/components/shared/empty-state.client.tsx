@@ -4,7 +4,7 @@ import { Button } from "@heroui/react";
 
 import { fadeInUpVariants } from "@web/config/animations";
 import { Home, RotateCcw } from "lucide-react";
-import { motion } from "motion/react";
+import * as motion from "motion/react-client";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
