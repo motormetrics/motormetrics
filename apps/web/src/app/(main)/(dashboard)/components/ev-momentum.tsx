@@ -53,7 +53,7 @@ export async function EvMomentum() {
               isIconOnly: true,
               variant: "tertiary",
             })}
-            href="/cars/electric"
+            href="/cars/electric-vehicles"
           >
             <ArrowUpRight className="size-5" />
           </Link>
