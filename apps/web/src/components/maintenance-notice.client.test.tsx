@@ -16,35 +16,33 @@ vi.mock("@web/hooks/use-maintenance", () => ({
   useMaintenance: () => mockUseMaintenance(),
 }));
 
-vi.mock("framer-motion", () => ({
-  motion: {
-    div: ({
-      children,
-      className,
-      initial,
-      animate,
-      layout,
-      variants,
-    }: {
-      children?: React.ReactNode;
-      className?: string;
-      initial?: string;
-      animate?: string;
-      layout?: boolean;
-      variants?: object;
-    }) => (
-      <div
-        data-testid="motion-div"
-        data-initial={initial}
-        data-animate={animate}
-        data-layout={layout ? "true" : "false"}
-        data-has-variants={variants ? "true" : "false"}
-        className={className}
-      >
-        {children}
-      </div>
-    ),
-  },
+vi.mock("motion/react-client", () => ({
+  div: ({
+    children,
+    className,
+    initial,
+    animate,
+    layout,
+    variants,
+  }: {
+    children?: React.ReactNode;
+    className?: string;
+    initial?: string;
+    animate?: string;
+    layout?: boolean;
+    variants?: object;
+  }) => (
+    <div
+      data-testid="motion-div"
+      data-initial={initial}
+      data-animate={animate}
+      data-layout={layout ? "true" : "false"}
+      data-has-variants={variants ? "true" : "false"}
+      className={className}
+    >
+      {children}
+    </div>
+  ),
 }));
 
 describe("maintenance-notice client helpers", () => {

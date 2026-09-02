@@ -60,8 +60,19 @@ See the `component-naming` skill for the full checklist.
 
 ### Animation Patterns
 
-> **Note**: Import from `framer-motion`, not `motion/react`. HeroUI v3 does not require Framer Motion; this app keeps
-> it as a direct dependency for custom page and chart animations.
+> **Note**: This app uses `motion` (the successor package); `framer-motion` has been
+> removed. HeroUI v3 does not require it — it is kept for custom page and chart animations.
+>
+> Always render elements from `motion/react-client`:
+>
+> - **`import * as motion from "motion/react-client"`** — for every `motion.*` element, in server
+>   and client components alike. A purely presentational file needs no `"use client"`.
+> - **`import { useScroll } from "motion/react"`** / **`import type { Variants } from "motion/react"`**
+>   — only for hooks and types, which `motion/react-client` does not export. A file using a hook
+>   still needs `"use client"`. Never import `motion` itself from `motion/react`.
+>
+> Tests mock `motion/react-client` with the element map at the top level (`{ div: … }`), not
+> nested under `motion`.
 
 Shared variants live in `src/config/animations.ts`.
 
@@ -84,24 +95,32 @@ Shared variants live in `src/config/animations.ts`.
 
 ### Typography System
 
+Typography comes from HeroUI (`@heroui/react`). There is no local Typography module — the
+one that used to live at `@web/components/typography` was deleted, along with its
+`Typography.H1`–`H4` / `Typography.TextSm` API. Only three subcomponents are in use:
+`Typography.Heading`, `Typography.Paragraph` and `Typography.Code`.
+
 **Enforcement Rules**:
 
-- ✅ Always use `Typography.H4` for `Card.Header` titles (not raw `<h3>`)
-- ✅ Always use `Typography.TextSm` for `Card.Header` descriptions (not raw `<p>`)
-- ✅ Use `Typography.H2` for section headings in blog components
-- ✅ Use `Typography.H3` for card titles and subsections
+- ✅ Use `Typography.Heading` with an explicit `level` (`1`–`4`) for headings
+- ✅ Use `Typography.Paragraph` for body copy; `color="muted" size="sm"` is the standard
+  treatment for secondary/description text
+- ✅ `Card.Header` titles are `Typography.Heading level={4}`, descriptions are
+  `Typography.Paragraph color="muted" size="sm"`
 - ❌ Avoid raw heading tags (`<h1>`–`<h4>`) outside of MDX content
+- ❌ There is no `Typography.H4`, `Typography.TextSm`, or default export — those are v2-era
 - ⚠️ Exception: raw tags allowed only for MDX blog content and image overlay text
 
 **Card Header Pattern** (standard for all cards):
 
 ```tsx
-import { Card } from "@heroui/react";
-import Typography from "@web/components/typography";
+import { Card, Typography } from "@heroui/react";
 
 <Card.Header className="flex flex-col items-start gap-2">
-  <Typography.H4>Card Title</Typography.H4>
-  <Typography.TextSm>Card description text</Typography.TextSm>
+  <Typography.Heading level={4}>Card Title</Typography.Heading>
+  <Typography.Paragraph color="muted" size="sm">
+    Card description text
+  </Typography.Paragraph>
 </Card.Header>
 ```
 
@@ -142,7 +161,8 @@ and `margin-top` introduce.
 
 ### Colour System
 
-See the `design-language-system` skill for the full palette, chart patterns, and migration checklists.
+`src/app/globals.css` is the source of truth for the palette; `DESIGN.md` at the repo root
+documents it and the HeroUI token bindings. If the two ever disagree, `globals.css` wins.
 
 - Dark mode variables are in `src/app/globals.css`. Use HeroUI surface tokens (`bg-surface`,
   `bg-surface-secondary`) for card/panel backgrounds, never hardcoded `bg-white`

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useScroll } from "framer-motion";
+import { useScroll } from "motion/react";
+import * as motion from "motion/react-client";
 
 export function ProgressBar() {
   const { scrollYProgress } = useScroll();

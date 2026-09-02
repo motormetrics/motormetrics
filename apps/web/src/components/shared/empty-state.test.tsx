@@ -1,16 +1,14 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { EmptyState } from "./empty-state";
 
-vi.mock("framer-motion", () => ({
-  motion: {
-    div: ({
-      children,
-      className,
-    }: {
-      children: React.ReactNode;
-      className?: string;
-    }) => <div className={className}>{children}</div>,
-  },
+vi.mock("motion/react-client", () => ({
+  div: ({
+    children,
+    className,
+  }: {
+    children: React.ReactNode;
+    className?: string;
+  }) => <div className={className}>{children}</div>,
 }));
 
 describe("EmptyState", () => {

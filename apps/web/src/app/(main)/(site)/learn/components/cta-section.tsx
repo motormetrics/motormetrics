@@ -1,5 +1,3 @@
-"use client";
-
 import { Button, Typography } from "@heroui/react";
 import { ReportEyebrow } from "@web/components/shared/report";
 
@@ -7,8 +5,8 @@ import {
   staggerContainerVariants,
   staggerItemVariants,
 } from "@web/config/animations";
-import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import * as motion from "motion/react-client";
 import Link from "next/link";
 
 export function CtaSection() {

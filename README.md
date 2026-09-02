@@ -114,7 +114,7 @@ motormetrics/
 ## Technologies
 
 - **Frontend**: Next.js 16.1 with Cache Components, React 19.2, TypeScript 5.8
-- **UI Library**: HeroUI (NextUI successor) with professional design system
+- **UI Library**: HeroUI v3 (`@heroui/react`) and HeroUI Pro (`@heroui-pro/react`) on Tailwind CSS v4
 - **Styling**: Tailwind CSS v4.1 with custom configuration
 - **Backend**: Node.js 22, TypeScript with strict mode
 - **API Framework**: Hono with OpenAPI documentation

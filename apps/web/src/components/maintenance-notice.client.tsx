@@ -1,7 +1,8 @@
 "use client";
 
 import { useMaintenance } from "@web/hooks/use-maintenance";
-import { motion, type Variants } from "framer-motion";
+import type { Variants } from "motion/react";
+import * as motion from "motion/react-client";
 import type { ReactNode } from "react";
 
 const containerVariants: Variants = {
