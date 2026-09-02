@@ -1,10 +1,10 @@
 import { redis } from "@motormetrics/utils";
+import { EV_CHARGING_CACHE_TAG } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { updateEvChargingPoints } from "@web/workflows/ev-charging/steps/process-data";
 import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
 
-export const EV_CHARGING_CACHE_TAG = "ev-charging";
 export const LAST_UPDATED_EV_CHARGING_KEY = "last_updated:ev-charging";
 
 /**
