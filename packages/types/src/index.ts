@@ -93,6 +93,26 @@ export interface CarPopulation {
   number: number;
 }
 
+export interface EvChargingPoint {
+  evCpId: string;
+  registrationCode: string;
+  operator: string;
+  outlets: number;
+  plugType: string;
+  chargingSpeedKw: number | null;
+  postalCode: string | null;
+  blockHouseNo: string | null;
+  streetName: string | null;
+  buildingName: string | null;
+  floorNo: string | null;
+  lotNo: string | null;
+  publiclyAccessible: boolean;
+  longitude: number | null;
+  latitude: number | null;
+  registrationDate: string | null;
+  parkingLotType: string | null;
+}
+
 export interface CleanSpecialCharsOptions {
   separator?: string;
   joinSeparator?: string;
