@@ -1,20 +1,19 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { DimensionStat } from "@web/queries/cars";
-import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
+import {
+  type OnUrlUpdateFunction,
+  withNuqsTestingAdapter,
+} from "nuqs/adapters/testing";
 import { describe, expect, it, vi } from "vitest";
 import { DimensionTable } from "./dimension-table";
 
-const onUrlUpdate = vi.fn<(event: UrlUpdateEvent) => void>();
+const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <NuqsTestingAdapter
-    searchParams={{ dimension: "make" }}
-    onUrlUpdate={onUrlUpdate}
-  >
-    {children}
-  </NuqsTestingAdapter>
-);
+const wrapper = withNuqsTestingAdapter({
+  searchParams: { dimension: "make" },
+  onUrlUpdate,
+});
 
 const rows: DimensionStat[] = [
   { name: "TOYOTA", count: 600, share: 60, trend: [], yoyChange: 12.5 },

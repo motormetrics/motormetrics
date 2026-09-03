@@ -1,18 +1,17 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { AdoptionColumns } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-columns";
-import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
+import {
+  type OnUrlUpdateFunction,
+  withNuqsTestingAdapter,
+} from "nuqs/adapters/testing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const onUrlUpdate = vi.fn<(event: UrlUpdateEvent) => void>();
+const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <NuqsTestingAdapter
-    searchParams={{ month: "2025-10" }}
-    onUrlUpdate={onUrlUpdate}
-  >
-    {children}
-  </NuqsTestingAdapter>
-);
+const wrapper = withNuqsTestingAdapter({
+  searchParams: { month: "2025-10" },
+  onUrlUpdate,
+});
 
 const columns = [
   { month: "2025-08", share: 24.1 },

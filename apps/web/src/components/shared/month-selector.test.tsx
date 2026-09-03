@@ -1,12 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { NuqsTestingAdapter } from "nuqs/adapters/testing";
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing";
 import { MonthSelector } from "./month-selector";
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <NuqsTestingAdapter searchParams={{ month: "2024-01" }}>
-    {children}
-  </NuqsTestingAdapter>
-);
+const wrapper = withNuqsTestingAdapter({
+  searchParams: { month: "2024-01" },
+});
 
 vi.mock("@heroui/react", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();

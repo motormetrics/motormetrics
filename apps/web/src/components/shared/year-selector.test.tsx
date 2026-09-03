@@ -1,15 +1,17 @@
 import { toast } from "@heroui/react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
+import {
+  type OnUrlUpdateFunction,
+  withNuqsTestingAdapter,
+} from "nuqs/adapters/testing";
 import { YearSelector } from "./year-selector";
 
-const onUrlUpdate = vi.fn<(event: UrlUpdateEvent) => void>();
+const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <NuqsTestingAdapter searchParams={{ year: "2024" }} onUrlUpdate={onUrlUpdate}>
-    {children}
-  </NuqsTestingAdapter>
-);
+const wrapper = withNuqsTestingAdapter({
+  searchParams: { year: "2024" },
+  onUrlUpdate,
+});
 
 const lastUrlUpdate = () => onUrlUpdate.mock.calls.at(-1)?.[0];
 
