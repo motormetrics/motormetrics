@@ -3,7 +3,7 @@ import { MetricCard } from "@web/components/shared/metric-card";
 
 describe("MetricCard", () => {
   it("should combine metric value and comparison", () => {
-    render(
+    const { container } = render(
       <MetricCard
         title="COE Premiums"
         value={50000}
@@ -12,13 +12,13 @@ describe("MetricCard", () => {
       />,
     );
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByText("COE Premiums")).toBeInTheDocument();
     expect(screen.getByText("vs last month")).toBeInTheDocument();
   });
 
   it("should render with hero variant", () => {
-    render(
+    const { container } = render(
       <MetricCard
         title="Total Registrations"
         value={10000}
@@ -28,7 +28,7 @@ describe("MetricCard", () => {
       />,
     );
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByText("Total Registrations")).toBeInTheDocument();
   });
 });

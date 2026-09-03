@@ -14,7 +14,7 @@ describe("Makes", () => {
   const lettersGerman = ["ALL", "A", "B", "M", "P"];
 
   it("should render the section with title and count", () => {
-    render(
+    const { container } = render(
       <AllMakes
         title="Test Makes"
         sortedMakes={germanMakes}
@@ -22,7 +22,7 @@ describe("Makes", () => {
         letters={lettersGerman}
       />,
     );
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByText("Test Makes")).toBeVisible();
     expect(screen.getByText(germanMakes.length.toString())).toBeVisible();
   });

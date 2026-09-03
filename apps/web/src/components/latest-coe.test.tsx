@@ -4,7 +4,8 @@ import type { COECategory, COEResult } from "@web/types";
 import type React from "react";
 import { LatestCoePremium } from "./coe/latest-coe-premium";
 
-vi.mock("@heroui-pro/react", () => {
+vi.mock("@heroui-pro/react", async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
   const KPI = ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   );
@@ -22,7 +23,7 @@ vi.mock("@heroui-pro/react", () => {
     <div data-testid="sparkline" data-colour={color} />
   );
 
-  return { KPI };
+  return { ...actual, KPI };
 });
 
 describe("LatestCoe", () => {
@@ -48,9 +49,9 @@ describe("LatestCoe", () => {
   ];
 
   it("should render all COE results", () => {
-    render(<LatestCoePremium results={mockResults} />);
+    const { container } = render(<LatestCoePremium results={mockResults} />);
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByText("Category A")).toBeInTheDocument();
     expect(screen.getByText("Category B")).toBeInTheDocument();
     expect(screen.getByText("95000")).toBeInTheDocument();

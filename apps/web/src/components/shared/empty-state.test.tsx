@@ -17,9 +17,9 @@ describe("EmptyState", () => {
   });
 
   it("should render default title and description", () => {
-    render(<EmptyState />);
+    const { container } = render(<EmptyState />);
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByText("No Data Available")).toBeInTheDocument();
     expect(
       screen.getByText(
@@ -89,7 +89,9 @@ describe("EmptyState", () => {
   });
 
   it("should call history.back when Go Back button is clicked", () => {
-    const historyBackSpy = vi.spyOn(history, "back");
+    const historyBackSpy = vi
+      .spyOn(history, "back")
+      .mockImplementation(() => {});
     render(<EmptyState />);
 
     fireEvent.click(screen.getByRole("button", { name: /go back/i }));

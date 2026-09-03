@@ -7,8 +7,10 @@ describe("MakeCard", () => {
   const mockLogoUrl = "https://blob.vercel-storage.com/logos/bmw.png";
 
   it("should render the make name", () => {
-    render(<MakeCard make={mockMake} logoUrl={mockLogoUrl} />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(
+      <MakeCard make={mockMake} logoUrl={mockLogoUrl} />,
+    );
+    expect(container).toMatchSnapshot();
     expect(screen.getByText(mockMake)).toBeVisible();
   });
 

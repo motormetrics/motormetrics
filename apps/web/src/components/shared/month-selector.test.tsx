@@ -1,14 +1,10 @@
 import { render, screen } from "@testing-library/react";
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing";
 import { MonthSelector } from "./month-selector";
 
-vi.mock("nuqs", () => ({
-  parseAsString: {
-    withDefault: vi.fn(() => ({
-      withOptions: vi.fn(() => ({})),
-    })),
-  },
-  useQueryState: vi.fn(() => ["2024-01", vi.fn()]),
-}));
+const wrapper = withNuqsTestingAdapter({
+  searchParams: { month: "2024-01" },
+});
 
 vi.mock("@heroui/react", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
@@ -53,13 +49,16 @@ vi.mock("@web/utils/group-by-year", () => ({
 describe("MonthSelector", () => {
   it("should render with months array", () => {
     const mockMonths = ["2024-01"];
-    render(<MonthSelector months={mockMonths} latestMonth="2024-01" />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(
+      <MonthSelector months={mockMonths} latestMonth="2024-01" />,
+      { wrapper },
+    );
+    expect(container).toMatchSnapshot();
     expect(screen.getByRole("combobox")).toBeInTheDocument();
   });
 
   it("should render with empty months array", () => {
-    render(<MonthSelector months={[]} latestMonth="" />);
+    render(<MonthSelector months={[]} latestMonth="" />, { wrapper });
     expect(screen.getByRole("combobox")).toBeInTheDocument();
   });
 
@@ -71,6 +70,7 @@ describe("MonthSelector", () => {
         latestMonth="2024-01"
         wasAdjusted={true}
       />,
+      { wrapper },
     );
     expect(screen.getByRole("combobox")).toBeInTheDocument();
   });

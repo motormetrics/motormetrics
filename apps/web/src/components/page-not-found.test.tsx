@@ -24,7 +24,9 @@ describe("PageNotFound", () => {
   });
 
   it("should go back when Go Back button is clicked", () => {
-    const historyBackSpy = vi.spyOn(history, "back");
+    const historyBackSpy = vi
+      .spyOn(history, "back")
+      .mockImplementation(() => {});
     render(<PageNotFound />);
 
     fireEvent.click(screen.getByRole("button", { name: "Go Back" }));

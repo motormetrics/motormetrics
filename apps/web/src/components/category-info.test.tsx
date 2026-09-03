@@ -11,7 +11,7 @@ describe("CategoryInfo", () => {
   });
 
   it("should render with required props", () => {
-    render(
+    const { container } = render(
       <CategoryInfo
         icon={Car}
         category="Category A"
@@ -21,7 +21,7 @@ describe("CategoryInfo", () => {
       />,
     );
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByText("Category A")).toBeInTheDocument();
     expect(screen.getByText("Cars up to 1600cc and 97kW")).toBeInTheDocument();
   });

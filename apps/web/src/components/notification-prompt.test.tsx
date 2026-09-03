@@ -60,7 +60,7 @@ async function renderDelayedPrompt() {
 }
 
 describe("NotificationPrompt Component", () => {
-  let originalNotification: typeof global.Notification;
+  let originalNotification: typeof globalThis.Notification;
 
   beforeEach(() => {
     vi.useFakeTimers();
@@ -70,15 +70,15 @@ describe("NotificationPrompt Component", () => {
       configurable: true,
       value: localStorageMock,
     });
-    originalNotification = global.Notification;
-    global.Notification = {
+    originalNotification = globalThis.Notification;
+    globalThis.Notification = {
       requestPermission: vi.fn().mockResolvedValue("default"),
       permission: "default",
-    } as unknown as typeof global.Notification;
+    } as unknown as typeof globalThis.Notification;
   });
 
   afterEach(() => {
-    global.Notification = originalNotification;
+    globalThis.Notification = originalNotification;
     vi.useRealTimers();
   });
 
@@ -111,10 +111,10 @@ describe("NotificationPrompt Component", () => {
     "granted",
     "denied",
   ] as const)("does not prompt when permission is %s", async (permission) => {
-    global.Notification = {
+    globalThis.Notification = {
       requestPermission: vi.fn(),
       permission,
-    } as unknown as typeof global.Notification;
+    } as unknown as typeof globalThis.Notification;
 
     await renderDelayedPrompt();
     expect(toast).not.toHaveBeenCalled();
@@ -127,7 +127,7 @@ describe("NotificationPrompt Component", () => {
   });
 
   it("requests permission only when Enable is pressed", async () => {
-    vi.mocked(global.Notification.requestPermission).mockResolvedValue(
+    vi.mocked(globalThis.Notification.requestPermission).mockResolvedValue(
       "granted",
     );
     await renderDelayedPrompt();
@@ -137,7 +137,7 @@ describe("NotificationPrompt Component", () => {
       fireEvent.click(screen.getAllByTestId("button")[0]);
     });
 
-    expect(global.Notification.requestPermission).toHaveBeenCalledOnce();
+    expect(globalThis.Notification.requestPermission).toHaveBeenCalledOnce();
     expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
     expect(toast.success).toHaveBeenCalledWith("Notifications enabled", {
       description: "You will receive an alert when new data is published.",
@@ -150,7 +150,7 @@ describe("NotificationPrompt Component", () => {
 
     fireEvent.click(screen.getAllByTestId("button")[1]);
 
-    expect(global.Notification.requestPermission).not.toHaveBeenCalled();
+    expect(globalThis.Notification.requestPermission).not.toHaveBeenCalled();
     expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
     expect(localStorageMock.setItem).toHaveBeenCalledWith(
       "motormetrics:notification-prompt-dismissed",
@@ -159,7 +159,7 @@ describe("NotificationPrompt Component", () => {
   });
 
   it("shows guidance when the browser declines permission", async () => {
-    vi.mocked(global.Notification.requestPermission).mockResolvedValue(
+    vi.mocked(globalThis.Notification.requestPermission).mockResolvedValue(
       "denied",
     );
     await renderDelayedPrompt();
@@ -186,7 +186,7 @@ describe("NotificationPrompt Component", () => {
   });
 
   it("does not prompt when the Notification API is unavailable", async () => {
-    delete (global as Partial<typeof globalThis>).Notification;
+    delete (globalThis as Partial<typeof globalThis>).Notification;
     await renderDelayedPrompt();
     expect(toast).not.toHaveBeenCalled();
   });

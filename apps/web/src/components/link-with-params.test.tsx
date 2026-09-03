@@ -26,13 +26,13 @@ describe("LinkWithParams", () => {
       toString: () => "",
     } as any);
 
-    render(
+    const { container } = render(
       <LinkWithParams href="/test">
         <span>Test Link</span>
       </LinkWithParams>,
     );
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByRole("link")).toBeInTheDocument();
     expect(screen.getByText("Test Link")).toBeInTheDocument();
   });
