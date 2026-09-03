@@ -1,3 +1,19 @@
+## [5.6.0](https://github.com/motormetrics/motormetrics/compare/v5.5.2...v5.6.0) (2026-09-03)
+
+### Features
+
+* **database:** add the ev charging points schema ([994d9b5](https://github.com/motormetrics/motormetrics/commit/994d9b55111a9cc69154cb9ebca9ce4e5c5c1f95))
+* **types:** add the EvChargingPoint interface ([e74bec3](https://github.com/motormetrics/motormetrics/commit/e74bec3c35c5be0afe6c8a42cbb046086a4abea4))
+* **utils:** mark the package side-effect free ([3f203c8](https://github.com/motormetrics/motormetrics/commit/3f203c8028fc190c0d8cc6b1cb004857a4181d2b))
+* **web:** ingest the ev charging points dataset ([f4ce376](https://github.com/motormetrics/motormetrics/commit/f4ce376e0f460bf5d0d2468f7dfce1749c9b5a16))
+* **web:** lead the ev fleet panel with the charging network ([572d95b](https://github.com/motormetrics/motormetrics/commit/572d95bc7d4ce6047ee9f2c440febc56425220df))
+
+### Bug Fixes
+
+* **web:** keep ev charging batches under the neon param cap ([7cc149b](https://github.com/motormetrics/motormetrics/commit/7cc149b919d5d3eaefd3d3da302fd283c920ad94))
+* **web:** point the ev momentum panel at the ev page ([67df60f](https://github.com/motormetrics/motormetrics/commit/67df60fe3d39bd9ca613aec553af9b1142ff7bd2))
+* **web:** shrink the ev charging insert batches ([39ed90e](https://github.com/motormetrics/motormetrics/commit/39ed90e528f42fae54e780f197f5583788624883))
+
 ## [5.5.2](https://github.com/motormetrics/motormetrics/compare/v5.5.1...v5.5.2) (2026-09-01)
 
 ### Bug Fixes
