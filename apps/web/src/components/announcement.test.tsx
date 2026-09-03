@@ -4,31 +4,35 @@ import type { Announcement as AnnouncementType } from "@web/types";
 import { createElement } from "react";
 import { vi } from "vitest";
 
-const announcementsFixture: AnnouncementType[] = [];
-let mockPathname = "/";
+// Hoisted so the mock factories below can reach it once they are lifted
+// above the imports (the browser mocker evaluates them eagerly).
+const state = vi.hoisted(() => ({
+  announcements: [] as AnnouncementType[],
+  pathname: "/",
+}));
 
 vi.mock("@web/config", () => ({
   get announcements() {
-    return announcementsFixture;
+    return state.announcements;
   },
 }));
 
 vi.mock("next/navigation", () => ({
-  usePathname: () => mockPathname,
+  usePathname: () => state.pathname,
 }));
 
 describe("Announcement", () => {
   beforeEach(() => {
-    announcementsFixture.length = 0;
-    mockPathname = "/";
+    state.announcements.length = 0;
+    state.pathname = "/";
   });
 
   it("should prioritise path-specific announcements", () => {
-    announcementsFixture.push(
+    state.announcements.push(
       { content: "Cars update", paths: ["/cars"] },
       { content: "Global update" },
     );
-    mockPathname = "/cars/makes";
+    state.pathname = "/cars/makes";
 
     const { container } = render(createElement(Announcement));
 
@@ -37,8 +41,8 @@ describe("Announcement", () => {
   });
 
   it("should fall back to global announcements", () => {
-    announcementsFixture.push({ content: "Global notice" });
-    mockPathname = "/unknown";
+    state.announcements.push({ content: "Global notice" });
+    state.pathname = "/unknown";
 
     render(createElement(Announcement));
 
@@ -51,8 +55,8 @@ describe("Announcement", () => {
   });
 
   it("should render nothing when no path matches and no global fallback exists", () => {
-    announcementsFixture.push({ content: "Cars update", paths: ["/cars"] });
-    mockPathname = "/coe";
+    state.announcements.push({ content: "Cars update", paths: ["/cars"] });
+    state.pathname = "/coe";
 
     const { container } = render(createElement(Announcement));
 

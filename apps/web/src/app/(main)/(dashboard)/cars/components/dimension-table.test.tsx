@@ -1,17 +1,20 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { DimensionStat } from "@web/queries/cars";
+import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { describe, expect, it, vi } from "vitest";
 import { DimensionTable } from "./dimension-table";
 
-const setDimension = vi.fn();
+const onUrlUpdate = vi.fn<(event: UrlUpdateEvent) => void>();
 
-vi.mock("nuqs", () => ({
-  parseAsStringLiteral: () => ({
-    withDefault: () => ({ withOptions: () => ({}) }),
-  }),
-  useQueryState: () => ["make", setDimension],
-}));
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <NuqsTestingAdapter
+    searchParams={{ dimension: "make" }}
+    onUrlUpdate={onUrlUpdate}
+  >
+    {children}
+  </NuqsTestingAdapter>
+);
 
 const rows: DimensionStat[] = [
   { name: "TOYOTA", count: 600, share: 60, trend: [], yoyChange: 12.5 },
@@ -35,6 +38,7 @@ const renderTable = (rowsToRender: DimensionStat[] = rows) =>
       monthLabel="October 2025"
       rows={rowsToRender}
     />,
+    { wrapper },
   );
 
 /**
@@ -127,7 +131,9 @@ describe("DimensionTable", () => {
 
     await user.click(tab);
 
-    expect(setDimension).toHaveBeenCalledWith("fuelType");
+    expect(
+      onUrlUpdate.mock.calls.at(-1)?.[0].searchParams.get("dimension"),
+    ).toBe("fuelType");
   });
 
   it("should collapse a long list to the first ten rows", () => {

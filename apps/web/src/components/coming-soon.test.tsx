@@ -3,13 +3,13 @@ import { ComingSoon } from "@web/components/coming-soon";
 
 describe("ComingSoon", () => {
   it("should render ComingSoon label", () => {
-    render(
+    const { container } = render(
       <ComingSoon>
         <span>Trends</span>
       </ComingSoon>,
     );
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByText("Coming Soon")).toBeInTheDocument();
   });
 });

@@ -1,18 +1,17 @@
 import { toast } from "@heroui/react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { YearSelector } from "./year-selector";
 
-const mockSetYear = vi.fn();
-const mockUseQueryState = vi.fn(() => [2024, mockSetYear]);
+const onUrlUpdate = vi.fn<(event: UrlUpdateEvent) => void>();
 
-vi.mock("nuqs", () => ({
-  parseAsInteger: {
-    withDefault: vi.fn(() => ({
-      withOptions: vi.fn(() => ({})),
-    })),
-  },
-  useQueryState: () => mockUseQueryState(),
-}));
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <NuqsTestingAdapter searchParams={{ year: "2024" }} onUrlUpdate={onUrlUpdate}>
+    {children}
+  </NuqsTestingAdapter>
+);
+
+const lastUrlUpdate = () => onUrlUpdate.mock.calls.at(-1)?.[0];
 
 vi.mock("@heroui/react", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
@@ -67,6 +66,7 @@ describe("YearSelector", () => {
   it("should render years sorted from newest to oldest", () => {
     const { container } = render(
       <YearSelector years={[2022, 2024, 2023]} latestYear={2024} />,
+      { wrapper },
     );
 
     expect(container).toMatchSnapshot();
@@ -78,18 +78,25 @@ describe("YearSelector", () => {
     expect(options).toEqual(["2024", "2023", "2022"]);
   });
 
-  it("should update query state when selection changes", () => {
-    render(<YearSelector years={[2022, 2024]} latestYear={2024} />);
+  it("should update query state when selection changes", async () => {
+    render(<YearSelector years={[2022, 2024]} latestYear={2024} />, {
+      wrapper,
+    });
 
     fireEvent.change(screen.getByTestId("year-selector"), {
       target: { value: "2022" },
     });
-    expect(mockSetYear).toHaveBeenCalledWith(2022);
+    // nuqs flushes URL updates asynchronously.
+    await waitFor(() =>
+      expect(lastUrlUpdate()?.searchParams.get("year")).toBe("2022"),
+    );
 
     fireEvent.change(screen.getByTestId("year-selector"), {
       target: { value: "" },
     });
-    expect(mockSetYear).toHaveBeenCalledWith(null);
+    await waitFor(() =>
+      expect(lastUrlUpdate()?.searchParams.get("year")).toBeNull(),
+    );
   });
 
   it("should show adjustment toast only once", () => {
@@ -99,6 +106,7 @@ describe("YearSelector", () => {
         latestYear={2024}
         wasAdjusted={true}
       />,
+      { wrapper },
     );
 
     expect(toast.info).toHaveBeenCalledTimes(1);
@@ -121,6 +129,7 @@ describe("YearSelector", () => {
         latestYear={2024}
         wasAdjusted={false}
       />,
+      { wrapper },
     );
 
     expect(toast.info).not.toHaveBeenCalled();

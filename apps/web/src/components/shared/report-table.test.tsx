@@ -45,9 +45,9 @@ describe("ReportTable", () => {
 
     // The width is applied through a custom property and a `sm:` utility, so
     // jsdom — which loads no Tailwind — only ever sees the variable.
-    expect(getByRole("columnheader")).toHaveStyle({
-      "--report-col-width": "30%",
-    });
+    expect(
+      getByRole("columnheader").style.getPropertyValue("--report-col-width"),
+    ).toBe("30%");
   });
 });
 

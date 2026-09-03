@@ -33,8 +33,8 @@ describe("useMaintenance", () => {
       get: mockGet,
     });
 
-    intervalSpy = vi.spyOn(global, "setInterval");
-    vi.spyOn(global, "clearInterval");
+    intervalSpy = vi.spyOn(globalThis, "setInterval");
+    vi.spyOn(globalThis, "clearInterval");
   });
 
   afterEach(() => {
@@ -109,7 +109,7 @@ describe("useMaintenance", () => {
 
     unmount();
 
-    expect(global.clearInterval).toHaveBeenCalled();
+    expect(globalThis.clearInterval).toHaveBeenCalled();
   });
 
   it("should handle errors gracefully", async () => {

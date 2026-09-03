@@ -11,8 +11,8 @@ describe("LoadingIndicator", () => {
   it("should render progress bar when pending", async () => {
     const { default: LoadingIndicator } = await import("./loading-indicator");
 
-    render(<LoadingIndicator />);
+    const { container } = render(<LoadingIndicator />);
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

@@ -15,70 +15,70 @@ import {
 
 describe("Skeleton components", () => {
   it("should render SkeletonText", () => {
-    render(<SkeletonText />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(<SkeletonText />);
+    expect(container).toMatchSnapshot();
   });
 
   it("should render SkeletonHeading", () => {
-    render(<SkeletonHeading />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(<SkeletonHeading />);
+    expect(container).toMatchSnapshot();
   });
 
   it("should render SkeletonCard", () => {
-    render(<SkeletonCard />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(<SkeletonCard />);
+    expect(container).toMatchSnapshot();
   });
 
   it("should render SkeletonChart", () => {
-    render(<SkeletonChart />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(<SkeletonChart />);
+    expect(container).toMatchSnapshot();
   });
 
   it("should render SkeletonMetricCard", () => {
-    render(<SkeletonMetricCard />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(<SkeletonMetricCard />);
+    expect(container).toMatchSnapshot();
   });
 
   it("should render SkeletonChartWidget", () => {
-    render(<SkeletonChartWidget />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(<SkeletonChartWidget />);
+    expect(container).toMatchSnapshot();
   });
 
   it("should render SkeletonPageHeader", () => {
-    render(<SkeletonPageHeader />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(<SkeletonPageHeader />);
+    expect(container).toMatchSnapshot();
   });
 
   it("should render SkeletonBentoCard", () => {
-    render(<SkeletonBentoCard />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(<SkeletonBentoCard />);
+    expect(container).toMatchSnapshot();
   });
 
   it("should render SectionSkeleton with title", () => {
-    render(
+    const { container } = render(
       <SectionSkeleton>
         <SkeletonCard />
       </SectionSkeleton>,
     );
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it("should render SectionSkeleton without title", () => {
-    render(
+    const { container } = render(
       <SectionSkeleton title={false}>
         <SkeletonCard />
       </SectionSkeleton>,
     );
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it("should render GridSkeleton", () => {
-    render(<GridSkeleton count={4} />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(<GridSkeleton count={4} />);
+    expect(container).toMatchSnapshot();
   });
 
   it("should render ListSkeleton", () => {
-    render(<ListSkeleton count={3} />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(<ListSkeleton count={3} />);
+    expect(container).toMatchSnapshot();
   });
 });

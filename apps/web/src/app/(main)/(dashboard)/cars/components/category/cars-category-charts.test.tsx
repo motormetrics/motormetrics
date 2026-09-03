@@ -17,13 +17,13 @@ describe("Cars Category Charts", () => {
     };
 
     it("should render chart title and description", () => {
-      render(<TopMakesChart {...defaultProps} />);
+      const { container } = render(<TopMakesChart {...defaultProps} />);
 
       expect(screen.getByText("Top Makes - Petrol")).toBeInTheDocument();
       expect(
         screen.getByText("Most popular brands in this category"),
       ).toBeInTheDocument();
-      expect(document.body.firstChild).toMatchSnapshot();
+      expect(container).toMatchSnapshot();
     });
 
     it("should render custom description when provided", () => {
@@ -37,9 +37,10 @@ describe("Cars Category Charts", () => {
     it("should render top 3 ranking chips", () => {
       render(<TopMakesChart {...defaultProps} />);
 
-      expect(screen.getByText("Toyota")).toBeInTheDocument();
-      expect(screen.getByText("Honda")).toBeInTheDocument();
-      expect(screen.getByText("BMW")).toBeInTheDocument();
+      // Recharts also renders a hidden measurement span with the label text.
+      expect(screen.getAllByText("Toyota")[0]).toBeInTheDocument();
+      expect(screen.getAllByText("Honda")[0]).toBeInTheDocument();
+      expect(screen.getAllByText("BMW")[0]).toBeInTheDocument();
     });
 
     it("should render empty state when makes array is empty", () => {

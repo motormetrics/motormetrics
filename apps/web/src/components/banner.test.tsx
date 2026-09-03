@@ -22,9 +22,9 @@ describe("Banner", () => {
       <span data-testid="banner-content">Hello COE</span>
     );
 
-    render(<Banner />);
+    const { container } = render(<Banner />);
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByTestId("banner-content")).toHaveTextContent("Hello COE");
   });
 

@@ -142,6 +142,10 @@ describe("MakesTable", () => {
     const user = userEvent.setup();
     renderTable();
 
+    // Stop the real anchor navigating the browser test page away.
+    document.addEventListener("click", (event) => event.preventDefault(), {
+      once: true,
+    });
     await user.click(screen.getAllByRole("link")[1]);
 
     expect(capture).toHaveBeenCalledExactlyOnceWith("car_make_searched", {

@@ -3,8 +3,10 @@ import { MetricsComparison } from "@web/components/metrics-comparison";
 
 describe("MetricsComparison", () => {
   it("should indicate positive growth", () => {
-    render(<MetricsComparison current={110} previousMonth={100} />);
-    expect(document.body.firstChild).toMatchSnapshot();
+    const { container } = render(
+      <MetricsComparison current={110} previousMonth={100} />,
+    );
+    expect(container).toMatchSnapshot();
     expect(screen.getByText("vs last month")).toBeInTheDocument();
     expect(screen.getByText("10%")).toBeInTheDocument();
   });

@@ -23,7 +23,7 @@ const mockComparisonData = {
 describe("TrendsComparison", () => {
   it("should render TrendsComparison content when open", () => {
     const handleChange = vi.fn();
-    render(
+    const { container } = render(
       <NuqsTestingAdapter>
         <TrendsComparison
           isOpen
@@ -35,7 +35,7 @@ describe("TrendsComparison", () => {
       </NuqsTestingAdapter>,
     );
 
-    expect(document.body.firstChild).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByText("Trends Comparison")).toBeInTheDocument();
   });
 
