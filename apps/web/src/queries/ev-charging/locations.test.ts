@@ -1,27 +1,5 @@
-import type { ConnectorRecord } from "@web/lib/ev-charging";
+import { connector } from "./fixtures";
 import { groupLocations, inDistrict } from "./locations";
-
-const connector = (
-  overrides: Partial<ConnectorRecord> & Pick<ConnectorRecord, "evCpId">,
-): ConnectorRecord => ({
-  locationId: "L1",
-  chargerId: null,
-  stationName: "Station",
-  address: null,
-  postalCode: "188537",
-  longitude: null,
-  latitude: null,
-  operator: null,
-  operationHours: null,
-  position: null,
-  plugType: null,
-  powerRating: "AC",
-  chargingSpeedKw: 7.4,
-  price: 0.7,
-  priceType: "$/kWh",
-  status: "available",
-  ...overrides,
-});
 
 describe("groupLocations", () => {
   it("should roll connectors up per location with counts, top speed and lowest price", () => {
