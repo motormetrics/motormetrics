@@ -1,4 +1,10 @@
-import { db, evChargingPoints, sql } from "@motormetrics/database";
+import {
+  count,
+  countDistinct,
+  db,
+  evChargingPoints,
+  sql,
+} from "@motormetrics/database";
 import { EV_CHARGING_CACHE_TAG } from "@web/lib/cache-tags";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -16,11 +22,11 @@ export async function getEvChargingNetworkSummary(): Promise<EvChargingNetworkSu
 
   const [row] = await db
     .select({
-      connectors: sql<number>`cast(count(*) as integer)`.mapWith(Number),
-      sites:
-        sql<number>`cast(count(distinct (${evChargingPoints.longitude}, ${evChargingPoints.latitude})) as integer)`.mapWith(
-          Number,
-        ),
+      connectors: count(),
+      // A site is a coordinate pair; Postgres counts distinct row values.
+      sites: countDistinct(
+        sql`(${evChargingPoints.longitude}, ${evChargingPoints.latitude})`,
+      ),
     })
     .from(evChargingPoints);
 

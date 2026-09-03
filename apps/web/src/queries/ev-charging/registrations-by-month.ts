@@ -1,4 +1,10 @@
-import { db, evChargingPoints, isNotNull, sql } from "@motormetrics/database";
+import {
+  count,
+  db,
+  evChargingPoints,
+  isNotNull,
+  sql,
+} from "@motormetrics/database";
 import { EV_CHARGING_CACHE_TAG } from "@web/lib/cache-tags";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -7,6 +13,9 @@ export interface EvChargingMonthlyRegistrations {
   month: string;
   count: number;
 }
+
+/** Calendar-month bucket for a registration date. */
+const monthExpr = sql<string>`to_char(${evChargingPoints.registrationDate}, 'YYYY-MM')`;
 
 /**
  * Connectors registered with LTA per month, oldest first.
@@ -23,15 +32,10 @@ export async function getEvChargingRegistrationsByMonth(): Promise<
   cacheLife("max");
   cacheTag(EV_CHARGING_CACHE_TAG);
 
-  const month = sql<string>`to_char(${evChargingPoints.registrationDate}, 'YYYY-MM')`;
-
   return db
-    .select({
-      month,
-      count: sql<number>`cast(count(*) as integer)`.mapWith(Number),
-    })
+    .select({ month: monthExpr, count: count() })
     .from(evChargingPoints)
     .where(isNotNull(evChargingPoints.registrationDate))
-    .groupBy(month)
-    .orderBy(month);
+    .groupBy(monthExpr)
+    .orderBy(monthExpr);
 }
