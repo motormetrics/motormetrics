@@ -1,3 +1,9 @@
+## [5.11.1](https://github.com/motormetrics/motormetrics/compare/v5.11.0...v5.11.1) (2026-09-03)
+
+### Bug Fixes
+
+* **web:** cache updater checksum only after inserts succeed ([d0a58f1](https://github.com/motormetrics/motormetrics/commit/d0a58f1af83af1e46ad3224061b17ebc0dbfecc1))
+
 ## [5.11.0](https://github.com/motormetrics/motormetrics/compare/v5.10.0...v5.11.0) (2026-09-03)
 
 ### Features
