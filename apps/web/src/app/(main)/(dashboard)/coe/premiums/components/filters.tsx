@@ -10,6 +10,7 @@ import {
   premiumsSearchParams,
 } from "@web/app/(main)/(dashboard)/coe/premiums/search-params";
 import { useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useTransition } from "react";
 
 /**
@@ -61,7 +62,13 @@ export function CategoryTabs() {
                 : "bg-surface font-semibold text-muted hover:text-foreground",
             )}
             key={key}
-            onClick={() => setCategory(key)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "category",
+                value: key,
+              });
+              setCategory(key);
+            }}
             type="button"
           >
             {key} · {CATEGORY_SHORT_NAMES[key]}
@@ -100,7 +107,13 @@ export function RangeTabs() {
                 : "font-semibold text-muted hover:text-foreground",
             )}
             key={option}
-            onClick={() => setRange(option)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "range",
+                value: option,
+              });
+              setRange(option);
+            }}
             type="button"
           >
             {option}

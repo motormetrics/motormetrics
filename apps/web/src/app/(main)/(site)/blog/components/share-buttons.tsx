@@ -6,6 +6,7 @@ import { SiTelegram, SiWhatsapp, SiX } from "@icons-pack/react-simple-icons";
 import { SITE_URL } from "@web/config";
 import { Check, Copy, Linkedin, Share2 } from "lucide-react";
 import Link from "next/link";
+import posthog from "posthog-js";
 import { useState } from "react";
 
 interface ShareButtonsProps {
@@ -19,13 +20,19 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
   const encodedUrl = encodeURIComponent(fullUrl);
   const encodedTitle = encodeURIComponent(title);
 
+  function trackShare(channel: string) {
+    posthog.capture("page_shared", { channel, content_type: "blog" });
+  }
+
   async function copyLink() {
+    trackShare("copy");
     await navigator.clipboard.writeText(fullUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
 
   async function nativeShare() {
+    trackShare("native");
     await navigator.share({ title, url: fullUrl });
   }
 
@@ -81,6 +88,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
               variant: "tertiary",
             })}
             href={linkedinUrl}
+            onClick={() => trackShare("linkedin")}
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -97,6 +105,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
               variant: "tertiary",
             })}
             href={telegramUrl}
+            onClick={() => trackShare("telegram")}
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -113,6 +122,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
               variant: "tertiary",
             })}
             href={whatsappUrl}
+            onClick={() => trackShare("whatsapp")}
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -129,6 +139,7 @@ export function ShareButtons({ url, title }: ShareButtonsProps) {
               variant: "tertiary",
             })}
             href={xUrl}
+            onClick={() => trackShare("x")}
             rel="noopener noreferrer"
             target="_blank"
           >

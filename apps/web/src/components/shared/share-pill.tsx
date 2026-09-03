@@ -7,6 +7,7 @@ import { SiTelegram, SiWhatsapp, SiX } from "@icons-pack/react-simple-icons";
 import { SITE_URL } from "@web/config";
 import { Check, Link2, Linkedin, Share2 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import posthog from "posthog-js";
 import { useState } from "react";
 
 const COPY_KEY = "copy";
@@ -49,13 +50,27 @@ const TARGETS = [
  * buttons, which suits an article footer but not the page head, where the comp
  * budgets one control's width beside the month picker.
  */
-export function SharePill({ title }: { title: string }) {
+export function SharePill({
+  title,
+  contentType = "dashboard",
+}: {
+  title: string;
+  contentType?: "dashboard" | "guide";
+}) {
   const pathname = usePathname();
   const [copied, setCopied] = useState(false);
 
   const url = `${SITE_URL}${pathname}`;
 
   const handleAction = async (key: Key) => {
+    const channel =
+      key === COPY_KEY
+        ? "copy"
+        : TARGETS.find(
+            (target) => target.build(url, title) === key,
+          )?.label.toLowerCase();
+    posthog.capture("page_shared", { channel, content_type: contentType });
+
     if (key === COPY_KEY) {
       await navigator.clipboard.writeText(url);
       setCopied(true);

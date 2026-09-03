@@ -2,6 +2,7 @@
 
 import { cn } from "@heroui/react";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useTransition } from "react";
 
 /**
@@ -59,7 +60,13 @@ export function PeriodTabs() {
                 : "bg-surface font-semibold text-muted hover:text-foreground",
             )}
             key={option}
-            onClick={() => setPeriod(option)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "period",
+                value: option,
+              });
+              setPeriod(option);
+            }}
             type="button"
           >
             {PERIOD_LABELS[option]}
@@ -100,7 +107,13 @@ export function MeasureTabs() {
                 : "font-semibold text-muted hover:text-foreground",
             )}
             key={option}
-            onClick={() => setMeasure(option)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "measure",
+                value: option,
+              });
+              setMeasure(option);
+            }}
             type="button"
           >
             {MEASURE_LABELS[option]}

@@ -2,6 +2,7 @@
 
 import { cn } from "@heroui/react";
 import { parseAsString, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 
 interface QueryTabsProps<Value extends string> {
   /** Accessible name for the group, since the tabs carry no visible label. */
@@ -68,7 +69,13 @@ export function QueryTabs<Value extends string>({
               isActive && "font-extrabold",
             )}
             key={option.key}
-            onClick={() => setValue(option.key)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: param,
+                value: option.key,
+              });
+              setValue(option.key);
+            }}
             type="button"
           >
             {option.label}

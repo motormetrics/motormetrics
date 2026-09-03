@@ -13,6 +13,7 @@ import {
   ReportHeadline,
   ReportStat,
 } from "@web/components/shared/report";
+import posthog from "posthog-js";
 import { useMemo, useState } from "react";
 
 /**
@@ -54,6 +55,12 @@ export function PARFCalculator() {
           <Input
             aria-label="ARF paid"
             inputMode="numeric"
+            onBlur={() =>
+              posthog.capture("parf_calculator_used", {
+                bracket: bracket.label,
+                field: "arf",
+              })
+            }
             onChange={(event) => setArfInput(event.target.value)}
             placeholder="e.g. 40,000"
             type="text"
@@ -62,7 +69,14 @@ export function PARFCalculator() {
         </div>
         <div className="flex min-w-64 flex-col gap-2">
           <Select
-            onChange={(key) => key && setBracketKey(String(key))}
+            onChange={(key) => {
+              if (!key) return;
+              posthog.capture("parf_calculator_used", {
+                bracket: AGE_BRACKETS[Number(key)]?.label,
+                field: "bracket",
+              });
+              setBracketKey(String(key));
+            }}
             value={bracketKey}
           >
             <Label>

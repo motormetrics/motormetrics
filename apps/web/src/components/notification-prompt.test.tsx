@@ -3,6 +3,10 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NotificationPrompt } from "./notification-prompt";
 
+const capture = vi.hoisted(() => vi.fn());
+
+vi.mock("posthog-js", () => ({ default: { capture } }));
+
 vi.mock("@heroui/react", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
   const toastMock = Object.assign(
@@ -138,6 +142,9 @@ describe("NotificationPrompt Component", () => {
     });
 
     expect(globalThis.Notification.requestPermission).toHaveBeenCalledOnce();
+    expect(capture).toHaveBeenCalledWith("notification_prompt_answered", {
+      answer: "enabled",
+    });
     expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
     expect(toast.success).toHaveBeenCalledWith("Notifications enabled", {
       description: "You will receive an alert when new data is published.",
@@ -151,6 +158,9 @@ describe("NotificationPrompt Component", () => {
     fireEvent.click(screen.getAllByTestId("button")[1]);
 
     expect(globalThis.Notification.requestPermission).not.toHaveBeenCalled();
+    expect(capture).toHaveBeenCalledWith("notification_prompt_answered", {
+      answer: "dismissed",
+    });
     expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
     expect(localStorageMock.setItem).toHaveBeenCalledWith(
       "motormetrics:notification-prompt-dismissed",

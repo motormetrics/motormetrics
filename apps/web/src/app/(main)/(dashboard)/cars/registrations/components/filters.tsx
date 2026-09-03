@@ -3,6 +3,7 @@
 import { cn } from "@heroui/react";
 import { RANGES } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
 import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useTransition } from "react";
 
 /*
@@ -47,7 +48,13 @@ export function FuelTypeTabs({ fuelTypes }: { fuelTypes: string[] }) {
                 : "bg-surface font-semibold text-muted hover:text-foreground",
             )}
             key={label}
-            onClick={() => setSelected(key)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "fuel_type",
+                value: key,
+              });
+              setSelected(key);
+            }}
             type="button"
           >
             {label}
@@ -88,7 +95,13 @@ export function RangeTabs() {
                 : "font-semibold text-muted hover:text-foreground",
             )}
             key={option}
-            onClick={() => setRange(option)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "range",
+                value: option,
+              });
+              setRange(option);
+            }}
             type="button"
           >
             {option}

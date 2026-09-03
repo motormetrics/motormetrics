@@ -5,6 +5,7 @@ import { COE_CATEGORIES } from "@web/app/(main)/(dashboard)/coe/components/coe-e
 import { coeSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params";
 import type { COECategory } from "@web/types";
 import { useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useTransition } from "react";
 
 /**
@@ -31,12 +32,17 @@ export function SeriesFilter() {
     coeSearchParams.categories.withOptions({ shallow: false, startTransition }),
   );
 
-  const toggle = (category: COECategory) =>
+  const toggle = (category: COECategory) => {
+    posthog.capture("dashboard_filter_changed", {
+      filter: "series",
+      value: category,
+    });
     setSelected(
       selected.includes(category)
         ? selected.filter((entry) => entry !== category)
         : [...selected, category],
     );
+  };
 
   return (
     <fieldset

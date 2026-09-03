@@ -15,6 +15,7 @@ import type { Month } from "@web/types";
 import { groupByYear } from "@web/utils/group-by-year";
 import { Calendar } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useEffect, useMemo, useRef } from "react";
 
 interface MonthSelectorProps {
@@ -51,7 +52,13 @@ export function MonthSelector({
   return (
     <ComboBox
       selectedKey={month}
-      onSelectionChange={(key) => setMonth(key as string)}
+      onSelectionChange={(key) => {
+        posthog.capture("dashboard_filter_changed", {
+          filter: "month",
+          value: key,
+        });
+        setMonth(key as string);
+      }}
     >
       <Label className="sr-only">Month</Label>
       <ComboBox.InputGroup className="relative">

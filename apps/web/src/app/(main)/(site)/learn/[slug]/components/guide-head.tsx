@@ -41,7 +41,7 @@ export function GuideHead({ guide }: { guide: Guide }) {
             year: "numeric",
           })}
         </span>
-        <SharePill title={guide.title} />
+        <SharePill contentType="guide" title={guide.title} />
       </div>
     </div>
   );

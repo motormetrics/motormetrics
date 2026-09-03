@@ -19,6 +19,7 @@ import { groupByYear } from "@web/utils/group-by-year";
 import { format, subMonths } from "date-fns";
 import { Calendar } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useEffect, useMemo } from "react";
 
 interface TrendsComparisonProps {
@@ -90,12 +91,20 @@ export function TrendsComparison({
 
   const renderMonthPicker = (
     label: string,
+    filter: "compare_a" | "compare_b",
     value: string,
     onChange: (val: string) => void,
   ) => (
     <ComboBox
       selectedKey={value}
-      onSelectionChange={(key) => key && onChange(key as string)}
+      onSelectionChange={(key) => {
+        if (!key) return;
+        posthog.capture("dashboard_filter_changed", {
+          filter,
+          value: key,
+        });
+        onChange(key as string);
+      }}
     >
       <Label>{label}</Label>
       <ComboBox.InputGroup className="relative">
@@ -144,8 +153,8 @@ export function TrendsComparison({
           </Drawer.Header>
           <Drawer.Body className="flex flex-col gap-6">
             <div className="grid grid-cols-2 gap-4">
-              {renderMonthPicker("Month A", monthA, setCompareA)}
-              {renderMonthPicker("Month B", monthB, setCompareB)}
+              {renderMonthPicker("Month A", "compare_a", monthA, setCompareA)}
+              {renderMonthPicker("Month B", "compare_b", monthB, setCompareB)}
             </div>
             {!comparisonData && (
               <div className="flex justify-center py-8">
