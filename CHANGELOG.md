@@ -1,3 +1,13 @@
+## [5.9.0](https://github.com/motormetrics/motormetrics/compare/v5.8.0...v5.9.0) (2026-09-03)
+
+### Features
+
+* **database:** add ev connector status, events and hourly tables ([8470700](https://github.com/motormetrics/motormetrics/commit/8470700da7da08294393a43930a2589413602ffc))
+* **web:** add ev charging history cards from stored snapshots ([5b7903f](https://github.com/motormetrics/motormetrics/commit/5b7903f55a1a42f8947a338a544d39fa90215f07))
+* **web:** add live ev charging page with availability and prices ([4862572](https://github.com/motormetrics/motormetrics/commit/4862572697e172df360510b0ba26ab79d130bcdc))
+* **web:** ingest ev charger snapshots for history ([611f8e6](https://github.com/motormetrics/motormetrics/commit/611f8e615505ce8093060ce32545f027c235e334))
+* **web:** read live ev charger availability from lta datamall ([1715112](https://github.com/motormetrics/motormetrics/commit/17151120b75f5966a70bccf4f4815222637e8e6a))
+
 ## [5.8.0](https://github.com/motormetrics/motormetrics/compare/v5.7.0...v5.8.0) (2026-09-03)
 
 ### Features

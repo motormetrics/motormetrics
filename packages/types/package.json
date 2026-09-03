@@ -1,7 +1,7 @@
 {
   "name": "@motormetrics/types",
   "description": "Shared type definitions for MotorMetrics",
-  "version": "5.8.0",
+  "version": "5.9.0",
   "type": "module",
   "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
