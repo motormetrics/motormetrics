@@ -184,6 +184,38 @@ describe("processCSV", () => {
     expect(config.transform("  hello  ", "name")).toBe("hello");
   });
 
+  it("should pass dynamicTyping through when disabled", async () => {
+    vi.spyOn(fs, "readFileSync").mockReturnValue("mock csv content");
+    const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
+      data: [],
+      errors: [],
+      meta: { fields: [] },
+    } as never);
+
+    await processCsv(filePath, { dynamicTyping: false });
+
+    expect(parseMock).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ dynamicTyping: false }),
+    );
+  });
+
+  it("should pass non-string values through transform untouched", async () => {
+    vi.spyOn(fs, "readFileSync").mockReturnValue("mock csv content");
+    const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
+      data: [],
+      errors: [],
+      meta: { fields: [] },
+    } as never);
+
+    await processCsv(filePath);
+
+    const config = parseMock.mock.calls[0][1] as {
+      transform: (value: unknown, field: string) => unknown;
+    };
+    expect(config.transform(42, "age")).toBe(42);
+  });
+
   it("should return an empty array if no records are found", async () => {
     const _readFileSyncMock = vi
       .spyOn(fs, "readFileSync")
