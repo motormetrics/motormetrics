@@ -78,10 +78,10 @@ describe("parseBatch", () => {
     expect(record.longitude).toBe(103.9);
   });
 
-  it("should fall back to the postal code when locationId is missing", () => {
+  it("should derive the location id when locationId is missing", () => {
     const [record] = parseBatch([{ ...station, locationId: undefined }]);
 
-    expect(record.locationId).toBe("188537");
+    expect(record.locationId).toBe("851234188537");
   });
 
   it("should drop connectors without an id", () => {
