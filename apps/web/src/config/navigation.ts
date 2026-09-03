@@ -19,6 +19,7 @@ import {
   Fuel,
   LayoutDashboard,
   type LucideIcon,
+  PlugZap,
   TrendingUp,
   Zap,
 } from "lucide-react";
@@ -122,6 +123,13 @@ export const navLinks: NavLinks = {
       url: "/cars/electric-vehicles",
       icon: Zap,
       description: "BEV, PHEV and hybrid adoption trends and market share",
+      badge: "new",
+    },
+    {
+      title: "EV Charging",
+      url: "/cars/electric-vehicles/charging",
+      icon: PlugZap,
+      description: "Live charger availability, prices and busy hours",
       badge: "new",
     },
     {
