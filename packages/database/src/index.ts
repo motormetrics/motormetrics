@@ -4,6 +4,7 @@ export {
   avg,
   cosineDistance,
   count,
+  countDistinct,
   desc,
   eq,
   getTableName,
