@@ -12,6 +12,7 @@ import {
 } from "@web/workflows/ev-charging-live/steps/diff-snapshot";
 import {
   type ConnectorStatus,
+  extractLastUpdated,
   parseBatch,
 } from "@web/workflows/ev-charging-live/steps/parse-batch";
 
@@ -91,22 +92,41 @@ export const extractDownloadLink = (payload: unknown): string | null => {
   return link ?? null;
 };
 
+const skipped = (observedAt: Date): IngestResult => ({
+  skipped: true,
+  connectors: 0,
+  locations: 0,
+  events: 0,
+  observedAt: observedAt.toISOString(),
+});
+
 export const ingestLiveSnapshot = async (): Promise<IngestResult> => {
   const accountKey = process.env.LTA_DATAMALL_ACCOUNT_KEY;
-  const observedAt = new Date();
   if (!accountKey) {
-    return {
-      skipped: true,
-      connectors: 0,
-      locations: 0,
-      events: 0,
-      observedAt: observedAt.toISOString(),
-    };
+    return skipped(new Date());
   }
 
-  const records = parseBatch(await fetchBatch(accountKey));
+  const payload = await fetchBatch(accountKey);
+  // Stamp rows with the feed's own time so hourly buckets follow the data,
+  // not the cron.
+  const observedAt = extractLastUpdated(payload) ?? new Date();
+  const records = parseBatch(payload);
   if (records.length === 0) {
     throw new Error("EVCBatch file parsed to zero connectors");
+  }
+
+  // The file is regenerated every five minutes but the cron may land on the
+  // same one twice; counting it again would inflate the hourly samples.
+  const [latest] = await db
+    .select({
+      observedAt: sql<string | null>`max(${evConnectorStatus.observedAt})`,
+    })
+    .from(evConnectorStatus);
+  if (
+    latest?.observedAt &&
+    new Date(latest.observedAt).getTime() >= observedAt.getTime()
+  ) {
+    return skipped(observedAt);
   }
 
   const previousRows = await db

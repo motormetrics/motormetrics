@@ -2,10 +2,15 @@
  * Flattens LTA DataMall's EV Charging Points Batch feed into one record per
  * connector.
  *
- * The feed nests station → chargingPoints → plugTypes → evIds. Field names
- * follow section 2.28 of the DataMall API guide, including its `longtitude`
- * spelling, which is accepted alongside the correct one in case the batch
- * file differs from the per-postal-code endpoint.
+ * The feed nests station → chargingPoints → plugTypes → evIds. The batch file
+ * deviates from section 2.28 of the DataMall API guide in a few places, all
+ * observed on 3 Sep 2026 and handled here alongside the documented shape:
+ *
+ * - stations sit under `evLocationsData` next to a `LastUpdatedTime`
+ * - stations carry `postalCode` directly and no `locationId`
+ * - charging points use `operatingHours`
+ * - plug types put AC/DC in `current` and the kW figure in `powerRating`
+ * - `priceType` is `kWh`, empty, or `free`
  */
 
 export type ConnectorStatus = "available" | "occupied" | "unavailable";
@@ -38,6 +43,7 @@ interface FeedEvId {
 
 interface FeedPlugType {
   plugType?: unknown;
+  current?: unknown;
   powerRating?: unknown;
   chargingSpeed?: unknown;
   price?: unknown;
@@ -49,6 +55,7 @@ interface FeedChargingPoint {
   id?: unknown;
   name?: unknown;
   operator?: unknown;
+  operatingHours?: unknown;
   operationHours?: unknown;
   position?: unknown;
   plugTypes?: unknown;
@@ -61,6 +68,7 @@ interface FeedStation {
   longtitude?: unknown;
   latitude?: unknown;
   locationId?: unknown;
+  postalCode?: unknown;
   chargingPoints?: unknown;
 }
 
@@ -107,6 +115,19 @@ export const toConnectorStatus = (value: unknown): ConnectorStatus => {
   return "unavailable";
 };
 
+/**
+ * The batch file says `kWh` where the guide says `$/kWh`. Both land as
+ * `$/kWh` so the price queries have one value to filter on; anything else
+ * (`free`, hourly) is kept as sent.
+ */
+export const toPriceType = (value: unknown): string | null => {
+  const text = toText(value);
+  if (!text) {
+    return null;
+  }
+  return text.toLowerCase().replace(/[$/\s]/g, "") === "kwh" ? "$/kWh" : text;
+};
+
 /** Singapore postal codes are the trailing six digits of the address. */
 export const extractPostalCode = (address: string | null): string | null => {
   const match = address?.match(/\b(\d{6})\b(?!.*\b\d{6}\b)/);
@@ -114,16 +135,50 @@ export const extractPostalCode = (address: string | null): string | null => {
 };
 
 /**
- * The batch endpoint hands back a presigned link to a JSON file. Both the
- * per-postal-code endpoint and DataMall's other OData feeds wrap results in
- * `value`, so accept that shape and a bare array.
+ * The guide defines a station's `locationId` as the first six decimals of its
+ * longitude followed by the postal code. The batch file omits the field, so
+ * it is rebuilt the same way to stay compatible with the per-postal-code API.
+ */
+export const deriveLocationId = (
+  longitude: number | null,
+  postalCode: string | null,
+): string | null => {
+  if (!postalCode) {
+    return null;
+  }
+  if (longitude == null) {
+    return postalCode;
+  }
+  const decimals = longitude.toFixed(6).split(".")[1] ?? "";
+  return `${decimals}${postalCode}`;
+};
+
+/** The batch's `LastUpdatedTime` is wall-clock Singapore time without a zone. */
+export const extractLastUpdated = (payload: unknown): Date | null => {
+  if (!isRecord(payload)) {
+    return null;
+  }
+  const text = toText(payload.LastUpdatedTime ?? payload.lastUpdatedTime);
+  if (!text) {
+    return null;
+  }
+  const parsed = new Date(`${text.replace(" ", "T")}+08:00`);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+/**
+ * Accept the batch file's `evLocationsData`, the OData `value` wrapper the
+ * per-postal-code endpoint uses, and a bare array.
  */
 export const extractStations = (payload: unknown): FeedStation[] => {
   if (Array.isArray(payload)) {
     return payload.filter(isRecord);
   }
-  if (isRecord(payload) && Array.isArray(payload.value)) {
-    return payload.value.filter(isRecord);
+  if (isRecord(payload)) {
+    const list = payload.evLocationsData ?? payload.value;
+    if (Array.isArray(list)) {
+      return list.filter(isRecord);
+    }
   }
   return [];
 };
@@ -133,12 +188,20 @@ export const parseBatch = (payload: unknown): ConnectorRecord[] => {
 
   for (const station of extractStations(payload)) {
     const address = toText(station.address);
+    const postalCode = toText(station.postalCode) ?? extractPostalCode(address);
+    const longitude = toNumber(station.longitude ?? station.longtitude);
+    const locationId =
+      toText(station.locationId) ?? deriveLocationId(longitude, postalCode);
+    if (!locationId) {
+      continue;
+    }
+
     const stationBase = {
-      locationId: toText(station.locationId),
+      locationId,
       stationName: toText(station.name),
       address,
-      postalCode: extractPostalCode(address),
-      longitude: toNumber(station.longitude ?? station.longtitude),
+      postalCode,
+      longitude,
       latitude: toNumber(station.latitude),
     };
 
@@ -147,18 +210,25 @@ export const parseBatch = (payload: unknown): ConnectorRecord[] => {
       const pointBase = {
         chargerId: toText(chargingPoint.id),
         operator: toText(chargingPoint.operator),
-        operationHours: toText(chargingPoint.operationHours),
+        operationHours: toText(
+          chargingPoint.operatingHours ?? chargingPoint.operationHours,
+        ),
         position: toText(chargingPoint.position),
       };
 
       for (const plug of asList(chargingPoint.plugTypes).filter(isRecord)) {
         const plugType = plug as FeedPlugType;
+        // Batch file: `current` is AC/DC and `powerRating` is kW. Guide:
+        // `powerRating` is AC/DC and `chargingSpeed` is kW.
+        const current = toText(plugType.current);
         const plugBase = {
           plugType: toText(plugType.plugType),
-          powerRating: toText(plugType.powerRating),
-          chargingSpeedKw: toNumber(plugType.chargingSpeed),
+          powerRating: current ?? toText(plugType.powerRating),
+          chargingSpeedKw: current
+            ? toNumber(plugType.powerRating)
+            : toNumber(plugType.chargingSpeed),
           price: toNumber(plugType.price),
-          priceType: toText(plugType.priceType),
+          priceType: toPriceType(plugType.priceType),
         };
 
         for (const connector of asList(plugType.evIds).filter(isRecord)) {
@@ -167,16 +237,9 @@ export const parseBatch = (payload: unknown): ConnectorRecord[] => {
           if (!evCpId) {
             continue;
           }
-          // Fall back to the postal code so a station missing `locationId`
-          // still groups with its neighbours instead of being dropped.
-          const locationId = stationBase.locationId ?? stationBase.postalCode;
-          if (!locationId) {
-            continue;
-          }
           records.push({
             evCpId,
             ...stationBase,
-            locationId,
             ...pointBase,
             ...plugBase,
             status: toConnectorStatus(evId.status),

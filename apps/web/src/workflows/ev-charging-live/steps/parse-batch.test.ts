@@ -1,8 +1,11 @@
 import {
+  deriveLocationId,
+  extractLastUpdated,
   extractPostalCode,
   extractStations,
   parseBatch,
   toConnectorStatus,
+  toPriceType,
 } from "./parse-batch";
 
 const station = {
@@ -94,6 +97,98 @@ describe("parseBatch", () => {
     ]);
 
     expect(records.map((record) => record.evCpId)).toEqual(["X-1"]);
+  });
+});
+
+describe("parseBatch with the batch file shape", () => {
+  const batch = {
+    LastUpdatedTime: "2026-09-03 20:55:00",
+    evLocationsData: [
+      {
+        address: "3E RIVER VALLEY ROAD SINGAPORE 179024",
+        name: "CLARKE QUAY",
+        longtitude: 103.846728,
+        latitude: 1.290314,
+        postalCode: "179024",
+        chargingPoints: [
+          {
+            status: "1",
+            operatingHours: "24 hrs",
+            operator: "SP MOBILITY PTE. LTD.",
+            position: "L4 51 & 52",
+            name: "CLARKE QUAY",
+            plugTypes: [
+              {
+                plugType: "Combo 2",
+                price: "0.8938",
+                current: "DC",
+                powerRating: "50",
+                priceType: "kWh",
+                evIds: [{ evCpId: "R114858R-002", status: "1" }],
+              },
+              {
+                plugType: "Type 2",
+                price: "",
+                current: "AC",
+                powerRating: "7.4",
+                priceType: "",
+                evIds: [{ evCpId: "R114858R-003", status: "" }],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+
+  it("reads stations from evLocationsData and derives the location id", () => {
+    const records = parseBatch(batch);
+
+    expect(records).toHaveLength(2);
+    expect(records[0]).toMatchObject({
+      evCpId: "R114858R-002",
+      locationId: "846728179024",
+      postalCode: "179024",
+      operationHours: "24 hrs",
+      powerRating: "DC",
+      chargingSpeedKw: 50,
+      price: 0.8938,
+      priceType: "$/kWh",
+      status: "available",
+    });
+    expect(records[1]).toMatchObject({
+      powerRating: "AC",
+      chargingSpeedKw: 7.4,
+      price: null,
+      priceType: null,
+      status: "unavailable",
+    });
+  });
+
+  it("reads LastUpdatedTime as Singapore time", () => {
+    expect(extractLastUpdated(batch)?.toISOString()).toBe(
+      "2026-09-03T12:55:00.000Z",
+    );
+    expect(extractLastUpdated({})).toBeNull();
+    expect(extractLastUpdated({ LastUpdatedTime: "nope" })).toBeNull();
+  });
+});
+
+describe("deriveLocationId", () => {
+  it("joins six longitude decimals to the postal code", () => {
+    expect(deriveLocationId(103.846728, "179024")).toBe("846728179024");
+    expect(deriveLocationId(103.8, "179024")).toBe("800000179024");
+    expect(deriveLocationId(null, "179024")).toBe("179024");
+    expect(deriveLocationId(103.8, null)).toBeNull();
+  });
+});
+
+describe("toPriceType", () => {
+  it("normalises per-kWh labels and keeps the rest", () => {
+    expect(toPriceType("kWh")).toBe("$/kWh");
+    expect(toPriceType("$/kWh")).toBe("$/kWh");
+    expect(toPriceType("free")).toBe("free");
+    expect(toPriceType("")).toBeNull();
   });
 });
 
