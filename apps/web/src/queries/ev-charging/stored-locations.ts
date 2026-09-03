@@ -62,7 +62,7 @@ export const storedLocationColumns = (locations: StoredLocations) => ({
  * Singapore.
  */
 export const districtPredicate = (
-  postalCodeColumn: StoredLocations["postalCode"],
+  postalCodeColumn: Parameters<typeof like>[0],
   districtSlug: string | undefined,
 ) => {
   const district = districtSlug ? getPostalDistrict(districtSlug) : undefined;
