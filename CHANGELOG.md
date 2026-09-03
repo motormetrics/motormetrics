@@ -1,3 +1,9 @@
+## [5.7.0](https://github.com/motormetrics/motormetrics/compare/v5.6.0...v5.7.0) (2026-09-03)
+
+### Features
+
+* **web:** remove the breadcrumb trails ([88ebcbe](https://github.com/motormetrics/motormetrics/commit/88ebcbea510804b20f4940a15432d7c30a65ab0f))
+
 ## [5.6.0](https://github.com/motormetrics/motormetrics/compare/v5.5.2...v5.6.0) (2026-09-03)
 
 ### Features
