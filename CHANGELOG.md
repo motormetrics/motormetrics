@@ -1,3 +1,9 @@
+## [5.10.0](https://github.com/motormetrics/motormetrics/compare/v5.9.0...v5.10.0) (2026-09-03)
+
+### Features
+
+* **web:** add intro, faq and dataset schema to ev charging page ([f0b6720](https://github.com/motormetrics/motormetrics/commit/f0b6720123e9b9dc37f5b337ebd4ca8a198bf29e))
+
 ## [5.9.0](https://github.com/motormetrics/motormetrics/compare/v5.8.0...v5.9.0) (2026-09-03)
 
 ### Features
