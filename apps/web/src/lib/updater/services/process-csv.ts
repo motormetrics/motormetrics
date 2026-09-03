@@ -4,6 +4,12 @@ import Papa, { type ParseConfig } from "papaparse";
 export interface CSVTransformOptions<_T> {
   fields?: Record<string, (value: string) => unknown>;
   columnMapping?: Record<string, string>;
+  /**
+   * PapaParse dynamic typing. Defaults to true. Disable for files where
+   * numeric-looking strings must survive intact, such as postal codes with
+   * leading zeros.
+   */
+  dynamicTyping?: boolean;
 }
 
 export async function processCsv<T>(
@@ -12,11 +18,11 @@ export async function processCsv<T>(
 ) {
   const fileContent = fs.readFileSync(filePath, "utf-8");
 
-  const { fields = {}, columnMapping = {} } = options;
+  const { fields = {}, columnMapping = {}, dynamicTyping = true } = options;
 
   const parseConfig: ParseConfig<T> = {
     header: true,
-    dynamicTyping: true,
+    dynamicTyping,
     skipEmptyLines: true,
     transformHeader: (header) => columnMapping[header] || header,
     transform: (value, field) => {
