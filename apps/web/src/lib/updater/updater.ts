@@ -61,7 +61,6 @@ export async function update<T>(
 
   if (!cachedChecksum) {
     console.log("No cached checksum found. This might be the first run.");
-    await checksumService.cacheChecksum(checksumKey, checksum);
   } else if (cachedChecksum === checksum) {
     console.log(
       `File has not changed since last update (Checksum: ${checksum})`,
@@ -72,10 +71,9 @@ export async function update<T>(
       message: "File has not changed since last update",
       timestamp: new Date().toISOString(),
     };
+  } else {
+    console.log("Checksum has been changed.");
   }
-
-  await checksumService.cacheChecksum(checksumKey, checksum);
-  console.log("Checksum has been changed.");
 
   // === Process CSV ===
   const processedData = await processCsv<T>(
@@ -106,6 +104,10 @@ export async function update<T>(
   console.log(
     `Inserted ${totalInserted} record(s) in ${Math.round(end - start)}ms`,
   );
+
+  // Cache the checksum only after the insert succeeds, so a failed run is
+  // retried instead of being skipped as "unchanged" next time.
+  await checksumService.cacheChecksum(checksumKey, checksum);
 
   if (totalInserted === 0) {
     return {
