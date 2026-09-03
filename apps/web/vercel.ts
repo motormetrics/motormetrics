@@ -39,7 +39,10 @@ export const config: VercelConfig = {
     },
     {
       path: "/api/workflows/ev-charging-live",
-      schedule: "*/5 * * * *",
+      // TODO: The DataMall batch refreshes every 5 minutes, but Hobby caps
+      // crons at once a day. Change to "*/5 * * * *" once the project is on
+      // Vercel Pro.
+      schedule: "0 22 * * *",
     },
   ],
   regions: ["sin1"],
