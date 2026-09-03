@@ -173,6 +173,48 @@ describe("update", () => {
     });
   });
 
+  it("should still cache the checksum when all records conflict", async () => {
+    vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue("different123");
+
+    const mockInsert = createInsertMock([]);
+    vi.mocked(db.insert).mockReturnValue(mockInsert as never);
+
+    await update(updaterConfig, updaterOptions);
+
+    expect(mockChecksum.cacheChecksum).toHaveBeenCalledWith(
+      "test-file.csv",
+      "abc123",
+    );
+  });
+
+  it("should not cache the checksum when the insert fails", async () => {
+    vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue("different123");
+
+    const mockInsert = createInsertMock();
+    mockInsert.returning.mockRejectedValue(
+      new Error("Database request failed"),
+    );
+    vi.mocked(db.insert).mockReturnValue(mockInsert as never);
+
+    await expect(update(updaterConfig, updaterOptions)).rejects.toThrow(
+      "Database request failed",
+    );
+
+    expect(mockChecksum.cacheChecksum).not.toHaveBeenCalled();
+  });
+
+  it("should not cache the checksum when CSV processing fails", async () => {
+    vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue(null);
+    vi.mocked(processCsv).mockRejectedValue(new Error("Malformed CSV"));
+
+    await expect(update(updaterConfig, updaterOptions)).rejects.toThrow(
+      "Malformed CSV",
+    );
+
+    expect(mockChecksum.cacheChecksum).not.toHaveBeenCalled();
+    expect(db.insert).not.toHaveBeenCalled();
+  });
+
   it("should process data in batches", async () => {
     const largeDataSet = Array(5)
       .fill(null)
