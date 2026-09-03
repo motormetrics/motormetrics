@@ -1,18 +1,16 @@
 import { Button, Typography } from "@heroui/react";
-import { Breadcrumbs } from "@web/components/shared/breadcrumbs";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 /**
- * The comp opens the `(site)` pages on the breadcrumb, an eyebrow pill and an
- * oversized title — larger than the dashboard `PageHead`, which is why this is
+ * The comp opens the `(site)` pages on an eyebrow pill and an oversized
+ * title — larger than the dashboard `PageHead`, which is why this is
  * written here rather than reusing it. There is also no share pill: these are
  * prose pages, not a figure anyone would send on.
  */
 export function HeroSection() {
   return (
     <section className="flex flex-col gap-6">
-      <Breadcrumbs />
       <span className="self-start rounded-full bg-accent-soft px-4 py-2 font-bold text-accent-strong text-sm">
         Singapore car market data
       </span>

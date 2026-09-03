@@ -1,15 +1,14 @@
 import { cn, Typography } from "@heroui/react";
-import { Breadcrumbs } from "@web/components/shared/breadcrumbs";
 import { SharePill } from "@web/components/shared/share-pill";
 import type { ReactNode } from "react";
 
 /**
- * Breadcrumb + oversized title, with an optional slot for the controls the
- * comps park on the right (month picker, range tabs). Every v2 page opens with
- * this exact block.
+ * Oversized title, with an optional slot for the controls the comps park on
+ * the right (month picker, range tabs). Every v2 page opens with this exact
+ * block.
  *
- * The breadcrumb derives its trail from the pathname and the share pill from
- * the title, so neither needs threading through the call sites.
+ * The share pill derives its text from the title, so it needs no threading
+ * through the call sites.
  *
  * `description` is the lede the report-family comps carry under the title and
  * the bento-family ones do not — passing it is what distinguishes the two
@@ -29,7 +28,6 @@ export function PageHead({
   return (
     <div className="flex flex-wrap items-end gap-6">
       <div className={cn("flex flex-col gap-2", description && "max-w-prose")}>
-        <Breadcrumbs />
         <Typography.Heading level={1}>{title}</Typography.Heading>
         {description ? (
           <Typography.Paragraph color="muted">
