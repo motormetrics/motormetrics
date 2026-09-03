@@ -250,6 +250,7 @@ export const BLOG_MORE_ITEM: NavigationItem = {
 export const FOOTER_NAV_ITEMS = [
   { href: "/about", label: "About" },
   { href: "/learn", label: "Learn" },
+  { href: "/contact", label: "Contact" },
   { href: "/legal/privacy-policy", label: "Privacy" },
   { href: "/legal/terms-of-service", label: "Terms" },
 ] as const satisfies readonly NavItem[];

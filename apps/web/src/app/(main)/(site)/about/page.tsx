@@ -8,7 +8,7 @@ import { MissionSection } from "@web/app/(main)/(site)/about/components/mission-
 import { StatsSection } from "@web/app/(main)/(site)/about/components/stats-section";
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
-import { LOGO_URL, SITE_TITLE, SITE_URL } from "@web/config";
+import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { brandSameAs, SOCIAL_HANDLE } from "@web/config/socials";
 import { socialLinks } from "@web/flags";
 import type { Metadata } from "next";
@@ -57,6 +57,13 @@ async function OrganizationStructuredData() {
     logo: LOGO_URL,
     description:
       "A platform for exploring Singapore car registration statistics, COE bidding results, and market data.",
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: SUPPORT_EMAIL,
+      url: `${SITE_URL}/contact`,
+    },
+    address: { "@type": "PostalAddress", addressCountry: "SG" },
     ...(sameAs.length > 0 ? { sameAs } : {}),
     founder: {
       "@type": "Person",

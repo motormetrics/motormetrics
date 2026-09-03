@@ -114,6 +114,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
     },
+    {
+      url: `${SITE_URL}/contact`,
+      lastModified: new Date(),
+      changeFrequency: "yearly" as const,
+    },
     ...getAllGuideSlugs().map((slug) => ({
       url: `${SITE_URL}/learn/${slug}`,
       lastModified: new Date(),

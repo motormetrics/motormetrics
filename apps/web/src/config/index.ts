@@ -25,6 +25,9 @@ export const SITE_URL =
 
 export const LOGO_URL = `${SITE_URL}/icon.png`;
 
+export const SUPPORT_EMAIL = "support@motormetrics.app";
+export const GITHUB_REPO_URL = "https://github.com/motormetrics/motormetrics";
+
 // =============================================================================
 // API Configuration
 // =============================================================================

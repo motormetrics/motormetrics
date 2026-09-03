@@ -150,6 +150,7 @@ ${recentPosts.map((post) => `- [${post.title}](${SITE_URL}/blog/${post.slug})`).
 
 - [About](${SITE_URL}/about): About ${SITE_TITLE} platform
 - [Learn](${SITE_URL}/learn): Educational hub with FAQs, terminology, guides and data sources
+- [Contact](${SITE_URL}/contact): How to reach the team about data, corrections or partnerships
 
 ## Guides
 
