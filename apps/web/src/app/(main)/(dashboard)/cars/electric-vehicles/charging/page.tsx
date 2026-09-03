@@ -1,4 +1,8 @@
 import { Skeleton } from "@heroui/react";
+import {
+  ChargingIntro,
+  ChargingQuestions,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-overview";
 import { DistrictSelect } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/district-select";
 import { LiveStatus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/live-status";
 import { PriceList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-list";
@@ -11,7 +15,10 @@ import { EmptyState } from "@web/components/shared/empty-state";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { generateBreadcrumbSchema } from "@web/lib/metadata";
+import {
+  generateBreadcrumbSchema,
+  generateDatasetSchema,
+} from "@web/lib/metadata";
 import { getEvChargingSnapshot } from "@web/queries/ev-charging";
 import { PlugZap } from "lucide-react";
 import type { Metadata } from "next";
@@ -20,7 +27,7 @@ import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
 
 export const metadata: Metadata = {
-  title: "EV Charging in Singapore",
+  title: "Singapore EV Charging Prices and Availability",
   description:
     "Live public EV charger availability across Singapore, with the cheapest and most expensive AC and DC charging rates by district.",
   openGraph: {
@@ -71,6 +78,12 @@ export default function ChargingPage({ searchParams }: PageProps) {
       <StructuredData
         data={{
           "@context": "https://schema.org",
+          ...generateDatasetSchema("ev-charging"),
+        }}
+      />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
           ...generateBreadcrumbSchema([
             { name: "Home", path: "/" },
             { name: "Cars", path: "/cars" },
@@ -89,6 +102,10 @@ export default function ChargingPage({ searchParams }: PageProps) {
         title="EV charging"
       />
 
+      <Suspense fallback={<Skeleton className="h-16 max-w-prose rounded-lg" />}>
+        <ChargingIntro />
+      </Suspense>
+
       <Suspense
         fallback={
           <Bento>
@@ -99,6 +116,10 @@ export default function ChargingPage({ searchParams }: PageProps) {
         }
       >
         <ChargingBento searchParams={searchParams} />
+      </Suspense>
+
+      <Suspense fallback={null}>
+        <ChargingQuestions />
       </Suspense>
     </>
   );
