@@ -3,6 +3,7 @@
 import { cn } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { parseAsString, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 
 export interface AdoptionColumn {
   month: string;
@@ -44,7 +45,13 @@ export function AdoptionColumns({
             aria-pressed={isSelected}
             className="grid h-[150px] flex-1 cursor-pointer grid-rows-[auto_1fr_auto] gap-2"
             key={column.month}
-            onClick={() => setMonth(column.month)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "month",
+                value: column.month,
+              });
+              setMonth(column.month);
+            }}
             type="button"
           >
             <span

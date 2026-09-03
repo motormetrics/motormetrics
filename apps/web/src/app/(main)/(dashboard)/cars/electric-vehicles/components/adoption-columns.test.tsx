@@ -7,6 +7,9 @@ import {
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
+const capture = vi.hoisted(() => vi.fn());
+
+vi.mock("posthog-js", () => ({ default: { capture } }));
 
 const wrapper = withNuqsTestingAdapter({
   searchParams: { month: "2025-10" },
@@ -63,6 +66,10 @@ describe("AdoptionColumns", () => {
     expect(onUrlUpdate.mock.calls[0]?.[0].searchParams.get("month")).toBe(
       "2025-08",
     );
+    expect(capture).toHaveBeenCalledWith("dashboard_filter_changed", {
+      filter: "month",
+      value: "2025-08",
+    });
   });
 
   it("should scale every column against the tallest share", () => {

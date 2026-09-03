@@ -5,6 +5,7 @@ import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
 import { ArrowUpRight, Calculator } from "lucide-react";
 import Link from "next/link";
+import posthog from "posthog-js";
 import { useState } from "react";
 import { CostTrendChip } from "./cost-trend-chip";
 
@@ -98,7 +99,13 @@ export function CoePremiumsCard({ series }: { series: CoeCategorySeries[] }) {
                     : "bg-default text-muted hover:bg-accent/15"
                 }`}
                 key={item.category}
-                onClick={() => setSelected(item.category)}
+                onClick={() => {
+                  posthog.capture("dashboard_filter_changed", {
+                    filter: "category",
+                    value: item.category,
+                  });
+                  setSelected(item.category);
+                }}
                 type="button"
               >
                 {item.label}

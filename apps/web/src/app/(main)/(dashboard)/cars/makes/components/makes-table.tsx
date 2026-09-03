@@ -121,7 +121,7 @@ function ChangeText({
 }
 
 function trackMakeSelected(make: string) {
-  posthog.capture("car_make_searched", { make });
+  posthog.capture("car_make_selected", { make, source: "makes_table" });
 }
 
 function compareRows(a: MakesTableRow, b: MakesTableRow, key: SortKey): number {

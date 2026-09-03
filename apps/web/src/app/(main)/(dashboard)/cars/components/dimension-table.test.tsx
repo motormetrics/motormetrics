@@ -9,6 +9,9 @@ import { describe, expect, it, vi } from "vitest";
 import { DimensionTable } from "./dimension-table";
 
 const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
+const capture = vi.hoisted(() => vi.fn());
+
+vi.mock("posthog-js", () => ({ default: { capture } }));
 
 const wrapper = withNuqsTestingAdapter({
   searchParams: { dimension: "make" },
@@ -133,6 +136,10 @@ describe("DimensionTable", () => {
     expect(
       onUrlUpdate.mock.calls.at(-1)?.[0].searchParams.get("dimension"),
     ).toBe("fuelType");
+    expect(capture).toHaveBeenCalledWith("dashboard_filter_changed", {
+      filter: "dimension",
+      value: "fuelType",
+    });
   });
 
   it("should collapse a long list to the first ten rows", () => {

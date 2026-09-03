@@ -7,6 +7,9 @@ import {
 import { YearSelector } from "./year-selector";
 
 const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
+const capture = vi.hoisted(() => vi.fn());
+
+vi.mock("posthog-js", () => ({ default: { capture } }));
 
 const wrapper = withNuqsTestingAdapter({
   searchParams: { year: "2024" },
@@ -92,6 +95,10 @@ describe("YearSelector", () => {
     await waitFor(() =>
       expect(lastUrlUpdate()?.searchParams.get("year")).toBe("2022"),
     );
+    expect(capture).toHaveBeenCalledWith("dashboard_filter_changed", {
+      filter: "year",
+      value: "2022",
+    });
 
     fireEvent.change(screen.getByTestId("year-selector"), {
       target: { value: "" },

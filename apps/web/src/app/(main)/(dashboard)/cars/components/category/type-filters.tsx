@@ -2,6 +2,7 @@
 
 import { cn } from "@heroui/react";
 import { parseAsString, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useTransition } from "react";
 
 /**
@@ -52,7 +53,13 @@ export function PeriodTabs({
                 : "bg-surface font-semibold text-muted hover:text-foreground",
             )}
             key={key}
-            onClick={() => setPeriod(key)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "period",
+                value: key,
+              });
+              setPeriod(key);
+            }}
             type="button"
           >
             {label}

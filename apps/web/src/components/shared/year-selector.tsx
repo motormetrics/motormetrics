@@ -4,6 +4,7 @@ import { ComboBox, Input, Label, ListBox, toast } from "@heroui/react";
 
 import { Calendar } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useEffect, useRef } from "react";
 
 interface YearSelectorProps {
@@ -37,7 +38,13 @@ export function YearSelector({
   return (
     <ComboBox
       selectedKey={year?.toString()}
-      onSelectionChange={(key) => setYear(key ? Number(key) : null)}
+      onSelectionChange={(key) => {
+        posthog.capture("dashboard_filter_changed", {
+          filter: "year",
+          value: key,
+        });
+        setYear(key ? Number(key) : null);
+      }}
     >
       <Label className="sr-only">Year</Label>
       <ComboBox.InputGroup className="relative">

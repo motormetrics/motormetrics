@@ -2,6 +2,7 @@
 
 import { Button, toast } from "@heroui/react";
 
+import posthog from "posthog-js";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const NOTIFICATION_PROMPT_DISMISSED_KEY =
@@ -40,7 +41,13 @@ export function NotificationPrompt() {
     rememberDismissal();
   }, [rememberDismissal]);
 
+  const handleDismiss = useCallback(() => {
+    posthog.capture("notification_prompt_answered", { answer: "dismissed" });
+    closePrompt();
+  }, [closePrompt]);
+
   const handleEnable = useCallback(async () => {
+    posthog.capture("notification_prompt_answered", { answer: "enabled" });
     closePrompt();
     const nextPermission = await Notification.requestPermission();
 
@@ -80,7 +87,7 @@ export function NotificationPrompt() {
               <Button onPress={handleEnable} size="sm" variant="primary">
                 {NOTIFICATION_PROMPT.allowLabel}
               </Button>
-              <Button onPress={closePrompt} size="sm" variant="tertiary">
+              <Button onPress={handleDismiss} size="sm" variant="tertiary">
                 {NOTIFICATION_PROMPT.dismissLabel}
               </Button>
             </div>
@@ -93,7 +100,7 @@ export function NotificationPrompt() {
     }, NOTIFICATION_PROMPT_DELAY_MS);
 
     return () => window.clearTimeout(timer);
-  }, [closePrompt, handleClose, handleEnable, isPromptDismissed]);
+  }, [handleDismiss, handleClose, handleEnable, isPromptDismissed]);
 
   return null;
 }

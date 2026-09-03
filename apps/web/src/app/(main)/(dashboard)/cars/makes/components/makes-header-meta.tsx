@@ -2,6 +2,7 @@
 
 import { cn } from "@heroui/react";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useTransition } from "react";
 import { RANGE_LABELS, RANGES } from "../search-params";
 
@@ -36,7 +37,13 @@ export function MakesHeaderMeta() {
                 : "font-semibold text-muted hover:text-foreground",
             )}
             key={option}
-            onClick={() => setRange(option)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "range",
+                value: option,
+              });
+              setRange(option);
+            }}
             type="button"
           >
             {RANGE_LABELS[option]}

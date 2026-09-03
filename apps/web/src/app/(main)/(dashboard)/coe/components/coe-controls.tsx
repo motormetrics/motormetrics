@@ -3,6 +3,7 @@
 import { cn, ScrollShadow } from "@heroui/react";
 import { Segment } from "@heroui-pro/react";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { type ReactNode, useTransition } from "react";
 import {
   CATEGORY_KEYS,
@@ -50,7 +51,13 @@ export function CategoryTabs({ selected }: { selected: CategoryKey }) {
                 : "bg-accent-foreground/20 text-accent-foreground hover:bg-accent-foreground/30",
             )}
             key={key}
-            onClick={() => setCategory(key)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "category",
+                value: key,
+              });
+              setCategory(key);
+            }}
             type="button"
           >
             {key}
@@ -85,7 +92,13 @@ export function CategorySelect({
       aria-label={label}
       aria-pressed={isActive}
       className={cn("w-full cursor-pointer text-left", className)}
-      onClick={() => setCategory(category)}
+      onClick={() => {
+        posthog.capture("dashboard_filter_changed", {
+          filter: "category",
+          value: category,
+        });
+        setCategory(category);
+      }}
       type="button"
     >
       {children}
@@ -120,7 +133,13 @@ export function RangeTabs() {
       <Segment
         aria-label="Exercise range"
         className={cn(isPending && "opacity-70")}
-        onSelectionChange={(key) => setRange(key as ExerciseRange)}
+        onSelectionChange={(key) => {
+          posthog.capture("dashboard_filter_changed", {
+            filter: "range",
+            value: key,
+          });
+          setRange(key as ExerciseRange);
+        }}
         selectedKey={range}
       >
         {EXERCISE_RANGES.map((option) => (

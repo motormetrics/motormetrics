@@ -3,6 +3,7 @@
 import { cn } from "@heroui/react";
 import type { PQPCategoryKey } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useTransition } from "react";
 
 /**
@@ -64,7 +65,13 @@ export function CategoryTabs({
                 : "bg-surface font-semibold text-muted hover:text-foreground",
             )}
             key={option}
-            onClick={() => setCategory(option)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "category",
+                value: option,
+              });
+              setCategory(option);
+            }}
             type="button"
           >
             Cat {option}
@@ -110,7 +117,13 @@ export function TermTabs() {
                 : "font-semibold text-muted hover:text-foreground",
             )}
             key={option}
-            onClick={() => setTerm(option)}
+            onClick={() => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "term",
+                value: option,
+              });
+              setTerm(option);
+            }}
             type="button"
           >
             {TERM_LABELS[option]}

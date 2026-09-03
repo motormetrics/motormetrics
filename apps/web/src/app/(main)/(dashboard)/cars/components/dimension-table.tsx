@@ -12,6 +12,7 @@ import type { CarDimension, DimensionStat } from "@web/queries/cars";
 import { ArrowRight, Car, Search } from "lucide-react";
 import Link from "next/link";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
+import posthog from "posthog-js";
 import { useMemo, useState, useTransition } from "react";
 
 type SortKey = "name" | "count";
@@ -161,6 +162,10 @@ export function DimensionTable({
           <Segment
             aria-label="Dimension"
             onSelectionChange={(key) => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "dimension",
+                value: key,
+              });
               setQuery("");
               setSortDescriptor({ column: "count", direction: "descending" });
               setDimension(key as CarDimension);

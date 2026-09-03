@@ -4,6 +4,7 @@ import { cn, Typography } from "@heroui/react";
 
 import type { COECategory } from "@web/types";
 import type { LucideIcon } from "lucide-react";
+import posthog from "posthog-js";
 
 interface CategoryInfoProps {
   icon: LucideIcon;
@@ -24,6 +25,10 @@ export function CategoryInfo({
 }: CategoryInfoProps) {
   const handleFilterCategories = () => {
     if (canFilter) {
+      posthog.capture("dashboard_filter_changed", {
+        filter: "category",
+        value: category,
+      });
       onToggle(category);
     }
   };

@@ -138,18 +138,19 @@ describe("MakesTable", () => {
     expect(makeNames()).toEqual(["byd", "toyota", "mazda"]);
   });
 
-  it("captures car_make_searched when a row is opened", async () => {
+  it("captures car_make_selected when a row is opened", async () => {
     const user = userEvent.setup();
     renderTable();
 
     await user.click(screen.getAllByRole("link")[1]);
 
-    expect(capture).toHaveBeenCalledExactlyOnceWith("car_make_searched", {
+    expect(capture).toHaveBeenCalledExactlyOnceWith("car_make_selected", {
       make: "BYD",
+      source: "makes_table",
     });
   });
 
-  it("does not capture car_make_searched while the query is being typed", async () => {
+  it("does not capture car_make_selected while the query is being typed", async () => {
     const user = userEvent.setup();
     renderTable();
 
