@@ -37,6 +37,10 @@ export const config: VercelConfig = {
       path: "/api/workflows/ev-charging",
       schedule: "0 10 * * *",
     },
+    {
+      path: "/api/workflows/ev-charging-live",
+      schedule: "*/5 * * * *",
+    },
   ],
   regions: ["sin1"],
 };
