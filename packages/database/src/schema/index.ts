@@ -19,9 +19,18 @@ export {
   type SelectDeregistration,
 } from "./deregistration";
 export {
+  evChargingEvents,
   evChargingPoints,
+  evConnectorStatus,
+  evLocationHourly,
+  type InsertEvChargingEvent,
   type InsertEvChargingPoint,
+  type InsertEvConnectorStatus,
+  type InsertEvLocationHourly,
+  type SelectEvChargingEvent,
   type SelectEvChargingPoint,
+  type SelectEvConnectorStatus,
+  type SelectEvLocationHourly,
 } from "./ev-charging";
 export { type InsertPost, posts, type SelectPost } from "./posts";
 export {
