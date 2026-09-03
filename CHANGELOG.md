@@ -1,3 +1,9 @@
+## [5.11.0](https://github.com/motormetrics/motormetrics/compare/v5.10.0...v5.11.0) (2026-09-03)
+
+### Features
+
+* **web:** add contact page and organization contact schema ([c2614ad](https://github.com/motormetrics/motormetrics/commit/c2614ad9b763c61453ba62c35c2263c142c76112))
+
 ## [5.10.0](https://github.com/motormetrics/motormetrics/compare/v5.9.0...v5.10.0) (2026-09-03)
 
 ### Features
