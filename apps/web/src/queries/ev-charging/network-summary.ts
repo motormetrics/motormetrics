@@ -22,7 +22,7 @@ export async function getEvChargingNetworkSummary(): Promise<EvChargingNetworkSu
     .from(evChargingPoints)
     .as("sites");
 
-  const [[connectorsRow], [sitesRow]] = await Promise.all([
+  const [[connectorsRow], [sitesRow]] = await db.batch([
     db.select({ value: count() }).from(evChargingPoints),
     db.select({ value: count() }).from(sites),
   ]);
