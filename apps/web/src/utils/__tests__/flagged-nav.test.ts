@@ -24,6 +24,7 @@ describe("footerNavItems", () => {
     ).toEqual([
       "/about",
       "/learn",
+      "/contact",
       "/legal/privacy-policy",
       "/legal/terms-of-service",
     ]);
@@ -35,6 +36,7 @@ describe("footerNavItems", () => {
         "/about",
         "/learn",
         "/advertise",
+        "/contact",
         "/legal/privacy-policy",
         "/legal/terms-of-service",
       ],
