@@ -98,7 +98,9 @@ ${popularMakes.map(({ make }) => make).join(", ")}
 - [PARF Calculator](${SITE_URL}/cars/parf): Calculate PARF rebate values
 - [Cars by Make](${SITE_URL}/cars/makes): Browse registrations by manufacturer
 - [All Makes Directory](${SITE_URL}/cars/makes): Complete list of car manufacturers
-- [Electric Vehicles](${SITE_URL}/cars/fuel-types/electric): BEV registration data
+- [Electric Vehicles](${SITE_URL}/cars/electric-vehicles): BEV, PHEV and hybrid adoption trends and market share
+- [EV Charging](${SITE_URL}/cars/electric-vehicles/charging): Live public charger availability, cheapest and most expensive per-kWh rates, filterable by postal district
+- [Electric Vehicles by Fuel Type](${SITE_URL}/cars/fuel-types/electric): BEV registration data
 - [Hybrid Vehicles](${SITE_URL}/cars/fuel-types/petrol-electric): Petrol-electric hybrid data
 - [Plug-in Hybrids](${SITE_URL}/cars/fuel-types/petrol-electric-plug-in): PHEV statistics
 - [Diesel Vehicles](${SITE_URL}/cars/fuel-types/diesel): Diesel registration data
@@ -107,6 +109,13 @@ ${popularMakes.map(({ make }) => make).join(", ")}
 - [Sedans](${SITE_URL}/cars/vehicle-types/sedan): Sedan registration statistics
 - [Hatchbacks](${SITE_URL}/cars/vehicle-types/hatchback): Hatchback vehicle data
 - [MPVs](${SITE_URL}/cars/vehicle-types/multi-purpose-vehicle): Multi-purpose vehicle statistics
+
+## EV Charging (Live)
+
+Singapore's public EV charger network, from LTA DataMall's EV Charging Points feed (refreshed every five minutes). Figures are live and per-kWh prices are the operators' advertised rates including GST.
+
+- [EV Charging Overview](${SITE_URL}/cars/electric-vehicles/charging): Connectors in use, cheapest and most expensive AC and DC charging by district, common questions answered with current figures
+- Filter by district with the query parameter district=<slug> (for example ${SITE_URL}/cars/electric-vehicles/charging?district=jurong-boon-lay-tuas) and by power rating with power=AC or power=DC
 
 ## COE Bidding Results
 
