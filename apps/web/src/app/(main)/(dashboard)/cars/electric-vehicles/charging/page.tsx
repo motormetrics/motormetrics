@@ -1,7 +1,10 @@
 import { Skeleton } from "@heroui/react";
+import { BusyHours } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/busy-hours";
 import { DistrictSelect } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/district-select";
 import { LiveStatus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/live-status";
 import { PriceList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-list";
+import { RecentChanges } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/recent-changes";
+import { UtilisationList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-list";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
@@ -22,11 +25,11 @@ import type { WebPage, WithContext } from "schema-dts";
 export const metadata: Metadata = {
   title: "EV Charging in Singapore",
   description:
-    "Live public EV charger availability across Singapore, with the cheapest and most expensive AC and DC charging rates by district.",
+    "Live public EV charger availability across Singapore, with the cheapest and most expensive charging rates, busiest hours and locations, and new chargers this week.",
   openGraph: {
     title: "EV Charging - Live Singapore Charger Stats",
     description:
-      "Live availability and prices for Singapore's public EV chargers.",
+      "Live availability, prices and busy hours for Singapore's public EV chargers.",
     type: "website",
   },
   alternates: {
@@ -39,7 +42,7 @@ const structuredData: WithContext<WebPage> = {
   "@type": "WebPage",
   name: "EV Charging",
   description:
-    "Live public EV charger availability and prices across Singapore",
+    "Live public EV charger availability, prices and busy hours across Singapore",
   url: `${SITE_URL}/cars/electric-vehicles/charging`,
   publisher: {
     "@type": "Organization",
@@ -140,6 +143,20 @@ async function ChargingBento({ searchParams }: PageProps) {
             </Suspense>
           </SectionErrorBoundary>
         </AnimatedSection>
+        <AnimatedSection>
+          <SectionErrorBoundary title="Busy hours unavailable">
+            <Suspense fallback={<CardSkeleton className="h-72" />}>
+              <BusyHours />
+            </Suspense>
+          </SectionErrorBoundary>
+        </AnimatedSection>
+        <AnimatedSection>
+          <SectionErrorBoundary title="Recent changes unavailable">
+            <Suspense fallback={<CardSkeleton className="h-72" />}>
+              <RecentChanges />
+            </Suspense>
+          </SectionErrorBoundary>
+        </AnimatedSection>
       </AnimatedGrid>
 
       <AnimatedGrid className="flex flex-col gap-6">
@@ -150,13 +167,27 @@ async function ChargingBento({ searchParams }: PageProps) {
             </Suspense>
           </SectionErrorBoundary>
         </AnimatedSection>
-      </AnimatedGrid>
-
-      <AnimatedGrid className="flex flex-col gap-6">
         <AnimatedSection>
           <SectionErrorBoundary title="Most expensive chargers unavailable">
             <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
               <PriceList district={district} order="priciest" power={power} />
+            </Suspense>
+          </SectionErrorBoundary>
+        </AnimatedSection>
+      </AnimatedGrid>
+
+      <AnimatedGrid className="flex flex-col gap-6">
+        <AnimatedSection>
+          <SectionErrorBoundary title="Busiest locations unavailable">
+            <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
+              <UtilisationList district={district} order="busiest" />
+            </Suspense>
+          </SectionErrorBoundary>
+        </AnimatedSection>
+        <AnimatedSection>
+          <SectionErrorBoundary title="Quietest locations unavailable">
+            <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
+              <UtilisationList district={district} order="quietest" />
             </Suspense>
           </SectionErrorBoundary>
         </AnimatedSection>
