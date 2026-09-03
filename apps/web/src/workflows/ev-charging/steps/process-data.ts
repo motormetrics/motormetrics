@@ -74,7 +74,9 @@ export const updateEvChargingPoints = () =>
       },
     },
     {
-      // 17 columns x 5000 rows exceeds Postgres' 65,535 bind-parameter cap.
-      batchSize: 3000,
+      // Neon's HTTP endpoint rejects statements with more than 32,767 bound
+      // parameters (a signed 16-bit count, half Postgres' own cap), so keep
+      // 17 columns x rows comfortably under it.
+      batchSize: 1500,
     },
   );
