@@ -69,7 +69,8 @@ type DatasetType =
   | "coe-pqp"
   | "deregistrations"
   | "annual"
-  | "electric-vehicles";
+  | "electric-vehicles"
+  | "ev-charging";
 
 interface DatasetConfig {
   name: string;
@@ -177,6 +178,19 @@ const DATASET_CONFIGS: Record<DatasetType, DatasetConfig> = {
       "EV market share percentage",
       "BEV vs PHEV vs HEV breakdown",
       "EV adoption growth rate",
+    ],
+  },
+  "ev-charging": {
+    name: "Singapore Public EV Charger Availability and Prices",
+    description:
+      "Live status of every public electric vehicle charging connector in Singapore, with advertised per-kWh prices, AC and DC power ratings and operator, refreshed every five minutes from LTA DataMall.",
+    path: "/cars/electric-vehicles/charging",
+    temporalCoverage: "2026-09/..",
+    variableMeasured: [
+      "Connectors available, occupied and out of service",
+      "Advertised charging price per kWh by location",
+      "AC and DC charging speed in kW",
+      "Charging locations by postal district and operator",
     ],
   },
 };
