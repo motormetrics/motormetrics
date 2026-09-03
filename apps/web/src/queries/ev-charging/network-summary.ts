@@ -1,10 +1,4 @@
-import {
-  count,
-  countDistinct,
-  db,
-  evChargingPoints,
-  sql,
-} from "@motormetrics/database";
+import { count, db, evChargingPoints } from "@motormetrics/database";
 import { EV_CHARGING_CACHE_TAG } from "@web/lib/cache-tags";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -20,15 +14,21 @@ export async function getEvChargingNetworkSummary(): Promise<EvChargingNetworkSu
   cacheLife("max");
   cacheTag(EV_CHARGING_CACHE_TAG);
 
-  const [row] = await db
-    .select({
-      connectors: count(),
-      // A site is a coordinate pair; Postgres counts distinct row values.
-      sites: countDistinct(
-        sql`(${evChargingPoints.longitude}, ${evChargingPoints.latitude})`,
-      ),
+  const sites = db
+    .selectDistinct({
+      longitude: evChargingPoints.longitude,
+      latitude: evChargingPoints.latitude,
     })
-    .from(evChargingPoints);
+    .from(evChargingPoints)
+    .as("sites");
 
-  return { connectors: row?.connectors ?? 0, sites: row?.sites ?? 0 };
+  const [[connectorsRow], [sitesRow]] = await Promise.all([
+    db.select({ value: count() }).from(evChargingPoints),
+    db.select({ value: count() }).from(sites),
+  ]);
+
+  return {
+    connectors: connectorsRow?.value ?? 0,
+    sites: sitesRow?.value ?? 0,
+  };
 }

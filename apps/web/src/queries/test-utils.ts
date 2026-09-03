@@ -18,6 +18,7 @@ interface QueryBuilder<T> {
   innerJoin: (...args: unknown[]) => QueryBuilder<T>;
   leftJoin: (...args: unknown[]) => QueryBuilder<T>;
   having: (...args: unknown[]) => QueryBuilder<T>;
+  as: (...args: unknown[]) => QueryBuilder<T>;
   then: (
     onFulfilled?: (value: T) => unknown,
     onRejected?: (reason: unknown) => void,
@@ -34,6 +35,7 @@ const createQueryBuilder = <T>(factory: ResultFactory<T>): QueryBuilder<T> => {
     innerJoin: () => builder,
     leftJoin: () => builder,
     having: () => builder,
+    as: () => builder,
     // biome-ignore lint/suspicious/noThenProperty: Required to make query builder thenable for async/await syntax
     then: (onFulfilled, onRejected) =>
       Promise.resolve(resolveFactory(factory)).then(onFulfilled, onRejected),

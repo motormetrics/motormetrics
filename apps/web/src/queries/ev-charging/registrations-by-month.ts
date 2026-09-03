@@ -1,10 +1,4 @@
-import {
-  count,
-  db,
-  evChargingPoints,
-  isNotNull,
-  sql,
-} from "@motormetrics/database";
+import { count, db, evChargingPoints, isNotNull } from "@motormetrics/database";
 import { EV_CHARGING_CACHE_TAG } from "@web/lib/cache-tags";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -13,9 +7,6 @@ export interface EvChargingMonthlyRegistrations {
   month: string;
   count: number;
 }
-
-/** Calendar-month bucket for a registration date. */
-const monthExpr = sql<string>`to_char(${evChargingPoints.registrationDate}, 'YYYY-MM')`;
 
 /**
  * Connectors registered with LTA per month, oldest first.
@@ -32,10 +23,23 @@ export async function getEvChargingRegistrationsByMonth(): Promise<
   cacheLife("max");
   cacheTag(EV_CHARGING_CACHE_TAG);
 
-  return db
-    .select({ month: monthExpr, count: count() })
+  // Grouped by day in the database, rolled up to months here: a few hundred
+  // rows at most, and it keeps the query on Drizzle's own API.
+  const daily = await db
+    .select({ date: evChargingPoints.registrationDate, count: count() })
     .from(evChargingPoints)
     .where(isNotNull(evChargingPoints.registrationDate))
-    .groupBy(monthExpr)
-    .orderBy(monthExpr);
+    .groupBy(evChargingPoints.registrationDate)
+    .orderBy(evChargingPoints.registrationDate);
+
+  const monthly = new Map<string, number>();
+  for (const row of daily) {
+    if (!row.date) {
+      continue;
+    }
+    const month = row.date.slice(0, 7);
+    monthly.set(month, (monthly.get(month) ?? 0) + row.count);
+  }
+
+  return [...monthly].map(([month, total]) => ({ month, count: total }));
 }

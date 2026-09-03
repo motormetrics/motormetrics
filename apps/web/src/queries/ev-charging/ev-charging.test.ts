@@ -15,7 +15,7 @@ describe("ev charging queries", () => {
 
   describe("getEvChargingNetworkSummary", () => {
     it("should return connector and site counts", async () => {
-      queueSelect([{ connectors: 11353, sites: 2816 }]);
+      queueSelect([{ value: 11353 }], [{ value: 2816 }]);
 
       const result = await getEvChargingNetworkSummary();
 
@@ -25,7 +25,7 @@ describe("ev charging queries", () => {
     });
 
     it("should return zeros when the table is empty", async () => {
-      queueSelect([]);
+      queueSelect([], []);
 
       const result = await getEvChargingNetworkSummary();
 
@@ -34,10 +34,11 @@ describe("ev charging queries", () => {
   });
 
   describe("getEvChargingRegistrationsByMonth", () => {
-    it("should return monthly registration counts", async () => {
+    it("should roll daily registration counts up to months, oldest first", async () => {
       queueSelect([
-        { month: "2024-02", count: 900 },
-        { month: "2024-03", count: 1200 },
+        { date: "2024-02-14", count: 500 },
+        { date: "2024-02-20", count: 400 },
+        { date: "2024-03-01", count: 1200 },
       ]);
 
       const result = await getEvChargingRegistrationsByMonth();
