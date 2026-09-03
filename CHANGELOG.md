@@ -1,3 +1,9 @@
+## [5.8.0](https://github.com/motormetrics/motormetrics/compare/v5.7.0...v5.8.0) (2026-09-03)
+
+### Features
+
+* **web:** add posthog engagement events and funnels ([7ce8649](https://github.com/motormetrics/motormetrics/commit/7ce86497c660f6176fd2e9dd1498cdff544d99cf))
+
 ## [5.7.0](https://github.com/motormetrics/motormetrics/compare/v5.6.0...v5.7.0) (2026-09-03)
 
 ### Features
