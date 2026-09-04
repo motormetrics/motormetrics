@@ -1,12 +1,13 @@
 import { Skeleton } from "@heroui/react";
-import { PageHead } from "@web/components/shared/page-head";
+import { OverviewPage } from "@web/components/shared/overview";
+import { PageEyebrow } from "@web/components/shared/page-eyebrow";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { MakesContentSection } from "./components/makes-content-section";
-import { MakesHeaderMeta } from "./components/makes-header-meta";
+import { RangeMenu } from "./components/range-menu";
 
 const title = "Car Makes in Singapore";
 const description =
@@ -41,16 +42,17 @@ export const metadata: Metadata = {
 
 export default function CarMakesPage({ searchParams }: PageProps) {
   return (
-    <>
-      <PageHead
-        controls={
-          <Suspense fallback={<Skeleton className="h-13 w-80 rounded-full" />}>
-            <MakesHeaderMeta />
+    <OverviewPage>
+      <PageEyebrow
+        control={
+          <Suspense fallback={<Skeleton className="h-6 w-28 rounded-full" />}>
+            <RangeMenu />
           </Suspense>
         }
+        section="Cars · Makes"
         title="Makes"
       />
       <MakesContentSection searchParams={searchParams} />
-    </>
+    </OverviewPage>
   );
 }

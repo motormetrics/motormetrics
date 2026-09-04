@@ -1,6 +1,6 @@
 import type { SearchParams } from "nuqs/server";
 import { loadSearchParams, RANGE_LABELS } from "../search-params";
-import { loadMakeRows } from "./make-rows";
+import { isFuelFilter, loadMakeRows } from "./make-rows";
 import { MakesTable } from "./makes-table";
 
 export async function AllMakesCard({
@@ -13,6 +13,7 @@ export async function AllMakesCard({
 
   return (
     <MakesTable
+      fuel={isFuelFilter(fuel) ? fuel : null}
       rangeLabel={RANGE_LABELS[range]}
       rows={rows.map(({ trend: _trend, ...row }) => row)}
     />

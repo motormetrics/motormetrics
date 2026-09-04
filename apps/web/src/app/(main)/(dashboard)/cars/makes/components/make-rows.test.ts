@@ -4,6 +4,7 @@ import {
   buildTotalsFromFuelRows,
   buildTotalsFromStats,
   finaliseRows,
+  matchesFuelFilter,
   rollingMonths,
   selectElectricOnlyMakes,
   shiftMonth,
@@ -98,7 +99,23 @@ describe("buildTotalsFromStats", () => {
   });
 });
 
+describe("matchesFuelFilter", () => {
+  it("should match an exact fuel type for the petrol and electric tabs", () => {
+    expect(matchesFuelFilter("Petrol", "Petrol")).toBe(true);
+    expect(matchesFuelFilter("Petrol", "Petrol-Electric")).toBe(false);
+    expect(matchesFuelFilter("Electric", "Electric")).toBe(true);
+  });
+
+  it("should match every hybrid variant for the hybrid tab", () => {
+    expect(matchesFuelFilter("Hybrid", "Petrol-Electric")).toBe(true);
+    expect(matchesFuelFilter("Hybrid", "Petrol-Electric (Plug-In)")).toBe(true);
+    expect(matchesFuelFilter("Hybrid", "Diesel-Electric")).toBe(true);
+    expect(matchesFuelFilter("Hybrid", "Electric")).toBe(false);
+  });
+});
+
 describe("buildTotalsFromFuelRows", () => {
+  const isElectric = (fuelType: string) => fuelType === "Electric";
   const rows = [
     // Inside the prior-year comparison window (Jan–Feb 2024).
     { count: 10, fuelType: "Electric", make: "BYD", month: "2024-02" },
@@ -116,23 +133,23 @@ describe("buildTotalsFromFuelRows", () => {
     { count: 5, fuelType: "Electric", make: "TESLA", month: "2025-02" },
   ];
 
-  it("ignores rows whose fuel type only matched the sql wildcard", () => {
-    const totals = buildTotalsFromFuelRows(rows, "Electric", "2025-02", "ytd");
+  it("should ignore rows whose fuel type only matched the sql wildcard", () => {
+    const totals = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "ytd");
     const byd = totals.find((item) => item.make === "BYD");
 
     expect(byd?.count).toBe(50);
   });
 
   it("computes each range from the same rows", () => {
-    const month = buildTotalsFromFuelRows(rows, "Electric", "2025-02", "month");
-    const rolling = buildTotalsFromFuelRows(rows, "Electric", "2025-02", "12m");
+    const month = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "month");
+    const rolling = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "12m");
 
     expect(month.find((item) => item.make === "BYD")?.count).toBe(30);
     expect(rolling.find((item) => item.make === "BYD")?.count).toBe(57);
   });
 
   it("aligns the trend to the twelve months ending at the latest month", () => {
-    const [byd] = buildTotalsFromFuelRows(rows, "Electric", "2025-02", "ytd");
+    const [byd] = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "ytd");
 
     expect(byd.trend).toHaveLength(12);
     expect(byd.trend.at(-1)).toBe(30);
@@ -140,7 +157,7 @@ describe("buildTotalsFromFuelRows", () => {
   });
 
   it("compares against the same months a year earlier, not the whole year", () => {
-    const totals = buildTotalsFromFuelRows(rows, "Electric", "2025-02", "ytd");
+    const totals = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "ytd");
 
     // Jan–Feb 2025 is 50 against Jan–Feb 2024 of 10. Counting all of 2024
     // would fold in the November 7 and understate this as +194%.
@@ -148,7 +165,7 @@ describe("buildTotalsFromFuelRows", () => {
   });
 
   it("reports no change when the make has no prior-year registrations", () => {
-    const totals = buildTotalsFromFuelRows(rows, "Electric", "2025-02", "ytd");
+    const totals = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "ytd");
 
     expect(totals.find((item) => item.make === "TESLA")?.yoyChange).toBeNull();
   });
