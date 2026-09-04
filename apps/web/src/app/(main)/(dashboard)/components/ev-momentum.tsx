@@ -1,136 +1,125 @@
-import { Tooltip, Typography } from "@heroui/react";
-import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
-import { InkPanel } from "@web/components/shared/bento";
-import { sparkline } from "@web/components/shared/sparkline";
+import { slugify } from "@motormetrics/utils";
 import {
-  getEvLatestSummary,
-  getEvMonthlyTrend,
-  getEvTopMakes,
-} from "@web/queries/cars";
-import { ArrowUpRight, Zap } from "lucide-react";
-import Link from "next/link";
+  batteryElectricMakes,
+  batteryElectricShares,
+  resolveMonthIndex,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+import { buildLogoMap } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
+import { DeltaChip } from "@web/components/shared/delta-chip";
+import { MakeAvatar } from "@web/components/shared/make-avatar";
+import { Headline, SectionHead } from "@web/components/shared/overview";
+import { SparklineChart } from "@web/components/shared/sparkline-chart";
+import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
+import { getTopMakesByFuelType } from "@web/queries/cars/market-insights";
+import { getAllCarLogos } from "@web/queries/logos";
+import type { SearchParams } from "nuqs/server";
 
-export async function EvMomentum() {
-  const [summary, trend, topMakes] = await Promise.all([
-    getEvLatestSummary(),
+/** Months of share history drawn under the figure. */
+const SPARK_MONTHS = 12;
+const TOP_MAKES = 3;
+
+const formatMonthName = (month: string) => {
+  const [year, monthNumber] = month.split("-").map(Number);
+  return new Date(year, monthNumber - 1).toLocaleString("en-SG", {
+    month: "long",
+  });
+};
+
+/**
+ * Battery-electric share of the month's new car registrations, its trend and
+ * the three makes selling the most of them — the same framing as the EV page
+ * the section links to.
+ */
+export async function EvMomentum({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const month = await resolveCarsMonth(searchParams);
+  const [trend, marketShare, fuelTypes, logoResult] = await Promise.all([
     getEvMonthlyTrend(),
-    getEvTopMakes(3),
+    getEvMarketShare(),
+    getTopMakesByFuelType(month),
+    getAllCarLogos(),
   ]);
 
-  if (!summary) {
+  const index = resolveMonthIndex(
+    trend.map((point) => point.month),
+    month,
+  );
+  const point = trend[index];
+  if (!point) {
     return null;
   }
 
-  const series = trend.slice(-8).map((point) => point.BEV + point.PHEV);
-  const spark = sparkline(series, 340, 84);
-  const evTotal = summary.totalEv || 1;
-
-  const [year, month] = summary.month.split("-");
-  const displayMonth = new Date(Number(year), Number(month) - 1).toLocaleString(
-    "en-SG",
-    { month: "long", year: "numeric" },
+  const shares = batteryElectricShares(trend, marketShare);
+  const share = shares[index] ?? 0;
+  const previousShare = index > 0 ? (shares[index - 1] ?? share) : share;
+  const history = shares.slice(
+    Math.max(0, index - SPARK_MONTHS + 1),
+    index + 1,
   );
 
+  const logoUrlBySlug = buildLogoMap(
+    "logos" in logoResult ? logoResult.logos : [],
+  );
+  const makes = batteryElectricMakes(fuelTypes).slice(0, TOP_MAKES);
+  const monthTotal = point.BEV || 1;
+
   return (
-    <InkPanel>
-      <div className="flex items-center gap-3">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
-          <Zap className="size-5" />
-        </span>
-        <Typography.Paragraph
-          color="muted"
-          size="sm"
-          className="text-accent-foreground/85"
-        >
-          Electric momentum
-        </Typography.Paragraph>
-        <Tooltip delay={300}>
-          <Link
-            aria-label="View electric vehicle data"
-            className={buttonVariants({
-              className: "ml-auto size-10 rounded-full text-accent-foreground",
-              isIconOnly: true,
-              variant: "tertiary",
-            })}
-            href="/cars/electric-vehicles"
-          >
-            <ArrowUpRight className="size-5" />
-          </Link>
-          <Tooltip.Content>View electric vehicle data</Tooltip.Content>
-        </Tooltip>
-      </div>
-
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
-          {summary.evSharePercent.toFixed(1)}%
-        </span>
-        <span className="rounded-full bg-accent-on-dark/20 px-4 py-2 font-bold text-accent-on-dark text-sm tabular-nums">
-          <NumberValue
-            locale="en-SG"
-            maximumFractionDigits={0}
-            value={summary.totalEv}
-          />
-        </span>
-      </div>
-
-      <Typography.Paragraph
-        color="muted"
-        size="sm"
-        className="text-accent-foreground/60"
-      >
-        Electrified share (BEV, PHEV, hybrid) · {displayMonth}
-      </Typography.Paragraph>
-
-      {spark ? (
-        <svg
-          className="h-[84px] w-full overflow-visible"
-          role="img"
-          viewBox="0 0 340 84"
-        >
-          <title>{`Electric registrations over the last ${series.length} months`}</title>
-          <path d={spark.area} fill="var(--accent-on-dark)" opacity={0.14} />
-          <path
-            d={spark.line}
-            fill="none"
-            stroke="var(--accent-on-dark)"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={3}
-          />
-          <circle
-            cx={spark.lastX}
-            cy={spark.lastY}
-            fill="var(--foreground)"
-            r={6}
-            stroke="var(--accent-on-dark)"
-            strokeWidth={3}
-          />
-        </svg>
-      ) : null}
-
+    <section className="flex flex-col gap-6">
+      <SectionHead
+        caption={`EV share of new registrations · ${formatMonthName(point.month)}`}
+        eyebrow="Electric vehicles"
+        link={{ href: "/cars/electric-vehicles", label: "All electric data" }}
+        title="Electric momentum"
+      />
       <div className="flex flex-col gap-3">
-        {topMakes.map((make, index) => (
-          <div className="flex items-center gap-3" key={make.make}>
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent-foreground/10 font-extrabold text-accent-foreground text-xs">
-              {index + 1}
-            </span>
-            <span className="font-bold text-accent-foreground text-sm">
-              {make.make}
-            </span>
-            <span className="ml-auto font-bold text-accent-foreground/85 text-sm tabular-nums">
-              <NumberValue
-                locale="en-SG"
-                maximumFractionDigits={0}
-                value={make.count}
-              />
-            </span>
-            <span className="w-12 text-right font-semibold text-accent-foreground/50 text-xs tabular-nums">
-              {((make.count / evTotal) * 100).toFixed(1)}%
-            </span>
-          </div>
-        ))}
+        <Headline
+          delta={<DeltaChip unit="pp" value={share - previousShare} />}
+          size="md"
+          value={`${share.toFixed(1)}%`}
+        />
+        <SparklineChart
+          height={120}
+          title={`Battery-electric share of new car registrations over the last ${history.length} months`}
+          values={history}
+        />
+        {makes.length > 0 ? (
+          <ol className="flex flex-col">
+            {makes.map((item, rank) => (
+              <li
+                className="flex items-center gap-3.5 border-separator border-t py-3"
+                key={item.make}
+              >
+                <span className="w-5 font-bold text-[15px] text-muted tabular-nums">
+                  {rank + 1}
+                </span>
+                <MakeAvatar
+                  logoUrl={logoUrlBySlug[slugify(item.make)] ?? null}
+                  make={item.make}
+                  size={28}
+                />
+                <span className="truncate font-semibold text-base text-foreground/85">
+                  {item.make}
+                </span>
+                <span className="ml-auto font-extrabold text-base tabular-nums">
+                  <NumberValue
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    value={item.count}
+                  />
+                </span>
+                <span className="w-14 text-right font-semibold text-muted text-sm tabular-nums">
+                  {((item.count / monthTotal) * 100).toFixed(1)}%
+                </span>
+              </li>
+            ))}
+          </ol>
+        ) : null}
       </div>
-    </InkPanel>
+    </section>
   );
 }

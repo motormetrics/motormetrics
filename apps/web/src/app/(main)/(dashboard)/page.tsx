@@ -1,27 +1,27 @@
 import { Skeleton } from "@heroui/react";
-import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
-import {
-  TopMakesSection,
-  YearlyChart,
-} from "@web/app/(main)/(dashboard)/components/charts-section";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { CoeSection } from "@web/app/(main)/(dashboard)/components/coe-section";
+import { DeregistrationsHeadline } from "@web/app/(main)/(dashboard)/components/deregistrations-headline";
+import { EvCharging } from "@web/app/(main)/(dashboard)/components/ev-charging";
 import { EvMomentum } from "@web/app/(main)/(dashboard)/components/ev-momentum";
-import { MarketOverview } from "@web/app/(main)/(dashboard)/components/market-overview";
-import { PqpRail } from "@web/app/(main)/(dashboard)/components/pqp-rail";
-// TODO: Not present in the Overview v2 comp. Restore if the dashboard should
-// keep a monthly-change KPI and a recent-posts block alongside the v2 layout.
-// import { MonthlyChangeSummary } from "@web/app/(main)/(dashboard)/components/monthly-change-summary";
-// import { PostsSection } from "@web/app/(main)/(dashboard)/components/posts-section";
-import { SummaryCard } from "@web/app/(main)/(dashboard)/components/summary-card";
+import { FuelMix } from "@web/app/(main)/(dashboard)/components/fuel-mix";
+import { RegistrationsHeadline } from "@web/app/(main)/(dashboard)/components/registrations-headline";
+import { TopMakes } from "@web/app/(main)/(dashboard)/components/top-makes";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { Bento, RAIL_CLASS } from "@web/components/shared/bento";
-import { PageHead } from "@web/components/shared/page-head";
+import { MonthMenu } from "@web/components/shared/month-menu";
+import {
+  Hairline,
+  OverviewGrid,
+  OverviewPage,
+} from "@web/components/shared/overview";
+import { PageEyebrow } from "@web/components/shared/page-eyebrow";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { brandSameAs } from "@web/config/socials";
 import { socialLinks } from "@web/flags";
+import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
+import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -103,19 +103,39 @@ async function OrganizationStructuredData() {
   );
 }
 
-function CardSkeleton({ className = "" }: { className?: string }) {
+interface PageProps {
+  searchParams: Promise<SearchParams>;
+}
+
+async function MonthControl({ searchParams }: PageProps) {
+  const { month: requestedMonth } = await loadSearchParams(searchParams);
+  const [months, { month, wasAdjusted }] = await Promise.all([
+    fetchMonthsForCars(),
+    getMonthOrLatest(requestedMonth, "cars"),
+  ]);
+
+  if (months.length === 0) {
+    return null;
+  }
+
   return (
-    <div className={`rounded-4xl bg-surface p-7 shadow-surface ${className}`}>
-      <div className="flex flex-col gap-4">
-        <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="h-12 w-40 rounded-lg" />
-        <Skeleton className="h-6 w-44 rounded-full" />
-      </div>
+    <MonthMenu latestMonth={month} months={months} wasAdjusted={wasAdjusted} />
+  );
+}
+
+/** A section-shaped placeholder: eyebrow, figure, then the chart area. */
+function BlockSkeleton({ chartHeight }: { chartHeight: string }) {
+  return (
+    <div className="flex flex-col gap-4">
+      <Skeleton className="h-5 w-40 rounded-lg" />
+      <Skeleton className="h-14 w-56 rounded-lg" />
+      <Skeleton className="h-4 w-72 rounded-lg" />
+      <Skeleton className={`w-full rounded-2xl ${chartHeight}`} />
     </div>
   );
 }
 
-const HomePage = () => {
+export default function HomePage({ searchParams }: PageProps) {
   return (
     <>
       <StructuredData data={webSiteSchema} />
@@ -123,85 +143,72 @@ const HomePage = () => {
         <OrganizationStructuredData />
       </Suspense>
 
-      <PageHead title="Overview" />
+      <OverviewPage>
+        <div className="flex flex-col gap-7">
+          <PageEyebrow
+            control={
+              <Suspense
+                fallback={<Skeleton className="h-6 w-36 rounded-full" />}
+              >
+                <MonthControl searchParams={searchParams} />
+              </Suspense>
+            }
+            section="Singapore car market"
+            title="Overview"
+          />
 
-      <Bento>
-        {/* Left column */}
-        <AnimatedGrid className="flex flex-col gap-6">
-          <AnimatedSection>
-            <SectionErrorBoundary title="Registration summary unavailable">
-              <Suspense fallback={<CardSkeleton className="h-[420px]" />}>
-                <SummaryCard />
+          <OverviewGrid>
+            <SectionErrorBoundary title="Registrations unavailable">
+              <Suspense fallback={<BlockSkeleton chartHeight="h-[150px]" />}>
+                <RegistrationsHeadline searchParams={searchParams} />
               </Suspense>
             </SectionErrorBoundary>
-          </AnimatedSection>
-          <AnimatedSection>
-            <SectionErrorBoundary title="Yearly chart unavailable">
-              <YearlyChart />
-            </SectionErrorBoundary>
-          </AnimatedSection>
-        </AnimatedGrid>
-
-        {/* Middle column */}
-        <AnimatedGrid className="flex flex-col gap-6">
-          <AnimatedSection>
-            <SectionErrorBoundary title="COE results unavailable">
-              <CoeSection />
-            </SectionErrorBoundary>
-          </AnimatedSection>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <AnimatedSection>
-              <SectionErrorBoundary title="Top makes unavailable">
-                <TopMakesSection />
-              </SectionErrorBoundary>
-            </AnimatedSection>
-            <AnimatedSection>
-              <SectionErrorBoundary title="Market overview unavailable">
-                <Suspense fallback={<CardSkeleton className="h-[430px]" />}>
-                  <MarketOverview />
-                </Suspense>
-              </SectionErrorBoundary>
-            </AnimatedSection>
-          </div>
-        </AnimatedGrid>
-
-        {/* Right rail — warm sand well: PQP rates over a dark EV panel */}
-        <AnimatedGrid className={RAIL_CLASS}>
-          <AnimatedSection>
-            <SectionErrorBoundary title="PQP rates unavailable">
-              <Suspense fallback={<CardSkeleton className="h-96" />}>
-                <PqpRail />
+            <SectionErrorBoundary title="Deregistrations unavailable">
+              <Suspense fallback={<BlockSkeleton chartHeight="h-[170px]" />}>
+                <DeregistrationsHeadline searchParams={searchParams} />
               </Suspense>
             </SectionErrorBoundary>
-          </AnimatedSection>
-          <AnimatedSection>
-            <SectionErrorBoundary title="Electric momentum unavailable">
-              <Suspense fallback={<CardSkeleton className="h-96" />}>
-                <EvMomentum />
-              </Suspense>
-            </SectionErrorBoundary>
-          </AnimatedSection>
-        </AnimatedGrid>
+          </OverviewGrid>
+        </div>
 
-        {/* TODO: Neither block appears in Overview v2. Commented out rather than
-            deleted so they can be restored if the dashboard should diverge from
-            the comp.
-        <AnimatedSection>
-          <SectionErrorBoundary title="Monthly change unavailable">
-            <Suspense fallback={<CardSkeleton className="h-40" />}>
-              <MonthlyChangeSummary />
+        <Hairline />
+
+        <SectionErrorBoundary title="COE premiums unavailable">
+          <Suspense fallback={<BlockSkeleton chartHeight="h-[200px]" />}>
+            <CoeSection searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+
+        <Hairline />
+
+        <OverviewGrid>
+          <SectionErrorBoundary title="Top makes unavailable">
+            <Suspense fallback={<BlockSkeleton chartHeight="h-[220px]" />}>
+              <TopMakes searchParams={searchParams} />
             </Suspense>
           </SectionErrorBoundary>
-        </AnimatedSection>
-        <AnimatedSection>
-          <SectionErrorBoundary title="Recent posts unavailable">
-            <PostsSection />
+          <SectionErrorBoundary title="Fuel mix unavailable">
+            <Suspense fallback={<BlockSkeleton chartHeight="h-[172px]" />}>
+              <FuelMix searchParams={searchParams} />
+            </Suspense>
           </SectionErrorBoundary>
-        </AnimatedSection>
-        */}
-      </Bento>
+        </OverviewGrid>
+
+        <Hairline />
+
+        <OverviewGrid>
+          <SectionErrorBoundary title="Electric momentum unavailable">
+            <Suspense fallback={<BlockSkeleton chartHeight="h-[240px]" />}>
+              <EvMomentum searchParams={searchParams} />
+            </Suspense>
+          </SectionErrorBoundary>
+          <SectionErrorBoundary title="EV charging unavailable">
+            <Suspense fallback={<BlockSkeleton chartHeight="h-[160px]" />}>
+              <EvCharging />
+            </Suspense>
+          </SectionErrorBoundary>
+        </OverviewGrid>
+      </OverviewPage>
     </>
   );
-};
-
-export default HomePage;
+}
