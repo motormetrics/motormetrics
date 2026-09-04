@@ -1,10 +1,10 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
+import { MakeAvatar } from "@web/components/shared/make-avatar";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 import { loadSearchParams } from "../search-params";
-import { MakeAvatar } from "./make-avatar";
 import { loadMakeRows } from "./make-rows";
 
 /**

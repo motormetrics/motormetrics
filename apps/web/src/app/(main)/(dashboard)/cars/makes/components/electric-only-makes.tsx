@@ -1,8 +1,8 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { InkPanel } from "@web/components/shared/bento";
+import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { Zap } from "lucide-react";
-import { MakeAvatar } from "./make-avatar";
 import { loadElectricOnlyMakes } from "./make-rows";
 
 export async function ElectricOnlyMakes() {

@@ -4,11 +4,11 @@ import { cn, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { SurfaceCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
+import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { Car, ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
 import posthog from "posthog-js";
 import { useMemo, useState } from "react";
-import { MakeAvatar } from "./make-avatar";
 import type { MakeRow } from "./make-rows";
 
 /** The trend series only feeds the hero sparkline, so it never crosses over. */

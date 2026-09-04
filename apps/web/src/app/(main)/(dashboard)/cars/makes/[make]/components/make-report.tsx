@@ -10,13 +10,13 @@ import {
   RANGE_LABELS,
   type Range,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
-import { MakeAvatar } from "@web/app/(main)/(dashboard)/cars/makes/components/make-avatar";
 import {
   buildLogoMap,
   shiftMonth,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { EmptyState } from "@web/components/shared/empty-state";
+import { MakeAvatar } from "@web/components/shared/make-avatar";
 import {
   ReportFilterBar,
   ReportHeadline,
