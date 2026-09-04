@@ -1,7 +1,8 @@
 "use client";
 
 import { Chip, Typography } from "@heroui/react";
-import { KPI, NumberValue, TrendChip } from "@heroui-pro/react";
+import { NumberValue, TrendChip } from "@heroui-pro/react";
+import { KPI } from "@heroui-pro/react/kpi";
 
 import { formatGrowthRate, slugify } from "@motormetrics/utils";
 import type { Make } from "@web/types";

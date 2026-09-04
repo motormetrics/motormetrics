@@ -1,5 +1,5 @@
 import { cn } from "@heroui/react";
-import { KPI } from "@heroui-pro/react";
+import { KPI } from "@heroui-pro/react/kpi";
 import { MetricsComparison } from "@web/components/metrics-comparison";
 
 type MetricCardVariant = "default" | "hero" | "metric";

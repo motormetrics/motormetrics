@@ -1,4 +1,5 @@
-import { KPI, KPIGroup } from "@heroui-pro/react";
+import { KPIGroup } from "@heroui-pro/react";
+import { KPI } from "@heroui-pro/react/kpi";
 import type { MakesSummary as MakesSummaryType } from "@web/types";
 
 interface MakesSummaryProps {

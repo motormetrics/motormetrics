@@ -1,6 +1,6 @@
 "use client";
 
-import { LineChart } from "@heroui-pro/react";
+import { LineChart } from "@heroui-pro/react/line-chart";
 
 const numberFormatter = new Intl.NumberFormat("en-SG");
 

@@ -118,6 +118,7 @@ export async function proxy(request: NextRequest) {
       connect-src *;
       font-src 'self';
       frame-src 'self' vercel.live;
+      worker-src 'self' blob:;
   `;
   // TODO: Use this CSP after migrating to Vercel
   // const cspHeader = `
@@ -128,6 +129,7 @@ export async function proxy(request: NextRequest) {
   //     connect-src *;
   //     font-src 'self';
   //     frame-src 'self' 'strict-dynamic';
+  //     worker-src 'self' blob:;
   // `;
 
   const requestHeaders = new Headers(request.headers);

@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Typography } from "@heroui/react";
-import { LineChart } from "@heroui-pro/react";
+import { LineChart } from "@heroui-pro/react/line-chart";
 
 interface YearTotal {
   year: number;

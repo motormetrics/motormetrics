@@ -1,4 +1,5 @@
-import { BarChart, NumberValue } from "@heroui-pro/react";
+import { NumberValue } from "@heroui-pro/react";
+import { BarChart } from "@heroui-pro/react/bar-chart";
 import type { RegistrationStat } from "@web/types/cars";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 

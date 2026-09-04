@@ -4,7 +4,7 @@ import type { COECategory, COEResult } from "@web/types";
 import type React from "react";
 import { LatestCoePremium } from "./coe/latest-coe-premium";
 
-vi.mock("@heroui-pro/react", async (importOriginal) => {
+vi.mock("@heroui-pro/react/kpi", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
   const KPI = ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>

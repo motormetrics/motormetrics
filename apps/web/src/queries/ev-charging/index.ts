@@ -2,6 +2,7 @@ export * from "./hourly-utilisation";
 export * from "./live-summary";
 export * from "./location-utilisation";
 export * from "./locations";
+export * from "./map-sites";
 export * from "./network-summary";
 export * from "./price-rankings";
 export * from "./recent-changes";

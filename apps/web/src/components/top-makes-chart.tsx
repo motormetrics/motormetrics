@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Typography } from "@heroui/react";
-import { BarChart } from "@heroui-pro/react";
+import { BarChart } from "@heroui-pro/react/bar-chart";
 
 interface TopMake {
   make: string;

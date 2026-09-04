@@ -1,6 +1,7 @@
 "use client";
 
-import { BarChart, NumberValue } from "@heroui-pro/react";
+import { NumberValue } from "@heroui-pro/react";
+import { BarChart } from "@heroui-pro/react/bar-chart";
 
 interface MakeData {
   make: string;

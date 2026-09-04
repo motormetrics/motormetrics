@@ -1,5 +1,6 @@
 import { Skeleton } from "@heroui/react";
 import { BusyHours } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/busy-hours";
+import { ChargingMap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map";
 import {
   ChargingIntro,
   ChargingQuestions,
@@ -109,6 +110,14 @@ export default function ChargingPage({ searchParams }: PageProps) {
         <ChargingIntro />
       </Suspense>
 
+      <AnimatedSection order={0}>
+        <SectionErrorBoundary title="Charger map unavailable">
+          <Suspense fallback={<CardSkeleton className="h-[600px]" />}>
+            <ChargingMapSection searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </AnimatedSection>
+
       <Suspense
         fallback={
           <Bento>
@@ -131,6 +140,11 @@ export default function ChargingPage({ searchParams }: PageProps) {
 async function DistrictControl({ searchParams }: PageProps) {
   const { district } = await loadSearchParams(searchParams);
   return <DistrictSelect district={district} />;
+}
+
+async function ChargingMapSection({ searchParams }: PageProps) {
+  const { district } = await loadSearchParams(searchParams);
+  return <ChargingMap district={district} />;
 }
 
 async function ChargingBento({ searchParams }: PageProps) {

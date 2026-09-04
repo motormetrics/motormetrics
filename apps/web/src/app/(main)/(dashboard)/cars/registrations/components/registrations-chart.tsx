@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart } from "@heroui-pro/react";
+import { BarChart } from "@heroui-pro/react/bar-chart";
 
 const numberFormatter = new Intl.NumberFormat("en-SG");
 
