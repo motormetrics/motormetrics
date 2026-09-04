@@ -1,4 +1,5 @@
 import {
+  batteryElectricMakes,
   batteryElectricShares,
   buildRegistrationSplit,
   changeRatio,
@@ -8,6 +9,7 @@ import {
   yearToDateMakes,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import type { EvMarketShare, EvMonthlyTrend } from "@web/queries/cars";
+import type { FuelType } from "@web/types/cars";
 import { describe, expect, it } from "vitest";
 
 const point: EvMonthlyTrend = {
@@ -187,5 +189,40 @@ describe("yearToDateMakes", () => {
         ({ make }) => make,
       ),
     ).not.toContain("Ghost");
+  });
+});
+
+describe("batteryElectricMakes", () => {
+  const fuelTypes: FuelType[] = [
+    {
+      fuelType: "Electric",
+      total: 500,
+      makes: [
+        { make: "BYD", count: 200 },
+        { make: "Tesla", count: 300 },
+      ],
+    },
+    {
+      fuelType: "Petrol-Electric",
+      total: 260,
+      makes: [
+        { make: "Toyota", count: 210 },
+        { make: "Tesla", count: 50 },
+      ],
+    },
+  ];
+
+  it("should rank battery-electric makes by count", () => {
+    expect(batteryElectricMakes(fuelTypes)).toEqual([
+      { make: "Tesla", count: 300 },
+      { make: "BYD", count: 200 },
+    ]);
+  });
+
+  it("should drop makes with no registrations", () => {
+    const withZero: FuelType[] = [
+      { fuelType: "Electric", total: 0, makes: [{ make: "Ghost", count: 0 }] },
+    ];
+    expect(batteryElectricMakes(withZero)).toEqual([]);
   });
 });

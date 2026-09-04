@@ -1,3 +1,4 @@
+import { EV_FUEL_TYPES } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import type {
   Powertrain,
   Range,
@@ -7,7 +8,7 @@ import type {
   EvMonthlyTrend,
   FuelTypeData,
 } from "@web/queries/cars";
-import type { Make } from "@web/types/cars";
+import type { FuelType, Make } from "@web/types/cars";
 
 /** Number of months each range keeps; `null` keeps the whole series. */
 const RANGE_MONTHS: Record<Range, number | null> = {
@@ -172,6 +173,32 @@ export function yearToDateMakes(
       continue;
     }
     totals.set(row.make, (totals.get(row.make) ?? 0) + row.count);
+  }
+
+  return Array.from(totals, ([make, count]) => ({ make, count }))
+    .filter(({ count }) => count > 0)
+    .sort((a, b) => b.count - a.count || a.make.localeCompare(b.make));
+}
+
+/**
+ * Battery-electric registrations per make for a single month, from the
+ * per-fuel-type breakdown `getTopMakesByFuelType()` returns.
+ *
+ * The homepage's electric momentum block ranks the month's EV makes from
+ * this; the EV overview's leaderboard is year to date and uses
+ * `yearToDateMakes` instead.
+ */
+export function batteryElectricMakes(fuelTypes: FuelType[]): Make[] {
+  const totals = new Map<string, number>();
+
+  for (const entry of fuelTypes) {
+    if (!(EV_FUEL_TYPES.BEV as readonly string[]).includes(entry.fuelType)) {
+      continue;
+    }
+
+    for (const { make, count } of entry.makes) {
+      totals.set(make, (totals.get(make) ?? 0) + count);
+    }
   }
 
   return Array.from(totals, ([make, count]) => ({ make, count }))
