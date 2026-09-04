@@ -1,0 +1,18 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "tags": ["-lintignore"],
+  "ignore": [".agents/**"],
+  "rules": {
+    "files": "error",
+    "dependencies": "error",
+    "devDependencies": "error",
+    "exports": "warn",
+    "types": "warn",
+    "enumMembers": "warn",
+    "namespaceMembers": "warn",
+    "duplicates": "warn"
+  },
+  "workspaces": {
+    ".": {}
+  }
+}
