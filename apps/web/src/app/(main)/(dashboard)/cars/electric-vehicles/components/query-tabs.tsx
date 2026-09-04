@@ -12,7 +12,7 @@ interface QueryTabsProps<Value extends string> {
   param: string;
   /** Currently selected key, as resolved on the server. */
   value: Value;
-  /** `pill` for the powertrain row, `segmented` for the range control. */
+  /** `pill` for the v3 tab rows, `segmented` for the charging controls. */
   variant?: "pill" | "segmented";
 }
 
@@ -40,8 +40,8 @@ export function QueryTabs<Value extends string>({
   return (
     <fieldset
       className={cn(
-        "flex min-w-0 flex-wrap gap-1.5",
-        variant === "segmented" && "rounded-full bg-default p-1.5",
+        "flex min-w-0 flex-wrap gap-2",
+        variant === "segmented" && "gap-1.5 rounded-full bg-default p-1.5",
       )}
     >
       <legend className="sr-only">{ariaLabel}</legend>
@@ -65,7 +65,7 @@ export function QueryTabs<Value extends string>({
               !isActive && variant === "segmented" && "text-muted",
               !isActive &&
                 variant === "pill" &&
-                "bg-background text-foreground/75",
+                "bg-default text-foreground/75 hover:brightness-[1.03]",
               isActive && "font-extrabold",
             )}
             key={option.key}

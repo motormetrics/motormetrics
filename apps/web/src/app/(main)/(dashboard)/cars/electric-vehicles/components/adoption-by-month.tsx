@@ -1,10 +1,10 @@
-import { Typography } from "@heroui/react";
-import { AdoptionColumns } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-columns";
+import { formatDateToMonthYear } from "@motormetrics/utils";
 import {
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import { SurfaceCard } from "@web/components/shared/bento";
+import { ShareColumns } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/share-columns";
+import { SectionHead } from "@web/components/shared/overview";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 
 /** Months of history the column chart shows, matching the comp's eight bars. */
@@ -27,28 +27,32 @@ export async function AdoptionByMonth({ month }: { month: string }) {
 
   const shares = batteryElectricShares(trend, marketShare);
   const start = Math.max(0, index - COLUMN_COUNT + 1);
-  const columns = trend.slice(start, index + 1).map((point, offset) => ({
-    month: point.month,
-    share: shares[start + offset] ?? 0,
-  }));
+  const columns = trend.slice(start, index + 1).map((point, offset) => {
+    const share = shares[start + offset] ?? 0;
+    return {
+      key: point.month,
+      label: formatDateToMonthYear(point.month).slice(0, 3),
+      value: share,
+      valueLabel: `${share.toFixed(0)}%`,
+    };
+  });
+
+  const firstYear = columns.at(0)?.key.slice(0, 4);
+  const lastYear = columns.at(-1)?.key.slice(0, 4);
+  const period = firstYear === lastYear ? lastYear : `${firstYear}–${lastYear}`;
 
   return (
-    <SurfaceCard className="gap-4 p-7">
-      <div className="flex flex-col gap-1">
-        <Typography.Paragraph className="text-muted">
-          Adoption
-        </Typography.Paragraph>
-        <Typography.Heading level={3}>Share by month</Typography.Heading>
-      </div>
+    <div className="flex flex-col gap-6">
+      <SectionHead
+        caption={`EV share of all new car registrations · ${period}`}
+        eyebrow="Adoption"
+        title="Share by month"
+      />
 
-      <AdoptionColumns
+      <ShareColumns
         columns={columns}
         selectedMonth={trend[index]?.month ?? month}
       />
-
-      <Typography.Paragraph color="muted" size="xs">
-        Battery-electric share of all new car registrations
-      </Typography.Paragraph>
-    </SurfaceCard>
+    </div>
   );
 }

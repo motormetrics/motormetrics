@@ -1,16 +1,13 @@
 import {
-  aggregateMakesByFuelType,
-  batteryElectricMakes,
   batteryElectricShares,
   buildRegistrationSplit,
   changeRatio,
-  electrifiedMakes,
   powertrainTotal,
   resolveMonthIndex,
   sliceRange,
+  yearToDateMakes,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import type { EvMarketShare, EvMonthlyTrend } from "@web/queries/cars";
-import type { FuelType } from "@web/types/cars";
 import { describe, expect, it } from "vitest";
 
 const point: EvMonthlyTrend = {
@@ -27,28 +24,14 @@ const segments = [
 ];
 const combustion = { colour: "other", label: "Petrol & diesel" };
 
-const fuelTypes: FuelType[] = [
-  {
-    fuelType: "Electric",
-    total: 500,
-    makes: [
-      { make: "Tesla", count: 300 },
-      { make: "BYD", count: 200 },
-    ],
-  },
-  {
-    fuelType: "Petrol-Electric",
-    total: 260,
-    makes: [
-      { make: "Toyota", count: 210 },
-      { make: "Tesla", count: 50 },
-    ],
-  },
-  {
-    fuelType: "Petrol",
-    total: 900,
-    makes: [{ make: "Honda", count: 900 }],
-  },
+const electricRows = [
+  { month: "2025-01", make: "Tesla", fuelType: "Electric", count: 300 },
+  { month: "2025-02", make: "Tesla", fuelType: "Electric", count: 100 },
+  { month: "2025-02", make: "BYD", fuelType: "Electric", count: 450 },
+  { month: "2025-03", make: "BYD", fuelType: "Electric", count: 50 },
+  { month: "2024-12", make: "BMW", fuelType: "Electric", count: 900 },
+  { month: "2025-01", make: "Toyota", fuelType: "Petrol-Electric", count: 900 },
+  { month: "2025-01", make: "Ghost", fuelType: "Electric", count: 0 },
 ];
 
 describe("resolveMonthIndex", () => {
@@ -175,35 +158,34 @@ describe("buildRegistrationSplit", () => {
   });
 });
 
-describe("aggregateMakesByFuelType", () => {
-  it("should sum a make across every included fuel type", () => {
-    expect(electrifiedMakes(fuelTypes)).toEqual([
-      { make: "Tesla", count: 350 },
-      { make: "Toyota", count: 210 },
-      { make: "BYD", count: 200 },
+describe("yearToDateMakes", () => {
+  it("should sum each make from January to the selected month", () => {
+    expect(yearToDateMakes(electricRows, ["Electric"], "2025-02")).toEqual([
+      { make: "BYD", count: 450 },
+      { make: "Tesla", count: 400 },
     ]);
   });
 
-  it("should narrow to battery-electric rows", () => {
-    expect(batteryElectricMakes(fuelTypes)).toEqual([
-      { make: "Tesla", count: 300 },
-      { make: "BYD", count: 200 },
-    ]);
+  it("should ignore months after the selected one and the previous year", () => {
+    const makes = yearToDateMakes(electricRows, ["Electric"], "2025-02");
+
+    expect(makes.find(({ make }) => make === "BMW")).toBeUndefined();
+    expect(makes.find(({ make }) => make === "BYD")?.count).toBe(450);
+  });
+
+  it("should only count the included fuel types", () => {
+    expect(
+      yearToDateMakes(electricRows, ["Electric"], "2025-03").map(
+        ({ make }) => make,
+      ),
+    ).not.toContain("Toyota");
   });
 
   it("should drop makes with no registrations", () => {
-    const withZero: FuelType[] = [
-      {
-        fuelType: "Electric",
-        total: 0,
-        makes: [{ make: "Ghost", count: 0 }],
-      },
-    ];
-
-    expect(aggregateMakesByFuelType(withZero, ["Electric"])).toEqual([]);
-  });
-
-  it("should return nothing when no fuel type matches", () => {
-    expect(aggregateMakesByFuelType(fuelTypes, ["Hydrogen"])).toEqual([]);
+    expect(
+      yearToDateMakes(electricRows, ["Electric"], "2025-03").map(
+        ({ make }) => make,
+      ),
+    ).not.toContain("Ghost");
   });
 });

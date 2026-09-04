@@ -1,6 +1,5 @@
-import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { formatDateToMonthYear } from "@motormetrics/utils";
+import { formatMonthName } from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import {
   buildRegistrationSplit,
   resolveMonthIndex,
@@ -9,8 +8,8 @@ import {
   COMBUSTION_COLOUR,
   POWERTRAIN_SEGMENTS,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
-import { SurfaceCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
+import { Headline } from "@web/components/shared/overview";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 
 /** Below this share a segment has no room for its own label inside the bar. */
@@ -55,35 +54,24 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
   });
 
   return (
-    <SurfaceCard className="gap-5">
-      <div className="flex flex-col gap-1.5">
-        <Typography.Paragraph className="text-muted">
-          Electrified total
-        </Typography.Paragraph>
-
-        <div className="flex flex-wrap items-center gap-3.5">
-          <span className="font-extrabold text-5xl tabular-nums tracking-tight">
-            {electrifiedShare.toFixed(1)}%
-          </span>
-          <DeltaChip unit="pp" value={electrifiedShare - previousShare} />
-        </div>
-
-        <Typography.Paragraph color="muted" size="sm">
-          battery-electric, plug-in and conventional hybrid combined ·{" "}
-          {formatDateToMonthYear(point.month)}
-        </Typography.Paragraph>
-      </div>
+    <div className="flex flex-col gap-5">
+      <Headline
+        caption={`battery-electric and hybrid combined · ${formatMonthName(point.month)}`}
+        delta={<DeltaChip unit="pp" value={electrifiedShare - previousShare} />}
+        label="Electrified total"
+        value={`${electrifiedShare.toFixed(1)}%`}
+      />
 
       <div className="flex h-10 overflow-hidden rounded-full">
         {split.map((segment) => (
           <span
-            className="inline-flex items-center justify-center font-extrabold text-sm tabular-nums"
+            className="inline-flex items-center justify-center font-extrabold text-[13px] tabular-nums"
             key={segment.label}
             style={{
               background: segment.colour,
               color:
                 segment.colour === COMBUSTION_COLOUR
-                  ? "var(--accent)"
+                  ? "var(--accent-strong)"
                   : "var(--accent-foreground)",
               flex: `${segment.share.toFixed(2)} 1 0`,
             }}
@@ -95,7 +83,7 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
         ))}
       </div>
 
-      <ul className="flex flex-col gap-2.5">
+      <ul className="flex flex-col gap-3">
         {split.map((segment) => (
           <li className="flex items-center gap-2.5" key={segment.label}>
             <span
@@ -103,14 +91,10 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
               className="size-[11px] shrink-0 rounded-full"
               style={{ background: segment.colour }}
             />
-            <Typography.Paragraph
-              color="muted"
-              size="sm"
-              className="text-foreground/85"
-            >
+            <span className="font-semibold text-base text-foreground/85">
               {segment.label}
-            </Typography.Paragraph>
-            <span className="ml-auto font-bold text-sm tabular-nums">
+            </span>
+            <span className="ml-auto font-extrabold text-base tabular-nums">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
@@ -120,6 +104,6 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
           </li>
         ))}
       </ul>
-    </SurfaceCard>
+    </div>
   );
 }

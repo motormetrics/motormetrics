@@ -1,19 +1,21 @@
 import { Skeleton } from "@heroui/react";
 import { AdoptionByMonth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-by-month";
+import { ChargingSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-summary";
 import { ElectrifiedTotal } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/electrified-total";
-import { EvFleetPanel } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-fleet-panel";
 import { EvLeaderboard } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-leaderboard";
 import { EvShareHero } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-share-hero";
 import { RegistrationTrend } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/registration-trend";
-import { TopMakesRail } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/top-makes-rail";
+import { VesBands } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ves-bands";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
-import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { Bento, RAIL_CLASS } from "@web/components/shared/bento";
 import { EmptyState } from "@web/components/shared/empty-state";
-import { MonthSelector } from "@web/components/shared/month-selector";
-import { PageHead } from "@web/components/shared/page-head";
+import { MonthMenu } from "@web/components/shared/month-menu";
+import {
+  Hairline,
+  OverviewGrid,
+  OverviewPage,
+} from "@web/components/shared/overview";
+import { PageEyebrow } from "@web/components/shared/page-eyebrow";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -61,21 +63,30 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-function CardSkeleton({ className = "" }: { className?: string }) {
+function HeadlineSkeleton() {
   return (
-    <div className={`rounded-4xl bg-surface p-7 shadow-surface ${className}`}>
-      <div className="flex flex-col gap-4">
-        <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="h-12 w-40 rounded-lg" />
-        <Skeleton className="h-6 w-44 rounded-full" />
-      </div>
+    <div className="flex flex-col gap-4">
+      <Skeleton className="h-5 w-56 rounded-lg" />
+      <Skeleton className="h-16 w-48 rounded-lg" />
+      <Skeleton className="h-5 w-72 rounded-lg" />
+      <Skeleton className="h-[150px] w-full rounded-lg" />
+    </div>
+  );
+}
+
+function SectionSkeleton({ className = "h-64" }: { className?: string }) {
+  return (
+    <div className="flex flex-col gap-4">
+      <Skeleton className="h-4 w-24 rounded-lg" />
+      <Skeleton className="h-8 w-48 rounded-lg" />
+      <Skeleton className={`w-full rounded-lg ${className}`} />
     </div>
   );
 }
 
 export default function ElectricVehiclesPage({ searchParams }: PageProps) {
   return (
-    <>
+    <OverviewPage>
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -94,27 +105,27 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
         }}
       />
 
-      <PageHead
-        controls={
-          <Suspense fallback={<Skeleton className="h-12 w-48 rounded-full" />}>
+      <PageEyebrow
+        control={
+          <Suspense fallback={<Skeleton className="h-6 w-32 rounded-lg" />}>
             <MonthControl searchParams={searchParams} />
           </Suspense>
         }
+        section="Electric vehicles"
         title="Electric vehicles"
       />
 
       <Suspense
         fallback={
-          <Bento>
-            <CardSkeleton className="h-[520px]" />
-            <CardSkeleton className="h-[520px]" />
-            <CardSkeleton className="h-[520px]" />
-          </Bento>
+          <OverviewGrid>
+            <HeadlineSkeleton />
+            <HeadlineSkeleton />
+          </OverviewGrid>
         }
       >
-        <EvBento searchParams={searchParams} />
+        <EvOverview searchParams={searchParams} />
       </Suspense>
-    </>
+    </OverviewPage>
   );
 }
 
@@ -130,15 +141,11 @@ async function MonthControl({ searchParams }: PageProps) {
   }
 
   return (
-    <MonthSelector
-      latestMonth={month}
-      months={months}
-      wasAdjusted={wasAdjusted}
-    />
+    <MonthMenu latestMonth={month} months={months} wasAdjusted={wasAdjusted} />
   );
 }
 
-async function EvBento({ searchParams }: PageProps) {
+async function EvOverview({ searchParams }: PageProps) {
   const {
     month: requestedMonth,
     powertrain,
@@ -165,73 +172,57 @@ async function EvBento({ searchParams }: PageProps) {
   }
 
   return (
-    <Bento>
-      {/* Left column — the dark EV story over the electrified split */}
-      <AnimatedGrid className="flex flex-col gap-6">
-        <AnimatedSection>
-          <SectionErrorBoundary title="EV share unavailable">
-            <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
-              <EvShareHero month={month} />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-        <AnimatedSection>
-          <SectionErrorBoundary title="Electrified total unavailable">
-            <Suspense fallback={<CardSkeleton className="h-80" />}>
-              <ElectrifiedTotal month={month} />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-      </AnimatedGrid>
+    <>
+      <OverviewGrid>
+        <SectionErrorBoundary title="EV share unavailable">
+          <Suspense fallback={<HeadlineSkeleton />}>
+            <EvShareHero month={month} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SectionErrorBoundary title="Electrified total unavailable">
+          <Suspense fallback={<HeadlineSkeleton />}>
+            <ElectrifiedTotal month={month} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </OverviewGrid>
 
-      {/* Middle column */}
-      <AnimatedGrid className="flex flex-col gap-6">
-        <AnimatedSection>
-          <SectionErrorBoundary title="Registration trend unavailable">
-            <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
-              <RegistrationTrend
-                month={month}
-                powertrain={powertrain}
-                range={range}
-              />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <AnimatedSection>
-            <SectionErrorBoundary title="EV leaderboard unavailable">
-              <Suspense fallback={<CardSkeleton className="h-[420px]" />}>
-                <EvLeaderboard month={month} />
-              </Suspense>
-            </SectionErrorBoundary>
-          </AnimatedSection>
-          <AnimatedSection>
-            <SectionErrorBoundary title="Monthly adoption unavailable">
-              <Suspense fallback={<CardSkeleton className="h-[420px]" />}>
-                <AdoptionByMonth month={month} />
-              </Suspense>
-            </SectionErrorBoundary>
-          </AnimatedSection>
-        </div>
-      </AnimatedGrid>
+      <Hairline />
 
-      {/* Right rail — warm sand well: make ranking over the dark fleet panel */}
-      <AnimatedGrid className={RAIL_CLASS}>
-        <AnimatedSection>
-          <SectionErrorBoundary title="Make ranking unavailable">
-            <Suspense fallback={<CardSkeleton className="h-96" />}>
-              <TopMakesRail month={month} />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-        <AnimatedSection>
-          <SectionErrorBoundary title="EV fleet unavailable">
-            <Suspense fallback={<CardSkeleton className="h-96" />}>
-              <EvFleetPanel />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-      </AnimatedGrid>
-    </Bento>
+      <SectionErrorBoundary title="Registration trend unavailable">
+        <Suspense fallback={<SectionSkeleton className="h-[320px]" />}>
+          <RegistrationTrend
+            month={month}
+            powertrain={powertrain}
+            range={range}
+          />
+        </Suspense>
+      </SectionErrorBoundary>
+
+      <Hairline />
+
+      <OverviewGrid>
+        <SectionErrorBoundary title="EV leaderboard unavailable">
+          <Suspense fallback={<SectionSkeleton className="h-80" />}>
+            <EvLeaderboard month={month} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SectionErrorBoundary title="Monthly adoption unavailable">
+          <Suspense fallback={<SectionSkeleton className="h-56" />}>
+            <AdoptionByMonth month={month} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </OverviewGrid>
+
+      <Hairline />
+
+      <OverviewGrid>
+        <SectionErrorBoundary title="Charging network unavailable">
+          <Suspense fallback={<SectionSkeleton className="h-40" />}>
+            <ChargingSummary />
+          </Suspense>
+        </SectionErrorBoundary>
+        <VesBands />
+      </OverviewGrid>
+    </>
   );
 }

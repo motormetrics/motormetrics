@@ -1,6 +1,6 @@
-import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
+import { formatMonthLabel } from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import {
   changeRatio,
   powertrainTotal,
@@ -17,14 +17,13 @@ import {
   RANGES,
   type Range,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
-import { SurfaceCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import { sparkline } from "@web/components/shared/sparkline";
+import { Headline, SectionHead } from "@web/components/shared/overview";
+import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { getEvMonthlyTrend } from "@web/queries/cars";
-import { Zap } from "lucide-react";
 
-const CHART_WIDTH = 560;
-const CHART_HEIGHT = 190;
+const CHART_WIDTH = 700;
+const CHART_HEIGHT = 200;
 
 const HEADINGS: Record<Powertrain, { subject: string; title: string }> = {
   all: { subject: "electrified cars", title: "All electrified registrations" },
@@ -71,35 +70,28 @@ export async function RegistrationTrend({
   const series = visibleMonths.map((entry) =>
     powertrainTotal(entry, powertrain),
   );
-  const chart = sparkline(series, CHART_WIDTH, CHART_HEIGHT, 12);
 
   const value = powertrainTotal(point, powertrain);
   const previous = trend[index - 1];
   const heading = HEADINGS[powertrain];
-  const monthLabel = formatDateToMonthYear(point.month);
+  const monthLabel = formatMonthLabel(point.month);
 
   return (
-    <SurfaceCard className="gap-5">
-      <div className="flex flex-wrap items-center gap-3.5">
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
-          <Zap className="size-5" />
-        </span>
-        <div className="flex min-w-0 flex-col">
-          <Typography.Heading level={3}>{heading.title}</Typography.Heading>
-          <Typography.Paragraph color="muted" size="sm">
-            {RANGE_NOTES[range]} to {monthLabel}
-          </Typography.Paragraph>
-        </div>
-        <div className="ml-auto">
+    <div className="flex flex-col gap-7">
+      <SectionHead
+        caption={`${RANGE_NOTES[range]} to ${monthLabel}`}
+        eyebrow="Registrations"
+        size="lg"
+        title={heading.title}
+        trailing={
           <QueryTabs
             ariaLabel="Chart range"
             options={RANGES.map((key) => ({ key, label: key }))}
             param="range"
             value={range}
-            variant="segmented"
           />
-        </div>
-      </div>
+        }
+      />
 
       <QueryTabs
         ariaLabel="Powertrain"
@@ -108,66 +100,46 @@ export async function RegistrationTrend({
         value={powertrain}
       />
 
-      <div className="flex flex-col gap-1">
-        <div className="flex flex-wrap items-center gap-3.5">
-          <span className="font-extrabold text-5xl tabular-nums tracking-tight lg:text-6xl">
+      <div className="flex flex-col gap-3.5">
+        <Headline
+          caption={`${heading.subject} registered in ${monthLabel}`}
+          delta={
+            <DeltaChip
+              value={
+                changeRatio(
+                  value,
+                  previous ? powertrainTotal(previous, powertrain) : 0,
+                ) * 100
+              }
+            />
+          }
+          size="md"
+          value={
             <NumberValue
               locale="en-SG"
               maximumFractionDigits={0}
               value={value}
             />
-          </span>
-          <DeltaChip
-            value={
-              changeRatio(
-                value,
-                previous ? powertrainTotal(previous, powertrain) : 0,
-              ) * 100
-            }
-          />
-        </div>
-        <Typography.Paragraph className="text-muted">
-          {heading.subject} registered in {monthLabel}
-        </Typography.Paragraph>
-      </div>
+          }
+        />
 
-      {chart ? (
-        <div className="flex flex-col gap-1">
-          <svg
-            className="h-[190px] w-full overflow-visible"
-            preserveAspectRatio="none"
-            role="img"
-            viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
-          >
-            <title>{`${heading.title} over the ${series.length} months to ${monthLabel}`}</title>
-            <path d={chart.area} fill="var(--accent)" opacity={0.12} />
-            <path
-              d={chart.line}
-              fill="none"
-              stroke="var(--accent)"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={3.5}
+        {series.length > 1 ? (
+          <div className="flex flex-col gap-2">
+            <SparklineChart
+              height={CHART_HEIGHT}
+              title={`${heading.title} over the ${series.length} months to ${monthLabel}`}
+              values={series}
+              width={CHART_WIDTH}
             />
-            <circle
-              cx={chart.lastX}
-              cy={chart.lastY}
-              fill="var(--surface)"
-              r={6.5}
-              stroke="var(--accent)"
-              strokeWidth={3.5}
-            />
-          </svg>
-          <div className="flex justify-between">
-            <Typography.Paragraph color="muted" size="xs">
-              {formatDateToMonthYear(visibleMonths.at(0)?.month ?? "")}
-            </Typography.Paragraph>
-            <Typography.Paragraph color="muted" size="xs">
-              {monthLabel}
-            </Typography.Paragraph>
+            <div className="flex justify-between font-semibold text-[13px] text-muted">
+              <span>
+                {formatDateToMonthYear(visibleMonths.at(0)?.month ?? "")}
+              </span>
+              <span>{formatDateToMonthYear(point.month)}</span>
+            </div>
           </div>
-        </div>
-      ) : null}
-    </SurfaceCard>
+        ) : null}
+      </div>
+    </div>
   );
 }
