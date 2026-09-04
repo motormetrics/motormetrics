@@ -1,41 +1,38 @@
 import { Skeleton } from "@heroui/react";
-import { AnnualViewTabs } from "@web/app/(main)/(dashboard)/cars/annual/components/annual-view-tabs";
-import { PopulationOverview } from "@web/app/(main)/(dashboard)/cars/annual/components/population-overview";
+import { ClassesTable } from "@web/app/(main)/(dashboard)/cars/annual/components/classes-table";
+import { ElectricFleet } from "@web/app/(main)/(dashboard)/cars/annual/components/electric-fleet";
+import { FuelMixRing } from "@web/app/(main)/(dashboard)/cars/annual/components/fuel-mix-ring";
+import { PopulationByYear } from "@web/app/(main)/(dashboard)/cars/annual/components/population-by-year";
+import { PopulationHeadline } from "@web/app/(main)/(dashboard)/cars/annual/components/population-headline";
 import {
   buildPopulationSeries,
-  DIMENSION_LABELS,
-  type PopulationRow,
+  CARS,
+  rankClasses,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
-import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/annual/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { Bento } from "@web/components/shared/bento";
 import { EmptyState } from "@web/components/shared/empty-state";
-import { PageHead } from "@web/components/shared/page-head";
-import { YearSelector } from "@web/components/shared/year-selector";
+import {
+  Hairline,
+  OverviewGrid,
+  OverviewPage,
+} from "@web/components/shared/overview";
+import { EyebrowValue, PageEyebrow } from "@web/components/shared/page-eyebrow";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
 } from "@web/lib/metadata";
-import {
-  getCarPopulationByMakeAndFuelType,
-  getCarPopulationYears,
-} from "@web/queries/car-population";
-import {
-  getVehiclePopulationByCategoryAndFuelType,
-  getVehiclePopulationYears,
-} from "@web/queries/vehicle-population";
+import { getVehiclePopulationByCategoryAndFuelType } from "@web/queries/vehicle-population";
 import { BarChart3 } from "lucide-react";
 import type { Metadata } from "next";
-import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
 
 export const metadata: Metadata = {
   title: "Annual Vehicle Population Singapore",
   description:
-    "Annual motor vehicle population in Singapore by vehicle type, fuel type and car make. Track the growth of electric, hybrid, petrol, and diesel vehicles on Singapore roads.",
+    "Annual motor vehicle population in Singapore by vehicle type and fuel type. Track the growth of electric, hybrid, petrol, and diesel vehicles on Singapore roads.",
   openGraph: {
     title: "Annual Vehicle Population - Singapore",
     description:
@@ -52,7 +49,7 @@ const structuredData: WithContext<WebPage> = {
   "@type": "WebPage",
   name: "Annual Vehicle Population",
   description:
-    "Motor vehicle population in Singapore by vehicle type and type of fuel used, and car population by make, with interactive charts and year-over-year analysis",
+    "Motor vehicle population in Singapore by vehicle type and type of fuel used, with interactive charts and year-over-year analysis",
   url: `${SITE_URL}/cars/annual`,
   publisher: {
     "@type": "Organization",
@@ -61,33 +58,31 @@ const structuredData: WithContext<WebPage> = {
   },
 };
 
-interface PageProps {
-  searchParams: Promise<SearchParams>;
-}
-
-function CardSkeleton({ className = "" }: { className?: string }) {
+function PopulationSkeleton() {
   return (
-    <div className={`rounded-4xl bg-surface p-7 shadow-surface ${className}`}>
-      <div className="flex flex-col gap-4">
-        <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="h-12 w-40 rounded-lg" />
-        <Skeleton className="h-6 w-44 rounded-full" />
-      </div>
-    </div>
+    <>
+      <OverviewGrid>
+        <div className="flex flex-col gap-4">
+          <Skeleton className="h-6 w-40 rounded-lg" />
+          <Skeleton className="h-16 w-72 rounded-lg" />
+          <Skeleton className="h-5 w-full max-w-md rounded-lg" />
+          <Skeleton className="h-[150px] w-full rounded-lg" />
+        </div>
+        <div className="flex flex-col gap-4">
+          <Skeleton className="h-6 w-24 rounded-lg" />
+          <Skeleton className="h-5 w-40 rounded-lg" />
+          <Skeleton className="size-[172px] rounded-full" />
+        </div>
+      </OverviewGrid>
+      <Hairline />
+      <Skeleton className="h-[320px] w-full rounded-lg" />
+      <Hairline />
+      <Skeleton className="h-[420px] w-full rounded-lg" />
+    </>
   );
 }
 
-function OverviewSkeleton() {
-  return (
-    <Bento>
-      <CardSkeleton className="h-[520px]" />
-      <CardSkeleton className="h-[720px]" />
-      <CardSkeleton className="h-[560px]" />
-    </Bento>
-  );
-}
-
-export default function AnnualPage({ searchParams }: PageProps) {
+export default function AnnualPage() {
   return (
     <>
       <StructuredData data={structuredData} />
@@ -108,78 +103,41 @@ export default function AnnualPage({ searchParams }: PageProps) {
         }}
       />
 
-      <PageHead
-        controls={
-          <Suspense
-            fallback={<Skeleton className="h-14 w-[19rem] rounded-full" />}
-          >
-            <AnnualViewTabs />
-            <AnnualYearSelector searchParams={searchParams} />
-          </Suspense>
-        }
-        title="Vehicle population"
-      />
+      <OverviewPage>
+        <PageEyebrow
+          control={<EyebrowValue>{CARS}</EyebrowValue>}
+          section="Vehicle population"
+          title="Annual vehicle population"
+        />
 
-      <SectionErrorBoundary title="Vehicle population unavailable">
-        <Suspense fallback={<OverviewSkeleton />}>
-          <PopulationSection searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
+        <SectionErrorBoundary title="Vehicle population unavailable">
+          <Suspense fallback={<PopulationSkeleton />}>
+            <PopulationSections />
+          </Suspense>
+        </SectionErrorBoundary>
+      </OverviewPage>
     </>
   );
 }
 
-/** Years on offer come from whichever dataset the view is reading. */
-async function AnnualYearSelector({ searchParams }: PageProps) {
-  const { year, view } = await loadSearchParams(searchParams);
-  const availableYears =
-    view === "make"
-      ? await getCarPopulationYears()
-      : await getVehiclePopulationYears();
-
-  if (availableYears.length === 0) {
-    return null;
-  }
-
-  const years = availableYears.map((entry) => Number(entry.year));
-  const latestYear = years[0];
-
-  return (
-    <YearSelector
-      latestYear={latestYear}
-      wasAdjusted={!years.includes(year)}
-      years={years}
-    />
-  );
-}
-
 /**
- * Both annual datasets are annual counts of the same shape — a year, an entity
- * and a fuel type — so the page flattens whichever the view selects into one
- * series and hands it to the same bento.
+ * One query feeds every section: the grid of year × class × fuel is small
+ * enough to pivot once on the server and hand each block its slice.
  */
-async function PopulationSection({ searchParams }: PageProps) {
-  const { view, year } = await loadSearchParams(searchParams);
-  const labels = DIMENSION_LABELS[view];
+async function PopulationSections() {
+  const rows = await getVehiclePopulationByCategoryAndFuelType();
+  const data = buildPopulationSeries(
+    rows.map((row) => ({
+      fuelType: row.fuelType,
+      name: row.category,
+      total: row.total,
+      year: row.year,
+    })),
+  );
 
-  const rows: PopulationRow[] =
-    view === "make"
-      ? (await getCarPopulationByMakeAndFuelType()).map((row) => ({
-          fuelType: row.fuelType,
-          name: row.make,
-          total: row.total,
-          year: row.year,
-        }))
-      : (await getVehiclePopulationByCategoryAndFuelType()).map((row) => ({
-          fuelType: row.fuelType,
-          name: row.category,
-          total: row.total,
-          year: row.year,
-        }));
+  const cars = data?.entities.find((entity) => entity.name === CARS);
 
-  const data = buildPopulationSeries(rows, year, labels.overall);
-
-  if (!data) {
+  if (!data || !cars) {
     return (
       <EmptyState
         description="Annual vehicle population data is not available at the moment. Please check back later."
@@ -194,5 +152,35 @@ async function PopulationSection({ searchParams }: PageProps) {
     );
   }
 
-  return <PopulationOverview data={data} labels={labels} />;
+  return (
+    <>
+      <OverviewGrid>
+        <PopulationHeadline
+          entity={cars}
+          previousYear={data.previousYear}
+          year={data.year}
+          years={data.years}
+        />
+        <FuelMixRing entity={cars} year={data.year} />
+      </OverviewGrid>
+
+      <Hairline />
+
+      <PopulationByYear entity={cars} years={data.years} />
+
+      <Hairline />
+
+      <ClassesTable
+        previousYear={data.previousYear}
+        rows={rankClasses(data.entities)}
+        year={data.year}
+      />
+
+      <Hairline />
+
+      <OverviewGrid>
+        <ElectricFleet entity={cars} years={data.years} />
+      </OverviewGrid>
+    </>
+  );
 }

@@ -1,12 +1,13 @@
-import type { View } from "@web/app/(main)/(dashboard)/cars/annual/search-params";
-
-/** Years drawn in the column chart and the hero sparkline. */
-const CHART_YEARS = 10;
-
 /** LTA's label for a battery-electric vehicle, used verbatim. */
 export const ELECTRIC = "Electric";
 
-/** One fuel type of an entity, in the selected year and the one before it. */
+/** LTA's vehicle type for private cars — the class the page is fixed on. */
+export const CARS = "Cars";
+
+/** Chart colours the skin carries; ranks past this share the last one. */
+const CHART_COLOURS = 6;
+
+/** One fuel type of a class, in the latest year and the one before it. */
 export interface PopulationFuelRow {
   /** LTA DataMall fuel label, verbatim — never re-grouped. */
   label: string;
@@ -14,72 +15,34 @@ export interface PopulationFuelRow {
   previous: number;
 }
 
-/** A row of the population table: one vehicle type, or one make. */
+/** A row of the classes table: one vehicle type. */
 export interface PopulationEntity {
   name: string;
   /** Population at each year of `years`, in the same order. */
   series: number[];
   /** Electric population at each year of `years`. */
   electric: number[];
-  /** Fuel split in the selected year, largest first. */
+  /** Fuel split in the latest year, largest first. */
   fuel: PopulationFuelRow[];
 }
 
 export interface PopulationSeries {
-  /** Ascending, ending at the selected year and capped to `CHART_YEARS`. */
+  /** Every year on record, ascending. */
   years: string[];
-  /** The year every headline figure is reported at. */
+  /** The latest year — the one every headline figure is reported at. */
   year: string;
   /** The year the change column measures against, if the data reaches it. */
   previousYear: string | null;
-  /** One per vehicle type or make, largest first. */
+  /** One per vehicle type, largest first. */
   entities: PopulationEntity[];
-  /** Every entity summed — the selection the page opens on. */
-  overall: PopulationEntity;
 }
 
-/** The copy that changes with the dimension the page is sliced by. */
-export interface DimensionLabels {
-  /** Pill in the page head. */
-  tab: string;
-  /** Title of the table. */
-  title: string;
-  /** Heading of the table's first column. */
-  column: string;
-  /** Plural, for the row count. */
-  plural: string;
-  /** Name given to every entity summed. */
-  overall: string;
-  /** What one unit of population is, for the hero and the ink panel. */
-  noun: string;
-}
-
-export const DIMENSION_LABELS: Record<View, DimensionLabels> = {
-  "fuel-type": {
-    tab: "Vehicle types",
-    title: "All vehicle types",
-    column: "Vehicle type",
-    plural: "vehicle types",
-    overall: "All vehicles",
-    noun: "vehicles",
-  },
-  make: {
-    tab: "Car makes",
-    title: "All makes",
-    column: "Make",
-    plural: "makes",
-    overall: "All cars",
-    noun: "cars",
-  },
-};
-
-/** A population row flattened out of either annual dataset. */
+/** A population row as the annual dataset publishes it. */
 export interface PopulationRow {
   year: string;
-  /** Vehicle type or make, whichever the view is sliced by. */
+  /** LTA's vehicle type, e.g. "Cars", "Motorcycles". */
   name: string;
-  /** Null where LTA published the count without a fuel split. */
-  fuelType: string | null;
+  fuelType: string;
   total: number;
 }
 
@@ -120,40 +83,25 @@ function finalise(name: string, entity: EntityDraft): PopulationEntity {
 
 /**
  * Pivots the flat annual rows into everything the page draws: a yearly series
- * per entity for the chart and the sparkline, a fuel split for the donut and
- * the rail, and the selected year's totals for the table.
- *
- * `selectedYear` is the year the reader picked; a year the dataset does not
- * carry falls back to the latest one on record rather than rendering empty.
+ * per vehicle type for the sparkline and the column chart, a fuel split for
+ * the ring, and the latest year's totals for the classes table.
  *
  * Returns `null` when the dataset is empty, which the page renders as its
  * empty state.
  */
 export function buildPopulationSeries(
   rows: PopulationRow[],
-  selectedYear: number | null,
-  overallName: string,
 ): PopulationSeries | null {
-  const allYears = [...new Set(rows.map((row) => row.year))].sort();
-  if (allYears.length === 0) {
+  const years = [...new Set(rows.map((row) => row.year))].sort();
+  if (years.length === 0) {
     return null;
   }
 
-  const wanted = selectedYear === null ? null : String(selectedYear);
-  const selectedIndex =
-    wanted !== null && allYears.includes(wanted)
-      ? allYears.indexOf(wanted)
-      : allYears.length - 1;
-  const year = allYears[selectedIndex];
-  const previousYear = allYears[selectedIndex - 1] ?? null;
-  const years = allYears.slice(
-    Math.max(0, selectedIndex - CHART_YEARS + 1),
-    selectedIndex + 1,
-  );
+  const year = years[years.length - 1];
+  const previousYear = years[years.length - 2] ?? null;
   const columnOf = new Map(years.map((value, index) => [value, index]));
 
   const drafts = new Map<string, EntityDraft>();
-  const overall = draft(years.length);
 
   for (const row of rows) {
     let entity = drafts.get(row.name);
@@ -165,42 +113,29 @@ export function buildPopulationSeries(
     const column = columnOf.get(row.year);
     if (column !== undefined) {
       entity.series[column] += row.total;
-      overall.series[column] += row.total;
       if (row.fuelType === ELECTRIC) {
         entity.electric[column] += row.total;
-        overall.electric[column] += row.total;
       }
     }
 
-    if (row.fuelType === null) {
-      continue;
-    }
     if (row.year === year) {
       fuelRow(entity, row.fuelType).value += row.total;
-      fuelRow(overall, row.fuelType).value += row.total;
     } else if (row.year === previousYear) {
       fuelRow(entity, row.fuelType).previous += row.total;
-      fuelRow(overall, row.fuelType).previous += row.total;
     }
   }
 
   const entities = [...drafts.entries()]
     .map(([name, entity]) => finalise(name, entity))
-    // A type or make that has left the road entirely is dropped rather than
-    // listed as a row of zeros.
+    // A type that has left the road entirely is dropped rather than listed as
+    // a row of zeros.
     .filter((entity) => (entity.series.at(-1) ?? 0) > 0)
     .sort(
       (first, second) =>
         (second.series.at(-1) ?? 0) - (first.series.at(-1) ?? 0),
     );
 
-  return {
-    entities,
-    overall: finalise(overallName, overall),
-    previousYear,
-    year,
-    years,
-  };
+  return { entities, previousYear, year, years };
 }
 
 /** Signed change of the last year against the one before it, as a ratio. */
@@ -211,4 +146,63 @@ export function changeRatio(series: number[]): number | null {
     return null;
   }
   return (current - previous) / previous;
+}
+
+/** One vehicle class as the table ranks it at the latest year end. */
+export interface ClassRank {
+  /** Change on the previous year as a ratio; null without a prior year. */
+  change: number | null;
+  /** Chart token, assigned by size so it survives a re-sort. */
+  colour: string;
+  name: string;
+  population: number;
+  /** Share of every class summed, 0–100. */
+  share: number;
+}
+
+/**
+ * Ranks the classes for the table: colour by size, share of the whole fleet
+ * and the movement on the year before. Expects `entities` largest first, as
+ * `buildPopulationSeries` returns them.
+ */
+export function rankClasses(entities: PopulationEntity[]): ClassRank[] {
+  const populations = entities.map((entity) => entity.series.at(-1) ?? 0);
+  const total = populations.reduce((sum, value) => sum + value, 0) || 1;
+
+  return entities.map((entity, index) => ({
+    change: changeRatio(entity.series),
+    colour: `var(--chart-${Math.min(CHART_COLOURS, index + 1)})`,
+    name: entity.name,
+    population: populations[index],
+    share: (populations[index] / total) * 100,
+  }));
+}
+
+export type ClassSortKey = "change" | "name" | "population";
+export type SortDirection = "asc" | "desc";
+
+/** Sorts a copy of the ranked classes on one column. */
+export function sortClasses(
+  rows: ClassRank[],
+  key: ClassSortKey,
+  direction: SortDirection,
+): ClassRank[] {
+  const sign = direction === "asc" ? 1 : -1;
+
+  return [...rows].sort((first, second) => {
+    if (key === "name") {
+      return sign * first.name.localeCompare(second.name, "en-SG");
+    }
+    if (key === "change") {
+      // A class with no prior year sorts as the lowest value rather than
+      // pretending to be a 0% change.
+      const left = first.change ?? Number.NEGATIVE_INFINITY;
+      const right = second.change ?? Number.NEGATIVE_INFINITY;
+      if (left === right) {
+        return 0;
+      }
+      return sign * (left < right ? -1 : 1);
+    }
+    return sign * (first.population - second.population);
+  });
 }
