@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { AllCategoriesTable, type CategoryRow } from "./all-categories-table";
+import type { CategoryRow } from "./all-categories-sort";
+import { AllCategoriesTable } from "./all-categories-table";
 
 vi.mock("./coe-controls", () => ({
   CategorySelect: ({
@@ -14,9 +16,12 @@ vi.mock("./coe-controls", () => ({
       {children}
     </button>
   ),
+  useCoeCategory: () => ({ setCategory: vi.fn() }),
 }));
 
-/** Deliberately not in premium order, so any re-sorting would be visible. */
+vi.mock("posthog-js", () => ({ default: { capture: vi.fn() } }));
+
+/** Deliberately not in premium order, so the default sort is visible. */
 const rows: CategoryRow[] = [
   {
     category: "Category A",
@@ -60,39 +65,47 @@ const rows: CategoryRow[] = [
   },
 ];
 
+const rowLabels = () =>
+  screen
+    .getAllByRole("button", { name: /^Show / })
+    .map((row) => row.getAttribute("aria-label"));
+
 const renderTable = () =>
-  render(
-    <AllCategoriesTable
-      exercise="October 2025 · first bidding"
-      rows={rows}
-      selected="A"
-    />,
-  );
+  render(<AllCategoriesTable rows={rows} selected="A" />);
 
 describe("AllCategoriesTable", () => {
-  it("should list the categories from A to E regardless of premium", () => {
+  it("should open on the highest premium first", () => {
     renderTable();
 
+    expect(rowLabels()).toEqual([
+      "Show Category E",
+      "Show Category B",
+      "Show Category A",
+      "Show Category C",
+      "Show Category D",
+    ]);
     expect(
-      screen
-        .getAllByRole("button")
-        .map((row) => row.getAttribute("aria-label")),
-    ).toEqual([
+      screen.getByRole("columnheader", { name: "Premium" }),
+    ).toHaveAttribute("aria-sort", "descending");
+    expect(screen.getByText(/Sorted by premium, descending/)).toBeVisible();
+  });
+
+  it("should re-sort when a header is pressed", async () => {
+    const user = userEvent.setup();
+    renderTable();
+
+    await user.click(screen.getByRole("button", { name: "Category" }));
+
+    expect(rowLabels()).toEqual([
       "Show Category A",
       "Show Category B",
       "Show Category C",
       "Show Category D",
       "Show Category E",
     ]);
-  });
-
-  it("should render the column headings as labels rather than sort controls", () => {
-    renderTable();
-
-    for (const heading of ["Category", "Premium", "Quota", "Change"]) {
-      expect(screen.getByText(heading)).toBeVisible();
-    }
-
-    expect(screen.queryByRole("button", { name: /Sort by/ })).toBeNull();
+    expect(
+      screen.getByRole("columnheader", { name: "Category" }),
+    ).toHaveAttribute("aria-sort", "ascending");
+    expect(screen.getByText(/Sorted by category, ascending/)).toBeVisible();
   });
 });

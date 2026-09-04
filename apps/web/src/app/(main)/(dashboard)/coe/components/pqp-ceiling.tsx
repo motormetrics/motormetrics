@@ -1,16 +1,16 @@
-import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
-import { getPqpRates } from "@web/queries/coe";
-import type { COECategory } from "@web/types";
 import {
   CATEGORY_DESCRIPTIONS,
   changeRatio,
-  formatMonth,
   toCategoryKey,
-} from "./coe-exercise-utils";
+} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
+import { SectionHead } from "@web/components/shared/overview";
+import { getPqpRates } from "@web/queries/coe";
+import type { COECategory } from "@web/types";
 
-export async function PqpCeilingRail() {
+/** The renewal rates for the coming exercise, one hairline row per category. */
+export async function PqpCeiling() {
   const rates = await getPqpRates();
   const [latestMonth, previousMonth] = Object.keys(rates).sort().reverse();
 
@@ -35,23 +35,21 @@ export async function PqpCeilingRail() {
     .sort((first, second) => first.category.localeCompare(second.category));
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-1">
-        <Typography.Paragraph color="muted" size="sm">
-          Current rates · {formatMonth(latestMonth)}
-        </Typography.Paragraph>
-        <Typography.Heading level={3} className="text-3xl">
-          PQP ceiling
-        </Typography.Heading>
-      </div>
+    <div className="flex flex-col gap-6">
+      <SectionHead
+        caption="Three-month moving average · used to renew a COE"
+        eyebrow="Next exercise"
+        link={{ href: "/coe/pqp", label: "PQP rates" }}
+        title="PQP ceiling"
+      />
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col">
         {rows.map((row) => (
           <div
-            className="flex items-center gap-3.5 rounded-field bg-surface px-[18px] py-4"
+            className="flex items-center gap-3.5 border-separator border-b py-3.5"
             key={row.category}
           >
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent-strong text-lg">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-soft font-extrabold text-[17px] text-accent-strong">
               {toCategoryKey(row.category)}
             </span>
             <div className="flex min-w-0 flex-col gap-px">
@@ -64,13 +62,9 @@ export async function PqpCeilingRail() {
                   value={row.rate}
                 />
               </span>
-              <Typography.Paragraph
-                color="muted"
-                size="xs"
-                className="truncate"
-              >
+              <span className="truncate font-medium text-[13.5px] text-muted">
                 {CATEGORY_DESCRIPTIONS[row.category]}
-              </Typography.Paragraph>
+              </span>
             </div>
             <div className="ml-auto shrink-0">
               <CostTrendChip changeRatio={row.changeRatio} />
@@ -78,10 +72,6 @@ export async function PqpCeilingRail() {
           </div>
         ))}
       </div>
-
-      <Typography.Paragraph color="muted" size="xs">
-        Three-month moving average of quota premiums · used to renew a COE
-      </Typography.Paragraph>
     </div>
   );
 }

@@ -1,18 +1,21 @@
 import { Skeleton } from "@heroui/react";
-import { AllCategoriesCard } from "@web/app/(main)/(dashboard)/coe/components/all-categories-card";
-import { BiddingCalendarPanel } from "@web/app/(main)/(dashboard)/coe/components/bidding-calendar-panel";
-import { RangeTabs } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
+import { AllCategories } from "@web/app/(main)/(dashboard)/coe/components/all-categories";
+import { BiddingCalendar } from "@web/app/(main)/(dashboard)/coe/components/bidding-calendar";
 import {
   formatExercise,
   groupByExercise,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { CoeHeroCard } from "@web/app/(main)/(dashboard)/coe/components/coe-hero-card";
-import { PqpCeilingRail } from "@web/app/(main)/(dashboard)/coe/components/pqp-ceiling-rail";
-import { PremiumsByExerciseCard } from "@web/app/(main)/(dashboard)/coe/components/premiums-by-exercise-card";
-import { QuotaAllocationCard } from "@web/app/(main)/(dashboard)/coe/components/quota-allocation-card";
+import { CoeHeadline } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
+import { PqpCeiling } from "@web/app/(main)/(dashboard)/coe/components/pqp-ceiling";
+import { PremiumsByExercise } from "@web/app/(main)/(dashboard)/coe/components/premiums-by-exercise";
+import { QuotaAllocation } from "@web/app/(main)/(dashboard)/coe/components/quota-allocation";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { Bento, BentoColumn, Rail } from "@web/components/shared/bento";
-import { PageHead } from "@web/components/shared/page-head";
+import {
+  Hairline,
+  OverviewGrid,
+  OverviewPage,
+} from "@web/components/shared/overview";
+import { EyebrowValue, PageEyebrow } from "@web/components/shared/page-eyebrow";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
@@ -49,27 +52,20 @@ export const metadata: Metadata = {
   },
 };
 
-function CardSkeleton({ className = "" }: { className?: string }) {
-  return (
-    <div className={`rounded-4xl bg-surface p-7 shadow-surface ${className}`}>
-      <div className="flex flex-col gap-4">
-        <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="h-12 w-40 rounded-lg" />
-        <Skeleton className="h-6 w-44 rounded-full" />
-      </div>
-    </div>
-  );
-}
-
 /** Names the exercise the whole page is reporting on. */
 async function LatestExerciseEyebrow() {
   const latest = groupByExercise(await getCoeResults()).at(-1);
 
+  return latest ? <EyebrowValue>{formatExercise(latest)}</EyebrowValue> : null;
+}
+
+function SectionSkeleton({ className }: { className: string }) {
   return (
-    <>
-      Certificate of Entitlement
-      {latest ? <>&ensp;·&ensp;{formatExercise(latest)}</> : null}
-    </>
+    <div className="flex flex-col gap-4">
+      <Skeleton className="h-4 w-32 rounded-lg" />
+      <Skeleton className="h-12 w-56 rounded-lg" />
+      <Skeleton className={`rounded-2xl ${className}`} />
+    </div>
   );
 }
 
@@ -79,7 +75,7 @@ interface PageProps {
 
 export default function Page({ searchParams }: PageProps) {
   return (
-    <>
+    <OverviewPage>
       <StructuredData
         data={{
           "@context": "https://schema.org",
@@ -92,58 +88,61 @@ export default function Page({ searchParams }: PageProps) {
         }}
       />
 
-      <PageHead
-        controls={
-          <Suspense fallback={<Skeleton className="h-14 w-80 rounded-full" />}>
-            <RangeTabs />
-          </Suspense>
-        }
-        title="COE overview"
-      />
+      <div className="flex flex-col gap-7">
+        <PageEyebrow
+          control={
+            <Suspense fallback={<Skeleton className="h-5 w-48 rounded-lg" />}>
+              <LatestExerciseEyebrow />
+            </Suspense>
+          }
+          section="Certificate of Entitlement"
+          title="COE overview"
+        />
 
-      <Bento>
-        {/* Left column — the selected category, then how the quota is split */}
-        <BentoColumn>
+        <OverviewGrid>
           <SectionErrorBoundary title="COE premium unavailable">
-            <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
-              <CoeHeroCard searchParams={searchParams} />
+            <Suspense fallback={<SectionSkeleton className="h-[150px]" />}>
+              <CoeHeadline searchParams={searchParams} />
             </Suspense>
           </SectionErrorBoundary>
           <SectionErrorBoundary title="Quota allocation unavailable">
-            <Suspense fallback={<CardSkeleton className="h-[420px]" />}>
-              <QuotaAllocationCard searchParams={searchParams} />
+            <Suspense fallback={<SectionSkeleton className="h-64" />}>
+              <QuotaAllocation searchParams={searchParams} />
             </Suspense>
           </SectionErrorBoundary>
-        </BentoColumn>
+        </OverviewGrid>
+      </div>
 
-        {/* Middle column — the history, then every category side by side */}
-        <BentoColumn>
-          <SectionErrorBoundary title="Premium history unavailable">
-            <Suspense fallback={<CardSkeleton className="h-[440px]" />}>
-              <PremiumsByExerciseCard searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-          <SectionErrorBoundary title="Category breakdown unavailable">
-            <Suspense fallback={<CardSkeleton className="h-[480px]" />}>
-              <AllCategoriesCard searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-        </BentoColumn>
+      <Hairline />
 
-        {/* Right rail — renewal rates over the dark calendar panel */}
-        <Rail>
-          <SectionErrorBoundary title="PQP rates unavailable">
-            <Suspense fallback={<CardSkeleton className="h-96" />}>
-              <PqpCeilingRail />
-            </Suspense>
-          </SectionErrorBoundary>
-          <SectionErrorBoundary title="Bidding calendar unavailable">
-            <Suspense fallback={<CardSkeleton className="h-72" />}>
-              <BiddingCalendarPanel />
-            </Suspense>
-          </SectionErrorBoundary>
-        </Rail>
-      </Bento>
-    </>
+      <SectionErrorBoundary title="Premium history unavailable">
+        <Suspense fallback={<SectionSkeleton className="h-[260px]" />}>
+          <PremiumsByExercise searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
+
+      <Hairline />
+
+      <SectionErrorBoundary title="Category breakdown unavailable">
+        <Suspense fallback={<SectionSkeleton className="h-80" />}>
+          <AllCategories searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
+
+      <Hairline />
+
+      <OverviewGrid>
+        <SectionErrorBoundary title="PQP rates unavailable">
+          <Suspense fallback={<SectionSkeleton className="h-64" />}>
+            <PqpCeiling />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SectionErrorBoundary title="Bidding calendar unavailable">
+          <Suspense fallback={<SectionSkeleton className="h-48" />}>
+            <BiddingCalendar />
+          </Suspense>
+        </SectionErrorBoundary>
+      </OverviewGrid>
+    </OverviewPage>
   );
 }

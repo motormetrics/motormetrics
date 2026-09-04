@@ -1,125 +1,187 @@
+"use client";
+
 import { cn, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
+import {
+  type CategoryRow,
+  DEFAULT_SORT,
+  describeSort,
+  nextSort,
+  type SortKey,
+  type SortState,
+  sortCategoryRows,
+} from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
+import {
+  CategorySelect,
+  useCoeCategory,
+} from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
+import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
-import { SurfaceCard } from "@web/components/shared/bento";
-import { ChevronRight } from "lucide-react";
-import { CategorySelect } from "./coe-controls";
-import type { CategoryKey } from "./search-params";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import posthog from "posthog-js";
+import { useState } from "react";
 
-export interface CategoryRow {
-  category: string;
-  categoryKey: CategoryKey;
-  changeRatio: number;
-  description: string;
-  premium: number;
-  quota: number;
-}
-
-const COLUMNS: { align: "left" | "right"; label: string }[] = [
-  { align: "left", label: "Category" },
-  { align: "right", label: "Premium" },
-  { align: "right", label: "Quota" },
-  { align: "right", label: "Change" },
+const COLUMNS: { align: "left" | "right"; key: SortKey; label: string }[] = [
+  { align: "left", key: "category", label: "Category" },
+  { align: "right", key: "premium", label: "Premium" },
+  { align: "right", key: "quota", label: "Quota" },
+  { align: "right", key: "change", label: "Change" },
 ];
 
 /**
- * Fixed numeric columns so every row lines up — each row is its own grid, so
- * `auto` tracks would size independently and stagger. Kept narrow enough that
- * the category name still fits in the two-column layout below `2xl`.
- *
- * The narrowest step exists because the default tracks add up to 244px, which
- * is wider than a 320px phone leaves this card once the page gutter and the
- * card padding are taken out.
+ * Fixed figure columns so the rows line up under their headers. The narrowest
+ * step exists because the comp's tracks add up to 380px of figures, which is
+ * wider than a 320px phone leaves the table once the page gutter is out.
  */
-const GRID =
-  "grid grid-cols-[minmax(0,1fr)_4.25rem_3.25rem_3.75rem_0.75rem] gap-1.5 sm:grid-cols-[minmax(0,1fr)_5.5rem_4rem_4.75rem_1rem] sm:gap-2 2xl:grid-cols-[minmax(0,1fr)_7rem_5rem_5.5rem_1.5rem] 2xl:gap-3";
+const FIGURE_COLUMN_CLASSES: Record<Exclude<SortKey, "category">, string> = {
+  premium: "w-[4.75rem] sm:w-[6.5rem] lg:w-[150px]",
+  quota: "w-[3.25rem] sm:w-[4.5rem] lg:w-[120px]",
+  change: "w-[4.25rem] sm:w-[5.5rem] lg:w-[110px]",
+};
+
+const CELL_CLASS = "px-1 py-3.5 sm:px-2";
 
 /**
- * The five-category table, always in category order.
+ * The five-category table with sortable headers.
  *
- * There is nothing to sort: A to E is the order the scheme itself defines and
- * the order every published COE result is quoted in, and with five fixed rows
- * a reader compares them by looking rather than by re-ordering. Sortable
- * headers here only offered a way to lose that familiar sequence.
+ * A client island only for the sort state: the rows arrive from the server in
+ * category order and are re-ordered here without another fetch. Clicking a row
+ * selects its category through the URL, the same as the circles up top.
  *
- * The rows arrive already ordered, built from `COE_CATEGORIES`.
+ * A real `<table>` rather than the comp's CSS grid: sortable column headers
+ * need `aria-sort` on a `columnheader`, which only means something inside a
+ * table. `border-separate` is what lets the selected row carry a radius.
  */
 export function AllCategoriesTable({
-  exercise,
   rows,
   selected,
 }: {
-  exercise: string;
   rows: CategoryRow[];
   selected: CategoryKey;
 }) {
+  const [sort, setSort] = useState<SortState>(DEFAULT_SORT);
+  const { setCategory } = useCoeCategory();
+
+  const sorted = sortCategoryRows(rows, sort);
+
+  const selectCategory = (category: CategoryKey) => {
+    posthog.capture("dashboard_filter_changed", {
+      filter: "category",
+      value: category,
+    });
+    setCategory(category);
+  };
+
   return (
-    <SurfaceCard className="gap-4">
-      <div className="flex flex-wrap items-center gap-3.5">
-        <div className="flex flex-col">
-          <Typography.Heading level={3}>All categories</Typography.Heading>
-          <Typography.Paragraph color="muted" size="sm">
-            {exercise} · five categories
-          </Typography.Paragraph>
-        </div>
-      </div>
-
-      <div className="flex flex-col">
-        <div
-          className={cn(
-            GRID,
-            "items-center border-separator border-b px-4 pt-4 pb-3",
-          )}
-        >
-          {COLUMNS.map((column) => (
-            <span
-              className={cn(
-                "font-bold text-muted text-xs uppercase tracking-wider",
-                column.align === "right" ? "text-right" : "text-left",
-              )}
-              key={column.label}
-            >
-              {column.label}
-            </span>
-          ))}
-          <span />
-        </div>
-
-        {rows.map((row) => {
-          const isActive = row.categoryKey === selected;
-          return (
-            <CategorySelect
-              category={row.categoryKey}
-              className={cn(
-                "rounded-field transition-colors",
-                isActive ? "bg-accent/15" : "hover:bg-background",
-              )}
-              isActive={isActive}
-              key={row.category}
-              label={`Show ${row.category}`}
-            >
-              <div className={cn(GRID, "items-center px-4 py-3.5")}>
-                <span className="flex min-w-0 items-center gap-3">
-                  <span
+    <div className="flex flex-col gap-4">
+      <table className="w-full table-fixed border-separate border-spacing-0 tabular-nums">
+        <thead>
+          <tr>
+            {COLUMNS.map((column) => {
+              const isActive = column.key === sort.key;
+              const Arrow = sort.direction === "asc" ? ArrowUp : ArrowDown;
+              return (
+                <th
+                  aria-sort={
+                    isActive
+                      ? sort.direction === "asc"
+                        ? "ascending"
+                        : "descending"
+                      : "none"
+                  }
+                  className={cn(
+                    "border-separator border-b pb-3",
+                    CELL_CLASS,
+                    column.key !== "category" &&
+                      FIGURE_COLUMN_CLASSES[column.key],
+                    column.align === "right" ? "text-right" : "text-left",
+                  )}
+                  key={column.key}
+                  scope="col"
+                >
+                  <button
                     className={cn(
-                      "flex size-[38px] shrink-0 items-center justify-center rounded-full font-extrabold text-sm",
+                      "inline-flex cursor-pointer items-center gap-1 font-semibold text-[13px] transition-colors",
                       isActive
-                        ? "bg-accent text-accent-foreground"
-                        : "bg-accent/15 text-accent-strong",
+                        ? "text-accent-strong"
+                        : "text-muted hover:text-muted-strong",
                     )}
+                    onClick={() => setSort(nextSort(sort, column.key))}
+                    type="button"
                   >
-                    {row.categoryKey}
-                  </span>
-                  <span className="flex min-w-0 flex-col">
-                    <span className="truncate font-bold text-base">
-                      {row.category}
+                    {column.label}
+                    {isActive ? (
+                      <Arrow
+                        aria-hidden
+                        className="size-3.5"
+                        strokeWidth={2.5}
+                      />
+                    ) : null}
+                  </button>
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {sorted.map((row) => {
+            const isActive = row.categoryKey === selected;
+            const cellClass = cn(
+              CELL_CLASS,
+              !isActive && "border-separator border-b",
+            );
+            return (
+              <tr
+                className={cn(
+                  "cursor-pointer transition-colors",
+                  isActive
+                    ? "bg-accent-soft-2 [&>td:first-child]:rounded-l-2xl [&>td:last-child]:rounded-r-2xl"
+                    : "hover:bg-default",
+                )}
+                key={row.categoryKey}
+                onClick={(event) => {
+                  // The category cell is already a button that selects the
+                  // row; its click bubbles here, so only the bare cells
+                  // need the row-level handler.
+                  if ((event.target as HTMLElement).closest("button")) {
+                    return;
+                  }
+                  selectCategory(row.categoryKey);
+                }}
+              >
+                <td className={cellClass}>
+                  <CategorySelect
+                    category={row.categoryKey}
+                    className="flex items-center gap-3.5"
+                    isActive={isActive}
+                    label={`Show ${row.category}`}
+                  >
+                    <span
+                      className={cn(
+                        "flex size-10 shrink-0 items-center justify-center rounded-full font-extrabold text-base",
+                        isActive
+                          ? "bg-accent text-accent-foreground"
+                          : "bg-accent-soft text-accent-strong",
+                      )}
+                    >
+                      {row.categoryKey}
                     </span>
-                    <span className="truncate font-medium text-muted text-sm">
-                      {row.description}
+                    <span className="flex min-w-0 flex-col">
+                      <span className="truncate font-bold text-base">
+                        {row.category}
+                      </span>
+                      <span className="truncate font-medium text-[13.5px] text-muted">
+                        {row.description}
+                      </span>
                     </span>
-                  </span>
-                </span>
-                <span className="text-right font-extrabold text-base tabular-nums">
+                  </CategorySelect>
+                </td>
+                <td
+                  className={cn(
+                    cellClass,
+                    "text-right font-extrabold text-sm sm:text-lg",
+                  )}
+                >
                   <NumberValue
                     currency="SGD"
                     locale="en-SG"
@@ -127,31 +189,32 @@ export function AllCategoriesTable({
                     style="currency"
                     value={row.premium}
                   />
-                </span>
-                <span className="text-right font-bold text-muted text-sm tabular-nums">
+                </td>
+                <td
+                  className={cn(
+                    cellClass,
+                    "text-right font-bold text-[15px] text-muted-strong",
+                  )}
+                >
                   <NumberValue
                     locale="en-SG"
                     maximumFractionDigits={0}
                     value={row.quota}
                   />
-                </span>
-                <span className="flex justify-end">
+                </td>
+                <td className={cn(cellClass, "text-right")}>
                   <CostTrendChip changeRatio={row.changeRatio} />
-                </span>
-                <ChevronRight
-                  aria-hidden
-                  className="size-[18px] justify-self-end text-muted"
-                />
-              </div>
-            </CategorySelect>
-          );
-        })}
-      </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
 
-      <Typography.Paragraph color="muted" size="xs" className="px-4">
-        Premiums are the quota premium at the close of the exercise. Select a
-        category for its bidding history.
+      <Typography.Paragraph color="muted" size="sm">
+        Premiums are the quota premium at the close of the exercise. Sorted by{" "}
+        {describeSort(sort)}.
       </Typography.Paragraph>
-    </SurfaceCard>
+    </div>
   );
 }
