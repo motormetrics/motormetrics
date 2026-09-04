@@ -1,3 +1,9 @@
+## [5.12.0](https://github.com/motormetrics/motormetrics/compare/v5.11.1...v5.12.0) (2026-09-04)
+
+### Features
+
+* **web:** add charger map to ev charging page ([720f01f](https://github.com/motormetrics/motormetrics/commit/720f01fb953375c290dcf0e5e3283b1ac4c57a03))
+
 ## [5.11.1](https://github.com/motormetrics/motormetrics/compare/v5.11.0...v5.11.1) (2026-09-03)
 
 ### Bug Fixes
