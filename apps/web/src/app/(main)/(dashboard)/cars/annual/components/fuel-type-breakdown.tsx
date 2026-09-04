@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Typography } from "@heroui/react";
-import { PieChart } from "@heroui-pro/react";
+import { PieChart } from "@heroui-pro/react/pie-chart";
 
 import {
   FUEL_GROUP_COLORS,

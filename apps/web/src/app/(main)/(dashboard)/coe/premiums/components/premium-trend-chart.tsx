@@ -1,6 +1,6 @@
 "use client";
 
-import { AreaChart } from "@heroui-pro/react";
+import { AreaChart } from "@heroui-pro/react/area-chart";
 
 const currencyFormatter = new Intl.NumberFormat("en-SG", {
   currency: "SGD",

@@ -1,6 +1,6 @@
 "use client";
 
-import { ComposedChart } from "@heroui-pro/react";
+import { ComposedChart } from "@heroui-pro/react/composed-chart";
 
 const currencyFormatter = new Intl.NumberFormat("en-SG", {
   currency: "SGD",

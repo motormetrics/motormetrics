@@ -47,7 +47,7 @@ Trigger this when new monthly data arrives, so only affected caches regenerate.
 ### Component Patterns
 
 - **UI**: HeroUI v3 from `@heroui/react`, using compound component patterns
-- **Charts**: HeroUI Pro charts from `@heroui-pro/react` directly — do not add local chart wrappers
+- **Charts**: HeroUI Pro charts and `KPI` from their subpaths (`@heroui-pro/react/area-chart`, `@heroui-pro/react/kpi`, …); everything else from `@heroui-pro/react` — do not add local chart wrappers
 - **Customisation**: HeroUI v3 CSS variables and local web tokens, to match Singapore car market branding
 
 ### Component Naming Conventions

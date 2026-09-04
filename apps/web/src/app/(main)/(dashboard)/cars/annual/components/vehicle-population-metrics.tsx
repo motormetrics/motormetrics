@@ -1,7 +1,8 @@
 "use client";
 
 import { Typography } from "@heroui/react";
-import { KPI, KPIGroup, NumberValue } from "@heroui-pro/react";
+import { KPIGroup, NumberValue } from "@heroui-pro/react";
+import { KPI } from "@heroui-pro/react/kpi";
 
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
 import { useMemo } from "react";

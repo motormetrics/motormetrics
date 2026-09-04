@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Chip, Typography } from "@heroui/react";
-import { BarChart } from "@heroui-pro/react";
+import { BarChart } from "@heroui-pro/react/bar-chart";
 import { formatNumber, slugify } from "@motormetrics/utils";
 import { getRankingEmoji } from "@web/lib/cars/calculations";
 import Link from "next/link";

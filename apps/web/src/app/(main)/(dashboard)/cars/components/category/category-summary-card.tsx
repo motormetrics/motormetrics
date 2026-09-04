@@ -1,4 +1,5 @@
-import { KPI, NumberValue } from "@heroui-pro/react";
+import { NumberValue } from "@heroui-pro/react";
+import { KPI } from "@heroui-pro/react/kpi";
 import { BarChart3 } from "lucide-react";
 
 interface CategorySummaryCardProps {

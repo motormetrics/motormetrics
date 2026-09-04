@@ -221,7 +221,7 @@ importers:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: 1.29.0
-        version: 1.29.0(supports-color@8.1.1)(zod@4.4.3)
+        version: 1.29.0(zod@4.4.3)
       '@vercel/related-projects':
         specifier: 'catalog:'
         version: 1.1.0
@@ -251,11 +251,11 @@ importers:
         specifier: 2.18.0
         version: 2.18.0(react@19.2.6)
       '@heroui-pro/react':
-        specifier: 1.0.0-beta.3
-        version: 1.0.0-beta.3
+        specifier: 1.0.0-beta.8
+        version: 1.0.0-beta.8
       '@heroui/react':
         specifier: 'catalog:'
-        version: 3.2.4(@react-aria/i18n@3.13.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-aria/ssr@3.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-aria/utils@3.34.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-spectrum/provider@3.11.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-aria-components@1.20.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-aria@3.51.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(tailwindcss@4.3.0)
+        version: 3.2.4(@react-aria/i18n@3.13.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-aria/ssr@3.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-aria/utils@3.34.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-spectrum/provider@3.11.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-aria-components@1.20.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-aria@3.51.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(tailwindcss@4.3.0)
       '@heroui/styles':
         specifier: 'catalog:'
         version: 3.2.4(tailwind-merge@3.6.0)(tailwindcss@4.3.0)
@@ -286,6 +286,9 @@ importers:
       '@opentelemetry/sdk-trace-node':
         specifier: 2.7.1
         version: 2.7.1(@opentelemetry/api@1.9.1)
+      '@react-aria/utils':
+        specifier: 3.34.1
+        version: 3.34.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@ruchernchong/number-format':
         specifier: 2.3.5
         version: 2.3.5
@@ -343,6 +346,9 @@ importers:
       lucide-react:
         specifier: 0.577.0
         version: 0.577.0(react@19.2.6)
+      maplibre-gl:
+        specifier: 6.7.0
+        version: 6.7.0
       match-sorter:
         specifier: 8.3.0
         version: 8.3.0
@@ -407,8 +413,8 @@ importers:
         specifier: 3.6.0
         version: 3.6.0
       tailwind-variants:
-        specifier: 3.2.2
-        version: 3.2.2(tailwind-merge@3.6.0)(tailwindcss@4.3.0)
+        specifier: 3.3.1
+        version: 3.3.1(tailwind-merge@3.6.0)(tailwindcss@4.3.0)
       twitter-api-v2:
         specifier: 1.29.0
         version: 1.29.0
@@ -493,7 +499,7 @@ importers:
         version: 1.0.0
       jsdom:
         specifier: 26.1.0
-        version: 26.1.0
+        version: 26.1.0(supports-color@8.1.1)
       postcss:
         specifier: 8.5.23
         version: 8.5.23
@@ -2112,8 +2118,8 @@ packages:
       react:
         optional: true
 
-  '@heroui-pro/react@1.0.0-beta.3':
-    resolution: {integrity: sha512-DVvi+4X1jFNpf174yA7MyfXaD8gDPYdTuNJo+iVswnePWS6Xn/Vtx181OFSUOcytmCipenYKY8reuuBDDrUzVw==}
+  '@heroui-pro/react@1.0.0-beta.8':
+    resolution: {integrity: sha512-kEXEdz5iu0YZLQQcEPGxyDS38YfvoC7cvdKmFRt9AsRdwKwqVZE9x/+SYom/qDj5j7Qt6UdX54B0/U8rycSuFw==}
 
   '@heroui/react@3.2.4':
     resolution: {integrity: sha512-ZXCTyz1G7bgCdHVxRPy4vIRI/wdb0ZvzEUJGG7CAEp0zqQsKrTH1o9i3Ns8yM6EidtAyfMosULN29gFA3wegBA==}
@@ -2362,6 +2368,35 @@ packages:
   '@lukeed/csprng@1.1.0':
     resolution: {integrity: sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==}
     engines: {node: '>=8'}
+
+  '@mapbox/jsonlint-lines-primitives@2.0.3':
+    resolution: {integrity: sha512-0SElaV0uMxEnxzBhhX9WTuPyUeMsAN/SS0i16tjuba4/mio63MG9khjC1a0JAiPGXAwvwm4UfHJURCN7nyudQg==}
+    engines: {node: '>= 22'}
+
+  '@mapbox/point-geometry@1.1.0':
+    resolution: {integrity: sha512-YGcBz1cg4ATXDCM/71L9xveh4dynfGmcLDqufR+nQQy3fKwsAZsWd/x4621/6uJaeB9mwOHE6hPeDgXz9uViUQ==}
+
+  '@mapbox/tiny-sdf@2.2.0':
+    resolution: {integrity: sha512-LVL4wgI9YAum5V+LNVQO6QgFBPw7/MIIY4XJPNsPDMrjEwcE+JfKk1LuIl8GnF197ejVdC9QdPaxrx5gfgdGXg==}
+
+  '@mapbox/unitbezier@1.0.0':
+    resolution: {integrity: sha512-fqd515fjBmANKGGsQ286E2Wvj/XvDFpGzwJxq4CI6jMQue6Oy04uCKp+JWKF00xRTmk6cEu1jPJ9p3xqH8YWqQ==}
+
+  '@mapbox/vector-tile@3.0.0':
+    resolution: {integrity: sha512-Qf10S1uIHMk20ri/IVBnpS+esUEkVaR5Hftmz88jTInrpmWgPGJfPe3LVjjlE77trLx8tH6qjTG7uWH9hIq/0Q==}
+
+  '@maplibre/geojson-vt@6.1.1':
+    resolution: {integrity: sha512-FVMOcmSP/yqol45t7StApEyTL5/vmqBCuFhH9n+fFuINenhaX+YgHHIt1yJ86S8kln3uJLcMvmEU2cfn6E2eCQ==}
+
+  '@maplibre/maplibre-gl-style-spec@26.4.1':
+    resolution: {integrity: sha512-I/qcIKVFHFSg1Meu/eqHrkSTjIez0gCsSaK56TNPutM3TkE61aSq6F1cZ4Kg4KiNs3cpViLtubDjfyRcQCdEJQ==}
+    hasBin: true
+
+  '@maplibre/mlt@1.2.0':
+    resolution: {integrity: sha512-g45M8gEI4sMO3X9ib4K7n3ZKFf0qQOL+NMkHCnEK51lOrYFHiEssOuZncx1+miIgi1IEE2NcbRMcq8RBkL+QHA==}
+
+  '@maplibre/vt-pbf@4.3.2':
+    resolution: {integrity: sha512-j6p0AdjvAR19Z3XaCysle7A4ZSo08tYOzxD0Y9NQylwPAkwJJeYub5b2eVucdeDh7erhv69DahoLOevDRERRUw==}
 
   '@mdx-js/mdx@3.1.1':
     resolution: {integrity: sha512-f6ZO2ifpwAQIpzGWaBQT2TXxPv6z3RBzQKpVftEWN78Vl/YweF1uwussDx8ECAXVtr3Rs89fKyG9YlzUs9DyGQ==}
@@ -3387,8 +3422,8 @@ packages:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
-  '@react-aria/utils@3.34.0':
-    resolution: {integrity: sha512-ZM1ZXIqpwGTJjjL6o3JhlZkEaBpQdxuOCqLEvwEwooaj5GsYI3E9UfOl5vy3UW6bYiEEWl9pNBntrb9CR9kItQ==}
+  '@react-aria/utils@3.34.1':
+    resolution: {integrity: sha512-H6+rGZL+0f58bBNaUMfctEnT+NogqwAk+nHiB8sR3K+YlQ37GTuCijy2U/pPvQtFMS5mURrjZeBH5JNNXsx14A==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
       react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
@@ -4156,6 +4191,9 @@ packages:
 
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
+
+  '@types/geojson@7946.0.16':
+    resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
 
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
@@ -5634,6 +5672,9 @@ packages:
   duplexer2@0.1.4:
     resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}
 
+  earcut@3.2.3:
+    resolution: {integrity: sha512-vnS4AVwp1KHAF13i1vp1/2D5evWy3k5u/iW/B81QVsUZtV8cv2tU0b2VNFlqvh4kYwrFMDdjPCfAmfyJW9y14Q==}
+
   easy-table@1.2.0:
     resolution: {integrity: sha512-OFzVOv03YpvtcWGe5AayU5G2hgybsg3iqA6drU8UaoZyB9jLGMTrz9+asnLp/E+6qPh88yEI1gvyZFZ41dmgww==}
 
@@ -6183,6 +6224,9 @@ packages:
   github-slugger@2.0.0:
     resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
 
+  gl-matrix@3.4.4:
+    resolution: {integrity: sha512-latSnyDNt/8zYUB6VIJ6PCh2jBjJX6gnDsoCZ7LyW7GkqrD51EWwa9qCoGixj8YqBtETQK/xY7OmpTF8xz1DdQ==}
+
   global-directory@5.0.0:
     resolution: {integrity: sha512-1pgFdhK3J2LeM+dVf2Pd424yHx2ou338lC0ErNP2hPx4j8eW1Sp0XqSjNxtk6Tc4Kr5wlWtSvz8cn2yb7/SG/w==}
     engines: {node: '>=20'}
@@ -6653,6 +6697,9 @@ packages:
   json-schema@0.4.0:
     resolution: {integrity: sha512-es94M3nTIfsEPisRafak+HDLfHXnKBhV3vU5eqPcS3flIWqcxJWgXHXiey3YrpaNsanY5ei1VoYEbOzijuq9BA==}
 
+  json-stringify-pretty-compact@4.0.0:
+    resolution: {integrity: sha512-3CNZ2DnrpByG9Nqj6Xo8vqbjT4F6N+tb4Gb28ESAZjYZ5yqvmc56J+/kuIwkaAMOyblTQhUW7PxMkUb8Q36N3Q==}
+
   json-with-bigint@3.5.8:
     resolution: {integrity: sha512-eq/4KP6K34kwa7TcFdtvnftvHCD9KvHOGGICWwMFc4dOOKF5t4iYqnfLK8otCRCRv06FXOzGGyqE8h8ElMvvdw==}
 
@@ -6667,6 +6714,9 @@ packages:
   jwt-decode@4.0.0:
     resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
     engines: {node: '>=18'}
+
+  kdbush@4.1.0:
+    resolution: {integrity: sha512-e9vurzrXJQrFX6ckpHP3bvj5l+9CnYzkxDNnNQ1h2QTqdWsUAJgXiKdGNcOa1EY85dU8KbQ+z/FdQdB7P+9yfQ==}
 
   keyv@5.6.0:
     resolution: {integrity: sha512-CYDD3SOtsHtyXeEORYRx2qBtpDJFjRTGXUtmNEMGyzYOKj1TE3tycdlho7kA1Ufx9OYWZzg52QFBGALTirzDSw==}
@@ -6878,6 +6928,10 @@ packages:
   make-dir@4.0.0:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
+
+  maplibre-gl@6.7.0:
+    resolution: {integrity: sha512-Y1Q1+UP9WXou0DUrnaFdDsoMqiMCWy6aS968IBUaQ2eZi6H1/kPCfpfZOWXFJZbeKMkX9Wo6OFzY/k48qqPf3Q==}
+    engines: {node: '>=16.14.0', npm: '>=8.1.0'}
 
   markdown-extensions@2.0.0:
     resolution: {integrity: sha512-o5vL7aDWatOTX8LzaS1WMoaoxIiLRQJuIKKe2wAw6IeULDHaqbiqiggmx+pKvZDb1Sj+pE46Sn1T7lCqfFtg1Q==}
@@ -7176,6 +7230,9 @@ packages:
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+
+  murmurhash-js@1.0.0:
+    resolution: {integrity: sha512-TvmkNhkv8yct0SVBSy+o8wYzXjE4Zz3PCesbfs8HiCXXdcTuocApFv11UWlNFWKYsP2okqrhb7JNlSm9InBhIw==}
 
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
@@ -7697,6 +7754,10 @@ packages:
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
 
+  pbf@5.1.2:
+    resolution: {integrity: sha512-mnvGdvOrIvJOBGUEdGkrVXjN8E/VkIJCkf2eS1DH2yv82ORUlLttmDt0rWY38yYZmVwciZwBUvHM20qxBZf40w==}
+    hasBin: true
+
   peberminta@0.9.0:
     resolution: {integrity: sha512-XIxfHpEuSJbITd1H3EeQwpcZbTLHc+VVr8ANI9t5sit565tsI4/xK3KWTUFE2e6QiangUkh3B0jihzmGnNrRsQ==}
 
@@ -7768,6 +7829,9 @@ packages:
   posthog-js@1.373.4:
     resolution: {integrity: sha512-6DueUS5KOGZlKsQlelLURmtp9PA52rdCxt/IvuoYKAErlkh2LczogMopUIpeqbwfOnGDQEf8gmDh4z/IFeU4CQ==}
 
+  potpack@2.1.0:
+    resolution: {integrity: sha512-pcaShQc1Shq0y+E7GqJqvZj8DTthWV1KeHGdi0Z6IAin2Oi3JnLCOfwnCo84qc+HAp52wT9nK9H7FAJp5a44GQ==}
+
   powershell-utils@0.1.0:
     resolution: {integrity: sha512-dM0jVuXJPsDN6DvRpea484tCUaMiXWjuCn++HGTqUWzGDjv5tZkEZldAJ/UMlqRYGFrD/etByo4/xOuC/snX2A==}
     engines: {node: '>=20'}
@@ -7815,6 +7879,9 @@ packages:
     resolution: {integrity: sha512-NWWCCscLjs+cOKF/s/XVNFRW7Yih0fdH+9brffR5NZCy8k42yRdl5KlWKMVXuI1vfCoy4o1z80XR/W/QUb3V3w==}
     engines: {node: '>=12.0.0'}
 
+  protocol-buffers-schema@3.6.1:
+    resolution: {integrity: sha512-VG2K63Igkiv9p76tk1lilczEK1cT+kCjKtkdhw1dQZV3k3IXJbd3o6Ho8b9zJZaHSnT2hKe4I+ObmX9w6m5SmQ==}
+
   proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
     engines: {node: '>= 0.10'}
@@ -7836,6 +7903,9 @@ packages:
 
   quickjs-wasi@3.4.0:
     resolution: {integrity: sha512-ttKaBD8u0RXhz2UqDU8wOEruhxADt0WWHfMfnNR8aO0UyhlifFS6NvPYFbyhASjqIp2/1dpneoP1IzBUxION1w==}
+
+  quickselect@3.0.0:
+    resolution: {integrity: sha512-XdjUArbK4Bm5fLLvlm5KpTFOiOThgfWWI4axAZDWg4E/0mKdZyI9tNEfds27qCi1ze/vwTR16kvmmGhRra3c2g==}
 
   range-parser@1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
@@ -8113,6 +8183,9 @@ packages:
 
   resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
+
+  resolve-protobuf-schema@2.1.0:
+    resolution: {integrity: sha512-kI5ffTiZWmJaS/huM8wZfEMer1eRd7oJQhDuxeCLe3t7N7mX3z94CN0xPxBQxFYQTSNz9T0i+v6inKqSdK8xrQ==}
 
   resolve@1.22.12:
     resolution: {integrity: sha512-TyeJ1zif53BPfHootBGwPRYT1RUt6oGWsaQr8UyZW/eAm9bKoijtvruSDEmZHm92CwS9nj7/fWttqPCgzep8CA==}
@@ -8537,16 +8610,6 @@ packages:
   tailwind-merge@3.6.0:
     resolution: {integrity: sha512-uxL7qAVQriqRQPAyK3pj66VqskWqoZ37PW94jwOTwNfq/z9oyu1V+eqrZqtR2+fCiXdYOZe/Modt8GtvqNzu+w==}
 
-  tailwind-variants@3.2.2:
-    resolution: {integrity: sha512-Mi4kHeMTLvKlM98XPnK+7HoBPmf4gygdFmqQPaDivc3DpYS6aIY6KiG/PgThrGvii5YZJqRsPz0aPyhoFzmZgg==}
-    engines: {node: '>=16.x', pnpm: '>=7.x'}
-    peerDependencies:
-      tailwind-merge: '>=3.0.0'
-      tailwindcss: '*'
-    peerDependenciesMeta:
-      tailwind-merge:
-        optional: true
-
   tailwind-variants@3.3.1:
     resolution: {integrity: sha512-4pAvwUtM4HKBiRZftncAbpn6V9Hhwoa5Fl7O2u5zbp7Z5Cvu+/o/6+176WY3WCEES209543quG8zFIcXCsc5Jw==}
     engines: {node: '>=16.9.x', pnpm: '>=7.x'}
@@ -8630,6 +8693,9 @@ packages:
   tinyglobby@0.2.17:
     resolution: {integrity: sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==}
     engines: {node: '>=12.0.0'}
+
+  tinyqueue@3.0.0:
+    resolution: {integrity: sha512-gRa9gwYU3ECmQYv3lslts5hxuIa90veaEcxDYuu3QGOIAEM2mOZkVHp48ANJuu1CURtRdHKUBY5Lm1tHV+sD4g==}
 
   tinyrainbow@3.1.0:
     resolution: {integrity: sha512-Bf+ILmBgretUrdJxzXM0SgXLZ3XfiaUuOj/IKQHuTXip+05Xn+uyEYdVg0kYDipTBcLrCVyUzAPz7QmArb0mmw==}
@@ -10666,18 +10732,18 @@ snapshots:
     optionalDependencies:
       react: 19.2.6
 
-  '@heroui-pro/react@1.0.0-beta.3':
+  '@heroui-pro/react@1.0.0-beta.8':
     dependencies:
       chalk: 5.6.2
       heroui-pro: 1.0.0-beta.9
 
-  '@heroui/react@3.2.4(@react-aria/i18n@3.13.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-aria/ssr@3.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-aria/utils@3.34.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-spectrum/provider@3.11.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-aria-components@1.20.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-aria@3.51.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(tailwindcss@4.3.0)':
+  '@heroui/react@3.2.4(@react-aria/i18n@3.13.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-aria/ssr@3.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-aria/utils@3.34.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@react-spectrum/provider@3.11.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-aria-components@1.20.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-aria@3.51.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(tailwindcss@4.3.0)':
     dependencies:
       '@heroui/styles': 3.2.4(tailwind-merge@3.4.0)(tailwindcss@4.3.0)
       '@radix-ui/react-avatar': 1.1.11(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@react-aria/i18n': 3.13.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@react-aria/ssr': 3.10.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@react-aria/utils': 3.34.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@react-aria/utils': 3.34.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@react-stately/utils': 3.12.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@react-types/color': 3.2.0(@react-spectrum/provider@3.11.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@react-types/shared': 3.36.1(react@19.2.6)
@@ -10885,6 +10951,43 @@ snapshots:
 
   '@lukeed/csprng@1.1.0': {}
 
+  '@mapbox/jsonlint-lines-primitives@2.0.3': {}
+
+  '@mapbox/point-geometry@1.1.0': {}
+
+  '@mapbox/tiny-sdf@2.2.0': {}
+
+  '@mapbox/unitbezier@1.0.0': {}
+
+  '@mapbox/vector-tile@3.0.0':
+    dependencies:
+      '@mapbox/point-geometry': 1.1.0
+      '@types/geojson': 7946.0.16
+      pbf: 5.1.2
+
+  '@maplibre/geojson-vt@6.1.1':
+    dependencies:
+      kdbush: 4.1.0
+
+  '@maplibre/maplibre-gl-style-spec@26.4.1':
+    dependencies:
+      '@mapbox/jsonlint-lines-primitives': 2.0.3
+      '@mapbox/unitbezier': 1.0.0
+      json-stringify-pretty-compact: 4.0.0
+      minimist: 1.2.8
+      quickselect: 3.0.0
+      tinyqueue: 3.0.0
+
+  '@maplibre/mlt@1.2.0':
+    dependencies:
+      '@mapbox/point-geometry': 1.1.0
+
+  '@maplibre/vt-pbf@4.3.2':
+    dependencies:
+      '@mapbox/point-geometry': 1.1.0
+      '@types/geojson': 7946.0.16
+      pbf: 5.1.2
+
   '@mdx-js/mdx@3.1.1':
     dependencies:
       '@types/estree': 1.0.9
@@ -10921,7 +11024,7 @@ snapshots:
       '@types/react': 19.2.14
       react: 19.2.6
 
-  '@modelcontextprotocol/sdk@1.29.0(supports-color@8.1.1)(zod@4.4.3)':
+  '@modelcontextprotocol/sdk@1.29.0(zod@4.4.3)':
     dependencies:
       '@hono/node-server': 1.19.14(hono@4.12.18)
       ajv: 8.20.0
@@ -10931,8 +11034,8 @@ snapshots:
       cross-spawn: 7.0.6
       eventsource: 3.0.7
       eventsource-parser: 3.0.8
-      express: 5.2.1(supports-color@8.1.1)
-      express-rate-limit: 8.5.1(express@5.2.1(supports-color@8.1.1))
+      express: 5.2.1
+      express-rate-limit: 8.5.1(express@5.2.1)
       hono: 4.12.18
       jose: 6.2.3
       json-schema-typed: 8.0.2
@@ -11870,13 +11973,13 @@ snapshots:
       react-aria: 3.48.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react-dom: 19.2.6(react@19.2.6)
 
-  '@react-aria/utils@3.34.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@react-aria/utils@3.34.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
       '@swc/helpers': 0.5.23
       react: 19.2.6
-      react-aria: 3.48.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      react-aria: 3.51.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react-dom: 19.2.6(react@19.2.6)
-      react-stately: 3.46.0(react@19.2.6)
+      react-stately: 3.49.0(react@19.2.6)
 
   '@react-email/render@2.0.8(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
@@ -11912,7 +12015,7 @@ snapshots:
       '@swc/helpers': 0.5.23
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
-      react-stately: 3.46.0(react@19.2.6)
+      react-stately: 3.49.0(react@19.2.6)
 
   '@react-types/color@3.2.0(@react-spectrum/provider@3.11.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
@@ -12562,6 +12665,8 @@ snapshots:
 
   '@types/estree@1.0.9': {}
 
+  '@types/geojson@7946.0.16': {}
+
   '@types/hast@3.0.4':
     dependencies:
       '@types/unist': 3.0.3
@@ -13115,7 +13220,7 @@ snapshots:
   '@workflow/web@5.0.0-beta.46(@opentelemetry/api@1.9.1)(react@19.2.6)':
     dependencies:
       '@workflow/world-local': 5.0.0-beta.40(@opentelemetry/api@1.9.1)
-      express: 5.2.1(supports-color@8.1.1)
+      express: 5.2.1
       swr: 2.5.1(react@19.2.6)
     transitivePeerDependencies:
       - '@opentelemetry/api'
@@ -13472,7 +13577,7 @@ snapshots:
       execa: 8.0.1
       find-versions: 6.0.0
 
-  body-parser@2.2.2(supports-color@8.1.1):
+  body-parser@2.2.2:
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
@@ -14002,6 +14107,8 @@ snapshots:
     dependencies:
       readable-stream: 2.3.8
 
+  earcut@3.2.3: {}
+
   easy-table@1.2.0:
     dependencies:
       ansi-regex: 5.0.1
@@ -14290,15 +14397,15 @@ snapshots:
 
   expect-type@1.3.0: {}
 
-  express-rate-limit@8.5.1(express@5.2.1(supports-color@8.1.1)):
+  express-rate-limit@8.5.1(express@5.2.1):
     dependencies:
-      express: 5.2.1(supports-color@8.1.1)
+      express: 5.2.1
       ip-address: 10.2.0
 
-  express@5.2.1(supports-color@8.1.1):
+  express@5.2.1:
     dependencies:
       accepts: 2.0.0
-      body-parser: 2.2.2(supports-color@8.1.1)
+      body-parser: 2.2.2
       content-disposition: 1.1.0
       content-type: 1.0.5
       cookie: 0.7.2
@@ -14308,7 +14415,7 @@ snapshots:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
-      finalhandler: 2.1.1(supports-color@8.1.1)
+      finalhandler: 2.1.1
       fresh: 2.0.0
       http-errors: 2.0.1
       merge-descriptors: 2.0.0
@@ -14319,8 +14426,8 @@ snapshots:
       proxy-addr: 2.0.7
       qs: 6.15.1
       range-parser: 1.2.1
-      router: 2.2.0(supports-color@8.1.1)
-      send: 1.2.1(supports-color@8.1.1)
+      router: 2.2.0
+      send: 1.2.1
       serve-static: 2.2.1
       statuses: 2.0.2
       type-is: 2.0.1
@@ -14399,7 +14506,7 @@ snapshots:
     dependencies:
       to-regex-range: 5.0.1
 
-  finalhandler@2.1.1(supports-color@8.1.1):
+  finalhandler@2.1.1:
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       encodeurl: 2.0.0
@@ -14631,6 +14738,8 @@ snapshots:
 
   github-slugger@2.0.0: {}
 
+  gl-matrix@3.4.4: {}
+
   global-directory@5.0.0:
     dependencies:
       ini: 6.0.0
@@ -14859,7 +14968,7 @@ snapshots:
       statuses: 2.0.2
       toidentifier: 1.0.1
 
-  http-proxy-agent@7.0.2:
+  http-proxy-agent@7.0.2(supports-color@8.1.1):
     dependencies:
       agent-base: 7.1.4
       debug: 4.4.3(supports-color@8.1.1)
@@ -14878,7 +14987,7 @@ snapshots:
       quick-lru: 5.1.1
       resolve-alpn: 1.2.1
 
-  https-proxy-agent@7.0.6:
+  https-proxy-agent@7.0.6(supports-color@8.1.1):
     dependencies:
       agent-base: 7.1.4
       debug: 4.4.3(supports-color@8.1.1)
@@ -15109,14 +15218,14 @@ snapshots:
 
   jsbi@4.3.2: {}
 
-  jsdom@26.1.0:
+  jsdom@26.1.0(supports-color@8.1.1):
     dependencies:
       cssstyle: 4.6.0
       data-urls: 5.0.0
       decimal.js: 10.6.0
       html-encoding-sniffer: 4.0.0
-      http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
+      http-proxy-agent: 7.0.2(supports-color@8.1.1)
+      https-proxy-agent: 7.0.6(supports-color@8.1.1)
       is-potential-custom-element-name: 1.0.1
       nwsapi: 2.2.23
       parse5: 7.3.0
@@ -15151,6 +15260,8 @@ snapshots:
 
   json-schema@0.4.0: {}
 
+  json-stringify-pretty-compact@4.0.0: {}
+
   json-with-bigint@3.5.8: {}
 
   json5@2.2.3: {}
@@ -15162,6 +15273,8 @@ snapshots:
       graceful-fs: 4.2.11
 
   jwt-decode@4.0.0: {}
+
+  kdbush@4.1.0: {}
 
   keyv@5.6.0:
     dependencies:
@@ -15341,6 +15454,26 @@ snapshots:
   make-dir@4.0.0:
     dependencies:
       semver: 7.8.4
+
+  maplibre-gl@6.7.0:
+    dependencies:
+      '@mapbox/point-geometry': 1.1.0
+      '@mapbox/tiny-sdf': 2.2.0
+      '@mapbox/unitbezier': 1.0.0
+      '@mapbox/vector-tile': 3.0.0
+      '@maplibre/geojson-vt': 6.1.1
+      '@maplibre/maplibre-gl-style-spec': 26.4.1
+      '@maplibre/mlt': 1.2.0
+      '@maplibre/vt-pbf': 4.3.2
+      '@types/geojson': 7946.0.16
+      earcut: 3.2.3
+      gl-matrix: 3.4.4
+      kdbush: 4.1.0
+      murmurhash-js: 1.0.0
+      pbf: 5.1.2
+      potpack: 2.1.0
+      quickselect: 3.0.0
+      tinyqueue: 3.0.0
 
   markdown-extensions@2.0.0: {}
 
@@ -15885,6 +16018,8 @@ snapshots:
 
   ms@2.1.3: {}
 
+  murmurhash-js@1.0.0: {}
+
   mz@2.7.0:
     dependencies:
       any-promise: 1.3.0
@@ -16240,6 +16375,10 @@ snapshots:
 
   pathe@2.0.3: {}
 
+  pbf@5.1.2:
+    dependencies:
+      resolve-protobuf-schema: 2.1.0
+
   peberminta@0.9.0: {}
 
   pend@1.2.0: {}
@@ -16316,6 +16455,8 @@ snapshots:
       query-selector-shadow-dom: 1.0.1
       web-vitals: 5.2.0
 
+  potpack@2.1.0: {}
+
   powershell-utils@0.1.0: {}
 
   preact@10.29.1: {}
@@ -16384,6 +16525,8 @@ snapshots:
       '@types/node': 25.7.0
       long: 5.3.2
 
+  protocol-buffers-schema@3.6.1: {}
+
   proxy-addr@2.0.7:
     dependencies:
       forwarded: 0.2.0
@@ -16400,6 +16543,8 @@ snapshots:
   quick-lru@5.1.1: {}
 
   quickjs-wasi@3.4.0: {}
+
+  quickselect@3.0.0: {}
 
   range-parser@1.2.1: {}
 
@@ -16797,6 +16942,10 @@ snapshots:
 
   resolve-pkg-maps@1.0.0: {}
 
+  resolve-protobuf-schema@2.1.0:
+    dependencies:
+      protocol-buffers-schema: 3.6.1
+
   resolve@1.22.12:
     dependencies:
       es-errors: 1.3.0
@@ -16863,7 +17012,7 @@ snapshots:
 
   rou3@0.9.2: {}
 
-  router@2.2.0(supports-color@8.1.1):
+  router@2.2.0:
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       depd: 2.0.0
@@ -16969,7 +17118,7 @@ snapshots:
 
   semver@7.8.5: {}
 
-  send@1.2.1(supports-color@8.1.1):
+  send@1.2.1:
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
       encodeurl: 2.0.0
@@ -16990,7 +17139,7 @@ snapshots:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       parseurl: 1.3.3
-      send: 1.2.1(supports-color@8.1.1)
+      send: 1.2.1
     transitivePeerDependencies:
       - supports-color
 
@@ -17334,12 +17483,6 @@ snapshots:
 
   tailwind-merge@3.6.0: {}
 
-  tailwind-variants@3.2.2(tailwind-merge@3.6.0)(tailwindcss@4.3.0):
-    dependencies:
-      tailwindcss: 4.3.0
-    optionalDependencies:
-      tailwind-merge: 3.6.0
-
   tailwind-variants@3.3.1(tailwind-merge@3.4.0)(tailwindcss@4.3.0):
     optionalDependencies:
       tailwind-merge: 3.4.0
@@ -17429,6 +17572,8 @@ snapshots:
     dependencies:
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
+
+  tinyqueue@3.0.0: {}
 
   tinyrainbow@3.1.0: {}
 
@@ -17800,7 +17945,7 @@ snapshots:
       '@types/node': 24.13.2
       '@vitest/coverage-v8': 4.1.6(vitest@4.1.6)
       '@vitest/ui': 4.1.6(vitest@4.1.6)
-      jsdom: 26.1.0
+      jsdom: 26.1.0(supports-color@8.1.1)
     transitivePeerDependencies:
       - msw
 

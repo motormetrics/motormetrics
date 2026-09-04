@@ -1,6 +1,6 @@
 "use client";
 
-import { ComposedChart } from "@heroui-pro/react";
+import { ComposedChart } from "@heroui-pro/react/composed-chart";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { numberFormat } from "@ruchernchong/number-format";
 import type { MakeCoeComparisonData } from "@web/queries/cars/makes/coe-comparison";

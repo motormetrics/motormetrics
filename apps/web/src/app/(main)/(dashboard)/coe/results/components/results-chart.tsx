@@ -1,7 +1,7 @@
 "use client";
 
 import { Typography } from "@heroui/react";
-import { LineChart } from "@heroui-pro/react";
+import { LineChart } from "@heroui-pro/react/line-chart";
 import { CATEGORY_COLOURS } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import type { COECategory } from "@web/types";
 

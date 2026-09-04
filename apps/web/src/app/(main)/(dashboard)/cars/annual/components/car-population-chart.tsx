@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Typography } from "@heroui/react";
-import { BarChart } from "@heroui-pro/react";
+import { BarChart } from "@heroui-pro/react/bar-chart";
 
 import { useEffectiveYear } from "@web/app/(main)/(dashboard)/cars/annual/hooks/use-effective-year";
 import { useMemo } from "react";

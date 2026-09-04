@@ -1,7 +1,8 @@
 "use client";
 
 import { Typography } from "@heroui/react";
-import { AreaChart, ChartTooltip, NumberValue } from "@heroui-pro/react";
+import { ChartTooltip, NumberValue } from "@heroui-pro/react";
+import { AreaChart } from "@heroui-pro/react/area-chart";
 
 interface DailyTraffic {
   date: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Typography } from "@heroui/react";
-import { BarChart } from "@heroui-pro/react";
+import { BarChart } from "@heroui-pro/react/bar-chart";
 
 import { formatDateToMonthYear, formatNumber } from "@motormetrics/utils";
 import type { Registration } from "@web/types/cars";
