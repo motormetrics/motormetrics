@@ -19,7 +19,9 @@
     "test:e2e:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit",
     "auth:generate": "pnpm dlx auth@rc generate --config ./src/app/admin/lib/auth.ts --output ../../packages/database/src/schema/auth.ts --yes",
-    "vercel-build": "turbo run @motormetrics/database#migrate && next build"
+    "vercel-build": "turbo run @motormetrics/database#migrate && pnpm build",
+    "prebuild": "node ./scripts/copy-maplibre-worker.mjs",
+    "predev": "node ./scripts/copy-maplibre-worker.mjs"
   },
   "dependencies": {
     "@ai-sdk/otel": "catalog:",

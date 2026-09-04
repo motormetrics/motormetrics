@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  type MapClusterLayerProps,
-  Map as MapSurface,
-  useMap,
-} from "@heroui-pro/react/map";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: HeroUI Pro Map component
+import { Map, type MapClusterLayerProps, useMap } from "@heroui-pro/react/map";
 import { inDistrict } from "@web/queries/ev-charging/locations";
 import type { EvChargingMapSite } from "@web/queries/ev-charging/map-sites";
 import type { FeatureCollection, Point } from "geojson";
@@ -12,20 +9,12 @@ import { type LngLatBoundsLike, setWorkerUrl } from "maplibre-gl";
 import { useEffect, useMemo, useState } from "react";
 import { describeConnectors } from "./location-row";
 
+setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
+
 const MAP_STYLES = {
   light: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
   dark: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
 };
-
-/**
- * Turbopack emits MapLibre's worker under a hashed name, which breaks the
- * worker's relative import of its shared chunk. Both files are copied from
- * `maplibre-gl/dist` into `public/maplibre` instead; refresh them when the
- * `maplibre-gl` version changes.
- */
-if (typeof window !== "undefined") {
-  setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
-}
 
 /** Singapore, framed with a little sea on every side. */
 const ISLAND_CENTER: [number, number] = [103.82, 1.36];
@@ -130,7 +119,7 @@ export function ChargingMapView({
 
   return (
     <div className="relative h-[480px] w-full overflow-hidden rounded-3xl">
-      <MapSurface
+      <Map
         center={ISLAND_CENTER}
         styles={MAP_STYLES}
         theme="light"
@@ -139,7 +128,7 @@ export function ChargingMapView({
         <DistrictFocus district={district} sites={sites} />
 
         {tokens ? (
-          <MapSurface.ClusterLayer<EvChargingMapSite>
+          <Map.ClusterLayer<EvChargingMapSite>
             clusterColors={[
               tokens.cluster,
               tokens.clusterStrong,
@@ -156,7 +145,7 @@ export function ChargingMapView({
         ) : null}
 
         {selected && selected.district === district ? (
-          <MapSurface.Popup
+          <Map.Popup
             closeButton
             closeOnClick={false}
             focusAfterOpen={false}
@@ -166,13 +155,13 @@ export function ChargingMapView({
             onClose={() => setSelected(null)}
           >
             <SitePopup site={selected.site} />
-          </MapSurface.Popup>
+          </Map.Popup>
         ) : null}
 
-        <MapSurface.Controls>
-          <MapSurface.ZoomControl />
-        </MapSurface.Controls>
-      </MapSurface>
+        <Map.Controls>
+          <Map.ZoomControl />
+        </Map.Controls>
+      </Map>
     </div>
   );
 }
