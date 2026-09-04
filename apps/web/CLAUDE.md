@@ -48,6 +48,9 @@ Trigger this when new monthly data arrives, so only affected caches regenerate.
 
 - **UI**: HeroUI v3 from `@heroui/react`, using compound component patterns
 - **Charts**: HeroUI Pro charts and `KPI` from their subpaths (`@heroui-pro/react/area-chart`, `@heroui-pro/react/kpi`, …); everything else from `@heroui-pro/react` — do not add local chart wrappers
+- **Maps**: HeroUI Pro `Map` from `@heroui-pro/react/map`. Turbopack cannot serve MapLibre's worker, so
+  `public/maplibre/` holds copies of `maplibre-gl-worker.mjs` and `maplibre-gl-shared.mjs` from
+  `maplibre-gl/dist` — recopy them whenever `maplibre-gl` is upgraded
 - **Customisation**: HeroUI v3 CSS variables and local web tokens, to match Singapore car market branding
 
 ### Component Naming Conventions

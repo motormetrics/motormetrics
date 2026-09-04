@@ -473,6 +473,9 @@ importers:
       '@types/adm-zip':
         specifier: 0.5.8
         version: 0.5.8
+      '@types/geojson':
+        specifier: 7946.0.16
+        version: 7946.0.16
       '@types/node':
         specifier: 'catalog:'
         version: 24.13.2

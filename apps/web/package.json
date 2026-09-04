@@ -102,6 +102,7 @@
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
     "@types/adm-zip": "0.5.8",
+    "@types/geojson": "7946.0.16",
     "@types/node": "catalog:",
     "@types/papaparse": "5.5.2",
     "@types/react": "catalog:",
