@@ -32,13 +32,6 @@ jobs:
       UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
       BETTER_AUTH_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
       BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}
-      # PRs only check what the diff touches. The merge queue is the last gate
-      # before main, so it runs the full suite.
-      AFFECTED: ${{ github.event_name == 'pull_request' && '--affected' || '' }}
-      # --affected defaults to a local `main` branch, which does not exist on a
-      # PR checkout. Pin the range to the event payload instead.
-      TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha }}
-      TURBO_SCM_HEAD: ${{ github.event.pull_request.head.sha }}
 
     steps:
       - name: Checkout
@@ -69,10 +62,12 @@ jobs:
       # https://github.blog/changelog/2026-06-25-actions-steps-can-now-be-run-in-parallel/
       - parallel:
           - name: Lint
-            run: pnpm turbo run lint $AFFECTED
+            run: pnpm lint
 
           - name: Typecheck
-            run: pnpm turbo run typecheck $AFFECTED
+            run: pnpm typecheck
 
           - name: Test
-            run: pnpm turbo run test $AFFECTED
+            run: ${{ github.event_name == 'pull_request' && 'pnpm test:affected' || 'pnpm test' }}
+            env:
+              TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha }}
