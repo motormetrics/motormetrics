@@ -10,18 +10,18 @@ overrides:
 allowBuilds:
   "@heroui-pro/react": true
   "@nestjs/core": false
+  "@parcel/watcher": false
   "@prisma/engines": false
   "@swc/core": false
   "@zowe/secrets-for-zowe-sdk": false
   cbor-extract: false
   core-js: false
   esbuild: false
-  prisma: false
+  heroui-native-pro: true
   heroui-pro: true
+  prisma: false
   protobufjs: false
   sharp: false
-  "@parcel/watcher": false
-
 catalog:
   "@ai-sdk/gateway": 4.0.46
   "@ai-sdk/openai": 4.0.36
@@ -54,11 +54,11 @@ catalog:
   zod: 4.4.3
 
 minimumReleaseAgeExclude:
-  - '@ai-sdk/gateway@4.0.46'
-  - '@ai-sdk/openai@4.0.36'
-  - '@ai-sdk/otel@1.0.58'
-  - '@ai-sdk/provider-utils@5.0.25'
-  - '@ai-sdk/provider@4.0.7'
+  - "@ai-sdk/gateway@4.0.46"
+  - "@ai-sdk/openai@4.0.36"
+  - "@ai-sdk/otel@1.0.58"
+  - "@ai-sdk/provider-utils@5.0.25"
+  - "@ai-sdk/provider@4.0.7"
   - ai@7.0.58
 
 savePrefix: ""

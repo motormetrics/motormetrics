@@ -68,7 +68,7 @@
     "papaparse": "5.5.3",
     "posthog-js": "1.373.4",
     "react": "catalog:",
-    "react-aria-components": "1.20.0",
+    "react-aria-components": "1.21.0",
     "react-dom": "catalog:",
     "react-resizable-panels": "4.11.1",
     "reading-time": "1.5.0",
