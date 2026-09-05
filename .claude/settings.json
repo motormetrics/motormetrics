@@ -1,17 +1,4 @@
 {
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bd prime --hook-json"
-          }
-        ]
-      }
-    ]
-  },
   "enabledPlugins": {
     "vercel@claude-plugins-official": true,
     "posthog@claude-plugins-official": true
