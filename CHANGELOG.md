@@ -1,3 +1,20 @@
+## [5.14.0](https://github.com/motormetrics/motormetrics/compare/v5.13.0...v5.14.0) (2026-09-05)
+
+### Features
+
+* **web:** add v3 overview primitives ([c0361d5](https://github.com/motormetrics/motormetrics/commit/c0361d5ad32ed34177b55b9696c27008d00e1dcb))
+* **web:** rebuild the cars overview on the v3 comp ([2657150](https://github.com/motormetrics/motormetrics/commit/2657150c1c8a0b7a1dd949d7599a6474a8493072))
+* **web:** rebuild the coe overview on the v3 comp ([b8e1ad4](https://github.com/motormetrics/motormetrics/commit/b8e1ad4d5c2812f66b37742d0ac40ab10d3fdd79))
+* **web:** rebuild the electric vehicles overview on the v3 comp ([2ff7449](https://github.com/motormetrics/motormetrics/commit/2ff744967ccf42c3153a250e33dbcfdd5d01a321))
+* **web:** rebuild the home overview on the v3 comp ([2b793e6](https://github.com/motormetrics/motormetrics/commit/2b793e6c4ca3b7899e86d5cb283eb5ce05266c7f))
+* **web:** rebuild the makes overview on the v3 comp ([1b26be6](https://github.com/motormetrics/motormetrics/commit/1b26be6566091b8f2bf9707340cf522820f2d40a))
+* **web:** rebuild the vehicle population overview on the v3 comp ([dc9c9d6](https://github.com/motormetrics/motormetrics/commit/dc9c9d60566996ffec3fe99a9744b2c025fc2cb5))
+
+### Bug Fixes
+
+* **web:** keep the fuel tabs off the cached make queries ([b13ef83](https://github.com/motormetrics/motormetrics/commit/b13ef831bcd9dfda558cee483d8fe13c8551e462))
+* **web:** keep the monthly ev make ranking for the home overview ([3f74feb](https://github.com/motormetrics/motormetrics/commit/3f74feb2e96ae478aa7d7d6986b06c994ff059a6))
+
 ## [5.13.0](https://github.com/motormetrics/motormetrics/compare/v5.12.0...v5.13.0) (2026-09-05)
 
 ### Features
