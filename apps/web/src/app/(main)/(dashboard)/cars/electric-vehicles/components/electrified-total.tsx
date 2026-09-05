@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatMonthName } from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import {
@@ -91,9 +92,9 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
               className="size-[11px] shrink-0 rounded-full"
               style={{ background: segment.colour }}
             />
-            <span className="font-semibold text-base text-foreground/85">
+            <Typography.Paragraph className="font-semibold text-foreground/85">
               {segment.label}
-            </span>
+            </Typography.Paragraph>
             <span className="ml-auto font-extrabold text-base tabular-nums">
               <NumberValue
                 locale="en-SG"

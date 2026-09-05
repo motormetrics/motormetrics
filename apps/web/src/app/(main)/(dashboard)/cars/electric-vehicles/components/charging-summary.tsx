@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-network";
@@ -86,9 +87,13 @@ export async function ChargingSummary() {
             style={{ width: `${targetShare.toFixed(1)}%` }}
           />
         </span>
-        <span className="font-medium text-[13.5px] text-muted">
+        <Typography.Paragraph
+          className="font-medium text-[13.5px]"
+          color="muted"
+          size="sm"
+        >
           {targetShare.toFixed(0)}% of the 2030 target installed
-        </span>
+        </Typography.Paragraph>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { SectionHead } from "@web/components/shared/overview";
 
 /**
@@ -40,9 +40,9 @@ export function VesBands() {
             >
               {row.band}
             </span>
-            <span className="font-semibold text-base text-foreground/85">
+            <Typography.Paragraph className="font-semibold text-foreground/85">
               {row.note}
-            </span>
+            </Typography.Paragraph>
             <span className="ml-auto font-extrabold text-lg tabular-nums">
               {row.value}
             </span>
