@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, Typography } from "@heroui/react";
+import { ToggleButton, ToggleButtonGroup, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
 import { changeRatio } from "@web/app/(main)/(dashboard)/components/overview-series";
@@ -50,31 +50,35 @@ export function CoePremiums({ series }: { series: CoeCategorySeries[] }) {
       {/* Five 44px circles plus their gaps want 252px, which a 320px phone can
           give this row but not with the name beside them — so it wraps. */}
       <div className="flex flex-wrap items-center gap-2">
-        {series.map((item) => {
-          const isActive = item.category === active.category;
-          return (
-            <button
-              aria-pressed={isActive}
-              className={cn(
-                "size-11 rounded-full font-extrabold text-base transition-colors",
-                isActive
-                  ? "bg-accent text-accent-foreground"
-                  : "bg-default text-muted-strong hover:bg-accent-soft",
-              )}
+        <ToggleButtonGroup
+          aria-label="COE category"
+          className="flex flex-wrap gap-2"
+          disallowEmptySelection
+          isDetached
+          onSelectionChange={(keys) => {
+            const [category] = [...keys];
+            if (category === undefined) {
+              return;
+            }
+            posthog.capture("dashboard_filter_changed", {
+              filter: "category",
+              value: category,
+            });
+            setSelected(String(category));
+          }}
+          selectedKeys={[active.category]}
+          selectionMode="single"
+        >
+          {series.map((item) => (
+            <ToggleButton
+              className="size-11 rounded-full bg-default p-0 font-extrabold text-base text-muted-strong transition-colors hover:bg-accent-soft data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
+              id={item.category}
               key={item.category}
-              onClick={() => {
-                posthog.capture("dashboard_filter_changed", {
-                  filter: "category",
-                  value: item.category,
-                });
-                setSelected(item.category);
-              }}
-              type="button"
             >
               {item.label}
-            </button>
-          );
-        })}
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
         <Typography.Paragraph
           className="font-semibold text-[15px] sm:pl-2"
           color="muted"

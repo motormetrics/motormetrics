@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { Chip, ProgressBar, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { Headline, SectionHead } from "@web/components/shared/overview";
 import { districtForPostalCode } from "@web/config/postal-districts";
@@ -112,27 +112,31 @@ export async function EvCharging() {
             <Headline
               caption="of public connectors in use right now"
               delta={
-                <span className="inline-flex items-center gap-2 rounded-full bg-success-soft px-3.5 py-2 font-bold text-sm text-success-soft-foreground">
+                <Chip
+                  className="gap-2 rounded-full px-3.5 py-2 font-bold text-sm"
+                  color="success"
+                  variant="soft"
+                >
                   <span
                     aria-hidden
                     className="size-2 rounded-full bg-success"
                   />
-                  Live
-                </span>
+                  <Chip.Label className="px-0">Live</Chip.Label>
+                </Chip>
               }
               size="md"
               value={`${inUsePercent.toFixed(1)}%`}
             />
             {/* Decorative: the figure above already states the share. */}
-            <div
+            <ProgressBar
               aria-hidden
-              className="h-3 overflow-hidden rounded-full bg-surface-secondary"
+              className="w-full"
+              value={Math.min(inUsePercent, 100)}
             >
-              <div
-                className="h-full rounded-full bg-accent"
-                style={{ width: `${inUsePercent.toFixed(1)}%` }}
-              />
-            </div>
+              <ProgressBar.Track className="h-3 rounded-full bg-surface-secondary">
+                <ProgressBar.Fill className="rounded-full bg-accent" />
+              </ProgressBar.Track>
+            </ProgressBar>
             <Typography.Paragraph
               className="font-medium"
               color="muted"
