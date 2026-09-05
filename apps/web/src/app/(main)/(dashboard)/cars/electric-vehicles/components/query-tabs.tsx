@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, ToggleButton, ToggleButtonGroup } from "@heroui/react";
 import { parseAsString, useQueryState } from "nuqs";
 import posthog from "posthog-js";
 
@@ -38,50 +38,42 @@ export function QueryTabs<Value extends string>({
   );
 
   return (
-    <fieldset
+    <ToggleButtonGroup
+      aria-label={ariaLabel}
       className={cn(
         "flex min-w-0 flex-wrap gap-2",
         variant === "segmented" && "gap-1.5 rounded-full bg-default p-1.5",
       )}
+      disallowEmptySelection
+      isDetached
+      onSelectionChange={(keys) => {
+        const [key] = [...keys];
+        if (key === undefined) {
+          return;
+        }
+        posthog.capture("dashboard_filter_changed", {
+          filter: param,
+          value: key,
+        });
+        setValue(String(key));
+      }}
+      selectedKeys={[value]}
+      selectionMode="single"
     >
-      <legend className="sr-only">{ariaLabel}</legend>
-      {options.map((option) => {
-        const isActive = option.key === value;
-
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "cursor-pointer whitespace-nowrap rounded-full transition-colors",
-              variant === "segmented"
-                ? "px-4 py-2 font-semibold text-sm"
-                : "px-[18px] py-2.5 font-semibold text-sm",
-              isActive &&
-                variant === "segmented" &&
-                "bg-surface shadow-surface",
-              isActive &&
-                variant === "pill" &&
-                "bg-accent text-accent-foreground",
-              !isActive && variant === "segmented" && "text-muted",
-              !isActive &&
-                variant === "pill" &&
-                "bg-default text-foreground/75 hover:brightness-[1.03]",
-              isActive && "font-extrabold",
-            )}
-            key={option.key}
-            onClick={() => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: param,
-                value: option.key,
-              });
-              setValue(option.key);
-            }}
-            type="button"
-          >
-            {option.label}
-          </button>
-        );
-      })}
-    </fieldset>
+      {options.map((option) => (
+        <ToggleButton
+          className={cn(
+            "h-auto whitespace-nowrap rounded-full bg-transparent font-semibold text-sm transition-colors data-[selected=true]:font-extrabold",
+            variant === "segmented"
+              ? "px-4 py-2 text-muted hover:bg-transparent data-[selected=true]:bg-surface data-[selected=true]:text-foreground data-[selected=true]:shadow-surface"
+              : "bg-default px-[18px] py-2.5 text-foreground/75 hover:bg-default hover:brightness-[1.03] data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground",
+          )}
+          id={option.key}
+          key={option.key}
+        >
+          {option.label}
+        </ToggleButton>
+      ))}
+    </ToggleButtonGroup>
   );
 }

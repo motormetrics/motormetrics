@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { Chip, ProgressBar, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils";
 import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-network";
@@ -59,11 +59,17 @@ export async function ChargingSummary() {
         }
         delta={
           growth?.growthPercent != null ? (
-            <span className="inline-flex items-center rounded-full bg-accent-soft px-3.5 py-2 font-bold text-accent-strong text-sm tabular-nums">
-              {growth.growthPercent >= 0 ? "+" : "−"}
-              {Math.abs(growth.growthPercent).toFixed(0)}% on{" "}
-              {formatDateToMonthYear(shiftMonth(growth.asOf, -12))}
-            </span>
+            <Chip
+              className="rounded-full px-3.5 py-2 font-bold text-accent-strong text-sm tabular-nums"
+              color="accent"
+              variant="soft"
+            >
+              <Chip.Label className="px-0">
+                {growth.growthPercent >= 0 ? "+" : "−"}
+                {Math.abs(growth.growthPercent).toFixed(0)}% on{" "}
+                {formatDateToMonthYear(shiftMonth(growth.asOf, -12))}
+              </Chip.Label>
+            </Chip>
           ) : undefined
         }
         size="md"
@@ -77,16 +83,15 @@ export async function ChargingSummary() {
       />
 
       <div className="flex flex-col gap-3">
-        <span
-          aria-label={`${targetShare.toFixed(0)}% of the 2030 target installed`}
-          className="block h-3 overflow-hidden rounded-full bg-surface-secondary"
-          role="img"
+        <ProgressBar
+          aria-label="Share of the 2030 target installed"
+          className="w-full"
+          value={Math.min(targetShare, 100)}
         >
-          <span
-            className="block h-full rounded-full bg-accent"
-            style={{ width: `${targetShare.toFixed(1)}%` }}
-          />
-        </span>
+          <ProgressBar.Track className="h-3 rounded-full bg-surface-secondary">
+            <ProgressBar.Fill className="rounded-full bg-accent" />
+          </ProgressBar.Track>
+        </ProgressBar>
         <Typography.Paragraph
           className="font-medium text-[13.5px]"
           color="muted"
