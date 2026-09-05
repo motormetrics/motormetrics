@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { Headline, SectionHead } from "@web/components/shared/overview";
 import { districtForPostalCode } from "@web/config/postal-districts";
@@ -45,14 +46,21 @@ function RateStat({
   const price = locations[0]?.pricePerKwh;
   return (
     <div className="flex min-w-0 flex-col gap-1">
-      <span className="font-semibold text-muted text-sm">{label}</span>
+      <Typography.Paragraph className="font-semibold" color="muted" size="sm">
+        {label}
+      </Typography.Paragraph>
       <span className="font-extrabold text-[26px] tabular-nums tracking-tight">
         {price == null ? "—" : `$${price.toFixed(2)}`}
         <span className="font-semibold text-[15px] text-muted">/kWh</span>
       </span>
-      <span className="truncate font-medium text-muted text-sm">
+      <Typography.Paragraph
+        className="font-medium"
+        color="muted"
+        size="sm"
+        truncate
+      >
         {describeRate(locations) ?? "not advertised"}
-      </span>
+      </Typography.Paragraph>
     </div>
   );
 }
@@ -125,7 +133,11 @@ export async function EvCharging() {
                 style={{ width: `${inUsePercent.toFixed(1)}%` }}
               />
             </div>
-            <span className="font-medium text-muted text-sm">
+            <Typography.Paragraph
+              className="font-medium"
+              color="muted"
+              size="sm"
+            >
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
@@ -149,10 +161,10 @@ export async function EvCharging() {
                   out of service
                 </>
               ) : null}
-            </span>
+            </Typography.Paragraph>
           </>
         ) : (
-          <span className="font-medium text-base text-muted">
+          <Typography.Paragraph className="font-medium" color="muted">
             <NumberValue
               locale="en-SG"
               maximumFractionDigits={0}
@@ -165,7 +177,7 @@ export async function EvCharging() {
               value={network.sites}
             />{" "}
             locations · live availability is not available right now
-          </span>
+          </Typography.Paragraph>
         )}
 
         {cheapest.length > 0 ? (
@@ -175,9 +187,9 @@ export async function EvCharging() {
           </div>
         ) : null}
 
-        <span className="font-medium text-muted text-sm">
+        <Typography.Paragraph className="font-medium" color="muted" size="sm">
           Per-kWh rates from LTA DataMall
-        </span>
+        </Typography.Paragraph>
       </div>
     </section>
   );

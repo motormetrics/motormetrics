@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { donutArcs } from "@web/app/(main)/(dashboard)/components/overview-series";
@@ -106,9 +107,13 @@ export async function FuelMix({
                 value={total}
               />
             </span>
-            <span className="font-semibold text-muted text-sm">
+            <Typography.Paragraph
+              className="font-semibold"
+              color="muted"
+              size="sm"
+            >
               registrations
-            </span>
+            </Typography.Paragraph>
           </div>
         </div>
 
@@ -120,9 +125,9 @@ export async function FuelMix({
                 className="size-[11px] shrink-0 rounded-full"
                 style={{ background: segment.color }}
               />
-              <span className="font-semibold text-base text-foreground/85">
+              <Typography.Paragraph className="font-semibold text-foreground/85">
                 {segment.label}
-              </span>
+              </Typography.Paragraph>
               <span className="ml-auto font-extrabold text-base tabular-nums">
                 {((segment.value / total) * 100).toFixed(1)}%
               </span>

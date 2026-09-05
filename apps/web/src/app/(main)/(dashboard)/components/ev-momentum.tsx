@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
 import {
@@ -102,9 +103,12 @@ export async function EvMomentum({
                   make={item.make}
                   size={28}
                 />
-                <span className="truncate font-semibold text-base text-foreground/85">
+                <Typography.Paragraph
+                  className="font-semibold text-foreground/85"
+                  truncate
+                >
                   {item.make}
-                </span>
+                </Typography.Paragraph>
                 <span className="ml-auto font-extrabold text-base tabular-nums">
                   <NumberValue
                     locale="en-SG"

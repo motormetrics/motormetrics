@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
 import { changeRatio } from "@web/app/(main)/(dashboard)/components/overview-series";
@@ -75,9 +75,13 @@ export function CoePremiums({ series }: { series: CoeCategorySeries[] }) {
             </button>
           );
         })}
-        <span className="font-semibold text-[15px] text-muted sm:pl-2">
+        <Typography.Paragraph
+          className="font-semibold text-[15px] sm:pl-2"
+          color="muted"
+          size="sm"
+        >
           {active.category} · {active.name}
-        </span>
+        </Typography.Paragraph>
       </div>
 
       <div className="flex flex-wrap items-center gap-3.5">

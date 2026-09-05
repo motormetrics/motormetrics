@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
   formatMonthLabel,
@@ -110,9 +111,13 @@ export async function CoeSection({
 
         {pqpMonths && pqpRows.length > 0 ? (
           <div className="flex flex-col gap-3">
-            <span className="font-semibold text-[15px] text-muted">
+            <Typography.Paragraph
+              className="font-semibold text-[15px]"
+              color="muted"
+              size="sm"
+            >
               PQP · {formatMonthName(pqpMonths.current)} renewal rates
-            </span>
+            </Typography.Paragraph>
             <ul className="flex flex-col">
               {pqpRows.map((row) => (
                 <li
@@ -132,9 +137,14 @@ export async function CoeSection({
                         value={row.value}
                       />
                     </span>
-                    <span className="truncate font-medium text-muted text-sm">
+                    <Typography.Paragraph
+                      className="font-medium"
+                      color="muted"
+                      size="sm"
+                      truncate
+                    >
                       {row.name}
-                    </span>
+                    </Typography.Paragraph>
                   </div>
                   <div className="ml-auto shrink-0">
                     <CostTrendChip changeRatio={row.changeRatio} />
@@ -142,9 +152,13 @@ export async function CoeSection({
                 </li>
               ))}
             </ul>
-            <span className="font-medium text-muted text-sm">
+            <Typography.Paragraph
+              className="font-medium"
+              color="muted"
+              size="sm"
+            >
               3-month moving average of premiums · renew 5 or 10 years
-            </span>
+            </Typography.Paragraph>
           </div>
         ) : null}
       </div>
