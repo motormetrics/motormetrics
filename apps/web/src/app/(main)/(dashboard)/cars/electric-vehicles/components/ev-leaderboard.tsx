@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
 import { yearToDateMakes } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
@@ -60,7 +61,12 @@ export async function EvLeaderboard({ month }: { month: string }) {
                       make={item.make}
                       size={28}
                     />
-                    <span className="truncate">{item.make}</span>
+                    <Typography.Paragraph
+                      className="[color:inherit] [font-weight:inherit]"
+                      truncate
+                    >
+                      {item.make}
+                    </Typography.Paragraph>
                   </Link>
                 }
                 share={(item.count / leader) * 100}
