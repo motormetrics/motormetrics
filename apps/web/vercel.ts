@@ -38,6 +38,11 @@ export const config: VercelConfig = {
       schedule: "0 10 * * *",
     },
     {
+      // After the cars run so newly registered makes are in the database.
+      path: "/api/workflows/logos",
+      schedule: "0 11 * * *",
+    },
+    {
       path: "/api/workflows/ev-charging-live",
       // TODO: The DataMall batch refreshes every 5 minutes, but Hobby caps
       // crons at once a day. Change to "*/5 * * * *" once the project is on
