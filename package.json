@@ -29,7 +29,8 @@
     "db:check": "turbo run @motormetrics/database#check",
     "db:generate": "turbo run @motormetrics/database#generate",
     "db:push": "turbo run @motormetrics/database#push",
-    "auth:generate": "turbo run auth:generate"
+    "auth:generate": "turbo run auth:generate",
+    "knip": "knip"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
@@ -46,6 +47,7 @@
     "@vitest/coverage-v8": "catalog:",
     "conventional-changelog-conventionalcommits": "9.3.1",
     "husky": "9.1.7",
+    "knip": "6.34.0",
     "lint-staged": "17.0.4",
     "portless": "0.15.5",
     "semantic-release": "25.0.3",
