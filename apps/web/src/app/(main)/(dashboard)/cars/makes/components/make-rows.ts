@@ -10,28 +10,24 @@ import {
 } from "@web/queries/cars";
 import { getAllCarLogos } from "@web/queries/logos";
 import { cache } from "react";
-import type { Range } from "../search-params";
+import {
+  FUEL_FILTERS,
+  type FuelFilter,
+  isFuelFilter,
+  type Range,
+} from "../search-params";
+
+export { FUEL_FILTERS, type FuelFilter, isFuelFilter };
 
 /** The `cars.fuelType` value that means battery-electric and nothing else. */
 const BEV_FUEL_TYPE = "Electric";
 
-/**
- * The powertrain tabs above the table. `Hybrid` is not a `cars.fuelType` value
- * but the family `HYBRID_REGEX` describes, so it is resolved here into the
- * breakdown queries it needs and the predicate that keeps only those rows.
- */
-export const FUEL_FILTERS = ["Petrol", "Hybrid", "Electric"] as const;
-export type FuelFilter = (typeof FUEL_FILTERS)[number];
-
+/** The breakdown queries each powertrain tab resolves to. */
 const FUEL_FILTER_QUERIES: Record<FuelFilter, string[]> = {
   Petrol: ["Petrol"],
   Hybrid: ["Petrol-Electric", "Diesel-Electric"],
   Electric: [BEV_FUEL_TYPE],
 };
-
-export function isFuelFilter(value: string | null): value is FuelFilter {
-  return FUEL_FILTERS.includes(value as FuelFilter);
-}
 
 /** Whether a `cars.fuelType` value belongs to the tab. */
 export function matchesFuelFilter(
