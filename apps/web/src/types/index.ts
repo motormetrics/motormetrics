@@ -69,12 +69,6 @@ export interface MakeStats {
   yoyChange: number | null;
 }
 
-export interface MakesSummary {
-  totalMakes: number;
-  totalRegistrations: number;
-  marketLeader: string;
-}
-
 export type Month = string;
 
 export interface LinkItem {
