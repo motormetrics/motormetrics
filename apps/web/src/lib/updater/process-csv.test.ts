@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { processCsv } from "@web/lib/updater/services/process-csv";
@@ -20,9 +20,9 @@ describe("processCSV", () => {
     vi.clearAllMocks();
 
     // Set up mock implementations for each test
-    const _readFileSyncMock = vi
-      .spyOn(fs, "readFileSync")
-      .mockReturnValue("mock csv content");
+    const _readFileMock = vi
+      .spyOn(fs, "readFile")
+      .mockResolvedValue("mock csv content");
 
     const _parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
       data: [
@@ -39,9 +39,9 @@ describe("processCSV", () => {
   });
 
   it("should read a CSV file and parse it", async () => {
-    const readFileSyncMock = vi
-      .spyOn(fs, "readFileSync")
-      .mockReturnValue("mock csv content");
+    const readFileMock = vi
+      .spyOn(fs, "readFile")
+      .mockResolvedValue("mock csv content");
     const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
       data: [
         { name: " John Doe ", age: "25", active: "true" },
@@ -53,15 +53,15 @@ describe("processCSV", () => {
 
     const result = await processCsv<TestRecord>(filePath);
 
-    expect(readFileSyncMock).toHaveBeenCalledWith(filePath, "utf-8");
+    expect(readFileMock).toHaveBeenCalledWith(filePath, "utf-8");
     expect(parseMock).toHaveBeenCalled();
     expect(result).toHaveLength(2);
   });
 
   it("should use Papa.parse with correct options", async () => {
-    const _readFileSyncMock = vi
-      .spyOn(fs, "readFileSync")
-      .mockReturnValue("mock csv content");
+    const _readFileMock = vi
+      .spyOn(fs, "readFile")
+      .mockResolvedValue("mock csv content");
     const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
       data: [],
       errors: [],
@@ -83,9 +83,9 @@ describe("processCSV", () => {
   });
 
   it("should apply custom field transformations when provided", async () => {
-    const _readFileSyncMock = vi
-      .spyOn(fs, "readFileSync")
-      .mockReturnValue("mock csv content");
+    const _readFileMock = vi
+      .spyOn(fs, "readFile")
+      .mockResolvedValue("mock csv content");
     const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
       data: [{ name: " JOHN DOE ", age: 30 }],
       errors: [],
@@ -112,8 +112,8 @@ describe("processCSV", () => {
 
   it("should handle file read errors", async () => {
     const errorMsg = "File not found";
-    const _readFileSyncMock = vi
-      .spyOn(fs, "readFileSync")
+    const _readFileMock = vi
+      .spyOn(fs, "readFile")
       .mockImplementationOnce(() => {
         throw new Error(errorMsg);
       });
@@ -122,9 +122,9 @@ describe("processCSV", () => {
   });
 
   it("should handle parsing errors", async () => {
-    const _readFileSyncMock = vi
-      .spyOn(fs, "readFileSync")
-      .mockReturnValue("mock csv content");
+    const _readFileMock = vi
+      .spyOn(fs, "readFile")
+      .mockResolvedValue("mock csv content");
     const _parseMock = vi.spyOn(Papa, "parse").mockImplementationOnce(() => {
       throw new Error("Parse error");
     });
@@ -133,7 +133,7 @@ describe("processCSV", () => {
   });
 
   it("should apply transformHeader to rename columns via columnMapping", async () => {
-    vi.spyOn(fs, "readFileSync").mockReturnValue("mock csv content");
+    vi.spyOn(fs, "readFile").mockResolvedValue("mock csv content");
     const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
       data: [],
       errors: [],
@@ -152,7 +152,7 @@ describe("processCSV", () => {
   });
 
   it("should apply transform with field handler when provided", async () => {
-    vi.spyOn(fs, "readFileSync").mockReturnValue("mock csv content");
+    vi.spyOn(fs, "readFile").mockResolvedValue("mock csv content");
     const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
       data: [],
       errors: [],
@@ -169,7 +169,7 @@ describe("processCSV", () => {
   });
 
   it("should trim string values without a field handler", async () => {
-    vi.spyOn(fs, "readFileSync").mockReturnValue("mock csv content");
+    vi.spyOn(fs, "readFile").mockResolvedValue("mock csv content");
     const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
       data: [],
       errors: [],
@@ -185,7 +185,7 @@ describe("processCSV", () => {
   });
 
   it("should pass dynamicTyping through when disabled", async () => {
-    vi.spyOn(fs, "readFileSync").mockReturnValue("mock csv content");
+    vi.spyOn(fs, "readFile").mockResolvedValue("mock csv content");
     const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
       data: [],
       errors: [],
@@ -201,7 +201,7 @@ describe("processCSV", () => {
   });
 
   it("should pass non-string values through transform untouched", async () => {
-    vi.spyOn(fs, "readFileSync").mockReturnValue("mock csv content");
+    vi.spyOn(fs, "readFile").mockResolvedValue("mock csv content");
     const parseMock = vi.spyOn(Papa, "parse").mockReturnValue({
       data: [],
       errors: [],
@@ -217,9 +217,9 @@ describe("processCSV", () => {
   });
 
   it("should return an empty array if no records are found", async () => {
-    const _readFileSyncMock = vi
-      .spyOn(fs, "readFileSync")
-      .mockReturnValue("mock csv content");
+    const _readFileMock = vi
+      .spyOn(fs, "readFile")
+      .mockResolvedValue("mock csv content");
     const _parseMock = vi.spyOn(Papa, "parse").mockReturnValueOnce({
       data: [],
       errors: [],
