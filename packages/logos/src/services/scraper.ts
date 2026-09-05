@@ -1,40 +1,33 @@
 import { BASE_URL } from "../config";
-import type { CarLogo } from "../types";
 import { extractFileExtension, getContentType } from "../utils/file-utils";
 import { normaliseMake } from "../utils/normalise-make";
-import * as blobStorage from "./blob";
+import { uploadLogo } from "./blob";
 
-export interface ScrapeResult {
-  success: boolean;
-  logo?: CarLogo;
-  error?: string;
-}
+export type ScrapeResult =
+  | {
+      success: true;
+      make: string;
+      url: string;
+      pathname: string;
+      sourceUrl: string;
+    }
+  | { success: false; make: string; sourceUrl: string; error: string };
 
 /**
- * Download a logo from external source and store in Vercel Blob
- * Returns the existing logo if one is already stored
+ * Fetch a logo from the external source and store it. Does not check whether
+ * one already exists; the manifest is the source of truth for that.
  */
 export const downloadLogo = async (make: string): Promise<ScrapeResult> => {
+  const normalisedMake = normaliseMake(make);
+  const sourceUrl = `${BASE_URL}/${normalisedMake}-logo.png`;
+
   try {
-    const normalisedMake = normaliseMake(make);
-
-    // Check if already exists
-    const existing = await blobStorage.getLogo(make);
-
-    if (existing) {
-      return {
-        success: true,
-        logo: existing,
-      };
-    }
-
-    // Download logo using direct URL pattern
-    const logoUrl = `${BASE_URL}/${normalisedMake}-logo.png`;
-
-    const response = await fetch(logoUrl);
+    const response = await fetch(sourceUrl);
     if (!response.ok) {
       return {
         success: false,
+        make: normalisedMake,
+        sourceUrl,
         error: `Failed to fetch logo: ${response.status}`,
       };
     }
@@ -44,39 +37,29 @@ export const downloadLogo = async (make: string): Promise<ScrapeResult> => {
     if (arrayBuffer.byteLength < 100) {
       return {
         success: false,
+        make: normalisedMake,
+        sourceUrl,
         error: "Downloaded image is too small, likely corrupted",
       };
     }
 
-    // Determine content type
-    const extension = extractFileExtension(logoUrl);
+    const extension = extractFileExtension(sourceUrl);
     const contentType = getContentType(`${normalisedMake}.${extension}`);
-
-    // Upload to Vercel Blob
-    const result = await blobStorage.uploadLogo(make, arrayBuffer, contentType);
-
-    if (!result) {
-      return {
-        success: false,
-        error: "Failed to upload logo to storage",
-      };
-    }
+    const stored = await uploadLogo(normalisedMake, arrayBuffer, contentType);
 
     return {
       success: true,
-      logo: {
-        make: normalisedMake,
-        filename: result.filename,
-        url: result.url,
-      },
+      make: normalisedMake,
+      url: stored.url,
+      pathname: stored.pathname,
+      sourceUrl,
     };
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-
     return {
       success: false,
-      error: errorMessage,
+      make: normalisedMake,
+      sourceUrl,
+      error: error instanceof Error ? error.message : "Unknown error",
     };
   }
 };
