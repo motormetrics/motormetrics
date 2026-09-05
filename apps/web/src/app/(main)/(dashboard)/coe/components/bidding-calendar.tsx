@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import {
   formatExercise,
   formatMonth,
@@ -48,12 +49,16 @@ export async function BiddingCalendar() {
             className="flex items-center gap-3 border-separator border-b py-3.5"
             key={entry.label}
           >
-            <span className="font-semibold text-base text-foreground/85">
+            <Typography.Paragraph className="font-semibold text-foreground/85">
               {entry.label}
-            </span>
-            <span className="ml-auto whitespace-nowrap font-medium text-muted text-sm">
+            </Typography.Paragraph>
+            <Typography.Paragraph
+              className="ml-auto whitespace-nowrap font-medium"
+              color="muted"
+              size="sm"
+            >
               {entry.note}
-            </span>
+            </Typography.Paragraph>
           </div>
         ))}
       </div>

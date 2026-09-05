@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CategoryTabs } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
@@ -58,9 +59,13 @@ export async function CoeHeadline({
     <div className="flex flex-col gap-3.5">
       <div className="flex flex-wrap items-center gap-2">
         <CategoryTabs selected={categoryKey} />
-        <span className="font-semibold text-[15px] text-muted sm:pl-2">
+        <Typography.Paragraph
+          className="font-semibold text-[15px] sm:pl-2"
+          color="muted"
+          size="sm"
+        >
           {category} · {CATEGORY_DESCRIPTIONS[category]}
-        </span>
+        </Typography.Paragraph>
       </div>
 
       <Headline

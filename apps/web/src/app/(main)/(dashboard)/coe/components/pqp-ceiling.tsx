@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
   CATEGORY_DESCRIPTIONS,
@@ -62,9 +63,14 @@ export async function PqpCeiling() {
                   value={row.rate}
                 />
               </span>
-              <span className="truncate font-medium text-[13.5px] text-muted">
+              <Typography.Paragraph
+                className="font-medium text-[13.5px]"
+                color="muted"
+                size="sm"
+                truncate
+              >
                 {CATEGORY_DESCRIPTIONS[row.category]}
-              </span>
+              </Typography.Paragraph>
             </div>
             <div className="ml-auto shrink-0">
               <CostTrendChip changeRatio={row.changeRatio} />

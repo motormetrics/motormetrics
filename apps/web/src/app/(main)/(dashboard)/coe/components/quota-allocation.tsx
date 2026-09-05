@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CategorySelect } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
@@ -15,7 +16,9 @@ import type { ReactNode } from "react";
 function Stat({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="font-semibold text-muted text-sm">{label}</span>
+      <Typography.Paragraph className="font-semibold" color="muted" size="sm">
+        {label}
+      </Typography.Paragraph>
       <span className="font-extrabold text-[33px] tabular-nums leading-none tracking-tight">
         {value}
       </span>
@@ -81,12 +84,12 @@ export async function QuotaAllocation({
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <span className="font-semibold text-base text-muted-strong">
+        <Typography.Paragraph className="font-semibold text-muted-strong">
           Quota allocation
-        </span>
-        <span className="font-medium text-muted text-sm">
+        </Typography.Paragraph>
+        <Typography.Paragraph className="font-medium" color="muted" size="sm">
           COEs available in this bidding exercise
-        </span>
+        </Typography.Paragraph>
       </div>
 
       <div className="flex flex-col gap-[13px]">
