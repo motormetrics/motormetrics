@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import type { SearchParams } from "nuqs/server";
 import { loadSearchParams } from "../search-params";
 import { loadMakeRows } from "./make-rows";
@@ -74,12 +75,12 @@ export async function ConcentrationCard({
 
   return (
     <div className="flex flex-col gap-2.5">
-      <span className="font-semibold text-muted-strong text-xl">
+      <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
         Concentration
-      </span>
-      <span className="font-medium text-base text-muted">
+      </Typography.Paragraph>
+      <Typography.Paragraph className="font-medium" color="muted">
         Top five makes against the rest
-      </span>
+      </Typography.Paragraph>
 
       <div className="mt-2 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-9">
         <div className="relative size-[172px] shrink-0">
@@ -106,9 +107,13 @@ export async function ConcentrationCard({
             <span className="font-extrabold text-[33px] tabular-nums leading-none tracking-tight">
               {leadersShare.toFixed(0)}%
             </span>
-            <span className="font-semibold text-muted text-sm">
+            <Typography.Paragraph
+              className="font-semibold"
+              color="muted"
+              size="sm"
+            >
               top five share
-            </span>
+            </Typography.Paragraph>
           </div>
         </div>
 
@@ -120,9 +125,13 @@ export async function ConcentrationCard({
                 className="size-[11px] shrink-0 rounded-full"
                 style={{ background: segment.color }}
               />
-              <span className="truncate font-semibold text-[15.5px] text-foreground/85">
+              <Typography.Paragraph
+                className="font-semibold text-[15.5px] text-foreground/85"
+                size="sm"
+                truncate
+              >
                 {segment.label}
-              </span>
+              </Typography.Paragraph>
               <span className="ml-auto shrink-0 font-extrabold text-[15.5px] tabular-nums">
                 {((segment.value / ringTotal) * 100).toFixed(1)}%
               </span>

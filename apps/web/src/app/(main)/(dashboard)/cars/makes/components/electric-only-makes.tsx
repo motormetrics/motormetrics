@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { BarRow } from "@web/components/shared/bar-row";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
@@ -24,9 +25,9 @@ export async function ElectricOnlyMakes() {
 
       <div className="flex flex-wrap items-center gap-3.5">
         <Headline size="md" value={`${summary.sharePercent.toFixed(1)}%`} />
-        <span className="font-medium text-base text-muted">
+        <Typography.Paragraph className="font-medium" color="muted">
           of registrations
-        </span>
+        </Typography.Paragraph>
       </div>
 
       <div className="flex flex-col gap-3.5">

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
@@ -226,10 +226,14 @@ export function MakesTable({
             value={query}
           />
         </span>
-        <span className="whitespace-nowrap font-semibold text-[13.5px] text-muted sm:ml-auto">
+        <Typography.Paragraph
+          className="whitespace-nowrap font-semibold text-[13.5px] sm:ml-auto"
+          color="muted"
+          size="sm"
+        >
           Sorted by {SORT_LABELS[sortKey]},{" "}
           {sortDirection === "asc" ? "ascending" : "descending"}
-        </span>
+        </Typography.Paragraph>
       </div>
 
       <div className="flex flex-col">
@@ -245,12 +249,16 @@ export function MakesTable({
 
             if (column.key === null) {
               return (
-                <span className={className} key={column.label}>
+                <Typography.Paragraph
+                  className={className}
+                  key={column.label}
+                  size="xs"
+                >
                   <ColumnLabel
                     label={column.label}
                     shortLabel={column.shortLabel}
                   />
-                </span>
+                </Typography.Paragraph>
               );
             }
 
@@ -348,9 +356,13 @@ export function MakesTable({
         ))}
 
         {visibleRows.length === 0 ? (
-          <span className="px-2 py-8 font-semibold text-[15px] text-muted">
+          <Typography.Paragraph
+            className="px-2 py-8 font-semibold text-[15px]"
+            color="muted"
+            size="sm"
+          >
             Nothing matches “{query}”.
-          </span>
+          </Typography.Paragraph>
         ) : null}
       </div>
 
@@ -365,11 +377,15 @@ export function MakesTable({
         </button>
       ) : null}
 
-      <span className="font-medium text-[13.5px] text-muted">
+      <Typography.Paragraph
+        className="font-medium text-[13.5px]"
+        color="muted"
+        size="sm"
+      >
         Change compares against the same period a year earlier, and is withheld
         below {MIN_COUNT_FOR_CHANGE} registrations. Select a row to open the
         make.
-      </span>
+      </Typography.Paragraph>
     </div>
   );
 }
