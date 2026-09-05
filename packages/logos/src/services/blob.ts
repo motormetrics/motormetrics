@@ -1,7 +1,7 @@
-import type { CarLogo } from "@logos/types";
-import { getFileExtension } from "@logos/utils/file-utils";
-import { normaliseMake } from "@logos/utils/normalise-make";
 import { del, list, put } from "@vercel/blob";
+import type { CarLogo } from "../types";
+import { getFileExtension } from "../utils/file-utils";
+import { normaliseMake } from "../utils/normalise-make";
 
 const BLOB_PREFIX = "logos/";
 
