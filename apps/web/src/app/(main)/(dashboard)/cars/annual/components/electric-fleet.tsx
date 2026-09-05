@@ -1,3 +1,4 @@
+import { Chip } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import type { PopulationEntity } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { BarRow } from "@web/components/shared/bar-row";
@@ -46,10 +47,16 @@ export function ElectricFleet({
           />
         </span>
         {population > 0 ? (
-          <span className="inline-flex items-center rounded-full bg-accent-soft px-3.5 py-2 font-bold text-accent-strong text-sm">
-            {((electric / population) * 100).toFixed(1)}% of{" "}
-            {entity.name.toLowerCase()}
-          </span>
+          <Chip
+            className="rounded-full px-3.5 py-2 font-bold text-accent-strong text-sm"
+            color="accent"
+            variant="soft"
+          >
+            <Chip.Label className="px-0">
+              {((electric / population) * 100).toFixed(1)}% of{" "}
+              {entity.name.toLowerCase()}
+            </Chip.Label>
+          </Chip>
         ) : null}
       </div>
 

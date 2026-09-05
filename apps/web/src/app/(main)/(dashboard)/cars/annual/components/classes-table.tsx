@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, Typography } from "@heroui/react";
+import { Button, cn, ProgressBar, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
   CARS,
@@ -125,15 +125,19 @@ export function ClassesTable({
 
             const sortKeyForColumn = column.key;
             return (
-              <button
-                className={cn(className, "cursor-pointer")}
+              <Button
+                className={cn(
+                  className,
+                  "h-auto justify-start gap-0 rounded-none bg-transparent p-0 hover:bg-transparent data-[pressed=true]:scale-100",
+                  column.align === "right" && "justify-end",
+                )}
                 key={column.label}
-                onClick={() => toggleSort(sortKeyForColumn)}
-                type="button"
+                onPress={() => toggleSort(sortKeyForColumn)}
+                variant="ghost"
               >
                 {column.label}
                 {isActive ? (sortDirection === "asc" ? " ↑" : " ↓") : ""}
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -176,15 +180,18 @@ export function ClassesTable({
               </span>
 
               <span className="hidden items-center gap-2.5 sm:flex">
-                <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-surface-secondary">
-                  <span
-                    className="block h-full rounded-full"
-                    style={{
-                      background: row.colour,
-                      width: `${((row.population / largest) * 100).toFixed(1)}%`,
-                    }}
-                  />
-                </span>
+                <ProgressBar
+                  aria-label={`${row.name} share of the largest class`}
+                  className="min-w-0 flex-1"
+                  value={(row.population / largest) * 100}
+                >
+                  <ProgressBar.Track className="h-2.5 rounded-full bg-surface-secondary">
+                    <ProgressBar.Fill
+                      className="rounded-full"
+                      style={{ background: row.colour }}
+                    />
+                  </ProgressBar.Track>
+                </ProgressBar>
                 <span className="w-11 text-right font-bold text-[13.5px] text-muted-strong tabular-nums">
                   {row.share.toFixed(1)}%
                 </span>
