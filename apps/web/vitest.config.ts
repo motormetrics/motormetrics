@@ -7,6 +7,7 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   test: {
+    fsModuleCache: true,
     globals: true,
     environment: "jsdom",
     // detectAsyncLeaks: true, // Available for targeted debugging; too noisy with framer-motion animation leaks
