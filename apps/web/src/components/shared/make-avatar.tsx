@@ -41,7 +41,7 @@ export function MakeAvatar({
           width={size}
         />
       ) : (
-        make.charAt(0).toUpperCase()
+        <span aria-hidden>{make.charAt(0).toUpperCase()}</span>
       )}
     </span>
   );

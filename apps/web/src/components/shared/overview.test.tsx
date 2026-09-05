@@ -53,7 +53,7 @@ describe("BarRow", () => {
   it("should clamp the share to the track", () => {
     const { container } = render(<BarRow label="A" share={140} value="1" />);
     const fill = container.querySelector<HTMLElement>("span > span");
-    expect(fill?.style.width).toBe("100.0%");
+    expect(fill?.style.width).toBe("100%");
   });
 });
 
