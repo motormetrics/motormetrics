@@ -1,4 +1,5 @@
 import { Typography } from "@heroui/react";
+import { MAP_ANCHOR_ID } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { SurfaceCard } from "@web/components/shared/bento";
 import { getPostalDistrict } from "@web/config/postal-districts";
 import { getEvChargingMapSites } from "@web/queries/ev-charging";
@@ -13,19 +14,17 @@ export async function ChargingMap({ district }: { district: string }) {
   const scope = getPostalDistrict(district)?.name ?? "Singapore";
 
   return (
-    <SurfaceCard className="gap-4 p-7">
-      <div className="flex flex-col gap-1">
-        <Typography.Paragraph className="text-muted">
-          Live availability by site
-        </Typography.Paragraph>
-        <Typography.Heading level={3}>Chargers in {scope}</Typography.Heading>
-      </div>
+    <div className="scroll-mt-6" id={MAP_ANCHOR_ID}>
+      <SurfaceCard className="gap-4 p-7">
+        <div className="flex flex-col gap-1">
+          <Typography.Paragraph className="text-muted">
+            Live availability by site
+          </Typography.Paragraph>
+          <Typography.Heading level={3}>Chargers in {scope}</Typography.Heading>
+        </div>
 
-      <ChargingMapView district={district} sites={sites} />
-
-      <Typography.Paragraph color="muted" size="xs">
-        Green has free connectors · amber is full · grey is out of service
-      </Typography.Paragraph>
-    </SurfaceCard>
+        <ChargingMapView district={district} sites={sites} />
+      </SurfaceCard>
+    </div>
   );
 }

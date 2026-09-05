@@ -1,8 +1,12 @@
 import { connector } from "./fixtures";
+import { getEvChargingLocationUtilisation } from "./location-utilisation";
 import { getEvChargingMapSites } from "./map-sites";
 import { getEvChargingSnapshot } from "./snapshot";
 
 vi.mock("./snapshot", () => ({ getEvChargingSnapshot: vi.fn() }));
+vi.mock("./location-utilisation", () => ({
+  getEvChargingLocationUtilisation: vi.fn().mockResolvedValue([]),
+}));
 
 describe("getEvChargingMapSites", () => {
   it("should place each location once with its status counts", async () => {
@@ -43,8 +47,26 @@ describe("getEvChargingMapSites", () => {
         available: 1,
         occupied: 1,
         unavailable: 1,
+        utilisationPercent: null,
       }),
     ]);
+  });
+
+  it("should attach the weekly utilisation where a location has one", async () => {
+    vi.mocked(getEvChargingSnapshot).mockResolvedValue({
+      observedAt: null,
+      records: [connector({ evCpId: "A", latitude: 1.3, longitude: 103.8 })],
+    });
+    vi.mocked(getEvChargingLocationUtilisation).mockResolvedValueOnce([
+      {
+        ...connector({ evCpId: "A" }),
+        utilisationPercent: 42.5,
+        samples: 300,
+      } as never,
+    ]);
+
+    const [site] = await getEvChargingMapSites();
+    expect(site).toMatchObject({ utilisationPercent: 42.5 });
   });
 
   it("should use the first connector that carries coordinates", async () => {

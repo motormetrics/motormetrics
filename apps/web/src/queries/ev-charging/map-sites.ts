@@ -1,3 +1,4 @@
+import { getEvChargingLocationUtilisation } from "./location-utilisation";
 import { type EvChargingLocation, groupLocations } from "./locations";
 import { getEvChargingSnapshot } from "./snapshot";
 
@@ -7,6 +8,8 @@ export interface EvChargingMapSite extends EvChargingLocation {
   available: number;
   occupied: number;
   unavailable: number;
+  /** Average occupancy over the past week, or null without enough samples. */
+  utilisationPercent: number | null;
 }
 
 interface SiteExtras {
@@ -24,7 +27,13 @@ interface SiteExtras {
  * Locations without coordinates are dropped rather than guessed at.
  */
 export async function getEvChargingMapSites(): Promise<EvChargingMapSite[]> {
-  const { records } = await getEvChargingSnapshot();
+  const [{ records }, utilisation] = await Promise.all([
+    getEvChargingSnapshot(),
+    getEvChargingLocationUtilisation({ order: "busiest", limit: 10_000 }),
+  ]);
+  const utilisationByLocation = new Map(
+    utilisation.map((row) => [row.locationId, row.utilisationPercent]),
+  );
 
   const extrasByLocation = new Map<string, SiteExtras>();
   for (const record of records) {
@@ -60,6 +69,8 @@ export async function getEvChargingMapSites(): Promise<EvChargingMapSite[]> {
       available: extras.available,
       occupied: extras.occupied,
       unavailable: extras.unavailable,
+      utilisationPercent:
+        utilisationByLocation.get(location.locationId) ?? null,
     });
   }
   return sites;
