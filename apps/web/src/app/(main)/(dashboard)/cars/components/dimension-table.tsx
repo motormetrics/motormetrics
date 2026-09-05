@@ -279,7 +279,7 @@ export function DimensionTable({
               {displayed.map((row) => (
                 <Table.Row id={row.name} key={row.name}>
                   <Table.Cell>
-                    <span className="flex min-w-0 items-center gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
                       <span
                         className={cn(
                           "w-6 shrink-0 text-[15px] tabular-nums",
@@ -299,10 +299,13 @@ export function DimensionTable({
                         make={row.name}
                         size={28}
                       />
-                      <span className="truncate font-semibold text-base text-foreground/85">
+                      <Typography.Paragraph
+                        className="font-semibold text-foreground/85"
+                        truncate
+                      >
                         {row.name}
-                      </span>
-                    </span>
+                      </Typography.Paragraph>
+                    </div>
                   </Table.Cell>
                   <Table.Cell className="text-right font-extrabold text-base tabular-nums">
                     {numberFormatter.format(row.count)}
@@ -325,10 +328,14 @@ export function DimensionTable({
                   </Table.Cell>
                   <Table.Cell className="text-right">
                     {row.yoyChange === null ? (
-                      <span className="font-semibold text-muted text-sm">
+                      <Typography.Paragraph
+                        className="font-semibold"
+                        color="muted"
+                        size="sm"
+                      >
                         <span aria-hidden>—</span>
                         <span className="sr-only">No comparable period</span>
-                      </span>
+                      </Typography.Paragraph>
                     ) : (
                       <DeltaChip value={row.yoyChange} />
                     )}

@@ -71,19 +71,26 @@ export async function MoversRail({
                     make={mover.name}
                     size={40}
                   />
-                  <span className="flex min-w-0 flex-col gap-px">
-                    <span className="truncate font-bold text-[17px]">
+                  <div className="flex min-w-0 flex-col gap-px">
+                    <Typography.Paragraph
+                      className="font-bold text-[17px]"
+                      truncate
+                    >
                       {mover.name}
-                    </span>
-                    <span className="font-medium text-muted text-sm tabular-nums">
+                    </Typography.Paragraph>
+                    <Typography.Paragraph
+                      className="font-medium tabular-nums"
+                      color="muted"
+                      size="sm"
+                    >
                       <NumberValue
                         locale="en-SG"
                         maximumFractionDigits={0}
                         value={mover.count}
                       />{" "}
                       registered
-                    </span>
-                  </span>
+                    </Typography.Paragraph>
+                  </div>
                   <DeltaChip className="ml-auto" value={mover.yoyChange ?? 0} />
                 </Link>
               </li>
