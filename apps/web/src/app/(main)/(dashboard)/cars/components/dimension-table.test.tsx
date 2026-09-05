@@ -177,8 +177,8 @@ describe("DimensionTable", () => {
     const user = userEvent.setup();
     renderTable();
 
-    const tab = screen.getByRole("button", { name: "Fuel types" });
-    expect(tab).toHaveAttribute("aria-pressed", "false");
+    const tab = screen.getByRole("radio", { name: "Fuel types" });
+    expect(tab).toHaveAttribute("aria-checked", "false");
 
     await user.click(tab);
 

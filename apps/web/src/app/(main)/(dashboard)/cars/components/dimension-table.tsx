@@ -1,7 +1,15 @@
 "use client";
 
 import type { SortDescriptor } from "@heroui/react";
-import { cn, Table, Typography } from "@heroui/react";
+import {
+  cn,
+  ProgressBar,
+  SearchField,
+  Table,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from "@heroui/react";
 import { slugify } from "@motormetrics/utils";
 import {
   CAR_DIMENSIONS,
@@ -11,7 +19,7 @@ import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead } from "@web/components/shared/overview";
 import type { CarDimension, DimensionStat } from "@web/queries/cars";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
@@ -172,55 +180,59 @@ export function DimensionTable({
         size="lg"
         title={labels.title}
         trailing={
-          <fieldset className="flex min-w-0 flex-wrap gap-2">
-            <legend className="sr-only">Dimension</legend>
-            {CAR_DIMENSIONS.map((option) => {
-              const isActive = option === dimension;
-
-              return (
-                <button
-                  aria-pressed={isActive}
-                  className={cn(
-                    "cursor-pointer whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
-                    isActive
-                      ? "bg-accent font-extrabold text-accent-foreground"
-                      : "bg-default font-semibold text-foreground/75 hover:bg-accent-soft",
-                  )}
-                  key={option}
-                  onClick={() => {
-                    posthog.capture("dashboard_filter_changed", {
-                      filter: "dimension",
-                      value: option,
-                    });
-                    setQuery("");
-                    setSortDescriptor({
-                      column: "count",
-                      direction: "descending",
-                    });
-                    setDimension(option);
-                  }}
-                  type="button"
-                >
-                  {DIMENSION_LABELS[option].tab}
-                </button>
-              );
-            })}
-          </fieldset>
+          <ToggleButtonGroup
+            aria-label="Dimension"
+            className="flex min-w-0 flex-wrap gap-2"
+            disallowEmptySelection
+            isDetached
+            onSelectionChange={(keys) => {
+              const [option] = [...keys];
+              if (option === undefined) {
+                return;
+              }
+              posthog.capture("dashboard_filter_changed", {
+                filter: "dimension",
+                value: option,
+              });
+              setQuery("");
+              setSortDescriptor({
+                column: "count",
+                direction: "descending",
+              });
+              setDimension(option as CarDimension);
+            }}
+            selectedKeys={[dimension]}
+            selectionMode="single"
+          >
+            {CAR_DIMENSIONS.map((option) => (
+              <ToggleButton
+                className="h-auto whitespace-nowrap rounded-full bg-default px-[18px] py-2.5 font-semibold text-foreground/75 text-sm transition-colors hover:bg-accent-soft data-[selected=true]:bg-accent data-[selected=true]:font-extrabold data-[selected=true]:text-accent-foreground"
+                id={option}
+                key={option}
+              >
+                {DIMENSION_LABELS[option].tab}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
         }
       />
 
       <div className="flex flex-wrap items-center gap-4">
-        <label className="flex w-full max-w-[340px] items-center gap-2.5 rounded-full bg-surface px-5 py-3 text-muted">
-          <Search aria-hidden className="size-[18px] shrink-0" />
-          <span className="sr-only">{labels.searchLabel}</span>
-          <input
-            className="w-full border-none bg-transparent font-semibold text-[15px] text-foreground outline-none placeholder:text-muted"
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder={searchHint}
-            type="search"
-            value={query}
-          />
-        </label>
+        <SearchField
+          aria-label={labels.searchLabel}
+          className="w-full max-w-[340px]"
+          onChange={setQuery}
+          value={query}
+        >
+          <SearchField.Group className="h-auto gap-2.5 rounded-full border-0 bg-surface px-5 py-3 text-muted shadow-none">
+            <SearchField.SearchIcon className="ml-0 size-[18px] text-muted" />
+            <SearchField.Input
+              className="px-0 font-semibold text-[15px] text-foreground placeholder:text-muted"
+              placeholder={searchHint}
+            />
+            <SearchField.ClearButton className="mr-0" />
+          </SearchField.Group>
+        </SearchField>
         <Typography.Paragraph
           className="ml-auto whitespace-nowrap font-semibold"
           color="muted"
@@ -312,15 +324,20 @@ export function DimensionTable({
                   </Table.Cell>
                   <Table.Cell className={SHARE_COLUMN_CLASS}>
                     <span className="flex items-center gap-2.5">
-                      <span className="h-2.5 w-24 shrink-0 overflow-hidden rounded-full bg-surface-secondary lg:w-40">
-                        <span
-                          className="block h-full rounded-full"
-                          style={{
-                            background: `var(--chart-${Math.min(CHART_COLOURS, row.rank)})`,
-                            width: `${((row.count / largestCount) * 100).toFixed(1)}%`,
-                          }}
-                        />
-                      </span>
+                      <ProgressBar
+                        aria-label={`${row.name} share of the largest`}
+                        className="w-24 shrink-0 lg:w-40"
+                        value={(row.count / largestCount) * 100}
+                      >
+                        <ProgressBar.Track className="h-2.5 rounded-full bg-surface-secondary">
+                          <ProgressBar.Fill
+                            className="rounded-full"
+                            style={{
+                              background: `var(--chart-${Math.min(CHART_COLOURS, row.rank)})`,
+                            }}
+                          />
+                        </ProgressBar.Track>
+                      </ProgressBar>
                       <span className="w-11 text-right font-bold text-muted-strong text-sm tabular-nums">
                         {row.share.toFixed(1)}%
                       </span>
