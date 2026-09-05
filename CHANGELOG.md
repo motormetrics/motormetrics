@@ -1,3 +1,9 @@
+## [5.13.0](https://github.com/motormetrics/motormetrics/compare/v5.12.0...v5.13.0) (2026-09-05)
+
+### Features
+
+* **web:** add heatmap mode and site locator to charger map ([c471888](https://github.com/motormetrics/motormetrics/commit/c47188873ea0b0fb5e16378eb86a7326bcdb0632))
+
 ## [5.12.0](https://github.com/motormetrics/motormetrics/compare/v5.11.1...v5.12.0) (2026-09-04)
 
 ### Features
