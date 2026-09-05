@@ -290,7 +290,7 @@ export function MakesTable({
             key={row.make}
             onClick={() => trackMakeSelected(row.make)}
           >
-            <span className="flex min-w-0 items-center gap-3">
+            <div className="flex min-w-0 items-center gap-3">
               <span
                 className={cn(
                   "w-[26px] shrink-0 text-[15px] tabular-nums",
@@ -304,10 +304,13 @@ export function MakesTable({
               <span className="hidden shrink-0 sm:block">
                 <MakeAvatar logoUrl={row.logoUrl} make={row.make} size={28} />
               </span>
-              <span className="truncate font-semibold text-foreground/85 text-sm sm:text-base">
+              <Typography.Paragraph
+                className="font-semibold text-foreground/85 text-sm sm:text-base"
+                truncate
+              >
                 {row.make}
-              </span>
-            </span>
+              </Typography.Paragraph>
+            </div>
 
             <span className="text-right font-extrabold text-sm tabular-nums sm:text-base">
               <NumberValue
@@ -333,8 +336,11 @@ export function MakesTable({
             </span>
 
             {row.yoyChange === null || row.count < MIN_COUNT_FOR_CHANGE ? (
-              <span
-                className="text-right font-semibold text-muted text-sm"
+              <Typography.Paragraph
+                align="end"
+                className="font-semibold"
+                color="muted"
+                size="sm"
                 title={
                   row.yoyChange === null
                     ? "No registrations in the same period a year earlier"
@@ -342,7 +348,7 @@ export function MakesTable({
                 }
               >
                 —
-              </span>
+              </Typography.Paragraph>
             ) : (
               <>
                 <ChangeText className="sm:hidden" value={row.yoyChange} />

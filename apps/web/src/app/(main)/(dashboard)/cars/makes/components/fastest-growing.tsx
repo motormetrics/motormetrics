@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
@@ -57,19 +58,26 @@ export async function FastestGrowing({
               href={`/cars/makes/${row.slug}`}
             >
               <MakeAvatar logoUrl={row.logoUrl} make={row.make} size={40} />
-              <span className="flex min-w-0 flex-col gap-px">
-                <span className="truncate font-bold text-[17px]">
+              <div className="flex min-w-0 flex-col gap-px">
+                <Typography.Paragraph
+                  className="font-bold text-[17px]"
+                  truncate
+                >
                   {row.make}
-                </span>
-                <span className="font-medium text-[13.5px] text-muted tabular-nums">
+                </Typography.Paragraph>
+                <Typography.Paragraph
+                  className="font-medium text-[13.5px] tabular-nums"
+                  color="muted"
+                  size="sm"
+                >
                   <NumberValue
                     locale="en-SG"
                     maximumFractionDigits={0}
                     value={row.count}
                   />{" "}
                   registered
-                </span>
-              </span>
+                </Typography.Paragraph>
+              </div>
               <DeltaChip className="ml-auto" value={row.yoyChange ?? 0} />
             </Link>
           </li>

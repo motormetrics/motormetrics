@@ -38,7 +38,12 @@ export async function ElectricOnlyMakes() {
             label={
               <>
                 <MakeAvatar logoUrl={make.logoUrl} make={make.make} size={28} />
-                <span className="truncate">{make.make}</span>
+                <Typography.Paragraph
+                  className="[color:inherit] [font-weight:inherit]"
+                  truncate
+                >
+                  {make.make}
+                </Typography.Paragraph>
               </>
             }
             share={(make.count / leadCount) * 100}
