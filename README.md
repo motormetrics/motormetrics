@@ -242,10 +242,6 @@ Deployment is handled automatically by Vercel:
 - `GET /api/workflows/coe` - COE data processing workflow
 - `GET /api/workflows/deregistrations` - Vehicle deregistration processing workflow
 
-## Repo Activity
-
-![Alt](https://repobeats.axiom.co/api/embed/01e0d81ecb779bfb5be18d4c7f79a33d75db9e7b.svg "Repobeats analytics image")
-
 ## License
 
 [MIT](LICENSE)
