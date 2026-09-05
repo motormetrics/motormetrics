@@ -8,13 +8,8 @@ export async function updateCoe() {
   const filename = "COE Bidding Results.zip";
   const url = `${LTA_DATAMALL_BASE_URL}/${filename}`;
 
-  const parseNumericString = (value: string | number) => {
-    if (typeof value === "string") {
-      return Number.parseInt(value.replace(/,/g, ""), 10);
-    }
-
-    return value;
-  };
+  const parseNumericString = (value: string) =>
+    Number.parseInt(value.replace(/,/g, ""), 10);
 
   // Download and extract ZIP once for both tables
   const extractedFiles = await fetchAndExtractZip(url);
@@ -28,16 +23,8 @@ export async function updateCoe() {
   }
 
   // Update COE bidding results
-  const coeParseNumericFields: Array<keyof COE> = [
-    "quota",
-    "bidsSuccess",
-    "bidsReceived",
-    "premium",
-  ];
-
   const coeResult = await update<COE>({
     table: coe,
-    url,
     filePath: coeCsvPath,
     csvTransformOptions: {
       columnMapping: {
@@ -46,27 +33,27 @@ export async function updateCoe() {
         bids_success: "bidsSuccess",
         bids_received: "bidsReceived",
       },
-      fields: Object.fromEntries(
-        coeParseNumericFields.map((field) => [field, parseNumericString]),
-      ),
+      fields: {
+        quota: parseNumericString,
+        bidsSuccess: parseNumericString,
+        bidsReceived: parseNumericString,
+        premium: parseNumericString,
+      },
     },
   });
   console.log("[COE]", coeResult);
 
   // Update COE PQP (Prevailing Quota Premium)
-  const pqpParseNumericFields: Array<keyof PQP> = ["pqp"];
-
   const pqpResult = await update<PQP>({
     table: pqp,
-    url,
     filePath: pqpCsvPath,
     csvTransformOptions: {
       columnMapping: {
         vehicle_class: "vehicleClass",
       },
-      fields: Object.fromEntries(
-        pqpParseNumericFields.map((field) => [field, parseNumericString]),
-      ),
+      fields: {
+        pqp: parseNumericString,
+      },
     },
   });
   console.log("[COE PQP]", pqpResult);

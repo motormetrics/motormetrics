@@ -1,13 +1,11 @@
-import path from "node:path";
 import { db, type PgTable } from "@motormetrics/database";
-import { WORKFLOW_TEMP_DIR } from "@web/config/workflow";
 import {
   type UpdaterConfig,
   type UpdaterOptions,
   update,
 } from "@web/lib/updater";
 import { calculateChecksum } from "@web/lib/updater/services/calculate-checksum";
-import { downloadFile } from "@web/lib/updater/services/download-file";
+import { fetchAndExtractZip } from "@web/lib/updater/services/download-file";
 import { processCsv } from "@web/lib/updater/services/process-csv";
 import type { Checksum } from "@web/utils/checksum";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -26,6 +24,7 @@ vi.mock("@motormetrics/database", async (importOriginal) => {
   return {
     ...actual,
     getTableName: vi.fn(() => "test_table"),
+    getTableColumns: vi.fn(() => ({ month: {}, make: {}, fuel_type: {} })),
     db: {
       insert: vi.fn(),
       $cache: {
@@ -48,10 +47,9 @@ type TestRecord = {
   fuel_type: string;
 };
 
-const createInsertMock = (returnedRows: unknown[] = [{}, {}]) => ({
+const createInsertMock = (rowCount = 2) => ({
   values: vi.fn().mockReturnThis(),
-  onConflictDoNothing: vi.fn().mockReturnThis(),
-  returning: vi.fn().mockResolvedValue(returnedRows),
+  onConflictDoNothing: vi.fn().mockResolvedValue({ rowCount }),
 });
 
 type InsertMock = ReturnType<typeof createInsertMock>;
@@ -88,7 +86,9 @@ describe("update", () => {
     };
 
     // Default mock implementations
-    vi.mocked(downloadFile).mockResolvedValue("test-file.csv");
+    vi.mocked(fetchAndExtractZip).mockResolvedValue(
+      new Map([["test-file.csv", "/tmp/test-file.csv"]]),
+    );
     vi.mocked(calculateChecksum).mockResolvedValue("abc123");
     vi.mocked(processCsv).mockResolvedValue(mockData);
 
@@ -116,13 +116,10 @@ describe("update", () => {
       timestamp: expect.any(String),
     });
 
-    expect(downloadFile).toHaveBeenCalledWith(
+    expect(fetchAndExtractZip).toHaveBeenCalledWith(
       "https://example.com/data.zip",
-      undefined,
     );
-    expect(calculateChecksum).toHaveBeenCalledWith(
-      path.join(WORKFLOW_TEMP_DIR, "test-file.csv"),
-    );
+    expect(calculateChecksum).toHaveBeenCalledWith("/tmp/test-file.csv");
     expect(mockChecksum.cacheChecksum).toHaveBeenCalledWith(
       "test-file.csv",
       "abc123",
@@ -153,13 +150,12 @@ describe("update", () => {
     const insertMock = vi.mocked(db.insert).mock.results[0].value as InsertMock;
     expect(insertMock.values).toHaveBeenCalled();
     expect(insertMock.onConflictDoNothing).toHaveBeenCalled();
-    expect(insertMock.returning).toHaveBeenCalled();
   });
 
   it("should return 0 when all records conflict", async () => {
     vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue("different123");
 
-    const mockInsert = createInsertMock([]);
+    const mockInsert = createInsertMock(0);
     vi.mocked(db.insert).mockReturnValue(mockInsert as never);
 
     const result = await update(updaterConfig, updaterOptions);
@@ -176,7 +172,7 @@ describe("update", () => {
   it("should still cache the checksum when all records conflict", async () => {
     vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue("different123");
 
-    const mockInsert = createInsertMock([]);
+    const mockInsert = createInsertMock(0);
     vi.mocked(db.insert).mockReturnValue(mockInsert as never);
 
     await update(updaterConfig, updaterOptions);
@@ -191,7 +187,7 @@ describe("update", () => {
     vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue("different123");
 
     const mockInsert = createInsertMock();
-    mockInsert.returning.mockRejectedValue(
+    mockInsert.onConflictDoNothing.mockRejectedValue(
       new Error("Database request failed"),
     );
     vi.mocked(db.insert).mockReturnValue(mockInsert as never);
@@ -228,10 +224,10 @@ describe("update", () => {
     vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue(null);
 
     const mockInsert = createInsertMock();
-    mockInsert.returning
-      .mockResolvedValueOnce([{}, {}])
-      .mockResolvedValueOnce([{}, {}])
-      .mockResolvedValueOnce([{}]);
+    mockInsert.onConflictDoNothing
+      .mockResolvedValueOnce({ rowCount: 2 })
+      .mockResolvedValueOnce({ rowCount: 2 })
+      .mockResolvedValueOnce({ rowCount: 1 });
     vi.mocked(db.insert).mockReturnValue(mockInsert as never);
 
     const result = await update(updaterConfig, updaterOptions);
@@ -240,41 +236,54 @@ describe("update", () => {
     expect(db.insert).toHaveBeenCalledTimes(3);
   });
 
+  it("should derive the batch size from the column count when not given", async () => {
+    const largeDataSet = Array(20_001)
+      .fill(null)
+      .map((_, index) => ({
+        month: "2024-01",
+        make: `MAKE_${index}`,
+        fuel_type: "Petrol",
+      }));
+
+    vi.mocked(processCsv).mockResolvedValue(largeDataSet);
+    vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue(null);
+
+    // 3 mocked columns -> floor(30,000 / 3) = 10,000 rows per batch
+    await update(updaterConfig, { checksum: mockChecksum });
+
+    expect(db.insert).toHaveBeenCalledTimes(3);
+  });
+
+  it("should throw when the ZIP contains no files", async () => {
+    vi.mocked(fetchAndExtractZip).mockResolvedValue(new Map());
+
+    await expect(update(updaterConfig, updaterOptions)).rejects.toThrow(
+      "No files found in ZIP",
+    );
+  });
+
   it("should propagate errors from download", async () => {
-    vi.mocked(downloadFile).mockRejectedValue(new Error("Download failed"));
+    vi.mocked(fetchAndExtractZip).mockRejectedValue(
+      new Error("Download failed"),
+    );
 
     await expect(update(updaterConfig, updaterOptions)).rejects.toThrow(
       "Download failed",
     );
   });
 
-  it("should use csvFile parameter when provided", async () => {
-    vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue(null);
-
-    const configWithCsvFile = {
-      ...updaterConfig,
-      csvFile: "specific-file.csv",
-    };
-
-    await update(configWithCsvFile, updaterOptions);
-
-    expect(downloadFile).toHaveBeenCalledWith(
-      "https://example.com/data.zip",
-      "specific-file.csv",
-    );
-  });
-
   it("should skip download when filePath is provided", async () => {
     vi.mocked(mockChecksum.getCachedChecksum).mockResolvedValue(null);
 
-    const configWithFilePath = {
-      ...updaterConfig,
+    const configWithFilePath: UpdaterConfig<TestRecord> = {
+      table: mockTable,
       filePath: "/tmp/pre-extracted.csv",
+      csvTransformOptions: {},
     };
 
     await update(configWithFilePath, updaterOptions);
 
-    expect(downloadFile).not.toHaveBeenCalled();
+    expect(fetchAndExtractZip).not.toHaveBeenCalled();
     expect(calculateChecksum).toHaveBeenCalledWith("/tmp/pre-extracted.csv");
     expect(mockChecksum.cacheChecksum).toHaveBeenCalledWith(
       "pre-extracted.csv",

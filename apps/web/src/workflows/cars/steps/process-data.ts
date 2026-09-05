@@ -22,7 +22,7 @@ export const updateCars = () => {
           cleanSpecialChars(value, { separator: "." }).toUpperCase(),
         vehicleType: (value: string) =>
           cleanSpecialChars(value, { separator: "/", joinSeparator: "/" }),
-        number: (value: string | number) => (value === "" ? 0 : Number(value)),
+        number: (value: string) => (value === "" ? 0 : Number(value)),
       },
     },
   });

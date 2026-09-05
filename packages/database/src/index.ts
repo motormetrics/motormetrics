@@ -6,6 +6,7 @@ export {
   count,
   desc,
   eq,
+  getTableColumns,
   getTableName,
   gt,
   gte,

@@ -1,21 +1,26 @@
 import path from "node:path";
-import { db, getTableName, type PgTable } from "@motormetrics/database";
-import { WORKFLOW_TEMP_DIR } from "@web/config/workflow";
+import {
+  db,
+  getTableColumns,
+  getTableName,
+  type PgTable,
+} from "@motormetrics/database";
 import { calculateChecksum } from "@web/lib/updater/services/calculate-checksum";
-import { downloadFile } from "@web/lib/updater/services/download-file";
+import { fetchAndExtractZip } from "@web/lib/updater/services/download-file";
 import {
   type CSVTransformOptions,
   processCsv,
 } from "@web/lib/updater/services/process-csv";
 import { Checksum } from "@web/utils/checksum";
 
-export interface UpdaterConfig<T> {
+type UpdaterSource =
+  | { url: string; filePath?: never }
+  | { filePath: string; url?: never };
+
+export type UpdaterConfig<T> = UpdaterSource & {
   table: PgTable;
-  url: string;
-  csvFile?: string;
-  filePath?: string;
   csvTransformOptions?: CSVTransformOptions<T>;
-}
+};
 
 export interface UpdaterResult {
   table: string;
@@ -26,29 +31,37 @@ export interface UpdaterResult {
 }
 
 export interface UpdaterOptions {
+  /** Rows per INSERT. Defaults to the largest batch that fits Neon's limit. */
   batchSize?: number;
   checksum?: Checksum;
 }
 
-const DEFAULT_BATCH_SIZE = 5000;
+// Neon's HTTP endpoint rejects statements with more than 32,767 bound
+// parameters (a signed 16-bit count). Leave headroom below that.
+const MAX_BOUND_PARAMETERS = 30_000;
 
 export async function update<T>(
   config: UpdaterConfig<T>,
   options: UpdaterOptions = {},
 ): Promise<UpdaterResult> {
-  const checksumService = options.checksum || new Checksum();
-  const batchSize = options.batchSize || DEFAULT_BATCH_SIZE;
-  const tableName = getTableName(config.table);
-
-  const { url, csvFile, csvTransformOptions = {} } = config;
+  const { table, csvTransformOptions = {} } = config;
+  const checksumService = options.checksum ?? new Checksum();
+  const columnCount = Object.keys(getTableColumns(table)).length;
+  const batchSize =
+    options.batchSize ?? Math.floor(MAX_BOUND_PARAMETERS / columnCount);
+  const tableName = getTableName(table);
 
   // === Download and verify ===
   let destinationPath: string;
-  if (config.filePath) {
+  if (config.url === undefined) {
     destinationPath = config.filePath;
   } else {
-    const extractedFileName = await downloadFile(url, csvFile);
-    destinationPath = path.join(WORKFLOW_TEMP_DIR, extractedFileName);
+    const extractedFiles = await fetchAndExtractZip(config.url);
+    const [firstFile] = extractedFiles.values();
+    if (!firstFile) {
+      throw new Error(`No files found in ZIP at ${config.url}`);
+    }
+    destinationPath = firstFile;
   }
   console.log("Destination path:", destinationPath);
 
@@ -82,21 +95,18 @@ export async function update<T>(
   );
 
   // === Insert records (idempotent via unique constraints) ===
-  const { table } = config;
-
   let totalInserted = 0;
   const start = performance.now();
 
-  for (let i = 0; i < processedData.length; i += batchSize) {
-    const batch = processedData.slice(i, i + batchSize);
-    const inserted = await db
+  for (let index = 0; index < processedData.length; index += batchSize) {
+    const batch = processedData.slice(index, index + batchSize);
+    const { rowCount } = await db
       .insert(table)
       .values(batch)
-      .onConflictDoNothing()
-      .returning();
-    totalInserted += inserted.length;
+      .onConflictDoNothing();
+    totalInserted += rowCount;
     console.log(
-      `Inserted batch of ${inserted.length} records. Total: ${totalInserted}`,
+      `Inserted batch of ${rowCount} records. Total: ${totalInserted}`,
     );
   }
 

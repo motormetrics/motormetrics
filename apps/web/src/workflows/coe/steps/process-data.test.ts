@@ -151,7 +151,7 @@ describe("updateCoe", () => {
 
     const coeConfig = vi.mocked(update).mock.calls[0][0] as {
       csvTransformOptions?: {
-        fields?: Record<string, (value: string | number) => number>;
+        fields?: Record<string, (value: string) => number>;
       };
     };
 
@@ -159,7 +159,6 @@ describe("updateCoe", () => {
     expect(quotaTransform).toBeDefined();
     expect(quotaTransform?.("1,234")).toBe(1234);
     expect(quotaTransform?.("100")).toBe(100);
-    expect(quotaTransform?.(50)).toBe(50);
   });
 
   it("should parse all numeric COE fields", async () => {
@@ -189,7 +188,7 @@ describe("updateCoe", () => {
 
     const pqpConfig = vi.mocked(update).mock.calls[1][0] as {
       csvTransformOptions?: {
-        fields?: Record<string, (value: string | number) => number>;
+        fields?: Record<string, (value: string) => number>;
       };
     };
     const pqpTransform = pqpConfig.csvTransformOptions?.fields?.pqp;
