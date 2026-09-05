@@ -1,4 +1,4 @@
-import { cn } from "@heroui/react";
+import { Avatar, cn } from "@heroui/react";
 import Image from "next/image";
 
 /**
@@ -21,9 +21,9 @@ export function MakeAvatar({
   size: number;
 }) {
   return (
-    <span
+    <Avatar
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent/15 font-extrabold text-accent-strong leading-none",
+        "rounded-full bg-accent/15 font-extrabold text-accent-strong leading-none",
         className,
       )}
       style={{
@@ -41,8 +41,13 @@ export function MakeAvatar({
           width={size}
         />
       ) : (
-        <span aria-hidden>{make.charAt(0).toUpperCase()}</span>
+        <Avatar.Fallback
+          aria-hidden
+          className="bg-transparent font-extrabold text-[length:inherit] text-accent-strong"
+        >
+          {make.charAt(0).toUpperCase()}
+        </Avatar.Fallback>
       )}
-    </span>
+    </Avatar>
   );
 }

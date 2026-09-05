@@ -1,5 +1,5 @@
-import { cn } from "@heroui/react";
-import type { ReactNode } from "react";
+import { cn, ProgressBar } from "@heroui/react";
+import { type ReactNode, useId } from "react";
 
 /**
  * One labelled proportion bar — the v3 comps' ranked list, used for top makes,
@@ -26,10 +26,13 @@ export function BarRow({
   share: number;
   value: ReactNode;
 }) {
+  const labelId = useId();
+
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <div className="flex items-center gap-2.5">
         <div
+          id={labelId}
           className={cn(
             "flex min-w-0 items-center gap-2.5 text-base",
             isActive
@@ -43,15 +46,18 @@ export function BarRow({
           {value}
         </span>
       </div>
-      <span className="block h-3 overflow-hidden rounded-full bg-surface-secondary">
-        <span
-          className="block h-full rounded-full"
-          style={{
-            background: color,
-            width: `${Math.min(Math.max(share, 0), 100).toFixed(1)}%`,
-          }}
-        />
-      </span>
+      <ProgressBar
+        aria-labelledby={labelId}
+        className="w-full"
+        value={Math.min(Math.max(share, 0), 100)}
+      >
+        <ProgressBar.Track className="h-3 rounded-full bg-surface-secondary">
+          <ProgressBar.Fill
+            className="rounded-full"
+            style={{ background: color }}
+          />
+        </ProgressBar.Track>
+      </ProgressBar>
     </div>
   );
 }

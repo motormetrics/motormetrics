@@ -42,18 +42,22 @@ describe("Headline", () => {
 
 describe("BarRow", () => {
   it("should size the fill to the share", () => {
-    const { container, getByText } = render(
+    const { getByRole, getByText } = render(
       <BarRow label="Toyota" share={60.25} value="6,843" />,
     );
     expect(getByText("Toyota")).toBeInTheDocument();
-    const fill = container.querySelector<HTMLElement>("span > span");
-    expect(fill?.style.width).toBe("60.3%");
+    expect(getByRole("progressbar", { name: "Toyota" })).toHaveAttribute(
+      "aria-valuenow",
+      "60.25",
+    );
   });
 
   it("should clamp the share to the track", () => {
-    const { container } = render(<BarRow label="A" share={140} value="1" />);
-    const fill = container.querySelector<HTMLElement>("span > span");
-    expect(fill?.style.width).toBe("100%");
+    const { getByRole } = render(<BarRow label="A" share={140} value="1" />);
+    expect(getByRole("progressbar", { name: "A" })).toHaveAttribute(
+      "aria-valuenow",
+      "100",
+    );
   });
 });
 

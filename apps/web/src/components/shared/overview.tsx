@@ -1,4 +1,4 @@
-import { cn, Typography } from "@heroui/react";
+import { cn, Separator, Typography } from "@heroui/react";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -54,7 +54,7 @@ export function OverviewGrid({
 
 /** The hairline that separates one section from the next. */
 export function Hairline({ className }: { className?: string }) {
-  return <hr className={cn("h-px w-full border-0 bg-separator", className)} />;
+  return <Separator className={cn("bg-separator", className)} />;
 }
 
 /**
