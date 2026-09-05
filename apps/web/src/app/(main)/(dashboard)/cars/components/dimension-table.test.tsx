@@ -53,7 +53,19 @@ const visibleNames = () =>
   screen
     .getAllByRole("row")
     .slice(1)
-    .map((row) => within(row).getAllByRole("rowheader")[0].textContent);
+    .map((row) => spokenText(within(row).getAllByRole("rowheader")[0]));
+
+/**
+ * Text as a screen reader announces it: the avatar's monogram is
+ * `aria-hidden`, so it is dropped the way `textContent` would not.
+ */
+const spokenText = (element: HTMLElement) => {
+  const clone = element.cloneNode(true) as HTMLElement;
+  for (const hidden of clone.querySelectorAll("[aria-hidden]")) {
+    hidden.remove();
+  }
+  return clone.textContent;
+};
 
 const searchBox = () => screen.getByRole("searchbox", { name: "Search makes" });
 
@@ -67,7 +79,7 @@ describe("DimensionTable", () => {
     ).toBeVisible();
 
     const row = within(screen.getAllByRole("row")[1]);
-    expect(row.getAllByRole("rowheader")[0]).toHaveTextContent("1TOYOTA");
+    expect(spokenText(row.getAllByRole("rowheader")[0])).toBe("1TOYOTA");
 
     const cells = row.getAllByRole("gridcell");
     expect(cells[0]).toHaveTextContent("600");
