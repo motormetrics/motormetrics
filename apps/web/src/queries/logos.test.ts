@@ -1,173 +1,84 @@
 import { describe, expect, it, vi } from "vitest";
 
-const {
-  redisGet,
-  redisSet,
-  getLogoMock,
-  listLogosMock,
-  downloadLogoMock,
-  normaliseMakeMock,
-} = vi.hoisted(() => ({
-  redisGet: vi.fn(),
-  redisSet: vi.fn(),
-  getLogoMock: vi.fn(),
-  listLogosMock: vi.fn(),
-  downloadLogoMock: vi.fn(),
-  normaliseMakeMock: vi.fn((value: string) => value.toLowerCase()),
+const { readManifestMock, cacheLifeMock, cacheTagMock } = vi.hoisted(() => ({
+  readManifestMock: vi.fn(),
+  cacheLifeMock: vi.fn(),
+  cacheTagMock: vi.fn(),
 }));
 
-vi.mock("@motormetrics/utils", () => ({
-  redis: {
-    get: redisGet,
-    set: redisSet,
-  },
+vi.mock("@motormetrics/logos", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@motormetrics/logos")>()),
+  readManifest: readManifestMock,
 }));
 
-vi.mock("@motormetrics/logos", () => ({
-  getLogo: getLogoMock,
-  listLogos: listLogosMock,
-  downloadLogo: downloadLogoMock,
-  normaliseMake: normaliseMakeMock,
+vi.mock("next/cache", () => ({
+  cacheLife: cacheLifeMock,
+  cacheTag: cacheTagMock,
 }));
 
-import { getAllCarLogos, getCarLogo } from "./logos";
+import { getAllCarLogos } from "./logos";
 
-describe("car logo queries", () => {
+const entry = (make: string, status: "found" | "missing") => ({
+  make,
+  status,
+  url: status === "found" ? `https://blob/logos/${make}.png` : null,
+  pathname: status === "found" ? `logos/${make}.png` : null,
+  sourceUrl: null,
+  checkedAt: "2026-09-05T00:00:00.000Z",
+  lastError: null,
+});
+
+describe("getAllCarLogos", () => {
   beforeEach(() => {
-    redisGet.mockReset();
-    redisSet.mockReset();
-    getLogoMock.mockReset();
-    listLogosMock.mockReset();
-    downloadLogoMock.mockReset();
-    normaliseMakeMock.mockClear();
+    readManifestMock.mockReset();
+    cacheLifeMock.mockClear();
+    cacheTagMock.mockClear();
   });
 
-  it("returns cached logos immediately", async () => {
-    const cachedLogo = { make: "tesla", filename: "logo.svg", url: "/logo" };
-    redisGet.mockResolvedValueOnce(cachedLogo);
-
-    const logo = await getCarLogo("Tesla");
-
-    expect(logo).toEqual(cachedLogo);
-    expect(getLogoMock).not.toHaveBeenCalled();
-    expect(normaliseMakeMock).toHaveBeenCalledWith("Tesla");
-  });
-
-  it("downloads and caches a logo when cache/blob miss", async () => {
-    redisGet.mockResolvedValueOnce(undefined);
-    getLogoMock.mockResolvedValueOnce(undefined);
-    downloadLogoMock.mockResolvedValueOnce({
-      success: true,
-      logo: { make: "tesla", filename: "tesla.svg", url: "/blob/tesla.svg" },
+  it("maps the manifest to logos and tags the cache", async () => {
+    readManifestMock.mockResolvedValueOnce({
+      version: 1,
+      updatedAt: "",
+      logos: {
+        toyota: entry("toyota", "found"),
+        zeekr: entry("zeekr", "missing"),
+      },
     });
-    redisSet.mockResolvedValue(undefined);
-
-    const logo = await getCarLogo("Tesla");
-
-    expect(logo).toEqual({
-      make: "tesla",
-      filename: "tesla.svg",
-      url: "/blob/tesla.svg",
-    });
-    expect(redisSet).toHaveBeenCalledWith("logo:tesla", JSON.stringify(logo));
-  });
-
-  it("caches negative results when a download fails", async () => {
-    redisGet.mockResolvedValueOnce(undefined);
-    getLogoMock.mockResolvedValueOnce(undefined);
-    downloadLogoMock.mockResolvedValueOnce({ success: false });
-
-    const logo = await getCarLogo("Unknown");
-
-    expect(logo).toEqual({
-      make: "unknown",
-      filename: "",
-      url: "",
-    });
-    expect(redisSet).toHaveBeenLastCalledWith(
-      "logo:unknown",
-      JSON.stringify(logo),
-    );
-  });
-
-  it("returns cached logo lists when available", async () => {
-    const cached = [{ make: "tesla", filename: "logo.svg", url: "/logo" }];
-    redisGet.mockResolvedValueOnce(cached);
 
     const result = await getAllCarLogos();
 
-    expect(result).toEqual({ logos: cached });
-    expect(listLogosMock).not.toHaveBeenCalled();
+    expect(result).toEqual({
+      logos: [
+        {
+          make: "toyota",
+          url: "https://blob/logos/toyota.png",
+          filename: "toyota.png",
+        },
+      ],
+    });
+    expect(cacheLifeMock).toHaveBeenCalledWith("max");
+    expect(cacheTagMock).toHaveBeenCalledWith("logos");
+  });
+
+  it("returns an empty list when no manifest exists yet", async () => {
+    readManifestMock.mockResolvedValueOnce(null);
+
+    expect(await getAllCarLogos()).toEqual({ logos: [] });
   });
 
   it("returns an error when blob access fails", async () => {
-    redisGet.mockResolvedValueOnce(undefined);
-    listLogosMock.mockRejectedValueOnce(new Error("blob error"));
-
-    const result = await getAllCarLogos();
-
-    expect(result).toEqual({ error: "blob error" });
-  });
-
-  it("should return undefined when getCarLogo throws an error", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    redisGet.mockRejectedValueOnce(new Error("Redis connection failed"));
+    readManifestMock.mockRejectedValueOnce(new Error("blob error"));
 
-    const logo = await getCarLogo("Tesla");
-
-    expect(logo).toBeUndefined();
-    expect(consoleSpy).toHaveBeenCalledWith(
-      "Error fetching logo:",
-      expect.any(Error),
-    );
+    expect(await getAllCarLogos()).toEqual({ error: "blob error" });
     consoleSpy.mockRestore();
   });
 
-  it("should fetch from blob storage and cache when cache misses for getAllCarLogos", async () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    const logos = [
-      { make: "toyota", filename: "toyota.svg", url: "/blob/toyota.svg" },
-      { make: "honda", filename: "honda.svg", url: "/blob/honda.svg" },
-    ];
-    redisGet.mockResolvedValueOnce(undefined);
-    listLogosMock.mockResolvedValueOnce(logos);
-    redisSet.mockResolvedValueOnce(undefined);
-
-    const result = await getAllCarLogos();
-
-    expect(result).toEqual({ logos });
-    expect(listLogosMock).toHaveBeenCalled();
-    expect(redisSet).toHaveBeenCalledWith("logos:all", JSON.stringify(logos));
-    expect(consoleSpy).toHaveBeenCalledWith(
-      "Cache miss, fetching from blob storage",
-    );
-    expect(consoleSpy).toHaveBeenCalledWith("Cached logos list");
-    consoleSpy.mockRestore();
-  });
-
-  it("should return logo from blob storage without downloading when found", async () => {
-    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    const blobLogo = { make: "bmw", filename: "bmw.svg", url: "/blob/bmw.svg" };
-    redisGet.mockResolvedValueOnce(undefined);
-    getLogoMock.mockResolvedValueOnce(blobLogo);
-    redisSet.mockResolvedValueOnce(undefined);
-
-    const logo = await getCarLogo("BMW");
-
-    expect(logo).toEqual(blobLogo);
-    expect(downloadLogoMock).not.toHaveBeenCalled();
-    expect(redisSet).toHaveBeenCalledWith("logo:bmw", JSON.stringify(blobLogo));
-    consoleSpy.mockRestore();
-  });
-
-  it("should handle non-Error objects in getAllCarLogos catch block", async () => {
+  it("handles non-Error rejections", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    redisGet.mockResolvedValueOnce(undefined);
-    listLogosMock.mockRejectedValueOnce("string error");
+    readManifestMock.mockRejectedValueOnce("string error");
 
-    const result = await getAllCarLogos();
-
-    expect(result).toEqual({ error: "Failed to fetch logos" });
+    expect(await getAllCarLogos()).toEqual({ error: "Failed to fetch logos" });
     consoleSpy.mockRestore();
   });
 });
