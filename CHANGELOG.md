@@ -1,3 +1,14 @@
+## [5.15.0](https://github.com/motormetrics/motormetrics/compare/v5.14.0...v5.15.0) (2026-09-05)
+
+### Features
+
+* **logos:** keep a blob manifest as the source of truth ([6edc9a8](https://github.com/motormetrics/motormetrics/commit/6edc9a83d4053323d4c57e93b0d30160a0afe81c))
+* **web:** add a logos workflow that fills manifest gaps ([f975e84](https://github.com/motormetrics/motormetrics/commit/f975e84d20000354a67e04e8bb77492ec26e8de9))
+
+### Bug Fixes
+
+* **web:** drop unneeded fetch override in logos workflow ([9a85577](https://github.com/motormetrics/motormetrics/commit/9a855773a3671e41b538e61ca58fa4b2e64f6738))
+
 ## [5.14.0](https://github.com/motormetrics/motormetrics/compare/v5.13.0...v5.14.0) (2026-09-05)
 
 ### Features
