@@ -58,10 +58,12 @@ export async function FuelMix({
 
   return (
     <div className="flex flex-col gap-2.5">
-      <span className="font-semibold text-muted-strong text-xl">Fuel mix</span>
-      <span className="font-medium text-base text-muted">
+      <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+        Fuel mix
+      </Typography.Paragraph>
+      <Typography.Paragraph className="font-medium" color="muted">
         {formatMonthName(month)} registrations by powertrain
-      </span>
+      </Typography.Paragraph>
 
       {segments.length > 0 ? (
         <div className="mt-2 flex flex-wrap items-center gap-9">
@@ -93,9 +95,13 @@ export async function FuelMix({
                   value={registrations.total}
                 />
               </span>
-              <span className="font-semibold text-muted text-sm">
+              <Typography.Paragraph
+                className="font-semibold"
+                color="muted"
+                size="sm"
+              >
                 {formatMonthName(month)}
-              </span>
+              </Typography.Paragraph>
             </div>
           </div>
 
@@ -107,9 +113,9 @@ export async function FuelMix({
                   className="size-[11px] shrink-0 rounded-full"
                   style={{ background: segment.color }}
                 />
-                <span className="font-semibold text-base text-foreground/85">
+                <Typography.Paragraph className="font-semibold text-foreground/85">
                   {segment.label}
-                </span>
+                </Typography.Paragraph>
                 <span className="ml-auto font-extrabold text-base tabular-nums">
                   {((segment.value / total) * 100).toFixed(1)}%
                 </span>

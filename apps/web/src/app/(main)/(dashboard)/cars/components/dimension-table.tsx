@@ -221,12 +221,16 @@ export function DimensionTable({
             value={query}
           />
         </label>
-        <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
+        <Typography.Paragraph
+          className="ml-auto whitespace-nowrap font-semibold"
+          color="muted"
+          size="sm"
+        >
           Sorted by {SORT_LABELS[sortDescriptor.column as SortKey]},{" "}
           {sortDescriptor.direction === "ascending"
             ? "ascending"
             : "descending"}
-        </span>
+        </Typography.Paragraph>
       </div>
 
       <Table
