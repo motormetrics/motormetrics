@@ -1,4 +1,4 @@
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { SharePill } from "@web/components/shared/share-pill";
 import type { ReactNode } from "react";
 
@@ -26,7 +26,9 @@ export function PageEyebrow({
   return (
     <div className={cn("flex flex-wrap items-center gap-3", className)}>
       <h1 className="sr-only">{title}</h1>
-      <span className="font-semibold text-base text-muted">{section} ·</span>
+      <Typography.Paragraph className="font-semibold" color="muted">
+        {section} ·
+      </Typography.Paragraph>
       {control}
       <div className="ml-auto">
         <SharePill title={title} />
@@ -38,6 +40,8 @@ export function PageEyebrow({
 /** The bold accent value beside the section label, where no control is needed. */
 export function EyebrowValue({ children }: { children: ReactNode }) {
   return (
-    <span className="font-bold text-accent-strong text-base">{children}</span>
+    <Typography.Paragraph className="font-bold text-accent-strong">
+      {children}
+    </Typography.Paragraph>
   );
 }

@@ -87,7 +87,9 @@ export function SectionHead({
   return (
     <div className={cn("flex flex-wrap items-end gap-4", className)}>
       <div className="flex min-w-0 flex-col gap-1.5">
-        <span className="font-semibold text-muted text-sm">{eyebrow}</span>
+        <Typography.Paragraph className="font-semibold" color="muted" size="sm">
+          {eyebrow}
+        </Typography.Paragraph>
         <Typography.Heading
           className={cn(
             "font-bold tracking-tight",
@@ -98,7 +100,13 @@ export function SectionHead({
           {title}
         </Typography.Heading>
         {caption ? (
-          <span className="font-medium text-[15px] text-muted">{caption}</span>
+          <Typography.Paragraph
+            className="font-medium text-[15px]"
+            color="muted"
+            size="sm"
+          >
+            {caption}
+          </Typography.Paragraph>
         ) : null}
       </div>
       {link ? <SectionLink href={link.href}>{link.label}</SectionLink> : null}
@@ -160,7 +168,9 @@ export function Headline({
   return (
     <div className={cn("flex flex-col gap-2.5", className)}>
       {label ? (
-        <span className="font-semibold text-muted-strong text-xl">{label}</span>
+        <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+          {label}
+        </Typography.Paragraph>
       ) : null}
       <div className="flex flex-wrap items-center gap-4">
         <span
@@ -174,9 +184,9 @@ export function Headline({
         {delta}
       </div>
       {caption ? (
-        <span className="text-pretty font-medium text-base text-muted">
+        <Typography.Paragraph className="text-pretty font-medium" color="muted">
           {caption}
-        </span>
+        </Typography.Paragraph>
       ) : null}
     </div>
   );
