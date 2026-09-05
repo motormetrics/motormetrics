@@ -112,9 +112,14 @@ export function ClassesTable({
 
             if (column.key === null) {
               return (
-                <span className={className} key={column.label}>
+                <Typography.Paragraph
+                  className={className}
+                  color="muted"
+                  key={column.label}
+                  size="xs"
+                >
                   {column.label}
-                </span>
+                </Typography.Paragraph>
               );
             }
 
@@ -186,9 +191,13 @@ export function ClassesTable({
               </span>
 
               {row.change === null ? (
-                <span className="text-right font-semibold text-muted text-sm">
+                <Typography.Paragraph
+                  className="text-right font-semibold"
+                  color="muted"
+                  size="sm"
+                >
                   —
-                </span>
+                </Typography.Paragraph>
               ) : (
                 <>
                   <span className="text-right sm:hidden">
