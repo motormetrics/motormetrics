@@ -1,10 +1,13 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { ToggleButton, ToggleButtonGroup } from "@heroui/react";
 import { parseAsString, useQueryState } from "nuqs";
 import posthog from "posthog-js";
 import { useTransition } from "react";
 import { FUEL_FILTERS, type FuelFilter } from "./make-rows";
+
+/** Group key for the "All" pill, which clears the `fuel` param. */
+const ALL = "all";
 
 /**
  * The powertrain pills beside the "All makes" heading.
@@ -21,40 +24,41 @@ export function FuelTabs({ fuel }: { fuel: FuelFilter | null }) {
     parseAsString.withOptions({ shallow: false, startTransition }),
   );
 
-  const options: { key: FuelFilter | null; label: string }[] = [
-    { key: null, label: "All" },
+  const options: { key: string; label: string }[] = [
+    { key: ALL, label: "All" },
     ...FUEL_FILTERS.map((filter) => ({ key: filter, label: filter })),
   ];
 
   return (
-    <fieldset className="m-0 flex min-w-0 flex-wrap gap-2 border-none p-0">
-      <legend className="sr-only">Powertrain</legend>
-      {options.map((option) => {
-        const isActive = option.key === fuel;
-
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "cursor-pointer whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
-              isActive
-                ? "bg-accent font-extrabold text-accent-foreground"
-                : "bg-default font-semibold text-foreground/75 hover:text-foreground",
-            )}
-            key={option.label}
-            onClick={() => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: "fuel",
-                value: option.label,
-              });
-              setFuel(option.key);
-            }}
-            type="button"
-          >
-            {option.label}
-          </button>
-        );
-      })}
-    </fieldset>
+    <ToggleButtonGroup
+      aria-label="Powertrain"
+      className="flex min-w-0 flex-wrap gap-2"
+      disallowEmptySelection
+      isDetached
+      onSelectionChange={(keys) => {
+        const [key] = [...keys];
+        if (key === undefined) {
+          return;
+        }
+        const label = key === ALL ? "All" : String(key);
+        posthog.capture("dashboard_filter_changed", {
+          filter: "fuel",
+          value: label,
+        });
+        setFuel(key === ALL ? null : String(key));
+      }}
+      selectedKeys={[fuel ?? ALL]}
+      selectionMode="single"
+    >
+      {options.map((option) => (
+        <ToggleButton
+          className="h-auto whitespace-nowrap rounded-full bg-default px-[18px] py-2.5 font-semibold text-foreground/75 text-sm transition-colors hover:bg-default hover:text-foreground data-[selected=true]:bg-accent data-[selected=true]:font-extrabold data-[selected=true]:text-accent-foreground"
+          id={option.key}
+          key={option.key}
+        >
+          {option.label}
+        </ToggleButton>
+      ))}
+    </ToggleButtonGroup>
   );
 }

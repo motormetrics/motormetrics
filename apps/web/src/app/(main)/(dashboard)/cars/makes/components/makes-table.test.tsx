@@ -97,7 +97,7 @@ describe("MakesTable", () => {
     renderTable();
 
     await user.type(
-      screen.getByRole("textbox", { name: "Search makes" }),
+      screen.getByRole("searchbox", { name: "Search makes" }),
       "yd",
     );
 
@@ -109,7 +109,7 @@ describe("MakesTable", () => {
     renderTable();
 
     await user.type(
-      screen.getByRole("textbox", { name: "Search makes" }),
+      screen.getByRole("searchbox", { name: "Search makes" }),
       "ferrari",
     );
 
@@ -161,7 +161,7 @@ describe("MakesTable", () => {
     renderTable();
 
     await user.type(
-      screen.getByRole("textbox", { name: "Search makes" }),
+      screen.getByRole("searchbox", { name: "Search makes" }),
       "byd",
     );
 
@@ -199,12 +199,12 @@ describe("MakesTable", () => {
       { wrapper },
     );
 
-    expect(screen.getByRole("button", { name: "Electric" })).toHaveAttribute(
-      "aria-pressed",
+    expect(screen.getByRole("radio", { name: "Electric" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
-    expect(screen.getByRole("button", { name: "All" })).toHaveAttribute(
-      "aria-pressed",
+    expect(screen.getByRole("radio", { name: "All" })).toHaveAttribute(
+      "aria-checked",
       "false",
     );
   });

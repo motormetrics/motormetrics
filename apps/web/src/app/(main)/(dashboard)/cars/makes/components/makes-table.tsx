@@ -1,11 +1,16 @@
 "use client";
 
-import { cn, Typography } from "@heroui/react";
+import {
+  Button,
+  cn,
+  ProgressBar,
+  SearchField,
+  Typography,
+} from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead } from "@web/components/shared/overview";
-import { Search } from "lucide-react";
 import Link from "next/link";
 import posthog from "posthog-js";
 import { useMemo, useState } from "react";
@@ -215,17 +220,21 @@ export function MakesTable({
       />
 
       <div className="flex flex-wrap items-center gap-4">
-        <span className="flex w-full items-center gap-2.5 rounded-full bg-surface px-5 py-3 text-muted sm:w-[340px]">
-          <Search aria-hidden className="size-[18px] shrink-0" />
-          <input
-            aria-label="Search makes"
-            className="w-full border-none bg-transparent font-semibold text-[15px] text-foreground outline-none placeholder:text-muted"
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder={`Search ${rows.length} makes …`}
-            type="text"
-            value={query}
-          />
-        </span>
+        <SearchField
+          aria-label="Search makes"
+          className="w-full sm:w-[340px]"
+          onChange={setQuery}
+          value={query}
+        >
+          <SearchField.Group className="h-auto gap-2.5 rounded-full border-0 bg-surface px-5 py-3 text-muted shadow-none">
+            <SearchField.SearchIcon className="ml-0 size-[18px] text-muted" />
+            <SearchField.Input
+              className="px-0 font-semibold text-[15px] text-foreground placeholder:text-muted"
+              placeholder={`Search ${rows.length} makes …`}
+            />
+            <SearchField.ClearButton className="mr-0" />
+          </SearchField.Group>
+        </SearchField>
         <Typography.Paragraph
           className="whitespace-nowrap font-semibold text-[13.5px] sm:ml-auto"
           color="muted"
@@ -264,18 +273,22 @@ export function MakesTable({
 
             const sortKeyForColumn = column.key;
             return (
-              <button
-                className={cn(className, "cursor-pointer")}
+              <Button
+                className={cn(
+                  className,
+                  "h-auto justify-start gap-0 rounded-none bg-transparent p-0 hover:bg-transparent data-[pressed=true]:scale-100",
+                  column.align === "right" && "justify-end",
+                )}
                 key={column.label}
-                onClick={() => toggleSort(sortKeyForColumn)}
-                type="button"
+                onPress={() => toggleSort(sortKeyForColumn)}
+                variant="ghost"
               >
                 <ColumnLabel
                   label={column.label}
                   shortLabel={column.shortLabel}
                 />
                 {isActive ? (sortDirection === "asc" ? " ↑" : " ↓") : ""}
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -321,15 +334,20 @@ export function MakesTable({
             </span>
 
             <span className="hidden items-center gap-2.5 sm:flex">
-              <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-surface-secondary">
-                <span
-                  className="block h-full rounded-full"
-                  style={{
-                    backgroundColor: `var(--chart-${Math.min(6, row.rank)})`,
-                    width: `${Math.max(2, (row.count / leadCount) * 100).toFixed(1)}%`,
-                  }}
-                />
-              </span>
+              <ProgressBar
+                aria-label={`${row.make} share of the leader`}
+                className="min-w-0 flex-1"
+                value={Math.max(2, (row.count / leadCount) * 100)}
+              >
+                <ProgressBar.Track className="h-2.5 rounded-full bg-surface-secondary">
+                  <ProgressBar.Fill
+                    className="rounded-full"
+                    style={{
+                      backgroundColor: `var(--chart-${Math.min(6, row.rank)})`,
+                    }}
+                  />
+                </ProgressBar.Track>
+              </ProgressBar>
               <span className="w-11 text-right font-bold text-[13.5px] text-muted-strong tabular-nums">
                 {row.share.toFixed(1)}%
               </span>
@@ -373,14 +391,14 @@ export function MakesTable({
       </div>
 
       {!isSearching && visibleRows.length > COLLAPSED_ROWS ? (
-        <button
+        <Button
           aria-expanded={isExpanded}
-          className="cursor-pointer self-center rounded-full bg-default px-6 py-3 font-bold text-muted text-sm transition-colors hover:text-foreground"
-          onClick={() => setIsExpanded((current) => !current)}
-          type="button"
+          className="h-auto self-center rounded-full px-6 py-3 font-bold text-muted text-sm transition-colors hover:text-foreground"
+          onPress={() => setIsExpanded((current) => !current)}
+          variant="tertiary"
         >
           {isExpanded ? "Show fewer" : `Show all ${visibleRows.length} makes`}
-        </button>
+        </Button>
       ) : null}
 
       <Typography.Paragraph

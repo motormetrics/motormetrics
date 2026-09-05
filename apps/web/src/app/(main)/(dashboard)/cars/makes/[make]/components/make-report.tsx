@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { Chip, Typography } from "@heroui/react";
 import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
 import {
   FuelTypeTabs,
@@ -359,9 +359,9 @@ export async function MakeReport({
                   {String(rowRank).padStart(2, "0")}
                 </ReportCell>
                 <ReportCell>
-                  <span className="inline-flex items-center whitespace-nowrap rounded-full bg-surface-secondary px-3 py-1.5 font-bold text-muted-strong text-sm">
-                    {rowFuelType}
-                  </span>
+                  <Chip className="whitespace-nowrap rounded-full bg-surface-secondary px-3 py-1.5 font-bold text-muted-strong text-sm">
+                    <Chip.Label className="px-0">{rowFuelType}</Chip.Label>
+                  </Chip>
                 </ReportCell>
                 <ReportCell className="font-bold text-base">
                   {formatVehicleType(vehicleType)}
