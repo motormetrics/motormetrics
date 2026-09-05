@@ -10,7 +10,6 @@ import {
 import { LOGOS_CACHE_TAG } from "@web/lib/cache-tags";
 import { getDistinctMakes } from "@web/queries/cars/filter-options";
 import { revalidateTag } from "next/cache";
-import { fetch } from "workflow";
 
 interface LogosWorkflowResult {
   message: string;
@@ -30,8 +29,6 @@ interface LogosWorkflowResult {
  */
 export async function logosWorkflow(): Promise<LogosWorkflowResult> {
   "use workflow";
-
-  globalThis.fetch = fetch;
 
   const manifest = await loadManifest();
   const makes = await listMakes();

@@ -16,10 +16,6 @@ vi.mock("next/cache", () => ({
   revalidateTag: vi.fn(),
 }));
 
-vi.mock("workflow", () => ({
-  fetch: vi.fn(),
-}));
-
 import {
   bootstrapManifest,
   downloadLogo,
