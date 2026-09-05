@@ -1,12 +1,12 @@
 "use client";
 
-import { cn, Typography } from "@heroui/react";
+import type { SortDescriptor } from "@heroui/react";
+import { cn, Table, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
   type CategoryRow,
   DEFAULT_SORT,
   describeSort,
-  nextSort,
   type SortKey,
   type SortState,
   sortCategoryRows,
@@ -48,7 +48,7 @@ const CELL_CLASS = "px-1 py-3.5 sm:px-2";
  * category order and are re-ordered here without another fetch. Clicking a row
  * selects its category through the URL, the same as the circles up top.
  *
- * A real `<table>` rather than the comp's CSS grid: sortable column headers
+ * A real table rather than the comp's CSS grid: sortable column headers
  * need `aria-sort` on a `columnheader`, which only means something inside a
  * table. `border-separate` is what lets the selected row carry a radius.
  */
@@ -72,144 +72,152 @@ export function AllCategoriesTable({
     setCategory(category);
   };
 
+  const sortDescriptor: SortDescriptor = {
+    column: sort.key,
+    direction: sort.direction === "asc" ? "ascending" : "descending",
+  };
+
   return (
     <div className="flex flex-col gap-4">
-      <table className="w-full table-fixed border-separate border-spacing-0 tabular-nums">
-        <thead>
-          <tr>
-            {COLUMNS.map((column) => {
-              const isActive = column.key === sort.key;
-              const Arrow = sort.direction === "asc" ? ArrowUp : ArrowDown;
-              return (
-                <th
-                  aria-sort={
-                    isActive
-                      ? sort.direction === "asc"
-                        ? "ascending"
-                        : "descending"
-                      : "none"
-                  }
-                  className={cn(
-                    "border-separator border-b pb-3",
-                    CELL_CLASS,
-                    column.key !== "category" &&
-                      FIGURE_COLUMN_CLASSES[column.key],
-                    column.align === "right" ? "text-right" : "text-left",
-                  )}
-                  key={column.key}
-                  scope="col"
-                >
-                  <button
+      <Table variant="secondary">
+        <Table.ScrollContainer>
+          <Table.Content
+            aria-label="COE categories"
+            className="w-full table-fixed border-separate border-spacing-0 tabular-nums"
+            onRowAction={(key) => selectCategory(key as CategoryKey)}
+            onSortChange={(descriptor) =>
+              setSort({
+                direction:
+                  descriptor.direction === "ascending" ? "asc" : "desc",
+                key: descriptor.column as SortKey,
+              })
+            }
+            sortDescriptor={sortDescriptor}
+          >
+            <Table.Header>
+              {COLUMNS.map((column) => {
+                const isActive = column.key === sort.key;
+                const Arrow = sort.direction === "asc" ? ArrowUp : ArrowDown;
+                return (
+                  <Table.Column
+                    allowsSorting
                     className={cn(
-                      "inline-flex cursor-pointer items-center gap-1 font-semibold text-[13px] transition-colors",
+                      "border-separator border-b pb-3 font-semibold text-[13px]",
+                      CELL_CLASS,
+                      column.key !== "category" &&
+                        FIGURE_COLUMN_CLASSES[column.key],
+                      column.align === "right" ? "text-right" : "text-left",
                       isActive
                         ? "text-accent-strong"
                         : "text-muted hover:text-muted-strong",
                     )}
-                    onClick={() => setSort(nextSort(sort, column.key))}
-                    type="button"
+                    id={column.key}
+                    isRowHeader={column.key === "category"}
+                    key={column.key}
                   >
-                    {column.label}
-                    {isActive ? (
-                      <Arrow
-                        aria-hidden
-                        className="size-3.5"
-                        strokeWidth={2.5}
-                      />
-                    ) : null}
-                  </button>
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {sorted.map((row) => {
-            const isActive = row.categoryKey === selected;
-            const cellClass = cn(
-              CELL_CLASS,
-              !isActive && "border-separator border-b",
-            );
-            return (
-              <tr
-                className={cn(
-                  "cursor-pointer transition-colors",
-                  isActive
-                    ? "bg-accent-soft-2 [&>td:first-child]:rounded-l-2xl [&>td:last-child]:rounded-r-2xl"
-                    : "hover:bg-default",
-                )}
-                key={row.categoryKey}
-                onClick={(event) => {
-                  // The category cell is already a button that selects the
-                  // row; its click bubbles here, so only the bare cells
-                  // need the row-level handler.
-                  if ((event.target as HTMLElement).closest("button")) {
-                    return;
-                  }
-                  selectCategory(row.categoryKey);
-                }}
-              >
-                <td className={cellClass}>
-                  <CategorySelect
-                    category={row.categoryKey}
-                    className="flex items-center gap-3.5"
-                    isActive={isActive}
-                    label={`Show ${row.category}`}
+                    {({ sortDirection }) => (
+                      <Table.SortableColumnHeader
+                        className={cn(
+                          "inline-flex items-center gap-1",
+                          column.align === "right" && "justify-end",
+                        )}
+                        indicator={
+                          <Arrow
+                            aria-hidden
+                            className="size-3.5"
+                            strokeWidth={2.5}
+                          />
+                        }
+                        sortDirection={sortDirection}
+                      >
+                        {column.label}
+                      </Table.SortableColumnHeader>
+                    )}
+                  </Table.Column>
+                );
+              })}
+            </Table.Header>
+            <Table.Body>
+              {sorted.map((row) => {
+                const isActive = row.categoryKey === selected;
+                const cellClass = cn(
+                  CELL_CLASS,
+                  !isActive && "border-separator border-b",
+                );
+                return (
+                  <Table.Row
+                    className={cn(
+                      "cursor-pointer transition-colors",
+                      isActive
+                        ? "bg-accent-soft-2 [&>td:first-child]:rounded-l-2xl [&>td:last-child]:rounded-r-2xl"
+                        : "hover:bg-default",
+                    )}
+                    id={row.categoryKey}
+                    key={row.categoryKey}
                   >
-                    <span
+                    <Table.Cell className={cellClass}>
+                      <CategorySelect
+                        category={row.categoryKey}
+                        className="flex items-center gap-3.5"
+                        isActive={isActive}
+                        label={`Show ${row.category}`}
+                      >
+                        <span
+                          className={cn(
+                            "flex size-10 shrink-0 items-center justify-center rounded-full font-extrabold text-base",
+                            isActive
+                              ? "bg-accent text-accent-foreground"
+                              : "bg-accent-soft text-accent-strong",
+                          )}
+                        >
+                          {row.categoryKey}
+                        </span>
+                        <span className="flex min-w-0 flex-col">
+                          <span className="truncate font-bold text-base">
+                            {row.category}
+                          </span>
+                          <span className="truncate font-medium text-[13.5px] text-muted">
+                            {row.description}
+                          </span>
+                        </span>
+                      </CategorySelect>
+                    </Table.Cell>
+                    <Table.Cell
                       className={cn(
-                        "flex size-10 shrink-0 items-center justify-center rounded-full font-extrabold text-base",
-                        isActive
-                          ? "bg-accent text-accent-foreground"
-                          : "bg-accent-soft text-accent-strong",
+                        cellClass,
+                        "text-right font-extrabold text-sm sm:text-lg",
                       )}
                     >
-                      {row.categoryKey}
-                    </span>
-                    <span className="flex min-w-0 flex-col">
-                      <span className="truncate font-bold text-base">
-                        {row.category}
-                      </span>
-                      <span className="truncate font-medium text-[13.5px] text-muted">
-                        {row.description}
-                      </span>
-                    </span>
-                  </CategorySelect>
-                </td>
-                <td
-                  className={cn(
-                    cellClass,
-                    "text-right font-extrabold text-sm sm:text-lg",
-                  )}
-                >
-                  <NumberValue
-                    currency="SGD"
-                    locale="en-SG"
-                    maximumFractionDigits={0}
-                    style="currency"
-                    value={row.premium}
-                  />
-                </td>
-                <td
-                  className={cn(
-                    cellClass,
-                    "text-right font-bold text-[15px] text-muted-strong",
-                  )}
-                >
-                  <NumberValue
-                    locale="en-SG"
-                    maximumFractionDigits={0}
-                    value={row.quota}
-                  />
-                </td>
-                <td className={cn(cellClass, "text-right")}>
-                  <CostTrendChip changeRatio={row.changeRatio} />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                      <NumberValue
+                        currency="SGD"
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        style="currency"
+                        value={row.premium}
+                      />
+                    </Table.Cell>
+                    <Table.Cell
+                      className={cn(
+                        cellClass,
+                        "text-right font-bold text-[15px] text-muted-strong",
+                      )}
+                    >
+                      <NumberValue
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        value={row.quota}
+                      />
+                    </Table.Cell>
+                    <Table.Cell className={cn(cellClass, "text-right")}>
+                      <CostTrendChip changeRatio={row.changeRatio} />
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+      </Table>
 
       <Typography.Paragraph color="muted" size="sm">
         Premiums are the quota premium at the close of the exercise. Sorted by{" "}

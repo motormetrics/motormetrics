@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { Button, cn, ToggleButton, ToggleButtonGroup } from "@heroui/react";
 import {
   CATEGORY_KEYS,
   type CategoryKey,
@@ -35,35 +35,36 @@ export function CategoryTabs({ selected }: { selected: CategoryKey }) {
   const { isPending, setCategory } = useCoeCategory();
 
   return (
-    <fieldset className={cn("flex flex-wrap gap-2", isPending && "opacity-70")}>
-      <legend className="sr-only">COE category</legend>
-      {CATEGORY_KEYS.map((key) => {
-        const isActive = key === selected;
-        return (
-          <button
-            aria-label={`Category ${key}`}
-            aria-pressed={isActive}
-            className={cn(
-              "size-11 shrink-0 rounded-full font-extrabold text-base transition-[filter] hover:brightness-105",
-              isActive
-                ? "bg-accent text-accent-foreground"
-                : "bg-default text-muted-strong",
-            )}
-            key={key}
-            onClick={() => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: "category",
-                value: key,
-              });
-              setCategory(key);
-            }}
-            type="button"
-          >
-            {key}
-          </button>
-        );
-      })}
-    </fieldset>
+    <ToggleButtonGroup
+      aria-label="COE category"
+      className={cn("flex flex-wrap gap-2", isPending && "opacity-70")}
+      disallowEmptySelection
+      isDetached
+      onSelectionChange={(keys) => {
+        const [key] = [...keys];
+        if (key === undefined) {
+          return;
+        }
+        posthog.capture("dashboard_filter_changed", {
+          filter: "category",
+          value: key,
+        });
+        setCategory(key as CategoryKey);
+      }}
+      selectedKeys={[selected]}
+      selectionMode="single"
+    >
+      {CATEGORY_KEYS.map((key) => (
+        <ToggleButton
+          aria-label={`Category ${key}`}
+          className="size-11 shrink-0 rounded-full bg-default p-0 font-extrabold text-base text-muted-strong transition-[filter] hover:bg-default hover:brightness-105 data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
+          id={key}
+          key={key}
+        >
+          {key}
+        </ToggleButton>
+      ))}
+    </ToggleButtonGroup>
   );
 }
 
@@ -87,21 +88,24 @@ export function CategorySelect({
   const { setCategory } = useCoeCategory();
 
   return (
-    <button
+    <Button
       aria-label={label}
       aria-pressed={isActive}
-      className={cn("w-full cursor-pointer text-left", className)}
-      onClick={() => {
+      className={cn(
+        "h-auto w-full justify-start rounded-none bg-transparent p-0 text-left font-[inherit] text-[length:inherit] text-inherit hover:bg-transparent data-[pressed=true]:scale-100",
+        className,
+      )}
+      onPress={() => {
         posthog.capture("dashboard_filter_changed", {
           filter: "category",
           value: category,
         });
         setCategory(category);
       }}
-      type="button"
+      variant="ghost"
     >
       {children}
-    </button>
+    </Button>
   );
 }
 
@@ -121,33 +125,34 @@ export function RangeTabs() {
   );
 
   return (
-    <fieldset className={cn("flex flex-wrap gap-2", isPending && "opacity-70")}>
-      <legend className="sr-only">Exercise range</legend>
-      {EXERCISE_RANGES.map((option) => {
-        const isActive = option === range;
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-[filter] hover:brightness-105",
-              isActive
-                ? "bg-accent font-extrabold text-accent-foreground"
-                : "bg-default font-semibold text-foreground/75",
-            )}
-            key={option}
-            onClick={() => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: "range",
-                value: option,
-              });
-              setRange(option as ExerciseRange);
-            }}
-            type="button"
-          >
-            {RANGE_LABELS[option]}
-          </button>
-        );
-      })}
-    </fieldset>
+    <ToggleButtonGroup
+      aria-label="Exercise range"
+      className={cn("flex flex-wrap gap-2", isPending && "opacity-70")}
+      disallowEmptySelection
+      isDetached
+      onSelectionChange={(keys) => {
+        const [option] = [...keys];
+        if (option === undefined) {
+          return;
+        }
+        posthog.capture("dashboard_filter_changed", {
+          filter: "range",
+          value: option,
+        });
+        setRange(option as ExerciseRange);
+      }}
+      selectedKeys={[range]}
+      selectionMode="single"
+    >
+      {EXERCISE_RANGES.map((option) => (
+        <ToggleButton
+          className="h-auto whitespace-nowrap rounded-full bg-default px-[18px] py-2.5 font-semibold text-foreground/75 text-sm transition-[filter] hover:bg-default hover:brightness-105 data-[selected=true]:bg-accent data-[selected=true]:font-extrabold data-[selected=true]:text-accent-foreground"
+          id={option}
+          key={option}
+        >
+          {RANGE_LABELS[option]}
+        </ToggleButton>
+      ))}
+    </ToggleButtonGroup>
   );
 }

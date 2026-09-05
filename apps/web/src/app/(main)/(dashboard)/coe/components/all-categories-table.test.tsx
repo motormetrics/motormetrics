@@ -94,7 +94,7 @@ describe("AllCategoriesTable", () => {
     const user = userEvent.setup();
     renderTable();
 
-    await user.click(screen.getByRole("button", { name: "Category" }));
+    await user.click(screen.getByRole("columnheader", { name: "Category" }));
 
     expect(rowLabels()).toEqual([
       "Show Category A",
