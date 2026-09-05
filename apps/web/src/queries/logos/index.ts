@@ -1,7 +1,10 @@
-import { getLogo, listLogos } from "@logos/services/blob";
-import { downloadLogo } from "@logos/services/scraper";
-import type { CarLogo } from "@logos/types";
-import { normaliseMake } from "@logos/utils/normalise-make";
+import {
+  type CarLogo,
+  downloadLogo,
+  getLogo,
+  listLogos,
+  normaliseMake,
+} from "@motormetrics/logos";
 import { redis } from "@motormetrics/utils";
 import { cacheLife, cacheTag } from "next/cache";
 

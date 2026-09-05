@@ -1,12 +1,16 @@
 {
   "name": "@motormetrics/logos",
+  "description": "Car make logo storage and retrieval for MotorMetrics",
   "version": "5.14.0",
-  "description": "Shared utilities for car logo management",
   "type": "module",
+  "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
+  "license": "MIT",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "sideEffects": false,
   "scripts": {
     "test": "vitest run",
-    "lint": "biome check .",
-    "format": "biome format --write",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -16,8 +20,6 @@
   "devDependencies": {
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "@vitest/ui": "catalog:",
-    "typescript": "catalog:",
     "vitest": "catalog:"
   }
 }

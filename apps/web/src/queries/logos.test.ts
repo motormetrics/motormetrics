@@ -23,16 +23,10 @@ vi.mock("@motormetrics/utils", () => ({
   },
 }));
 
-vi.mock("@logos/services/blob", () => ({
+vi.mock("@motormetrics/logos", () => ({
   getLogo: getLogoMock,
   listLogos: listLogosMock,
-}));
-
-vi.mock("@logos/services/scraper", () => ({
   downloadLogo: downloadLogoMock,
-}));
-
-vi.mock("@logos/utils/normalise-make", () => ({
   normaliseMake: normaliseMakeMock,
 }));
 

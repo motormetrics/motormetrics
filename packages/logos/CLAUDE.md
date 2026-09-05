@@ -1,71 +1,28 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code when working in `packages/logos`.
 
-## Coding Standards
+## Purpose
 
-**Language**: Always use British English spelling throughout this project (e.g., "colour" not "color", "organised" not "organized", "realise" not "realize").
+Utility package for car make logos. It talks to Vercel Blob directly and has no routes,
+no caching, and no build step. Consumed from `src/index.ts` by `apps/web`.
 
-## Development Commands
+## Layout
 
-```bash
-# Package management
-pnpm install
+- `src/services/blob.ts`: `uploadLogo`, `listLogos`, `getLogo`, `deleteLogo` over `@vercel/blob`
+- `src/services/scraper.ts`: `downloadLogo`, fetches `<BASE_URL>/<make>-logo.png` and uploads it
+- `src/utils/normalise-make.ts`: make name to kebab-case key, the only tested module
+- `src/utils/file-utils.ts`: extension and MIME helpers
+- `src/config/index.ts`: `BASE_URL` for carlogos.org
+- `src/types/index.ts`: `CarLogo`
 
-# Code quality
-pnpm run lint
-pnpm run format
+## Conventions
 
-# Testing
-pnpm test
-pnpm test:ui
-```
+- Import by package name from other workspaces: `@motormetrics/logos`. Relative imports inside.
+- British English spelling (`normalise`, not `normalize`).
+- Caching belongs to the consumer. The web app's Redis layer lives in `apps/web/src/queries/logos`.
+- `getLogo` lists the whole prefix and scans for a match. Fine at current volume.
 
-## Architecture
+## Environment
 
-This package provides shared utilities for car logo management. It is a **utility package only** - the API routes have been moved to `apps/api/src/features/logos/`.
-
-### Package Structure
-
-**Services** (`src/services/logo/`): Core logo functionality including scraper, service, and repository patterns for logo retrieval and management.
-
-**Types** (`src/types/`): TypeScript type definitions for CarLogo, LogoMetadata, and environment bindings.
-
-**Utilities** (`src/utils/`): Helper functions for brand name normalisation, file handling, and logging.
-
-**Storage** (`src/infra/storage/`): Storage adapters for Vercel Blob with Redis caching.
-
-**Configuration** (`src/config/`): Configuration constants for paths and domains.
-
-## Key Components
-
-- **Logo Scraper**: Downloads logos from external sources
-- **Brand Normalisation**: Converts brand names to consistent kebab-case format
-- **Storage Layer**: Uses Vercel Blob for image storage and Upstash Redis for metadata caching
-- **Metadata Management**: Tracks logo files and their metadata
-
-## Storage Implementation
-
-The package uses **Vercel Blob** for logo storage with **Upstash Redis** for metadata caching:
-
-- **Vercel Blob**: Stores logo images with public access and aggressive caching (1-year TTL)
-- **Upstash Redis**: Caches logo metadata and list results for fast lookups (24-hour TTL)
-- **On-demand downloads**: Logos are automatically downloaded from external sources when requested
-
-This architecture provides:
-- Zero infrastructure setup (no custom buckets or DNS configuration)
-- Fast performance with Redis caching
-- Compatible with serverless and Vercel deployments
-- Automatic CDN distribution via Vercel Blob
-
-## Usage in Other Packages
-
-This package is imported by `apps/api` for logo functionality:
-
-```typescript
-import { downloadLogo, getLogo, listLogos } from "@motormetrics/logos";
-```
-
-## Release Management
-
-Releases are handled at the monorepo level. See root CLAUDE.md for commit conventions and release process.
+`BLOB_READ_WRITE_TOKEN` only. See `.env.example`.

@@ -1,4 +1,4 @@
-import type { CarLogo } from "@logos/types";
+import type { CarLogo } from "@motormetrics/logos";
 import { slugify } from "@motormetrics/utils";
 import { HYBRID_REGEX } from "@web/config";
 import type { MakeRegistrationStat } from "@web/queries/cars";

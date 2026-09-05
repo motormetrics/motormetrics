@@ -10,9 +10,7 @@
     "strict": true,
     "verbatimModuleSyntax": true,
     "paths": {
-      "@web/*": ["./apps/web/src/*"],
-      "@logos/*": ["./packages/logos/src/*"],
-      "@utils/*": ["./packages/utils/src/*"]
+      "@web/*": ["./apps/web/src/*"]
     },
     "types": ["node"]
   }

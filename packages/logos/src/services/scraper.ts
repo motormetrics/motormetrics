@@ -1,8 +1,8 @@
-import { BASE_URL } from "@logos/config";
-import * as blobStorage from "@logos/services/blob";
-import type { CarLogo } from "@logos/types";
-import { extractFileExtension, getContentType } from "@logos/utils/file-utils";
-import { normaliseMake } from "@logos/utils/normalise-make";
+import { BASE_URL } from "../config";
+import type { CarLogo } from "../types";
+import { extractFileExtension, getContentType } from "../utils/file-utils";
+import { normaliseMake } from "../utils/normalise-make";
+import * as blobStorage from "./blob";
 
 export interface ScrapeResult {
   success: boolean;
@@ -12,7 +12,7 @@ export interface ScrapeResult {
 
 /**
  * Download a logo from external source and store in Vercel Blob
- * Uses Redis caching for metadata
+ * Returns the existing logo if one is already stored
  */
 export const downloadLogo = async (make: string): Promise<ScrapeResult> => {
   try {
@@ -52,7 +52,7 @@ export const downloadLogo = async (make: string): Promise<ScrapeResult> => {
     const extension = extractFileExtension(logoUrl);
     const contentType = getContentType(`${normalisedMake}.${extension}`);
 
-    // Upload to Vercel Blob (also caches in Redis)
+    // Upload to Vercel Blob
     const result = await blobStorage.uploadLogo(make, arrayBuffer, contentType);
 
     if (!result) {

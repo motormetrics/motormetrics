@@ -1,5 +1,5 @@
-import { normaliseMake } from "@logos/utils/normalise-make";
 import { describe, expect, it } from "vitest";
+import { normaliseMake } from "./normalise-make";
 
 describe("normaliseMake", () => {
   it.each([
