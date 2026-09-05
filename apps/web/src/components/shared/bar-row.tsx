@@ -29,7 +29,7 @@ export function BarRow({
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <div className="flex items-center gap-2.5">
-        <span
+        <div
           className={cn(
             "flex min-w-0 items-center gap-2.5 text-base",
             isActive
@@ -38,7 +38,7 @@ export function BarRow({
           )}
         >
           {label}
-        </span>
+        </div>
         <span className="ml-auto shrink-0 font-extrabold text-base tabular-nums">
           {value}
         </span>

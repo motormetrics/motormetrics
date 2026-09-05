@@ -25,7 +25,9 @@ export function PageEyebrow({
 }) {
   return (
     <div className={cn("flex flex-wrap items-center gap-3", className)}>
-      <h1 className="sr-only">{title}</h1>
+      <Typography.Heading className="sr-only" level={1}>
+        {title}
+      </Typography.Heading>
       <Typography.Paragraph className="font-semibold" color="muted">
         {section} ·
       </Typography.Paragraph>
