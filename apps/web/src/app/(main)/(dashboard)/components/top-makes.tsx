@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils";
 import { buildLogoMap } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
@@ -53,7 +54,12 @@ export async function TopMakes({
                   make={item.make}
                   size={28}
                 />
-                <span className="truncate">{item.make}</span>
+                <Typography.Paragraph
+                  className="[color:inherit] [font-weight:inherit]"
+                  truncate
+                >
+                  {item.make}
+                </Typography.Paragraph>
               </>
             }
             share={(item.value / leader) * 100}
