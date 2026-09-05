@@ -1,18 +1,21 @@
-import { Typography } from "@heroui/react";
+import { Chip } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { InkPanel } from "@web/components/shared/bento";
+import { BarRow } from "@web/components/shared/bar-row";
+import { Headline, SectionHead } from "@web/components/shared/overview";
 import {
   getVehiclePopulationByYearAndFuelType,
   getVehiclePopulationYearlyTotals,
 } from "@web/queries/vehicle-population";
-import { Car } from "lucide-react";
 
 /** Fuel types listed individually before the tail is folded into "Others". */
 const NAMED_ROWS = 5;
 
+/** Ranks past this share the last chart colour rather than wrapping around. */
+const CHART_COLOURS = 6;
+
 /**
- * The rail's closing ink panel: how many vehicles are actually on the road,
- * against the registrations the rest of the page counts.
+ * How many vehicles are actually on the road, against the registrations the
+ * rest of the page counts.
  */
 export async function PopulationPanel() {
   const [yearlyTotals, byFuelType] = await Promise.all([
@@ -51,71 +54,56 @@ export async function PopulationPanel() {
   const largestTotal = rows[0]?.total ?? 1;
 
   return (
-    <InkPanel>
-      <div className="flex items-center gap-2.5">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
-          <Car aria-hidden className="size-5" />
-        </span>
-        <Typography.Paragraph
-          color="muted"
-          size="sm"
-          className="text-accent-foreground/85"
-        >
-          Vehicles on the road
-        </Typography.Paragraph>
-      </div>
+    <div className="flex flex-col gap-6">
+      <SectionHead
+        caption={`All vehicles registered in Singapore · ${latest.year}`}
+        eyebrow="Vehicle population"
+        link={{ href: "/cars/annual", label: "Population data" }}
+        title="Cars on the road"
+      />
 
-      <span className="font-extrabold text-5xl text-accent-on-dark tabular-nums tracking-tight">
-        <NumberValue
-          locale="en-SG"
-          maximumFractionDigits={0}
-          value={latest.total}
-        />
-      </span>
+      <Headline
+        delta={
+          changeRatio !== null && previous ? (
+            <Chip
+              className="rounded-full bg-accent-soft font-bold text-accent-strong tabular-nums"
+              size="lg"
+              variant="soft"
+            >
+              <Chip.Label>
+                <NumberValue
+                  maximumFractionDigits={1}
+                  signDisplay="exceptZero"
+                  style="percent"
+                  value={changeRatio}
+                />{" "}
+                on {previous.year}
+              </Chip.Label>
+            </Chip>
+          ) : undefined
+        }
+        size="md"
+        value={
+          <NumberValue
+            locale="en-SG"
+            maximumFractionDigits={0}
+            value={latest.total}
+          />
+        }
+      />
 
-      <Typography.Paragraph
-        color="muted"
-        size="sm"
-        className="text-accent-foreground/60"
-      >
-        All vehicles registered in Singapore · {latest.year}
-        {changeRatio !== null && previous ? (
-          <>
-            {" · "}
-            <NumberValue
-              maximumFractionDigits={1}
-              signDisplay="exceptZero"
-              style="percent"
-              value={changeRatio}
-            />{" "}
-            on {previous.year}
-          </>
-        ) : null}
-      </Typography.Paragraph>
-
-      <ul className="flex flex-col gap-3">
-        {rows.map((row) => (
-          <li className="flex flex-col gap-1.5" key={row.label}>
-            <div className="flex items-center gap-3">
-              <span className="font-semibold text-accent-foreground/85 text-sm">
-                {row.label}
-              </span>
-              <span className="ml-auto font-bold text-accent-foreground text-sm tabular-nums">
-                {((row.total / latest.total) * 100).toFixed(1)}%
-              </span>
-            </div>
-            <span className="block h-2 overflow-hidden rounded-full bg-accent-foreground/10">
-              <span
-                className="block h-full rounded-full bg-accent-on-dark"
-                style={{
-                  opacity: row.label === "Electric" ? 1 : 0.45,
-                  width: `${((row.total / largestTotal) * 100).toFixed(1)}%`,
-                }}
-              />
-            </span>
+      <ul className="flex flex-col gap-3.5">
+        {rows.map((row, index) => (
+          <li key={row.label}>
+            <BarRow
+              color={`var(--chart-${Math.min(CHART_COLOURS, index + 1)})`}
+              label={row.label}
+              share={(row.total / largestTotal) * 100}
+              value={`${((row.total / latest.total) * 100).toFixed(1)}%`}
+            />
           </li>
         ))}
       </ul>
-    </InkPanel>
+    </div>
   );
 }

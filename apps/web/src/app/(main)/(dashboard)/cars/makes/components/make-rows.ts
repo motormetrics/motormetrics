@@ -1,5 +1,6 @@
 import type { CarLogo } from "@logos/types";
 import { slugify } from "@motormetrics/utils";
+import { HYBRID_REGEX } from "@web/config";
 import type { MakeRegistrationStat } from "@web/queries/cars";
 import {
   getCarsLatestMonth,
@@ -9,10 +10,35 @@ import {
 } from "@web/queries/cars";
 import { getAllCarLogos } from "@web/queries/logos";
 import { cache } from "react";
-import type { Range } from "../search-params";
+import {
+  FUEL_FILTERS,
+  type FuelFilter,
+  isFuelFilter,
+  type Range,
+} from "../search-params";
+
+export { FUEL_FILTERS, type FuelFilter, isFuelFilter };
 
 /** The `cars.fuelType` value that means battery-electric and nothing else. */
 const BEV_FUEL_TYPE = "Electric";
+
+/** The breakdown queries each powertrain tab resolves to. */
+const FUEL_FILTER_QUERIES: Record<FuelFilter, string[]> = {
+  Petrol: ["Petrol"],
+  Hybrid: ["Petrol-Electric", "Diesel-Electric"],
+  Electric: [BEV_FUEL_TYPE],
+};
+
+/** Whether a `cars.fuelType` value belongs to the tab. */
+export function matchesFuelFilter(
+  filter: FuelFilter,
+  fuelType: string,
+): boolean {
+  if (filter === "Hybrid") {
+    return HYBRID_REGEX.test(fuelType);
+  }
+  return fuelType === filter;
+}
 
 export interface MakeRow {
   count: number;
@@ -136,12 +162,12 @@ export function buildTotalsFromStats(
 }
 
 /**
- * Aggregate the raw `{ month, make, fuelType, count }` rows of a single fuel
- * type into the same shape.
+ * Aggregate the raw `{ month, make, fuelType, count }` rows of one powertrain
+ * tab into the same shape.
  *
- * Rows are re-filtered on an exact `fuelType` match because `getFuelTypeData`
- * turns hyphens into SQL wildcards, so asking for "Petrol-Electric" also
- * returns the plug-in variant.
+ * Rows are re-filtered through `isMatch` because `getFuelTypeData` turns
+ * hyphens into SQL wildcards, so asking for "Petrol-Electric" also returns the
+ * plug-in variant — wanted for the Hybrid tab, not for an exact fuel type.
  *
  * The year-on-year window mirrors `getMakeRegistrationStats()`: January to the
  * latest month, against the same months a year earlier. Both paths feed the same
@@ -149,7 +175,7 @@ export function buildTotalsFromStats(
  */
 export function buildTotalsFromFuelRows(
   rows: FuelRow[],
-  fuelType: string,
+  isMatch: (fuelType: string) => boolean,
   latestMonth: string,
   range: Range,
 ): MakeTotals[] {
@@ -166,7 +192,7 @@ export function buildTotalsFromFuelRows(
   >();
 
   for (const row of rows) {
-    if (row.fuelType !== fuelType) {
+    if (!isMatch(row.fuelType)) {
       continue;
     }
 
@@ -241,11 +267,11 @@ async function loadMonthCounts(
 /**
  * Every make for the active range and fuel filter, ranked and shared out.
  *
- * Memoised per request because five bento blocks read the same rows behind
- * their own Suspense boundaries.
+ * Memoised per request because four sections read the same rows behind their
+ * own Suspense boundaries.
  */
 export const loadMakeRows = cache(
-  async (range: Range, fuelType: string | null): Promise<MakeRowsResult> => {
+  async (range: Range, fuel: string | null): Promise<MakeRowsResult> => {
     const [latestMonth, fuelTypeRows, logoResult] = await Promise.all([
       getCarsLatestMonth(),
       getDistinctFuelTypes(),
@@ -261,15 +287,14 @@ export const loadMakeRows = cache(
       return { fuelTypes, latestMonth: null, rows: [], total: 0 };
     }
 
-    const activeFuelType =
-      fuelType && fuelTypes.includes(fuelType) ? fuelType : null;
-
     let totals: MakeTotals[];
-    if (activeFuelType) {
-      const breakdown = await getFuelTypeData(activeFuelType);
+    if (isFuelFilter(fuel)) {
+      const breakdowns = await Promise.all(
+        FUEL_FILTER_QUERIES[fuel].map((fuelType) => getFuelTypeData(fuelType)),
+      );
       totals = buildTotalsFromFuelRows(
-        breakdown.data,
-        activeFuelType,
+        breakdowns.flatMap((breakdown) => breakdown.data),
+        (fuelType) => matchesFuelFilter(fuel, fuelType),
         latestMonth,
         range,
       );

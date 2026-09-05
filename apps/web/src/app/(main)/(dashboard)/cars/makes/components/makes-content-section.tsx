@@ -1,7 +1,7 @@
 import { Skeleton } from "@heroui/react";
 import { slugify } from "@motormetrics/utils";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { Bento, BentoColumn, Rail } from "@web/components/shared/bento";
+import { Hairline, OverviewGrid } from "@web/components/shared/overview";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateItemListSchema } from "@web/lib/metadata";
@@ -30,20 +30,6 @@ const structuredData: WithContext<WebPage> = {
     url: SITE_URL,
   },
 };
-
-function CardSkeleton({ className }: { className?: string }) {
-  return (
-    <div
-      className={`rounded-4xl bg-surface p-8 shadow-surface ${className ?? ""}`}
-    >
-      <div className="flex flex-col gap-4">
-        <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="h-12 w-40 rounded-lg" />
-        <Skeleton className="h-6 w-44 rounded-full" />
-      </div>
-    </div>
-  );
-}
 
 async function MakesItemList() {
   const { sortedMakes } = await getGroupedMakes();
@@ -76,44 +62,44 @@ export function MakesContentSection({
         <MakesItemList />
       </Suspense>
 
-      <Bento>
-        {/* Left column — who leads, and how tightly the market is held */}
-        <BentoColumn>
-          <SectionErrorBoundary title="Leading make unavailable">
-            <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
-              <LeadingMakeCard searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-          <SectionErrorBoundary title="Market concentration unavailable">
-            <Suspense fallback={<CardSkeleton className="h-[420px]" />}>
-              <ConcentrationCard searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-        </BentoColumn>
+      {/* Who leads, and how tightly the market is held */}
+      <OverviewGrid>
+        <SectionErrorBoundary title="Leading make unavailable">
+          <Suspense fallback={<Skeleton className="h-80 w-full rounded-lg" />}>
+            <LeadingMakeCard searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SectionErrorBoundary title="Market concentration unavailable">
+          <Suspense fallback={<Skeleton className="h-80 w-full rounded-lg" />}>
+            <ConcentrationCard searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </OverviewGrid>
 
-        {/* Middle column — the full table */}
-        <BentoColumn>
-          <SectionErrorBoundary title="Makes table unavailable">
-            <Suspense fallback={<CardSkeleton className="h-[900px]" />}>
-              <AllMakesCard searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-        </BentoColumn>
+      <Hairline />
 
-        {/* Right rail — warm sand well: movers over a dark electric panel */}
-        <Rail>
-          <SectionErrorBoundary title="Movers unavailable">
-            <Suspense fallback={<CardSkeleton className="h-96" />}>
-              <FastestGrowing searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-          <SectionErrorBoundary title="Electric-only makes unavailable">
-            <Suspense fallback={<CardSkeleton className="h-80" />}>
-              <ElectricOnlyMakes />
-            </Suspense>
-          </SectionErrorBoundary>
-        </Rail>
-      </Bento>
+      <SectionErrorBoundary title="Makes table unavailable">
+        <Suspense
+          fallback={<Skeleton className="h-[720px] w-full rounded-lg" />}
+        >
+          <AllMakesCard searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
+
+      <Hairline />
+
+      <OverviewGrid>
+        <SectionErrorBoundary title="Movers unavailable">
+          <Suspense fallback={<Skeleton className="h-96 w-full rounded-lg" />}>
+            <FastestGrowing searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SectionErrorBoundary title="Electric-only makes unavailable">
+          <Suspense fallback={<Skeleton className="h-96 w-full rounded-lg" />}>
+            <ElectricOnlyMakes />
+          </Suspense>
+        </SectionErrorBoundary>
+      </OverviewGrid>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { Chip, Typography } from "@heroui/react";
 import { formatDateToMonthYear, slugify } from "@motormetrics/utils";
 import {
   FuelTypeTabs,
@@ -10,13 +10,13 @@ import {
   RANGE_LABELS,
   type Range,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
-import { MakeAvatar } from "@web/app/(main)/(dashboard)/cars/makes/components/make-avatar";
 import {
   buildLogoMap,
   shiftMonth,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { EmptyState } from "@web/components/shared/empty-state";
+import { MakeAvatar } from "@web/components/shared/make-avatar";
 import {
   ReportFilterBar,
   ReportHeadline,
@@ -359,9 +359,9 @@ export async function MakeReport({
                   {String(rowRank).padStart(2, "0")}
                 </ReportCell>
                 <ReportCell>
-                  <span className="inline-flex items-center whitespace-nowrap rounded-full bg-surface-secondary px-3 py-1.5 font-bold text-muted-strong text-sm">
-                    {rowFuelType}
-                  </span>
+                  <Chip className="whitespace-nowrap rounded-full bg-surface-secondary px-3 py-1.5 font-bold text-muted-strong text-sm">
+                    <Chip.Label className="px-0">{rowFuelType}</Chip.Label>
+                  </Chip>
                 </ReportCell>
                 <ReportCell className="font-bold text-base">
                   {formatVehicleType(vehicleType)}

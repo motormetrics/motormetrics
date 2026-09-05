@@ -1,21 +1,16 @@
-import { Tooltip, Typography } from "@heroui/react";
-import { buttonVariants } from "@heroui/styles";
 import { NumberValue } from "@heroui-pro/react";
-import { slugify } from "@motormetrics/utils";
 import {
   formatMonthLabel,
   formatMonthName,
 } from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
-import { HeroCard } from "@web/components/shared/bento";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import { sparkline } from "@web/components/shared/sparkline";
+import { Headline } from "@web/components/shared/overview";
+import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import {
   getDimensionStats,
   getMonthlyRegistrationTotals,
 } from "@web/queries/cars";
-import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
 /**
@@ -24,9 +19,14 @@ import type { SearchParams } from "nuqs/server";
  */
 const HISTORY_LIMIT = 360;
 
-/** Months drawn in the hero sparkline. */
+/** Months drawn in the headline sparkline. */
 const SPARK_MONTHS = 12;
 
+/**
+ * The page's opening figure: the month's registrations, the change on the
+ * month before, the year to date and the leading make, over a sparkline of
+ * the twelve months to the selected one.
+ */
 export async function RegistrationsHero({
   searchParams,
 }: {
@@ -56,103 +56,45 @@ export async function RegistrationsHero({
     .reduce((total, row) => total + row.total, 0);
 
   const series = history.slice(-SPARK_MONTHS).map((row) => row.total);
-  const spark = sparkline(series, 380, 90);
   const leader = makeStats[0];
 
   return (
-    <HeroCard>
-      <span className="w-fit rounded-full bg-accent-foreground/20 px-4 py-2 font-bold text-sm">
-        Registered · {formatMonthLabel(month)}
-      </span>
-
-      <div className="flex flex-wrap items-center gap-4">
-        <span className="font-extrabold text-6xl tabular-nums tracking-tight">
+    <div className="flex flex-col gap-2.5">
+      <Headline
+        caption={
+          <>
+            vs{" "}
+            {previous ? formatMonthName(previous.month) : "the previous month"}{" "}
+            ·{" "}
+            <NumberValue
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={yearToDate}
+            />{" "}
+            year to date
+            {leader ? (
+              <>
+                {" · "}
+                {leader.name} leads with {leader.share.toFixed(1)}%
+              </>
+            ) : null}
+          </>
+        }
+        delta={<DeltaChip value={changeRatio * 100} />}
+        label="New car registrations"
+        value={
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
             value={current.total}
           />
-        </span>
-        <DeltaChip tone="inverse" value={changeRatio * 100} />
-      </div>
-
-      <Typography.Paragraph className="text-accent-foreground/85">
-        cars registered vs{" "}
-        {previous ? formatMonthName(previous.month) : "the previous month"} ·{" "}
-        <NumberValue
-          locale="en-SG"
-          maximumFractionDigits={0}
-          value={yearToDate}
-        />{" "}
-        year to date
-      </Typography.Paragraph>
-
-      {spark ? (
-        <svg
-          className="h-[90px] w-full overflow-visible"
-          role="img"
-          viewBox="0 0 380 90"
-        >
-          <title>{`Monthly registrations over the ${series.length} months to ${formatMonthLabel(month)}`}</title>
-          <path d={spark.area} fill="currentColor" opacity={0.16} />
-          <path
-            d={spark.line}
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={3.5}
-          />
-          <circle
-            cx={spark.lastX}
-            cy={spark.lastY}
-            fill="var(--accent)"
-            r={6}
-            stroke="currentColor"
-            strokeWidth={3.5}
-          />
-        </svg>
-      ) : null}
-
-      {leader ? (
-        <div className="flex items-center gap-4 rounded-field bg-foreground/70 px-6 py-5">
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <Typography.Paragraph
-              color="muted"
-              className="text-accent-foreground"
-            >
-              {leader.name} leads with{" "}
-              <NumberValue
-                locale="en-SG"
-                maximumFractionDigits={0}
-                value={leader.count}
-              />
-            </Typography.Paragraph>
-            <Typography.Paragraph
-              color="muted"
-              size="xs"
-              className="text-accent-foreground/70"
-            >
-              {leader.share.toFixed(1)}% of registrations year to date
-            </Typography.Paragraph>
-          </div>
-          <Tooltip delay={300}>
-            <Link
-              aria-label={`View registrations for ${leader.name}`}
-              className={buttonVariants({
-                className:
-                  "ml-auto size-12 shrink-0 rounded-full bg-accent-foreground text-accent-strong",
-                isIconOnly: true,
-                variant: "tertiary",
-              })}
-              href={`/cars/makes/${slugify(leader.name)}`}
-            >
-              <ArrowUpRight className="size-5" />
-            </Link>
-            <Tooltip.Content>{`View registrations for ${leader.name}`}</Tooltip.Content>
-          </Tooltip>
-        </div>
-      ) : null}
-    </HeroCard>
+        }
+      />
+      <SparklineChart
+        className="mt-2"
+        title={`Monthly registrations over the ${series.length} months to ${formatMonthLabel(month)}`}
+        values={series}
+      />
+    </div>
   );
 }

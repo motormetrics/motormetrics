@@ -19,6 +19,9 @@ export const ALL_EV_FUEL_TYPES = [
 /** Fuel type recorded against battery-electric vehicles in `vehicle_population`. */
 export const ELECTRIC_POPULATION_FUEL_TYPE = "Electric";
 
+/** LTA's Singapore Green Plan 2030 target for public charging points. */
+export const CHARGING_POINT_TARGET_2030 = 60_000;
+
 interface PowertrainSegment {
   /** Colour for the split bar and the trend chart. */
   colour: string;
@@ -60,8 +63,7 @@ export const POWERTRAIN_TABS: { key: Powertrain; label: string }[] = [
 ];
 
 /** Colour of everything that is neither battery-electric nor hybrid. */
-export const COMBUSTION_COLOUR =
-  "color-mix(in oklab, var(--accent) 15%, transparent)";
+export const COMBUSTION_COLOUR = "var(--accent-soft)";
 
 export const RANGE_NOTES: Record<Range, string> = {
   "1Y": "12 months",

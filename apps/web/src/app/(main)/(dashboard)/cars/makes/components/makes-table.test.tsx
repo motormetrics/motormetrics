@@ -1,11 +1,14 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { withNuqsTestingAdapter } from "nuqs/adapters/testing";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MakesTable, type MakesTableRow } from "./makes-table";
 
 const capture = vi.hoisted(() => vi.fn());
 
 vi.mock("posthog-js", () => ({ default: { capture } }));
+
+const wrapper = withNuqsTestingAdapter({ searchParams: {} });
 
 const rows: MakesTableRow[] = [
   {
@@ -49,7 +52,10 @@ const manyRows: MakesTableRow[] = Array.from({ length: 25 }, (_, index) => ({
 }));
 
 const renderTable = (rowsToRender: MakesTableRow[] = rows) =>
-  render(<MakesTable rangeLabel="Year to date" rows={rowsToRender} />);
+  render(
+    <MakesTable fuel={null} rangeLabel="Year to date" rows={rowsToRender} />,
+    { wrapper },
+  );
 
 const makeNames = () =>
   screen
@@ -72,13 +78,13 @@ describe("MakesTable", () => {
     document.removeEventListener("click", preventNavigation, true);
   });
 
-  it("lists every make with a link to its detail page", () => {
+  it("should list every make with a link to its detail page", () => {
     renderTable();
 
     expect(makeNames()).toEqual(["toyota", "byd", "mazda"]);
   });
 
-  it("sorts by registrations descending by default", () => {
+  it("should sort by registrations descending by default", () => {
     renderTable();
 
     expect(
@@ -86,24 +92,24 @@ describe("MakesTable", () => {
     ).toBeVisible();
   });
 
-  it("filters rows by the search query", async () => {
+  it("should filter rows by the search query", async () => {
     const user = userEvent.setup();
     renderTable();
 
     await user.type(
-      screen.getByRole("textbox", { name: "Search makes" }),
+      screen.getByRole("searchbox", { name: "Search makes" }),
       "yd",
     );
 
     expect(makeNames()).toEqual(["byd"]);
   });
 
-  it("shows the empty state when nothing matches", async () => {
+  it("should show the empty state when nothing matches", async () => {
     const user = userEvent.setup();
     renderTable();
 
     await user.type(
-      screen.getByRole("textbox", { name: "Search makes" }),
+      screen.getByRole("searchbox", { name: "Search makes" }),
       "ferrari",
     );
 
@@ -111,7 +117,7 @@ describe("MakesTable", () => {
     expect(screen.queryAllByRole("link")).toHaveLength(0);
   });
 
-  it("sorts by make name ascending on the first click of that header", async () => {
+  it("should sort by make name ascending on the first click of that header", async () => {
     const user = userEvent.setup();
     renderTable();
 
@@ -120,7 +126,7 @@ describe("MakesTable", () => {
     expect(makeNames()).toEqual(["byd", "mazda", "toyota"]);
   });
 
-  it("reverses the direction when the active header is clicked again", async () => {
+  it("should reverse the direction when the active header is clicked again", async () => {
     const user = userEvent.setup();
     renderTable();
 
@@ -129,7 +135,7 @@ describe("MakesTable", () => {
     expect(makeNames()).toEqual(["mazda", "byd", "toyota"]);
   });
 
-  it("sinks makes without a year-on-year figure when sorting by change", async () => {
+  it("should sink makes without a year-on-year figure when sorting by change", async () => {
     const user = userEvent.setup();
     renderTable();
 
@@ -138,7 +144,7 @@ describe("MakesTable", () => {
     expect(makeNames()).toEqual(["byd", "toyota", "mazda"]);
   });
 
-  it("captures car_make_selected when a row is opened", async () => {
+  it("should capture car_make_selected when a row is opened", async () => {
     const user = userEvent.setup();
     renderTable();
 
@@ -150,19 +156,19 @@ describe("MakesTable", () => {
     });
   });
 
-  it("does not capture car_make_selected while the query is being typed", async () => {
+  it("should not capture car_make_selected while the query is being typed", async () => {
     const user = userEvent.setup();
     renderTable();
 
     await user.type(
-      screen.getByRole("textbox", { name: "Search makes" }),
+      screen.getByRole("searchbox", { name: "Search makes" }),
       "byd",
     );
 
     expect(capture).not.toHaveBeenCalled();
   });
 
-  it("renders a dash instead of a delta chip when there is no comparison", () => {
+  it("should render a dash instead of a delta chip when there is no comparison", () => {
     renderTable();
 
     const mazdaRow = screen.getAllByRole("link")[2];
@@ -185,6 +191,22 @@ describe("MakesTable", () => {
 
     expect(makeNames()).toHaveLength(25);
     expect(screen.getByRole("button", { name: "Show fewer" })).toBeVisible();
+  });
+
+  it("should mark the active powertrain tab and offer the rest", () => {
+    render(
+      <MakesTable fuel="Electric" rangeLabel="Year to date" rows={rows} />,
+      { wrapper },
+    );
+
+    expect(screen.getByRole("radio", { name: "Electric" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
+    expect(screen.getByRole("radio", { name: "All" })).toHaveAttribute(
+      "aria-checked",
+      "false",
+    );
   });
 
   it("should not offer to expand a list that already fits", () => {

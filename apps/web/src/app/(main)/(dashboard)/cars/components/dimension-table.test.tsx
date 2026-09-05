@@ -53,7 +53,19 @@ const visibleNames = () =>
   screen
     .getAllByRole("row")
     .slice(1)
-    .map((row) => within(row).getAllByRole("rowheader")[0].textContent);
+    .map((row) => spokenText(within(row).getAllByRole("rowheader")[0]));
+
+/**
+ * Text as a screen reader announces it: the avatar's monogram is
+ * `aria-hidden`, so it is dropped the way `textContent` would not.
+ */
+const spokenText = (element: HTMLElement) => {
+  const clone = element.cloneNode(true) as HTMLElement;
+  for (const hidden of clone.querySelectorAll("[aria-hidden]")) {
+    hidden.remove();
+  }
+  return clone.textContent;
+};
 
 const searchBox = () => screen.getByRole("searchbox", { name: "Search makes" });
 
@@ -67,11 +79,48 @@ describe("DimensionTable", () => {
     ).toBeVisible();
 
     const row = within(screen.getAllByRole("row")[1]);
-    expect(row.getAllByRole("rowheader")[0]).toHaveTextContent("1TOYOTA");
+    expect(spokenText(row.getAllByRole("rowheader")[0])).toBe("1TOYOTA");
 
     const cells = row.getAllByRole("gridcell");
     expect(cells[0]).toHaveTextContent("600");
     expect(cells[1]).toHaveTextContent("60.0%");
+    expect(cells[2]).toHaveTextContent("+12.5%");
+  });
+
+  it("should show a dash where a row has no comparable period", () => {
+    renderTable();
+
+    const row = within(screen.getAllByRole("row")[3]);
+    expect(row.getByText("No comparable period")).toBeInTheDocument();
+  });
+
+  it("should sort by change, keeping rows without one at the bottom", async () => {
+    const user = userEvent.setup();
+    renderTable();
+
+    await user.click(screen.getByRole("columnheader", { name: /Change/ }));
+
+    expect(visibleNames()).toEqual(["2BMW", "1TOYOTA", "3BYD"]);
+    expect(screen.getByText(/Sorted by change, ascending/)).toBeVisible();
+
+    await user.click(screen.getByRole("columnheader", { name: /Change/ }));
+
+    expect(visibleNames()).toEqual(["1TOYOTA", "2BMW", "3BYD"]);
+  });
+
+  it("should show the make's logo when one is known", () => {
+    render(
+      <DimensionTable
+        dimension="make"
+        logoUrlBySlug={{ toyota: "https://cdn.example/toyota.png" }}
+        monthLabel="October 2025"
+        rows={rows}
+      />,
+      { wrapper },
+    );
+
+    expect(screen.getByRole("img", { name: "TOYOTA logo" })).toBeVisible();
+    expect(screen.queryByRole("img", { name: "BMW logo" })).toBeNull();
   });
 
   it("should filter rows by the search query", async () => {
@@ -129,7 +178,7 @@ describe("DimensionTable", () => {
     renderTable();
 
     const tab = screen.getByRole("radio", { name: "Fuel types" });
-    expect(tab).not.toBeChecked();
+    expect(tab).toHaveAttribute("aria-checked", "false");
 
     await user.click(tab);
 
