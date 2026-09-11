@@ -4,7 +4,7 @@ import { asc } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export async function getDeregistrations() {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("deregistrations:months");
 

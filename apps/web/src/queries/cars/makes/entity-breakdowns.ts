@@ -91,7 +91,7 @@ export async function getMakeDetails(
   make: string,
   month?: string | null,
 ): Promise<MakeDetails> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:make:${make}`);
   if (month) {
@@ -134,7 +134,7 @@ export async function getFuelTypeData(
   fuelType: string,
   month?: string,
 ): Promise<FuelTypeData> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:fuel:${fuelType}`);
   if (month) {
@@ -149,7 +149,7 @@ export async function getMakeFuelTypeBreakdown(
   make: string,
   month?: string | null,
 ): Promise<{ name: string; value: number }[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:make:${make}`);
   if (month) {
@@ -180,7 +180,7 @@ export async function getMakeVehicleTypeBreakdown(
   make: string,
   month?: string | null,
 ): Promise<{ name: string; value: number }[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:make:${make}`);
   if (month) {
@@ -211,7 +211,7 @@ export async function getVehicleTypeData(
   vehicleType: string,
   month?: string,
 ): Promise<VehicleTypeData> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:vehicle:${vehicleType}`);
   if (month) {
@@ -229,7 +229,7 @@ export async function getVehicleTypeData(
 export async function getMakeMonthlyTotals(
   make: string,
 ): Promise<MakeMonthlyTotal[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:make:${make}`);
 

@@ -47,7 +47,7 @@ export function getComparisonWindows(latestMonth: string): {
 export async function getMakeRegistrationStats(): Promise<
   MakeRegistrationStat[]
 > {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:makes");
 

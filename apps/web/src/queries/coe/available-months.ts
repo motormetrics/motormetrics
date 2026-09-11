@@ -4,7 +4,7 @@ import { desc } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export async function getCoeMonths(): Promise<{ month: string }[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("coe:months");
 

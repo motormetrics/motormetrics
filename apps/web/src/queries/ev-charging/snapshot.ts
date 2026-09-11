@@ -26,7 +26,7 @@ const EMPTY: EvChargingSnapshot = { observedAt: null, records: [] };
  * account key the snapshot is empty and the pages show their empty state.
  */
 export async function getEvChargingSnapshot(): Promise<EvChargingSnapshot> {
-  "use cache: remote";
+  "use cache";
   cacheLife("hours");
 
   const accountKey = process.env.LTA_DATAMALL_ACCOUNT_KEY;

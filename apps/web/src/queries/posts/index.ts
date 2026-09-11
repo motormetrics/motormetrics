@@ -63,7 +63,7 @@ export async function searchPosts(query: string): Promise<SelectPost[]> {
 }
 
 export async function getAllPosts() {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("posts:list");
 
@@ -74,7 +74,7 @@ export async function getAllPosts() {
 }
 
 export async function getRecentPosts(limit = 3) {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("posts:recent");
 
@@ -86,7 +86,7 @@ export async function getRecentPosts(limit = 3) {
 }
 
 export async function getPostBySlug(slug: string) {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`posts:slug:${slug}`);
 
@@ -96,7 +96,7 @@ export async function getPostBySlug(slug: string) {
 }
 
 export async function getPostsByIds(postIds: string[]) {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("posts:list");
 
@@ -111,7 +111,7 @@ export async function getPostsByIds(postIds: string[]) {
 }
 
 export async function getPostCountsByCategory() {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("posts:list");
 
@@ -123,7 +123,7 @@ export async function getPostCountsByCategory() {
 }
 
 export async function getPreviousPost(publishedAt: Date) {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("posts:list");
 
@@ -134,7 +134,7 @@ export async function getPreviousPost(publishedAt: Date) {
 }
 
 export async function getNextPost(publishedAt: Date) {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("posts:list");
 

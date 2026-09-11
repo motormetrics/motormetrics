@@ -18,7 +18,7 @@ interface YearOnly {
  * Get yearly registration totals aggregated from monthly data (ascending order for charts)
  */
 export async function getYearlyRegistrations(): Promise<YearlyTotal[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:annual");
 
@@ -37,7 +37,7 @@ export async function getYearlyRegistrations(): Promise<YearlyTotal[]> {
  * Get available years in descending order (for dropdowns/selectors)
  */
 export async function getAvailableYears(): Promise<YearOnly[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:annual");
 
@@ -63,7 +63,7 @@ export async function getTopMakesByYear(
   year?: number,
   limit = 8,
 ): Promise<MakeValue[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:top-makes");
   if (year) {

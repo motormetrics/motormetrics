@@ -276,7 +276,7 @@ export async function loadMakeRows(
   range: Range,
   fuel: string | null,
 ): Promise<MakeRowsResult> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:months", "cars:makes", LOGOS_CACHE_TAG);
   if (isFuelFilter(fuel)) {
@@ -381,7 +381,7 @@ export function selectElectricOnlyMakes(
 }
 
 export async function loadElectricOnlyMakes(): Promise<ElectricOnlySummary | null> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(
     "cars:months",
