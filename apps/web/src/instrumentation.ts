@@ -33,23 +33,32 @@ export async function register() {
     exportMode: "immediate",
   });
 
-  const tracerProvider = new NodeTracerProvider({
-    // Sentry decides sampling so trace propagation stays consistent.
-    sampler: sentryClient ? new SentrySampler(sentryClient) : undefined,
-    spanProcessors: [new SentrySpanProcessor(), langfuseSpanProcessor],
-    // Use Web Crypto API to avoid Math.random() which triggers
-    // Next.js prerender bailout in Server Components.
-    idGenerator: {
-      generateTraceId: () => toHex(crypto.getRandomValues(new Uint8Array(16))),
-      generateSpanId: () => toHex(crypto.getRandomValues(new Uint8Array(8))),
-    },
-  });
+  // DIAGNOSTIC (temporary, do not merge): tracing is off unless
+  // OTEL_TRACING_ENABLED=1. The OpenTelemetry tracer reads the clock for span
+  // start times, and we are testing whether that Date.now() call is what makes
+  // the opengraph-image and twitter-image routes bail out of static rendering
+  // on revalidation. The idGenerator below already works around the same class
+  // of bug for Math.random(), which is what points at the tracer here.
+  if (process.env.OTEL_TRACING_ENABLED === "1") {
+    const tracerProvider = new NodeTracerProvider({
+      // Sentry decides sampling so trace propagation stays consistent.
+      sampler: sentryClient ? new SentrySampler(sentryClient) : undefined,
+      spanProcessors: [new SentrySpanProcessor(), langfuseSpanProcessor],
+      // Use Web Crypto API to avoid Math.random() which triggers
+      // Next.js prerender bailout in Server Components.
+      idGenerator: {
+        generateTraceId: () =>
+          toHex(crypto.getRandomValues(new Uint8Array(16))),
+        generateSpanId: () => toHex(crypto.getRandomValues(new Uint8Array(8))),
+      },
+    });
 
-  tracerProvider.register({
-    propagator: new SentryPropagator(),
-    contextManager: new Sentry.SentryContextManager(),
-  });
-  Sentry.validateOpenTelemetrySetup();
+    tracerProvider.register({
+      propagator: new SentryPropagator(),
+      contextManager: new Sentry.SentryContextManager(),
+    });
+    Sentry.validateOpenTelemetrySetup();
+  }
 
   registerTelemetry(new OpenTelemetry({ runtimeContext: true }));
 }
