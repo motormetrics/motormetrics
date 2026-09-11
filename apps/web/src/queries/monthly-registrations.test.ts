@@ -1,9 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { getCarsComparison, getCarsData } from "./cars/monthly-registrations";
+import {
+  getCarsComparison,
+  getCarsData,
+  getMonthlyRegistrationTotals,
+  getMonthlyRegistrationTotalsByFuelType,
+  getYearToDateByFuelType,
+} from "./cars/monthly-registrations";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueBatch,
+  queueSelect,
   resetDbMocks,
 } from "./test-utils";
 
@@ -107,5 +114,59 @@ describe("monthly registration queries", () => {
     expect(result.currentMonth.total).toBe(0);
     expect(result.previousMonth.total).toBe(0);
     expect(result.previousYear.total).toBe(0);
+  });
+
+  it("should return monthly totals oldest first", async () => {
+    // The query reads newest first; the series is reversed for the sparkline
+    queueSelect([
+      { month: "2024-03", total: 30 },
+      { month: "2024-02", total: 20 },
+    ]);
+
+    const result = await getMonthlyRegistrationTotals();
+
+    expect(result).toEqual([
+      { month: "2024-02", total: 20 },
+      { month: "2024-03", total: 30 },
+    ]);
+    expect(cacheTagMock).toHaveBeenCalledWith("cars:monthly-totals");
+  });
+
+  it("should report year-to-date registrations per fuel type", async () => {
+    queueSelect([
+      { name: "Electric", count: 40 },
+      { name: "Petrol", count: 10 },
+    ]);
+
+    const result = await getYearToDateByFuelType(2024);
+
+    expect(result).toEqual([
+      { name: "Electric", count: 40 },
+      { name: "Petrol", count: 10 },
+    ]);
+    expect(cacheTagMock).toHaveBeenCalledWith("cars:year:2024");
+  });
+
+  it("should tag the monthly series per fuel type", async () => {
+    queueSelect([
+      { month: "2024-03", total: 8 },
+      { month: "2024-02", total: 5 },
+    ]);
+
+    const result = await getMonthlyRegistrationTotalsByFuelType("Electric");
+
+    expect(result).toEqual([
+      { month: "2024-02", total: 5 },
+      { month: "2024-03", total: 8 },
+    ]);
+    expect(cacheTagMock).toHaveBeenCalledWith("cars:monthly-totals:Electric");
+  });
+
+  it("should treat a null sum as zero", async () => {
+    queueSelect([{ month: "2024-02", total: null }]);
+
+    const result = await getMonthlyRegistrationTotals();
+
+    expect(result).toEqual([{ month: "2024-02", total: 0 }]);
   });
 });
