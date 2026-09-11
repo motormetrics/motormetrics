@@ -1,3 +1,11 @@
+## [5.20.5](https://github.com/motormetrics/motormetrics/compare/v5.20.4...v5.20.5) (2026-09-11)
+
+### Performance Improvements
+
+* **web:** cache static-shell queries in the build cache ([0804140](https://github.com/motormetrics/motormetrics/commit/0804140f363e425fffbbffeefeefbff9f0b68a20))
+* **web:** drop the last remote cache directives ([0f6ca5e](https://github.com/motormetrics/motormetrics/commit/0f6ca5e596e46fe298f3bb429e1674bd0e30763f))
+* **web:** prefer the build cache for mixed-caller queries ([03475a6](https://github.com/motormetrics/motormetrics/commit/03475a6ba7ba60ba830fad3a82306b6b98779050))
+
 ## [5.20.4](https://github.com/motormetrics/motormetrics/compare/v5.20.3...v5.20.4) (2026-09-11)
 
 ### Performance Improvements
