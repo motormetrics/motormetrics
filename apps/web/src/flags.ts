@@ -8,20 +8,6 @@ export const advertisePage = flag<boolean>({
   adapter: vercelAdapter(),
 });
 
-/** Advertise in More menu and footer. Independent of advertise-page. */
-export const advertiseNav = flag<boolean>({
-  key: "advertise-nav",
-  defaultValue: false,
-  adapter: vercelAdapter(),
-});
-
-/** Blog in the More menu. The /blog route stays live either way. */
-export const blogNav = flag<boolean>({
-  key: "blog-nav",
-  defaultValue: false,
-  adapter: vercelAdapter(),
-});
-
 /** Popular posts on blog pages. */
 export const blogPopularPosts = flag<boolean>({
   key: "blog-popular-posts",

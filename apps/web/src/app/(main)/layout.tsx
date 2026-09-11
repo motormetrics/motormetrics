@@ -4,21 +4,15 @@ import { Banner } from "@web/components/banner";
 import { Footer } from "@web/components/footer";
 import { NotificationPrompt } from "@web/components/notification-prompt";
 import { SurveyPrompt } from "@web/components/survey-prompt";
-import { advertiseNav, blogNav } from "@web/flags";
 import { footerNavItems, moreNavItems } from "@web/utils/flagged-nav";
-import { type ReactNode, Suspense } from "react";
+import type { ReactNode } from "react";
 
-async function FlaggedAppNav() {
-  const [advertise, blog] = await Promise.all([advertiseNav(), blogNav()]);
-
-  return <AppNav moreNavItems={moreNavItems({ advertise, blog })} />;
-}
-
-async function FlaggedFooter() {
-  const advertise = await advertiseNav();
-
-  return <Footer navItems={footerNavItems({ advertise })} />;
-}
+// advertise-nav and blog-nav previously gated these items per request via
+// the Flags SDK, which reads request headers and pulled every page out of
+// the static shell. The flags provider work is parked (#1019), so this
+// renders the declared defaultValue (false) statically instead.
+const moreItems = moreNavItems({ advertise: false, blog: false });
+const footerItems = footerNavItems({ advertise: false });
 
 export default function MainLayout({
   children,
@@ -36,13 +30,9 @@ export default function MainLayout({
         the content beneath them, and the two bars above use the same measure.
       */}
       <div className="mx-auto flex min-h-screen w-full max-w-page flex-col gap-8 px-4 py-8 sm:px-6 lg:px-9 lg:py-9">
-        <Suspense fallback={<AppNav />}>
-          <FlaggedAppNav />
-        </Suspense>
+        <AppNav moreNavItems={moreItems} />
         <main className="flex flex-1 flex-col gap-8">{children}</main>
-        <Suspense fallback={<Footer />}>
-          <FlaggedFooter />
-        </Suspense>
+        <Footer navItems={footerItems} />
       </div>
     </div>
   );
