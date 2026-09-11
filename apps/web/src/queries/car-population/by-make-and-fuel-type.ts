@@ -19,7 +19,7 @@ export interface CarPopulationBreakdown {
 export async function getCarPopulationByMakeAndFuelType(): Promise<
   CarPopulationBreakdown[]
 > {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:population:totals");
 

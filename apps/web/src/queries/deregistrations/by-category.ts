@@ -18,7 +18,7 @@ interface MonthTotal {
 export async function getDeregistrationsByCategory(
   month: string,
 ): Promise<CategoryTotal[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`deregistrations:month:${month}`);
 
@@ -42,7 +42,7 @@ export async function getDeregistrationsByCategory(
 export async function getDeregistrationsTotalByMonth(
   month: string,
 ): Promise<MonthTotal[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`deregistrations:month:${month}`);
 

@@ -7,7 +7,7 @@ import { cacheLife, cacheTag } from "next/cache";
  * Get the latest month available in deregistrations data
  */
 export async function getDeregistrationsLatestMonth() {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("deregistrations:months");
 

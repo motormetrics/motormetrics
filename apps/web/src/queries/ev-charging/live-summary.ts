@@ -16,7 +16,7 @@ export interface EvChargingLiveSummary {
 export async function getEvChargingLiveSummary(
   district?: string,
 ): Promise<EvChargingLiveSummary> {
-  "use cache: remote";
+  "use cache";
   cacheLife("hours");
 
   const { observedAt, records } = await getEvChargingSnapshot();

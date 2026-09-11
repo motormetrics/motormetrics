@@ -28,7 +28,7 @@ interface SiteExtras {
  * Locations without coordinates are dropped rather than guessed at.
  */
 export async function getEvChargingMapSites(): Promise<EvChargingMapSite[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("hours");
 
   const [{ records }, utilisation] = await Promise.all([
