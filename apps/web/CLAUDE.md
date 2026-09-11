@@ -204,7 +204,9 @@ Test descriptions start with "should" (`it("should render title and children")`,
 
 Web-specific variables (see root `CLAUDE.md` for the cross-cutting ones):
 
-- `BLOB_READ_WRITE_TOKEN`: Vercel Blob storage for car logos (via `@motormetrics/logos`)
+- `BLOB_STORE_ID` / `BLOB_WEBHOOK_PUBLIC_KEY`: Vercel Blob for car logos and hero images (via `@motormetrics/logos` and `@motormetrics/ai`).
+  Auth is OIDC: `@vercel/blob` reads `VERCEL_OIDC_TOKEN` and `BLOB_STORE_ID` from the environment, so the legacy
+  `BLOB_READ_WRITE_TOKEN` is no longer used. Run `vercel env pull` locally
 - `NEXT_PUBLIC_FEATURE_FLAG_UNRELEASED`: env switch for leftover unreleased UI (PQP renewal comparison).
   Preview/production gates for other surfaces use Vercel Flags in `src/flags.ts`, not this public env var
 - `FLAGS` / `FLAGS_SECRET`: Vercel Flags server SDK key and signing secret, used by the Flags SDK
