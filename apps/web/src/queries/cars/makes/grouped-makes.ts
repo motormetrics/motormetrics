@@ -16,7 +16,7 @@ const getLetterFromMake = (make: Make): string => {
 };
 
 export async function getGroupedMakes(): Promise<GroupedMakesResult> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:makes");
 

@@ -41,7 +41,7 @@ export async function getCategoryTotals(
   field: CategoryField,
   months: string[],
 ): Promise<CategoryTotal[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(...monthTags(months));
 
@@ -76,7 +76,7 @@ export async function getCategoryMonthlySeries(
   field: CategoryField,
   months: string[],
 ): Promise<CategoryMonthlyPoint[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(...monthTags(months));
 
@@ -116,7 +116,7 @@ export async function getTopMakesByCategory(
   months: string[],
   makesPerType = 3,
 ): Promise<CategoryLeader[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(...monthTags(months));
 
@@ -173,7 +173,7 @@ export interface ElectricShare {
 export async function getElectricShareByVehicleType(
   months: string[],
 ): Promise<ElectricShare[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(...monthTags(months));
 

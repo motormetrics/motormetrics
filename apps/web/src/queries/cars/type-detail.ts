@@ -64,7 +64,7 @@ export async function getTypeMonthlySeries(
   month: string,
   limit = 12,
 ): Promise<TypeMonthlyPoint[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:month:${month}`, `cars:${DIMENSION_TAGS[dimension]}:${value}`);
 
@@ -100,7 +100,7 @@ export async function getTypeDistributionInWindow(
   from: string,
   to: string,
 ): Promise<TypeCount[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:month:${to}`, "cars:annual");
 
@@ -124,7 +124,7 @@ export async function getTypeMakesInWindow(
   from: string,
   to: string,
 ): Promise<{ count: number; make: string }[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:month:${to}`, `cars:${DIMENSION_TAGS[dimension]}:${value}`);
 
@@ -158,7 +158,7 @@ export async function getTypeCrossMixInWindow(
   from: string,
   to: string,
 ): Promise<TypeCount[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:month:${to}`, `cars:${DIMENSION_TAGS[dimension]}:${value}`);
 

@@ -24,7 +24,7 @@ export async function getExercisePair(month?: string): Promise<{
   current: ExerciseRows | null;
   previous: ExerciseRows | null;
 }> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("coe:exercises", month ? `coe:month:${month}` : "coe:latest");
 
@@ -93,7 +93,7 @@ export interface CategoryExercise {
 export async function getCategoryExercises(
   category: COECategory,
 ): Promise<CategoryExercise[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`coe:category:${category}`);
 
