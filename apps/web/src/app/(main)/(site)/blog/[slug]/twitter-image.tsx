@@ -8,6 +8,7 @@ import { OG_CONTENT_TYPE, TWITTER_SIZE } from "@web/lib/og/config";
 import { getOGFonts } from "@web/lib/og/fonts";
 import { getAllPosts, getPostBySlug } from "@web/queries/posts";
 import { ImageResponse } from "next/og";
+import { connection } from "next/server";
 
 interface ImageProps {
   params: Promise<{ slug: string }>;
@@ -23,6 +24,8 @@ export async function generateStaticParams() {
 }
 
 export default async function Image({ params }: ImageProps) {
+  await connection();
+
   const { slug } = await params;
   const [post, fonts] = await Promise.all([getPostBySlug(slug), getOGFonts()]);
 

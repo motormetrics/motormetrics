@@ -5,6 +5,7 @@ import { loadFuelMix } from "@web/lib/og/data";
 import { getOGFonts } from "@web/lib/og/fonts";
 import { getDistinctFuelTypes } from "@web/queries/cars";
 import { ImageResponse } from "next/og";
+import { connection } from "next/server";
 
 export const alt = "Fuel-type share of new registrations - MotorMetrics";
 export const size = OG_SIZE;
@@ -18,6 +19,8 @@ export async function generateStaticParams() {
 }
 
 export default async function Image() {
+  await connection();
+
   const [data, fonts] = await Promise.all([loadFuelMix(), getOGFonts()]);
 
   if (!data) {

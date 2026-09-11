@@ -5,6 +5,7 @@ import { loadMake } from "@web/lib/og/data";
 import { getOGFonts } from "@web/lib/og/fonts";
 import { getDistinctMakes } from "@web/queries/cars";
 import { ImageResponse } from "next/og";
+import { connection } from "next/server";
 
 interface ImageProps {
   params: Promise<{ make: string }>;
@@ -22,6 +23,8 @@ export async function generateStaticParams() {
 }
 
 export default async function Image({ params }: ImageProps) {
+  await connection();
+
   const { make } = await params;
   const [data, fonts] = await Promise.all([loadMake(make), getOGFonts()]);
 
