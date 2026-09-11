@@ -1,3 +1,9 @@
+## [5.20.3](https://github.com/motormetrics/motormetrics/compare/v5.20.2...v5.20.3) (2026-09-11)
+
+### Bug Fixes
+
+* bump @vercel/blob to 2.8.0 for OIDC auth support ([a53d710](https://github.com/motormetrics/motormetrics/commit/a53d7109473c37f2db1de3e0fefea2bdc9322904))
+
 ## [5.20.2](https://github.com/motormetrics/motormetrics/compare/v5.20.1...v5.20.2) (2026-09-11)
 
 ### Performance Improvements
