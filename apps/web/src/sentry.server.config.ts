@@ -7,6 +7,8 @@ export const sentryClient = Sentry.init({
   environment: process.env.VERCEL_ENV ?? process.env.NODE_ENV,
   skipOpenTelemetrySetup: true,
   tracesSampleRate: process.env.NODE_ENV === "development" ? 1.0 : 0.1,
-  includeLocalVariables: true,
+  // Local variable capture attaches the V8 inspector on every cold start
+  // (the "Debugger listening on ws://" log lines), which costs CPU on
+  // Fluid Compute — left off.
   enableLogs: true,
 });
