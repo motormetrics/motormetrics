@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@motormetrics/utils": "workspace:*",
-    "@vercel/blob": "2.3.3"
+    "@vercel/blob": "2.8.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",
