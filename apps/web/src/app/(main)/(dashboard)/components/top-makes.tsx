@@ -5,16 +5,23 @@ import { buildLogoMap } from "@web/app/(main)/(dashboard)/cars/makes/components/
 import { BarRow } from "@web/components/shared/bar-row";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead } from "@web/components/shared/overview";
+import { LOGOS_CACHE_TAG } from "@web/lib/cache-tags";
 import { getTopMakesByYear } from "@web/queries/cars";
 import { getAllCarLogos } from "@web/queries/logos";
 import { getLatestMonth } from "@web/utils/dates/months";
+import { cacheLife, cacheTag } from "next/cache";
 
 const ROW_COUNT = 5;
 
 /** The five best-selling makes for the selected month's year. */
 export async function TopMakes() {
+  "use cache";
+  cacheLife("max");
+  cacheTag("cars:months", "cars:top-makes", LOGOS_CACHE_TAG);
+
   const month = await getLatestMonth("cars");
   const year = Number(month.slice(0, 4));
+  cacheTag(`cars:year:${year}`);
   const [makes, logoResult] = await Promise.all([
     getTopMakesByYear(year, ROW_COUNT),
     getAllCarLogos(),

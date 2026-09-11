@@ -1,7 +1,9 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { SectionHead } from "@web/components/shared/overview";
+import { EV_CHARGING_CACHE_TAG } from "@web/lib/cache-tags";
 import { getEvChargingNetworkSummary } from "@web/queries/ev-charging";
+import { cacheLife, cacheTag } from "next/cache";
 
 const LINK = {
   href: "/cars/electric-vehicles/charging",
@@ -14,6 +16,10 @@ const LINK = {
  * homepage carries nothing that would regenerate its shell that often.
  */
 export async function EvCharging() {
+  "use cache";
+  cacheLife("max");
+  cacheTag(EV_CHARGING_CACHE_TAG);
+
   const network = await getEvChargingNetworkSummary();
 
   if (network.connectors === 0) {

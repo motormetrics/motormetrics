@@ -13,6 +13,7 @@ import { DeltaChip } from "@web/components/shared/delta-chip";
 import { Headline, SectionLink } from "@web/components/shared/overview";
 import { getDeregistrations } from "@web/queries/deregistrations";
 import { getLatestMonth } from "@web/utils/dates/months";
+import { cacheLife, cacheTag } from "next/cache";
 
 /** Months drawn in the column chart, the selected one last. */
 const CHART_MONTHS = 8;
@@ -31,6 +32,10 @@ const formatTick = (month: string) => {
  * at the newest month at or before the selection and the caption names it.
  */
 export async function DeregistrationsHeadline() {
+  "use cache";
+  cacheLife("max");
+  cacheTag("cars:months", "deregistrations:months");
+
   const month = await getLatestMonth("cars");
   const rows = await getDeregistrations();
   const series = windowEndingAt(sumByMonth(rows), month, CHART_MONTHS);

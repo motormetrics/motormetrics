@@ -10,6 +10,7 @@ import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { getMonthlyRegistrationTotals } from "@web/queries/cars";
 import { getVehiclePopulationYearlyTotals } from "@web/queries/vehicle-population";
 import { getLatestMonth } from "@web/utils/dates/months";
+import { cacheLife, cacheTag } from "next/cache";
 
 /**
  * Deep enough to reach the oldest month the picker offers, so selecting an
@@ -22,6 +23,10 @@ const SPARK_MONTHS = 12;
 
 /** The page's opening figure: new car registrations for the selected month. */
 export async function RegistrationsHeadline() {
+  "use cache";
+  cacheLife("max");
+  cacheTag("cars:months", "cars:monthly-totals", "vehicle-population:totals");
+
   const month = await getLatestMonth("cars");
   const [monthlyTotals, populationTotals] = await Promise.all([
     getMonthlyRegistrationTotals(HISTORY_LIMIT),

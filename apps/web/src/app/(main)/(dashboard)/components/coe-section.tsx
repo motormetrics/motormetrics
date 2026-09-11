@@ -17,6 +17,7 @@ import {
 import { SectionHead } from "@web/components/shared/overview";
 import { getAllCoeCategoryTrends, getPqpRates } from "@web/queries/coe";
 import { getLatestMonth } from "@web/utils/dates/months";
+import { cacheLife, cacheTag } from "next/cache";
 
 /** Bidding months drawn in the premium trend, the selected one last. */
 const TREND_MONTHS = 12;
@@ -36,8 +37,13 @@ const CATEGORY_NAMES: Record<string, string> = {
  * one before are merged to give a full 12-exercise run-up to any month.
  */
 export async function CoeSection() {
+  "use cache";
+  cacheLife("max");
+  cacheTag("cars:months", "coe:trends", "coe:pqp");
+
   const month = await getLatestMonth("cars");
   const year = Number(month.slice(0, 4));
+  cacheTag(`coe:year:${year - 1}`, `coe:year:${year}`);
   const [previousYearTrends, currentYearTrends, pqpRates] = await Promise.all([
     getAllCoeCategoryTrends(year - 1),
     getAllCoeCategoryTrends(year),

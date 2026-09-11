@@ -32,7 +32,16 @@ granular cache tags (e.g. `cars:month:2024-01`, `coe:period:12m`). The custom "m
 **Why `remote`, not plain `"use cache"`**: at request time, plain `"use cache"` stores entries in a per-instance
 in-memory handler, which never persists across serverless invocations. Every request outside the static shell
 (anything reading `searchParams`) re-ran every query against Neon. `"use cache: remote"` writes to the shared
-Vercel Data Cache instead, while still prerendering into the static shell where possible.
+Vercel Data Cache instead. Note that `"use cache: remote"` is runtime-only — it is never captured into the
+build-time static shell, unlike plain `"use cache"`.
+
+**Prerendering the static pages**: pages that don't read `searchParams` (the homepage, in particular) wrap their
+data-rendering server components in an outer `"use cache"` with the same `cacheLife("max")` and the union of the
+inner query functions' cache tags (so existing `revalidateTag()` calls still invalidate them). Nesting a
+`"use cache: remote"` call inside a `"use cache"` function is valid, and — because nothing in that call chain reads
+`searchParams`/`cookies()`/`headers()` — the whole result gets computed and baked into the static shell at build
+time, so a cache hit is served straight from the CDN with no function invocation at all. Query functions reused by
+`searchParams`-driven pages keep their `"use cache: remote"` directive unchanged.
 
 **Why "max" (30-day stale/revalidate, 1-year expire)**: data updates monthly, so this yields ~2 regenerations/month
 (1 automatic + 1 on-demand) versus ~30 with daily checks — roughly **15x less** Vercel Fluid Compute. Do not shorten

@@ -4,6 +4,7 @@ import { donutArcs } from "@web/app/(main)/(dashboard)/components/overview-serie
 import { SectionHead } from "@web/components/shared/overview";
 import { getYearToDateByFuelType } from "@web/queries/cars";
 import { getLatestMonth } from "@web/utils/dates/months";
+import { cacheLife, cacheTag } from "next/cache";
 
 const RADIUS = 74;
 /** Arc length removed from each segment so the rounded caps read as separate. */
@@ -41,8 +42,13 @@ const OTHER = { color: "var(--chart-6)", label: "Other" };
 
 /** Registrations by powertrain for the selected month's year. */
 export async function FuelMix() {
+  "use cache";
+  cacheLife("max");
+  cacheTag("cars:months");
+
   const month = await getLatestMonth("cars");
   const year = Number(month.slice(0, 4));
+  cacheTag(`cars:year:${year}`);
   const fuelTypes = await getYearToDateByFuelType(year);
 
   const total = fuelTypes.reduce((sum, item) => sum + item.count, 0);

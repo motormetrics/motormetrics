@@ -11,10 +11,12 @@ import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { Headline, SectionHead } from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
+import { LOGOS_CACHE_TAG } from "@web/lib/cache-tags";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 import { getTopMakesByFuelType } from "@web/queries/cars/market-insights";
 import { getAllCarLogos } from "@web/queries/logos";
 import { getLatestMonth } from "@web/utils/dates/months";
+import { cacheLife, cacheTag } from "next/cache";
 
 /** Months of share history drawn under the figure. */
 const SPARK_MONTHS = 12;
@@ -33,7 +35,17 @@ const formatMonthName = (month: string) => {
  * the section links to.
  */
 export async function EvMomentum() {
+  "use cache";
+  cacheLife("max");
+  cacheTag(
+    "cars:months",
+    "cars:fuel:electric",
+    "cars:fuel:hybrid",
+    LOGOS_CACHE_TAG,
+  );
+
   const month = await getLatestMonth("cars");
+  cacheTag(`cars:month:${month}`);
   const [trend, marketShare, fuelTypes, logoResult] = await Promise.all([
     getEvMonthlyTrend(),
     getEvMarketShare(),

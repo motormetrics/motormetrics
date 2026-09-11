@@ -19,6 +19,7 @@ import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
 import { getLatestMonth } from "@web/utils/dates/months";
 import type { Metadata } from "next";
+import { cacheLife, cacheTag } from "next/cache";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -105,6 +106,10 @@ function OrganizationStructuredData() {
  * than offering a picker; each block links to the page that can change it.
  */
 async function LatestMonth() {
+  "use cache";
+  cacheLife("max");
+  cacheTag("cars:months");
+
   const month = await getLatestMonth("cars");
 
   return <EyebrowValue>{formatDateToMonthYear(month)}</EyebrowValue>;
