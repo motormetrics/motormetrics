@@ -1,3 +1,10 @@
+## [5.20.4](https://github.com/motormetrics/motormetrics/compare/v5.20.3...v5.20.4) (2026-09-11)
+
+### Performance Improvements
+
+* **web:** render nav and footer statically ([2c3d9e3](https://github.com/motormetrics/motormetrics/commit/2c3d9e35e570361069461a25e9e8aa3d109f4641))
+* **web:** stop Sentry attaching the inspector on cold start ([c0ff3dd](https://github.com/motormetrics/motormetrics/commit/c0ff3ddc5a6c815a351705ab33519f0474b3b5c7))
+
 ## [5.20.3](https://github.com/motormetrics/motormetrics/compare/v5.20.2...v5.20.3) (2026-09-11)
 
 ### Bug Fixes
