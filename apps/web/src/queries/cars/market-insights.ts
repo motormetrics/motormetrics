@@ -6,7 +6,7 @@ import {
 } from "@web/lib/cars/calculations";
 import { getCarsData } from "@web/queries/cars/monthly-registrations";
 import type { FuelType, TopType } from "@web/types/cars";
-import { and, desc, eq, gt, sql } from "drizzle-orm";
+import { and, desc, eq, gt, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export interface CarMarketShareData {
@@ -67,23 +67,23 @@ export async function getTopTypes(month: string): Promise<TopType> {
   const topFuelTypeQuery = db
     .select({
       name: cars.fuelType,
-      total: sql<number>`sum(${cars.number})`.mapWith(Number),
+      total: sum(cars.number).mapWith(Number),
     })
     .from(cars)
     .where(eq(cars.month, month))
     .groupBy(cars.fuelType)
-    .orderBy(desc(sql<number>`sum(${cars.number})`))
+    .orderBy(desc(sum(cars.number)))
     .limit(1);
 
   const topVehicleTypeQuery = db
     .select({
       name: cars.vehicleType,
-      total: sql<number>`sum(${cars.number})`.mapWith(Number),
+      total: sum(cars.number).mapWith(Number),
     })
     .from(cars)
     .where(eq(cars.month, month))
     .groupBy(cars.vehicleType)
-    .orderBy(desc(sql<number>`sum(${cars.number})`))
+    .orderBy(desc(sum(cars.number)))
     .limit(1);
 
   const [topFuelTypeResult, topVehicleTypeResult] = await db.batch([
@@ -91,8 +91,16 @@ export async function getTopTypes(month: string): Promise<TopType> {
     topVehicleTypeQuery,
   ]);
 
-  const topFuelType = topFuelTypeResult[0] ?? { name: "N/A", total: 0 };
-  const topVehicleType = topVehicleTypeResult[0] ?? { name: "N/A", total: 0 };
+  // `sum()` is null only for an empty group, which a GROUP BY cannot produce
+  const [topFuelTypeRow] = topFuelTypeResult;
+  const [topVehicleTypeRow] = topVehicleTypeResult;
+
+  const topFuelType = topFuelTypeRow
+    ? { name: topFuelTypeRow.name, total: topFuelTypeRow.total ?? 0 }
+    : { name: "N/A", total: 0 };
+  const topVehicleType = topVehicleTypeRow
+    ? { name: topVehicleTypeRow.name, total: topVehicleTypeRow.total ?? 0 }
+    : { name: "N/A", total: 0 };
 
   return {
     month,
@@ -106,16 +114,19 @@ export async function getTopMakes(month: string): Promise<TopMake[]> {
   cacheLife("max");
   cacheTag(`cars:month:${month}`);
 
-  return db
+  const rows = await db
     .select({
       make: cars.make,
-      total: sql<number>`sum(${cars.number})`.mapWith(Number),
+      total: sum(cars.number).mapWith(Number),
     })
     .from(cars)
     .where(eq(cars.month, month))
     .groupBy(cars.make)
-    .orderBy(desc(sql<number>`sum(${cars.number})`))
+    .orderBy(desc(sum(cars.number)))
     .limit(10);
+
+  // `sum()` is null only for an empty group, which a GROUP BY cannot produce
+  return rows.map(({ make, total }) => ({ make, total: total ?? 0 }));
 }
 
 export async function getTopMakesByFuelType(
@@ -134,7 +145,7 @@ export async function getTopMakesByFuelType(
     .select({
       fuelType: cars.fuelType,
       make: cars.make,
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
+      count: sum(cars.number).mapWith(Number),
     })
     .from(cars)
     .where(and(eq(cars.month, month), gt(cars.number, 0)))
@@ -149,8 +160,11 @@ export async function getTopMakesByFuelType(
       makes: [],
     };
 
-    entry.total += row.count;
-    entry.makes.push({ make: row.make, count: row.count });
+    // `sum()` is null only for an empty group, which a GROUP BY cannot produce
+    const count = row.count ?? 0;
+
+    entry.total += count;
+    entry.makes.push({ make: row.make, count });
     byFuelType.set(row.fuelType, entry);
   }
 

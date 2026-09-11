@@ -2,56 +2,58 @@ import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
 import type { Comparison, Registration } from "@web/types/cars";
 import { format, subMonths } from "date-fns";
-import { and, desc, eq, gt, gte, lte, sql, sum } from "drizzle-orm";
+import { and, desc, eq, gt, gte, inArray, lte, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
+
+/**
+ * Registration groups largest first — the `order by sum(number) desc` the
+ * grouped queries used to carry, applied here so a month can be grouped once
+ * and split by dimension rather than queried once per dimension.
+ *
+ * `sum()` is null only for an empty group, which a GROUP BY cannot produce.
+ */
+const sortByCount = <Row extends { count: number | null }>(
+  rows: Row[],
+): (Row & { count: number })[] =>
+  rows
+    .map((row) => ({ ...row, count: row.count ?? 0 }))
+    .sort((first, second) => second.count - first.count);
 
 export async function getCarsData(month: string): Promise<Registration> {
   "use cache: remote";
   cacheLife("max");
   cacheTag(`cars:month:${month}`);
 
-  const fuelTypeQuery = db
-    .select({
-      name: cars.fuelType,
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
-    })
-    .from(cars)
-    .where(eq(cars.month, month))
-    .groupBy(cars.fuelType)
-    .having(gt(sum(cars.number), 0))
-    .orderBy(desc(sql<number>`sum(${cars.number})`));
-
-  const vehicleTypeQuery = db
-    .select({
-      name: cars.vehicleType,
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
-    })
-    .from(cars)
-    .where(eq(cars.month, month))
-    .groupBy(cars.vehicleType)
-    .having(gt(sum(cars.number), 0))
-    .orderBy(desc(sql<number>`sum(${cars.number})`));
-
-  const totalQuery = db
-    .select({
-      total: sql<number>`sum(${cars.number})`.mapWith(Number),
-    })
-    .from(cars)
-    .where(eq(cars.month, month));
-
-  const [fuelType, vehicleType, totalResult] = await db.batch([
-    fuelTypeQuery,
-    vehicleTypeQuery,
-    totalQuery,
+  // Two grouped scans rather than three. The separate total query is gone: the
+  // fuel type groups partition the month's rows, so their sum is that total.
+  const [fuelTypeRows, vehicleTypeRows] = await db.batch([
+    db
+      .select({
+        name: cars.fuelType,
+        count: sum(cars.number).mapWith(Number),
+      })
+      .from(cars)
+      .where(eq(cars.month, month))
+      .groupBy(cars.fuelType),
+    db
+      .select({
+        name: cars.vehicleType,
+        count: sum(cars.number).mapWith(Number),
+      })
+      .from(cars)
+      .where(eq(cars.month, month))
+      .groupBy(cars.vehicleType),
   ]);
 
-  const total = totalResult[0]?.total ?? 0;
+  const fuelType = sortByCount(fuelTypeRows);
+  const total = fuelType.reduce((running, row) => running + row.count, 0);
 
   return {
     month,
     total,
-    fuelType,
-    vehicleType,
+    // `having sum(number) > 0` on the grouped queries, applied here
+    fuelType: fuelType.filter((row) => row.count > 0),
+    vehicleType: sortByCount(vehicleTypeRows).filter((row) => row.count > 0),
   };
 }
 
@@ -61,83 +63,55 @@ export async function getCarsComparison(month: string): Promise<Comparison> {
   cacheTag(`cars:month:${month}`);
 
   const currentDate = new Date(`${month}-01`);
-  const previousMonthDate = subMonths(currentDate, 1);
-  const previousMonthStr = format(previousMonthDate, "yyyy-MM");
-  const previousYearDate = subMonths(currentDate, 12);
-  const previousYearStr = format(previousYearDate, "yyyy-MM");
+  const previousMonthStr = format(subMonths(currentDate, 1), "yyyy-MM");
+  const previousYearStr = format(subMonths(currentDate, 12), "yyyy-MM");
+  const months = [month, previousMonthStr, previousYearStr];
 
-  const createFuelTypeQuery = (m: string) =>
+  // Two scans covering all three months, rather than nine single-month scans.
+  // The batch was one round-trip either way, but its statements ran serially,
+  // so the month partitions were read three times over.
+  const [fuelTypeRows, vehicleTypeRows] = await db.batch([
     db
       .select({
+        month: cars.month,
         label: cars.fuelType,
-        count: sql<number>`sum(${cars.number})`.mapWith(Number),
+        count: sum(cars.number).mapWith(Number),
       })
       .from(cars)
-      .where(eq(cars.month, m))
-      .groupBy(cars.fuelType)
-      .orderBy(desc(sql<number>`sum(${cars.number})`));
-
-  const createVehicleTypeQuery = (m: string) =>
+      .where(inArray(cars.month, months))
+      .groupBy(cars.month, cars.fuelType),
     db
       .select({
+        month: cars.month,
         label: cars.vehicleType,
-        count: sql<number>`sum(${cars.number})`.mapWith(Number),
+        count: sum(cars.number).mapWith(Number),
       })
       .from(cars)
-      .where(eq(cars.month, m))
-      .groupBy(cars.vehicleType)
-      .orderBy(desc(sql<number>`sum(${cars.number})`));
-
-  const createTotalQuery = (m: string) =>
-    db
-      .select({
-        total: sql<number>`sum(${cars.number})`.mapWith(Number),
-      })
-      .from(cars)
-      .where(eq(cars.month, m));
-
-  // Execute all 9 queries in a single batch (3 months × 3 query types)
-  const [
-    currentFuelType,
-    currentVehicleType,
-    currentTotal,
-    previousMonthFuelType,
-    previousMonthVehicleType,
-    previousMonthTotal,
-    previousYearFuelType,
-    previousYearVehicleType,
-    previousYearTotal,
-  ] = await db.batch([
-    createFuelTypeQuery(month),
-    createVehicleTypeQuery(month),
-    createTotalQuery(month),
-    createFuelTypeQuery(previousMonthStr),
-    createVehicleTypeQuery(previousMonthStr),
-    createTotalQuery(previousMonthStr),
-    createFuelTypeQuery(previousYearStr),
-    createVehicleTypeQuery(previousYearStr),
-    createTotalQuery(previousYearStr),
+      .where(inArray(cars.month, months))
+      .groupBy(cars.month, cars.vehicleType),
   ]);
 
+  const forPeriod = (period: string) => {
+    const fuelType = sortByCount(
+      fuelTypeRows.filter((row) => row.month === period),
+    );
+    const vehicleType = sortByCount(
+      vehicleTypeRows.filter((row) => row.month === period),
+    );
+
+    return {
+      period,
+      // The fuel type groups partition the period's rows, so they sum to its total
+      total: fuelType.reduce((running, row) => running + row.count, 0),
+      fuelType: fuelType.map(({ label, count }) => ({ label, count })),
+      vehicleType: vehicleType.map(({ label, count }) => ({ label, count })),
+    };
+  };
+
   return {
-    currentMonth: {
-      period: month,
-      total: currentTotal[0]?.total ?? 0,
-      fuelType: currentFuelType,
-      vehicleType: currentVehicleType,
-    },
-    previousMonth: {
-      period: previousMonthStr,
-      total: previousMonthTotal[0]?.total ?? 0,
-      fuelType: previousMonthFuelType,
-      vehicleType: previousMonthVehicleType,
-    },
-    previousYear: {
-      period: previousYearStr,
-      total: previousYearTotal[0]?.total ?? 0,
-      fuelType: previousYearFuelType,
-      vehicleType: previousYearVehicleType,
-    },
+    currentMonth: forPeriod(month),
+    previousMonth: forPeriod(previousMonthStr),
+    previousYear: forPeriod(previousYearStr),
   };
 }
 
@@ -161,14 +135,16 @@ export async function getMonthlyRegistrationTotals(
   const results = await db
     .select({
       month: cars.month,
-      total: sql<number>`sum(${cars.number})`.mapWith(Number),
+      total: sum(cars.number).mapWith(Number),
     })
     .from(cars)
     .groupBy(cars.month)
     .orderBy(desc(cars.month))
     .limit(limit);
 
-  return results.reverse();
+  return results
+    .map(({ month, total }) => ({ month, total: total ?? 0 }))
+    .reverse();
 }
 
 /**
@@ -185,16 +161,18 @@ export async function getYearToDateByFuelType(
   // A range on the stored `YYYY-MM` text rather than `ilike '<year>-%'`, which
   // no btree index can serve. Lexicographic ordering on `YYYY-MM` is
   // chronological, so the bounds are exact.
-  return db
+  const results = await db
     .select({
       name: cars.fuelType,
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
+      count: sum(cars.number).mapWith(Number),
     })
     .from(cars)
     .where(and(gte(cars.month, `${year}-01`), lte(cars.month, `${year}-12`)))
     .groupBy(cars.fuelType)
     .having(gt(sum(cars.number), 0))
-    .orderBy(desc(sql<number>`sum(${cars.number})`));
+    .orderBy(desc(sum(cars.number)));
+
+  return results.map(({ name, count }) => ({ name, count: count ?? 0 }));
 }
 
 /**
@@ -214,7 +192,7 @@ export async function getMonthlyRegistrationTotalsByFuelType(
   const results = await db
     .select({
       month: cars.month,
-      total: sql<number>`sum(${cars.number})`.mapWith(Number),
+      total: sum(cars.number).mapWith(Number),
     })
     .from(cars)
     .where(eq(cars.fuelType, fuelType))
@@ -223,5 +201,7 @@ export async function getMonthlyRegistrationTotalsByFuelType(
     .orderBy(desc(cars.month))
     .limit(limit);
 
-  return results.reverse();
+  return results
+    .map(({ month, total }) => ({ month, total: total ?? 0 }))
+    .reverse();
 }

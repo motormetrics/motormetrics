@@ -1,6 +1,6 @@
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
-import { and, asc, desc, gt, gte, lte, sql, sum } from "drizzle-orm";
+import { and, asc, desc, gt, gte, lte, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**
@@ -33,9 +33,8 @@ const DIMENSION_COLUMNS = {
   fuelType: cars.fuelType,
 } as const;
 
-/** A fresh expression per call: Drizzle mutates `sql` fragments when decorated. */
-const registrationTotal = () =>
-  sql<number>`cast(sum(${cars.number}) as integer)`.mapWith(Number);
+/** A fresh expression per call: Drizzle mutates aggregate fragments when decorated. */
+const registrationTotal = () => sum(cars.number).mapWith(Number);
 
 /**
  * Year-to-date registrations, share and year-over-year change for one dimension.
@@ -103,8 +102,9 @@ export async function getDimensionStats(
     trendQuery,
   ]);
 
+  // `sum()` is null only for an empty group, which a GROUP BY cannot produce
   const grandTotal = yearToDateRows.reduce(
-    (total, row) => total + row.count,
+    (total, row) => total + (row.count ?? 0),
     0,
   );
 
@@ -115,7 +115,7 @@ export async function getDimensionStats(
   const trendByName = trendRows.reduce<Map<string, { value: number }[]>>(
     (accumulator, row) => {
       const series = accumulator.get(row.name) ?? [];
-      series.push({ value: row.count });
+      series.push({ value: row.count ?? 0 });
       accumulator.set(row.name, series);
       return accumulator;
     },
@@ -123,16 +123,19 @@ export async function getDimensionStats(
   );
 
   return yearToDateRows.map((row) => {
-    const previousCount = previousYearByName.get(row.name);
+    const previousCount = previousYearByName.get(row.name) ?? undefined;
+    const count = row.count ?? 0;
 
     return {
       name: row.name,
-      count: row.count,
-      share: grandTotal > 0 ? (row.count / grandTotal) * 100 : 0,
+      count,
+      share: grandTotal > 0 ? (count / grandTotal) * 100 : 0,
       trend: trendByName.get(row.name) ?? [],
       yoyChange:
-        previousCount !== undefined && previousCount > 0
-          ? ((row.count - previousCount) / previousCount) * 100
+        previousCount !== undefined &&
+        previousCount !== null &&
+        previousCount > 0
+          ? ((count - previousCount) / previousCount) * 100
           : null,
     };
   });
