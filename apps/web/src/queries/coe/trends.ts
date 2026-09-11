@@ -80,7 +80,7 @@ export async function getCoeCategoryTrends(
   category: COECategory,
   year?: number,
 ): Promise<CoeMonthlyPremium[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`coe:category:${category}`);
   if (year) {
@@ -102,7 +102,7 @@ export async function getCoeCategoryTrends(
 export async function getAllCoeCategoryTrends(
   year?: number,
 ): Promise<Record<COECategory, CoeMonthlyPremium[]>> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("coe:trends");
   if (year) {

@@ -5,7 +5,7 @@ import { asc, desc } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export async function getPqpRates(): Promise<Record<string, Pqp.Rates>> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("coe:pqp");
 

@@ -20,7 +20,7 @@ export interface MonthBiddingRounds {
 export async function getMonthBiddingRounds(
   month?: string,
 ): Promise<MonthBiddingRounds> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("coe:bidding-rounds", month ? `coe:month:${month}` : "coe:latest");
 

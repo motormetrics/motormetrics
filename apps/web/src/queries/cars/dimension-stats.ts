@@ -53,7 +53,7 @@ export async function getDimensionStats(
   dimension: CarDimension,
   month: string,
 ): Promise<DimensionStat[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   // `cars:annual` as well as the month: these totals are year to date, so a new
   // month changes every cached dimension, not only the one just loaded.

@@ -15,7 +15,7 @@ export interface CoeMarketShareData {
 }
 
 export async function getCoeResults(): Promise<COEResult[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("coe:results");
 
@@ -30,7 +30,7 @@ export async function getCoeResults(): Promise<COEResult[]> {
 export async function getCoeResultsByPeriod(
   period: Period = "12m",
 ): Promise<COEResult[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`coe:period:${period}`);
 

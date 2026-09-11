@@ -6,7 +6,7 @@ import { desc, eq, gt, ilike, sql, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export async function getCarsData(month: string): Promise<Registration> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:month:${month}`);
 
@@ -56,7 +56,7 @@ export async function getCarsData(month: string): Promise<Registration> {
 }
 
 export async function getCarsComparison(month: string): Promise<Comparison> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:month:${month}`);
 
@@ -154,7 +154,7 @@ export interface MonthlyTotal {
 export async function getMonthlyRegistrationTotals(
   limit = 12,
 ): Promise<MonthlyTotal[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:monthly-totals");
 
@@ -178,7 +178,7 @@ export async function getMonthlyRegistrationTotals(
 export async function getYearToDateByFuelType(
   year: number,
 ): Promise<{ count: number; name: string }[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:year:${year}`);
 
@@ -204,7 +204,7 @@ export async function getMonthlyRegistrationTotalsByFuelType(
   fuelType: string,
   limit = 12,
 ): Promise<MonthlyTotal[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:monthly-totals:${fuelType}`);
 

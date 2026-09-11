@@ -15,7 +15,7 @@ import { cacheLife, cacheTag } from "next/cache";
  * life of the entry.
  */
 async function readCarLogos(): Promise<CarLogo[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(LOGOS_CACHE_TAG);
 

@@ -38,7 +38,7 @@ function findEntity(config: EntityCheckConfig, value: string) {
 export async function checkMakeIfExist(
   make: string,
 ): Promise<{ make: string } | undefined> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:make:${make}`);
 
@@ -49,7 +49,7 @@ export async function checkMakeIfExist(
 export async function checkFuelTypeIfExist(
   fuelType: string,
 ): Promise<{ fuelType: string } | undefined> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:fuel:${fuelType}`);
 
@@ -60,7 +60,7 @@ export async function checkFuelTypeIfExist(
 export async function checkVehicleTypeIfExist(
   vehicleType: string,
 ): Promise<{ vehicleType: string } | undefined> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:vehicle:${vehicleType}`);
 

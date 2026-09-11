@@ -36,7 +36,7 @@ export async function getEvChargingPriceRankings({
   district,
   limit = 10,
 }: PriceRankingOptions): Promise<EvChargingPricedLocation[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("hours");
 
   const { records } = await getEvChargingSnapshot();

@@ -7,7 +7,7 @@ import { cacheLife, cacheTag } from "next/cache";
  * Get available months in descending order (for dropdowns/selectors)
  */
 export async function getDeregistrationsMonths() {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("deregistrations:months");
 

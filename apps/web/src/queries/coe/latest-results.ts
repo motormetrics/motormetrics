@@ -5,7 +5,7 @@ import { and, asc, desc, eq, max, or, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export async function getLatestCoeResults(): Promise<COEResult[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("coe:latest");
 
@@ -36,7 +36,7 @@ export async function getLatestCoeResults(): Promise<COEResult[]> {
  * Handles both same-month previous round and previous month's last round.
  */
 export async function getPreviousCoeResults(): Promise<COEResult[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("coe:previous");
 
@@ -79,7 +79,7 @@ export async function getLatestAndPreviousCoeResults(): Promise<{
   latest: COEResult[];
   previous: COEResult[];
 }> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("coe:latest", "coe:previous");
 

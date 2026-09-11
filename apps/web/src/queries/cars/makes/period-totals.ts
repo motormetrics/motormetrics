@@ -33,7 +33,7 @@ export interface MakeCrossTabRow {
 export async function getMakeCrossTab(
   make: string,
 ): Promise<MakeCrossTabRow[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:make:${make}`);
 
@@ -65,7 +65,7 @@ export async function getMakeTotalsInRange(
   start: string,
   end: string,
 ): Promise<MakePeriodTotal[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:makes");
 
@@ -95,7 +95,7 @@ export async function getMarketMonthlyTotals(
   start: string,
   end: string,
 ): Promise<MarketMonthlyTotal[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:monthly-totals");
 

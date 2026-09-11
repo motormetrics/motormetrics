@@ -57,7 +57,7 @@ interface TopMake {
 }
 
 export async function getTopTypes(month: string): Promise<TopType> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:month:${month}`);
 
@@ -99,7 +99,7 @@ export async function getTopTypes(month: string): Promise<TopType> {
 }
 
 export async function getTopMakes(month: string): Promise<TopMake[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:month:${month}`);
 
@@ -118,7 +118,7 @@ export async function getTopMakes(month: string): Promise<TopMake[]> {
 export async function getTopMakesByFuelType(
   month: string,
 ): Promise<FuelType[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:month:${month}`);
 
@@ -168,7 +168,7 @@ export async function getCarMarketShareData(
   month: string,
   category: "fuelType" | "vehicleType",
 ): Promise<CarMarketShareResponse> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag(`cars:month:${month}`, `cars:category:${category}`);
 

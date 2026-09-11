@@ -7,7 +7,7 @@ import { cacheLife, cacheTag } from "next/cache";
  * Get the latest month with COE bidding data
  */
 export async function getCOELatestMonth(): Promise<string | null> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("coe:months");
 

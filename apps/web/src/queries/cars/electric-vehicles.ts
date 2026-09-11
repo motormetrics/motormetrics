@@ -51,7 +51,7 @@ export interface EvMakeDetail {
 }
 
 export async function getEvMonthlyTrend(): Promise<EvMonthlyTrend[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:fuel:electric", "cars:fuel:hybrid");
 
@@ -87,7 +87,7 @@ export async function getEvMonthlyTrend(): Promise<EvMonthlyTrend[]> {
 }
 
 export async function getEvMarketShare(): Promise<EvMarketShare[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:fuel:electric", "cars:fuel:hybrid");
 
@@ -129,7 +129,7 @@ export async function getEvMarketShare(): Promise<EvMarketShare[]> {
 }
 
 export async function getEvTopMakes(limit = 10): Promise<EvTopMake[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:fuel:electric", "cars:fuel:hybrid");
 
@@ -158,7 +158,7 @@ export async function getEvTopMakes(limit = 10): Promise<EvTopMake[]> {
 }
 
 export async function getEvMakeDetails(): Promise<EvMakeDetail[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:fuel:electric", "cars:fuel:hybrid");
 
@@ -212,7 +212,7 @@ export async function getEvMakeDetails(): Promise<EvMakeDetail[]> {
 }
 
 export async function getEvLatestSummary(): Promise<EvLatestSummary | null> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:fuel:electric", "cars:fuel:hybrid");
 

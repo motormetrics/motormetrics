@@ -5,7 +5,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { FUEL_TYPE, type TypeConfig, VEHICLE_TYPE } from "./categories";
 
 export async function getDistinctMakes() {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:makes");
 
@@ -34,7 +34,7 @@ function queryDistinctTypeValues(config: TypeConfig, month?: string) {
 export async function getDistinctFuelTypes(
   month?: string,
 ): Promise<{ fuelType: string }[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   if (month) {
     cacheTag(`cars:month:${month}`);
@@ -47,7 +47,7 @@ export async function getDistinctFuelTypes(
 export async function getDistinctVehicleTypes(
   month?: string,
 ): Promise<{ vehicleType: string }[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   if (month) {
     cacheTag(`cars:month:${month}`);
@@ -58,7 +58,7 @@ export async function getDistinctVehicleTypes(
 }
 
 export async function getCarsMonths(): Promise<{ month: string }[]> {
-  "use cache: remote";
+  "use cache";
   cacheLife("max");
   cacheTag("cars:months");
 
