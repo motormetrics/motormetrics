@@ -2,7 +2,7 @@ import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
 import type { Comparison, Registration } from "@web/types/cars";
 import { format, subMonths } from "date-fns";
-import { desc, eq, gt, ilike, sql, sum } from "drizzle-orm";
+import { and, desc, eq, gt, gte, lte, sql, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export async function getCarsData(month: string): Promise<Registration> {
@@ -182,13 +182,16 @@ export async function getYearToDateByFuelType(
   cacheLife("max");
   cacheTag(`cars:year:${year}`);
 
+  // A range on the stored `YYYY-MM` text rather than `ilike '<year>-%'`, which
+  // no btree index can serve. Lexicographic ordering on `YYYY-MM` is
+  // chronological, so the bounds are exact.
   return db
     .select({
       name: cars.fuelType,
       count: sql<number>`sum(${cars.number})`.mapWith(Number),
     })
     .from(cars)
-    .where(ilike(cars.month, `${year}-%`))
+    .where(and(gte(cars.month, `${year}-01`), lte(cars.month, `${year}-12`)))
     .groupBy(cars.fuelType)
     .having(gt(sum(cars.number), 0))
     .orderBy(desc(sql<number>`sum(${cars.number})`));

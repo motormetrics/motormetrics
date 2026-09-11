@@ -1,6 +1,6 @@
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
-import { and, eq, gt, sql } from "drizzle-orm";
+import { and, gt, gte, lte, max, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export interface CategorySummary {
@@ -10,7 +10,16 @@ export interface CategorySummary {
   hybrid: number;
 }
 
-const yearExpr = sql`extract(year from to_date(${cars.month}, 'YYYY-MM'))`;
+/** The year component of a stored `YYYY-MM` month. */
+const yearOf = (month: string) => Number(month.slice(0, 4));
+
+/**
+ * LTA names every electrified fuel type with an `-Electric` component —
+ * `Petrol-Electric`, `Diesel-Electric (Plug-In)` and so on. `Electric` alone is
+ * fully battery electric and counted separately.
+ */
+const isHybrid = (fuelType: string) =>
+  fuelType.includes("-Electric") && fuelType !== "Electric";
 
 /**
  * Get category summary (total, electric, hybrid) for a given year
@@ -26,37 +35,64 @@ export async function getCategorySummaryByYear(
     cacheTag(`cars:year:${year}`);
   }
 
-  // Use SQL subquery for latest year when not provided
-  const latestYearSubquery = db
-    .select({ year: sql<number>`max(${yearExpr})` })
-    .from(cars)
-    .where(gt(cars.number, 0));
+  let targetYear = year;
 
-  const targetYear = year ?? sql`(${latestYearSubquery})`;
+  if (!targetYear) {
+    const [latest] = await db
+      .select({ month: max(cars.month) })
+      .from(cars)
+      .where(gt(cars.number, 0));
 
-  const result = await db
-    .select({
-      year: sql<number>`cast(${yearExpr} as integer)`.mapWith(Number),
-      total: sql<number>`sum(${cars.number})`.mapWith(Number),
-      electric:
-        sql<number>`sum(case when ${cars.fuelType} = 'Electric' then ${cars.number} else 0 end)`.mapWith(
-          Number,
-        ),
-      hybrid:
-        sql<number>`sum(case when ${cars.fuelType} like '%-Electric%' and ${cars.fuelType} != 'Electric' then ${cars.number} else 0 end)`.mapWith(
-          Number,
-        ),
-    })
-    .from(cars)
-    .where(and(eq(yearExpr, targetYear), gt(cars.number, 0)))
-    .groupBy(yearExpr);
+    targetYear = latest?.month ? yearOf(latest.month) : undefined;
+  }
 
-  return (
-    result[0] ?? {
-      year: year ?? new Date().getFullYear(),
+  if (!targetYear) {
+    return {
+      year: new Date().getFullYear(),
       total: 0,
       electric: 0,
       hybrid: 0,
+    };
+  }
+
+  // Bounds on the stored `YYYY-MM` text rather than
+  // `extract(year from to_date(month, ...)) = year`, which parsed a date on
+  // every row and left the month index unusable. Lexicographic ordering on
+  // `YYYY-MM` is chronological, so the range is exact.
+  const rows = await db
+    .select({
+      fuelType: cars.fuelType,
+      total: sum(cars.number).mapWith(Number),
+    })
+    .from(cars)
+    .where(
+      and(
+        gte(cars.month, `${targetYear}-01`),
+        lte(cars.month, `${targetYear}-12`),
+        gt(cars.number, 0),
+      ),
+    )
+    .groupBy(cars.fuelType);
+
+  const summary: CategorySummary = {
+    year: targetYear,
+    total: 0,
+    electric: 0,
+    hybrid: 0,
+  };
+
+  for (const row of rows) {
+    // `sum()` is null only for an empty group, which a GROUP BY cannot produce
+    const total = row.total ?? 0;
+
+    summary.total += total;
+
+    if (row.fuelType === "Electric") {
+      summary.electric += total;
+    } else if (isHybrid(row.fuelType)) {
+      summary.hybrid += total;
     }
-  );
+  }
+
+  return summary;
 }

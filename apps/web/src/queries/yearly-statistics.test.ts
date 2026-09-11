@@ -16,22 +16,26 @@ describe("yearly statistics queries", () => {
   });
 
   it("aggregates yearly registration totals", async () => {
-    queueSelect([{ year: 2022, total: 123 }]);
+    // The query groups by month; the fold into years happens here
+    queueSelect([
+      { month: "2022-01", total: 100 },
+      { month: "2022-07", total: 23 },
+      { month: "2023-02", total: 40 },
+    ]);
 
     const result = await getYearlyRegistrations();
 
-    expect(result).toEqual([{ year: 2022, total: 123 }]);
+    expect(result).toEqual([
+      { year: 2022, total: 123 },
+      { year: 2023, total: 40 },
+    ]);
     expect(cacheLifeMock).toHaveBeenCalledWith("max");
     expect(cacheTagMock).toHaveBeenCalledWith("cars:annual");
   });
 
   it("returns top makes for an explicit year", async () => {
-    // Queue results in order of db.select() calls:
-    // 1. latestYearSubquery (embedded in SQL, not awaited directly), 2. main query
-    queueSelect(
-      [], // latestYearSubquery (created but not used when year is provided)
-      [{ make: "Tesla", value: 50 }], // main query result
-    );
+    // An explicit year skips the latest-year lookup, so there is one query
+    queueSelect([{ make: "Tesla", value: 50 }]);
 
     const result = await getTopMakesByYear(2024, 1);
 
@@ -40,7 +44,8 @@ describe("yearly statistics queries", () => {
   });
 
   it("derives latest year when no year is supplied", async () => {
-    queueSelect([{ year: 2021 }], [{ make: "Toyota", value: 80 }]);
+    // 1. latest month carrying registrations, 2. the makes for that year
+    queueSelect([{ month: "2021-11" }], [{ make: "Toyota", value: 80 }]);
 
     const result = await getTopMakesByYear();
 
@@ -48,9 +53,8 @@ describe("yearly statistics queries", () => {
   });
 
   it("returns an empty list when no data is present", async () => {
-    // Queue results in order of db.select() calls:
-    // 1. latestYearSubquery, 2. main query (empty)
-    queueSelect([], []);
+    // The latest-month lookup comes back empty, so no second query runs
+    queueSelect([]);
 
     const result = await getTopMakesByYear();
 
