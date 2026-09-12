@@ -3,6 +3,7 @@ import { Article } from "@web/lib/og/cards/article";
 import { OG_CONTENT_TYPE, OG_SIZE } from "@web/lib/og/config";
 import { getOGFonts } from "@web/lib/og/fonts";
 import { ImageResponse } from "next/og";
+import { connection } from "next/server";
 import {
   getAllGuideSlugs,
   getGuideBySlug,
@@ -22,6 +23,8 @@ export async function generateStaticParams() {
 }
 
 export default async function Image({ params }: ImageProps) {
+  await connection();
+
   const { slug } = await params;
   const guide = getGuideBySlug(slug);
 
