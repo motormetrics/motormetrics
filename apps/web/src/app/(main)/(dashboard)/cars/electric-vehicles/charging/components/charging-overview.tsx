@@ -37,8 +37,7 @@ export async function ChargingIntro() {
         {formatPerKwh(stats.medianPerKwh)}, with AC charging from{" "}
         {formatPerKwh(stats.cheapestAc)} and DC fast charging from{" "}
         {formatPerKwh(stats.cheapestDc)}. Availability and prices below come
-        from the Land Transport Authority's DataMall feed and refresh every five
-        minutes.
+        from the Land Transport Authority's DataMall feed and refresh hourly.
       </Typography.Paragraph>
       {observedAt ? (
         <Typography.Paragraph color="muted" size="sm">

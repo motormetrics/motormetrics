@@ -183,7 +183,7 @@ const DATASET_CONFIGS: Record<DatasetType, DatasetConfig> = {
   "ev-charging": {
     name: "Singapore Public EV Charger Availability and Prices",
     description:
-      "Live status of every public electric vehicle charging connector in Singapore, with advertised per-kWh prices, AC and DC power ratings and operator, refreshed every five minutes from LTA DataMall.",
+      "Live status of every public electric vehicle charging connector in Singapore, with advertised per-kWh prices, AC and DC power ratings and operator, refreshed hourly from LTA DataMall.",
     path: "/cars/electric-vehicles/charging",
     temporalCoverage: "2026-09/..",
     variableMeasured: [

@@ -32,6 +32,6 @@ export const buildChargingFaqs = (stats: ChargingStats): Faq[] => [
   {
     question: "How current is the availability shown here?",
     answer:
-      "Availability comes from LTA DataMall's EV Charging Points feed, which operators update and LTA republishes every five minutes. This page refreshes on the same cadence, so a connector shown as free was free within the last few minutes. Prices are the operators' advertised rates, including GST.",
+      "Availability comes from LTA DataMall's EV Charging Points feed, which operators update and LTA republishes every five minutes. This page pulls that feed hourly, so a connector shown as free was free as of the last update, up to about an hour ago. Prices are the operators' advertised rates, including GST.",
   },
 ];

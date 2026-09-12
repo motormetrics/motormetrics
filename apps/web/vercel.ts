@@ -9,7 +9,7 @@ export const config: VercelConfig = {
   },
   relatedProjects: ["prj_fyAvupEssH3LO4OQFDWplinVFlaI"],
   // The live EV charging ingest (/api/workflows/ev-charging-live) is not
-  // here: Hobby caps crons at once a day, so it runs every five minutes from
+  // here: Hobby caps crons at once a day, so it runs hourly from
   // a QStash schedule (id `ev-charging-live`) that forwards CRON_SECRET.
   crons: [
     {

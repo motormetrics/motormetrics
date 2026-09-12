@@ -13,7 +13,7 @@ const formatObservedAt = (iso: string) =>
     minute: "2-digit",
   });
 
-/** Connector state at the last five-minute batch, island-wide or per district. */
+/** Connector state at the latest cached batch, island-wide or per district. */
 export async function LiveStatus({ district }: { district: string }) {
   const summary = await getEvChargingLiveSummary(district || undefined);
   const scope = getPostalDistrict(district)?.name ?? "Singapore";

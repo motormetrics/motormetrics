@@ -56,7 +56,7 @@ export type SelectEvChargingPoint = typeof evChargingPoints.$inferSelect;
 /**
  * Latest observed state of every public connector, one row per `evCpId`.
  *
- * Fed every five minutes from LTA DataMall's EV Charging Points Batch API and
+ * Fed hourly from LTA DataMall's EV Charging Points Batch API and
  * upserted in place, so this table is always the current snapshot. Station
  * and price attributes travel with the connector because the feed nests them
  * under each station and the batch is the only source that carries prices.
