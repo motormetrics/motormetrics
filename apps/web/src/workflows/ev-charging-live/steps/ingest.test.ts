@@ -72,7 +72,7 @@ describe("ingestLiveSnapshot", () => {
     vi.stubEnv("LTA_DATAMALL_ACCOUNT_KEY", "");
 
     await expect(ingestLiveSnapshot()).resolves.toMatchObject({
-      skipped: true,
+      skipped: "missing-account-key",
       connectors: 0,
     });
     expect(fetchBatch).not.toHaveBeenCalled();
@@ -95,7 +95,7 @@ describe("ingestLiveSnapshot", () => {
     selectChain.from.mockResolvedValueOnce([{ observedAt }]);
 
     await expect(ingestLiveSnapshot()).resolves.toMatchObject({
-      skipped: true,
+      skipped: "already-ingested",
       observedAt: observedAt.toISOString(),
     });
     expect(db.insert).not.toHaveBeenCalled();
@@ -113,7 +113,7 @@ describe("ingestLiveSnapshot", () => {
     const result = await ingestLiveSnapshot();
 
     expect(result).toMatchObject({
-      skipped: false,
+      skipped: null,
       connectors: 2,
       locations: 2,
       events: 2,
