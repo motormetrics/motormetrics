@@ -1,4 +1,5 @@
-import { cacheLife } from "next/cache";
+import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+import { cacheLife, cacheTag } from "next/cache";
 import {
   type EvChargingLocation,
   groupLocations,
@@ -37,7 +38,8 @@ export async function getEvChargingPriceRankings({
   limit = 10,
 }: PriceRankingOptions): Promise<EvChargingPricedLocation[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("max");
+  cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
   const { records } = await getEvChargingSnapshot();
   const matching = records.filter(

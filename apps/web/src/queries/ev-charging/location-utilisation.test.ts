@@ -1,9 +1,16 @@
+import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+
 vi.mock("./stored-locations", async () => {
   const { storedLocationsMock } = await import("./history-fixtures");
   return storedLocationsMock();
 });
 
-import { cacheLifeMock, queueSelect, resetDbMocks } from "../test-utils";
+import {
+  cacheLifeMock,
+  cacheTagMock,
+  queueSelect,
+  resetDbMocks,
+} from "../test-utils";
 import { storedRow } from "./history-fixtures";
 import { getEvChargingLocationUtilisation } from "./location-utilisation";
 import { districtPredicate } from "./stored-locations";
@@ -31,7 +38,8 @@ describe("getEvChargingLocationUtilisation", () => {
       }),
       expect.objectContaining({ locationId: "L2", samples: 0 }),
     ]);
-    expect(cacheLifeMock).toHaveBeenCalledWith("hours");
+    expect(cacheLifeMock).toHaveBeenCalledWith("max");
+    expect(cacheTagMock).toHaveBeenCalledWith(EV_CHARGING_LIVE_CACHE_TAG);
     expect(districtPredicate).toHaveBeenCalledWith(
       "locations.postal_code",
       undefined,

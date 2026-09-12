@@ -1,4 +1,10 @@
-import { cacheLifeMock, queueSelect, resetDbMocks } from "../test-utils";
+import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+import {
+  cacheLifeMock,
+  cacheTagMock,
+  queueSelect,
+  resetDbMocks,
+} from "../test-utils";
 import { getEvChargingUtilisationByHour } from "./hourly-utilisation";
 
 describe("getEvChargingUtilisationByHour", () => {
@@ -22,7 +28,8 @@ describe("getEvChargingUtilisationByHour", () => {
       utilisationPercent: 24.5,
       samples: 12,
     });
-    expect(cacheLifeMock).toHaveBeenCalledWith("hours");
+    expect(cacheLifeMock).toHaveBeenCalledWith("max");
+    expect(cacheTagMock).toHaveBeenCalledWith(EV_CHARGING_LIVE_CACHE_TAG);
   });
 
   it("should accept a custom window", async () => {
