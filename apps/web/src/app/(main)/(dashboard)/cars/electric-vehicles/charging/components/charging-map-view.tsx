@@ -147,16 +147,30 @@ function UtilisationHeatmap({
               ["coalesce", ["get", "utilisationPercent"], 0],
               100,
             ],
-            "heatmap-intensity": 0.9,
-            "heatmap-opacity": 0.8,
-            "heatmap-radius": [
+            // Sites spread apart as the map zooms in, so density has to be
+            // boosted to keep the colour ramp from fading out.
+            "heatmap-intensity": [
               "interpolate",
               ["linear"],
               ["zoom"],
               10,
+              0.9,
+              13,
+              2,
+              16,
+              5,
+            ],
+            "heatmap-opacity": 0.8,
+            "heatmap-radius": [
+              "interpolate",
+              ["exponential", 1.5],
+              ["zoom"],
+              10,
               18,
               14,
-              40,
+              60,
+              17,
+              160,
             ],
             "heatmap-color": [
               "interpolate",
