@@ -29,7 +29,7 @@ providerOptions: { openai: { reasoningEffort: "max" } }
 - `stopWhen: isStepCount(10)` ensures tool execution completes before structured output
 - Single API call handles both Code Execution and validated generation
 
-## Langfuse Telemetry
+## Telemetry
 
 **Trace Metadata:**
 - `functionId`: `post-generation/cars` or `post-generation/coe`
@@ -37,7 +37,7 @@ providerOptions: { openai: { reasoningEffort: "max" } }
 - `dataType`: Either "cars" or "coe"
 - `tags`: [dataType, month, "post-generation"]
 
-Langfuse telemetry is wired through the web app OpenTelemetry instrumentation
+Telemetry is wired through the web app instrumentation
 (`apps/web/src/instrumentation.ts`); there is no package-level
 `shutdownTracing()` export.
 
@@ -47,11 +47,10 @@ top-level / final-step provider metadata) and looked up with
 exact billed `totalCost` only when every lookup succeeds. Any failed lookup
 omits `totalCost` while still saving the post.
 
-AI SDK 7 telemetry is registered once in `apps/web/src/instrumentation.ts` using
-`@ai-sdk/otel`. Generation and embedding calls use the stable `telemetry` option;
-their `functionId` continues to flow to Langfuse. Blog generation passes month,
-data type, and tags through AI SDK 7 runtime context so they are recorded as span
-attributes without exposing unrelated runtime data.
+Generation and embedding calls pass the stable AI SDK 7 `telemetry` option
+(`functionId`, and runtime context for blog generation). No telemetry backend is
+registered, so these spans are currently inert — the options are kept so that
+wiring up an exporter is a one-line change rather than a re-instrumentation.
 
 ## Post Persistence
 
@@ -94,11 +93,6 @@ additionally needs Blob access. Do not add provider-specific API keys.
   remaining posts. The backfill only writes null rows, so it is resumable and
   idempotent after the reset.
 - Never rerun the reset once backfilling has started.
-
-**Optional (for telemetry):**
-- `LANGFUSE_PUBLIC_KEY`: Langfuse public key
-- `LANGFUSE_SECRET_KEY`: Langfuse secret key
-- `LANGFUSE_HOST`: Langfuse host URL (defaults to https://cloud.langfuse.com)
 
 ## Related Documentation
 

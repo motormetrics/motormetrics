@@ -1,10 +1,10 @@
-import * as Sentry from "@sentry/nextjs";
 import { fireEvent, render, screen } from "@testing-library/react";
+import posthog from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import GlobalError from "./global-error";
 
-vi.mock("@sentry/nextjs", () => ({
-  captureException: vi.fn(),
+vi.mock("posthog-js", () => ({
+  default: { captureException: vi.fn() },
 }));
 
 vi.mock("next/font/google", () => ({
@@ -29,7 +29,7 @@ describe("GlobalError", () => {
       screen.getByText("A critical error occurred. Please try again."),
     ).toBeInTheDocument();
     expect(screen.getByText("Error ID: xyz789")).toBeInTheDocument();
-    expect(Sentry.captureException).toHaveBeenCalledWith(error);
+    expect(posthog.captureException).toHaveBeenCalledWith(error);
   });
 
   it("should omit the error id when digest is missing", () => {

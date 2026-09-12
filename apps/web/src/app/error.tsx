@@ -1,8 +1,8 @@
 "use client";
 
 import { Button, Typography } from "@heroui/react";
-import * as Sentry from "@sentry/nextjs";
 import { AlertTriangle } from "lucide-react";
+import posthog from "posthog-js";
 import { useEffect } from "react";
 
 export default function AppError({
@@ -13,7 +13,7 @@ export default function AppError({
   retry: () => void;
 }>) {
   useEffect(() => {
-    Sentry.captureException(error);
+    posthog.captureException(error);
   }, [error]);
 
   return (

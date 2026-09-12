@@ -1,8 +1,8 @@
 "use client";
 
-import * as Sentry from "@sentry/nextjs";
 import { AlertTriangle } from "lucide-react";
 import { Geist } from "next/font/google";
+import posthog from "posthog-js";
 import { useEffect } from "react";
 import "./globals.css";
 
@@ -18,7 +18,7 @@ export default function GlobalError({
   retry: () => void;
 }>) {
   useEffect(() => {
-    Sentry.captureException(error);
+    posthog.captureException(error);
   }, [error]);
 
   return (

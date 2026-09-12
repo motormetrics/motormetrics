@@ -1,10 +1,10 @@
-import * as Sentry from "@sentry/nextjs";
 import { fireEvent, render, screen } from "@testing-library/react";
+import posthog from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import AppError from "./error";
 
-vi.mock("@sentry/nextjs", () => ({
-  captureException: vi.fn(),
+vi.mock("posthog-js", () => ({
+  default: { captureException: vi.fn() },
 }));
 
 vi.mock("@heroui/react", async (importOriginal) => ({
@@ -48,7 +48,7 @@ describe("AppError", () => {
       ),
     ).toBeInTheDocument();
     expect(screen.getByText("Error ID: abc123")).toBeInTheDocument();
-    expect(Sentry.captureException).toHaveBeenCalledWith(error);
+    expect(posthog.captureException).toHaveBeenCalledWith(error);
   });
 
   it("should omit the error id when digest is missing", () => {

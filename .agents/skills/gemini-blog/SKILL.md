@@ -86,8 +86,6 @@ Edit `packages/ai/src/config.ts`:
 AI_GATEWAY_API_KEY=...              # Required (Vercel AI Gateway)
 DATABASE_URL=...                    # Required for generate-and-save (Neon/Postgres)
 BLOB_READ_WRITE_TOKEN=...           # Required for local hero-image upload
-LANGFUSE_PUBLIC_KEY=pk-lf-...       # Optional telemetry
-LANGFUSE_SECRET_KEY=sk-lf-...
 ```
 
 ## Best Practices

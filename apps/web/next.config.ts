@@ -1,4 +1,3 @@
-import { withSentryConfig } from "@sentry/nextjs";
 import { withBotId } from "botid/next/config";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
@@ -146,16 +145,4 @@ const nextConfig: NextConfig = {
 
 const withNextIntl = createNextIntlPlugin();
 
-export default withSentryConfig(
-  withWorkflow(withBotId(withNextIntl(nextConfig))),
-  {
-    org: process.env.SENTRY_ORG,
-    project: process.env.SENTRY_PROJECT,
-    // Source map upload; skipped silently when the token is unset.
-    authToken: process.env.SENTRY_AUTH_TOKEN,
-    widenClientFileUpload: true,
-    // Proxy Sentry traffic through the app so ad-blockers do not drop it.
-    tunnelRoute: "/monitoring",
-    silent: !process.env.CI,
-  },
-);
+export default withWorkflow(withBotId(withNextIntl(nextConfig)));

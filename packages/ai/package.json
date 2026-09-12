@@ -26,10 +26,8 @@
   "dependencies": {
     "@ai-sdk/gateway": "catalog:",
     "@ai-sdk/openai": "catalog:",
-    "@langfuse/otel": "catalog:",
     "@motormetrics/database": "workspace:*",
     "@motormetrics/utils": "workspace:*",
-    "@opentelemetry/sdk-trace-node": "2.7.1",
     "@vercel/blob": "2.8.0",
     "ai": "catalog:",
     "drizzle-orm": "catalog:",
