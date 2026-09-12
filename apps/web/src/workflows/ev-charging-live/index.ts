@@ -29,10 +29,16 @@ export async function evChargingLiveWorkflow(): Promise<{ message: string }> {
     data: { recordsProcessed: result.connectors },
   });
 
-  if (result.skipped) {
+  // Either way nothing was written, so there is nothing to revalidate.
+  if (result.skipped === "missing-account-key") {
     return {
       message:
         "[EV CHARGING LIVE] LTA_DATAMALL_ACCOUNT_KEY is not set. Skipped.",
+    };
+  }
+  if (result.skipped === "already-ingested") {
+    return {
+      message: `[EV CHARGING LIVE] Batch at ${result.observedAt} is already stored. Skipped.`,
     };
   }
 

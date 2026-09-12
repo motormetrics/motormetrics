@@ -21,8 +21,14 @@ import { max, sql } from "drizzle-orm";
 // upsert binds 19 columns a row, so 1,500 rows stays well under it.
 const BATCH_SIZE = 1500;
 
+/**
+ * Why a run wrote nothing: no DataMall key is configured, or the feed has not
+ * moved past the batch already stored. `null` means the batch was ingested.
+ */
+type SkipReason = "missing-account-key" | "already-ingested";
+
 export interface IngestResult {
-  skipped: boolean;
+  skipped: SkipReason | null;
   connectors: number;
   locations: number;
   events: number;
@@ -37,8 +43,8 @@ const chunk = <T>(items: T[], size: number): T[][] => {
   return chunks;
 };
 
-const skipped = (observedAt: Date): IngestResult => ({
-  skipped: true,
+const skipped = (reason: SkipReason, observedAt: Date): IngestResult => ({
+  skipped: reason,
   connectors: 0,
   locations: 0,
   events: 0,
@@ -48,7 +54,7 @@ const skipped = (observedAt: Date): IngestResult => ({
 export const ingestLiveSnapshot = async (): Promise<IngestResult> => {
   const accountKey = process.env.LTA_DATAMALL_ACCOUNT_KEY;
   if (!accountKey) {
-    return skipped(new Date());
+    return skipped("missing-account-key", new Date());
   }
 
   const payload = await fetchBatch(accountKey);
@@ -69,7 +75,7 @@ export const ingestLiveSnapshot = async (): Promise<IngestResult> => {
     latest?.observedAt &&
     new Date(latest.observedAt).getTime() >= observedAt.getTime()
   ) {
-    return skipped(observedAt);
+    return skipped("already-ingested", observedAt);
   }
 
   const previousRows = await db
@@ -145,7 +151,7 @@ export const ingestLiveSnapshot = async (): Promise<IngestResult> => {
   }
 
   return {
-    skipped: false,
+    skipped: null,
     connectors: records.length,
     locations: diff.hourly.length,
     events: diff.events.length,
