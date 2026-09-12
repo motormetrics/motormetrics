@@ -1,4 +1,5 @@
-import { cacheLife } from "next/cache";
+import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+import { cacheLife, cacheTag } from "next/cache";
 import { getEvChargingLocationUtilisation } from "./location-utilisation";
 import { type EvChargingLocation, groupLocations } from "./locations";
 import { getEvChargingSnapshot } from "./snapshot";
@@ -29,7 +30,8 @@ interface SiteExtras {
  */
 export async function getEvChargingMapSites(): Promise<EvChargingMapSite[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("weeks");
+  cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
   const [{ records }, utilisation] = await Promise.all([
     getEvChargingSnapshot(),

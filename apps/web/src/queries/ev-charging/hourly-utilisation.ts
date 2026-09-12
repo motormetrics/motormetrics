@@ -1,7 +1,8 @@
 import { db } from "@motormetrics/database/client";
 import { evLocationHourly } from "@motormetrics/database/schema";
+import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
 import { gte, sql, sum } from "drizzle-orm";
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 const daysAgo = (days: number) =>
   new Date(Date.now() - days * 24 * 60 * 60 * 1000);
@@ -24,7 +25,8 @@ export async function getEvChargingUtilisationByHour(
   days = 7,
 ): Promise<EvChargingHourlyUtilisation[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("weeks");
+  cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
   const hourOfDay =
     sql`extract(hour from ${evLocationHourly.hour} at time zone 'Asia/Singapore')`.mapWith(

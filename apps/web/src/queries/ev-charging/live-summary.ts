@@ -1,4 +1,5 @@
-import { cacheLife } from "next/cache";
+import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+import { cacheLife, cacheTag } from "next/cache";
 import { inDistrict } from "./locations";
 import { getEvChargingSnapshot } from "./snapshot";
 
@@ -17,7 +18,8 @@ export async function getEvChargingLiveSummary(
   district?: string,
 ): Promise<EvChargingLiveSummary> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("weeks");
+  cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
   const { observedAt, records } = await getEvChargingSnapshot();
   const summary: EvChargingLiveSummary = {

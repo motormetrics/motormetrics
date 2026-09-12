@@ -1,7 +1,8 @@
 import { db } from "@motormetrics/database/client";
 import { evChargingEvents } from "@motormetrics/database/schema";
+import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
 import { and, count, desc, eq, gt, gte, isNull, max, min } from "drizzle-orm";
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import type { EvChargingLocation } from "./locations";
 import {
   storedLocationColumns,
@@ -38,7 +39,8 @@ export async function getEvChargingRecentChanges(
   days = 7,
 ): Promise<EvChargingRecentChanges> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("weeks");
+  cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
   const locations = storedLocationsSubquery();
   const columns = storedLocationColumns(locations);
