@@ -3,8 +3,6 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 import { withWorkflow } from "workflow/next";
 
-const ONE_DAY = 60 * 60 * 24;
-
 const LEGACY_DOMAIN_REDIRECTS = [
   ["sgcarstrends.com", "motormetrics.app"],
   ["www.sgcarstrends.com", "motormetrics.app"],
@@ -17,13 +15,6 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   cacheComponents: true,
   partialPrefetching: true,
-  cacheLife: {
-    max: {
-      stale: ONE_DAY * 30,
-      revalidate: ONE_DAY * 30,
-      expire: ONE_DAY * 365,
-    },
-  },
   images: {
     remotePatterns: [
       {
