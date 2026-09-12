@@ -1,3 +1,10 @@
+## [5.20.8](https://github.com/motormetrics/motormetrics/compare/v5.20.7...v5.20.8) (2026-09-12)
+
+### Performance Improvements
+
+* **web:** defer make params to keep the static shell ([c79596d](https://github.com/motormetrics/motormetrics/commit/c79596d36a9ef3b4237fcd8ca035ddd88edc648e))
+* **web:** stream coe results report by region ([80ba198](https://github.com/motormetrics/motormetrics/commit/80ba198b288ccafd698baff9d7fd88b9a7118d3f))
+
 ## [5.20.7](https://github.com/motormetrics/motormetrics/compare/v5.20.6...v5.20.7) (2026-09-12)
 
 ### Bug Fixes
