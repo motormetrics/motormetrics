@@ -13,10 +13,15 @@ describe("category summary queries", () => {
   });
 
   it("should return category summary for current year", async () => {
-    // Queue: 1) latestYearSubquery builder, 2) main query result
+    // Queue: 1) latest month carrying registrations, 2) totals per fuel type
     queueSelect(
-      [],
-      [{ year: 2024, total: 100000, electric: 15000, hybrid: 25000 }],
+      [{ month: "2024-11" }],
+      [
+        { fuelType: "Petrol", total: 60000 },
+        { fuelType: "Electric", total: 15000 },
+        { fuelType: "Petrol-Electric", total: 20000 },
+        { fuelType: "Diesel-Electric (Plug-In)", total: 5000 },
+      ],
     );
 
     const result = await getCategorySummaryByYear();
@@ -36,11 +41,12 @@ describe("category summary queries", () => {
   });
 
   it("should return category summary for explicit year", async () => {
-    // Queue: 1) latestYearSubquery builder (created but not used), 2) main query result
-    queueSelect(
-      [],
-      [{ year: 2023, total: 90000, electric: 10000, hybrid: 20000 }],
-    );
+    // An explicit year skips the latest-month lookup, so there is one query
+    queueSelect([
+      { fuelType: "Petrol", total: 60000 },
+      { fuelType: "Electric", total: 10000 },
+      { fuelType: "Petrol-Electric", total: 20000 },
+    ]);
 
     const result = await getCategorySummaryByYear(2023);
 
@@ -57,8 +63,8 @@ describe("category summary queries", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2024-06-15"));
 
-    // Queue: 1) latestYearSubquery builder, 2) main query (empty)
-    queueSelect([], []);
+    // The latest-month lookup comes back empty, so no second query runs
+    queueSelect([]);
 
     const result = await getCategorySummaryByYear();
 

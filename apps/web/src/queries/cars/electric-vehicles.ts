@@ -1,6 +1,6 @@
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
-import { desc, eq, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 const BEV_FUEL_TYPES = ["Electric"];
@@ -59,7 +59,7 @@ export async function getEvMonthlyTrend(): Promise<EvMonthlyTrend[]> {
     .select({
       month: cars.month,
       fuelType: cars.fuelType,
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
+      count: sum(cars.number).mapWith(Number),
     })
     .from(cars)
     .where(inArray(cars.fuelType, ALL_EV_FUEL_TYPES))
@@ -73,13 +73,15 @@ export async function getEvMonthlyTrend(): Promise<EvMonthlyTrend[]> {
       monthMap.set(row.month, { month: row.month, BEV: 0, PHEV: 0, Hybrid: 0 });
     }
     const entry = monthMap.get(row.month)!;
+    // `sum()` is null only for an empty group, which a GROUP BY cannot produce
+    const count = row.count ?? 0;
 
     if (BEV_FUEL_TYPES.includes(row.fuelType)) {
-      entry.BEV += row.count;
+      entry.BEV += count;
     } else if (PHEV_FUEL_TYPES.includes(row.fuelType)) {
-      entry.PHEV += row.count;
+      entry.PHEV += count;
     } else if (HYBRID_FUEL_TYPES.includes(row.fuelType)) {
-      entry.Hybrid += row.count;
+      entry.Hybrid += count;
     }
   }
 
@@ -91,41 +93,52 @@ export async function getEvMarketShare(): Promise<EvMarketShare[]> {
   cacheLife("max");
   cacheTag("cars:fuel:electric", "cars:fuel:hybrid");
 
-  const evByMonthQuery = db
+  // One scan grouped by month and fuel type, split here, rather than batching
+  // an EV-filtered scan alongside a second unfiltered scan of the whole table.
+  const rows = await db
     .select({
       month: cars.month,
-      evCount: sql<number>`sum(${cars.number})`.mapWith(Number),
+      fuelType: cars.fuelType,
+      count: sum(cars.number).mapWith(Number),
     })
     .from(cars)
-    .where(inArray(cars.fuelType, ALL_EV_FUEL_TYPES))
-    .groupBy(cars.month);
+    .groupBy(cars.month, cars.fuelType);
 
-  const totalByMonthQuery = db
-    .select({
-      month: cars.month,
-      totalCount: sql<number>`sum(${cars.number})`.mapWith(Number),
-    })
-    .from(cars)
-    .groupBy(cars.month);
+  const byMonth = new Map<string, EvMarketShare>();
+  // Months the EV-filtered query would have returned a row for. A month with no
+  // electrified registrations at all was absent from that result, so it stays
+  // out of this one rather than appearing as a zero.
+  const monthsWithEv = new Set<string>();
 
-  const [evByMonth, totalByMonth] = await db.batch([
-    evByMonthQuery,
-    totalByMonthQuery,
-  ]);
+  for (const row of rows) {
+    // `sum()` is null only for an empty group, which a GROUP BY cannot produce
+    const count = row.count ?? 0;
 
-  const totalMap = new Map(totalByMonth.map((r) => [r.month, r.totalCount]));
+    const entry = byMonth.get(row.month) ?? {
+      month: row.month,
+      evCount: 0,
+      totalCount: 0,
+      evShare: 0,
+    };
 
-  return evByMonth
-    .map((row) => {
-      const total = totalMap.get(row.month) ?? 0;
-      return {
-        month: row.month,
-        evCount: row.evCount,
-        totalCount: total,
-        evShare: total > 0 ? (row.evCount / total) * 100 : 0,
-      };
-    })
-    .sort((a, b) => a.month.localeCompare(b.month));
+    entry.totalCount += count;
+
+    if (ALL_EV_FUEL_TYPES.includes(row.fuelType)) {
+      entry.evCount += count;
+      monthsWithEv.add(row.month);
+    }
+
+    byMonth.set(row.month, entry);
+  }
+
+  return Array.from(byMonth.values())
+    .filter((entry) => monthsWithEv.has(entry.month))
+    .map((entry) => ({
+      ...entry,
+      evShare:
+        entry.totalCount > 0 ? (entry.evCount / entry.totalCount) * 100 : 0,
+    }))
+    .sort((first, second) => first.month.localeCompare(second.month));
 }
 
 export async function getEvTopMakes(limit = 10): Promise<EvTopMake[]> {
@@ -143,18 +156,24 @@ export async function getEvTopMakes(limit = 10): Promise<EvTopMake[]> {
   const latestMonth = latestMonthResult[0]?.month;
   if (!latestMonth) return [];
 
-  return db
+  const rows = await db
     .select({
       make: cars.make,
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
+      count: sum(cars.number).mapWith(Number),
     })
     .from(cars)
     .where(
-      sql`${cars.month} = ${latestMonth} AND ${cars.fuelType} IN ${ALL_EV_FUEL_TYPES}`,
+      and(
+        eq(cars.month, latestMonth),
+        inArray(cars.fuelType, ALL_EV_FUEL_TYPES),
+      ),
     )
     .groupBy(cars.make)
-    .orderBy(desc(sql<number>`sum(${cars.number})`))
+    .orderBy(desc(sum(cars.number)))
     .limit(limit);
+
+  // `sum()` is null only for an empty group, which a GROUP BY cannot produce
+  return rows.map(({ make, count }) => ({ make, count: count ?? 0 }));
 }
 
 export async function getEvMakeDetails(): Promise<EvMakeDetail[]> {
@@ -176,11 +195,14 @@ export async function getEvMakeDetails(): Promise<EvMakeDetail[]> {
     .select({
       make: cars.make,
       fuelType: cars.fuelType,
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
+      count: sum(cars.number).mapWith(Number),
     })
     .from(cars)
     .where(
-      sql`${cars.month} = ${latestMonth} AND ${cars.fuelType} IN ${ALL_EV_FUEL_TYPES}`,
+      and(
+        eq(cars.month, latestMonth),
+        inArray(cars.fuelType, ALL_EV_FUEL_TYPES),
+      ),
     )
     .groupBy(cars.make, cars.fuelType);
 
@@ -197,15 +219,17 @@ export async function getEvMakeDetails(): Promise<EvMakeDetail[]> {
       });
     }
     const entry = makeMap.get(row.make)!;
+    // `sum()` is null only for an empty group, which a GROUP BY cannot produce
+    const count = row.count ?? 0;
 
     if (BEV_FUEL_TYPES.includes(row.fuelType)) {
-      entry.bev += row.count;
+      entry.bev += count;
     } else if (PHEV_FUEL_TYPES.includes(row.fuelType)) {
-      entry.phev += row.count;
+      entry.phev += count;
     } else if (HYBRID_FUEL_TYPES.includes(row.fuelType)) {
-      entry.hybrid += row.count;
+      entry.hybrid += count;
     }
-    entry.total += row.count;
+    entry.total += count;
   }
 
   return Array.from(makeMap.values()).sort((a, b) => b.total - a.total);
@@ -226,59 +250,49 @@ export async function getEvLatestSummary(): Promise<EvLatestSummary | null> {
   const latestMonth = latestMonthResult[0]?.month;
   if (!latestMonth) return null;
 
-  const evTotalQuery = db
-    .select({
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
-    })
-    .from(cars)
-    .where(
-      sql`${cars.month} = ${latestMonth} AND ${cars.fuelType} IN ${ALL_EV_FUEL_TYPES}`,
-    );
-
-  const bevTotalQuery = db
-    .select({
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
-    })
-    .from(cars)
-    .where(
-      sql`${cars.month} = ${latestMonth} AND ${cars.fuelType} IN ${BEV_FUEL_TYPES}`,
-    );
-
-  const allTotalQuery = db
-    .select({
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
-    })
-    .from(cars)
-    .where(eq(cars.month, latestMonth));
-
-  const topMakeQuery = db
+  // One scan of the month grouped by make and fuel type. The four batched
+  // aggregates it replaces were a single round-trip but ran serially, scanning
+  // the same month four times over.
+  const rows = await db
     .select({
       make: cars.make,
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
+      fuelType: cars.fuelType,
+      count: sum(cars.number).mapWith(Number),
     })
     .from(cars)
-    .where(
-      sql`${cars.month} = ${latestMonth} AND ${cars.fuelType} IN ${ALL_EV_FUEL_TYPES}`,
-    )
-    .groupBy(cars.make)
-    .orderBy(desc(sql<number>`sum(${cars.number})`))
-    .limit(1);
+    .where(eq(cars.month, latestMonth))
+    .groupBy(cars.make, cars.fuelType);
 
-  const [evTotal, bevTotal, allTotal, topMake] = await db.batch([
-    evTotalQuery,
-    bevTotalQuery,
-    allTotalQuery,
-    topMakeQuery,
-  ]);
+  let totalEv = 0;
+  let bevCount = 0;
+  let total = 0;
+  const evByMake = new Map<string, number>();
 
-  const totalEv = evTotal[0]?.count ?? 0;
-  const total = allTotal[0]?.count ?? 0;
+  for (const row of rows) {
+    // `sum()` is null only for an empty group, which a GROUP BY cannot produce
+    const count = row.count ?? 0;
+
+    total += count;
+
+    if (ALL_EV_FUEL_TYPES.includes(row.fuelType)) {
+      totalEv += count;
+      evByMake.set(row.make, (evByMake.get(row.make) ?? 0) + count);
+    }
+
+    if (BEV_FUEL_TYPES.includes(row.fuelType)) {
+      bevCount += count;
+    }
+  }
+
+  const [topMake] = Array.from(evByMake).sort(
+    ([, first], [, second]) => second - first,
+  );
 
   return {
     month: latestMonth,
     totalEv,
     evSharePercent: total > 0 ? (totalEv / total) * 100 : 0,
-    bevCount: bevTotal[0]?.count ?? 0,
-    topMake: topMake[0]?.make ?? "N/A",
+    bevCount,
+    topMake: topMake?.[0] ?? "N/A",
   };
 }

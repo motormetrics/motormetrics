@@ -1,9 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { getCarsComparison, getCarsData } from "./cars/monthly-registrations";
+import {
+  getCarsComparison,
+  getCarsData,
+  getMonthlyRegistrationTotals,
+  getMonthlyRegistrationTotalsByFuelType,
+  getYearToDateByFuelType,
+} from "./cars/monthly-registrations";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueBatch,
+  queueSelect,
   resetDbMocks,
 } from "./test-utils";
 
@@ -13,14 +20,13 @@ describe("monthly registration queries", () => {
   });
 
   it("should aggregate monthly registrations by fuel and vehicle type", async () => {
-    // db.batch returns array of results for all queries
+    // Two grouped queries; the total is derived from the fuel type groups
     queueBatch([
       [
-        { name: "Electric", count: 10 },
         { name: "Hybrid", count: 2 },
+        { name: "Electric", count: 10 },
       ],
       [{ name: "SUV", count: 5 }],
-      [{ total: 12 }],
     ]);
 
     const result = await getCarsData("2024-06");
@@ -39,7 +45,7 @@ describe("monthly registration queries", () => {
   });
 
   it("should return 0 total when no data exists for month", async () => {
-    queueBatch([[], [], []]);
+    queueBatch([[], []]);
 
     const result = await getCarsData("2099-01");
 
@@ -48,18 +54,33 @@ describe("monthly registration queries", () => {
     expect(result.vehicleType).toEqual([]);
   });
 
-  it("should provide comparisons for previous month and year", async () => {
-    // db.batch returns array of 9 results (3 months × 3 query types)
+  it("should drop groups that sum to nothing", async () => {
     queueBatch([
-      [{ label: "Electric", count: 8 }], // currentMonth fuelType
-      [{ label: "SUV", count: 6 }], // currentMonth vehicleType
-      [{ total: 8 }], // currentMonth total
-      [{ label: "Petrol", count: 3 }], // previousMonth fuelType
-      [{ label: "Sedan", count: 4 }], // previousMonth vehicleType
-      [{ total: 3 }], // previousMonth total
-      [], // previousYear fuelType
-      [], // previousYear vehicleType
-      [{ total: 0 }], // previousYear total
+      [
+        { name: "Electric", count: 10 },
+        { name: "Diesel", count: 0 },
+      ],
+      [{ name: "SUV", count: 10 }],
+    ]);
+
+    const result = await getCarsData("2024-06");
+
+    // The empty group still counts towards the total, as the old total query did
+    expect(result.total).toBe(10);
+    expect(result.fuelType).toEqual([{ name: "Electric", count: 10 }]);
+  });
+
+  it("should provide comparisons for previous month and year", async () => {
+    // Two grouped queries spanning all three months, split by month here
+    queueBatch([
+      [
+        { month: "2024-06", label: "Electric", count: 8 },
+        { month: "2024-05", label: "Petrol", count: 3 },
+      ],
+      [
+        { month: "2024-06", label: "SUV", count: 6 },
+        { month: "2024-05", label: "Sedan", count: 4 },
+      ],
     ]);
 
     const result = await getCarsComparison("2024-06");
@@ -86,22 +107,66 @@ describe("monthly registration queries", () => {
   });
 
   it("should return 0 totals when no data exists for comparison periods", async () => {
-    queueBatch([
-      [], // currentMonth fuelType
-      [], // currentMonth vehicleType
-      [], // currentMonth total - empty
-      [], // previousMonth fuelType
-      [], // previousMonth vehicleType
-      [], // previousMonth total - empty
-      [], // previousYear fuelType
-      [], // previousYear vehicleType
-      [], // previousYear total - empty
-    ]);
+    queueBatch([[], []]);
 
     const result = await getCarsComparison("2099-01");
 
     expect(result.currentMonth.total).toBe(0);
     expect(result.previousMonth.total).toBe(0);
     expect(result.previousYear.total).toBe(0);
+  });
+
+  it("should return monthly totals oldest first", async () => {
+    // The query reads newest first; the series is reversed for the sparkline
+    queueSelect([
+      { month: "2024-03", total: 30 },
+      { month: "2024-02", total: 20 },
+    ]);
+
+    const result = await getMonthlyRegistrationTotals();
+
+    expect(result).toEqual([
+      { month: "2024-02", total: 20 },
+      { month: "2024-03", total: 30 },
+    ]);
+    expect(cacheTagMock).toHaveBeenCalledWith("cars:monthly-totals");
+  });
+
+  it("should report year-to-date registrations per fuel type", async () => {
+    queueSelect([
+      { name: "Electric", count: 40 },
+      { name: "Petrol", count: 10 },
+    ]);
+
+    const result = await getYearToDateByFuelType(2024);
+
+    expect(result).toEqual([
+      { name: "Electric", count: 40 },
+      { name: "Petrol", count: 10 },
+    ]);
+    expect(cacheTagMock).toHaveBeenCalledWith("cars:year:2024");
+  });
+
+  it("should tag the monthly series per fuel type", async () => {
+    queueSelect([
+      { month: "2024-03", total: 8 },
+      { month: "2024-02", total: 5 },
+    ]);
+
+    const result = await getMonthlyRegistrationTotalsByFuelType("Electric");
+
+    expect(result).toEqual([
+      { month: "2024-02", total: 5 },
+      { month: "2024-03", total: 8 },
+    ]);
+    expect(cacheTagMock).toHaveBeenCalledWith("cars:monthly-totals:Electric");
+  });
+
+  it("should treat a null sum as zero", async () => {
+    queueSelect([{ month: "2024-02", total: null }]);
+
+    const result = await getMonthlyRegistrationTotals();
+
+    expect(result).toEqual([{ month: "2024-02", total: 0 }]);
   });
 });

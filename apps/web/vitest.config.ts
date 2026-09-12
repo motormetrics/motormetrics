@@ -93,9 +93,6 @@ export default defineConfig({
         "src/components/top-makes-chart.tsx",
         "src/components/shared/skeleton.tsx",
 
-        // EV queries (DB aggregation, no testable logic without DB)
-        "src/queries/cars/electric-vehicles.ts",
-
         // Simple DB/API wrappers (no business logic)
         "src/queries/cars/latest-month.ts",
         "src/utils/social/linkedin.ts",

@@ -58,24 +58,24 @@ describe("car market insight queries", () => {
   });
 
   it("groups top makes for every fuel type", async () => {
-    // First query (non-batched) fetches fuel type totals
+    // A single grouped query returns every fuel type / make pair for the month
     queueSelect([
-      { fuelType: "Electric", total: 100 },
-      { fuelType: "Hybrid", total: 20 },
-    ]);
-    // Then db.batch is called with queries for each fuel type
-    queueBatch([
-      [{ make: "Tesla", count: 80 }],
-      [{ make: "Toyota", count: 20 }],
+      { fuelType: "Hybrid", make: "Toyota", count: 20 },
+      { fuelType: "Electric", make: "Tesla", count: 80 },
+      { fuelType: "Electric", make: "BYD", count: 20 },
     ]);
 
     const result = await marketInsights.getTopMakesByFuelType("2024-06");
 
+    // Fuel types ordered by their total, makes ordered within each
     expect(result).toEqual([
       {
         fuelType: "Electric",
         total: 100,
-        makes: [{ make: "Tesla", count: 80 }],
+        makes: [
+          { make: "Tesla", count: 80 },
+          { make: "BYD", count: 20 },
+        ],
       },
       {
         fuelType: "Hybrid",
@@ -84,6 +84,27 @@ describe("car market insight queries", () => {
       },
     ]);
     expect(cacheTagMock).toHaveBeenCalledWith("cars:month:2024-06");
+  });
+
+  it("reports every make in the fuel type total but only the top five", async () => {
+    queueSelect(
+      Array.from({ length: 7 }, (_, index) => ({
+        fuelType: "Electric",
+        make: `Make ${index}`,
+        count: index + 1,
+      })),
+    );
+
+    const [electric] = await marketInsights.getTopMakesByFuelType("2024-06");
+
+    expect(electric.total).toBe(28);
+    expect(electric.makes).toEqual([
+      { make: "Make 6", count: 7 },
+      { make: "Make 5", count: 6 },
+      { make: "Make 4", count: 5 },
+      { make: "Make 3", count: 4 },
+      { make: "Make 2", count: 3 },
+    ]);
   });
 
   it("computes market share breakdowns from cached data", async () => {
