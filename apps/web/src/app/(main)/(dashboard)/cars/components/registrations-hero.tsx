@@ -55,7 +55,10 @@ export async function RegistrationsHero({
     .filter((row) => row.month.startsWith(year))
     .reduce((total, row) => total + row.total, 0);
 
-  const series = history.slice(-SPARK_MONTHS).map((row) => row.total);
+  const series = history.slice(-SPARK_MONTHS).map((row) => ({
+    label: formatMonthLabel(row.month),
+    value: row.total,
+  }));
   const leader = makeStats[0];
 
   return (
@@ -92,8 +95,9 @@ export async function RegistrationsHero({
       />
       <SparklineChart
         className="mt-2"
+        data={series}
+        name="Registrations"
         title={`Monthly registrations over the ${series.length} months to ${formatMonthLabel(month)}`}
-        values={series}
       />
     </div>
   );

@@ -49,8 +49,12 @@ export function PopulationHeadline({
       />
       <SparklineChart
         className="mt-2"
+        data={entity.series.map((value, index) => ({
+          label: years[index] ?? "",
+          value,
+        }))}
+        name="Population"
         title={`${entity.name} population from ${firstYear} to ${year}`}
-        values={entity.series}
       />
       {years.length > 1 ? (
         <div className="flex justify-between font-semibold text-muted text-xs">
