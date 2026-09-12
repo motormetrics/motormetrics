@@ -1,3 +1,10 @@
+## [5.21.0](https://github.com/motormetrics/motormetrics/compare/v5.20.8...v5.21.0) (2026-09-12)
+
+### Features
+
+* **web:** add hover tooltips to overview sparklines ([258551f](https://github.com/motormetrics/motormetrics/commit/258551ff2babac9afce918ba9d9e93129596d1d1))
+* **web:** format sparkline tooltip values ([64ab94b](https://github.com/motormetrics/motormetrics/commit/64ab94b7735c11e7be74695010d81d5b80d0096c))
+
 ## [5.20.8](https://github.com/motormetrics/motormetrics/compare/v5.20.7...v5.20.8) (2026-09-12)
 
 ### Performance Improvements
