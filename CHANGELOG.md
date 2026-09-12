@@ -1,3 +1,9 @@
+## [5.20.7](https://github.com/motormetrics/motormetrics/compare/v5.20.6...v5.20.7) (2026-09-12)
+
+### Bug Fixes
+
+* **web:** render share images dynamically to stop prerender bailout ([2f0f97f](https://github.com/motormetrics/motormetrics/commit/2f0f97f8eb334222e5ea54dc9d2cf9e3c1fd347d))
+
 ## [5.20.6](https://github.com/motormetrics/motormetrics/compare/v5.20.5...v5.20.6) (2026-09-12)
 
 ### Performance Improvements
