@@ -1,3 +1,11 @@
+## [5.20.6](https://github.com/motormetrics/motormetrics/compare/v5.20.5...v5.20.6) (2026-09-12)
+
+### Performance Improvements
+
+* **database:** drop two unused cars indexes ([7de0f54](https://github.com/motormetrics/motormetrics/commit/7de0f54ca97ca78a34b15b5a3867f5669178fe2a))
+* **web:** collapse batched car queries into single scans ([0124c78](https://github.com/motormetrics/motormetrics/commit/0124c789824cd981a99a63c6f29b21ad45a34178))
+* **web:** fold multi-month car queries into two scans ([47d7f36](https://github.com/motormetrics/motormetrics/commit/47d7f361ac9504c660b4ed6c2dd4441627e942d8))
+
 ## [5.20.5](https://github.com/motormetrics/motormetrics/compare/v5.20.4...v5.20.5) (2026-09-11)
 
 ### Performance Improvements
