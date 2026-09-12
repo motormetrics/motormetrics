@@ -7,7 +7,7 @@ import { emitEvent } from "@web/workflows/shared";
 /**
  * Live EV charger availability workflow using Vercel WDK.
  *
- * Runs every five minutes against LTA DataMall's EV Charging Points Batch
+ * Runs hourly against LTA DataMall's EV Charging Points Batch
  * API and records the current state of every connector, the transitions
  * since the last run, and per-location hourly utilisation counters.
  *

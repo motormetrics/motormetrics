@@ -216,7 +216,7 @@ Web-specific variables (see root `CLAUDE.md` for the cross-cutting ones):
   `advertise-page`, `blog-popular-posts`. (`advertise-nav` and `blog-nav` were removed: they were
   read at request time in the main layout, which pulled every page out of the static shell.)
 - `QSTASH_TOKEN` / `QSTASH_CURRENT_SIGNING_KEY` / `QSTASH_NEXT_SIGNING_KEY`: Upstash QStash. The
-  five-minute `ev-charging-live` schedule lives in QStash, not `vercel.ts` crons; it forwards
+  hourly (`0 * * * *`) `ev-charging-live` schedule lives in QStash, not `vercel.ts` crons; it forwards
   `CRON_SECRET` as the bearer token so the route needs no QStash-specific verification
 - `VERCEL_ENV`: social media redirects and production-only features activate only when this is `"production"`
 - `NEXT_PUBLIC_VERCEL_URL`: client-side deployment URL, without the `https://` protocol. `SITE_URL` falls back to it

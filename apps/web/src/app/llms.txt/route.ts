@@ -110,7 +110,7 @@ ${popularMakes.map(({ make }) => make).join(", ")}
 
 ## EV Charging (Live)
 
-Singapore's public EV charger network, from LTA DataMall's EV Charging Points feed (refreshed every five minutes). Figures are live and per-kWh prices are the operators' advertised rates including GST.
+Singapore's public EV charger network, from LTA DataMall's EV Charging Points feed, updated hourly. Per-kWh prices are the operators' advertised rates including GST.
 
 - [EV Charging Overview](${SITE_URL}/cars/electric-vehicles/charging): Connectors in use, cheapest and most expensive AC and DC charging by district, common questions answered with current figures
 - Filter by district with the query parameter district=<slug> (for example ${SITE_URL}/cars/electric-vehicles/charging?district=jurong-boon-lay-tuas) and by power rating with power=AC or power=DC

@@ -11,7 +11,7 @@ export interface EvChargingHourlyUtilisation {
   hour: number;
   /** Share of usable connectors occupied, 0–100. */
   utilisationPercent: number;
-  /** Five-minute readings behind the figure; zero until the hour is sampled. */
+  /** Hourly ingest readings behind the figure; zero until the hour is sampled. */
   samples: number;
 }
 
