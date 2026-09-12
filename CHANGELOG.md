@@ -1,3 +1,9 @@
+## [5.21.5](https://github.com/motormetrics/motormetrics/compare/v5.21.4...v5.21.5) (2026-09-12)
+
+### Bug Fixes
+
+* **web:** keep ev charging heatmap colour when zoomed in ([074a341](https://github.com/motormetrics/motormetrics/commit/074a341022e2044a6010b8b6e4ed0789e9cf711a))
+
 ## [5.21.4](https://github.com/motormetrics/motormetrics/compare/v5.21.3...v5.21.4) (2026-09-12)
 
 ### Performance Improvements
