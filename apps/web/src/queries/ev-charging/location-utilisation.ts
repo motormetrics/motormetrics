@@ -30,10 +30,12 @@ export interface EvChargingLocationUtilisation extends EvChargingLocation {
 }
 
 /**
- * A location needs about a day of five-minute samples before its average
- * says anything; below that a single busy evening dominates.
+ * A location needs about a day of samples before its average says anything;
+ * below that a single busy evening dominates. The `ev-charging-live` ingest
+ * adds one sample per location per run and runs hourly, so a day is 24 —
+ * change this with the schedule, or the threshold can outgrow the window.
  */
-const MIN_SAMPLES = 24 * 12;
+const MIN_SAMPLES = 24;
 
 /**
  * Locations ranked by average occupancy over the past `days`.
