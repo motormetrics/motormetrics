@@ -1,3 +1,14 @@
+## [5.21.3](https://github.com/motormetrics/motormetrics/compare/v5.21.2...v5.21.3) (2026-09-12)
+
+### Bug Fixes
+
+* **web:** report why the ev charging live ingest skipped ([9a269a6](https://github.com/motormetrics/motormetrics/commit/9a269a6d5b444c1e64c31e6ebcc445b6509b9917))
+* **web:** use built-in max profile for ev charging live queries ([4d21db7](https://github.com/motormetrics/motormetrics/commit/4d21db798b4b48fbe5a5daa30a37b4722d65f0b5)), closes [#1083](https://github.com/motormetrics/motormetrics/issues/1083)
+
+### Performance Improvements
+
+* **web:** bust ev charging live caches on ingest ([8623444](https://github.com/motormetrics/motormetrics/commit/86234443e30991224f739b5b8303d0921fc83126))
+
 ## [5.21.2](https://github.com/motormetrics/motormetrics/compare/v5.21.1...v5.21.2) (2026-09-12)
 
 ### Bug Fixes
