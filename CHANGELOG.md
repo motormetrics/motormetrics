@@ -1,3 +1,9 @@
+## [5.21.4](https://github.com/motormetrics/motormetrics/compare/v5.21.3...v5.21.4) (2026-09-12)
+
+### Performance Improvements
+
+* **web:** fetch charger map sites instead of inlining them ([5a0c018](https://github.com/motormetrics/motormetrics/commit/5a0c018a365a459835c5d998849b982580d582ee))
+
 ## [5.21.3](https://github.com/motormetrics/motormetrics/compare/v5.21.2...v5.21.3) (2026-09-12)
 
 ### Bug Fixes
