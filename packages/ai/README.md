@@ -12,7 +12,7 @@ provider traffic is routed through Vercel AI Gateway.
 | Hero images | `openai/gpt-image-2` |
 
 Blog generation uses `max` reasoning, OpenAI Code Interpreter, the existing Zod
-post schema, and Langfuse telemetry. Distinct Gateway generation IDs across all
+post schema, and OpenTelemetry tracing. Distinct Gateway generation IDs across all
 model steps are looked up and summed into the exact billed cost only when every
 step lookup succeeds. Gemini 2 embeddings use 768 dimensions.
 
@@ -96,14 +96,6 @@ BLOB_READ_WRITE_TOKEN=
 non-Vercel environments need `BLOB_READ_WRITE_TOKEN` even after Gateway auth is
 configured.
 
-Optional Langfuse observability:
-
-```bash
-LANGFUSE_PUBLIC_KEY=
-LANGFUSE_SECRET_KEY=
-LANGFUSE_HOST=https://cloud.langfuse.com
-```
-
 No direct provider API key is required.
 
 ## Embedding migration rollout
@@ -149,8 +141,8 @@ pnpm --filter @motormetrics/ai test
 pnpm --filter @motormetrics/ai typecheck
 ```
 
-Key dependencies are `ai`, `@ai-sdk/gateway`, `@ai-sdk/openai`, Langfuse, and
-the MotorMetrics database and utility packages.
+Key dependencies are `ai`, `@ai-sdk/gateway`, `@ai-sdk/openai`, and the
+MotorMetrics database and utility packages.
 
 ## License
 

@@ -151,7 +151,7 @@ graph TB
 - Vercel AI SDK with Google Gemini integration
 - 2-step blog generation (analysis → structured output)
 - Zod schemas for structured responses
-- Langfuse telemetry for LLM observability
+- OpenTelemetry tracing via Sentry for LLM observability
 
 **Logos Package**
 - Car brand logo management
