@@ -28,11 +28,14 @@ export const cars = snakeCase.table(
         table.vehicleType,
       )
       .nullsNotDistinct(),
-    index().on(table.month, table.make),
+    // Narrow single-column indexes, not the composites that cover them: the
+    // planner picks these because they touch far fewer pages than the wide
+    // unique index above. Measured on staging, Sep 2026 — `(month)` alone
+    // served 124,699 scans, `(make)` 5,476, while `(month, make)` and
+    // `(make, fuel_type)` served none and were dropped.
     index().on(table.month),
     index().on(table.make),
     index().on(table.fuelType),
-    index().on(table.make, table.fuelType),
     index().on(table.number),
   ],
 );
