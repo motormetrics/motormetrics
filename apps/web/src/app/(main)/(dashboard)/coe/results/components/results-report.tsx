@@ -1,4 +1,3 @@
-import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   biddingOrdinal,
@@ -14,12 +13,9 @@ import {
 import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/premiums/components/category-badge";
 import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-delta";
 import { ResultsChart } from "@web/app/(main)/(dashboard)/coe/results/components/results-chart";
-import { SeriesFilter } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params";
 import {
-  ReportFilterBar,
   ReportHeadline,
-  ReportNote,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
@@ -32,7 +28,6 @@ import {
 } from "@web/components/shared/report-table";
 import { getCoeResultsByPeriod } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
-import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
 /** The three categories the comp calls out beside the headline. */
@@ -72,13 +67,31 @@ function totalFor(
   );
 }
 
-export async function ResultsReport({
-  searchParams,
-}: {
+interface RegionProps {
   searchParams: Promise<SearchParams>;
-}) {
+}
+
+/**
+ * The read every region below shares.
+ *
+ * Each region awaits this itself rather than taking the data as a prop, so the
+ * regions sit behind their own Suspense boundaries and stream independently —
+ * the page never waits on the slowest of them. It is not one query per region:
+ * `getCoeResultsByPeriod` is `'use cache'`, so the first call populates and the
+ * rest read it.
+ */
+async function loadExercises(searchParams: Promise<SearchParams>) {
   const { categories: selected, period } = await loadSearchParams(searchParams);
-  const exercises = groupByExercise(await getCoeResultsByPeriod(period));
+
+  return {
+    exercises: groupByExercise(await getCoeResultsByPeriod(period)),
+    selected,
+  };
+}
+
+/** The bids-per-quota figure and the premiums beside it. */
+export async function ResultsHeadline({ searchParams }: RegionProps) {
+  const { exercises } = await loadExercises(searchParams);
 
   const latest = exercises.at(-1);
   const previous = exercises.at(-2);
@@ -86,6 +99,51 @@ export async function ResultsReport({
   if (!latest) {
     return null;
   }
+
+  const totalQuota = totalFor(latest, "quota");
+  const totalBids = totalFor(latest, "bidsReceived");
+  const bidsPerQuota = totalQuota > 0 ? totalBids / totalQuota : 0;
+
+  return (
+    <ReportHeadline
+      delta={
+        <span className="inline-flex items-center whitespace-nowrap rounded-full bg-accent-soft-2 px-4 py-2 font-bold text-accent-strong text-sm">
+          bids per quota
+        </span>
+      }
+      label={`Latest exercise · ${formatMonth(latest.month)} · ${biddingOrdinal(latest.biddingNo)} bidding`}
+      stats={
+        <>
+          {HIGHLIGHT_CATEGORIES.map((category) => {
+            const premium = premiumOf(latest, category) ?? 0;
+            return (
+              <ReportStat
+                key={category}
+                label={`${category} premium`}
+                note={movementNote(
+                  premium,
+                  previous && premiumOf(previous, category),
+                )}
+                value={formatCurrency(premium)}
+              />
+            );
+          })}
+          <ReportStat
+            label="Quota"
+            note="this exercise"
+            value={<Count value={totalQuota} />}
+          />
+        </>
+      }
+      sub={`${totalBids.toLocaleString("en-SG")} bids against a quota of ${totalQuota.toLocaleString("en-SG")} across all five categories`}
+      value={`${bidsPerQuota.toFixed(2)}×`}
+    />
+  );
+}
+
+/** The premium-by-exercise lines for whichever categories are switched on. */
+export async function ResultsChartPanel({ searchParams }: RegionProps) {
+  const { exercises, selected } = await loadExercises(searchParams);
 
   const plotted = COE_CATEGORIES.filter((category) =>
     selected.includes(category),
@@ -103,205 +161,132 @@ export async function ResultsReport({
     return point;
   });
 
-  const totalQuota = totalFor(latest, "quota");
-  const totalBids = totalFor(latest, "bidsReceived");
-  const bidsPerQuota = totalQuota > 0 ? totalBids / totalQuota : 0;
+  return <ResultsChart categories={plotted} data={chartData} />;
+}
+
+/**
+ * Only the rows. The table's own `<thead>` is static, so it stays in the page
+ * shell and paints before these resolve.
+ */
+export async function ResultsByExerciseRows({ searchParams }: RegionProps) {
+  const { exercises } = await loadExercises(searchParams);
+
+  const latest = exercises.at(-1);
+
+  if (!latest) {
+    return null;
+  }
 
   const tableRows = exercises
     .map((exercise, index) => ({ exercise, previous: exercises[index - 1] }))
     .reverse();
 
-  return (
-    <>
-      <ReportFilterBar
-        label="Series"
-        trailing={
-          <Typography.Paragraph color="muted" size="sm">
-            Tap a category to add or remove it from the chart
-          </Typography.Paragraph>
-        }
-      >
-        <SeriesFilter />
-      </ReportFilterBar>
-
-      <ReportHeadline
-        delta={
-          <span className="inline-flex items-center whitespace-nowrap rounded-full bg-accent-soft-2 px-4 py-2 font-bold text-accent-strong text-sm">
-            bids per quota
+  return tableRows.map(({ exercise, previous: earlier }) => (
+    <ReportRow isActive={exercise.key === latest.key} key={exercise.key}>
+      <ReportCell>
+        <div className="flex flex-col gap-0.5">
+          <span className="font-bold text-base">
+            {formatMonth(exercise.month)}
           </span>
-        }
-        label={`Latest exercise · ${formatMonth(latest.month)} · ${biddingOrdinal(latest.biddingNo)} bidding`}
-        stats={
-          <>
-            {HIGHLIGHT_CATEGORIES.map((category) => {
-              const premium = premiumOf(latest, category) ?? 0;
-              return (
-                <ReportStat
-                  key={category}
-                  label={`${category} premium`}
-                  note={movementNote(
-                    premium,
-                    previous && premiumOf(previous, category),
-                  )}
-                  value={formatCurrency(premium)}
-                />
-              );
-            })}
-            <ReportStat
-              label="Quota"
-              note="this exercise"
-              value={<Count value={totalQuota} />}
-            />
-          </>
-        }
-        sub={`${totalBids.toLocaleString("en-SG")} bids against a quota of ${totalQuota.toLocaleString("en-SG")} across all five categories`}
-        value={`${bidsPerQuota.toFixed(2)}×`}
-      />
+          <span className="font-medium text-muted text-xs">
+            {biddingOrdinal(exercise.biddingNo)} bidding exercise
+          </span>
+        </div>
+      </ReportCell>
+      {COE_CATEGORIES.map((category) => {
+        const premium = premiumOf(exercise, category);
+        const earlierPremium = earlier && premiumOf(earlier, category);
 
-      <div className="flex flex-col gap-3.5">
-        <ResultsChart categories={plotted} data={chartData} />
-        <Typography.Paragraph color="muted" size="sm">
-          Category D premiums sit an order of magnitude below the car categories
-          — add it to the chart and the other lines flatten.
-        </Typography.Paragraph>
-      </div>
+        return (
+          <ReportCell align="end" key={category}>
+            <div className="flex flex-col items-end gap-0.5">
+              <span className="font-extrabold text-base">
+                {premium === undefined ? "—" : formatCurrency(premium)}
+              </span>
+              <PremiumDelta
+                className="text-xs"
+                ratio={
+                  premium !== undefined && earlierPremium
+                    ? changeRatio(premium, earlierPremium)
+                    : null
+                }
+              />
+            </div>
+          </ReportCell>
+        );
+      })}
+      <ReportCell align="end" className="font-semibold text-muted">
+        <Count value={totalFor(exercise, "bidsReceived")} />
+      </ReportCell>
+    </ReportRow>
+  ));
+}
 
-      <ReportSection
-        caption="Closing premium per category · most recent first"
-        title="Results by exercise"
+/**
+ * Quota against bids for the latest exercise. The section header names that
+ * exercise, so unlike the table above it the heading is data-derived and the
+ * whole section stays behind the boundary.
+ */
+export async function QuotaAndDemand({ searchParams }: RegionProps) {
+  const { exercises } = await loadExercises(searchParams);
+
+  const latest = exercises.at(-1);
+
+  if (!latest) {
+    return null;
+  }
+
+  return (
+    <ReportSection
+      caption={`${formatMonth(latest.month)} · ${biddingOrdinal(latest.biddingNo)} bidding exercise`}
+      title="Quota and demand"
+    >
+      <ReportTable
+        columns={[
+          { label: "Cat", width: "64px" },
+          { label: "Description" },
+          { align: "end", label: "Quota" },
+          { align: "end", label: "Bids" },
+          { label: "Success rate", width: "200px" },
+        ]}
       >
-        <ReportTable
-          columns={[
-            { label: "Exercise" },
-            ...COE_CATEGORIES.map((category) => ({
-              align: "end" as const,
-              label: `Cat ${toCategoryKey(category)}`,
-            })),
-            { align: "end" as const, label: "Total bids" },
-          ]}
-        >
-          {tableRows.map(({ exercise, previous: earlier }) => (
-            <ReportRow
-              isActive={exercise.key === latest.key}
-              key={exercise.key}
-            >
+        {COE_CATEGORIES.map((category) => {
+          const figures = latest.results[category];
+          const rate = successRate(
+            figures?.bidsSuccess ?? 0,
+            figures?.bidsReceived ?? 0,
+          );
+
+          return (
+            <ReportRow key={category}>
               <ReportCell>
-                <div className="flex flex-col gap-0.5">
-                  <span className="font-bold text-base">
-                    {formatMonth(exercise.month)}
+                <CategoryBadge categoryKey={toCategoryKey(category)} />
+              </ReportCell>
+              <ReportCell className="font-semibold text-base">
+                {CATEGORY_DESCRIPTIONS[category]}
+              </ReportCell>
+              <ReportCell align="end" className="font-extrabold text-base">
+                <Count value={figures?.quota ?? 0} />
+              </ReportCell>
+              <ReportCell align="end" className="font-semibold text-muted">
+                <Count value={figures?.bidsReceived ?? 0} />
+              </ReportCell>
+              <ReportCell>
+                <div className="flex items-center gap-3">
+                  {/* `isLeader` is the bar's darker fill — every row here
+                      carries it, since the rows are not ranked. */}
+                  <span className="flex-1">
+                    <ShareBar isLeader share={rate} />
                   </span>
-                  <span className="font-medium text-muted text-xs">
-                    {biddingOrdinal(exercise.biddingNo)} bidding exercise
+                  <span className="w-10 text-right font-bold text-muted-strong text-sm tabular-nums">
+                    {rate.toFixed(0)}%
                   </span>
                 </div>
               </ReportCell>
-              {COE_CATEGORIES.map((category) => {
-                const premium = premiumOf(exercise, category);
-                const earlierPremium = earlier && premiumOf(earlier, category);
-
-                return (
-                  <ReportCell align="end" key={category}>
-                    <div className="flex flex-col items-end gap-0.5">
-                      <span className="font-extrabold text-base">
-                        {premium === undefined ? "—" : formatCurrency(premium)}
-                      </span>
-                      <PremiumDelta
-                        className="text-xs"
-                        ratio={
-                          premium !== undefined && earlierPremium
-                            ? changeRatio(premium, earlierPremium)
-                            : null
-                        }
-                      />
-                    </div>
-                  </ReportCell>
-                );
-              })}
-              <ReportCell align="end" className="font-semibold text-muted">
-                <Count value={totalFor(exercise, "bidsReceived")} />
-              </ReportCell>
             </ReportRow>
-          ))}
-        </ReportTable>
-      </ReportSection>
-
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
-        <ReportSection
-          caption={`${formatMonth(latest.month)} · ${biddingOrdinal(latest.biddingNo)} bidding exercise`}
-          title="Quota and demand"
-        >
-          <ReportTable
-            columns={[
-              { label: "Cat", width: "64px" },
-              { label: "Description" },
-              { align: "end", label: "Quota" },
-              { align: "end", label: "Bids" },
-              { label: "Success rate", width: "200px" },
-            ]}
-          >
-            {COE_CATEGORIES.map((category) => {
-              const figures = latest.results[category];
-              const rate = successRate(
-                figures?.bidsSuccess ?? 0,
-                figures?.bidsReceived ?? 0,
-              );
-
-              return (
-                <ReportRow key={category}>
-                  <ReportCell>
-                    <CategoryBadge categoryKey={toCategoryKey(category)} />
-                  </ReportCell>
-                  <ReportCell className="font-semibold text-base">
-                    {CATEGORY_DESCRIPTIONS[category]}
-                  </ReportCell>
-                  <ReportCell align="end" className="font-extrabold text-base">
-                    <Count value={figures?.quota ?? 0} />
-                  </ReportCell>
-                  <ReportCell align="end" className="font-semibold text-muted">
-                    <Count value={figures?.bidsReceived ?? 0} />
-                  </ReportCell>
-                  <ReportCell>
-                    <div className="flex items-center gap-3">
-                      {/* `isLeader` is the bar's darker fill — every row here
-                          carries it, since the rows are not ranked. */}
-                      <span className="flex-1">
-                        <ShareBar isLeader share={rate} />
-                      </span>
-                      <span className="w-10 text-right font-bold text-muted-strong text-sm tabular-nums">
-                        {rate.toFixed(0)}%
-                      </span>
-                    </div>
-                  </ReportCell>
-                </ReportRow>
-              );
-            })}
-          </ReportTable>
-        </ReportSection>
-
-        <ReportNote title="How an exercise runs">
-          <Typography.Paragraph>
-            Bidding opens at 12pm on the first Monday and third Monday of each
-            month and closes at 4pm on the third day. The premium is the lowest
-            successful bid, so everyone who wins pays the same price.
-          </Typography.Paragraph>
-          <Typography.Paragraph>
-            Quotas are set quarterly from deregistrations and the allowed growth
-            in the vehicle population.
-          </Typography.Paragraph>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/coe/premiums"
-          >
-            Premium trends by category →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/coe/pqp"
-          >
-            PQP renewal rates →
-          </Link>
-        </ReportNote>
-      </div>
-    </>
+          );
+        })}
+      </ReportTable>
+    </ReportSection>
   );
 }
