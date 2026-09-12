@@ -13,9 +13,28 @@ const SURVEY_ROUTE_PATTERN = /^\/(coe|cars)(\/|$)/;
 
 const SURVEY_PROMPT_DELAY_MS = 10_000;
 
-// Shows at most one survey per browser. PostHog holds the survey, its
-// targeting and its responses; automatic popover display is switched off in
-// instrumentation-client.ts so this component is the only display path.
+// Shows at most one survey per browser every 90 days. PostHog holds the
+// survey, its targeting and its responses; automatic popover display is
+// switched off in instrumentation-client.ts so this component is the only
+// display path.
+//
+// The 90-day gate is enforced four times over, so the survey vanishing after a
+// refresh is expected rather than a bug:
+//
+//   1. The survey's completion condition is `schedule: once`.
+//   2. Its display condition sets a 90-day wait period, which spans every
+//      survey in the project, not just this one.
+//   3. Its internal targeting flag requires `$survey_dismissed` and
+//      `$survey_responded` to be unset and `$last_seen_survey_date` to be unset
+//      or older than 90 days. PostHog writes that date when the survey is
+//      *shown*, so simply seeing it is enough to gate the person out.
+//   4. SURVEY_COOLDOWN_MS above, which saves the round trip when we already
+//      know PostHog would refuse.
+//
+// Loosening SURVEY_COOLDOWN_MS therefore changes nothing on its own; the
+// survey's conditions in PostHog have to change with it. Its URL condition is
+// also anchored to the production host, so the survey never displays on
+// localhost or a preview deployment.
 export function SurveyPrompt() {
   const pathname = usePathname();
 
