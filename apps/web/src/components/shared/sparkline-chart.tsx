@@ -13,12 +13,15 @@ import { AreaChart } from "@heroui-pro/react/area-chart";
 export function SparklineChart({
   className,
   data,
+  format,
   height = 150,
   name,
   title,
 }: {
   className?: string;
   data: { label: string; value: number }[];
+  /** Number format for the tooltip value; whole numbers by default. */
+  format?: Intl.NumberFormatOptions;
   height?: number;
   /** Series name shown in the tooltip. */
   name: string;
@@ -28,6 +31,11 @@ export function SparklineChart({
   if (data.length < 2) {
     return null;
   }
+
+  const numberFormat = new Intl.NumberFormat("en-SG", {
+    maximumFractionDigits: 0,
+    ...format,
+  });
 
   return (
     <div aria-label={title} className={className} role="img">
@@ -48,7 +56,13 @@ export function SparklineChart({
           strokeWidth={3}
           type="monotone"
         />
-        <AreaChart.Tooltip content={<AreaChart.TooltipContent />} />
+        <AreaChart.Tooltip
+          content={
+            <AreaChart.TooltipContent
+              valueFormatter={(value) => numberFormat.format(Number(value))}
+            />
+          }
+        />
       </AreaChart>
     </div>
   );

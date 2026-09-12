@@ -106,8 +106,9 @@ export function CoePremiums({ series }: { series: CoeCategorySeries[] }) {
             label: formatMonth(point.month),
             value: point.premium,
           }))}
+          format={{ currency: "SGD", style: "currency" }}
           height={CHART_HEIGHT}
-          name="Premium (S$)"
+          name="Premium"
           title={`${active.category} premiums over the last ${values.length} exercises`}
         />
         <div className="flex justify-between font-semibold text-muted text-xs">

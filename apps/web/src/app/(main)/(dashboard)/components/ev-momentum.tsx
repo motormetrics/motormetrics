@@ -82,8 +82,13 @@ export async function EvMomentum() {
         />
         <SparklineChart
           data={history}
+          format={{
+            maximumFractionDigits: 1,
+            style: "unit",
+            unit: "percent",
+          }}
           height={120}
-          name="EV share (%)"
+          name="EV share"
           title={`Battery-electric share of new car registrations over the last ${history.length} months`}
         />
         {makes.length > 0 ? (

@@ -88,7 +88,8 @@ export async function CoeHeadline({
 
       <SparklineChart
         data={premiums}
-        name="Premium (S$)"
+        format={{ currency: "SGD", style: "currency" }}
+        name="Premium"
         title={`${category} premiums over the last ${visible.length} bidding exercises`}
       />
     </div>

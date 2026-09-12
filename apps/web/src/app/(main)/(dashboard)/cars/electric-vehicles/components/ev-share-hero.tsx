@@ -93,7 +93,12 @@ export async function EvShareHero({ month }: { month: string }) {
       />
       <SparklineChart
         data={history}
-        name="EV share (%)"
+        format={{
+          maximumFractionDigits: 1,
+          style: "unit",
+          unit: "percent",
+        }}
+        name="EV share"
         title={`Battery-electric share of new car registrations over the last ${history.length} months`}
       />
     </div>
