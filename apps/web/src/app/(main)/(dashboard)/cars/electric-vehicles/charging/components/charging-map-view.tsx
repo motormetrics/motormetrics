@@ -38,6 +38,12 @@ const MODE_LEGENDS: Record<MapMode, string> = {
 /** How many matches the locator card lists before asking for more letters. */
 const LOCATOR_LIMIT = 5;
 
+/** Serves the same array that used to arrive as props. */
+const MAP_SITES_ENDPOINT = "/api/ev-charging/map-sites";
+
+/** Stable empty reference so the memos below do not rerun while loading. */
+const NO_SITES: EvChargingMapSite[] = [];
+
 const siteTitle = (site: EvChargingMapSite) =>
   site.stationName ?? site.address ?? site.locationId;
 
@@ -322,9 +328,13 @@ function SiteFocus({
   return null;
 }
 
-export function ChargingMapView({ sites }: { sites: EvChargingMapSite[] }) {
+export function ChargingMapView() {
   const [district] = useQueryState("district", parseAsString.withDefault(""));
   const scope = getPostalDistrict(district)?.name ?? "Singapore";
+  const [loadedSites, setLoadedSites] = useState<EvChargingMapSite[] | null>(
+    null,
+  );
+  const sites = loadedSites ?? NO_SITES;
   const [tokens, setTokens] = useState<MapTokens | null>(null);
   const [mode, setMode] = useState<MapMode>("availability");
   const [selected, setSelected] = useState<SelectedSite | null>(null);
@@ -353,6 +363,32 @@ export function ChargingMapView({ sites }: { sites: EvChargingMapSite[] }) {
 
   useEffect(() => {
     setTokens(readTokens());
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const load = async () => {
+      try {
+        const response = await fetch(MAP_SITES_ENDPOINT, {
+          signal: controller.signal,
+        });
+        if (!response.ok) {
+          throw new Error(`Map sites request failed: ${response.status}`);
+        }
+        setLoadedSites((await response.json()) as EvChargingMapSite[]);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+        console.error("Failed to load charging map sites:", error);
+        // An empty list leaves the map usable, just without pins.
+        setLoadedSites(NO_SITES);
+      }
+    };
+
+    void load();
+    return () => controller.abort();
   }, []);
 
   const pointColor: MapClusterLayerProps["pointColor"] = tokens
@@ -450,6 +486,14 @@ export function ChargingMapView({ sites }: { sites: EvChargingMapSite[] }) {
           onPick={(site) => setSiteId(site.locationId)}
           sites={sites}
         />
+
+        {loadedSites === null ? (
+          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-surface/60 backdrop-blur-xs">
+            <Typography.Paragraph color="muted" size="sm">
+              Loading chargers…
+            </Typography.Paragraph>
+          </div>
+        ) : null}
       </div>
 
       <Typography.Paragraph color="muted" size="xs">
