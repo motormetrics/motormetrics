@@ -23,7 +23,11 @@ import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
 } from "@web/lib/metadata";
-import { getEvChargingSnapshot } from "@web/queries/ev-charging";
+import {
+  getEvChargingSnapshot,
+  type PriceOrder,
+  type UtilisationOrder,
+} from "@web/queries/ev-charging";
 import { PlugZap } from "lucide-react";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
@@ -123,6 +127,10 @@ export default function ChargingPage({ searchParams }: PageProps) {
         </SectionErrorBoundary>
       </AnimatedSection>
 
+      <Suspense fallback={null}>
+        <ChargingEmptyState />
+      </Suspense>
+
       <Suspense
         fallback={
           <Bento>
@@ -147,34 +155,65 @@ async function DistrictControl({ searchParams }: PageProps) {
   return <DistrictSelect district={district} />;
 }
 
-async function ChargingBento({ searchParams }: PageProps) {
-  const [{ district, power }, snapshot] = await Promise.all([
-    loadSearchParams(searchParams),
-    getEvChargingSnapshot(),
-  ]);
-
-  if (snapshot.records.length === 0) {
-    return (
-      <EmptyState
-        description="Live charger availability is not available at the moment. Please check back later."
-        icon={
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
-            <PlugZap className="size-8 text-muted" />
-          </div>
-        }
-        showDefaultActions={false}
-        title="No Live Data Available"
-      />
-    );
+/**
+ * Explains an empty live feed. It has its own boundary so the S3 snapshot it
+ * awaits never holds back the cards: most of them read Postgres, and each one
+ * streams as soon as its own data is ready.
+ */
+async function ChargingEmptyState() {
+  const snapshot = await getEvChargingSnapshot();
+  if (snapshot.records.length > 0) {
+    return null;
   }
 
+  return (
+    <EmptyState
+      description="Live charger availability is not available at the moment. Please check back later."
+      icon={
+        <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
+          <PlugZap className="size-8 text-muted" />
+        </div>
+      }
+      showDefaultActions={false}
+      title="No Live Data Available"
+    />
+  );
+}
+
+async function LiveStatusCard({ searchParams }: PageProps) {
+  const { district } = await loadSearchParams(searchParams);
+  return <LiveStatus district={district} />;
+}
+
+async function PriceListCard({
+  order,
+  searchParams,
+}: PageProps & { order: PriceOrder }) {
+  const { district, power } = await loadSearchParams(searchParams);
+  return <PriceList district={district} order={order} power={power} />;
+}
+
+async function UtilisationListCard({
+  order,
+  searchParams,
+}: PageProps & { order: UtilisationOrder }) {
+  const { district } = await loadSearchParams(searchParams);
+  return <UtilisationList district={district} order={order} />;
+}
+
+/**
+ * The card grid. It awaits nothing itself: aggregating the cards' data here
+ * would make the slowest read gate every card, so each card resolves search
+ * params and its own query inside its own Suspense boundary.
+ */
+function ChargingBento({ searchParams }: PageProps) {
   return (
     <Bento>
       <AnimatedGrid className="flex flex-col gap-6">
         <AnimatedSection>
           <SectionErrorBoundary title="Live status unavailable">
             <Suspense fallback={<CardSkeleton className="h-80" />}>
-              <LiveStatus district={district} />
+              <LiveStatusCard searchParams={searchParams} />
             </Suspense>
           </SectionErrorBoundary>
         </AnimatedSection>
@@ -198,14 +237,14 @@ async function ChargingBento({ searchParams }: PageProps) {
         <AnimatedSection>
           <SectionErrorBoundary title="Cheapest chargers unavailable">
             <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
-              <PriceList district={district} order="cheapest" power={power} />
+              <PriceListCard order="cheapest" searchParams={searchParams} />
             </Suspense>
           </SectionErrorBoundary>
         </AnimatedSection>
         <AnimatedSection>
           <SectionErrorBoundary title="Most expensive chargers unavailable">
             <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
-              <PriceList district={district} order="priciest" power={power} />
+              <PriceListCard order="priciest" searchParams={searchParams} />
             </Suspense>
           </SectionErrorBoundary>
         </AnimatedSection>
@@ -215,14 +254,20 @@ async function ChargingBento({ searchParams }: PageProps) {
         <AnimatedSection>
           <SectionErrorBoundary title="Busiest locations unavailable">
             <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
-              <UtilisationList district={district} order="busiest" />
+              <UtilisationListCard
+                order="busiest"
+                searchParams={searchParams}
+              />
             </Suspense>
           </SectionErrorBoundary>
         </AnimatedSection>
         <AnimatedSection>
           <SectionErrorBoundary title="Quietest locations unavailable">
             <Suspense fallback={<CardSkeleton className="h-[520px]" />}>
-              <UtilisationList district={district} order="quietest" />
+              <UtilisationListCard
+                order="quietest"
+                searchParams={searchParams}
+              />
             </Suspense>
           </SectionErrorBoundary>
         </AnimatedSection>
