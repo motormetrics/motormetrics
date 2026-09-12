@@ -1,3 +1,9 @@
+## [5.21.1](https://github.com/motormetrics/motormetrics/compare/v5.21.0...v5.21.1) (2026-09-12)
+
+### Bug Fixes
+
+* **web:** lower ev charging utilisation threshold for hourly ingest ([93c29b0](https://github.com/motormetrics/motormetrics/commit/93c29b02ca5bf4441d6155034a35b8dad7521b5e))
+
 ## [5.21.0](https://github.com/motormetrics/motormetrics/compare/v5.20.8...v5.21.0) (2026-09-12)
 
 ### Features
