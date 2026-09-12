@@ -38,7 +38,7 @@ export async function getEvChargingPriceRankings({
   limit = 10,
 }: PriceRankingOptions): Promise<EvChargingPricedLocation[]> {
   "use cache";
-  cacheLife("weeks");
+  cacheLife("max");
   cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
   const { records } = await getEvChargingSnapshot();

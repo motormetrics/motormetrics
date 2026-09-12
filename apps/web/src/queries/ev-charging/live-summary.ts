@@ -18,7 +18,7 @@ export async function getEvChargingLiveSummary(
   district?: string,
 ): Promise<EvChargingLiveSummary> {
   "use cache";
-  cacheLife("weeks");
+  cacheLife("max");
   cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
   const { observedAt, records } = await getEvChargingSnapshot();

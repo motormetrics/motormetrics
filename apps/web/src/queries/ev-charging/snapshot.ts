@@ -20,9 +20,9 @@ const EMPTY: EvChargingSnapshot = { observedAt: null, records: [] };
  * five-minute batch file.
  *
  * Nothing is stored: every live figure on the site derives from this one
- * cached download. The `weeks` profile puts the timer far enough out to be a
- * backstop: the `ev-charging-live` workflow busts the tag after each ingest,
- * and that is what refreshes these figures in practice. Mind
+ * cached download. The built-in `max` profile puts the timer far enough out
+ * to be a backstop: the `ev-charging-live` workflow busts the tag after each
+ * ingest, and that is what refreshes these figures in practice. Mind
  * that this query feeds the homepage too, and the shortest cache life on a
  * route sets how often Vercel regenerates the whole page — which is why an
  * earlier one-minute profile burned the Hobby ISR-write and CPU quotas.
@@ -31,7 +31,7 @@ const EMPTY: EvChargingSnapshot = { observedAt: null, records: [] };
  */
 export async function getEvChargingSnapshot(): Promise<EvChargingSnapshot> {
   "use cache";
-  cacheLife("weeks");
+  cacheLife("max");
   cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
   const accountKey = process.env.LTA_DATAMALL_ACCOUNT_KEY;

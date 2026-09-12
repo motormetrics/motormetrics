@@ -30,7 +30,7 @@ interface SiteExtras {
  */
 export async function getEvChargingMapSites(): Promise<EvChargingMapSite[]> {
   "use cache";
-  cacheLife("weeks");
+  cacheLife("max");
   cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
   const [{ records }, utilisation] = await Promise.all([

@@ -1,3 +1,5 @@
+import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+
 vi.mock("@web/lib/ev-charging", () => ({
   extractLastUpdated: vi.fn(),
   fetchBatch: vi.fn(),
@@ -9,7 +11,7 @@ import {
   fetchBatch,
   parseBatch,
 } from "@web/lib/ev-charging";
-import { cacheLifeMock } from "../test-utils";
+import { cacheLifeMock, cacheTagMock } from "../test-utils";
 import { getEvChargingSnapshot } from "./snapshot";
 
 describe("getEvChargingSnapshot", () => {
@@ -26,7 +28,8 @@ describe("getEvChargingSnapshot", () => {
       records: [],
     });
     expect(fetchBatch).not.toHaveBeenCalled();
-    expect(cacheLifeMock).toHaveBeenCalledWith("hours");
+    expect(cacheLifeMock).toHaveBeenCalledWith("max");
+    expect(cacheTagMock).toHaveBeenCalledWith(EV_CHARGING_LIVE_CACHE_TAG);
   });
 
   it("should fetch, parse and stamp the feed time", async () => {

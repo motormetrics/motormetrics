@@ -1,9 +1,16 @@
+import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+
 vi.mock("./stored-locations", async () => {
   const { storedLocationsMock } = await import("./history-fixtures");
   return storedLocationsMock();
 });
 
-import { cacheLifeMock, queueSelect, resetDbMocks } from "../test-utils";
+import {
+  cacheLifeMock,
+  cacheTagMock,
+  queueSelect,
+  resetDbMocks,
+} from "../test-utils";
 import { storedRow } from "./history-fixtures";
 import { getEvChargingRecentChanges } from "./recent-changes";
 
@@ -19,7 +26,8 @@ describe("getEvChargingRecentChanges", () => {
       newLocations: [],
       priceChanges: [],
     });
-    expect(cacheLifeMock).toHaveBeenCalledWith("hours");
+    expect(cacheLifeMock).toHaveBeenCalledWith("max");
+    expect(cacheTagMock).toHaveBeenCalledWith(EV_CHARGING_LIVE_CACHE_TAG);
   });
 
   it("should map new locations and price changes", async () => {

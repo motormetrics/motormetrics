@@ -39,7 +39,7 @@ export async function getEvChargingRecentChanges(
   days = 7,
 ): Promise<EvChargingRecentChanges> {
   "use cache";
-  cacheLife("weeks");
+  cacheLife("max");
   cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
   const locations = storedLocationsSubquery();

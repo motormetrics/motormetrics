@@ -14,9 +14,9 @@ import { revalidateTag } from "next/cache";
  * since the last run, and per-location hourly utilisation counters.
  *
  * Reads served from this data are cached under `EV_CHARGING_LIVE_CACHE_TAG`
- * on the `weeks` profile, whose timer is only a backstop: this workflow busts
- * the tag once the ingest lands, so a read regenerates when the numbers
- * actually change rather than on a guess at the feed's cadence.
+ * on the built-in `max` profile, whose timer is only a backstop: this
+ * workflow busts the tag once the ingest lands, so a read regenerates when
+ * the numbers actually change rather than on a guess at the feed's cadence.
  */
 export async function evChargingLiveWorkflow(): Promise<{ message: string }> {
   "use workflow";
