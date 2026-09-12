@@ -1,3 +1,9 @@
+## [5.21.2](https://github.com/motormetrics/motormetrics/compare/v5.21.1...v5.21.2) (2026-09-12)
+
+### Bug Fixes
+
+* correct ev charging refresh cadence to hourly ([e5af98d](https://github.com/motormetrics/motormetrics/commit/e5af98d2eac6a3e02e8953f9132cd8d7a606e008))
+
 ## [5.21.1](https://github.com/motormetrics/motormetrics/compare/v5.21.0...v5.21.1) (2026-09-12)
 
 ### Bug Fixes
