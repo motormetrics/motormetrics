@@ -7,7 +7,6 @@ allowBuilds:
   "@nestjs/core": false
   "@parcel/watcher": false
   "@prisma/engines": false
-  "@sentry/cli": true
   "@swc/core": false
   "@zowe/secrets-for-zowe-sdk": false
   cbor-extract: false
@@ -22,11 +21,9 @@ allowBuilds:
 catalog:
   "@ai-sdk/gateway": 4.0.46
   "@ai-sdk/openai": 4.0.36
-  "@ai-sdk/otel": 1.0.58
   "@better-auth/drizzle-adapter": 1.7.2
   "@heroui/react": 3.2.4
   "@heroui/styles": 3.2.4
-  "@sentry/nextjs": 10.72.0
   "@tailwindcss/postcss": 4.3.0
   "@types/node": 24.13.2
   "@types/react": 19.2.14

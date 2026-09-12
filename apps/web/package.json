@@ -24,7 +24,6 @@
     "predev": "node ./scripts/copy-maplibre-worker.mjs"
   },
   "dependencies": {
-    "@ai-sdk/otel": "catalog:",
     "@better-auth/drizzle-adapter": "catalog:",
     "@flags-sdk/vercel": "1.4.6",
     "@gravity-ui/icons": "2.18.0",
@@ -41,7 +40,6 @@
     "@number-flow/react": "0.6.0",
     "@react-aria/utils": "3.34.1",
     "@ruchernchong/number-format": "2.3.5",
-    "@sentry/nextjs": "catalog:",
     "@tanstack/react-table": "8.21.3",
     "@upstash/ratelimit": "2.0.8",
     "@upstash/redis": "catalog:",
