@@ -47,7 +47,10 @@ export async function RegistrationsHeadline() {
   const fleet =
     populationTotals.find((row) => row.year <= year) ?? populationTotals[0];
 
-  const series = history.slice(-SPARK_MONTHS).map((row) => row.total);
+  const series = history.slice(-SPARK_MONTHS).map((row) => ({
+    label: formatMonthLabel(row.month),
+    value: row.total,
+  }));
 
   return (
     <div className="flex flex-col gap-5">
@@ -96,8 +99,9 @@ export async function RegistrationsHeadline() {
         }
       />
       <SparklineChart
+        data={series}
+        name="Registrations"
         title={`Monthly registrations over the ${series.length} months to ${formatMonthLabel(month)}`}
-        values={series}
       />
     </div>
   );

@@ -64,17 +64,27 @@ describe("BarRow", () => {
 describe("SparklineChart", () => {
   it("should render nothing for a series too short to draw", () => {
     const { container } = render(
-      <SparklineChart title="One point" values={[1]} />,
+      <SparklineChart
+        data={[{ label: "Jan", value: 1 }]}
+        name="Registrations"
+        title="One point"
+      />,
     );
-    expect(container.querySelector("svg")).toBeNull();
+    expect(container).toBeEmptyDOMElement();
   });
 
-  it("should draw the line, the area and the latest-point marker", () => {
-    const { container, getByRole } = render(
-      <SparklineChart title="Registrations" values={[3, 5, 4, 6]} />,
+  it("should name the chart for assistive technology", () => {
+    const { getByRole } = render(
+      <SparklineChart
+        data={[
+          { label: "Jan", value: 3 },
+          { label: "Feb", value: 5 },
+          { label: "Mar", value: 4 },
+        ]}
+        name="Registrations"
+        title="Registrations"
+      />,
     );
     expect(getByRole("img", { name: "Registrations" })).toBeInTheDocument();
-    expect(container.querySelectorAll("path")).toHaveLength(2);
-    expect(container.querySelector("circle")).toBeInTheDocument();
   });
 });

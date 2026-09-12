@@ -1,62 +1,55 @@
-import { cn } from "@heroui/react";
-import { sparkline } from "@web/components/shared/sparkline";
+"use client";
+
+import { AreaChart } from "@heroui-pro/react/area-chart";
 
 /**
- * The accent sparkline the v3 comps draw under every headline figure: a soft
- * area, a 3.5px line and a hollow marker on the latest point.
+ * The sparkline under every overview headline figure: Pro's area chart with its
+ * axes hidden, and a tooltip naming the hovered point.
  *
- * Drawn with `preserveAspectRatio="none"` so the chart fills whatever width
- * the column gives it, as the comps do; `vectorEffect` keeps the stroke from
- * stretching with it. Renders nothing for a series too short to draw.
+ * The y-axis spans the series' own range rather than starting at zero, so a
+ * premium moving a few percent still reads as movement. Renders nothing for a
+ * series too short to draw.
  */
 export function SparklineChart({
   className,
+  data,
   height = 150,
+  name,
   title,
-  values,
-  width = 520,
 }: {
   className?: string;
+  data: { label: string; value: number }[];
   height?: number;
+  /** Series name shown in the tooltip. */
+  name: string;
   /** Accessible name for the chart. */
   title: string;
-  values: number[];
-  width?: number;
 }) {
-  const spark = sparkline(values, width, height, 10);
-
-  if (!spark) {
+  if (data.length < 2) {
     return null;
   }
 
   return (
-    <svg
-      className={cn("w-full overflow-visible", className)}
-      preserveAspectRatio="none"
-      role="img"
-      style={{ height: `${height}px` }}
-      viewBox={`0 0 ${width} ${height}`}
-    >
-      <title>{title}</title>
-      <path d={spark.area} fill="var(--accent)" opacity={0.1} />
-      <path
-        d={spark.line}
-        fill="none"
-        stroke="var(--accent)"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={3.5}
-        vectorEffect="non-scaling-stroke"
-      />
-      <circle
-        cx={spark.lastX}
-        cy={spark.lastY}
-        fill="var(--background)"
-        r={6.5}
-        stroke="var(--accent)"
-        strokeWidth={3.5}
-        vectorEffect="non-scaling-stroke"
-      />
-    </svg>
+    <div aria-label={title} className={className} role="img">
+      <AreaChart
+        data={data}
+        height={height}
+        margin={{ bottom: 0, left: 0, right: 0, top: 8 }}
+      >
+        <AreaChart.XAxis dataKey="label" hide />
+        <AreaChart.YAxis domain={["dataMin", "dataMax"]} hide />
+        <AreaChart.Area
+          dataKey="value"
+          dot={false}
+          fill="var(--chart-1)"
+          fillOpacity={0.1}
+          name={name}
+          stroke="var(--chart-1)"
+          strokeWidth={3}
+          type="monotone"
+        />
+        <AreaChart.Tooltip content={<AreaChart.TooltipContent />} />
+      </AreaChart>
+    </div>
   );
 }

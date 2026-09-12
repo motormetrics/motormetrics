@@ -17,7 +17,6 @@ export interface CoeCategorySeries {
   points: { month: string; premium: number }[];
 }
 
-const CHART_WIDTH = 700;
 const CHART_HEIGHT = 200;
 
 const formatMonth = (month: string) => {
@@ -103,10 +102,13 @@ export function CoePremiums({ series }: { series: CoeCategorySeries[] }) {
 
       <div className="flex flex-col gap-2">
         <SparklineChart
+          data={active.points.map((point) => ({
+            label: formatMonth(point.month),
+            value: point.premium,
+          }))}
           height={CHART_HEIGHT}
+          name="Premium (S$)"
           title={`${active.category} premiums over the last ${values.length} exercises`}
-          values={values}
-          width={CHART_WIDTH}
         />
         <div className="flex justify-between font-semibold text-muted text-xs">
           <span>{formatMonth(active.points[0]?.month ?? "")}</span>

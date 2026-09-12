@@ -22,7 +22,6 @@ import { Headline, SectionHead } from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { getEvMonthlyTrend } from "@web/queries/cars";
 
-const CHART_WIDTH = 700;
 const CHART_HEIGHT = 200;
 
 const HEADINGS: Record<Powertrain, { subject: string; title: string }> = {
@@ -67,9 +66,10 @@ export async function RegistrationTrend({
   }
 
   const visibleMonths = sliceRange(trend, index, range);
-  const series = visibleMonths.map((entry) =>
-    powertrainTotal(entry, powertrain),
-  );
+  const series = visibleMonths.map((entry) => ({
+    label: formatMonthLabel(entry.month),
+    value: powertrainTotal(entry, powertrain),
+  }));
 
   const value = powertrainTotal(point, powertrain);
   const previous = trend[index - 1];
@@ -126,10 +126,10 @@ export async function RegistrationTrend({
         {series.length > 1 ? (
           <div className="flex flex-col gap-2">
             <SparklineChart
+              data={series}
               height={CHART_HEIGHT}
+              name="Registrations"
               title={`${heading.title} over the ${series.length} months to ${monthLabel}`}
-              values={series}
-              width={CHART_WIDTH}
             />
             <div className="flex justify-between font-semibold text-[13px] text-muted">
               <span>

@@ -1,6 +1,7 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
+import { formatMonthLabel } from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import {
   batteryElectricMakes,
   batteryElectricShares,
@@ -53,10 +54,11 @@ export async function EvMomentum() {
   const shares = batteryElectricShares(trend, marketShare);
   const share = shares[index] ?? 0;
   const previousShare = index > 0 ? (shares[index - 1] ?? share) : share;
-  const history = shares.slice(
-    Math.max(0, index - SPARK_MONTHS + 1),
-    index + 1,
-  );
+  const start = Math.max(0, index - SPARK_MONTHS + 1);
+  const history = trend.slice(start, index + 1).map((entry, offset) => ({
+    label: formatMonthLabel(entry.month),
+    value: Number((shares[start + offset] ?? 0).toFixed(1)),
+  }));
 
   const logoUrlBySlug = buildLogoMap(
     "logos" in logoResult ? logoResult.logos : [],
@@ -79,9 +81,10 @@ export async function EvMomentum() {
           value={`${share.toFixed(1)}%`}
         />
         <SparklineChart
+          data={history}
           height={120}
+          name="EV share (%)"
           title={`Battery-electric share of new car registrations over the last ${history.length} months`}
-          values={history}
         />
         {makes.length > 0 ? (
           <ol className="flex flex-col">

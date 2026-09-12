@@ -1,5 +1,8 @@
 import { NumberValue } from "@heroui-pro/react";
-import { formatMonthName } from "@web/app/(main)/(dashboard)/cars/components/format-month";
+import {
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import {
   batteryElectricShares,
   resolveMonthIndex,
@@ -43,10 +46,11 @@ export async function EvShareHero({ month }: { month: string }) {
   const shares = batteryElectricShares(trend, marketShare);
   const share = shares[index] ?? 0;
   const previousShare = index > 0 ? (shares[index - 1] ?? 0) : share;
-  const history = shares.slice(
-    Math.max(0, index - SPARK_MONTHS + 1),
-    index + 1,
-  );
+  const start = Math.max(0, index - SPARK_MONTHS + 1);
+  const history = trend.slice(start, index + 1).map((entry, offset) => ({
+    label: formatMonthLabel(entry.month),
+    value: Number((shares[start + offset] ?? 0).toFixed(1)),
+  }));
 
   // `getVehiclePopulationYearlyTotals()` comes back newest year first, and the
   // fuel-type breakdown covers every vehicle class, not cars alone.
@@ -88,8 +92,9 @@ export async function EvShareHero({ month }: { month: string }) {
         value={`${share.toFixed(1)}%`}
       />
       <SparklineChart
+        data={history}
+        name="EV share (%)"
         title={`Battery-electric share of new car registrations over the last ${history.length} months`}
-        values={history}
       />
     </div>
   );

@@ -45,8 +45,9 @@ export async function LeadingMakeCard({
         }
       />
       <SparklineChart
+        data={leader.trend.map((value) => ({ label: "", value }))}
+        name="Registrations"
         title={`${leader.make} registrations over the last ${leader.trend.length} months`}
-        values={leader.trend}
       />
     </div>
   );

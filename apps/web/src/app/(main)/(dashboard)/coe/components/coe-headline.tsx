@@ -5,6 +5,7 @@ import {
   biddingOrdinal,
   CATEGORY_DESCRIPTIONS,
   changeRatio,
+  formatExercise,
   formatMonth,
   groupByExercise,
   toCategory,
@@ -43,9 +44,10 @@ export async function CoeHeadline({
   const previousPremium = previous?.results[category]?.premium ?? 0;
 
   const visible = exercises.slice(-Number(range));
-  const premiums = visible.map(
-    (exercise) => exercise.results[category]?.premium ?? 0,
-  );
+  const premiums = visible.map((exercise) => ({
+    label: formatExercise(exercise),
+    value: exercise.results[category]?.premium ?? 0,
+  }));
 
   const comparison = previous
     ? `vs ${biddingOrdinal(previous.biddingNo)} bidding${
@@ -85,8 +87,9 @@ export async function CoeHeadline({
       />
 
       <SparklineChart
+        data={premiums}
+        name="Premium (S$)"
         title={`${category} premiums over the last ${visible.length} bidding exercises`}
-        values={premiums}
       />
     </div>
   );
