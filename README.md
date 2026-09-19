@@ -131,11 +131,11 @@ motormetrics/
 
 For developers working on this codebase, detailed component-specific guidance is available:
 
-- **[Root CLAUDE.md](CLAUDE.md)** - Overall project guidance and conventions
-- **[Web Application](apps/web/CLAUDE.md)** - Next.js development, HeroUI components, blog features, and data updater workflows
-- **[AI Package](packages/ai/CLAUDE.md)** - AI-powered blog generation with Vercel AI SDK and Google Gemini
-- **[Database Package](packages/database/CLAUDE.md)** - Schema management, migrations, and TypeScript integration
-- **[Logos Package](packages/logos/CLAUDE.md)** - Car logo management with Vercel Blob storage
+- **[Root AGENTS.md](AGENTS.md)** - Overall project guidance and conventions
+- **[Web Application](apps/web/AGENTS.md)** - Next.js development, HeroUI components, blog features, and data updater workflows
+- **[AI Package](packages/ai/AGENTS.md)** - AI-powered blog generation with Vercel AI SDK and Google Gemini
+- **[Database Package](packages/database/AGENTS.md)** - Schema management, migrations, and TypeScript integration
+- **[Logos Package](packages/logos/AGENTS.md)** - Car logo management with Vercel Blob storage
 
 ### Product Documentation
 

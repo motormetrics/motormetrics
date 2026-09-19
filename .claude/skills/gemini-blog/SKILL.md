@@ -97,5 +97,5 @@ BLOB_READ_WRITE_TOKEN=...           # Required for local hero-image upload
 
 ## References
 
-- `packages/ai/CLAUDE.md` for full package documentation
+- `packages/ai/AGENTS.md` for full package documentation
 - Vercel AI SDK: Use Context7 for latest docs

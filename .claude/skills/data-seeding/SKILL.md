@@ -163,5 +163,5 @@ seeders[target]().then(() => process.exit(0)).catch(() => process.exit(1));
 
 ## References
 
-- `packages/database/CLAUDE.md` for schema details
+- `packages/database/AGENTS.md` for schema details
 - See `schema-design` skill for migrations

@@ -23,7 +23,7 @@ function compact(value: number): string {
  * The full-width premium history, one line per selected category's exercises.
  *
  * Pro's chart rather than hand-rolled SVG: this one carries axes, gridlines and
- * a tooltip, which is the boundary set in `apps/web/CLAUDE.md`.
+ * a tooltip, which is the boundary set in `apps/web/AGENTS.md`.
  *
  * The y-axis is left on `["auto", "auto"]` rather than anchored at zero. A
  * category's premium moves by a few percent between exercises against a base of

@@ -19,7 +19,7 @@ function compact(value: number): string {
  * The full-width monthly column chart.
  *
  * Pro's chart rather than hand-rolled SVG: this one carries axes, gridlines and
- * a tooltip, which is the boundary set in `apps/web/CLAUDE.md` — inline SVG is
+ * a tooltip, which is the boundary set in `apps/web/AGENTS.md` — inline SVG is
  * for sparklines and gauges inside cards.
  *
  * The comp highlights the latest column in a darker fill. Per-bar colouring

@@ -19,7 +19,7 @@ function compact(value: number): string {
  * The make's monthly column chart.
  *
  * Pro's chart rather than hand-rolled SVG: this one carries axes, gridlines and
- * a tooltip, which is the boundary set in `apps/web/CLAUDE.md`. Matches
+ * a tooltip, which is the boundary set in `apps/web/AGENTS.md`. Matches
  * `cars/registrations/components/registrations-chart.tsx`, including the single
  * fill — the comp darkens the latest column, which needs Recharts' `Cell`, and
  * Pro does not re-export it.

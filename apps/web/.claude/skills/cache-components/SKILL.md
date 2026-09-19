@@ -240,7 +240,7 @@ When reviewing query functions, verify:
 
 ## Related Documentation
 
-- Project cache strategy: `apps/web/CLAUDE.md` (Cache Components & Optimization section)
+- Project cache strategy: `apps/web/AGENTS.md` (Cache Components & Optimization section)
 - Cache configuration: `next.config.ts` (cacheLife profile)
 - Cache tags: `src/lib/cache.ts` (CACHE_TAG constants)
 - Next.js Cache Components: Use Context7 MCP with `/vercel/next.js`

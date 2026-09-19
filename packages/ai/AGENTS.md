@@ -96,6 +96,6 @@ additionally needs Blob access. Do not add provider-specific API keys.
 
 ## Related Documentation
 
-- **Workflow Integration**: See [apps/web/CLAUDE.md](../../apps/web/CLAUDE.md) for Vercel WDK workflow usage
+- **Workflow Integration**: See [apps/web/AGENTS.md](../../apps/web/AGENTS.md) for Vercel WDK workflow usage
 - **Admin Interface**: Admin functionality is integrated into the web app at `/admin` path
-- **Database Schema**: See [packages/database/CLAUDE.md](../database/CLAUDE.md) for posts table structure
+- **Database Schema**: See [packages/database/AGENTS.md](../database/AGENTS.md) for posts table structure

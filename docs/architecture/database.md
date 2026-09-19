@@ -332,7 +332,7 @@ pnpm db:generate
 
 Do not run `pnpm db:migrate` against development: `push` has already applied the
 changes without recording a ledger row, so the migration replays and fails. See
-[packages/database/CLAUDE.md](../../packages/database/CLAUDE.md) for the full rules.
+[packages/database/AGENTS.md](../../packages/database/AGENTS.md) for the full rules.
 
 ### Schema Evolution
 
@@ -365,4 +365,4 @@ changes without recording a ledger row, so the migration replays and fails. See
 - [System Architecture Overview](./system)
 - [Data Processing Workflows](./workflows)
 - [API Architecture](./api)
-- [Database Package Documentation](../../packages/database/CLAUDE.md)
+- [Database Package Documentation](../../packages/database/AGENTS.md)

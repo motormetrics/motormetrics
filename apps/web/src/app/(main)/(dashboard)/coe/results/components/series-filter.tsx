@@ -10,7 +10,7 @@ import { useTransition } from "react";
 
 /**
  * One chart colour per category, in the order LTA lists them. Index-based
- * rather than hand-picked, per the colour rules in `apps/web/CLAUDE.md`.
+ * rather than hand-picked, per the colour rules in `apps/web/AGENTS.md`.
  */
 export const CATEGORY_COLOURS: Record<COECategory, string> = Object.fromEntries(
   COE_CATEGORIES.map((category, index) => [

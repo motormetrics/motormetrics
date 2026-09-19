@@ -28,7 +28,7 @@ export interface CategorySeries {
  *
  * Pro's chart rather than the comp's hand-rolled SVG: it carries the axes,
  * gridlines and tooltip the comp draws by hand, which is the boundary set in
- * `apps/web/CLAUDE.md`.
+ * `apps/web/AGENTS.md`.
  *
  * The legend is markup rather than `LineChart.Legend` so it can sit above the
  * plot in the comp's type scale, and so the swatches match the row dots in the
