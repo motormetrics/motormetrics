@@ -65,7 +65,8 @@ export const POST_CATEGORIES = {
 
 export type PostCategoryKey = keyof typeof POST_CATEGORIES;
 
-export const categoryConfig: Record<
+/** Widened view of POST_CATEGORIES, so an unknown dataType can be looked up. */
+const categoryConfig: Record<
   string,
   {
     label: string;
