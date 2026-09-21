@@ -1,3 +1,13 @@
+## [5.22.0](https://github.com/motormetrics/motormetrics/compare/v5.21.12...v5.22.0) (2026-09-21)
+
+### Features
+
+* **web:** replace brand files with the contained standard mark ([7f09858](https://github.com/motormetrics/motormetrics/commit/7f09858b4d472e35e20cf92ac78789298e30f99a))
+
+### Bug Fixes
+
+* **web:** inset apple icon and drop its baked-in title ([a4ed9ab](https://github.com/motormetrics/motormetrics/commit/a4ed9ab0ae8d61effad4aece29b5c4dd128fb563))
+
 ## [5.21.12](https://github.com/motormetrics/motormetrics/compare/v5.21.11...v5.21.12) (2026-09-21)
 
 ### Bug Fixes
