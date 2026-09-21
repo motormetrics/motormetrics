@@ -13,6 +13,7 @@ vi.mock("@motormetrics/ai/generate-post", () => ({
 
 vi.mock("@motormetrics/ai/queries", () => ({
   getEvDataForMonth: vi.fn(),
+  getTotalRegistrationsForMonth: vi.fn(),
 }));
 
 vi.mock("@motormetrics/ai/save-post", () => ({
