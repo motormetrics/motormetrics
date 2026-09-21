@@ -1,6 +1,12 @@
 import { db } from "@motormetrics/database/client";
 import { cars, coe, deregistrations } from "@motormetrics/database/schema";
-import { and, asc, eq, gt, ilike, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gt, ilike, inArray, lt, sql } from "drizzle-orm";
+
+/**
+ * How many months of context the prompts get by default. Enough for "up from
+ * 64% in May", not so much that the model starts narrating a year.
+ */
+const PRIOR_MONTHS = 3;
 
 export function getCarsAggregatedByMonth(month: string) {
   return db
@@ -54,6 +60,98 @@ export async function getTotalRegistrationsForMonth(month: string) {
     .where(and(eq(cars.month, month), gt(cars.number, 0)));
 
   return row?.total ?? 0;
+}
+
+/**
+ * The months immediately before `month`, oldest first, with the headline car
+ * figures for each.
+ *
+ * Posts had no continuity — nothing let them say "up from 64.1% in May". Pass
+ * this alongside the month's own rows so the prompt can compare. `bevShare` is
+ * BEV registrations over registrations across ALL fuel types, the same
+ * denominator the post itself must use.
+ */
+export async function getPriorMonthsCarsSummary(
+  month: string,
+  months: number = PRIOR_MONTHS,
+) {
+  const rows = await db
+    .select({
+      month: cars.month,
+      total: sql<number>`cast(sum(${cars.number}) as integer)`,
+      bev: sql<number>`cast(sum(case when ${cars.fuelType} = 'Electric' then ${cars.number} else 0 end) as integer)`,
+      bevShare: sql<number>`cast(round(100.0 * sum(case when ${cars.fuelType} = 'Electric' then ${cars.number} else 0 end) / nullif(sum(${cars.number}), 0), 2) as double precision)`,
+    })
+    .from(cars)
+    .where(and(lt(cars.month, month), gt(cars.number, 0)))
+    .groupBy(cars.month)
+    .orderBy(desc(cars.month))
+    .limit(months);
+
+  return rows.reverse();
+}
+
+/**
+ * The months immediately before `month`, oldest first, with every COE result
+ * in each — one row per bidding exercise per category.
+ *
+ * Two queries because the limit applies to months, not rows.
+ */
+export async function getPriorMonthsCoeSummary(
+  month: string,
+  months: number = PRIOR_MONTHS,
+) {
+  const priorMonths = await db
+    .selectDistinct({ month: coe.month })
+    .from(coe)
+    .where(lt(coe.month, month))
+    .orderBy(desc(coe.month))
+    .limit(months);
+
+  if (priorMonths.length === 0) {
+    return [];
+  }
+
+  return db
+    .select({
+      month: coe.month,
+      biddingNo: coe.biddingNo,
+      vehicleClass: coe.vehicleClass,
+      quota: coe.quota,
+      bidsReceived: coe.bidsReceived,
+      premium: coe.premium,
+    })
+    .from(coe)
+    .where(
+      inArray(
+        coe.month,
+        priorMonths.map(({ month: m }) => m),
+      ),
+    )
+    .orderBy(asc(coe.month), asc(coe.biddingNo), asc(coe.vehicleClass));
+}
+
+/**
+ * The months immediately before `month`, oldest first, with the total
+ * deregistrations for each. Category detail is deliberately left out — the
+ * prior months are context for a comparison line, not a second dataset.
+ */
+export async function getPriorMonthsDeregistrationsSummary(
+  month: string,
+  months: number = PRIOR_MONTHS,
+) {
+  const rows = await db
+    .select({
+      month: deregistrations.month,
+      total: sql<number>`cast(sum(${deregistrations.number}) as integer)`,
+    })
+    .from(deregistrations)
+    .where(lt(deregistrations.month, month))
+    .groupBy(deregistrations.month)
+    .orderBy(desc(deregistrations.month))
+    .limit(months);
+
+  return rows.reverse();
 }
 
 /**
