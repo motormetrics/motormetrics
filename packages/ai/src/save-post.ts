@@ -48,12 +48,6 @@ interface EvergreenPostParams extends BasePostParams {
 
 export type PostParams = MonthlyPostParams | EvergreenPostParams;
 
-const isUniqueViolation = (error: unknown): boolean =>
-  typeof error === "object" &&
-  error !== null &&
-  "code" in error &&
-  (error as { code?: unknown }).code === "23505";
-
 export const savePost = async (data: PostParams) => {
   const kind = data.kind ?? "monthly";
   const month = kind === "evergreen" ? null : data.month;
@@ -98,22 +92,15 @@ export const savePost = async (data: PostParams) => {
   const target =
     kind === "evergreen" ? [posts.slug] : [posts.month, posts.dataType];
 
-  let post: typeof posts.$inferSelect;
-  try {
-    [post] = await db
-      .insert(posts)
-      .values(values)
-      .onConflictDoUpdate({ target, set })
-      .returning();
-  } catch (error) {
-    if (kind === "monthly" && isUniqueViolation(error)) {
-      throw new Error(
-        `[BLOG_SAVE] Slug "${slug}" is already taken by a different post (month: ${month}, category: ${data.dataType}). The generated title collides with an existing post; regenerate with a different title or rename the existing post.`,
-        { cause: error },
-      );
-    }
-    throw error;
-  }
+  // A monthly slug is derived from the model's title, so it can still collide
+  // with a different month's post. Postgres rejects that on posts_slug_unique
+  // and the step fails, which is the correct outcome: the error already names
+  // the constraint and the duplicate value.
+  const [post] = await db
+    .insert(posts)
+    .values(values)
+    .onConflictDoUpdate({ target, set })
+    .returning();
 
   console.log(
     `[BLOG_SAVE] Post saved successfully - id: ${post.id}, slug: ${post.slug}, kind: ${kind}, month: ${month}, category: ${data.dataType}`,
