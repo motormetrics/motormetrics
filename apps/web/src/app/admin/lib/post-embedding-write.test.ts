@@ -129,7 +129,13 @@ describe("post embedding writes", () => {
       embedding: [0.1, 0.2],
     });
     expect(revalidateTag).toHaveBeenCalledWith("posts:old-title", "max");
-    expect(revalidateTag).toHaveBeenCalledWith("posts:updated-title", "max");
+    // The slug is frozen after creation, so retitling must not invalidate a
+    // tag for a slug derived from the new title — that tag would only exist
+    // if the URL had moved, which is the bug this guards.
+    expect(revalidateTag).not.toHaveBeenCalledWith(
+      "posts:updated-title",
+      "max",
+    );
   });
 
   it("keeps post creation available when embedding generation fails", async () => {
