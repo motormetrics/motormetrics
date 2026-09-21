@@ -34,13 +34,6 @@ vi.mock("@motormetrics/utils/slugify", () => ({
   slugify: vi.fn((value: string) => value.toLowerCase().replaceAll(" ", "-")),
 }));
 
-vi.mock("@web/lib/cache-tags/posts", () => ({
-  getPostPublishRevalidationTags: vi.fn((slug: string) => [
-    "posts:list",
-    `posts:${slug}`,
-  ]),
-}));
-
 vi.mock("next/cache", () => ({ revalidateTag: vi.fn() }));
 
 function createWriteChain(returnedRows: unknown[]) {
@@ -96,6 +89,10 @@ describe("post embedding writes", () => {
       embedding: [0.1, 0.2],
     });
     expect(revalidateTag).toHaveBeenCalledWith("posts:list", "max");
+    expect(revalidateTag).toHaveBeenCalledWith(
+      "posts:slug:updated-title",
+      "max",
+    );
   });
 
   it("stores a V2 document embedding after updating a post", async () => {
@@ -128,12 +125,14 @@ describe("post embedding writes", () => {
     expect(embeddingChain.set).toHaveBeenCalledWith({
       embedding: [0.1, 0.2],
     });
-    expect(revalidateTag).toHaveBeenCalledWith("posts:old-title", "max");
+    expect(revalidateTag).toHaveBeenCalledWith("posts:slug:old-title", "max");
     // The slug is frozen after creation, so retitling must not invalidate a
     // tag for a slug derived from the new title — that tag would only exist
-    // if the URL had moved, which is the bug this guards.
+    // if the URL had moved, which is the bug this guards. The tag strings come
+    // from the real getPostPublishRevalidationTags, so this fails if the tag
+    // format drifts rather than asserting against a mock's own invention.
     expect(revalidateTag).not.toHaveBeenCalledWith(
-      "posts:updated-title",
+      "posts:slug:updated-title",
       "max",
     );
   });
