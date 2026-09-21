@@ -96,7 +96,13 @@ function parseChartSpec(source: string): PostChartSpec | null {
   let raw: unknown;
 
   try {
-    raw = JSON.parse(source);
+    // Generators occasionally emit a stray control character inside a string
+    // (a U+0014 turned up mid-title in a real post). JSON.parse rejects those
+    // outright, which sent a perfectly good chart to the code-block fallback.
+    // Strip them rather than lose the chart; C0 controls carry no meaning in a
+    // chart label, and \n / \t inside JSON strings arrive escaped, not raw.
+    // biome-ignore lint/suspicious/noControlCharactersInRegex: matching them is the point
+    raw = JSON.parse(source.replace(/[\u0000-\u001f\u007f]/g, " "));
   } catch {
     return null;
   }

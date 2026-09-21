@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, Typography } from "@heroui/react";
 import { AreaChart } from "@heroui-pro/react/area-chart";
 import { BarChart } from "@heroui-pro/react/bar-chart";
 import { LineChart } from "@heroui-pro/react/line-chart";
@@ -275,48 +274,47 @@ function ChartBody({ spec }: { spec: PostChartSpec }) {
  * Renders one ```chart fence from a post body.
  *
  * `not-prose` because the article wrapper applies `prose`, which would
- * otherwise restyle the legend and caption text. The card is `min-w-0` and the
- * charts are all `width="100%"` so nothing pushes the article into a horizontal
- * scroll at ~400px.
+ * otherwise restyle the legend and caption text. Everything is `min-w-0` and
+ * the charts are all `width="100%"` so nothing pushes the article into a
+ * horizontal scroll at ~400px.
+ *
+ * Deliberately NOT wrapped in a Card. Card is HeroUI Pro's dashboard idiom —
+ * a bordered panel that reads as a separate widget. Inside an article the
+ * chart is part of the argument, so it sits on the page with the title set in
+ * the article's own type and a hairline rule tying it to the prose above.
  */
 export function PostChart({ spec }: { spec: PostChartSpec }) {
   const multiSeries = spec.series.length > 1;
 
   return (
-    <figure className="not-prose my-8 w-full min-w-0">
-      <Card className="w-full min-w-0">
-        {spec.title || spec.subtitle ? (
-          <Card.Header className="flex flex-col items-start gap-1">
-            {spec.title ? (
-              <Typography.Heading level={4}>{spec.title}</Typography.Heading>
-            ) : null}
-            {spec.subtitle ? (
-              // Not decoration: the subtitle names the denominator or the
-              // scope, and is how a reader checks a percentage. It gets the
-              // body colour and a rule, rather than the muted grey that would
-              // read as a caption.
-              <p className="border-accent border-l-2 pl-2.5 text-foreground text-sm">
-                {spec.subtitle}
-              </p>
-            ) : null}
-          </Card.Header>
-        ) : null}
-        <Card.Content className="flex flex-col gap-4 pt-2">
-          <ChartBody spec={spec} />
-          {multiSeries && spec.type !== "donut" ? (
-            <ChartLegend
-              entries={spec.series.map((key, index) => ({
-                color: CHART_COLORS[index % CHART_COLORS.length],
-                label: seriesLabel(key, spec.valueLabel),
-              }))}
-            />
+    <figure className="not-prose my-10 w-full min-w-0 border-border border-t pt-5">
+      {spec.title || spec.subtitle ? (
+        <figcaption className="mb-4 flex flex-col gap-0.5">
+          {spec.title ? (
+            <span className="font-semibold text-foreground text-sm tracking-tight">
+              {spec.title}
+            </span>
           ) : null}
-        </Card.Content>
-      </Card>
-      {spec.caption ? (
-        <figcaption className="mt-2 text-muted text-xs">
-          {spec.caption}
+          {spec.subtitle ? (
+            // Not decoration: the subtitle names the denominator or the scope,
+            // and is how a reader checks a percentage.
+            <span className="text-muted text-xs">{spec.subtitle}</span>
+          ) : null}
         </figcaption>
+      ) : null}
+      <div className="flex w-full min-w-0 flex-col gap-4">
+        <ChartBody spec={spec} />
+        {multiSeries && spec.type !== "donut" ? (
+          <ChartLegend
+            entries={spec.series.map((key, index) => ({
+              color: CHART_COLORS[index % CHART_COLORS.length],
+              label: seriesLabel(key, spec.valueLabel),
+            }))}
+          />
+        ) : null}
+      </div>
+      {spec.caption ? (
+        <p className="mt-3 text-muted text-xs">{spec.caption}</p>
       ) : null}
     </figure>
   );
