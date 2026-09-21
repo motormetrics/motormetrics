@@ -128,7 +128,10 @@ export async function getPreviousPost(publishedAt: Date) {
   cacheTag("posts:list");
 
   return db.query.posts.findFirst({
-    where: { publishedAt: { isNotNull: true, lt: publishedAt } },
+    where: {
+      kind: "monthly",
+      publishedAt: { isNotNull: true, lt: publishedAt },
+    },
     orderBy: { publishedAt: "desc" },
   });
 }
@@ -139,7 +142,10 @@ export async function getNextPost(publishedAt: Date) {
   cacheTag("posts:list");
 
   return db.query.posts.findFirst({
-    where: { publishedAt: { isNotNull: true, gt: publishedAt } },
+    where: {
+      kind: "monthly",
+      publishedAt: { isNotNull: true, gt: publishedAt },
+    },
     orderBy: { publishedAt: "asc" },
   });
 }
