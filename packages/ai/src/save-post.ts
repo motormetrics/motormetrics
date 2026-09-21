@@ -2,7 +2,7 @@ import { db } from "@motormetrics/database/client";
 import { posts } from "@motormetrics/database/schema";
 import { slugify } from "@motormetrics/utils/slugify";
 import type { LanguageModelUsage } from "ai";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { generateDocumentEmbedding } from "./embedding";
 import type { Highlight } from "./schemas";
 
@@ -10,14 +10,13 @@ const getPostPublishRevalidationTags = (slug: string): string[] => {
   return ["posts:list", "posts:recent", `posts:slug:${slug}`];
 };
 
-export interface PostParams {
+interface BasePostParams {
   title: string;
   content: string;
   excerpt: string;
   heroImage: string | null;
   tags: string[];
   highlights: Highlight[];
-  month: string;
   dataType: "cars" | "coe" | "deregistrations" | "electric-vehicles";
   responseMetadata: {
     generationId?: string;
@@ -29,43 +28,95 @@ export interface PostParams {
   };
 }
 
-export const savePost = async (data: PostParams) => {
-  const slug = slugify(data.title);
+interface MonthlyPostParams extends BasePostParams {
+  kind?: "monthly";
+  month: string;
+  /** Defaults to slugify(title), as monthly posts have always done. */
+  slug?: string;
+}
 
-  const [post] = await db
-    .insert(posts)
-    .values({
-      title: data.title,
-      slug,
-      content: data.content,
-      excerpt: data.excerpt,
-      heroImage: data.heroImage,
-      tags: data.tags,
-      highlights: data.highlights,
-      status: "published",
-      metadata: data.responseMetadata,
-      month: data.month,
-      dataType: data.dataType,
-      publishedAt: new Date(),
-    })
-    .onConflictDoUpdate({
-      target: [posts.month, posts.dataType],
-      set: {
-        title: data.title,
-        slug,
-        content: data.content,
-        excerpt: data.excerpt,
-        heroImage: data.heroImage,
-        tags: data.tags,
-        highlights: data.highlights,
-        metadata: data.responseMetadata,
-        modifiedAt: new Date(),
-      },
-    })
-    .returning();
+interface EvergreenPostParams extends BasePostParams {
+  kind: "evergreen";
+  month?: never;
+  /**
+   * Required and stable — it comes from the topic registry, never from the
+   * title, so a refreshed evergreen post never moves its URL. It is also the
+   * upsert conflict target.
+   */
+  slug: string;
+}
+
+export type PostParams = MonthlyPostParams | EvergreenPostParams;
+
+const isUniqueViolation = (error: unknown): boolean =>
+  typeof error === "object" &&
+  error !== null &&
+  "code" in error &&
+  (error as { code?: unknown }).code === "23505";
+
+export const savePost = async (data: PostParams) => {
+  const kind = data.kind ?? "monthly";
+  const month = kind === "evergreen" ? null : data.month;
+  const slug = data.slug ?? slugify(data.title);
+
+  // Merge rather than assign so anything else stored in metadata (e.g. a hero
+  // subject) survives a regeneration.
+  const metadata = sql`coalesce(${posts.metadata}, '{}'::jsonb) || ${JSON.stringify(data.responseMetadata)}::jsonb`;
+
+  const values = {
+    title: data.title,
+    slug,
+    content: data.content,
+    excerpt: data.excerpt,
+    heroImage: data.heroImage,
+    tags: data.tags,
+    highlights: data.highlights,
+    status: "published",
+    metadata: data.responseMetadata,
+    month,
+    dataType: data.dataType,
+    kind,
+    publishedAt: new Date(),
+  };
+
+  const set = {
+    title: data.title,
+    slug,
+    content: data.content,
+    excerpt: data.excerpt,
+    heroImage: data.heroImage,
+    tags: data.tags,
+    highlights: data.highlights,
+    metadata,
+    modifiedAt: new Date(),
+  };
+
+  // Evergreen posts have a null month, and posts_month_data_type_unique is
+  // declared without NULLS NOT DISTINCT — a null month never matches that
+  // conflict target, so every save would insert a new row. They upsert on the
+  // caller-supplied stable slug instead, which posts_slug_unique enforces.
+  const target =
+    kind === "evergreen" ? [posts.slug] : [posts.month, posts.dataType];
+
+  let post: typeof posts.$inferSelect;
+  try {
+    [post] = await db
+      .insert(posts)
+      .values(values)
+      .onConflictDoUpdate({ target, set })
+      .returning();
+  } catch (error) {
+    if (kind === "monthly" && isUniqueViolation(error)) {
+      throw new Error(
+        `[BLOG_SAVE] Slug "${slug}" is already taken by a different post (month: ${month}, category: ${data.dataType}). The generated title collides with an existing post; regenerate with a different title or rename the existing post.`,
+        { cause: error },
+      );
+    }
+    throw error;
+  }
 
   console.log(
-    `[BLOG_SAVE] Post saved successfully - id: ${post.id}, slug: ${post.slug}, month: ${data.month}, category: ${data.dataType}`,
+    `[BLOG_SAVE] Post saved successfully - id: ${post.id}, slug: ${post.slug}, kind: ${kind}, month: ${month}, category: ${data.dataType}`,
   );
 
   try {

@@ -24,6 +24,8 @@ export const posts = snakeCase.table(
     metadata: jsonb(),
     month: text(),
     dataType: text(),
+    /** 'monthly' | 'evergreen' — evergreen posts have a null month. */
+    kind: text().notNull().default("monthly"),
     embedding: vector({ dimensions: 768 }),
     createdAt: timestamp().defaultNow().notNull(),
     modifiedAt: timestamp().defaultNow().notNull(),
