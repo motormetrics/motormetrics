@@ -1,7 +1,6 @@
 import { generateDocumentEmbedding } from "@motormetrics/ai/embedding";
 import { db } from "@motormetrics/database/client";
 import { posts } from "@motormetrics/database/schema";
-import { slugify } from "@motormetrics/utils/slugify";
 import { getPostPublishRevalidationTags } from "@web/lib/cache-tags/posts";
 import { eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
@@ -31,9 +30,8 @@ export type UpdatePostInput = z.infer<typeof updatePostSchema>;
 
 export async function updatePost(input: UpdatePostInput) {
   const validated = updatePostSchema.parse(input);
-  const newSlug = slugify(validated.title);
 
-  // Fetch existing post for old slug (cache invalidation)
+  // Fetch existing post for its slug (URLs are immutable) and publish state
   const existing = await db.query.posts.findFirst({
     where: { id: validated.id },
   });
@@ -42,17 +40,17 @@ export async function updatePost(input: UpdatePostInput) {
     throw new Error("Post not found");
   }
 
-  // Set publishedAt when transitioning to "published"
+  // Keep status and publishedAt consistent: drafts are never published, and a
+  // published post keeps its original publish timestamp across saves
   const publishedAt =
-    validated.status === "published" && existing.status !== "published"
-      ? new Date()
-      : existing.publishedAt;
+    validated.status === "published"
+      ? (existing.publishedAt ?? new Date())
+      : null;
 
   const [post] = await db
     .update(posts)
     .set({
       title: validated.title,
-      slug: newSlug,
       content: validated.content,
       excerpt: validated.excerpt,
       tags: validated.tags,
@@ -80,12 +78,8 @@ export async function updatePost(input: UpdatePostInput) {
     );
   }
 
-  // Revalidate cache for both old and new slugs
-  const slugsToInvalidate = new Set([existing.slug, newSlug]);
-  for (const slug of slugsToInvalidate) {
-    for (const tag of getPostPublishRevalidationTags(slug)) {
-      revalidateTag(tag, "max");
-    }
+  for (const tag of getPostPublishRevalidationTags(existing.slug)) {
+    revalidateTag(tag, "max");
   }
 
   return post;
