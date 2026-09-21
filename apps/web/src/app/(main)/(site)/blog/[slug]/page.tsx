@@ -5,6 +5,7 @@ import {
   KeyHighlights,
 } from "@web/app/(main)/(site)/blog/components/key-highlights";
 import { mdxComponents } from "@web/app/(main)/(site)/blog/components/mdx-components";
+import { getArticleSection } from "@web/app/(main)/(site)/blog/components/post/utils";
 import { PostNavigation } from "@web/app/(main)/(site)/blog/components/post-navigation";
 import { ProgressBar } from "@web/app/(main)/(site)/blog/components/progress-bar";
 import { RelatedPosts } from "@web/app/(main)/(site)/blog/components/related-posts";
@@ -173,8 +174,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       url: `${SITE_URL}/blog/${post.slug}/opengraph-image`,
     },
     keywords: post.tags?.join(", "),
-    articleSection:
-      post.dataType === "cars" ? "Market Analysis" : "COE Bidding",
+    articleSection: getArticleSection(post),
     isPartOf: {
       "@type": "Blog",
       name: `${SITE_TITLE} Blog`,

@@ -6,6 +6,7 @@ import type { SelectPost } from "@motormetrics/database/schema";
 import { Post } from "@web/app/(main)/(site)/blog/components/post";
 import posthog from "posthog-js";
 import { useMemo, useState } from "react";
+import { POST_CATEGORIES } from "../post/utils";
 
 interface PostCounts {
   total: number;
@@ -22,10 +23,12 @@ interface PostsGridProps {
   posts: SelectPost[];
 }
 
+// Derived so a new dataType shows a real tab label instead of its raw slug.
 const tabLabels: Record<string, string> = {
   all: "All Posts",
-  coe: "COE",
-  cars: "Cars",
+  ...Object.fromEntries(
+    Object.entries(POST_CATEGORIES).map(([key, value]) => [key, value.label]),
+  ),
 };
 
 const PostsGrid = ({ posts }: PostsGridProps) => {
