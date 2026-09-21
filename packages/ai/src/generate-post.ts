@@ -24,7 +24,13 @@ export interface GenerateAndSaveResult {
   title: string;
   slug: string;
   excerpt: string;
-  dataType: "cars" | "coe" | "deregistrations" | "electric-vehicles";
+  dataType:
+    | "cars"
+    | "coe"
+    | "deregistrations"
+    | "electric-vehicles"
+    | "pqp"
+    | "monthly-update";
 }
 
 /**

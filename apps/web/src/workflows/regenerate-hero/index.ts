@@ -22,6 +22,8 @@ const SUPPORTED_DATA_TYPES = [
   "coe",
   "deregistrations",
   "electric-vehicles",
+  "pqp",
+  "monthly-update",
 ] as const;
 
 type SupportedDataType = (typeof SUPPORTED_DATA_TYPES)[number];

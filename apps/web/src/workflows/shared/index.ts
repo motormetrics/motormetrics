@@ -50,7 +50,13 @@ export async function generatePostHero(params: {
   postId: string;
   title: string;
   excerpt: string;
-  dataType: "cars" | "coe" | "deregistrations" | "electric-vehicles";
+  dataType:
+    | "cars"
+    | "coe"
+    | "deregistrations"
+    | "electric-vehicles"
+    | "pqp"
+    | "monthly-update";
 }): Promise<string> {
   "use step";
 
@@ -89,17 +95,19 @@ export function handleAIError(error: unknown): never {
 
   if (reason === "authentication") {
     console.error(`[WORKFLOW] AI authentication failed — ${message}`);
-    throw new FatalError("AI authentication failed");
+    throw new FatalError(`AI authentication failed — ${message}`);
   }
 
   if (classification === "retryable") {
     console.log(`[WORKFLOW] AI call retryable — ${message}`);
-    throw new RetryableError("AI call failed", { retryAfter: "1m" });
+    throw new RetryableError(`AI call failed — ${message}`, {
+      retryAfter: "1m",
+    });
   }
 
   if (classification === "fatal") {
     console.error(`[WORKFLOW] AI call failed fatally — ${message}`);
-    throw new FatalError("AI call failed");
+    throw new FatalError(`AI call failed — ${message}`);
   }
 
   console.error(`[WORKFLOW] AI generation failed — ${message}`);
