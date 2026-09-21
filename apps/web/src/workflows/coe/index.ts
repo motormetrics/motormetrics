@@ -1,21 +1,9 @@
-import { generateBlogContent } from "@motormetrics/ai/generate-post";
-import {
-  getCoeForMonth,
-  getPriorMonthsCoeSummary,
-} from "@motormetrics/ai/queries";
 import { redis } from "@motormetrics/utils/redis";
-import { tokeniser } from "@motormetrics/utils/tokeniser";
 import { getCoeMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";
-import { getExistingPostByMonth } from "@web/queries/posts";
 import { updateCoe } from "@web/workflows/coe/steps/process-data";
-import {
-  emitEvent,
-  generatePostHero,
-  handleAIError,
-  revalidatePostsCache,
-} from "@web/workflows/shared";
+import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
 import { fetch } from "workflow";
 

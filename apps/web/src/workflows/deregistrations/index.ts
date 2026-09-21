@@ -1,21 +1,9 @@
-import { generateBlogContent } from "@motormetrics/ai/generate-post";
-import {
-  getDeregistrationsForMonth,
-  getPriorMonthsDeregistrationsSummary,
-} from "@motormetrics/ai/queries";
 import { redis } from "@motormetrics/utils/redis";
-import { tokeniser } from "@motormetrics/utils/tokeniser";
 import { getDeregistrationsMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getDeregistrationsLatestMonth } from "@web/queries/deregistrations/latest-month";
-import { getExistingPostByMonth } from "@web/queries/posts";
 import { updateDeregistration } from "@web/workflows/deregistrations/steps/process-data";
-import {
-  emitEvent,
-  generatePostHero,
-  handleAIError,
-  revalidatePostsCache,
-} from "@web/workflows/shared";
+import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
 import { fetch } from "workflow";
 
