@@ -1,3 +1,9 @@
+## [5.21.12](https://github.com/motormetrics/motormetrics/compare/v5.21.11...v5.21.12) (2026-09-21)
+
+### Bug Fixes
+
+* **ai:** correct ev market share denominator ([ab668df](https://github.com/motormetrics/motormetrics/commit/ab668df2c95f519906252cb94b48daf625610aa1))
+
 ## [5.21.11](https://github.com/motormetrics/motormetrics/compare/v5.21.10...v5.21.11) (2026-09-14)
 
 ### Performance Improvements
