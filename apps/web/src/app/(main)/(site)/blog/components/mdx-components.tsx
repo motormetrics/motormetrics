@@ -1,7 +1,18 @@
 import { Separator, Typography } from "@heroui/react";
+import {
+  PostChart,
+  type PostChartSpec,
+  type PostChartType,
+  type PostChartUnit,
+} from "@web/app/(main)/(site)/blog/components/post-chart";
 import type { Route } from "next";
 import NextLink from "next/link";
-import type { ComponentPropsWithoutRef, JSX } from "react";
+import {
+  type ComponentPropsWithoutRef,
+  isValidElement,
+  type JSX,
+  type ReactNode,
+} from "react";
 
 type MdxLinkProps = ComponentPropsWithoutRef<"a">;
 
@@ -43,6 +54,176 @@ function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
       {children}
     </a>
   );
+}
+
+/** Beyond this a chart stops being readable at 400px and the payload bloats. */
+const MAX_CHART_POINTS = 24;
+/** The chart palette in `globals.css` carries six distinct hues, no more. */
+const MAX_CHART_SERIES = 6;
+
+const CHART_TYPES: PostChartType[] = ["area", "bar", "donut", "hbar", "line"];
+const CHART_UNITS: PostChartUnit[] = ["count", "currency", "percent"];
+
+/**
+ * An earlier draft of the generator contract spelled some of these differently.
+ * The prompts emit the names above, but a post generated against the older
+ * wording should still draw rather than fall back to a code block — these cost
+ * nothing and a published post is not worth losing a chart over.
+ *
+ * `column` meant a vertical bar chart there, which is what `bar` means here.
+ */
+const TYPE_ALIASES: Record<string, PostChartType> = { column: "bar" };
+const UNIT_ALIASES: Record<string, PostChartUnit> = { sgd: "currency" };
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value);
+}
+
+/**
+ * Turns the body of a ```chart fence into a spec, or `null` when it is not one
+ * we can draw.
+ *
+ * Every caller falls back to the plain `<pre>` on `null`: these bodies are
+ * model-generated and already published, so a malformed spec has to be a
+ * visible failure rather than a 500 on a live post.
+ *
+ * It lives here rather than beside `PostChart` because `post-chart.tsx` is a
+ * client boundary — a function exported from there would be a client reference
+ * on the server, where this runs. The type import above is erased, so only the
+ * plain spec object crosses.
+ */
+function parseChartSpec(source: string): PostChartSpec | null {
+  let raw: unknown;
+
+  try {
+    raw = JSON.parse(source);
+  } catch {
+    return null;
+  }
+
+  if (typeof raw !== "object" || raw === null || Array.isArray(raw)) {
+    return null;
+  }
+
+  const spec = raw as Record<string, unknown>;
+
+  if (!Array.isArray(spec.data) || spec.data.length === 0) {
+    return null;
+  }
+
+  const rows = spec.data.slice(0, MAX_CHART_POINTS);
+  const first = rows[0];
+
+  if (typeof first !== "object" || first === null || Array.isArray(first)) {
+    return null;
+  }
+
+  // The series are whatever numeric keys the first row carries, so both
+  // `{ label, value }` and `{ label, bev, petrol }` work without the generator
+  // declaring anything. An explicit `series` array narrows and orders that set
+  // when the generator does declare it, and is ignored when it names nothing
+  // the rows actually have.
+  const numericKeys = Object.entries(first as Record<string, unknown>)
+    .filter(([key, value]) => key !== "label" && isFiniteNumber(value))
+    .map(([key]) => key);
+  const declared = Array.isArray(spec.series)
+    ? spec.series.filter(
+        (key): key is string =>
+          typeof key === "string" && numericKeys.includes(key),
+      )
+    : [];
+  const series = (declared.length ? declared : numericKeys).slice(
+    0,
+    MAX_CHART_SERIES,
+  );
+
+  if (series.length === 0) {
+    return null;
+  }
+
+  // A row missing any of the series is dropped rather than coerced to zero — a
+  // fabricated zero reads as a real datum.
+  const data = rows.flatMap((row) => {
+    if (typeof row !== "object" || row === null || Array.isArray(row)) {
+      return [];
+    }
+
+    const entry = row as Record<string, unknown>;
+    const point: Record<string, number | string> = {
+      label: String(entry.label ?? ""),
+    };
+
+    for (const key of series) {
+      const value = entry[key];
+
+      if (!isFiniteNumber(value)) {
+        return [];
+      }
+
+      point[key] = value;
+    }
+
+    return [point];
+  });
+
+  if (data.length === 0) {
+    return null;
+  }
+
+  const text = (value: unknown) =>
+    typeof value === "string" && value.trim() ? value : undefined;
+
+  const type = typeof spec.type === "string" ? spec.type : "";
+  const unit = typeof spec.unit === "string" ? spec.unit : "";
+
+  return {
+    caption: text(spec.caption),
+    data,
+    series,
+    // `note` is the older name for the same field — the line that names the
+    // denominator or the scope.
+    subtitle: text(spec.subtitle) ?? text(spec.note),
+    title: text(spec.title),
+    // An unrecognised type still draws: columns are the safe default, and
+    // losing the chart entirely is worse than drawing the wrong shape.
+    type:
+      CHART_TYPES.find((candidate) => candidate === type) ??
+      TYPE_ALIASES[type] ??
+      "bar",
+    unit:
+      CHART_UNITS.find((candidate) => candidate === unit) ??
+      UNIT_ALIASES[unit] ??
+      "count",
+    valueLabel: text(spec.valueLabel),
+  };
+}
+
+/**
+ * The text of a fenced block tagged `chart`, or `null` for every other fence.
+ *
+ * `format: "md"` compiles a fence to `<pre><code className="language-chart">`,
+ * so the tag arrives as a class on the child element. Nothing here changes the
+ * parser — the fence is only a carrier.
+ */
+function chartFenceSource(children: ReactNode): string | null {
+  if (!isValidElement(children)) {
+    return null;
+  }
+
+  const { className, children: code } = children.props as {
+    children?: ReactNode;
+    className?: string;
+  };
+
+  if (typeof className !== "string" || typeof code !== "string") {
+    return null;
+  }
+
+  const isChart = className
+    .split(/\s+/)
+    .some((name) => name === "language-chart" || name === "lang-chart");
+
+  return isChart ? code : null;
 }
 
 /**
@@ -132,13 +313,22 @@ export const mdxComponents = {
   // Horizontal rule
   hr: () => <Separator className="my-12" />,
 
-  // Pre-formatted code blocks
-  pre: (props: ComponentPropsWithoutRef<"pre">) => (
-    <pre
-      className="my-6 overflow-x-auto rounded-lg bg-default p-4 text-sm"
-      {...props}
-    />
-  ),
+  // Pre-formatted code blocks, and the ```chart fence that rides on them
+  pre: (props: ComponentPropsWithoutRef<"pre">) => {
+    const source = chartFenceSource(props.children);
+    const spec = source === null ? null : parseChartSpec(source);
+
+    if (spec) {
+      return <PostChart spec={spec} />;
+    }
+
+    return (
+      <pre
+        className="my-6 overflow-x-auto rounded-lg bg-default p-4 text-sm"
+        {...props}
+      />
+    );
+  },
 
   // Strong/Bold - slightly heavier for emphasis
   strong: (props: ComponentPropsWithoutRef<"strong">) => (
