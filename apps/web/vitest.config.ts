@@ -64,6 +64,8 @@ export default defineConfig({
         "src/queries/coe/**", // Low priority for coverage
         "src/queries/posts/**", // Blog queries not prioritized for coverage
         "src/workflows/car-population", // Workflow without tests yet
+        "src/workflows/monthly-update", // Workflow without tests yet
+        "src/workflows/monthly-update/**", // Workflow without tests yet
         "src/workflows/car-population/**", // Workflow without tests yet
         "src/workflows/shared/types.ts", // Pure type definitions
 

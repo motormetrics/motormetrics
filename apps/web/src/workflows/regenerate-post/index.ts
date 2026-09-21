@@ -2,6 +2,8 @@ import { regenerateBlogContent } from "@motormetrics/ai/generate-post";
 import {
   getCarsAggregatedByMonth,
   getCoeForMonth,
+  getPriorMonthsCarsSummary,
+  getPriorMonthsCoeSummary,
 } from "@motormetrics/ai/queries";
 import { tokeniser } from "@motormetrics/utils/tokeniser";
 import {
@@ -97,13 +99,21 @@ async function fetchData(
   "use step";
   console.log(`Fetching ${dataType} data for ${month}`);
 
+  // Prior months travel with the rows so the post can say "up from 64% in
+  // May" instead of treating every month as a standalone snapshot.
   if (dataType === "cars") {
-    const cars = await getCarsAggregatedByMonth(month);
-    return tokeniser(cars);
+    const [cars, prior] = await Promise.all([
+      getCarsAggregatedByMonth(month),
+      getPriorMonthsCarsSummary(month),
+    ]);
+    return `PRIOR MONTHS (oldest first)\n${tokeniser(prior)}\n\nTHIS MONTH\n${tokeniser(cars)}`;
   }
 
-  const coe = await getCoeForMonth(month);
-  return tokeniser(coe);
+  const [coe, prior] = await Promise.all([
+    getCoeForMonth(month),
+    getPriorMonthsCoeSummary(month),
+  ]);
+  return `PRIOR MONTHS (oldest first)\n${tokeniser(prior)}\n\nTHIS MONTH\n${tokeniser(coe)}`;
 }
 
 async function generatePost(
