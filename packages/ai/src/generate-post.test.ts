@@ -1,29 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const {
-  codeExecutionMock,
   gatewayMock,
   getGenerationInfoMock,
   generateTextMock,
-  isStepCountMock,
   outputObjectMock,
   savePostMock,
 } = vi.hoisted(() => ({
-  codeExecutionMock: vi.fn(),
   gatewayMock: vi.fn(),
   getGenerationInfoMock: vi.fn(),
   generateTextMock: vi.fn(),
-  isStepCountMock: vi.fn(),
   outputObjectMock: vi.fn(),
   savePostMock: vi.fn(),
-}));
-
-vi.mock("@ai-sdk/google", () => ({
-  google: {
-    tools: {
-      codeExecution: codeExecutionMock,
-    },
-  },
 }));
 
 vi.mock("ai", () => ({
@@ -31,7 +19,6 @@ vi.mock("ai", () => ({
     getGenerationInfo: getGenerationInfoMock,
   }),
   generateText: generateTextMock,
-  isStepCount: isStepCountMock,
   Output: { object: outputObjectMock },
 }));
 
@@ -44,9 +31,7 @@ describe("blog generation model configuration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     gatewayMock.mockReturnValue("gateway-language-model");
-    codeExecutionMock.mockReturnValue("code-execution-tool");
     outputObjectMock.mockReturnValue("structured-output");
-    isStepCountMock.mockReturnValue("step-limit");
     getGenerationInfoMock.mockResolvedValue({ totalCost: 0.0042 });
     generateTextMock.mockResolvedValue({
       output: {
@@ -86,7 +71,7 @@ describe("blog generation model configuration", () => {
     });
   });
 
-  it("drafts with code execution then shapes into the schema", async () => {
+  it("generates structured output in one toolless call", async () => {
     await generateBlogContent({
       data: "make|count\nToyota|100",
       month: "2026-07",
@@ -94,21 +79,19 @@ describe("blog generation model configuration", () => {
     });
 
     expect(gatewayMock).toHaveBeenCalledWith("google/gemini-2.5-flash");
-    expect(codeExecutionMock).toHaveBeenCalledWith({});
     expect(outputObjectMock).toHaveBeenCalledWith({ schema: postSchema });
-    expect(isStepCountMock).toHaveBeenCalledWith(10);
+    expect(generateTextMock).toHaveBeenCalledTimes(1);
     expect(generateTextMock).toHaveBeenCalledWith(
       expect.objectContaining({
         model: "gateway-language-model",
-        tools: { code_execution: "code-execution-tool" },
-        stopWhen: "step-limit",
+        output: "structured-output",
         providerOptions: {
           google: {
             thinkingConfig: { thinkingBudget: 8192, includeThoughts: false },
           },
         },
         telemetry: expect.objectContaining({
-          functionId: "post-generation/cars/draft",
+          functionId: "post-generation/cars",
         }),
         runtimeContext: {
           month: "2026-07",
@@ -117,6 +100,11 @@ describe("blog generation model configuration", () => {
         },
       }),
     );
+    // Gemini refuses tools alongside a JSON response format, and there is
+    // nothing left for a tool to do now figures are precomputed in SQL.
+    const [request] = generateTextMock.mock.calls[0];
+    expect(request).not.toHaveProperty("tools");
+    expect(request).not.toHaveProperty("stopWhen");
   });
 
   it("persists the Gateway model, usage, generation ID, and exact cost", async () => {
@@ -133,12 +121,10 @@ describe("blog generation model configuration", () => {
           responseId: "response-1",
           modelId: "gemini-2.5-flash",
           totalCost: 0.0042,
-          // Summed across the draft and shaping calls, which the shared mock
-          // answers identically — so this is the single-call figure doubled.
           usage: expect.objectContaining({
-            inputTokens: 200,
-            outputTokens: 100,
-            totalTokens: 300,
+            inputTokens: 100,
+            outputTokens: 50,
+            totalTokens: 150,
           }),
         }),
       }),
@@ -147,12 +133,9 @@ describe("blog generation model configuration", () => {
   });
 
   it("sums Gateway costs across every distinct step generation ID", async () => {
-    // Three IDs now: two from the draft call's steps, one from the shaping
-    // call, since generation IDs are collected across both.
     getGenerationInfoMock
       .mockResolvedValueOnce({ totalCost: 0.001 })
-      .mockResolvedValueOnce({ totalCost: 0.003 })
-      .mockResolvedValueOnce({ totalCost: 0.002 });
+      .mockResolvedValueOnce({ totalCost: 0.003 });
     generateTextMock.mockResolvedValueOnce({
       output: {
         title: "July registration trends",
@@ -202,9 +185,9 @@ describe("blog generation model configuration", () => {
       dataType: "cars",
     });
 
-    // Two distinct IDs from the draft call's steps, plus the shaping call's:
-    // cost is summed across both calls, not just the one that emits the JSON.
-    expect(getGenerationInfoMock).toHaveBeenCalledTimes(3);
+    // generation-final appears both as a step and at the top level, so it is
+    // billed once, not twice.
+    expect(getGenerationInfoMock).toHaveBeenCalledTimes(2);
     expect(getGenerationInfoMock).toHaveBeenCalledWith({
       id: "generation-tool",
     });
@@ -214,10 +197,8 @@ describe("blog generation model configuration", () => {
     expect(savePostMock).toHaveBeenCalledWith(
       expect.objectContaining({
         responseMetadata: expect.objectContaining({
-          // finalStep is the shaping call, so its generation ID is the one
-          // recorded; the draft call's IDs still contribute to the cost.
-          generationId: "generation-1",
-          totalCost: 0.006,
+          generationId: "generation-final",
+          totalCost: 0.004,
         }),
       }),
     );
@@ -313,9 +294,7 @@ describe("blog generation model configuration", () => {
     expect(savePostMock).toHaveBeenCalledWith(
       expect.objectContaining({
         responseMetadata: expect.objectContaining({
-          // finalStep is the shaping call, which falls through to the default
-          // mock; the draft call's IDs are what the failing lookup covers.
-          generationId: "generation-1",
+          generationId: "generation-final",
           totalCost: undefined,
         }),
       }),
