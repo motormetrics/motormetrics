@@ -52,9 +52,17 @@ describe("blog generation model configuration", () => {
       output: {
         title: "July registration trends",
         excerpt: "A monthly market summary.",
-        content: "## Market overview",
+        lead: "Registrations fell to 4,007 in July.",
+        sections: [
+          {
+            categories: ["cars"],
+            heading: "Registrations fell",
+            body: "4,007 cars were registered in July.",
+            charts: [],
+            highlights: [],
+          },
+        ],
         tags: ["Cars"],
-        highlights: [],
       },
       usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
       finalStep: {
@@ -139,9 +147,17 @@ describe("blog generation model configuration", () => {
       output: {
         title: "July registration trends",
         excerpt: "A monthly market summary.",
-        content: "## Market overview",
+        lead: "Registrations fell to 4,007 in July.",
+        sections: [
+          {
+            categories: ["cars"],
+            heading: "Registrations fell",
+            body: "4,007 cars were registered in July.",
+            charts: [],
+            highlights: [],
+          },
+        ],
         tags: ["Cars"],
-        highlights: [],
       },
       usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
       finalStep: {
@@ -232,9 +248,17 @@ describe("blog generation model configuration", () => {
       output: {
         title: "July registration trends",
         excerpt: "A monthly market summary.",
-        content: "## Market overview",
+        lead: "Registrations fell to 4,007 in July.",
+        sections: [
+          {
+            categories: ["cars"],
+            heading: "Registrations fell",
+            body: "4,007 cars were registered in July.",
+            charts: [],
+            highlights: [],
+          },
+        ],
         tags: ["Cars"],
-        highlights: [],
       },
       usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
       finalStep: {

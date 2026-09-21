@@ -17,7 +17,13 @@ interface BasePostParams {
   heroImage: string | null;
   tags: string[];
   highlights: Highlight[];
-  dataType: "cars" | "coe" | "deregistrations" | "electric-vehicles";
+  dataType:
+    | "cars"
+    | "coe"
+    | "deregistrations"
+    | "electric-vehicles"
+    | "pqp"
+    | "monthly-update";
   responseMetadata: {
     generationId?: string;
     responseId: string;
@@ -25,6 +31,14 @@ interface BasePostParams {
     timestamp: Date;
     totalCost?: number;
     usage?: LanguageModelUsage;
+    /**
+     * The structured sections the markdown was rendered from, and the data
+     * types they drew on. `content` is the serialised form the blog renders;
+     * this is the form it came from, kept so the post can later be grouped,
+     * filtered or re-rendered without re-parsing markdown.
+     */
+    sections?: unknown;
+    categories?: string[];
   };
 }
 
@@ -69,9 +83,11 @@ export const savePost = async (data: PostParams) => {
     publishedAt: new Date(),
   };
 
+  // slug is deliberately absent: on update the existing URL must survive a
+  // regeneration, even though the model may produce a different title. A
+  // changed slug 404s the old URL — there is no redirect layer.
   const set = {
     title: data.title,
-    slug,
     content: data.content,
     excerpt: data.excerpt,
     heroImage: data.heroImage,

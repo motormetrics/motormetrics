@@ -7,6 +7,11 @@ import {
   Output,
 } from "ai";
 import { type BlogGenerationParams, INSTRUCTIONS, PROMPTS } from "./config";
+import {
+  collectCategories,
+  collectHighlights,
+  renderPostContent,
+} from "./render-post";
 import { savePost } from "./save-post";
 import { type GeneratedPost, postSchema } from "./schemas";
 
@@ -185,11 +190,11 @@ async function saveGeneratedPost(
 
   const post = await savePost({
     title: output.title,
-    content: output.content,
+    content: renderPostContent(output),
     excerpt: output.excerpt,
     heroImage: null,
     tags: output.tags,
-    highlights: output.highlights,
+    highlights: collectHighlights(output),
     month,
     dataType,
     responseMetadata: {
@@ -199,6 +204,8 @@ async function saveGeneratedPost(
       timestamp: response.timestamp,
       totalCost: response.totalCost,
       usage,
+      sections: output.sections,
+      categories: collectCategories(output.sections),
     },
   });
 
