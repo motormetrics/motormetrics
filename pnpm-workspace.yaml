@@ -20,11 +20,6 @@ allowBuilds:
 
 catalog:
   "@ai-sdk/gateway": 4.0.46
-  # Pinned to the release sharing @ai-sdk/provider-utils 5.0.25 with
-  # @ai-sdk/openai and @ai-sdk/gateway. A mismatched copy duplicates the
-  # Tool type, and codeExecution then fails to typecheck against `ai`.
-  "@ai-sdk/google": 4.0.39
-  "@ai-sdk/openai": 4.0.36
   "@better-auth/drizzle-adapter": 1.7.2
   "@heroui/react": 3.2.4
   "@heroui/styles": 3.2.4
