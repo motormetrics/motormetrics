@@ -1,5 +1,6 @@
 export const CARS_TAGS = [
   "Cars",
+  "Electric Vehicles",
   "Registrations",
   "Fuel Types",
   "Vehicle Types",
