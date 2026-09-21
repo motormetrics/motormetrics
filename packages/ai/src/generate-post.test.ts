@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const {
-  codeInterpreterMock,
+  codeExecutionMock,
   gatewayMock,
   getGenerationInfoMock,
   generateTextMock,
@@ -9,7 +9,7 @@ const {
   outputObjectMock,
   savePostMock,
 } = vi.hoisted(() => ({
-  codeInterpreterMock: vi.fn(),
+  codeExecutionMock: vi.fn(),
   gatewayMock: vi.fn(),
   getGenerationInfoMock: vi.fn(),
   generateTextMock: vi.fn(),
@@ -18,10 +18,10 @@ const {
   savePostMock: vi.fn(),
 }));
 
-vi.mock("@ai-sdk/openai", () => ({
-  openai: {
+vi.mock("@ai-sdk/google", () => ({
+  google: {
     tools: {
-      codeInterpreter: codeInterpreterMock,
+      codeExecution: codeExecutionMock,
     },
   },
 }));
@@ -44,7 +44,7 @@ describe("blog generation model configuration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     gatewayMock.mockReturnValue("gateway-language-model");
-    codeInterpreterMock.mockReturnValue("code-interpreter-tool");
+    codeExecutionMock.mockReturnValue("code-execution-tool");
     outputObjectMock.mockReturnValue("structured-output");
     isStepCountMock.mockReturnValue("step-limit");
     getGenerationInfoMock.mockResolvedValue({ totalCost: 0.0042 });
@@ -71,7 +71,7 @@ describe("blog generation model configuration", () => {
         },
         response: {
           id: "response-1",
-          modelId: "gpt-5.6-luna",
+          modelId: "gemini-2.5-flash",
           timestamp: new Date("2026-08-08T00:00:00Z"),
         },
       },
@@ -86,28 +86,29 @@ describe("blog generation model configuration", () => {
     });
   });
 
-  it("uses Luna through Gateway with max reasoning and Code Interpreter", async () => {
+  it("drafts with code execution then shapes into the schema", async () => {
     await generateBlogContent({
       data: "make|count\nToyota|100",
       month: "2026-07",
       dataType: "cars",
     });
 
-    expect(gatewayMock).toHaveBeenCalledWith("openai/gpt-5.6-luna");
-    expect(codeInterpreterMock).toHaveBeenCalledWith({});
+    expect(gatewayMock).toHaveBeenCalledWith("google/gemini-2.5-flash");
+    expect(codeExecutionMock).toHaveBeenCalledWith({});
     expect(outputObjectMock).toHaveBeenCalledWith({ schema: postSchema });
     expect(isStepCountMock).toHaveBeenCalledWith(10);
     expect(generateTextMock).toHaveBeenCalledWith(
       expect.objectContaining({
         model: "gateway-language-model",
-        tools: { code_interpreter: "code-interpreter-tool" },
-        output: "structured-output",
+        tools: { code_execution: "code-execution-tool" },
         stopWhen: "step-limit",
         providerOptions: {
-          openai: { reasoningEffort: "max", reasoningSummary: null },
+          google: {
+            thinkingConfig: { thinkingBudget: 8192, includeThoughts: false },
+          },
         },
         telemetry: expect.objectContaining({
-          functionId: "post-generation/cars",
+          functionId: "post-generation/cars/draft",
         }),
         runtimeContext: {
           month: "2026-07",
@@ -130,9 +131,15 @@ describe("blog generation model configuration", () => {
         responseMetadata: expect.objectContaining({
           generationId: "generation-1",
           responseId: "response-1",
-          modelId: "gpt-5.6-luna",
+          modelId: "gemini-2.5-flash",
           totalCost: 0.0042,
-          usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
+          // Summed across the draft and shaping calls, which the shared mock
+          // answers identically — so this is the single-call figure doubled.
+          usage: expect.objectContaining({
+            inputTokens: 200,
+            outputTokens: 100,
+            totalTokens: 300,
+          }),
         }),
       }),
     );
@@ -140,9 +147,12 @@ describe("blog generation model configuration", () => {
   });
 
   it("sums Gateway costs across every distinct step generation ID", async () => {
+    // Three IDs now: two from the draft call's steps, one from the shaping
+    // call, since generation IDs are collected across both.
     getGenerationInfoMock
       .mockResolvedValueOnce({ totalCost: 0.001 })
-      .mockResolvedValueOnce({ totalCost: 0.003 });
+      .mockResolvedValueOnce({ totalCost: 0.003 })
+      .mockResolvedValueOnce({ totalCost: 0.002 });
     generateTextMock.mockResolvedValueOnce({
       output: {
         title: "July registration trends",
@@ -166,7 +176,7 @@ describe("blog generation model configuration", () => {
         },
         response: {
           id: "response-1",
-          modelId: "gpt-5.6-luna",
+          modelId: "gemini-2.5-flash",
           timestamp: new Date("2026-08-08T00:00:00Z"),
         },
       },
@@ -192,7 +202,9 @@ describe("blog generation model configuration", () => {
       dataType: "cars",
     });
 
-    expect(getGenerationInfoMock).toHaveBeenCalledTimes(2);
+    // Two distinct IDs from the draft call's steps, plus the shaping call's:
+    // cost is summed across both calls, not just the one that emits the JSON.
+    expect(getGenerationInfoMock).toHaveBeenCalledTimes(3);
     expect(getGenerationInfoMock).toHaveBeenCalledWith({
       id: "generation-tool",
     });
@@ -202,8 +214,10 @@ describe("blog generation model configuration", () => {
     expect(savePostMock).toHaveBeenCalledWith(
       expect.objectContaining({
         responseMetadata: expect.objectContaining({
-          generationId: "generation-final",
-          totalCost: 0.004,
+          // finalStep is the shaping call, so its generation ID is the one
+          // recorded; the draft call's IDs still contribute to the cost.
+          generationId: "generation-1",
+          totalCost: 0.006,
         }),
       }),
     );
@@ -267,7 +281,7 @@ describe("blog generation model configuration", () => {
         },
         response: {
           id: "response-1",
-          modelId: "gpt-5.6-luna",
+          modelId: "gemini-2.5-flash",
           timestamp: new Date("2026-08-08T00:00:00Z"),
         },
       },
@@ -299,7 +313,9 @@ describe("blog generation model configuration", () => {
     expect(savePostMock).toHaveBeenCalledWith(
       expect.objectContaining({
         responseMetadata: expect.objectContaining({
-          generationId: "generation-final",
+          // finalStep is the shaping call, which falls through to the default
+          // mock; the draft call's IDs are what the failing lookup covers.
+          generationId: "generation-1",
           totalCost: undefined,
         }),
       }),

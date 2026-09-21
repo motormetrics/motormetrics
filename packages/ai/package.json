@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@ai-sdk/gateway": "catalog:",
+    "@ai-sdk/google": "catalog:",
     "@ai-sdk/openai": "catalog:",
     "@motormetrics/database": "workspace:*",
     "@motormetrics/utils": "workspace:*",
