@@ -9,6 +9,7 @@ import {
 import { SitePage } from "@web/components/shared/site-page";
 import { SITE_TITLE } from "@web/config";
 import type { Metadata } from "next";
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 const title = `${SITE_TITLE} logo & wordmark`;
@@ -23,6 +24,11 @@ export const metadata: Metadata = {
 
 const INK_SURFACE = "#232A2E";
 const WHITE = "#FFFFFF";
+/* A near-black host surface, darker than --ink-surface, to show that the
+   mark's own cream ground does not blend into whatever sits behind it. */
+const HOST_DARK = "#16181A";
+
+const MARK_FILE = "/brand/motormetrics-mark.svg";
 
 const SWATCHES = [
   { colour: MARK_INK, label: `Ink deep ${MARK_INK} — first arch, "motor"` },
@@ -38,15 +44,8 @@ const SWATCHES = [
 ];
 
 const FILES = [
-  "logo-mark.svg",
-  "logo-mark-dark.svg",
-  "logo-mark-mono.svg",
-  "app-icon.svg",
-  "favicon.svg",
-  "logo-mark-1024.png",
-  "logo-mark-512.png",
-  "app-icon-1024.png",
-  "app-icon-512.png",
+  "motormetrics-mark.svg",
+  "motormetrics-mark.png",
   "wordmark-lockup.png",
 ];
 
@@ -156,22 +155,19 @@ export default function BrandPage() {
             </div>
           </div>
         </Figure>
-        <Figure caption="Minimum sizes. Below 24px use the contained icon.">
+        <Figure caption="Stroke legibility. The free-standing arches hold down to 24px — use them for the 24–31px range, below the contained file's 32px floor">
           <div
-            className="flex h-55 items-center justify-center gap-7 rounded-2xl"
+            className="flex h-55 items-end justify-center gap-7 rounded-2xl p-7"
             style={{ background: WHITE }}
           >
-            <SizeSpecimen label="16 favicon">
-              <LogoMark size={16} strokeWidth={8} />
+            <SizeSpecimen label="24 min">
+              <LogoMark size={24} />
             </SizeSpecimen>
             <SizeSpecimen label="32">
               <LogoMark size={32} />
             </SizeSpecimen>
-            <SizeSpecimen label="64 app icon">
+            <SizeSpecimen label="64">
               <LogoMark size={64} />
-            </SizeSpecimen>
-            <SizeSpecimen label="24 min open">
-              <LogoMark size={24} />
             </SizeSpecimen>
           </div>
         </Figure>
@@ -199,6 +195,104 @@ export default function BrandPage() {
             ))}
           </ul>
         </Figure>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <SectionHeading>The standard mark</SectionHeading>
+        <Typography.Paragraph
+          color="muted"
+          className="max-w-3xl text-pretty leading-relaxed"
+        >
+          One design, in two formats because no single file is accepted
+          everywhere:{" "}
+          <strong className="font-bold">motormetrics-mark.svg</strong> for
+          anything that scales,{" "}
+          <strong className="font-bold">motormetrics-mark.png</strong> at 1024
+          for platforms that reject SVG. Same artwork in both. Favicon at 32px
+          and up, PWA icon, app tile, social avatar, partner listing, deck title
+          slide — all of them take this file. There is no light version and no
+          dark version, because the mark brings its own cream ground and
+          therefore does not care what is behind it.
+        </Typography.Paragraph>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
+          <Figure caption="Unchanged on a light or a dark host surface">
+            <div className="grid h-55 grid-cols-2 overflow-hidden rounded-2xl">
+              <div
+                className="grid place-items-center"
+                style={{ background: WHITE }}
+              >
+                <MarkFile
+                  alt="The mark on a light surface"
+                  className="rounded-[22px]"
+                  size={96}
+                />
+              </div>
+              <div
+                className="grid place-items-center"
+                style={{ background: HOST_DARK }}
+              >
+                <MarkFile
+                  alt="The mark on a dark surface"
+                  className="rounded-[22px]"
+                  size={96}
+                />
+              </div>
+            </div>
+          </Figure>
+          <Figure caption="Squircle, 22px radius at 96px — the house shape. The file itself is a full-bleed square; platforms round it themselves">
+            <div
+              className="flex h-55 items-center justify-center rounded-2xl"
+              style={{ background: WHITE }}
+            >
+              <MarkFile
+                alt="The mark in its squircle frame"
+                className="rounded-[28px]"
+                size={120}
+              />
+            </div>
+          </Figure>
+          <Figure caption="Holds from 32px up. One file at every size above that">
+            <div
+              className="flex h-55 items-end justify-center gap-5 rounded-2xl p-7"
+              style={{ background: WHITE }}
+            >
+              <SizeSpecimen label="32">
+                <MarkFile
+                  alt="The mark at 32px"
+                  className="rounded-[23%]"
+                  size={32}
+                />
+              </SizeSpecimen>
+              <SizeSpecimen label="64">
+                <MarkFile
+                  alt="The mark at 64px"
+                  className="rounded-[23%]"
+                  size={64}
+                />
+              </SizeSpecimen>
+              <SizeSpecimen label="96">
+                <MarkFile
+                  alt="The mark at 96px"
+                  className="rounded-[23%]"
+                  size={96}
+                />
+              </SizeSpecimen>
+            </div>
+          </Figure>
+        </div>
+        <Typography.Paragraph
+          color="muted"
+          className="max-w-3xl text-pretty text-[15px] leading-relaxed"
+        >
+          The cost of standardising is two things. The mark always appears in
+          its cream frame, so on a dark surface it reads as a tile rather than
+          as arches floating free. And the 50% inset that keeps every crop safe
+          leaves too little stroke at favicon scale — at a 16px frame the arches
+          are 8px wide on a 1.2px stroke, which is a smudge. Below 32px, set the
+          free-standing arches in code instead. In the product itself the nav
+          and footer keep drawing the arches inline, where the code can pick ink
+          or white — code can branch on theme, a file cannot.
+        </Typography.Paragraph>
       </section>
 
       <section className="flex flex-col gap-4">
@@ -239,8 +333,9 @@ export default function BrandPage() {
             <Wordmark className="text-[30px]" />
             <Typography.Paragraph color="muted" className="text-[15px]">
               The wordmark is a graphic. Always lowercase, always Urbanist 800
-              with the two-tone split. Use it in the nav, footer mark, share
-              cards, app store listings and anywhere the logo appears.
+              with the two-tone split. Use it wherever type can actually be set:
+              the nav, the footer mark, share cards, docs and decks. Icon slots
+              take the mark on its own — never the wordmark.
             </Typography.Paragraph>
           </div>
           <div className="flex flex-col gap-3 rounded-2xl bg-surface p-7">
@@ -272,6 +367,33 @@ export default function BrandPage() {
         </Typography.Paragraph>
       </section>
     </SitePage>
+  );
+}
+
+/**
+ * The standard mark, served from its file rather than drawn inline — the
+ * point of these specimens is what ships, cream ground and all. `unoptimized`
+ * because the source is an SVG: the image optimiser rejects it, and there is
+ * nothing to optimise.
+ */
+function MarkFile({
+  alt,
+  className,
+  size,
+}: {
+  alt: string;
+  className?: string;
+  size: number;
+}) {
+  return (
+    <Image
+      alt={alt}
+      className={className}
+      height={size}
+      src={MARK_FILE}
+      unoptimized
+      width={size}
+    />
   );
 }
 
