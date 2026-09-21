@@ -27,6 +27,9 @@ const WHITE = "#FFFFFF";
 /* A near-black host surface, darker than --ink-surface, to show that the
    mark's own cream ground does not blend into whatever sits behind it. */
 const HOST_DARK = "#16181A";
+/* Browser chrome behind the favicon specimen. Cream's next step down, so the
+   tab shape reads against the white figure ground. */
+const TAB_CHROME = "#EDEAE1";
 
 const MARK_FILE = "/brand/motormetrics-mark.svg";
 
@@ -47,6 +50,25 @@ const FILES = [
   "motormetrics-mark.svg",
   "motormetrics-mark.png",
   "wordmark-lockup.png",
+];
+
+/* Where each platform slot is served from. The browser and app files are
+   App Router metadata conventions under src/app, so Next emits their <link>
+   tags; the manifest rasters are plain public/ URLs because manifest entries
+   need a path that does not carry a content hash. */
+const ICON_KIT = [
+  { label: "Browser", files: ["icon.svg", "favicon.ico — 16 · 32 · 48"] },
+  {
+    label: "App & PWA",
+    files: [
+      "apple-icon.png",
+      "icons/icon-192.png",
+      "icons/icon-512.png",
+      "icons/icon-maskable-512.png",
+    ],
+  },
+  { label: "Below 32px", files: ["<LogoMark />, drawn in code"] },
+  { label: "Wiring", files: ["app/manifest.ts", "theme-color #16323F"] },
 ];
 
 function Figure({
@@ -291,8 +313,98 @@ export default function BrandPage() {
           are 8px wide on a 1.2px stroke, which is a smudge. Below 32px, set the
           free-standing arches in code instead. In the product itself the nav
           and footer keep drawing the arches inline, where the code can pick ink
-          or white — code can branch on theme, a file cannot.
+          or white — code can branch on theme, a file cannot. Radius stays at
+          23% of the frame — 12px at 52px, 7px at 30px.
         </Typography.Paragraph>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <SectionHeading>Icon kit</SectionHeading>
+        <Typography.Paragraph
+          color="muted"
+          className="max-w-3xl text-pretty leading-relaxed"
+        >
+          The platform files, cut from the standard mark. Every raster is a
+          full-bleed square on the cream ground — never pre-round the corners,
+          because iOS, Android and the browser each apply their own mask, and a
+          baked-in radius shows up as a notch inside theirs.
+        </Typography.Paragraph>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
+          <Figure caption="Favicon. The SVG leads; favicon.ico carries the 16, 32 and 48 behind it. The 16 is redrawn on a tighter inset so the strokes survive">
+            <div
+              className="flex h-55 items-center justify-center rounded-2xl p-7"
+              style={{ background: WHITE }}
+            >
+              <div
+                className="flex items-center gap-2.5 rounded-t-xl px-4 pt-2.5 pb-3"
+                style={{ background: TAB_CHROME }}
+              >
+                <Image
+                  alt="The favicon at 16px"
+                  height={16}
+                  src="/favicon.ico"
+                  unoptimized
+                  width={16}
+                />
+                <span className="font-semibold text-[13px] text-muted">
+                  COE results — MotorMetrics
+                </span>
+              </div>
+            </div>
+          </Figure>
+          <Figure caption="Home screen. iOS takes apple-icon.png at 180. Android crops to a circle, so the maskable file pulls the arches in to 50% of the frame">
+            <div
+              className="flex h-55 items-center justify-center gap-7 rounded-2xl"
+              style={{ background: WHITE }}
+            >
+              <SizeSpecimen label="Standard">
+                <Image
+                  alt="The standard inset, as iOS receives it"
+                  className="rounded-[24%]"
+                  height={84}
+                  src="/icons/icon-512.png"
+                  width={84}
+                />
+              </SizeSpecimen>
+              <SizeSpecimen label="Maskable">
+                <Image
+                  alt="The maskable inset, cropped to a circle by Android"
+                  className="rounded-full"
+                  height={84}
+                  src="/icons/icon-maskable-512.png"
+                  width={84}
+                />
+              </SizeSpecimen>
+            </div>
+          </Figure>
+          <Figure caption="Below the 32px floor the file gives way to the free-standing arches, drawn in code so they can take ink or white">
+            <div
+              className="flex h-55 items-end justify-center gap-7 rounded-2xl p-7"
+              style={{ background: WHITE }}
+            >
+              <SizeSpecimen label="24">
+                <LogoMark size={24} />
+              </SizeSpecimen>
+              <SizeSpecimen label="16">
+                <LogoMark size={16} />
+              </SizeSpecimen>
+            </div>
+          </Figure>
+        </div>
+        <dl className="m-0 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-x-10 gap-y-5 rounded-2xl bg-surface p-7">
+          {ICON_KIT.map(({ files, label }) => (
+            <div className="flex flex-col gap-1.5" key={label}>
+              <dt className="font-bold text-subtle text-xs uppercase tracking-[0.08em]">
+                {label}
+              </dt>
+              <dd className="m-0 flex flex-col text-[14.5px] leading-7">
+                {files.map((file) => (
+                  <span key={file}>{file}</span>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       <section className="flex flex-col gap-4">

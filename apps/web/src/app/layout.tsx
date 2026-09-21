@@ -6,7 +6,7 @@ import LoadingIndicator from "@web/components/loading-indicator";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
 import { BotIdClient } from "botid/client";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Urbanist } from "next/font/google";
 import { getLocale, getMessages } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
@@ -73,6 +73,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
   },
+};
+
+// themeColor belongs to the viewport export, not metadata. Ink deep is the
+// brand's darkest tone, so the browser chrome reads as part of the mark.
+export const viewport: Viewport = {
+  themeColor: "#16323F",
 };
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {

@@ -23,7 +23,9 @@ export const DOMAIN_NAME = "motormetrics.app";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? `https://${DOMAIN_NAME}`;
 
-export const LOGO_URL = `${SITE_URL}/apple-icon`;
+// A public/ path, not an app/ icon convention: those carry a content hash in
+// their URL, and structured data wants a stable one.
+export const LOGO_URL = `${SITE_URL}/icons/icon-512.png`;
 
 export const SUPPORT_EMAIL = "support@motormetrics.app";
 export const GITHUB_REPO_URL = "https://github.com/motormetrics/motormetrics";
