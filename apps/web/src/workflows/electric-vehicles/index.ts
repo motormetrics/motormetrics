@@ -1,5 +1,8 @@
 import { generateBlogContent } from "@motormetrics/ai/generate-post";
-import { getEvDataForMonth } from "@motormetrics/ai/queries";
+import {
+  getEvDataForMonth,
+  getTotalRegistrationsForMonth,
+} from "@motormetrics/ai/queries";
 import { tokeniser } from "@motormetrics/utils/tokeniser";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { getExistingPostByMonth } from "@web/queries/posts";
@@ -53,8 +56,14 @@ export async function electricVehiclesWorkflow(
     return { message: "[EV] No EV data for this month." };
   }
 
+  const totalRegistrations = await fetchTotalRegistrations(month);
+
   await emitEvent({ type: "step:start", step: "generateElectricVehiclesPost" });
-  const post = await generateElectricVehiclesPost(electricVehiclesData, month);
+  const post = await generateElectricVehiclesPost(
+    electricVehiclesData,
+    month,
+    totalRegistrations,
+  );
   await emitEvent({
     type: "post:generated",
     step: "generateElectricVehiclesPost",
@@ -113,13 +122,22 @@ async function fetchElectricVehiclesData(month: string) {
   return getEvDataForMonth(month);
 }
 
+async function fetchTotalRegistrations(month: string) {
+  "use step";
+  return getTotalRegistrationsForMonth(month);
+}
+
 async function generateElectricVehiclesPost(
   electricVehiclesData: Awaited<ReturnType<typeof getEvDataForMonth>>,
   month: string,
+  totalRegistrations: number,
 ) {
   "use step";
 
-  const data = tokeniser(electricVehiclesData);
+  // The rows below cover electrified fuel types only, so the month's full
+  // registration count has to travel with them or any share is computed
+  // against the wrong denominator.
+  const data = `TOTAL_CAR_REGISTRATIONS_ALL_FUEL_TYPES|${totalRegistrations}\n\n${tokeniser(electricVehiclesData)}`;
 
   try {
     return await generateBlogContent({

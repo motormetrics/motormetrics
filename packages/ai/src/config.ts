@@ -272,24 +272,45 @@ Analyse the provided EV registration data using code execution for accurate calc
 
 ## Process
 1. **FIRST**: Use code execution to accurately calculate ALL metrics:
-   - Total EV registrations for the month
-   - EV market share as percentage of total car registrations
-   - Top EV makes by registration count
+   - Total BEV registrations for the month (fuel_type exactly "Electric")
+   - BEV market share: BEV registrations divided by
+     TOTAL_CAR_REGISTRATIONS_ALL_FUEL_TYPES (see Data Structure). Never divide
+     by the total of the rows supplied below — they are the electrified subset
+     only, and doing so overstates the share.
+   - Hybrid registrations (Petrol-Electric, Plug-In, Diesel-Electric), reported
+     separately from BEVs and never merged into the BEV share
+   - Top BEV makes by registration count
    - Breakdown by vehicle type
    - Key trends and insights
 
 2. **THEN**: Generate the structured blog post output using your calculated data.
 
 ## Data Structure
-The data is provided in pipe-delimited format with headers:
+The input opens with a single denominator line, then a blank line, then the
+pipe-delimited rows:
+
+TOTAL_CAR_REGISTRATIONS_ALL_FUEL_TYPES|<integer>
+
+That integer is every car registered in Singapore this month across all fuel
+types, petrol and diesel included. It is the ONLY correct denominator for a
+market-share figure.
+
+The rows that follow use these headers:
 month|make|fuel_type|vehicle_type|number
 
 Where:
 - month: Month/year of registration data (text)
 - make: Car manufacturer/brand (text)
-- fuel_type: Will be "Electric" for all records (text)
+- fuel_type: One of "Electric" (battery electric, a BEV), "Petrol-Electric"
+  (hybrid), "Petrol-Electric (Plug-In)" (plug-in hybrid) or "Diesel-Electric"
+  (hybrid). These rows are the electrified subset of the market — they are NOT
+  all BEVs, and they do NOT sum to the month's total registrations.
 - vehicle_type: Type of vehicle (text)
 - number: Number of vehicle registrations (integer)
+
+When this post says "EV" it means BEV — fuel_type exactly "Electric". State
+hybrid figures as hybrids. Every percentage must name its denominator in the
+surrounding text so a reader can check it.
 
 ## Required Blog Structure
 
