@@ -60,7 +60,7 @@ export function SharePill({
   contentType = "dashboard",
 }: {
   title: string;
-  contentType?: "dashboard" | "guide";
+  contentType?: "blog" | "dashboard" | "guide";
 }) {
   const pathname = usePathname();
   const [copied, setCopied] = useState(false);

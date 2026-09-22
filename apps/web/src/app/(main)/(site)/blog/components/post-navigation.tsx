@@ -7,6 +7,10 @@ interface PostNavigationProps {
   next?: SelectPost;
 }
 
+/**
+ * Previous and next monthly report, closing the article column. Not in the
+ * comp, but the monthly posts are a series and readers page through them.
+ */
 export function PostNavigation({ previous, next }: PostNavigationProps) {
   if (!previous && !next) {
     return null;
@@ -15,65 +19,45 @@ export function PostNavigation({ previous, next }: PostNavigationProps) {
   return (
     <nav
       aria-label="Post navigation"
-      className="border-foreground/10 border-t pt-12"
+      className="grid grid-cols-1 gap-6 border-border border-t-2 pt-8 sm:grid-cols-2"
     >
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        {/* Previous Post */}
-        <div className="group">
-          {previous ? (
-            <Link
-              href={`/blog/${previous.slug}`}
-              className="flex h-full flex-col"
-            >
-              {/* Direction Label */}
-              <div className="mb-3 flex items-center gap-2">
-                <ArrowLeft className="size-4 -translate-x-0 text-foreground/40 transition-transform duration-300 ease-out group-hover:-translate-x-1 group-hover:text-accent-strong" />
-                <span className="font-medium text-foreground/40 text-xs uppercase tracking-widest transition-colors duration-300 group-hover:text-accent-strong">
-                  Previous
-                </span>
-              </div>
+      {previous ? (
+        <Link
+          className="group flex flex-col gap-2 text-foreground no-underline"
+          href={`/blog/${previous.slug}`}
+        >
+          <span className="flex items-center gap-2 font-semibold text-muted text-sm transition-colors group-hover:text-accent-strong">
+            <ArrowLeft
+              aria-hidden
+              className="size-4 transition-transform group-hover:-translate-x-0.5"
+            />
+            Previous
+          </span>
+          <span className="line-clamp-2 font-bold text-base leading-snug transition-colors group-hover:text-accent-strong">
+            {previous.title}
+          </span>
+        </Link>
+      ) : (
+        <div className="hidden sm:block" />
+      )}
 
-              {/* Title */}
-              <h3 className="line-clamp-2 font-semibold text-foreground text-lg leading-snug transition-colors duration-300 group-hover:text-accent-strong md:text-xl">
-                {previous.title}
-              </h3>
-
-              {/* Animated underline */}
-              <div className="mt-4 h-px w-0 bg-accent transition-all duration-500 ease-out group-hover:w-16" />
-            </Link>
-          ) : (
-            <div className="hidden md:block" />
-          )}
-        </div>
-
-        {/* Next Post */}
-        <div className="group md:text-right">
-          {next ? (
-            <Link
-              href={`/blog/${next.slug}`}
-              className="flex h-full flex-col md:items-end"
-            >
-              {/* Direction Label */}
-              <div className="mb-3 flex items-center gap-2">
-                <span className="font-medium text-foreground/40 text-xs uppercase tracking-widest transition-colors duration-300 group-hover:text-accent-strong">
-                  Next
-                </span>
-                <ArrowRight className="size-4 translate-x-0 text-foreground/40 transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:text-accent-strong" />
-              </div>
-
-              {/* Title */}
-              <h3 className="line-clamp-2 font-semibold text-foreground text-lg leading-snug transition-colors duration-300 group-hover:text-accent-strong md:text-xl">
-                {next.title}
-              </h3>
-
-              {/* Animated underline */}
-              <div className="mt-4 h-px w-0 bg-accent transition-all duration-500 ease-out group-hover:w-16 md:ml-auto" />
-            </Link>
-          ) : (
-            <div className="hidden md:block" />
-          )}
-        </div>
-      </div>
+      {next ? (
+        <Link
+          className="group flex flex-col gap-2 text-foreground no-underline sm:items-end sm:text-right"
+          href={`/blog/${next.slug}`}
+        >
+          <span className="flex items-center gap-2 font-semibold text-muted text-sm transition-colors group-hover:text-accent-strong">
+            Next
+            <ArrowRight
+              aria-hidden
+              className="size-4 transition-transform group-hover:translate-x-0.5"
+            />
+          </span>
+          <span className="line-clamp-2 font-bold text-base leading-snug transition-colors group-hover:text-accent-strong">
+            {next.title}
+          </span>
+        </Link>
+      ) : null}
     </nav>
   );
 }

@@ -57,20 +57,18 @@ vi.mock("motion/react", () => ({
   },
 }));
 
-vi.mock("@web/app/(main)/(site)/blog/components/post", () => ({
-  Post: {
-    Card: ({ post }: { post: SelectPost }) => (
-      <article data-testid={`post-card-${post.id}`}>
-        <a href={`/blog/${post.slug}`}>{post.title}</a>
-        <span data-testid={`post-date-${post.id}`}>
-          {new Date(post.publishedAt ?? post.createdAt).toLocaleDateString(
-            "en-SG",
-            { year: "numeric", month: "short", day: "numeric" },
-          )}
-        </span>
-      </article>
-    ),
-  },
+vi.mock("@web/app/(main)/(site)/blog/components/post-card", () => ({
+  PostCard: ({ post }: { post: SelectPost }) => (
+    <article data-testid={`post-card-${post.id}`}>
+      <a href={`/blog/${post.slug}`}>{post.title}</a>
+      <span data-testid={`post-date-${post.id}`}>
+        {new Date(post.publishedAt ?? post.createdAt).toLocaleDateString(
+          "en-SG",
+          { year: "numeric", month: "short", day: "numeric" },
+        )}
+      </span>
+    </article>
+  ),
 }));
 
 describe("RecentPosts", () => {
