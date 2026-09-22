@@ -64,7 +64,7 @@ describe("post embedding writes", () => {
     vi.mocked(generateDocumentEmbedding).mockResolvedValue([0.1, 0.2]);
   });
 
-  it("stores a V2 document embedding after creating a post", async () => {
+  it("should store a V2 document embedding after creating a post", async () => {
     const insertChain = createWriteChain([post]);
     const embeddingChain = createWriteChain([]);
     vi.mocked(db.insert).mockReturnValue(insertChain as never);
@@ -95,7 +95,7 @@ describe("post embedding writes", () => {
     );
   });
 
-  it("stores a V2 document embedding after updating a post", async () => {
+  it("should store a V2 document embedding after updating a post", async () => {
     const contentChain = createWriteChain([post]);
     const embeddingChain = createWriteChain([]);
     vi.mocked(db.query.posts.findFirst).mockResolvedValue({
@@ -137,7 +137,7 @@ describe("post embedding writes", () => {
     );
   });
 
-  it("keeps post creation available when embedding generation fails", async () => {
+  it("should keep post creation available when embedding generation fails", async () => {
     const insertChain = createWriteChain([post]);
     vi.mocked(db.insert).mockReturnValue(insertChain as never);
     vi.mocked(generateDocumentEmbedding).mockRejectedValue(
