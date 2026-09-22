@@ -1,3 +1,10 @@
+## [5.24.0](https://github.com/motormetrics/motormetrics/compare/v5.23.0...v5.24.0) (2026-09-22)
+
+### Features
+
+* **web:** port the blog to the v2 design ([d38653b](https://github.com/motormetrics/motormetrics/commit/d38653bc7404af09318d15f753e2638af7aee971))
+* **web:** show live figures in a popover on follow links ([afed2a0](https://github.com/motormetrics/motormetrics/commit/afed2a05f3b0dc066fd28b4425ffcf815cd26aa2))
+
 ## [5.23.0](https://github.com/motormetrics/motormetrics/compare/v5.22.0...v5.23.0) (2026-09-22)
 
 ### Features
