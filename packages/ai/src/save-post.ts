@@ -2,7 +2,7 @@ import { db } from "@motormetrics/database/client";
 import { posts } from "@motormetrics/database/schema";
 import { slugify } from "@motormetrics/utils/slugify";
 import type { LanguageModelUsage } from "ai";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { generateDocumentEmbedding } from "./embedding";
 import type { Highlight } from "./schemas";
 
@@ -53,10 +53,6 @@ export const savePost = async (data: PostParams) => {
   const month = kind === "evergreen" ? null : data.month;
   const slug = data.slug ?? slugify(data.title);
 
-  // Merge rather than assign so anything else stored in metadata (e.g. a hero
-  // subject) survives a regeneration.
-  const metadata = sql`coalesce(${posts.metadata}, '{}'::jsonb) || ${JSON.stringify(data.responseMetadata)}::jsonb`;
-
   const values = {
     title: data.title,
     slug,
@@ -81,7 +77,7 @@ export const savePost = async (data: PostParams) => {
     heroImage: data.heroImage,
     tags: data.tags,
     highlights: data.highlights,
-    metadata,
+    metadata: data.responseMetadata,
     modifiedAt: new Date(),
   };
 
