@@ -1,5 +1,5 @@
 import { BlogList } from "@web/app/(main)/(site)/blog/components/blog-list";
-import { ListSkeleton } from "@web/components/shared/skeleton";
+import { GridSkeleton } from "@web/components/shared/skeleton";
 import { getAllPosts, searchPosts } from "@web/queries/posts";
 import { Suspense } from "react";
 
@@ -7,27 +7,29 @@ interface BlogListSectionProps {
   query: string;
 }
 
-function fetchPosts(query: string) {
+async function BlogListContent({ query }: BlogListSectionProps) {
   if (query) {
-    return searchPosts(query);
+    return <BlogList posts={await searchPosts(query)} query={query} />;
   }
 
-  return getAllPosts();
-}
+  // The newest post is the featured panel above, so the grid starts at the
+  // second — the comp never shows the same post twice on the page.
+  const posts = await getAllPosts();
 
-async function BlogListContent({ query }: BlogListSectionProps) {
-  const posts = await fetchPosts(query);
-
-  return <BlogList posts={posts} query={query} />;
-}
-
-function BlogListSkeleton() {
-  return <ListSkeleton count={3} />;
+  return <BlogList posts={posts.slice(1)} query={query} />;
 }
 
 export function BlogListSection({ query }: BlogListSectionProps) {
   return (
-    <Suspense key={query} fallback={<BlogListSkeleton />}>
+    <Suspense
+      key={query}
+      fallback={
+        <GridSkeleton
+          columns="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+          count={6}
+        />
+      }
+    >
       <BlogListContent query={query} />
     </Suspense>
   );

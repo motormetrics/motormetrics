@@ -1,65 +1,60 @@
-"use client";
-
-import { NumberValue } from "@heroui-pro/react";
+import { Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
-import { Flame, TrendingUp } from "lucide-react";
+import { SurfaceCard } from "@web/components/shared/bento";
 import Link from "next/link";
+import { getCategoryConfig } from "./post/utils";
 
 interface PostWithViews extends SelectPost {
   viewCount: number;
 }
 
-interface PopularPostsProps {
-  posts: PostWithViews[];
-}
+const views = new Intl.NumberFormat("en-SG", {
+  maximumFractionDigits: 1,
+  notation: "compact",
+});
 
-export function PopularPosts({ posts }: PopularPostsProps) {
+/**
+ * The comp pairs the featured panel with a white "at a glance" card of
+ * headline figures. Those figures belong to the dashboard, not the blog, so
+ * the card carries the posts readers open most instead — the one signal the
+ * blog owns.
+ */
+export function PopularPosts({ posts }: { posts: PostWithViews[] }) {
   if (posts.length === 0) {
     return null;
   }
 
   return (
-    <section className="flex flex-col gap-4">
-      {/* Header */}
-      <div className="flex items-center gap-2">
-        <Flame className="size-4 text-warning" />
-        <span className="font-medium text-foreground text-sm">Trending</span>
-      </div>
-
-      {/* Posts Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+    <SurfaceCard className="gap-5">
+      <Typography.Paragraph className="font-semibold" color="muted">
+        Most read
+      </Typography.Paragraph>
+      <ol className="flex flex-col gap-4">
         {posts.map((post, index) => (
-          <Link
+          <li
+            className="border-border border-t pt-4 first:border-t-0 first:pt-0"
             key={post.id}
-            href={`/blog/${post.slug}`}
-            className="group flex h-full items-center gap-4 overflow-hidden rounded-xl bg-default p-4 hover:bg-default/80"
           >
-            {/* Rank */}
-            <span className="shrink-0 font-semibold text-lg text-muted tabular-nums">
-              {index + 1}
-            </span>
-
-            {/* Content */}
-            <div className="flex flex-1 flex-col gap-2">
-              <span className="line-clamp-2 font-medium text-foreground text-sm leading-snug transition-colors group-hover:text-accent-strong">
-                {post.title}
+            <Link
+              className="group flex items-baseline gap-4 text-foreground no-underline"
+              href={`/blog/${post.slug}`}
+            >
+              <span className="w-6 shrink-0 font-extrabold text-2xl text-muted tabular-nums leading-none tracking-tight">
+                {index + 1}
               </span>
-              <div className="flex items-center gap-2 text-muted">
-                <TrendingUp className="size-3 text-accent-strong" />
-                <span className="text-xs tabular-nums">
-                  <NumberValue
-                    maximumFractionDigits={1}
-                    notation="compact"
-                    value={post.viewCount}
-                  >
-                    <NumberValue.Suffix> views</NumberValue.Suffix>
-                  </NumberValue>
+              <span className="flex min-w-0 flex-col gap-1">
+                <span className="line-clamp-2 font-bold text-base leading-snug transition-colors group-hover:text-accent-strong">
+                  {post.title}
                 </span>
-              </div>
-            </div>
-          </Link>
+                <span className="font-semibold text-muted text-sm">
+                  {getCategoryConfig(post).label} ·{" "}
+                  {views.format(post.viewCount)} views
+                </span>
+              </span>
+            </Link>
+          </li>
         ))}
-      </div>
-    </section>
+      </ol>
+    </SurfaceCard>
   );
 }

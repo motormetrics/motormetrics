@@ -1,7 +1,7 @@
 import { Tooltip, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import type { SelectPost } from "@motormetrics/database/schema";
-import { Post } from "@web/app/(main)/(site)/blog/components/post";
+import { PostCard } from "@web/app/(main)/(site)/blog/components/post-card";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
@@ -59,7 +59,7 @@ export function RecentPosts({ posts }: RecentPostsProps) {
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-3 2xl:grid-cols-1">
         {posts.slice(0, 3).map((post) => (
-          <Post.Card key={post.id} post={post} />
+          <PostCard key={post.id} post={post} />
         ))}
       </div>
     </section>

@@ -1,119 +1,104 @@
 "use client";
 
-import { Tabs } from "@heroui/react";
-
+import { cn, Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
-import { Post } from "@web/app/(main)/(site)/blog/components/post";
+import { PostCard } from "@web/app/(main)/(site)/blog/components/post-card";
 import posthog from "posthog-js";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { POST_CATEGORIES } from "../post/utils";
 
-interface PostCounts {
-  total: number;
-  category: Record<string, number>;
-}
-
 interface BlogListClientProps {
+  /** Every dataType with at least one published post, alphabetical. */
+  categories: string[];
   posts: SelectPost[];
-  counts: PostCounts;
   query: string;
 }
 
-interface PostsGridProps {
-  posts: SelectPost[];
-}
+const ALL = "all";
 
 // Derived so a new dataType shows a real tab label instead of its raw slug.
-const tabLabels: Record<string, string> = {
-  all: "All Posts",
+const labels: Record<string, string> = {
+  [ALL]: "All",
   ...Object.fromEntries(
     Object.entries(POST_CATEGORIES).map(([key, value]) => [key, value.label]),
   ),
 };
 
-const PostsGrid = ({ posts }: PostsGridProps) => {
+/**
+ * The comp's "All posts" block: heading and count on the left, topic pills
+ * hard right, then the three-up card grid.
+ *
+ * The pills filter the posts already on the page rather than refetching —
+ * there are dozens of posts, not thousands, and a tab that responds on the
+ * next frame reads better than one that suspends.
+ */
+export function BlogListClient({
+  categories,
+  posts,
+  query,
+}: BlogListClientProps) {
+  const [topic, setTopic] = useState(ALL);
+
+  const filtered =
+    topic === ALL ? posts : posts.filter((post) => post.dataType === topic);
+
+  const count = filtered.length;
+
+  const selectTopic = (key: string) => {
+    posthog.capture("blog_category_tab_changed", { category: key });
+    setTopic(key);
+  };
+
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {posts.map((post) => (
-        <Post.Card key={post.id} post={post} />
-      ))}
-    </div>
-  );
-};
+    <section className="flex flex-col gap-7">
+      <div className="flex flex-wrap items-center gap-5">
+        <Typography.Heading level={2}>
+          {query ? `Results for “${query}”` : "All posts"}
+        </Typography.Heading>
+        <span className="font-semibold text-base text-muted">
+          {count} {count === 1 ? "post" : "posts"}
+        </span>
 
-export function BlogListClient({ posts, counts, query }: BlogListClientProps) {
-  const [selectedTab, setSelectedTab] = useState("all");
+        {query ? null : (
+          <fieldset className="flex flex-wrap gap-2 sm:ml-auto">
+            <legend className="sr-only">Filter posts by topic</legend>
+            {[ALL, ...categories].map((key) => {
+              const active = key === topic;
 
-  const filteredPosts = useMemo(() => {
-    if (selectedTab === "all") {
-      return posts;
-    }
-    return posts.filter((post) => post.dataType === selectedTab);
-  }, [posts, selectedTab]);
+              return (
+                <button
+                  aria-pressed={active}
+                  className={cn(
+                    "cursor-pointer whitespace-nowrap rounded-full px-5 py-2.5 text-sm transition-colors",
+                    active
+                      ? "bg-accent font-bold text-accent-foreground"
+                      : "bg-surface font-semibold text-muted shadow-surface hover:text-foreground",
+                  )}
+                  key={key}
+                  onClick={() => selectTopic(key)}
+                  type="button"
+                >
+                  {labels[key] ?? key}
+                </button>
+              );
+            })}
+          </fieldset>
+        )}
+      </div>
 
-  const heroPost = filteredPosts[0];
-  const remainingPosts = filteredPosts.slice(1);
-
-  if (posts.length === 0) {
-    return (
-      <div className="py-12 text-center">
-        <p className="text-muted">
+      {count > 0 ? (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      ) : (
+        <Typography.Paragraph className="font-semibold" color="muted">
           {query
-            ? `No results found for "${query}".`
-            : "No blog posts available."}
-        </p>
-      </div>
-    );
-  }
-
-  if (query) {
-    return (
-      <div className="flex flex-col gap-8">
-        <p className="text-muted">
-          {filteredPosts.length} result{filteredPosts.length !== 1 && "s"} for "
-          {query}"
-        </p>
-        <PostsGrid posts={filteredPosts} />
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col gap-8">
-      <Tabs
-        selectedKey={selectedTab}
-        variant="secondary"
-        onSelectionChange={(key) => {
-          posthog.capture("blog_category_tab_changed", {
-            category: key as string,
-          });
-          setSelectedTab(key as string);
-        }}
-      >
-        <Tabs.ListContainer>
-          <Tabs.List
-            aria-label="Blog categories"
-            className="gap-6 *:h-10 *:px-0"
-          >
-            <Tabs.Tab id="all">
-              {tabLabels.all} ({counts.total})
-              <Tabs.Indicator />
-            </Tabs.Tab>
-            {Object.keys(counts.category)
-              .sort((a, b) => a.localeCompare(b))
-              .map((cat) => (
-                <Tabs.Tab key={cat} id={cat}>
-                  {tabLabels[cat] || cat} ({counts.category[cat]})
-                  <Tabs.Indicator />
-                </Tabs.Tab>
-              ))}
-          </Tabs.List>
-        </Tabs.ListContainer>
-      </Tabs>
-
-      {heroPost && <Post.Hero post={heroPost} />}
-
-      {remainingPosts.length > 0 && <PostsGrid posts={remainingPosts} />}
-    </div>
+            ? `No posts match “${query}”.`
+            : "No posts under this topic yet."}
+        </Typography.Paragraph>
+      )}
+    </section>
   );
 }

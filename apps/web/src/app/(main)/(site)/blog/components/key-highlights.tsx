@@ -4,38 +4,35 @@ export interface Highlight {
   detail?: string;
 }
 
-interface KeyHighlightsProps {
-  highlights?: Highlight[];
-}
-
-export function KeyHighlights({ highlights }: KeyHighlightsProps) {
+/**
+ * The figures the post is about, before the argument starts.
+ *
+ * The comp draws them in a white card. At the article's full column that
+ * reads as a dashboard panel dropped into the copy, so they take the
+ * rule-topped form the Learn head uses instead — on the page like the
+ * charts further down, not boxed apart from it.
+ */
+export function KeyHighlights({ highlights }: { highlights?: Highlight[] }) {
   if (!highlights || highlights.length === 0) {
     return null;
   }
 
   return (
-    <section className="mb-12">
-      <h2 className="mb-6 font-bold text-foreground/60 text-xs uppercase tracking-widest">
-        Key Highlights
-      </h2>
-      <div className="grid grid-cols-1 gap-0 border-foreground border-t-2 md:grid-cols-2 lg:grid-cols-3">
-        {highlights.map((item) => (
-          <div
-            key={`${item.label}-${item.value}`}
-            className="border-foreground border-r-0 border-b-2 p-5 last:border-r-0 md:border-r-2"
-          >
-            <div className="mb-1 font-black text-3xl text-accent-strong tabular-nums md:text-4xl">
-              {item.value}
-            </div>
-            <div className="mb-1 font-bold text-foreground text-xs uppercase tracking-wide">
-              {item.label}
-            </div>
-            {item.detail && (
-              <div className="text-foreground/60 text-xs">{item.detail}</div>
-            )}
-          </div>
-        ))}
-      </div>
-    </section>
+    <dl className="not-prose grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-3">
+      {highlights.map((item) => (
+        <div
+          className="flex flex-col gap-1.5 border-border border-t-2 pt-5"
+          key={`${item.label}-${item.value}`}
+        >
+          <dd className="font-extrabold text-4xl tabular-nums leading-none tracking-tight">
+            {item.value}
+          </dd>
+          <dt className="font-semibold text-muted text-sm">{item.label}</dt>
+          {item.detail ? (
+            <dd className="text-muted text-xs">{item.detail}</dd>
+          ) : null}
+        </div>
+      ))}
+    </dl>
   );
 }

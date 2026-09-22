@@ -1,14 +1,13 @@
-import { Card, Chip } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import { getRelatedPosts } from "@web/lib/data/posts";
-import Link from "next/link";
-import readingTime from "reading-time";
-import { getCategoryConfig } from "./post/utils";
+import { PostCard } from "./post-card";
 
 interface RelatedPostsProps {
   currentPostId: string;
   limit?: number;
 }
 
+/** The comp's "Read next" row — the posts nearest this one by embedding. */
 export async function RelatedPosts({
   currentPostId,
   limit = 3,
@@ -20,58 +19,12 @@ export async function RelatedPosts({
   }
 
   return (
-    <section className="border-foreground border-t-2 pt-8">
-      {/* Section header - matches KeyHighlights style */}
-      <h2 className="mb-6 font-bold text-foreground/60 text-xs uppercase tracking-widest">
-        Related Posts
-      </h2>
-
+    <section className="flex flex-col gap-7">
+      <Typography.Heading level={2}>Read next</Typography.Heading>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {relatedPosts.map((post) => {
-          const category = getCategoryConfig(post);
-          const publishedDate = post.publishedAt ?? post.createdAt;
-          const readTime = readingTime(post.content).minutes;
-
-          return (
-            <Link
-              key={post.id}
-              href={`/blog/${post.slug}`}
-              className="group block h-full"
-            >
-              <Card className="h-full border-border transition-colors hover:border-muted">
-                <Card.Content className="flex flex-col gap-4">
-                  {/* Category Label */}
-                  <Chip
-                    size="sm"
-                    color={category.color}
-                    variant="primary"
-                    className="h-5 px-1 font-bold text-xs"
-                  >
-                    {category.label}
-                  </Chip>
-
-                  {/* Title */}
-                  <h3 className="line-clamp-2 font-bold text-lg leading-tight">
-                    {post.title}
-                  </h3>
-
-                  {/* Metadata */}
-                  <div className="flex items-center gap-2 text-muted text-xs">
-                    <span>
-                      {publishedDate.toLocaleDateString("en-SG", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </span>
-                    <span className="size-1 rounded-full bg-default" />
-                    <span>{Math.ceil(readTime)} min read</span>
-                  </div>
-                </Card.Content>
-              </Card>
-            </Link>
-          );
-        })}
+        {relatedPosts.map((post) => (
+          <PostCard key={post.id} post={post} showExcerpt={false} />
+        ))}
       </div>
     </section>
   );

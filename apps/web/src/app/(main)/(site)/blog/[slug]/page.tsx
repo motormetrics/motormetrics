@@ -1,16 +1,16 @@
-import { Button, Card, Separator } from "@heroui/react";
-import { BlogHero } from "@web/app/(main)/(site)/blog/components/blog-hero";
+import { Typography } from "@heroui/react";
 import {
   type Highlight,
   KeyHighlights,
 } from "@web/app/(main)/(site)/blog/components/key-highlights";
 import { mdxComponents } from "@web/app/(main)/(site)/blog/components/mdx-components";
 import { getArticleSection } from "@web/app/(main)/(site)/blog/components/post/utils";
+import { PostHead } from "@web/app/(main)/(site)/blog/components/post-head";
 import { PostNavigation } from "@web/app/(main)/(site)/blog/components/post-navigation";
+import { PostSidebar } from "@web/app/(main)/(site)/blog/components/post-sidebar";
 import { ProgressBar } from "@web/app/(main)/(site)/blog/components/progress-bar";
 import { RelatedPosts } from "@web/app/(main)/(site)/blog/components/related-posts";
-import { ShareButtons } from "@web/app/(main)/(site)/blog/components/share-buttons";
-import { TableOfContents } from "@web/app/(main)/(site)/blog/components/table-of-contents";
+import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { SOCIAL_HANDLE } from "@web/config/socials";
@@ -22,11 +22,9 @@ import {
   getPostBySlug,
   getPreviousPost,
 } from "@web/queries/posts";
-import { Undo2 } from "lucide-react";
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
-import Link from "next/link";
-
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import readingTime from "reading-time";
@@ -35,6 +33,9 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 import type { BlogPosting, WithContext } from "schema-dts";
+
+/** Enough of the excerpt to identify it, short of where rewording sets in. */
+const LEDE_PREFIX_LENGTH = 80;
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -90,13 +91,20 @@ export const generateStaticParams = async () => {
   return posts.map((post) => ({ slug: post.slug }));
 };
 
+/**
+ * The article body, filling the full column beside the rail at the comp's
+ * 18px body size — no second cap, so nothing leaves a gutter before the rail.
+ *
+ * `prose` carries the markdown; the modifiers pull its greys onto the site's
+ * own tokens so the copy matches the type around it.
+ */
 async function Article({ slug, content }: { slug: string; content: string }) {
   "use cache";
   cacheLife("max");
   cacheTag(`posts:slug:${slug}`);
 
   return (
-    <article className="prose dark:prose-invert max-w-none">
+    <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted prose-p:text-muted prose-strong:text-foreground prose-td:text-muted prose-th:text-foreground prose-p:leading-relaxed prose-headings:tracking-tight">
       <MDXRemote
         source={content}
         components={mdxComponents}
@@ -129,7 +137,7 @@ async function Article({ slug, content }: { slug: string; content: string }) {
           },
         }}
       />
-    </article>
+    </div>
   );
 }
 
@@ -142,6 +150,19 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   const publishedDate = post.publishedAt || post.createdAt;
+
+  // Generated posts often open the body with the excerpt, sometimes reworded
+  // a few words in. The lede repeats it only when the body does not open with
+  // its first sentence or so, so the same paragraph never renders twice.
+  const normalise = (text: string) => text.replace(/\s+/g, " ").trim();
+  const lede =
+    post.excerpt &&
+    !normalise(post.content).startsWith(
+      normalise(post.excerpt).slice(0, LEDE_PREFIX_LENGTH),
+    )
+      ? post.excerpt
+      : null;
+
   const [initialViewCount, previousPost, nextPost] = await Promise.all([
     getPostViewCount(post.id),
     getPreviousPost(publishedDate),
@@ -182,8 +203,6 @@ export default async function BlogPostPage({ params }: PageProps) {
     },
   };
 
-  const readingTimeText = readingTime(post.content).text;
-
   return (
     <>
       <StructuredData data={structuredData} />
@@ -199,70 +218,49 @@ export default async function BlogPostPage({ params }: PageProps) {
       />
       <ProgressBar />
 
-      {/* Full-width content wrapper */}
-      <div className="flex flex-col">
-        {/* Bloomberg-style Hero with overlaid title */}
-        <BlogHero
-          title={post.title}
-          slug={post.slug}
-          publishedAt={publishedDate}
-          readingTimeText={readingTimeText}
-          tags={post.tags}
-          postId={post.id}
+      <SitePage className="gap-14">
+        <PostHead
           initialViewCount={initialViewCount}
-          heroImage={post.heroImage}
+          post={post}
+          publishedAt={publishedDate}
+          readingTimeText={readingTime(post.content).text}
         />
 
-        {/* Main Content - Single column, centered */}
-        <div className="container mx-auto flex flex-col gap-8">
-          <div className="flex justify-end">
-            <ShareButtons url={`/blog/${post.slug}`} title={post.title} />
+        {post.heroImage ? (
+          <div className="relative aspect-12/5 w-full overflow-hidden rounded-4xl bg-surface-secondary shadow-surface">
+            <Image
+              alt=""
+              className="object-cover"
+              fill
+              priority
+              sizes="(max-width: 1180px) 100vw, 1180px"
+              src={post.heroImage}
+            />
           </div>
+        ) : null}
 
-          {/* Table of Contents */}
-          <TableOfContents />
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-14">
+          <article className="flex min-w-0 flex-col gap-7">
+            {lede ? (
+              <Typography.Paragraph className="font-medium text-2xl text-foreground leading-normal">
+                {lede}
+              </Typography.Paragraph>
+            ) : null}
 
-          {/* Excerpt / Executive Summary */}
-          {post.excerpt && (
-            <section>
-              <h2 className="mb-4 font-bold text-foreground/60 text-xs uppercase tracking-widest">
-                Executive Summary
-              </h2>
-              <Card className="border-accent border-l-4 bg-transparent shadow-none">
-                <Card.Content className="py-0 pl-4">
-                  <p className="text-foreground/90 text-lg leading-relaxed md:text-xl">
-                    {post.excerpt}
-                  </p>
-                </Card.Content>
-              </Card>
-            </section>
-          )}
+            <KeyHighlights
+              highlights={post.highlights as Highlight[] | undefined}
+            />
 
-          {/* Key Highlights */}
-          <KeyHighlights
-            highlights={post.highlights as Highlight[] | undefined}
-          />
+            <Article slug={post.slug} content={post.content} />
 
-          {/* Article Content */}
-          <Article slug={post.slug} content={post.content} />
+            <PostNavigation previous={previousPost} next={nextPost} />
+          </article>
 
-          {/* Post Navigation */}
-          <PostNavigation previous={previousPost} next={nextPost} />
-
-          {/* Related Posts */}
-          <RelatedPosts currentPostId={post.id} />
-
-          <Separator className="my-6" />
-          <div className="flex justify-center pb-8">
-            <Link href="/blog" className="no-underline">
-              <Button variant="ghost">
-                <Undo2 className="size-4" />
-                Back to blog
-              </Button>
-            </Link>
-          </div>
+          <PostSidebar post={post} />
         </div>
-      </div>
+
+        <RelatedPosts currentPostId={post.id} />
+      </SitePage>
     </>
   );
 }

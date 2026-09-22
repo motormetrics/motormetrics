@@ -1,5 +1,6 @@
 import type { SelectPost } from "@motormetrics/database/schema";
 import { differenceInDays } from "date-fns";
+import readingTime from "reading-time";
 
 type ChipColor = "default" | "warning" | "accent" | "danger" | "success";
 
@@ -99,11 +100,12 @@ export const getCategoryConfig = (post: SelectPost) => {
   return categoryConfig[post.dataType ?? "default"] || defaultCategory;
 };
 
-// Get reading time from post metadata with default fallback
-export const getReadingTime = (post: SelectPost): number => {
-  const metadata = post.metadata as Record<string, unknown>;
-  return (metadata?.readingTime as number) || 5;
-};
+/**
+ * Minutes to read, counted from the body — the same figure the post head
+ * shows, so a card and the post it opens never disagree.
+ */
+export const getReadingTime = (post: SelectPost): number =>
+  Math.max(1, Math.ceil(readingTime(post.content).minutes));
 
 // Get excerpt from post (top-level field in flattened schema)
 export const getExcerpt = (post: SelectPost): string | undefined => {

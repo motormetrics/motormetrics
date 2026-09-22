@@ -1,64 +1,56 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import Link from "next/link";
-
 import { useEffect, useState } from "react";
 
 interface TocItem {
   id: string;
   text: string;
-  level: number;
 }
 
+/**
+ * The comp's "In this post" rail card. The headings are read out of the
+ * rendered article, so the list cannot fall out of step with it, and the ids
+ * are the ones `rehype-slug` gave the headings.
+ */
 export function TableOfContents() {
   const [headings, setHeadings] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
-  // Extract headings from the article on mount
   useEffect(() => {
     const article = document.querySelector("article");
     if (!article) return;
 
-    const elements = article.querySelectorAll("h2");
-    const items: TocItem[] = Array.from(elements)
-      .filter((el) => el.id) // Only include elements with IDs
-      .map((el) => ({
-        id: el.id,
-        text: el.textContent || "",
-        level: 2,
-      }));
+    const items: TocItem[] = Array.from(article.querySelectorAll("h2"))
+      .filter((el) => el.id)
+      .map((el) => ({ id: el.id, text: el.textContent || "" }));
 
     setHeadings(items);
 
-    // Set initial active heading
     if (items.length > 0) {
       setActiveId(items[0].id);
     }
   }, []);
 
-  // Track scroll position and update active heading
   useEffect(() => {
     if (headings.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const visibleEntries = entries.filter((entry) => entry.isIntersecting);
-        if (visibleEntries.length > 0) {
-          const topEntry = visibleEntries.reduce(
+        const visible = entries.filter((entry) => entry.isIntersecting);
+        if (visible.length > 0) {
+          const top = visible.reduce(
             (prev, current) =>
               prev.boundingClientRect.top < current.boundingClientRect.top
                 ? prev
                 : current,
-            visibleEntries[0],
+            visible[0],
           );
-          setActiveId(topEntry.target.id);
+          setActiveId(top.target.id);
         }
       },
-      {
-        rootMargin: "-80px 0px -80% 0px",
-        threshold: 0,
-      },
+      { rootMargin: "-80px 0px -80% 0px", threshold: 0 },
     );
 
     for (const { id } of headings) {
@@ -76,44 +68,42 @@ export function TableOfContents() {
   }
 
   return (
-    <nav className="border-foreground border-b-2 pb-6">
-      <div className="mb-4 font-bold text-foreground/60 text-xs uppercase tracking-widest">
-        In This Report
-      </div>
-      <div className="flex flex-wrap gap-x-6 gap-y-2">
-        {headings.map((heading, idx) => (
-          <Link
-            key={heading.id}
-            href={`#${heading.id}`}
-            onClick={(e) => {
-              e.preventDefault();
-              const element = document.getElementById(heading.id);
-              if (element) {
-                element.scrollIntoView({ behavior: "smooth" });
-                setActiveId(heading.id);
-              }
-            }}
-            className={cn(
-              "group flex items-center gap-2 font-bold text-sm underline-offset-4 hover:underline",
-              activeId === heading.id
-                ? "text-foreground"
-                : "text-foreground hover:text-foreground",
-            )}
-          >
-            <span
-              className={cn(
-                "text-xs transition-opacity",
-                activeId === heading.id
-                  ? "text-accent-strong"
-                  : "text-accent-strong/60 group-hover:text-accent-strong",
-              )}
-            >
-              {String(idx + 1).padStart(2, "0")}
-            </span>
-            <span>{heading.text}</span>
-          </Link>
-        ))}
-      </div>
+    <nav
+      aria-label="In this post"
+      className="flex flex-col gap-3.5 rounded-2xl bg-surface-secondary p-7"
+    >
+      <Typography.Heading level={4} className="text-base">
+        In this post
+      </Typography.Heading>
+      <ol className="flex flex-col gap-0.5">
+        {headings.map((heading) => {
+          const active = activeId === heading.id;
+
+          return (
+            <li key={heading.id}>
+              <Link
+                aria-current={active ? "location" : undefined}
+                className={cn(
+                  "block rounded-lg px-3 py-2 text-sm no-underline transition-colors",
+                  active
+                    ? "bg-surface font-bold text-foreground"
+                    : "font-semibold text-muted hover:bg-surface hover:text-foreground",
+                )}
+                href={`#${heading.id}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  document
+                    .getElementById(heading.id)
+                    ?.scrollIntoView({ behavior: "smooth" });
+                  setActiveId(heading.id);
+                }}
+              >
+                {heading.text}
+              </Link>
+            </li>
+          );
+        })}
+      </ol>
     </nav>
   );
 }
