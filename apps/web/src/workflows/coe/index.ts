@@ -1,18 +1,9 @@
-import { generateBlogContent } from "@motormetrics/ai/generate-post";
-import { getCoeForMonth } from "@motormetrics/ai/queries";
 import { redis } from "@motormetrics/utils/redis";
-import { tokeniser } from "@motormetrics/utils/tokeniser";
 import { getCoeMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";
-import { getExistingPostByMonth } from "@web/queries/posts";
 import { updateCoe } from "@web/workflows/coe/steps/process-data";
-import {
-  emitEvent,
-  generatePostHero,
-  handleAIError,
-  revalidatePostsCache,
-} from "@web/workflows/shared";
+import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
 import { fetch } from "workflow";
 
@@ -83,50 +74,8 @@ export async function coeWorkflow(
     data: { month, year },
   });
 
-  const existingPost = await checkExistingCoePost(month);
-  if (existingPost) {
-    return {
-      message:
-        "[COE] Data processed. Post already exists, skipping social media.",
-    };
-  }
-
-  await emitEvent({ type: "step:start", step: "generateCoePost" });
-  const coeData = await fetchCoeData(month);
-  const post = await generateCoePost(coeData, month);
-  await emitEvent({
-    type: "post:generated",
-    step: "generateCoePost",
-    data: { postId: post.postId },
-  });
-
-  await emitEvent({ type: "step:start", step: "generateCoeHero" });
-  try {
-    await generatePostHero({
-      postId: post.postId,
-      title: post.title,
-      excerpt: post.excerpt,
-      dataType: post.dataType,
-    });
-    await emitEvent({
-      type: "step:complete",
-      step: "generateCoeHero",
-      data: { postId: post.postId },
-    });
-  } catch (error) {
-    console.error("[COE] Hero image generation failed after retries:", error);
-    await emitEvent({
-      type: "step:complete",
-      step: "generateCoeHero",
-      data: { postId: post.postId, heroGenerated: false },
-    });
-  }
-
-  await revalidatePostsCache();
-
   return {
     message: "[COE] Data processed and cache revalidated successfully",
-    postId: post.postId,
   };
 }
 
@@ -157,34 +106,5 @@ async function revalidateCoeCache(month: string, year: string): Promise<void> {
   const tags = getCoeMonthlyRevalidationTags(month, year);
   for (const tag of tags) {
     revalidateTag(tag, "max");
-  }
-}
-
-async function checkExistingCoePost(
-  month: string,
-): Promise<{ id: string } | null> {
-  "use step";
-
-  const [existingPost] = await getExistingPostByMonth(month, "coe");
-  return existingPost ?? null;
-}
-
-async function fetchCoeData(month: string) {
-  "use step";
-  return getCoeForMonth(month);
-}
-
-async function generateCoePost(
-  coeData: Awaited<ReturnType<typeof getCoeForMonth>>,
-  month: string,
-) {
-  "use step";
-
-  const data = tokeniser(coeData);
-
-  try {
-    return await generateBlogContent({ data, month, dataType: "coe" });
-  } catch (error) {
-    handleAIError(error);
   }
 }

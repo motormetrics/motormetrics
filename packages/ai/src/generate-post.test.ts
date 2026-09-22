@@ -1,29 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const {
-  codeInterpreterMock,
   gatewayMock,
   getGenerationInfoMock,
   generateTextMock,
-  isStepCountMock,
   outputObjectMock,
   savePostMock,
 } = vi.hoisted(() => ({
-  codeInterpreterMock: vi.fn(),
   gatewayMock: vi.fn(),
   getGenerationInfoMock: vi.fn(),
   generateTextMock: vi.fn(),
-  isStepCountMock: vi.fn(),
   outputObjectMock: vi.fn(),
   savePostMock: vi.fn(),
-}));
-
-vi.mock("@ai-sdk/openai", () => ({
-  openai: {
-    tools: {
-      codeInterpreter: codeInterpreterMock,
-    },
-  },
 }));
 
 vi.mock("ai", () => ({
@@ -31,7 +19,6 @@ vi.mock("ai", () => ({
     getGenerationInfo: getGenerationInfoMock,
   }),
   generateText: generateTextMock,
-  isStepCount: isStepCountMock,
   Output: { object: outputObjectMock },
 }));
 
@@ -44,17 +31,23 @@ describe("blog generation model configuration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     gatewayMock.mockReturnValue("gateway-language-model");
-    codeInterpreterMock.mockReturnValue("code-interpreter-tool");
     outputObjectMock.mockReturnValue("structured-output");
-    isStepCountMock.mockReturnValue("step-limit");
     getGenerationInfoMock.mockResolvedValue({ totalCost: 0.0042 });
     generateTextMock.mockResolvedValue({
       output: {
         title: "July registration trends",
         excerpt: "A monthly market summary.",
-        content: "## Market overview",
+        lead: "Registrations fell to 4,007 in July.",
+        sections: [
+          {
+            categories: ["cars"],
+            heading: "Registrations fell",
+            body: "4,007 cars were registered in July.",
+            charts: [],
+            highlights: [],
+          },
+        ],
         tags: ["Cars"],
-        highlights: [],
       },
       usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
       finalStep: {
@@ -63,7 +56,7 @@ describe("blog generation model configuration", () => {
         },
         response: {
           id: "response-1",
-          modelId: "gpt-5.6-luna",
+          modelId: "gemini-2.5-flash",
           timestamp: new Date("2026-08-08T00:00:00Z"),
         },
       },
@@ -78,25 +71,24 @@ describe("blog generation model configuration", () => {
     });
   });
 
-  it("uses Luna through Gateway with max reasoning and Code Interpreter", async () => {
+  it("should generate structured output in one toolless call", async () => {
     await generateBlogContent({
       data: "make|count\nToyota|100",
       month: "2026-07",
       dataType: "cars",
     });
 
-    expect(gatewayMock).toHaveBeenCalledWith("openai/gpt-5.6-luna");
-    expect(codeInterpreterMock).toHaveBeenCalledWith({});
+    expect(gatewayMock).toHaveBeenCalledWith("google/gemini-2.5-flash");
     expect(outputObjectMock).toHaveBeenCalledWith({ schema: postSchema });
-    expect(isStepCountMock).toHaveBeenCalledWith(10);
+    expect(generateTextMock).toHaveBeenCalledTimes(1);
     expect(generateTextMock).toHaveBeenCalledWith(
       expect.objectContaining({
         model: "gateway-language-model",
-        tools: { code_interpreter: "code-interpreter-tool" },
         output: "structured-output",
-        stopWhen: "step-limit",
         providerOptions: {
-          openai: { reasoningEffort: "max", reasoningSummary: null },
+          google: {
+            thinkingConfig: { thinkingBudget: 8192, includeThoughts: false },
+          },
         },
         telemetry: expect.objectContaining({
           functionId: "post-generation/cars",
@@ -108,9 +100,14 @@ describe("blog generation model configuration", () => {
         },
       }),
     );
+    // Gemini refuses tools alongside a JSON response format, and there is
+    // nothing left for a tool to do now figures are precomputed in SQL.
+    const [request] = generateTextMock.mock.calls[0];
+    expect(request).not.toHaveProperty("tools");
+    expect(request).not.toHaveProperty("stopWhen");
   });
 
-  it("persists the Gateway model, usage, generation ID, and exact cost", async () => {
+  it("should persist the Gateway model, usage, generation ID, and exact cost", async () => {
     await generateBlogContent({
       data: "category|premium\nA|100000",
       month: "2026-07",
@@ -122,16 +119,20 @@ describe("blog generation model configuration", () => {
         responseMetadata: expect.objectContaining({
           generationId: "generation-1",
           responseId: "response-1",
-          modelId: "gpt-5.6-luna",
+          modelId: "gemini-2.5-flash",
           totalCost: 0.0042,
-          usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
+          usage: expect.objectContaining({
+            inputTokens: 100,
+            outputTokens: 50,
+            totalTokens: 150,
+          }),
         }),
       }),
     );
     expect(getGenerationInfoMock).toHaveBeenCalledWith({ id: "generation-1" });
   });
 
-  it("sums Gateway costs across every distinct step generation ID", async () => {
+  it("should sum Gateway costs across every distinct step generation ID", async () => {
     getGenerationInfoMock
       .mockResolvedValueOnce({ totalCost: 0.001 })
       .mockResolvedValueOnce({ totalCost: 0.003 });
@@ -139,9 +140,17 @@ describe("blog generation model configuration", () => {
       output: {
         title: "July registration trends",
         excerpt: "A monthly market summary.",
-        content: "## Market overview",
+        lead: "Registrations fell to 4,007 in July.",
+        sections: [
+          {
+            categories: ["cars"],
+            heading: "Registrations fell",
+            body: "4,007 cars were registered in July.",
+            charts: [],
+            highlights: [],
+          },
+        ],
         tags: ["Cars"],
-        highlights: [],
       },
       usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
       finalStep: {
@@ -150,7 +159,7 @@ describe("blog generation model configuration", () => {
         },
         response: {
           id: "response-1",
-          modelId: "gpt-5.6-luna",
+          modelId: "gemini-2.5-flash",
           timestamp: new Date("2026-08-08T00:00:00Z"),
         },
       },
@@ -176,6 +185,8 @@ describe("blog generation model configuration", () => {
       dataType: "cars",
     });
 
+    // generation-final appears both as a step and at the top level, so it is
+    // billed once, not twice.
     expect(getGenerationInfoMock).toHaveBeenCalledTimes(2);
     expect(getGenerationInfoMock).toHaveBeenCalledWith({
       id: "generation-tool",
@@ -193,7 +204,7 @@ describe("blog generation model configuration", () => {
     );
   });
 
-  it("still saves the post when Gateway cost lookup fails", async () => {
+  it("should still save the post when Gateway cost lookup fails", async () => {
     getGenerationInfoMock.mockRejectedValueOnce(
       new Error("Report unavailable"),
     );
@@ -224,7 +235,7 @@ describe("blog generation model configuration", () => {
     consoleError.mockRestore();
   });
 
-  it("omits totalCost when any multi-step Gateway cost lookup fails", async () => {
+  it("should omit totalCost when any multi-step Gateway cost lookup fails", async () => {
     getGenerationInfoMock
       .mockResolvedValueOnce({ totalCost: 0.001 })
       .mockRejectedValueOnce(new Error("Report unavailable"));
@@ -232,9 +243,17 @@ describe("blog generation model configuration", () => {
       output: {
         title: "July registration trends",
         excerpt: "A monthly market summary.",
-        content: "## Market overview",
+        lead: "Registrations fell to 4,007 in July.",
+        sections: [
+          {
+            categories: ["cars"],
+            heading: "Registrations fell",
+            body: "4,007 cars were registered in July.",
+            charts: [],
+            highlights: [],
+          },
+        ],
         tags: ["Cars"],
-        highlights: [],
       },
       usage: { inputTokens: 100, outputTokens: 50, totalTokens: 150 },
       finalStep: {
@@ -243,7 +262,7 @@ describe("blog generation model configuration", () => {
         },
         response: {
           id: "response-1",
-          modelId: "gpt-5.6-luna",
+          modelId: "gemini-2.5-flash",
           timestamp: new Date("2026-08-08T00:00:00Z"),
         },
       },

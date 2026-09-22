@@ -14,6 +14,8 @@ vi.mock("@motormetrics/ai/generate-post", () => ({
 vi.mock("@motormetrics/ai/queries", () => ({
   getCarsAggregatedByMonth: vi.fn(),
   getCoeForMonth: vi.fn(),
+  getPriorMonthsCarsSummary: vi.fn(),
+  getPriorMonthsCoeSummary: vi.fn(),
 }));
 
 vi.mock("@motormetrics/ai/save-post", () => ({
@@ -55,6 +57,8 @@ import { regenerateBlogContent } from "@motormetrics/ai/generate-post";
 import {
   getCarsAggregatedByMonth,
   getCoeForMonth,
+  getPriorMonthsCarsSummary,
+  getPriorMonthsCoeSummary,
 } from "@motormetrics/ai/queries";
 import { updatePostHeroImage } from "@motormetrics/ai/save-post";
 import { regeneratePostWorkflow } from "@web/workflows/regenerate-post";
@@ -62,6 +66,8 @@ import { revalidatePostsCache } from "@web/workflows/shared";
 
 describe("regeneratePostWorkflow", () => {
   beforeEach(() => {
+    vi.mocked(getPriorMonthsCarsSummary).mockResolvedValue([]);
+    vi.mocked(getPriorMonthsCoeSummary).mockResolvedValue([]);
     vi.clearAllMocks();
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});

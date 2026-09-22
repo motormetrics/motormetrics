@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "@ai-sdk/gateway": "catalog:",
-    "@ai-sdk/openai": "catalog:",
     "@motormetrics/database": "workspace:*",
     "@motormetrics/utils": "workspace:*",
     "@vercel/blob": "2.8.0",

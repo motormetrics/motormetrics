@@ -33,12 +33,14 @@ export const config: VercelConfig = {
       schedule: "0 10 1 * *",
     },
     {
-      path: "/api/workflows/electric-vehicles",
-      schedule: "30 10 * * *",
-    },
-    {
       path: "/api/workflows/ev-charging",
       schedule: "0 10 * * *",
+    },
+    {
+      // After every ingest above: reads what they wrote and publishes the
+      // month's single update once all four datasets have the month.
+      path: "/api/workflows/monthly-update",
+      schedule: "30 11 * * *",
     },
     {
       // After the cars run so newly registered makes are in the database.

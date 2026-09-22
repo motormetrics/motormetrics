@@ -1,5 +1,17 @@
+export const MONTHLY_UPDATE_TAGS = [
+  "Monthly Update",
+  "Cars",
+  "COE",
+  "PQP",
+  "Deregistrations",
+  "Electric Vehicles",
+  "Registrations",
+  "Market Trends",
+] as const;
+
 export const CARS_TAGS = [
   "Cars",
+  "Electric Vehicles",
   "Registrations",
   "Fuel Types",
   "Vehicle Types",
@@ -29,7 +41,17 @@ export const EV_TAGS = [
   "Market Trends",
 ] as const;
 
+export const PQP_TAGS = [
+  "PQP",
+  "COE",
+  "COE Renewal",
+  "Quota Premium",
+  "Monthly Update",
+] as const;
+
+export type MonthlyUpdateTag = (typeof MONTHLY_UPDATE_TAGS)[number];
 export type CarsTag = (typeof CARS_TAGS)[number];
 export type CoeTag = (typeof COE_TAGS)[number];
 export type DeregistrationTag = (typeof DEREGISTRATION_TAGS)[number];
 export type EvTag = (typeof EV_TAGS)[number];
+export type PqpTag = (typeof PQP_TAGS)[number];

@@ -1,5 +1,5 @@
 import { WORKFLOW_REGION } from "@web/config/workflow";
-import { electricVehiclesWorkflow } from "@web/workflows/electric-vehicles";
+import { monthlyUpdateWorkflow } from "@web/workflows/monthly-update";
 import { start } from "workflow/api";
 
 export async function GET(request: Request) {
@@ -8,9 +8,7 @@ export async function GET(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const run = await start(electricVehiclesWorkflow, {
-    region: WORKFLOW_REGION,
-  });
+  const run = await start(monthlyUpdateWorkflow, { region: WORKFLOW_REGION });
 
   return Response.json(
     { message: "Workflow started", runId: run.runId },

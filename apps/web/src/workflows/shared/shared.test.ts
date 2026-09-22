@@ -224,8 +224,10 @@ describe("handleAIError", () => {
       handleAIError(new Error("ignored"));
     } catch (e) {
       expect(e).toBeInstanceOf(MockFatalError);
+      // The provider's own message rides along: a bare "AI authentication
+      // failed" took four probes to trace back to a free-tier 403.
       expect((e as InstanceType<typeof MockFatalError>).message).toBe(
-        "AI authentication failed",
+        "AI authentication failed — boom",
       );
     }
 

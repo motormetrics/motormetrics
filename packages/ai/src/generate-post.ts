@@ -1,12 +1,10 @@
-import { openai } from "@ai-sdk/openai";
-import {
-  gateway,
-  generateText,
-  isStepCount,
-  type LanguageModelUsage,
-  Output,
-} from "ai";
+import { gateway, generateText, type LanguageModelUsage, Output } from "ai";
 import { type BlogGenerationParams, INSTRUCTIONS, PROMPTS } from "./config";
+import {
+  collectCategories,
+  collectHighlights,
+  renderPostContent,
+} from "./render-post";
 import { savePost } from "./save-post";
 import { type GeneratedPost, postSchema } from "./schemas";
 
@@ -19,7 +17,13 @@ export interface GenerateAndSaveResult {
   title: string;
   slug: string;
   excerpt: string;
-  dataType: "cars" | "coe" | "deregistrations" | "electric-vehicles";
+  dataType:
+    | "cars"
+    | "coe"
+    | "deregistrations"
+    | "electric-vehicles"
+    | "pqp"
+    | "monthly-update";
 }
 
 /**
@@ -39,7 +43,21 @@ export interface GenerateBlogContentResult {
 
 /**
  * Internal: AI content generation.
- * Uses a single call with both code execution (tools) and structured output for accuracy and type-safety.
+ *
+ * One call, structured output, no tools. Code execution used to be here so the
+ * model could compute totals and shares, but it computed them wrong: both
+ * gpt-5-mini and gpt-5.2 reported 4,001 registrations for a month whose rows
+ * sum to 4,007, and quoted a make's all-fuel count inside a BEV section. Every
+ * headline figure now arrives pre-computed from SQL (see
+ * getMonthlyComputedFigures), so the model quotes rather than derives.
+ *
+ * That is also why this is a single call. Gemini refuses tools alongside a
+ * JSON response format ("Tool use with a response mime type:
+ * 'application/json' is unsupported"), which previously forced a draft call
+ * carrying the tools and a second call to reshape the draft into the schema.
+ * With no tools left to carry, the draft call bought nothing and cost a second
+ * round trip, a second set of tokens, and one more chance for a figure to be
+ * restated wrong.
  */
 async function generateContent(
   options: BlogGenerationParams,
@@ -49,29 +67,22 @@ async function generateContent(
   console.log(`[GENERATE] ${dataType} blog generation started...`);
 
   const result = await generateText({
-    model: gateway("openai/gpt-5.6-luna"),
-    tools: {
-      code_interpreter: openai.tools.codeInterpreter({}),
-    },
+    model: gateway("google/gemini-2.5-flash"),
     output: Output.object({
       schema: postSchema,
     }),
-    stopWhen: isStepCount(10),
     instructions: INSTRUCTIONS[dataType],
     prompt: `Generate a blog post for ${dataType.toUpperCase()} data from ${month}:\n\n${data}\n\n${PROMPTS[dataType]}`,
     providerOptions: {
-      openai: {
-        reasoningEffort: "max",
-        reasoningSummary: null,
+      google: {
+        // Gemini 2.5's equivalent of reasoningEffort. thinkingLevel is 3.x+
+        // only, which the free tier cannot reach. 0 disables thinking.
+        thinkingConfig: { thinkingBudget: 8192, includeThoughts: false },
       },
     },
     telemetry: {
       functionId: `post-generation/${dataType}`,
-      includeRuntimeContext: {
-        month: true,
-        dataType: true,
-        tags: true,
-      },
+      includeRuntimeContext: { month: true, dataType: true, tags: true },
     },
     runtimeContext: {
       month,
@@ -81,9 +92,7 @@ async function generateContent(
   });
 
   console.log(`[GENERATE] ${dataType} blog generation completed`);
-  console.log(`[GENERATE] Steps: ${result.steps?.length ?? 0}`);
   console.log(`[GENERATE] Finish reason: ${result.finishReason}`);
-  console.log(`[GENERATE] Tool calls: ${result.toolCalls?.length ?? 0}`);
 
   const { output, usage, finalStep, steps } = result;
   const { response } = finalStep;
@@ -185,11 +194,11 @@ async function saveGeneratedPost(
 
   const post = await savePost({
     title: output.title,
-    content: output.content,
+    content: renderPostContent(output),
     excerpt: output.excerpt,
     heroImage: null,
     tags: output.tags,
-    highlights: output.highlights,
+    highlights: collectHighlights(output),
     month,
     dataType,
     responseMetadata: {
@@ -199,6 +208,8 @@ async function saveGeneratedPost(
       timestamp: response.timestamp,
       totalCost: response.totalCost,
       usage,
+      sections: output.sections,
+      categories: collectCategories(output.sections),
     },
   });
 

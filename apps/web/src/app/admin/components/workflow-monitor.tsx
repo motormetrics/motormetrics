@@ -25,14 +25,14 @@ const WORKFLOW_TYPES: WorkflowType[] = [
     description: "Vehicle population data",
   },
   {
+    id: "monthly-update",
+    name: "Monthly Update",
+    description: "The month's single post across all datasets",
+  },
+  {
     id: "car-population",
     name: "Car Population",
     description: "Car population breakdown",
-  },
-  {
-    id: "electric-vehicles",
-    name: "Electric Vehicles",
-    description: "Electric vehicle registrations",
   },
 ];
 

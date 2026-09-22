@@ -1,18 +1,9 @@
-import { generateBlogContent } from "@motormetrics/ai/generate-post";
-import { getDeregistrationsForMonth } from "@motormetrics/ai/queries";
 import { redis } from "@motormetrics/utils/redis";
-import { tokeniser } from "@motormetrics/utils/tokeniser";
 import { getDeregistrationsMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getDeregistrationsLatestMonth } from "@web/queries/deregistrations/latest-month";
-import { getExistingPostByMonth } from "@web/queries/posts";
 import { updateDeregistration } from "@web/workflows/deregistrations/steps/process-data";
-import {
-  emitEvent,
-  generatePostHero,
-  handleAIError,
-  revalidatePostsCache,
-} from "@web/workflows/shared";
+import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
 import { fetch } from "workflow";
 
@@ -64,57 +55,9 @@ export async function deregistrationsWorkflow(
     data: { month: latestMonth },
   });
 
-  const existingPost = await checkExistingDeregistrationsPost(latestMonth);
-  if (existingPost) {
-    return {
-      message:
-        "[DEREGISTRATIONS] Data processed. Post already exists, skipping.",
-    };
-  }
-
-  await emitEvent({ type: "step:start", step: "generateDeregistrationsPost" });
-  const deregistrationsData = await fetchDeregistrationsData(latestMonth);
-  const post = await generateDeregistrationsPost(
-    deregistrationsData,
-    latestMonth,
-  );
-  await emitEvent({
-    type: "post:generated",
-    step: "generateDeregistrationsPost",
-    data: { postId: post.postId },
-  });
-
-  await emitEvent({ type: "step:start", step: "generateDeregistrationsHero" });
-  try {
-    await generatePostHero({
-      postId: post.postId,
-      title: post.title,
-      excerpt: post.excerpt,
-      dataType: post.dataType,
-    });
-    await emitEvent({
-      type: "step:complete",
-      step: "generateDeregistrationsHero",
-      data: { postId: post.postId },
-    });
-  } catch (error) {
-    console.error(
-      "[DEREGISTRATIONS] Hero image generation failed after retries:",
-      error,
-    );
-    await emitEvent({
-      type: "step:complete",
-      step: "generateDeregistrationsHero",
-      data: { postId: post.postId, heroGenerated: false },
-    });
-  }
-
-  await revalidatePostsCache();
-
   return {
     message:
       "[DEREGISTRATIONS] Data processed and cache revalidated successfully",
-    postId: post.postId,
   };
 }
 
@@ -142,38 +85,5 @@ async function revalidateDeregistrationsCache(month: string): Promise<void> {
   const tags = getDeregistrationsMonthlyRevalidationTags(month);
   for (const tag of tags) {
     revalidateTag(tag, "max");
-  }
-}
-
-async function checkExistingDeregistrationsPost(
-  month: string,
-): Promise<{ id: string } | null> {
-  "use step";
-
-  const [existingPost] = await getExistingPostByMonth(month, "deregistrations");
-  return existingPost ?? null;
-}
-
-async function fetchDeregistrationsData(month: string) {
-  "use step";
-  return getDeregistrationsForMonth(month);
-}
-
-async function generateDeregistrationsPost(
-  deregistrationsData: Awaited<ReturnType<typeof getDeregistrationsForMonth>>,
-  month: string,
-) {
-  "use step";
-
-  const data = tokeniser(deregistrationsData);
-
-  try {
-    return await generateBlogContent({
-      data,
-      month,
-      dataType: "deregistrations",
-    });
-  } catch (error) {
-    handleAIError(error);
   }
 }

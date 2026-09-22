@@ -34,13 +34,6 @@ vi.mock("@motormetrics/utils/slugify", () => ({
   slugify: vi.fn((value: string) => value.toLowerCase().replaceAll(" ", "-")),
 }));
 
-vi.mock("@web/lib/cache-tags/posts", () => ({
-  getPostPublishRevalidationTags: vi.fn((slug: string) => [
-    "posts:list",
-    `posts:${slug}`,
-  ]),
-}));
-
 vi.mock("next/cache", () => ({ revalidateTag: vi.fn() }));
 
 function createWriteChain(returnedRows: unknown[]) {
@@ -71,7 +64,7 @@ describe("post embedding writes", () => {
     vi.mocked(generateDocumentEmbedding).mockResolvedValue([0.1, 0.2]);
   });
 
-  it("stores a V2 document embedding after creating a post", async () => {
+  it("should store a V2 document embedding after creating a post", async () => {
     const insertChain = createWriteChain([post]);
     const embeddingChain = createWriteChain([]);
     vi.mocked(db.insert).mockReturnValue(insertChain as never);
@@ -96,9 +89,13 @@ describe("post embedding writes", () => {
       embedding: [0.1, 0.2],
     });
     expect(revalidateTag).toHaveBeenCalledWith("posts:list", "max");
+    expect(revalidateTag).toHaveBeenCalledWith(
+      "posts:slug:updated-title",
+      "max",
+    );
   });
 
-  it("stores a V2 document embedding after updating a post", async () => {
+  it("should store a V2 document embedding after updating a post", async () => {
     const contentChain = createWriteChain([post]);
     const embeddingChain = createWriteChain([]);
     vi.mocked(db.query.posts.findFirst).mockResolvedValue({
@@ -128,11 +125,19 @@ describe("post embedding writes", () => {
     expect(embeddingChain.set).toHaveBeenCalledWith({
       embedding: [0.1, 0.2],
     });
-    expect(revalidateTag).toHaveBeenCalledWith("posts:old-title", "max");
-    expect(revalidateTag).toHaveBeenCalledWith("posts:updated-title", "max");
+    expect(revalidateTag).toHaveBeenCalledWith("posts:slug:old-title", "max");
+    // The slug is frozen after creation, so retitling must not invalidate a
+    // tag for a slug derived from the new title — that tag would only exist
+    // if the URL had moved, which is the bug this guards. The tag strings come
+    // from the real getPostPublishRevalidationTags, so this fails if the tag
+    // format drifts rather than asserting against a mock's own invention.
+    expect(revalidateTag).not.toHaveBeenCalledWith(
+      "posts:slug:updated-title",
+      "max",
+    );
   });
 
-  it("keeps post creation available when embedding generation fails", async () => {
+  it("should keep post creation available when embedding generation fails", async () => {
     const insertChain = createWriteChain([post]);
     vi.mocked(db.insert).mockReturnValue(insertChain as never);
     vi.mocked(generateDocumentEmbedding).mockRejectedValue(

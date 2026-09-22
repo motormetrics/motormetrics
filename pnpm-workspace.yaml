@@ -20,7 +20,6 @@ allowBuilds:
 
 catalog:
   "@ai-sdk/gateway": 4.0.46
-  "@ai-sdk/openai": 4.0.36
   "@better-auth/drizzle-adapter": 1.7.2
   "@heroui/react": 3.2.4
   "@heroui/styles": 3.2.4

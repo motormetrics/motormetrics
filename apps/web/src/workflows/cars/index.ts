@@ -1,18 +1,9 @@
-import { generateBlogContent } from "@motormetrics/ai/generate-post";
-import { getCarsAggregatedByMonth } from "@motormetrics/ai/queries";
 import { redis } from "@motormetrics/utils/redis";
-import { tokeniser } from "@motormetrics/utils/tokeniser";
 import { getCarsMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
-import { getExistingPostByMonth } from "@web/queries/posts";
 import { updateCars } from "@web/workflows/cars/steps/process-data";
-import {
-  emitEvent,
-  generatePostHero,
-  handleAIError,
-  revalidatePostsCache,
-} from "@web/workflows/shared";
+import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
 import { fetch } from "workflow";
 
@@ -64,50 +55,8 @@ export async function carsWorkflow(
     data: { month },
   });
 
-  const existingPost = await checkExistingCarsPost(month);
-  if (existingPost) {
-    return {
-      message:
-        "[CARS] Data processed. Post already exists, skipping social media.",
-    };
-  }
-
-  await emitEvent({ type: "step:start", step: "generateCarsPost" });
-  const carsData = await fetchCarsData(month);
-  const post = await generateCarsPost(carsData, month);
-  await emitEvent({
-    type: "post:generated",
-    step: "generateCarsPost",
-    data: { postId: post.postId },
-  });
-
-  await emitEvent({ type: "step:start", step: "generateCarsHero" });
-  try {
-    await generatePostHero({
-      postId: post.postId,
-      title: post.title,
-      excerpt: post.excerpt,
-      dataType: post.dataType,
-    });
-    await emitEvent({
-      type: "step:complete",
-      step: "generateCarsHero",
-      data: { postId: post.postId },
-    });
-  } catch (error) {
-    console.error("[CARS] Hero image generation failed after retries:", error);
-    await emitEvent({
-      type: "step:complete",
-      step: "generateCarsHero",
-      data: { postId: post.postId, heroGenerated: false },
-    });
-  }
-
-  await revalidatePostsCache();
-
   return {
     message: "[CARS] Data processed and cache revalidated successfully",
-    postId: post.postId,
   };
 }
 
@@ -134,34 +83,5 @@ async function revalidateCarsCache(month: string): Promise<void> {
   const tags = getCarsMonthlyRevalidationTags(month);
   for (const tag of tags) {
     revalidateTag(tag, "max");
-  }
-}
-
-async function checkExistingCarsPost(
-  month: string,
-): Promise<{ id: string } | null> {
-  "use step";
-
-  const [existingPost] = await getExistingPostByMonth(month, "cars");
-  return existingPost ?? null;
-}
-
-async function fetchCarsData(month: string) {
-  "use step";
-  return getCarsAggregatedByMonth(month);
-}
-
-async function generateCarsPost(
-  carsData: Awaited<ReturnType<typeof getCarsAggregatedByMonth>>,
-  month: string,
-) {
-  "use step";
-
-  const data = tokeniser(carsData);
-
-  try {
-    return await generateBlogContent({ data, month, dataType: "cars" });
-  } catch (error) {
-    handleAIError(error);
   }
 }
