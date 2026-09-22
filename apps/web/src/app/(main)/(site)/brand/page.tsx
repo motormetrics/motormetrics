@@ -30,6 +30,9 @@ const HOST_DARK = "#16181A";
 /* Browser chrome behind the favicon specimen. Cream's next step down, so the
    tab shape reads against the white figure ground. */
 const TAB_CHROME = "#EDEAE1";
+/* The edge the code tile carries, so it keeps a silhouette on the page
+   ground it shares. Light-mode value of --separator. */
+const SEPARATOR = "#E5E1D5";
 
 const MARK_FILE = "/brand/motormetrics-mark.svg";
 
@@ -311,10 +314,14 @@ export default function BrandPage() {
           as arches floating free. And the 50% inset that keeps every crop safe
           leaves too little stroke at favicon scale — at a 16px frame the arches
           are 8px wide on a 1.2px stroke, which is a smudge. Below 32px, set the
-          free-standing arches in code instead. In the product itself the nav
-          and footer keep drawing the arches inline, where the code can pick ink
-          or white — code can branch on theme, a file cannot. Radius stays at
-          23% of the frame — 12px at 52px, 7px at 30px.
+          free-standing arches in code instead. The product follows the same
+          shape: the nav, the footer and the share cards draw the tile in code
+          rather than loading the file, so the arches can take ink or white as
+          the theme requires. Because those surfaces are cream themselves, the
+          code tile carries a 1px {SEPARATOR} edge to hold its silhouette; the
+          file needs no edge, since it only ever lands on a host surface that is
+          not cream. Radius stays at 23% of the frame — 12px at 52px, 7px at
+          30px.
         </Typography.Paragraph>
       </section>
 

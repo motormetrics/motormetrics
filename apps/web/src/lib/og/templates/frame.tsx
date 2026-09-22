@@ -13,8 +13,10 @@ interface FrameProps {
 /**
  * Cream full-bleed card with the shared MotorMetrics footer.
  *
- * Every share card in the design comp ends with the same row: accent circle
- * with a trending-up mark, the wordmark, and a right-aligned label.
+ * Every share card in the design comp ends with the same row: the mark in
+ * its cream tile, the wordmark, and a right-aligned label. The tile keeps
+ * the house geometry — 23% radius and arches at 69% of the frame — and
+ * carries an edge because the card ground is cream too.
  */
 export function Frame({
   height,
@@ -54,25 +56,33 @@ export function Frame({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: 46,
-            height: 46,
-            borderRadius: "50%",
-            backgroundColor: OG_COLOURS.accent,
+            width: 64,
+            height: 64,
+            borderRadius: 15,
+            backgroundColor: OG_COLOURS.background,
+            border: `2px solid ${OG_COLOURS.rule}`,
+            boxSizing: "border-box",
           }}
         >
           <svg
             role="img"
             aria-label="MotorMetrics"
-            width="23"
-            height="23"
+            width="44"
+            height="44"
             viewBox="0 0 64 64"
             fill="none"
-            stroke="#FFFFFF"
             strokeWidth="7"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d="M8 50 V30 a12 12 0 0 1 24 0 V50 M32 50 V30 a12 12 0 0 1 24 0 V50" />
+            <path
+              d="M8 50 V30 a12 12 0 0 1 24 0 V50"
+              stroke={OG_COLOURS.inkDeep}
+            />
+            <path
+              d="M32 50 V30 a12 12 0 0 1 24 0 V50"
+              stroke={OG_COLOURS.accent}
+            />
           </svg>
         </div>
         <div

@@ -1,5 +1,5 @@
 import { Typography } from "@heroui/react";
-import { LogoMark, Wordmark } from "@web/components/brand-logo";
+import { LogoTile, Wordmark } from "@web/components/brand-logo";
 import { SITE_TITLE } from "@web/config";
 import {
   FOOTER_NAV_ITEMS,
@@ -23,12 +23,7 @@ export function Footer({
         className="flex items-center gap-3 text-foreground"
         href="/"
       >
-        <LogoMark
-          first="currentColor"
-          second="var(--accent)"
-          size={20}
-          strokeWidth={8}
-        />
+        <LogoTile size={30} strokeWidth={8} />
         <Wordmark
           className="text-[15px]"
           first="currentColor"

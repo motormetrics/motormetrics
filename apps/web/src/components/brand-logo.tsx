@@ -57,6 +57,41 @@ export function LogoMark({
 }
 
 /**
+ * The mark in its house squircle — the same shape the icon files carry,
+ * drawn in code rather than loaded so the arches can take ink or white as
+ * the theme requires. The nav and footer sit on the page ground, which the
+ * tile also uses, so a separator-width edge holds the silhouette; the file
+ * needs no edge, since it only ever lands on a surface that is not cream.
+ * Radius is 23% of the frame and the arches 69% of it — 12px and 36px at
+ * 52px, 7px and 21px at 30px, 15px and 44px at the 64px share-card size.
+ */
+export function LogoTile({
+  size,
+  strokeWidth,
+}: {
+  size: number;
+  strokeWidth?: number;
+}) {
+  return (
+    <span
+      className="inline-flex shrink-0 items-center justify-center border border-separator bg-background"
+      style={{
+        borderRadius: Math.round(size * 0.23),
+        height: size,
+        width: size,
+      }}
+    >
+      <LogoMark
+        first="currentColor"
+        second="var(--accent)"
+        size={Math.round(size * 0.69)}
+        strokeWidth={strokeWidth}
+      />
+    </span>
+  );
+}
+
+/**
  * The wordmark is a graphic: always lowercase, Urbanist 800, tracking
  * -0.03em, with "metrics" in the accent. Colours are fixed for the same
  * reason as the mark; `mono` drops the split for accent grounds.

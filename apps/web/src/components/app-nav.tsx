@@ -3,7 +3,7 @@
 import type { Key } from "@heroui/react";
 import { Button, cn, Dropdown, Header, Label } from "@heroui/react";
 import { Navbar } from "@heroui-pro/react";
-import { LogoMark, Wordmark } from "@web/components/brand-logo";
+import { LogoTile, Wordmark } from "@web/components/brand-logo";
 import { BetaChip, NewChip } from "@web/components/shared/chips";
 import {
   MORE_NAV_ITEMS,
@@ -141,7 +141,7 @@ export function AppNav({
             className="flex shrink-0 items-center gap-3 text-foreground no-underline"
             href="/"
           >
-            <LogoMark first="currentColor" second="var(--accent)" size={40} />
+            <LogoTile size={52} />
             <Wordmark
               className="hidden text-2xl lg:inline"
               first="currentColor"
