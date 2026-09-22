@@ -71,7 +71,7 @@ describe("blog generation model configuration", () => {
     });
   });
 
-  it("generates structured output in one toolless call", async () => {
+  it("should generate structured output in one toolless call", async () => {
     await generateBlogContent({
       data: "make|count\nToyota|100",
       month: "2026-07",
@@ -107,7 +107,7 @@ describe("blog generation model configuration", () => {
     expect(request).not.toHaveProperty("stopWhen");
   });
 
-  it("persists the Gateway model, usage, generation ID, and exact cost", async () => {
+  it("should persist the Gateway model, usage, generation ID, and exact cost", async () => {
     await generateBlogContent({
       data: "category|premium\nA|100000",
       month: "2026-07",
@@ -132,7 +132,7 @@ describe("blog generation model configuration", () => {
     expect(getGenerationInfoMock).toHaveBeenCalledWith({ id: "generation-1" });
   });
 
-  it("sums Gateway costs across every distinct step generation ID", async () => {
+  it("should sum Gateway costs across every distinct step generation ID", async () => {
     getGenerationInfoMock
       .mockResolvedValueOnce({ totalCost: 0.001 })
       .mockResolvedValueOnce({ totalCost: 0.003 });
@@ -204,7 +204,7 @@ describe("blog generation model configuration", () => {
     );
   });
 
-  it("still saves the post when Gateway cost lookup fails", async () => {
+  it("should still save the post when Gateway cost lookup fails", async () => {
     getGenerationInfoMock.mockRejectedValueOnce(
       new Error("Report unavailable"),
     );
@@ -235,7 +235,7 @@ describe("blog generation model configuration", () => {
     consoleError.mockRestore();
   });
 
-  it("omits totalCost when any multi-step Gateway cost lookup fails", async () => {
+  it("should omit totalCost when any multi-step Gateway cost lookup fails", async () => {
     getGenerationInfoMock
       .mockResolvedValueOnce({ totalCost: 0.001 })
       .mockRejectedValueOnce(new Error("Report unavailable"));
