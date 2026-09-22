@@ -1,3 +1,22 @@
+## [5.23.0](https://github.com/motormetrics/motormetrics/compare/v5.22.0...v5.23.0) (2026-09-22)
+
+### Features
+
+* **ai:** generate posts as structured sections ([83de0ee](https://github.com/motormetrics/motormetrics/commit/83de0eef15dbcf7eac81a2b5caaee8edefe43306))
+* **ai:** generate posts with Gemini 2.5 Flash ([88c3ab6](https://github.com/motormetrics/motormetrics/commit/88c3ab6464647090d99ba7c3d49d6c10c16ccacb))
+* **ai:** rewrite blog prompts as stat-led briefs ([535adcb](https://github.com/motormetrics/motormetrics/commit/535adcb2a542778a24294888a2261d98337d1db9))
+* **database:** add post kind and evergreen upsert path ([38355c6](https://github.com/motormetrics/motormetrics/commit/38355c62fc3970b30ea8e251863eab88b552c2f8))
+* **database:** generate the post kind migration ([973ec52](https://github.com/motormetrics/motormetrics/commit/973ec521b792cfd69edf524c590f67ee94f5d5a0))
+* **web:** publish one monthly update instead of four posts ([9ffd1fd](https://github.com/motormetrics/motormetrics/commit/9ffd1fdcf89fc12269276582315203906a6950d7))
+* **web:** render chart blocks in blog posts ([69d0352](https://github.com/motormetrics/motormetrics/commit/69d0352118eb275465eea0e37fd47c4790d86b5a))
+* **web:** retire the electric-vehicles post workflow ([b7c43f8](https://github.com/motormetrics/motormetrics/commit/b7c43f83d853d8dbf10fcc7fb2963274d732c0a3))
+
+### Bug Fixes
+
+* **web:** categorise posts from one source ([b56a2dc](https://github.com/motormetrics/motormetrics/commit/b56a2dc0c2590b7c014cf9f763fc1d6b222912ea))
+* **web:** keep post slugs stable across admin edits ([94b9edc](https://github.com/motormetrics/motormetrics/commit/94b9edc919624425d7a2e93df38dbe7c7a8b7d9e))
+* **web:** render chart fences with a stray control character ([debac1e](https://github.com/motormetrics/motormetrics/commit/debac1e69e65ee76dfea601abc10ffe300b55352))
+
 ## [5.22.0](https://github.com/motormetrics/motormetrics/compare/v5.21.12...v5.22.0) (2026-09-21)
 
 ### Features
