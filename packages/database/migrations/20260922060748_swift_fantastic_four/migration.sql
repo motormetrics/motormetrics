@@ -1,0 +1,1 @@
+ALTER TABLE "posts" ADD COLUMN "kind" text DEFAULT 'monthly' NOT NULL;
