@@ -16,6 +16,7 @@
     "test:watch": "vitest",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:e2e": "playwright test",
+    "playwright:install": "playwright install --with-deps --only-shell chromium",
     "test:e2e:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit",
     "auth:generate": "pnpm dlx auth@rc generate --config ./src/app/admin/lib/auth.ts --output ../../packages/database/src/schema/auth.ts --yes",

@@ -226,7 +226,7 @@ Test descriptions start with "should" (`it("should render title and children")`,
 Vitest runs two projects: `unit` (`*.test.ts`, Node) and `browser` (`*.test.tsx`, Vitest Browser Mode in
 headless Chromium). Component tests use `render` from `vitest-browser-react` and assert with
 `await expect.element(locator)`; `@testing-library/react` and jsdom are not used. Run
-`pnpm exec playwright install chromium` once before running the browser project locally.
+`pnpm turbo run @motormetrics/web#playwright:install` once before running the browser project locally.
 
 ### Environment Configuration
 

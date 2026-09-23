@@ -56,7 +56,7 @@ jobs:
         run: pnpm ci
 
       - name: Install Playwright Chromium
-        run: pnpm --filter @motormetrics/web exec playwright install --with-deps --only-shell chromium
+        run: pnpm turbo run @motormetrics/web#playwright:install
 
       - name: Run tests with coverage
         run: pnpm test

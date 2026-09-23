@@ -48,7 +48,7 @@ jobs:
           team: ${{ vars.TURBO_TEAM }}
 
       - name: Install Playwright Chromium
-        run: pnpm --filter @motormetrics/web exec playwright install --with-deps --only-shell chromium
+        run: pnpm turbo run @motormetrics/web#playwright:install
 
       # Parallel steps (GitHub Actions, 2026-06-25): one checkout + install, then
       # lint, typecheck and test run concurrently.
