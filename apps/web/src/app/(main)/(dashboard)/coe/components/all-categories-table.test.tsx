@@ -1,6 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { render } from "vitest-browser-react";
 import type { CategoryRow } from "./all-categories-sort";
 import { AllCategoriesTable } from "./all-categories-table";
 
@@ -65,47 +64,53 @@ const rows: CategoryRow[] = [
   },
 ];
 
-const rowLabels = () =>
+type TableScreen = Awaited<ReturnType<typeof renderTable>>;
+
+const rowLabels = (screen: TableScreen) =>
   screen
-    .getAllByRole("button", { name: /^Show / })
+    .getByRole("button", { name: /^Show / })
+    .elements()
     .map((row) => row.getAttribute("aria-label"));
 
 const renderTable = () =>
   render(<AllCategoriesTable rows={rows} selected="A" />);
 
 describe("AllCategoriesTable", () => {
-  it("should open on the highest premium first", () => {
-    renderTable();
+  it("should open on the highest premium first", async () => {
+    const screen = await renderTable();
 
-    expect(rowLabels()).toEqual([
+    expect(rowLabels(screen)).toEqual([
       "Show Category E",
       "Show Category B",
       "Show Category A",
       "Show Category C",
       "Show Category D",
     ]);
-    expect(
-      screen.getByRole("columnheader", { name: "Premium" }),
-    ).toHaveAttribute("aria-sort", "descending");
-    expect(screen.getByText(/Sorted by premium, descending/)).toBeVisible();
+    await expect
+      .element(screen.getByRole("columnheader", { name: "Premium" }))
+      .toHaveAttribute("aria-sort", "descending");
+    await expect
+      .element(screen.getByText(/Sorted by premium, descending/))
+      .toBeVisible();
   });
 
   it("should re-sort when a header is pressed", async () => {
-    const user = userEvent.setup();
-    renderTable();
+    const screen = await renderTable();
 
-    await user.click(screen.getByRole("columnheader", { name: "Category" }));
+    await screen.getByRole("columnheader", { name: "Category" }).click();
 
-    expect(rowLabels()).toEqual([
+    await expect
+      .element(screen.getByRole("columnheader", { name: "Category" }))
+      .toHaveAttribute("aria-sort", "ascending");
+    expect(rowLabels(screen)).toEqual([
       "Show Category A",
       "Show Category B",
       "Show Category C",
       "Show Category D",
       "Show Category E",
     ]);
-    expect(
-      screen.getByRole("columnheader", { name: "Category" }),
-    ).toHaveAttribute("aria-sort", "ascending");
-    expect(screen.getByText(/Sorted by category, ascending/)).toBeVisible();
+    await expect
+      .element(screen.getByText(/Sorted by category, ascending/))
+      .toBeVisible();
   });
 });

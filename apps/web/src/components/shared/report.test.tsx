@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render } from "vitest-browser-react";
 import {
   Report,
   ReportEyebrow,
@@ -9,57 +9,59 @@ import {
 } from "./report";
 
 describe("Report", () => {
-  it("should render its children in the report column", () => {
-    const { container, getByText } = render(
+  it("should render its children in the report column", async () => {
+    const screen = await render(
       <Report>
         <p>Section</p>
       </Report>,
     );
 
-    expect(getByText("Section")).toBeInTheDocument();
-    expect(container.querySelector(".gap-8")).toBeInTheDocument();
+    await expect.element(screen.getByText("Section")).toBeInTheDocument();
+    expect(screen.container.querySelector(".gap-8")).toBeInTheDocument();
   });
 
-  it("should merge a caller class name", () => {
-    const { container } = render(
+  it("should merge a caller class name", async () => {
+    const screen = await render(
       <Report className="pb-16">
         <p>Section</p>
       </Report>,
     );
 
-    expect(container.querySelector(".pb-16")).toBeInTheDocument();
+    expect(screen.container.querySelector(".pb-16")).toBeInTheDocument();
   });
 });
 
 describe("ReportEyebrow", () => {
-  it("should render its label", () => {
-    const { getByText } = render(<ReportEyebrow>Fuel type</ReportEyebrow>);
-    expect(getByText("Fuel type")).toBeInTheDocument();
+  it("should render its label", async () => {
+    const screen = await render(<ReportEyebrow>Fuel type</ReportEyebrow>);
+    await expect.element(screen.getByText("Fuel type")).toBeInTheDocument();
   });
 
-  it("should merge a caller class name", () => {
-    const { getByText } = render(
+  it("should merge a caller class name", async () => {
+    const screen = await render(
       <ReportEyebrow className="text-accent">Fuel type</ReportEyebrow>,
     );
-    expect(getByText("Fuel type")).toHaveClass("text-accent");
+    await expect
+      .element(screen.getByText("Fuel type"))
+      .toHaveClass("text-accent");
   });
 });
 
 describe("ReportFilterBar", () => {
-  it("should render the label and the controls passed in", () => {
-    const { getByText, queryByText } = render(
+  it("should render the label and the controls passed in", async () => {
+    const screen = await render(
       <ReportFilterBar label="Fuel type">
         <button type="button">Petrol</button>
       </ReportFilterBar>,
     );
 
-    expect(getByText("Fuel type")).toBeInTheDocument();
-    expect(getByText("Petrol")).toBeInTheDocument();
-    expect(queryByText("Range")).not.toBeInTheDocument();
+    await expect.element(screen.getByText("Fuel type")).toBeInTheDocument();
+    await expect.element(screen.getByText("Petrol")).toBeInTheDocument();
+    await expect.element(screen.getByText("Range")).not.toBeInTheDocument();
   });
 
-  it("should render a trailing control with its own label", () => {
-    const { getByText } = render(
+  it("should render a trailing control with its own label", async () => {
+    const screen = await render(
       <ReportFilterBar
         className="mt-4"
         label="Fuel type"
@@ -70,12 +72,12 @@ describe("ReportFilterBar", () => {
       </ReportFilterBar>,
     );
 
-    expect(getByText("Range")).toBeInTheDocument();
-    expect(getByText("12 months")).toBeInTheDocument();
+    await expect.element(screen.getByText("Range")).toBeInTheDocument();
+    await expect.element(screen.getByText("12 months")).toBeInTheDocument();
   });
 
-  it("should render a trailing control without a label", () => {
-    const { getByText, queryByText } = render(
+  it("should render a trailing control without a label", async () => {
+    const screen = await render(
       <ReportFilterBar
         label="Fuel type"
         trailing={<button type="button">12 months</button>}
@@ -84,24 +86,26 @@ describe("ReportFilterBar", () => {
       </ReportFilterBar>,
     );
 
-    expect(getByText("12 months")).toBeInTheDocument();
-    expect(queryByText("Range")).not.toBeInTheDocument();
+    await expect.element(screen.getByText("12 months")).toBeInTheDocument();
+    await expect.element(screen.getByText("Range")).not.toBeInTheDocument();
   });
 });
 
 describe("ReportHeadline", () => {
-  it("should render the label and figure alone", () => {
-    const { getByText, queryByText } = render(
+  it("should render the label and figure alone", async () => {
+    const screen = await render(
       <ReportHeadline label="Registrations" value="4,321" />,
     );
 
-    expect(getByText("Registrations")).toBeInTheDocument();
-    expect(getByText("4,321")).toBeInTheDocument();
-    expect(queryByText("vs last month")).not.toBeInTheDocument();
+    await expect.element(screen.getByText("Registrations")).toBeInTheDocument();
+    await expect.element(screen.getByText("4,321")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("vs last month"))
+      .not.toBeInTheDocument();
   });
 
-  it("should render the delta, sub-label and stat cells", () => {
-    const { getByText } = render(
+  it("should render the delta, sub-label and stat cells", async () => {
+    const screen = await render(
       <ReportHeadline
         className="mb-4"
         delta={<span>+12.3%</span>}
@@ -112,47 +116,53 @@ describe("ReportHeadline", () => {
       />,
     );
 
-    expect(getByText("+12.3%")).toBeInTheDocument();
-    expect(getByText("vs last month")).toBeInTheDocument();
-    expect(getByText("Share")).toBeInTheDocument();
+    await expect.element(screen.getByText("+12.3%")).toBeInTheDocument();
+    await expect.element(screen.getByText("vs last month")).toBeInTheDocument();
+    await expect.element(screen.getByText("Share")).toBeInTheDocument();
   });
 });
 
 describe("ReportStat", () => {
-  it("should render a cell without a note", () => {
-    const { getByText, queryByText } = render(
-      <ReportStat label="Share" value="18.4%" />,
-    );
+  it("should render a cell without a note", async () => {
+    const screen = await render(<ReportStat label="Share" value="18.4%" />);
 
-    expect(getByText("Share")).toBeInTheDocument();
-    expect(getByText("18.4%")).toBeInTheDocument();
-    expect(queryByText("of all registrations")).not.toBeInTheDocument();
+    await expect.element(screen.getByText("Share")).toBeInTheDocument();
+    await expect.element(screen.getByText("18.4%")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("of all registrations"))
+      .not.toBeInTheDocument();
   });
 
-  it("should render a cell with a note", () => {
-    const { getByText } = render(
+  it("should render a cell with a note", async () => {
+    const screen = await render(
       <ReportStat label="Share" note="of all registrations" value="18.4%" />,
     );
 
-    expect(getByText("of all registrations")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("of all registrations"))
+      .toBeInTheDocument();
   });
 });
 
 describe("ReportSection", () => {
-  it("should render a titled block without a caption", () => {
-    const { getByRole, getByText, queryByText } = render(
+  it("should render a titled block without a caption", async () => {
+    const screen = await render(
       <ReportSection title="By fuel type">
         <p>Table</p>
       </ReportSection>,
     );
 
-    expect(getByRole("heading", { name: "By fuel type" })).toBeInTheDocument();
-    expect(getByText("Table")).toBeInTheDocument();
-    expect(queryByText("Year to date")).not.toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("heading", { name: "By fuel type" }))
+      .toBeInTheDocument();
+    await expect.element(screen.getByText("Table")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Year to date"))
+      .not.toBeInTheDocument();
   });
 
-  it("should render a caption beside the title", () => {
-    const { getByText } = render(
+  it("should render a caption beside the title", async () => {
+    const screen = await render(
       <ReportSection
         caption="Year to date"
         className="mt-8"
@@ -162,6 +172,6 @@ describe("ReportSection", () => {
       </ReportSection>,
     );
 
-    expect(getByText("Year to date")).toBeInTheDocument();
+    await expect.element(screen.getByText("Year to date")).toBeInTheDocument();
   });
 });

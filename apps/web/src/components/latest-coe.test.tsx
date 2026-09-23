@@ -1,7 +1,7 @@
-import { render, screen } from "@testing-library/react";
 import type { CoeMonthlyPremium } from "@web/queries/coe";
 import type { COECategory, COEResult } from "@web/types";
 import type React from "react";
+import { render } from "vitest-browser-react";
 import { LatestCoePremium } from "./coe/latest-coe-premium";
 
 vi.mock("@heroui-pro/react/kpi", async (importOriginal) => {
@@ -48,23 +48,23 @@ describe("LatestCoe", () => {
     },
   ];
 
-  it("should render all COE results", () => {
-    const { container } = render(<LatestCoePremium results={mockResults} />);
+  it("should render all COE results", async () => {
+    const screen = await render(<LatestCoePremium results={mockResults} />);
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByText("Category A")).toBeInTheDocument();
-    expect(screen.getByText("Category B")).toBeInTheDocument();
-    expect(screen.getByText("95000")).toBeInTheDocument();
-    expect(screen.getByText("105000")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByText("Category A")).toBeInTheDocument();
+    await expect.element(screen.getByText("Category B")).toBeInTheDocument();
+    await expect.element(screen.getByText("95000")).toBeInTheDocument();
+    await expect.element(screen.getByText("105000")).toBeInTheDocument();
   });
 
-  it("should render with empty results", () => {
-    const { container } = render(<LatestCoePremium results={[]} />);
+  it("should render with empty results", async () => {
+    const screen = await render(<LatestCoePremium results={[]} />);
 
-    expect(container).toBeEmptyDOMElement();
+    expect(screen.container).toBeEmptyDOMElement();
   });
 
-  it("should render sparklines when trends data is provided", () => {
+  it("should render sparklines when trends data is provided", async () => {
     const mockTrends: Record<COECategory, CoeMonthlyPremium[]> = {
       "Category A": [
         { month: "2024-01", premium: 90000, biddingNo: 1 },
@@ -79,20 +79,22 @@ describe("LatestCoe", () => {
       "Category E": [],
     };
 
-    render(<LatestCoePremium results={mockResults} trends={mockTrends} />);
+    const screen = await render(
+      <LatestCoePremium results={mockResults} trends={mockTrends} />,
+    );
 
-    const sparklines = screen.getAllByTestId("sparkline");
-    expect(sparklines).toHaveLength(2);
+    const sparklines = screen.getByTestId("sparkline");
+    expect(sparklines.elements()).toHaveLength(2);
   });
 
-  it("should not render sparklines when trends data is not provided", () => {
-    render(<LatestCoePremium results={mockResults} />);
+  it("should not render sparklines when trends data is not provided", async () => {
+    const screen = await render(<LatestCoePremium results={mockResults} />);
 
-    const sparklines = screen.queryAllByTestId("sparkline");
-    expect(sparklines).toHaveLength(0);
+    const sparklines = screen.getByTestId("sparkline");
+    expect(sparklines.elements()).toHaveLength(0);
   });
 
-  it("should use danger colour when premium trend goes up", () => {
+  it("should use danger colour when premium trend goes up", async () => {
     const trends: Record<COECategory, CoeMonthlyPremium[]> = {
       "Category A": [
         { month: "2024-01", premium: 90000, biddingNo: 1 },
@@ -104,15 +106,16 @@ describe("LatestCoe", () => {
       "Category E": [],
     };
 
-    render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
-
-    expect(screen.getByTestId("sparkline")).toHaveAttribute(
-      "data-colour",
-      "var(--danger)",
+    const screen = await render(
+      <LatestCoePremium results={[mockResults[0]]} trends={trends} />,
     );
+
+    await expect
+      .element(screen.getByTestId("sparkline"))
+      .toHaveAttribute("data-colour", "var(--danger)");
   });
 
-  it("should use success colour when premium trend goes down", () => {
+  it("should use success colour when premium trend goes down", async () => {
     const trends: Record<COECategory, CoeMonthlyPremium[]> = {
       "Category A": [
         { month: "2024-01", premium: 95000, biddingNo: 1 },
@@ -124,15 +127,16 @@ describe("LatestCoe", () => {
       "Category E": [],
     };
 
-    render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
-
-    expect(screen.getByTestId("sparkline")).toHaveAttribute(
-      "data-colour",
-      "var(--success)",
+    const screen = await render(
+      <LatestCoePremium results={[mockResults[0]]} trends={trends} />,
     );
+
+    await expect
+      .element(screen.getByTestId("sparkline"))
+      .toHaveAttribute("data-colour", "var(--success)");
   });
 
-  it("should use warning colour when premium trend is neutral", () => {
+  it("should use warning colour when premium trend is neutral", async () => {
     const trends: Record<COECategory, CoeMonthlyPremium[]> = {
       "Category A": [
         { month: "2024-01", premium: 90000, biddingNo: 1 },
@@ -144,15 +148,16 @@ describe("LatestCoe", () => {
       "Category E": [],
     };
 
-    render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
-
-    expect(screen.getByTestId("sparkline")).toHaveAttribute(
-      "data-colour",
-      "var(--warning)",
+    const screen = await render(
+      <LatestCoePremium results={[mockResults[0]]} trends={trends} />,
     );
+
+    await expect
+      .element(screen.getByTestId("sparkline"))
+      .toHaveAttribute("data-colour", "var(--warning)");
   });
 
-  it("should use primary colour when there is only one premium point", () => {
+  it("should use primary colour when there is only one premium point", async () => {
     const trends: Record<COECategory, CoeMonthlyPremium[]> = {
       "Category A": [{ month: "2024-01", premium: 90000, biddingNo: 1 }],
       "Category B": [],
@@ -161,11 +166,12 @@ describe("LatestCoe", () => {
       "Category E": [],
     };
 
-    render(<LatestCoePremium results={[mockResults[0]]} trends={trends} />);
-
-    expect(screen.getByTestId("sparkline")).toHaveAttribute(
-      "data-colour",
-      "var(--accent)",
+    const screen = await render(
+      <LatestCoePremium results={[mockResults[0]]} trends={trends} />,
     );
+
+    await expect
+      .element(screen.getByTestId("sparkline"))
+      .toHaveAttribute("data-colour", "var(--accent)");
   });
 });

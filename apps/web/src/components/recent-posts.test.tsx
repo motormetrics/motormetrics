@@ -1,6 +1,6 @@
 import type { SelectPost } from "@motormetrics/database/schema";
-import { render, screen } from "@testing-library/react";
 import { RecentPosts } from "@web/app/(main)/(dashboard)/components/recent-posts";
+import { render } from "vitest-browser-react";
 
 vi.mock("@heroui/react", async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
@@ -113,64 +113,71 @@ describe("RecentPosts", () => {
     },
   ];
 
-  it("should render title and view all link", () => {
-    const { container } = render(<RecentPosts posts={mockPosts} />);
+  it("should render title and view all link", async () => {
+    const screen = await render(<RecentPosts posts={mockPosts} />);
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByText("Recent Posts")).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: "View all blog posts" }),
-    ).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByText("Recent Posts")).toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("link", { name: "View all blog posts" }))
+      .toBeInTheDocument();
   });
 
-  it("should render all posts", () => {
-    render(<RecentPosts posts={mockPosts} />);
+  it("should render all posts", async () => {
+    const screen = await render(<RecentPosts posts={mockPosts} />);
 
-    expect(screen.getByText("First Post")).toBeInTheDocument();
-    expect(screen.getByText("Second Post")).toBeInTheDocument();
+    await expect.element(screen.getByText("First Post")).toBeInTheDocument();
+    await expect.element(screen.getByText("Second Post")).toBeInTheDocument();
   });
 
-  it("should render published date when available", () => {
-    render(<RecentPosts posts={mockPosts} />);
+  it("should render published date when available", async () => {
+    const screen = await render(<RecentPosts posts={mockPosts} />);
 
-    expect(screen.getByText("15 Jan 2024")).toBeInTheDocument();
+    await expect.element(screen.getByText("15 Jan 2024")).toBeInTheDocument();
   });
 
-  it("should use createdAt when publishedAt is null", () => {
-    render(<RecentPosts posts={mockPosts} />);
+  it("should use createdAt when publishedAt is null", async () => {
+    const screen = await render(<RecentPosts posts={mockPosts} />);
 
-    expect(screen.getByText("20 Feb 2024")).toBeInTheDocument();
+    await expect.element(screen.getByText("20 Feb 2024")).toBeInTheDocument();
   });
 
-  it("should render with empty posts", () => {
-    render(<RecentPosts posts={[]} />);
+  it("should render with empty posts", async () => {
+    const screen = await render(<RecentPosts posts={[]} />);
 
-    expect(screen.getByText("Recent Posts")).toBeInTheDocument();
-    expect(screen.getByText("No recent posts available.")).toBeInTheDocument();
+    await expect.element(screen.getByText("Recent Posts")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("No recent posts available."))
+      .toBeInTheDocument();
   });
 
-  it("should render correctly with fewer than 3 posts", () => {
+  it("should render correctly with fewer than 3 posts", async () => {
     const singlePost = [mockPosts[0]];
-    render(<RecentPosts posts={singlePost} />);
+    const screen = await render(<RecentPosts posts={singlePost} />);
 
-    expect(screen.getByText("First Post")).toBeInTheDocument();
-    expect(screen.queryByText("Second Post")).not.toBeInTheDocument();
+    await expect.element(screen.getByText("First Post")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Second Post"))
+      .not.toBeInTheDocument();
   });
 
-  it("should have links to blog posts", () => {
-    render(<RecentPosts posts={mockPosts} />);
+  it("should have links to blog posts", async () => {
+    const screen = await render(<RecentPosts posts={mockPosts} />);
 
-    const firstPostLink = screen.getByText("First Post").closest("a");
+    const firstPostLink = screen.getByText("First Post").element().closest("a");
     expect(firstPostLink).toHaveAttribute("href", "/blog/first-post");
 
-    const secondPostLink = screen.getByText("Second Post").closest("a");
+    const secondPostLink = screen
+      .getByText("Second Post")
+      .element()
+      .closest("a");
     expect(secondPostLink).toHaveAttribute("href", "/blog/second-post");
   });
 
-  it("should have link to blog page", () => {
-    render(<RecentPosts posts={mockPosts} />);
+  it("should have link to blog page", async () => {
+    const screen = await render(<RecentPosts posts={mockPosts} />);
 
     const link = screen.getByRole("link", { name: "View all blog posts" });
-    expect(link).toHaveAttribute("href", "/blog");
+    await expect.element(link).toHaveAttribute("href", "/blog");
   });
 });

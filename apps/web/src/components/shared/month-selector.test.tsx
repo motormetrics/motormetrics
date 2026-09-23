@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing";
+import { render } from "vitest-browser-react";
 import { MonthSelector } from "./month-selector";
 
 const wrapper = withNuqsTestingAdapter({
@@ -47,24 +47,26 @@ vi.mock("@web/utils/group-by-year", () => ({
 }));
 
 describe("MonthSelector", () => {
-  it("should render with months array", () => {
+  it("should render with months array", async () => {
     const mockMonths = ["2024-01"];
-    const { container } = render(
+    const screen = await render(
       <MonthSelector months={mockMonths} latestMonth="2024-01" />,
       { wrapper },
     );
-    expect(container).toMatchSnapshot();
-    expect(screen.getByRole("combobox")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByRole("combobox")).toBeInTheDocument();
   });
 
-  it("should render with empty months array", () => {
-    render(<MonthSelector months={[]} latestMonth="" />, { wrapper });
-    expect(screen.getByRole("combobox")).toBeInTheDocument();
+  it("should render with empty months array", async () => {
+    const screen = await render(<MonthSelector months={[]} latestMonth="" />, {
+      wrapper,
+    });
+    await expect.element(screen.getByRole("combobox")).toBeInTheDocument();
   });
 
-  it("should render with wasAdjusted prop", () => {
+  it("should render with wasAdjusted prop", async () => {
     const mockMonths = ["2024-01"];
-    render(
+    const screen = await render(
       <MonthSelector
         months={mockMonths}
         latestMonth="2024-01"
@@ -72,6 +74,6 @@ describe("MonthSelector", () => {
       />,
       { wrapper },
     );
-    expect(screen.getByRole("combobox")).toBeInTheDocument();
+    await expect.element(screen.getByRole("combobox")).toBeInTheDocument();
   });
 });

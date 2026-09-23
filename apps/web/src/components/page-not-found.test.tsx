@@ -1,53 +1,62 @@
-import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { render } from "vitest-browser-react";
 import { PageNotFound } from "./page-not-found";
 
 describe("PageNotFound", () => {
-  it("renders the 404 error message", () => {
-    const { container } = render(<PageNotFound />);
+  it("renders the 404 error message", async () => {
+    const screen = await render(<PageNotFound />);
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByText("404")).toBeInTheDocument();
-    expect(screen.getByText("Page Not Found")).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "The page you're looking for doesn't exist or has been moved.",
-      ),
-    ).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByText("404")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Page Not Found"))
+      .toBeInTheDocument();
+    await expect
+      .element(
+        screen.getByText(
+          "The page you're looking for doesn't exist or has been moved.",
+        ),
+      )
+      .toBeInTheDocument();
   });
 
-  it("renders navigation buttons", () => {
-    render(<PageNotFound />);
+  it("renders navigation buttons", async () => {
+    const screen = await render(<PageNotFound />);
 
-    expect(screen.getByText("Go to Homepage")).toBeInTheDocument();
-    expect(screen.getByText("Go Back")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Go to Homepage"))
+      .toBeInTheDocument();
+    await expect.element(screen.getByText("Go Back")).toBeInTheDocument();
   });
 
-  it("should go back when Go Back button is clicked", () => {
+  it("should go back when Go Back button is clicked", async () => {
     const historyBackSpy = vi
       .spyOn(history, "back")
       .mockImplementation(() => {});
-    render(<PageNotFound />);
+    const screen = await render(<PageNotFound />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Go Back" }));
+    await screen.getByRole("button", { name: "Go Back" }).click();
     expect(historyBackSpy).toHaveBeenCalledTimes(1);
 
     historyBackSpy.mockRestore();
   });
 
-  it("renders help text with links", () => {
-    render(<PageNotFound />);
+  it("renders help text with links", async () => {
+    const screen = await render(<PageNotFound />);
 
-    expect(screen.getByText(/Need help\? Visit our/)).toBeInTheDocument();
-    expect(screen.getByText(/or go back to the/)).toBeInTheDocument();
+    await expect
+      .element(screen.getByText(/Need help\? Visit our/))
+      .toBeInTheDocument();
+    await expect
+      .element(screen.getByText(/or go back to the/))
+      .toBeInTheDocument();
   });
 
-  it("has correct link href attributes", () => {
-    render(<PageNotFound />);
+  it("has correct link href attributes", async () => {
+    const screen = await render(<PageNotFound />);
 
-    expect(screen.getByRole("link", { name: /learn page/i })).toHaveAttribute(
-      "href",
-      "/learn",
-    );
+    await expect
+      .element(screen.getByRole("link", { name: /learn page/i }))
+      .toHaveAttribute("href", "/learn");
   });
 });

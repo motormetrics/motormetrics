@@ -1,10 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { ShareColumns } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/share-columns";
 import {
   type OnUrlUpdateFunction,
   withNuqsTestingAdapter,
 } from "nuqs/adapters/testing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { render } from "vitest-browser-react";
 
 const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
 const capture = vi.hoisted(() => vi.fn());
@@ -28,32 +28,30 @@ describe("ShareColumns", () => {
     capture.mockClear();
   });
 
-  it("should mark only the selected month as pressed", () => {
-    render(<ShareColumns columns={columns} selectedMonth="2025-09" />, {
-      wrapper,
-    });
+  it("should mark only the selected month as pressed", async () => {
+    const screen = await render(
+      <ShareColumns columns={columns} selectedMonth="2025-09" />,
+      { wrapper },
+    );
 
-    expect(
-      screen
-        .getByRole("button", { name: "Sep: 28%" })
-        .getAttribute("aria-pressed"),
-    ).toBe("true");
-    expect(
-      screen
-        .getByRole("button", { name: "Oct: 30%" })
-        .getAttribute("aria-pressed"),
-    ).toBe("false");
+    await expect
+      .element(screen.getByRole("button", { name: "Sep: 28%" }))
+      .toHaveAttribute("aria-pressed", "true");
+    await expect
+      .element(screen.getByRole("button", { name: "Oct: 30%" }))
+      .toHaveAttribute("aria-pressed", "false");
   });
 
   it("should move the page to the month behind the column that was clicked", async () => {
-    render(<ShareColumns columns={columns} selectedMonth="2025-10" />, {
-      wrapper,
-    });
+    const screen = await render(
+      <ShareColumns columns={columns} selectedMonth="2025-10" />,
+      { wrapper },
+    );
 
-    fireEvent.click(screen.getByRole("button", { name: "Aug: 24%" }));
+    await screen.getByRole("button", { name: "Aug: 24%" }).click();
 
     // nuqs flushes URL updates asynchronously.
-    await waitFor(() => expect(onUrlUpdate).toHaveBeenCalledOnce());
+    await vi.waitFor(() => expect(onUrlUpdate).toHaveBeenCalledOnce());
     expect(onUrlUpdate.mock.calls[0]?.[0].searchParams.get("month")).toBe(
       "2025-08",
     );

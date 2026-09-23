@@ -1,6 +1,7 @@
-import { renderHook } from "@testing-library/react";
 import type { MaintenanceStatus } from "@web/actions/maintenance";
 import { useRouter, useSearchParams } from "next/navigation";
+import type { MockInstance } from "vitest";
+import { renderHook } from "vitest-browser-react";
 import { useMaintenance } from "./use-maintenance";
 
 // Mock Next.js navigation hooks
@@ -12,7 +13,7 @@ vi.mock("next/navigation", () => ({
 describe("useMaintenance", () => {
   const mockReplace = vi.fn();
   const mockGet = vi.fn();
-  let intervalSpy: any;
+  let intervalSpy: MockInstance<typeof globalThis.setInterval>;
   const createFetcher = (status: MaintenanceStatus) => {
     return async () => ({
       ...status,
@@ -25,13 +26,13 @@ describe("useMaintenance", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    (useRouter as any).mockReturnValue({
+    vi.mocked(useRouter).mockReturnValue({
       replace: mockReplace,
-    });
+    } as unknown as ReturnType<typeof useRouter>);
 
-    (useSearchParams as any).mockReturnValue({
+    vi.mocked(useSearchParams).mockReturnValue({
       get: mockGet,
-    });
+    } as unknown as ReturnType<typeof useSearchParams>);
 
     intervalSpy = vi.spyOn(globalThis, "setInterval");
     vi.spyOn(globalThis, "clearInterval");
@@ -45,7 +46,9 @@ describe("useMaintenance", () => {
     mockGet.mockReturnValue(null);
     const fetchStatus = createFetcher({ enabled: false, message: "" });
 
-    renderHook(() => useMaintenance({ pollingInterval: 1000, fetchStatus }));
+    await renderHook(() =>
+      useMaintenance({ pollingInterval: 1000, fetchStatus }),
+    );
 
     // Wait for the async effect to complete
     await waitForAsyncEffect();
@@ -57,7 +60,9 @@ describe("useMaintenance", () => {
     mockGet.mockReturnValue("/dashboard");
     const fetchStatus = createFetcher({ enabled: false, message: "" });
 
-    renderHook(() => useMaintenance({ pollingInterval: 1000, fetchStatus }));
+    await renderHook(() =>
+      useMaintenance({ pollingInterval: 1000, fetchStatus }),
+    );
 
     await waitForAsyncEffect();
 
@@ -68,7 +73,9 @@ describe("useMaintenance", () => {
     mockGet.mockReturnValue("/dashboard%2Fsettings");
     const fetchStatus = createFetcher({ enabled: false, message: "" });
 
-    renderHook(() => useMaintenance({ pollingInterval: 1000, fetchStatus }));
+    await renderHook(() =>
+      useMaintenance({ pollingInterval: 1000, fetchStatus }),
+    );
 
     await waitForAsyncEffect();
 
@@ -78,36 +85,40 @@ describe("useMaintenance", () => {
   it("should not redirect when in maintenance mode", async () => {
     const fetchStatus = createFetcher({ enabled: true, message: "Active" });
 
-    renderHook(() => useMaintenance({ pollingInterval: 1000, fetchStatus }));
+    await renderHook(() =>
+      useMaintenance({ pollingInterval: 1000, fetchStatus }),
+    );
 
     await waitForAsyncEffect();
 
     expect(mockReplace).not.toHaveBeenCalled();
   });
 
-  it("should set up polling interval with custom interval", () => {
+  it("should set up polling interval with custom interval", async () => {
     const fetchStatus = createFetcher({ enabled: false, message: "" });
 
-    renderHook(() => useMaintenance({ pollingInterval: 2000, fetchStatus }));
+    await renderHook(() =>
+      useMaintenance({ pollingInterval: 2000, fetchStatus }),
+    );
 
     expect(intervalSpy).toHaveBeenCalledWith(expect.any(Function), 2000);
   });
 
-  it("should use default polling interval when not specified", () => {
+  it("should use default polling interval when not specified", async () => {
     const fetchStatus = createFetcher({ enabled: false, message: "" });
 
-    renderHook(() => useMaintenance({ fetchStatus }));
+    await renderHook(() => useMaintenance({ fetchStatus }));
 
     expect(intervalSpy).toHaveBeenCalledWith(expect.any(Function), 30000);
   });
 
-  it("should clear interval on unmount", () => {
+  it("should clear interval on unmount", async () => {
     const fetchStatus = createFetcher({ enabled: false, message: "" });
-    const { unmount } = renderHook(() =>
+    const { unmount } = await renderHook(() =>
       useMaintenance({ pollingInterval: 1000, fetchStatus }),
     );
 
-    unmount();
+    await unmount();
 
     expect(globalThis.clearInterval).toHaveBeenCalled();
   });
@@ -120,7 +131,9 @@ describe("useMaintenance", () => {
       throw new Error("Test error");
     };
 
-    renderHook(() => useMaintenance({ pollingInterval: 1000, fetchStatus }));
+    await renderHook(() =>
+      useMaintenance({ pollingInterval: 1000, fetchStatus }),
+    );
 
     await waitForAsyncEffect(10);
 

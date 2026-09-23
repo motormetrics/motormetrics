@@ -223,6 +223,11 @@ data in `src/lib/og/data.ts`; see the Next.js `opengraph-image` and `twitter-ima
 
 Test descriptions start with "should" (`it("should render title and children")`, not `it("renders …")`).
 
+Vitest runs two projects: `unit` (`*.test.ts`, Node) and `browser` (`*.test.tsx`, Vitest Browser Mode in
+headless Chromium). Component tests use `render` from `vitest-browser-react` and assert with
+`await expect.element(locator)`; `@testing-library/react` and jsdom are not used. Run
+`pnpm turbo run @motormetrics/web#playwright:install` once before running the browser project locally.
+
 ### Environment Configuration
 
 Web-specific variables (see root `AGENTS.md` for the cross-cutting ones):

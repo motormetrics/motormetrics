@@ -16,6 +16,7 @@
     "test:watch": "vitest",
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:e2e": "playwright test",
+    "playwright:install": "playwright install --with-deps --only-shell chromium",
     "test:e2e:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit",
     "auth:generate": "pnpm dlx auth@rc generate --config ./src/app/admin/lib/auth.ts --output ../../packages/database/src/schema/auth.ts --yes",
@@ -97,10 +98,6 @@
     "@tailwindcss/forms": "0.5.11",
     "@tailwindcss/postcss": "catalog:",
     "@tailwindcss/typography": "0.5.19",
-    "@testing-library/dom": "10.4.1",
-    "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "16.3.2",
-    "@testing-library/user-event": "14.6.1",
     "@types/adm-zip": "0.5.8",
     "@types/geojson": "7946.0.16",
     "@types/node": "catalog:",
@@ -108,13 +105,15 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "6.0.1",
+    "@vitest/browser-playwright": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@workflow/vitest": "5.0.0-beta.46",
     "babel-plugin-react-compiler": "1.0.0",
-    "jsdom": "26.1.0",
+    "playwright": "1.60.0",
     "postcss": "8.5.23",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "vitest-browser-react": "2.3.0"
   }
 }

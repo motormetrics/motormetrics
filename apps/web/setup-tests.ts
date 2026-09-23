@@ -1,29 +1,7 @@
-import "@testing-library/jest-dom/vitest";
-import { cleanup } from "@testing-library/react";
-import { afterEach } from "vitest";
 import "./src/queries/test-utils";
 
-// Mock ResizeObserver for Recharts
-global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
-
-Object.defineProperty(window, "matchMedia", {
-  writable: true,
-  value: (query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener() {},
-    removeListener() {},
-    addEventListener() {},
-    removeEventListener() {},
-    dispatchEvent: () => false,
-  }),
-});
-
-afterEach(() => {
-  cleanup();
-});
+// Next.js client modules (next/link, next/navigation) read process.env at
+// import time; the browser project has no `process` global.
+globalThis.process ??= {
+  env: { NODE_ENV: "test" },
+} as unknown as NodeJS.Process;

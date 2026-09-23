@@ -52,6 +52,9 @@
         "vitest.integration.config.ts"
       ]
     },
+    "playwright:install": {
+      "cache": false
+    },
     "test:e2e": {
       "inputs": ["$TURBO_DEFAULT$", "tests/**/*.ts"],
       "outputs": ["test-results/**", "playwright-report/**"]

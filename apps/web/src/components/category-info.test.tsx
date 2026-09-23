@@ -1,7 +1,7 @@
-import { render, screen } from "@testing-library/react";
 import { CategoryInfo } from "@web/app/(main)/(dashboard)/cars/registrations/components/category-info";
 import { Car } from "lucide-react";
 import { vi } from "vitest";
+import { render } from "vitest-browser-react";
 
 describe("CategoryInfo", () => {
   const mockOnToggle = vi.fn();
@@ -10,8 +10,8 @@ describe("CategoryInfo", () => {
     mockOnToggle.mockClear();
   });
 
-  it("should render with required props", () => {
-    const { container } = render(
+  it("should render with required props", async () => {
+    const screen = await render(
       <CategoryInfo
         icon={Car}
         category="Category A"
@@ -21,13 +21,15 @@ describe("CategoryInfo", () => {
       />,
     );
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByText("Category A")).toBeInTheDocument();
-    expect(screen.getByText("Cars up to 1600cc and 97kW")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByText("Category A")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Cars up to 1600cc and 97kW"))
+      .toBeInTheDocument();
   });
 
-  it("should render with canFilter prop", () => {
-    render(
+  it("should render with canFilter prop", async () => {
+    const screen = await render(
       <CategoryInfo
         icon={Car}
         category="Category A"
@@ -38,6 +40,6 @@ describe("CategoryInfo", () => {
       />,
     );
 
-    expect(screen.getByText("Category A")).toBeInTheDocument();
+    await expect.element(screen.getByText("Category A")).toBeInTheDocument();
   });
 });

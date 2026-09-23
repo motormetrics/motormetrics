@@ -1,15 +1,15 @@
-import { render, screen } from "@testing-library/react";
 import { ComingSoon } from "@web/components/coming-soon";
+import { render } from "vitest-browser-react";
 
 describe("ComingSoon", () => {
-  it("should render ComingSoon label", () => {
-    const { container } = render(
+  it("should render ComingSoon label", async () => {
+    const screen = await render(
       <ComingSoon>
         <span>Trends</span>
       </ComingSoon>,
     );
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByText("Coming Soon")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByText("Coming Soon")).toBeInTheDocument();
   });
 });

@@ -1,53 +1,70 @@
-import { render, screen } from "@testing-library/react";
+import type { ReadonlyURLSearchParams } from "next/navigation";
+import type { ReactNode } from "react";
+import { render } from "vitest-browser-react";
 import { LinkWithParams } from "./link-with-params";
 
 vi.mock("next/navigation", () => ({
   useSearchParams: vi.fn(),
 }));
 
-vi.mock("next/link", () => ({
-  default: ({ href, children, ...props }: any) => (
-    <a
-      href={typeof href === "object" ? `${href.pathname}?${href.query}` : href}
-      {...props}
-    >
-      {children}
-    </a>
-  ),
-}));
+interface MockLinkProps {
+  href: string | { pathname: string; query: string };
+  children?: ReactNode;
+}
+
+// next/link is CommonJS whose `module.exports` is the Link component itself, and
+// browser mode resolves its default import to the whole mocked module. Spreading
+// a forwardRef component in keeps the mocked module a valid React element type.
+vi.mock("next/link", async () => {
+  const { forwardRef } = await import("react");
+  const MockLink = forwardRef<HTMLAnchorElement, MockLinkProps>(
+    ({ href, children, ...props }, ref) => (
+      <a
+        ref={ref}
+        href={
+          typeof href === "object" ? `${href.pathname}?${href.query}` : href
+        }
+        {...props}
+      >
+        {children}
+      </a>
+    ),
+  );
+  return { ...MockLink, default: MockLink };
+});
 
 const mockUseSearchParams = vi.mocked(
   await import("next/navigation"),
 ).useSearchParams;
 
 describe("LinkWithParams", () => {
-  it("should render with basic props", () => {
+  it("should render with basic props", async () => {
     mockUseSearchParams.mockReturnValue({
       toString: () => "",
-    } as any);
+    } as unknown as ReadonlyURLSearchParams);
 
-    const { container } = render(
+    const screen = await render(
       <LinkWithParams href="/test">
         <span>Test Link</span>
       </LinkWithParams>,
     );
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByRole("link")).toBeInTheDocument();
-    expect(screen.getByText("Test Link")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByRole("link")).toBeInTheDocument();
+    await expect.element(screen.getByText("Test Link")).toBeInTheDocument();
   });
 
-  it("should render with search params", () => {
+  it("should render with search params", async () => {
     mockUseSearchParams.mockReturnValue({
       toString: () => "foo=bar",
-    } as any);
+    } as unknown as ReadonlyURLSearchParams);
 
-    render(
+    const screen = await render(
       <LinkWithParams href="/test">
         <span>Test Link</span>
       </LinkWithParams>,
     );
 
-    expect(screen.getByRole("link")).toBeInTheDocument();
+    await expect.element(screen.getByRole("link")).toBeInTheDocument();
   });
 });
