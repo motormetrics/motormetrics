@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { Skeleton, Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
 import { TypeChart } from "@web/app/(main)/(dashboard)/cars/components/category/type-chart";
@@ -214,26 +214,16 @@ async function resolveType(
   return (await checkVehicleTypeIfExist(type))?.vehicleType;
 }
 
-export async function TypeDetail({
-  config,
-  params,
-  searchParams,
-}: TypeDetailProps) {
-  const { type } = await params;
-  const value = await resolveType(config.category, type);
-  const terms = CATEGORY_TERMS[config.category];
-
+export function TypeDetail({ config, params, searchParams }: TypeDetailProps) {
   return (
     <Report>
-      <PageHead
-        controls={
-          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-            <TypeDetailHeaderMeta searchParams={searchParams} />
-          </Suspense>
-        }
-        description={`New car registrations recorded against this ${terms.noun}, month by month — not the fleet already on the road.`}
-        title={value ? displayValue(config.category, value) : "Type overview"}
-      />
+      <Suspense fallback={<TypeDetailHeadSkeleton />}>
+        <TypeDetailHead
+          config={config}
+          params={params}
+          searchParams={searchParams}
+        />
+      </Suspense>
 
       <SectionErrorBoundary title="Registration data unavailable">
         <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
@@ -245,6 +235,43 @@ export async function TypeDetail({
         </Suspense>
       </SectionErrorBoundary>
     </Report>
+  );
+}
+
+/** Stands in for `PageHead` while the type name resolves. */
+function TypeDetailHeadSkeleton() {
+  return (
+    <div className="flex flex-wrap items-end gap-6">
+      <div className="flex max-w-prose flex-col gap-2">
+        <Skeleton className="h-12 w-64 rounded-lg" />
+        <Skeleton className="h-5 w-full rounded-lg" />
+      </div>
+      <div className="flex min-w-0 max-w-full flex-wrap items-center gap-3 sm:ml-auto">
+        <Skeleton className="h-10 w-40 rounded-full" />
+      </div>
+    </div>
+  );
+}
+
+async function TypeDetailHead({
+  config,
+  params,
+  searchParams,
+}: TypeDetailProps) {
+  const { type } = await params;
+  const value = await resolveType(config.category, type);
+  const terms = CATEGORY_TERMS[config.category];
+
+  return (
+    <PageHead
+      controls={
+        <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+          <TypeDetailHeaderMeta searchParams={searchParams} />
+        </Suspense>
+      }
+      description={`New car registrations recorded against this ${terms.noun}, month by month — not the fleet already on the road.`}
+      title={value ? displayValue(config.category, value) : "Type overview"}
+    />
   );
 }
 

@@ -1,3 +1,4 @@
+import { Skeleton } from "@heroui/react";
 import { GuideHead } from "@web/app/(main)/(site)/learn/[slug]/components/guide-head";
 import { GuideSidebar } from "@web/app/(main)/(site)/learn/[slug]/components/guide-sidebar";
 import { RelatedGuides } from "@web/app/(main)/(site)/learn/[slug]/components/related-guides";
@@ -14,6 +15,7 @@ import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { Suspense } from "react";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
@@ -111,7 +113,39 @@ async function GuideContent({
   );
 }
 
-export default async function GuidePage({ params }: PageProps) {
+/**
+ * The shell every guide shares. Only `Guide` reads the slug, so the frame and
+ * skeleton stay in the App Shell that Partial Prefetching serves for any link.
+ */
+export default function GuidePage({ params }: PageProps) {
+  return (
+    <SitePage className="gap-14">
+      <Suspense fallback={<GuideSkeleton />}>
+        <Guide params={params} />
+      </Suspense>
+    </SitePage>
+  );
+}
+
+/** Stands in for the guide head and body while the slug resolves. */
+function GuideSkeleton() {
+  return (
+    <>
+      <div className="flex max-w-prose flex-col gap-4">
+        <Skeleton className="h-4 w-32 rounded-lg" />
+        <Skeleton className="h-12 w-full rounded-lg" />
+        <Skeleton className="h-5 w-3/4 rounded-lg" />
+      </div>
+      <div className="flex flex-col gap-4">
+        <Skeleton className="h-6 w-full rounded-lg" />
+        <Skeleton className="h-6 w-5/6 rounded-lg" />
+        <Skeleton className="h-6 w-4/6 rounded-lg" />
+      </div>
+    </>
+  );
+}
+
+async function Guide({ params }: PageProps) {
   const { slug } = await params;
   const guide = getGuideBySlug(slug);
 
@@ -173,16 +207,14 @@ export default async function GuidePage({ params }: PageProps) {
         data={{ "@context": "https://schema.org", ...breadcrumbSchema }}
       />
 
-      <SitePage className="gap-14">
-        <GuideHead guide={guide} />
+      <GuideHead guide={guide} />
 
-        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-14">
-          <GuideContent content={guide.content} slug={guide.slug} />
-          <GuideSidebar guide={guide} />
-        </div>
+      <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-14">
+        <GuideContent content={guide.content} slug={guide.slug} />
+        <GuideSidebar guide={guide} />
+      </div>
 
-        <RelatedGuides guide={guide} />
-      </SitePage>
+      <RelatedGuides guide={guide} />
     </>
   );
 }
