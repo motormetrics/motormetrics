@@ -1,6 +1,6 @@
 import { toast } from "@heroui/react";
-import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { render } from "vitest-browser-react";
 import { NotificationPrompt } from "./notification-prompt";
 
 const capture = vi.hoisted(() => vi.fn());
@@ -56,11 +56,9 @@ function getFirstToastOptions() {
 }
 
 async function renderDelayedPrompt() {
-  const result = render(<NotificationPrompt />);
-  await act(async () => {
-    vi.advanceTimersByTime(2_000);
-  });
-  return result;
+  const screen = await render(<NotificationPrompt />);
+  vi.advanceTimersByTime(2_000);
+  return screen;
 }
 
 describe("NotificationPrompt Component", () => {
@@ -86,9 +84,9 @@ describe("NotificationPrompt Component", () => {
     vi.useRealTimers();
   });
 
-  it("renders nothing directly", () => {
-    const { container } = render(<NotificationPrompt />);
-    expect(container.firstChild).toBeNull();
+  it("renders nothing directly", async () => {
+    const screen = await render(<NotificationPrompt />);
+    expect(screen.container.firstChild).toBeNull();
   });
 
   it("shows a delayed, temporary prompt when permission is undecided", async () => {
@@ -100,15 +98,17 @@ describe("NotificationPrompt Component", () => {
     );
 
     const options = getFirstToastOptions();
-    render(options.description as React.ReactElement);
+    const screen = await render(options.description as React.ReactElement);
 
-    expect(
-      screen.getByText(
-        "Enable browser notifications when new vehicle and COE data is published.",
-      ),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Enable")).toBeInTheDocument();
-    expect(screen.getByText("Not now")).toBeInTheDocument();
+    await expect
+      .element(
+        screen.getByText(
+          "Enable browser notifications when new vehicle and COE data is published.",
+        ),
+      )
+      .toBeInTheDocument();
+    await expect.element(screen.getByText("Enable")).toBeInTheDocument();
+    await expect.element(screen.getByText("Not now")).toBeInTheDocument();
   });
 
   it.each([
@@ -135,27 +135,31 @@ describe("NotificationPrompt Component", () => {
       "granted",
     );
     await renderDelayedPrompt();
-    render(getFirstToastOptions().description as React.ReactElement);
+    const screen = await render(
+      getFirstToastOptions().description as React.ReactElement,
+    );
 
-    await act(async () => {
-      fireEvent.click(screen.getAllByTestId("button")[0]);
-    });
+    await screen.getByTestId("button").nth(0).click();
 
     expect(globalThis.Notification.requestPermission).toHaveBeenCalledOnce();
     expect(capture).toHaveBeenCalledWith("notification_prompt_answered", {
       answer: "enabled",
     });
     expect(toast.close).toHaveBeenCalledWith("notification-toast-id");
-    expect(toast.success).toHaveBeenCalledWith("Notifications enabled", {
-      description: "You will receive an alert when new data is published.",
-    });
+    await vi.waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith("Notifications enabled", {
+        description: "You will receive an alert when new data is published.",
+      }),
+    );
   });
 
   it("dismisses without requesting permission", async () => {
     await renderDelayedPrompt();
-    render(getFirstToastOptions().description as React.ReactElement);
+    const screen = await render(
+      getFirstToastOptions().description as React.ReactElement,
+    );
 
-    fireEvent.click(screen.getAllByTestId("button")[1]);
+    await screen.getByTestId("button").nth(1).click();
 
     expect(globalThis.Notification.requestPermission).not.toHaveBeenCalled();
     expect(capture).toHaveBeenCalledWith("notification_prompt_answered", {
@@ -173,16 +177,18 @@ describe("NotificationPrompt Component", () => {
       "denied",
     );
     await renderDelayedPrompt();
-    render(getFirstToastOptions().description as React.ReactElement);
+    const screen = await render(
+      getFirstToastOptions().description as React.ReactElement,
+    );
 
-    await act(async () => {
-      fireEvent.click(screen.getAllByTestId("button")[0]);
-    });
+    await screen.getByTestId("button").nth(0).click();
 
-    expect(toast.warning).toHaveBeenCalledWith("Notifications remain off", {
-      description:
-        "You can enable browser notifications later from your browser settings.",
-    });
+    await vi.waitFor(() =>
+      expect(toast.warning).toHaveBeenCalledWith("Notifications remain off", {
+        description:
+          "You can enable browser notifications later from your browser settings.",
+      }),
+    );
   });
 
   it("remembers when the toast closes", async () => {

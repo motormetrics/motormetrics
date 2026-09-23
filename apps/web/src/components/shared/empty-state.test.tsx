@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render } from "vitest-browser-react";
 import { EmptyState } from "./empty-state";
 
 vi.mock("motion/react-client", () => ({
@@ -16,92 +16,103 @@ describe("EmptyState", () => {
     vi.clearAllMocks();
   });
 
-  it("should render default title and description", () => {
-    const { container } = render(<EmptyState />);
+  it("should render default title and description", async () => {
+    const screen = await render(<EmptyState />);
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByText("No Data Available")).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "The requested data could not be found. Please try a different selection.",
-      ),
-    ).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect
+      .element(screen.getByText("No Data Available", { exact: true }))
+      .toBeInTheDocument();
+    await expect
+      .element(
+        screen.getByText(
+          "The requested data could not be found. Please try a different selection.",
+          { exact: true },
+        ),
+      )
+      .toBeInTheDocument();
   });
 
-  it("should render default action buttons", () => {
-    render(<EmptyState />);
+  it("should render default action buttons", async () => {
+    const screen = await render(<EmptyState />);
 
-    expect(
-      screen.getByRole("button", { name: /go home/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /go back/i }),
-    ).toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("button", { name: /go home/i }))
+      .toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("button", { name: /go back/i }))
+      .toBeInTheDocument();
   });
 
-  it("should render Go Home as a link to /", () => {
-    render(<EmptyState />);
+  it("should render Go Home as a link to /", async () => {
+    const screen = await render(<EmptyState />);
 
     const homeButton = screen.getByRole("button", { name: /go home/i });
-    expect(homeButton.closest("a")).toHaveAttribute("href", "/");
+    expect(homeButton.element().closest("a")).toHaveAttribute("href", "/");
   });
 
-  it("should render custom title and description", () => {
-    render(
+  it("should render custom title and description", async () => {
+    const screen = await render(
       <EmptyState title="Custom Title" description="Custom description text" />,
     );
 
-    expect(screen.getByText("Custom Title")).toBeInTheDocument();
-    expect(screen.getByText("Custom description text")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Custom Title", { exact: true }))
+      .toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Custom description text", { exact: true }))
+      .toBeInTheDocument();
   });
 
-  it("should render custom icon", () => {
-    render(<EmptyState icon={<span data-testid="custom-icon">Icon</span>} />);
+  it("should render custom icon", async () => {
+    const screen = await render(
+      <EmptyState icon={<span data-testid="custom-icon">Icon</span>} />,
+    );
 
-    expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
+    await expect.element(screen.getByTestId("custom-icon")).toBeInTheDocument();
   });
 
-  it("should render custom actions", () => {
-    render(
+  it("should render custom actions", async () => {
+    const screen = await render(
       <EmptyState
         actions={<button type="button">Custom Action</button>}
         showDefaultActions={false}
       />,
     );
 
-    expect(
-      screen.getByRole("button", { name: /custom action/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /go home/i }),
-    ).not.toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("button", { name: /custom action/i }))
+      .toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("button", { name: /go home/i }))
+      .not.toBeInTheDocument();
   });
 
-  it("should hide default actions when showDefaultActions is false", () => {
-    render(<EmptyState showDefaultActions={false} />);
+  it("should hide default actions when showDefaultActions is false", async () => {
+    const screen = await render(<EmptyState showDefaultActions={false} />);
 
-    expect(
-      screen.queryByRole("button", { name: /go home/i }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /go back/i }),
-    ).not.toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("button", { name: /go home/i }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("button", { name: /go back/i }))
+      .not.toBeInTheDocument();
   });
 
-  it("should call history.back when Go Back button is clicked", () => {
+  it("should call history.back when Go Back button is clicked", async () => {
     const historyBackSpy = vi
       .spyOn(history, "back")
       .mockImplementation(() => {});
-    render(<EmptyState />);
+    const screen = await render(<EmptyState />);
 
-    fireEvent.click(screen.getByRole("button", { name: /go back/i }));
+    await screen.getByRole("button", { name: /go back/i }).click();
     expect(historyBackSpy).toHaveBeenCalled();
 
     historyBackSpy.mockRestore();
   });
 
-  it("should apply custom className", () => {
-    const { container } = render(<EmptyState className="custom-class" />);
-    expect(container.firstChild).toHaveClass("custom-class");
+  it("should apply custom className", async () => {
+    const screen = await render(<EmptyState className="custom-class" />);
+    expect(screen.container.firstChild).toHaveClass("custom-class");
   });
 });

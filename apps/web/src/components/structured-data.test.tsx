@@ -1,25 +1,30 @@
-import { render } from "@testing-library/react";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE } from "@web/config";
 import type { Organization, WithContext } from "schema-dts";
 import { vi } from "vitest";
+import { render } from "vitest-browser-react";
 
-vi.mock("next/script", () => ({
-  __esModule: true,
-  default: (props: Record<string, unknown>) => <script {...props} />,
-}));
+// The browser mocker hands a CommonJS dependency's whole factory result to a
+// default import, so the mock itself must be a valid element type.
+vi.mock("next/script", async () => {
+  const { forwardRef } = await import("react");
+  const MockScript = forwardRef<HTMLScriptElement, Record<string, unknown>>(
+    (props, ref) => <script ref={ref} {...props} />,
+  );
+  return { ...MockScript, default: MockScript };
+});
 
 describe("StructuredData", () => {
-  it("should inject JSON-LD script", () => {
+  it("should inject JSON-LD script", async () => {
     const data: WithContext<Organization> = {
       "@context": "https://schema.org",
       "@type": "Organization",
       name: SITE_TITLE,
     };
 
-    const { container } = render(<StructuredData data={data} />);
-    expect(container).toMatchSnapshot();
-    const script = container.querySelector(
+    const screen = await render(<StructuredData data={data} />);
+    expect(screen.container).toMatchSnapshot();
+    const script = screen.container.querySelector(
       "script#structured-data",
     ) as HTMLScriptElement;
 

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render } from "vitest-browser-react";
 import {
   AnimatedCard,
   AnimatedCardGrid,
@@ -50,20 +50,20 @@ describe("maintenance-notice client helpers", () => {
     vi.clearAllMocks();
   });
 
-  it("should call maintenance hook in polling helpers", () => {
+  it("should call maintenance hook in polling helpers", async () => {
     useMaintenancePolling();
-    render(
+    const screen = await render(
       <MaintenancePollingWrapper>
         <span>Polling content</span>
       </MaintenancePollingWrapper>,
     );
 
     expect(mockUseMaintenance).toHaveBeenCalledTimes(2);
-    expect(screen.getByText("Polling content")).toBeVisible();
+    await expect.element(screen.getByText("Polling content")).toBeVisible();
   });
 
-  it("should render animated wrappers with expected classes", () => {
-    const { container } = render(
+  it("should render animated wrappers with expected classes", async () => {
+    const screen = await render(
       <AnimatedContainer>
         <AnimatedSection className="section-class">
           <AnimatedText>
@@ -78,21 +78,23 @@ describe("maintenance-notice client helpers", () => {
       </AnimatedContainer>,
     );
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByText("Maintenance text")).toBeVisible();
-    expect(screen.getByText("Card A")).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByText("Maintenance text")).toBeVisible();
+    await expect.element(screen.getByText("Card A")).toBeVisible();
     expect(document.querySelector(".section-class")).toBeTruthy();
     expect(document.querySelector(".grid")).toBeTruthy();
   });
 
-  it("should render animated icon wrapper", () => {
-    render(
+  it("should render animated icon wrapper", async () => {
+    const screen = await render(
       <AnimatedIconWrapper>
         <span data-testid="icon">Icon</span>
       </AnimatedIconWrapper>,
     );
 
-    expect(screen.getByTestId("icon")).toBeVisible();
-    expect(screen.getAllByTestId("motion-div").length).toBeGreaterThan(1);
+    await expect.element(screen.getByTestId("icon")).toBeVisible();
+    expect(screen.getByTestId("motion-div").elements().length).toBeGreaterThan(
+      1,
+    );
   });
 });

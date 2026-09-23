@@ -1,9 +1,9 @@
 import { toast } from "@heroui/react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import {
   type OnUrlUpdateFunction,
   withNuqsTestingAdapter,
 } from "nuqs/adapters/testing";
+import { render } from "vitest-browser-react";
 import { YearSelector } from "./year-selector";
 
 const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
@@ -68,15 +68,16 @@ describe("YearSelector", () => {
     vi.clearAllMocks();
   });
 
-  it("should render years sorted from newest to oldest", () => {
-    const { container } = render(
+  it("should render years sorted from newest to oldest", async () => {
+    const screen = await render(
       <YearSelector years={[2022, 2024, 2023]} latestYear={2024} />,
       { wrapper },
     );
 
-    expect(container).toMatchSnapshot();
+    expect(screen.container).toMatchSnapshot();
     const options = screen
-      .getAllByRole("option")
+      .getByRole("option")
+      .elements()
       .map((option) => option.textContent)
       .filter((option) => option && option !== "None");
 
@@ -84,32 +85,29 @@ describe("YearSelector", () => {
   });
 
   it("should update query state when selection changes", async () => {
-    render(<YearSelector years={[2022, 2024]} latestYear={2024} />, {
-      wrapper,
-    });
-
-    fireEvent.change(screen.getByTestId("year-selector"), {
-      target: { value: "2022" },
-    });
-    // nuqs flushes URL updates asynchronously.
-    await waitFor(() =>
-      expect(lastUrlUpdate()?.searchParams.get("year")).toBe("2022"),
+    const screen = await render(
+      <YearSelector years={[2022, 2024]} latestYear={2024} />,
+      { wrapper },
     );
+
+    await screen.getByTestId("year-selector").selectOptions("2022");
+    // nuqs flushes URL updates asynchronously.
+    await expect
+      .poll(() => lastUrlUpdate()?.searchParams.get("year"))
+      .toBe("2022");
     expect(capture).toHaveBeenCalledWith("dashboard_filter_changed", {
       filter: "year",
       value: "2022",
     });
 
-    fireEvent.change(screen.getByTestId("year-selector"), {
-      target: { value: "" },
-    });
-    await waitFor(() =>
-      expect(lastUrlUpdate()?.searchParams.get("year")).toBeNull(),
-    );
+    await screen.getByTestId("year-selector").selectOptions("None");
+    await expect
+      .poll(() => lastUrlUpdate()?.searchParams.get("year"))
+      .toBeNull();
   });
 
-  it("should show adjustment toast only once", () => {
-    const { rerender } = render(
+  it("should show adjustment toast only once", async () => {
+    const screen = await render(
       <YearSelector
         years={[2023, 2024]}
         latestYear={2024}
@@ -121,7 +119,7 @@ describe("YearSelector", () => {
     expect(toast.info).toHaveBeenCalledTimes(1);
     expect(toast.info).toHaveBeenCalledWith("Latest data is 2024");
 
-    rerender(
+    await screen.rerender(
       <YearSelector
         years={[2023, 2024]}
         latestYear={2024}
@@ -131,8 +129,8 @@ describe("YearSelector", () => {
     expect(toast.info).toHaveBeenCalledTimes(1);
   });
 
-  it("should not show toast when year was not adjusted", () => {
-    render(
+  it("should not show toast when year was not adjusted", async () => {
+    await render(
       <YearSelector
         years={[2023, 2024]}
         latestYear={2024}

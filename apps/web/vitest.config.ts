@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import { playwright } from "@vitest/browser-playwright";
 import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -9,13 +10,6 @@ export default defineConfig({
   test: {
     fsModuleCache: true,
     globals: true,
-    environment: "jsdom",
-    // Vitest 5 externalises @testing-library/jest-dom, which resolves its CJS
-    // entry and pulls in a second `vitest` module instance. That instance
-    // registers its own snapshot plugin, so toMatchSnapshot() looks up a
-    // SnapshotClient that was never set up for the file. Inlining keeps
-    // jest-dom on the ESM build that shares this run's vitest instance.
-    server: { deps: { inline: ["@testing-library/jest-dom"] } },
     // detectAsyncLeaks: true, // Available for targeted debugging; too noisy with framer-motion animation leaks
     coverage: {
       enabled: true,
@@ -110,5 +104,39 @@ export default defineConfig({
     },
     exclude: [...configDefaults.exclude, "tests", "**/*.integration.test.ts"],
     setupFiles: "./setup-tests.ts",
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "unit",
+          environment: "node",
+          include: ["src/**/*.test.ts"],
+        },
+      },
+      {
+        extends: true,
+        // Pre-bundle dependencies Vite would otherwise discover mid-run; the
+        // resulting reload breaks vi.mock factories on a cold cache.
+        optimizeDeps: {
+          include: [
+            "@neondatabase/serverless",
+            "motion/react",
+            "next/cache",
+            "next/image",
+            "nuqs/server",
+          ],
+        },
+        test: {
+          name: "browser",
+          include: ["src/**/*.test.tsx"],
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright(),
+            instances: [{ browser: "chromium" }],
+          },
+        },
+      },
+    ],
   },
 });

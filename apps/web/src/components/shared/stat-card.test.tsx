@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
 import type { RegistrationStat } from "@web/types/cars";
+import { render } from "vitest-browser-react";
 import { StatCard } from "./stat-card";
 
 vi.mock(
@@ -36,24 +36,26 @@ describe("StatCard", () => {
     total: 1500,
   };
 
-  it("should render with required props", () => {
-    const { container } = render(<StatCard {...defaultProps} />);
+  it("should render with required props", async () => {
+    const screen = await render(<StatCard {...defaultProps} />);
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByText("Test Title")).toBeInTheDocument();
-    expect(screen.getByText("Test Description")).toBeInTheDocument();
-    expect(screen.getByTestId("bar-chart")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByText("Test Title")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Test Description"))
+      .toBeInTheDocument();
+    await expect.element(screen.getByTestId("bar-chart")).toBeInTheDocument();
   });
 
-  it("should render with empty data", () => {
-    render(<StatCard {...defaultProps} data={[]} />);
-    expect(screen.getByText("Test Title")).toBeInTheDocument();
+  it("should render with empty data", async () => {
+    const screen = await render(<StatCard {...defaultProps} data={[]} />);
+    await expect.element(screen.getByText("Test Title")).toBeInTheDocument();
   });
 
-  it("should render with hero variant", () => {
-    const { container } = render(<StatCard {...defaultProps} variant="hero" />);
+  it("should render with hero variant", async () => {
+    const screen = await render(<StatCard {...defaultProps} variant="hero" />);
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByText("Test Title")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByText("Test Title")).toBeInTheDocument();
   });
 });

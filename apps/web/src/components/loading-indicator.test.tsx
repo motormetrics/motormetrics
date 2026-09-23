@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render } from "vitest-browser-react";
 
 vi.mock("next/link", () => ({
   default: ({ children, ...props }: { children: React.ReactNode }) => (
@@ -11,8 +11,8 @@ describe("LoadingIndicator", () => {
   it("should render progress bar when pending", async () => {
     const { default: LoadingIndicator } = await import("./loading-indicator");
 
-    const { container } = render(<LoadingIndicator />);
+    const screen = await render(<LoadingIndicator />);
 
-    expect(container).toMatchSnapshot();
+    expect(screen.container).toMatchSnapshot();
   });
 });

@@ -1,17 +1,32 @@
-import { render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import type { DimensionStat } from "@web/queries/cars";
 import {
   type OnUrlUpdateFunction,
   withNuqsTestingAdapter,
 } from "nuqs/adapters/testing";
+import type { ComponentProps } from "react";
 import { describe, expect, it, vi } from "vitest";
+import type { RenderResult } from "vitest-browser-react";
+import { render } from "vitest-browser-react";
 import { DimensionTable } from "./dimension-table";
 
 const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
 const capture = vi.hoisted(() => vi.fn());
 
 vi.mock("posthog-js", () => ({ default: { capture } }));
+
+// The browser mocker hands a CommonJS dependency's whole factory result to a
+// default import, and it must be an object. Spreading a forwardRef component in
+// keeps the mocked module itself a valid React element type.
+vi.mock("next/image", async () => {
+  const { forwardRef } = await import("react");
+  const MockImage = forwardRef<HTMLImageElement, ComponentProps<"img">>(
+    ({ alt, ...props }, ref) => (
+      // biome-ignore lint/performance/noImgElement: stands in for next/image itself
+      <img alt={alt} ref={ref} {...props} />
+    ),
+  );
+  return { ...MockImage, default: MockImage };
+});
 
 const wrapper = withNuqsTestingAdapter({
   searchParams: { dimension: "make" },
@@ -49,67 +64,78 @@ const renderTable = (rowsToRender: DimensionStat[] = rows) =>
  * A sortable HeroUI table is an ARIA grid, so the name column is the row's
  * `rowheader` and the remaining columns are `gridcell` — there is no `cell`.
  */
-const visibleNames = () =>
+const visibleNames = (screen: RenderResult) =>
   screen
-    .getAllByRole("row")
+    .getByRole("row")
+    .all()
     .slice(1)
-    .map((row) => spokenText(within(row).getAllByRole("rowheader")[0]));
+    .map((row) => spokenText(row.getByRole("rowheader").first().element()));
 
 /**
  * Text as a screen reader announces it: the avatar's monogram is
  * `aria-hidden`, so it is dropped the way `textContent` would not.
  */
-const spokenText = (element: HTMLElement) => {
-  const clone = element.cloneNode(true) as HTMLElement;
+const spokenText = (element: Element) => {
+  const clone = element.cloneNode(true) as Element;
   for (const hidden of clone.querySelectorAll("[aria-hidden]")) {
     hidden.remove();
   }
   return clone.textContent;
 };
 
-const searchBox = () => screen.getByRole("searchbox", { name: "Search makes" });
+const searchBox = (screen: RenderResult) =>
+  screen.getByRole("searchbox", { name: "Search makes" });
 
 describe("DimensionTable", () => {
-  it("should render every row with its rank, value and share", () => {
-    renderTable();
+  it("should render every row with its rank, value and share", async () => {
+    const screen = await renderTable();
 
-    expect(screen.getByText("Top makes")).toBeVisible();
-    expect(
-      screen.getByText(/Year to date through October 2025 · 3 rows/),
-    ).toBeVisible();
+    await expect.element(screen.getByText("Top makes")).toBeVisible();
+    await expect
+      .element(screen.getByText(/Year to date through October 2025 · 3 rows/))
+      .toBeVisible();
 
-    const row = within(screen.getAllByRole("row")[1]);
-    expect(spokenText(row.getAllByRole("rowheader")[0])).toBe("1TOYOTA");
+    const row = screen.getByRole("row").nth(1);
+    expect(spokenText(row.getByRole("rowheader").first().element())).toBe(
+      "1TOYOTA",
+    );
 
-    const cells = row.getAllByRole("gridcell");
-    expect(cells[0]).toHaveTextContent("600");
-    expect(cells[1]).toHaveTextContent("60.0%");
-    expect(cells[2]).toHaveTextContent("+12.5%");
+    const cells = row.getByRole("gridcell");
+    await expect.element(cells.nth(0)).toHaveTextContent("600");
+    await expect.element(cells.nth(1)).toHaveTextContent("60.0%");
+    await expect.element(cells.nth(2)).toHaveTextContent("+12.5%");
   });
 
-  it("should show a dash where a row has no comparable period", () => {
-    renderTable();
+  it("should show a dash where a row has no comparable period", async () => {
+    const screen = await renderTable();
 
-    const row = within(screen.getAllByRole("row")[3]);
-    expect(row.getByText("No comparable period")).toBeInTheDocument();
+    const row = screen.getByRole("row").nth(3);
+    await expect
+      .element(row.getByText("No comparable period"))
+      .toBeInTheDocument();
   });
 
   it("should sort by change, keeping rows without one at the bottom", async () => {
-    const user = userEvent.setup();
-    renderTable();
+    const screen = await renderTable();
 
-    await user.click(screen.getByRole("columnheader", { name: /Change/ }));
+    await screen.getByRole("columnheader", { name: /Change/ }).click();
 
-    expect(visibleNames()).toEqual(["2BMW", "1TOYOTA", "3BYD"]);
-    expect(screen.getByText(/Sorted by change, ascending/)).toBeVisible();
+    await expect
+      .poll(() => visibleNames(screen))
+      .toEqual(["2BMW", "1TOYOTA", "3BYD"]);
+    await expect
+      .element(screen.getByText(/Sorted by change, ascending/))
+      .toBeVisible();
 
-    await user.click(screen.getByRole("columnheader", { name: /Change/ }));
+    await screen.getByRole("columnheader", { name: /Change/ }).click();
 
-    expect(visibleNames()).toEqual(["1TOYOTA", "2BMW", "3BYD"]);
+    await expect
+      .poll(() => visibleNames(screen))
+      .toEqual(["1TOYOTA", "2BMW", "3BYD"]);
   });
 
-  it("should show the make's logo when one is known", () => {
-    render(
+  it("should show the make's logo when one is known", async () => {
+    const screen = await render(
       <DimensionTable
         dimension="make"
         logoUrlBySlug={{ toyota: "https://cdn.example/toyota.png" }}
@@ -119,108 +145,118 @@ describe("DimensionTable", () => {
       { wrapper },
     );
 
-    expect(screen.getByRole("img", { name: "TOYOTA logo" })).toBeVisible();
-    expect(screen.queryByRole("img", { name: "BMW logo" })).toBeNull();
+    await expect
+      .element(screen.getByRole("img", { name: "TOYOTA logo" }))
+      .toBeVisible();
+    await expect
+      .element(screen.getByRole("img", { name: "BMW logo" }))
+      .not.toBeInTheDocument();
   });
 
   it("should filter rows by the search query", async () => {
-    const user = userEvent.setup();
-    renderTable();
+    const screen = await renderTable();
 
-    await user.type(searchBox(), "bm");
+    await searchBox(screen).fill("bm");
 
-    expect(visibleNames()).toEqual(["2BMW"]);
-    expect(
-      screen.getByText(/Year to date through October 2025 · 1 row$/),
-    ).toBeVisible();
+    await expect.poll(() => visibleNames(screen)).toEqual(["2BMW"]);
+    await expect
+      .element(screen.getByText(/Year to date through October 2025 · 1 row$/))
+      .toBeVisible();
   });
 
   it("should show an empty state naming the query when nothing matches", async () => {
-    const user = userEvent.setup();
-    renderTable();
+    const screen = await renderTable();
 
-    await user.type(searchBox(), "zzz");
+    await searchBox(screen).fill("zzz");
 
-    expect(visibleNames()).toEqual([]);
-    expect(screen.getByText("Nothing matches “zzz”.")).toBeVisible();
+    await expect.poll(() => visibleNames(screen)).toEqual([]);
+    await expect
+      .element(screen.getByText("Nothing matches “zzz”."))
+      .toBeVisible();
   });
 
   it("should reverse the order when the active column header is clicked", async () => {
-    const user = userEvent.setup();
-    renderTable();
+    const screen = await renderTable();
 
-    expect(visibleNames()).toEqual(["1TOYOTA", "2BMW", "3BYD"]);
+    expect(visibleNames(screen)).toEqual(["1TOYOTA", "2BMW", "3BYD"]);
 
-    await user.click(
-      screen.getByRole("columnheader", { name: /Registrations/ }),
-    );
+    await screen.getByRole("columnheader", { name: /Registrations/ }).click();
 
-    expect(visibleNames()).toEqual(["3BYD", "2BMW", "1TOYOTA"]);
-    expect(
-      screen.getByText(/Sorted by registrations, ascending/),
-    ).toBeVisible();
-    expect(
-      screen.getByRole("columnheader", { name: /Registrations/ }),
-    ).toHaveAttribute("aria-sort", "ascending");
+    await expect
+      .poll(() => visibleNames(screen))
+      .toEqual(["3BYD", "2BMW", "1TOYOTA"]);
+    await expect
+      .element(screen.getByText(/Sorted by registrations, ascending/))
+      .toBeVisible();
+    await expect
+      .element(screen.getByRole("columnheader", { name: /Registrations/ }))
+      .toHaveAttribute("aria-sort", "ascending");
   });
 
   it("should sort by name when the name column is chosen", async () => {
-    const user = userEvent.setup();
-    renderTable();
+    const screen = await renderTable();
 
-    await user.click(screen.getByRole("columnheader", { name: /^Make/ }));
+    await screen.getByRole("columnheader", { name: /^Make/ }).click();
 
-    expect(visibleNames()).toEqual(["2BMW", "3BYD", "1TOYOTA"]);
+    await expect
+      .poll(() => visibleNames(screen))
+      .toEqual(["2BMW", "3BYD", "1TOYOTA"]);
   });
 
   it("should switch dimension through the URL when another tab is pressed", async () => {
-    const user = userEvent.setup();
-    renderTable();
+    const screen = await renderTable();
 
     const tab = screen.getByRole("radio", { name: "Fuel types" });
-    expect(tab).toHaveAttribute("aria-checked", "false");
+    await expect.element(tab).toHaveAttribute("aria-checked", "false");
 
-    await user.click(tab);
+    await tab.click();
 
-    expect(
-      onUrlUpdate.mock.calls.at(-1)?.[0].searchParams.get("dimension"),
-    ).toBe("fuelType");
+    await expect
+      .poll(() =>
+        onUrlUpdate.mock.calls.at(-1)?.[0].searchParams.get("dimension"),
+      )
+      .toBe("fuelType");
     expect(capture).toHaveBeenCalledWith("dashboard_filter_changed", {
       filter: "dimension",
       value: "fuelType",
     });
   });
 
-  it("should collapse a long list to the first ten rows", () => {
-    renderTable(manyRows);
+  it("should collapse a long list to the first ten rows", async () => {
+    const screen = await renderTable(manyRows);
 
-    expect(visibleNames()).toHaveLength(10);
-    expect(
-      screen.getByText(/Year to date through October 2025 · top 10 of 25/),
-    ).toBeVisible();
+    expect(visibleNames(screen)).toHaveLength(10);
+    await expect
+      .element(
+        screen.getByText(/Year to date through October 2025 · top 10 of 25/),
+      )
+      .toBeVisible();
   });
 
-  it("should link to the dimension's own page rather than expanding", () => {
-    renderTable(manyRows);
+  it("should link to the dimension's own page rather than expanding", async () => {
+    const screen = await renderTable(manyRows);
 
-    expect(
-      screen.getByRole("link", { name: /Show all 25 makes/ }),
-    ).toHaveAttribute("href", "/cars/makes");
+    await expect
+      .element(screen.getByRole("link", { name: /Show all 25 makes/ }))
+      .toHaveAttribute("href", "/cars/makes");
   });
 
-  it("should not offer to expand a list that already fits", () => {
-    renderTable();
+  it("should not offer to expand a list that already fits", async () => {
+    const screen = await renderTable();
 
-    expect(screen.queryByRole("link", { name: /Show all/ })).toBeNull();
+    await expect
+      .element(screen.getByRole("link", { name: /Show all/ }))
+      .not.toBeInTheDocument();
   });
 
   it("should show every match when searching, without truncating", async () => {
-    const user = userEvent.setup();
-    renderTable(manyRows);
+    const screen = await renderTable(manyRows);
 
-    await user.type(searchBox(), "MAKE");
+    await searchBox(screen).fill("MAKE");
 
-    expect(visibleNames()).toHaveLength(25);
-    expect(screen.queryByRole("link", { name: /Show all/ })).toBeNull();
+    await expect.poll(() => visibleNames(screen)).toHaveLength(25);
+    await expect
+      .element(screen.getByRole("link", { name: /Show all/ }))
+      .not.toBeInTheDocument();
   });
 });

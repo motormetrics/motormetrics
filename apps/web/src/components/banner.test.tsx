@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
 import { Banner } from "@web/components/banner";
 import { vi } from "vitest";
+import { render } from "vitest-browser-react";
 import { createUseStoreMock } from "../../tests/test-utils";
 
 const { state: mockStoreState } = createUseStoreMock();
@@ -17,21 +17,23 @@ describe("Banner", () => {
     mockStoreState.setBannerContent.mockClear();
   });
 
-  it("should show banner content from the store", () => {
+  it("should show banner content from the store", async () => {
     mockStoreState.bannerContent = (
       <span data-testid="banner-content">Hello COE</span>
     );
 
-    const { container } = render(<Banner />);
+    const screen = await render(<Banner />);
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByTestId("banner-content")).toHaveTextContent("Hello COE");
+    expect(screen.container).toMatchSnapshot();
+    await expect
+      .element(screen.getByTestId("banner-content"))
+      .toHaveTextContent("Hello COE");
   });
 
-  it("should return null when no banner content is set", () => {
+  it("should return null when no banner content is set", async () => {
     mockStoreState.bannerContent = null;
 
-    const { container } = render(<Banner />);
-    expect(container).toBeEmptyDOMElement();
+    const screen = await render(<Banner />);
+    expect(screen.container).toBeEmptyDOMElement();
   });
 });

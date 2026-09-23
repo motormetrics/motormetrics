@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/react";
 import { TrendsComparison } from "@web/components/trends-comparison";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { vi } from "vitest";
+import { page } from "vitest/browser";
+import { render } from "vitest-browser-react";
 
 const mockMonths = ["2024-01", "2023-12", "2023-11"];
 
@@ -21,9 +22,9 @@ const mockComparisonData = {
 };
 
 describe("TrendsComparison", () => {
-  it("should render TrendsComparison content when open", () => {
+  it("should render TrendsComparison content when open", async () => {
     const handleChange = vi.fn();
-    const { container } = render(
+    const screen = await render(
       <NuqsTestingAdapter>
         <TrendsComparison
           isOpen
@@ -35,13 +36,15 @@ describe("TrendsComparison", () => {
       </NuqsTestingAdapter>,
     );
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByText("Trends Comparison")).toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect
+      .element(page.getByText("Trends Comparison"))
+      .toBeInTheDocument();
   });
 
-  it("should render loading state when comparison data is unavailable", () => {
+  it("should render loading state when comparison data is unavailable", async () => {
     const handleChange = vi.fn();
-    render(
+    await render(
       <NuqsTestingAdapter>
         <TrendsComparison
           isOpen
@@ -53,6 +56,8 @@ describe("TrendsComparison", () => {
       </NuqsTestingAdapter>,
     );
 
-    expect(screen.getByText("Loading comparison data…")).toBeInTheDocument();
+    await expect
+      .element(page.getByText("Loading comparison data…"))
+      .toBeInTheDocument();
   });
 });

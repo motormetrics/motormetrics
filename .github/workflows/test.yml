@@ -26,5 +26,8 @@ jobs:
         with:
           team: ${{ vars.TURBO_TEAM }}
 
+      - name: Install Playwright Chromium
+        run: pnpm --filter @motormetrics/web exec playwright install --with-deps --only-shell chromium
+
       - name: Run tests
         run: pnpm test

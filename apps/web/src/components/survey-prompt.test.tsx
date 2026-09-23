@@ -1,4 +1,3 @@
-import { act, render } from "@testing-library/react";
 import {
   SURVEY_COOLDOWN_MS,
   SURVEY_SHOWN_AT_KEY,
@@ -6,6 +5,7 @@ import {
   VISITOR_INTENT_SURVEY_ID,
 } from "@web/components/survey-prompt";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { render } from "vitest-browser-react";
 
 const state = vi.hoisted(() => ({
   pathname: "/coe/pqp",
@@ -36,11 +36,9 @@ vi.mock("posthog-js", () => ({
 const storage = new Map<string, string>();
 
 async function renderAndWait() {
-  const result = render(<SurveyPrompt />);
-  await act(async () => {
-    await vi.runAllTimersAsync();
-  });
-  return result;
+  const screen = await render(<SurveyPrompt />);
+  await vi.runAllTimersAsync();
+  return screen;
 }
 
 describe("SurveyPrompt", () => {
@@ -125,11 +123,9 @@ describe("SurveyPrompt", () => {
   });
 
   it("should cancel a pending display on unmount", async () => {
-    const { unmount } = render(<SurveyPrompt />);
-    unmount();
-    await act(async () => {
-      await vi.runAllTimersAsync();
-    });
+    const screen = await render(<SurveyPrompt />);
+    await screen.unmount();
+    await vi.runAllTimersAsync();
 
     expect(displaySurvey).not.toHaveBeenCalled();
   });

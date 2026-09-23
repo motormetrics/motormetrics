@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
 import type { ErrorInfo } from "next/error";
 import { describe, expect, it, vi } from "vitest";
+import { render } from "vitest-browser-react";
 import { SectionErrorBoundary, SectionErrorFallback } from "./error-boundary";
 
 vi.mock("@heroui/react", async (importOriginal) => ({
@@ -44,7 +44,7 @@ vi.mock("next/error", () => ({
 }));
 
 describe("SectionErrorFallback", () => {
-  it("should render the default title and error message", () => {
+  it("should render the default title and error message", async () => {
     const retry = vi.fn();
     const errorInfo = {
       error: new Error("Query failed"),
@@ -52,14 +52,16 @@ describe("SectionErrorFallback", () => {
       reset: retry,
     } as ErrorInfo;
 
-    render(SectionErrorFallback({}, errorInfo));
+    const screen = await render(SectionErrorFallback({}, errorInfo));
 
-    expect(screen.getByRole("alert")).toBeInTheDocument();
-    expect(screen.getByText("This section failed to load")).toBeInTheDocument();
-    expect(screen.getByText("Query failed")).toBeInTheDocument();
+    await expect.element(screen.getByRole("alert")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("This section failed to load"))
+      .toBeInTheDocument();
+    await expect.element(screen.getByText("Query failed")).toBeInTheDocument();
   });
 
-  it("should render a custom title and fallback message for non-Error values", () => {
+  it("should render a custom title and fallback message for non-Error values", async () => {
     const retry = vi.fn();
     const errorInfo = {
       error: "not-an-error",
@@ -67,22 +69,24 @@ describe("SectionErrorFallback", () => {
       reset: retry,
     } as unknown as ErrorInfo;
 
-    render(
+    const screen = await render(
       SectionErrorFallback(
         { title: "Registration data unavailable" },
         errorInfo,
       ),
     );
 
-    expect(
-      screen.getByText("Registration data unavailable"),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Something went wrong while loading this data."),
-    ).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Registration data unavailable"))
+      .toBeInTheDocument();
+    await expect
+      .element(
+        screen.getByText("Something went wrong while loading this data."),
+      )
+      .toBeInTheDocument();
   });
 
-  it("should call retry when Try again is pressed", () => {
+  it("should call retry when Try again is pressed", async () => {
     const retry = vi.fn();
     const errorInfo = {
       error: new Error("Boom"),
@@ -90,28 +94,27 @@ describe("SectionErrorFallback", () => {
       reset: retry,
     } as ErrorInfo;
 
-    render(
+    const screen = await render(
       SectionErrorFallback({ title: "COE results unavailable" }, errorInfo),
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+    await screen.getByRole("button", { name: "Try again" }).click();
 
     expect(retry).toHaveBeenCalledTimes(1);
   });
 });
 
 describe("SectionErrorBoundary", () => {
-  it("should wrap children via catchError", () => {
-    render(
+  it("should wrap children via catchError", async () => {
+    const screen = await render(
       <SectionErrorBoundary title="Top makes unavailable">
         <span>Child content</span>
       </SectionErrorBoundary>,
     );
 
-    expect(screen.getByTestId("section-error-boundary")).toHaveAttribute(
-      "data-title",
-      "Top makes unavailable",
-    );
-    expect(screen.getByText("Child content")).toBeInTheDocument();
+    await expect
+      .element(screen.getByTestId("section-error-boundary"))
+      .toHaveAttribute("data-title", "Top makes unavailable");
+    await expect.element(screen.getByText("Child content")).toBeInTheDocument();
   });
 });

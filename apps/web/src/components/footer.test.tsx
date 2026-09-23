@@ -1,22 +1,22 @@
-import { render } from "@testing-library/react";
 import { Footer } from "@web/components/footer";
 import { vi } from "vitest";
+import { render } from "vitest-browser-react";
 
 vi.mock("../../package.json", () => ({ version: "0.0.0-test" }));
 
 describe("Footer", () => {
-  it("should render the shell footer with navigation and version information", () => {
-    const { container, getByText, queryByText } = render(<Footer />);
+  it("should render the shell footer with navigation and version information", async () => {
+    const screen = await render(<Footer />);
 
-    expect(container).toMatchSnapshot();
-    expect(getByText(/v0\.0\.0-test/)).toBeInTheDocument();
-    expect(getByText("Privacy")).toBeInTheDocument();
-    expect(getByText("LTA DataMall")).toBeInTheDocument();
-    expect(queryByText("Advertise")).not.toBeInTheDocument();
+    expect(screen.container).toMatchSnapshot();
+    await expect.element(screen.getByText(/v0\.0\.0-test/)).toBeInTheDocument();
+    await expect.element(screen.getByText("Privacy")).toBeInTheDocument();
+    await expect.element(screen.getByText("LTA DataMall")).toBeInTheDocument();
+    await expect.element(screen.getByText("Advertise")).not.toBeInTheDocument();
   });
 
-  it("should render Advertise when the flag is on, with social icons", () => {
-    const { getByRole, getByText } = render(
+  it("should render Advertise when the flag is on, with social icons", async () => {
+    const screen = await render(
       <Footer
         navItems={[
           { href: "/about", label: "About" },
@@ -28,10 +28,18 @@ describe("Footer", () => {
       />,
     );
 
-    expect(getByText("Advertise")).toBeInTheDocument();
-    expect(getByRole("link", { name: "Instagram" })).toBeInTheDocument();
-    expect(getByRole("link", { name: "Telegram" })).toBeInTheDocument();
-    expect(getByRole("link", { name: "GitHub" })).toBeInTheDocument();
-    expect(getByRole("link", { name: "X" })).toBeInTheDocument();
+    await expect.element(screen.getByText("Advertise")).toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("link", { name: "Instagram" }))
+      .toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("link", { name: "Telegram" }))
+      .toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("link", { name: "GitHub" }))
+      .toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("link", { name: "X" }))
+      .toBeInTheDocument();
   });
 });

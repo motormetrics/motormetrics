@@ -1,25 +1,25 @@
-import { render } from "@testing-library/react";
+import { render } from "vitest-browser-react";
 import { SitePage } from "./site-page";
 
 describe("SitePage", () => {
-  it("should render its children in the shared column", () => {
-    const { container, getByText } = render(
+  it("should render its children in the shared column", async () => {
+    const screen = await render(
       <SitePage>
         <p>About</p>
       </SitePage>,
     );
 
-    expect(getByText("About")).toBeInTheDocument();
-    expect(container.querySelector(".gap-16")).toBeInTheDocument();
+    await expect.element(screen.getByText("About")).toBeInTheDocument();
+    expect(screen.container.querySelector(".gap-16")).toBeInTheDocument();
   });
 
-  it("should merge a caller class name", () => {
-    const { container } = render(
+  it("should merge a caller class name", async () => {
+    const screen = await render(
       <SitePage className="pb-24">
         <p>Advertise</p>
       </SitePage>,
     );
 
-    expect(container.querySelector(".pb-24")).toBeInTheDocument();
+    expect(screen.container.querySelector(".pb-24")).toBeInTheDocument();
   });
 });

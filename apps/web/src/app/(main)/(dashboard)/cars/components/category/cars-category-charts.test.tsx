@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render } from "vitest-browser-react";
 import { CategoryHeroCard } from "./category-hero-card";
 import { CategoryInsightsCard } from "./category-insights-card";
 import { CategorySummaryCard } from "./category-summary-card";
@@ -16,81 +16,130 @@ describe("Cars Category Charts", () => {
       title: "Petrol",
     };
 
-    it("should render chart title and description", () => {
-      const { container } = render(<TopMakesChart {...defaultProps} />);
+    it("should render chart title and description", async () => {
+      // The pointer stays wherever an earlier test left it. Resting over the
+      // plot, it opens Recharts' tooltip and changes the snapshot, so park it
+      // on a small element at the top of the page before the chart renders.
+      const parking = await render(<span>Pointer parking</span>);
+      await parking.getByText("Pointer parking").hover();
+      await parking.unmount();
 
-      expect(screen.getByText("Top Makes - Petrol")).toBeInTheDocument();
-      expect(
-        screen.getByText("Most popular brands in this category"),
-      ).toBeInTheDocument();
-      expect(container).toMatchSnapshot();
+      const screen = await render(<TopMakesChart {...defaultProps} />);
+
+      await expect
+        .element(screen.getByText("Top Makes - Petrol", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(
+          screen.getByText("Most popular brands in this category", {
+            exact: true,
+          }),
+        )
+        .toBeInTheDocument();
+      expect(screen.container).toMatchSnapshot();
     });
 
-    it("should render custom description when provided", () => {
-      render(
+    it("should render custom description when provided", async () => {
+      const screen = await render(
         <TopMakesChart {...defaultProps} description="Custom description" />,
       );
 
-      expect(screen.getByText("Custom description")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Custom description", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should render top 3 ranking chips", () => {
-      render(<TopMakesChart {...defaultProps} />);
+    it("should render top 3 ranking chips", async () => {
+      const screen = await render(<TopMakesChart {...defaultProps} />);
 
       // Recharts also renders a hidden measurement span with the label text.
-      expect(screen.getAllByText("Toyota")[0]).toBeInTheDocument();
-      expect(screen.getAllByText("Honda")[0]).toBeInTheDocument();
-      expect(screen.getAllByText("BMW")[0]).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Toyota", { exact: true }).first())
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Honda", { exact: true }).first())
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("BMW", { exact: true }).first())
+        .toBeInTheDocument();
     });
 
-    it("should render empty state when makes array is empty", () => {
-      render(<TopMakesChart makes={[]} total={0} title="Petrol" />);
+    it("should render empty state when makes array is empty", async () => {
+      const screen = await render(
+        <TopMakesChart makes={[]} total={0} title="Petrol" />,
+      );
 
-      expect(screen.getByText("No make data available")).toBeInTheDocument();
-      expect(screen.getByText("No data available")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("No make data available", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("No data available", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should handle zero total without division error", () => {
+    it("should handle zero total without division error", async () => {
       const props = {
         makes: [{ make: "Toyota", count: 100 }],
         total: 0,
         title: "Test",
       };
 
-      expect(() => render(<TopMakesChart {...props} />)).not.toThrow();
+      await expect(render(<TopMakesChart {...props} />)).resolves.toBeDefined();
     });
   });
 
   describe("CategorySummaryCard", () => {
-    it("should render total registrations", () => {
-      render(<CategorySummaryCard total={5000} previousTotal={null} />);
+    it("should render total registrations", async () => {
+      const screen = await render(
+        <CategorySummaryCard total={5000} previousTotal={null} />,
+      );
 
-      expect(screen.getByText("Total Registrations")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Total Registrations", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should render positive change indicator when current is higher", () => {
-      render(<CategorySummaryCard total={5500} previousTotal={5000} />);
+    it("should render positive change indicator when current is higher", async () => {
+      const screen = await render(
+        <CategorySummaryCard total={5500} previousTotal={5000} />,
+      );
 
-      expect(screen.getByText("+10%")).toBeInTheDocument();
-      expect(screen.getByText("vs last month")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("+10%", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("vs last month", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should render negative change indicator when current is lower", () => {
-      render(<CategorySummaryCard total={4500} previousTotal={5000} />);
+    it("should render negative change indicator when current is lower", async () => {
+      const screen = await render(
+        <CategorySummaryCard total={4500} previousTotal={5000} />,
+      );
 
-      expect(screen.getByText("-10%")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("-10%", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should not render comparison when previousTotal is null", () => {
-      render(<CategorySummaryCard total={5000} previousTotal={null} />);
+    it("should not render comparison when previousTotal is null", async () => {
+      const screen = await render(
+        <CategorySummaryCard total={5000} previousTotal={null} />,
+      );
 
-      expect(screen.queryByText("vs last month")).not.toBeInTheDocument();
+      await expect
+        .element(screen.getByText("vs last month", { exact: true }))
+        .not.toBeInTheDocument();
     });
 
-    it("should not render comparison when previousTotal is zero", () => {
-      render(<CategorySummaryCard total={5000} previousTotal={0} />);
+    it("should not render comparison when previousTotal is zero", async () => {
+      const screen = await render(
+        <CategorySummaryCard total={5000} previousTotal={0} />,
+      );
 
-      expect(screen.queryByText("vs last month")).not.toBeInTheDocument();
+      await expect
+        .element(screen.getByText("vs last month", { exact: true }))
+        .not.toBeInTheDocument();
     });
   });
 
@@ -105,38 +154,56 @@ describe("Cars Category Charts", () => {
       title: "Fuel Type",
     };
 
-    it("should render market insights heading", () => {
-      render(<CategoryInsightsCard {...defaultProps} />);
+    it("should render market insights heading", async () => {
+      const screen = await render(<CategoryInsightsCard {...defaultProps} />);
 
-      expect(screen.getByText("Market Insights")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Market Insights", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should render formatted month", () => {
-      render(<CategoryInsightsCard {...defaultProps} />);
+    it("should render formatted month", async () => {
+      const screen = await render(<CategoryInsightsCard {...defaultProps} />);
 
-      expect(screen.getByText("Jan 2024")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Jan 2024", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should render categories count", () => {
-      render(<CategoryInsightsCard {...defaultProps} />);
+    it("should render categories count", async () => {
+      const screen = await render(<CategoryInsightsCard {...defaultProps} />);
 
-      expect(screen.getByText("Active Categories")).toBeInTheDocument();
-      expect(screen.getByText("5")).toBeInTheDocument();
-      expect(screen.getByText("Fuel Type types")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Active Categories", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("5", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Fuel Type types", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should render top performer name", () => {
-      render(<CategoryInsightsCard {...defaultProps} />);
+    it("should render top performer name", async () => {
+      const screen = await render(<CategoryInsightsCard {...defaultProps} />);
 
-      expect(screen.getByText("Top Performer")).toBeInTheDocument();
-      expect(screen.getAllByText("Petrol").length).toBeGreaterThan(0);
+      await expect
+        .element(screen.getByText("Top Performer", { exact: true }))
+        .toBeInTheDocument();
+      expect(
+        screen.getByText("Petrol", { exact: true }).elements().length,
+      ).toBeGreaterThan(0);
     });
 
-    it("should render market share percentage", () => {
-      render(<CategoryInsightsCard {...defaultProps} />);
+    it("should render market share percentage", async () => {
+      const screen = await render(<CategoryInsightsCard {...defaultProps} />);
 
-      expect(screen.getByText("Market Share")).toBeInTheDocument();
-      expect(screen.getByText("45.5%")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Market Share", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("45.5%", { exact: true }))
+        .toBeInTheDocument();
     });
   });
 
@@ -150,55 +217,85 @@ describe("Cars Category Charts", () => {
       totalCategories: 5,
     };
 
-    it("should render total registrations card", () => {
-      render(<CategoryHeroCard {...defaultProps} />);
+    it("should render total registrations card", async () => {
+      const screen = await render(<CategoryHeroCard {...defaultProps} />);
 
-      expect(screen.getByText("Total Registrations")).toBeInTheDocument();
-      expect(screen.getByText("Jan 2024")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Total Registrations", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Jan 2024", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should render market share card", () => {
-      render(<CategoryHeroCard {...defaultProps} />);
+    it("should render market share card", async () => {
+      const screen = await render(<CategoryHeroCard {...defaultProps} />);
 
-      expect(screen.getByText("Market Share")).toBeInTheDocument();
-      expect(screen.getByText("30%")).toBeInTheDocument();
-      expect(screen.getByText("of all registrations")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Market Share", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("30%", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("of all registrations", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should render category ranking card", () => {
-      render(<CategoryHeroCard {...defaultProps} />);
+    it("should render category ranking card", async () => {
+      const screen = await render(<CategoryHeroCard {...defaultProps} />);
 
-      expect(screen.getByText("Category Ranking")).toBeInTheDocument();
-      expect(screen.getByText("#1")).toBeInTheDocument();
-      expect(screen.getByText("of 5 types")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("Category Ranking", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("#1", { exact: true }))
+        .toBeInTheDocument();
+      await expect
+        .element(screen.getByText("of 5 types", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should handle zero totalRegistrations without division error", () => {
+    it("should handle zero totalRegistrations without division error", async () => {
       const props = {
         ...defaultProps,
         totalRegistrations: 0,
       };
 
-      expect(() => render(<CategoryHeroCard {...props} />)).not.toThrow();
-      expect(screen.getByText("0%")).toBeInTheDocument();
+      const renderResult = render(<CategoryHeroCard {...props} />);
+      await expect(renderResult).resolves.toBeDefined();
+      const screen = await renderResult;
+      await expect
+        .element(screen.getByText("0%", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should display ranking emoji for top 3 positions", () => {
-      const { rerender } = render(<CategoryHeroCard {...defaultProps} />);
+    it("should display ranking emoji for top 3 positions", async () => {
+      const screen = await render(<CategoryHeroCard {...defaultProps} />);
 
-      expect(screen.getByText("🥇")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("🥇", { exact: true }))
+        .toBeInTheDocument();
 
-      rerender(<CategoryHeroCard {...defaultProps} rank={2} />);
-      expect(screen.getByText("🥈")).toBeInTheDocument();
+      await screen.rerender(<CategoryHeroCard {...defaultProps} rank={2} />);
+      await expect
+        .element(screen.getByText("🥈", { exact: true }))
+        .toBeInTheDocument();
 
-      rerender(<CategoryHeroCard {...defaultProps} rank={3} />);
-      expect(screen.getByText("🥉")).toBeInTheDocument();
+      await screen.rerender(<CategoryHeroCard {...defaultProps} rank={3} />);
+      await expect
+        .element(screen.getByText("🥉", { exact: true }))
+        .toBeInTheDocument();
     });
 
-    it("should include fuel in category description for fuel types", () => {
-      render(<CategoryHeroCard {...defaultProps} typeName="Fuel Type A" />);
+    it("should include fuel in category description for fuel types", async () => {
+      const screen = await render(
+        <CategoryHeroCard {...defaultProps} typeName="Fuel Type A" />,
+      );
 
-      expect(screen.getByText("of 5 fuel types")).toBeInTheDocument();
+      await expect
+        .element(screen.getByText("of 5 fuel types", { exact: true }))
+        .toBeInTheDocument();
     });
   });
 });

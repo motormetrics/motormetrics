@@ -2,6 +2,6 @@
 
 exports[`TrendsComparison > should render TrendsComparison content when open 1`] = `
 <div
-  aria-hidden="true"
+  inert=""
 />
 `;

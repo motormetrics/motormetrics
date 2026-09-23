@@ -1,8 +1,8 @@
-import { render } from "@testing-library/react";
 import { PremiumBanner } from "@web/components/premium-banner";
 import type { COEResult } from "@web/types";
 import type { ReactElement } from "react";
 import { vi } from "vitest";
+import { render } from "vitest-browser-react";
 import { createUseStoreMock } from "../../tests/test-utils";
 
 const { state: mockStoreState } = createUseStoreMock();
@@ -37,17 +37,17 @@ describe("PremiumBanner", () => {
     createCoeResult("Category A", 40000),
   ];
 
-  it("should populate the global banner with sorted categories and clean up on unmount", () => {
-    const { unmount } = render(<PremiumBanner data={data} />);
+  it("should populate the global banner with sorted categories and clean up on unmount", async () => {
+    const screen = await render(<PremiumBanner data={data} />);
 
     expect(mockStoreState.setBannerContent).toHaveBeenCalledTimes(1);
     const bannerNode = mockStoreState.setBannerContent.mock
       .calls[0][0] as ReactElement;
-    const { container, getAllByText } = render(bannerNode);
-    expect(container).toMatchSnapshot();
-    expect(getAllByText(/Category [AB]/)).toHaveLength(2);
+    const bannerScreen = await render(bannerNode);
+    expect(bannerScreen.container).toMatchSnapshot();
+    expect(bannerScreen.getByText(/Category [AB]/).elements()).toHaveLength(2);
 
-    unmount();
+    await screen.unmount();
 
     expect(mockStoreState.setBannerContent).toHaveBeenLastCalledWith(null);
   });

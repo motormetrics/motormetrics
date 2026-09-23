@@ -1,4 +1,5 @@
-import { fireEvent, render } from "@testing-library/react";
+import { userEvent } from "vitest/browser";
+import { render } from "vitest-browser-react";
 import { ColumnChart } from "./column-chart";
 
 const columns = [
@@ -17,34 +18,38 @@ const columns = [
 ];
 
 describe("ColumnChart", () => {
-  it("should draw one column per point with the last highlighted", () => {
-    const { getAllByRole } = render(<ColumnChart columns={columns} />);
-    const buttons = getAllByRole("button");
-    expect(buttons).toHaveLength(3);
-    expect(buttons[2]).toHaveTextContent("4,640");
+  it("should draw one column per point with the last highlighted", async () => {
+    const screen = await render(<ColumnChart columns={columns} />);
+    const buttons = screen.getByRole("button");
+    expect(buttons.elements()).toHaveLength(3);
+    await expect.element(buttons.nth(2)).toMatchTextContent("4,640");
   });
 
-  it("should show the tooltip on hover", () => {
-    const { getAllByRole, getByText, queryByText } = render(
-      <ColumnChart columns={columns} />,
-    );
-    expect(queryByText("Oct · Cat A")).toBeNull();
-    fireEvent.mouseEnter(getAllByRole("button")[2]);
-    expect(getByText("Oct · Cat A")).toBeInTheDocument();
-    expect(getByText("$4,640")).toBeInTheDocument();
+  it("should show the tooltip on hover", async () => {
+    const screen = await render(<ColumnChart columns={columns} />);
+    expect(screen.getByText("Oct · Cat A").query()).toBeNull();
+    await screen.getByRole("button").nth(2).hover();
+    await expect.element(screen.getByText("Oct · Cat A")).toBeInTheDocument();
+    await expect.element(screen.getByText("$4,640")).toBeInTheDocument();
   });
 
-  it("should hand the key back on select", () => {
+  it("should hand the key back on select", async () => {
     const onSelect = vi.fn();
-    const { getAllByRole } = render(
+    const screen = await render(
       <ColumnChart
         columns={columns}
         highlightKey="2024-09"
         onSelect={onSelect}
       />,
     );
-    fireEvent.click(getAllByRole("button")[0]);
+    // The pointer is left wherever the previous test put it. Without the app's
+    // stylesheet the tooltip renders in flow, so a column opening under the
+    // resting pointer reflows the row mid-click; park the pointer first.
+    await userEvent.unhover(screen.container);
+    await screen.getByRole("button").nth(0).click();
     expect(onSelect).toHaveBeenCalledWith("2024-08");
-    expect(getAllByRole("button")[1]).toHaveAttribute("aria-pressed", "true");
+    await expect
+      .element(screen.getByRole("button").nth(1))
+      .toHaveAttribute("aria-pressed", "true");
   });
 });

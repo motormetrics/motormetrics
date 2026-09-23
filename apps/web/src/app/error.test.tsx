@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
 import posthog from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { render } from "vitest-browser-react";
 import AppError from "./error";
 
 vi.mock("posthog-js", () => ({
@@ -35,33 +35,46 @@ describe("AppError", () => {
     vi.spyOn(console, "error").mockImplementation(() => undefined);
   });
 
-  it("should render the error message and retry action", () => {
+  it("should render the error message and retry action", async () => {
     const retry = vi.fn();
     const error = Object.assign(new Error("Boom"), { digest: "abc123" });
 
-    render(<AppError error={error} retry={retry} />);
+    const screen = await render(<AppError error={error} retry={retry} />);
 
-    expect(screen.getByText("Something went wrong")).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "We couldn't load this page. You can try again, or head back to the homepage.",
-      ),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Error ID: abc123")).toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Something went wrong", { exact: true }))
+      .toBeInTheDocument();
+    await expect
+      .element(
+        screen.getByText(
+          "We couldn't load this page. You can try again, or head back to the homepage.",
+          { exact: true },
+        ),
+      )
+      .toBeInTheDocument();
+    await expect
+      .element(screen.getByText("Error ID: abc123", { exact: true }))
+      .toBeInTheDocument();
     expect(posthog.captureException).toHaveBeenCalledWith(error);
   });
 
-  it("should omit the error id when digest is missing", () => {
-    render(<AppError error={new Error("Boom")} retry={vi.fn()} />);
+  it("should omit the error id when digest is missing", async () => {
+    const screen = await render(
+      <AppError error={new Error("Boom")} retry={vi.fn()} />,
+    );
 
-    expect(screen.queryByText(/Error ID:/)).not.toBeInTheDocument();
+    await expect.element(screen.getByText(/Error ID:/)).not.toBeInTheDocument();
   });
 
-  it("should call retry when Try again is pressed", () => {
+  it("should call retry when Try again is pressed", async () => {
     const retry = vi.fn();
-    render(<AppError error={new Error("Boom")} retry={retry} />);
+    const screen = await render(
+      <AppError error={new Error("Boom")} retry={retry} />,
+    );
 
-    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+    await screen
+      .getByRole("button", { name: "Try again", exact: true })
+      .click();
 
     expect(retry).toHaveBeenCalledTimes(1);
   });

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render } from "vitest-browser-react";
 import { DashboardPageMeta } from "./dashboard-page-meta";
 
 vi.mock("@web/components/shared/last-updated", () => ({
@@ -8,25 +8,31 @@ vi.mock("@web/components/shared/last-updated", () => ({
 }));
 
 describe("DashboardPageMeta", () => {
-  it("should render last updated and custom content", () => {
-    const { container } = render(
+  it("should render last updated and custom content", async () => {
+    const screen = await render(
       <DashboardPageMeta lastUpdated={1704067200000}>
         <button type="button">Compare</button>
       </DashboardPageMeta>,
     );
 
-    expect(container).toMatchSnapshot();
-    expect(screen.getByTestId("last-updated")).toHaveTextContent(
-      "1704067200000",
-    );
-    expect(screen.getByRole("button", { name: "Compare" })).toBeVisible();
+    expect(screen.container).toMatchSnapshot();
+    await expect
+      .element(screen.getByTestId("last-updated"))
+      .toHaveTextContent("1704067200000");
+    await expect
+      .element(screen.getByRole("button", { name: "Compare", exact: true }))
+      .toBeVisible();
   });
 
-  it("should hide last updated when value is null or zero", () => {
-    const { rerender } = render(<DashboardPageMeta lastUpdated={null} />);
-    expect(screen.queryByTestId("last-updated")).not.toBeInTheDocument();
+  it("should hide last updated when value is null or zero", async () => {
+    const screen = await render(<DashboardPageMeta lastUpdated={null} />);
+    await expect
+      .element(screen.getByTestId("last-updated"))
+      .not.toBeInTheDocument();
 
-    rerender(<DashboardPageMeta lastUpdated={0} />);
-    expect(screen.queryByTestId("last-updated")).not.toBeInTheDocument();
+    await screen.rerender(<DashboardPageMeta lastUpdated={0} />);
+    await expect
+      .element(screen.getByTestId("last-updated"))
+      .not.toBeInTheDocument();
   });
 });
