@@ -17,9 +17,9 @@ export const GUIDES: Guide[] = [
   {
     slug: "coe",
     term: "COE",
-    title: "Certificate of Entitlement (COE) - Complete Guide",
+    title: "What is COE? Singapore Certificate of Entitlement Guide",
     description:
-      "Everything you need to know about Singapore's COE system: how bidding works, the 5 categories, current premiums, and tips for timing your purchase.",
+      "A COE (Certificate of Entitlement) is the 10-year licence to own a vehicle in Singapore. Learn how COE bidding works, the 5 categories, and when to buy.",
     excerpt:
       "The Certificate of Entitlement is Singapore's unique vehicle quota system that controls the number of vehicles on the road. Understanding how COE works is essential for anyone planning to buy a car in Singapore.",
     content: `## What is COE?
@@ -125,9 +125,9 @@ Your deposit is returned, and you can bid again in the next exercise.
   {
     slug: "parf",
     term: "PARF",
-    title: "PARF Rebate - How It Works and When to Deregister",
+    title: "What is PARF? PARF Rebate Rates and When to Deregister",
     description:
-      "Understand Singapore's PARF rebate system: how it's calculated, the declining rebate schedule, and when it makes financial sense to deregister your car.",
+      "PARF is the rebate you get back on your ARF when you deregister a car early. See how the PARF rebate is calculated, the rate schedule, and when deregistering pays off.",
     excerpt:
       "The Preferential Additional Registration Fee (PARF) rebate is money you get back when you deregister your car before the COE expires. Understanding PARF can save you thousands when deciding when to sell or scrap your vehicle.",
     content: `## What is PARF?
@@ -260,9 +260,9 @@ PARF is a government rebate. Scrap value is what scrapyards pay for the vehicle'
   {
     slug: "arf",
     term: "ARF",
-    title: "Additional Registration Fee (ARF) - Tiers and Calculation",
+    title: "What is ARF? Singapore ARF Rates and How It Is Calculated",
     description:
-      "Complete guide to Singapore's ARF: the tiered tax structure, how it's calculated from OMV, and its impact on car prices and PARF rebates.",
+      "ARF (Additional Registration Fee) is the tiered tax paid when registering a car in Singapore. See the ARF rates, how ARF is calculated from OMV, and worked examples.",
     excerpt:
       "The Additional Registration Fee is a major component of car prices in Singapore. This tiered tax on vehicle value can add tens of thousands to your purchase:here's how it works.",
     content: `## What is ARF?
@@ -405,9 +405,9 @@ No, ARF is mandatory for all new vehicle registrations in Singapore. There are n
   {
     slug: "omv",
     term: "OMV",
-    title: "Open Market Value (OMV) - How Singapore Customs Assesses Your Car",
+    title: "What is OMV? Open Market Value of Cars in Singapore",
     description:
-      "Understand how OMV is determined by Singapore Customs, what's included in the valuation, and how it affects your ARF, PARF, and total car cost.",
+      "OMV (Open Market Value) is a car's price before Singapore taxes, assessed by Singapore Customs. Learn what OMV includes and how it sets your ARF and PARF.",
     excerpt:
       "The Open Market Value is the foundation of Singapore's car tax system. This Customs-assessed value determines your ARF, PARF potential, and significantly impacts the total price you pay for a car.",
     content: `## What is OMV?
@@ -572,9 +572,9 @@ Not exactly. Paper value for loans/insurance may differ from OMV as it includes 
   {
     slug: "pqp",
     term: "PQP",
-    title: "Prevailing Quota Premium (PQP) - COE Renewal Costs Explained",
+    title: "What is PQP? Prevailing Quota Premium and COE Renewal Costs",
     description:
-      "Complete guide to Singapore's PQP: how it's calculated, when to renew vs deregister, and current PQP rates across all vehicle categories.",
+      "PQP (Prevailing Quota Premium) is the 3-month average COE price you pay to renew your COE. Learn how PQP is calculated and when to renew or deregister.",
     excerpt:
       "The Prevailing Quota Premium determines how much you pay to renew your COE after 10 years. Understanding PQP helps you decide whether to extend your car's lifespan or deregister for rebates.",
     content: `## What is PQP?
