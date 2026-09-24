@@ -27,8 +27,8 @@ export async function generateMetadata({
 
   const formattedMonth = formatDateToMonthYear(month);
 
-  const title = "Singapore Car Registrations";
-  const description = `Discover ${formattedMonth} car registrations in Singapore. See detailed stats by fuel type, vehicle type, and top brands.`;
+  const title = "New Car Registrations in Singapore";
+  const description = `${formattedMonth} new car registrations in Singapore from LTA data, by make, fuel type and vehicle type.`;
 
   return {
     title,
