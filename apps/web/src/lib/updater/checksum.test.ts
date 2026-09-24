@@ -1,5 +1,5 @@
+import { Checksum } from "@web/lib/updater/checksum";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { Checksum } from "./checksum";
 
 const mockHset = vi.fn();
 const mockHget = vi.fn();

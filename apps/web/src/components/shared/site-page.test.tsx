@@ -1,5 +1,5 @@
+import { SitePage } from "@web/components/shared/site-page";
 import { render } from "vitest-browser-react";
-import { SitePage } from "./site-page";
 
 describe("SitePage", () => {
   it("should render its children in the shared column", async () => {

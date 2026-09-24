@@ -1,10 +1,10 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   fetchMonthsForCars,
   fetchMonthsForDeregistrations,
   getLatestMonth,
   getMonthOrLatest,
-} from "./months";
+} from "@web/utils/dates/months";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockGetCarsMonths = vi.fn();
 const mockGetCarsLatestMonth = vi.fn();

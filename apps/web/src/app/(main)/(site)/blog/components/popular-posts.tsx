@@ -1,8 +1,8 @@
 import { Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
+import { getCategoryConfig } from "@web/app/(main)/(site)/blog/components/post/utils";
 import { SurfaceCard } from "@web/components/shared/bento";
 import Link from "next/link";
-import { getCategoryConfig } from "./post/utils";
 
 interface PostWithViews extends SelectPost {
   viewCount: number;

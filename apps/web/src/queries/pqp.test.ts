@@ -3,13 +3,12 @@ import {
   PQP_REPORTED_CATEGORIES,
 } from "@web/queries/coe/pqp/overview";
 import { getPqpRates } from "@web/queries/coe/pqp/rates";
-import { describe, expect, it } from "vitest";
 import {
-  queueBatch,
   queueSelect,
   queueSelectDistinct,
   resetDbMocks,
-} from "./test-utils";
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("PQP queries", () => {
   beforeEach(() => {
@@ -17,26 +16,23 @@ describe("PQP queries", () => {
   });
 
   it("provides an overview of PQP insights with savings calculations", async () => {
-    queueSelectDistinct([]);
-    queueSelect([], []);
-    queueBatch([
-      [{ month: "2024-06" }],
-      [{ month: "2024-06" }],
-      [{ month: "2024-06" }],
-    ]);
-    queueSelect([], [], []);
-    queueBatch([
-      [{ month: "2024-06", vehicleClass: "Category A", pqp: 100 }],
-      [{ biddingNo: 2 }],
+    // Recent PQP months, read in the first batch
+    queueSelectDistinct([{ month: "2024-06" }]);
+    queueSelect(
+      // Latest COE month and bidding number subqueries
+      [],
+      [],
+      // Latest exercise premiums, read in the first batch
       [
-        { vehicleClass: "Category A", pqp: 100 },
-        { vehicleClass: "Category B", pqp: 0 },
+        { vehicleClass: "Category A", premium: 120 },
+        { vehicleClass: "Category B", premium: 0 },
       ],
-    ]);
-    queueSelect([
-      { vehicleClass: "Category A", premium: 120 },
-      { vehicleClass: "Category B", premium: 0 },
-    ]);
+      // PQP rates for the recent months
+      [
+        { month: "2024-06", vehicleClass: "Category A", pqp: 100 },
+        { month: "2024-06", vehicleClass: "Category B", pqp: 0 },
+      ],
+    );
 
     const result = await getPQPOverview();
 
@@ -79,8 +75,6 @@ describe("PQP queries", () => {
 
   it("handles empty PQP data gracefully", async () => {
     queueSelectDistinct([]);
-    queueSelect([], []);
-    queueBatch([[], [], []]);
 
     const result = await getPQPOverview();
 

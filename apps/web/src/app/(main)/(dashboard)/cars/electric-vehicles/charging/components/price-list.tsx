@@ -1,4 +1,5 @@
 import { Skeleton, Typography } from "@heroui/react";
+import { LocationRow } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/location-row";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { QueryTabs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/query-tabs";
 import { SurfaceCard } from "@web/components/shared/bento";
@@ -10,7 +11,6 @@ import {
 } from "@web/queries/ev-charging";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
-import { LocationRow } from "./location-row";
 
 const POWER_OPTIONS = [
   { key: "AC" as const, label: "AC" },

@@ -1,10 +1,10 @@
-import { describe, expect, it } from "vitest";
 import {
   nextMonth,
   pqpMonthsFor,
   sumByMonth,
   windowEndingAt,
-} from "./overview-series";
+} from "@web/app/(main)/(dashboard)/components/overview-series";
+import { describe, expect, it } from "vitest";
 
 describe("nextMonth", () => {
   it("should step to the following month", () => {

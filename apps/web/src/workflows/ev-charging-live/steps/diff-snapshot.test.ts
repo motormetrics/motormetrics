@@ -1,5 +1,9 @@
 import type { ConnectorRecord } from "@web/lib/ev-charging";
-import { diffSnapshot, formatPrice, truncateToHour } from "./diff-snapshot";
+import {
+  diffSnapshot,
+  formatPrice,
+  truncateToHour,
+} from "@web/workflows/ev-charging-live/steps/diff-snapshot";
 
 const observedAt = new Date("2026-09-03T10:07:00+08:00");
 const earlier = new Date("2026-09-03T08:00:00+08:00");

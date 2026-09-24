@@ -1,11 +1,15 @@
 "use client";
 
 import { Button, Dropdown, Label } from "@heroui/react";
+import {
+  isRange,
+  RANGE_LABELS,
+  RANGES,
+} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { ChevronDown } from "lucide-react";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
 import { useTransition } from "react";
-import { RANGE_LABELS, RANGES } from "../search-params";
 
 /**
  * The period picker in the page eyebrow — the makes-page counterpart of
@@ -42,14 +46,14 @@ export function RangeMenu() {
         <Dropdown.Menu
           onAction={(key) => {
             const next = String(key);
-            if (!RANGES.includes(next as (typeof RANGES)[number])) {
+            if (!isRange(next)) {
               return;
             }
             posthog.capture("dashboard_filter_changed", {
               filter: "range",
               value: next,
             });
-            setRange(next as (typeof RANGES)[number]);
+            setRange(next);
           }}
         >
           {RANGES.map((option) => {

@@ -13,7 +13,7 @@ The wizard has completed a deep integration of PostHog analytics into the MotorM
 | `admin_blog_post_regenerated` | Admin triggers AI regeneration of a blog post | `src/app/admin/components/blog-post-form.tsx` |
 | `car_make_searched` | User selects a car make on the makes page, by opening its row in the all-makes table | `src/app/(main)/(dashboard)/cars/makes/components/makes-table.tsx` |
 | `car_make_selected` | User selects a car make in the registrations page autocomplete | `src/app/(main)/(dashboard)/cars/registrations/components/make-selector.tsx` |
-| `blog_category_tab_changed` | User switches between blog category tabs (All, COE, Cars) | `src/app/(main)/(site)/blog/components/blog-list/client.tsx` |
+| `blog_category_tab_changed` | User switches between blog category tabs (All, COE, Cars) | `src/app/(main)/(site)/blog/components/blog-list.tsx` |
 | `annual_view_tab_changed` | User switches between annual view tabs (By Fuel Type, By Make) | `src/app/(main)/(dashboard)/cars/annual/components/annual-view-tabs.tsx` |
 | `api_post_created` | Blog post created successfully via the REST API (server-side) | `src/app/api/v1/posts/route.ts` |
 | `api_post_deleted` | Blog post deleted successfully via the REST API (server-side) | `src/app/api/v1/posts/[id]/route.ts` |

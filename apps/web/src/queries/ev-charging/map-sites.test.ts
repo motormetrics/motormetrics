@@ -1,11 +1,13 @@
-import "../test-utils";
-import { connector } from "./fixtures";
-import { getEvChargingLocationUtilisation } from "./location-utilisation";
-import { getEvChargingMapSites } from "./map-sites";
-import { getEvChargingSnapshot } from "./snapshot";
+import "@web/queries/test-utils";
+import { connector } from "@web/queries/ev-charging/fixtures";
+import { getEvChargingLocationUtilisation } from "@web/queries/ev-charging/location-utilisation";
+import { getEvChargingMapSites } from "@web/queries/ev-charging/map-sites";
+import { getEvChargingSnapshot } from "@web/queries/ev-charging/snapshot";
 
-vi.mock("./snapshot", () => ({ getEvChargingSnapshot: vi.fn() }));
-vi.mock("./location-utilisation", () => ({
+vi.mock("@web/queries/ev-charging/snapshot", () => ({
+  getEvChargingSnapshot: vi.fn(),
+}));
+vi.mock("@web/queries/ev-charging/location-utilisation", () => ({
   getEvChargingLocationUtilisation: vi.fn().mockResolvedValue([]),
 }));
 

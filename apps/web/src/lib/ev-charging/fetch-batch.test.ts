@@ -1,4 +1,7 @@
-import { extractDownloadLink, fetchBatch } from "./fetch-batch";
+import {
+  extractDownloadLink,
+  fetchBatch,
+} from "@web/lib/ev-charging/fetch-batch";
 
 describe("extractDownloadLink", () => {
   it("should read the link from the shapes DataMall uses", () => {

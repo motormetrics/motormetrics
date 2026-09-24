@@ -34,8 +34,11 @@ export async function MoversRail({
 
   const movers = makeStats
     .slice(0, CANDIDATE_POOL)
-    .filter((stat) => stat.yoyChange !== null)
-    .sort((first, second) => (second.yoyChange ?? 0) - (first.yoyChange ?? 0))
+    .filter(
+      (stat): stat is typeof stat & { yoyChange: number } =>
+        stat.yoyChange !== null,
+    )
+    .sort((first, second) => second.yoyChange - first.yoyChange)
     .slice(0, MOVERS_SHOWN);
 
   return (
@@ -87,7 +90,7 @@ export async function MoversRail({
                       registered
                     </Typography.Paragraph>
                   </div>
-                  <DeltaChip className="ml-auto" value={mover.yoyChange ?? 0} />
+                  <DeltaChip className="ml-auto" value={mover.yoyChange} />
                 </Link>
               </li>
             );

@@ -3,14 +3,14 @@ import {
   getDistinctFuelTypes,
   getDistinctMakes,
   getDistinctVehicleTypes,
-} from "./cars/filter-options";
+} from "@web/queries/cars/filter-options";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelect,
   queueSelectDistinct,
   resetDbMocks,
-} from "./test-utils";
+} from "@web/queries/test-utils";
 
 describe("car filter option queries", () => {
   beforeEach(() => {

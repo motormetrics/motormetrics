@@ -86,7 +86,7 @@ export async function ChargingSummary() {
         <ProgressBar
           aria-label="Share of the 2030 target installed"
           className="w-full"
-          value={Math.min(targetShare, 100)}
+          value={targetShare}
         >
           <ProgressBar.Track className="h-3 rounded-full bg-surface-secondary">
             <ProgressBar.Fill className="rounded-full bg-accent" />

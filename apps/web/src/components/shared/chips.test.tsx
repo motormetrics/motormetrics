@@ -1,5 +1,5 @@
+import { NewChip } from "@web/components/shared/chips";
 import { render } from "vitest-browser-react";
-import { NewChip } from "./chips";
 
 describe("NewChip", () => {
   it("should render with default props", async () => {

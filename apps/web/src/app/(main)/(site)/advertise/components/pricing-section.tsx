@@ -1,6 +1,6 @@
-import { Button, Card, Chip, cn, Typography } from "@heroui/react";
+import { Card, Chip, cn, Typography } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
 import { Check } from "lucide-react";
-import { cacheLife } from "next/cache";
 import Link from "next/link";
 
 const plans = [
@@ -44,10 +44,7 @@ const plans = [
   },
 ];
 
-export async function PricingSection() {
-  "use cache";
-  cacheLife("days");
-
+export function PricingSection() {
   return (
     <section className="flex scroll-mt-24 flex-col gap-7" id="pricing">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
@@ -99,18 +96,18 @@ export async function PricingSection() {
                   </div>
                 ))}
               </div>
-              <Link
-                className="mt-auto w-full pt-3 no-underline"
-                href="#contact"
-              >
-                <Button
-                  className="rounded-full"
-                  fullWidth
-                  variant={featured ? "primary" : "secondary"}
+              <div className="mt-auto w-full pt-3">
+                <Link
+                  className={buttonVariants({
+                    className: "rounded-full no-underline",
+                    fullWidth: true,
+                    variant: featured ? "primary" : "secondary",
+                  })}
+                  href="#contact"
                 >
                   {cta}
-                </Button>
-              </Link>
+                </Link>
+              </div>
             </Card.Content>
           </Card>
         ))}

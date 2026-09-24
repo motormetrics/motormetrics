@@ -1,5 +1,5 @@
+import { DeltaChip } from "@web/components/shared/delta-chip";
 import { render } from "vitest-browser-react";
-import { DeltaChip } from "./delta-chip";
 
 describe("DeltaChip", () => {
   it("should render a rise with a leading plus", async () => {

@@ -2,49 +2,35 @@ import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { and, desc, gt, gte, lte, sql } from "drizzle-orm";
-import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife } from "next/cache";
 
 /**
- * Get popular car makes based on annual registration totals
+ * Query popular makes for the latest year with registration data.
+ * Returns array of make names sorted by annual registration volume.
  */
-const getPopularMakesByYearData = async (year: string, limit: number = 8) => {
-  const whereConditions = [
-    gte(cars.month, `${year}-01`),
-    lte(cars.month, `${year}-12`),
-    gt(cars.number, 0),
-  ];
-
-  return db
-    .select({
-      make: cars.make,
-    })
-    .from(cars)
-    .where(and(...whereConditions))
-    .groupBy(cars.make)
-    .orderBy(desc(sql`sum(${cars.number})`))
-    .limit(limit);
-};
-
-/**
- * Query popular makes for the current year.
- * Returns array of make names sorted by registration volume.
- */
-export async function getPopularMakes(year?: string) {
+export async function getPopularMakes() {
   "use cache";
   cacheLife("max");
-  if (year) {
-    cacheTag(`cars:year:${year}`);
-  }
-
-  if (year) {
-    return getPopularMakesByYearData(year, 8);
-  }
 
   const latestMonth = await getCarsLatestMonth();
   if (!latestMonth) {
     return [];
   }
 
-  const targetYear = latestMonth.split("-")[0];
-  return getPopularMakesByYearData(targetYear, 8);
+  const year = latestMonth.split("-")[0];
+  return db
+    .select({
+      make: cars.make,
+    })
+    .from(cars)
+    .where(
+      and(
+        gte(cars.month, `${year}-01`),
+        lte(cars.month, `${year}-12`),
+        gt(cars.number, 0),
+      ),
+    )
+    .groupBy(cars.make)
+    .orderBy(desc(sql`sum(${cars.number})`))
+    .limit(8);
 }

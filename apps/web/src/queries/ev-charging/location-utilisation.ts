@@ -1,19 +1,19 @@
 import { db } from "@motormetrics/database/client";
 import { evLocationHourly } from "@motormetrics/database/schema";
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+import type { EvChargingLocation } from "@web/queries/ev-charging/locations";
+import {
+  districtPredicate,
+  storedLocationColumns,
+  storedLocationsSubquery,
+  toStoredLocation,
+} from "@web/queries/ev-charging/stored-locations";
 import {
   daysAgo,
   utilisationPercent,
 } from "@web/queries/ev-charging/utilisation";
 import { and, asc, desc, eq, gte, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import type { EvChargingLocation } from "./locations";
-import {
-  districtPredicate,
-  storedLocationColumns,
-  storedLocationsSubquery,
-  toStoredLocation,
-} from "./stored-locations";
 
 export type UtilisationOrder = "busiest" | "quietest";
 

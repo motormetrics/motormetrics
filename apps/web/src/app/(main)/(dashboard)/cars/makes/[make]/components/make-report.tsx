@@ -108,7 +108,11 @@ export async function MakeReport({
     month: parsedMonth,
     range,
   } = await loadSearchParams(searchParams);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
+  const [{ month }, crossTab, logoUrlBySlug] = await Promise.all([
+    getMonthOrLatest(parsedMonth, "cars"),
+    getMakeCrossTab(make),
+    getCarLogoMap(),
+  ]);
 
   const { end, start } = periodWindow(month, range);
   const previousStart = shiftMonth(start, -12);
@@ -119,13 +123,10 @@ export async function MakeReport({
   const seriesStart = start === end ? shiftMonth(end, -11) : start;
   const seriesMonths = monthsBetween(seriesStart, end);
 
-  const [crossTab, makeTotals, marketMonthly, logoUrlBySlug] =
-    await Promise.all([
-      getMakeCrossTab(make),
-      getMakeTotalsInRange(start, end),
-      getMarketMonthlyTotals(seriesStart, end),
-      getCarLogoMap(),
-    ]);
+  const [makeTotals, marketMonthly] = await Promise.all([
+    getMakeTotalsInRange(start, end),
+    getMarketMonthlyTotals(seriesStart, end),
+  ]);
 
   if (crossTab.length === 0) {
     return <EmptyState />;

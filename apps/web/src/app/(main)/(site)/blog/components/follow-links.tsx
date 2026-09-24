@@ -1,9 +1,9 @@
 import { Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
+import type { PostCategoryKey } from "@web/app/(main)/(site)/blog/components/post/utils";
 import { InkPanel } from "@web/components/shared/bento";
 import type { Route } from "next";
 import Link from "next/link";
-import type { PostCategoryKey } from "./post/utils";
 
 interface FollowLink {
   href: Route;

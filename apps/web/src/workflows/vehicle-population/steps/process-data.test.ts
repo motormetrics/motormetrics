@@ -11,7 +11,7 @@ vi.mock("@web/lib/updater", () => ({
 }));
 
 import { type UpdaterResult, update } from "@web/lib/updater";
-import { updateVehiclePopulation } from "./process-data";
+import { updateVehiclePopulation } from "@web/workflows/vehicle-population/steps/process-data";
 
 const mockResult = (overrides?: Partial<UpdaterResult>): UpdaterResult => ({
   table: "vehicle_population",

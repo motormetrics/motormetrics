@@ -4,6 +4,7 @@ import {
   type UpdaterOptions,
   update,
 } from "@web/lib/updater";
+import type { Checksum } from "@web/lib/updater/checksum";
 import {
   calculateBufferChecksum,
   calculateChecksum,
@@ -13,7 +14,6 @@ import {
   fetchZipBuffer,
 } from "@web/lib/updater/services/download-file";
 import { processCsv } from "@web/lib/updater/services/process-csv";
-import type { Checksum } from "@web/utils/checksum";
 import type { PgTable } from "drizzle-orm/pg-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -21,7 +21,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("@web/lib/updater/services/download-file");
 vi.mock("@web/lib/updater/services/calculate-checksum");
 vi.mock("@web/lib/updater/services/process-csv");
-vi.mock("@web/utils/checksum");
+vi.mock("@web/lib/updater/checksum");
 vi.mock("@neondatabase/serverless", () => ({
   neon: vi.fn(() => vi.fn()),
 }));

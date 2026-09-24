@@ -67,7 +67,7 @@ export function Frame({
             height="23"
             viewBox="0 0 64 64"
             fill="none"
-            stroke="#FFFFFF"
+            stroke={OG_COLOURS.onAccent}
             strokeWidth="7"
             strokeLinecap="round"
             strokeLinejoin="round"

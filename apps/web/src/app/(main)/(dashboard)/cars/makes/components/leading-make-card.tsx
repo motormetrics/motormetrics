@@ -1,11 +1,14 @@
 import { NumberValue } from "@heroui-pro/react";
+import { loadMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import {
+  loadSearchParams,
+  RANGE_LABELS,
+} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { Headline } from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import type { SearchParams } from "nuqs/server";
-import { loadSearchParams, RANGE_LABELS } from "../search-params";
-import { loadMakeRows } from "./make-rows";
 
 /** The page headline: the leading make's count, share and 12-month trend. */
 export async function LeadingMakeCard({

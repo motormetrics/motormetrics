@@ -1,11 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { getDimensionStats } from "@web/queries/cars/dimension-stats";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelect,
   resetDbMocks,
-} from "../test-utils";
-import { getDimensionStats } from "./dimension-stats";
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("getDimensionStats", () => {
   beforeEach(() => {

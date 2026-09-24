@@ -68,12 +68,8 @@ export function SharePill({
   const url = `${SITE_URL}${pathname}`;
 
   const handleAction = async (key: Key) => {
-    const channel =
-      key === COPY_KEY
-        ? "copy"
-        : TARGETS.find(
-            (target) => target.build(url, title) === key,
-          )?.label.toLowerCase();
+    const target = TARGETS.find(({ label }) => label === key);
+    const channel = key === COPY_KEY ? "copy" : target?.label.toLowerCase();
     posthog.capture("page_shared", { channel, content_type: contentType });
 
     if (key === COPY_KEY) {
@@ -83,7 +79,9 @@ export function SharePill({
       return;
     }
 
-    window.open(String(key), "_blank", "noopener,noreferrer");
+    if (target) {
+      window.open(target.build(url, title), "_blank", "noopener,noreferrer");
+    }
   };
 
   return (
@@ -99,12 +97,8 @@ export function SharePill({
         <Dropdown.Menu onAction={handleAction}>
           <Dropdown.Section>
             <Header>Share this page</Header>
-            {TARGETS.map(({ build, icon: Icon, label }) => (
-              <Dropdown.Item
-                id={build(url, title)}
-                key={label}
-                textValue={label}
-              >
+            {TARGETS.map(({ icon: Icon, label }) => (
+              <Dropdown.Item id={label} key={label} textValue={label}>
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent-strong">
                   <Icon className="size-4" />
                 </span>

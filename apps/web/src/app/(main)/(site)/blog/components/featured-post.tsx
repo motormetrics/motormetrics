@@ -1,10 +1,13 @@
 import { Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
+import {
+  getCategoryConfig,
+  getReadingTime,
+} from "@web/app/(main)/(site)/blog/components/post/utils";
 import { InkPanel } from "@web/components/shared/bento";
 import { formatDate } from "@web/utils/dates/format-date";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { getCategoryConfig, getReadingTime } from "./post/utils";
 
 /**
  * The comp's dark featured panel — the latest post, given the width of a

@@ -19,29 +19,27 @@ const title = "COE Premiums and Trends";
 const description =
   "Certificate of Entitlement (COE) analysis hub for Singapore vehicle registration. View latest premiums, trends, and category-specific insights.";
 
-export function generateMetadata(): Metadata {
-  return {
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    ...baseOpenGraph,
     title,
     description,
-    openGraph: {
-      ...baseOpenGraph,
-      title,
-      description,
-      url: `${SITE_URL}/coe/premiums`,
-    },
-    twitter: {
-      ...baseTwitter,
-      title,
-      description,
-    },
-    alternates: {
-      canonical: "/coe/premiums",
-    },
-    authors: [{ name: SITE_TITLE, url: SITE_URL }],
-    creator: SITE_TITLE,
-    publisher: SITE_TITLE,
-  };
-}
+    url: `${SITE_URL}/coe/premiums`,
+  },
+  twitter: {
+    ...baseTwitter,
+    title,
+    description,
+  },
+  alternates: {
+    canonical: "/coe/premiums",
+  },
+  authors: [{ name: SITE_TITLE, url: SITE_URL }],
+  creator: SITE_TITLE,
+  publisher: SITE_TITLE,
+};
 
 export default function COEPremiumsPage({ searchParams }: PageProps) {
   return (

@@ -1,10 +1,10 @@
+import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import type { COECategory, COEResult } from "@web/types";
 import {
   formatMonthLabel,
   formatMonthShortLabel,
   formatMonthShortName,
 } from "@web/utils/dates/format-month";
-import type { CategoryKey } from "./search-params";
 
 export const COE_CATEGORIES: COECategory[] = [
   "Category A",

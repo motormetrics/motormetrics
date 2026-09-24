@@ -3,6 +3,12 @@ import { createReadStream } from "node:fs";
 import { pipeline } from "node:stream/promises";
 
 /**
+ * Calculates the SHA-256 checksum of an in-memory buffer.
+ */
+export const calculateBufferChecksum = (buffer: Buffer): string =>
+  createHash("sha256").update(buffer).digest("hex");
+
+/**
  * Calculates the SHA-256 checksum of a file efficiently using streaming.
  *
  * Processes the file in chunks to minimize memory usage, making it suitable
@@ -22,12 +28,6 @@ import { pipeline } from "node:stream/promises";
  * }
  * ```
  */
-/**
- * Calculates the SHA-256 checksum of an in-memory buffer.
- */
-export const calculateBufferChecksum = (buffer: Buffer): string =>
-  createHash("sha256").update(buffer).digest("hex");
-
 export const calculateChecksum = async (filePath: string): Promise<string> => {
   const hash = createHash("sha256");
   const fileStream = createReadStream(filePath);

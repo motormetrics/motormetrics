@@ -1,7 +1,7 @@
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+import { inDistrict } from "@web/queries/ev-charging/locations";
+import { getEvChargingSnapshot } from "@web/queries/ev-charging/snapshot";
 import { cacheLife, cacheTag } from "next/cache";
-import { inDistrict } from "./locations";
-import { getEvChargingSnapshot } from "./snapshot";
 
 export interface EvChargingLiveSummary {
   connectors: number;

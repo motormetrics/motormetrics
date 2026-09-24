@@ -29,7 +29,7 @@ vi.mock("@web/lib/updater", () => ({
 
 import { cleanSpecialChars } from "@motormetrics/utils/cleanSpecialChars";
 import { type UpdaterResult, update } from "@web/lib/updater";
-import { updateCars } from "./process-data";
+import { updateCars } from "@web/workflows/cars/steps/process-data";
 
 const mockResult = (overrides?: Partial<UpdaterResult>): UpdaterResult => ({
   table: "cars",

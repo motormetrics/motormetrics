@@ -220,12 +220,12 @@ async function CarMakeHeaderMeta({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const [{ month: parsedMonth }, months, makes] = await Promise.all([
-    loadSearchParams(searchParamsPromise),
+  const { month: parsedMonth } = await loadSearchParams(searchParamsPromise);
+  const [months, makes, { wasAdjusted }] = await Promise.all([
     fetchMonthsForCars(),
     getDistinctMakes(),
+    getMonthOrLatest(parsedMonth, "cars"),
   ]);
-  const { wasAdjusted } = await getMonthOrLatest(parsedMonth, "cars");
 
   return (
     <>

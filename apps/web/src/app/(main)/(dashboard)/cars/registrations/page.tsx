@@ -105,8 +105,7 @@ async function CarsCompareSection({
   ]);
 
   const comparisonData =
-    (compareA && compareB && (await getComparisonData(compareA, compareB))) ||
-    false;
+    compareA && compareB ? await getComparisonData(compareA, compareB) : false;
 
   return (
     <TrendsCompareButton

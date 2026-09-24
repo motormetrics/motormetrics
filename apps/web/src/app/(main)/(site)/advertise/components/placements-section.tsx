@@ -1,7 +1,6 @@
 import { Typography } from "@heroui/react";
 import { ReportEyebrow } from "@web/components/shared/report";
 import { Layout, Rows3, StickyNote } from "lucide-react";
-import { cacheLife } from "next/cache";
 
 const placements = [
   {
@@ -27,10 +26,7 @@ const placements = [
   },
 ];
 
-export async function PlacementsSection() {
-  "use cache";
-  cacheLife("days");
-
+export function PlacementsSection() {
   return (
     <section className="flex scroll-mt-24 flex-col gap-7" id="placements">
       <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">

@@ -1,9 +1,9 @@
-import { dbMock, queueSelect, resetDbMocks } from "@web/queries/test-utils";
-import { beforeEach, describe, expect, it } from "vitest";
 import {
   getComparisonWindows,
   getMakeRegistrationStats,
-} from "./registration-stats";
+} from "@web/queries/cars/makes/registration-stats";
+import { dbMock, queueSelect, resetDbMocks } from "@web/queries/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("getComparisonWindows", () => {
   it("should end both windows on the same month rather than running the previous year to December", () => {

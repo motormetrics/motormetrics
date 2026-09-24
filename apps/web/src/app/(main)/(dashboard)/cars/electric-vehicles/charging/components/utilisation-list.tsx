@@ -1,4 +1,5 @@
 import { Typography } from "@heroui/react";
+import { LocationRow } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/location-row";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { SurfaceCard } from "@web/components/shared/bento";
 import { ListSkeleton } from "@web/components/shared/skeleton";
@@ -9,7 +10,6 @@ import {
 } from "@web/queries/ev-charging";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
-import { LocationRow } from "./location-row";
 
 interface UtilisationListProps {
   order: UtilisationOrder;

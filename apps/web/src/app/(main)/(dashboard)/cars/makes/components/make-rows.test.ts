@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import {
   buildTotalsFromFuelRows,
   buildTotalsFromStats,
@@ -6,7 +5,8 @@ import {
   matchesFuelFilter,
   rollingMonths,
   selectElectricOnlyMakes,
-} from "./make-rows";
+} from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { describe, expect, it } from "vitest";
 
 const stats = [
   {

@@ -1,11 +1,11 @@
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+import { getEvChargingUtilisationByHour } from "@web/queries/ev-charging/hourly-utilisation";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelect,
   resetDbMocks,
-} from "../test-utils";
-import { getEvChargingUtilisationByHour } from "./hourly-utilisation";
+} from "@web/queries/test-utils";
 
 describe("getEvChargingUtilisationByHour", () => {
   beforeEach(() => {

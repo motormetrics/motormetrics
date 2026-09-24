@@ -1,6 +1,6 @@
+import { PageNotFound } from "@web/components/page-not-found";
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
-import { PageNotFound } from "./page-not-found";
 
 describe("PageNotFound", () => {
   it("renders the 404 error message", async () => {

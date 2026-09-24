@@ -1,8 +1,7 @@
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
-import { and, desc, eq, gt, sum } from "drizzle-orm";
+import { desc, eq, gt, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import { FUEL_TYPE, type TypeConfig, VEHICLE_TYPE } from "./categories";
 
 export async function getDistinctMakes() {
   "use cache";
@@ -12,24 +11,11 @@ export async function getDistinctMakes() {
   return db.selectDistinct({ make: cars.make }).from(cars).orderBy(cars.make);
 }
 
-function queryDistinctTypeValues(config: TypeConfig, month?: string) {
-  const filters = [];
+/** Restricts to one month when given, and drops values with no registrations. */
+const monthFilter = (month?: string) =>
+  month ? eq(cars.month, month) : undefined;
 
-  if (month) {
-    filters.push(eq(cars.month, month));
-  }
-
-  return (
-    db
-      // biome-ignore lint/suspicious/noExplicitAny: computed property key requires type assertion for Drizzle's SelectedFields
-      .select({ [config.fieldName]: config.column } as any)
-      .from(cars)
-      .where(filters.length > 0 ? and(...filters) : undefined)
-      .groupBy(config.column)
-      .having(gt(sum(cars.number), 0))
-      .orderBy(config.column)
-  );
-}
+const hasRegistrations = gt(sum(cars.number), 0);
 
 export async function getDistinctFuelTypes(
   month?: string,
@@ -40,8 +26,13 @@ export async function getDistinctFuelTypes(
     cacheTag(`cars:month:${month}`);
   }
 
-  const result = await queryDistinctTypeValues(FUEL_TYPE, month);
-  return result as { fuelType: string }[];
+  return db
+    .select({ fuelType: cars.fuelType })
+    .from(cars)
+    .where(monthFilter(month))
+    .groupBy(cars.fuelType)
+    .having(hasRegistrations)
+    .orderBy(cars.fuelType);
 }
 
 export async function getDistinctVehicleTypes(
@@ -53,8 +44,13 @@ export async function getDistinctVehicleTypes(
     cacheTag(`cars:month:${month}`);
   }
 
-  const result = await queryDistinctTypeValues(VEHICLE_TYPE, month);
-  return result as { vehicleType: string }[];
+  return db
+    .select({ vehicleType: cars.vehicleType })
+    .from(cars)
+    .where(monthFilter(month))
+    .groupBy(cars.vehicleType)
+    .having(hasRegistrations)
+    .orderBy(cars.vehicleType);
 }
 
 export async function getCarsMonths(): Promise<{ month: string }[]> {

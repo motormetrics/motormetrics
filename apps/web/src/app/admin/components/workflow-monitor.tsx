@@ -1,8 +1,9 @@
 "use client";
 
 import { Button, Card, Chip } from "@heroui/react";
+import { triggerWorkflow as startWorkflow } from "@web/app/admin/actions/workflows";
 import { Loader2, Play, RefreshCw } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 interface WorkflowType {
@@ -81,21 +82,36 @@ export function WorkflowMonitor() {
       ),
   );
   const [polling, setPolling] = useState(false);
+  // Latest state for refreshAll, so its interval is not recreated on every update
+  const workflowsRef = useRef(workflows);
+  useEffect(() => {
+    workflowsRef.current = workflows;
+  }, [workflows]);
+  // Per-trigger polling timers, cleared on unmount
+  const timersRef = useRef<{
+    intervals: Set<ReturnType<typeof setInterval>>;
+    timeouts: Set<ReturnType<typeof setTimeout>>;
+  }>({ intervals: new Set(), timeouts: new Set() });
 
-  const checkRunStatus = useCallback(
-    async (_workflowId: string, runId: string) => {
-      try {
-        const response = await fetch(
-          `/api/admin/workflows?runId=${encodeURIComponent(runId)}`,
-        );
-        if (!response.ok) return null;
-        return (await response.json()) as WorkflowRunInfo;
-      } catch {
-        return null;
-      }
-    },
-    [],
-  );
+  useEffect(() => {
+    const timers = timersRef.current;
+    return () => {
+      for (const interval of timers.intervals) clearInterval(interval);
+      for (const timeout of timers.timeouts) clearTimeout(timeout);
+    };
+  }, []);
+
+  const checkRunStatus = useCallback(async (runId: string) => {
+    try {
+      const response = await fetch(
+        `/api/admin/workflows?runId=${encodeURIComponent(runId)}`,
+      );
+      if (!response.ok) return null;
+      return (await response.json()) as WorkflowRunInfo;
+    } catch {
+      return null;
+    }
+  }, []);
 
   const triggerWorkflow = useCallback(
     async (workflowId: string) => {
@@ -105,18 +121,15 @@ export function WorkflowMonitor() {
       }));
 
       try {
-        const response = await fetch(`/api/workflows/${workflowId}`, {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET ?? ""}`,
-          },
-        });
+        const result = await startWorkflow(workflowId);
 
-        if (!response.ok) {
-          throw new Error(`Failed to trigger workflow: ${response.statusText}`);
+        if (!result.success || !result.runId) {
+          throw new Error(
+            `Failed to trigger workflow: ${result.error ?? "Unknown error"}`,
+          );
         }
 
-        const data = await response.json();
-        const runId = data.runId as string;
+        const { runId } = result;
 
         setWorkflows((prev) => ({
           ...prev,
@@ -130,9 +143,17 @@ export function WorkflowMonitor() {
           `${WORKFLOW_TYPES.find((w) => w.id === workflowId)?.name} workflow triggered`,
         );
 
+        const { intervals, timeouts } = timersRef.current;
+        const stopPolling = () => {
+          clearInterval(interval);
+          clearTimeout(timeout);
+          intervals.delete(interval);
+          timeouts.delete(timeout);
+        };
+
         // Poll for status updates
         const interval = setInterval(async () => {
-          const info = await checkRunStatus(workflowId, runId);
+          const info = await checkRunStatus(runId);
           if (info) {
             setWorkflows((prev) => ({
               ...prev,
@@ -143,13 +164,15 @@ export function WorkflowMonitor() {
               info.status === "failed" ||
               info.status === "cancelled"
             ) {
-              clearInterval(interval);
+              stopPolling();
             }
           }
         }, 3000);
 
         // Stop polling after 5 minutes
-        setTimeout(() => clearInterval(interval), 5 * 60 * 1000);
+        const timeout = setTimeout(stopPolling, 5 * 60 * 1000);
+        intervals.add(interval);
+        timeouts.add(timeout);
       } catch (error) {
         setWorkflows((prev) => ({
           ...prev,
@@ -169,9 +192,9 @@ export function WorkflowMonitor() {
 
     await Promise.all(
       WORKFLOW_TYPES.map(async (w) => {
-        const current = workflows[w.id];
+        const current = workflowsRef.current[w.id];
         if (current?.lastRun?.runId) {
-          const info = await checkRunStatus(w.id, current.lastRun.runId);
+          const info = await checkRunStatus(current.lastRun.runId);
           if (info) {
             updates[w.id] = { ...current, lastRun: info };
           }
@@ -183,7 +206,7 @@ export function WorkflowMonitor() {
       setWorkflows((prev) => ({ ...prev, ...updates }));
     }
     setPolling(false);
-  }, [workflows, checkRunStatus]);
+  }, [checkRunStatus]);
 
   useEffect(() => {
     const interval = setInterval(refreshAll, 30000);

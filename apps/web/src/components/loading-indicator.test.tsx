@@ -9,7 +9,9 @@ vi.mock("next/link", () => ({
 
 describe("LoadingIndicator", () => {
   it("should render progress bar when pending", async () => {
-    const { default: LoadingIndicator } = await import("./loading-indicator");
+    const { default: LoadingIndicator } = await import(
+      "@web/components/loading-indicator"
+    );
 
     const screen = await render(<LoadingIndicator />);
 

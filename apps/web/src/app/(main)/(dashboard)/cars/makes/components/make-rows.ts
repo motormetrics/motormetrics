@@ -1,4 +1,9 @@
 import { slugify } from "@motormetrics/utils/slugify";
+import {
+  type FuelFilter,
+  isFuelFilter,
+  type Range,
+} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { HYBRID_REGEX } from "@web/config";
 import { LOGOS_CACHE_TAG } from "@web/lib/cache-tags/logos";
 import type { MakeRegistrationStat } from "@web/queries/cars";
@@ -11,7 +16,6 @@ import {
 import { getCarLogoMap } from "@web/queries/logos";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { cacheLife, cacheTag } from "next/cache";
-import { type FuelFilter, isFuelFilter, type Range } from "../search-params";
 
 /** The `cars.fuelType` value that means battery-electric and nothing else. */
 const BEV_FUEL_TYPE = "Electric";

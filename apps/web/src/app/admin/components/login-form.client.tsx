@@ -8,21 +8,9 @@ import { toast } from "sonner";
 
 interface LoginFormClientProps {
   googleButtonContent: ReactNode;
-  dividerText: string;
-  emailLabel: string;
-  passwordLabel: string;
-  loginButtonText: string;
-  loadingButtonText: string;
 }
 
-export function LoginFormClient({
-  googleButtonContent,
-  dividerText,
-  emailLabel,
-  passwordLabel,
-  loginButtonText,
-  loadingButtonText,
-}: LoginFormClientProps) {
+export function LoginFormClient({ googleButtonContent }: LoginFormClientProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -74,7 +62,7 @@ export function LoginFormClient({
 
       <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-border after:border-t">
         <span className="relative z-10 bg-surface px-2 text-muted">
-          {dividerText}
+          Or continue with
         </span>
       </div>
 
@@ -85,7 +73,7 @@ export function LoginFormClient({
           className="flex flex-col gap-2"
           type="email"
         >
-          <Label>{emailLabel}</Label>
+          <Label>Email</Label>
           <Input
             name="email"
             placeholder="m@example.com"
@@ -99,7 +87,7 @@ export function LoginFormClient({
           className="flex flex-col gap-2"
           type="password"
         >
-          <Label>{passwordLabel}</Label>
+          <Label>Password</Label>
           <Input
             name="password"
             value={password}
@@ -107,7 +95,7 @@ export function LoginFormClient({
           />
         </TextField>
         <Button type="submit" isDisabled={isLoading}>
-          {isLoading ? loadingButtonText : loginButtonText}
+          {isLoading ? "Signing in..." : "Login"}
         </Button>
       </div>
     </form>

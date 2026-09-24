@@ -59,14 +59,16 @@ export async function getMonthOrLatest(
   month: string | null,
   type: DataType = "cars",
 ): Promise<MonthResult> {
-  const latestMonth = await getLatestMonth(type);
-
   if (!month) {
+    const latestMonth = await getLatestMonth(type);
     return { month: latestMonth, wasAdjusted: false };
   }
 
   // Validate month exists in available list
-  const months = await getMonthsForType(type);
+  const [latestMonth, months] = await Promise.all([
+    getLatestMonth(type),
+    getMonthsForType(type),
+  ]);
   if (months.includes(month)) {
     return { month, wasAdjusted: false };
   }

@@ -1,6 +1,6 @@
 import type { SelectPost } from "@motormetrics/database/schema";
-import { FollowLinks } from "./follow-links";
-import { TableOfContents } from "./table-of-contents";
+import { FollowLinks } from "@web/app/(main)/(site)/blog/components/follow-links";
+import { TableOfContents } from "@web/app/(main)/(site)/blog/components/table-of-contents";
 
 /**
  * The comp's right-hand rail: contents, then the pages carrying the live

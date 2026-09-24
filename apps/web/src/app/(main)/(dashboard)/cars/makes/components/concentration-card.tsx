@@ -1,12 +1,12 @@
 import { Typography } from "@heroui/react";
+import { loadMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import {
   type DonutSegment,
   donutArcs,
   RING_RADIUS,
 } from "@web/utils/charts/donut-arcs";
 import type { SearchParams } from "nuqs/server";
-import { loadSearchParams } from "../search-params";
-import { loadMakeRows } from "./make-rows";
 
 /** How many makes the ring breaks out before folding the rest together. */
 const LEADERS = 5;

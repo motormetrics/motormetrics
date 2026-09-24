@@ -1,6 +1,10 @@
+import * as marketInsights from "@web/queries/cars/market-insights";
+import {
+  cacheTagMock,
+  queueSelect,
+  resetDbMocks,
+} from "@web/queries/test-utils";
 import { describe, expect, it } from "vitest";
-import * as marketInsights from "./cars/market-insights";
-import { cacheTagMock, queueSelect, resetDbMocks } from "./test-utils";
 
 describe("car market insight queries", () => {
   beforeEach(() => {

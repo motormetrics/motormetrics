@@ -1,7 +1,7 @@
 import { db } from "@motormetrics/database/client";
 import { coe, pqp } from "@motormetrics/database/schema";
 import type { Pqp } from "@web/types/coe";
-import { and, desc, eq, inArray, isNotNull } from "drizzle-orm";
+import { and, desc, eq, inArray, max, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 /** Every category LTA publishes a PQP for. */
@@ -36,17 +36,6 @@ const createEmptyRates = (): Pqp.Rates => ({
   "Category D": 0,
 });
 
-const toNumber = (value: number | string | null | undefined): number => {
-  if (typeof value === "number") {
-    return value;
-  }
-  if (typeof value === "string") {
-    const parsed = Number(value);
-    return Number.isNaN(parsed) ? 0 : parsed;
-  }
-  return 0;
-};
-
 /**
  * Aggregated PQP insights for the last 12 months.
  *
@@ -62,69 +51,39 @@ export async function getPQPOverview(
   cacheLife("max");
   cacheTag("coe:pqp");
 
-  // Batch independent queries in a single round-trip
-  const [recentMonthsRows, latestCoeMonthRow, latestPqpMonthRow] =
-    await db.batch([
-      db
-        .selectDistinct({ month: pqp.month })
-        .from(pqp)
-        .where(isNotNull(pqp.month))
-        .orderBy(desc(pqp.month))
-        .limit(12),
-      db
-        .select({ month: coe.month })
-        .from(coe)
-        .where(isNotNull(coe.month))
-        .orderBy(desc(coe.month))
-        .limit(1),
-      db
-        .select({ month: pqp.month })
-        .from(pqp)
-        .where(isNotNull(pqp.month))
-        .orderBy(desc(pqp.month))
-        .limit(1),
-    ]);
+  // The latest exercise: the highest bidding number within the latest month
+  const latestCoeMonth = db.select({ month: max(coe.month) }).from(coe);
+  const latestCoeBiddingNo = db
+    .select({ biddingNo: max(coe.biddingNo) })
+    .from(coe)
+    .where(eq(coe.month, sql`(${latestCoeMonth})`));
 
-  const recentMonths = recentMonthsRows
-    .map((row) => row.month)
-    .filter((month): month is string => Boolean(month));
+  const [recentMonthRows, latestCoeResults] = await db.batch([
+    db
+      .selectDistinct({ month: pqp.month })
+      .from(pqp)
+      .orderBy(desc(pqp.month))
+      .limit(12),
+    db
+      .select({
+        vehicleClass: coe.vehicleClass,
+        premium: coe.premium,
+      })
+      .from(coe)
+      .where(
+        and(
+          eq(coe.month, sql`(${latestCoeMonth})`),
+          eq(coe.biddingNo, sql`(${latestCoeBiddingNo})`),
+          inArray(coe.vehicleClass, categories),
+        ),
+      ),
+  ]);
 
-  const latestCoeMonth = latestCoeMonthRow[0]?.month ?? null;
-  const latestPqpMonth = latestPqpMonthRow[0]?.month ?? null;
+  const recentMonths = recentMonthRows.map((row) => row.month);
 
-  const monthRateMap = new Map<string, Pqp.Rates>(
-    recentMonths.map((month) => [month, createEmptyRates()]),
-  );
-
-  const coePremiumMap = new Map<PQPCategory, number>();
-  const pqpRateMap = new Map<PQPCategory, number>();
-
-  // Build conditional queries based on first batch results
-  type PqpRatesResult = {
-    month: string | null;
-    vehicleClass: string;
-    pqp: number | null;
-  }[];
-  type LatestBiddingResult = { biddingNo: number }[];
-  type LatestPqpRatesResult = { vehicleClass: string; pqp: number | null }[];
-
-  let pqpRates: PqpRatesResult = [];
-  let latestCoeBiddingRow: LatestBiddingResult = [];
-  let latestPqpRates: LatestPqpRatesResult = [];
-
-  // Batch second round of queries (depend on first batch results)
-  if (recentMonths.length > 0 || latestCoeMonth || latestPqpMonth) {
-    const queries = [];
-    const queryIndexes: {
-      pqpRates?: number;
-      biddingNo?: number;
-      pqpLatest?: number;
-    } = {};
-    let queryIndex = 0;
-
-    if (recentMonths.length > 0) {
-      queries.push(
-        db
+  const pqpRates =
+    recentMonths.length > 0
+      ? await db
           .select({
             month: pqp.month,
             vehicleClass: pqp.vehicleClass,
@@ -136,111 +95,30 @@ export async function getPQPOverview(
               inArray(pqp.month, recentMonths),
               inArray(pqp.vehicleClass, categories),
             ),
-          ),
-      );
-      queryIndexes.pqpRates = queryIndex++;
-    }
+          )
+      : [];
 
-    if (latestCoeMonth) {
-      queries.push(
-        db
-          .select({ biddingNo: coe.biddingNo })
-          .from(coe)
-          .where(eq(coe.month, latestCoeMonth))
-          .orderBy(desc(coe.biddingNo))
-          .limit(1),
-      );
-      queryIndexes.biddingNo = queryIndex++;
-    }
+  const monthRateMap = new Map<string, Pqp.Rates>(
+    recentMonths.map((month) => [month, createEmptyRates()]),
+  );
 
-    if (latestPqpMonth) {
-      queries.push(
-        db
-          .select({
-            vehicleClass: pqp.vehicleClass,
-            pqp: pqp.pqp,
-          })
-          .from(pqp)
-          .where(
-            and(
-              eq(pqp.month, latestPqpMonth),
-              inArray(pqp.vehicleClass, categories),
-            ),
-          ),
-      );
-      queryIndexes.pqpLatest = queryIndex++;
-    }
-
-    if (queries.length > 0) {
-      const results = await db.batch(
-        queries as [(typeof queries)[0], ...(typeof queries)[number][]],
-      );
-
-      if (queryIndexes.pqpRates !== undefined) {
-        pqpRates = results[queryIndexes.pqpRates] as PqpRatesResult;
-      }
-      if (queryIndexes.biddingNo !== undefined) {
-        latestCoeBiddingRow = results[
-          queryIndexes.biddingNo
-        ] as LatestBiddingResult;
-      }
-      if (queryIndexes.pqpLatest !== undefined) {
-        latestPqpRates = results[
-          queryIndexes.pqpLatest
-        ] as LatestPqpRatesResult;
-      }
-    }
-  }
-
-  // Process PQP rates
   for (const rate of pqpRates) {
-    if (!rate.month || !rate.vehicleClass) {
-      continue;
-    }
-
-    const monthRates = monthRateMap.get(rate.month) ?? createEmptyRates();
-    monthRates[rate.vehicleClass as keyof Pqp.Rates] = toNumber(rate.pqp);
-    monthRateMap.set(rate.month, monthRates);
-  }
-
-  // Process latest PQP rates
-  for (const rate of latestPqpRates) {
-    if (!rate.vehicleClass) {
-      continue;
-    }
-
-    pqpRateMap.set(rate.vehicleClass as PQPCategory, toNumber(rate.pqp));
-  }
-
-  // Fetch latest COE results if we have a bidding number
-  const latestCoeBiddingNo = latestCoeBiddingRow[0]?.biddingNo ?? null;
-
-  if (latestCoeMonth && latestCoeBiddingNo !== null) {
-    const latestCoeResults = await db
-      .select({
-        vehicleClass: coe.vehicleClass,
-        premium: coe.premium,
-      })
-      .from(coe)
-      .where(
-        and(
-          eq(coe.month, latestCoeMonth),
-          eq(coe.biddingNo, latestCoeBiddingNo),
-          inArray(coe.vehicleClass, categories),
-        ),
-      );
-
-    for (const result of latestCoeResults) {
-      if (!result.vehicleClass) {
-        continue;
-      }
-
-      coePremiumMap.set(
-        result.vehicleClass as PQPCategory,
-        toNumber(result.premium),
-      );
+    const monthRates = monthRateMap.get(rate.month);
+    if (monthRates) {
+      monthRates[rate.vehicleClass as keyof Pqp.Rates] = rate.pqp;
     }
   }
+
+  const coePremiumMap = new Map(
+    latestCoeResults.map((result) => [
+      result.vehicleClass as PQPCategory,
+      result.premium,
+    ]),
+  );
+
+  // The most recent month's rates, which the comparison measures premiums against
+  const latestPqpRates =
+    monthRateMap.get(recentMonths[0]) ?? createEmptyRates();
 
   const tableRows: Pqp.TableRow[] = recentMonths.map((month) => {
     const rates = monthRateMap.get(month) ?? createEmptyRates();
@@ -262,7 +140,7 @@ export async function getPQPOverview(
   const categorySummaries: Pqp.CategorySummary[] = categories.map(
     (category) => {
       const coePremium = coePremiumMap.get(category) ?? 0;
-      const pqpRate = pqpRateMap.get(category) ?? 0;
+      const pqpRate = latestPqpRates[category];
       const difference = coePremium - pqpRate;
       const differencePercent = pqpRate > 0 ? (difference * 100) / pqpRate : 0;
       const pqpCost5Year = pqpRate * 0.5;

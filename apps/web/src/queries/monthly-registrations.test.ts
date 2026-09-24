@@ -1,18 +1,18 @@
-import { describe, expect, it } from "vitest";
 import {
   getCarsComparison,
   getCarsData,
   getMonthlyRegistrationTotals,
   getMonthlyRegistrationTotalsByFuelType,
   getYearToDateByFuelType,
-} from "./cars/monthly-registrations";
+} from "@web/queries/cars/monthly-registrations";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueBatch,
   queueSelect,
   resetDbMocks,
-} from "./test-utils";
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("monthly registration queries", () => {
   beforeEach(() => {

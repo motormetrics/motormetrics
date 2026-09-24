@@ -2,12 +2,12 @@ import type {
   InsertEvChargingEvent,
   InsertEvLocationHourly,
 } from "@motormetrics/database/schema";
-import type { ConnectorRecord, ConnectorStatus } from "@web/lib/ev-charging";
+import type { ConnectorRecord } from "@web/lib/ev-charging";
 
 /** The subset of the stored row a diff needs: what was last seen. */
 export interface PreviousConnectorState {
   evCpId: string;
-  status: ConnectorStatus;
+  status: string;
   statusChangedAt: Date;
   price: number | null;
   priceType: string | null;

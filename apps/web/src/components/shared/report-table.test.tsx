@@ -1,4 +1,3 @@
-import { render } from "vitest-browser-react";
 import {
   Count,
   DeltaText,
@@ -6,7 +5,8 @@ import {
   ReportRow,
   ReportTable,
   ShareBar,
-} from "./report-table";
+} from "@web/components/shared/report-table";
+import { render } from "vitest-browser-react";
 
 describe("ReportTable", () => {
   it("should render column headers and the rows passed in", async () => {

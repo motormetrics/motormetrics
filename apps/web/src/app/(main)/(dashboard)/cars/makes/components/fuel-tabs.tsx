@@ -1,10 +1,13 @@
 "use client";
 
 import { ToggleButton, ToggleButtonGroup } from "@heroui/react";
+import {
+  FUEL_FILTERS,
+  type FuelFilter,
+} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { parseAsString, useQueryState } from "nuqs";
 import posthog from "posthog-js";
 import { useTransition } from "react";
-import { FUEL_FILTERS, type FuelFilter } from "../search-params";
 
 /** Group key for the "All" pill, which clears the `fuel` param. */
 const ALL = "all";

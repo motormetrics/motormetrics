@@ -43,6 +43,21 @@ export function getComparisonWindows(latestMonth: string): {
 }
 
 /**
+ * The exclusive lower bound of the rolling twelve months ending at
+ * `latestMonth`, as `YYYY-MM`.
+ *
+ * Worked out in JavaScript because "YYYY-MM" is not a valid Postgres date
+ * literal without a day component. Comparisons on the stored text are
+ * lexicographic, which is chronological for this format.
+ */
+export function getTrendCutoff(latestMonth: string): string {
+  const [year, monthNumber] = latestMonth.split("-").map(Number);
+  const cutoffDate = new Date(year, monthNumber - 1 - 12);
+
+  return `${cutoffDate.getFullYear()}-${String(cutoffDate.getMonth() + 1).padStart(2, "0")}`;
+}
+
+/**
  * Get registration count, market share, and rolling 12-month trend per make.
  */
 export async function getMakeRegistrationStats(): Promise<
@@ -58,40 +73,47 @@ export async function getMakeRegistrationStats(): Promise<
   }
 
   const { current, previous } = getComparisonWindows(latestMonth);
+  const cutoffMonth = getTrendCutoff(latestMonth);
 
-  // Year-to-date totals for the latest year (for count + share)
-  const annualRows = await db
-    .select({
-      make: cars.make,
-      count: sql<number>`cast(sum(${cars.number}) as int)`,
-    })
-    .from(cars)
-    .where(
-      sql`${cars.month} >= ${current.start} and ${cars.month} <= ${current.end}`,
-    )
-    .groupBy(cars.make);
+  const [annualRows, monthlyRows, prevYearRows] = await db.batch([
+    // Year-to-date totals for the latest year (for count + share)
+    db
+      .select({
+        make: cars.make,
+        count: sql<number>`cast(sum(${cars.number}) as int)`,
+      })
+      .from(cars)
+      .where(
+        sql`${cars.month} >= ${current.start} and ${cars.month} <= ${current.end}`,
+      )
+      .groupBy(cars.make),
+    // Rolling 12-month monthly data (for sparkline trend)
+    db
+      .select({
+        make: cars.make,
+        month: cars.month,
+        count: sql<number>`cast(sum(${cars.number}) as int)`,
+      })
+      .from(cars)
+      .where(
+        sql`${cars.month} > ${cutoffMonth} and ${cars.month} <= ${latestMonth}`,
+      )
+      .groupBy(cars.make, cars.month)
+      .orderBy(asc(cars.month)),
+    // The same January-to-month span a year earlier (for YoY comparison)
+    db
+      .select({
+        make: cars.make,
+        count: sql<number>`cast(sum(${cars.number}) as int)`,
+      })
+      .from(cars)
+      .where(
+        sql`${cars.month} >= ${previous.start} and ${cars.month} <= ${previous.end}`,
+      )
+      .groupBy(cars.make),
+  ]);
 
   const grandTotal = annualRows.reduce((sum, row) => sum + row.count, 0);
-
-  // Compute the 12-month cutoff in JS to avoid Postgres date casting issues
-  // with YYYY-MM strings (which are not valid date literals without a day).
-  const [latestYear, latestMonthNum] = latestMonth.split("-").map(Number);
-  const cutoffDate = new Date(latestYear, latestMonthNum - 1 - 12);
-  const cutoffMonth = `${cutoffDate.getFullYear()}-${String(cutoffDate.getMonth() + 1).padStart(2, "0")}`;
-
-  // Rolling 12-month monthly data (for sparkline trend)
-  const monthlyRows = await db
-    .select({
-      make: cars.make,
-      month: cars.month,
-      count: sql<number>`cast(sum(${cars.number}) as int)`,
-    })
-    .from(cars)
-    .where(
-      sql`${cars.month} > ${cutoffMonth} and ${cars.month} <= ${latestMonth}`,
-    )
-    .groupBy(cars.make, cars.month)
-    .orderBy(asc(cars.month));
 
   // Group monthly rows by make
   const trendByMake = monthlyRows.reduce<Record<string, { value: number }[]>>(
@@ -102,18 +124,6 @@ export async function getMakeRegistrationStats(): Promise<
     },
     {},
   );
-
-  // The same January-to-month span a year earlier (for YoY comparison)
-  const prevYearRows = await db
-    .select({
-      make: cars.make,
-      count: sql<number>`cast(sum(${cars.number}) as int)`,
-    })
-    .from(cars)
-    .where(
-      sql`${cars.month} >= ${previous.start} and ${cars.month} <= ${previous.end}`,
-    )
-    .groupBy(cars.make);
 
   const prevYearByMake = prevYearRows.reduce<Record<string, number>>(
     (acc, row) => {

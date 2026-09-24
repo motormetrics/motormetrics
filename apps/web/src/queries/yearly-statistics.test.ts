@@ -1,14 +1,14 @@
-import { describe, expect, it } from "vitest";
 import {
   getTopMakesByYear,
   getYearlyRegistrations,
-} from "./cars/yearly-statistics";
+} from "@web/queries/cars/yearly-statistics";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelect,
   resetDbMocks,
-} from "./test-utils";
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("yearly statistics queries", () => {
   beforeEach(() => {

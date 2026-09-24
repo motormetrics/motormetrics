@@ -1,5 +1,5 @@
 import { Card } from "@heroui/react";
-import { LoginFormClient } from "./login-form.client";
+import { LoginFormClient } from "@web/app/admin/components/login-form.client";
 
 function GoogleIcon() {
   return (
@@ -29,14 +29,7 @@ export function LoginForm() {
         <Card.Description>Login to access the admin dashboard</Card.Description>
       </Card.Header>
       <Card.Content>
-        <LoginFormClient
-          googleButtonContent={<GoogleIcon />}
-          dividerText="Or continue with"
-          emailLabel="Email"
-          passwordLabel="Password"
-          loginButtonText="Login"
-          loadingButtonText="Signing in..."
-        />
+        <LoginFormClient googleButtonContent={<GoogleIcon />} />
       </Card.Content>
     </Card>
   );

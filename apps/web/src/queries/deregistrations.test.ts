@@ -1,16 +1,16 @@
-import { describe, expect, it } from "vitest";
 import {
   getDeregistrations,
   getDeregistrationsLatestMonth,
   getDeregistrationsMonths,
-} from "./deregistrations";
+} from "@web/queries/deregistrations";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelect,
   queueSelectDistinct,
   resetDbMocks,
-} from "./test-utils";
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("deregistrations queries", () => {
   beforeEach(() => {

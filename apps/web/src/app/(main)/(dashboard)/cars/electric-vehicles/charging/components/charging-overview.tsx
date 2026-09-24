@@ -1,10 +1,13 @@
 import { Typography } from "@heroui/react";
+import { ChargingFaq } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-faq";
+import { buildChargingFaqs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/faq-data";
+import {
+  deriveChargingStats,
+  formatPerKwh,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
 import { StructuredData } from "@web/components/structured-data";
 import { generateFAQPageSchema } from "@web/lib/metadata";
 import { getEvChargingSnapshot } from "@web/queries/ev-charging";
-import { ChargingFaq } from "./charging-faq";
-import { buildChargingFaqs } from "./faq-data";
-import { deriveChargingStats, formatPerKwh } from "./price-stats";
 
 const formatObservedAt = (iso: string) =>
   new Date(iso).toLocaleString("en-SG", {

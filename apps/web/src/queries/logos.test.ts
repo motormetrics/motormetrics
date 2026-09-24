@@ -18,7 +18,7 @@ vi.mock("next/cache", () => ({
   cacheTag: cacheTagMock,
 }));
 
-import { buildLogoMap, getAllCarLogos } from "./logos";
+import { buildLogoMap, getAllCarLogos } from "@web/queries/logos";
 
 const entry = (make: string, status: "found" | "missing") => ({
   make,

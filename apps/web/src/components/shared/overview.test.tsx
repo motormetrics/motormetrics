@@ -1,7 +1,7 @@
+import { BarRow } from "@web/components/shared/bar-row";
+import { Headline, SectionHead } from "@web/components/shared/overview";
+import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { render } from "vitest-browser-react";
-import { BarRow } from "./bar-row";
-import { Headline, SectionHead } from "./overview";
-import { SparklineChart } from "./sparkline-chart";
 
 describe("SectionHead", () => {
   it("should render the eyebrow, heading, caption and link", async () => {

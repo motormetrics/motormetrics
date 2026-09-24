@@ -8,6 +8,8 @@ import {
   Typography,
 } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
+import { FuelTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/fuel-tabs";
+import type { MakeRow } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import type { FuelFilter } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
@@ -15,8 +17,6 @@ import { SectionHead } from "@web/components/shared/overview";
 import Link from "next/link";
 import posthog from "posthog-js";
 import { useMemo, useState } from "react";
-import { FuelTabs } from "./fuel-tabs";
-import type { MakeRow } from "./make-rows";
 
 /** The trend series only feeds the headline sparkline, so it never crosses over. */
 export type MakesTableRow = Omit<MakeRow, "trend">;

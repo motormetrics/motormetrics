@@ -61,27 +61,21 @@ export async function RegistrationsReport({
     month: parsedMonth,
     range,
   } = await loadSearchParams(searchParams);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
-  const year = Number(month.slice(0, 4));
-
-  const [
-    registrations,
-    comparison,
-    fuelTypes,
-    yearToDate,
-    topMakes,
-    yearlyTotals,
-    series,
-  ] = await Promise.all([
-    getCarsData(month),
-    getCarsComparison(month),
+  const [{ month }, fuelTypes, yearlyTotals, series] = await Promise.all([
+    getMonthOrLatest(parsedMonth, "cars"),
     getDistinctFuelTypes(),
-    getYearToDateByFuelType(year),
-    getTopMakesByYear(year, 10),
     getYearlyRegistrations(),
     fuelType
       ? getMonthlyRegistrationTotalsByFuelType(fuelType, RANGE_MONTHS[range])
       : getMonthlyRegistrationTotals(RANGE_MONTHS[range]),
+  ]);
+  const year = Number(month.slice(0, 4));
+
+  const [registrations, comparison, yearToDate, topMakes] = await Promise.all([
+    getCarsData(month),
+    getCarsComparison(month),
+    getYearToDateByFuelType(year),
+    getTopMakesByYear(year, 10),
   ]);
 
   const formattedMonth = formatDateToMonthYear(month);

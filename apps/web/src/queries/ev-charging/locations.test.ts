@@ -1,5 +1,5 @@
-import { connector } from "./fixtures";
-import { groupLocations, inDistrict } from "./locations";
+import { connector } from "@web/queries/ev-charging/fixtures";
+import { groupLocations, inDistrict } from "@web/queries/ev-charging/locations";
 
 describe("groupLocations", () => {
   it("should roll connectors up per location with counts, top speed and lowest price", () => {

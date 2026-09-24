@@ -23,6 +23,10 @@ export const RANGE_LABELS: Record<Range, string> = {
 export const FUEL_FILTERS = ["Petrol", "Hybrid", "Electric"] as const;
 export type FuelFilter = (typeof FUEL_FILTERS)[number];
 
+export function isRange(value: string): value is Range {
+  return RANGES.includes(value as Range);
+}
+
 export function isFuelFilter(value: string | null): value is FuelFilter {
   return FUEL_FILTERS.includes(value as FuelFilter);
 }

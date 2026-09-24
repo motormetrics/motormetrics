@@ -1,15 +1,15 @@
-import { describe, expect, it } from "vitest";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelect,
   queueSelectDistinct,
   resetDbMocks,
-} from "../test-utils";
-import { getVehiclePopulationYears } from "./available-years";
-import { getVehiclePopulationByCategoryAndFuelType } from "./by-category-and-fuel-type";
-import { getVehiclePopulationByYearAndFuelType } from "./by-year-and-fuel-type";
-import { getVehiclePopulationYearlyTotals } from "./yearly-totals";
+} from "@web/queries/test-utils";
+import { getVehiclePopulationYears } from "@web/queries/vehicle-population/available-years";
+import { getVehiclePopulationByCategoryAndFuelType } from "@web/queries/vehicle-population/by-category-and-fuel-type";
+import { getVehiclePopulationByYearAndFuelType } from "@web/queries/vehicle-population/by-year-and-fuel-type";
+import { getVehiclePopulationYearlyTotals } from "@web/queries/vehicle-population/yearly-totals";
+import { describe, expect, it } from "vitest";
 
 describe("vehicle population queries", () => {
   beforeEach(() => {

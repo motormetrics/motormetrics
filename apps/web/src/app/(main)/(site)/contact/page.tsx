@@ -7,6 +7,7 @@ import {
 import { advertisePage } from "@web/flags";
 import { baseOpenGraph } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 
 const title = `Contact ${SITE_TITLE}`;
@@ -37,7 +38,7 @@ async function AdvertisingSection() {
       <h2>Advertising</h2>
       <p>
         Sponsorship and placement enquiries have their own page. See{" "}
-        <a href="/advertise">Advertise</a> for the rules and rates.
+        <Link href="/advertise">Advertise</Link> for the rules and rates.
       </p>
     </section>
   );

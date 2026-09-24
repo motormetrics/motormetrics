@@ -1,11 +1,11 @@
-import { render } from "vitest-browser-react";
 import {
   GridSkeleton,
   ListSkeleton,
   SkeletonBentoCard,
   SkeletonCard,
   SkeletonChart,
-} from "./skeleton";
+} from "@web/components/shared/skeleton";
+import { render } from "vitest-browser-react";
 
 describe("Skeleton components", () => {
   it("should render SkeletonCard", async () => {

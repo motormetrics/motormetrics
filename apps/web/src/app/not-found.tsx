@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const NotFound = async () => {
+const NotFound = () => {
   return <PageNotFound />;
 };
 

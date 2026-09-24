@@ -1,9 +1,11 @@
-vi.mock("./snapshot", () => ({ getEvChargingSnapshot: vi.fn() }));
+vi.mock("@web/queries/ev-charging/snapshot", () => ({
+  getEvChargingSnapshot: vi.fn(),
+}));
 
-import "../test-utils";
-import { connector } from "./fixtures";
-import { getEvChargingPriceRankings } from "./price-rankings";
-import { getEvChargingSnapshot } from "./snapshot";
+import "@web/queries/test-utils";
+import { connector } from "@web/queries/ev-charging/fixtures";
+import { getEvChargingPriceRankings } from "@web/queries/ev-charging/price-rankings";
+import { getEvChargingSnapshot } from "@web/queries/ev-charging/snapshot";
 
 const records = [
   connector({ evCpId: "A", locationId: "L1", stationName: "Beta", price: 0.7 }),

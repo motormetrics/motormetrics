@@ -1,5 +1,5 @@
+import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 import { describe, expect, it } from "vitest";
-import { formatVehicleType } from "./format-vehicle-type";
 
 describe("formatVehicleType", () => {
   it("should return mapped vehicle type", () => {

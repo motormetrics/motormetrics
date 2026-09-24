@@ -1,6 +1,6 @@
 import { Typography } from "@heroui/react";
+import { NavigationButtons } from "@web/components/page-not-found.client";
 import Link from "next/link";
-import { NavigationButtons } from "./page-not-found.client";
 
 export function PageNotFound() {
   return (

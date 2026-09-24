@@ -85,9 +85,10 @@ export async function DeregistrationsReport({
   searchParams: Promise<SearchParams>;
 }) {
   const { month: parsedMonth } = await loadSearchParams(searchParams);
-  const { month } = await getMonthOrLatest(parsedMonth, "deregistrations");
-
-  const records = await getDeregistrations();
+  const [{ month }, records] = await Promise.all([
+    getMonthOrLatest(parsedMonth, "deregistrations"),
+    getDeregistrations(),
+  ]);
   const seriesMonths = trailingMonths(month, SERIES_MONTHS);
   const priorMonth = shiftMonth(month, -1);
   const yearAgoMonth = shiftMonth(month, -12);

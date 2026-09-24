@@ -1,10 +1,9 @@
-import { Typography } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
+import { DefaultActions } from "@web/components/shared/empty-state.client";
+import { fadeInUpVariants } from "@web/config/animations";
 import { FileQuestion } from "lucide-react";
+import * as motion from "motion/react-client";
 import type { ReactNode } from "react";
-import {
-  AnimatedEmptyStateWrapper,
-  DefaultActions,
-} from "./empty-state.client";
 
 interface EmptyStateProps {
   icon?: ReactNode;
@@ -30,7 +29,15 @@ export function EmptyState({
   );
 
   return (
-    <AnimatedEmptyStateWrapper className={className}>
+    <motion.div
+      variants={fadeInUpVariants}
+      initial="hidden"
+      animate="visible"
+      className={cn(
+        "flex flex-col items-center justify-center gap-6 rounded-3xl bg-default/50 px-8 py-12",
+        className,
+      )}
+    >
       {icon ?? defaultIcon}
 
       <div className="flex flex-col items-center gap-2 text-center">
@@ -41,6 +48,6 @@ export function EmptyState({
       </div>
 
       {actions ?? (showDefaultActions && <DefaultActions />)}
-    </AnimatedEmptyStateWrapper>
+    </motion.div>
   );
 }

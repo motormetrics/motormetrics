@@ -16,10 +16,6 @@ vi.mock("@web/app/admin/lib/auth", () => ({
   auth: { api: { getSession: vi.fn() } },
 }));
 
-vi.mock("next/headers", () => ({
-  headers: vi.fn(),
-}));
-
 function makeServerActionRequest() {
   return new NextRequest("http://localhost/blog/example", {
     method: "POST",

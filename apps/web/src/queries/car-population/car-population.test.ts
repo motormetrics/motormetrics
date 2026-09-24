@@ -1,11 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { getCarPopulationYears } from "@web/queries/car-population/available-years";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelectDistinct,
   resetDbMocks,
-} from "../test-utils";
-import { getCarPopulationYears } from "./available-years";
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("car population queries", () => {
   beforeEach(() => {

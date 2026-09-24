@@ -1,12 +1,12 @@
-import { describe, expect, it } from "vitest";
+import { getEvChargingNetworkSummary } from "@web/queries/ev-charging/network-summary";
+import { getEvChargingRegistrationsByMonth } from "@web/queries/ev-charging/registrations-by-month";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelect,
   resetDbMocks,
-} from "../test-utils";
-import { getEvChargingNetworkSummary } from "./network-summary";
-import { getEvChargingRegistrationsByMonth } from "./registrations-by-month";
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("ev charging queries", () => {
   beforeEach(() => {

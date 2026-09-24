@@ -1,6 +1,13 @@
+import {
+  getEvMarketShare,
+  getEvMonthlyTrend,
+} from "@web/queries/cars/electric-vehicles";
+import {
+  cacheLifeMock,
+  queueSelect,
+  resetDbMocks,
+} from "@web/queries/test-utils";
 import { describe, expect, it } from "vitest";
-import { getEvMarketShare, getEvMonthlyTrend } from "./cars/electric-vehicles";
-import { cacheLifeMock, queueSelect, resetDbMocks } from "./test-utils";
 
 describe("electric vehicle queries", () => {
   beforeEach(() => {

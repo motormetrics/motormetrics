@@ -1,5 +1,6 @@
 import path from "node:path";
 import { db } from "@motormetrics/database/client";
+import { Checksum } from "@web/lib/updater/checksum";
 import {
   calculateBufferChecksum,
   calculateChecksum,
@@ -12,7 +13,6 @@ import {
   type CSVTransformOptions,
   processCsv,
 } from "@web/lib/updater/services/process-csv";
-import { Checksum } from "@web/utils/checksum";
 import { getTableColumns, getTableName } from "drizzle-orm";
 import type { PgTable } from "drizzle-orm/pg-core";
 

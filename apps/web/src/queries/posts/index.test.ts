@@ -1,5 +1,5 @@
+import { queueSelect, resetDbMocks } from "@web/queries/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { queueSelect, resetDbMocks } from "../test-utils";
 
 const { generateQueryEmbeddingMock } = vi.hoisted(() => ({
   generateQueryEmbeddingMock: vi.fn(),

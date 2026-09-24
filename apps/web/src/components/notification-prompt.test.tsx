@@ -1,7 +1,7 @@
 import { toast } from "@heroui/react";
+import { NotificationPrompt } from "@web/components/notification-prompt";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
-import { NotificationPrompt } from "./notification-prompt";
 
 const capture = vi.hoisted(() => vi.fn());
 

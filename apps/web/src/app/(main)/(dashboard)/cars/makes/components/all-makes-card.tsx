@@ -1,7 +1,11 @@
+import { loadMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { MakesTable } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-table";
+import {
+  isFuelFilter,
+  loadSearchParams,
+  RANGE_LABELS,
+} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import type { SearchParams } from "nuqs/server";
-import { isFuelFilter, loadSearchParams, RANGE_LABELS } from "../search-params";
-import { loadMakeRows } from "./make-rows";
-import { MakesTable } from "./makes-table";
 
 export async function AllMakesCard({
   searchParams,

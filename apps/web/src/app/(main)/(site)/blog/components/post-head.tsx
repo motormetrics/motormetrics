@@ -1,10 +1,9 @@
 import { Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
+import { getCategoryConfig } from "@web/app/(main)/(site)/blog/components/post/utils";
 import { ViewCounter } from "@web/app/(main)/(site)/blog/components/view-counter";
 import { SharePill } from "@web/components/shared/share-pill";
 import Link from "next/link";
-import { Suspense } from "react";
-import { getCategoryConfig } from "./post/utils";
 
 /**
  * The comp's post opening: breadcrumb, topic pill, title, then the date, the
@@ -78,13 +77,11 @@ export function PostHead({
           {readingTimeText}
         </span>
         <span aria-hidden className="size-1.5 rounded-full bg-border" />
-        <Suspense fallback={null}>
-          <ViewCounter
-            className="font-semibold text-base text-muted"
-            initialCount={initialViewCount}
-            postId={post.id}
-          />
-        </Suspense>
+        <ViewCounter
+          className="font-semibold text-base text-muted"
+          initialCount={initialViewCount}
+          postId={post.id}
+        />
         <SharePill contentType="blog" title={post.title} />
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
 import { TYPE_DIMENSION_COLUMNS } from "@web/queries/cars/categories";
+import { getTrendCutoff } from "@web/queries/cars/makes/registration-stats";
 import { and, asc, desc, gt, gte, lte, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -63,11 +64,7 @@ export async function getDimensionStats(
   const previousYear = year - 1;
   const paddedMonth = String(monthNumber).padStart(2, "0");
 
-  // The rolling cutoff is worked out in JavaScript because "YYYY-MM" is not a
-  // valid Postgres date literal without a day component. Comparisons on the
-  // stored text are lexicographic, which is chronological for this format.
-  const cutoffDate = new Date(year, monthNumber - 1 - 12);
-  const trendCutoff = `${cutoffDate.getFullYear()}-${String(cutoffDate.getMonth() + 1).padStart(2, "0")}`;
+  const trendCutoff = getTrendCutoff(month);
 
   const yearToDateQuery = db
     .select({ name: column, count: registrationTotal() })

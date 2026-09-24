@@ -8,7 +8,7 @@ import {
   toNumber,
   toPriceType,
   toText,
-} from "./parse-batch";
+} from "@web/lib/ev-charging/parse-batch";
 
 const station = {
   address: "15 Queen St Singapore 188537",

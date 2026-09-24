@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 
 async function getCarsData(
   month: string | null,
-  _page: number,
   limit: number,
   offset: number,
 ) {
@@ -20,35 +19,33 @@ async function getCarsData(
     cacheTag("cars:months");
   }
 
-  const filters = [];
-  if (month) {
-    filters.push(eq(cars.month, month));
-  }
+  const filter = month ? eq(cars.month, month) : undefined;
 
-  const data = await db
-    .select({
-      month: cars.month,
-      make: cars.make,
-      fuelType: cars.fuelType,
-      vehicleType: cars.vehicleType,
-      number: sql<number>`sum(${cars.number})`.mapWith(Number),
-    })
-    .from(cars)
-    .where(filters.length > 0 ? filters[0] : undefined)
-    .groupBy(cars.month, cars.make, cars.fuelType, cars.vehicleType)
-    .orderBy(desc(cars.month), desc(sum(cars.number)))
-    .limit(limit)
-    .offset(offset);
-
-  const [countResult] = await db
-    .select({
-      count:
-        sql<number>`count(distinct (${cars.month}, ${cars.make}, ${cars.fuelType}, ${cars.vehicleType}))`.mapWith(
-          Number,
-        ),
-    })
-    .from(cars)
-    .where(filters.length > 0 ? filters[0] : undefined);
+  const [data, [countResult]] = await Promise.all([
+    db
+      .select({
+        month: cars.month,
+        make: cars.make,
+        fuelType: cars.fuelType,
+        vehicleType: cars.vehicleType,
+        number: sql<number>`sum(${cars.number})`.mapWith(Number),
+      })
+      .from(cars)
+      .where(filter)
+      .groupBy(cars.month, cars.make, cars.fuelType, cars.vehicleType)
+      .orderBy(desc(cars.month), desc(sum(cars.number)))
+      .limit(limit)
+      .offset(offset),
+    db
+      .select({
+        count:
+          sql<number>`count(distinct (${cars.month}, ${cars.make}, ${cars.fuelType}, ${cars.vehicleType}))`.mapWith(
+            Number,
+          ),
+      })
+      .from(cars)
+      .where(filter),
+  ]);
 
   const total = countResult?.count ?? 0;
 
@@ -69,7 +66,7 @@ export async function GET(request: NextRequest) {
   const offset = (page - 1) * limit;
 
   try {
-    const { data, total } = await getCarsData(month, page, limit, offset);
+    const { data, total } = await getCarsData(month, limit, offset);
     const totalPages = Math.ceil(total / limit);
 
     return NextResponse.json({

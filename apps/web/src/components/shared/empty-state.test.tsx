@@ -1,5 +1,5 @@
+import { EmptyState } from "@web/components/shared/empty-state";
 import { render } from "vitest-browser-react";
-import { EmptyState } from "./empty-state";
 
 vi.mock("motion/react-client", () => ({
   div: ({

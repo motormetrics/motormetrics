@@ -1,4 +1,5 @@
-import { Button, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
@@ -28,16 +29,26 @@ export function HeroSection() {
         that is easier to understand. No spreadsheets required.
       </Typography.Paragraph>
       <div className="flex flex-wrap gap-3 pt-2">
-        <Link className="no-underline" href="/">
-          <Button className="rounded-full" size="lg" variant="primary">
-            Explore the data
-            <ArrowUpRight className="size-4" />
-          </Button>
+        <Link
+          className={buttonVariants({
+            className: "rounded-full no-underline",
+            size: "lg",
+            variant: "primary",
+          })}
+          href="/"
+        >
+          Explore the data
+          <ArrowUpRight className="size-4" />
         </Link>
-        <Link className="no-underline" href="/learn">
-          <Button className="rounded-full" size="lg" variant="secondary">
-            Read the guides
-          </Button>
+        <Link
+          className={buttonVariants({
+            className: "rounded-full no-underline",
+            size: "lg",
+            variant: "secondary",
+          })}
+          href="/learn"
+        >
+          Read the guides
         </Link>
       </div>
     </section>

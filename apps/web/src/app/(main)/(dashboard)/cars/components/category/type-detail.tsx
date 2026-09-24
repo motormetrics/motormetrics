@@ -241,9 +241,10 @@ async function TypeDetailContent({
     paramsPromise,
     loadTypeSearchParams(searchParamsPromise),
   ]);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
-
-  const value = await resolveType(config.category, type);
+  const [{ month }, value] = await Promise.all([
+    getMonthOrLatest(parsedMonth, "cars"),
+    resolveType(config.category, type),
+  ]);
   if (!value) {
     notFound();
   }

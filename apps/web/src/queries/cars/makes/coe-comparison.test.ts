@@ -1,6 +1,6 @@
+import { getMakeCoeComparison } from "@web/queries/cars/makes/coe-comparison";
+import { queueBatch, resetDbMocks } from "@web/queries/test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
-import { queueBatch, resetDbMocks } from "../../test-utils";
-import { getMakeCoeComparison } from "./coe-comparison";
 
 describe("getMakeCoeComparison", () => {
   beforeEach(() => {

@@ -15,7 +15,7 @@ import type { EvChargingMapSite } from "@web/queries/ev-charging/map-sites";
 import type { FeatureCollection, Point } from "geojson";
 import { type LngLatBoundsLike, setWorkerUrl } from "maplibre-gl";
 import { parseAsString, useQueryState } from "nuqs";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useMemo, useState } from "react";
 
 setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
 
@@ -327,6 +327,7 @@ function SiteFocus({
   site: EvChargingMapSite | undefined;
 }) {
   const { isLoaded, map } = useMap();
+  const handleFocus = useEffectEvent(onFocus);
 
   useEffect(() => {
     if (!isLoaded || !map || !site) {
@@ -336,8 +337,8 @@ function SiteFocus({
       center: [site.longitude, site.latitude],
       zoom: Math.max(map.getZoom(), SITE_ZOOM),
     });
-    onFocus(site);
-  }, [isLoaded, map, onFocus, site]);
+    handleFocus(site);
+  }, [isLoaded, map, site]);
 
   return null;
 }
@@ -359,17 +360,14 @@ export function ChargingMapView() {
       siteId ? sites.find((site) => site.locationId === siteId) : undefined,
     [siteId, sites],
   );
-  // Read through a ref so a district change does not re-run the site focus.
-  const districtRef = useRef(district);
-  districtRef.current = district;
-  const focusSite = useCallback((site: EvChargingMapSite) => {
+  const focusSite = (site: EvChargingMapSite) => {
     setMode("availability");
     setSelected({
       site,
       coordinates: [site.longitude, site.latitude],
-      district: districtRef.current,
+      district,
     });
-  }, []);
+  };
   const closePopup = () => {
     setSelected(null);
     setSiteId(null);

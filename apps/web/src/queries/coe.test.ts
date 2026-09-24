@@ -4,14 +4,14 @@ import {
   getCoeResultsByPeriod,
   getLatestCoeResults,
 } from "@web/queries/coe";
-import { describe, expect, it } from "vitest";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelect,
   queueSelectDistinct,
   resetDbMocks,
-} from "./test-utils";
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("COE queries", () => {
   beforeEach(() => {

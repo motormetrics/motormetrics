@@ -1,16 +1,16 @@
-import { describe, expect, it } from "vitest";
-import {
-  cacheLifeMock,
-  cacheTagMock,
-  queueSelect,
-  resetDbMocks,
-} from "../test-utils";
 import {
   getCategoryMonthlySeries,
   getCategoryTotals,
   getElectricShareByVehicleType,
   getTopMakesByCategory,
-} from "./category-report";
+} from "@web/queries/cars/category-report";
+import {
+  cacheLifeMock,
+  cacheTagMock,
+  queueSelect,
+  resetDbMocks,
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("category report queries", () => {
   beforeEach(() => {

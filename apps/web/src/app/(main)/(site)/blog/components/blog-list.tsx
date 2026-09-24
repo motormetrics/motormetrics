@@ -2,12 +2,12 @@
 
 import { cn, Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
+import { POST_CATEGORIES } from "@web/app/(main)/(site)/blog/components/post/utils";
 import { PostCard } from "@web/app/(main)/(site)/blog/components/post-card";
 import posthog from "posthog-js";
 import { useState } from "react";
-import { POST_CATEGORIES } from "../post/utils";
 
-interface BlogListClientProps {
+interface BlogListProps {
   /** Every dataType with at least one published post, alphabetical. */
   categories: string[];
   posts: SelectPost[];
@@ -32,11 +32,7 @@ const labels: Record<string, string> = {
  * there are dozens of posts, not thousands, and a tab that responds on the
  * next frame reads better than one that suspends.
  */
-export function BlogListClient({
-  categories,
-  posts,
-  query,
-}: BlogListClientProps) {
+export function BlogList({ categories, posts, query }: BlogListProps) {
   const [topic, setTopic] = useState(ALL);
 
   const filtered =
