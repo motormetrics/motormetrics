@@ -24,20 +24,3 @@ export const AGE_BRACKETS: AgeBracket[] = [
 
 export const OLD_CAP = 60_000;
 export const NEW_CAP = 30_000;
-
-export interface CoePeriod {
-  key: string;
-  label: string;
-  /** The cap on the old schedule, or `null` where it had none. */
-  oldCap: number | null;
-}
-
-/**
- * When the COE was obtained decides the cap under the old schedule: the
- * $60,000 cap covers COEs from the 2nd February 2023 exercise to the 1st
- * February 2026 exercise, and COEs obtained before that have no cap.
- */
-export const COE_PERIODS: CoePeriod[] = [
-  { key: "2023", label: "Feb 2023 to Feb 2026", oldCap: OLD_CAP },
-  { key: "pre-2023", label: "Before Feb 2023", oldCap: null },
-];

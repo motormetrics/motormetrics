@@ -4,8 +4,8 @@ import { Input, Label, ListBox, Select, Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   AGE_BRACKETS,
-  COE_PERIODS,
   NEW_CAP,
+  OLD_CAP,
 } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import {
@@ -28,28 +28,25 @@ import { useMemo, useState } from "react";
 export function PARFCalculator() {
   const [arfInput, setArfInput] = useState("80000");
   const [bracketKey, setBracketKey] = useState("0");
-  const [periodKey, setPeriodKey] = useState(COE_PERIODS[0].key);
 
   const arf = Number(arfInput.replace(/[^0-9.]/g, "")) || 0;
   const bracket = AGE_BRACKETS[Number(bracketKey)] ?? AGE_BRACKETS[0];
-  const period =
-    COE_PERIODS.find(({ key }) => key === periodKey) ?? COE_PERIODS[0];
 
   const result = useMemo(() => {
     const oldUncapped = arf * bracket.oldRate;
     const newUncapped = arf * bracket.newRate;
-    const oldCapped = period.oldCap !== null && oldUncapped > period.oldCap;
-    const oldRebate = oldCapped ? (period.oldCap ?? 0) : oldUncapped;
+    const oldRebate = Math.min(oldUncapped, OLD_CAP);
     const newRebate = Math.min(newUncapped, NEW_CAP);
 
     return {
       newCapped: newUncapped > NEW_CAP,
       newRebate,
-      oldCapped,
+      oldCapped: oldUncapped > OLD_CAP,
       oldRebate,
+      oldUncapped,
       shortfall: oldRebate - newRebate,
     };
-  }, [arf, bracket, period]);
+  }, [arf, bracket]);
 
   return (
     <>
@@ -102,37 +99,6 @@ export function PARFCalculator() {
             </Select.Popover>
           </Select>
         </div>
-        <div className="flex min-w-64 flex-col gap-2">
-          <Select
-            onChange={(key) => {
-              if (!key) return;
-              posthog.capture("parf_calculator_used", {
-                coe_period: key,
-                field: "coe_period",
-              });
-              setPeriodKey(String(key));
-            }}
-            value={periodKey}
-          >
-            <Label>
-              <ReportEyebrow>COE obtained</ReportEyebrow>
-            </Label>
-            <Select.Trigger>
-              <Select.Value />
-              <Select.Indicator />
-            </Select.Trigger>
-            <Select.Popover>
-              <ListBox>
-                {COE_PERIODS.map(({ key, label }) => (
-                  <ListBox.Item id={key} key={key} textValue={label}>
-                    {label}
-                    <ListBox.ItemIndicator />
-                  </ListBox.Item>
-                ))}
-              </ListBox>
-            </Select.Popover>
-          </Select>
-        </div>
       </div>
 
       <ReportHeadline
@@ -147,8 +113,10 @@ export function PARFCalculator() {
             <ReportStat
               label="Before Budget 2026"
               note={
+                // The $60,000 cap only covers COEs from February 2023, so an
+                // older COE would get the uncapped figure.
                 result.oldCapped
-                  ? `capped at ${formatCurrency(period.oldCap ?? 0)}`
+                  ? `capped at ${formatCurrency(OLD_CAP)} · ${formatCurrency(result.oldUncapped)} for COEs before Feb 2023`
                   : `${(bracket.oldRate * 100).toFixed(0)}% of ARF`
               }
               value={formatCurrency(result.oldRebate)}
