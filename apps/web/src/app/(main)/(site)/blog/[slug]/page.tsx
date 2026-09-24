@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { Skeleton, Typography } from "@heroui/react";
 import {
   type Highlight,
   KeyHighlights,
@@ -27,6 +27,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { Suspense } from "react";
 import readingTime from "reading-time";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
@@ -141,7 +142,44 @@ async function Article({ slug, content }: { slug: string; content: string }) {
   );
 }
 
-export default async function BlogPostPage({ params }: PageProps) {
+/**
+ * The shell every post shares. Only `Post` reads the slug, so the frame and
+ * skeleton stay in the App Shell that Partial Prefetching serves for any link.
+ */
+export default function BlogPostPage({ params }: PageProps) {
+  return (
+    <>
+      <ProgressBar />
+
+      <SitePage className="gap-14">
+        <Suspense fallback={<PostSkeleton />}>
+          <Post params={params} />
+        </Suspense>
+      </SitePage>
+    </>
+  );
+}
+
+/** Stands in for the post head, hero and body while the slug resolves. */
+function PostSkeleton() {
+  return (
+    <>
+      <div className="flex max-w-prose flex-col gap-4">
+        <Skeleton className="h-4 w-40 rounded-lg" />
+        <Skeleton className="h-12 w-full rounded-lg" />
+        <Skeleton className="h-5 w-64 rounded-lg" />
+      </div>
+      <Skeleton className="aspect-12/5 w-full rounded-4xl" />
+      <div className="flex flex-col gap-4">
+        <Skeleton className="h-6 w-full rounded-lg" />
+        <Skeleton className="h-6 w-5/6 rounded-lg" />
+        <Skeleton className="h-6 w-4/6 rounded-lg" />
+      </div>
+    </>
+  );
+}
+
+async function Post({ params }: PageProps) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
@@ -216,51 +254,47 @@ export default async function BlogPostPage({ params }: PageProps) {
           ]),
         }}
       />
-      <ProgressBar />
+      <PostHead
+        initialViewCount={initialViewCount}
+        post={post}
+        publishedAt={publishedDate}
+        readingTimeText={readingTime(post.content).text}
+      />
 
-      <SitePage className="gap-14">
-        <PostHead
-          initialViewCount={initialViewCount}
-          post={post}
-          publishedAt={publishedDate}
-          readingTimeText={readingTime(post.content).text}
-        />
-
-        {post.heroImage ? (
-          <div className="relative aspect-12/5 w-full overflow-hidden rounded-4xl bg-surface-secondary shadow-surface">
-            <Image
-              alt=""
-              className="object-cover"
-              fill
-              priority
-              sizes="(max-width: 1180px) 100vw, 1180px"
-              src={post.heroImage}
-            />
-          </div>
-        ) : null}
-
-        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-14">
-          <article className="flex min-w-0 flex-col gap-7">
-            {lede ? (
-              <Typography.Paragraph className="font-medium text-2xl text-foreground leading-normal">
-                {lede}
-              </Typography.Paragraph>
-            ) : null}
-
-            <KeyHighlights
-              highlights={post.highlights as Highlight[] | undefined}
-            />
-
-            <Article slug={post.slug} content={post.content} />
-
-            <PostNavigation previous={previousPost} next={nextPost} />
-          </article>
-
-          <PostSidebar post={post} />
+      {post.heroImage ? (
+        <div className="relative aspect-12/5 w-full overflow-hidden rounded-4xl bg-surface-secondary shadow-surface">
+          <Image
+            alt=""
+            className="object-cover"
+            fill
+            priority
+            sizes="(max-width: 1180px) 100vw, 1180px"
+            src={post.heroImage}
+          />
         </div>
+      ) : null}
 
-        <RelatedPosts currentPostId={post.id} />
-      </SitePage>
+      <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-14">
+        <article className="flex min-w-0 flex-col gap-7">
+          {lede ? (
+            <Typography.Paragraph className="font-medium text-2xl text-foreground leading-normal">
+              {lede}
+            </Typography.Paragraph>
+          ) : null}
+
+          <KeyHighlights
+            highlights={post.highlights as Highlight[] | undefined}
+          />
+
+          <Article slug={post.slug} content={post.content} />
+
+          <PostNavigation previous={previousPost} next={nextPost} />
+        </article>
+
+        <PostSidebar post={post} />
+      </div>
+
+      <RelatedPosts currentPostId={post.id} />
     </>
   );
 }
