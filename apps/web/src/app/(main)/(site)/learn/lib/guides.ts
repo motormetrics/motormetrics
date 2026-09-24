@@ -117,7 +117,7 @@ Your deposit is returned, and you can bid again in the next exercise.
     relatedTerms: ["ARF", "PARF", "OMV", "PQP"],
     relatedLinks: [
       { label: "Current COE Premiums", href: "/coe/premiums" },
-      { label: "COE Bidding Results", href: "/coe/results" },
+      { label: "COE Price History", href: "/coe/results" },
       { label: "PQP Rates", href: "/coe/pqp" },
     ],
     lastUpdated: "2026-04-11",
