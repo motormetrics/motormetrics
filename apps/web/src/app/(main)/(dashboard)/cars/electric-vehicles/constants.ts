@@ -3,13 +3,6 @@ import type {
   Range,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
 
-/** LTA DataMall fuel-type labels, grouped into the powertrains this page shows. */
-export const EV_FUEL_TYPES = {
-  BEV: ["Electric"],
-  PHEV: ["Petrol-Electric (Plug-In)", "Diesel-Electric (Plug-In)"],
-  Hybrid: ["Petrol-Electric", "Diesel-Electric"],
-} as const;
-
 /** Fuel type recorded against battery-electric vehicles in `vehicle_population`. */
 export const ELECTRIC_POPULATION_FUEL_TYPE = "Electric";
 

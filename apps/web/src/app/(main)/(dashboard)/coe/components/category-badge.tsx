@@ -1,9 +1,9 @@
 import { cn } from "@heroui/react";
 
 /**
- * The round CAT badge opening each row of the category tables on the two COE
- * report pages. `isActive` marks the category the premiums page is filtered to;
- * `/coe/results` has no category selection and leaves it off.
+ * The round CAT badge opening each row of the category tables on the COE
+ * report pages. `isActive` marks the category the premiums and PQP pages are
+ * filtered to; `/coe/results` has no category selection and leaves it off.
  */
 export function CategoryBadge({
   categoryKey,

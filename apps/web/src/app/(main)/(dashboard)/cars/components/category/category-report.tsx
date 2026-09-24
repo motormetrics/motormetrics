@@ -1,14 +1,12 @@
 import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
-import {
-  MeasureTabs,
-  PeriodTabs,
-} from "@web/app/(main)/(dashboard)/cars/components/category/category-filters";
+import { MeasureTabs } from "@web/app/(main)/(dashboard)/cars/components/category/category-filters";
 import {
   type CategorySeries,
   CategoryShareChart,
 } from "@web/app/(main)/(dashboard)/cars/components/category/category-share-chart";
+import { PeriodTabs } from "@web/app/(main)/(dashboard)/cars/components/category/period-tabs";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import {
   ReportFilterBar,
@@ -32,9 +30,10 @@ import {
   getElectricShareByVehicleType,
   getTopMakesByCategory,
 } from "@web/queries/cars/category-report";
+import { formatChartMonth } from "@web/utils/dates/format-month";
+import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
-import { format, subMonths } from "date-fns";
 import Link from "next/link";
 import {
   createLoader,
@@ -46,14 +45,27 @@ import {
 /**
  * The parsers live here rather than in a folder-level `search-params.ts` —
  * extracting one for this folder is deliberately deferred. `category-filters.tsx`
- * restates them for the client side.
+ * restates the measure parser for the client side; `PeriodTabs` takes the
+ * period labels as a prop so that vocabulary is stated once.
  */
+const PERIODS = ["month", "ytd"] as const;
+
+const PERIOD_LABELS: Record<(typeof PERIODS)[number], string> = {
+  month: "This month",
+  ytd: "Year to date",
+};
+
+const PERIOD_OPTIONS = PERIODS.map((key) => ({
+  key,
+  label: PERIOD_LABELS[key],
+}));
+
 const loadCategorySearchParams = createLoader({
   measure: parseAsStringLiteral(["share", "volume"] as const).withDefault(
     "share",
   ),
   month: parseAsString,
-  period: parseAsStringLiteral(["month", "ytd"] as const).withDefault("month"),
+  period: parseAsStringLiteral(PERIODS).withDefault("month"),
 });
 
 export interface CategoryConfig {
@@ -91,37 +103,6 @@ const SERIES_MONTHS = 12;
 /** How many types the chart plots and the month-by-month table columns. */
 const CHARTED_TYPES = 6;
 
-const MONTH_LABELS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-/** `2025-10` → `Oct`. The window never spans more than a year. */
-function chartLabel(month: string): string {
-  const monthNumber = Number(month.slice(5, 7));
-
-  return MONTH_LABELS[monthNumber - 1] ?? month;
-}
-
-/** The `SERIES_MONTHS` months ending at `month`, oldest first. */
-function trailingMonths(month: string): string[] {
-  const anchor = new Date(`${month}-01T00:00:00Z`);
-
-  return Array.from({ length: SERIES_MONTHS }, (_, index) =>
-    format(subMonths(anchor, SERIES_MONTHS - 1 - index), "yyyy-MM"),
-  );
-}
-
 /** January through `month`, for the year-to-date view. */
 function yearToDateMonths(month: string): string[] {
   const year = month.slice(0, 4);
@@ -135,9 +116,7 @@ function yearToDateMonths(month: string): string[] {
 
 /** The same span a year earlier, for the year-on-year column. */
 function shiftedBackAYear(months: string[]): string[] {
-  return months.map(
-    (month) => `${Number(month.slice(0, 4)) - 1}-${month.slice(5, 7)}`,
-  );
+  return months.map((month) => shiftMonth(month, -12));
 }
 
 function percentageOf(count: number, total: number): number {
@@ -165,7 +144,7 @@ export async function CategoryReport({
   const year = Number(month.slice(0, 4));
   const periodMonths = period === "ytd" ? yearToDateMonths(month) : [month];
   const priorMonths = shiftedBackAYear(periodMonths);
-  const seriesMonths = trailingMonths(month);
+  const seriesMonths = trailingMonths(month, SERIES_MONTHS);
 
   const [totals, priorTotals, series, leaders, electricShares] =
     await Promise.all([
@@ -245,7 +224,7 @@ export async function CategoryReport({
   });
 
   const chartData = monthlyRows.map(({ cells, month: seriesMonth }) => ({
-    label: chartLabel(seriesMonth),
+    label: formatChartMonth(seriesMonth),
     ...Object.fromEntries(
       cells.map(({ count, share }, index) => [
         `type${index}`,
@@ -261,7 +240,7 @@ export async function CategoryReport({
         trailing={<MeasureTabs />}
         trailingLabel="Measure"
       >
-        <PeriodTabs />
+        <PeriodTabs defaultKey="month" options={PERIOD_OPTIONS} />
       </ReportFilterBar>
 
       <ReportHeadline

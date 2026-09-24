@@ -1,6 +1,7 @@
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
-import { and, desc, gt, gte, lte, max, sql } from "drizzle-orm";
+import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
+import { and, desc, gt, gte, lte, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**
@@ -39,11 +40,7 @@ export async function getPopularMakes(year?: string) {
     return getPopularMakesByYearData(year, 8);
   }
 
-  const [latestMonthResult] = await db
-    .select({ latestMonth: max(cars.month) })
-    .from(cars);
-
-  const latestMonth = latestMonthResult.latestMonth;
+  const latestMonth = await getCarsLatestMonth();
   if (!latestMonth) {
     return [];
   }

@@ -1,4 +1,13 @@
 import { Card, Chip, Separator, Typography } from "@heroui/react";
+import {
+  AnimatedCard,
+  AnimatedCardGrid,
+  AnimatedContainer,
+  AnimatedIconWrapper,
+  AnimatedSection,
+  AnimatedText,
+  MaintenancePollingWrapper,
+} from "@web/app/(main)/(site)/maintenance/components/maintenance-notice.client";
 import { SOCIAL_URLS } from "@web/config/socials";
 import {
   Clock,
@@ -11,15 +20,6 @@ import {
   Zap,
 } from "lucide-react";
 import Link from "next/link";
-import {
-  AnimatedCard,
-  AnimatedCardGrid,
-  AnimatedContainer,
-  AnimatedIconWrapper,
-  AnimatedSection,
-  AnimatedText,
-  MaintenancePollingWrapper,
-} from "./maintenance-notice.client";
 
 export function MaintenanceNotice() {
   return (

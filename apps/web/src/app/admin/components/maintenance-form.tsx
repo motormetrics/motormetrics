@@ -1,4 +1,4 @@
-import type { MaintenanceConfig } from "@web/app/admin/actions/maintenance";
+import type { MaintenanceConfig } from "@web/lib/maintenance";
 import { MaintenanceFormClient } from "./maintenance-form.client";
 
 interface MaintenanceFormProps {

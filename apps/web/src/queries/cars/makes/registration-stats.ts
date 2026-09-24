@@ -1,6 +1,7 @@
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
-import { asc, max, sql } from "drizzle-orm";
+import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
+import { asc, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export interface MakeRegistrationStat {
@@ -51,11 +52,7 @@ export async function getMakeRegistrationStats(): Promise<
   cacheLife("max");
   cacheTag("cars:makes");
 
-  const [latestMonthResult] = await db
-    .select({ latestMonth: max(cars.month) })
-    .from(cars);
-
-  const latestMonth = latestMonthResult?.latestMonth;
+  const latestMonth = await getCarsLatestMonth();
   if (!latestMonth) {
     return [];
   }

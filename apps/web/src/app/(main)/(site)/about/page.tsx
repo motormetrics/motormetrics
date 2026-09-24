@@ -10,15 +10,10 @@ import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
+import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
-import type {
-  FAQPage,
-  Organization,
-  Person,
-  WebPage,
-  WithContext,
-} from "schema-dts";
+import type { Organization, Person, WebPage, WithContext } from "schema-dts";
 
 const title = `About ${SITE_TITLE} (formerly SG Cars Trends)`;
 const description = `Learn about ${SITE_TITLE}, a platform for exploring Singapore car registration statistics, COE bidding results, and market data. Built to make car market information easier to find and understand.`;
@@ -102,22 +97,16 @@ export default function AboutPage() {
     jobTitle: "Software Engineer",
   };
 
-  const faqSchema: WithContext<FAQPage> = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQS.map(({ answer, question }) => ({
-      "@type": "Question",
-      name: question,
-      acceptedAnswer: { "@type": "Answer", text: answer },
-    })),
-  };
+  const faqSchema = generateFAQPageSchema([{ items: FAQS }]);
 
   return (
     <>
       <StructuredData data={webPageSchema} />
       <OrganizationStructuredData />
       <StructuredData data={personSchema} />
-      <StructuredData data={faqSchema} />
+      <StructuredData
+        data={{ "@context": "https://schema.org", ...faqSchema }}
+      />
 
       <SitePage>
         <HeroSection />

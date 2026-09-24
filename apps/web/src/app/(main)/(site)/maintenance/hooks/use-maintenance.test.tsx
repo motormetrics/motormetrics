@@ -1,8 +1,8 @@
-import type { MaintenanceStatus } from "@web/actions/maintenance";
+import { useMaintenance } from "@web/app/(main)/(site)/maintenance/hooks/use-maintenance";
+import type { MaintenanceConfig } from "@web/lib/maintenance";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { MockInstance } from "vitest";
 import { renderHook } from "vitest-browser-react";
-import { useMaintenance } from "./use-maintenance";
 
 // Mock Next.js navigation hooks
 vi.mock("next/navigation", () => ({
@@ -14,7 +14,7 @@ describe("useMaintenance", () => {
   const mockReplace = vi.fn();
   const mockGet = vi.fn();
   let intervalSpy: MockInstance<typeof globalThis.setInterval>;
-  const createFetcher = (status: MaintenanceStatus) => {
+  const createFetcher = (status: MaintenanceConfig) => {
     return async () => ({
       ...status,
     });

@@ -1,9 +1,9 @@
 import { generateDocumentEmbedding } from "@motormetrics/ai/embedding";
 import { db } from "@motormetrics/database/client";
+import { createPost } from "@web/lib/posts/create-post";
+import { updatePost } from "@web/lib/posts/update-post";
 import { revalidateTag } from "next/cache";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createPost } from "./create-post";
-import { updatePost } from "./update-post";
 
 vi.mock("@motormetrics/ai/embedding", () => ({
   generateDocumentEmbedding: vi.fn(),

@@ -1,11 +1,9 @@
-import {
-  getMaintenanceStatus,
-  type MaintenanceStatus,
-} from "@web/actions/maintenance";
+import { getMaintenanceStatus } from "@web/app/(main)/(site)/maintenance/actions/maintenance";
+import type { MaintenanceConfig } from "@web/lib/maintenance";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-type MaintenanceFetcher = () => Promise<MaintenanceStatus>;
+type MaintenanceFetcher = () => Promise<MaintenanceConfig>;
 
 export interface UseMaintenanceOptions {
   pollingInterval?: number;

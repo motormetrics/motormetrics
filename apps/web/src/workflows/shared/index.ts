@@ -1,5 +1,8 @@
 import { classifyAIError } from "@motormetrics/ai/errors";
-import { generateHeroImage } from "@motormetrics/ai/generate-hero-image";
+import {
+  type GenerateHeroImageParams,
+  generateHeroImage,
+} from "@motormetrics/ai/generate-hero-image";
 import { updatePostHeroImage } from "@motormetrics/ai/save-post";
 import { slugify } from "@motormetrics/utils/slugify";
 import { getPostsWorkflowRevalidationTags } from "@web/lib/cache-tags";
@@ -47,13 +50,7 @@ export async function generatePostHero(params: {
   postId: string;
   title: string;
   excerpt: string;
-  dataType:
-    | "cars"
-    | "coe"
-    | "deregistrations"
-    | "electric-vehicles"
-    | "pqp"
-    | "monthly-update";
+  dataType: GenerateHeroImageParams["dataType"];
 }): Promise<string> {
   "use step";
 

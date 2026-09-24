@@ -1,32 +1,27 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
-import { formatMonthLabel } from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import {
   batteryElectricMakes,
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import { buildLogoMap } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { Headline, SectionHead } from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 import { getTopMakesByFuelType } from "@web/queries/cars/market-insights";
-import { getAllCarLogos } from "@web/queries/logos";
+import { getCarLogoMap } from "@web/queries/logos";
+import {
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
 import { getLatestMonth } from "@web/utils/dates/months";
 
 /** Months of share history drawn under the figure. */
 const SPARK_MONTHS = 12;
 const TOP_MAKES = 3;
-
-const formatMonthName = (month: string) => {
-  const [year, monthNumber] = month.split("-").map(Number);
-  return new Date(year, monthNumber - 1).toLocaleString("en-SG", {
-    month: "long",
-  });
-};
 
 /**
  * Battery-electric share of the month's new car registrations, its trend and
@@ -35,11 +30,11 @@ const formatMonthName = (month: string) => {
  */
 export async function EvMomentum() {
   const month = await getLatestMonth("cars");
-  const [trend, marketShare, fuelTypes, logoResult] = await Promise.all([
+  const [trend, marketShare, fuelTypes, logoUrlBySlug] = await Promise.all([
     getEvMonthlyTrend(),
     getEvMarketShare(),
     getTopMakesByFuelType(month),
-    getAllCarLogos(),
+    getCarLogoMap(),
   ]);
 
   const index = resolveMonthIndex(
@@ -60,9 +55,6 @@ export async function EvMomentum() {
     value: Number((shares[start + offset] ?? 0).toFixed(1)),
   }));
 
-  const logoUrlBySlug = buildLogoMap(
-    "logos" in logoResult ? logoResult.logos : [],
-  );
   const makes = batteryElectricMakes(fuelTypes).slice(0, TOP_MAKES);
   const monthTotal = point.BEV || 1;
 

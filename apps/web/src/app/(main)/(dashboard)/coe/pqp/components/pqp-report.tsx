@@ -1,5 +1,6 @@
 import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/components/category-badge";
 import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
   PQPChart,
@@ -14,12 +15,13 @@ import {
   TermTabs,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-filters";
 import { RenewalComparison } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal-comparison";
+import { UnreleasedFeature } from "@web/app/(main)/(dashboard)/coe/pqp/components/unreleased-feature";
 import {
   loadSearchParams,
   PQP_CATEGORY_KEYS,
   type PQPCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
-import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
+import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import {
   ReportFilterBar,
   ReportHeadline,
@@ -33,7 +35,6 @@ import {
   ReportRow,
   ReportTable,
 } from "@web/components/shared/report-table";
-import { UnreleasedFeature } from "@web/components/unreleased-feature";
 import { getPQPOverview } from "@web/queries/coe";
 import type { Pqp } from "@web/types/coe";
 import Link from "next/link";
@@ -232,21 +233,10 @@ export async function PQPReport({
             return (
               <ReportRow isActive={key === category} key={key}>
                 <ReportCell>
-                  <span
-                    className="inline-flex size-10 items-center justify-center rounded-full font-extrabold text-base"
-                    style={{
-                      backgroundColor:
-                        key === category
-                          ? "var(--accent)"
-                          : "var(--surface-secondary)",
-                      color:
-                        key === category
-                          ? "var(--accent-foreground)"
-                          : "var(--accent-strong)",
-                    }}
-                  >
-                    {key}
-                  </span>
+                  <CategoryBadge
+                    categoryKey={key}
+                    isActive={key === category}
+                  />
                 </ReportCell>
                 <ReportCell className="font-semibold text-base">
                   {CATEGORY_DESCRIPTIONS[key]}

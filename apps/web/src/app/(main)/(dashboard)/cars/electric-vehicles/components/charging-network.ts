@@ -1,4 +1,5 @@
 import type { EvChargingMonthlyRegistrations } from "@web/queries/ev-charging";
+import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 
 export interface ChargingNetworkGrowth {
   /** Latest month with a registration, `yyyy-MM`. */
@@ -8,12 +9,6 @@ export interface ChargingNetworkGrowth {
   /** Percentage growth of the cumulative network over those twelve months. */
   growthPercent: number | null;
 }
-
-const shiftMonth = (month: string, offset: number): string => {
-  const [year, monthPart] = month.split("-").map(Number);
-  const date = new Date(Date.UTC(year, monthPart - 1 + offset, 1));
-  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
-};
 
 /**
  * Twelve-month growth of the cumulative network, anchored on the data rather

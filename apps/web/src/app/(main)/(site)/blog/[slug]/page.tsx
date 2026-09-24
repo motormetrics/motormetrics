@@ -13,7 +13,6 @@ import { RelatedPosts } from "@web/app/(main)/(site)/blog/components/related-pos
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { getPostViewCount } from "@web/lib/data/posts";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import {
@@ -22,6 +21,7 @@ import {
   getPostBySlug,
   getPreviousPost,
 } from "@web/queries/posts";
+import { getPostViewCount } from "@web/queries/posts/popularity";
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 import Image from "next/image";

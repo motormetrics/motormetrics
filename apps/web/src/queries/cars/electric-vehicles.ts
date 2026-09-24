@@ -1,19 +1,20 @@
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
+import { ALL_EV_FUEL_TYPES, EV_FUEL_TYPES } from "@web/config";
 import { inArray, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
-const BEV_FUEL_TYPES = ["Electric"];
-const PHEV_FUEL_TYPES = [
-  "Petrol-Electric (Plug-In)",
-  "Diesel-Electric (Plug-In)",
-];
-const HYBRID_FUEL_TYPES = ["Petrol-Electric", "Diesel-Electric"];
-const ALL_EV_FUEL_TYPES = [
-  ...BEV_FUEL_TYPES,
-  ...PHEV_FUEL_TYPES,
-  ...HYBRID_FUEL_TYPES,
-];
+type EvPowertrain = keyof typeof EV_FUEL_TYPES;
+
+/** Each electrified fuel-type label mapped to the powertrain it counts towards. */
+const POWERTRAIN_BY_FUEL_TYPE = new Map<string, EvPowertrain>(
+  (Object.keys(EV_FUEL_TYPES) as EvPowertrain[]).flatMap((powertrain) =>
+    EV_FUEL_TYPES[powertrain].map((fuelType): [string, EvPowertrain] => [
+      fuelType,
+      powertrain,
+    ]),
+  ),
+);
 
 export interface EvMonthlyTrend {
   month: string;
@@ -48,20 +49,21 @@ export async function getEvMonthlyTrend(): Promise<EvMonthlyTrend[]> {
   const monthMap = new Map<string, EvMonthlyTrend>();
 
   for (const row of results) {
-    if (!monthMap.has(row.month)) {
-      monthMap.set(row.month, { month: row.month, BEV: 0, PHEV: 0, Hybrid: 0 });
-    }
-    const entry = monthMap.get(row.month)!;
+    const entry = monthMap.get(row.month) ?? {
+      month: row.month,
+      BEV: 0,
+      PHEV: 0,
+      Hybrid: 0,
+    };
     // `sum()` is null only for an empty group, which a GROUP BY cannot produce
     const count = row.count ?? 0;
 
-    if (BEV_FUEL_TYPES.includes(row.fuelType)) {
-      entry.BEV += count;
-    } else if (PHEV_FUEL_TYPES.includes(row.fuelType)) {
-      entry.PHEV += count;
-    } else if (HYBRID_FUEL_TYPES.includes(row.fuelType)) {
-      entry.Hybrid += count;
+    const powertrain = POWERTRAIN_BY_FUEL_TYPE.get(row.fuelType);
+    if (powertrain) {
+      entry[powertrain] += count;
     }
+
+    monthMap.set(row.month, entry);
   }
 
   return Array.from(monthMap.values());

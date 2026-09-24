@@ -2,9 +2,10 @@
 
 import { ToggleButton, ToggleButtonGroup, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
-import { changeRatio } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
+import { changeRatio } from "@web/utils/change-ratio";
+import { formatMonthShortLabel } from "@web/utils/dates/format-month";
 import posthog from "posthog-js";
 import { useState } from "react";
 
@@ -18,14 +19,6 @@ export interface CoeCategorySeries {
 }
 
 const CHART_HEIGHT = 200;
-
-const formatMonth = (month: string) => {
-  const [year, monthPart] = month.split("-");
-  return new Date(Number(year), Number(monthPart) - 1).toLocaleString("en-SG", {
-    month: "short",
-    year: "numeric",
-  });
-};
 
 /**
  * The left half of the COE section: category circles, the latest premium for
@@ -103,7 +96,7 @@ export function CoePremiums({ series }: { series: CoeCategorySeries[] }) {
       <div className="flex flex-col gap-2">
         <SparklineChart
           data={active.points.map((point) => ({
-            label: formatMonth(point.month),
+            label: formatMonthShortLabel(point.month),
             value: point.premium,
           }))}
           format={{ currency: "SGD", style: "currency" }}
@@ -112,8 +105,10 @@ export function CoePremiums({ series }: { series: CoeCategorySeries[] }) {
           title={`${active.category} premiums over the last ${values.length} exercises`}
         />
         <div className="flex justify-between font-semibold text-muted text-xs">
-          <span>{formatMonth(active.points[0]?.month ?? "")}</span>
-          <span>{formatMonth(active.points.at(-1)?.month ?? "")}</span>
+          <span>{formatMonthShortLabel(active.points[0]?.month ?? "")}</span>
+          <span>
+            {formatMonthShortLabel(active.points.at(-1)?.month ?? "")}
+          </span>
         </div>
       </div>
     </div>

@@ -1,4 +1,9 @@
 import type { COECategory, COEResult } from "@web/types";
+import {
+  formatMonthLabel,
+  formatMonthShortLabel,
+  formatMonthShortName,
+} from "@web/utils/dates/format-month";
 import type { CategoryKey } from "./search-params";
 
 export const COE_CATEGORIES: COECategory[] = [
@@ -152,16 +157,11 @@ const ORDINALS = ["first", "second", "third"];
 export const biddingOrdinal = (biddingNo: number): string =>
   ORDINALS[biddingNo - 1] ?? `round ${biddingNo}`;
 
-const monthDate = (month: string) => {
-  const [year, monthPart] = month.split("-");
-  return new Date(Number(year), Number(monthPart) - 1);
-};
-
 export const formatMonth = (
   month: string,
   style: "long" | "short" = "long",
 ): string =>
-  monthDate(month).toLocaleString("en-SG", { month: style, year: "numeric" });
+  style === "short" ? formatMonthShortLabel(month) : formatMonthLabel(month);
 
 /** "Second bidding, April 2026" — the page's name for an exercise. */
 export const formatExercise = (exercise: {
@@ -177,15 +177,14 @@ export const formatExercise = (exercise: {
 export const formatExerciseTick = (exercise: {
   biddingNo: number;
   month: string;
-}): string =>
-  `${monthDate(exercise.month).toLocaleString("en-SG", { month: "short" })} ${exercise.biddingNo}`;
+}): string => `${formatMonthShortName(exercise.month)} ${exercise.biddingNo}`;
 
-/**
- * Signed change as a ratio. Returns 0 when there is no usable baseline, which
- * every caller renders as "no movement" rather than as an infinite jump.
- */
-export const changeRatio = (current: number, previous: number): number =>
-  previous > 0 ? (current - previous) / previous : 0;
+export { changeRatio } from "@web/utils/change-ratio";
+
+/** Successful bids as a percentage of bids received; 0 when none were received. */
+export function successRate(bidsSuccess: number, bidsReceived: number): number {
+  return bidsReceived > 0 ? (bidsSuccess / bidsReceived) * 100 : 0;
+}
 
 /**
  * The exercise that follows the given one: the second round of the same month,

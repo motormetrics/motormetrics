@@ -1,18 +1,16 @@
+import { RANGES } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { createLoader, parseAsString, parseAsStringLiteral } from "nuqs/server";
 
 /**
  * Periods the make page can be read over, anchored on the selected month
- * rather than on the latest one. The vocabulary matches the Makes overview
+ * rather than on the latest one. The vocabulary is the Makes overview's
  * (`cars/makes/search-params.ts`) so the two pages read the same way.
  */
-export const RANGES = ["month", "ytd", "12m"] as const;
-export type Range = (typeof RANGES)[number];
-
-export const RANGE_LABELS: Record<Range, string> = {
-  month: "This month",
-  ytd: "Year to date",
-  "12m": "Last 12 months",
-};
+export {
+  RANGE_LABELS,
+  RANGES,
+  type Range,
+} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 
 export const searchParams = {
   /**

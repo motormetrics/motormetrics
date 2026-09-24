@@ -2,7 +2,7 @@
 
 import { Button } from "@heroui/react";
 
-import { TrendsComparison } from "@web/components/trends-comparison";
+import { TrendsComparison } from "@web/app/(main)/(dashboard)/cars/registrations/components/trends-comparison";
 import type { ComparisonData } from "@web/queries/cars/compare";
 import type { Month } from "@web/types";
 import { TrendingUp } from "lucide-react";

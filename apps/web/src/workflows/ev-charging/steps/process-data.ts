@@ -1,5 +1,6 @@
 import { evChargingPoints } from "@motormetrics/database/schema";
 import type { EvChargingPoint } from "@motormetrics/types";
+import { toNumber, toText } from "@web/lib/ev-charging/parse-batch";
 import { update } from "@web/lib/updater";
 import { format, isValid, parse } from "date-fns";
 
@@ -16,19 +17,7 @@ export const toIsoDate = (value: string): string | null => {
   return isValid(parsed) ? format(parsed, "yyyy-MM-dd") : null;
 };
 
-export const toNumberOrNull = (value: string): number | null => {
-  const trimmed = value.trim();
-  if (!trimmed) {
-    return null;
-  }
-  const parsed = Number(trimmed);
-  return Number.isFinite(parsed) ? parsed : null;
-};
-
-export const toTextOrNull = (value: string): string | null =>
-  value.trim() || null;
-
-export const toOutlets = (value: string): number => toNumberOrNull(value) ?? 1;
+export const toOutlets = (value: string): number => toNumber(value) ?? 1;
 
 export const toPubliclyAccessible = (value: string): boolean =>
   value.trim().toLowerCase() === "yes";
@@ -57,18 +46,18 @@ export const updateEvChargingPoints = () =>
       },
       fields: {
         outlets: toOutlets,
-        chargingSpeedKw: toNumberOrNull,
-        postalCode: toTextOrNull,
-        blockHouseNo: toTextOrNull,
-        streetName: toTextOrNull,
-        buildingName: toTextOrNull,
-        floorNo: toTextOrNull,
-        lotNo: toTextOrNull,
+        chargingSpeedKw: toNumber,
+        postalCode: toText,
+        blockHouseNo: toText,
+        streetName: toText,
+        buildingName: toText,
+        floorNo: toText,
+        lotNo: toText,
         publiclyAccessible: toPubliclyAccessible,
-        longitude: toNumberOrNull,
-        latitude: toNumberOrNull,
+        longitude: toNumber,
+        latitude: toNumber,
         registrationDate: toIsoDate,
-        parkingLotType: toTextOrNull,
+        parkingLotType: toText,
       },
     },
   });

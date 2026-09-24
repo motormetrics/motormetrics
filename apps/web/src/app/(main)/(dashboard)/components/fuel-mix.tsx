@@ -1,13 +1,9 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { donutArcs } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionHead } from "@web/components/shared/overview";
 import { getYearToDateByFuelType } from "@web/queries/cars";
+import { donutArcs, RING_RADIUS } from "@web/utils/charts/donut-arcs";
 import { getLatestMonth } from "@web/utils/dates/months";
-
-const RADIUS = 74;
-/** Arc length removed from each segment so the rounded caps read as separate. */
-const SEGMENT_GAP = 16;
 
 /**
  * The powertrains the ring shows, in drawing order. LTA records hybrids as
@@ -63,7 +59,7 @@ export async function FuelMix() {
   }
 
   const segments = slices.filter((slice) => slice.value > 0);
-  const arcs = donutArcs(segments, RADIUS, SEGMENT_GAP);
+  const arcs = donutArcs(segments);
 
   return (
     <section className="flex flex-col gap-6">
@@ -84,7 +80,7 @@ export async function FuelMix() {
                   cy={95}
                   fill="none"
                   key={arc.key}
-                  r={RADIUS}
+                  r={RING_RADIUS}
                   stroke={arc.color}
                   strokeDasharray={arc.dashArray}
                   strokeDashoffset={arc.dashOffset}

@@ -1,9 +1,9 @@
 import { db } from "@motormetrics/database/client";
-import { deletePost } from "@web/app/admin/lib/delete-post";
-import { updatePost, updatePostSchema } from "@web/app/admin/lib/update-post";
+import { validateApiToken } from "@web/app/api/v1/lib/auth";
+import { deletePost } from "@web/lib/posts/delete-post";
+import { updatePost, updatePostSchema } from "@web/lib/posts/update-post";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { validateApiToken } from "../../lib/auth";
 
 type RouteContext = { params: Promise<{ id: string }> };
 

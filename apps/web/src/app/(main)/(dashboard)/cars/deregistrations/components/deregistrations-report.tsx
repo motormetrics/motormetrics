@@ -22,8 +22,9 @@ import {
   ShareBar,
 } from "@web/components/shared/report-table";
 import { getDeregistrations } from "@web/queries/deregistrations";
+import { formatChartMonth } from "@web/utils/dates/format-month";
+import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
-import { format, subMonths } from "date-fns";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
@@ -45,35 +46,6 @@ const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   "Vehicles Exempted From VQS": "Vehicles outside the quota system",
   Taxis: "Taxis, which draw on their own quota",
 };
-
-const MONTH_LABELS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-/** `2025-10` → `Oct`. The window never spans more than a year. */
-function chartLabel(month: string): string {
-  return MONTH_LABELS[Number(month.slice(5, 7)) - 1] ?? month;
-}
-
-/** The `SERIES_MONTHS` months ending at `month`, oldest first. */
-function trailingMonths(month: string): string[] {
-  const anchor = new Date(`${month}-01T00:00:00Z`);
-
-  return Array.from({ length: SERIES_MONTHS }, (_, index) =>
-    format(subMonths(anchor, SERIES_MONTHS - 1 - index), "yyyy-MM"),
-  );
-}
 
 function percentageOf(count: number, total: number): number {
   return total > 0 ? (count / total) * 100 : 0;
@@ -116,12 +88,9 @@ export async function DeregistrationsReport({
   const { month } = await getMonthOrLatest(parsedMonth, "deregistrations");
 
   const records = await getDeregistrations();
-  const seriesMonths = trailingMonths(month);
-  const priorMonth = format(
-    subMonths(new Date(`${month}-01T00:00:00Z`), 1),
-    "yyyy-MM",
-  );
-  const yearAgoMonth = `${Number(month.slice(0, 4)) - 1}-${month.slice(5, 7)}`;
+  const seriesMonths = trailingMonths(month, SERIES_MONTHS);
+  const priorMonth = shiftMonth(month, -1);
+  const yearAgoMonth = shiftMonth(month, -12);
 
   const totals = totalsForMonth(records, month);
   const priorTotals = totalsForMonth(records, priorMonth);
@@ -170,7 +139,7 @@ export async function DeregistrationsReport({
   });
 
   const chartData = monthlyRows.map(({ cells, month: seriesMonth }) => ({
-    label: chartLabel(seriesMonth),
+    label: formatChartMonth(seriesMonth),
     ...Object.fromEntries(
       cells.map(({ count }, index) => [`category${index}`, count]),
     ),

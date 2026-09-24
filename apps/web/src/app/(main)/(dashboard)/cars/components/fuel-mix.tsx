@@ -1,16 +1,16 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
+import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
+import { getCarsData } from "@web/queries/cars";
 import {
   type DonutSegment,
   donutArcs,
   RING_RADIUS,
-} from "@web/app/(main)/(dashboard)/cars/components/donut-arcs";
+} from "@web/utils/charts/donut-arcs";
 import {
   formatMonthLabel,
   formatMonthName,
-} from "@web/app/(main)/(dashboard)/cars/components/format-month";
-import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
-import { getCarsData } from "@web/queries/cars";
+} from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
 
 /**

@@ -1,24 +1,16 @@
-import { redis } from "@motormetrics/utils/redis";
+import { validateApiToken } from "@web/app/api/v1/lib/auth";
+import {
+  readMaintenanceConfig,
+  writeMaintenanceConfig,
+} from "@web/lib/maintenance";
 import { NextResponse } from "next/server";
-import { validateApiToken } from "../lib/auth";
-
-interface AppConfig {
-  maintenance: {
-    enabled: boolean;
-    message: string;
-  };
-}
 
 export async function GET(request: Request) {
   const authError = validateApiToken(request);
   if (authError) return authError;
 
   try {
-    const config = await redis.get<AppConfig>("config");
-
-    return NextResponse.json(
-      config?.maintenance ?? { enabled: false, message: "" },
-    );
+    return NextResponse.json(await readMaintenanceConfig());
   } catch (error) {
     console.error("[API] Failed to read maintenance config:", error);
     return NextResponse.json(
@@ -52,13 +44,7 @@ export async function PUT(request: Request) {
   };
 
   try {
-    const currentConfig =
-      (await redis.get<AppConfig>("config")) ??
-      ({ maintenance: { enabled: false, message: "" } } satisfies AppConfig);
-
-    currentConfig.maintenance = maintenance;
-
-    await redis.set("config", currentConfig);
+    await writeMaintenanceConfig(maintenance);
 
     return NextResponse.json(maintenance);
   } catch (error) {

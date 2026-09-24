@@ -1,10 +1,5 @@
 import { NumberValue } from "@heroui-pro/react";
 import {
-  formatMonthLabel,
-  formatMonthName,
-} from "@web/app/(main)/(dashboard)/cars/components/format-month";
-import {
-  changeRatio,
   sumByMonth,
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
@@ -12,17 +7,16 @@ import { ColumnChart } from "@web/components/shared/column-chart";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { Headline, SectionLink } from "@web/components/shared/overview";
 import { getDeregistrations } from "@web/queries/deregistrations";
+import { changeRatio } from "@web/utils/change-ratio";
+import {
+  formatMonthLabel,
+  formatMonthName,
+  formatMonthShortName,
+} from "@web/utils/dates/format-month";
 import { getLatestMonth } from "@web/utils/dates/months";
 
 /** Months drawn in the column chart, the selected one last. */
 const CHART_MONTHS = 8;
-
-const formatTick = (month: string) => {
-  const [year, monthNumber] = month.split("-").map(Number);
-  return new Date(year, monthNumber - 1).toLocaleString("en-SG", {
-    month: "short",
-  });
-};
 
 /**
  * The second headline figure: vehicles deregistered in the selected month.
@@ -74,7 +68,7 @@ export async function DeregistrationsHeadline() {
       <ColumnChart
         columns={series.map((item) => ({
           key: item.month,
-          label: formatTick(item.month),
+          label: formatMonthShortName(item.month),
           tooltip: {
             rows: [
               {

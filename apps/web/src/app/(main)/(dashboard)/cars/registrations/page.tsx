@@ -1,9 +1,9 @@
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { CarsMonthSelector } from "@web/app/(main)/(dashboard)/cars/components/cars-month-selector";
 import { RegistrationsReport } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-report";
+import { TrendsCompareButton } from "@web/app/(main)/(dashboard)/cars/registrations/components/trends-compare-button";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
-import { TrendsCompareButton } from "@web/app/(main)/(dashboard)/cars/registrations/trends-compare-button";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { MonthSelector } from "@web/components/shared/month-selector";
 import { PageHead } from "@web/components/shared/page-head";
 import { Report, ReportSection } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
@@ -59,7 +59,7 @@ export default function Page({ searchParams }: PageProps) {
       <PageHead
         controls={
           <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-            <CarsPageHeaderMeta searchParams={searchParams} />
+            <CarsMonthSelector searchParams={searchParams} />
           </Suspense>
         }
         description="Every car registered in Singapore, counted in the month of registration — which can lag the bidding exercise that won its COE by several weeks."
@@ -113,26 +113,6 @@ async function CarsCompareSection({
       currentMonth={month}
       months={months}
       comparisonData={comparisonData}
-    />
-  );
-}
-
-async function CarsPageHeaderMeta({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const { month: parsedMonth } = await loadSearchParams(searchParams);
-  const [months, { wasAdjusted }] = await Promise.all([
-    fetchMonthsForCars(),
-    getMonthOrLatest(parsedMonth, "cars"),
-  ]);
-
-  return (
-    <MonthSelector
-      latestMonth={months[0]}
-      months={months}
-      wasAdjusted={wasAdjusted}
     />
   );
 }

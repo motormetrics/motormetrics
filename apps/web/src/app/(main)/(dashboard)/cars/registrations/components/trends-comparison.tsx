@@ -1,26 +1,16 @@
 "use client";
 
-import {
-  ComboBox,
-  Drawer,
-  Header,
-  Input,
-  Label,
-  ListBox,
-  Separator,
-} from "@heroui/react";
-
-import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { ComboBox, Drawer, Input, Label } from "@heroui/react";
 import { ComparisonBarChart } from "@web/app/(main)/(dashboard)/cars/registrations/components/comparison-bar-chart";
 import { ComparisonSummary } from "@web/app/(main)/(dashboard)/cars/registrations/components/comparison-summary";
+import { MonthListBox } from "@web/components/shared/month-selector";
 import type { ComparisonData } from "@web/queries/cars/compare";
 import type { Month } from "@web/types";
-import { groupByYear } from "@web/utils/group-by-year";
 import { format, subMonths } from "date-fns";
 import { Calendar } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 import posthog from "posthog-js";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 interface TrendsComparisonProps {
   isOpen: boolean;
@@ -84,11 +74,6 @@ export function TrendsComparison({
     }
   }, [isOpen, compareA, compareB, setCompareA, setCompareB]);
 
-  const sortedMonths = useMemo(
-    () => Object.entries(groupByYear(months)).slice().reverse(),
-    [months],
-  );
-
   const renderMonthPicker = (
     label: string,
     filter: "compare_a" | "compare_b",
@@ -116,24 +101,7 @@ export function TrendsComparison({
         <ComboBox.Trigger />
       </ComboBox.InputGroup>
       <ComboBox.Popover>
-        <ListBox>
-          {sortedMonths.map(([year, yearMonths], index) => (
-            <ListBox.Section key={year}>
-              {index > 0 && <Separator />}
-              <Header>{year}</Header>
-              {yearMonths.map((m) => {
-                const date = `${year}-${m}`;
-                const monthLabel = formatDateToMonthYear(date);
-                return (
-                  <ListBox.Item key={date} id={date} textValue={monthLabel}>
-                    {monthLabel}
-                    <ListBox.ItemIndicator />
-                  </ListBox.Item>
-                );
-              })}
-            </ListBox.Section>
-          ))}
-        </ListBox>
+        <MonthListBox months={months} />
       </ComboBox.Popover>
     </ComboBox>
   );

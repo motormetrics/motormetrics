@@ -1,5 +1,6 @@
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
+import { TYPE_DIMENSION_COLUMNS } from "@web/queries/cars/categories";
 import { and, asc, desc, gt, gte, lte, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -29,8 +30,7 @@ export interface DimensionStat {
 
 const DIMENSION_COLUMNS = {
   make: cars.make,
-  vehicleType: cars.vehicleType,
-  fuelType: cars.fuelType,
+  ...TYPE_DIMENSION_COLUMNS,
 } as const;
 
 /** A fresh expression per call: Drizzle mutates aggregate fragments when decorated. */

@@ -36,7 +36,6 @@ export default defineConfig({
         "src/functions",
         // Exclude src/lib subdirectories except updater
         "src/lib/coe/**",
-        "src/lib/data/**",
         "src/lib/metadata/**",
         "src/lib/og/**",
         "src/lib/realtime/**",
@@ -45,7 +44,7 @@ export default defineConfig({
         "src/lib/*.ts", // Exclude loose files in src/lib
         "src/schema",
         "src/types",
-        "src/components/unreleased-feature.tsx",
+        "src/app/(main)/(dashboard)/coe/pqp/components/unreleased-feature.tsx",
         "src/components/tables/**", // Tables not prioritized for coverage
         "src/components/notifications.tsx", // Realtime component
         "src/components/tables/columns/cars-make-columns.tsx",
@@ -78,7 +77,7 @@ export default defineConfig({
 
         // Infrastructure/setup files (external service integration)
         "src/instrumentation.ts",
-        "src/actions/maintenance.ts",
+        "src/app/(main)/(site)/maintenance/actions/maintenance.ts",
 
         // Presentational components (UI-only, no business logic)
         "src/components/loading-indicator.tsx",

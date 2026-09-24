@@ -9,12 +9,10 @@ vi.mock("@web/lib/updater", () => ({
 import { type UpdaterResult, update } from "@web/lib/updater";
 import {
   toIsoDate,
-  toNumberOrNull,
   toOutlets,
   toPubliclyAccessible,
-  toTextOrNull,
   updateEvChargingPoints,
-} from "./process-data";
+} from "@web/workflows/ev-charging/steps/process-data";
 
 const mockResult = (overrides?: Partial<UpdaterResult>): UpdaterResult => ({
   table: "ev_charging_points",
@@ -95,23 +93,9 @@ describe("field transforms", () => {
     expect(toIsoDate("31/13/2025")).toBeNull();
   });
 
-  it("should convert numeric strings and null out blanks", () => {
-    expect(toNumberOrNull("22")).toBe(22);
-    expect(toNumberOrNull("7.4")).toBe(7.4);
-    expect(toNumberOrNull("103.8525029")).toBe(103.8525029);
-    expect(toNumberOrNull("")).toBeNull();
-    expect(toNumberOrNull("n/a")).toBeNull();
-  });
-
   it("should default outlets to 1 when missing", () => {
     expect(toOutlets("2")).toBe(2);
     expect(toOutlets("")).toBe(1);
-  });
-
-  it("should null out blank optional text such as parking lot type", () => {
-    expect(toTextOrNull("")).toBeNull();
-    expect(toTextOrNull("  ")).toBeNull();
-    expect(toTextOrNull(" B3 ")).toBe("B3");
   });
 
   it("should read the public accessibility flag", () => {

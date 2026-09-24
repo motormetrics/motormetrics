@@ -1,12 +1,11 @@
 import { DimensionTable } from "@web/app/(main)/(dashboard)/cars/components/dimension-table";
-import { formatMonthLabel } from "@web/app/(main)/(dashboard)/cars/components/format-month";
-import { buildLogoMap } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import {
   loadSearchParams,
   resolveCarsMonth,
 } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { getDimensionStats } from "@web/queries/cars";
-import { getAllCarLogos } from "@web/queries/logos";
+import { getCarLogoMap } from "@web/queries/logos";
+import { formatMonthLabel } from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
 
 /**
@@ -25,17 +24,15 @@ export async function DimensionPanel({
     loadSearchParams(searchParams),
     resolveCarsMonth(searchParams),
   ]);
-  const [rows, logoResult] = await Promise.all([
+  const [rows, logoUrlBySlug] = await Promise.all([
     getDimensionStats(dimension, month),
-    dimension === "make" ? getAllCarLogos() : Promise.resolve({ logos: [] }),
+    dimension === "make" ? getCarLogoMap() : Promise.resolve({}),
   ]);
 
   return (
     <DimensionTable
       dimension={dimension}
-      logoUrlBySlug={buildLogoMap(
-        "logos" in logoResult ? logoResult.logos : [],
-      )}
+      logoUrlBySlug={logoUrlBySlug}
       monthLabel={formatMonthLabel(month)}
       rows={rows}
     />

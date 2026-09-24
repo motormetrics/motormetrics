@@ -3,15 +3,9 @@
 import { db } from "@motormetrics/database/client";
 import type { SelectPost } from "@motormetrics/database/schema";
 import { auth } from "@web/app/admin/lib/auth";
-import {
-  type CreatePostInput,
-  createPost,
-} from "@web/app/admin/lib/create-post";
-import { deletePost } from "@web/app/admin/lib/delete-post";
-import {
-  type UpdatePostInput,
-  updatePost,
-} from "@web/app/admin/lib/update-post";
+import { type CreatePostInput, createPost } from "@web/lib/posts/create-post";
+import { deletePost } from "@web/lib/posts/delete-post";
+import { type UpdatePostInput, updatePost } from "@web/lib/posts/update-post";
 import { regeneratePostWorkflow } from "@web/workflows/regenerate-post";
 import type { LanguageModelUsage } from "ai";
 import { headers } from "next/headers";

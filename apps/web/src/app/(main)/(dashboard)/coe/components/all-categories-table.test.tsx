@@ -15,7 +15,7 @@ vi.mock("./coe-controls", () => ({
       {children}
     </button>
   ),
-  useCoeCategory: () => ({ setCategory: vi.fn() }),
+  useCoeCategory: () => ({ selectCategory: vi.fn() }),
 }));
 
 vi.mock("posthog-js", () => ({ default: { capture: vi.fn() } }));

@@ -4,11 +4,12 @@ import { Button, cn, ToggleButton, ToggleButtonGroup } from "@heroui/react";
 import {
   CATEGORY_KEYS,
   type CategoryKey,
+  coeOverviewSearchParams,
   EXERCISE_RANGES,
   type ExerciseRange,
   RANGE_LABELS,
 } from "@web/app/(main)/(dashboard)/coe/components/search-params";
-import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { useQueryState } from "nuqs";
 import posthog from "posthog-js";
 import { type ReactNode, useTransition } from "react";
 
@@ -20,19 +21,28 @@ import { type ReactNode, useTransition } from "react";
  */
 export function useCoeCategory() {
   const [isPending, startTransition] = useTransition();
-  const [category, setCategory] = useQueryState(
+  const [, setCategory] = useQueryState(
     "category",
-    parseAsStringLiteral(CATEGORY_KEYS)
-      .withDefault("A")
-      .withOptions({ shallow: false, startTransition }),
+    coeOverviewSearchParams.category.withOptions({
+      shallow: false,
+      startTransition,
+    }),
   );
 
-  return { category, isPending, setCategory };
+  const selectCategory = (category: CategoryKey) => {
+    posthog.capture("dashboard_filter_changed", {
+      filter: "category",
+      value: category,
+    });
+    setCategory(category);
+  };
+
+  return { isPending, selectCategory };
 }
 
 /** The A–E circles at the head of the page. */
 export function CategoryTabs({ selected }: { selected: CategoryKey }) {
-  const { isPending, setCategory } = useCoeCategory();
+  const { isPending, selectCategory } = useCoeCategory();
 
   return (
     <ToggleButtonGroup
@@ -45,11 +55,7 @@ export function CategoryTabs({ selected }: { selected: CategoryKey }) {
         if (key === undefined) {
           return;
         }
-        posthog.capture("dashboard_filter_changed", {
-          filter: "category",
-          value: key,
-        });
-        setCategory(key as CategoryKey);
+        selectCategory(key as CategoryKey);
       }}
       selectedKeys={[selected]}
       selectionMode="single"
@@ -85,7 +91,7 @@ export function CategorySelect({
   isActive: boolean;
   label: string;
 }) {
-  const { setCategory } = useCoeCategory();
+  const { selectCategory } = useCoeCategory();
 
   return (
     <Button
@@ -95,13 +101,7 @@ export function CategorySelect({
         "h-auto w-full justify-start rounded-none bg-transparent p-0 text-left font-[inherit] text-[length:inherit] text-inherit hover:bg-transparent data-[pressed=true]:scale-100",
         className,
       )}
-      onPress={() => {
-        posthog.capture("dashboard_filter_changed", {
-          filter: "category",
-          value: category,
-        });
-        setCategory(category);
-      }}
+      onPress={() => selectCategory(category)}
       variant="ghost"
     >
       {children}
@@ -119,9 +119,10 @@ export function RangeTabs() {
   const [isPending, startTransition] = useTransition();
   const [range, setRange] = useQueryState(
     "range",
-    parseAsStringLiteral(EXERCISE_RANGES)
-      .withDefault("12")
-      .withOptions({ shallow: false, startTransition }),
+    coeOverviewSearchParams.range.withOptions({
+      shallow: false,
+      startTransition,
+    }),
   );
 
   return (

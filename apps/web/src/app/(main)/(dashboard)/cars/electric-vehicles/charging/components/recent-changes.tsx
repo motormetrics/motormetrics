@@ -1,5 +1,8 @@
 import { Typography } from "@heroui/react";
-import { describeConnectors } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/utils/describe-connectors";
+import {
+  describeConnectors,
+  siteTitle,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/utils/describe-connectors";
 import { InkPanel } from "@web/components/shared/bento";
 import { districtForPostalCode } from "@web/config/postal-districts";
 import { getEvChargingRecentChanges } from "@web/queries/ev-charging";
@@ -45,9 +48,7 @@ export async function RecentChanges() {
           {newLocations.slice(0, LIMIT).map((location) => (
             <li className="flex flex-col" key={location.locationId}>
               <span className="truncate font-bold text-accent-foreground text-sm">
-                {location.stationName ??
-                  location.address ??
-                  location.locationId}
+                {siteTitle(location)}
               </span>
               <span className="text-accent-foreground/60 text-xs">
                 {[
@@ -81,7 +82,7 @@ export async function RecentChanges() {
               key={`${change.locationId}-${change.previousValue}-${change.value}`}
             >
               <span className="truncate font-bold text-accent-foreground text-sm">
-                {change.stationName ?? change.address ?? change.locationId}
+                {siteTitle(change)}
               </span>
               <span className="text-accent-foreground/60 text-xs tabular-nums">
                 {change.previousValue ?? "—"} → {change.value} ·{" "}

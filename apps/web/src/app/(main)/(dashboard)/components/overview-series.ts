@@ -1,3 +1,5 @@
+import { shiftMonth } from "@web/utils/dates/month-arithmetic";
+
 /**
  * Pure series helpers for the Overview page.
  *
@@ -13,9 +15,7 @@ export interface MonthTotal {
 
 /** `2025-10` → `2025-11`, with the year rolling over as needed. */
 export function nextMonth(month: string): string {
-  const [year, monthPart] = month.split("-").map(Number);
-  const index = year * 12 + monthPart; // already the following month
-  return `${Math.floor(index / 12)}-${String((index % 12) + 1).padStart(2, "0")}`;
+  return shiftMonth(month, 1);
 }
 
 /** Sum per-category rows into one total per month, oldest first. */
@@ -73,50 +73,4 @@ export function pqpMonthsFor(
     current,
     previous: currentIndex > 0 ? sorted[currentIndex - 1] : undefined,
   };
-}
-
-export interface DonutArc {
-  color: string;
-  dashArray: string;
-  dashOffset: string;
-  key: string;
-}
-
-/**
- * Dash geometry for a gapped-segment ring, drawn as dash offsets on a single
- * circle so the rounded caps stay consistent at any share. Lifted from the
- * shared `DonutGauge`, which stacks its legend under the ring; the Overview
- * comp puts the legend beside it.
- */
-export function donutArcs(
-  segments: { color: string; label: string; value: number }[],
-  radius: number,
-  gap: number,
-): DonutArc[] {
-  const circumference = 2 * Math.PI * radius;
-  const total = segments.reduce((sum, item) => sum + item.value, 0) || 1;
-
-  let consumed = 0;
-  return segments.map((segment) => {
-    const full = (segment.value / total) * circumference;
-    // Floor at 2px so a rounding-to-zero share still shows as a tick rather
-    // than vanishing from the ring.
-    const dash = Math.max(2, full - gap);
-    const arc = {
-      color: segment.color,
-      dashArray: `${dash.toFixed(2)} ${(circumference - dash).toFixed(2)}`,
-      dashOffset: (-(consumed + gap / 2)).toFixed(2),
-      key: segment.label,
-    };
-    consumed += full;
-    return arc;
-  });
-}
-
-/** Signed month-over-month change as a ratio, `0` when there is no baseline. */
-export function changeRatio(current: number, previous: number | undefined) {
-  if (!previous || previous <= 0) {
-    return 0;
-  }
-  return (current - previous) / previous;
 }

@@ -1,4 +1,7 @@
 import { Chip, Skeleton } from "@heroui/react";
+import { AnimatedGrid } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-grid";
+import { AnimatedSection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-section";
+import { Bento } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/bento";
 import { BusyHours } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/busy-hours";
 import { ChargingMap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map";
 import {
@@ -11,10 +14,7 @@ import { PriceList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/ch
 import { RecentChanges } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/recent-changes";
 import { UtilisationList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-list";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
-import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { Bento } from "@web/components/shared/bento";
 import { EmptyState } from "@web/components/shared/empty-state";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";

@@ -13,16 +13,14 @@
 
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
+import {
+  TYPE_DIMENSION_COLUMNS,
+  type TypeDimension,
+} from "@web/queries/cars/categories";
 import { and, desc, gt, gte, lte, sql, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
-/** The two columns these pages pivot on, named as the schema names them. */
-export type TypeDimension = "fuelType" | "vehicleType";
-
-const DIMENSION_COLUMNS = {
-  fuelType: cars.fuelType,
-  vehicleType: cars.vehicleType,
-} as const;
+export type { TypeDimension };
 
 /** Cache tag family per dimension, matching the tags the existing queries set. */
 const DIMENSION_TAGS = {
@@ -68,7 +66,7 @@ export async function getTypeMonthlySeries(
   cacheLife("max");
   cacheTag(`cars:month:${month}`, `cars:${DIMENSION_TAGS[dimension]}:${value}`);
 
-  const column = DIMENSION_COLUMNS[dimension];
+  const column = TYPE_DIMENSION_COLUMNS[dimension];
 
   const rows = await db
     .select({
@@ -104,7 +102,7 @@ export async function getTypeDistributionInWindow(
   cacheLife("max");
   cacheTag(`cars:month:${to}`, "cars:annual");
 
-  const column = DIMENSION_COLUMNS[dimension];
+  const column = TYPE_DIMENSION_COLUMNS[dimension];
 
   const rows = await db
     .select({ name: column, count: registrationTotal() })
@@ -128,7 +126,7 @@ export async function getTypeMakesInWindow(
   cacheLife("max");
   cacheTag(`cars:month:${to}`, `cars:${DIMENSION_TAGS[dimension]}:${value}`);
 
-  const column = DIMENSION_COLUMNS[dimension];
+  const column = TYPE_DIMENSION_COLUMNS[dimension];
 
   return db
     .select({ make: cars.make, count: registrationTotal() })
@@ -162,8 +160,8 @@ export async function getTypeCrossMixInWindow(
   cacheLife("max");
   cacheTag(`cars:month:${to}`, `cars:${DIMENSION_TAGS[dimension]}:${value}`);
 
-  const column = DIMENSION_COLUMNS[dimension];
-  const crossColumn = DIMENSION_COLUMNS[otherDimension(dimension)];
+  const column = TYPE_DIMENSION_COLUMNS[dimension];
+  const crossColumn = TYPE_DIMENSION_COLUMNS[otherDimension(dimension)];
 
   const rows = await db
     .select({ name: crossColumn, count: registrationTotal() })

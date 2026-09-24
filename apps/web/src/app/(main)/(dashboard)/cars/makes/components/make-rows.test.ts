@@ -1,13 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
-  buildLogoMap,
   buildTotalsFromFuelRows,
   buildTotalsFromStats,
   finaliseRows,
   matchesFuelFilter,
   rollingMonths,
   selectElectricOnlyMakes,
-  shiftMonth,
 } from "./make-rows";
 
 const stats = [
@@ -34,19 +32,6 @@ const stats = [
   },
 ];
 
-describe("shiftMonth", () => {
-  it("steps forward and backward within a year", () => {
-    expect(shiftMonth("2025-04", 2)).toBe("2025-06");
-    expect(shiftMonth("2025-04", -2)).toBe("2025-02");
-  });
-
-  it("rolls over year boundaries in both directions", () => {
-    expect(shiftMonth("2025-01", -1)).toBe("2024-12");
-    expect(shiftMonth("2024-12", 1)).toBe("2025-01");
-    expect(shiftMonth("2025-06", -11)).toBe("2024-07");
-  });
-});
-
 describe("rollingMonths", () => {
   it("returns the twelve months ending at the given month, oldest first", () => {
     const months = rollingMonths("2025-03");
@@ -54,17 +39,6 @@ describe("rollingMonths", () => {
     expect(months).toHaveLength(12);
     expect(months[0]).toBe("2024-04");
     expect(months.at(-1)).toBe("2025-03");
-  });
-});
-
-describe("buildLogoMap", () => {
-  it("keys logo urls by slug and skips makes without one", () => {
-    expect(
-      buildLogoMap([
-        { make: "Mercedes Benz", filename: "mb.png", url: "https://x/mb.png" },
-        { make: "Saab", filename: "", url: "" },
-      ]),
-    ).toEqual({ "mercedes-benz": "https://x/mb.png" });
   });
 });
 

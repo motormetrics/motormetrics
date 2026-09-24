@@ -1,17 +1,17 @@
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { CarsMonthSelector } from "@web/app/(main)/(dashboard)/cars/components/cars-month-selector";
 import {
   type CategoryConfig,
   CategoryReport,
 } from "@web/app/(main)/(dashboard)/cars/components/category/category-report";
-import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { MonthSelector } from "@web/components/shared/month-selector";
 import { PageHead } from "@web/components/shared/page-head";
 import { Report } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
+import { getMonthOrLatest } from "@web/utils/dates/months";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
@@ -38,7 +38,7 @@ export function CategoryOverview({
       <PageHead
         controls={
           <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-            <CategoryOverviewHeaderMeta searchParams={searchParams} />
+            <CarsMonthSelector searchParams={searchParams} />
           </Suspense>
         }
         description={config.lede}
@@ -52,27 +52,6 @@ export function CategoryOverview({
         </Suspense>
       </SectionErrorBoundary>
     </Report>
-  );
-}
-
-async function CategoryOverviewHeaderMeta({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const { month: parsedMonth } = await loadSearchParams(searchParams);
-
-  const [{ wasAdjusted }, months] = await Promise.all([
-    getMonthOrLatest(parsedMonth, "cars"),
-    fetchMonthsForCars(),
-  ]);
-
-  return (
-    <MonthSelector
-      latestMonth={months[0]}
-      months={months}
-      wasAdjusted={wasAdjusted}
-    />
   );
 }
 

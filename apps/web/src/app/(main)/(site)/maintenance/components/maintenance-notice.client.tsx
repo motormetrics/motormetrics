@@ -1,6 +1,6 @@
 "use client";
 
-import { useMaintenance } from "@web/hooks/use-maintenance";
+import { useMaintenance } from "@web/app/(main)/(site)/maintenance/hooks/use-maintenance";
 import type { Variants } from "motion/react";
 import * as motion from "motion/react-client";
 import type { ReactNode } from "react";

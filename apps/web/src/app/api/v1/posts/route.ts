@@ -1,8 +1,8 @@
 import { db } from "@motormetrics/database/client";
-import { createPost, createPostSchema } from "@web/app/admin/lib/create-post";
+import { validateApiToken } from "@web/app/api/v1/lib/auth";
+import { createPost, createPostSchema } from "@web/lib/posts/create-post";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { validateApiToken } from "../lib/auth";
 
 export async function GET(request: NextRequest) {
   const authError = validateApiToken(request);

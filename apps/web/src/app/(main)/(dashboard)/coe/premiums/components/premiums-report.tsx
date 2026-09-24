@@ -1,5 +1,6 @@
 import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/components/category-badge";
 import {
   biddingOrdinal,
   CATEGORY_DESCRIPTIONS,
@@ -7,21 +8,22 @@ import {
   changeRatio,
   formatExerciseTick,
   formatMonth,
+  successRate,
   toCategory,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/premiums/components/category-badge";
+import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
+import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
 import {
   CategoryTabs,
   RangeTabs,
 } from "@web/app/(main)/(dashboard)/coe/premiums/components/filters";
-import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-delta";
 import { PremiumTrendChart } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-trend-chart";
 import {
   loadSearchParams,
   RANGE_EXERCISES,
 } from "@web/app/(main)/(dashboard)/coe/premiums/search-params";
-import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
+import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import {
   ReportFilterBar,
   ReportHeadline,
@@ -34,7 +36,6 @@ import {
   ReportCell,
   ReportRow,
   ReportTable,
-  ShareBar,
 } from "@web/components/shared/report-table";
 import { getCategoryExercises, getExercisePair } from "@web/queries/coe";
 import Link from "next/link";
@@ -56,10 +57,6 @@ function exerciseTick(
 /** Bids received against the quota, e.g. `1.35×`. */
 function bidsPerQuota(bidsReceived: number, quota: number): string {
   return `${(quota > 0 ? bidsReceived / quota : 0).toFixed(2)}×`;
-}
-
-function successRate(bidsSuccess: number, bidsReceived: number): number {
-  return bidsReceived > 0 ? (bidsSuccess / bidsReceived) * 100 : 0;
 }
 
 /**
@@ -328,16 +325,7 @@ export async function PremiumsReport({
                   <Count value={exercise.bidsReceived} />
                 </ReportCell>
                 <ReportCell>
-                  <div className="flex items-center gap-3">
-                    {/* `isLeader` is the bar's darker fill — every row here
-                        carries it, since the rows are not ranked. */}
-                    <span className="flex-1">
-                      <ShareBar isLeader share={rate} />
-                    </span>
-                    <span className="w-10 text-right font-bold text-muted-strong text-sm tabular-nums">
-                      {rate.toFixed(0)}%
-                    </span>
-                  </div>
+                  <SuccessRateCell rate={rate} />
                 </ReportCell>
               </ReportRow>
             );

@@ -1,4 +1,3 @@
-import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import {
   batteryElectricShares,
   resolveMonthIndex,
@@ -6,6 +5,7 @@ import {
 import { ShareColumns } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/share-columns";
 import { SectionHead } from "@web/components/shared/overview";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
+import { formatChartMonth } from "@web/utils/dates/format-month";
 
 /** Months of history the column chart shows, matching the comp's eight bars. */
 const COLUMN_COUNT = 8;
@@ -31,7 +31,7 @@ export async function AdoptionByMonth({ month }: { month: string }) {
     const share = shares[start + offset] ?? 0;
     return {
       key: point.month,
-      label: formatDateToMonthYear(point.month).slice(0, 3),
+      label: formatChartMonth(point.month),
       value: share,
       valueLabel: `${share.toFixed(0)}%`,
     };

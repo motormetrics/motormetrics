@@ -1,11 +1,12 @@
 import { db } from "@motormetrics/database/client";
 import { evLocationHourly } from "@motormetrics/database/schema";
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+import {
+  daysAgo,
+  utilisationPercent,
+} from "@web/queries/ev-charging/utilisation";
 import { gte, sql, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-
-const daysAgo = (days: number) =>
-  new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 
 export interface EvChargingHourlyUtilisation {
   /** Hour of day in Singapore time, 0–23. */
@@ -32,11 +33,7 @@ export async function getEvChargingUtilisationByHour(
     sql`extract(hour from ${evLocationHourly.hour} at time zone 'Asia/Singapore')`.mapWith(
       Number,
     );
-  const usable = sql`sum(${evLocationHourly.connectorSamples} - ${evLocationHourly.unavailableSamples})`;
-  const utilisation =
-    sql`coalesce(100.0 * ${sum(evLocationHourly.occupiedSamples)} / nullif(${usable}, 0), 0)`.mapWith(
-      Number,
-    );
+  const utilisation = utilisationPercent();
 
   const samples = sum(evLocationHourly.samples).mapWith(Number);
 

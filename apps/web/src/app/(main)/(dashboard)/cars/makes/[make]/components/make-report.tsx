@@ -1,20 +1,16 @@
 import { Chip, Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
+import { MonthlyChart } from "@web/app/(main)/(dashboard)/cars/components/monthly-chart";
 import {
   FuelTypeTabs,
   PeriodTabs,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/filters";
-import { MakeChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-chart";
 import {
   loadSearchParams,
   RANGE_LABELS,
   type Range,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
-import {
-  buildLogoMap,
-  shiftMonth,
-} from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { EmptyState } from "@web/components/shared/empty-state";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
@@ -38,46 +34,17 @@ import {
   getMakeTotalsInRange,
   getMarketMonthlyTotals,
 } from "@web/queries/cars/makes/period-totals";
-import { getAllCarLogos } from "@web/queries/logos";
+import { getCarLogoMap } from "@web/queries/logos";
+import { percentageChange } from "@web/utils/change-ratio";
+import { formatChartMonth } from "@web/utils/dates/format-month";
+import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
-const MONTH_LABELS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
 /** How many makes the peer list shows, the current one always among them. */
 const PEER_COUNT = 5;
-
-/** Percentage change, guarding the division so an absent base reads as flat. */
-function percentageChange(current: number, previous: number): number {
-  if (!previous) {
-    return 0;
-  }
-
-  return ((current - previous) / previous) * 100;
-}
-
-/** `2025-10` → `Oct`, or `Oct '24` once the window spans more than a year. */
-function chartLabel(month: string, showYear: boolean): string {
-  const [year, monthNumber] = month.split("-");
-  const label = MONTH_LABELS[Number(monthNumber) - 1] ?? month;
-
-  return showYear ? `${label} '${year.slice(2)}` : label;
-}
 
 /** The `YYYY-MM` window a period covers, anchored on the selected month. */
 function periodWindow(
@@ -152,20 +119,17 @@ export async function MakeReport({
   const seriesStart = start === end ? shiftMonth(end, -11) : start;
   const seriesMonths = monthsBetween(seriesStart, end);
 
-  const [crossTab, makeTotals, marketMonthly, logoResult] = await Promise.all([
-    getMakeCrossTab(make),
-    getMakeTotalsInRange(start, end),
-    getMarketMonthlyTotals(seriesStart, end),
-    getAllCarLogos(),
-  ]);
+  const [crossTab, makeTotals, marketMonthly, logoUrlBySlug] =
+    await Promise.all([
+      getMakeCrossTab(make),
+      getMakeTotalsInRange(start, end),
+      getMarketMonthlyTotals(seriesStart, end),
+      getCarLogoMap(),
+    ]);
 
   if (crossTab.length === 0) {
     return <EmptyState />;
   }
-
-  const logoUrlBySlug = buildLogoMap(
-    "logos" in logoResult ? logoResult.logos : [],
-  );
 
   const matchesFuel = (row: { fuelType: string }) =>
     !fuelType || row.fuelType === fuelType;
@@ -325,9 +289,9 @@ export async function MakeReport({
         value={<Count value={total} />}
       />
 
-      <MakeChart
+      <MonthlyChart
         data={series.map(({ count, month: seriesMonth }) => ({
-          label: chartLabel(seriesMonth, showYear),
+          label: formatChartMonth(seriesMonth, showYear),
           total: count,
         }))}
       />

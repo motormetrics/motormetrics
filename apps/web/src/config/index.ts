@@ -37,6 +37,20 @@ export const FEATURE_FLAG_UNRELEASED =
 // =============================================================================
 export const HYBRID_REGEX = /^(Diesel|Petrol)-(Electric)(\s\(Plug-In\))?$/;
 
+/** LTA DataMall fuel-type labels, grouped into the electrified powertrains. */
+export const EV_FUEL_TYPES = {
+  BEV: ["Electric"],
+  PHEV: ["Petrol-Electric (Plug-In)", "Diesel-Electric (Plug-In)"],
+  Hybrid: ["Petrol-Electric", "Diesel-Electric"],
+} as const;
+
+/** Every electrified fuel-type label, across all three powertrains. */
+export const ALL_EV_FUEL_TYPES: string[] = [
+  ...EV_FUEL_TYPES.BEV,
+  ...EV_FUEL_TYPES.PHEV,
+  ...EV_FUEL_TYPES.Hybrid,
+];
+
 export const FUEL_TYPE_LINKS: LinkItem[] = [
   {
     label: "Petrol",
@@ -93,5 +107,7 @@ export const announcements: Announcement[] = [
 // =============================================================================
 // Cache Keys
 // =============================================================================
-export const LAST_UPDATED_CARS_KEY = "last_updated:cars";
-export const LAST_UPDATED_COE_KEY = "last_updated:coe";
+export {
+  LAST_UPDATED_CARS_KEY,
+  LAST_UPDATED_COE_KEY,
+} from "@web/config/workflow";

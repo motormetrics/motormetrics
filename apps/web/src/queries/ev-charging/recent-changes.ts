@@ -1,6 +1,7 @@
 import { db } from "@motormetrics/database/client";
 import { evChargingEvents } from "@motormetrics/database/schema";
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
+import { daysAgo } from "@web/queries/ev-charging/utilisation";
 import { and, count, desc, eq, gt, gte, isNull, max, min } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import type { EvChargingLocation } from "./locations";
@@ -44,7 +45,7 @@ export async function getEvChargingRecentChanges(
 
   const locations = storedLocationsSubquery();
   const columns = storedLocationColumns(locations);
-  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+  const since = daysAgo(days);
   const [earliest] = await db
     .select({ observedAt: min(evChargingEvents.observedAt) })
     .from(evChargingEvents);

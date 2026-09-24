@@ -144,7 +144,7 @@ export function ShareBar({
  * the pill for the headline figure and use bare text inside tables.
  *
  * A rise in registrations is good news, so the sentiment follows the sign. For
- * figures where a rise is bad news, see `(dashboard)/components/cost-trend-chip.tsx`.
+ * figures where a rise is bad news, see `shared/cost-trend-chip.tsx`.
  */
 export function DeltaText({
   unit = "%",

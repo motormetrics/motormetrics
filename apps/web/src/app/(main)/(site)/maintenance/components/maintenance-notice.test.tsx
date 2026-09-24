@@ -1,11 +1,11 @@
-import { MaintenanceNotice } from "@web/components/maintenance-notice";
+import { MaintenanceNotice } from "@web/app/(main)/(site)/maintenance/components/maintenance-notice";
 import { MotionGlobalConfig } from "motion/react";
 import { vi } from "vitest";
 import { render } from "vitest-browser-react";
 
 const mockUseMaintenance = vi.fn();
 
-vi.mock("@web/hooks/use-maintenance", () => ({
+vi.mock("@web/app/(main)/(site)/maintenance/hooks/use-maintenance", () => ({
   useMaintenance: () => mockUseMaintenance(),
 }));
 

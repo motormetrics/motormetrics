@@ -80,16 +80,3 @@ export const getCategoryConfig = (post: SelectPost) => {
  */
 export const getReadingTime = (post: SelectPost): number =>
   Math.max(1, Math.ceil(readingTime(post.content).minutes));
-
-// Format date for display
-export const formatDate = (
-  date: Date,
-  format: "short" | "full" = "full",
-): string => {
-  const options: Intl.DateTimeFormatOptions =
-    format === "full"
-      ? { year: "numeric", month: "short", day: "numeric" }
-      : { month: "short", day: "numeric" };
-
-  return new Date(date).toLocaleDateString("en-SG", options);
-};

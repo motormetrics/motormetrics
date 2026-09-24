@@ -33,7 +33,7 @@ Route-specific components, actions, queries and utils live in plainly-named fold
 (`components/`, `actions/`, `queries/`, `utils/` — no underscore prefix). Folders without a `page.tsx` are not treated
 as routes by the App Router.
 
-Blog actions are **mutations only** (view incrementing, tag updates); blog reads live in `lib/data/posts.ts`.
+Blog actions are **mutations only** (view incrementing, tag updates); blog reads live in `queries/posts`.
 
 **Keep centralised when:**
 

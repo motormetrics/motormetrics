@@ -136,20 +136,25 @@ describe("popular makes queries", () => {
   });
 
   it("loads current year when year argument is omitted", async () => {
-    queueSelect([{ latestMonth: "2024-05" }], [{ make: "Honda" }]);
+    dbMock.query.cars.findFirst.mockResolvedValue({ month: "2024-05" });
+    queueSelect([{ make: "Honda" }]);
 
     const result = await getPopularMakes();
 
     expect(result).toEqual([{ make: "Honda" }]);
-    // cacheTag is only called when year is explicitly provided
-    expect(cacheTagMock).not.toHaveBeenCalled();
+    // Only the latest-month lookup tags the entry when no year is provided
+    expect(cacheTagMock).toHaveBeenCalledWith("cars:months");
+    expect(cacheTagMock).not.toHaveBeenCalledWith(
+      expect.stringMatching(/^cars:year:/),
+    );
   });
 
   it("falls back to calendar year when latest month query returns no results", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2022-08-15"));
 
-    queueSelect([{ latestMonth: "2022-01" }], [{ make: "Mazda" }]);
+    dbMock.query.cars.findFirst.mockResolvedValue({ month: "2022-01" });
+    queueSelect([{ make: "Mazda" }]);
 
     try {
       const result = await getPopularMakes();

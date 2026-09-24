@@ -1,20 +1,12 @@
 "use server";
 
-import { redis } from "@motormetrics/utils/redis";
 import { auth } from "@web/app/admin/lib/auth";
+import {
+  type MaintenanceConfig,
+  readMaintenanceConfig,
+  writeMaintenanceConfig,
+} from "@web/lib/maintenance";
 import { headers } from "next/headers";
-
-interface AppConfig {
-  maintenance: {
-    enabled: boolean;
-    message: string;
-  };
-}
-
-export interface MaintenanceConfig {
-  enabled: boolean;
-  message: string;
-}
 
 export const getMaintenanceConfig = async (): Promise<MaintenanceConfig> => {
   const session = await auth.api.getSession({
@@ -26,14 +18,7 @@ export const getMaintenanceConfig = async (): Promise<MaintenanceConfig> => {
   }
 
   try {
-    const config = await redis.get<AppConfig>("config");
-
-    return (
-      config?.maintenance ?? {
-        enabled: false,
-        message: "",
-      }
-    );
+    return await readMaintenanceConfig();
   } catch (error) {
     console.error("Error fetching maintenance config from Redis:", error);
 
@@ -59,21 +44,7 @@ export const updateMaintenanceConfig = async (
   }
 
   try {
-    // Get current config
-    const currentConfig =
-      (await redis.get<AppConfig>("config")) ??
-      ({
-        maintenance: {
-          enabled: false,
-          message: "",
-        },
-      } satisfies AppConfig);
-
-    // Update only maintenance section
-    currentConfig.maintenance = maintenanceConfig;
-
-    // Save back to Redis
-    await redis.set("config", currentConfig);
+    await writeMaintenanceConfig(maintenanceConfig);
 
     return { success: true };
   } catch (error) {

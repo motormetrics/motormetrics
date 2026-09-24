@@ -1,7 +1,11 @@
 import { db } from "@motormetrics/database/client";
 import { evLocationHourly } from "@motormetrics/database/schema";
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
-import { and, asc, desc, eq, gte, sql, sum } from "drizzle-orm";
+import {
+  daysAgo,
+  utilisationPercent,
+} from "@web/queries/ev-charging/utilisation";
+import { and, asc, desc, eq, gte, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import type { EvChargingLocation } from "./locations";
 import {
@@ -10,9 +14,6 @@ import {
   storedLocationsSubquery,
   toStoredLocation,
 } from "./stored-locations";
-
-const daysAgo = (days: number) =>
-  new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 
 export type UtilisationOrder = "busiest" | "quietest";
 
@@ -60,11 +61,7 @@ export async function getEvChargingLocationUtilisation({
   const locations = storedLocationsSubquery();
   const columns = storedLocationColumns(locations);
   const samples = sum(evLocationHourly.samples).mapWith(Number);
-  const usable = sql`sum(${evLocationHourly.connectorSamples} - ${evLocationHourly.unavailableSamples})`;
-  const utilisation =
-    sql`coalesce(100.0 * ${sum(evLocationHourly.occupiedSamples)} / nullif(${usable}, 0), 0)`.mapWith(
-      Number,
-    );
+  const utilisation = utilisationPercent();
 
   const rows = await db
     .select({ ...columns, utilisationPercent: utilisation, samples })

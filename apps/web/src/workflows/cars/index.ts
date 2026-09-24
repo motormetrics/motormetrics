@@ -1,4 +1,5 @@
 import { redis } from "@motormetrics/utils/redis";
+import { LAST_UPDATED_CARS_KEY } from "@web/config/workflow";
 import { getCarsMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
@@ -62,7 +63,7 @@ async function processCarsData(): Promise<UpdaterResult> {
   const result = await updateCars();
 
   if (result.recordsProcessed > 0) {
-    await redis.set("last_updated:cars", Date.now());
+    await redis.set(LAST_UPDATED_CARS_KEY, Date.now());
   }
 
   return result;

@@ -4,7 +4,7 @@ import type { Key } from "@heroui/react";
 import { Button, cn, Dropdown, Header, Label } from "@heroui/react";
 import { Navbar } from "@heroui-pro/react";
 import { LogoMark, Wordmark } from "@web/components/brand-logo";
-import { BetaChip, NewChip } from "@web/components/shared/chips";
+import { NavBadge } from "@web/components/shared/chips";
 import {
   MORE_NAV_ITEMS,
   MORE_NAV_SECTION_LABEL,
@@ -79,8 +79,7 @@ function NavMenuItems({ items }: { items: readonly NavigationItem[] }) {
     >
       <Label className="flex min-w-0 flex-1 items-center gap-2">
         <span className="truncate">{title}</span>
-        {badge === "new" ? <NewChip /> : null}
-        {badge === "beta" ? <BetaChip /> : null}
+        <NavBadge badge={badge} />
       </Label>
     </Dropdown.Item>
   ));
@@ -105,9 +104,25 @@ function MobileMenuLink({
       isCurrent={isCurrent}
     >
       {label}
-      {badge === "new" ? <NewChip /> : null}
-      {badge === "beta" ? <BetaChip /> : null}
+      <NavBadge badge={badge} />
     </Navbar.MenuItem>
+  );
+}
+
+/** The Telegram call to action, in the bar on desktop and the menu on phones. */
+function GetUpdatesLink({ className }: { className?: string }) {
+  return (
+    <Link
+      className={cn(
+        "rounded-full bg-foreground px-6 py-3.5 font-bold text-accent-foreground text-sm transition-colors hover:bg-muted",
+        className,
+      )}
+      href={SOCIAL_URLS.telegram}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      Get updates
+    </Link>
   );
 }
 
@@ -159,12 +174,7 @@ export function AppNav({
             if (!items) {
               return (
                 <Link
-                  className={cn(
-                    "rounded-full px-7 py-3.5 font-semibold text-base transition-shadow",
-                    isActive
-                      ? "bg-accent font-bold text-accent-foreground"
-                      : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
-                  )}
+                  className={cn(pillClassName(isActive), "px-7")}
                   href={href}
                   key={href}
                 >
@@ -243,14 +253,7 @@ export function AppNav({
 
         <Navbar.Spacer />
 
-        <Link
-          className="hidden rounded-full bg-foreground px-6 py-3.5 font-bold text-accent-foreground text-sm transition-colors hover:bg-muted md:block"
-          href={SOCIAL_URLS.telegram}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Get updates
-        </Link>
+        <GetUpdatesLink className="hidden md:block" />
 
         <Navbar.MenuToggle className="md:hidden" />
       </Navbar.Header>
@@ -308,14 +311,7 @@ export function AppNav({
           </div>
         </div>
 
-        <Link
-          className="rounded-full bg-foreground px-6 py-3.5 text-center font-bold text-accent-foreground text-sm transition-colors hover:bg-muted"
-          href={SOCIAL_URLS.telegram}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Get updates
-        </Link>
+        <GetUpdatesLink className="text-center" />
       </Navbar.Menu>
     </Navbar>
   );

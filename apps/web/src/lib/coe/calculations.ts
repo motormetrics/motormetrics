@@ -1,4 +1,4 @@
-import type { Period } from "@web/app/(main)/(dashboard)/coe/search-params";
+import type { Period } from "@web/types/coe";
 import { format, subMonths, subYears } from "date-fns";
 
 /**

@@ -18,7 +18,7 @@ vi.mock("next/cache", () => ({
   cacheTag: cacheTagMock,
 }));
 
-import { getAllCarLogos } from "./logos";
+import { buildLogoMap, getAllCarLogos } from "./logos";
 
 const entry = (make: string, status: "found" | "missing") => ({
   make,
@@ -82,5 +82,16 @@ describe("getAllCarLogos", () => {
 
     expect(await getAllCarLogos()).toEqual({ error: "Failed to fetch logos" });
     consoleSpy.mockRestore();
+  });
+});
+
+describe("buildLogoMap", () => {
+  it("keys logo urls by slug and skips makes without one", () => {
+    expect(
+      buildLogoMap([
+        { make: "Mercedes Benz", filename: "mb.png", url: "https://x/mb.png" },
+        { make: "Saab", filename: "", url: "" },
+      ]),
+    ).toEqual({ "mercedes-benz": "https://x/mb.png" });
   });
 });

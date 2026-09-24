@@ -1,3 +1,7 @@
+/** The COE history windows the results page and its queries accept. */
+export const periods = ["12m", "5y", "10y", "ytd", "all"] as const;
+export type Period = (typeof periods)[number];
+
 export namespace Pqp {
   export type Rates = {
     "Category A": number;

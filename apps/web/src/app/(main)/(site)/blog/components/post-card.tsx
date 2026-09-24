@@ -1,8 +1,9 @@
 import { Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
+import { formatDate } from "@web/utils/dates/format-date";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { formatDate, getCategoryConfig, getReadingTime } from "./post/utils";
+import { getCategoryConfig, getReadingTime } from "./post/utils";
 
 /**
  * One post in a grid — the comps use the same card under "All posts" on the

@@ -32,6 +32,10 @@ export function PeriodTabs({
       .withDefault(defaultKey)
       .withOptions({ shallow: false, startTransition }),
   );
+  // An unknown `?period=` falls back to the default on the server, so show it active here too.
+  const activeKey = options.some(({ key }) => key === period)
+    ? period
+    : defaultKey;
 
   return (
     <fieldset
@@ -42,7 +46,7 @@ export function PeriodTabs({
     >
       <legend className="sr-only">Period</legend>
       {options.map(({ key, label }) => {
-        const isActive = key === period;
+        const isActive = key === activeKey;
         return (
           <button
             aria-pressed={isActive}

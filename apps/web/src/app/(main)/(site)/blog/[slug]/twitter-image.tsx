@@ -1,5 +1,4 @@
 import {
-  formatDate,
   getCategoryConfig,
   getReadingTime,
 } from "@web/app/(main)/(site)/blog/components/post/utils";
@@ -11,6 +10,7 @@ import {
 } from "@web/lib/og/config";
 import { getOGFonts } from "@web/lib/og/fonts";
 import { getAllPosts, getPostBySlug } from "@web/queries/posts";
+import { formatDate } from "@web/utils/dates/format-date";
 import { ImageResponse } from "next/og";
 
 interface ImageProps {

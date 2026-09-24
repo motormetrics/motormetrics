@@ -5,7 +5,10 @@ import {
   MAP_ANCHOR_ID,
   siteParam,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
-import { describeConnectors } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/utils/describe-connectors";
+import {
+  describeConnectors,
+  siteTitle,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/utils/describe-connectors";
 import { districtForPostalCode } from "@web/config/postal-districts";
 import type { EvChargingLocation } from "@web/queries/ev-charging";
 import { useQueryState } from "nuqs";
@@ -29,7 +32,7 @@ export function LocationRow({
 }) {
   const [, setSite] = useQueryState("site", siteParam);
   const district = districtForPostalCode(location.postalCode);
-  const title = location.stationName ?? location.address ?? location.locationId;
+  const title = siteTitle(location);
 
   return (
     <li>

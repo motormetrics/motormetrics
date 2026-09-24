@@ -16,9 +16,8 @@ import {
   useCoeCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
-import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
+import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import posthog from "posthog-js";
 import { useState } from "react";
 
 const COLUMNS: { align: "left" | "right"; key: SortKey; label: string }[] = [
@@ -60,17 +59,9 @@ export function AllCategoriesTable({
   selected: CategoryKey;
 }) {
   const [sort, setSort] = useState<SortState>(DEFAULT_SORT);
-  const { setCategory } = useCoeCategory();
+  const { selectCategory } = useCoeCategory();
 
   const sorted = sortCategoryRows(rows, sort);
-
-  const selectCategory = (category: CategoryKey) => {
-    posthog.capture("dashboard_filter_changed", {
-      filter: "category",
-      value: category,
-    });
-    setCategory(category);
-  };
 
   const sortDescriptor: SortDescriptor = {
     column: sort.key,

@@ -13,7 +13,7 @@ export const updateDeregistration = () => {
     url,
     csvTransformOptions: {
       fields: {
-        number: (value: string | number) => (value === "" ? 0 : Number(value)),
+        number: (value: string) => (value === "" ? 0 : Number(value)),
       },
     },
   });

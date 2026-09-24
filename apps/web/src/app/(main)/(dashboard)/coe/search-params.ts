@@ -1,12 +1,10 @@
+import { periods } from "@web/types/coe";
 import {
   createLoader,
   parseAsArrayOf,
   parseAsString,
   parseAsStringLiteral,
 } from "nuqs/server";
-
-export const periods = ["12m", "5y", "10y", "ytd", "all"] as const;
-export type Period = (typeof periods)[number];
 
 /**
  * The series `/coe/results` plots on first load. The client filter reads it

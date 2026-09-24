@@ -1,11 +1,9 @@
-import { Typography } from "@heroui/react";
-import { NumberValue } from "@heroui-pro/react";
 import {
   CATEGORY_DESCRIPTIONS,
   changeRatio,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
+import { PqpRateRow } from "@web/app/(main)/(dashboard)/coe/components/pqp-rate-row";
 import { SectionHead } from "@web/components/shared/overview";
 import { getPqpRates } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
@@ -44,40 +42,18 @@ export async function PqpCeiling() {
         title="PQP ceiling"
       />
 
-      <div className="flex flex-col">
+      <ul className="flex flex-col">
         {rows.map((row) => (
-          <div
-            className="flex items-center gap-3.5 border-separator border-b py-3.5"
+          <PqpRateRow
+            changeRatio={row.changeRatio}
+            description={CATEGORY_DESCRIPTIONS[row.category]}
+            descriptionClassName="text-[13.5px]"
             key={row.category}
-          >
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-soft font-extrabold text-[17px] text-accent-strong">
-              {toCategoryKey(row.category)}
-            </span>
-            <div className="flex min-w-0 flex-col gap-px">
-              <span className="font-extrabold text-lg tabular-nums">
-                <NumberValue
-                  currency="SGD"
-                  locale="en-SG"
-                  maximumFractionDigits={0}
-                  style="currency"
-                  value={row.rate}
-                />
-              </span>
-              <Typography.Paragraph
-                className="font-medium text-[13.5px]"
-                color="muted"
-                size="sm"
-                truncate
-              >
-                {CATEGORY_DESCRIPTIONS[row.category]}
-              </Typography.Paragraph>
-            </div>
-            <div className="ml-auto shrink-0">
-              <CostTrendChip changeRatio={row.changeRatio} />
-            </div>
-          </div>
+            letter={toCategoryKey(row.category)}
+            value={row.rate}
+          />
         ))}
-      </div>
+      </ul>
     </div>
   );
 }

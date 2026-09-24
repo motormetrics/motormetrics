@@ -10,10 +10,8 @@ import {
   Switch,
   TextField,
 } from "@heroui/react";
-import {
-  type MaintenanceConfig,
-  updateMaintenanceConfig,
-} from "@web/app/admin/actions/maintenance";
+import { updateMaintenanceConfig } from "@web/app/admin/actions/maintenance";
+import type { MaintenanceConfig } from "@web/lib/maintenance";
 import { AlertCircle, Globe, Save, Wrench } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";

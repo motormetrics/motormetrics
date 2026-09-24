@@ -1,4 +1,4 @@
-import { MaintenanceNotice } from "@web/components/maintenance-notice";
+import { MaintenanceNotice } from "@web/app/(main)/(site)/maintenance/components/maintenance-notice";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 

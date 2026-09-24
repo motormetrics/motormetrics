@@ -1,5 +1,5 @@
 import { Typography } from "@heroui/react";
-import { getRelatedPosts } from "@web/lib/data/posts";
+import { getRelatedPosts } from "@web/queries/posts/popularity";
 import { PostCard } from "./post-card";
 
 interface RelatedPostsProps {

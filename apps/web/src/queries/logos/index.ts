@@ -3,6 +3,7 @@ import {
   readManifest,
 } from "@motormetrics/logos/services/manifest";
 import type { CarLogo } from "@motormetrics/logos/types";
+import { slugify } from "@motormetrics/utils/slugify";
 import { LOGOS_CACHE_TAG } from "@web/lib/cache-tags";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -36,4 +37,20 @@ export async function getAllCarLogos(): Promise<
       error: error instanceof Error ? error.message : "Failed to fetch logos",
     };
   }
+}
+
+/** Logo URLs keyed by make slug, skipping makes without an image. */
+export function buildLogoMap(logos: CarLogo[]): Record<string, string> {
+  return logos.reduce<Record<string, string>>((acc, logo) => {
+    if (logo.url) {
+      acc[slugify(logo.make)] = logo.url;
+    }
+    return acc;
+  }, {});
+}
+
+/** Logo URLs keyed by make slug; empty when the logos cannot be read. */
+export async function getCarLogoMap(): Promise<Record<string, string>> {
+  const logoResult = await getAllCarLogos();
+  return buildLogoMap("logos" in logoResult ? logoResult.logos : []);
 }

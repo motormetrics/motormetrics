@@ -1,9 +1,5 @@
 import { NumberValue } from "@heroui-pro/react";
 import {
-  formatMonthLabel,
-  formatMonthName,
-} from "@web/app/(main)/(dashboard)/cars/components/format-month";
-import {
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
@@ -16,6 +12,10 @@ import {
   getVehiclePopulationByYearAndFuelType,
   getVehiclePopulationYearlyTotals,
 } from "@web/queries/vehicle-population";
+import {
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
 
 /** Months of share history drawn under the headline figure. */
 const SPARK_MONTHS = 12;

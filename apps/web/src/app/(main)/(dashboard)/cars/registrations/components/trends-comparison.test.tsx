@@ -1,4 +1,4 @@
-import { TrendsComparison } from "@web/components/trends-comparison";
+import { TrendsComparison } from "@web/app/(main)/(dashboard)/cars/registrations/components/trends-comparison";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { vi } from "vitest";
 import { page } from "vitest/browser";

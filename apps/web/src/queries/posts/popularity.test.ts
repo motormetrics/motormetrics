@@ -9,7 +9,7 @@ vi.mock("@web/queries/posts", () => ({
   getPostsByIds: getPostsByIdsMock,
 }));
 
-import { getRelatedPosts } from "./posts";
+import { getRelatedPosts } from "@web/queries/posts/popularity";
 
 describe("getRelatedPosts", () => {
   beforeEach(() => {

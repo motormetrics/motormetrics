@@ -1,4 +1,5 @@
 import { redis } from "@motormetrics/utils/redis";
+import { LAST_UPDATED_COE_KEY } from "@web/config/workflow";
 import { getCoeMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";
@@ -82,7 +83,7 @@ async function processCoeData(): Promise<UpdaterResult> {
   const result = await updateCoe();
 
   if (result.recordsProcessed > 0) {
-    await redis.set("last_updated:coe", Date.now());
+    await redis.set(LAST_UPDATED_COE_KEY, Date.now());
   }
 
   return result;

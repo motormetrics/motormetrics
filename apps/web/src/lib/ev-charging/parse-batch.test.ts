@@ -5,7 +5,9 @@ import {
   extractStations,
   parseBatch,
   toConnectorStatus,
+  toNumber,
   toPriceType,
+  toText,
 } from "./parse-batch";
 
 const station = {
@@ -217,5 +219,23 @@ describe("extractPostalCode", () => {
     );
     expect(extractPostalCode("No postal here")).toBeNull();
     expect(extractPostalCode(null)).toBeNull();
+  });
+});
+
+describe("toNumber", () => {
+  it("should convert numeric strings and null out blanks", () => {
+    expect(toNumber("22")).toBe(22);
+    expect(toNumber("7.4")).toBe(7.4);
+    expect(toNumber("103.8525029")).toBe(103.8525029);
+    expect(toNumber("")).toBeNull();
+    expect(toNumber("n/a")).toBeNull();
+  });
+});
+
+describe("toText", () => {
+  it("should null out blank optional text such as parking lot type", () => {
+    expect(toText("")).toBeNull();
+    expect(toText("  ")).toBeNull();
+    expect(toText(" B3 ")).toBe("B3");
   });
 });

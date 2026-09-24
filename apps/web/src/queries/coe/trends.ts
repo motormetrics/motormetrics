@@ -1,9 +1,10 @@
 import { db } from "@motormetrics/database/client";
 import { coe, type SelectCOE } from "@motormetrics/database/schema";
 import { getDateRangeForYear } from "@web/lib/coe/calculations";
+import { getCOELatestMonth } from "@web/queries/coe/latest-month";
 import type { COECategory } from "@web/types";
 import { subMonths } from "date-fns";
-import { and, asc, desc, eq, gte, lte, max } from "drizzle-orm";
+import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 const COE_CATEGORIES: COECategory[] = [
@@ -30,15 +31,6 @@ const fetchCoeResults = async (
     .from(coe)
     .where(and(...filters))
     .orderBy(asc(coe.month), desc(coe.biddingNo));
-};
-
-const getLatestCoeMonth = async (): Promise<string | null> => {
-  const result = await db
-    .select({ month: max(coe.month) })
-    .from(coe)
-    .then((rows) => rows[0]?.month ?? null);
-
-  return result;
 };
 
 const getDateRangeRolling12Months = (
@@ -115,7 +107,7 @@ export async function getAllCoeCategoryTrends(
   if (year) {
     ({ startMonth, endMonth } = getDateRangeForYear(year));
   } else {
-    const latestMonth = await getLatestCoeMonth();
+    const latestMonth = await getCOELatestMonth();
     if (!latestMonth) {
       return Object.fromEntries(
         COE_CATEGORIES.map((category) => [category, [] as CoeMonthlyPremium[]]),
