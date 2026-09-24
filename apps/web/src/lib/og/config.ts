@@ -36,10 +36,9 @@ export const OG_CONTENT_TYPE = "image/png";
 /**
  * Shared-cache headers for data-driven cards.
  *
- * Every share image calls `connection()` to avoid the prerender bailout, so
- * without these each request renders the PNG on a function. An hour at the
- * CDN with a day of stale-while-revalidate caps that at one render per hour
- * per card while keeping the figures within an hour of the data.
+ * The cards prerender, and their queries regenerate on cache-tag revalidation.
+ * An hour at the CDN with a day of stale-while-revalidate keeps a card within
+ * an hour of that regeneration without sending every crawler to the origin.
  */
 export const OG_CACHE_HEADERS = {
   "Cache-Control":

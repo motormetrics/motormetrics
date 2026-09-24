@@ -4,8 +4,8 @@ import {
   CategoryOverview,
 } from "@web/app/(main)/(dashboard)/cars/components/category/category-overview";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
-import { FUEL_TYPE_LINKS, SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
+import { FUEL_TYPE_LINKS, SITE_URL } from "@web/config";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
@@ -62,19 +62,15 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      ...baseOpenGraph,
       title,
       description,
       url: `${SITE_URL}${canonical}`,
-      siteName: SITE_TITLE,
-      locale: "en_SG",
-      type: "website",
     },
     twitter: {
-      card: "summary_large_image",
+      ...baseTwitter,
       title,
       description,
-      site: SOCIAL_HANDLE,
-      creator: SOCIAL_HANDLE,
     },
     alternates: {
       canonical,

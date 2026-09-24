@@ -17,9 +17,9 @@ import {
 } from "@web/components/shared/overview";
 import { EyebrowValue, PageEyebrow } from "@web/components/shared/page-eyebrow";
 import { StructuredData } from "@web/components/structured-data";
-import { SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
+import { SITE_URL } from "@web/config";
 import { generateDataCatalogSchema } from "@web/lib/metadata";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getCoeResults } from "@web/queries/coe";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
@@ -33,19 +33,15 @@ export const metadata: Metadata = {
   title,
   description,
   openGraph: {
+    ...baseOpenGraph,
     title,
     description,
     url: `${SITE_URL}/coe`,
-    siteName: SITE_TITLE,
-    locale: "en_SG",
-    type: "website",
   },
   twitter: {
-    card: "summary_large_image",
+    ...baseTwitter,
     title,
     description,
-    site: SOCIAL_HANDLE,
-    creator: SOCIAL_HANDLE,
   },
   alternates: {
     canonical: "/coe",

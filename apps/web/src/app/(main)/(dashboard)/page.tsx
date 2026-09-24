@@ -17,6 +17,7 @@ import { EyebrowValue, PageEyebrow } from "@web/components/shared/page-eyebrow";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getLatestMonth } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import { Suspense } from "react";
@@ -35,14 +36,14 @@ export const metadata: Metadata = {
     "LTA data",
   ],
   openGraph: {
+    ...baseOpenGraph,
     title: `${SITE_TITLE} (formerly SG Cars Trends)`,
     description:
       "Track Singapore car registration trends and COE bidding results with interactive charts and latest market insights.",
-    type: "website",
-    siteName: SITE_TITLE,
+    url: SITE_URL,
   },
   twitter: {
-    card: "summary_large_image",
+    ...baseTwitter,
     title: `${SITE_TITLE} (formerly SG Cars Trends)`,
     description:
       "Track Singapore car registration trends and COE bidding results with interactive charts.",

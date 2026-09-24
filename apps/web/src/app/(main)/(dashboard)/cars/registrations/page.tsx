@@ -8,7 +8,7 @@ import { PageHead } from "@web/components/shared/page-head";
 import { Report, ReportSection } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getComparisonData } from "@web/queries/cars/compare";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
@@ -34,19 +34,15 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      ...baseOpenGraph,
       title,
       description,
       url: `${SITE_URL}/cars/registrations`,
-      siteName: SITE_TITLE,
-      locale: "en_SG",
-      type: "website",
     },
     twitter: {
-      card: "summary_large_image",
+      ...baseTwitter,
       title,
       description,
-      site: SOCIAL_HANDLE,
-      creator: SOCIAL_HANDLE,
     },
     alternates: {
       canonical: "/cars/registrations",

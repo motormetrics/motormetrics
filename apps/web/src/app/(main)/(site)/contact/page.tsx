@@ -5,6 +5,7 @@ import {
   SUPPORT_EMAIL,
 } from "@web/config";
 import { advertisePage } from "@web/flags";
+import { baseOpenGraph } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -15,12 +16,10 @@ export const metadata: Metadata = {
   title: { absolute: title },
   description,
   openGraph: {
+    ...baseOpenGraph,
     title,
     description,
     url: `${SITE_URL}/contact`,
-    siteName: SITE_TITLE,
-    locale: "en_SG",
-    type: "website",
   },
   alternates: {
     canonical: "/contact",

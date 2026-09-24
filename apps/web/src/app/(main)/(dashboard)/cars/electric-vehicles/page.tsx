@@ -22,6 +22,7 @@ import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
 } from "@web/lib/metadata";
+import { baseOpenGraph } from "@web/lib/metadata/social";
 import { getEvMarketShare } from "@web/queries/cars";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import { Zap } from "lucide-react";
@@ -35,10 +36,11 @@ export const metadata: Metadata = {
   description:
     "Track Singapore's electric vehicle adoption with BEV, PHEV, and hybrid registration trends, market share analysis, and top EV makes.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Electric Vehicles - Singapore EV Trends",
     description:
       "Explore BEV, PHEV, and hybrid adoption trends, market share, and brand rankings in Singapore.",
-    type: "website",
+    url: `${SITE_URL}/cars/electric-vehicles`,
   },
   alternates: {
     canonical: "/cars/electric-vehicles",

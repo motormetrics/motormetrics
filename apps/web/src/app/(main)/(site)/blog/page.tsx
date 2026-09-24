@@ -5,6 +5,7 @@ import { FeaturedSection } from "@web/app/(main)/(site)/blog/components/featured
 import { loadSearchParams } from "@web/app/(main)/(site)/blog/search-params";
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
@@ -27,11 +28,13 @@ export const metadata: Metadata = {
   title,
   description,
   openGraph: {
+    ...baseOpenGraph,
     title,
     description,
+    url,
   },
   twitter: {
-    card: "summary_large_image",
+    ...baseTwitter,
     title,
     description,
   },

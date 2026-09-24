@@ -17,7 +17,7 @@ const robots = (): MetadataRoute.Robots => {
         },
         {
           userAgent: "AhrefsSiteAudit",
-          allow: "/public/x5wwykuhfx3gazs9h8y3fq9fxtnmv9zw.txt",
+          allow: "/x5wwykuhfx3gazs9h8y3fq9fxtnmv9zw.txt",
           disallow: protectedPaths,
         },
       ],

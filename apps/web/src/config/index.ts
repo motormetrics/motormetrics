@@ -1,7 +1,6 @@
 import { slugify } from "@motormetrics/utils/slugify";
 import { withRelatedProject } from "@vercel/related-projects";
-import { VEHICLE_TYPE_MAP } from "@web/constants";
-import type { Announcement, LinkItem, VehicleType } from "@web/types";
+import type { Announcement, LinkItem } from "@web/types";
 import { Battery, Droplet, Fuel, Zap } from "lucide-react";
 
 // =============================================================================
@@ -108,36 +107,6 @@ export const FUEL_TYPE_LINKS: LinkItem[] = [
     href: `/cars/fuel-types/${slugify(link.label)}`,
   }))
   .sort((a, b) => a.label.localeCompare(b.label));
-
-export const VEHICLE_TYPE_LINKS: LinkItem[] = [
-  { label: "Hatchback" },
-  { label: "Sedan" },
-  { label: "Multi-purpose Vehicle" },
-  { label: "Station-wagon" },
-  { label: "Sports Utility Vehicle" },
-  { label: "Coupe/Convertible" },
-]
-  .map((link) => {
-    const label = link.label as VehicleType;
-    return {
-      ...link,
-      label: VEHICLE_TYPE_MAP[label] ?? label,
-      href: `/cars/vehicle-types/${slugify(link.label)}`,
-    };
-  })
-  .sort((a, b) => a.label.localeCompare(b.label));
-
-export const COE_LINKS: LinkItem[] = [
-  { href: "/coe", label: "COE Result" },
-  // { href: "/coe/prices", label: "COE Prices" },
-  // { href: "/coe/bidding", label: "COE Bidding" },
-];
-
-export const SITE_LINKS: LinkItem[] = [
-  ...FUEL_TYPE_LINKS,
-  ...VEHICLE_TYPE_LINKS,
-  ...COE_LINKS,
-];
 
 // =============================================================================
 // UI Constants

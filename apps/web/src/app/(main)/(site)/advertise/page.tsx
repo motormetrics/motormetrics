@@ -8,8 +8,8 @@ import { TrafficChartSection } from "@web/app/(main)/(site)/advertise/components
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
 import { advertisePage } from "@web/flags";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getDailyTraffic, getTrafficStats } from "@web/lib/posthog";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -22,19 +22,15 @@ export const metadata: Metadata = {
   title,
   description,
   openGraph: {
+    ...baseOpenGraph,
     title: `${title} - ${SITE_TITLE}`,
     description,
     url: `${SITE_URL}/advertise`,
-    siteName: SITE_TITLE,
-    locale: "en_SG",
-    type: "website",
   },
   twitter: {
-    card: "summary_large_image",
+    ...baseTwitter,
     title: `${title} - ${SITE_TITLE}`,
     description,
-    site: SOCIAL_HANDLE,
-    creator: SOCIAL_HANDLE,
   },
   alternates: {
     canonical: "/advertise",

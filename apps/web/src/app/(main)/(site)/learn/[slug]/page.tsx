@@ -9,8 +9,8 @@ import {
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 import { notFound } from "next/navigation";
@@ -44,6 +44,7 @@ export async function generateMetadata({
     creator: SITE_TITLE,
     publisher: SITE_TITLE,
     openGraph: {
+      ...baseOpenGraph,
       title: guide.title,
       description: guide.description,
       type: "article",
@@ -53,11 +54,9 @@ export async function generateMetadata({
       url: `${SITE_URL}${canonical}`,
     },
     twitter: {
-      card: "summary_large_image",
+      ...baseTwitter,
       title: guide.title,
       description: guide.description,
-      creator: SOCIAL_HANDLE,
-      site: SOCIAL_HANDLE,
     },
     alternates: {
       canonical,
