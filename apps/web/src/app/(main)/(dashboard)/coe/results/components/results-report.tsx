@@ -5,9 +5,12 @@ import {
   COE_CATEGORIES,
   type CoeExercise,
   changeRatio,
+  formatExercise,
   formatExerciseTick,
   formatMonth,
   groupByExercise,
+  recordHighs,
+  summariseByYear,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/premiums/components/category-badge";
@@ -26,7 +29,7 @@ import {
   ReportTable,
   ShareBar,
 } from "@web/components/shared/report-table";
-import { getCoeResultsByPeriod } from "@web/queries/coe";
+import { getCoeResults, getCoeResultsByPeriod } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
 import type { SearchParams } from "nuqs/server";
 
@@ -220,6 +223,67 @@ export async function ResultsByExerciseRows({ searchParams }: RegionProps) {
       </ReportCell>
     </ReportRow>
   ));
+}
+
+/**
+ * One row per calendar year across the whole dataset. It reads every result
+ * rather than the selected period and takes no search params, so it
+ * prerenders into the static shell.
+ */
+export async function PremiumsByYearRows() {
+  const years = summariseByYear(groupByExercise(await getCoeResults()));
+
+  return years.map(({ year, categories }) => (
+    <ReportRow key={year}>
+      <ReportCell className="font-bold text-base">{year}</ReportCell>
+      {COE_CATEGORIES.map((category) => {
+        const figures = categories[category];
+
+        return (
+          <ReportCell align="end" key={category}>
+            {figures ? (
+              <div className="flex flex-col items-end gap-0.5">
+                <span className="font-extrabold text-base">
+                  {formatCurrency(figures.average)}
+                </span>
+                <span className="font-medium text-muted text-xs">
+                  high {formatCurrency(figures.high)}
+                </span>
+              </div>
+            ) : (
+              "—"
+            )}
+          </ReportCell>
+        );
+      })}
+    </ReportRow>
+  ));
+}
+
+/** The highest closing premium each category has ever reached. */
+export async function RecordHighRows() {
+  const highs = recordHighs(groupByExercise(await getCoeResults()));
+
+  return COE_CATEGORIES.map((category) => {
+    const exercise = highs[category];
+
+    return (
+      <ReportRow key={category}>
+        <ReportCell>
+          <CategoryBadge categoryKey={toCategoryKey(category)} />
+        </ReportCell>
+        <ReportCell className="font-semibold text-base">
+          {CATEGORY_DESCRIPTIONS[category]}
+        </ReportCell>
+        <ReportCell align="end" className="font-extrabold text-base">
+          {exercise ? formatCurrency(premiumOf(exercise, category) ?? 0) : "—"}
+        </ReportCell>
+        <ReportCell className="font-semibold text-muted">
+          {exercise ? formatExercise(exercise) : "—"}
+        </ReportCell>
+      </ReportRow>
+    );
+  });
 }
 
 /**

@@ -4,7 +4,9 @@ import {
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
+  PremiumsByYearRows,
   QuotaAndDemand,
+  RecordHighRows,
   ResultsByExerciseRows,
   ResultsChartPanel,
   ResultsHeadline,
@@ -41,9 +43,9 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-const title = "Historical COE Bidding Results";
+const title = "COE Price History and Trends";
 const description =
-  "Complete historical COE bidding results for Singapore. Explore trends, analyze price movements, and view detailed data for all vehicle categories.";
+  "Singapore COE price history for Cat A to E: every bidding result, yearly averages and record highs, with 12-month, 5-year, 10-year and all-time charts.";
 
 /**
  * Static: every label comes from `COE_CATEGORIES`, so the table's `<thead>`
@@ -56,6 +58,21 @@ const EXERCISE_COLUMNS = [
     label: `Cat ${toCategoryKey(category)}`,
   })),
   { align: "end" as const, label: "Total bids" },
+];
+
+const YEAR_COLUMNS = [
+  { label: "Year" },
+  ...COE_CATEGORIES.map((category) => ({
+    align: "end" as const,
+    label: `Cat ${toCategoryKey(category)}`,
+  })),
+];
+
+const RECORD_COLUMNS = [
+  { label: "Cat", width: "64px" },
+  { label: "Description" },
+  { align: "end" as const, label: "Record premium" },
+  { label: "Exercise" },
 ];
 
 export function generateMetadata(): Metadata {
@@ -183,8 +200,8 @@ export default function COEResultsPage({ searchParams }: PageProps) {
       />
 
       <PageHead
-        description="Closing premiums for every category in every exercise, with the quota and bids behind each result."
-        title="COE bidding results"
+        description="Closing premiums for every category in every exercise, with yearly averages, record highs, and the quota and bids behind each result."
+        title="COE price history and trends"
       />
 
       {/* The bar's own furniture — the eyebrow, the hint, the rules — is static
@@ -222,6 +239,41 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           — add it to the chart and the other lines flatten.
         </Typography.Paragraph>
       </div>
+
+      <ReportSection
+        caption="Average closing premium across each year's exercises, with the year's high"
+        title="COE prices by year"
+      >
+        <SectionErrorBoundary title="Yearly COE prices unavailable">
+          <ReportTable columns={YEAR_COLUMNS}>
+            <Suspense
+              fallback={<RowsSkeleton cells={YEAR_COLUMNS.length} rows={8} />}
+            >
+              <PremiumsByYearRows />
+            </Suspense>
+          </ReportTable>
+        </SectionErrorBoundary>
+      </ReportSection>
+
+      <ReportSection
+        caption="The highest closing premium each category has reached"
+        title="Record COE prices"
+      >
+        <SectionErrorBoundary title="Record COE prices unavailable">
+          <ReportTable columns={RECORD_COLUMNS}>
+            <Suspense
+              fallback={
+                <RowsSkeleton
+                  cells={RECORD_COLUMNS.length}
+                  rows={COE_CATEGORIES.length}
+                />
+              }
+            >
+              <RecordHighRows />
+            </Suspense>
+          </ReportTable>
+        </SectionErrorBoundary>
+      </ReportSection>
 
       <ReportSection
         caption="Closing premium per category · most recent first"
