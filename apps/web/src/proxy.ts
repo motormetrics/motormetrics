@@ -97,7 +97,6 @@ export async function proxy(request: NextRequest) {
   requestHeaders.set("X-Robots-Tag", "all");
 
   return NextResponse.next({
-    ...(!process.env.VERCEL && { headers: requestHeaders }),
     request: {
       headers: requestHeaders,
     },
