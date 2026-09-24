@@ -15,9 +15,9 @@ import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
 
-const title = "PQP Rates for COE Renewal";
+const title = "Latest PQP Rates for COE Renewal";
 const description =
-  "Latest Prevailing Quota Premium (PQP) rates for COE renewal in Singapore. These rates show the average COE prices over the last 3 months.";
+  "Current PQP (Prevailing Quota Premium) rates for Cat A and Cat B COE renewal in Singapore, averaged over the last 3 months of COE prices.";
 export const metadata: Metadata = {
   title,
   description,
