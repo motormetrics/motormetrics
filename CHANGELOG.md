@@ -1,3 +1,13 @@
+## [5.24.1](https://github.com/motormetrics/motormetrics/compare/v5.24.0...v5.24.1) (2026-09-24)
+
+### Bug Fixes
+
+* **web:** read route params behind Suspense ([6b3fe6e](https://github.com/motormetrics/motormetrics/commit/6b3fe6eb0d12390ec6d8c0bdaad7637558905e3e)), closes [#1136](https://github.com/motormetrics/motormetrics/issues/1136)
+
+### Reverts
+
+* **web:** drop the live figures popover from follow links ([cf095f6](https://github.com/motormetrics/motormetrics/commit/cf095f688e89524b2c29d692b8f7e561af6367e6))
+
 ## [5.24.0](https://github.com/motormetrics/motormetrics/compare/v5.23.0...v5.24.0) (2026-09-22)
 
 ### Features
