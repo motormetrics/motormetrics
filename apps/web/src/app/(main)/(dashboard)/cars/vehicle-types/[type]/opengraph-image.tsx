@@ -5,7 +5,6 @@ import { loadRegistrations } from "@web/lib/og/data";
 import { getOGFonts } from "@web/lib/og/fonts";
 import { getDistinctVehicleTypes } from "@web/queries/cars";
 import { ImageResponse } from "next/og";
-import { connection } from "next/server";
 
 export const alt = "Latest car registrations in Singapore - MotorMetrics";
 export const size = OG_SIZE;
@@ -21,8 +20,6 @@ export async function generateStaticParams() {
 }
 
 export default async function Image() {
-  await connection();
-
   const [data, fonts] = await Promise.all([loadRegistrations(), getOGFonts()]);
 
   if (!data) {
