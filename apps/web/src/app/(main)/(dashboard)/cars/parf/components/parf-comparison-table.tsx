@@ -60,7 +60,9 @@ export function PARFComparisonTable() {
       </ReportTable>
       <Typography.Paragraph color="muted" size="sm">
         Rates apply to the ARF paid on the vehicle, and the rebate is capped
-        whichever bracket it falls in.
+        whichever bracket it falls in. Under the old schedule, the{" "}
+        {formatCurrency(OLD_CAP)} cap covers COEs from the 2nd February 2023
+        exercise onwards; COEs obtained before that have no cap.
       </Typography.Paragraph>
     </ReportSection>
   );

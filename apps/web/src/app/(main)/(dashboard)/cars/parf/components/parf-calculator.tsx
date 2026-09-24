@@ -43,6 +43,7 @@ export function PARFCalculator() {
       newRebate,
       oldCapped: oldUncapped > OLD_CAP,
       oldRebate,
+      oldUncapped,
       shortfall: oldRebate - newRebate,
     };
   }, [arf, bracket]);
@@ -112,8 +113,10 @@ export function PARFCalculator() {
             <ReportStat
               label="Before Budget 2026"
               note={
+                // The $60,000 cap only covers COEs from February 2023, so an
+                // older COE would get the uncapped figure.
                 result.oldCapped
-                  ? `capped at ${formatCurrency(OLD_CAP)}`
+                  ? `capped at ${formatCurrency(OLD_CAP)} · ${formatCurrency(result.oldUncapped)} for COEs before Feb 2023`
                   : `${(bracket.oldRate * 100).toFixed(0)}% of ARF`
               }
               value={formatCurrency(result.oldRebate)}
