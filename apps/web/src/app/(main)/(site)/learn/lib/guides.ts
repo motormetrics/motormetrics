@@ -492,7 +492,7 @@ Both are one-time fees paid at registration, but they serve different purposes.
 The ARF is shown on your vehicle registration documents. You can also:
 - Check via OneMotoring with your vehicle number
 - Ask the dealer during purchase
-- Calculate from OMV using the tiers above
+- Calculate from OMV using the tiers above, or with our [ARF Calculator](/cars/arf)
 
 ## Frequently Asked Questions
 
@@ -512,6 +512,7 @@ No, ARF is mandatory for all new vehicle registrations in Singapore. There are n
 - [COE](/learn/coe): The other major registration cost`,
     relatedTerms: ["OMV", "PARF", "COE"],
     relatedLinks: [
+      { label: "ARF Calculator", href: "/cars/arf" },
       { label: "PARF Calculator", href: "/cars/parf" },
       { label: "Car Registrations", href: "/cars/registrations" },
     ],

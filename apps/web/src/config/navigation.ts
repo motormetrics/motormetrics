@@ -145,6 +145,13 @@ export const navLinks: NavLinks = {
       description: "Calculate PARF rebate under old and new rates",
       badge: "new",
     },
+    {
+      title: "ARF Calculator",
+      url: "/cars/arf",
+      icon: Calculator,
+      description: "Calculate ARF from a car's OMV",
+      badge: "new",
+    },
   ],
   coe: [
     {
