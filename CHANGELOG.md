@@ -1,3 +1,16 @@
+## [5.25.0](https://github.com/motormetrics/motormetrics/compare/v5.24.3...v5.25.0) (2026-09-24)
+
+### Features
+
+* **web:** add parf rebate and dereg value guide ([b51e1a4](https://github.com/motormetrics/motormetrics/commit/b51e1a484d4907fe392343dbbea066e7c2f85665))
+
+### Bug Fixes
+
+* **web:** correct legacy parf rebate cap in guide ([9809c29](https://github.com/motormetrics/motormetrics/commit/9809c29e53f0a91bde6d4d652285f11be4a8b331))
+* **web:** lead learn guide titles with the question ([877cf4e](https://github.com/motormetrics/motormetrics/commit/877cf4ec25b3cf285ef4bef5142d0ac881e55307))
+* **web:** retitle new car registrations page ([8e053c3](https://github.com/motormetrics/motormetrics/commit/8e053c3ba00f80e985d3271e952d2f6d067c976a))
+* **web:** retitle pqp page as latest rates ([da5d800](https://github.com/motormetrics/motormetrics/commit/da5d800918d34b39b0e47a89cbfda244b6194987))
+
 ## [5.24.3](https://github.com/motormetrics/motormetrics/compare/v5.24.2...v5.24.3) (2026-09-24)
 
 ### Bug Fixes
