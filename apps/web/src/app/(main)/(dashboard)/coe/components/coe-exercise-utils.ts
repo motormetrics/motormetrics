@@ -73,6 +73,79 @@ export function groupByExercise(results: COEResult[]): CoeExercise[] {
   );
 }
 
+export interface CategoryYear {
+  average: number;
+  high: number;
+  low: number;
+}
+
+export interface CoeYear {
+  year: string;
+  categories: Partial<Record<COECategory, CategoryYear>>;
+}
+
+/**
+ * Average, high and low closing premium per category for each calendar year,
+ * newest first. The average is across every exercise in the year, so a year
+ * still in progress averages only the exercises held so far.
+ */
+export function summariseByYear(exercises: CoeExercise[]): CoeYear[] {
+  const premiumsByYear = new Map<string, Map<COECategory, number[]>>();
+
+  for (const exercise of exercises) {
+    const year = exercise.month.slice(0, 4);
+    const categories = premiumsByYear.get(year) ?? new Map();
+
+    for (const category of COE_CATEGORIES) {
+      const premium = exercise.results[category]?.premium;
+      if (premium === undefined) {
+        continue;
+      }
+      categories.set(category, [...(categories.get(category) ?? []), premium]);
+    }
+    premiumsByYear.set(year, categories);
+  }
+
+  return Array.from(premiumsByYear, ([year, categories]) => ({
+    year,
+    categories: Object.fromEntries(
+      Array.from(categories, ([category, premiums]) => [
+        category,
+        {
+          average: Math.round(
+            premiums.reduce((total, premium) => total + premium, 0) /
+              premiums.length,
+          ),
+          high: Math.max(...premiums),
+          low: Math.min(...premiums),
+        },
+      ]),
+    ),
+  })).sort((first, second) => second.year.localeCompare(first.year));
+}
+
+/**
+ * The exercise with the highest closing premium per category. The earliest
+ * exercise wins a tie, so the record names when the high was first set.
+ */
+export function recordHighs(
+  exercises: CoeExercise[],
+): Partial<Record<COECategory, CoeExercise>> {
+  const highs: Partial<Record<COECategory, CoeExercise>> = {};
+
+  for (const exercise of exercises) {
+    for (const category of COE_CATEGORIES) {
+      const premium = exercise.results[category]?.premium;
+      const record = highs[category]?.results[category]?.premium;
+      if (premium !== undefined && (record === undefined || premium > record)) {
+        highs[category] = exercise;
+      }
+    }
+  }
+
+  return highs;
+}
+
 const ORDINALS = ["first", "second", "third"];
 
 /** `1` → "first". Falls back to the bare number for an unexpected round. */

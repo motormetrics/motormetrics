@@ -7,6 +7,8 @@ import {
   formatExerciseTick,
   groupByExercise,
   nextExercise,
+  recordHighs,
+  summariseByYear,
   toCategory,
   toCategoryKey,
 } from "./coe-exercise-utils";
@@ -120,5 +122,42 @@ describe("category keys", () => {
   it("round-trips between the URL key and the stored category", () => {
     expect(toCategory("B")).toBe("Category B");
     expect(toCategoryKey("Category B")).toBe("B");
+  });
+});
+
+describe("summariseByYear", () => {
+  it("should average, high and low each category per year, newest first", () => {
+    const years = summariseByYear(
+      groupByExercise([
+        result("2025-01", 1, "Category A", 90_000),
+        result("2025-06", 2, "Category A", 110_000),
+        result("2026-01", 1, "Category A", 100_000),
+        result("2026-01", 1, "Category B", 120_000),
+      ]),
+    );
+
+    expect(years.map((year) => year.year)).toEqual(["2026", "2025"]);
+    expect(years[1].categories["Category A"]).toEqual({
+      average: 100_000,
+      high: 110_000,
+      low: 90_000,
+    });
+    expect(years[1].categories["Category B"]).toBeUndefined();
+  });
+});
+
+describe("recordHighs", () => {
+  it("should keep the earliest exercise that set each category's high", () => {
+    const highs = recordHighs(
+      groupByExercise([
+        result("2023-09", 1, "Category A", 106_000),
+        result("2024-02", 1, "Category A", 106_000),
+        result("2024-02", 1, "Category B", 150_000),
+      ]),
+    );
+
+    expect(highs["Category A"]?.key).toBe("2023-09:1");
+    expect(highs["Category B"]?.key).toBe("2024-02:1");
+    expect(highs["Category C"]).toBeUndefined();
   });
 });
