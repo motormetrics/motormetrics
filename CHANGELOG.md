@@ -1,3 +1,13 @@
+## [5.24.2](https://github.com/motormetrics/motormetrics/compare/v5.24.1...v5.24.2) (2026-09-24)
+
+### Bug Fixes
+
+* **web:** correct sitemap and robots entries ([5598b79](https://github.com/motormetrics/motormetrics/commit/5598b790323e36e60ae01395b062d434551862bb)), closes [#1152](https://github.com/motormetrics/motormetrics/issues/1152)
+
+### Performance Improvements
+
+* **web:** prerender share images ([fab38ec](https://github.com/motormetrics/motormetrics/commit/fab38ecaffa68f256bb956222ccd4c72b21b2be5)), closes [#1131](https://github.com/motormetrics/motormetrics/issues/1131)
+
 ## [5.24.1](https://github.com/motormetrics/motormetrics/compare/v5.24.0...v5.24.1) (2026-09-24)
 
 ### Bug Fixes
