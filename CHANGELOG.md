@@ -1,3 +1,9 @@
+## [5.24.3](https://github.com/motormetrics/motormetrics/compare/v5.24.2...v5.24.3) (2026-09-24)
+
+### Bug Fixes
+
+* **web:** stop proxy echoing request headers ([df91d12](https://github.com/motormetrics/motormetrics/commit/df91d12c5d3df3f63d8a88bfe0bce6d5640b55e2))
+
 ## [5.24.2](https://github.com/motormetrics/motormetrics/compare/v5.24.1...v5.24.2) (2026-09-24)
 
 ### Bug Fixes
