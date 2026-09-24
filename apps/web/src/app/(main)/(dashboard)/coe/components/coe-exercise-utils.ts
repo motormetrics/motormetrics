@@ -73,7 +73,7 @@ export function groupByExercise(results: COEResult[]): CoeExercise[] {
   );
 }
 
-export interface CategoryYear {
+interface CategoryYear {
   average: number;
   high: number;
   low: number;
