@@ -1,4 +1,8 @@
 import { Typography } from "@heroui/react";
+import {
+  CATEGORY_DESCRIPTIONS,
+  toCategoryKey,
+} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { PqpRateRow } from "@web/app/(main)/(dashboard)/coe/components/pqp-rate-row";
 import {
   type CoeCategorySeries,
@@ -10,6 +14,7 @@ import {
 } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionHead } from "@web/components/shared/overview";
 import { getAllCoeCategoryTrends, getPqpRates } from "@web/queries/coe";
+import type { COECategory } from "@web/types";
 import { changeRatio } from "@web/utils/change-ratio";
 import {
   formatMonthLabel,
@@ -19,14 +24,6 @@ import { getLatestMonth } from "@web/utils/dates/months";
 
 /** Bidding months drawn in the premium trend, the selected one last. */
 const TREND_MONTHS = 12;
-
-const CATEGORY_NAMES: Record<string, string> = {
-  "Category A": "Cars up to 1600cc & 130bhp",
-  "Category B": "Cars above 1600cc or 130bhp",
-  "Category C": "Goods vehicles & buses",
-  "Category D": "Motorcycles",
-  "Category E": "Open category",
-};
 
 /**
  * COE premiums for the selected month with the PQP renewal rates beside them.
@@ -53,8 +50,8 @@ export async function CoeSection() {
 
       return {
         category,
-        label: category.replace("Category ", ""),
-        name: CATEGORY_NAMES[category] ?? category,
+        label: toCategoryKey(category as COECategory),
+        name: CATEGORY_DESCRIPTIONS[category as COECategory] ?? category,
         points: windowEndingAt(merged, month, TREND_MONTHS).map(
           ({ month: pointMonth, premium }) => ({ month: pointMonth, premium }),
         ),
@@ -85,8 +82,8 @@ export async function CoeSection() {
         value,
         pqpPrevious?.[category as keyof typeof pqpPrevious],
       ),
-      letter: category.replace("Category ", ""),
-      name: CATEGORY_NAMES[category] ?? category,
+      letter: toCategoryKey(category as COECategory),
+      name: CATEGORY_DESCRIPTIONS[category as COECategory] ?? category,
       value,
     }));
 

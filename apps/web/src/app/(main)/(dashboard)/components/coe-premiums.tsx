@@ -13,7 +13,7 @@ export interface CoeCategorySeries {
   category: string;
   /** The letter on the category circle. */
   label: string;
-  /** "Cars up to 1600cc & 130bhp". */
+  /** "Cars up to 1,600cc and 130bhp". */
   name: string;
   points: { month: string; premium: number }[];
 }

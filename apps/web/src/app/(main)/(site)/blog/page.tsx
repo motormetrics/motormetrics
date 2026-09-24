@@ -4,6 +4,10 @@ import { BlogSearchInput } from "@web/app/(main)/(site)/blog/components/blog-sea
 import { FeaturedSection } from "@web/app/(main)/(site)/blog/components/featured-section";
 import { loadSearchParams } from "@web/app/(main)/(site)/blog/search-params";
 import { SitePage } from "@web/components/shared/site-page";
+import {
+  GridSkeleton,
+  SkeletonBentoCard,
+} from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
@@ -79,7 +83,17 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
         <Suspense>
           <BlogSearchInput />
         </Suspense>
-        <Suspense>
+        <Suspense
+          fallback={
+            <>
+              <SkeletonBentoCard className="min-h-80" />
+              <GridSkeleton
+                columns="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                count={6}
+              />
+            </>
+          }
+        >
           <BlogBody searchParams={searchParams} />
         </Suspense>
       </SitePage>

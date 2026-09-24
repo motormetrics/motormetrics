@@ -1,9 +1,24 @@
-import { SITE_TITLE } from "@web/config";
+import { SITE_TITLE, SITE_URL } from "@web/config";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 
+const title = "Terms of Service";
+const description = `Terms and conditions for using ${SITE_TITLE}. Understand data usage rights, liability limits, and acceptable use of our Singapore car market platform.`;
+
 export const metadata: Metadata = {
-  title: "Terms of Service",
-  description: `Terms and conditions for using ${SITE_TITLE}. Understand data usage rights, liability limits, and acceptable use of our Singapore car market platform.`,
+  title,
+  description,
+  openGraph: {
+    ...baseOpenGraph,
+    title,
+    description,
+    url: `${SITE_URL}/legal/terms-of-service`,
+  },
+  twitter: {
+    ...baseTwitter,
+    title,
+    description,
+  },
   alternates: {
     canonical: "/legal/terms-of-service",
   },

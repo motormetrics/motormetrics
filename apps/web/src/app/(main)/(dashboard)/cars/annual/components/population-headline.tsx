@@ -27,7 +27,7 @@ export function PopulationHeadline({
   const firstYear = years[0];
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-[18px]">
       <Headline
         caption={
           <>
@@ -47,21 +47,22 @@ export function PopulationHeadline({
           <NumberValue locale="en-SG" maximumFractionDigits={0} value={total} />
         }
       />
-      <SparklineChart
-        className="mt-2"
-        data={entity.series.map((value, index) => ({
-          label: years[index] ?? "",
-          value,
-        }))}
-        name="Population"
-        title={`${entity.name} population from ${firstYear} to ${year}`}
-      />
-      {years.length > 1 ? (
-        <div className="flex justify-between font-semibold text-muted text-xs">
-          <span>{firstYear}</span>
-          <span>{year}</span>
-        </div>
-      ) : null}
+      <div className="flex flex-col gap-2.5">
+        <SparklineChart
+          data={entity.series.map((value, index) => ({
+            label: years[index] ?? "",
+            value,
+          }))}
+          name="Population"
+          title={`${entity.name} population from ${firstYear} to ${year}`}
+        />
+        {years.length > 1 ? (
+          <div className="flex justify-between font-semibold text-muted text-xs">
+            <span>{firstYear}</span>
+            <span>{year}</span>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

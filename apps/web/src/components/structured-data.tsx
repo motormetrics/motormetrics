@@ -1,4 +1,3 @@
-import Script from "next/script";
 import type { Thing, WithContext } from "schema-dts";
 
 interface StructuredDataProps {
@@ -7,10 +6,11 @@ interface StructuredDataProps {
 
 export function StructuredData({ data }: StructuredDataProps) {
   return (
-    <Script
-      id="structured-data"
+    <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(data).replace(/</g, "\\u003c"),
+      }}
     />
   );
 }

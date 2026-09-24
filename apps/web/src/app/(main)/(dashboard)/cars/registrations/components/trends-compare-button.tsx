@@ -2,10 +2,15 @@
 
 import { Button } from "@heroui/react";
 
-import { TrendsComparison } from "@web/app/(main)/(dashboard)/cars/registrations/components/trends-comparison";
+import {
+  compareParams,
+  getDefaultMonthB,
+  TrendsComparison,
+} from "@web/app/(main)/(dashboard)/cars/registrations/components/trends-comparison";
 import type { ComparisonData } from "@web/queries/cars/compare";
 import type { Month } from "@web/types";
 import { TrendingUp } from "lucide-react";
+import { useQueryStates } from "nuqs";
 import posthog from "posthog-js";
 import { useState } from "react";
 
@@ -20,11 +25,28 @@ export function TrendsCompareButton({
   months,
   comparisonData,
 }: TrendsCompareButtonProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [{ compareA, compareB }, setCompare] = useQueryStates(compareParams, {
+    shallow: false,
+  });
+  // A shared link that already names both months opens straight onto them
+  const [isOpen, setIsOpen] = useState(Boolean(compareA && compareB));
 
   const openComparison = () => {
     posthog.capture("trends_compare_opened");
     setIsOpen(true);
+    if (!compareA && !compareB) {
+      setCompare({
+        compareA: currentMonth,
+        compareB: getDefaultMonthB(currentMonth, months),
+      });
+    }
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      setCompare({ compareA: null, compareB: null });
+    }
   };
 
   return (
@@ -38,7 +60,7 @@ export function TrendsCompareButton({
 
       <TrendsComparison
         isOpen={isOpen}
-        onOpenChange={setIsOpen}
+        onOpenChange={handleOpenChange}
         currentMonth={currentMonth}
         months={months}
         comparisonData={comparisonData}

@@ -67,20 +67,24 @@ export function FuelMixRing({
   const arcs = donutArcs(segments);
 
   return (
-    <div className="flex flex-col gap-2.5">
-      <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
-        Fuel mix
-      </Typography.Paragraph>
-      <Typography.Paragraph className="font-medium" color="muted">
-        {entity.name} by fuel type
-      </Typography.Paragraph>
-
-      {segments.length === 0 ? (
-        <Typography.Paragraph color="muted" size="sm">
-          LTA published the {year} count for {entity.name} without a fuel split.
+    <div className="flex flex-col gap-[18px]">
+      <div className="flex flex-col gap-2.5">
+        <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+          Fuel mix
         </Typography.Paragraph>
-      ) : (
-        <div className="mt-2 flex flex-wrap items-center gap-9">
+        <Typography.Paragraph className="font-medium" color="muted">
+          {entity.name} by fuel type
+        </Typography.Paragraph>
+        {segments.length === 0 ? (
+          <Typography.Paragraph color="muted" size="sm">
+            LTA published the {year} count for {entity.name} without a fuel
+            split.
+          </Typography.Paragraph>
+        ) : null}
+      </div>
+
+      {segments.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-9">
           <div className="relative size-[172px] shrink-0">
             <svg className="block" role="img" viewBox="0 0 190 190">
               <title>{`${entity.name} by fuel type, ${year}`}</title>
@@ -133,7 +137,7 @@ export function FuelMixRing({
             ))}
           </ul>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

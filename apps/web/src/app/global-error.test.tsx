@@ -8,7 +8,7 @@ vi.mock("posthog-js", () => ({
 }));
 
 vi.mock("next/font/google", () => ({
-  Geist: () => ({ className: "mock-geist" }),
+  Urbanist: () => ({ variable: "mock-urbanist" }),
 }));
 
 vi.mock("@web/app/globals.css", () => ({}));

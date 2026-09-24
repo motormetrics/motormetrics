@@ -156,6 +156,25 @@ function displayValue(
   return category === "vehicle-types" ? formatVehicleType(value) : value;
 }
 
+/**
+ * Title, description and canonical path for a type page, shared by
+ * `generateMetadata` and the WebPage structured data so the two never drift.
+ * `value` is the LTA value; the slug stands in when it does not resolve.
+ */
+export function typeDetailMeta(
+  category: TypeDetailConfig["category"],
+  type: string,
+  value: string | undefined,
+): { title: string; description: string; canonical: string } {
+  const displayName = value ? displayValue(category, value) : type;
+
+  return {
+    title: `${displayName} Cars in Singapore`,
+    description: `${displayName} car registrations in Singapore. Explore registration trends, statistics, and distribution by ${CATEGORY_TERMS[category].noun} for each month.`,
+    canonical: `/cars/${category}/${type}`,
+  };
+}
+
 async function resolveType(
   category: TypeDetailConfig["category"],
   type: string,
@@ -304,14 +323,17 @@ async function TypeDetailContent({
   const isElectricFuelType =
     config.category === "fuel-types" && value === "Electric";
 
-  const title = `${displayName} Cars in Singapore`;
-  const description = `${displayName} car registrations in Singapore. Explore registration trends, statistics, and distribution by ${terms.noun} for each month.`;
+  const { title, description, canonical } = typeDetailMeta(
+    config.category,
+    type,
+    value,
+  );
   const structuredData: WithContext<WebPage> = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: title,
     description,
-    url: `${SITE_URL}/cars/${config.category}/${type}`,
+    url: `${SITE_URL}${canonical}`,
     publisher: {
       "@type": "Organization",
       name: SITE_TITLE,

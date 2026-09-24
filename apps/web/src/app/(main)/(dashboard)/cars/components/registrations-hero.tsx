@@ -62,7 +62,7 @@ export async function RegistrationsHero({
   const leader = makeStats[0];
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-[18px]">
       <Headline
         caption={
           <>
@@ -94,7 +94,6 @@ export async function RegistrationsHero({
         }
       />
       <SparklineChart
-        className="mt-2"
         data={series}
         name="Registrations"
         title={`Monthly registrations over the ${series.length} months to ${formatMonthLabel(month)}`}

@@ -1,9 +1,24 @@
-import { SITE_TITLE } from "@web/config";
+import { SITE_TITLE, SITE_URL } from "@web/config";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 
+const title = "Privacy Policy";
+const description = `How ${SITE_TITLE} collects, uses, and protects your data. Learn about our analytics, third-party services, and your privacy rights.`;
+
 export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: `How ${SITE_TITLE} collects, uses, and protects your data. Learn about our analytics, third-party services, and your privacy rights.`,
+  title,
+  description,
+  openGraph: {
+    ...baseOpenGraph,
+    title,
+    description,
+    url: `${SITE_URL}/legal/privacy-policy`,
+  },
+  twitter: {
+    ...baseTwitter,
+    title,
+    description,
+  },
   alternates: {
     canonical: "/legal/privacy-policy",
   },

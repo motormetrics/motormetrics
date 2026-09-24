@@ -23,7 +23,7 @@ import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
 } from "@web/lib/metadata";
-import { baseOpenGraph } from "@web/lib/metadata/social";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getEvChargingSnapshot } from "@web/queries/ev-charging";
 import { PlugZap } from "lucide-react";
 import type { Metadata } from "next";
@@ -41,6 +41,12 @@ export const metadata: Metadata = {
     description:
       "Live availability, prices and busy hours for Singapore's public EV chargers.",
     url: `${SITE_URL}/cars/electric-vehicles/charging`,
+  },
+  twitter: {
+    ...baseTwitter,
+    title: "EV Charging - Live Singapore Charger Stats",
+    description:
+      "Live availability, prices and busy hours for Singapore's public EV chargers.",
   },
   alternates: {
     canonical: "/cars/electric-vehicles/charging",

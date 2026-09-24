@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`MaintenanceNotice > should render the maintenance copy and run the hook 1`] = `
+exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
 <div>
   <div
     class="mx-auto flex max-w-4xl flex-col gap-8"
@@ -8,10 +8,11 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
   >
     <div
       class="flex flex-col items-center gap-4 text-center"
-      style="opacity: 0;"
+      style="opacity: 0; transform: translateY(16px);"
     >
       <div
         class="mb-4"
+        style="opacity: 0; transform: scale(0.8);"
       >
         <div
           style="transform: none;"
@@ -41,18 +42,18 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
         </div>
       </div>
       <div
-        style="opacity: 0;"
+        style="opacity: 0; transform: translateY(16px);"
       >
         <h1
           class="typography typography--align-start typography--color-default typography--h1"
           data-slot="typography"
           data-type="h1"
         >
-          Pit Stop in ProgressBar
+          Pit Stop in Progress
         </h1>
       </div>
       <div
-        style="opacity: 0;"
+        style="opacity: 0; transform: translateY(16px);"
       >
         <p
           class="typography typography--align-start typography--color-muted typography--body"
@@ -64,7 +65,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
       </div>
     </div>
     <div
-      style="opacity: 0;"
+      style="opacity: 0; transform: translateY(16px);"
     >
       <div
         class="card card--default"
@@ -165,7 +166,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
     </div>
     <div
       class="flex flex-col gap-4"
-      style="opacity: 0;"
+      style="opacity: 0; transform: translateY(16px);"
     >
       <h2
         class="typography typography--align-start typography--color-default typography--h2"
@@ -179,7 +180,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
         style="opacity: 0;"
       >
         <div
-          style="opacity: 0;"
+          style="opacity: 0; transform: translateY(16px);"
         >
           <div
             class="card card--default"
@@ -226,7 +227,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           </div>
         </div>
         <div
-          style="opacity: 0;"
+          style="opacity: 0; transform: translateY(16px);"
         >
           <div
             class="card card--default"
@@ -273,7 +274,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           </div>
         </div>
         <div
-          style="opacity: 0;"
+          style="opacity: 0; transform: translateY(16px);"
         >
           <div
             class="card card--default"
@@ -323,7 +324,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
           </div>
         </div>
         <div
-          style="opacity: 0;"
+          style="opacity: 0; transform: translateY(16px);"
         >
           <div
             class="card card--default"
@@ -372,7 +373,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
       </div>
     </div>
     <div
-      style="opacity: 0;"
+      style="opacity: 0; transform: translateY(16px);"
     >
       <hr
         class="separator separator--horizontal separator--default"
@@ -383,7 +384,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
     </div>
     <div
       class="flex flex-col gap-4 text-center"
-      style="opacity: 0;"
+      style="opacity: 0; transform: translateY(16px);"
     >
       <h3
         class="typography typography--align-start typography--color-default typography--h3"
@@ -466,7 +467,7 @@ exports[`MaintenanceNotice > should render the maintenance copy and run the hook
     </div>
     <div
       class="text-center"
-      style="opacity: 0;"
+      style="opacity: 0; transform: translateY(16px);"
     >
       <p
         class="typography typography--align-start typography--color-muted typography--body-sm"

@@ -6,48 +6,42 @@ exports[`PageNotFound > renders the 404 error message 1`] = `
     class="container mx-auto px-6 py-16"
   >
     <div
-      class="flex min-h-[60vh] flex-col items-center justify-center"
+      class="flex min-h-[60vh] flex-col items-center justify-center gap-12"
     >
       <div
-        class="mb-8 flex flex-col items-center"
+        class="flex flex-col items-center gap-8"
       >
-        <h1
-          class="typography typography--align-start typography--color-default typography--h1 text-accent-strong"
-          data-slot="typography"
-          data-type="h1"
+        <div
+          class="flex flex-col items-center"
         >
-          404
-        </h1>
-        <h2
-          class="typography typography--align-start typography--color-default typography--h2"
-          data-slot="typography"
-          data-type="h2"
+          <h1
+            class="typography typography--align-start typography--color-default typography--h1 text-accent-strong"
+            data-slot="typography"
+            data-type="h1"
+          >
+            404
+          </h1>
+          <h2
+            class="typography typography--align-start typography--color-default typography--h2"
+            data-slot="typography"
+            data-type="h2"
+          >
+            Page Not Found
+          </h2>
+          <p
+            class="typography typography--align-start typography--color-muted typography--body"
+            data-slot="typography"
+            data-type="body"
+          >
+            The page you're looking for doesn't exist or has been moved.
+          </p>
+        </div>
+        <div
+          class="flex flex-col gap-4 sm:flex-row"
         >
-          Page Not Found
-        </h2>
-        <p
-          class="typography typography--align-start typography--color-muted typography--body"
-          data-slot="typography"
-          data-type="body"
-        >
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-      </div>
-      <div
-        class="mb-12 flex flex-col gap-4 sm:flex-row"
-      >
-        <a
-          class="no-underline"
-          href="/"
-        >
-          <button
-            class="button button--lg button--primary"
-            data-rac=""
-            data-react-aria-pressable="true"
-            data-slot="button"
-            id="react-aria-_r_0_"
-            tabindex="0"
-            type="button"
+          <a
+            class="button button--lg button--primary no-underline"
+            href="/"
           >
             <svg
               aria-hidden="true"
@@ -70,39 +64,39 @@ exports[`PageNotFound > renders the 404 error message 1`] = `
               />
             </svg>
             Go to Homepage
-          </button>
-        </a>
-        <button
-          class="button button--lg button--outline"
-          data-rac=""
-          data-react-aria-pressable="true"
-          data-slot="button"
-          id="react-aria-_r_2_"
-          tabindex="0"
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="lucide lucide-arrow-left size-4"
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
+          </a>
+          <button
+            class="button button--lg button--outline"
+            data-rac=""
+            data-react-aria-pressable="true"
+            data-slot="button"
+            id="react-aria-_r_0_"
+            tabindex="0"
+            type="button"
           >
-            <path
-              d="m12 19-7-7 7-7"
-            />
-            <path
-              d="M19 12H5"
-            />
-          </svg>
-          Go Back
-        </button>
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-arrow-left size-4"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="m12 19-7-7 7-7"
+              />
+              <path
+                d="M19 12H5"
+              />
+            </svg>
+            Go Back
+          </button>
+        </div>
       </div>
       <p
         class="typography typography--align-start typography--color-muted typography--body-sm"

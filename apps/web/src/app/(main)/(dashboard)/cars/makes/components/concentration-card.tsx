@@ -51,15 +51,17 @@ export async function ConcentrationCard({
   const arcs = donutArcs(segments);
 
   return (
-    <div className="flex flex-col gap-2.5">
-      <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
-        Concentration
-      </Typography.Paragraph>
-      <Typography.Paragraph className="font-medium" color="muted">
-        Top five makes against the rest
-      </Typography.Paragraph>
+    <div className="flex flex-col gap-[18px]">
+      <div className="flex flex-col gap-2.5">
+        <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+          Concentration
+        </Typography.Paragraph>
+        <Typography.Paragraph className="font-medium" color="muted">
+          Top five makes against the rest
+        </Typography.Paragraph>
+      </div>
 
-      <div className="mt-2 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-9">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-9">
         <div className="relative size-[172px] shrink-0">
           <svg className="block size-full" role="img" viewBox="0 0 190 190">
             <title>Share of registrations held by the five largest makes</title>
