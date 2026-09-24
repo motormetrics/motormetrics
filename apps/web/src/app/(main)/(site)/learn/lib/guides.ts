@@ -231,7 +231,7 @@ This is one reason why the total cost of ownership for EVs can be competitive de
 
 ## Check Your PARF Value
 
-Use our [PARF Calculator](/cars/parf) to estimate your vehicle's current PARF rebate based on registration date and ARF paid.
+Use our [PARF Calculator](/cars/parf) to estimate your vehicle's current PARF rebate based on registration date and ARF paid. To get LTA's exact figure, or to add the COE rebate on top, see [how to check your PARF rebate and deregistration value](/learn/check-parf-rebate).
 
 ## Frequently Asked Questions
 
@@ -250,12 +250,127 @@ PARF is a government rebate. Scrap value is what scrapyards pay for the vehicle'
 - [COE](/learn/coe): Certificate of Entitlement
 - [OMV](/learn/omv): Determines your ARF
 - [PQP](/learn/pqp): COE renewal cost`,
-    relatedTerms: ["ARF", "COE", "OMV", "PQP"],
+    relatedTerms: ["Deregistration Value", "ARF", "COE", "OMV", "PQP"],
     relatedLinks: [
       { label: "PARF Calculator", href: "/cars/parf" },
       { label: "Deregistration Statistics", href: "/cars/deregistrations" },
     ],
-    lastUpdated: "2026-04-11",
+    lastUpdated: "2026-09-25",
+  },
+  {
+    slug: "check-parf-rebate",
+    term: "Deregistration Value",
+    title: "How to Check Your PARF Rebate and Deregistration Value",
+    description:
+      "Your car's deregistration value is its PARF rebate plus its COE rebate. Check it on OneMotoring, or work it out yourself with our step-by-step example.",
+    excerpt:
+      "Your car's deregistration value is the PARF rebate plus the COE rebate you get back when you deregister it. You can check the exact figure on OneMotoring, or estimate it yourself from the ARF and COE premium you paid.",
+    content: `## What is Deregistration Value?
+
+A car's **deregistration value** (often called its "paper value") is the money you get back from the government when you deregister it:
+
+**Deregistration value = PARF rebate + COE rebate**
+
+- The **PARF rebate** returns part of the [ARF](/learn/arf) you paid at registration. It depends on the car's age and when its COE was obtained.
+- The **COE rebate** returns the unused part of the COE premium you paid, pro-rated by the months left on the COE.
+
+Scrap or export value is separate. It is what a scrapyard or exporter pays you for the car itself, on top of the rebates.
+
+## How to Check Your PARF Rebate on OneMotoring
+
+The exact figure comes from LTA. Use the **Enquire PARF/COE Rebate for Registered Vehicle** e-service on [OneMotoring](https://onemotoring.lta.gov.sg):
+
+1. Log in to OneMotoring with Singpass and request an **LTA access code** under Digital Services. Since 30 June 2025 the rebate enquiry asks for one.
+2. Open the rebate enquiry and enter your **vehicle number** and the **access code**.
+3. Enter the **date you plan to deregister**. The rebate falls as the car ages, so the date changes the answer.
+4. The result shows your PARF rebate and COE rebate for that date.
+
+A dealer or scrapyard can run the same check for you if you give them the access code.
+
+## How to Calculate Deregistration Value Yourself
+
+If you know the ARF and the COE premium you paid, you can estimate both rebates.
+
+### Step 1: PARF rebate
+
+Multiply the ARF paid by the rate for the car's age at deregistration, then apply the cap for when the COE was obtained:
+
+| Age at deregistration | COE up to 1st Feb 2026 exercise | COE from 2nd Feb 2026 exercise |
+|-----------------------|---------------------|--------------------------------|
+| Not more than 5 years | 75% of ARF | 30% of ARF |
+| Above 5 to 6 years | 70% of ARF | 25% of ARF |
+| Above 6 to 7 years | 65% of ARF | 20% of ARF |
+| Above 7 to 8 years | 60% of ARF | 15% of ARF |
+| Above 8 to 9 years | 55% of ARF | 10% of ARF |
+| Above 9 to 10 years | 50% of ARF | 5% of ARF |
+| More than 10 years | Nil | Nil |
+
+**Caps:**
+- COE obtained before the 2nd bidding exercise of February 2023: **no cap**
+- COE obtained from the 2nd February 2023 exercise to the 1st February 2026 exercise: **$60,000**
+- COE obtained from the 2nd February 2026 exercise onwards: **$30,000**
+
+### Step 2: COE rebate
+
+**COE rebate = COE premium paid × unused months ÷ 120**
+
+The unused period is counted in months, with leftover days as a fraction of a month. For a renewed COE, the rebate is based on the PQP you paid, pro-rated over the renewal period.
+
+### Worked example
+
+A car registered with a COE from March 2023, with **$40,000 ARF** and a **$100,000** COE premium, deregistered at **6 years and 3 months** (75 months used, 45 months left):
+
+- **PARF rebate**: $40,000 × 65% = **$26,000** (under the $60,000 cap)
+- **COE rebate**: $100,000 × 45 ÷ 120 = **$37,500**
+- **Deregistration value**: $26,000 + $37,500 = **$63,500**
+
+The same car with a COE from the 2nd February 2026 exercise would get $40,000 × 20% = $8,000 in PARF rebate instead.
+
+Use the [PARF Calculator](/cars/parf) to compare the PARF rebate under the old and new schedules.
+
+## Who Gets a PARF Rebate?
+
+A car qualifies only if it:
+
+- Has **never been laid up**
+- Is **not more than 10 years old** when deregistered
+- Was **brand new** when registered (or an imported used car no more than 3 years old, registered after 1 September 2007)
+
+If you renew your COE, the car loses PARF eligibility for good. Only the COE rebate applies from then on.
+
+## Using Your Rebates
+
+After deregistering, you have **12 months** to use the rebates. You can:
+
+- **Encash** them
+- **Offset** them against taxes and fees when registering a new vehicle
+- **Transfer** them to another party
+
+If you deregister to export the car within 2 years of registration, the COE rebate is capped at 80%.
+
+## Frequently Asked Questions
+
+### Why is my PARF rebate lower than I expected?
+The rate drops every year after year 5, and the cap depends on when the COE was obtained. Cars with COEs from the 2nd February 2026 exercise onwards get far lower rates and a $30,000 cap.
+
+### Do I need my ARF to check my rebate?
+Not for the OneMotoring enquiry, which shows the rebate directly. To work it out yourself you need the ARF paid, which is set from the car's [OMV](/learn/omv).
+
+### Is the COE rebate paid if the car is over 10 years old?
+Yes, if the COE has been renewed and still has unused months. The PARF rebate is nil after 10 years, but the COE rebate on the renewed COE still applies.
+
+## Related Terms
+
+- [PARF](/learn/parf): The rebate on your ARF
+- [ARF](/learn/arf): The fee PARF is calculated from
+- [COE](/learn/coe): Certificate of Entitlement
+- [PQP](/learn/pqp): The price of renewing a COE`,
+    relatedTerms: ["PARF", "ARF", "COE", "PQP"],
+    relatedLinks: [
+      { label: "PARF Calculator", href: "/cars/parf" },
+      { label: "Deregistration Statistics", href: "/cars/deregistrations" },
+    ],
+    lastUpdated: "2026-09-25",
   },
   {
     slug: "arf",
