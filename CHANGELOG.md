@@ -1,3 +1,18 @@
+## [5.26.0](https://github.com/motormetrics/motormetrics/compare/v5.25.0...v5.26.0) (2026-09-24)
+
+### Features
+
+* **web:** add arf calculator page ([48eccc3](https://github.com/motormetrics/motormetrics/commit/48eccc3e8670f0ecd0d88f6a561f6574be1de820))
+* **web:** add yearly and record coe price tables ([db1f0bb](https://github.com/motormetrics/motormetrics/commit/db1f0bb0cc8443eae823de7465f33c495a897ca7))
+* **web:** keep yearly premium type file-local ([d7dfc82](https://github.com/motormetrics/motormetrics/commit/d7dfc825ee004f391bfa781d8ff8f8368d506946))
+* **web:** link arf guide to the calculator ([a35ac2d](https://github.com/motormetrics/motormetrics/commit/a35ac2d2fbe2a78e50b388ee75ab2652cac1272a))
+* **web:** retarget coe results at price history ([8541ea1](https://github.com/motormetrics/motormetrics/commit/8541ea1d21519fd64275a318668a4e598faba347))
+
+### Bug Fixes
+
+* **web:** drop parf cap for pre-2023 coes ([ff195fe](https://github.com/motormetrics/motormetrics/commit/ff195fe6a40c04ec9615c27b958bf0657567cbf5))
+* **web:** note uncapped parf instead of a selector ([f1deccf](https://github.com/motormetrics/motormetrics/commit/f1deccf76915685aa6e740f537f3478bba011a82))
+
 ## [5.25.0](https://github.com/motormetrics/motormetrics/compare/v5.24.3...v5.25.0) (2026-09-24)
 
 ### Features
