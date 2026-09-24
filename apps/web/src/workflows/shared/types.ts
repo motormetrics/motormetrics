@@ -1,7 +1,6 @@
 export type WorkflowEventType =
   | "step:start"
   | "step:complete"
-  | "step:error"
   | "data:processed"
   | "post:generated"
   | "cache:revalidated";

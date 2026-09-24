@@ -3,7 +3,6 @@ import {
   getCoeResults,
   getCoeResultsByPeriod,
   getLatestCoeResults,
-  getPreviousCoeResults,
 } from "@web/queries/coe";
 import { describe, expect, it } from "vitest";
 import {
@@ -97,14 +96,5 @@ describe("COE queries", () => {
     await getCoeResultsByPeriod();
 
     expect(cacheTagMock).toHaveBeenCalledWith("coe:period:12m");
-  });
-
-  it("should return empty array when fewer than 2 bidding rounds exist", async () => {
-    queueSelectDistinct([{ month: "2024-05", biddingNo: 1 }]);
-
-    const result = await getPreviousCoeResults();
-
-    expect(result).toEqual([]);
-    expect(cacheTagMock).toHaveBeenCalledWith("coe:previous");
   });
 });

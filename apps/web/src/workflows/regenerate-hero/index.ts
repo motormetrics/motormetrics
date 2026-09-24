@@ -5,7 +5,6 @@ import {
   handleAIError,
   revalidatePostsCache,
 } from "@web/workflows/shared";
-import { fetch } from "workflow";
 
 interface RegenerateHeroPayload {
   postId: string;
@@ -68,8 +67,6 @@ export async function regenerateHeroWorkflow(
   payload: RegenerateHeroPayload,
 ): Promise<RegenerateHeroResult> {
   "use workflow";
-
-  globalThis.fetch = fetch;
 
   const { postId } = payload;
   console.log(`[REGENERATE-HERO] Starting workflow for postId=${postId}`);

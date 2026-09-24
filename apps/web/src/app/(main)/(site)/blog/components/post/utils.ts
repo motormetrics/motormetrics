@@ -1,8 +1,5 @@
 import type { SelectPost } from "@motormetrics/database/schema";
-import { differenceInDays } from "date-fns";
 import readingTime from "reading-time";
-
-type ChipColor = "default" | "warning" | "accent" | "danger" | "success";
 
 /**
  * The single source of truth for how a post is categorised.
@@ -19,47 +16,33 @@ type ChipColor = "default" | "warning" | "accent" | "danger" | "success";
 export const POST_CATEGORIES = {
   "monthly-update": {
     label: "Monthly Update",
-    className: "text-accent-strong",
-    color: "accent",
     articleSection: "Singapore Car Market Monthly Update",
   },
   cars: {
     label: "Cars",
-    className: "text-success",
-    color: "success",
     articleSection: "Car Registrations",
   },
   coe: {
     label: "COE",
-    className: "text-accent-strong",
-    color: "accent",
     articleSection: "COE Bidding",
   },
   pqp: {
     label: "PQP",
-    className: "text-warning",
-    color: "warning",
     articleSection: "COE Renewal",
   },
   deregistrations: {
     label: "Deregistrations",
-    className: "text-danger",
-    color: "danger",
     articleSection: "Vehicle Deregistrations",
   },
   // Legacy: the EV post workflow is retired, but published posts carry it.
   "electric-vehicles": {
     label: "Electric",
-    className: "text-accent-strong",
-    color: "accent",
     articleSection: "Electric Vehicles",
   },
 } as const satisfies Record<
   string,
   {
     label: string;
-    className: string;
-    color: ChipColor;
     articleSection: string;
   }
 >;
@@ -67,24 +50,15 @@ export const POST_CATEGORIES = {
 export type PostCategoryKey = keyof typeof POST_CATEGORIES;
 
 /** Widened view of POST_CATEGORIES, so an unknown dataType can be looked up. */
-const categoryConfig: Record<
-  string,
-  {
-    label: string;
-    className: string;
-    color: ChipColor;
-  }
-> = POST_CATEGORIES;
+const categoryConfig: Record<string, { label: string }> = POST_CATEGORIES;
 
 // Get category configuration for a post
 /**
  * Fallback for a post whose dataType is missing or not in POST_CATEGORIES.
  * Reaching this is a signal a dataType was added without registering it above.
  */
-export const defaultCategory = {
+const defaultCategory = {
   label: "Insights",
-  className: "text-muted",
-  color: "default" as ChipColor,
 };
 
 /**
@@ -107,11 +81,6 @@ export const getCategoryConfig = (post: SelectPost) => {
 export const getReadingTime = (post: SelectPost): number =>
   Math.max(1, Math.ceil(readingTime(post.content).minutes));
 
-// Get excerpt from post (top-level field in flattened schema)
-export const getExcerpt = (post: SelectPost): string | undefined => {
-  return post.excerpt ?? undefined;
-};
-
 // Format date for display
 export const formatDate = (
   date: Date,
@@ -123,10 +92,4 @@ export const formatDate = (
       : { month: "short", day: "numeric" };
 
   return new Date(date).toLocaleDateString("en-SG", options);
-};
-
-// Check if post is new (published within threshold days)
-export const isNewPost = (post: SelectPost, daysThreshold = 14): boolean => {
-  const publishedDate = post.publishedAt ?? post.createdAt;
-  return differenceInDays(new Date(), publishedDate) <= daysThreshold;
 };

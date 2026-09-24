@@ -34,26 +34,9 @@ export namespace Pqp {
     savings10Year: number;
   }
 
-  export interface RenewalRecord {
-    category: keyof Rates;
-    pqpRate: number;
-    coePremium: number;
-    pqpCost5Year: number;
-    pqpCost10Year: number;
-    pqpSavings5Year: number;
-    pqpSavings10Year: number;
-    recommendation: string;
-  }
-
   export interface TableRow extends Rates {
     key: string;
     month: string;
-  }
-
-  export interface TableColumn {
-    key: string;
-    label: string;
-    sortable?: boolean;
   }
 
   export interface Overview {
@@ -63,6 +46,4 @@ export namespace Pqp {
     comparison: Comparison[];
     categorySummaries: CategorySummary[];
   }
-
-  export type MonthlyRates = Record<string, Rates>;
 }

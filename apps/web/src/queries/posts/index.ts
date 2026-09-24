@@ -73,18 +73,6 @@ export async function getAllPosts() {
   });
 }
 
-export async function getRecentPosts(limit = 3) {
-  "use cache";
-  cacheLife("max");
-  cacheTag("posts:recent");
-
-  return db.query.posts.findMany({
-    where: { publishedAt: { isNotNull: true } },
-    orderBy: { publishedAt: "desc" },
-    limit,
-  });
-}
-
 export async function getPostBySlug(slug: string) {
   "use cache";
   cacheLife("max");

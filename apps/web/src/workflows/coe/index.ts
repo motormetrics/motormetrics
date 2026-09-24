@@ -5,7 +5,6 @@ import { getCOELatestRecord } from "@web/queries/coe/latest-month";
 import { updateCoe } from "@web/workflows/coe/steps/process-data";
 import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
-import { fetch } from "workflow";
 
 interface CoeWorkflowPayload {
   month?: string;
@@ -24,8 +23,6 @@ export async function coeWorkflow(
   payload?: CoeWorkflowPayload,
 ): Promise<CoeWorkflowResult> {
   "use workflow";
-
-  globalThis.fetch = fetch;
 
   await emitEvent({ type: "step:start", step: "processCoeData" });
   const result = await processCoeData();

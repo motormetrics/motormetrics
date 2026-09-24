@@ -74,15 +74,14 @@ const SERIES_MONTHS = 12;
 /** How many makes the by-make table lists before it stops. */
 const MAKE_LIMIT = 15;
 
-export const typeSearchParams = {
+const typeSearchParams = {
   month: parseAsString,
   period: parseAsStringLiteral(PERIODS).withDefault(DEFAULT_PERIOD),
 };
-export const loadTypeSearchParams = createLoader(typeSearchParams);
+const loadTypeSearchParams = createLoader(typeSearchParams);
 
 export interface TypeDetailConfig {
   category: "fuel-types" | "vehicle-types";
-  description: string;
 }
 
 interface TypeDetailProps {

@@ -1,6 +1,6 @@
 import type { SearchParams } from "nuqs/server";
-import { loadSearchParams, RANGE_LABELS } from "../search-params";
-import { isFuelFilter, loadMakeRows } from "./make-rows";
+import { isFuelFilter, loadSearchParams, RANGE_LABELS } from "../search-params";
+import { loadMakeRows } from "./make-rows";
 import { MakesTable } from "./makes-table";
 
 export async function AllMakesCard({

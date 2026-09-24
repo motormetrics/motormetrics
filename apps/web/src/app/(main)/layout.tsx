@@ -1,6 +1,5 @@
 import { Announcement } from "@web/components/announcement";
 import { AppNav } from "@web/components/app-nav";
-import { Banner } from "@web/components/banner";
 import { Footer } from "@web/components/footer";
 import { NotificationPrompt } from "@web/components/notification-prompt";
 import { SurveyPrompt } from "@web/components/survey-prompt";
@@ -22,7 +21,6 @@ export default function MainLayout({
       <NotificationPrompt />
       <SurveyPrompt />
       <Announcement />
-      <Banner />
 
       {/*
         Every page draws the same column — `max-w-page`, defined once in

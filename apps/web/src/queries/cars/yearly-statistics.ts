@@ -8,10 +8,6 @@ interface YearlyTotal {
   total: number;
 }
 
-interface YearOnly {
-  year: number;
-}
-
 interface MakeValue {
   make: string;
   value: number;
@@ -60,25 +56,6 @@ export async function getYearlyRegistrations(): Promise<YearlyTotal[]> {
   }
 
   return Array.from(totals, ([year, total]) => ({ year, total }));
-}
-
-/**
- * Get available years in descending order (for dropdowns/selectors)
- */
-export async function getAvailableYears(): Promise<YearOnly[]> {
-  "use cache";
-  cacheLife("max");
-  cacheTag("cars:annual");
-
-  const rows = await db
-    .selectDistinct({ month: cars.month })
-    .from(cars)
-    .where(gt(cars.number, 0))
-    .orderBy(desc(cars.month));
-
-  const years = new Set(rows.map((row) => yearOf(row.month)));
-
-  return Array.from(years, (year) => ({ year }));
 }
 
 /**

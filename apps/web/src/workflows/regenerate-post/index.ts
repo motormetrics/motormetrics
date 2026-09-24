@@ -12,7 +12,6 @@ import {
   handleAIError,
   revalidatePostsCache,
 } from "@web/workflows/shared";
-import { fetch } from "workflow";
 
 interface RegeneratePostPayload {
   month: string;
@@ -35,9 +34,6 @@ export async function regeneratePostWorkflow(
   payload: RegeneratePostPayload,
 ): Promise<RegeneratePostResult> {
   "use workflow";
-
-  // Enable WDK's durable fetch for AI SDK
-  globalThis.fetch = fetch;
 
   const { month, dataType } = payload;
 

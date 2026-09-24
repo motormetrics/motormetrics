@@ -5,7 +5,6 @@ import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { updateCars } from "@web/workflows/cars/steps/process-data";
 import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
-import { fetch } from "workflow";
 
 interface CarsWorkflowPayload {
   month?: string;
@@ -24,9 +23,6 @@ export async function carsWorkflow(
   payload?: CarsWorkflowPayload,
 ): Promise<CarsWorkflowResult> {
   "use workflow";
-
-  // Enable WDK's durable fetch for AI SDK
-  globalThis.fetch = fetch;
 
   await emitEvent({ type: "step:start", step: "processCarsData" });
   const result = await processCarsData();

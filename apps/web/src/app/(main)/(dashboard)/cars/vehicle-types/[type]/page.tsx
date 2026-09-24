@@ -14,8 +14,6 @@ import type { SearchParams } from "nuqs/server";
 
 const config: TypeDetailConfig = {
   category: "vehicle-types",
-  description:
-    "cars registrations by month. Explore registration trends, statistics and distribution by vehicle type for the month in Singapore.",
 };
 
 interface PageProps {

@@ -23,7 +23,6 @@ vi.mock("@motormetrics/ai/save-post", () => ({
 }));
 
 vi.mock("workflow", () => ({
-  fetch: vi.fn(),
   getWritable: vi.fn(() => ({
     getWriter: () => ({
       write: vi.fn().mockResolvedValue(undefined),

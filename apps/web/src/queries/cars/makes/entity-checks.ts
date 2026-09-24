@@ -12,11 +12,6 @@ interface EntityCheckConfig {
   normalise: boolean;
 }
 
-const MAKE_CHECK: EntityCheckConfig = {
-  fieldName: "make",
-  normalise: false,
-};
-
 const FUEL_TYPE_CHECK: EntityCheckConfig = {
   fieldName: "fuelType",
   normalise: true,
@@ -33,17 +28,6 @@ function findEntity(config: EntityCheckConfig, value: string) {
     where: { [config.fieldName]: { ilike: pattern } },
     columns: { [config.fieldName]: true },
   });
-}
-
-export async function checkMakeIfExist(
-  make: string,
-): Promise<{ make: string } | undefined> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`cars:make:${make}`);
-
-  const result = await findEntity(MAKE_CHECK, make);
-  return result as { make: string } | undefined;
 }
 
 export async function checkFuelTypeIfExist(

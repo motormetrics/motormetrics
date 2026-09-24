@@ -20,7 +20,7 @@ export async function fetchMonthsForCars(): Promise<Month[]> {
   return results.map((result) => result.month);
 }
 
-export async function fetchMonthsForCOE(): Promise<Month[]> {
+async function fetchMonthsForCOE(): Promise<Month[]> {
   const results = await getCoeMonths();
   return results.map((result) => result.month);
 }

@@ -11,14 +11,7 @@ import {
 } from "@web/queries/cars";
 import { getAllCarLogos } from "@web/queries/logos";
 import { cacheLife, cacheTag } from "next/cache";
-import {
-  FUEL_FILTERS,
-  type FuelFilter,
-  isFuelFilter,
-  type Range,
-} from "../search-params";
-
-export { FUEL_FILTERS, type FuelFilter, isFuelFilter };
+import { type FuelFilter, isFuelFilter, type Range } from "../search-params";
 
 /** The `cars.fuelType` value that means battery-electric and nothing else. */
 const BEV_FUEL_TYPE = "Electric";
@@ -57,8 +50,6 @@ export interface MakeRow {
 }
 
 export interface MakeRowsResult {
-  /** Every fuel type with registrations, for the filter tabs. */
-  fuelTypes: string[];
   latestMonth: string | null;
   rows: MakeRow[];
   total: number;
@@ -297,7 +288,7 @@ export async function loadMakeRows(
   );
 
   if (!latestMonth) {
-    return { fuelTypes, latestMonth: null, rows: [], total: 0 };
+    return { latestMonth: null, rows: [], total: 0 };
   }
 
   let totals: MakeTotals[];
@@ -324,7 +315,6 @@ export async function loadMakeRows(
   const rows = finaliseRows(totals, logoUrlBySlug);
 
   return {
-    fuelTypes,
     latestMonth,
     rows,
     total: rows.reduce((sum, row) => sum + row.count, 0),

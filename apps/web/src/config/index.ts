@@ -1,5 +1,4 @@
 import { slugify } from "@motormetrics/utils/slugify";
-import { withRelatedProject } from "@vercel/related-projects";
 import type { Announcement, LinkItem } from "@web/types";
 import { Battery, Droplet, Fuel, Zap } from "lucide-react";
 
@@ -28,22 +27,6 @@ export const SUPPORT_EMAIL = "support@motormetrics.app";
 export const GITHUB_REPO_URL = "https://github.com/motormetrics/motormetrics";
 
 // =============================================================================
-// API Configuration
-// =============================================================================
-const API_VERSION = "v1";
-const DEFAULT_API_URL = `https://api.${DOMAIN_NAME}`;
-
-export const API_BASE_URL =
-  // TODO: Remove this check once Hono is working on Vercel
-  process.env.NEXT_PUBLIC_API_URL ??
-  withRelatedProject({
-    projectName: "api",
-    defaultHost: process.env.NEXT_PUBLIC_API_URL ?? DEFAULT_API_URL,
-  });
-
-export const API_URL = `${API_BASE_URL}/${API_VERSION}`;
-
-// =============================================================================
 // Feature Flags
 // =============================================================================
 export const FEATURE_FLAG_UNRELEASED =
@@ -52,17 +35,6 @@ export const FEATURE_FLAG_UNRELEASED =
 // =============================================================================
 // Data Constants (Fuel Types, Vehicle Types, etc.)
 // =============================================================================
-export enum FUEL_TYPE {
-  DIESEL = "Diesel",
-  DIESEL_ELECTRIC = "Diesel-Electric",
-  DIESEL_ELECTRIC_PLUG_IN = "Diesel-Electric (Plug-In)",
-  ELECTRIC = "Electric",
-  OTHERS = "Others",
-  PETROL = "Petrol",
-  PETROL_ELECTRIC = "Petrol-Electric",
-  PETROL_ELECTRIC_PLUG_IN = "Petrol-Electric (Plug-In)",
-}
-
 export const HYBRID_REGEX = /^(Diesel|Petrol)-(Electric)(\s\(Plug-In\))?$/;
 
 export const FUEL_TYPE_LINKS: LinkItem[] = [
@@ -111,25 +83,11 @@ export const FUEL_TYPE_LINKS: LinkItem[] = [
 // =============================================================================
 // UI Constants
 // =============================================================================
-export const MEDAL_MAPPING: Record<number, string> = {
-  1: "🥇",
-  2: "🥈",
-  3: "🥉",
-};
-
 export const announcements: Announcement[] = [
   {
     content:
       "SG Cars Trends is now MotorMetrics. Please update your bookmark to motormetrics.app.",
   },
-  // {
-  //   content: "🚗 Latest car registration data now available!",
-  //   paths: ["/cars"],
-  // },
-  // {
-  //   content: "📊 New COE bidding results are in!",
-  //   paths: ["/coe"],
-  // },
 ];
 
 // =============================================================================

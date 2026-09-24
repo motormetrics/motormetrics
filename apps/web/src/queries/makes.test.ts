@@ -3,11 +3,9 @@ import { getPopularMakes } from "./cars/makes/current-year-popular-makes";
 import {
   getFuelTypeData,
   getMakeDetails,
-  getVehicleTypeData,
 } from "./cars/makes/entity-breakdowns";
 import {
   checkFuelTypeIfExist,
-  checkMakeIfExist,
   checkVehicleTypeIfExist,
 } from "./cars/makes/entity-checks";
 import {
@@ -75,28 +73,6 @@ describe("car make breakdown queries", () => {
     });
   });
 
-  it("returns vehicle type aggregates for sport utility vehicles", async () => {
-    // getVehicleTypeData now uses db.batch with 2 queries
-    queueBatch([
-      [{ total: 9 }],
-      [{ month: "2024-03", make: "BMW", vehicleType: "SUV", count: 9 }],
-    ]);
-
-    const result = await getVehicleTypeData("sport-utility", "2024-03");
-
-    expect(result).toEqual({
-      total: 9,
-      data: [
-        {
-          month: "2024-03",
-          make: "BMW",
-          vehicleType: "SUV",
-          count: 9,
-        },
-      ],
-    });
-  });
-
   it("should return fuel type data without month filter", async () => {
     queueBatch([
       [{ total: 25 }],
@@ -113,22 +89,6 @@ describe("car make breakdown queries", () => {
     });
   });
 
-  it("should return vehicle type data without month filter", async () => {
-    queueBatch([
-      [{ total: 15 }],
-      [{ month: "2024-01", make: "Toyota", vehicleType: "SUV", count: 15 }],
-    ]);
-
-    const result = await getVehicleTypeData("suv");
-
-    expect(result).toEqual({
-      total: 15,
-      data: [
-        { month: "2024-01", make: "Toyota", vehicleType: "SUV", count: 15 },
-      ],
-    });
-  });
-
   it("should return zero total when no results match", async () => {
     queueBatch([[{ total: null }], []]);
 
@@ -141,16 +101,6 @@ describe("car make breakdown queries", () => {
 describe("entity existence checks", () => {
   beforeEach(() => {
     resetDbMocks();
-  });
-
-  it("returns make when it exists in database", async () => {
-    vi.mocked(dbMock.query.cars.findFirst).mockResolvedValueOnce({
-      make: "Tesla",
-    });
-
-    await expect(checkMakeIfExist("tesla")).resolves.toEqual({
-      make: "Tesla",
-    });
   });
 
   it("returns undefined when fuel type does not exist", async () => {

@@ -8,7 +8,6 @@ export const getCoeMonthlyRevalidationTags = (
     "coe:months",
     "coe:results",
     "coe:trends",
-    "coe:bidding-rounds",
     `coe:month:${month}`,
     `coe:year:${year}`,
   ];

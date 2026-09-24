@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   fetchMonthsForCars,
-  fetchMonthsForCOE,
   fetchMonthsForDeregistrations,
   getLatestMonth,
   getMonthOrLatest,
@@ -57,27 +56,6 @@ describe("months utilities", () => {
       mockGetCarsMonths.mockResolvedValueOnce([]);
 
       const result = await fetchMonthsForCars();
-
-      expect(result).toEqual([]);
-    });
-  });
-
-  describe("fetchMonthsForCOE", () => {
-    it("should return array of month strings from COE data", async () => {
-      mockGetCoeMonths.mockResolvedValueOnce([
-        { month: "2024-01" },
-        { month: "2024-02" },
-      ]);
-
-      const result = await fetchMonthsForCOE();
-
-      expect(result).toEqual(["2024-01", "2024-02"]);
-    });
-
-    it("should return empty array when no COE data", async () => {
-      mockGetCoeMonths.mockResolvedValueOnce([]);
-
-      const result = await fetchMonthsForCOE();
 
       expect(result).toEqual([]);
     });

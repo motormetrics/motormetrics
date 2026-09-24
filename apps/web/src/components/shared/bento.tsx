@@ -27,17 +27,6 @@ export function Bento({
   );
 }
 
-/** A stacked column within the bento. */
-export function BentoColumn({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return <div className={cn("flex flex-col gap-6", className)}>{children}</div>;
-}
-
 /** White bento card — the default surface for a data block. */
 export function SurfaceCard({
   children,
@@ -56,27 +45,6 @@ export function SurfaceCard({
       {children}
     </div>
   );
-}
-
-/**
- * Warm sand well holding the right-hand rail. Spans both data columns at `xl`,
- * where there is no third column to sit in.
- *
- * Exported as a class string as well, for the places where the rail has to be
- * an existing wrapper — the dashboard rail is an `AnimatedGrid`, which owns the
- * stagger context and so cannot be nested inside another element.
- */
-export const RAIL_CLASS =
-  "flex flex-col gap-6 rounded-4xl bg-default p-6 shadow-surface xl:col-span-2 xl:p-8 2xl:col-span-1";
-
-export function Rail({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return <div className={cn(RAIL_CLASS, className)}>{children}</div>;
 }
 
 /** Dark feature panel — one per page, always the rail's closing block. */

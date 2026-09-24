@@ -5,7 +5,7 @@ import { Hairline, OverviewGrid } from "@web/components/shared/overview";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateItemListSchema } from "@web/lib/metadata";
-import { getGroupedMakes } from "@web/queries/cars";
+import { getDistinctMakes } from "@web/queries/cars/filter-options";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
@@ -32,7 +32,7 @@ const structuredData: WithContext<WebPage> = {
 };
 
 async function MakesItemList() {
-  const { sortedMakes } = await getGroupedMakes();
+  const makes = await getDistinctMakes();
 
   return (
     <StructuredData
@@ -40,7 +40,7 @@ async function MakesItemList() {
         "@context": "https://schema.org",
         ...generateItemListSchema(
           "Car Makes in Singapore",
-          sortedMakes.map((make) => ({
+          makes.map(({ make }) => ({
             name: make,
             url: `${SITE_URL}/cars/makes/${slugify(make)}`,
           })),

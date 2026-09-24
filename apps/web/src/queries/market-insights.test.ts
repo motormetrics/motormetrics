@@ -1,52 +1,10 @@
-import { describe, expect, it, vi } from "vitest";
-import {
-  cacheLifeMock,
-  cacheTagMock,
-  queueBatch,
-  queueSelect,
-  resetDbMocks,
-} from "./test-utils";
-
-vi.mock("@web/queries/cars/monthly-registrations", () => ({
-  getCarsData: vi.fn(),
-}));
-
-import { getCarsData } from "@web/queries/cars/monthly-registrations";
+import { describe, expect, it } from "vitest";
 import * as marketInsights from "./cars/market-insights";
-
-const mockedGetCarsData = vi.mocked(getCarsData);
+import { cacheTagMock, queueSelect, resetDbMocks } from "./test-utils";
 
 describe("car market insight queries", () => {
   beforeEach(() => {
     resetDbMocks();
-    mockedGetCarsData.mockReset();
-  });
-
-  it("returns the top fuel and vehicle types", async () => {
-    // getTopTypes uses db.batch with 2 queries
-    queueBatch([
-      [{ name: "Electric", total: 60 }],
-      [{ name: "SUV", total: 40 }],
-    ]);
-
-    const result = await marketInsights.getTopTypes("2024-04");
-
-    expect(result).toEqual({
-      month: "2024-04",
-      topFuelType: { name: "Electric", total: 60 },
-      topVehicleType: { name: "SUV", total: 40 },
-    });
-    expect(cacheLifeMock).toHaveBeenCalledWith("max");
-    expect(cacheTagMock).toHaveBeenCalledWith("cars:month:2024-04");
-  });
-
-  it("falls back to placeholder entries when no types exist", async () => {
-    queueBatch([[], []]);
-
-    const result = await marketInsights.getTopTypes("2024-05");
-
-    expect(result.topFuelType).toEqual({ name: "N/A", total: 0 });
-    expect(result.topVehicleType).toEqual({ name: "N/A", total: 0 });
   });
 
   it("returns top makes for the month", async () => {
@@ -105,30 +63,5 @@ describe("car market insight queries", () => {
       { make: "Make 3", count: 4 },
       { make: "Make 2", count: 3 },
     ]);
-  });
-
-  it("computes market share breakdowns from cached data", async () => {
-    mockedGetCarsData.mockResolvedValue({
-      month: "2024-07",
-      total: 100,
-      fuelType: [
-        { name: "Electric", count: 60 },
-        { name: "Hybrid", count: 40 },
-      ],
-      vehicleType: [],
-    });
-
-    const result = await marketInsights.getCarMarketShareData(
-      "2024-07",
-      "fuelType",
-    );
-
-    expect(result).toMatchObject({
-      month: "2024-07",
-      total: 100,
-      category: "fuelType",
-      dominantType: { name: "Electric", percentage: 60 },
-    });
-    expect(result.data).toHaveLength(2);
   });
 });

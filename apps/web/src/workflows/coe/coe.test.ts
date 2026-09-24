@@ -42,7 +42,6 @@ vi.mock("next/cache", () => ({
 }));
 
 vi.mock("workflow", () => ({
-  fetch: vi.fn(),
   getStepMetadata: vi.fn(() => ({ attempt: 1 })),
   getWritable: vi.fn(() => ({
     getWriter: () => ({

@@ -64,7 +64,7 @@ export async function getRelatedPosts(postId: string, limit: number = 3) {
   }
 }
 
-export async function getPopularPosts(
+async function getPopularPosts(
   limit: number = 10,
 ): Promise<Array<{ postId: string; viewCount: number }>> {
   "use cache";

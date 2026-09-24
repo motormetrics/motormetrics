@@ -1,5 +1,4 @@
 export * from "./categories";
-export * from "./category-summary";
 export * from "./compare";
 export * from "./dimension-stats";
 export * from "./electric-vehicles";
@@ -9,7 +8,6 @@ export * from "./makes/current-year-popular-makes";
 export * from "./makes/entity-breakdowns";
 export * from "./makes/entity-checks";
 export * from "./makes/get-make-from-slug";
-export * from "./makes/grouped-makes";
 export * from "./makes/registration-stats";
 export * from "./market-insights";
 export * from "./monthly-registrations";

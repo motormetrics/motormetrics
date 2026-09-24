@@ -2,16 +2,11 @@ import { db } from "@motormetrics/database/client";
 import { cars, type SelectCar } from "@motormetrics/database/schema";
 import { and, desc, eq, ilike, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import { FUEL_TYPE, type TypeConfig, VEHICLE_TYPE } from "../categories";
+import { FUEL_TYPE, type TypeConfig } from "../categories";
 
 export interface MakeDetails {
   total: number;
   data: Partial<SelectCar>[];
-}
-
-export interface MakeMonthlyTotal {
-  month: string;
-  count: number;
 }
 
 export interface FuelTypeData {
@@ -24,16 +19,6 @@ export interface FuelTypeData {
   }>;
 }
 
-interface VehicleTypeData {
-  total: number;
-  data: Array<{
-    month: string;
-    make: string;
-    vehicleType: string;
-    count: number;
-  }>;
-}
-
 interface BreakdownConfig extends TypeConfig {
   cachePrefix: string;
 }
@@ -41,11 +26,6 @@ interface BreakdownConfig extends TypeConfig {
 const FUEL_TYPE_BREAKDOWN: BreakdownConfig = {
   ...FUEL_TYPE,
   cachePrefix: "cars:fuel",
-};
-
-const VEHICLE_TYPE_BREAKDOWN: BreakdownConfig = {
-  ...VEHICLE_TYPE,
-  cachePrefix: "cars:vehicle",
 };
 
 async function queryTypeBreakdown(
@@ -143,103 +123,4 @@ export async function getFuelTypeData(
 
   const result = await queryTypeBreakdown(FUEL_TYPE_BREAKDOWN, fuelType, month);
   return result as FuelTypeData;
-}
-
-export async function getMakeFuelTypeBreakdown(
-  make: string,
-  month?: string | null,
-): Promise<{ name: string; value: number }[]> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`cars:make:${make}`);
-  if (month) {
-    cacheTag(`cars:month:${month}`);
-  }
-
-  const whereConditions = [ilike(cars.make, make)];
-  if (month) {
-    whereConditions.push(eq(cars.month, month));
-  }
-
-  const rows = await db
-    .select({
-      name: cars.fuelType,
-      value: sql<number>`cast(sum(${cars.number}) as int)`,
-    })
-    .from(cars)
-    .where(and(...whereConditions))
-    .groupBy(cars.fuelType)
-    .orderBy(desc(sql<number>`sum(${cars.number})`));
-
-  return rows
-    .filter((row) => row.name)
-    .map((row) => ({ name: row.name!, value: row.value }));
-}
-
-export async function getMakeVehicleTypeBreakdown(
-  make: string,
-  month?: string | null,
-): Promise<{ name: string; value: number }[]> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`cars:make:${make}`);
-  if (month) {
-    cacheTag(`cars:month:${month}`);
-  }
-
-  const whereConditions = [ilike(cars.make, make)];
-  if (month) {
-    whereConditions.push(eq(cars.month, month));
-  }
-
-  const rows = await db
-    .select({
-      name: cars.vehicleType,
-      value: sql<number>`cast(sum(${cars.number}) as int)`,
-    })
-    .from(cars)
-    .where(and(...whereConditions))
-    .groupBy(cars.vehicleType)
-    .orderBy(desc(sql<number>`sum(${cars.number})`));
-
-  return rows
-    .filter((row) => row.name)
-    .map((row) => ({ name: row.name!, value: row.value }));
-}
-
-export async function getVehicleTypeData(
-  vehicleType: string,
-  month?: string,
-): Promise<VehicleTypeData> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`cars:vehicle:${vehicleType}`);
-  if (month) {
-    cacheTag(`cars:month:${month}`);
-  }
-
-  const result = await queryTypeBreakdown(
-    VEHICLE_TYPE_BREAKDOWN,
-    vehicleType,
-    month,
-  );
-  return result as VehicleTypeData;
-}
-
-export async function getMakeMonthlyTotals(
-  make: string,
-): Promise<MakeMonthlyTotal[]> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`cars:make:${make}`);
-
-  return db
-    .select({
-      month: cars.month,
-      count: sql<number>`sum(${cars.number})`.mapWith(Number),
-    })
-    .from(cars)
-    .where(ilike(cars.make, make))
-    .groupBy(cars.month)
-    .orderBy(desc(cars.month));
 }

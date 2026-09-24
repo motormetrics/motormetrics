@@ -7,7 +7,6 @@ import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@web/config";
 import { BotIdClient } from "botid/client";
 import type { Metadata } from "next";
 import { Urbanist } from "next/font/google";
-import { getLocale, getMessages } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, Suspense } from "react";
 import "./globals.css";
@@ -71,19 +70,17 @@ export const metadata: Metadata = {
   },
 };
 
-const RootLayout = async ({ children }: { children: ReactNode }) => {
-  const [locale, messages] = await Promise.all([getLocale(), getMessages()]);
-
+const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html
-      lang={locale}
+      lang="en"
       className={cn("scroll-smooth antialiased", urbanist.variable)}
     >
       <head>
         <BotIdClient protect={protectedRoutes} />
       </head>
       <body className="bg-background text-foreground">
-        <Providers locale={locale} messages={messages}>
+        <Providers>
           <NuqsAdapter>
             <Suspense fallback={null}>
               <LoadingIndicator />

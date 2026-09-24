@@ -1,11 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  getEvLatestSummary,
-  getEvMakeDetails,
-  getEvMarketShare,
-  getEvMonthlyTrend,
-  getEvTopMakes,
-} from "./cars/electric-vehicles";
+import { getEvMarketShare, getEvMonthlyTrend } from "./cars/electric-vehicles";
 import { cacheLifeMock, queueSelect, resetDbMocks } from "./test-utils";
 
 describe("electric vehicle queries", () => {
@@ -48,62 +42,5 @@ describe("electric vehicle queries", () => {
     const result = await getEvMarketShare();
 
     expect(result.map((entry) => entry.month)).toEqual(["2024-01"]);
-  });
-
-  it("should summarise the latest month by make", async () => {
-    // 1. latest month carrying electrified registrations, 2. that month's rows
-    queueSelect(
-      [{ month: "2024-06" }],
-      [
-        { make: "BYD", fuelType: "Electric", count: 10 },
-        { make: "Tesla", fuelType: "Electric", count: 30 },
-        { make: "Toyota", fuelType: "Petrol", count: 60 },
-      ],
-    );
-
-    const result = await getEvLatestSummary();
-
-    expect(result).toEqual({
-      month: "2024-06",
-      totalEv: 40,
-      evSharePercent: 40,
-      bevCount: 40,
-      topMake: "Tesla",
-    });
-  });
-
-  it("should return null when no electrified registrations exist", async () => {
-    queueSelect([]);
-
-    expect(await getEvLatestSummary()).toBeNull();
-  });
-
-  it("should rank makes for the latest month", async () => {
-    queueSelect([{ month: "2024-06" }], [{ make: "Tesla", count: 30 }]);
-
-    expect(await getEvTopMakes()).toEqual([{ make: "Tesla", count: 30 }]);
-  });
-
-  it("should break each make down by electrification type", async () => {
-    queueSelect(
-      [{ month: "2024-06" }],
-      [
-        { make: "Tesla", fuelType: "Electric", count: 30 },
-        { make: "Toyota", fuelType: "Petrol-Electric", count: 12 },
-        { make: "Toyota", fuelType: "Petrol-Electric (Plug-In)", count: 3 },
-      ],
-    );
-
-    // Largest total first
-    expect(await getEvMakeDetails()).toEqual([
-      { make: "Tesla", bev: 30, phev: 0, hybrid: 0, total: 30 },
-      { make: "Toyota", bev: 0, phev: 3, hybrid: 12, total: 15 },
-    ]);
-  });
-
-  it("should return an empty list when no month has electrified data", async () => {
-    queueSelect([]);
-
-    expect(await getEvMakeDetails()).toEqual([]);
   });
 });

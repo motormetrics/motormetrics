@@ -32,46 +32,6 @@ export async function getLatestCoeResults(): Promise<COEResult[]> {
 }
 
 /**
- * Get the previous bidding round results (one round before the latest).
- * Handles both same-month previous round and previous month's last round.
- */
-export async function getPreviousCoeResults(): Promise<COEResult[]> {
-  "use cache";
-  cacheLife("max");
-  cacheTag("coe:previous");
-
-  // First get the two most recent bidding rounds
-  const recentRounds = await db
-    .selectDistinct({
-      month: coe.month,
-      biddingNo: coe.biddingNo,
-    })
-    .from(coe)
-    .orderBy(desc(coe.month), desc(coe.biddingNo))
-    .limit(2);
-
-  if (recentRounds.length < 2) {
-    return [];
-  }
-
-  // Get the second most recent round (previous round)
-  const previousRound = recentRounds[1];
-
-  const results = await db
-    .select()
-    .from(coe)
-    .where(
-      and(
-        eq(coe.month, previousRound.month),
-        eq(coe.biddingNo, previousRound.biddingNo),
-      ),
-    )
-    .orderBy(asc(coe.vehicleClass));
-
-  return results as COEResult[];
-}
-
-/**
  * Get both latest and previous bidding round results in a single call.
  * Useful for calculating period-over-period changes.
  */

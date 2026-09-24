@@ -3,12 +3,9 @@ import { generateHeroImage } from "@motormetrics/ai/generate-hero-image";
 import { updatePostHeroImage } from "@motormetrics/ai/save-post";
 import { slugify } from "@motormetrics/utils/slugify";
 import { getPostsWorkflowRevalidationTags } from "@web/lib/cache-tags";
+import type { WorkflowEvent } from "@web/workflows/shared/types";
 import { revalidateTag } from "next/cache";
 import { FatalError, getWritable, RetryableError } from "workflow";
-
-import type { WorkflowEvent } from "./types";
-
-export type { WorkflowEvent, WorkflowEventType } from "./types";
 
 /**
  * Emit a streaming event from a workflow step.

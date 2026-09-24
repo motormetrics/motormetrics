@@ -1,16 +1,13 @@
 import { sortByName } from "@motormetrics/utils/sorting";
 import {
   BarChart3,
-  BookOpen,
   Calculator,
   Calendar,
   Car,
   CarFront,
   FileMinus,
   FilePlus,
-  FileText,
   Fuel,
-  LayoutDashboard,
   type LucideIcon,
   PlugZap,
   TrendingUp,
@@ -18,22 +15,14 @@ import {
 } from "lucide-react";
 import type { Route } from "next";
 import type { IconType } from "react-icons";
-import {
-  FaGithub,
-  FaInstagram,
-  FaTelegram,
-  // FaThreads,
-  FaXTwitter,
-} from "react-icons/fa6";
+import { FaGithub, FaInstagram, FaTelegram, FaXTwitter } from "react-icons/fa6";
 
 export interface NavigationItem {
   title: string;
   url: string;
   icon?: LucideIcon;
   description?: string;
-  show?: boolean;
   badge?: "beta" | "new";
-  matchPrefix?: boolean;
 }
 
 export interface SocialMedia {
@@ -45,15 +34,7 @@ export interface SocialMedia {
 export interface NavLinks {
   cars: NavigationItem[];
   coe: NavigationItem[];
-  general: NavigationItem[];
   socialMedia: SocialMedia[];
-}
-
-export interface NavigationSection {
-  name: string;
-  href: string;
-  icon: LucideIcon;
-  children: NavigationItem[];
 }
 
 const socialMedia: SocialMedia[] = [
@@ -62,11 +43,6 @@ const socialMedia: SocialMedia[] = [
     url: "/instagram",
     icon: FaInstagram,
   },
-  // {
-  //   title: "Threads",
-  //   url: "/threads",
-  //   icon: FaThreads,
-  // },
   {
     title: "Telegram",
     url: "/telegram",
@@ -104,7 +80,6 @@ export const navLinks: NavLinks = {
       icon: CarFront,
       description: "Car makes statistics and market share analysis",
       badge: "beta",
-      matchPrefix: true,
     },
     {
       title: "Fuel Types",
@@ -173,40 +148,8 @@ export const navLinks: NavLinks = {
       description: "Prevailing quota premiums and calculations",
     },
   ],
-  general: [
-    {
-      title: "Blog",
-      url: "/blog",
-      icon: FileText,
-      description: "Insights and analysis on Singapore's car market",
-      show: true,
-    },
-    {
-      title: "Learn",
-      url: "/learn",
-      icon: BookOpen,
-      description:
-        "Educational hub with FAQs, glossary, guides and data sources",
-      show: true,
-    },
-  ],
   socialMedia: sortByName(socialMedia, { sortKey: "title" }),
 };
-
-const dashboardItems: NavigationItem[] = [
-  { title: "Overview", url: "/", icon: LayoutDashboard },
-];
-
-export const navigationSections: NavigationSection[] = [
-  {
-    name: "Overview",
-    href: "/",
-    icon: LayoutDashboard,
-    children: dashboardItems,
-  },
-  { name: "Cars", href: "/cars", icon: Car, children: navLinks.cars },
-  { name: "COE", href: "/coe", icon: BarChart3, children: navLinks.coe },
-];
 
 export type NavItem = {
   href: Route;
