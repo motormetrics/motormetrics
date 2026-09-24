@@ -1,24 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-// classifyAIError is left unmocked; it is pure, so these keep covering the
-// whole path from a provider error to the WDK error type.
-
-vi.mock("@motormetrics/ai/generate-hero-image", () => ({
-  generateHeroImage: vi.fn(),
-}));
-
-vi.mock("@motormetrics/ai/generate-post", () => ({
-  generateBlogContent: vi.fn(),
-}));
-
-vi.mock("@motormetrics/ai/queries", () => ({
-  getDeregistrationsForMonth: vi.fn(),
-}));
-
-vi.mock("@motormetrics/ai/save-post", () => ({
-  updatePostHeroImage: vi.fn(),
-}));
-
 vi.mock("@motormetrics/utils/redis", () => ({
   redis: {
     set: vi.fn(),
@@ -58,22 +39,12 @@ vi.mock("@web/queries/deregistrations/latest-month", () => ({
   getDeregistrationsLatestMonth: vi.fn(),
 }));
 
-vi.mock("@web/queries/posts", () => ({
-  getExistingPostByMonth: vi.fn(),
-}));
-
 vi.mock("next/cache", () => ({
   revalidateTag: vi.fn(),
 }));
 
-vi.mock("@web/workflows/shared", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@web/workflows/shared")>()),
-  revalidatePostsCache: vi.fn(),
-}));
-
 import { redis } from "@motormetrics/utils/redis";
 import { getDeregistrationsLatestMonth } from "@web/queries/deregistrations/latest-month";
-import { getExistingPostByMonth } from "@web/queries/posts";
 import { deregistrationsWorkflow } from "@web/workflows/deregistrations";
 import { updateDeregistration } from "@web/workflows/deregistrations/steps/process-data";
 
@@ -124,9 +95,6 @@ describe("deregistrationsWorkflow", () => {
     vi.mocked(getDeregistrationsLatestMonth).mockResolvedValueOnce({
       month: "2024-02",
     });
-    vi.mocked(getExistingPostByMonth).mockResolvedValueOnce([
-      { id: "existing", title: "Existing Post", slug: "existing-post" },
-    ]);
 
     await deregistrationsWorkflow({});
 

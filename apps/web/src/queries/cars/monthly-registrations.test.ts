@@ -159,7 +159,10 @@ describe("monthly registration queries", () => {
       { month: "2024-02", total: 5 },
       { month: "2024-03", total: 8 },
     ]);
-    expect(cacheTagMock).toHaveBeenCalledWith("cars:monthly-totals:Electric");
+    expect(cacheTagMock).toHaveBeenCalledWith(
+      "cars:monthly-totals:Electric",
+      "cars:monthly-totals",
+    );
   });
 
   it("should treat a null sum as zero", async () => {

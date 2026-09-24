@@ -37,7 +37,10 @@ describe("make period totals", () => {
 
       expect(result).toHaveLength(2);
       expect(cacheLifeMock).toHaveBeenCalledWith("max");
-      expect(cacheTagMock).toHaveBeenCalledWith("cars:make:Toyota");
+      expect(cacheTagMock).toHaveBeenCalledWith(
+        "cars:make:Toyota",
+        "cars:makes",
+      );
     });
 
     it("should drop cells with no registrations", async () => {

@@ -1,24 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-// classifyAIError is left unmocked; it is pure, so these keep covering the
-// whole path from a provider error to the WDK error type.
-
-vi.mock("@motormetrics/ai/generate-hero-image", () => ({
-  generateHeroImage: vi.fn(),
-}));
-
-vi.mock("@motormetrics/ai/generate-post", () => ({
-  generateBlogContent: vi.fn(),
-}));
-
-vi.mock("@motormetrics/ai/queries", () => ({
-  getCarsAggregatedByMonth: vi.fn(),
-}));
-
-vi.mock("@motormetrics/ai/save-post", () => ({
-  updatePostHeroImage: vi.fn(),
-}));
-
 vi.mock("@motormetrics/utils/redis", () => ({
   redis: {
     set: vi.fn(),
@@ -31,10 +12,6 @@ vi.mock("@web/workflows/cars/steps/process-data", () => ({
 
 vi.mock("@web/queries/cars/latest-month", () => ({
   getCarsLatestMonth: vi.fn(),
-}));
-
-vi.mock("@web/queries/posts", () => ({
-  getExistingPostByMonth: vi.fn(),
 }));
 
 vi.mock("next/cache", () => ({
@@ -68,14 +45,8 @@ vi.mock("workflow", () => ({
   },
 }));
 
-vi.mock("@web/workflows/shared", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@web/workflows/shared")>()),
-  revalidatePostsCache: vi.fn(),
-}));
-
 import { redis } from "@motormetrics/utils/redis";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
-import { getExistingPostByMonth } from "@web/queries/posts";
 import { carsWorkflow } from "@web/workflows/cars";
 import { updateCars } from "@web/workflows/cars/steps/process-data";
 
@@ -96,9 +67,7 @@ describe("carsWorkflow", () => {
 
     const result = await carsWorkflow({});
 
-    expect(result.message).toBe(
-      "No car records processed. Skipped publishing to social media.",
-    );
+    expect(result.message).toBe("No car records processed.");
     expect(getCarsLatestMonth).not.toHaveBeenCalled();
   });
 
@@ -124,9 +93,6 @@ describe("carsWorkflow", () => {
       timestamp: "",
     });
     vi.mocked(getCarsLatestMonth).mockResolvedValueOnce("2024-02");
-    vi.mocked(getExistingPostByMonth).mockResolvedValueOnce([
-      { id: "existing", title: "Existing Post", slug: "existing-post" },
-    ]);
 
     await carsWorkflow({});
 

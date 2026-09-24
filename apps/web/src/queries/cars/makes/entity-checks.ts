@@ -35,7 +35,7 @@ export async function checkFuelTypeIfExist(
 ): Promise<{ fuelType: string } | undefined> {
   "use cache";
   cacheLife("max");
-  cacheTag(`cars:fuel:${fuelType}`);
+  cacheTag(`cars:fuel:${fuelType}`, "cars:annual");
 
   const result = await findEntity(FUEL_TYPE_CHECK, fuelType);
   return result as { fuelType: string } | undefined;

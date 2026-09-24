@@ -74,7 +74,7 @@ export async function getCoeCategoryTrends(
 ): Promise<CoeMonthlyPremium[]> {
   "use cache";
   cacheLife("max");
-  cacheTag(`coe:category:${category}`);
+  cacheTag(`coe:category:${category}`, "coe:trends");
   if (year) {
     cacheTag(`coe:year:${year}`);
   }

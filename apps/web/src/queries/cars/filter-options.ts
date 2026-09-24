@@ -22,9 +22,7 @@ export async function getDistinctFuelTypes(
 ): Promise<{ fuelType: string }[]> {
   "use cache";
   cacheLife("max");
-  if (month) {
-    cacheTag(`cars:month:${month}`);
-  }
+  cacheTag(month ? `cars:month:${month}` : "cars:annual");
 
   return db
     .select({ fuelType: cars.fuelType })
@@ -40,9 +38,7 @@ export async function getDistinctVehicleTypes(
 ): Promise<{ vehicleType: string }[]> {
   "use cache";
   cacheLife("max");
-  if (month) {
-    cacheTag(`cars:month:${month}`);
-  }
+  cacheTag(month ? `cars:month:${month}` : "cars:annual");
 
   return db
     .select({ vehicleType: cars.vehicleType })

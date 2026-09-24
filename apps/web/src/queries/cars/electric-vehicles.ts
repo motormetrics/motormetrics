@@ -33,7 +33,7 @@ export interface EvMarketShare {
 export async function getEvMonthlyTrend(): Promise<EvMonthlyTrend[]> {
   "use cache";
   cacheLife("max");
-  cacheTag("cars:fuel:electric", "cars:fuel:hybrid");
+  cacheTag("cars:fuel:electric", "cars:fuel:hybrid", "cars:annual");
 
   const results = await db
     .select({
@@ -72,7 +72,7 @@ export async function getEvMonthlyTrend(): Promise<EvMonthlyTrend[]> {
 export async function getEvMarketShare(): Promise<EvMarketShare[]> {
   "use cache";
   cacheLife("max");
-  cacheTag("cars:fuel:electric", "cars:fuel:hybrid");
+  cacheTag("cars:fuel:electric", "cars:fuel:hybrid", "cars:annual");
 
   // One scan grouped by month and fuel type, split here, rather than batching
   // an EV-filtered scan alongside a second unfiltered scan of the whole table.

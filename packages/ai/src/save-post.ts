@@ -162,26 +162,19 @@ async function revalidateWebCache(slug: string): Promise<void> {
     const webUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
     const revalidateToken = process.env.REVALIDATE_TOKEN;
-    const fallbackToken = process.env.NEXT_PUBLIC_REVALIDATE_TOKEN;
 
-    if (!revalidateToken && !fallbackToken) {
+    if (!revalidateToken) {
       console.warn(
         "[BLOG_SAVE] REVALIDATE_TOKEN not set, skipping cache invalidation",
       );
       return;
     }
 
-    if (!revalidateToken && fallbackToken) {
-      console.warn(
-        "[BLOG_SAVE] Using NEXT_PUBLIC_REVALIDATE_TOKEN fallback. Set REVALIDATE_TOKEN instead.",
-      );
-    }
-
     const response = await fetch(`${webUrl}/api/revalidate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-revalidate-token": revalidateToken ?? fallbackToken ?? "",
+        "x-revalidate-token": revalidateToken,
       },
       body: JSON.stringify({
         tags: getPostPublishRevalidationTags(slug),

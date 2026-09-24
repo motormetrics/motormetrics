@@ -13,12 +13,11 @@ interface CarsWorkflowPayload {
 
 interface CarsWorkflowResult {
   message: string;
-  postId?: string;
 }
 
 /**
  * Cars data workflow using Vercel WDK.
- * Processes car registration data and generates blog posts.
+ * Processes car registration data and revalidates cache.
  */
 export async function carsWorkflow(
   payload?: CarsWorkflowPayload,
@@ -34,9 +33,7 @@ export async function carsWorkflow(
   });
 
   if (result.recordsProcessed === 0) {
-    return {
-      message: "No car records processed. Skipped publishing to social media.",
-    };
+    return { message: "No car records processed." };
   }
 
   const month = payload?.month ?? (await getCarsLatestRegistrationMonth());

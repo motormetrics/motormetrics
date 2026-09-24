@@ -2,7 +2,7 @@ import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { and, desc, gt, gte, lte, sql } from "drizzle-orm";
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 /**
  * Query popular makes for the latest year with registration data.
@@ -11,6 +11,7 @@ import { cacheLife } from "next/cache";
 export async function getPopularMakes() {
   "use cache";
   cacheLife("max");
+  cacheTag("cars:annual");
 
   const latestMonth = await getCarsLatestMonth();
   if (!latestMonth) {

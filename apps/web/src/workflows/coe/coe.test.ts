@@ -1,24 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-// classifyAIError is left unmocked; it is pure, so these keep covering the
-// whole path from a provider error to the WDK error type.
-
-vi.mock("@motormetrics/ai/generate-hero-image", () => ({
-  generateHeroImage: vi.fn(),
-}));
-
-vi.mock("@motormetrics/ai/generate-post", () => ({
-  generateBlogContent: vi.fn(),
-}));
-
-vi.mock("@motormetrics/ai/queries", () => ({
-  getCoeForMonth: vi.fn(),
-}));
-
-vi.mock("@motormetrics/ai/save-post", () => ({
-  updatePostHeroImage: vi.fn(),
-}));
-
 vi.mock("@motormetrics/utils/redis", () => ({
   redis: {
     set: vi.fn(),
@@ -31,10 +12,6 @@ vi.mock("@web/workflows/coe/steps/process-data", () => ({
 
 vi.mock("@web/queries/coe/latest-month", () => ({
   getCOELatestRecord: vi.fn(),
-}));
-
-vi.mock("@web/queries/posts", () => ({
-  getExistingPostByMonth: vi.fn(),
 }));
 
 vi.mock("next/cache", () => ({
@@ -66,16 +43,11 @@ vi.mock("workflow", () => ({
   },
 }));
 
-vi.mock("@web/workflows/shared", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@web/workflows/shared")>()),
-  revalidatePostsCache: vi.fn(),
-}));
-
-import { generateBlogContent } from "@motormetrics/ai/generate-post";
 import { redis } from "@motormetrics/utils/redis";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";
 import { coeWorkflow } from "@web/workflows/coe";
 import { updateCoe } from "@web/workflows/coe/steps/process-data";
+import { revalidateTag } from "next/cache";
 
 describe("coeWorkflow", () => {
   beforeEach(() => {
@@ -94,9 +66,7 @@ describe("coeWorkflow", () => {
 
     const result = await coeWorkflow({});
 
-    expect(result.message).toBe(
-      "No COE records processed. Skipped publishing to social media.",
-    );
+    expect(result.message).toBe("No COE records processed.");
     expect(getCOELatestRecord).not.toHaveBeenCalled();
   });
 
@@ -114,7 +84,7 @@ describe("coeWorkflow", () => {
     expect(result.message).toBe("[COE] No COE records found");
   });
 
-  it("should wait for second bidding exercise before generating post", async () => {
+  it("should revalidate cache after the first bidding exercise", async () => {
     vi.mocked(updateCoe).mockResolvedValueOnce({
       recordsProcessed: 10,
       table: "coe",
@@ -135,9 +105,10 @@ describe("coeWorkflow", () => {
     const result = await coeWorkflow({});
 
     expect(result.message).toBe(
-      "[COE] Data processed. Waiting for second bidding exercise to generate post.",
+      "[COE] Data processed and cache revalidated successfully",
     );
-    expect(generateBlogContent).not.toHaveBeenCalled();
+    expect(revalidateTag).toHaveBeenCalledWith("coe:month:2024-01", "max");
+    expect(revalidateTag).toHaveBeenCalledWith("coe:year:2024", "max");
   });
 
   it("should update redis timestamp when records are processed", async () => {

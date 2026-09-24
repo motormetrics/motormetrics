@@ -12,12 +12,11 @@ interface DeregistrationsWorkflowPayload {
 
 interface DeregistrationsWorkflowResult {
   message: string;
-  postId?: string;
 }
 
 /**
  * Deregistrations data workflow using Vercel WDK.
- * Processes vehicle deregistration data, generates blog posts, and revalidates cache.
+ * Processes vehicle deregistration data and revalidates cache.
  */
 export async function deregistrationsWorkflow(
   payload?: DeregistrationsWorkflowPayload,

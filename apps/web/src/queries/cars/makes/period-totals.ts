@@ -35,7 +35,7 @@ export async function getMakeCrossTab(
 ): Promise<MakeCrossTabRow[]> {
   "use cache";
   cacheLife("max");
-  cacheTag(`cars:make:${make}`);
+  cacheTag(`cars:make:${make}`, "cars:makes");
 
   const rows = await db
     .select({

@@ -24,7 +24,7 @@ export async function getMakeDetails(
 ): Promise<MakeDetails> {
   "use cache";
   cacheLife("max");
-  cacheTag(`cars:make:${make}`);
+  cacheTag(`cars:make:${make}`, "cars:makes");
   if (month) {
     cacheTag(`cars:month:${month}`);
   }
@@ -67,7 +67,7 @@ export async function getFuelTypeData(
 ): Promise<FuelTypeData> {
   "use cache";
   cacheLife("max");
-  cacheTag(`cars:fuel:${fuelType}`);
+  cacheTag(`cars:fuel:${fuelType}`, "cars:annual");
   if (month) {
     cacheTag(`cars:month:${month}`);
   }
