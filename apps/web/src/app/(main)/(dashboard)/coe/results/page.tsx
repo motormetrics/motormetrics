@@ -75,29 +75,27 @@ const RECORD_COLUMNS = [
   { label: "Exercise" },
 ];
 
-export function generateMetadata(): Metadata {
-  return {
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    ...baseOpenGraph,
     title,
     description,
-    openGraph: {
-      ...baseOpenGraph,
-      title,
-      description,
-      url: `${SITE_URL}/coe/results`,
-    },
-    twitter: {
-      ...baseTwitter,
-      title,
-      description,
-    },
-    alternates: {
-      canonical: "/coe/results",
-    },
-    authors: [{ name: SITE_TITLE, url: SITE_URL }],
-    creator: SITE_TITLE,
-    publisher: SITE_TITLE,
-  };
-}
+    url: `${SITE_URL}/coe/results`,
+  },
+  twitter: {
+    ...baseTwitter,
+    title,
+    description,
+  },
+  alternates: {
+    canonical: "/coe/results",
+  },
+  authors: [{ name: SITE_TITLE, url: SITE_URL }],
+  creator: SITE_TITLE,
+  publisher: SITE_TITLE,
+};
 
 const structuredData: WithContext<WebPage> = {
   "@context": "https://schema.org",

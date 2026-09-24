@@ -1,23 +1,8 @@
 "use client";
 
 import { AreaChart } from "@heroui-pro/react/area-chart";
-
-const currencyFormatter = new Intl.NumberFormat("en-SG", {
-  currency: "SGD",
-  maximumFractionDigits: 0,
-  style: "currency",
-});
-
-/** Axis labels are compact — the comp reads "$100k", not "$100,000". */
-function compact(value: number): string {
-  if (Math.abs(value) < 1000) {
-    return `$${Math.round(value)}`;
-  }
-
-  const thousands = value / 1000;
-
-  return `$${thousands.toFixed(thousands % 1 === 0 ? 0 : 1)}k`;
-}
+import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { compactCurrency } from "@web/utils/formatting/chart-axis";
 
 /**
  * The full-width premium history, one line per selected category's exercises.
@@ -47,7 +32,7 @@ export function PremiumTrendChart({
       <AreaChart.YAxis
         domain={["auto", "auto"]}
         orientation="right"
-        tickFormatter={compact}
+        tickFormatter={compactCurrency}
         width={70}
       />
       <AreaChart.Area
@@ -62,7 +47,7 @@ export function PremiumTrendChart({
       <AreaChart.Tooltip
         content={
           <AreaChart.TooltipContent
-            valueFormatter={(value) => currencyFormatter.format(Number(value))}
+            valueFormatter={(value) => formatCurrency(Number(value))}
           />
         }
       />

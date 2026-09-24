@@ -1,5 +1,12 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import type { NextRequest } from "next/server";
+import { z } from "zod";
+
+const revalidateBodySchema = z.object({
+  tags: z.array(z.string()).optional(),
+  tag: z.string().optional(),
+  path: z.string().optional(),
+});
 
 /**
  * On-demand cache revalidation endpoint for granular cache tag invalidation.
@@ -33,7 +40,6 @@ import type { NextRequest } from "next/server";
 export const POST = async (req: NextRequest) => {
   const token = req.headers.get("x-revalidate-token");
   const expectedToken = process.env.REVALIDATE_TOKEN;
-  const fallbackToken = process.env.NEXT_PUBLIC_REVALIDATE_TOKEN;
 
   if (!token) {
     return Response.json(
@@ -42,29 +48,29 @@ export const POST = async (req: NextRequest) => {
     );
   }
 
-  if (!expectedToken && !fallbackToken) {
+  if (!expectedToken) {
     return Response.json(
       { message: "Revalidate token is not configured" },
       { status: 500 },
     );
   }
 
-  if (!expectedToken && fallbackToken) {
-    console.warn(
-      "[REVALIDATE] Using NEXT_PUBLIC_REVALIDATE_TOKEN fallback. Set REVALIDATE_TOKEN instead.",
-    );
-  }
-
-  if (token !== (expectedToken ?? fallbackToken)) {
+  if (token !== expectedToken) {
     return Response.json({ message: "Invalid token" }, { status: 401 });
   }
 
   try {
-    const body = await req.json();
+    const parsed = revalidateBodySchema.safeParse(await req.json());
+    if (!parsed.success) {
+      return Response.json(
+        { message: "Invalid request body", error: parsed.error.message },
+        { status: 400 },
+      );
+    }
 
     // Support single tag or array of tags
-    const tags = body.tags || (body.tag ? [body.tag] : []);
-    const path = body.path;
+    const tags = parsed.data.tags ?? (parsed.data.tag ? [parsed.data.tag] : []);
+    const path = parsed.data.path;
 
     const revalidated: { tags?: string[]; path?: string } = {};
 

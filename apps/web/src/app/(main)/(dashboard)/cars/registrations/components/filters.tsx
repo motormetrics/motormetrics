@@ -10,7 +10,7 @@ import { useTransition } from "react";
  * URL state with `shallow: false` throughout, so the server re-renders every
  * block against the new selection — the sections stay server components and no
  * registration data crosses into the client bundle. Same approach as
- * `cars/makes/components/makes-header-meta.tsx`.
+ * `cars/makes/components/range-menu.tsx`.
  */
 /**
  * Fuel types as LTA records them, passed in from the server rather than listed

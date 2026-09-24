@@ -1,5 +1,5 @@
+import { EmptyState } from "@web/components/shared/empty-state";
 import { render } from "vitest-browser-react";
-import { EmptyState } from "./empty-state";
 
 vi.mock("motion/react-client", () => ({
   div: ({
@@ -37,7 +37,7 @@ describe("EmptyState", () => {
     const screen = await render(<EmptyState />);
 
     await expect
-      .element(screen.getByRole("button", { name: /go home/i }))
+      .element(screen.getByRole("link", { name: /go home/i }))
       .toBeInTheDocument();
     await expect
       .element(screen.getByRole("button", { name: /go back/i }))
@@ -47,8 +47,9 @@ describe("EmptyState", () => {
   it("should render Go Home as a link to /", async () => {
     const screen = await render(<EmptyState />);
 
-    const homeButton = screen.getByRole("button", { name: /go home/i });
-    expect(homeButton.element().closest("a")).toHaveAttribute("href", "/");
+    await expect
+      .element(screen.getByRole("link", { name: /go home/i }))
+      .toHaveAttribute("href", "/");
   });
 
   it("should render custom title and description", async () => {
@@ -84,7 +85,7 @@ describe("EmptyState", () => {
       .element(screen.getByRole("button", { name: /custom action/i }))
       .toBeInTheDocument();
     await expect
-      .element(screen.getByRole("button", { name: /go home/i }))
+      .element(screen.getByRole("link", { name: /go home/i }))
       .not.toBeInTheDocument();
   });
 
@@ -92,7 +93,7 @@ describe("EmptyState", () => {
     const screen = await render(<EmptyState showDefaultActions={false} />);
 
     await expect
-      .element(screen.getByRole("button", { name: /go home/i }))
+      .element(screen.getByRole("link", { name: /go home/i }))
       .not.toBeInTheDocument();
     await expect
       .element(screen.getByRole("button", { name: /go back/i }))

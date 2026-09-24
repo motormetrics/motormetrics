@@ -1,15 +1,15 @@
-import { describe, expect, it } from "vitest";
+import {
+  getMakeCrossTab,
+  getMakeTotalsInRange,
+  getMarketMonthlyTotals,
+} from "@web/queries/cars/makes/period-totals";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelect,
   resetDbMocks,
-} from "../../test-utils";
-import {
-  getMakeCrossTab,
-  getMakeTotalsInRange,
-  getMarketMonthlyTotals,
-} from "./period-totals";
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("make period totals", () => {
   beforeEach(() => {
@@ -37,7 +37,10 @@ describe("make period totals", () => {
 
       expect(result).toHaveLength(2);
       expect(cacheLifeMock).toHaveBeenCalledWith("max");
-      expect(cacheTagMock).toHaveBeenCalledWith("cars:make:Toyota");
+      expect(cacheTagMock).toHaveBeenCalledWith(
+        "cars:make:Toyota",
+        "cars:makes",
+      );
     });
 
     it("should drop cells with no registrations", async () => {

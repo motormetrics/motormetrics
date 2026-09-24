@@ -1,38 +1,21 @@
 import { Skeleton } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
+import { AllMakesCard } from "@web/app/(main)/(dashboard)/cars/makes/components/all-makes-card";
+import { ConcentrationCard } from "@web/app/(main)/(dashboard)/cars/makes/components/concentration-card";
+import { ElectricOnlyMakes } from "@web/app/(main)/(dashboard)/cars/makes/components/electric-only-makes";
+import { FastestGrowing } from "@web/app/(main)/(dashboard)/cars/makes/components/fastest-growing";
+import { LeadingMakeCard } from "@web/app/(main)/(dashboard)/cars/makes/components/leading-make-card";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { Hairline, OverviewGrid } from "@web/components/shared/overview";
 import { StructuredData } from "@web/components/structured-data";
-import { SITE_TITLE, SITE_URL } from "@web/config";
+import { SITE_URL } from "@web/config";
 import { generateItemListSchema } from "@web/lib/metadata";
-import { getGroupedMakes } from "@web/queries/cars";
+import { getDistinctMakes } from "@web/queries/cars/filter-options";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
-import type { WebPage, WithContext } from "schema-dts";
-import { AllMakesCard } from "./all-makes-card";
-import { ConcentrationCard } from "./concentration-card";
-import { ElectricOnlyMakes } from "./electric-only-makes";
-import { FastestGrowing } from "./fastest-growing";
-import { LeadingMakeCard } from "./leading-make-card";
-
-const description =
-  "Comprehensive overview of car makes in Singapore. Explore popular brands, discover all available manufacturers, and view registration trends and market statistics.";
-
-const structuredData: WithContext<WebPage> = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  name: "Makes",
-  description,
-  url: `${SITE_URL}/cars/makes`,
-  publisher: {
-    "@type": "Organization",
-    name: SITE_TITLE,
-    url: SITE_URL,
-  },
-};
 
 async function MakesItemList() {
-  const { sortedMakes } = await getGroupedMakes();
+  const makes = await getDistinctMakes();
 
   return (
     <StructuredData
@@ -40,7 +23,7 @@ async function MakesItemList() {
         "@context": "https://schema.org",
         ...generateItemListSchema(
           "Car Makes in Singapore",
-          sortedMakes.map((make) => ({
+          makes.map(({ make }) => ({
             name: make,
             url: `${SITE_URL}/cars/makes/${slugify(make)}`,
           })),
@@ -57,7 +40,6 @@ export function MakesContentSection({
 }) {
   return (
     <>
-      <StructuredData data={structuredData} />
       <Suspense fallback={null}>
         <MakesItemList />
       </Suspense>

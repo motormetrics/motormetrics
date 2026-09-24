@@ -163,18 +163,14 @@ ${recentPosts.map((post) => `- [${post.title}](${SITE_URL}/blog/${post.slug})`).
 - [Privacy Policy](${SITE_URL}/legal/privacy-policy): Data privacy and usage policy
 - [Terms of Service](${SITE_URL}/legal/terms-of-service): Terms and conditions
 - [GitHub Repository](https://github.com/motormetrics/motormetrics): Open source codebase
+- [Instagram](${SITE_URL}/instagram): Follow us on Instagram
+- [Telegram](${SITE_URL}/telegram): Join our Telegram channel
+- [X](${SITE_URL}/x): Follow us on X
 `;
 }
 
-function socialChannelLines() {
-  return `- [Instagram](${SITE_URL}/instagram): Follow us on Instagram
-- [Telegram](${SITE_URL}/telegram): Join our Telegram channel
-- [X](${SITE_URL}/x): Follow us on X`;
-}
-
 export async function GET() {
-  const content = await generateLlmsTxt();
-  const body = `${content}${socialChannelLines()}\n`;
+  const body = await generateLlmsTxt();
 
   return new Response(body, {
     headers: {

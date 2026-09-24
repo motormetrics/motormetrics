@@ -1,3 +1,4 @@
+import { DimensionTable } from "@web/app/(main)/(dashboard)/cars/components/dimension-table";
 import type { DimensionStat } from "@web/queries/cars";
 import {
   type OnUrlUpdateFunction,
@@ -7,7 +8,6 @@ import type { ComponentProps } from "react";
 import { describe, expect, it, vi } from "vitest";
 import type { RenderResult } from "vitest-browser-react";
 import { render } from "vitest-browser-react";
-import { DimensionTable } from "./dimension-table";
 
 const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
 const capture = vi.hoisted(() => vi.fn());

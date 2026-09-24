@@ -5,14 +5,6 @@ interface SkeletonProps {
 }
 
 // Base skeleton primitives
-export function SkeletonText({ className }: SkeletonProps) {
-  return <HeroUISkeleton className={cn("h-4 w-full rounded-lg", className)} />;
-}
-
-export function SkeletonHeading({ className }: SkeletonProps) {
-  return <HeroUISkeleton className={cn("h-8 w-48 rounded-lg", className)} />;
-}
-
 export function SkeletonCard({ className }: SkeletonProps) {
   return <HeroUISkeleton className={cn("h-32 w-full rounded-lg", className)} />;
 }
@@ -22,52 +14,6 @@ export function SkeletonChart({ className }: SkeletonProps) {
 }
 
 // Composed skeleton components for dashboard
-
-/**
- * Metric card skeleton matching MetricCard layout
- */
-export function SkeletonMetricCard() {
-  return (
-    <Card className="flex-1">
-      <Card.Content className="flex flex-col gap-4">
-        <HeroUISkeleton className="h-5 w-3/4 rounded-lg" />
-        <HeroUISkeleton className="h-10 w-32 rounded-lg" />
-        <HeroUISkeleton className="h-5 w-28 rounded-lg" />
-      </Card.Content>
-    </Card>
-  );
-}
-
-/**
- * Chart widget skeleton matching ChartWidget layout
- */
-export function SkeletonChartWidget({ className }: SkeletonProps) {
-  return (
-    <Card className={cn(className)}>
-      <Card.Header>
-        <HeroUISkeleton className="h-6 w-48 rounded-lg" />
-      </Card.Header>
-      <Card.Content>
-        <HeroUISkeleton className="h-64 w-full rounded-lg" />
-      </Card.Content>
-    </Card>
-  );
-}
-
-/**
- * Page header skeleton for loading states
- */
-export function SkeletonPageHeader() {
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <HeroUISkeleton className="h-8 w-48 rounded-lg" />
-        <HeroUISkeleton className="h-10 w-40 rounded-lg" />
-      </div>
-      <HeroUISkeleton className="h-5 w-32 rounded-lg" />
-    </div>
-  );
-}
 
 /**
  * Bento card skeleton for dashboard grids
@@ -83,24 +29,6 @@ export function SkeletonBentoCard({ className }: SkeletonProps) {
         <HeroUISkeleton className="h-24 w-full rounded-lg" />
       </Card.Content>
     </Card>
-  );
-}
-
-// Composed section skeletons for Suspense fallbacks
-interface SectionSkeletonProps {
-  title?: boolean;
-  children: React.ReactNode;
-}
-
-export function SectionSkeleton({
-  title = true,
-  children,
-}: SectionSkeletonProps) {
-  return (
-    <section className="flex flex-col gap-4">
-      {title && <SkeletonHeading />}
-      {children}
-    </section>
   );
 }
 

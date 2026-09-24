@@ -14,11 +14,11 @@ vi.mock("next/cache", () => ({
   cacheTag: vi.fn(),
 }));
 
-vi.mock("@web/queries/cars", () => ({
+vi.mock("@web/queries/cars/filter-options", () => ({
   getDistinctMakes: getDistinctMakesMock,
 }));
 
-import { getMakeFromSlug } from "./get-make-from-slug";
+import { getMakeFromSlug } from "@web/queries/cars/makes/get-make-from-slug";
 
 const mockMakes = (makes: string[]) =>
   getDistinctMakesMock.mockResolvedValue(makes.map((make) => ({ make })));

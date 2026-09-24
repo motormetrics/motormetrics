@@ -1,4 +1,3 @@
-import { render } from "vitest-browser-react";
 import {
   Report,
   ReportEyebrow,
@@ -6,7 +5,8 @@ import {
   ReportHeadline,
   ReportSection,
   ReportStat,
-} from "./report";
+} from "@web/components/shared/report";
+import { render } from "vitest-browser-react";
 
 describe("Report", () => {
   it("should render its children in the report column", async () => {

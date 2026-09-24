@@ -3,12 +3,12 @@ import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-network";
 import { CHARGING_POINT_TARGET_2030 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
-import { shiftMonth } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { Headline, SectionHead } from "@web/components/shared/overview";
 import {
   getEvChargingNetworkSummary,
   getEvChargingRegistrationsByMonth,
 } from "@web/queries/ev-charging";
+import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 
 /**
  * Size of the public charging network against the 2030 target.
@@ -86,7 +86,7 @@ export async function ChargingSummary() {
         <ProgressBar
           aria-label="Share of the 2030 target installed"
           className="w-full"
-          value={Math.min(targetShare, 100)}
+          value={targetShare}
         >
           <ProgressBar.Track className="h-3 rounded-full bg-surface-secondary">
             <ProgressBar.Fill className="rounded-full bg-accent" />

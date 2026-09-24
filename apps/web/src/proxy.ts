@@ -1,8 +1,7 @@
 import crypto from "node:crypto";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { auth } from "@web/app/admin/lib/auth";
-import { headers } from "next/headers";
+import { auth } from "@web/lib/auth";
 import { type NextRequest, NextResponse } from "next/server";
 
 // Rate limiter for Developer API (60 requests per minute)
@@ -51,7 +50,7 @@ export async function proxy(request: NextRequest) {
 
     // Check admin session for protected admin routes
     const session = await auth.api.getSession({
-      headers: await headers(),
+      headers: request.headers,
     });
 
     if (!session) {

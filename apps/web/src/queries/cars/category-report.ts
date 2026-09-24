@@ -13,15 +13,12 @@
 
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
+import {
+  TYPE_DIMENSION_COLUMNS,
+  type TypeDimension,
+} from "@web/queries/cars/categories";
 import { desc, inArray, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-
-export type CategoryField = "fuelType" | "vehicleType";
-
-/** The `cars` column a dimension resolves to. */
-function columnFor(field: CategoryField) {
-  return field === "fuelType" ? cars.fuelType : cars.vehicleType;
-}
 
 /** One cache tag per month, so a monthly data drop invalidates only its own. */
 function monthTags(months: string[]): string[] {
@@ -38,7 +35,7 @@ export interface CategoryTotal {
  * view, a year's worth for the year-to-date one.
  */
 export async function getCategoryTotals(
-  field: CategoryField,
+  field: TypeDimension,
   months: string[],
 ): Promise<CategoryTotal[]> {
   "use cache";
@@ -49,7 +46,7 @@ export async function getCategoryTotals(
     return [];
   }
 
-  const column = columnFor(field);
+  const column = TYPE_DIMENSION_COLUMNS[field];
 
   return db
     .select({
@@ -73,7 +70,7 @@ export interface CategoryMonthlyPoint {
  * table. Returned long rather than pivoted — the callers need different shapes.
  */
 export async function getCategoryMonthlySeries(
-  field: CategoryField,
+  field: TypeDimension,
   months: string[],
 ): Promise<CategoryMonthlyPoint[]> {
   "use cache";
@@ -84,7 +81,7 @@ export async function getCategoryMonthlySeries(
     return [];
   }
 
-  const column = columnFor(field);
+  const column = TYPE_DIMENSION_COLUMNS[field];
 
   return db
     .select({
@@ -112,7 +109,7 @@ export interface CategoryLeader {
  * cheaper than the round trips.
  */
 export async function getTopMakesByCategory(
-  field: CategoryField,
+  field: TypeDimension,
   months: string[],
   makesPerType = 3,
 ): Promise<CategoryLeader[]> {
@@ -124,7 +121,7 @@ export async function getTopMakesByCategory(
     return [];
   }
 
-  const column = columnFor(field);
+  const column = TYPE_DIMENSION_COLUMNS[field];
 
   const rows = await db
     .select({

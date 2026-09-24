@@ -1,6 +1,5 @@
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { formatMonthLabel } from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import {
   changeRatio,
   powertrainTotal,
@@ -21,6 +20,7 @@ import { DeltaChip } from "@web/components/shared/delta-chip";
 import { Headline, SectionHead } from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { getEvMonthlyTrend } from "@web/queries/cars";
+import { formatMonthLabel } from "@web/utils/dates/format-month";
 
 const CHART_HEIGHT = 200;
 

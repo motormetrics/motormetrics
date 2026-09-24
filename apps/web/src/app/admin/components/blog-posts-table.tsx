@@ -24,13 +24,9 @@ import {
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  deleteBlogPost,
-  getAllPosts,
-  type PostWithMetadata,
-  regeneratePost,
-} from "@web/app/admin/actions/blog";
+import { deleteBlogPost, regeneratePost } from "@web/app/admin/actions/blog";
 import { regeneratePostHero } from "@web/app/admin/actions/regenerate-hero";
+import type { AdminPost } from "@web/app/admin/queries/posts";
 import {
   ArrowUpDown,
   ChevronLeft,
@@ -53,7 +49,7 @@ import { type ReactNode, useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 interface BlogPostsTableProps {
-  initialPosts: PostWithMetadata[];
+  posts: AdminPost[];
   previews: Record<string, ReactNode>;
 }
 
@@ -65,7 +61,7 @@ function formatDate(date: Date): string {
   });
 }
 
-function formatTokens(post: PostWithMetadata): string {
+function formatTokens(post: AdminPost): string {
   const totalTokens = post.metadata?.usage?.totalTokens;
   if (!totalTokens) return "N/A";
   const input = post.metadata?.usage?.inputTokens ?? 0;
@@ -73,7 +69,7 @@ function formatTokens(post: PostWithMetadata): string {
   return `${totalTokens.toLocaleString()} (${input.toLocaleString()} + ${output.toLocaleString()})`;
 }
 
-function formatGenerationCost(post: PostWithMetadata): string {
+function formatGenerationCost(post: AdminPost): string {
   const totalCost = post.metadata?.totalCost;
   return typeof totalCost === "number"
     ? `$${totalCost.toFixed(6)}`
@@ -95,12 +91,8 @@ function SortableHeader({
   );
 }
 
-export function BlogPostsTable({
-  initialPosts,
-  previews,
-}: BlogPostsTableProps) {
+export function BlogPostsTable({ posts, previews }: BlogPostsTableProps) {
   const router = useRouter();
-  const [posts, setPosts] = useState(initialPosts);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([
     { id: "createdAt", desc: true },
@@ -113,14 +105,15 @@ export function BlogPostsTable({
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
     type: "regenerate" | "delete";
-    post: PostWithMetadata | null;
+    post: AdminPost | null;
   }>({ open: false, type: "regenerate", post: null });
   const [previewDialog, setPreviewDialog] = useState<{
     open: boolean;
-    post: PostWithMetadata | null;
+    post: AdminPost | null;
   }>({ open: false, post: null });
 
-  const handleRegenerate = async (post: PostWithMetadata) => {
+  const handleRegenerate = async (post: AdminPost) => {
+    if (!post.month || !post.dataType) return;
     setRegeneratingId(post.id);
     setConfirmDialog({ open: false, type: "regenerate", post: null });
     try {
@@ -132,8 +125,7 @@ export function BlogPostsTable({
         toast.success(
           `Blog post for ${post.month} (${post.dataType}) regenerated successfully!`,
         );
-        const allPosts = await getAllPosts();
-        setPosts(allPosts);
+        router.refresh();
       } else {
         throw new Error(result.error ?? "Unknown error");
       }
@@ -148,7 +140,7 @@ export function BlogPostsTable({
     }
   };
 
-  const handleRegenerateHero = useCallback(async (post: PostWithMetadata) => {
+  const handleRegenerateHero = useCallback(async (post: AdminPost) => {
     setHeroRegeneratingId(post.id);
     try {
       const result = await regeneratePostHero(post.id);
@@ -170,14 +162,14 @@ export function BlogPostsTable({
     }
   }, []);
 
-  const handleDelete = async (post: PostWithMetadata) => {
+  const handleDelete = async (post: AdminPost) => {
     setDeletingId(post.id);
     setConfirmDialog({ open: false, type: "delete", post: null });
     try {
       const result = await deleteBlogPost(post.id);
       if (result.success) {
         toast.success(`"${post.title}" deleted successfully.`);
-        setPosts((prev) => prev.filter((p) => p.id !== post.id));
+        router.refresh();
       } else {
         throw new Error(result.error ?? "Unknown error");
       }
@@ -190,11 +182,11 @@ export function BlogPostsTable({
     }
   };
 
-  const handlePreview = useCallback((post: PostWithMetadata) => {
+  const handlePreview = useCallback((post: AdminPost) => {
     setPreviewDialog({ open: true, post });
   }, []);
 
-  const columns = useMemo<ColumnDef<PostWithMetadata>[]>(
+  const columns = useMemo<ColumnDef<AdminPost>[]>(
     () => [
       {
         accessorKey: "title",

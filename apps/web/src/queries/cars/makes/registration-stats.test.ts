@@ -1,9 +1,9 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { queueSelect, resetDbMocks } from "../../test-utils";
 import {
   getComparisonWindows,
   getMakeRegistrationStats,
-} from "./registration-stats";
+} from "@web/queries/cars/makes/registration-stats";
+import { dbMock, queueSelect, resetDbMocks } from "@web/queries/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 describe("getComparisonWindows", () => {
   it("should end both windows on the same month rather than running the previous year to December", () => {
@@ -34,7 +34,7 @@ describe("getMakeRegistrationStats", () => {
   });
 
   it("should return empty array when latest month query returns empty", async () => {
-    queueSelect([]);
+    dbMock.query.cars.findFirst.mockResolvedValue(undefined);
 
     const result = await getMakeRegistrationStats();
 
@@ -42,7 +42,7 @@ describe("getMakeRegistrationStats", () => {
   });
 
   it("should return empty array when latest month is null", async () => {
-    queueSelect([{ latestMonth: null }]);
+    dbMock.query.cars.findFirst.mockResolvedValue({ month: null });
 
     const result = await getMakeRegistrationStats();
 
@@ -50,7 +50,7 @@ describe("getMakeRegistrationStats", () => {
   });
 
   it("should return registration stats with YoY change and trend data", async () => {
-    queueSelect([{ latestMonth: "2025-01" }]); // latest month
+    dbMock.query.cars.findFirst.mockResolvedValue({ month: "2025-01" }); // latest month
     queueSelect([
       // annual rows for 2025
       { make: "TOYOTA", count: 1000 },
@@ -83,7 +83,7 @@ describe("getMakeRegistrationStats", () => {
   });
 
   it("should report no change for a make whose volume is flat across the two windows", async () => {
-    queueSelect([{ latestMonth: "2025-08" }]);
+    dbMock.query.cars.findFirst.mockResolvedValue({ month: "2025-08" });
     // January to August 2025, and the same eight months of 2024.
     queueSelect([{ make: "TOYOTA", count: 800 }]);
     queueSelect([]);
@@ -95,7 +95,7 @@ describe("getMakeRegistrationStats", () => {
   });
 
   it("should return null yoyChange when make has no previous year data", async () => {
-    queueSelect([{ latestMonth: "2025-01" }]);
+    dbMock.query.cars.findFirst.mockResolvedValue({ month: "2025-01" });
     queueSelect([{ make: "NEWMAKE", count: 200 }]);
     queueSelect([]);
     queueSelect([]); // no prev year data
@@ -106,7 +106,7 @@ describe("getMakeRegistrationStats", () => {
   });
 
   it("should return null yoyChange when previous year count is zero", async () => {
-    queueSelect([{ latestMonth: "2025-01" }]);
+    dbMock.query.cars.findFirst.mockResolvedValue({ month: "2025-01" });
     queueSelect([{ make: "TOYOTA", count: 500 }]);
     queueSelect([]);
     queueSelect([{ make: "TOYOTA", count: 0 }]);
@@ -117,7 +117,7 @@ describe("getMakeRegistrationStats", () => {
   });
 
   it("should return zero share when grandTotal is zero", async () => {
-    queueSelect([{ latestMonth: "2025-01" }]);
+    dbMock.query.cars.findFirst.mockResolvedValue({ month: "2025-01" });
     queueSelect([{ make: "TOYOTA", count: 0 }]);
     queueSelect([]);
     queueSelect([]);
@@ -128,7 +128,7 @@ describe("getMakeRegistrationStats", () => {
   });
 
   it("should return empty trend array when make has no rolling monthly data", async () => {
-    queueSelect([{ latestMonth: "2025-01" }]);
+    dbMock.query.cars.findFirst.mockResolvedValue({ month: "2025-01" });
     queueSelect([{ make: "TOYOTA", count: 100 }]);
     queueSelect([]); // no trend data
     queueSelect([{ make: "TOYOTA", count: 80 }]);
@@ -139,7 +139,7 @@ describe("getMakeRegistrationStats", () => {
   });
 
   it("should accumulate multiple months per make in trend", async () => {
-    queueSelect([{ latestMonth: "2025-01" }]);
+    dbMock.query.cars.findFirst.mockResolvedValue({ month: "2025-01" });
     queueSelect([
       { make: "TOYOTA", count: 100 },
       { make: "HONDA", count: 50 },

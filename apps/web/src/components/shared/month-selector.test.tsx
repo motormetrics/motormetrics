@@ -1,6 +1,6 @@
+import { MonthSelector } from "@web/components/shared/month-selector";
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing";
 import { render } from "vitest-browser-react";
-import { MonthSelector } from "./month-selector";
 
 const wrapper = withNuqsTestingAdapter({
   searchParams: { month: "2024-01" },

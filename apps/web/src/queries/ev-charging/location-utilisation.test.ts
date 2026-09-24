@@ -1,19 +1,21 @@
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
 
-vi.mock("./stored-locations", async () => {
-  const { storedLocationsMock } = await import("./history-fixtures");
+vi.mock("@web/queries/ev-charging/stored-locations", async () => {
+  const { storedLocationsMock } = await import(
+    "@web/queries/ev-charging/history-fixtures"
+  );
   return storedLocationsMock();
 });
 
+import { storedRow } from "@web/queries/ev-charging/history-fixtures";
+import { getEvChargingLocationUtilisation } from "@web/queries/ev-charging/location-utilisation";
+import { districtPredicate } from "@web/queries/ev-charging/stored-locations";
 import {
   cacheLifeMock,
   cacheTagMock,
   queueSelect,
   resetDbMocks,
-} from "../test-utils";
-import { storedRow } from "./history-fixtures";
-import { getEvChargingLocationUtilisation } from "./location-utilisation";
-import { districtPredicate } from "./stored-locations";
+} from "@web/queries/test-utils";
 
 describe("getEvChargingLocationUtilisation", () => {
   beforeEach(() => {

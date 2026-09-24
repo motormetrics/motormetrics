@@ -1,76 +1,16 @@
 "use server";
 
-import { db } from "@motormetrics/database/client";
-import type { SelectPost } from "@motormetrics/database/schema";
-import { auth } from "@web/app/admin/lib/auth";
+import { auth } from "@web/lib/auth";
 import {
   type CreatePostInput,
   createPost,
-} from "@web/app/admin/lib/create-post";
-import { deletePost } from "@web/app/admin/lib/delete-post";
-import {
-  type UpdatePostInput,
-  updatePost,
-} from "@web/app/admin/lib/update-post";
+  createPostSchema,
+} from "@web/lib/posts/create-post";
+import { deletePost } from "@web/lib/posts/delete-post";
+import { type UpdatePostInput, updatePost } from "@web/lib/posts/update-post";
 import { regeneratePostWorkflow } from "@web/workflows/regenerate-post";
-import type { LanguageModelUsage } from "ai";
 import { headers } from "next/headers";
 import { start } from "workflow/api";
-
-export interface PostWithMetadata {
-  id: string;
-  title: string;
-  slug: string;
-  month: string;
-  dataType: string;
-  status: string;
-  createdAt: Date;
-  metadata: {
-    generationId?: string;
-    modelId?: string;
-    totalCost?: number;
-    usage?: LanguageModelUsage;
-  } | null;
-}
-
-export async function getAllPosts(): Promise<PostWithMetadata[]> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    throw new Error("Unauthorised");
-  }
-
-  const allPosts = await db.query.posts.findMany({
-    orderBy: { createdAt: "desc" },
-  });
-
-  return allPosts as PostWithMetadata[];
-}
-
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-export async function getPostById(id: string): Promise<SelectPost | null> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    throw new Error("Unauthorised");
-  }
-
-  if (!UUID_REGEX.test(id)) {
-    return null;
-  }
-
-  const post = await db.query.posts.findFirst({
-    where: { id },
-  });
-
-  return post ?? null;
-}
 
 export async function regeneratePost(params: {
   month: string;
@@ -118,8 +58,17 @@ export async function createBlogPost(
     };
   }
 
+  // Server action arguments are untrusted client input
+  const result = createPostSchema.safeParse(input);
+  if (!result.success) {
+    return {
+      success: false,
+      error: "Validation failed",
+    };
+  }
+
   try {
-    const post = await createPost(input);
+    const post = await createPost(result.data);
 
     return {
       success: true,

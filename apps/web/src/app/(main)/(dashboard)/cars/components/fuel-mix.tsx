@@ -1,16 +1,16 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
+import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
+import { getCarsData } from "@web/queries/cars";
 import {
   type DonutSegment,
   donutArcs,
   RING_RADIUS,
-} from "@web/app/(main)/(dashboard)/cars/components/donut-arcs";
+} from "@web/utils/charts/donut-arcs";
 import {
   formatMonthLabel,
   formatMonthName,
-} from "@web/app/(main)/(dashboard)/cars/components/format-month";
-import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
-import { getCarsData } from "@web/queries/cars";
+} from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
 
 /**
@@ -57,16 +57,23 @@ export async function FuelMix({
   const arcs = donutArcs(segments);
 
   return (
-    <div className="flex flex-col gap-2.5">
-      <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
-        Fuel mix
-      </Typography.Paragraph>
-      <Typography.Paragraph className="font-medium" color="muted">
-        {formatMonthName(month)} registrations by powertrain
-      </Typography.Paragraph>
+    <div className="flex flex-col gap-[18px]">
+      <div className="flex flex-col gap-2.5">
+        <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+          Fuel mix
+        </Typography.Paragraph>
+        <Typography.Paragraph className="font-medium" color="muted">
+          {formatMonthName(month)} registrations by powertrain
+        </Typography.Paragraph>
+        {segments.length === 0 ? (
+          <Typography.Paragraph color="muted" size="sm">
+            No registrations recorded for {formatMonthLabel(month)}.
+          </Typography.Paragraph>
+        ) : null}
+      </div>
 
       {segments.length > 0 ? (
-        <div className="mt-2 flex flex-wrap items-center gap-9">
+        <div className="flex flex-wrap items-center gap-9">
           <div className="relative size-[172px] shrink-0">
             <svg className="block" role="img" viewBox="0 0 190 190">
               <title>{`Registrations by fuel type, ${formatMonthLabel(month)}`}</title>
@@ -123,11 +130,7 @@ export async function FuelMix({
             ))}
           </ul>
         </div>
-      ) : (
-        <Typography.Paragraph color="muted" size="sm">
-          No registrations recorded for {formatMonthLabel(month)}.
-        </Typography.Paragraph>
-      )}
+      ) : null}
     </div>
   );
 }

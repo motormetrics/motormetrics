@@ -1,4 +1,5 @@
 import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/components/category-badge";
 import {
   biddingOrdinal,
   CATEGORY_DESCRIPTIONS,
@@ -10,11 +11,12 @@ import {
   formatMonth,
   groupByExercise,
   recordHighs,
+  successRate,
   summariseByYear,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/premiums/components/category-badge";
-import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-delta";
+import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
+import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
 import { ResultsChart } from "@web/app/(main)/(dashboard)/coe/results/components/results-chart";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params";
 import {
@@ -27,7 +29,6 @@ import {
   ReportCell,
   ReportRow,
   ReportTable,
-  ShareBar,
 } from "@web/components/shared/report-table";
 import { getCoeResults, getCoeResultsByPeriod } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
@@ -53,10 +54,6 @@ function movementNote(current: number, previous?: number): string {
   const sign = percent > 0 ? "+" : percent < 0 ? "−" : "";
 
   return `${sign}${Math.abs(percent).toFixed(1)}% on the previous exercise`;
-}
-
-function successRate(bidsSuccess: number, bidsReceived: number): number {
-  return bidsReceived > 0 ? (bidsSuccess / bidsReceived) * 100 : 0;
 }
 
 /** Sum one figure across every category in an exercise. */
@@ -336,16 +333,7 @@ export async function QuotaAndDemand({ searchParams }: RegionProps) {
                 <Count value={figures?.bidsReceived ?? 0} />
               </ReportCell>
               <ReportCell>
-                <div className="flex items-center gap-3">
-                  {/* `isLeader` is the bar's darker fill — every row here
-                      carries it, since the rows are not ranked. */}
-                  <span className="flex-1">
-                    <ShareBar isLeader share={rate} />
-                  </span>
-                  <span className="w-10 text-right font-bold text-muted-strong text-sm tabular-nums">
-                    {rate.toFixed(0)}%
-                  </span>
-                </div>
+                <SuccessRateCell rate={rate} />
               </ReportCell>
             </ReportRow>
           );

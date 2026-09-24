@@ -2,25 +2,10 @@
 
 import { Typography } from "@heroui/react";
 import { LineChart } from "@heroui-pro/react/line-chart";
+import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { CATEGORY_COLOURS } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import type { COECategory } from "@web/types";
-
-const currencyFormatter = new Intl.NumberFormat("en-SG", {
-  currency: "SGD",
-  maximumFractionDigits: 0,
-  style: "currency",
-});
-
-/** Axis labels are compact — the comp reads "$100k", not "$100,000". */
-function compact(value: number): string {
-  if (Math.abs(value) < 1000) {
-    return `$${Math.round(value)}`;
-  }
-
-  const thousands = value / 1000;
-
-  return `$${thousands.toFixed(thousands % 1 === 0 ? 0 : 1)}k`;
-}
+import { compactCurrency } from "@web/utils/formatting/chart-axis";
 
 /**
  * Closing premiums per exercise, one line per selected category.
@@ -53,7 +38,7 @@ export function ResultsChart({
       <LineChart.YAxis
         domain={["auto", "auto"]}
         orientation="right"
-        tickFormatter={compact}
+        tickFormatter={compactCurrency}
         width={70}
       />
       {categories.map((category) => (
@@ -71,7 +56,7 @@ export function ResultsChart({
         content={
           <LineChart.TooltipContent
             indicator="line"
-            valueFormatter={(value) => currencyFormatter.format(Number(value))}
+            valueFormatter={(value) => formatCurrency(Number(value))}
           />
         }
       />

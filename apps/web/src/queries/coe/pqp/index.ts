@@ -1,2 +1,2 @@
-export * from "./overview";
-export * from "./rates";
+export * from "@web/queries/coe/pqp/overview";
+export * from "@web/queries/coe/pqp/rates";

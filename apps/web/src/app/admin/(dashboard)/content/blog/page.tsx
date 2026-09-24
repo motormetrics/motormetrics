@@ -1,21 +1,19 @@
 import { Button, Card } from "@heroui/react";
 import { mdxComponents } from "@web/app/(main)/(site)/blog/components/mdx-components";
-import { getAllPosts } from "@web/app/admin/actions/blog";
 import { BlogPostsTable } from "@web/app/admin/components/blog-posts-table";
-import { ListSkeleton } from "@web/components/shared/skeleton";
+import { getAllPosts } from "@web/app/admin/queries/posts";
 import { FileText, Plus } from "lucide-react";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { ReactNode } from "react";
-import { Suspense } from "react";
 import remarkGfm from "remark-gfm";
 
 export default async function BlogManagementPage() {
   const posts = await getAllPosts();
 
   const previews: Record<string, ReactNode> = {};
-  for (const post of posts) {
-    const content = (post as unknown as { content: string }).content;
+  // Content only feeds the server-rendered previews; the client table never receives it
+  const tablePosts = posts.map(({ content, ...post }) => {
     if (content) {
       previews[post.id] = (
         <article className="prose max-w-none p-6">
@@ -29,7 +27,8 @@ export default async function BlogManagementPage() {
         </article>
       );
     }
-  }
+    return post;
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -53,9 +52,7 @@ export default async function BlogManagementPage() {
       </div>
 
       {/* Posts Table */}
-      <Suspense fallback={<ListSkeleton count={5} itemHeight="h-16" />}>
-        <BlogPostsTable initialPosts={posts} previews={previews} />
-      </Suspense>
+      <BlogPostsTable posts={tablePosts} previews={previews} />
 
       {/* Instructions */}
       <Card>

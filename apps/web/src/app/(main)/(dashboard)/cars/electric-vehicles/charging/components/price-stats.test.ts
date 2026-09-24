@@ -1,5 +1,8 @@
+import {
+  deriveChargingStats,
+  formatPerKwh,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
 import type { ConnectorRecord } from "@web/lib/ev-charging";
-import { deriveChargingStats, formatPerKwh } from "./price-stats";
 
 const connector = (
   overrides: Partial<ConnectorRecord> & Pick<ConnectorRecord, "evCpId">,

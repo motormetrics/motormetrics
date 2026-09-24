@@ -1,33 +1,29 @@
 import { Typography } from "@heroui/react";
-import { NumberValue } from "@heroui-pro/react";
 import {
-  formatMonthLabel,
-  formatMonthName,
-} from "@web/app/(main)/(dashboard)/cars/components/format-month";
+  CATEGORY_DESCRIPTIONS,
+  toCategoryKey,
+} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { PqpRateRow } from "@web/app/(main)/(dashboard)/coe/components/pqp-rate-row";
 import {
   type CoeCategorySeries,
   CoePremiums,
 } from "@web/app/(main)/(dashboard)/components/coe-premiums";
-import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
 import {
-  changeRatio,
   pqpMonthsFor,
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionHead } from "@web/components/shared/overview";
 import { getAllCoeCategoryTrends, getPqpRates } from "@web/queries/coe";
+import type { COECategory } from "@web/types";
+import { changeRatio } from "@web/utils/change-ratio";
+import {
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
 import { getLatestMonth } from "@web/utils/dates/months";
 
 /** Bidding months drawn in the premium trend, the selected one last. */
 const TREND_MONTHS = 12;
-
-const CATEGORY_NAMES: Record<string, string> = {
-  "Category A": "Cars up to 1600cc & 130bhp",
-  "Category B": "Cars above 1600cc or 130bhp",
-  "Category C": "Goods vehicles & buses",
-  "Category D": "Motorcycles",
-  "Category E": "Open category",
-};
 
 /**
  * COE premiums for the selected month with the PQP renewal rates beside them.
@@ -54,8 +50,8 @@ export async function CoeSection() {
 
       return {
         category,
-        label: category.replace("Category ", ""),
-        name: CATEGORY_NAMES[category] ?? category,
+        label: toCategoryKey(category as COECategory),
+        name: CATEGORY_DESCRIPTIONS[category as COECategory] ?? category,
         points: windowEndingAt(merged, month, TREND_MONTHS).map(
           ({ month: pointMonth, premium }) => ({ month: pointMonth, premium }),
         ),
@@ -86,8 +82,8 @@ export async function CoeSection() {
         value,
         pqpPrevious?.[category as keyof typeof pqpPrevious],
       ),
-      letter: category.replace("Category ", ""),
-      name: CATEGORY_NAMES[category] ?? category,
+      letter: toCategoryKey(category as COECategory),
+      name: CATEGORY_DESCRIPTIONS[category as COECategory] ?? category,
       value,
     }));
 
@@ -115,36 +111,13 @@ export async function CoeSection() {
             </Typography.Paragraph>
             <ul className="flex flex-col">
               {pqpRows.map((row) => (
-                <li
-                  className="flex items-center gap-3.5 border-separator border-b py-3.5"
+                <PqpRateRow
+                  changeRatio={row.changeRatio}
+                  description={row.name}
                   key={row.category}
-                >
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-soft font-extrabold text-[17px] text-accent-strong">
-                    {row.letter}
-                  </span>
-                  <div className="flex min-w-0 flex-col gap-px">
-                    <span className="font-extrabold text-lg tabular-nums">
-                      <NumberValue
-                        currency="SGD"
-                        locale="en-SG"
-                        maximumFractionDigits={0}
-                        style="currency"
-                        value={row.value}
-                      />
-                    </span>
-                    <Typography.Paragraph
-                      className="font-medium"
-                      color="muted"
-                      size="sm"
-                      truncate
-                    >
-                      {row.name}
-                    </Typography.Paragraph>
-                  </div>
-                  <div className="ml-auto shrink-0">
-                    <CostTrendChip changeRatio={row.changeRatio} />
-                  </div>
-                </li>
+                  letter={row.letter}
+                  value={row.value}
+                />
               ))}
             </ul>
             <Typography.Paragraph

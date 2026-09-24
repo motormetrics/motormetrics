@@ -17,7 +17,7 @@ vi.mock("@web/lib/updater/services/download-file", () => ({
 
 import { type UpdaterResult, update } from "@web/lib/updater";
 import { fetchAndExtractZip } from "@web/lib/updater/services/download-file";
-import { updateCoe } from "./process-data";
+import { updateCoe } from "@web/workflows/coe/steps/process-data";
 
 const mockResult = (overrides?: Partial<UpdaterResult>): UpdaterResult => ({
   table: "coe",

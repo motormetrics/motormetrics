@@ -1,13 +1,12 @@
 import { Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
+import {
+  getCategoryConfig,
+  getReadingTime,
+} from "@web/app/(main)/(site)/blog/components/post/utils";
+import { formatDate } from "@web/utils/dates/format-date";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import {
-  formatDate,
-  getCategoryConfig,
-  getExcerpt,
-  getReadingTime,
-} from "./post/utils";
 
 /**
  * One post in a grid — the comps use the same card under "All posts" on the
@@ -23,7 +22,7 @@ export function PostCard({
   showExcerpt?: boolean;
 }) {
   const publishedDate = post.publishedAt ?? post.createdAt;
-  const excerpt = getExcerpt(post);
+  const excerpt = post.excerpt;
 
   return (
     <Link

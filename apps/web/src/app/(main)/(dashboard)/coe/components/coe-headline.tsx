@@ -11,7 +11,7 @@ import {
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
-import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
+import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { Headline } from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { getCoeResults } from "@web/queries/coe";

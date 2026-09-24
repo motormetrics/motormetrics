@@ -1,10 +1,10 @@
 import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { MonthlyChart } from "@web/app/(main)/(dashboard)/cars/components/monthly-chart";
 import {
   FuelTypeTabs,
   RangeTabs,
 } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
-import { RegistrationsChart } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-chart";
 import {
   loadSearchParams,
   RANGE_MONTHS,
@@ -37,42 +37,12 @@ import {
   getTopMakesByYear,
   getYearlyRegistrations,
 } from "@web/queries/cars/yearly-statistics";
+import { percentageChange } from "@web/utils/change-ratio";
+import { formatChartMonth } from "@web/utils/dates/format-month";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
-
-const MONTH_LABELS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-/** Percentage change, guarding the division so an absent base reads as flat. */
-function percentageChange(current: number, previous: number): number {
-  if (!previous) {
-    return 0;
-  }
-
-  return ((current - previous) / previous) * 100;
-}
-
-/** `2025-10` → `Oct`, or `Oct '24` once the window spans more than a year. */
-function chartLabel(month: string, showYear: boolean): string {
-  const [year, monthNumber] = month.split("-");
-  const label = MONTH_LABELS[Number(monthNumber) - 1] ?? month;
-
-  return showYear ? `${label} '${year.slice(2)}` : label;
-}
 
 function lookup(
   rows: { count: number; label: string }[],
@@ -91,33 +61,27 @@ export async function RegistrationsReport({
     month: parsedMonth,
     range,
   } = await loadSearchParams(searchParams);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
-  const year = Number(month.slice(0, 4));
-
-  const [
-    registrations,
-    comparison,
-    fuelTypes,
-    yearToDate,
-    topMakes,
-    yearlyTotals,
-    series,
-  ] = await Promise.all([
-    getCarsData(month),
-    getCarsComparison(month),
+  const [{ month }, fuelTypes, yearlyTotals, series] = await Promise.all([
+    getMonthOrLatest(parsedMonth, "cars"),
     getDistinctFuelTypes(),
-    getYearToDateByFuelType(year),
-    getTopMakesByYear(year, 10),
     getYearlyRegistrations(),
     fuelType
       ? getMonthlyRegistrationTotalsByFuelType(fuelType, RANGE_MONTHS[range])
       : getMonthlyRegistrationTotals(RANGE_MONTHS[range]),
   ]);
+  const year = Number(month.slice(0, 4));
+
+  const [registrations, comparison, yearToDate, topMakes] = await Promise.all([
+    getCarsData(month),
+    getCarsComparison(month),
+    getYearToDateByFuelType(year),
+    getTopMakesByYear(year, 10),
+  ]);
 
   const formattedMonth = formatDateToMonthYear(month);
   const showYear = range !== "1Y";
   const chartData = series.map(({ month: seriesMonth, total }) => ({
-    label: chartLabel(seriesMonth, showYear),
+    label: formatChartMonth(seriesMonth, showYear),
     total,
   }));
 
@@ -190,7 +154,7 @@ export async function RegistrationsReport({
         value={<Count value={headlineValue} />}
       />
 
-      <RegistrationsChart data={chartData} />
+      <MonthlyChart data={chartData} />
 
       <ReportSection
         caption={`${formattedMonth} · all makes`}

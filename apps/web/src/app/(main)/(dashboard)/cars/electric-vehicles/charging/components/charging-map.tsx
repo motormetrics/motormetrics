@@ -1,6 +1,6 @@
+import { ChargingMapView } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map-view";
 import { MAP_ANCHOR_ID } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { SurfaceCard } from "@web/components/shared/bento";
-import { ChargingMapView } from "./charging-map-view";
 
 /**
  * Every public charging site on a map, coloured by live availability.

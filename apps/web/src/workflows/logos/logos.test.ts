@@ -29,8 +29,8 @@ import {
 import { downloadLogo } from "@motormetrics/logos/services/scraper";
 import type { LogoManifest } from "@motormetrics/logos/types";
 import { getDistinctMakes } from "@web/queries/cars/filter-options";
+import { logosWorkflow } from "@web/workflows/logos";
 import { revalidateTag } from "next/cache";
-import { logosWorkflow } from "./index";
 
 const found = (make: string) => ({
   make,

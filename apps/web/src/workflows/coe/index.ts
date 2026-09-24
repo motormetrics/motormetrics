@@ -1,11 +1,11 @@
 import { redis } from "@motormetrics/utils/redis";
+import { LAST_UPDATED_COE_KEY } from "@web/config/workflow";
 import { getCoeMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";
 import { updateCoe } from "@web/workflows/coe/steps/process-data";
 import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
-import { fetch } from "workflow";
 
 interface CoeWorkflowPayload {
   month?: string;
@@ -13,19 +13,16 @@ interface CoeWorkflowPayload {
 
 interface CoeWorkflowResult {
   message: string;
-  postId?: string;
 }
 
 /**
  * COE data workflow using Vercel WDK.
- * Processes COE bidding data and generates blog posts.
+ * Processes COE bidding data and revalidates cache.
  */
 export async function coeWorkflow(
   payload?: CoeWorkflowPayload,
 ): Promise<CoeWorkflowResult> {
   "use workflow";
-
-  globalThis.fetch = fetch;
 
   await emitEvent({ type: "step:start", step: "processCoeData" });
   const result = await processCoeData();
@@ -36,42 +33,20 @@ export async function coeWorkflow(
   });
 
   if (result.recordsProcessed === 0) {
-    return {
-      message: "No COE records processed. Skipped publishing to social media.",
-    };
+    return { message: "No COE records processed." };
   }
 
-  let month: string;
-
-  if (payload?.month) {
-    // When month is explicitly provided, use it directly and skip biddingNo guard
-    month = payload?.month;
-  } else {
-    const record = await getLatestRecord();
-    if (!record) {
-      return { message: "[COE] No COE records found" };
-    }
-
-    month = record.month;
-
-    // Only generate blog post when both bidding exercises are complete
-    if (record.biddingNo !== 2) {
-      const year = month.split("-")[0];
-      await revalidateCoeCache(month, year);
-      return {
-        message:
-          "[COE] Data processed. Waiting for second bidding exercise to generate post.",
-      };
-    }
+  const month = payload?.month ?? (await getLatestCoeMonth());
+  if (!month) {
+    return { message: "[COE] No COE records found" };
   }
 
-  const year = month.split("-")[0];
   await emitEvent({ type: "step:start", step: "revalidateCoeCache" });
-  await revalidateCoeCache(month, year);
+  await revalidateCoeCache(month);
   await emitEvent({
     type: "cache:revalidated",
     step: "revalidateCoeCache",
-    data: { month, year },
+    data: { month },
   });
 
   return {
@@ -85,25 +60,22 @@ async function processCoeData(): Promise<UpdaterResult> {
   const result = await updateCoe();
 
   if (result.recordsProcessed > 0) {
-    await redis.set("last_updated:coe", Date.now());
+    await redis.set(LAST_UPDATED_COE_KEY, Date.now());
   }
 
   return result;
 }
-async function getLatestRecord(): Promise<{
-  month: string;
-  biddingNo: number;
-} | null> {
+async function getLatestCoeMonth(): Promise<string | null> {
   "use step";
 
   const record = await getCOELatestRecord();
-  return record ?? null;
+  return record?.month ?? null;
 }
 
-async function revalidateCoeCache(month: string, year: string): Promise<void> {
+async function revalidateCoeCache(month: string): Promise<void> {
   "use step";
 
-  const tags = getCoeMonthlyRevalidationTags(month, year);
+  const tags = getCoeMonthlyRevalidationTags(month);
   for (const tag of tags) {
     revalidateTag(tag, "max");
   }

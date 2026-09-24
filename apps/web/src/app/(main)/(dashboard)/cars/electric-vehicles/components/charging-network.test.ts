@@ -1,5 +1,5 @@
+import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-network";
 import { describe, expect, it } from "vitest";
-import { deriveChargingNetworkGrowth } from "./charging-network";
 
 describe("deriveChargingNetworkGrowth", () => {
   it("should return null for an empty series", () => {

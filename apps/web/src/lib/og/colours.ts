@@ -20,11 +20,20 @@ export const OG_COLOURS = {
   /** Axis labels and hairline text */
   faint: "#96A2A7",
 
+  /** Fuel mix legend labels */
+  label: "#3A4448",
+
   /** Wordmark ink — the first arch and "motor" */
   inkDeep: "#16323F",
 
   /** Slate-blue accent */
   accent: "#4E7C9B",
+
+  /** Ink on an accent fill */
+  onAccent: "#FFFFFF",
+
+  /** Accent at 9%, for decorative washes */
+  accentWash: "rgba(78,124,155,0.09)",
 
   /** Soft accent pill background */
   accentSoft: "#DCE7EC",

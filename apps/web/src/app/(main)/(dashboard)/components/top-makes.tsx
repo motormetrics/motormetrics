@@ -1,12 +1,11 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
-import { buildLogoMap } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { BarRow } from "@web/components/shared/bar-row";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead } from "@web/components/shared/overview";
 import { getTopMakesByYear } from "@web/queries/cars";
-import { getAllCarLogos } from "@web/queries/logos";
+import { getCarLogoMap } from "@web/queries/logos";
 import { getLatestMonth } from "@web/utils/dates/months";
 
 const ROW_COUNT = 5;
@@ -15,18 +14,15 @@ const ROW_COUNT = 5;
 export async function TopMakes() {
   const month = await getLatestMonth("cars");
   const year = Number(month.slice(0, 4));
-  const [makes, logoResult] = await Promise.all([
+  const [makes, logoUrlBySlug] = await Promise.all([
     getTopMakesByYear(year, ROW_COUNT),
-    getAllCarLogos(),
+    getCarLogoMap(),
   ]);
 
   if (makes.length === 0) {
     return null;
   }
 
-  const logoUrlBySlug = buildLogoMap(
-    "logos" in logoResult ? logoResult.logos : [],
-  );
   const leader = makes[0].value || 1;
 
   return (

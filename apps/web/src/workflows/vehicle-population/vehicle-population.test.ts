@@ -35,16 +35,11 @@ vi.mock("@web/workflows/vehicle-population/steps/process-data", () => ({
   updateVehiclePopulation: vi.fn(),
 }));
 
-vi.mock("@web/queries/vehicle-population", () => ({
-  getVehiclePopulationYears: vi.fn(),
-}));
-
 vi.mock("next/cache", () => ({
   revalidateTag: vi.fn(),
 }));
 
 import { redis } from "@motormetrics/utils/redis";
-import { getVehiclePopulationYears } from "@web/queries/vehicle-population";
 import { vehiclePopulationWorkflow } from "@web/workflows/vehicle-population";
 import { updateVehiclePopulation } from "@web/workflows/vehicle-population/steps/process-data";
 import { revalidateTag } from "next/cache";
@@ -66,21 +61,7 @@ describe("vehiclePopulationWorkflow", () => {
     const result = await vehiclePopulationWorkflow();
 
     expect(result.message).toBe("No vehicle population records processed.");
-    expect(getVehiclePopulationYears).not.toHaveBeenCalled();
-  });
-
-  it("should return message when no data found", async () => {
-    vi.mocked(updateVehiclePopulation).mockResolvedValueOnce({
-      recordsProcessed: 5,
-      table: "vehicle_population",
-      message: "",
-      timestamp: "",
-    });
-    vi.mocked(getVehiclePopulationYears).mockResolvedValueOnce([]);
-
-    const result = await vehiclePopulationWorkflow();
-
-    expect(result.message).toBe("No vehicle population data found.");
+    expect(revalidateTag).not.toHaveBeenCalled();
   });
 
   it("should process data and revalidate cache on success", async () => {
@@ -90,18 +71,10 @@ describe("vehiclePopulationWorkflow", () => {
       message: "",
       timestamp: "",
     });
-    vi.mocked(getVehiclePopulationYears).mockResolvedValueOnce([
-      { year: "2024" },
-      { year: "2023" },
-    ]);
 
     const result = await vehiclePopulationWorkflow();
 
     expect(redis.set).toHaveBeenCalled();
-    expect(revalidateTag).toHaveBeenCalledWith(
-      "vehicle-population:year:2024",
-      "max",
-    );
     expect(revalidateTag).toHaveBeenCalledWith(
       "vehicle-population:years",
       "max",
@@ -122,9 +95,6 @@ describe("vehiclePopulationWorkflow", () => {
       message: "",
       timestamp: "",
     });
-    vi.mocked(getVehiclePopulationYears).mockResolvedValueOnce([
-      { year: "2024" },
-    ]);
 
     await vehiclePopulationWorkflow();
 

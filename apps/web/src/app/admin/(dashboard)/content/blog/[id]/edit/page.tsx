@@ -1,5 +1,5 @@
-import { getPostById } from "@web/app/admin/actions/blog";
 import { BlogPostForm } from "@web/app/admin/components/blog-post-form";
+import { getPostById } from "@web/app/admin/queries/posts";
 import { PenLine } from "lucide-react";
 import { notFound } from "next/navigation";
 

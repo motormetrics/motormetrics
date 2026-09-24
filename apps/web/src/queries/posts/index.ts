@@ -3,7 +3,6 @@ import { posts, type SelectPost } from "@motormetrics/database/schema";
 import {
   and,
   cosineDistance,
-  count,
   desc,
   eq,
   gt,
@@ -73,18 +72,6 @@ export async function getAllPosts() {
   });
 }
 
-export async function getRecentPosts(limit = 3) {
-  "use cache";
-  cacheLife("max");
-  cacheTag("posts:recent");
-
-  return db.query.posts.findMany({
-    where: { publishedAt: { isNotNull: true } },
-    orderBy: { publishedAt: "desc" },
-    limit,
-  });
-}
-
 export async function getPostBySlug(slug: string) {
   "use cache";
   cacheLife("max");
@@ -108,18 +95,6 @@ export async function getPostsByIds(postIds: string[]) {
     where: { id: { in: postIds }, publishedAt: { isNotNull: true } },
     orderBy: { publishedAt: "desc" },
   });
-}
-
-export async function getPostCountsByCategory() {
-  "use cache";
-  cacheLife("max");
-  cacheTag("posts:list");
-
-  return db
-    .select({ category: posts.dataType, count: count() })
-    .from(posts)
-    .where(isNotNull(posts.publishedAt))
-    .groupBy(posts.dataType);
 }
 
 export async function getPreviousPost(publishedAt: Date) {

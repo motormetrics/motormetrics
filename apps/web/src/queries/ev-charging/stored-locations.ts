@@ -1,8 +1,8 @@
 import { db } from "@motormetrics/database/client";
 import { evConnectorStatus } from "@motormetrics/database/schema";
 import { getPostalDistrict } from "@web/config/postal-districts";
+import type { EvChargingLocation } from "@web/queries/ev-charging/locations";
 import { count, like, max, min, or, sql } from "drizzle-orm";
-import type { EvChargingLocation } from "./locations";
 
 /**
  * One row per charging location, rolled up from the stored connector table.

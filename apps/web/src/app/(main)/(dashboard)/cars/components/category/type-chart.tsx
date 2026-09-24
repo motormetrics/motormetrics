@@ -1,19 +1,8 @@
 "use client";
 
 import { BarChart } from "@heroui-pro/react/bar-chart";
-
-const numberFormatter = new Intl.NumberFormat("en-SG");
-
-/** Axis labels are compact — the comp reads "6k", not "6,100". */
-function compact(value: number): string {
-  if (value < 1000) {
-    return String(value);
-  }
-
-  const thousands = value / 1000;
-
-  return `${thousands.toFixed(thousands % 1 === 0 ? 0 : 1)}k`;
-}
+import { formatNumber } from "@motormetrics/utils/format-currency";
+import { compactCount } from "@web/utils/formatting/chart-axis";
 
 /**
  * The full-width monthly column chart on a type detail page.
@@ -33,7 +22,11 @@ export function TypeChart({
     <BarChart data={data} height={320}>
       <BarChart.Grid vertical={false} />
       <BarChart.XAxis dataKey="label" tickMargin={8} />
-      <BarChart.YAxis orientation="right" tickFormatter={compact} width={60} />
+      <BarChart.YAxis
+        orientation="right"
+        tickFormatter={compactCount}
+        width={60}
+      />
       <BarChart.Bar
         dataKey="count"
         fill="var(--chart-1)"
@@ -42,7 +35,7 @@ export function TypeChart({
       <BarChart.Tooltip
         content={
           <BarChart.TooltipContent
-            valueFormatter={(value) => numberFormatter.format(Number(value))}
+            valueFormatter={(value) => formatNumber(Number(value))}
           />
         }
       />

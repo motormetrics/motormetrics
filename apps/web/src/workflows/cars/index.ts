@@ -1,11 +1,11 @@
 import { redis } from "@motormetrics/utils/redis";
+import { LAST_UPDATED_CARS_KEY } from "@web/config/workflow";
 import { getCarsMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { updateCars } from "@web/workflows/cars/steps/process-data";
 import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
-import { fetch } from "workflow";
 
 interface CarsWorkflowPayload {
   month?: string;
@@ -13,20 +13,16 @@ interface CarsWorkflowPayload {
 
 interface CarsWorkflowResult {
   message: string;
-  postId?: string;
 }
 
 /**
  * Cars data workflow using Vercel WDK.
- * Processes car registration data and generates blog posts.
+ * Processes car registration data and revalidates cache.
  */
 export async function carsWorkflow(
   payload?: CarsWorkflowPayload,
 ): Promise<CarsWorkflowResult> {
   "use workflow";
-
-  // Enable WDK's durable fetch for AI SDK
-  globalThis.fetch = fetch;
 
   await emitEvent({ type: "step:start", step: "processCarsData" });
   const result = await processCarsData();
@@ -37,9 +33,7 @@ export async function carsWorkflow(
   });
 
   if (result.recordsProcessed === 0) {
-    return {
-      message: "No car records processed. Skipped publishing to social media.",
-    };
+    return { message: "No car records processed." };
   }
 
   const month = payload?.month ?? (await getCarsLatestRegistrationMonth());
@@ -66,7 +60,7 @@ async function processCarsData(): Promise<UpdaterResult> {
   const result = await updateCars();
 
   if (result.recordsProcessed > 0) {
-    await redis.set("last_updated:cars", Date.now());
+    await redis.set(LAST_UPDATED_CARS_KEY, Date.now());
   }
 
   return result;

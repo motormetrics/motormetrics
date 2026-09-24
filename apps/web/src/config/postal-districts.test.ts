@@ -2,7 +2,7 @@ import {
   districtForPostalCode,
   getPostalDistrict,
   POSTAL_DISTRICTS,
-} from "./postal-districts";
+} from "@web/config/postal-districts";
 
 describe("POSTAL_DISTRICTS", () => {
   it("should cover every sector exactly once", () => {

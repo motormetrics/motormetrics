@@ -5,7 +5,7 @@ import { Chip, cn } from "@heroui/react";
  *
  * Sentiment follows the sign directly: a rise is good news for registrations,
  * population and market share. For figures where a rise is bad news — COE
- * premiums, PQP rates — use `(dashboard)/components/cost-trend-chip.tsx`,
+ * premiums, PQP rates — use `shared/cost-trend-chip.tsx`,
  * which inverts the colour instead.
  *
  * Built on HeroUI's Chip: `variant="soft"` with `color="success" | "warning"`

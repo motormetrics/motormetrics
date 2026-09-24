@@ -1,55 +1,8 @@
 import { db } from "@motormetrics/database/client";
 import { cars } from "@motormetrics/database/schema";
-import {
-  calculateMarketShareData,
-  findDominantType,
-} from "@web/lib/cars/calculations";
-import { getCarsData } from "@web/queries/cars/monthly-registrations";
-import type { FuelType, TopType } from "@web/types/cars";
+import type { FuelType } from "@web/types/cars";
 import { and, desc, eq, gt, sum } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-
-export interface CarMarketShareData {
-  name: string;
-  count: number;
-  percentage: number;
-  colour: string;
-}
-
-export interface CarMarketShareResponse {
-  month: string;
-  total: number;
-  category: "fuelType" | "vehicleType";
-  data: CarMarketShareData[];
-  dominantType: {
-    name: string;
-    percentage: number;
-  };
-}
-
-export interface CarTopTypeData {
-  name: string;
-  count: number;
-  percentage: number;
-  rank: number;
-}
-
-export interface CarTopMakeData {
-  make: string;
-  count: number;
-  percentage: number;
-  rank: number;
-  fuelType?: string;
-  vehicleType?: string;
-}
-
-export interface CarTopPerformersData {
-  month: string;
-  total: number;
-  topFuelTypes: CarTopTypeData[];
-  topVehicleTypes: CarTopTypeData[];
-  topMakes: CarTopMakeData[];
-}
 
 interface TopMake {
   make: string;
@@ -58,56 +11,6 @@ interface TopMake {
 
 /** Makes reported per fuel type by `getTopMakesByFuelType()`. */
 const TOP_MAKES_PER_FUEL_TYPE = 5;
-
-export async function getTopTypes(month: string): Promise<TopType> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`cars:month:${month}`);
-
-  const topFuelTypeQuery = db
-    .select({
-      name: cars.fuelType,
-      total: sum(cars.number).mapWith(Number),
-    })
-    .from(cars)
-    .where(eq(cars.month, month))
-    .groupBy(cars.fuelType)
-    .orderBy(desc(sum(cars.number)))
-    .limit(1);
-
-  const topVehicleTypeQuery = db
-    .select({
-      name: cars.vehicleType,
-      total: sum(cars.number).mapWith(Number),
-    })
-    .from(cars)
-    .where(eq(cars.month, month))
-    .groupBy(cars.vehicleType)
-    .orderBy(desc(sum(cars.number)))
-    .limit(1);
-
-  const [topFuelTypeResult, topVehicleTypeResult] = await db.batch([
-    topFuelTypeQuery,
-    topVehicleTypeQuery,
-  ]);
-
-  // `sum()` is null only for an empty group, which a GROUP BY cannot produce
-  const [topFuelTypeRow] = topFuelTypeResult;
-  const [topVehicleTypeRow] = topVehicleTypeResult;
-
-  const topFuelType = topFuelTypeRow
-    ? { name: topFuelTypeRow.name, total: topFuelTypeRow.total ?? 0 }
-    : { name: "N/A", total: 0 };
-  const topVehicleType = topVehicleTypeRow
-    ? { name: topVehicleTypeRow.name, total: topVehicleTypeRow.total ?? 0 }
-    : { name: "N/A", total: 0 };
-
-  return {
-    month,
-    topFuelType,
-    topVehicleType,
-  };
-}
 
 export async function getTopMakes(month: string): Promise<TopMake[]> {
   "use cache";
@@ -176,28 +79,4 @@ export async function getTopMakesByFuelType(
         .sort((first, second) => second.count - first.count)
         .slice(0, TOP_MAKES_PER_FUEL_TYPE),
     }));
-}
-
-export async function getCarMarketShareData(
-  month: string,
-  category: "fuelType" | "vehicleType",
-): Promise<CarMarketShareResponse> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(`cars:month:${month}`, `cars:category:${category}`);
-
-  const response = await getCarsData(month);
-  const categoryData = response[category];
-  const total = response.total;
-
-  const marketShareData = calculateMarketShareData(categoryData, total);
-  const dominantType = findDominantType(marketShareData);
-
-  return {
-    month: response.month,
-    total,
-    category,
-    data: marketShareData,
-    dominantType,
-  };
 }

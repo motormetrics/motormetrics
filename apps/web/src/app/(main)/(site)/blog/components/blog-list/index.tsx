@@ -1,1 +1,0 @@
-export { BlogList } from "./server";

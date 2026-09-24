@@ -1,8 +1,8 @@
-import { EV_FUEL_TYPES } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import type {
   Powertrain,
   Range,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
+import { EV_FUEL_TYPES } from "@web/config";
 import type {
   EvMarketShare,
   EvMonthlyTrend,
@@ -77,14 +77,7 @@ export function sliceRange<Item>(
   return series.slice(start, endIndex + 1);
 }
 
-/** Signed month-over-month change as a ratio, e.g. `0.084` for +8.4%. */
-export function changeRatio(current: number, previous: number): number {
-  if (!previous) {
-    return 0;
-  }
-
-  return (current - previous) / previous;
-}
+export { changeRatio } from "@web/utils/change-ratio";
 
 /**
  * Battery-electric share of all new car registrations, one entry per month of

@@ -1,8 +1,4 @@
 import { NumberValue } from "@heroui-pro/react";
-import {
-  formatMonthLabel,
-  formatMonthName,
-} from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { Headline } from "@web/components/shared/overview";
@@ -11,6 +7,10 @@ import {
   getDimensionStats,
   getMonthlyRegistrationTotals,
 } from "@web/queries/cars";
+import {
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
 
 /**
@@ -62,7 +62,7 @@ export async function RegistrationsHero({
   const leader = makeStats[0];
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-[18px]">
       <Headline
         caption={
           <>
@@ -94,7 +94,6 @@ export async function RegistrationsHero({
         }
       />
       <SparklineChart
-        className="mt-2"
         data={series}
         name="Registrations"
         title={`Monthly registrations over the ${series.length} months to ${formatMonthLabel(month)}`}

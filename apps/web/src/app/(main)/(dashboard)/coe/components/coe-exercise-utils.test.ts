@@ -1,5 +1,3 @@
-import type { COEResult } from "@web/types";
-import { describe, expect, it } from "vitest";
 import {
   biddingOrdinal,
   changeRatio,
@@ -11,7 +9,9 @@ import {
   summariseByYear,
   toCategory,
   toCategoryKey,
-} from "./coe-exercise-utils";
+} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import type { COEResult } from "@web/types";
+import { describe, expect, it } from "vitest";
 
 const result = (
   month: string,

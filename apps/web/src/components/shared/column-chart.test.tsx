@@ -1,6 +1,6 @@
+import { ColumnChart } from "@web/components/shared/column-chart";
 import { userEvent } from "vitest/browser";
 import { render } from "vitest-browser-react";
-import { ColumnChart } from "./column-chart";
 
 const columns = [
   { key: "2024-08", label: "Aug", value: 4460 },

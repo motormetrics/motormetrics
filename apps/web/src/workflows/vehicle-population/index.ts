@@ -1,6 +1,5 @@
 import { redis } from "@motormetrics/utils/redis";
 import type { UpdaterResult } from "@web/lib/updater";
-import { getVehiclePopulationYears } from "@web/queries/vehicle-population";
 import { emitEvent } from "@web/workflows/shared";
 import { updateVehiclePopulation } from "@web/workflows/vehicle-population/steps/process-data";
 import { revalidateTag } from "next/cache";
@@ -22,20 +21,14 @@ export async function vehiclePopulationWorkflow(): Promise<{
     return { message: "No vehicle population records processed." };
   }
 
-  const latestYear = await getVehiclePopulationLatestYear();
-  if (!latestYear) {
-    return { message: "No vehicle population data found." };
-  }
-
   await emitEvent({
     type: "step:start",
     step: "revalidateVehiclePopulationCache",
   });
-  await revalidateVehiclePopulationCache(latestYear);
+  await revalidateVehiclePopulationCache();
   await emitEvent({
     type: "cache:revalidated",
     step: "revalidateVehiclePopulationCache",
-    data: { year: latestYear },
   });
 
   return {
@@ -52,19 +45,9 @@ async function processVehiclePopulationData(): Promise<UpdaterResult> {
   }
   return result;
 }
-async function getVehiclePopulationLatestYear(): Promise<string | null> {
+async function revalidateVehiclePopulationCache(): Promise<void> {
   "use step";
-  const years = await getVehiclePopulationYears();
-  return years[0]?.year ?? null;
-}
-
-async function revalidateVehiclePopulationCache(year: string): Promise<void> {
-  "use step";
-  const tags = [
-    `vehicle-population:year:${year}`,
-    "vehicle-population:years",
-    "vehicle-population:totals",
-  ];
+  const tags = ["vehicle-population:years", "vehicle-population:totals"];
   for (const tag of tags) {
     revalidateTag(tag, "max");
   }

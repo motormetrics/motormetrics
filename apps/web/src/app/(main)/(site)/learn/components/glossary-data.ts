@@ -1,9 +1,3 @@
-// Data extracted from glossary-section.tsx because "use client" modules
-// don't expose non-component exports to Server Components.
-
-import type { LucideIcon } from "lucide-react";
-import { BookOpen, Car, Landmark, Layers, TrendingUp } from "lucide-react";
-
 interface GlossaryTerm {
   term: string;
   definition: string;
@@ -11,16 +5,12 @@ interface GlossaryTerm {
 
 export interface GlossaryCategoryData {
   title: string;
-  icon: LucideIcon;
-  iconColor: string;
   terms: GlossaryTerm[];
 }
 
 export const GLOSSARY_CATEGORIES: GlossaryCategoryData[] = [
   {
     title: "Core Terms",
-    icon: BookOpen,
-    iconColor: "text-accent-strong",
     terms: [
       {
         term: "COE",
@@ -56,8 +46,6 @@ export const GLOSSARY_CATEGORIES: GlossaryCategoryData[] = [
   },
   {
     title: "COE Categories",
-    icon: Layers,
-    iconColor: "text-warning",
     terms: [
       {
         term: "Category A",
@@ -86,8 +74,6 @@ export const GLOSSARY_CATEGORIES: GlossaryCategoryData[] = [
   },
   {
     title: "Vehicle Types",
-    icon: Car,
-    iconColor: "text-success",
     terms: [
       {
         term: "BEV",
@@ -108,8 +94,6 @@ export const GLOSSARY_CATEGORIES: GlossaryCategoryData[] = [
   },
   {
     title: "Regulatory Bodies and Schemes",
-    icon: Landmark,
-    iconColor: "text-muted",
     terms: [
       {
         term: "LTA",
@@ -140,8 +124,6 @@ export const GLOSSARY_CATEGORIES: GlossaryCategoryData[] = [
   },
   {
     title: "Market Terms",
-    icon: TrendingUp,
-    iconColor: "text-accent-strong",
     terms: [
       {
         term: "Quota Premium",

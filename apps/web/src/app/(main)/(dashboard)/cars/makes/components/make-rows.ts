@@ -1,5 +1,9 @@
-import type { CarLogo } from "@motormetrics/logos/types";
 import { slugify } from "@motormetrics/utils/slugify";
+import {
+  type FuelFilter,
+  isFuelFilter,
+  type Range,
+} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { HYBRID_REGEX } from "@web/config";
 import { LOGOS_CACHE_TAG } from "@web/lib/cache-tags/logos";
 import type { MakeRegistrationStat } from "@web/queries/cars";
@@ -9,16 +13,9 @@ import {
   getFuelTypeData,
   getMakeRegistrationStats,
 } from "@web/queries/cars";
-import { getAllCarLogos } from "@web/queries/logos";
+import { getCarLogoMap } from "@web/queries/logos";
+import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { cacheLife, cacheTag } from "next/cache";
-import {
-  FUEL_FILTERS,
-  type FuelFilter,
-  isFuelFilter,
-  type Range,
-} from "../search-params";
-
-export { FUEL_FILTERS, type FuelFilter, isFuelFilter };
 
 /** The `cars.fuelType` value that means battery-electric and nothing else. */
 const BEV_FUEL_TYPE = "Electric";
@@ -57,8 +54,6 @@ export interface MakeRow {
 }
 
 export interface MakeRowsResult {
-  /** Every fuel type with registrations, for the filter tabs. */
-  fuelTypes: string[];
   latestMonth: string | null;
   rows: MakeRow[];
   total: number;
@@ -78,32 +73,10 @@ interface FuelRow {
   month: string;
 }
 
-/**
- * Month arithmetic on `YYYY-MM` strings.
- *
- * Deliberately does not go through `Date`: Cache Components rejects reading the
- * current time anywhere in the prerender path, and plain arithmetic keeps this
- * provably clock-free.
- */
-export function shiftMonth(month: string, delta: number): string {
-  const [year, monthPart] = month.split("-").map(Number);
-  const index = year * 12 + (monthPart - 1) + delta;
-  return `${Math.floor(index / 12)}-${String((index % 12) + 1).padStart(2, "0")}`;
-}
-
 /** The 12 months ending at `latestMonth`, oldest first. */
 export function rollingMonths(latestMonth: string): string[] {
   const start = shiftMonth(latestMonth, -11);
   return Array.from({ length: 12 }, (_, index) => shiftMonth(start, index));
-}
-
-export function buildLogoMap(logos: CarLogo[]): Record<string, string> {
-  return logos.reduce<Record<string, string>>((acc, logo) => {
-    if (logo.url) {
-      acc[slugify(logo.make)] = logo.url;
-    }
-    return acc;
-  }, {});
 }
 
 /**
@@ -285,19 +258,16 @@ export async function loadMakeRows(
     );
   }
 
-  const [latestMonth, fuelTypeRows, logoResult] = await Promise.all([
+  const [latestMonth, fuelTypeRows, logoUrlBySlug] = await Promise.all([
     getCarsLatestMonth(),
     getDistinctFuelTypes(),
-    getAllCarLogos(),
+    getCarLogoMap(),
   ]);
 
   const fuelTypes = fuelTypeRows.map((row) => row.fuelType);
-  const logoUrlBySlug = buildLogoMap(
-    "logos" in logoResult ? logoResult.logos : [],
-  );
 
   if (!latestMonth) {
-    return { fuelTypes, latestMonth: null, rows: [], total: 0 };
+    return { latestMonth: null, rows: [], total: 0 };
   }
 
   let totals: MakeTotals[];
@@ -324,7 +294,6 @@ export async function loadMakeRows(
   const rows = finaliseRows(totals, logoUrlBySlug);
 
   return {
-    fuelTypes,
     latestMonth,
     rows,
     total: rows.reduce((sum, row) => sum + row.count, 0),
@@ -390,11 +359,11 @@ export async function loadElectricOnlyMakes(): Promise<ElectricOnlySummary | nul
     LOGOS_CACHE_TAG,
   );
 
-  const [latestMonth, stats, electric, logoResult] = await Promise.all([
+  const [latestMonth, stats, electric, logoUrlBySlug] = await Promise.all([
     getCarsLatestMonth(),
     getMakeRegistrationStats(),
     getFuelTypeData(BEV_FUEL_TYPE),
-    getAllCarLogos(),
+    getCarLogoMap(),
   ]);
 
   if (!latestMonth) {
@@ -416,9 +385,5 @@ export async function loadElectricOnlyMakes(): Promise<ElectricOnlySummary | nul
     );
   }
 
-  return selectElectricOnlyMakes(
-    stats,
-    electricByMake,
-    buildLogoMap("logos" in logoResult ? logoResult.logos : []),
-  );
+  return selectElectricOnlyMakes(stats, electricByMake, logoUrlBySlug);
 }

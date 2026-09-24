@@ -11,8 +11,8 @@ import {
   fetchBatch,
   parseBatch,
 } from "@web/lib/ev-charging";
-import { cacheLifeMock, cacheTagMock } from "../test-utils";
-import { getEvChargingSnapshot } from "./snapshot";
+import { getEvChargingSnapshot } from "@web/queries/ev-charging/snapshot";
+import { cacheLifeMock, cacheTagMock } from "@web/queries/test-utils";
 
 describe("getEvChargingSnapshot", () => {
   afterEach(() => {

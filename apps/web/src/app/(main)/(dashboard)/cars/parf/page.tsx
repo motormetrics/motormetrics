@@ -14,26 +14,24 @@ import type { WebPage, WithContext } from "schema-dts";
 const title = "PARF Rebate Calculator Singapore";
 const description =
   "Compare PARF rebates before and after the Budget 2026 changes. Calculate how much less you would receive under the new rates.";
-export function generateMetadata(): Metadata {
-  return {
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    ...baseOpenGraph,
     title,
     description,
-    openGraph: {
-      ...baseOpenGraph,
-      title,
-      description,
-      url: `${SITE_URL}/cars/parf`,
-    },
-    twitter: {
-      ...baseTwitter,
-      title,
-      description,
-    },
-    alternates: {
-      canonical: "/cars/parf",
-    },
-  };
-}
+    url: `${SITE_URL}/cars/parf`,
+  },
+  twitter: {
+    ...baseTwitter,
+    title,
+    description,
+  },
+  alternates: {
+    canonical: "/cars/parf",
+  },
+};
 
 const structuredData: WithContext<WebPage> = {
   "@context": "https://schema.org",

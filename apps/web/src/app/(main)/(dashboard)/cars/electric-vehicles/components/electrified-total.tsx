@@ -1,6 +1,5 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { formatMonthName } from "@web/app/(main)/(dashboard)/cars/components/format-month";
 import {
   buildRegistrationSplit,
   resolveMonthIndex,
@@ -12,6 +11,7 @@ import {
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { Headline } from "@web/components/shared/overview";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
+import { formatMonthName } from "@web/utils/dates/format-month";
 
 /** Below this share a segment has no room for its own label inside the bar. */
 const LABEL_THRESHOLD = 10;

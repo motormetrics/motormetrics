@@ -28,7 +28,11 @@ export function NotificationPrompt() {
   const [isPromptDismissed, setIsPromptDismissed] = useState(false);
 
   const rememberDismissal = useCallback(() => {
-    window.localStorage?.setItem(NOTIFICATION_PROMPT_DISMISSED_KEY, "true");
+    try {
+      window.localStorage?.setItem(NOTIFICATION_PROMPT_DISMISSED_KEY, "true");
+    } catch {
+      // Storage unavailable; the in-memory flag still stops a repeat prompt.
+    }
     promptToastId.current = null;
     setIsPromptDismissed(true);
   }, []);
@@ -62,16 +66,11 @@ export function NotificationPrompt() {
     });
   }, [closePrompt]);
 
-  const handleClose = useCallback(() => {
-    rememberDismissal();
-  }, [rememberDismissal]);
-
   useEffect(() => {
     if (
       !("Notification" in window) ||
       Notification.permission !== "default" ||
-      window.localStorage?.getItem(NOTIFICATION_PROMPT_DISMISSED_KEY) ===
-        "true" ||
+      isDismissalStored() ||
       isPromptDismissed ||
       promptToastId.current
     ) {
@@ -93,14 +92,24 @@ export function NotificationPrompt() {
             </div>
           </div>
         ),
-        onClose: handleClose,
+        onClose: rememberDismissal,
         timeout: 8_000,
         variant: "default",
       });
     }, NOTIFICATION_PROMPT_DELAY_MS);
 
     return () => window.clearTimeout(timer);
-  }, [handleDismiss, handleClose, handleEnable, isPromptDismissed]);
+  }, [handleDismiss, handleEnable, isPromptDismissed, rememberDismissal]);
 
   return null;
+}
+
+function isDismissalStored() {
+  try {
+    return (
+      window.localStorage?.getItem(NOTIFICATION_PROMPT_DISMISSED_KEY) === "true"
+    );
+  } catch {
+    return false;
+  }
 }

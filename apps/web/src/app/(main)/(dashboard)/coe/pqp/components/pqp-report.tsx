@@ -1,6 +1,11 @@
 import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
-import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/components/category-badge";
+import {
+  CATEGORY_DESCRIPTIONS,
+  formatMonth,
+  toCategory,
+} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
   PQPChart,
   type PQPSeries,
@@ -14,12 +19,13 @@ import {
   TermTabs,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-filters";
 import { RenewalComparison } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal-comparison";
+import { UnreleasedFeature } from "@web/app/(main)/(dashboard)/coe/pqp/components/unreleased-feature";
 import {
   loadSearchParams,
   PQP_CATEGORY_KEYS,
   type PQPCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
-import { CostTrendChip } from "@web/app/(main)/(dashboard)/components/cost-trend-chip";
+import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import {
   ReportFilterBar,
   ReportHeadline,
@@ -33,7 +39,6 @@ import {
   ReportRow,
   ReportTable,
 } from "@web/components/shared/report-table";
-import { UnreleasedFeature } from "@web/components/unreleased-feature";
 import { getPQPOverview } from "@web/queries/coe";
 import type { Pqp } from "@web/types/coe";
 import Link from "next/link";
@@ -41,15 +46,7 @@ import type { SearchParams } from "nuqs/server";
 
 /** `A` → `Category A`, the key the query and the types use. */
 const categoryName = (key: PQPCategoryKey) =>
-  `Category ${key}` as keyof Pqp.Rates;
-
-/** What each renewal category covers. */
-const CATEGORY_DESCRIPTIONS: Record<string, string> = {
-  A: "Cars up to 1,600cc and 130bhp",
-  B: "Cars above 1,600cc or 130bhp",
-  C: "Goods vehicles and buses",
-  D: "Motorcycles",
-};
+  toCategory(key) as keyof Pqp.Rates;
 
 /**
  * What renewing costs against bidding, beyond the price. Authored copy — none
@@ -157,7 +154,7 @@ export async function PQPReport({
             <CostTrendChip changeRatio={headlineChange / 100} />
           )
         }
-        label={`Category ${category} · ${CATEGORY_DESCRIPTIONS[category]}`}
+        label={`Category ${category} · ${CATEGORY_DESCRIPTIONS[toCategory(category)]}`}
         stats={
           <>
             <ReportStat
@@ -189,8 +186,7 @@ export async function PQPReport({
       <div className="flex flex-col gap-3.5">
         <PQPChart data={chartData} series={series} />
         <Typography.Paragraph color="muted" size="sm">
-          Rates are quoted for a {term}-year renewal. The comps draw the closing
-          premium alongside the rate; that series is not in this query yet.
+          Rates are quoted for a {term}-year renewal.
         </Typography.Paragraph>
       </div>
 
@@ -232,24 +228,13 @@ export async function PQPReport({
             return (
               <ReportRow isActive={key === category} key={key}>
                 <ReportCell>
-                  <span
-                    className="inline-flex size-10 items-center justify-center rounded-full font-extrabold text-base"
-                    style={{
-                      backgroundColor:
-                        key === category
-                          ? "var(--accent)"
-                          : "var(--surface-secondary)",
-                      color:
-                        key === category
-                          ? "var(--accent-foreground)"
-                          : "var(--accent-strong)",
-                    }}
-                  >
-                    {key}
-                  </span>
+                  <CategoryBadge
+                    categoryKey={key}
+                    isActive={key === category}
+                  />
                 </ReportCell>
                 <ReportCell className="font-semibold text-base">
-                  {CATEGORY_DESCRIPTIONS[key]}
+                  {CATEGORY_DESCRIPTIONS[toCategory(key)]}
                 </ReportCell>
                 <ReportCell align="end" className="font-extrabold text-lg">
                   {formatCurrency(rate * termFactor)}

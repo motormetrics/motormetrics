@@ -1,12 +1,12 @@
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
-import { cacheLife, cacheTag } from "next/cache";
 import {
   type EvChargingLocation,
   groupLocations,
   inDistrict,
   PER_KWH,
-} from "./locations";
-import { getEvChargingSnapshot } from "./snapshot";
+} from "@web/queries/ev-charging/locations";
+import { getEvChargingSnapshot } from "@web/queries/ev-charging/snapshot";
+import { cacheLife, cacheTag } from "next/cache";
 
 export type PowerRating = "AC" | "DC";
 export type PriceOrder = "cheapest" | "priciest";

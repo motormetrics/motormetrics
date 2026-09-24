@@ -1,19 +1,8 @@
 "use client";
 
 import { LineChart } from "@heroui-pro/react/line-chart";
-
-const numberFormatter = new Intl.NumberFormat("en-SG");
-
-/** Axis labels are compact — the comp reads "6k", not "6,100". */
-function compact(value: number): string {
-  if (value < 1000) {
-    return String(value);
-  }
-
-  const thousands = value / 1000;
-
-  return `${thousands.toFixed(thousands % 1 === 0 ? 0 : 1)}k`;
-}
+import { formatNumber } from "@motormetrics/utils/format-currency";
+import { compactCount } from "@web/utils/formatting/chart-axis";
 
 export interface DeregistrationSeries {
   /** Chart-colour custom property, e.g. `var(--chart-1)`. */
@@ -58,7 +47,7 @@ export function DeregistrationsChart({
         <LineChart.XAxis dataKey="label" tickMargin={8} />
         <LineChart.YAxis
           orientation="right"
-          tickFormatter={(value: number) => compact(value)}
+          tickFormatter={(value: number) => compactCount(value)}
           width={60}
         />
         {series.map(({ color, key, label }) => (
@@ -76,7 +65,7 @@ export function DeregistrationsChart({
           content={
             <LineChart.TooltipContent
               indicator="line"
-              valueFormatter={(value) => numberFormatter.format(Number(value))}
+              valueFormatter={(value) => formatNumber(Number(value))}
             />
           }
         />

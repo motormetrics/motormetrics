@@ -5,14 +5,17 @@ import { Segment } from "@heroui-pro/react";
 // biome-ignore lint/suspicious/noShadowRestrictedNames: HeroUI Pro Map component
 import { Map, type MapClusterLayerProps, useMap } from "@heroui-pro/react/map";
 import { siteParam } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
-import { describeConnectors } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/utils/describe-connectors";
+import {
+  describeConnectors,
+  siteTitle,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/utils/describe-connectors";
 import { getPostalDistrict } from "@web/config/postal-districts";
 import { inDistrict } from "@web/queries/ev-charging/locations";
 import type { EvChargingMapSite } from "@web/queries/ev-charging/map-sites";
 import type { FeatureCollection, Point } from "geojson";
 import { type LngLatBoundsLike, setWorkerUrl } from "maplibre-gl";
 import { parseAsString, useQueryState } from "nuqs";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useMemo, useState } from "react";
 
 setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
 
@@ -43,9 +46,6 @@ const MAP_SITES_ENDPOINT = "/api/ev-charging/map-sites";
 
 /** Stable empty reference so the memos below do not rerun while loading. */
 const NO_SITES: EvChargingMapSite[] = [];
-
-const siteTitle = (site: EvChargingMapSite) =>
-  site.stationName ?? site.address ?? site.locationId;
 
 /** Singapore, framed with a little sea on every side. */
 const ISLAND_CENTER: [number, number] = [103.82, 1.36];
@@ -327,6 +327,7 @@ function SiteFocus({
   site: EvChargingMapSite | undefined;
 }) {
   const { isLoaded, map } = useMap();
+  const handleFocus = useEffectEvent(onFocus);
 
   useEffect(() => {
     if (!isLoaded || !map || !site) {
@@ -336,8 +337,8 @@ function SiteFocus({
       center: [site.longitude, site.latitude],
       zoom: Math.max(map.getZoom(), SITE_ZOOM),
     });
-    onFocus(site);
-  }, [isLoaded, map, onFocus, site]);
+    handleFocus(site);
+  }, [isLoaded, map, site]);
 
   return null;
 }
@@ -359,17 +360,14 @@ export function ChargingMapView() {
       siteId ? sites.find((site) => site.locationId === siteId) : undefined,
     [siteId, sites],
   );
-  // Read through a ref so a district change does not re-run the site focus.
-  const districtRef = useRef(district);
-  districtRef.current = district;
-  const focusSite = useCallback((site: EvChargingMapSite) => {
+  const focusSite = (site: EvChargingMapSite) => {
     setMode("availability");
     setSelected({
       site,
       coordinates: [site.longitude, site.latitude],
-      district: districtRef.current,
+      district,
     });
-  }, []);
+  };
   const closePopup = () => {
     setSelected(null);
     setSiteId(null);

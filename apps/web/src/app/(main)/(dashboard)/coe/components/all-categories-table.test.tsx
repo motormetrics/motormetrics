@@ -1,9 +1,9 @@
+import type { CategoryRow } from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
+import { AllCategoriesTable } from "@web/app/(main)/(dashboard)/coe/components/all-categories-table";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
-import type { CategoryRow } from "./all-categories-sort";
-import { AllCategoriesTable } from "./all-categories-table";
 
-vi.mock("./coe-controls", () => ({
+vi.mock("@web/app/(main)/(dashboard)/coe/components/coe-controls", () => ({
   CategorySelect: ({
     children,
     label,
@@ -15,7 +15,7 @@ vi.mock("./coe-controls", () => ({
       {children}
     </button>
   ),
-  useCoeCategory: () => ({ setCategory: vi.fn() }),
+  useCoeCategory: () => ({ selectCategory: vi.fn() }),
 }));
 
 vi.mock("posthog-js", () => ({ default: { capture: vi.fn() } }));

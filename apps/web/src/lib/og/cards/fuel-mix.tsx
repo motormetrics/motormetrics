@@ -167,7 +167,11 @@ export function FuelMix({
                   }}
                 />
                 <span
-                  style={{ fontSize: 25, fontWeight: 600, color: "#3A4448" }}
+                  style={{
+                    fontSize: 25,
+                    fontWeight: 600,
+                    color: OG_COLOURS.label,
+                  }}
                 >
                   {slice.label}
                 </span>

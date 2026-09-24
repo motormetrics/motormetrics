@@ -1,11 +1,12 @@
 import { Skeleton, Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { formatOrdinal } from "@motormetrics/utils/format-ordinal";
 import { slugify } from "@motormetrics/utils/slugify";
+import { CarsMonthSelector } from "@web/app/(main)/(dashboard)/cars/components/cars-month-selector";
+import { PeriodTabs } from "@web/app/(main)/(dashboard)/cars/components/category/period-tabs";
 import { TypeChart } from "@web/app/(main)/(dashboard)/cars/components/category/type-chart";
-import { PeriodTabs } from "@web/app/(main)/(dashboard)/cars/components/category/type-filters";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import { MonthSelector } from "@web/components/shared/month-selector";
 import { PageHead } from "@web/components/shared/page-head";
 import {
   Report,
@@ -38,7 +39,10 @@ import {
   getTypeMonthlySeries,
   type TypeDimension,
 } from "@web/queries/cars/type-detail";
-import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
+import { percentageChange } from "@web/utils/change-ratio";
+import { formatChartMonth } from "@web/utils/dates/format-month";
+import { shiftMonth } from "@web/utils/dates/month-arithmetic";
+import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -74,50 +78,20 @@ const SERIES_MONTHS = 12;
 /** How many makes the by-make table lists before it stops. */
 const MAKE_LIMIT = 15;
 
-export const typeSearchParams = {
+const typeSearchParams = {
   month: parseAsString,
   period: parseAsStringLiteral(PERIODS).withDefault(DEFAULT_PERIOD),
 };
-export const loadTypeSearchParams = createLoader(typeSearchParams);
+const loadTypeSearchParams = createLoader(typeSearchParams);
 
 export interface TypeDetailConfig {
   category: "fuel-types" | "vehicle-types";
-  description: string;
 }
 
 interface TypeDetailProps {
   config: TypeDetailConfig;
   params: Promise<{ type: string }>;
   searchParams: Promise<SearchParams>;
-}
-
-const MONTH_LABELS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-/** `2025-10` → `Oct`. Twelve consecutive months never repeat a label. */
-function monthLabel(month: string): string {
-  const monthNumber = Number(month.split("-")[1]);
-  return MONTH_LABELS[monthNumber - 1] ?? month;
-}
-
-/** `2025-10`, -12 → `2024-10`. */
-function shiftMonth(month: string, delta: number): string {
-  const [year, monthNumber] = month.split("-").map(Number);
-  const shifted = new Date(Date.UTC(year, monthNumber - 1 + delta, 1));
-
-  return `${shifted.getUTCFullYear()}-${String(shifted.getUTCMonth() + 1).padStart(2, "0")}`;
 }
 
 /** Inclusive `YYYY-MM` bounds for a period, anchored on `month`. */
@@ -134,27 +108,6 @@ function periodWindow(
   }
 
   return { from: shiftMonth(month, -(SERIES_MONTHS - 1)), to: month };
-}
-
-/** Percentage change, guarding the division so an absent base reads as flat. */
-function percentageChange(current: number, previous: number): number {
-  if (!previous) {
-    return 0;
-  }
-
-  return ((current - previous) / previous) * 100;
-}
-
-/** `1` → `1st`, `2` → `2nd`, `13` → `13th`. */
-function ordinal(rank: number): string {
-  const lastTwo = rank % 100;
-  if (lastTwo >= 11 && lastTwo <= 13) {
-    return `${rank}th`;
-  }
-
-  const suffix = { 1: "st", 2: "nd", 3: "rd" }[rank % 10] ?? "th";
-
-  return `${rank}${suffix}`;
 }
 
 function share(part: number, whole: number): number {
@@ -201,6 +154,25 @@ function displayValue(
   value: string,
 ): string {
   return category === "vehicle-types" ? formatVehicleType(value) : value;
+}
+
+/**
+ * Title, description and canonical path for a type page, shared by
+ * `generateMetadata` and the WebPage structured data so the two never drift.
+ * `value` is the LTA value; the slug stands in when it does not resolve.
+ */
+export function typeDetailMeta(
+  category: TypeDetailConfig["category"],
+  type: string,
+  value: string | undefined,
+): { title: string; description: string; canonical: string } {
+  const displayName = value ? displayValue(category, value) : type;
+
+  return {
+    title: `${displayName} Cars in Singapore`,
+    description: `${displayName} car registrations in Singapore. Explore registration trends, statistics, and distribution by ${CATEGORY_TERMS[category].noun} for each month.`,
+    canonical: `/cars/${category}/${type}`,
+  };
 }
 
 async function resolveType(
@@ -266,33 +238,11 @@ async function TypeDetailHead({
     <PageHead
       controls={
         <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-          <TypeDetailHeaderMeta searchParams={searchParams} />
+          <CarsMonthSelector searchParams={searchParams} />
         </Suspense>
       }
       description={`New car registrations recorded against this ${terms.noun}, month by month — not the fleet already on the road.`}
       title={value ? displayValue(config.category, value) : "Type overview"}
-    />
-  );
-}
-
-async function TypeDetailHeaderMeta({
-  searchParams: searchParamsPromise,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const { month: parsedMonth } =
-    await loadTypeSearchParams(searchParamsPromise);
-
-  const [{ wasAdjusted }, months] = await Promise.all([
-    getMonthOrLatest(parsedMonth, "cars"),
-    fetchMonthsForCars(),
-  ]);
-
-  return (
-    <MonthSelector
-      latestMonth={months[0]}
-      months={months}
-      wasAdjusted={wasAdjusted}
     />
   );
 }
@@ -310,9 +260,10 @@ async function TypeDetailContent({
     paramsPromise,
     loadTypeSearchParams(searchParamsPromise),
   ]);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
-
-  const value = await resolveType(config.category, type);
+  const [{ month }, value] = await Promise.all([
+    getMonthOrLatest(parsedMonth, "cars"),
+    resolveType(config.category, type),
+  ]);
   if (!value) {
     notFound();
   }
@@ -362,7 +313,7 @@ async function TypeDetailContent({
 
   const chartData = series.map(({ count, month: seriesMonth }) => ({
     count,
-    label: monthLabel(seriesMonth),
+    label: formatChartMonth(seriesMonth),
   }));
   const monthRows = [...series].reverse();
   const monthShareLeader = series.length
@@ -372,14 +323,17 @@ async function TypeDetailContent({
   const isElectricFuelType =
     config.category === "fuel-types" && value === "Electric";
 
-  const title = `${displayName} Cars in Singapore`;
-  const description = `${displayName} car registrations in Singapore. Explore registration trends, statistics, and distribution by ${terms.noun} for each month.`;
+  const { title, description, canonical } = typeDetailMeta(
+    config.category,
+    type,
+    value,
+  );
   const structuredData: WithContext<WebPage> = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: title,
     description,
-    url: `${SITE_URL}/cars/${config.category}/${type}`,
+    url: `${SITE_URL}${canonical}`,
     publisher: {
       "@type": "Organization",
       name: SITE_TITLE,
@@ -485,7 +439,7 @@ async function TypeDetailContent({
             />
           </>
         }
-        sub={`${periodLabel} · ${share(typeTotal, marketTotal).toFixed(1)}% of all registrations${rank > 0 ? ` · ${ordinal(rank)} largest of ${distribution.length} ${terms.plural}` : ""}`}
+        sub={`${periodLabel} · ${share(typeTotal, marketTotal).toFixed(1)}% of all registrations${rank > 0 ? ` · ${formatOrdinal(rank)} largest of ${distribution.length} ${terms.plural}` : ""}`}
         value={<Count value={typeTotal} />}
       />
 

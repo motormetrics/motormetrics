@@ -17,8 +17,8 @@ import {
   regeneratePost,
   updateBlogPost,
 } from "@web/app/admin/actions/blog";
-import type { CreatePostInput } from "@web/app/admin/lib/create-post";
-import type { UpdatePostInput } from "@web/app/admin/lib/update-post";
+import type { CreatePostInput } from "@web/lib/posts/create-post";
+import type { UpdatePostInput } from "@web/lib/posts/update-post";
 import { Loader2, Plus, RefreshCw, Save, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

@@ -26,7 +26,7 @@ export function Article({ height, tag, byline, title, excerpt }: ArticleProps) {
           width: 460,
           height: 460,
           borderRadius: "50%",
-          backgroundColor: "rgba(78,124,155,0.09)",
+          backgroundColor: OG_COLOURS.accentWash,
         }}
       />
       <div

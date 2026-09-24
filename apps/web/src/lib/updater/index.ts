@@ -2,5 +2,5 @@ export type {
   UpdaterConfig,
   UpdaterOptions,
   UpdaterResult,
-} from "./updater";
-export { update } from "./updater";
+} from "@web/lib/updater/updater";
+export { update } from "@web/lib/updater/updater";

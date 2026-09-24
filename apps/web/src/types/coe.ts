@@ -1,3 +1,7 @@
+/** The COE history windows the results page and its queries accept. */
+export const periods = ["12m", "5y", "10y", "ytd", "all"] as const;
+export type Period = (typeof periods)[number];
+
 export namespace Pqp {
   export type Rates = {
     "Category A": number;
@@ -34,26 +38,9 @@ export namespace Pqp {
     savings10Year: number;
   }
 
-  export interface RenewalRecord {
-    category: keyof Rates;
-    pqpRate: number;
-    coePremium: number;
-    pqpCost5Year: number;
-    pqpCost10Year: number;
-    pqpSavings5Year: number;
-    pqpSavings10Year: number;
-    recommendation: string;
-  }
-
   export interface TableRow extends Rates {
     key: string;
     month: string;
-  }
-
-  export interface TableColumn {
-    key: string;
-    label: string;
-    sortable?: boolean;
   }
 
   export interface Overview {
@@ -63,6 +50,4 @@ export namespace Pqp {
     comparison: Comparison[];
     categorySummaries: CategorySummary[];
   }
-
-  export type MonthlyRates = Record<string, Rates>;
 }

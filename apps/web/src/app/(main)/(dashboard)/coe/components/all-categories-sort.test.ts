@@ -1,11 +1,11 @@
-import { describe, expect, it } from "vitest";
 import {
   type CategoryRow,
   DEFAULT_SORT,
   describeSort,
   nextSort,
   sortCategoryRows,
-} from "./all-categories-sort";
+} from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
+import { describe, expect, it } from "vitest";
 
 const row = (
   categoryKey: CategoryRow["categoryKey"],

@@ -78,7 +78,6 @@ interface DatasetConfig {
   path: string;
   temporalCoverage: string;
   variableMeasured: string[];
-  distribution?: { encodingFormat: string; contentUrl: string }[];
 }
 
 const DATASET_CONFIGS: Record<DatasetType, DatasetConfig> = {
@@ -94,12 +93,6 @@ const DATASET_CONFIGS: Record<DatasetType, DatasetConfig> = {
       "Fuel type distribution",
       "Vehicle category breakdown",
     ],
-    distribution: [
-      {
-        encodingFormat: "application/json",
-        contentUrl: `${SITE_URL}/api/cars/registrations`,
-      },
-    ],
   },
   "coe-results": {
     name: "Singapore COE Bidding Results",
@@ -112,12 +105,6 @@ const DATASET_CONFIGS: Record<DatasetType, DatasetConfig> = {
       "Bids received per exercise",
       "Quota available per category",
       "Bidding exercise results",
-    ],
-    distribution: [
-      {
-        encodingFormat: "application/json",
-        contentUrl: `${SITE_URL}/api/coe`,
-      },
     ],
   },
   "coe-premiums": {
@@ -209,12 +196,6 @@ export function generateDatasetSchema(type: DatasetType): Dataset {
     ...datasetBase,
     temporalCoverage: config.temporalCoverage,
     variableMeasured: config.variableMeasured,
-    ...(config.distribution && {
-      distribution: config.distribution.map((d) => ({
-        "@type": "DataDownload" as const,
-        ...d,
-      })),
-    }),
   };
 }
 

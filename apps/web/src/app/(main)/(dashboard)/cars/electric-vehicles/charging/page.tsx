@@ -1,4 +1,7 @@
 import { Chip, Skeleton } from "@heroui/react";
+import { AnimatedGrid } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-grid";
+import { AnimatedSection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-section";
+import { Bento } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/bento";
 import { BusyHours } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/busy-hours";
 import { ChargingMap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map";
 import {
@@ -11,10 +14,7 @@ import { PriceList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/ch
 import { RecentChanges } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/recent-changes";
 import { UtilisationList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-list";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
-import { AnimatedGrid } from "@web/app/(main)/(dashboard)/components/animated-grid";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/components/animated-section";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { Bento } from "@web/components/shared/bento";
 import { EmptyState } from "@web/components/shared/empty-state";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
@@ -23,7 +23,7 @@ import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
 } from "@web/lib/metadata";
-import { baseOpenGraph } from "@web/lib/metadata/social";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getEvChargingSnapshot } from "@web/queries/ev-charging";
 import { PlugZap } from "lucide-react";
 import type { Metadata } from "next";
@@ -41,6 +41,12 @@ export const metadata: Metadata = {
     description:
       "Live availability, prices and busy hours for Singapore's public EV chargers.",
     url: `${SITE_URL}/cars/electric-vehicles/charging`,
+  },
+  twitter: {
+    ...baseTwitter,
+    title: "EV Charging - Live Singapore Charger Stats",
+    description:
+      "Live availability, prices and busy hours for Singapore's public EV chargers.",
   },
   alternates: {
     canonical: "/cars/electric-vehicles/charging",

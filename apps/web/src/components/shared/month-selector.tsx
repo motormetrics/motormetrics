@@ -43,12 +43,6 @@ export function MonthSelector({
     }
   }, [wasAdjusted, latestMonth]);
 
-  const memoisedGroupByYear = useMemo(() => groupByYear, []);
-  const sortedMonths = useMemo(
-    () => Object.entries(memoisedGroupByYear(months)).slice().reverse(),
-    [memoisedGroupByYear, months],
-  );
-
   return (
     <ComboBox
       selectedKey={month}
@@ -70,25 +64,40 @@ export function MonthSelector({
         <ComboBox.Trigger />
       </ComboBox.InputGroup>
       <ComboBox.Popover>
-        <ListBox>
-          {sortedMonths.map(([year, months], index) => (
-            <ListBox.Section key={year}>
-              {index > 0 && <Separator />}
-              <Header>{year}</Header>
-              {months.map((month) => {
-                const date = `${year}-${month}`;
-                const label = formatDateToMonthYear(date);
-                return (
-                  <ListBox.Item key={date} id={date} textValue={label}>
-                    {label}
-                    <ListBox.ItemIndicator />
-                  </ListBox.Item>
-                );
-              })}
-            </ListBox.Section>
-          ))}
-        </ListBox>
+        <MonthListBox months={months} />
       </ComboBox.Popover>
     </ComboBox>
+  );
+}
+
+/**
+ * The combo box list of months, newest year first, one section per year.
+ * Shared by `MonthSelector` and the trends comparison pickers.
+ */
+export function MonthListBox({ months }: { months: Month[] }) {
+  const years = useMemo(
+    () => Object.entries(groupByYear(months)).reverse(),
+    [months],
+  );
+
+  return (
+    <ListBox>
+      {years.map(([year, yearMonths], index) => (
+        <ListBox.Section key={year}>
+          {index > 0 && <Separator />}
+          <Header>{year}</Header>
+          {yearMonths.map((yearMonth) => {
+            const date = `${year}-${yearMonth}`;
+            const label = formatDateToMonthYear(date);
+            return (
+              <ListBox.Item key={date} id={date} textValue={label}>
+                {label}
+                <ListBox.ItemIndicator />
+              </ListBox.Item>
+            );
+          })}
+        </ListBox.Section>
+      ))}
+    </ListBox>
   );
 }

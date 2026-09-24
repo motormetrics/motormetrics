@@ -18,7 +18,8 @@ export async function getMakeCoeComparison(
   cacheLife("max");
 
   const { startMonth, endMonth } = getDateRange24Months();
-  cacheTag(`cars:make:${make}`);
+  // Reads both tables, so it needs a tag each monthly workflow revalidates
+  cacheTag(`cars:make:${make}`, "cars:makes", "coe:results");
 
   // Execute both queries in parallel using db.batch()
   const [makeRegistrations, coePremiums] = await db.batch([

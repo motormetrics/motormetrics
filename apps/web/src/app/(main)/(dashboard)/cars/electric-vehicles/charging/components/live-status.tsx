@@ -1,6 +1,6 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { HeroCard } from "@web/components/shared/bento";
+import { HeroCard } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/bento";
 import { getPostalDistrict } from "@web/config/postal-districts";
 import { getEvChargingLiveSummary } from "@web/queries/ev-charging";
 

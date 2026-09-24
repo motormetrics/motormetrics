@@ -1,9 +1,9 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
+import { loadElectricOnlyMakes } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { BarRow } from "@web/components/shared/bar-row";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { Headline, SectionHead } from "@web/components/shared/overview";
-import { loadElectricOnlyMakes } from "./make-rows";
 
 export async function ElectricOnlyMakes() {
   const summary = await loadElectricOnlyMakes();

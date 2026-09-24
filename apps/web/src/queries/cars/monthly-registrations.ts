@@ -187,7 +187,7 @@ export async function getMonthlyRegistrationTotalsByFuelType(
 ): Promise<MonthlyTotal[]> {
   "use cache";
   cacheLife("max");
-  cacheTag(`cars:monthly-totals:${fuelType}`);
+  cacheTag(`cars:monthly-totals:${fuelType}`, "cars:monthly-totals");
 
   const results = await db
     .select({

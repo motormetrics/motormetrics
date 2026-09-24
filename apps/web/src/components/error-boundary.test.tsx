@@ -1,7 +1,10 @@
+import {
+  SectionErrorBoundary,
+  SectionErrorFallback,
+} from "@web/components/error-boundary";
 import type { ErrorInfo } from "next/error";
 import { describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
-import { SectionErrorBoundary, SectionErrorFallback } from "./error-boundary";
 
 vi.mock("@heroui/react", async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),

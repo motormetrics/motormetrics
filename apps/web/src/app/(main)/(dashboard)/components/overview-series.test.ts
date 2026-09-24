@@ -1,12 +1,10 @@
-import { describe, expect, it } from "vitest";
 import {
-  changeRatio,
-  donutArcs,
   nextMonth,
   pqpMonthsFor,
   sumByMonth,
   windowEndingAt,
-} from "./overview-series";
+} from "@web/app/(main)/(dashboard)/components/overview-series";
+import { describe, expect, it } from "vitest";
 
 describe("nextMonth", () => {
   it("should step to the following month", () => {
@@ -80,51 +78,5 @@ describe("pqpMonthsFor", () => {
 
   it("should return null with no published months", () => {
     expect(pqpMonthsFor([], "2025-10")).toBeNull();
-  });
-});
-
-describe("donutArcs", () => {
-  it("should place each segment after the ones before it", () => {
-    const arcs = donutArcs(
-      [
-        { color: "a", label: "Half", value: 50 },
-        { color: "b", label: "Other half", value: 50 },
-      ],
-      74,
-      16,
-    );
-    const circumference = 2 * Math.PI * 74;
-    const half = circumference / 2;
-
-    expect(arcs[0].dashArray).toBe(
-      `${(half - 16).toFixed(2)} ${(circumference - half + 16).toFixed(2)}`,
-    );
-    expect(arcs[0].dashOffset).toBe("-8.00");
-    expect(arcs[1].dashOffset).toBe((-(half + 8)).toFixed(2));
-  });
-
-  it("should keep a near-zero share visible as a tick", () => {
-    const [tiny] = donutArcs(
-      [
-        { color: "a", label: "Tiny", value: 0.001 },
-        { color: "b", label: "Rest", value: 100 },
-      ],
-      74,
-      16,
-    );
-
-    expect(tiny.dashArray.startsWith("2.00 ")).toBe(true);
-  });
-});
-
-describe("changeRatio", () => {
-  it("should return the signed relative change", () => {
-    expect(changeRatio(110, 100)).toBeCloseTo(0.1);
-    expect(changeRatio(90, 100)).toBeCloseTo(-0.1);
-  });
-
-  it("should return zero without a usable baseline", () => {
-    expect(changeRatio(100, undefined)).toBe(0);
-    expect(changeRatio(100, 0)).toBe(0);
   });
 });

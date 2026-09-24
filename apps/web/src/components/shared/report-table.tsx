@@ -2,14 +2,8 @@ import { cn, ScrollShadow } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import type { CSSProperties, ReactNode } from "react";
 
-/**
- * The column-header treatment shared by every table in the app.
- *
- * `ReportTable` applies it for you. The sortable tables — `population-table`,
- * `dimension-table` — cannot use `ReportTable` because their headers are
- * buttons, so they import this instead of restating the string.
- */
-export const TABLE_HEADER_CLASS =
+/** The column-header treatment `ReportTable` applies to every header cell. */
+const TABLE_HEADER_CLASS =
   "font-bold text-muted text-xs uppercase tracking-wider";
 
 /**
@@ -150,7 +144,7 @@ export function ShareBar({
  * the pill for the headline figure and use bare text inside tables.
  *
  * A rise in registrations is good news, so the sentiment follows the sign. For
- * figures where a rise is bad news, see `(dashboard)/components/cost-trend-chip.tsx`.
+ * figures where a rise is bad news, see `shared/cost-trend-chip.tsx`.
  */
 export function DeltaText({
   unit = "%",

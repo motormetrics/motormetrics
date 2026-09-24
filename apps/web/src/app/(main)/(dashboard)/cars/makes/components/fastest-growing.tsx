@@ -1,12 +1,12 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
+import { loadMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead } from "@web/components/shared/overview";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
-import { loadSearchParams } from "../search-params";
-import { loadMakeRows } from "./make-rows";
 
 /**
  * Makes considered for the list, by volume. The rows arrive sorted by

@@ -4,6 +4,7 @@ export const getCarsMonthlyRevalidationTags = (month: string): string[] => {
   return [
     `cars:month:${month}`,
     "cars:months",
+    "cars:monthly-totals",
     "cars:makes",
     "cars:annual",
     "cars:top-makes",

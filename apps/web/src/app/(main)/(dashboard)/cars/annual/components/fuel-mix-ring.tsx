@@ -3,11 +3,11 @@ import {
   ELECTRIC,
   type PopulationEntity,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
-
-const RADIUS = 74;
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-/** Arc length removed from each segment so the rounded caps read as separate. */
-const SEGMENT_GAP = 16;
+import {
+  type DonutSegment,
+  donutArcs,
+  RING_RADIUS,
+} from "@web/utils/charts/donut-arcs";
 
 /**
  * Fuel types shown individually before the tail is folded into "Others". The
@@ -17,16 +17,9 @@ const NAMED_SEGMENTS = 5;
 
 const OTHERS = "Others";
 
-interface Segment {
-  color: string;
-  label: string;
-  value: number;
-}
-
 /**
  * The fuel mix at the latest year end: a gapped-segment ring with the legend
- * beside it, as the v3 comp lays it out. `shared/donut-gauge.tsx` stacks its
- * legend underneath, so the ring is composed here instead.
+ * beside it, as the v3 comp lays it out.
  *
  * Labels are LTA's own — "Petrol-Electric" and "Petrol-Electric (Plug-In)"
  * stay apart rather than being folded into a "hybrid" bucket LTA does not
@@ -43,7 +36,7 @@ export function FuelMixRing({
   const total = ranked.reduce((sum, row) => sum + row.value, 0);
   const electric = ranked.find((row) => row.label === ELECTRIC)?.value ?? 0;
 
-  const segments: Segment[] = ranked
+  const segments: DonutSegment[] = ranked
     .slice(0, NAMED_SEGMENTS)
     .map((row, index) => ({
       color: `var(--chart-${index + 1})`,
@@ -70,37 +63,28 @@ export function FuelMixRing({
     }
   }
 
-  let consumed = 0;
-  const arcs = segments.map((segment) => {
-    const full = (segment.value / (total || 1)) * CIRCUMFERENCE;
-    // Floor at 2px so a rounding-to-zero share still shows as a tick rather
-    // than vanishing, which would silently drop it from the ring.
-    const dash = Math.max(2, full - SEGMENT_GAP);
-    const arc = {
-      color: segment.color,
-      dashArray: `${dash.toFixed(2)} ${(CIRCUMFERENCE - dash).toFixed(2)}`,
-      dashOffset: (-(consumed + SEGMENT_GAP / 2)).toFixed(2),
-      key: segment.label,
-    };
-    consumed += full;
-    return arc;
-  });
+  // Every ranked row lands in a segment, so the segments sum to `total`.
+  const arcs = donutArcs(segments);
 
   return (
-    <div className="flex flex-col gap-2.5">
-      <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
-        Fuel mix
-      </Typography.Paragraph>
-      <Typography.Paragraph className="font-medium" color="muted">
-        {entity.name} by fuel type
-      </Typography.Paragraph>
-
-      {segments.length === 0 ? (
-        <Typography.Paragraph color="muted" size="sm">
-          LTA published the {year} count for {entity.name} without a fuel split.
+    <div className="flex flex-col gap-[18px]">
+      <div className="flex flex-col gap-2.5">
+        <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+          Fuel mix
         </Typography.Paragraph>
-      ) : (
-        <div className="mt-2 flex flex-wrap items-center gap-9">
+        <Typography.Paragraph className="font-medium" color="muted">
+          {entity.name} by fuel type
+        </Typography.Paragraph>
+        {segments.length === 0 ? (
+          <Typography.Paragraph color="muted" size="sm">
+            LTA published the {year} count for {entity.name} without a fuel
+            split.
+          </Typography.Paragraph>
+        ) : null}
+      </div>
+
+      {segments.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-9">
           <div className="relative size-[172px] shrink-0">
             <svg className="block" role="img" viewBox="0 0 190 190">
               <title>{`${entity.name} by fuel type, ${year}`}</title>
@@ -111,7 +95,7 @@ export function FuelMixRing({
                     cy={95}
                     fill="none"
                     key={arc.key}
-                    r={RADIUS}
+                    r={RING_RADIUS}
                     stroke={arc.color}
                     strokeDasharray={arc.dashArray}
                     strokeDashoffset={arc.dashOffset}
@@ -153,7 +137,7 @@ export function FuelMixRing({
             ))}
           </ul>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

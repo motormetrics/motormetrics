@@ -1,13 +1,12 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
-import { buildLogoMap } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead } from "@web/components/shared/overview";
 import { getDimensionStats } from "@web/queries/cars";
-import { getAllCarLogos } from "@web/queries/logos";
+import { getCarLogoMap } from "@web/queries/logos";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
@@ -27,19 +26,19 @@ export async function MoversRail({
   searchParams: Promise<SearchParams>;
 }) {
   const month = await resolveCarsMonth(searchParams);
-  const [makeStats, logoResult] = await Promise.all([
+  const [makeStats, logoUrlBySlug] = await Promise.all([
     getDimensionStats("make", month),
-    getAllCarLogos(),
+    getCarLogoMap(),
   ]);
   const previousYear = Number(month.slice(0, 4)) - 1;
-  const logoUrlBySlug = buildLogoMap(
-    "logos" in logoResult ? logoResult.logos : [],
-  );
 
   const movers = makeStats
     .slice(0, CANDIDATE_POOL)
-    .filter((stat) => stat.yoyChange !== null)
-    .sort((first, second) => (second.yoyChange ?? 0) - (first.yoyChange ?? 0))
+    .filter(
+      (stat): stat is typeof stat & { yoyChange: number } =>
+        stat.yoyChange !== null,
+    )
+    .sort((first, second) => second.yoyChange - first.yoyChange)
     .slice(0, MOVERS_SHOWN);
 
   return (
@@ -91,7 +90,7 @@ export async function MoversRail({
                       registered
                     </Typography.Paragraph>
                   </div>
-                  <DeltaChip className="ml-auto" value={mover.yoyChange ?? 0} />
+                  <DeltaChip className="ml-auto" value={mover.yoyChange} />
                 </Link>
               </li>
             );

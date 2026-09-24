@@ -36,7 +36,7 @@ import {
   fetchBatch,
   parseBatch,
 } from "@web/lib/ev-charging";
-import { ingestLiveSnapshot } from "./ingest";
+import { ingestLiveSnapshot } from "@web/workflows/ev-charging-live/steps/ingest";
 
 const record = (evCpId: string, locationId = "L1") => ({
   evCpId,

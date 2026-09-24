@@ -1,4 +1,5 @@
-import { Button, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
 import { navLinks } from "@web/config/navigation";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
@@ -40,11 +41,16 @@ export function CtaSection() {
           ))}
         </div>
       </div>
-      <Link className="no-underline lg:ml-auto" href="/">
-        <Button className="rounded-full" size="lg" variant="secondary">
-          Explore the dashboard
-          <ArrowUpRight className="size-4" />
-        </Button>
+      <Link
+        className={buttonVariants({
+          className: "rounded-full no-underline lg:ml-auto",
+          size: "lg",
+          variant: "secondary",
+        })}
+        href="/"
+      >
+        Explore the dashboard
+        <ArrowUpRight className="size-4" />
       </Link>
     </section>
   );

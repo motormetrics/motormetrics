@@ -1,5 +1,8 @@
+import {
+  ARF_SCHEDULES,
+  calculateArf,
+} from "@web/app/(main)/(dashboard)/cars/arf/components/arf-rates";
 import { describe, expect, it } from "vitest";
-import { ARF_SCHEDULES, calculateArf } from "./arf-rates";
 
 const [current, from2022, before2022] = ARF_SCHEDULES;
 

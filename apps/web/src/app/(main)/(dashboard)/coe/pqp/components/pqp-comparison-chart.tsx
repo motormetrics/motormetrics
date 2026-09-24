@@ -1,12 +1,8 @@
 "use client";
 
 import { ComposedChart } from "@heroui-pro/react/composed-chart";
-
-const currencyFormatter = new Intl.NumberFormat("en-SG", {
-  currency: "SGD",
-  maximumFractionDigits: 0,
-  style: "currency",
-});
+import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { compactWholeCurrency } from "@web/utils/formatting/chart-axis";
 
 export interface PQPComparisonPoint {
   /** Indexed because Pro's chart types the data as a plain record. */
@@ -55,7 +51,7 @@ export function PQPComparisonChart({ data }: { data: PQPComparisonPoint[] }) {
             (dataMax: number) => Math.ceil(dataMax / 10000) * 10000,
           ]}
           orientation="right"
-          tickFormatter={(value: number) => `$${Math.round(value / 1000)}k`}
+          tickFormatter={compactWholeCurrency}
           width={70}
         />
         <ComposedChart.Bar
@@ -76,9 +72,7 @@ export function PQPComparisonChart({ data }: { data: PQPComparisonPoint[] }) {
         <ComposedChart.Tooltip
           content={
             <ComposedChart.TooltipContent
-              valueFormatter={(value) =>
-                currencyFormatter.format(Number(value))
-              }
+              valueFormatter={(value) => formatCurrency(Number(value))}
             />
           }
           cursor={{ fill: "var(--muted)", opacity: 0.2 }}

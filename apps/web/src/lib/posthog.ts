@@ -3,17 +3,17 @@ import { cacheLife, cacheTag } from "next/cache";
 const POSTHOG_HOST = "https://eu.i.posthog.com";
 const POSTHOG_PROJECT_ID = "100514";
 
-interface TrafficStats {
+export type TrafficStats = {
   uniqueVisitors: number;
   pageViews: number;
   pagesPerVisitor: number;
-}
+};
 
-interface DailyTraffic {
+export type DailyTraffic = {
   date: string;
   visitors: number;
   pageViews: number;
-}
+};
 
 async function queryPostHog(body: Record<string, unknown>) {
   const apiKey = process.env.POSTHOG_API_KEY;

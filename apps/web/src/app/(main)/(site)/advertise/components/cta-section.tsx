@@ -1,6 +1,6 @@
-import { Button, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
 import { Mail } from "lucide-react";
-import { cacheLife } from "next/cache";
 
 const ADVERTISE_EMAIL = "advertise@motormetrics.app";
 
@@ -28,10 +28,7 @@ const rules = [
  * form. There is no form endpoint, so the right-hand card carries the same copy
  * and hands off to email instead.
  */
-export async function CtaSection() {
-  "use cache";
-  cacheLife("days");
-
+export function CtaSection() {
   return (
     <section
       className="grid scroll-mt-24 items-start gap-10 rounded-4xl bg-ink-surface p-8 text-ink-surface-foreground lg:grid-cols-[1fr_360px] lg:p-14"
@@ -80,13 +77,14 @@ export async function CtaSection() {
           availability, the rate and the creative spec.
         </Typography.Paragraph>
         <a
-          className="self-start no-underline"
+          className={buttonVariants({
+            className: "self-start rounded-full no-underline",
+            variant: "primary",
+          })}
           href={`mailto:${ADVERTISE_EMAIL}`}
         >
-          <Button className="rounded-full" variant="primary">
-            <Mail className="size-4" />
-            Send an enquiry
-          </Button>
+          <Mail className="size-4" />
+          Send an enquiry
         </a>
         <Typography.Paragraph
           color="muted"

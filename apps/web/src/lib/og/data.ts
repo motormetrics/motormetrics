@@ -1,4 +1,4 @@
-import type { COECategory } from "@motormetrics/types";
+import type { SelectCOE } from "@motormetrics/database/schema";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import type { CoePremiumsProps } from "@web/lib/og/cards/coe-premiums";
@@ -18,12 +18,9 @@ import {
   getTopMakes,
   getYearToDateByFuelType,
 } from "@web/queries/cars";
-import {
-  getCoeCategoryTrends,
-  getLatestAndPreviousCoeResults,
-} from "@web/queries/coe";
-import type { COEResult } from "@web/types";
+import { getCoeCategoryTrends, getExercisePair } from "@web/queries/coe";
 import type { RegistrationStat } from "@web/types/cars";
+import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 
 type CardData<Props> = Omit<Props, "height">;
 
@@ -39,15 +36,15 @@ const shortMonth = (month: string) => formatDateToMonthYear(month).slice(0, 3);
 const percentChange = (current: number, previous: number | undefined) =>
   previous ? ((current - previous) / previous) * 100 : 0;
 
-const previousMonthOf = (month: string) => {
-  const [year, monthNumber] = month.split("-").map(Number);
-  const date = new Date(Date.UTC(year, monthNumber - 2, 1));
-
-  return date.toISOString().slice(0, 7);
-};
-
-const findCategory = (results: COEResult[], category: COECategory) =>
+const findCategory = (results: SelectCOE[], category: string) =>
   results.find((result) => result.vehicleClass === category);
+
+/** The latest bidding exercise's rows and the one before it, empty when absent. */
+const loadLatestExercises = async () => {
+  const { current, previous } = await getExercisePair();
+
+  return { latest: current?.rows ?? [], previous: previous?.rows ?? [] };
+};
 
 /**
  * Buckets LTA fuel types into the four slices the fuel-mix card draws.
@@ -100,7 +97,7 @@ const toFuelSlices = (
 /** 01 · Site default */
 export async function loadSiteDefault(): Promise<CardData<SiteDefaultProps>> {
   const [{ latest }, month] = await Promise.all([
-    getLatestAndPreviousCoeResults(),
+    loadLatestExercises(),
     getCarsLatestMonth(),
   ]);
   const registrations = month ? await getCarsData(month) : null;
@@ -121,7 +118,7 @@ export async function loadSiteDefault(): Promise<CardData<SiteDefaultProps>> {
 
 /** 02 · COE bidding results */
 export async function loadCoeResults(): Promise<CardData<CoeResultsProps> | null> {
-  const { latest, previous } = await getLatestAndPreviousCoeResults();
+  const { latest, previous } = await loadLatestExercises();
   const categoryA = findCategory(latest, "Category A");
   const categoryB = findCategory(latest, "Category B");
 
@@ -148,7 +145,7 @@ export async function loadCoeResults(): Promise<CardData<CoeResultsProps> | null
 /** 03 · Cat A and Cat B premiums */
 export async function loadCoePremiums(): Promise<CardData<CoePremiumsProps> | null> {
   const [{ latest, previous }, trendsA, trendsB] = await Promise.all([
-    getLatestAndPreviousCoeResults(),
+    loadLatestExercises(),
     getCoeCategoryTrends("Category A"),
     getCoeCategoryTrends("Category B"),
   ]);
@@ -160,7 +157,7 @@ export async function loadCoePremiums(): Promise<CardData<CoePremiumsProps> | nu
   }
 
   const series = (
-    current: COEResult,
+    current: SelectCOE,
     trends: { month: string; premium: number }[],
   ) => {
     const recent = trends.slice(-TREND_POINTS);
@@ -209,7 +206,7 @@ export async function loadRegistrations(): Promise<CardData<RegistrationsProps> 
     monthLabel: formatDateToMonthYear(month),
     total: formatCount(registrations.total),
     delta: percentChange(registrations.total, comparison.previousMonth.total),
-    previousMonthLabel: shortMonth(previousMonthOf(month)),
+    previousMonthLabel: shortMonth(shiftMonth(month, -1)),
     yearToDate: formatCount(
       yearToDate.reduce((sum, fuelType) => sum + fuelType.count, 0),
     ),

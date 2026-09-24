@@ -1,14 +1,14 @@
 import { NumberValue } from "@heroui-pro/react";
-import {
-  formatMonthLabel,
-  formatMonthName,
-} from "@web/app/(main)/(dashboard)/cars/components/format-month";
-import { changeRatio } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { Headline, SectionLink } from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { getMonthlyRegistrationTotals } from "@web/queries/cars";
 import { getVehiclePopulationYearlyTotals } from "@web/queries/vehicle-population";
+import { changeRatio } from "@web/utils/change-ratio";
+import {
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
 import { getLatestMonth } from "@web/utils/dates/months";
 
 /**

@@ -1,8 +1,8 @@
 "use client";
 
 import { Accordion, Typography } from "@heroui/react";
+import type { Faq } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/faq-data";
 import { ChevronDown } from "lucide-react";
-import type { Faq } from "./faq-data";
 
 /** The FAQ accordion; the questions arrive from the server with live figures. */
 export function ChargingFaq({ faqs }: { faqs: Faq[] }) {

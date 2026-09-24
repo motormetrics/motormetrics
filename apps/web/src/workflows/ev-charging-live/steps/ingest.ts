@@ -6,7 +6,6 @@ import {
   type InsertEvConnectorStatus,
 } from "@motormetrics/database/schema";
 import {
-  type ConnectorStatus,
   extractLastUpdated,
   fetchBatch,
   parseBatch,
@@ -88,10 +87,7 @@ export const ingestLiveSnapshot = async (): Promise<IngestResult> => {
     })
     .from(evConnectorStatus);
   const previous = new Map<string, PreviousConnectorState>(
-    previousRows.map((row) => [
-      row.evCpId,
-      { ...row, status: row.status as ConnectorStatus },
-    ]),
+    previousRows.map((row) => [row.evCpId, row]),
   );
 
   const diff = diffSnapshot(records, previous, observedAt);

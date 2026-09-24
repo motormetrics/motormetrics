@@ -1,16 +1,16 @@
-import { describe, expect, it } from "vitest";
-import {
-  cacheLifeMock,
-  cacheTagMock,
-  queueSelect,
-  resetDbMocks,
-} from "../test-utils";
 import {
   getTypeCrossMixInWindow,
   getTypeDistributionInWindow,
   getTypeMakesInWindow,
   getTypeMonthlySeries,
-} from "./type-detail";
+} from "@web/queries/cars/type-detail";
+import {
+  cacheLifeMock,
+  cacheTagMock,
+  queueSelect,
+  resetDbMocks,
+} from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("type detail queries", () => {
   beforeEach(() => {

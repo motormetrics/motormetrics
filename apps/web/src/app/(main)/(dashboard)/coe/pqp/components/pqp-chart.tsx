@@ -1,17 +1,8 @@
 "use client";
 
 import { LineChart } from "@heroui-pro/react/line-chart";
-
-const currencyFormatter = new Intl.NumberFormat("en-SG", {
-  currency: "SGD",
-  maximumFractionDigits: 0,
-  style: "currency",
-});
-
-/** Axis labels are compact — the comp reads "$90k", not "$90,000". */
-function compact(value: number): string {
-  return `$${Math.round(value / 1000)}k`;
-}
+import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { compactWholeCurrency } from "@web/utils/formatting/chart-axis";
 
 export interface PQPSeries {
   /** Chart-colour custom property, e.g. `var(--chart-1)`. */
@@ -55,7 +46,7 @@ export function PQPChart({
         <LineChart.XAxis dataKey="label" tickMargin={8} />
         <LineChart.YAxis
           orientation="right"
-          tickFormatter={(value: number) => compact(value)}
+          tickFormatter={(value: number) => compactWholeCurrency(value)}
           width={70}
         />
         {series.map(({ color, key, label }) => (
@@ -73,9 +64,7 @@ export function PQPChart({
           content={
             <LineChart.TooltipContent
               indicator="line"
-              valueFormatter={(value) =>
-                currencyFormatter.format(Number(value))
-              }
+              valueFormatter={(value) => formatCurrency(Number(value))}
             />
           }
         />

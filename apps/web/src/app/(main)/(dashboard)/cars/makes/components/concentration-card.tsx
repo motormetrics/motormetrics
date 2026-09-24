@@ -1,29 +1,19 @@
 import { Typography } from "@heroui/react";
+import { loadMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
+import {
+  type DonutSegment,
+  donutArcs,
+  RING_RADIUS,
+} from "@web/utils/charts/donut-arcs";
 import type { SearchParams } from "nuqs/server";
-import { loadSearchParams } from "../search-params";
-import { loadMakeRows } from "./make-rows";
 
 /** How many makes the ring breaks out before folding the rest together. */
 const LEADERS = 5;
 
-const RADIUS = 74;
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-/** Arc length removed from each segment so the rounded caps read as separate. */
-const SEGMENT_GAP = 16;
-
-interface Segment {
-  color: string;
-  label: string;
-  value: number;
-}
-
 /**
  * The "Concentration" block: the top five makes against the rest, drawn as a
  * gapped ring with its legend beside it.
- *
- * The arc maths is `shared/donut-gauge.tsx`'s, restated here because that
- * component stacks its legend under the ring and the v3 comp puts the two side
- * by side.
  */
 export async function ConcentrationCard({
   searchParams,
@@ -40,7 +30,7 @@ export async function ConcentrationCard({
   const leaders = rows.slice(0, LEADERS);
   const rest = rows.slice(LEADERS).reduce((sum, row) => sum + row.count, 0);
 
-  const segments: Segment[] = leaders.map((row, index) => ({
+  const segments: DonutSegment[] = leaders.map((row, index) => ({
     color: `var(--chart-${index + 1})`,
     label: row.make,
     value: row.count,
@@ -56,33 +46,22 @@ export async function ConcentrationCard({
   const leadersTotal = leaders.reduce((sum, row) => sum + row.count, 0);
   const leadersShare = total > 0 ? (leadersTotal / total) * 100 : 0;
   const ringTotal = total || 1;
-
-  let consumed = 0;
-  const arcs = segments.map((segment) => {
-    const full = (segment.value / ringTotal) * CIRCUMFERENCE;
-    // Floor at 2px so a rounding-to-zero share still shows as a tick rather
-    // than vanishing from the ring.
-    const dash = Math.max(2, full - SEGMENT_GAP);
-    const arc = {
-      color: segment.color,
-      dashArray: `${dash.toFixed(2)} ${(CIRCUMFERENCE - dash).toFixed(2)}`,
-      dashOffset: (-(consumed + SEGMENT_GAP / 2)).toFixed(2),
-      key: segment.label,
-    };
-    consumed += full;
-    return arc;
-  });
+  // The leaders plus the folded tail cover every row, so the segments sum to
+  // `total`.
+  const arcs = donutArcs(segments);
 
   return (
-    <div className="flex flex-col gap-2.5">
-      <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
-        Concentration
-      </Typography.Paragraph>
-      <Typography.Paragraph className="font-medium" color="muted">
-        Top five makes against the rest
-      </Typography.Paragraph>
+    <div className="flex flex-col gap-[18px]">
+      <div className="flex flex-col gap-2.5">
+        <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+          Concentration
+        </Typography.Paragraph>
+        <Typography.Paragraph className="font-medium" color="muted">
+          Top five makes against the rest
+        </Typography.Paragraph>
+      </div>
 
-      <div className="mt-2 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-9">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-9">
         <div className="relative size-[172px] shrink-0">
           <svg className="block size-full" role="img" viewBox="0 0 190 190">
             <title>Share of registrations held by the five largest makes</title>
@@ -93,7 +72,7 @@ export async function ConcentrationCard({
                   cy={95}
                   fill="none"
                   key={arc.key}
-                  r={RADIUS}
+                  r={RING_RADIUS}
                   stroke={arc.color}
                   strokeDasharray={arc.dashArray}
                   strokeDashoffset={arc.dashOffset}

@@ -5,7 +5,6 @@ import { getDeregistrationsLatestMonth } from "@web/queries/deregistrations/late
 import { updateDeregistration } from "@web/workflows/deregistrations/steps/process-data";
 import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
-import { fetch } from "workflow";
 
 interface DeregistrationsWorkflowPayload {
   month?: string;
@@ -13,19 +12,16 @@ interface DeregistrationsWorkflowPayload {
 
 interface DeregistrationsWorkflowResult {
   message: string;
-  postId?: string;
 }
 
 /**
  * Deregistrations data workflow using Vercel WDK.
- * Processes vehicle deregistration data, generates blog posts, and revalidates cache.
+ * Processes vehicle deregistration data and revalidates cache.
  */
 export async function deregistrationsWorkflow(
   payload?: DeregistrationsWorkflowPayload,
 ): Promise<DeregistrationsWorkflowResult> {
   "use workflow";
-
-  globalThis.fetch = fetch;
 
   await emitEvent({ type: "step:start", step: "processDeregistrationsData" });
   const result = await processDeregistrationsData();

@@ -18,7 +18,6 @@ import {
   handleAIError,
   revalidatePostsCache,
 } from "@web/workflows/shared";
-import { fetch } from "workflow";
 
 interface MonthlyUpdatePayload {
   month?: string;
@@ -44,8 +43,6 @@ export async function monthlyUpdateWorkflow(
   payload?: MonthlyUpdatePayload,
 ): Promise<MonthlyUpdateResult> {
   "use workflow";
-
-  globalThis.fetch = fetch;
 
   const month = payload?.month ?? (await resolveMonth());
   if (!month) {

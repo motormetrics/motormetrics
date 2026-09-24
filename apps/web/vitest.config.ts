@@ -25,21 +25,17 @@ export default defineConfig({
         "src/app/admin/**",
         "src/app/api/**",
         "src/app/llms.txt/**",
-        "src/app/store/**",
         "src/app/layout.tsx",
         "src/app/not-found.tsx",
         "src/app/providers.tsx",
         "src/app/robots.ts",
         "src/app/sitemap.ts",
-        "src/app/store.ts",
         "src/app/*.{css,ico,png}",
         "src/components/analytics.tsx",
         "src/config",
         "src/functions",
         // Exclude src/lib subdirectories except updater
-        "src/lib/cars/**",
         "src/lib/coe/**",
-        "src/lib/data/**",
         "src/lib/metadata/**",
         "src/lib/og/**",
         "src/lib/realtime/**",
@@ -48,7 +44,7 @@ export default defineConfig({
         "src/lib/*.ts", // Exclude loose files in src/lib
         "src/schema",
         "src/types",
-        "src/components/unreleased-feature.tsx",
+        "src/app/(main)/(dashboard)/coe/pqp/components/unreleased-feature.tsx",
         "src/components/tables/**", // Tables not prioritized for coverage
         "src/components/notifications.tsx", // Realtime component
         "src/components/tables/columns/cars-make-columns.tsx",
@@ -81,7 +77,7 @@ export default defineConfig({
 
         // Infrastructure/setup files (external service integration)
         "src/instrumentation.ts",
-        "src/actions/maintenance.ts",
+        "src/app/(main)/(site)/maintenance/actions/maintenance.ts",
 
         // Presentational components (UI-only, no business logic)
         "src/components/loading-indicator.tsx",
@@ -119,7 +115,11 @@ export default defineConfig({
         // resulting reload breaks vi.mock factories on a cold cache.
         optimizeDeps: {
           include: [
+            "@heroui-pro/react/bar-chart",
+            "@heroui-pro/react/kpi",
             "@neondatabase/serverless",
+            "@upstash/redis/cloudflare",
+            "date-fns",
             "motion/react",
             "next/cache",
             "next/image",

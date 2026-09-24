@@ -1,8 +1,8 @@
 import { Skeleton } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
-import { CoeComparisonChart } from "@web/app/(main)/(dashboard)/cars/components/makes/coe-comparison-chart";
-import { MakeSearch } from "@web/app/(main)/(dashboard)/cars/components/makes/make-search";
+import { CoeComparisonChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/coe-comparison-chart";
 import { MakeReport } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
+import { MakeSearch } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-search";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthSelector } from "@web/components/shared/month-selector";
@@ -38,6 +38,11 @@ export async function generateStaticParams() {
   return params.length > 0 ? params : [{ make: "__static-validation__" }];
 }
 
+const makeTitle = (make: string) => `${make} Cars in Singapore`;
+
+const makeDescription = (make: string) =>
+  `${make} cars overview. Historical car registration trends and monthly breakdown by fuel and vehicle types in Singapore.`;
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -52,8 +57,8 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${exactMake} Cars in Singapore`;
-  const description = `${exactMake} cars overview. Historical car registration trends and monthly breakdown by fuel and vehicle types in Singapore.`;
+  const title = makeTitle(exactMake);
+  const description = makeDescription(exactMake);
   return {
     title,
     description,
@@ -154,8 +159,8 @@ export default function CarMakePage({
 async function MakeStructuredData({ params }: Pick<PageProps, "params">) {
   const { exactMake, make } = await resolveMake(params);
 
-  const title = `${exactMake} Cars in Singapore`;
-  const description = `${exactMake} cars overview. Historical car registration trends and monthly breakdown by fuel and vehicle types in Singapore.`;
+  const title = makeTitle(exactMake);
+  const description = makeDescription(exactMake);
 
   return (
     <>
@@ -215,12 +220,12 @@ async function CarMakeHeaderMeta({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const [{ month: parsedMonth }, months, makes] = await Promise.all([
-    loadSearchParams(searchParamsPromise),
+  const { month: parsedMonth } = await loadSearchParams(searchParamsPromise);
+  const [months, makes, { wasAdjusted }] = await Promise.all([
     fetchMonthsForCars(),
     getDistinctMakes(),
+    getMonthOrLatest(parsedMonth, "cars"),
   ]);
-  const { wasAdjusted } = await getMonthOrLatest(parsedMonth, "cars");
 
   return (
     <>

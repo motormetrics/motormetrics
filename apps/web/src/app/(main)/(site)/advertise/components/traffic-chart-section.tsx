@@ -3,12 +3,7 @@
 import { Typography } from "@heroui/react";
 import { ChartTooltip, NumberValue } from "@heroui-pro/react";
 import { AreaChart } from "@heroui-pro/react/area-chart";
-
-interface DailyTraffic {
-  date: string;
-  visitors: number;
-  pageViews: number;
-}
+import type { DailyTraffic } from "@web/lib/posthog";
 
 /**
  * The comp has no chart here, but the figures above it are real and this is
@@ -28,10 +23,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
           Last 30 days · unique visitors per day
         </Typography.Paragraph>
       </div>
-      <AreaChart
-        data={data as unknown as Record<string, string | number>[]}
-        height={300}
-      >
+      <AreaChart data={data} height={300}>
         <defs>
           <linearGradient id="fillVisitors" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="var(--chart-1)" stopOpacity={0.3} />

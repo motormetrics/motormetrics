@@ -1,12 +1,12 @@
 import { db } from "@motormetrics/database/client";
 import { evConnectorStatus } from "@motormetrics/database/schema";
-import { resetDbMocks } from "../test-utils";
 import {
   districtPredicate,
   storedLocationColumns,
   storedLocationsSubquery,
   toStoredLocation,
-} from "./stored-locations";
+} from "@web/queries/ev-charging/stored-locations";
+import { resetDbMocks } from "@web/queries/test-utils";
 
 describe("storedLocationsSubquery", () => {
   beforeEach(() => {

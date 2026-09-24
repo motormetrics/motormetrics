@@ -1,8 +1,11 @@
+import {
+  MakesTable,
+  type MakesTableRow,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/makes-table";
 import { withNuqsTestingAdapter } from "nuqs/adapters/testing";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { userEvent } from "vitest/browser";
 import { type RenderResult, render } from "vitest-browser-react";
-import { MakesTable, type MakesTableRow } from "./makes-table";
 
 const capture = vi.hoisted(() => vi.fn());
 

@@ -39,33 +39,6 @@ exports[`Skeleton components > should render ListSkeleton 1`] = `
 </div>
 `;
 
-exports[`Skeleton components > should render SectionSkeleton with title 1`] = `
-<div>
-  <section
-    class="flex flex-col gap-4"
-  >
-    <div
-      class="skeleton skeleton--shimmer h-8 w-48 rounded-lg"
-    />
-    <div
-      class="skeleton skeleton--shimmer h-32 w-full rounded-lg"
-    />
-  </section>
-</div>
-`;
-
-exports[`Skeleton components > should render SectionSkeleton without title 1`] = `
-<div>
-  <section
-    class="flex flex-col gap-4"
-  >
-    <div
-      class="skeleton skeleton--shimmer h-32 w-full rounded-lg"
-    />
-  </section>
-</div>
-`;
-
 exports[`Skeleton components > should render SkeletonBentoCard 1`] = `
 <div>
   <div
@@ -107,94 +80,6 @@ exports[`Skeleton components > should render SkeletonChart 1`] = `
 <div>
   <div
     class="skeleton skeleton--shimmer h-80 w-full rounded-lg"
-  />
-</div>
-`;
-
-exports[`Skeleton components > should render SkeletonChartWidget 1`] = `
-<div>
-  <div
-    class="card card--default"
-    data-slot="card"
-  >
-    <div
-      class="card__header"
-      data-slot="card-header"
-    >
-      <div
-        class="skeleton skeleton--shimmer h-6 w-48 rounded-lg"
-      />
-    </div>
-    <div
-      class="card__content"
-      data-slot="card-content"
-    >
-      <div
-        class="skeleton skeleton--shimmer h-64 w-full rounded-lg"
-      />
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Skeleton components > should render SkeletonHeading 1`] = `
-<div>
-  <div
-    class="skeleton skeleton--shimmer h-8 w-48 rounded-lg"
-  />
-</div>
-`;
-
-exports[`Skeleton components > should render SkeletonMetricCard 1`] = `
-<div>
-  <div
-    class="card card--default flex-1"
-    data-slot="card"
-  >
-    <div
-      class="card__content flex flex-col gap-4"
-      data-slot="card-content"
-    >
-      <div
-        class="skeleton skeleton--shimmer h-5 w-3/4 rounded-lg"
-      />
-      <div
-        class="skeleton skeleton--shimmer h-10 w-32 rounded-lg"
-      />
-      <div
-        class="skeleton skeleton--shimmer h-5 w-28 rounded-lg"
-      />
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Skeleton components > should render SkeletonPageHeader 1`] = `
-<div>
-  <div
-    class="flex flex-col gap-4"
-  >
-    <div
-      class="flex items-center justify-between"
-    >
-      <div
-        class="skeleton skeleton--shimmer h-8 w-48 rounded-lg"
-      />
-      <div
-        class="skeleton skeleton--shimmer h-10 w-40 rounded-lg"
-      />
-    </div>
-    <div
-      class="skeleton skeleton--shimmer h-5 w-32 rounded-lg"
-    />
-  </div>
-</div>
-`;
-
-exports[`Skeleton components > should render SkeletonText 1`] = `
-<div>
-  <div
-    class="skeleton skeleton--shimmer h-4 w-full rounded-lg"
   />
 </div>
 `;

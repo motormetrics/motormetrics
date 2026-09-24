@@ -1,6 +1,6 @@
 import { Card } from "@heroui/react";
-import { getMaintenanceConfig } from "@web/app/admin/actions/maintenance";
 import { MaintenanceForm } from "@web/app/admin/components/maintenance-form";
+import { getMaintenanceConfig } from "@web/app/admin/queries/maintenance";
 import { ArrowLeft, Wrench } from "lucide-react";
 import Link from "next/link";
 

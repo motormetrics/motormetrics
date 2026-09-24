@@ -9,14 +9,29 @@ interface BlogListSectionProps {
 
 async function BlogListContent({ query }: BlogListSectionProps) {
   if (query) {
-    return <BlogList posts={await searchPosts(query)} query={query} />;
+    // Search results hide the topic pills, so no categories are needed.
+    return (
+      <BlogList
+        categories={[]}
+        posts={await searchPosts(query)}
+        query={query}
+      />
+    );
   }
+
+  const posts = await getAllPosts();
+
+  // Read from every published post, before the featured one is sliced off,
+  // so its topic still gets a pill.
+  const categories = [
+    ...new Set(posts.flatMap((post) => (post.dataType ? [post.dataType] : []))),
+  ].sort((a, b) => a.localeCompare(b));
 
   // The newest post is the featured panel above, so the grid starts at the
   // second — the comp never shows the same post twice on the page.
-  const posts = await getAllPosts();
-
-  return <BlogList posts={posts.slice(1)} query={query} />;
+  return (
+    <BlogList categories={categories} posts={posts.slice(1)} query={query} />
+  );
 }
 
 export function BlogListSection({ query }: BlogListSectionProps) {

@@ -1,3 +1,5 @@
+import { HERO_IMAGE_SUBJECTS } from "@motormetrics/ai/config";
+import type { GenerateHeroImageParams } from "@motormetrics/ai/generate-hero-image";
 import { db } from "@motormetrics/database/client";
 import {
   emitEvent,
@@ -5,7 +7,6 @@ import {
   handleAIError,
   revalidatePostsCache,
 } from "@web/workflows/shared";
-import { fetch } from "workflow";
 
 interface RegenerateHeroPayload {
   postId: string;
@@ -17,19 +18,10 @@ interface RegenerateHeroResult {
   heroImage?: string;
 }
 
-const SUPPORTED_DATA_TYPES = [
-  "cars",
-  "coe",
-  "deregistrations",
-  "electric-vehicles",
-  "pqp",
-  "monthly-update",
-] as const;
-
-type SupportedDataType = (typeof SUPPORTED_DATA_TYPES)[number];
-
-function isSupportedDataType(value: string): value is SupportedDataType {
-  return (SUPPORTED_DATA_TYPES as readonly string[]).includes(value);
+function isSupportedDataType(
+  value: string,
+): value is GenerateHeroImageParams["dataType"] {
+  return Object.hasOwn(HERO_IMAGE_SUBJECTS, value);
 }
 
 async function loadPost(postId: string) {
@@ -68,8 +60,6 @@ export async function regenerateHeroWorkflow(
   payload: RegenerateHeroPayload,
 ): Promise<RegenerateHeroResult> {
   "use workflow";
-
-  globalThis.fetch = fetch;
 
   const { postId } = payload;
   console.log(`[REGENERATE-HERO] Starting workflow for postId=${postId}`);

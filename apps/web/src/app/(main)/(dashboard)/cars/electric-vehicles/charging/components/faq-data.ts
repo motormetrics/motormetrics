@@ -1,4 +1,7 @@
-import { type ChargingStats, formatPerKwh } from "./price-stats";
+import {
+  type ChargingStats,
+  formatPerKwh,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
 
 export interface Faq {
   answer: string;

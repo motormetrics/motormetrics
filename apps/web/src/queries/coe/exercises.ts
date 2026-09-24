@@ -95,7 +95,7 @@ export async function getCategoryExercises(
 ): Promise<CategoryExercise[]> {
   "use cache";
   cacheLife("max");
-  cacheTag(`coe:category:${category}`);
+  cacheTag(`coe:category:${category}`, "coe:results");
 
   return db
     .select({

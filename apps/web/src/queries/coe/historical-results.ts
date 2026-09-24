@@ -1,8 +1,8 @@
 import { db } from "@motormetrics/database/client";
 import { coe } from "@motormetrics/database/schema";
-import type { Period } from "@web/app/(main)/(dashboard)/coe/search-params";
 import { getDateRangeFromPeriod } from "@web/lib/coe/calculations";
 import type { COEResult } from "@web/types";
+import type { Period } from "@web/types/coe";
 import { and, asc, gte, lte, max, min } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 

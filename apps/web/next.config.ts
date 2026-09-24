@@ -1,6 +1,5 @@
 import { withBotId } from "botid/next/config";
 import type { NextConfig } from "next";
-import createNextIntlPlugin from "next-intl/plugin";
 import { withWorkflow } from "workflow/next";
 
 const LEGACY_DOMAIN_REDIRECTS = [
@@ -134,6 +133,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-const withNextIntl = createNextIntlPlugin();
-
-export default withWorkflow(withBotId(withNextIntl(nextConfig)));
+export default withWorkflow(withBotId(nextConfig));

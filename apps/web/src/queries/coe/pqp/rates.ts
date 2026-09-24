@@ -19,7 +19,7 @@ export async function getPqpRates(): Promise<Record<string, Pqp.Rates>> {
       if (!groupedByMonth[month]) {
         groupedByMonth[month] = {} as Pqp.Rates;
       }
-      groupedByMonth[month][vehicleClass as keyof Pqp.Rates] = pqp ?? 0;
+      groupedByMonth[month][vehicleClass as keyof Pqp.Rates] = pqp;
       return groupedByMonth;
     },
     {},

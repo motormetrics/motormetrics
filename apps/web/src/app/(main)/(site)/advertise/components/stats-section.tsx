@@ -1,10 +1,5 @@
 import { Typography } from "@heroui/react";
-
-interface TrafficStats {
-  uniqueVisitors: number;
-  pageViews: number;
-  pagesPerVisitor: number;
-}
+import type { TrafficStats } from "@web/lib/posthog";
 
 /**
  * The comp shows four audience figures under hairline rules. Only three of them

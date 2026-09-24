@@ -1,4 +1,5 @@
-import { Button, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
@@ -23,16 +24,26 @@ export function HeroSection() {
         answer, not on top of it.
       </Typography.Paragraph>
       <div className="flex flex-wrap gap-3 pt-2">
-        <Link className="no-underline" href="#contact">
-          <Button className="rounded-full" size="lg" variant="primary">
-            Enquire about a placement
-            <ArrowUpRight className="size-4" />
-          </Button>
+        <Link
+          className={buttonVariants({
+            className: "rounded-full no-underline",
+            size: "lg",
+            variant: "primary",
+          })}
+          href="#contact"
+        >
+          Enquire about a placement
+          <ArrowUpRight className="size-4" />
         </Link>
-        <Link className="no-underline" href="#placements">
-          <Button className="rounded-full" size="lg" variant="secondary">
-            See the placements
-          </Button>
+        <Link
+          className={buttonVariants({
+            className: "rounded-full no-underline",
+            size: "lg",
+            variant: "secondary",
+          })}
+          href="#placements"
+        >
+          See the placements
         </Link>
       </div>
     </section>

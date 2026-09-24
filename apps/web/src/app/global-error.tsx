@@ -1,13 +1,15 @@
 "use client";
 
 import { AlertTriangle } from "lucide-react";
-import { Geist } from "next/font/google";
+import { Urbanist } from "next/font/google";
 import posthog from "posthog-js";
 import { useEffect } from "react";
 import "./globals.css";
 
-const geistSans = Geist({
+// global-error replaces the root layout, so it loads Urbanist itself.
+const urbanist = Urbanist({
   subsets: ["latin"],
+  variable: "--font-urbanist",
 });
 
 export default function GlobalError({
@@ -22,10 +24,8 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html data-theme="light" lang="en">
-      <body
-        className={`${geistSans.className} bg-background text-foreground antialiased`}
-      >
+    <html className={urbanist.variable} data-theme="light" lang="en">
+      <body className="bg-background text-foreground antialiased">
         <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-6 py-16">
           <div className="flex max-w-lg flex-col items-center gap-6 text-center">
             <AlertTriangle aria-hidden className="size-12 text-danger" />

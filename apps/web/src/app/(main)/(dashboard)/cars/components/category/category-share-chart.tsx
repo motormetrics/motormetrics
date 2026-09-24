@@ -1,19 +1,8 @@
 "use client";
 
 import { LineChart } from "@heroui-pro/react/line-chart";
-
-const numberFormatter = new Intl.NumberFormat("en-SG");
-
-/** Axis labels are compact — the comp reads "6k", not "6,100". */
-function compact(value: number): string {
-  if (value < 1000) {
-    return String(value);
-  }
-
-  const thousands = value / 1000;
-
-  return `${thousands.toFixed(thousands % 1 === 0 ? 0 : 1)}k`;
-}
+import { formatNumber } from "@motormetrics/utils/format-currency";
+import { compactCount } from "@web/utils/formatting/chart-axis";
 
 export interface CategorySeries {
   /** Chart-colour custom property, e.g. `var(--chart-1)`. */
@@ -44,9 +33,7 @@ export function CategoryShareChart({
   series: CategorySeries[];
 }) {
   const formatValue = (value: number) =>
-    measure === "share"
-      ? `${value.toFixed(1)}%`
-      : numberFormatter.format(value);
+    measure === "share" ? `${value.toFixed(1)}%` : formatNumber(value);
 
   return (
     <div className="flex flex-col gap-3.5">
@@ -70,7 +57,7 @@ export function CategoryShareChart({
         <LineChart.YAxis
           orientation="right"
           tickFormatter={(value: number) =>
-            measure === "share" ? `${value.toFixed(0)}%` : compact(value)
+            measure === "share" ? `${value.toFixed(0)}%` : compactCount(value)
           }
           width={60}
         />

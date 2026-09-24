@@ -29,29 +29,27 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-export function generateMetadata(): Metadata {
-  const canonical = "/cars/deregistrations";
+const canonical = "/cars/deregistrations";
 
-  return {
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    ...baseOpenGraph,
     title,
     description,
-    openGraph: {
-      ...baseOpenGraph,
-      title,
-      description,
-      url: `${SITE_URL}${canonical}`,
-    },
-    twitter: {
-      ...baseTwitter,
-      title,
-      description,
-    },
-    alternates: { canonical },
-    authors: [{ name: SITE_TITLE, url: SITE_URL }],
-    creator: SITE_TITLE,
-    publisher: SITE_TITLE,
-  };
-}
+    url: `${SITE_URL}${canonical}`,
+  },
+  twitter: {
+    ...baseTwitter,
+    title,
+    description,
+  },
+  alternates: { canonical },
+  authors: [{ name: SITE_TITLE, url: SITE_URL }],
+  creator: SITE_TITLE,
+  publisher: SITE_TITLE,
+};
 
 const structuredData: WithContext<WebPage> = {
   "@context": "https://schema.org",

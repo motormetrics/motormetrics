@@ -1,5 +1,5 @@
 import { slugify } from "@motormetrics/utils/slugify";
-import { getDistinctMakes } from "@web/queries/cars";
+import { getDistinctMakes } from "@web/queries/cars/filter-options";
 import { cacheLife, cacheTag } from "next/cache";
 
 /**

@@ -1,0 +1,489 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
+<div>
+  <div
+    class="mx-auto flex max-w-4xl flex-col gap-8"
+    style="opacity: 0;"
+  >
+    <div
+      class="flex flex-col items-center gap-4 text-center"
+      style="opacity: 0; transform: translateY(16px);"
+    >
+      <div
+        class="mb-4"
+        style="opacity: 0; transform: scale(0.8);"
+      >
+        <div
+          style="transform: none;"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-settings size-20 text-accent-strong"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="3"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        style="opacity: 0; transform: translateY(16px);"
+      >
+        <h1
+          class="typography typography--align-start typography--color-default typography--h1"
+          data-slot="typography"
+          data-type="h1"
+        >
+          Pit Stop in Progress
+        </h1>
+      </div>
+      <div
+        style="opacity: 0; transform: translateY(16px);"
+      >
+        <p
+          class="typography typography--align-start typography--color-muted typography--body"
+          data-slot="typography"
+          data-type="body"
+        >
+          Just like a Formula 1 pit stop, we're fine-tuning our engines to deliver the fastest and most reliable Singapore car market insights!
+        </p>
+      </div>
+    </div>
+    <div
+      style="opacity: 0; transform: translateY(16px);"
+    >
+      <div
+        class="card card--default"
+        data-slot="card"
+      >
+        <div
+          class="card__content"
+          data-slot="card-content"
+        >
+          <div
+            class="flex flex-col gap-4"
+          >
+            <div
+              class="flex items-center justify-between"
+            >
+              <div
+                class="flex items-center gap-2"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="lucide lucide-clock size-5 text-accent-strong"
+                  fill="none"
+                  height="24"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                  />
+                  <path
+                    d="M12 6v6l4 2"
+                  />
+                </svg>
+                <p
+                  class="typography typography--align-start typography--color-default typography--body"
+                  data-slot="typography"
+                  data-type="body"
+                >
+                  Estimated Completion
+                </p>
+              </div>
+              <span
+                class="chip chip--accent chip--lg chip--primary"
+                data-slot="chip"
+              >
+                <span
+                  class="chip__label"
+                  data-slot="chip-label"
+                >
+                  2 hours
+                </span>
+              </span>
+            </div>
+            <div
+              class="flex items-center justify-center gap-2"
+            >
+              <div
+                class="flex items-center gap-1"
+              >
+                <div
+                  class="size-2 animate-pulse rounded-full bg-accent"
+                  style="animation-delay: 0s;"
+                />
+                <div
+                  class="size-2 animate-pulse rounded-full bg-accent"
+                  style="animation-delay: 0.2s;"
+                />
+                <div
+                  class="size-2 animate-pulse rounded-full bg-accent"
+                  style="animation-delay: 0.4s;"
+                />
+              </div>
+              <p
+                class="typography typography--align-start typography--color-muted typography--body-sm"
+                data-slot="typography"
+                data-type="body-sm"
+              >
+                Maintenance in progress
+              </p>
+            </div>
+            <p
+              class="typography typography--align-start typography--color-muted typography--body-sm"
+              data-slot="typography"
+              data-type="body-sm"
+            >
+              We are upgrading our data processing systems for faster analysis
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex flex-col gap-4"
+      style="opacity: 0; transform: translateY(16px);"
+    >
+      <h2
+        class="typography typography--align-start typography--color-default typography--h2"
+        data-slot="typography"
+        data-type="h2"
+      >
+        What's Under the Hood?
+      </h2>
+      <div
+        class="grid gap-4 md:grid-cols-2"
+        style="opacity: 0;"
+      >
+        <div
+          style="opacity: 0; transform: translateY(16px);"
+        >
+          <div
+            class="card card--default"
+            data-slot="card"
+          >
+            <div
+              class="card__content flex flex-row items-start gap-4"
+              data-slot="card-content"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-zap mt-1 size-6 flex-shrink-0 text-accent-strong"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"
+                />
+              </svg>
+              <div>
+                <h3
+                  class="typography typography--align-start typography--color-default typography--h3"
+                  data-slot="typography"
+                  data-type="h3"
+                >
+                  Performance Boost
+                </h3>
+                <p
+                  class="typography typography--align-start typography--color-muted typography--body-sm"
+                  data-slot="typography"
+                  data-type="body-sm"
+                >
+                  Turbocharging our database for lightning-fast COE trend analysis
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style="opacity: 0; transform: translateY(16px);"
+        >
+          <div
+            class="card card--default"
+            data-slot="card"
+          >
+            <div
+              class="card__content flex flex-row items-start gap-4"
+              data-slot="card-content"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-shield mt-1 size-6 flex-shrink-0 text-accent-strong"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+                />
+              </svg>
+              <div>
+                <h3
+                  class="typography typography--align-start typography--color-default typography--h3"
+                  data-slot="typography"
+                  data-type="h3"
+                >
+                  Security Updates
+                </h3>
+                <p
+                  class="typography typography--align-start typography--color-muted typography--body-sm"
+                  data-slot="typography"
+                  data-type="body-sm"
+                >
+                  Installing the latest security patches to protect your data
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style="opacity: 0; transform: translateY(16px);"
+        >
+          <div
+            class="card card--default"
+            data-slot="card"
+          >
+            <div
+              class="card__content flex flex-row items-start gap-4"
+              data-slot="card-content"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-trending-up mt-1 size-6 flex-shrink-0 text-accent-strong"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 7h6v6"
+                />
+                <path
+                  d="m22 7-8.5 8.5-5-5L2 17"
+                />
+              </svg>
+              <div>
+                <h3
+                  class="typography typography--align-start typography--color-default typography--h3"
+                  data-slot="typography"
+                  data-type="h3"
+                >
+                  New Features
+                </h3>
+                <p
+                  class="typography typography--align-start typography--color-muted typography--body-sm"
+                  data-slot="typography"
+                  data-type="body-sm"
+                >
+                  Adding advanced analytics for better market predictions
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style="opacity: 0; transform: translateY(16px);"
+        >
+          <div
+            class="card card--default"
+            data-slot="card"
+          >
+            <div
+              class="card__content flex flex-row items-start gap-4"
+              data-slot="card-content"
+            >
+              <svg
+                aria-hidden="true"
+                class="lucide lucide-wrench mt-1 size-6 flex-shrink-0 text-accent-strong"
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"
+                />
+              </svg>
+              <div>
+                <h3
+                  class="typography typography--align-start typography--color-default typography--h3"
+                  data-slot="typography"
+                  data-type="h3"
+                >
+                  Bug Fixes
+                </h3>
+                <p
+                  class="typography typography--align-start typography--color-muted typography--body-sm"
+                  data-slot="typography"
+                  data-type="body-sm"
+                >
+                  Fixing minor issues to ensure smooth sailing ahead
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      style="opacity: 0; transform: translateY(16px);"
+    >
+      <hr
+        class="separator separator--horizontal separator--default"
+        data-orientation="horizontal"
+        data-slot="separator"
+        role="separator"
+      />
+    </div>
+    <div
+      class="flex flex-col gap-4 text-center"
+      style="opacity: 0; transform: translateY(16px);"
+    >
+      <h3
+        class="typography typography--align-start typography--color-default typography--h3"
+        data-slot="typography"
+        data-type="h3"
+      >
+        Need Immediate Assistance?
+      </h3>
+      <p
+        class="typography typography--align-start typography--color-default typography--body"
+        data-slot="typography"
+        data-type="body"
+      >
+        While we're upgrading, our support team is still available for urgent inquiries
+      </p>
+      <div
+        class="flex flex-col items-center justify-center gap-4 sm:flex-row"
+      >
+        <a
+          class="flex items-center gap-2 font-medium text-accent-strong text-sm"
+          href="mailto:support@motormetrics.app"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-mail size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"
+            />
+            <rect
+              height="16"
+              rx="2"
+              width="20"
+              x="2"
+              y="4"
+            />
+          </svg>
+          support@motormetrics.app
+        </a>
+        <span
+          class="hidden text-muted sm:inline"
+        >
+          |
+        </span>
+        <a
+          class="flex items-center gap-2 font-medium text-accent-strong text-sm"
+          href="https://x.com/motormetricsapp"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-message-circle size-4"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"
+            />
+          </svg>
+          Follow updates on Twitter
+        </a>
+      </div>
+    </div>
+    <div
+      class="text-center"
+      style="opacity: 0; transform: translateY(16px);"
+    >
+      <p
+        class="typography typography--align-start typography--color-muted typography--body-sm"
+        data-slot="typography"
+        data-type="body-sm"
+      >
+        Thanks for your patience as we race towards a better experience!
+      </p>
+      <p
+        class="typography typography--align-start typography--color-muted typography--body-xs"
+        data-slot="typography"
+        data-type="body-xs"
+      >
+        This page will automatically refresh when maintenance is complete
+      </p>
+    </div>
+  </div>
+</div>
+`;

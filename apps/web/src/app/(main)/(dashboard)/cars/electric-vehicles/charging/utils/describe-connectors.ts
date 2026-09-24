@@ -6,3 +6,10 @@ export const describeConnectors = (location: EvChargingLocation): string => {
   const speed = location.maxSpeedKw != null ? ` ${location.maxSpeedKw} kW` : "";
   return `${location.connectors}× ${rating}${speed}`;
 };
+
+/** The name a site is listed under: its station name, else its address, else its ID. */
+export const siteTitle = (site: {
+  address: string | null;
+  locationId: string;
+  stationName: string | null;
+}): string => site.stationName ?? site.address ?? site.locationId;

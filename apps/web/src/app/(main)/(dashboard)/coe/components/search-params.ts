@@ -3,8 +3,8 @@ import { createLoader, parseAsStringLiteral } from "nuqs/server";
 /**
  * URL state for the COE overview bento.
  *
- * Kept separate from `coe/search-params.ts` — that loader is shared with
- * `/coe/premiums` and `/coe/results`, which have no category or range control.
+ * Kept separate from `coe/search-params.ts` — that loader belongs to
+ * `/coe/results`, which has no category or range control.
  *
  * The category travels as a bare letter so the URL reads `?category=B` rather
  * than the encoded `?category=Category%20B`.

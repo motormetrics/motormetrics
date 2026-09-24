@@ -1,6 +1,6 @@
 import { Typography } from "@heroui/react";
-import { getRelatedPosts } from "@web/lib/data/posts";
-import { PostCard } from "./post-card";
+import { PostCard } from "@web/app/(main)/(site)/blog/components/post-card";
+import { getRelatedPosts } from "@web/queries/posts/popularity";
 
 interface RelatedPostsProps {
   currentPostId: string;

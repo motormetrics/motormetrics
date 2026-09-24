@@ -1,104 +1,87 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { queueSelect, resetDbMocks } from "../../test-utils";
 import {
-  getMakeFuelTypeBreakdown,
-  getMakeVehicleTypeBreakdown,
-} from "./entity-breakdowns";
+  getFuelTypeData,
+  getMakeDetails,
+} from "@web/queries/cars/makes/entity-breakdowns";
+import { queueBatch, resetDbMocks } from "@web/queries/test-utils";
+import { describe, expect, it } from "vitest";
 
-describe("entity-breakdowns queries", () => {
+describe("car make breakdown queries", () => {
   beforeEach(() => {
     resetDbMocks();
   });
 
-  describe("getMakeFuelTypeBreakdown", () => {
-    it("should return fuel type breakdown without month filter", async () => {
-      queueSelect([
-        { name: "Petrol", value: 500 },
-        { name: "Electric", value: 300 },
-      ]);
+  it("returns make details with summed totals", async () => {
+    // getMakeDetails now uses db.batch with 2 queries
+    queueBatch([
+      [{ total: 42 }],
+      [
+        {
+          month: "2024-01",
+          fuelType: "Hybrid",
+          vehicleType: "SUV",
+          count: 42,
+        },
+      ],
+    ]);
 
-      const result = await getMakeFuelTypeBreakdown("TOYOTA");
+    const result = await getMakeDetails("toyota-prius", "2024-01");
 
-      expect(result).toEqual([
-        { name: "Petrol", value: 500 },
-        { name: "Electric", value: 300 },
-      ]);
-    });
-
-    it("should return fuel type breakdown with month filter", async () => {
-      queueSelect([{ name: "Hybrid", value: 200 }]);
-
-      const result = await getMakeFuelTypeBreakdown("TOYOTA", "2024-01");
-
-      expect(result).toEqual([{ name: "Hybrid", value: 200 }]);
-    });
-
-    it("should filter out rows with null fuel type name", async () => {
-      queueSelect([
-        { name: "Petrol", value: 500 },
-        { name: null, value: 100 },
-        { name: "Electric", value: 300 },
-      ]);
-
-      const result = await getMakeFuelTypeBreakdown("TOYOTA");
-
-      expect(result).toHaveLength(2);
-      expect(result).toEqual([
-        { name: "Petrol", value: 500 },
-        { name: "Electric", value: 300 },
-      ]);
-    });
-
-    it("should return empty array when no data exists", async () => {
-      queueSelect([]);
-
-      const result = await getMakeFuelTypeBreakdown("NONEXISTENT");
-
-      expect(result).toEqual([]);
+    expect(result).toEqual({
+      total: 42,
+      data: [
+        {
+          month: "2024-01",
+          fuelType: "Hybrid",
+          vehicleType: "SUV",
+          count: 42,
+        },
+      ],
     });
   });
 
-  describe("getMakeVehicleTypeBreakdown", () => {
-    it("should return vehicle type breakdown without month filter", async () => {
-      queueSelect([
-        { name: "Saloon", value: 400 },
-        { name: "SUV", value: 200 },
-      ]);
+  it("returns fuel type aggregates for battery electric vehicles", async () => {
+    // getFuelTypeData now uses db.batch with 2 queries
+    queueBatch([
+      [{ total: 12 }],
+      [{ month: "2024-02", make: "Tesla", fuelType: "Electric", count: 12 }],
+    ]);
 
-      const result = await getMakeVehicleTypeBreakdown("BMW");
+    const result = await getFuelTypeData("battery-electric", "2024-02");
 
-      expect(result).toEqual([
-        { name: "Saloon", value: 400 },
-        { name: "SUV", value: 200 },
-      ]);
+    expect(result).toEqual({
+      total: 12,
+      data: [
+        {
+          month: "2024-02",
+          make: "Tesla",
+          fuelType: "Electric",
+          count: 12,
+        },
+      ],
     });
+  });
 
-    it("should return vehicle type breakdown with month filter", async () => {
-      queueSelect([{ name: "Hatchback", value: 150 }]);
+  it("should return fuel type data without month filter", async () => {
+    queueBatch([
+      [{ total: 25 }],
+      [{ month: "2024-01", make: "Tesla", fuelType: "Electric", count: 25 }],
+    ]);
 
-      const result = await getMakeVehicleTypeBreakdown("BMW", "2024-01");
+    const result = await getFuelTypeData("electric");
 
-      expect(result).toEqual([{ name: "Hatchback", value: 150 }]);
+    expect(result).toEqual({
+      total: 25,
+      data: [
+        { month: "2024-01", make: "Tesla", fuelType: "Electric", count: 25 },
+      ],
     });
+  });
 
-    it("should filter out rows with null vehicle type name", async () => {
-      queueSelect([
-        { name: "Saloon", value: 400 },
-        { name: null, value: 50 },
-      ]);
+  it("should return zero total when no results match", async () => {
+    queueBatch([[{ total: null }], []]);
 
-      const result = await getMakeVehicleTypeBreakdown("BMW");
+    const result = await getFuelTypeData("nonexistent");
 
-      expect(result).toHaveLength(1);
-      expect(result[0].name).toBe("Saloon");
-    });
-
-    it("should return empty array when no data exists", async () => {
-      queueSelect([]);
-
-      const result = await getMakeVehicleTypeBreakdown("NONEXISTENT");
-
-      expect(result).toEqual([]);
-    });
+    expect(result).toEqual({ total: 0, data: [] });
   });
 });
