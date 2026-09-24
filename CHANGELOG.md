@@ -1,3 +1,11 @@
+## [5.26.1](https://github.com/motormetrics/motormetrics/compare/v5.26.0...v5.26.1) (2026-09-24)
+
+### Bug Fixes
+
+* **web:** add share images to brand and legal pages ([edadf53](https://github.com/motormetrics/motormetrics/commit/edadf539a1b0e4e363188f36adababcc290ea21e))
+* **web:** correct metadata, structured data and markup ([4ce0443](https://github.com/motormetrics/motormetrics/commit/4ce04430e2fec4e5dbd758287cf7c4d17826b2d5))
+* **web:** revalidate stale cache tags ([1d1818c](https://github.com/motormetrics/motormetrics/commit/1d1818cf04140f40d9c5eeaecd3a58548bd26972))
+
 ## [5.26.0](https://github.com/motormetrics/motormetrics/compare/v5.25.0...v5.26.0) (2026-09-24)
 
 ### Features
