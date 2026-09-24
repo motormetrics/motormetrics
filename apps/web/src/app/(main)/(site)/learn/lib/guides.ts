@@ -155,16 +155,16 @@ For cars registered with COEs from the second February 2026 bidding exercise:
 
 ### Legacy PARF Rates (pre-February 2026)
 
-For cars registered before February 2026, the original rates still apply:
+For cars with COEs obtained up to the first February 2026 bidding exercise, the original rates still apply. The cap depends on when the COE was obtained: **$60,000** for COEs from the second February 2023 exercise onwards, and **no cap** for COEs obtained before that.
 
-| Vehicle Age | PARF Rebate | Cap |
-|-------------|-------------|-----|
-| Within 5 years | 75% of ARF | $60,000 |
-| 6th year | 70% of ARF | $60,000 |
-| 7th year | 65% of ARF | $60,000 |
-| 8th year | 60% of ARF | $60,000 |
-| 9th year | 55% of ARF | $60,000 |
-| 10th year | 50% of ARF | $60,000 |
+| Vehicle Age | PARF Rebate |
+|-------------|-------------|
+| Within 5 years | 75% of ARF |
+| 6th year | 70% of ARF |
+| 7th year | 65% of ARF |
+| 8th year | 60% of ARF |
+| 9th year | 55% of ARF |
+| 10th year | 50% of ARF |
 
 After 10 years (when the original COE expires), **no PARF rebate is available**.
 
@@ -172,7 +172,7 @@ After 10 years (when the original COE expires), **no PARF rebate is available**.
 
 For a car with **$100,000 ARF** deregistered at Year 5:
 
-**Legacy (pre-Feb 2026)**: $100,000 × 75% = $75,000 → capped at **$60,000**
+**Legacy (COE from Feb 2023 to Feb 2026)**: $100,000 × 75% = $75,000 → capped at **$60,000**
 
 **New (Feb 2026+)**: $100,000 × 30% = $30,000 → **$30,000** (within cap)
 
