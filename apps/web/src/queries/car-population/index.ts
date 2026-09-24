@@ -1,1 +1,1 @@
-export * from "./available-years";
+export * from "@web/queries/car-population/available-years";

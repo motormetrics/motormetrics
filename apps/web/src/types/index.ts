@@ -30,4 +30,4 @@ export interface Announcement {
   paths?: string[];
 }
 
-export type { Pqp } from "./coe";
+export type { Pqp } from "@web/types/coe";

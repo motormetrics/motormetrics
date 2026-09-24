@@ -1,7 +1,7 @@
 "use server";
 
-import { auth } from "@web/app/admin/lib/auth";
 import { WORKFLOW_REGION } from "@web/config/workflow";
+import { auth } from "@web/lib/auth";
 import { carPopulationWorkflow } from "@web/workflows/car-population";
 import { carsWorkflow } from "@web/workflows/cars";
 import { coeWorkflow } from "@web/workflows/coe";

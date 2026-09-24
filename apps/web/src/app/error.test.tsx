@@ -1,7 +1,7 @@
+import AppError from "@web/app/error";
 import posthog from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
-import AppError from "./error";
 
 vi.mock("posthog-js", () => ({
   default: { captureException: vi.fn() },

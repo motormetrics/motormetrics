@@ -12,7 +12,7 @@ vi.mock("@upstash/ratelimit", () => ({
   },
 }));
 
-vi.mock("@web/app/admin/lib/auth", () => ({
+vi.mock("@web/lib/auth", () => ({
   auth: { api: { getSession: vi.fn() } },
 }));
 

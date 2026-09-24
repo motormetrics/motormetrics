@@ -73,17 +73,11 @@ vi.mock("@web/workflows/shared", async (importOriginal) => ({
   revalidatePostsCache: vi.fn(),
 }));
 
-import { generateHeroImage } from "@motormetrics/ai/generate-hero-image";
-import { generateBlogContent } from "@motormetrics/ai/generate-post";
-import { getCarsAggregatedByMonth } from "@motormetrics/ai/queries";
-import { updatePostHeroImage } from "@motormetrics/ai/save-post";
 import { redis } from "@motormetrics/utils/redis";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { getExistingPostByMonth } from "@web/queries/posts";
 import { carsWorkflow } from "@web/workflows/cars";
 import { updateCars } from "@web/workflows/cars/steps/process-data";
-import { revalidatePostsCache } from "@web/workflows/shared";
-import { revalidateTag } from "next/cache";
 
 describe("carsWorkflow", () => {
   beforeEach(() => {

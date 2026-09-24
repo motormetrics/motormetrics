@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { auth } from "@web/app/admin/lib/auth";
+import { auth } from "@web/lib/auth";
 import { type NextRequest, NextResponse } from "next/server";
 
 // Rate limiter for Developer API (60 requests per minute)

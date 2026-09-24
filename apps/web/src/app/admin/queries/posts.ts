@@ -1,6 +1,6 @@
 import { db } from "@motormetrics/database/client";
 import type { SelectPost } from "@motormetrics/database/schema";
-import { auth } from "@web/app/admin/lib/auth";
+import { auth } from "@web/lib/auth";
 import type { LanguageModelUsage } from "ai";
 import { headers } from "next/headers";
 

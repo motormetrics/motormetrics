@@ -1,60 +1,17 @@
 import {
-  getCoeMonths,
   getCoeResults,
   getCoeResultsByPeriod,
-  getLatestCoeResults,
-} from "@web/queries/coe";
+} from "@web/queries/coe/historical-results";
 import {
-  cacheLifeMock,
   cacheTagMock,
   queueSelect,
-  queueSelectDistinct,
   resetDbMocks,
 } from "@web/queries/test-utils";
 import { describe, expect, it } from "vitest";
 
-describe("COE queries", () => {
+describe("COE historical result queries", () => {
   beforeEach(() => {
     resetDbMocks();
-  });
-
-  it("should return the available COE months", async () => {
-    queueSelectDistinct([{ month: "2024-05" }, { month: "2024-04" }]);
-
-    const result = await getCoeMonths();
-
-    expect(result).toEqual([{ month: "2024-05" }, { month: "2024-04" }]);
-    expect(cacheLifeMock).toHaveBeenCalledWith("max");
-    expect(cacheTagMock).toHaveBeenCalledWith("coe:months");
-  });
-
-  it("should return the latest COE bidding results", async () => {
-    // Queue results in order of db.select() calls:
-    // 1. latestMonthSubquery, 2. latestBiddingSubquery, 3. main query (the one that's awaited)
-    queueSelect(
-      [], // latestMonthSubquery (embedded in SQL, not awaited directly)
-      [], // latestBiddingSubquery (embedded in SQL, not awaited directly)
-      [{ month: "2024-05", biddingNo: 2, vehicleClass: "A" }], // main query result
-    );
-
-    const result = await getLatestCoeResults();
-
-    expect(result).toEqual([
-      {
-        month: "2024-05",
-        biddingNo: 2,
-        vehicleClass: "A",
-      },
-    ]);
-    expect(cacheTagMock).toHaveBeenCalledWith("coe:latest");
-  });
-
-  it("should return an empty list when no latest month is available", async () => {
-    queueSelect([{ latestMonth: null }]);
-
-    const result = await getLatestCoeResults();
-
-    expect(result).toEqual([]);
   });
 
   it("should load all COE results without filters", async () => {

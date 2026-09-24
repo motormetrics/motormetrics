@@ -1,3 +1,3 @@
-export * from "./all";
-export * from "./available-months";
-export * from "./latest-month";
+export * from "@web/queries/deregistrations/all";
+export * from "@web/queries/deregistrations/available-months";
+export * from "@web/queries/deregistrations/latest-month";

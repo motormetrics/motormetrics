@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@web/app/admin/lib/auth";
+import { auth } from "@web/lib/auth";
 import { regenerateHeroWorkflow } from "@web/workflows/regenerate-hero";
 import { headers } from "next/headers";
 import { start } from "workflow/api";

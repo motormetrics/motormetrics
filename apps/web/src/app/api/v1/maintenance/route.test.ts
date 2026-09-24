@@ -38,7 +38,7 @@ function makeRequest(
 
 describe("GET /api/v1/maintenance", () => {
   it("should return 401 without auth token", async () => {
-    const { GET } = await import("../route");
+    const { GET } = await import("@web/app/api/v1/maintenance/route");
     const response = await GET(makeRequest("GET"));
 
     expect(response.status).toBe(401);
@@ -47,7 +47,7 @@ describe("GET /api/v1/maintenance", () => {
   it("should return default config when Redis key is missing", async () => {
     mockRedisGet.mockResolvedValue(null);
 
-    const { GET } = await import("../route");
+    const { GET } = await import("@web/app/api/v1/maintenance/route");
     const response = await GET(makeRequest("GET", undefined, VALID_TOKEN));
     const data = await response.json();
 
@@ -60,7 +60,7 @@ describe("GET /api/v1/maintenance", () => {
       maintenance: { enabled: true, message: "Down for updates" },
     });
 
-    const { GET } = await import("../route");
+    const { GET } = await import("@web/app/api/v1/maintenance/route");
     const response = await GET(makeRequest("GET", undefined, VALID_TOKEN));
     const data = await response.json();
 
@@ -71,7 +71,7 @@ describe("GET /api/v1/maintenance", () => {
   it("should return 500 when Redis throws", async () => {
     mockRedisGet.mockRejectedValue(new Error("Redis connection failed"));
 
-    const { GET } = await import("../route");
+    const { GET } = await import("@web/app/api/v1/maintenance/route");
     const response = await GET(makeRequest("GET", undefined, VALID_TOKEN));
     const data = await response.json();
 
@@ -82,14 +82,14 @@ describe("GET /api/v1/maintenance", () => {
 
 describe("PUT /api/v1/maintenance", () => {
   it("should return 401 without auth token", async () => {
-    const { PUT } = await import("../route");
+    const { PUT } = await import("@web/app/api/v1/maintenance/route");
     const response = await PUT(makeRequest("PUT", { enabled: true }));
 
     expect(response.status).toBe(401);
   });
 
   it("should return 400 when enabled is missing", async () => {
-    const { PUT } = await import("../route");
+    const { PUT } = await import("@web/app/api/v1/maintenance/route");
     const response = await PUT(
       makeRequest("PUT", { message: "test" }, VALID_TOKEN),
     );
@@ -100,7 +100,7 @@ describe("PUT /api/v1/maintenance", () => {
   });
 
   it("should return 400 when enabled is not boolean", async () => {
-    const { PUT } = await import("../route");
+    const { PUT } = await import("@web/app/api/v1/maintenance/route");
     const response = await PUT(
       makeRequest("PUT", { enabled: "yes" }, VALID_TOKEN),
     );
@@ -114,7 +114,7 @@ describe("PUT /api/v1/maintenance", () => {
     });
     mockRedisSet.mockResolvedValue("OK");
 
-    const { PUT } = await import("../route");
+    const { PUT } = await import("@web/app/api/v1/maintenance/route");
     const response = await PUT(
       makeRequest(
         "PUT",
@@ -137,7 +137,7 @@ describe("PUT /api/v1/maintenance", () => {
     });
     mockRedisSet.mockResolvedValue("OK");
 
-    const { PUT } = await import("../route");
+    const { PUT } = await import("@web/app/api/v1/maintenance/route");
     const response = await PUT(
       makeRequest("PUT", { enabled: false }, VALID_TOKEN),
     );
@@ -154,7 +154,7 @@ describe("PUT /api/v1/maintenance", () => {
     });
     mockRedisSet.mockResolvedValue("OK");
 
-    const { PUT } = await import("../route");
+    const { PUT } = await import("@web/app/api/v1/maintenance/route");
     await PUT(
       makeRequest("PUT", { enabled: true, message: "test" }, VALID_TOKEN),
     );
@@ -169,7 +169,7 @@ describe("PUT /api/v1/maintenance", () => {
     mockRedisGet.mockResolvedValue(null);
     mockRedisSet.mockResolvedValue("OK");
 
-    const { PUT } = await import("../route");
+    const { PUT } = await import("@web/app/api/v1/maintenance/route");
     const response = await PUT(
       makeRequest("PUT", { enabled: true, message: "first time" }, VALID_TOKEN),
     );
@@ -182,7 +182,7 @@ describe("PUT /api/v1/maintenance", () => {
   it("should return 500 when Redis throws", async () => {
     mockRedisGet.mockRejectedValue(new Error("Redis write failed"));
 
-    const { PUT } = await import("../route");
+    const { PUT } = await import("@web/app/api/v1/maintenance/route");
     const response = await PUT(
       makeRequest("PUT", { enabled: true }, VALID_TOKEN),
     );

@@ -1,4 +1,4 @@
-import { auth } from "@web/app/admin/lib/auth";
+import { auth } from "@web/lib/auth";
 import { toNextJsHandler } from "better-auth/next-js";
 import { checkBotId } from "botid/server";
 import { NextResponse } from "next/server";

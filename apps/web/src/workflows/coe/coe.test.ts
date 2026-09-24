@@ -71,17 +71,11 @@ vi.mock("@web/workflows/shared", async (importOriginal) => ({
   revalidatePostsCache: vi.fn(),
 }));
 
-import { generateHeroImage } from "@motormetrics/ai/generate-hero-image";
 import { generateBlogContent } from "@motormetrics/ai/generate-post";
-import { getCoeForMonth } from "@motormetrics/ai/queries";
-import { updatePostHeroImage } from "@motormetrics/ai/save-post";
 import { redis } from "@motormetrics/utils/redis";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";
-import { getExistingPostByMonth } from "@web/queries/posts";
 import { coeWorkflow } from "@web/workflows/coe";
 import { updateCoe } from "@web/workflows/coe/steps/process-data";
-import { revalidatePostsCache } from "@web/workflows/shared";
-import { revalidateTag } from "next/cache";
 
 describe("coeWorkflow", () => {
   beforeEach(() => {

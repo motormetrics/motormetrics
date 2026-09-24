@@ -1,7 +1,7 @@
+import GlobalError from "@web/app/global-error";
 import posthog from "posthog-js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
-import GlobalError from "./global-error";
 
 vi.mock("posthog-js", () => ({
   default: { captureException: vi.fn() },
@@ -11,7 +11,7 @@ vi.mock("next/font/google", () => ({
   Geist: () => ({ className: "mock-geist" }),
 }));
 
-vi.mock("./globals.css", () => ({}));
+vi.mock("@web/app/globals.css", () => ({}));
 
 describe("GlobalError", () => {
   beforeEach(() => {

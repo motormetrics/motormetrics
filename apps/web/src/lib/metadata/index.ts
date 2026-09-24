@@ -6,4 +6,4 @@ export {
   generateDefinedTermSetSchema,
   generateFAQPageSchema,
   generateItemListSchema,
-} from "./structured-data";
+} from "@web/lib/metadata/structured-data";
