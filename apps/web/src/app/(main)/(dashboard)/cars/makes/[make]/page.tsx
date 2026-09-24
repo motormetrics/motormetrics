@@ -10,12 +10,12 @@ import { PageHead } from "@web/components/shared/page-head";
 import { Report, ReportSection } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
-import { SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
+import { SITE_URL } from "@web/config";
 import {
   createWebPageStructuredData,
   generateBreadcrumbSchema,
 } from "@web/lib/metadata";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getDistinctMakes } from "@web/queries/cars";
 import { getMakeCoeComparison } from "@web/queries/cars/makes/coe-comparison";
 import { getMakeFromSlug } from "@web/queries/cars/makes/get-make-from-slug";
@@ -58,19 +58,15 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      ...baseOpenGraph,
       title,
       description,
       url: `${SITE_URL}/cars/makes/${make}`,
-      siteName: SITE_TITLE,
-      locale: "en_SG",
-      type: "website",
     },
     twitter: {
-      card: "summary_large_image",
+      ...baseTwitter,
       title,
       description,
-      site: SOCIAL_HANDLE,
-      creator: SOCIAL_HANDLE,
     },
     alternates: {
       canonical: `/cars/makes/${make}`,

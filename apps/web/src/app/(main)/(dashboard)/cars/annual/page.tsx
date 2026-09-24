@@ -23,6 +23,7 @@ import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
 } from "@web/lib/metadata";
+import { baseOpenGraph } from "@web/lib/metadata/social";
 import { getVehiclePopulationByCategoryAndFuelType } from "@web/queries/vehicle-population";
 import { BarChart3 } from "lucide-react";
 import type { Metadata } from "next";
@@ -34,10 +35,11 @@ export const metadata: Metadata = {
   description:
     "Annual motor vehicle population in Singapore by vehicle type and fuel type. Track the growth of electric, hybrid, petrol, and diesel vehicles on Singapore roads.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Annual Vehicle Population - Singapore",
     description:
       "Explore annual vehicle population trends in Singapore with interactive charts and key statistics.",
-    type: "website",
+    url: `${SITE_URL}/cars/annual`,
   },
   alternates: {
     canonical: "/cars/annual",

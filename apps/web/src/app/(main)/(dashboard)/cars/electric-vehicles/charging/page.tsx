@@ -23,6 +23,7 @@ import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
 } from "@web/lib/metadata";
+import { baseOpenGraph } from "@web/lib/metadata/social";
 import { getEvChargingSnapshot } from "@web/queries/ev-charging";
 import { PlugZap } from "lucide-react";
 import type { Metadata } from "next";
@@ -35,10 +36,11 @@ export const metadata: Metadata = {
   description:
     "Live public EV charger availability across Singapore, with the cheapest and most expensive charging rates, busiest hours and locations, and new chargers this week.",
   openGraph: {
+    ...baseOpenGraph,
     title: "EV Charging - Live Singapore Charger Stats",
     description:
       "Live availability, prices and busy hours for Singapore's public EV chargers.",
-    type: "website",
+    url: `${SITE_URL}/cars/electric-vehicles/charging`,
   },
   alternates: {
     canonical: "/cars/electric-vehicles/charging",

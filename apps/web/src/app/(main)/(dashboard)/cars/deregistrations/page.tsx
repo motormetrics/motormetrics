@@ -7,11 +7,11 @@ import { Report } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
 import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
 } from "@web/lib/metadata";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import {
   fetchMonthsForDeregistrations,
   getMonthOrLatest,
@@ -36,19 +36,15 @@ export function generateMetadata(): Metadata {
     title,
     description,
     openGraph: {
+      ...baseOpenGraph,
       title,
       description,
       url: `${SITE_URL}${canonical}`,
-      siteName: SITE_TITLE,
-      locale: "en_SG",
-      type: "website",
     },
     twitter: {
-      card: "summary_large_image",
+      ...baseTwitter,
       title,
       description,
-      site: SOCIAL_HANDLE,
-      creator: SOCIAL_HANDLE,
     },
     alternates: { canonical },
     authors: [{ name: SITE_TITLE, url: SITE_URL }],

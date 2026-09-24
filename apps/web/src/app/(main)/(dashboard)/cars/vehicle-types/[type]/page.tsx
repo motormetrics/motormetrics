@@ -3,8 +3,8 @@ import {
   TypeDetail,
   type TypeDetailConfig,
 } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
-import { SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
+import { SITE_URL } from "@web/config";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import {
   checkVehicleTypeIfExist,
   getDistinctVehicleTypes,
@@ -38,19 +38,15 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
+      ...baseOpenGraph,
       title,
       description,
       url: `${SITE_URL}${canonical}`,
-      siteName: SITE_TITLE,
-      locale: "en_SG",
-      type: "website",
     },
     twitter: {
-      card: "summary_large_image",
+      ...baseTwitter,
       title,
       description,
-      site: SOCIAL_HANDLE,
-      creator: SOCIAL_HANDLE,
     },
     alternates: {
       canonical,

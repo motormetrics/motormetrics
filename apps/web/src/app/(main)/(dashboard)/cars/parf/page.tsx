@@ -5,8 +5,8 @@ import { PageHead } from "@web/components/shared/page-head";
 import { Report } from "@web/components/shared/report";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { WebPage, WithContext } from "schema-dts";
@@ -19,19 +19,15 @@ export function generateMetadata(): Metadata {
     title,
     description,
     openGraph: {
+      ...baseOpenGraph,
       title,
       description,
       url: `${SITE_URL}/cars/parf`,
-      siteName: SITE_TITLE,
-      locale: "en_SG",
-      type: "website",
     },
     twitter: {
-      card: "summary_large_image",
+      ...baseTwitter,
       title,
       description,
-      site: SOCIAL_HANDLE,
-      creator: SOCIAL_HANDLE,
     },
     alternates: {
       canonical: "/cars/parf",

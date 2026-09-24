@@ -4,7 +4,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "@web/app/providers";
 import LoadingIndicator from "@web/components/loading-indicator";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
 import { BotIdClient } from "botid/client";
 import type { Metadata } from "next";
 import { Urbanist } from "next/font/google";
@@ -12,6 +11,7 @@ import { getLocale, getMessages } from "next-intl/server";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, Suspense } from "react";
 import "./globals.css";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 
 // Urbanist is the single family across the app, per the design system.
 // Exposed as a CSS variable so globals.css can map --font-sans onto it.
@@ -56,19 +56,15 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
+    ...baseOpenGraph,
     title,
     description,
     url,
-    siteName: title,
-    locale: "en_SG",
-    type: "website",
   },
   twitter: {
-    card: "summary_large_image",
+    ...baseTwitter,
     title,
     description,
-    site: SOCIAL_HANDLE,
-    creator: SOCIAL_HANDLE,
   },
   alternates: {
     canonical: SITE_URL,

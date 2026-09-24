@@ -9,7 +9,8 @@ import { StatsSection } from "@web/app/(main)/(site)/about/components/stats-sect
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
-import { BRAND_SOCIAL_PROFILE_URLS, SOCIAL_HANDLE } from "@web/config/socials";
+import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import type {
   FAQPage,
@@ -26,19 +27,15 @@ export const metadata: Metadata = {
   title: { absolute: title },
   description,
   openGraph: {
+    ...baseOpenGraph,
     title,
     description,
     url: `${SITE_URL}/about`,
-    siteName: SITE_TITLE,
-    locale: "en_SG",
-    type: "website",
   },
   twitter: {
-    card: "summary_large_image",
+    ...baseTwitter,
     title,
     description,
-    site: SOCIAL_HANDLE,
-    creator: SOCIAL_HANDLE,
   },
   alternates: {
     canonical: "/about",

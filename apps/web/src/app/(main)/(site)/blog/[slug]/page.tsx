@@ -13,9 +13,9 @@ import { RelatedPosts } from "@web/app/(main)/(site)/blog/components/related-pos
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
 import { getPostViewCount } from "@web/lib/data/posts";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import {
   getAllPosts,
   getNextPost,
@@ -65,6 +65,7 @@ export const generateMetadata = async ({
     creator: SITE_TITLE,
     publisher: SITE_TITLE,
     openGraph: {
+      ...baseOpenGraph,
       title: post.title,
       description: post.excerpt || "",
       type: "article",
@@ -75,11 +76,9 @@ export const generateMetadata = async ({
       url: `${SITE_URL}${canonical}`,
     },
     twitter: {
-      card: "summary_large_image",
+      ...baseTwitter,
       title: post.title,
       description: post.excerpt || "",
-      creator: SOCIAL_HANDLE,
-      site: SOCIAL_HANDLE,
     },
     alternates: {
       canonical,

@@ -26,11 +26,11 @@ import {
 import { SkeletonChart } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { SOCIAL_HANDLE } from "@web/config/socials";
 import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
 } from "@web/lib/metadata";
+import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
@@ -63,19 +63,15 @@ export function generateMetadata(): Metadata {
     title,
     description,
     openGraph: {
+      ...baseOpenGraph,
       title,
       description,
       url: `${SITE_URL}/coe/results`,
-      siteName: SITE_TITLE,
-      locale: "en_SG",
-      type: "website",
     },
     twitter: {
-      card: "summary_large_image",
+      ...baseTwitter,
       title,
       description,
-      site: SOCIAL_HANDLE,
-      creator: SOCIAL_HANDLE,
     },
     alternates: {
       canonical: "/coe/results",
