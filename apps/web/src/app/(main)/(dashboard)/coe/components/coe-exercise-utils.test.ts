@@ -6,6 +6,7 @@ import {
   formatPremiumChange,
   groupByExercise,
   nextExercise,
+  premiumAxisTicks,
   recordHighs,
   summariseByYear,
   toCategory,
@@ -180,5 +181,28 @@ describe("recordHighs", () => {
     expect(highs["Category A"]?.key).toBe("2023-09:1");
     expect(highs["Category B"]?.key).toBe("2024-02:1");
     expect(highs["Category C"]).toBeUndefined();
+  });
+});
+
+describe("premiumAxisTicks", () => {
+  it("should pick a round step that covers the lowest and highest premium", () => {
+    expect(premiumAxisTicks([101_200, 104_300, 98_900, 107_100])).toEqual([
+      97_500, 100_000, 102_500, 105_000, 107_500,
+    ]);
+  });
+
+  it("should widen the step for a long, volatile range", () => {
+    expect(premiumAxisTicks([30_000, 150_000])).toEqual([
+      0, 50_000, 100_000, 150_000,
+    ]);
+  });
+
+  it("should give a flat series two ticks around its value", () => {
+    expect(premiumAxisTicks([104_000, 104_000])).toEqual([104_000, 104_250]);
+    expect(premiumAxisTicks([104_100])).toEqual([104_000, 104_250]);
+  });
+
+  it("should return no ticks for an empty series", () => {
+    expect(premiumAxisTicks([])).toEqual([]);
   });
 });

@@ -201,6 +201,34 @@ export function formatPremiumChange(
   return `${sign}${percentage}% (${sign}${formatCurrency(Math.abs(difference))}) vs ${biddingOrdinal(previous.biddingNo)} bidding, ${formatMonthShortName(previous.month)} at ${formatCurrency(previous.premium)}`;
 }
 
+const AXIS_STEPS = [
+  250, 500, 1000, 2000, 2500, 5000, 10_000, 20_000, 25_000, 50_000, 100_000,
+];
+
+/**
+ * Y-axis ticks for a premium chart: a round step of about a quarter of the
+ * range, running from just below the lowest value to just above the highest.
+ * A flat series still gets two ticks, so the line sits on a real scale.
+ */
+export function premiumAxisTicks(values: number[]): number[] {
+  if (values.length === 0) {
+    return [];
+  }
+
+  const high = Math.max(...values);
+  const low = Math.min(...values);
+  const step =
+    AXIS_STEPS.find((candidate) => candidate >= (high - low) / 4) ??
+    AXIS_STEPS[AXIS_STEPS.length - 1];
+  const first = Math.floor(low / step) * step;
+  const last = Math.max(Math.ceil(high / step) * step, first + step);
+
+  return Array.from(
+    { length: (last - first) / step + 1 },
+    (_, index) => first + index * step,
+  );
+}
+
 /** Successful bids as a percentage of bids received; 0 when none were received. */
 export function successRate(bidsSuccess: number, bidsReceived: number): number {
   return bidsReceived > 0 ? (bidsSuccess / bidsReceived) * 100 : 0;
