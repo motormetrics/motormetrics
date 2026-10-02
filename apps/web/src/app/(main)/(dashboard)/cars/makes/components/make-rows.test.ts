@@ -3,6 +3,7 @@ import {
   buildTotalsFromStats,
   finaliseRows,
   matchesFuelFilter,
+  priorWindow,
   rollingMonths,
   selectElectricOnlyMakes,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
@@ -42,6 +43,23 @@ describe("rollingMonths", () => {
   });
 });
 
+describe("priorWindow", () => {
+  it("compares each range with the same period a year earlier", () => {
+    expect(priorWindow("2025-03", "month")).toEqual({
+      end: "2024-03",
+      start: "2024-03",
+    });
+    expect(priorWindow("2025-03", "ytd")).toEqual({
+      end: "2024-03",
+      start: "2024-01",
+    });
+    expect(priorWindow("2025-03", "12m")).toEqual({
+      end: "2024-03",
+      start: "2023-04",
+    });
+  });
+});
+
 describe("buildTotalsFromStats", () => {
   it("uses the year-to-date count for the ytd range", () => {
     const totals = buildTotalsFromStats(stats, "ytd", {});
@@ -69,6 +87,26 @@ describe("buildTotalsFromStats", () => {
     const totals = buildTotalsFromStats(stats, "ytd", {});
 
     expect(totals[0].yoyChange).toBe(25);
+    expect(totals[1].yoyChange).toBeNull();
+  });
+
+  it("measures the month range against the prior-period counts", () => {
+    const totals = buildTotalsFromStats(
+      stats,
+      "month",
+      { BYD: 30, TOYOTA: 88 },
+      { BYD: 20, TOYOTA: 110 },
+    );
+
+    expect(totals[0].yoyChange).toBe(-20);
+    expect(totals[1].yoyChange).toBe(50);
+  });
+
+  it("measures the twelve-month range against the prior-period counts", () => {
+    const totals = buildTotalsFromStats(stats, "12m", {}, { TOYOTA: 80 });
+
+    expect(totals[0].yoyChange).toBe(25);
+    // No prior-period registrations: no change rather than the ytd figure.
     expect(totals[1].yoyChange).toBeNull();
   });
 });
@@ -136,6 +174,17 @@ describe("buildTotalsFromFuelRows", () => {
     // Jan–Feb 2025 is 50 against Jan–Feb 2024 of 10. Counting all of 2024
     // would fold in the November 7 and understate this as +194%.
     expect(totals.find((item) => item.make === "BYD")?.yoyChange).toBe(400);
+  });
+
+  it("measures the month and twelve-month ranges against a year earlier", () => {
+    const month = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "month");
+    const rolling = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "12m");
+
+    // February 2025 is 30 against February 2024 of 10.
+    expect(month.find((item) => item.make === "BYD")?.yoyChange).toBe(200);
+    // March 2024 to February 2025 is 57 against March 2023 to February 2024
+    // of 10.
+    expect(rolling.find((item) => item.make === "BYD")?.yoyChange).toBe(470);
   });
 
   it("reports no change when the make has no prior-year registrations", () => {
