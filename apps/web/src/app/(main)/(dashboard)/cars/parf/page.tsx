@@ -13,7 +13,7 @@ import type { WebPage, WithContext } from "schema-dts";
 
 const title = "PARF Rebate Calculator and 2026 Rates";
 const description =
-  "Work out your PARF rebate from the ARF paid and the car's age. Budget 2026 cut the rates from 75% to 30% of ARF and halved the cap to $30,000.";
+  "Work out your PARF rebate, COE rebate and deregistration value. Budget 2026 cut the PARF rates from 75% to 30% of ARF and halved the cap to $30,000.";
 export const metadata: Metadata = {
   title,
   description,
@@ -62,7 +62,7 @@ export default function PARFCalculatorPage() {
       />
 
       <PageHead
-        description="The PARF rebate is the part of your ARF you get back when you deregister a car before it turns 10. See what it returns under the Budget 2026 schedule, and how much that is short of the old one."
+        description="The PARF rebate is the part of your ARF you get back when you deregister a car before it turns 10. See what it returns under the Budget 2026 schedule, how much that is short of the old one, and your car's deregistration value once the COE rebate is added."
         title="PARF rebate calculator"
       />
 
