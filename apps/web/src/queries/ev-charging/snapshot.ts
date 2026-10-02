@@ -2,7 +2,7 @@ import { db } from "@motormetrics/database/client";
 import { evConnectorStatus } from "@motormetrics/database/schema";
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
 import type { ConnectorRecord, ConnectorStatus } from "@web/lib/ev-charging";
-import { sql } from "drizzle-orm";
+import { eq, max } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export interface EvChargingSnapshot {
@@ -65,7 +65,12 @@ export async function getEvChargingSnapshot(): Promise<EvChargingSnapshot> {
     })
     .from(evConnectorStatus)
     .where(
-      sql`${evConnectorStatus.observedAt} = (select max(${evConnectorStatus.observedAt}) from ${evConnectorStatus})`,
+      eq(
+        evConnectorStatus.observedAt,
+        db
+          .select({ observedAt: max(evConnectorStatus.observedAt) })
+          .from(evConnectorStatus),
+      ),
     );
 
   if (rows.length === 0) {
