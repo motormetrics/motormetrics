@@ -215,7 +215,6 @@ export function MakesTable({
             : `${visibleRows.length} ${visibleRows.length === 1 ? "make" : "makes"}`
         }`}
         eyebrow="Registrations"
-        size="lg"
         title="All makes"
         trailing={<FuelTabs fuel={fuel} />}
       />

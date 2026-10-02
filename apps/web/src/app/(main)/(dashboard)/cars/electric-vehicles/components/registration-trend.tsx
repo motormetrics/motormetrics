@@ -81,7 +81,6 @@ export async function RegistrationTrend({
       <SectionHead
         caption={`${RANGE_NOTES[range]} to ${monthLabel}`}
         eyebrow="Registrations"
-        size="lg"
         title={heading.title}
         trailing={
           <QueryTabs

@@ -93,7 +93,6 @@ export async function CoeSection() {
         caption={`${formatMonthLabel(latestExercise)} · latest bidding exercise`}
         eyebrow="Certificate of Entitlement"
         link={{ href: "/coe/results", label: "All COE results" }}
-        size="lg"
         title="COE premiums"
       />
 
