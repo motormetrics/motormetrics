@@ -117,7 +117,7 @@ export function AllCategoriesTable({
                   <Table.Column
                     allowsSorting={column.sortable}
                     className={cn(
-                      "pb-3 font-semibold text-[13px]",
+                      "rounded-none bg-transparent pb-3 font-semibold text-[13px] after:hidden",
                       CELL_CLASS,
                       column.key !== "category" &&
                         FIGURE_COLUMN_CLASSES[column.key],
