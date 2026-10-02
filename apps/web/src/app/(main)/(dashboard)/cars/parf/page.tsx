@@ -2,7 +2,7 @@ import { Typography } from "@heroui/react";
 import { PARFCalculator } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-calculator";
 import { PARFComparisonTable } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-comparison-table";
 import { PageHead } from "@web/components/shared/page-head";
-import { Report } from "@web/components/shared/report";
+import { Report, ReportSection } from "@web/components/shared/report";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -11,9 +11,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { WebPage, WithContext } from "schema-dts";
 
-const title = "PARF Rebate Calculator Singapore";
+const title = "PARF Rebate Calculator and 2026 Rates";
 const description =
-  "Compare PARF rebates before and after the Budget 2026 changes. Calculate how much less you would receive under the new rates.";
+  "Work out your PARF rebate from the ARF paid and the car's age. Budget 2026 cut the rates from 75% to 30% of ARF and halved the cap to $30,000.";
 export const metadata: Metadata = {
   title,
   description,
@@ -62,12 +62,40 @@ export default function PARFCalculatorPage() {
       />
 
       <PageHead
-        description="What a deregistration returns under the Budget 2026 rebate schedule, and how much that is short of the old one."
-        title="PARF calculator"
+        description="The PARF rebate is the part of your ARF you get back when you deregister a car before it turns 10. See what it returns under the Budget 2026 schedule, and how much that is short of the old one."
+        title="PARF rebate calculator"
       />
 
       <PARFCalculator />
       <PARFComparisonTable />
+
+      <ReportSection title="Who gets a PARF rebate">
+        <ul className="flex list-disc flex-col gap-2 pl-5 text-muted-strong">
+          <li>
+            The car was registered brand new, or as a used import no more than 3
+            years old after 1 September 2007.
+          </li>
+          <li>It is no more than 10 years old when deregistered.</li>
+          <li>
+            It has never been laid up, and its COE has never been renewed.
+          </li>
+        </ul>
+        <Typography.Paragraph className="text-muted-strong">
+          Your deregistration value is the PARF rebate plus a COE rebate for the
+          months left on the COE.{" "}
+          <Link
+            className="font-bold text-accent-strong"
+            href="/learn/check-parf-rebate"
+          >
+            How to check your PARF rebate on OneMotoring
+          </Link>{" "}
+          covers both, and the{" "}
+          <Link className="font-bold text-accent-strong" href="/learn/parf">
+            PARF guide
+          </Link>{" "}
+          explains when deregistering early pays off.
+        </Typography.Paragraph>
+      </ReportSection>
 
       <Typography.Paragraph color="muted" size="sm">
         Figures are for illustration only. The PARF rebate is subject to the
