@@ -45,6 +45,11 @@ const LINKS_BY_CATEGORY: Record<PostCategoryKey, FollowLink[]> = {
     { href: "/coe/premiums", label: "COE premiums" },
     { href: "/cars/electric-vehicles", label: "Electric vehicles" },
   ],
+  policy: [
+    { href: "/cars/parf", label: "PARF calculator" },
+    { href: "/coe/premiums", label: "COE premiums" },
+    { href: "/cars/deregistrations", label: "Deregistrations" },
+  ],
   pqp: [
     { href: "/coe/pqp", label: "PQP rates" },
     { href: "/coe/premiums", label: "COE premiums" },

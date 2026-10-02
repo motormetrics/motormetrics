@@ -39,6 +39,11 @@ export const POST_CATEGORIES = {
     label: "Electric",
     articleSection: "Electric Vehicles",
   },
+  // Hand-written posts on government measures, such as Budget 2026.
+  policy: {
+    label: "Policy",
+    articleSection: "Motoring Policy",
+  },
 } as const satisfies Record<
   string,
   {
