@@ -1,3 +1,9 @@
+## [5.26.4](https://github.com/motormetrics/motormetrics/compare/v5.26.3...v5.26.4) (2026-10-02)
+
+### Bug Fixes
+
+* **web:** read the EV charging snapshot from Postgres ([6891591](https://github.com/motormetrics/motormetrics/commit/68915910affa802b950d7400c0a72f53fb5dff1a))
+
 ## [5.26.3](https://github.com/motormetrics/motormetrics/compare/v5.26.2...v5.26.3) (2026-10-02)
 
 ### Bug Fixes
