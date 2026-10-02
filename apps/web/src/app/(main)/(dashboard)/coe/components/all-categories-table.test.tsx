@@ -23,6 +23,7 @@ vi.mock("posthog-js", () => ({ default: { capture: vi.fn() } }));
 /** Deliberately not in premium order, so the default sort is visible. */
 const rows: CategoryRow[] = [
   {
+    bidsReceived: 1_507,
     category: "Category A",
     categoryKey: "A",
     changeRatio: 0.02,
@@ -31,6 +32,7 @@ const rows: CategoryRow[] = [
     quota: 1_200,
   },
   {
+    bidsReceived: 1_135,
     category: "Category B",
     categoryKey: "B",
     changeRatio: -0.01,
@@ -39,6 +41,7 @@ const rows: CategoryRow[] = [
     quota: 900,
   },
   {
+    bidsReceived: 532,
     category: "Category C",
     categoryKey: "C",
     changeRatio: 0.03,
@@ -47,6 +50,7 @@ const rows: CategoryRow[] = [
     quota: 400,
   },
   {
+    bidsReceived: 605,
     category: "Category D",
     categoryKey: "D",
     changeRatio: 0,
@@ -55,6 +59,7 @@ const rows: CategoryRow[] = [
     quota: 500,
   },
   {
+    bidsReceived: 431,
     category: "Category E",
     categoryKey: "E",
     changeRatio: 0.04,
@@ -112,5 +117,25 @@ describe("AllCategoriesTable", () => {
     await expect
       .element(screen.getByText(/Sorted by category, ascending/))
       .toBeVisible();
+  });
+
+  it("should show bids and bids per COE without making them sortable", async () => {
+    const screen = await renderTable();
+
+    await expect
+      .element(screen.getByRole("columnheader", { name: "Bids", exact: true }))
+      .not.toHaveAttribute("aria-sort");
+    await expect
+      .element(screen.getByRole("columnheader", { name: "Bids/COE" }))
+      .not.toHaveAttribute("aria-sort");
+    await expect
+      .element(screen.getByRole("gridcell", { name: "1,507", exact: true }))
+      .toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("gridcell", { name: "1.44×", exact: true }))
+      .toBeInTheDocument();
+    await expect
+      .element(screen.getByText("1,200 quota · 1,507 bids · 1.26×"))
+      .toBeInTheDocument();
   });
 });

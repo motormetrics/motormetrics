@@ -1,6 +1,7 @@
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 
 export interface CategoryRow {
+  bidsReceived: number;
   category: string;
   categoryKey: CategoryKey;
   changeRatio: number;

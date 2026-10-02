@@ -20,25 +20,47 @@ import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useState } from "react";
 
-const COLUMNS: { align: "left" | "right"; key: SortKey; label: string }[] = [
-  { align: "left", key: "category", label: "Category" },
-  { align: "right", key: "premium", label: "Premium" },
-  { align: "right", key: "quota", label: "Quota" },
-  { align: "right", key: "change", label: "Change" },
+type ColumnKey = SortKey | "bids" | "ratio";
+
+/** Bids and Bids/COE are read across, not ranked, so they do not sort. */
+const COLUMNS: {
+  align: "left" | "right";
+  key: ColumnKey;
+  label: string;
+  sortable: boolean;
+}[] = [
+  { align: "left", key: "category", label: "Category", sortable: true },
+  { align: "right", key: "premium", label: "Premium", sortable: true },
+  { align: "right", key: "quota", label: "Quota", sortable: true },
+  { align: "right", key: "bids", label: "Bids", sortable: false },
+  { align: "right", key: "ratio", label: "Bids/COE", sortable: false },
+  { align: "right", key: "change", label: "Change", sortable: true },
 ];
 
 /**
  * Fixed figure columns so the rows line up under their headers. The narrowest
  * step exists because the comp's tracks add up to 380px of figures, which is
  * wider than a 320px phone leaves the table once the page gutter is out.
+ * Below 720px the demand columns drop out for the meta line under the name.
  */
-const FIGURE_COLUMN_CLASSES: Record<Exclude<SortKey, "category">, string> = {
-  premium: "w-[4.75rem] sm:w-[6.5rem] lg:w-[150px]",
-  quota: "w-[3.25rem] sm:w-[4.5rem] lg:w-[120px]",
+const FIGURE_COLUMN_CLASSES: Record<Exclude<ColumnKey, "category">, string> = {
+  premium: "w-[4.75rem] sm:w-[6.5rem] lg:w-[130px]",
+  quota: "w-[4.5rem] max-[720px]:hidden lg:w-[90px]",
+  bids: "w-[4.5rem] max-[720px]:hidden lg:w-[90px]",
+  ratio: "w-[4.5rem] max-[720px]:hidden lg:w-[90px]",
   change: "w-[4.25rem] sm:w-[5.5rem] lg:w-[110px]",
 };
 
+const formatCount = (value: number): string => value.toLocaleString("en-SG");
+
+/** "1.26×"; a dash when the quota is missing rather than dividing by zero. */
+const bidsPerCoe = (row: CategoryRow): string =>
+  row.quota > 0 ? `${(row.bidsReceived / row.quota).toFixed(2)}×` : "—";
+
 const CELL_CLASS = "px-1 py-3.5 sm:px-2";
+
+const DEMAND_CELL_CLASS =
+  "text-right font-bold text-[15px] text-muted-strong max-[720px]:hidden";
 
 /**
  * The five-category table with sortable headers.
@@ -91,39 +113,42 @@ export function AllCategoriesTable({
                 const Arrow = sort.direction === "asc" ? ArrowUp : ArrowDown;
                 return (
                   <Table.Column
-                    allowsSorting
+                    allowsSorting={column.sortable}
                     className={cn(
                       "border-separator border-b pb-3 font-semibold text-[13px]",
                       CELL_CLASS,
                       column.key !== "category" &&
                         FIGURE_COLUMN_CLASSES[column.key],
                       column.align === "right" ? "text-right" : "text-left",
-                      isActive
-                        ? "text-accent-strong"
-                        : "text-muted hover:text-muted-strong",
+                      isActive ? "text-accent-strong" : "text-muted",
+                      !isActive && column.sortable && "hover:text-muted-strong",
                     )}
                     id={column.key}
                     isRowHeader={column.key === "category"}
                     key={column.key}
                   >
-                    {({ sortDirection }) => (
-                      <Table.SortableColumnHeader
-                        className={cn(
-                          "inline-flex items-center gap-1",
-                          column.align === "right" && "justify-end",
-                        )}
-                        indicator={
-                          <Arrow
-                            aria-hidden
-                            className="size-3.5"
-                            strokeWidth={2.5}
-                          />
-                        }
-                        sortDirection={sortDirection}
-                      >
-                        {column.label}
-                      </Table.SortableColumnHeader>
-                    )}
+                    {({ sortDirection }) =>
+                      column.sortable ? (
+                        <Table.SortableColumnHeader
+                          className={cn(
+                            "inline-flex items-center gap-1",
+                            column.align === "right" && "justify-end",
+                          )}
+                          indicator={
+                            <Arrow
+                              aria-hidden
+                              className="size-3.5"
+                              strokeWidth={2.5}
+                            />
+                          }
+                          sortDirection={sortDirection}
+                        >
+                          {column.label}
+                        </Table.SortableColumnHeader>
+                      ) : (
+                        column.label
+                      )
+                    }
                   </Table.Column>
                 );
               })}
@@ -170,6 +195,11 @@ export function AllCategoriesTable({
                           <span className="truncate font-medium text-[13.5px] text-muted">
                             {row.description}
                           </span>
+                          <span className="truncate font-medium text-[12.5px] text-muted min-[720px]:hidden">
+                            {formatCount(row.quota)} quota ·{" "}
+                            {formatCount(row.bidsReceived)} bids ·{" "}
+                            {bidsPerCoe(row)}
+                          </span>
                         </span>
                       </CategorySelect>
                     </Table.Cell>
@@ -187,17 +217,22 @@ export function AllCategoriesTable({
                         value={row.premium}
                       />
                     </Table.Cell>
-                    <Table.Cell
-                      className={cn(
-                        cellClass,
-                        "text-right font-bold text-[15px] text-muted-strong",
-                      )}
-                    >
+                    <Table.Cell className={cn(cellClass, DEMAND_CELL_CLASS)}>
                       <NumberValue
                         locale="en-SG"
                         maximumFractionDigits={0}
                         value={row.quota}
                       />
+                    </Table.Cell>
+                    <Table.Cell className={cn(cellClass, DEMAND_CELL_CLASS)}>
+                      <NumberValue
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        value={row.bidsReceived}
+                      />
+                    </Table.Cell>
+                    <Table.Cell className={cn(cellClass, DEMAND_CELL_CLASS)}>
+                      {bidsPerCoe(row)}
                     </Table.Cell>
                     <Table.Cell className={cn(cellClass, "text-right")}>
                       <CostTrendChip changeRatio={row.changeRatio} />

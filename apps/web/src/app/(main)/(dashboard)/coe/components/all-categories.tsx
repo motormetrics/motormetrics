@@ -36,8 +36,10 @@ export async function AllCategories({
   }
 
   const rows: CategoryRow[] = COE_CATEGORIES.map((category) => {
-    const premium = latest.results[category]?.premium ?? 0;
+    const figures = latest.results[category];
+    const premium = figures?.premium ?? 0;
     return {
+      bidsReceived: figures?.bidsReceived ?? 0,
       category,
       categoryKey: toCategoryKey(category),
       changeRatio: changeRatio(
@@ -46,7 +48,7 @@ export async function AllCategories({
       ),
       description: CATEGORY_DESCRIPTIONS[category],
       premium,
-      quota: latest.results[category]?.quota ?? 0,
+      quota: figures?.quota ?? 0,
     };
   });
 
