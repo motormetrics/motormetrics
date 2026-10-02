@@ -5,6 +5,7 @@ import { AreaChart } from "@heroui-pro/react/area-chart";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { premiumAxisTicks } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { compactCurrency } from "@web/utils/formatting/chart-axis";
+import { useSyncExternalStore } from "react";
 
 type PremiumPoint = {
   label: string;
@@ -26,6 +27,17 @@ interface GridLineProps {
   y2?: number;
   index?: number;
 }
+
+/** The design's phone geometry: no end label and a narrow right margin. */
+const PHONE_QUERY = "(max-width: 720px)";
+
+const subscribePhone = (onChange: () => void) => {
+  const query = window.matchMedia(PHONE_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+};
+
+const isPhoneViewport = () => window.matchMedia(PHONE_QUERY).matches;
 
 /** "+2.0% vs previous exercise", with a true minus for a fall. */
 const formatChange = (change: number): string =>
@@ -56,13 +68,18 @@ export function PremiumTrendChart({
     ticks ?? premiumAxisTicks(data.map((point) => point.premium));
   const axisDomain = domain ?? [axisTicks[0], axisTicks[axisTicks.length - 1]];
   const lastIndex = data.length - 1;
+  const isPhone = useSyncExternalStore(
+    subscribePhone,
+    isPhoneViewport,
+    () => false,
+  );
 
   return (
     <AreaChart
       className="[&_.recharts-cartesian-axis-tick-value]:text-xs"
       data={data}
       height={340}
-      margin={{ bottom: 0, left: 0, right: 84, top: 12 }}
+      margin={{ bottom: 0, left: 0, right: isPhone ? 10 : 84, top: 12 }}
     >
       <defs>
         <linearGradient id="coePremiumFill" x1="0" x2="0" y1="0" y2="1">
@@ -98,14 +115,16 @@ export function PremiumTrendChart({
           index === lastIndex && cx !== undefined && cy !== undefined ? (
             <g key="last-point">
               <circle cx={cx} cy={cy} fill="var(--chart-1)" r={4} />
-              <text
-                className="fill-foreground font-semibold text-xs tabular-nums"
-                dominantBaseline="middle"
-                x={cx + 10}
-                y={cy}
-              >
-                {formatCurrency(data[lastIndex].premium)}
-              </text>
+              {isPhone ? null : (
+                <text
+                  className="fill-foreground font-semibold text-xs tabular-nums"
+                  dominantBaseline="middle"
+                  x={cx + 10}
+                  y={cy}
+                >
+                  {formatCurrency(data[lastIndex].premium)}
+                </text>
+              )}
             </g>
           ) : (
             <g key={`point-${index}`} />
