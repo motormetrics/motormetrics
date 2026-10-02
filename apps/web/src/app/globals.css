@@ -192,6 +192,11 @@
     --chart-4: #9dbfd3;
     --chart-5: #c3d8e4;
     --chart-6: #dce7ec;
+    /* Sand — a warm series colour for petrol and other fossil fuels, set
+       against the slate ramp. Not --chart-7: the six-step ramp is unchanged.
+       1.79:1 on --background, the same footing as --chart-4..6, so it relies
+       on the same text labels. */
+    --chart-sand: #c9b88f;
     --chart-grid: var(--border);
   }
 
@@ -277,6 +282,9 @@
     /* Same ramp on the dark canvas. Only the darkest step needs lifting to
        clear 3:1 against --surface-secondary; the rest already do. */
     --chart-1: #5a7e96;
+    /* Restated so it reads as deliberate. 8.41:1 on --background, 7.44:1 on
+       --surface and 6.67:1 on --surface-secondary. */
+    --chart-sand: #c9b88f;
     --chart-grid: var(--border);
   }
 }
@@ -310,6 +318,7 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
   --color-chart-6: var(--chart-6);
+  --color-chart-sand: var(--chart-sand);
   --color-chart-grid: var(--chart-grid);
 }
 
