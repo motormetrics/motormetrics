@@ -67,9 +67,9 @@ export async function CoeHeadline({
   const figures = latest.results[category];
   const premium = figures?.premium ?? 0;
   const previousPremium = previous?.results[category]?.premium;
-  const oversubscription = figures?.quota
-    ? figures.bidsReceived / figures.quota
-    : 0;
+  const bidsPerCoe = figures?.quota
+    ? `${(figures.bidsReceived / figures.quota).toFixed(2)} bids per COE`
+    : "—";
 
   return (
     <div className="grid gap-5 min-[901px]:grid-cols-[1.15fr_1fr] min-[901px]:items-end min-[901px]:gap-14">
@@ -115,7 +115,7 @@ export async function CoeHeadline({
         />
         <StatCell
           label="Bids received"
-          note={`${oversubscription.toFixed(2)}× oversubscribed`}
+          note={bidsPerCoe}
           value={
             <NumberValue
               locale="en-SG"
