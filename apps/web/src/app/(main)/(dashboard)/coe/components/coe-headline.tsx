@@ -2,13 +2,19 @@ import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CategoryTabs } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
+  biddingOrdinal,
   CATEGORY_DESCRIPTIONS,
+  changeRatio,
   formatPremiumChange,
   groupByExercise,
+  nextExercise,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
-import { getCoeResults } from "@web/queries/coe";
+import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
+import { getCoeResults, getPqpRates } from "@web/queries/coe";
+import type { Pqp } from "@web/types";
+import { formatMonthName } from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
 import type { ReactNode } from "react";
 
@@ -50,9 +56,10 @@ export async function CoeHeadline({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const [{ category: categoryKey }, results] = await Promise.all([
+  const [{ category: categoryKey }, results, pqpRates] = await Promise.all([
     loadCoeOverviewSearchParams(searchParams),
     getCoeResults(),
+    getPqpRates(),
   ]);
 
   const exercises = groupByExercise(results);
@@ -70,6 +77,18 @@ export async function CoeHeadline({
   const bidsPerCoe = figures?.quota
     ? `${(figures.bidsReceived / figures.quota).toFixed(2)} bids per COE`
     : "—";
+
+  // The `pqp` table only publishes A–D: an Open category COE cannot be
+  // renewed, so Category E has no rate.
+  const [pqpMonth, previousPqpMonth] = Object.keys(pqpRates).sort().reverse();
+  const pqpKey = category as keyof Pqp.Rates;
+  const pqpRate = pqpMonth ? pqpRates[pqpMonth]?.[pqpKey] : undefined;
+  const previousPqpRate = previousPqpMonth
+    ? pqpRates[previousPqpMonth]?.[pqpKey]
+    : undefined;
+  const pqpChange = changeRatio(pqpRate ?? 0, previousPqpRate);
+  const upcoming = nextExercise(latest);
+  const upcomingOrdinal = biddingOrdinal(upcoming.biddingNo);
 
   return (
     <div className="grid gap-5 min-[901px]:grid-cols-[1.15fr_1fr] min-[901px]:items-end min-[901px]:gap-14">
@@ -123,6 +142,39 @@ export async function CoeHeadline({
               value={figures?.bidsReceived ?? 0}
             />
           }
+        />
+        <StatCell
+          label={pqpMonth ? `PQP, ${formatMonthName(pqpMonth)}` : "PQP"}
+          note={
+            pqpRate === undefined ? (
+              `Not set for ${category}`
+            ) : previousPqpMonth && pqpChange !== 0 ? (
+              <>
+                <CostTrendChip changeRatio={pqpChange} />
+                {` vs ${formatMonthName(previousPqpMonth)}`}
+              </>
+            ) : (
+              "Three-month moving average"
+            )
+          }
+          value={
+            pqpRate === undefined ? (
+              "—"
+            ) : (
+              <NumberValue
+                currency="SGD"
+                locale="en-SG"
+                maximumFractionDigits={0}
+                style="currency"
+                value={pqpRate}
+              />
+            )
+          }
+        />
+        <StatCell
+          label="Next exercise"
+          note={`${upcomingOrdinal.charAt(0).toUpperCase()}${upcomingOrdinal.slice(1)} exercise · closes 16:00`}
+          value={formatMonthName(upcoming.month)}
         />
       </div>
     </div>
