@@ -6,17 +6,18 @@ import LoadingIndicator from "@web/components/loading-indicator";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@web/config";
 import { BotIdClient } from "botid/client";
 import type { Metadata } from "next";
-import { Urbanist } from "next/font/google";
+import { Geist } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { type ReactNode, Suspense } from "react";
 import "./globals.css";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 
-// Urbanist is the single family across the app, per the design system.
+// Geist is the single family across the app. The wordmark is outlined Urbanist,
+// so the logo keeps its face without the site loading a second font.
 // Exposed as a CSS variable so globals.css can map --font-sans onto it.
-const urbanist = Urbanist({
+const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-urbanist",
+  variable: "--font-geist",
 });
 
 const title = `${SITE_TITLE} (formerly SG Cars Trends)`;
@@ -73,10 +74,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <html
-      lang="en"
-      className={cn("scroll-smooth antialiased", urbanist.variable)}
-    >
+    <html lang="en" className={cn("scroll-smooth antialiased", geist.variable)}>
       <head>
         <BotIdClient protect={protectedRoutes} />
       </head>

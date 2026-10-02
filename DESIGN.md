@@ -24,70 +24,70 @@ colors:
   separator: "#e5e1d5"
   focus: "#4e7c9b"
   chart-1: "#33586f"
-  chart-2: "#c9803f"
+  chart-2: "#4e7c9b"
   chart-3: "#5f8ba8"
-  chart-4: "#7a9e63"
-  chart-5: "#9cc4da"
-  chart-6: "#b0728f"
+  chart-4: "#9dbfd3"
+  chart-5: "#c3d8e4"
+  chart-6: "#dce7ec"
   chart-grid: "{colors.border}"
 typography:
   h1:
-    fontFamily: "Urbanist"
+    fontFamily: "Geist"
     fontSize: 36px
     fontWeight: 600
     lineHeight: 40px
     letterSpacing: -0.025em
   h2:
-    fontFamily: "Urbanist"
+    fontFamily: "Geist"
     fontSize: 30px
     fontWeight: 600
     lineHeight: 36px
     letterSpacing: -0.025em
   h3:
-    fontFamily: "Urbanist"
+    fontFamily: "Geist"
     fontSize: 24px
     fontWeight: 500
     lineHeight: 32px
     letterSpacing: -0.025em
   h4:
-    fontFamily: "Urbanist"
+    fontFamily: "Geist"
     fontSize: 20px
     fontWeight: 500
     lineHeight: 28px
     letterSpacing: -0.025em
   body-lg:
-    fontFamily: "Urbanist"
+    fontFamily: "Geist"
     fontSize: 18px
     fontWeight: 400
     lineHeight: 1.625
   body:
-    fontFamily: "Urbanist"
+    fontFamily: "Geist"
     fontSize: 16px
     fontWeight: 400
     lineHeight: 28px
   body-sm:
-    fontFamily: "Urbanist"
+    fontFamily: "Geist"
     fontSize: 14px
     fontWeight: 400
     lineHeight: 24px
   label:
-    fontFamily: "Urbanist"
+    fontFamily: "Geist"
     fontSize: 14px
     fontWeight: 500
     lineHeight: 1
   caption:
-    fontFamily: "Urbanist"
+    fontFamily: "Geist"
     fontSize: 12px
     fontWeight: 400
     lineHeight: 1.25
   caption-mono:
-    fontFamily: "Urbanist"
+    fontFamily: "Geist"
     fontSize: 14px
     fontWeight: 500
     lineHeight: 20px
 rounded:
-  base: "1.375rem"
-  field: "1.375rem"
+  base: "0.375rem"
+  field: "0.375rem"
   pill: "9999px"
 spacing:
   base: "0.25rem"
@@ -189,19 +189,20 @@ Design token set.
 | Border / Separator | `--border` / `--separator` | `#e5e1d5` | `#333c41` |
 | Focus | `--focus` | = `--accent` | = `--accent` |
 
-**Chart palette** — six **categorical** hues for distinguishing series (not a
-ranked ramp), plus `--chart-grid` (= `--border`):
+**Chart palette** — Claude Design's six-step ramp of slate blues, from the accent
+down to neutral (rank 1 highest, 6 lowest), plus `--chart-grid` (= `--border`):
 
-| Token | Value | Hue |
-|-------|-------|-----|
-| `--chart-1` | `#33586f` | slate |
-| `--chart-2` | `#c9803f` | ochre |
-| `--chart-3` | `#5f8ba8` | blue |
-| `--chart-4` | `#7a9e63` | green |
-| `--chart-5` | `#9cc4da` | pale blue |
-| `--chart-6` | `#b0728f` | mauve |
+| Token | Value |
+|-------|-------|
+| `--chart-1` | `#33586f` |
+| `--chart-2` | `#4e7c9b` |
+| `--chart-3` | `#5f8ba8` |
+| `--chart-4` | `#9dbfd3` |
+| `--chart-5` | `#c3d8e4` |
+| `--chart-6` | `#dce7ec` |
 
-Charts are capped at **six series** to match the palette; single-highlight charts
+Adjacent steps are close, so two series that must be told apart take steps that
+sit well apart (1 and 4, say). Charts are capped at **six series** to match the palette; single-highlight charts
 use `--chart-1` for the emphasised element and `bg-default` for the rest.
 
 **Rules.** Never hardcode hex in components. Use semantic classes
@@ -210,8 +211,11 @@ use `--chart-1` for the emphasised element and `bg-default` for the rest.
 
 ## Typography
 
-One family: **Urbanist** (`--font-urbanist`, mapped onto `--font-sans`), loaded in
-`apps/web/src/app/layout.tsx` and used for UI, prose and tabular data alike.
+One family: **Geist** (`--font-geist`, mapped onto `--font-sans`), loaded in
+`apps/web/src/app/layout.tsx` and used for UI, prose and tabular data alike. The
+wordmark is outlined Urbanist ExtraBold drawn as an SVG (`brand-logo.tsx`), and
+the share images set Urbanist from the TTFs in `apps/web/assets/fonts`; neither
+needs Urbanist loaded on the site.
 Hierarchy is driven by size and weight restraint:
 
 - **Bold (700)** — headings (`H1`, `H2`, `H3`) and data emphasis (metric numbers)
@@ -245,7 +249,7 @@ those were the local module's API and are gone.
 
 `caption-mono` applies the caption metrics to inline code (`Typography.Code`) and
 to tabular figures where numbers must align. There is no separate mono family —
-Urbanist is the single typeface; use `tabular-nums` for figure alignment.
+Geist is the single typeface; use `tabular-nums` for figure alignment.
 
 Use `Typography.*` rather than raw heading tags everywhere except MDX blog
 content and image-overlay text.
@@ -299,9 +303,11 @@ Custom page and chart animation uses Framer Motion via shared variants in
 
 ## Shapes
 
-Radius scale: `--radius: 0.5rem` (8px) for everyday controls; `--field-radius`
-(= `radius × 1.5`, 12px) for inputs; `rounded-full` (9999px) for pills and
-status chips; `rounded-2xl`/`rounded-3xl` for large dashboard cards. Don't mix
+Radius scale: square, after the Hybrid page designs. `--radius: 0.375rem` (6px)
+for everyday controls, with `--field-radius` the same 6px for inputs. The
+`rounded-*` ladder in `globals.css` runs 2px (`xs`, bar ends), 4px (`sm`), 6px
+(`lg`, = `--radius`), 8px (`2xl`, panels), 10px (`3xl`, bento cards) and 12px
+(`4xl`, the rail); `rounded-full` (9999px) stays for pills and status chips. Don't mix
 sharp and rounded corners within a single view.
 
 ## Components
@@ -332,7 +338,7 @@ radius/padding/shadow; override only to communicate hierarchy.
   leading dot. Never signal state by colour alone — pair with text/icon. The
   token map binds `chip-success` / `chip-warning` / `chip-danger` to the status
   pairs; the base `chip` is radius-only.
-- **Field (Input/Select)** — `--field-radius` (12px), `--field-border-width: 0`,
+- **Field (Input/Select)** — `--field-radius` (6px), `--field-border-width: 0`,
   `--field-background` white (light) / `--default` (dark).
 - **Modal/Popover** — `--overlay` background, `--foreground` text, base radius,
   `--overlay-shadow`. The token map binds `modal` to the overlay pair.
