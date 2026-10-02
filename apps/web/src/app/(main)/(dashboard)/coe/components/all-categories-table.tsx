@@ -245,10 +245,15 @@ export function AllCategoriesTable({
                       className={cn(CELL_CLASS, FIGURE_COLUMN_CLASSES.trend)}
                     >
                       <SparklineChart
+                        color={isActive ? "var(--chart-1)" : "var(--chart-4)"}
                         data={row.series}
+                        endDot
+                        fillOpacity={0}
                         format={{ currency: "SGD", style: "currency" }}
                         height={30}
+                        margin={{ bottom: 3, left: 0, right: 3, top: 3 }}
                         name="Premium"
+                        strokeWidth={1.5}
                         title={`${row.category} premiums over the last ${row.series.length} exercises`}
                       />
                     </Table.Cell>
