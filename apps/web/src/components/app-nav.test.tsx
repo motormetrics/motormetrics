@@ -83,4 +83,38 @@ describe("AppNav", () => {
       .element(screen.getByRole("link", { name: "Get updates" }))
       .toBeInTheDocument();
   });
+
+  it("should open a sheet of every group with the current row marked", async () => {
+    navigation.pathname = "/coe/premiums";
+
+    const screen = await render(<AppNav />);
+    await screen
+      .getByRole("button", { name: "Toggle navigation menu" })
+      .click();
+
+    for (const header of [
+      "Explore",
+      "Electric",
+      "Vehicle data",
+      "Tools",
+      "COE data",
+      "Company",
+    ]) {
+      await expect
+        .element(screen.getByText(header, { exact: true }))
+        .toBeVisible();
+    }
+    await expect
+      .element(screen.getByRole("link", { name: "Premiums by category" }))
+      .toHaveAttribute("aria-current", "page");
+    await expect
+      .element(screen.getByRole("link", { name: "COE", exact: true }))
+      .toHaveAttribute("aria-current", "page");
+    await expect
+      .element(screen.getByRole("link", { name: "COE overview" }))
+      .not.toHaveAttribute("aria-current");
+    expect(
+      screen.getByRole("link", { name: "Get updates" }).elements(),
+    ).toHaveLength(1);
+  });
 });

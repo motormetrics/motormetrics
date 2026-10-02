@@ -86,13 +86,19 @@ function NavMenuItems({ items }: { items: readonly NavigationItem[] }) {
   ));
 }
 
-/** One row of the phone menu. Pressing it closes the menu on its own. */
+/**
+ * One row of the phone sheet. Pressing it closes the menu on its own. Rows are
+ * 15px with a 4px radius, and the current one takes the accent tint, per the
+ * MMNav comp. A long label wraps rather than pushing its column wider.
+ */
 function MobileMenuLink({
+  ariaLabel,
   badge,
   href,
   isCurrent,
   label,
 }: {
+  ariaLabel?: string;
   badge?: NavigationItem["badge"];
   href: string;
   isCurrent: boolean;
@@ -100,11 +106,12 @@ function MobileMenuLink({
 }) {
   return (
     <Navbar.MenuItem
-      className="flex items-center gap-2 py-2.5 font-semibold text-base"
+      aria-label={ariaLabel}
+      className="flex min-w-0 items-center gap-2 rounded-sm px-3.5 py-2.75 font-medium text-[15px] text-muted-strong data-[current=true]:bg-accent-soft data-[current=true]:font-semibold data-[current=true]:text-accent"
       href={href}
       isCurrent={isCurrent}
     >
-      {label}
+      <span className="min-w-0">{label}</span>
       <NavBadge badge={badge} />
     </Navbar.MenuItem>
   );
@@ -289,63 +296,66 @@ export function AppNav({
 
         <GetUpdatesLink />
 
-        <Navbar.MenuToggle className="@4xl:hidden" />
+        {/* A 34px bordered square, matching the CTA's height. */}
+        <Navbar.MenuToggle className="@4xl:hidden size-8.5 shrink-0 rounded-lg border border-border" />
       </Navbar.Header>
 
-      <Navbar.Menu className="gap-4">
-        <div className="flex flex-col gap-1">
-          {PRIMARY_NAV_ITEMS.map(({ href, label, sections }) => {
-            if (!sections) {
-              return (
+      {/* The phone sheet: an Explore group of the primary links, then every
+          dropdown group and Company, each ruled off by a hairline. Rows run in
+          two columns, and the eyebrows and rules span both. HeroUI keeps the
+          full-height panel and the scroll lock. */}
+      <Navbar.Menu className="grid grid-cols-2 content-start gap-x-2 gap-y-0.5 px-0 pt-2">
+        <Header className={menuHeaderClassName}>Explore</Header>
+        {PRIMARY_NAV_ITEMS.map(({ href, label }) => (
+          <MobileMenuLink
+            href={href}
+            isCurrent={href === activeHref}
+            key={href}
+            label={label}
+          />
+        ))}
+
+        {PRIMARY_NAV_ITEMS.flatMap(({ href, label, sections = [] }) =>
+          sections.map((section) => (
+            <Fragment key={section.label}>
+              <Separator className={menuSeparatorClassName} />
+              <Header className={menuHeaderClassName}>{section.label}</Header>
+              {/* Explore already marks the section, so this row is current only
+                  on the section's own page. */}
+              {section.withOverview ? (
                 <MobileMenuLink
+                  ariaLabel={`${label} overview`}
                   href={href}
-                  isCurrent={href === activeHref}
-                  key={href}
-                  label={label}
+                  isCurrent={pathname === href}
+                  label="Overview"
                 />
-              );
-            }
+              ) : null}
+              {section.items.map(({ badge, title, url }) => (
+                <MobileMenuLink
+                  badge={badge}
+                  href={url}
+                  isCurrent={matchesPath(pathname, url)}
+                  key={url}
+                  label={title}
+                />
+              ))}
+            </Fragment>
+          )),
+        )}
 
-            // The pill's own dropdown flattens into eyebrows plus their rows, so
-            // the whole tree is reachable without a second level of tapping.
-            return sections.map((section) => (
-              <div className="flex flex-col gap-1" key={section.label}>
-                <Header className={menuHeaderClassName}>{section.label}</Header>
-                {section.withOverview ? (
-                  <MobileMenuLink
-                    href={href}
-                    isCurrent={href === activeHref}
-                    label={`${label} overview`}
-                  />
-                ) : null}
-                {section.items.map(({ badge, title, url }) => (
-                  <MobileMenuLink
-                    badge={badge}
-                    href={url}
-                    isCurrent={matchesPath(pathname, url)}
-                    key={url}
-                    label={title}
-                  />
-                ))}
-              </div>
-            ));
-          })}
-
-          <div className="flex flex-col gap-1">
-            <Header className={menuHeaderClassName}>
-              {MORE_NAV_SECTION_LABEL}
-            </Header>
-            {moreNavItems.map(({ badge, title, url }) => (
-              <MobileMenuLink
-                badge={badge}
-                href={url}
-                isCurrent={matchesPath(pathname, url)}
-                key={url}
-                label={title}
-              />
-            ))}
-          </div>
-        </div>
+        <Separator className={menuSeparatorClassName} />
+        <Header className={menuHeaderClassName}>
+          {MORE_NAV_SECTION_LABEL}
+        </Header>
+        {moreNavItems.map(({ badge, title, url }) => (
+          <MobileMenuLink
+            badge={badge}
+            href={url}
+            isCurrent={matchesPath(pathname, url)}
+            key={url}
+            label={title}
+          />
+        ))}
       </Navbar.Menu>
     </Navbar>
   );
