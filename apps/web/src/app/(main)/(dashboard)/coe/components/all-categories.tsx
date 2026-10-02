@@ -1,21 +1,24 @@
+import { Typography } from "@heroui/react";
 import type { CategoryRow } from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
 import { AllCategoriesTable } from "@web/app/(main)/(dashboard)/coe/components/all-categories-table";
 import {
   CATEGORY_DESCRIPTIONS,
   COE_CATEGORIES,
   changeRatio,
-  formatExercise,
   groupByExercise,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
-import { SectionHead } from "@web/components/shared/overview";
+import { SectionLink } from "@web/components/shared/overview";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
 
 /**
  * Every category's latest result side by side. The rows are shaped here, in
  * category order; the client table sorts them and selects a category on click.
+ *
+ * The table carries no visible title on desktop, where it sits straight under
+ * the headline; below 720px an "All categories" eyebrow names the list.
  */
 export async function AllCategories({
   searchParams,
@@ -53,13 +56,16 @@ export async function AllCategories({
   });
 
   return (
-    <div className="flex flex-col gap-6">
-      <SectionHead
-        caption={`${formatExercise(latest)} · select a category for its bidding history`}
-        eyebrow="Latest results"
-        link={{ href: "/coe/results", label: "All COE results" }}
-        title="All categories"
-      />
+    <div className="flex flex-col gap-3">
+      <div className="flex items-end gap-4">
+        <Typography.Heading
+          className="font-semibold text-muted text-xs uppercase tracking-[0.06em] min-[721px]:sr-only"
+          level={2}
+        >
+          All categories
+        </Typography.Heading>
+        <SectionLink href="/coe/results">All COE results</SectionLink>
+      </div>
       <AllCategoriesTable rows={rows} selected={selected} />
     </div>
   );

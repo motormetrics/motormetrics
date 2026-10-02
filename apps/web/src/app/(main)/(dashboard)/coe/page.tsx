@@ -131,17 +131,17 @@ export default function Page({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <SectionErrorBoundary title="Premium history unavailable">
-        <Suspense fallback={<SectionSkeleton className="h-[260px]" />}>
-          <PremiumsByExercise searchParams={searchParams} />
+      <SectionErrorBoundary title="Category breakdown unavailable">
+        <Suspense fallback={<SectionSkeleton className="h-80" />}>
+          <AllCategories searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
 
       <Hairline />
 
-      <SectionErrorBoundary title="Category breakdown unavailable">
-        <Suspense fallback={<SectionSkeleton className="h-80" />}>
-          <AllCategories searchParams={searchParams} />
+      <SectionErrorBoundary title="Premium history unavailable">
+        <Suspense fallback={<SectionSkeleton className="h-[260px]" />}>
+          <PremiumsByExercise searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
 

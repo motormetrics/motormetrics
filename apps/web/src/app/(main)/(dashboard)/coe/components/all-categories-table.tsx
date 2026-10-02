@@ -1,7 +1,7 @@
 "use client";
 
 import type { SortDescriptor } from "@heroui/react";
-import { cn, Table, Typography } from "@heroui/react";
+import { cn, Table } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
   type CategoryRow,
@@ -17,6 +17,7 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
+import { SourceNote } from "@web/components/shared/overview";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useState } from "react";
 
@@ -57,10 +58,10 @@ const formatCount = (value: number): string => value.toLocaleString("en-SG");
 const bidsPerCoe = (row: CategoryRow): string =>
   row.quota > 0 ? `${(row.bidsReceived / row.quota).toFixed(2)}×` : "—";
 
-const CELL_CLASS = "px-1 py-3.5 sm:px-2";
+const CELL_CLASS = "border-separator border-b px-1 py-3 sm:px-3";
 
 const DEMAND_CELL_CLASS =
-  "text-right font-bold text-[15px] text-muted-strong max-[720px]:hidden";
+  "text-right text-[14.5px] text-muted-strong max-[720px]:hidden";
 
 /**
  * The five-category table with sortable headers.
@@ -71,7 +72,8 @@ const DEMAND_CELL_CLASS =
  *
  * A real table rather than the comp's CSS grid: sortable column headers
  * need `aria-sort` on a `columnheader`, which only means something inside a
- * table. `border-separate` is what lets the selected row carry a radius.
+ * table. The selected row is marked by a tint and a 3px accent rule on its
+ * leading edge, drawn on the first cell so it does not depend on row shadows.
  */
 export function AllCategoriesTable({
   rows,
@@ -91,7 +93,7 @@ export function AllCategoriesTable({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2.5">
       <Table variant="secondary">
         <Table.ScrollContainer>
           <Table.Content
@@ -115,7 +117,7 @@ export function AllCategoriesTable({
                   <Table.Column
                     allowsSorting={column.sortable}
                     className={cn(
-                      "border-separator border-b pb-3 font-semibold text-[13px]",
+                      "pb-3 font-semibold text-[13px]",
                       CELL_CLASS,
                       column.key !== "category" &&
                         FIGURE_COLUMN_CLASSES[column.key],
@@ -156,57 +158,50 @@ export function AllCategoriesTable({
             <Table.Body>
               {sorted.map((row) => {
                 const isActive = row.categoryKey === selected;
-                const cellClass = cn(
-                  CELL_CLASS,
-                  !isActive && "border-separator border-b",
-                );
                 return (
                   <Table.Row
                     className={cn(
                       "cursor-pointer transition-colors",
                       isActive
-                        ? "bg-accent-soft-2 [&>td:first-child]:rounded-l-2xl [&>td:last-child]:rounded-r-2xl max-[720px]:[&>td:nth-child(3)]:rounded-r-2xl"
+                        ? "bg-accent-soft-2 [&>td:first-child]:shadow-[inset_3px_0_0_var(--accent)]"
                         : "hover:bg-default",
                     )}
                     id={row.categoryKey}
                     key={row.categoryKey}
                   >
-                    <Table.Cell className={cellClass}>
+                    <Table.Cell className={CELL_CLASS}>
                       <CategorySelect
                         category={row.categoryKey}
-                        className="flex items-center gap-3.5"
+                        className="flex min-w-0 flex-col gap-0.5"
                         isActive={isActive}
                         label={`Show ${row.category}`}
                       >
-                        <span
-                          className={cn(
-                            "flex size-10 shrink-0 items-center justify-center rounded-full font-extrabold text-base",
-                            isActive
-                              ? "bg-accent text-accent-foreground"
-                              : "bg-accent-soft text-accent-strong",
-                          )}
-                        >
-                          {row.categoryKey}
-                        </span>
-                        <span className="flex min-w-0 flex-col">
-                          <span className="truncate font-bold text-base">
+                        <span className="flex min-w-0 items-baseline gap-x-3 max-[720px]:flex-col">
+                          <span
+                            className={cn(
+                              "whitespace-nowrap text-[15px]",
+                              isActive
+                                ? "font-bold text-accent-strong"
+                                : "font-semibold text-foreground",
+                            )}
+                          >
                             {row.category}
                           </span>
-                          <span className="truncate font-medium text-[13.5px] text-muted">
+                          <span className="min-w-0 max-w-full truncate text-[13.5px] text-muted">
                             {row.description}
                           </span>
-                          <span className="truncate font-medium text-[12.5px] text-muted min-[720px]:hidden">
-                            {formatCount(row.quota)} quota ·{" "}
-                            {formatCount(row.bidsReceived)} bids ·{" "}
-                            {bidsPerCoe(row)}
-                          </span>
+                        </span>
+                        <span className="truncate text-[12.5px] text-muted tabular-nums min-[720px]:hidden">
+                          {formatCount(row.quota)} quota ·{" "}
+                          {formatCount(row.bidsReceived)} bids ·{" "}
+                          {bidsPerCoe(row)}
                         </span>
                       </CategorySelect>
                     </Table.Cell>
                     <Table.Cell
                       className={cn(
-                        cellClass,
-                        "text-right font-extrabold text-sm sm:text-lg",
+                        CELL_CLASS,
+                        "text-right font-semibold text-sm sm:text-[17px]",
                       )}
                     >
                       <NumberValue
@@ -217,24 +212,26 @@ export function AllCategoriesTable({
                         value={row.premium}
                       />
                     </Table.Cell>
-                    <Table.Cell className={cn(cellClass, "text-right")}>
+                    <Table.Cell
+                      className={cn(CELL_CLASS, "text-right text-sm")}
+                    >
                       <CostTrendChip changeRatio={row.changeRatio} />
                     </Table.Cell>
-                    <Table.Cell className={cn(cellClass, DEMAND_CELL_CLASS)}>
+                    <Table.Cell className={cn(CELL_CLASS, DEMAND_CELL_CLASS)}>
                       <NumberValue
                         locale="en-SG"
                         maximumFractionDigits={0}
                         value={row.quota}
                       />
                     </Table.Cell>
-                    <Table.Cell className={cn(cellClass, DEMAND_CELL_CLASS)}>
+                    <Table.Cell className={cn(CELL_CLASS, DEMAND_CELL_CLASS)}>
                       <NumberValue
                         locale="en-SG"
                         maximumFractionDigits={0}
                         value={row.bidsReceived}
                       />
                     </Table.Cell>
-                    <Table.Cell className={cn(cellClass, DEMAND_CELL_CLASS)}>
+                    <Table.Cell className={cn(CELL_CLASS, DEMAND_CELL_CLASS)}>
                       {bidsPerCoe(row)}
                     </Table.Cell>
                   </Table.Row>
@@ -245,10 +242,11 @@ export function AllCategoriesTable({
         </Table.ScrollContainer>
       </Table>
 
-      <Typography.Paragraph color="muted" size="sm">
-        Premiums are the quota premium at the close of the exercise. Sorted by{" "}
+      <SourceNote className="px-1 sm:px-3">
+        Quota premium at the close of each exercise. Change is against the
+        previous exercise. Select a row to chart it. Sorted by{" "}
         {describeSort(sort)}.
-      </Typography.Paragraph>
+      </SourceNote>
     </div>
   );
 }
