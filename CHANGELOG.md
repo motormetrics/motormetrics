@@ -1,3 +1,9 @@
+## [5.26.3](https://github.com/motormetrics/motormetrics/compare/v5.26.2...v5.26.3) (2026-10-02)
+
+### Bug Fixes
+
+* **web:** match auth routes in the BotID protect rule ([8d8d112](https://github.com/motormetrics/motormetrics/commit/8d8d1121655fed5f3b0f57a152f88eeef1a6988d))
+
 ## [5.26.2](https://github.com/motormetrics/motormetrics/compare/v5.26.1...v5.26.2) (2026-10-02)
 
 ### Bug Fixes
