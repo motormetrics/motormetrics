@@ -6,6 +6,7 @@ import {
   formatMonth,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
 import {
   PQPChart,
   type PQPSeries,
@@ -34,7 +35,6 @@ import {
   ReportStat,
 } from "@web/components/shared/report";
 import {
-  DeltaText,
   ReportCell,
   ReportRow,
   ReportTable,
@@ -254,14 +254,14 @@ export async function PQPReport({
                   ) : (
                     // A rate above the premium is bad news for a renewal, so
                     // the sentiment is inverted against the raw sign.
-                    <DeltaText value={-gap} />
+                    <PremiumDelta ratio={gap / 100} />
                   )}
                 </ReportCell>
                 <ReportCell align="end">
                   {monthChange === null ? (
                     <span className="font-semibold text-muted text-sm">—</span>
                   ) : (
-                    <DeltaText value={-monthChange} />
+                    <PremiumDelta ratio={monthChange / 100} />
                   )}
                 </ReportCell>
               </ReportRow>
@@ -306,7 +306,7 @@ export async function PQPReport({
                         </span>
                         {monthChange === null ? null : (
                           <span className="text-xs">
-                            <DeltaText value={-monthChange} />
+                            <PremiumDelta ratio={monthChange / 100} />
                           </span>
                         )}
                       </div>
