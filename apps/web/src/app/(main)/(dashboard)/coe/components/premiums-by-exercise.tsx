@@ -67,8 +67,10 @@ export async function PremiumsByExercise({
 
   return (
     <div className="flex flex-col gap-7">
+      {/* At 720px and below the trailing slot spans the row so the switch can. */}
       <SectionHead
         caption={`${category} · hover a column for the premium`}
+        className="max-[720px]:[&>:last-child]:w-full"
         eyebrow="Bidding history"
         title="Premiums by exercise"
         trailing={<RangeTabs />}
