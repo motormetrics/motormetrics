@@ -497,7 +497,7 @@ The ARF is shown on your vehicle registration documents. You can also:
 ## Frequently Asked Questions
 
 ### Is ARF refundable?
-Yes, partially. When you deregister within 10 years, you receive a PARF rebate (50-75% of ARF depending on vehicle age).
+Yes, partially. When you deregister within 10 years, you receive a PARF rebate. For COEs obtained from the second February 2026 bidding exercise, it is 5-30% of ARF depending on vehicle age, capped at $30,000. Cars with earlier COEs keep the legacy rates of 50-75% of ARF. See [PARF](/learn/parf) for the full schedule.
 
 ### Why does Singapore have ARF?
 ARF serves multiple purposes: revenue generation, controlling vehicle population, and ensuring car ownership costs reflect usage of limited road space.
