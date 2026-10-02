@@ -24,7 +24,8 @@ const description = SITE_DESCRIPTION;
 const url = new URL(SITE_URL);
 const protectedRoutes = [
   {
-    path: "/api/auth/:path*",
+    // BotID matches `*` wildcards only; `:path*` would be taken literally.
+    path: "/api/auth/*",
     method: "POST",
     advancedOptions: {
       checkLevel: "basic" as const,
