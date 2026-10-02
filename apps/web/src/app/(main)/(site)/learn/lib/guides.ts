@@ -326,7 +326,7 @@ A car registered with a COE from March 2023, with **$40,000 ARF** and a **$100,0
 
 The same car with a COE from the 2nd February 2026 exercise would get $40,000 × 20% = $8,000 in PARF rebate instead.
 
-Use the [PARF Calculator](/cars/parf) to compare the PARF rebate under the old and new schedules.
+Use the [PARF Calculator](/cars/parf) to work out your deregistration value, and to compare the PARF rebate under the old and new schedules.
 
 ## Who Gets a PARF Rebate?
 
