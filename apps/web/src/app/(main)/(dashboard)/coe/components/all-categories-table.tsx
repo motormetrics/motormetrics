@@ -31,10 +31,10 @@ const COLUMNS: {
 }[] = [
   { align: "left", key: "category", label: "Category", sortable: true },
   { align: "right", key: "premium", label: "Premium", sortable: true },
+  { align: "right", key: "change", label: "Change", sortable: true },
   { align: "right", key: "quota", label: "Quota", sortable: true },
   { align: "right", key: "bids", label: "Bids", sortable: false },
   { align: "right", key: "ratio", label: "Bids/COE", sortable: false },
-  { align: "right", key: "change", label: "Change", sortable: true },
 ];
 
 /**
@@ -165,7 +165,7 @@ export function AllCategoriesTable({
                     className={cn(
                       "cursor-pointer transition-colors",
                       isActive
-                        ? "bg-accent-soft-2 [&>td:first-child]:rounded-l-2xl [&>td:last-child]:rounded-r-2xl"
+                        ? "bg-accent-soft-2 [&>td:first-child]:rounded-l-2xl [&>td:last-child]:rounded-r-2xl max-[720px]:[&>td:nth-child(3)]:rounded-r-2xl"
                         : "hover:bg-default",
                     )}
                     id={row.categoryKey}
@@ -217,6 +217,9 @@ export function AllCategoriesTable({
                         value={row.premium}
                       />
                     </Table.Cell>
+                    <Table.Cell className={cn(cellClass, "text-right")}>
+                      <CostTrendChip changeRatio={row.changeRatio} />
+                    </Table.Cell>
                     <Table.Cell className={cn(cellClass, DEMAND_CELL_CLASS)}>
                       <NumberValue
                         locale="en-SG"
@@ -233,9 +236,6 @@ export function AllCategoriesTable({
                     </Table.Cell>
                     <Table.Cell className={cn(cellClass, DEMAND_CELL_CLASS)}>
                       {bidsPerCoe(row)}
-                    </Table.Cell>
-                    <Table.Cell className={cn(cellClass, "text-right")}>
-                      <CostTrendChip changeRatio={row.changeRatio} />
                     </Table.Cell>
                   </Table.Row>
                 );
