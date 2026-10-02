@@ -178,6 +178,34 @@ the Next.js metadata template in `src/app/layout.tsx`:
 - Keep every indexed `<title>` ≤ 60 characters; content titles (`/blog/[slug]`,
   `/learn/[slug]`) are left full rather than truncated.
 
+### Route Conventions
+
+- **Sections** are top-level nouns: `/cars`, `/coe`, `/learn`, `/blog`. EV pages live under
+  `/cars`, with no separate Electric section, and calculators live in the section they serve
+  (`/cars/parf`, `/cars/arf`).
+- **Segments** are lowercase kebab-case. Collections are plural, with a detail segment
+  (`/cars/makes/[make]`).
+- **Filters** (`?month`, `?category`, `?period`) stay query params, never path segments; see
+  Page Title Conventions for canonicals.
+- **Names**: a page is named for what it holds in its nav label, `<title>` and H1. Renaming any
+  of those never needs a URL change.
+- **Navigation** groups live in `src/config/navigation.ts`.
+
+**Moving a URL is the last resort:**
+
+- Check Search Console first. A URL with real search traffic keeps its path; retarget its
+  title, description and H1 instead.
+- Never move URLs in the same release as a framework migration, so a ranking drop has one
+  cause.
+- Redirects are permanent (`permanent: true`, a 308) in `redirects()` in `next.config.ts`. Each
+  one carries a comment with the date added and a review date 12 months later, and a GitHub
+  issue is opened for that review.
+- At review, remove a redirect only if Search Console shows no impressions on the old URL for
+  the past 3 months and no backlinks still point to it. Otherwise move the review out another
+  12 months.
+- A removed page with no equivalent returns 404. Do not redirect it to an unrelated page:
+  Google treats that as a soft 404.
+
 ### Layout & Spacing Conventions
 
 - ✅ Use `flex flex-col gap-*` for vertical spacing in containers
