@@ -1,3 +1,13 @@
+## [5.28.0](https://github.com/motormetrics/motormetrics/compare/v5.27.0...v5.28.0) (2026-10-02)
+
+### Features
+
+* **web:** switch to Geist, square corners and the design chart ramp ([49ad96f](https://github.com/motormetrics/motormetrics/commit/49ad96fded84c2becd318f3973fddd901344476c))
+
+### Bug Fixes
+
+* **web:** target latest coe results on the coe hub ([c939061](https://github.com/motormetrics/motormetrics/commit/c9390615db67ece7737f690d770377ab59f0ea33))
+
 ## [5.27.0](https://github.com/motormetrics/motormetrics/compare/v5.26.5...v5.27.0) (2026-10-02)
 
 ### Features
