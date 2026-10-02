@@ -34,6 +34,8 @@ export interface SocialMedia {
 export interface NavLinks {
   cars: NavigationItem[];
   coe: NavigationItem[];
+  electric: NavigationItem[];
+  tools: NavigationItem[];
   socialMedia: SocialMedia[];
 }
 
@@ -94,13 +96,15 @@ export const navLinks: NavLinks = {
       description: "Analysis of saloons, hatchbacks, SUVs and more",
     },
     {
-      title: "Annual",
+      title: "Vehicle Population",
       url: "/cars/annual",
       icon: Calendar,
       description: "Yearly vehicle population and registration trends",
     },
+  ],
+  electric: [
     {
-      title: "Electric Vehicles",
+      title: "EV Adoption",
       url: "/cars/electric-vehicles",
       icon: Zap,
       description: "BEV, PHEV and hybrid adoption trends and market share",
@@ -113,11 +117,13 @@ export const navLinks: NavLinks = {
       description: "Live charger availability, prices and busy hours",
       badge: "new",
     },
+  ],
+  tools: [
     {
       title: "PARF Calculator",
       url: "/cars/parf",
       icon: Calculator,
-      description: "Calculate PARF rebate under old and new rates",
+      description: "PARF rebate, COE rebate and deregistration value",
       badge: "new",
     },
     {
@@ -130,16 +136,16 @@ export const navLinks: NavLinks = {
   ],
   coe: [
     {
-      title: "Premiums",
+      title: "Premiums by Category",
       url: "/coe/premiums",
       icon: BarChart3,
-      description: "Latest COE premiums and quick insights",
+      description: "Every exercise's premium for each category, Cat A to E",
     },
     {
-      title: "Results",
+      title: "Price History",
       url: "/coe/results",
       icon: TrendingUp,
-      description: "Historical trends and bidding results",
+      description: "COE prices by year, trends and record highs",
     },
     {
       title: "PQP Rates",
@@ -151,19 +157,26 @@ export const navLinks: NavLinks = {
   socialMedia: sortByName(socialMedia, { sortKey: "title" }),
 };
 
+/** One labelled group of rows in a pill's dropdown. */
+export interface NavSection {
+  /**
+   * Eyebrow above the rows. Names what the group is rather than repeating the
+   * pill, which already sits directly above it.
+   */
+  label: string;
+  items: NavigationItem[];
+  /** Leads this group with the pill's own "Overview" row. */
+  withOverview?: boolean;
+}
+
 export type NavItem = {
   href: Route;
   label: string;
   /**
-   * Pages inside this section. A pill with items opens a dropdown listing them
-   * (plus a link back to `href`); a pill without items is a plain link.
+   * Pages inside this section. A pill with sections opens a dropdown listing
+   * them; a pill without sections is a plain link.
    */
-  items?: NavigationItem[];
-  /**
-   * Eyebrow above `items` in the dropdown. Names what the group is rather than
-   * repeating the pill, which already sits directly above it.
-   */
-  sectionLabel?: string;
+  sections?: NavSection[];
 };
 
 /** Pills in the shell navigation, in comp order. */
@@ -172,15 +185,23 @@ export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
   {
     href: "/cars",
     label: "Cars",
-    items: navLinks.cars,
-    sectionLabel: "Vehicle data",
+    // Electric leads: EVs are most new cars now, so they get the top of the
+    // menu rather than a pill of their own.
+    sections: [
+      { label: "Electric", items: navLinks.electric },
+      { label: "Vehicle data", items: navLinks.cars, withOverview: true },
+      { label: "Tools", items: navLinks.tools },
+    ],
   },
-  { href: "/coe", label: "COE", items: navLinks.coe, sectionLabel: "COE data" },
-  { href: "/cars/electric-vehicles", label: "Electric" },
+  {
+    href: "/coe",
+    label: "COE",
+    sections: [{ label: "COE data", items: navLinks.coe, withOverview: true }],
+  },
   { href: "/learn", label: "Learn" },
 ];
 
-/** Eyebrow above MORE_NAV_ITEMS, matching `sectionLabel` on the pills. */
+/** Eyebrow above MORE_NAV_ITEMS, matching the pills' section labels. */
 export const MORE_NAV_SECTION_LABEL = "About this site";
 
 /**

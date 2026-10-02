@@ -24,8 +24,8 @@ const matchesPath = (pathname: string, href: string) => {
   return pathname === href || pathname.startsWith(`${href}/`);
 };
 
-// "/cars/electric-vehicles" matches both the Cars pill and the Electric pill,
-// so the longest match wins and only one pill ever reads as active.
+// The longest matching href wins, so a nested pill would never also light up
+// the section it sits under.
 const getActiveHref = (pathname: string) =>
   PRIMARY_NAV_ITEMS.filter(({ href }) => matchesPath(pathname, href)).sort(
     (a, b) => b.href.length - a.href.length,
@@ -168,10 +168,10 @@ export function AppNav({
         {/* Laid out in full the pills wrap onto three rows on a phone and eat
             half the first screen, so below `md` they move into the menu. */}
         <Navbar.Content className="hidden flex-wrap items-center gap-2 md:flex">
-          {PRIMARY_NAV_ITEMS.map(({ href, items, label, sectionLabel }) => {
+          {PRIMARY_NAV_ITEMS.map(({ href, label, sections }) => {
             const isActive = href === activeHref;
 
-            if (!items) {
+            if (!sections) {
               return (
                 <Link
                   className={cn(pillClassName(isActive), "px-7")}
@@ -182,6 +182,14 @@ export function AppNav({
                 </Link>
               );
             }
+
+            // Every group shares the menu's columns, so the column count comes
+            // from the rows across all of them, Overview included.
+            const rowCount = sections.reduce(
+              (count, section) =>
+                count + section.items.length + (section.withOverview ? 1 : 0),
+              0,
+            );
 
             return (
               <Dropdown key={href}>
@@ -194,28 +202,33 @@ export function AppNav({
                   placement="bottom start"
                 >
                   <Dropdown.Menu
-                    className={menuClassName(items.length + 1)}
+                    className={menuClassName(rowCount)}
                     onAction={handleNavigate}
                   >
-                    <Dropdown.Section
-                      className={menuSectionClassName(items.length + 1)}
-                    >
-                      <Header className={menuHeaderClassName}>
-                        {sectionLabel}
-                      </Header>
-                      {/* Reads "Overview" but announces "Cars overview" — the
-                          eyebrow names the group, not the section it links to. */}
-                      <Dropdown.Item
-                        aria-label={`${label} overview`}
-                        className={menuItemClassName}
-                        id={href}
-                        key={href}
-                        textValue={`${label} overview`}
+                    {sections.map((section) => (
+                      <Dropdown.Section
+                        className={menuSectionClassName(rowCount)}
+                        key={section.label}
                       >
-                        <Label>Overview</Label>
-                      </Dropdown.Item>
-                      <NavMenuItems items={items} />
-                    </Dropdown.Section>
+                        <Header className={menuHeaderClassName}>
+                          {section.label}
+                        </Header>
+                        {/* Reads "Overview" but announces "Cars overview" — the
+                            eyebrow names the group, not the section it links to. */}
+                        {section.withOverview ? (
+                          <Dropdown.Item
+                            aria-label={`${label} overview`}
+                            className={menuItemClassName}
+                            id={href}
+                            key={href}
+                            textValue={`${label} overview`}
+                          >
+                            <Label>Overview</Label>
+                          </Dropdown.Item>
+                        ) : null}
+                        <NavMenuItems items={section.items} />
+                      </Dropdown.Section>
+                    ))}
                   </Dropdown.Menu>
                 </Dropdown.Popover>
               </Dropdown>
@@ -260,8 +273,8 @@ export function AppNav({
 
       <Navbar.Menu className="gap-4">
         <div className="flex flex-col gap-1">
-          {PRIMARY_NAV_ITEMS.map(({ href, items, label, sectionLabel }) => {
-            if (!items) {
+          {PRIMARY_NAV_ITEMS.map(({ href, label, sections }) => {
+            if (!sections) {
               return (
                 <MobileMenuLink
                   href={href}
@@ -272,17 +285,19 @@ export function AppNav({
               );
             }
 
-            // The pill's own dropdown flattens into an eyebrow plus its rows, so
+            // The pill's own dropdown flattens into eyebrows plus their rows, so
             // the whole tree is reachable without a second level of tapping.
-            return (
-              <div className="flex flex-col gap-1" key={href}>
-                <Header className={menuHeaderClassName}>{sectionLabel}</Header>
-                <MobileMenuLink
-                  href={href}
-                  isCurrent={href === activeHref}
-                  label={`${label} overview`}
-                />
-                {items.map(({ badge, title, url }) => (
+            return sections.map((section) => (
+              <div className="flex flex-col gap-1" key={section.label}>
+                <Header className={menuHeaderClassName}>{section.label}</Header>
+                {section.withOverview ? (
+                  <MobileMenuLink
+                    href={href}
+                    isCurrent={href === activeHref}
+                    label={`${label} overview`}
+                  />
+                ) : null}
+                {section.items.map(({ badge, title, url }) => (
                   <MobileMenuLink
                     badge={badge}
                     href={url}
@@ -292,7 +307,7 @@ export function AppNav({
                   />
                 ))}
               </div>
-            );
+            ));
           })}
 
           <div className="flex flex-col gap-1">
