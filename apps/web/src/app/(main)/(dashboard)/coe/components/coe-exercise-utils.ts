@@ -201,6 +201,58 @@ export function formatPremiumChange(
   return `${sign}${percentage}% (${sign}${formatCurrency(Math.abs(difference))}) vs ${biddingOrdinal(previous.biddingNo)} bidding, ${formatMonthShortName(previous.month)} at ${formatCurrency(previous.premium)}`;
 }
 
+export interface ExercisePremium {
+  biddingNo: number;
+  month: string;
+  premium: number;
+}
+
+export interface PremiumRangeStats {
+  /** The exercise the range opens on, which the change is measured from. */
+  first: ExercisePremium;
+  high: ExercisePremium;
+  latest: ExercisePremium;
+  low: ExercisePremium;
+  /** Change from the first exercise to the latest, as a ratio. */
+  change: number;
+}
+
+/**
+ * Latest, high and low premium across a run of exercises, oldest first, and
+ * the change from its first exercise to its last. The earliest exercise wins a
+ * tie for the high or the low. `undefined` for an empty run.
+ */
+export function premiumRangeStats(
+  view: ExercisePremium[],
+): PremiumRangeStats | undefined {
+  const first = view[0];
+  const latest = view.at(-1);
+  if (!first || !latest) {
+    return undefined;
+  }
+
+  let high = first;
+  let low = first;
+  for (const exercise of view) {
+    if (exercise.premium > high.premium) {
+      high = exercise;
+    }
+    if (exercise.premium < low.premium) {
+      low = exercise;
+    }
+  }
+
+  return {
+    change: first.premium
+      ? (latest.premium - first.premium) / first.premium
+      : 0,
+    first,
+    high,
+    latest,
+    low,
+  };
+}
+
 const AXIS_STEPS = [
   250, 500, 1000, 2000, 2500, 5000, 10_000, 20_000, 25_000, 50_000, 100_000,
 ];

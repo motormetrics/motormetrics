@@ -7,6 +7,7 @@ import {
   groupByExercise,
   nextExercise,
   premiumAxisTicks,
+  premiumRangeStats,
   recordHighs,
   summariseByYear,
   toCategory,
@@ -204,5 +205,41 @@ describe("premiumAxisTicks", () => {
 
   it("should return no ticks for an empty series", () => {
     expect(premiumAxisTicks([])).toEqual([]);
+  });
+});
+
+describe("premiumRangeStats", () => {
+  const view = [
+    { biddingNo: 1, month: "2026-07", premium: 100_000 },
+    { biddingNo: 2, month: "2026-07", premium: 96_000 },
+    { biddingNo: 1, month: "2026-08", premium: 108_000 },
+    { biddingNo: 2, month: "2026-08", premium: 96_000 },
+    { biddingNo: 1, month: "2026-09", premium: 105_000 },
+  ];
+
+  it("should return the latest, high and low exercises with the change over the range", () => {
+    expect(premiumRangeStats(view)).toEqual({
+      change: 0.05,
+      first: view[0],
+      high: view[2],
+      latest: view[4],
+      low: view[1],
+    });
+  });
+
+  it("should keep the earliest exercise on a tie", () => {
+    expect(premiumRangeStats(view)?.low).toEqual({
+      biddingNo: 2,
+      month: "2026-07",
+      premium: 96_000,
+    });
+  });
+
+  it("should report a fall as a negative change", () => {
+    expect(premiumRangeStats(view.slice(2, 4))?.change).toBeCloseTo(-0.1111, 4);
+  });
+
+  it("should return undefined for an empty range", () => {
+    expect(premiumRangeStats([])).toBeUndefined();
   });
 });
