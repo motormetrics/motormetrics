@@ -76,13 +76,7 @@ export function RenewalComparison({
               {formatCurrency(row.bid)}
             </ReportCell>
             <ReportCell align="end">
-              <span
-                className={
-                  row.saving >= 0
-                    ? "font-bold text-base text-success-soft-foreground tabular-nums"
-                    : "font-bold text-base text-warning-soft-foreground tabular-nums"
-                }
-              >
+              <span className="font-bold text-base text-muted-strong tabular-nums">
                 {row.saving >= 0 ? "Saves " : "Costs "}
                 {formatCurrency(Math.abs(row.saving))}
               </span>
