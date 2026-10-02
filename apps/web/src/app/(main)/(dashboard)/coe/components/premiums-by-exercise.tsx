@@ -99,6 +99,7 @@ export async function PremiumsByExercise({
                   : undefined,
                 label: formatExerciseTick(exercise),
                 premium: exercise.premium,
+                title: `${exerciseWithYear(exercise)} · ${category}`,
               };
             })}
             ticks={ticks}

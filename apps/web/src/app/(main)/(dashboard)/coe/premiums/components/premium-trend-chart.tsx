@@ -9,6 +9,8 @@ import { useSyncExternalStore } from "react";
 
 type PremiumPoint = {
   label: string;
+  /** The tooltip header when the axis label alone is ambiguous, e.g. no year. */
+  title?: string;
   premium: number;
   /** Change from the previous exercise as a ratio, e.g. `0.02` for +2.0%. */
   change?: number;
@@ -145,7 +147,7 @@ export function PremiumTrendChart({
 
           return (
             <ChartTooltip>
-              <ChartTooltip.Header>{label}</ChartTooltip.Header>
+              <ChartTooltip.Header>{point.title ?? label}</ChartTooltip.Header>
               <ChartTooltip.Item>
                 <ChartTooltip.Indicator color="var(--chart-1)" />
                 <ChartTooltip.Label>Premium</ChartTooltip.Label>
