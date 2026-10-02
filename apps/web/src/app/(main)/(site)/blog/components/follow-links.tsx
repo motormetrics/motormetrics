@@ -33,7 +33,7 @@ const LINKS_BY_CATEGORY: Record<PostCategoryKey, FollowLink[]> = {
   deregistrations: [
     { href: "/cars/deregistrations", label: "Deregistrations" },
     { href: "/coe/pqp", label: "PQP rates" },
-    { href: "/cars/parf", label: "PARF calculator" },
+    { href: "/cars/parf", label: "PARF rebate calculator" },
   ],
   "electric-vehicles": [
     { href: "/cars/electric-vehicles", label: "Electric vehicles" },
@@ -46,7 +46,7 @@ const LINKS_BY_CATEGORY: Record<PostCategoryKey, FollowLink[]> = {
     { href: "/cars/electric-vehicles", label: "Electric vehicles" },
   ],
   policy: [
-    { href: "/cars/parf", label: "PARF calculator" },
+    { href: "/cars/parf", label: "PARF rebate calculator" },
     { href: "/coe/premiums", label: "COE premiums" },
     { href: "/cars/deregistrations", label: "Deregistrations" },
   ],

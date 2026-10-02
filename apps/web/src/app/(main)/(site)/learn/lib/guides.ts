@@ -125,7 +125,7 @@ Your deposit is returned, and you can bid again in the next exercise.
   {
     slug: "parf",
     term: "PARF",
-    title: "What is PARF? PARF Rebate Rates and When to Deregister",
+    title: "What is PARF? How the Rebate Works and When to Deregister",
     description:
       "PARF is the rebate you get back on your ARF when you deregister a car early. See how the PARF rebate is calculated, the rate schedule, and when deregistering pays off.",
     excerpt:
@@ -252,7 +252,7 @@ PARF is a government rebate. Scrap value is what scrapyards pay for the vehicle'
 - [PQP](/learn/pqp): COE renewal cost`,
     relatedTerms: ["Deregistration Value", "ARF", "COE", "OMV", "PQP"],
     relatedLinks: [
-      { label: "PARF Calculator", href: "/cars/parf" },
+      { label: "PARF Rebate Calculator", href: "/cars/parf" },
       { label: "Deregistration Statistics", href: "/cars/deregistrations" },
     ],
     lastUpdated: "2026-09-25",
@@ -367,7 +367,7 @@ Yes, if the COE has been renewed and still has unused months. The PARF rebate is
 - [PQP](/learn/pqp): The price of renewing a COE`,
     relatedTerms: ["PARF", "ARF", "COE", "PQP"],
     relatedLinks: [
-      { label: "PARF Calculator", href: "/cars/parf" },
+      { label: "PARF Rebate Calculator", href: "/cars/parf" },
       { label: "Deregistration Statistics", href: "/cars/deregistrations" },
     ],
     lastUpdated: "2026-09-25",
@@ -513,7 +513,7 @@ No, ARF is mandatory for all new vehicle registrations in Singapore. There are n
     relatedTerms: ["OMV", "PARF", "COE"],
     relatedLinks: [
       { label: "ARF Calculator", href: "/cars/arf" },
-      { label: "PARF Calculator", href: "/cars/parf" },
+      { label: "PARF Rebate Calculator", href: "/cars/parf" },
       { label: "Car Registrations", href: "/cars/registrations" },
     ],
     lastUpdated: "2026-04-11",
@@ -680,7 +680,7 @@ Not exactly. Paper value for loans/insurance may differ from OMV as it includes 
 - [COE](/learn/coe): Separate from OMV-based taxes`,
     relatedTerms: ["ARF", "PARF", "COE"],
     relatedLinks: [
-      { label: "PARF Calculator", href: "/cars/parf" },
+      { label: "PARF Rebate Calculator", href: "/cars/parf" },
       { label: "Car Registrations", href: "/cars/registrations" },
     ],
     lastUpdated: "2026-04-11",
