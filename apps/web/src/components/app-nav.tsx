@@ -144,14 +144,18 @@ export function AppNav({
     // The bar is 60px (56px on phones) over a hairline, per the MMNav comp.
     <Navbar
       aria-label="Main navigation"
-      className="border-separator border-b [--navbar-height:3.5rem] md:[--navbar-height:3.75rem]"
+      className="@container border-separator border-b [--navbar-height:3.5rem] md:[--navbar-height:3.75rem]"
       maxWidth="full"
       navigate={(href) => router.push(href)}
       position="static"
     >
       {/* The header is the query container: it is w-full in the Pro CSS, so
-          its width tracks the layout column rather than its own content. */}
-      <Navbar.Header className="@container gap-5 px-0 min-[1101px]:gap-8">
+          its width tracks the layout column rather than its own content.
+          Once collapsed, the gap drops to 12px so the brand, CTA and toggle
+          fit a 360px phone, per the MMNav comp. An element cannot query
+          itself, so that gap reads the root, which is also @container and
+          exactly as wide. */}
+      <Navbar.Header className="@container @max-4xl:gap-3 gap-5 px-0 min-[1101px]:gap-8">
         <Navbar.Brand>
           <Link
             aria-label="MotorMetrics home"
