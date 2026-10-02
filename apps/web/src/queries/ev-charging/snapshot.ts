@@ -1,10 +1,8 @@
+import { db } from "@motormetrics/database/client";
+import { evConnectorStatus } from "@motormetrics/database/schema";
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
-import {
-  type ConnectorRecord,
-  extractLastUpdated,
-  fetchBatch,
-  parseBatch,
-} from "@web/lib/ev-charging";
+import type { ConnectorRecord, ConnectorStatus } from "@web/lib/ev-charging";
+import { eq, max } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
 export interface EvChargingSnapshot {
@@ -16,37 +14,76 @@ export interface EvChargingSnapshot {
 const EMPTY: EvChargingSnapshot = { observedAt: null, records: [] };
 
 /**
- * The current state of every public connector, straight from LTA DataMall's
- * five-minute batch file.
+ * The current state of every public connector, as the `ev-charging-live`
+ * workflow last stored it.
  *
- * Nothing is stored: every live figure on the site derives from this one
- * cached download. The built-in `max` profile puts the timer far enough out
- * to be a backstop: the `ev-charging-live` workflow busts the tag after each
- * ingest, and that is what refreshes these figures in practice. Mind
- * that this query feeds the homepage too, and the shortest cache life on a
- * route sets how often Vercel regenerates the whole page — which is why an
- * earlier one-minute profile burned the Hobby ISR-write and CPU quotas.
- * Without an account key the snapshot is empty and the pages show their
+ * Read from Postgres rather than from LTA DataMall: the workflow already
+ * downloads the batch file each hour, in a step that retries, and stores every
+ * connector. Fetching the file again here put DataMall on the page's render
+ * path, so a DataMall 500 failed the page. The workflow never deletes a
+ * connector that drops out of the feed, so only rows from its latest batch
+ * count.
+ *
+ * The built-in `max` profile puts the timer far enough out to be a backstop:
+ * the workflow busts the tag after each ingest, and that is what refreshes
+ * these figures in practice. Mind that the shortest cache life on a route
+ * sets how often Vercel regenerates the whole page — which is why an earlier
+ * one-minute profile burned the Hobby ISR-write and CPU quotas. Until the
+ * workflow has stored a batch the snapshot is empty and the pages show their
  * empty state.
  *
  * It stays on plain in-memory `"use cache"`: serialised it is about 5 MB, over
  * the Vercel Runtime Cache 2 MB item limit, so it cannot be cached remotely.
  * The small request-time queries built on it use `"use cache: remote"`
- * instead, so a hit on those skips this download entirely.
+ * instead, so a hit on those skips this read entirely.
  */
 export async function getEvChargingSnapshot(): Promise<EvChargingSnapshot> {
   "use cache";
   cacheLife("max");
   cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
-  const accountKey = process.env.LTA_DATAMALL_ACCOUNT_KEY;
-  if (!accountKey) {
+  const rows = await db
+    .select({
+      evCpId: evConnectorStatus.evCpId,
+      locationId: evConnectorStatus.locationId,
+      chargerId: evConnectorStatus.chargerId,
+      stationName: evConnectorStatus.stationName,
+      address: evConnectorStatus.address,
+      postalCode: evConnectorStatus.postalCode,
+      longitude: evConnectorStatus.longitude,
+      latitude: evConnectorStatus.latitude,
+      operator: evConnectorStatus.operator,
+      operationHours: evConnectorStatus.operationHours,
+      position: evConnectorStatus.position,
+      plugType: evConnectorStatus.plugType,
+      powerRating: evConnectorStatus.powerRating,
+      chargingSpeedKw: evConnectorStatus.chargingSpeedKw,
+      price: evConnectorStatus.price,
+      priceType: evConnectorStatus.priceType,
+      status: evConnectorStatus.status,
+      observedAt: evConnectorStatus.observedAt,
+    })
+    .from(evConnectorStatus)
+    .where(
+      eq(
+        evConnectorStatus.observedAt,
+        db
+          .select({ observedAt: max(evConnectorStatus.observedAt) })
+          .from(evConnectorStatus),
+      ),
+    );
+
+  if (rows.length === 0) {
     return EMPTY;
   }
 
-  const payload = await fetchBatch(accountKey);
   return {
-    observedAt: extractLastUpdated(payload)?.toISOString() ?? null,
-    records: parseBatch(payload),
+    observedAt: rows[0].observedAt.toISOString(),
+    // The workflow stores `ConnectorStatus` values, already mapped from the
+    // feed's codes.
+    records: rows.map(({ observedAt: _observedAt, ...record }) => ({
+      ...record,
+      status: record.status as ConnectorStatus,
+    })),
   };
 }

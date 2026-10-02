@@ -160,9 +160,9 @@ async function DistrictControl({ searchParams }: PageProps) {
 }
 
 /**
- * Explains an empty live feed. It has its own boundary so the S3 snapshot it
- * awaits never holds back the cards: most of them read Postgres, and each one
- * streams as soon as its own data is ready.
+ * Explains an empty live feed. It has its own boundary so the snapshot it
+ * awaits never holds back the cards: each one streams as soon as its own data
+ * is ready.
  */
 async function ChargingEmptyState() {
   const snapshot = await getEvChargingSnapshot();
