@@ -1,3 +1,9 @@
+## [5.26.5](https://github.com/motormetrics/motormetrics/compare/v5.26.4...v5.26.5) (2026-10-02)
+
+### Bug Fixes
+
+* **web:** target parf rebate on the calculator page ([cf73646](https://github.com/motormetrics/motormetrics/commit/cf73646c5bcf8f6fcd1233e40a93db1f05f0edfd))
+
 ## [5.26.4](https://github.com/motormetrics/motormetrics/compare/v5.26.3...v5.26.4) (2026-10-02)
 
 ### Bug Fixes
