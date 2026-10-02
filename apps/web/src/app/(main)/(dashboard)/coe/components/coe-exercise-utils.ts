@@ -331,8 +331,8 @@ export function successRate(bidsSuccess: number, bidsReceived: number): number {
  * The exercise that follows the given one: the second round of the same month,
  * or the first round of the next month.
  *
- * Derived from the data rather than from the calendar, so the bidding calendar
- * panel needs no current-time read (see `components/footer.tsx`).
+ * Derived from the data rather than from the calendar, so the PQP section's
+ * "next exercise" note needs no current-time read (see `components/footer.tsx`).
  */
 export function nextExercise(exercise: { biddingNo: number; month: string }): {
   biddingNo: number;

@@ -1,10 +1,15 @@
-import { cn, Typography } from "@heroui/react";
+import { cn } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 
+/** The three columns shared by the PQP rows and the header above them. */
+export const PQP_ROW_GRID =
+  "grid grid-cols-[minmax(0,1fr)_120px_90px] items-baseline gap-3 max-[720px]:grid-cols-[minmax(0,1fr)_96px_56px]";
+
 /**
- * One hairline PQP row: the category letter, the renewal rate and its trend
- * against the previous month. Render inside a `<ul>`.
+ * One hairline PQP row: "Cat X" with its note, the renewal rate and the grey
+ * change against the previous month. The note drops out on phones. Render
+ * inside a `<ul>`.
  */
 export function PqpRateRow({
   changeRatio,
@@ -20,32 +25,28 @@ export function PqpRateRow({
   value: number;
 }) {
   return (
-    <li className="flex items-center gap-3.5 border-separator border-b py-3.5">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-soft font-extrabold text-[17px] text-accent-strong">
-        {letter}
-      </span>
-      <div className="flex min-w-0 flex-col gap-px">
-        <span className="font-extrabold text-lg tabular-nums">
-          <NumberValue
-            currency="SGD"
-            locale="en-SG"
-            maximumFractionDigits={0}
-            style="currency"
-            value={value}
-          />
-        </span>
-        <Typography.Paragraph
-          className={cn("font-medium", descriptionClassName)}
-          color="muted"
-          size="sm"
-          truncate
+    <li className={cn(PQP_ROW_GRID, "border-separator border-b py-[11px]")}>
+      <span className="min-w-0 truncate text-sm">
+        <b className="font-semibold">Cat {letter}</b>{" "}
+        <span
+          className={cn("text-muted max-[720px]:hidden", descriptionClassName)}
         >
           {description}
-        </Typography.Paragraph>
-      </div>
-      <div className="ml-auto shrink-0">
-        <CostTrendChip changeRatio={changeRatio} />
-      </div>
+        </span>
+      </span>
+      <span className="text-right font-semibold text-[15px] tabular-nums">
+        <NumberValue
+          currency="SGD"
+          locale="en-SG"
+          maximumFractionDigits={0}
+          style="currency"
+          value={value}
+        />
+      </span>
+      <CostTrendChip
+        changeRatio={changeRatio}
+        className="text-right text-[13.5px]"
+      />
     </li>
   );
 }

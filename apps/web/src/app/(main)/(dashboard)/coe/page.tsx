@@ -1,7 +1,6 @@
 import { Skeleton } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { AllCategories } from "@web/app/(main)/(dashboard)/coe/components/all-categories";
-import { BiddingCalendar } from "@web/app/(main)/(dashboard)/coe/components/bidding-calendar";
 import {
   biddingOrdinal,
   formatExercise,
@@ -92,7 +91,7 @@ interface PageProps {
 
 export default function Page({ searchParams }: PageProps) {
   return (
-    <OverviewPage>
+    <OverviewPage className="gap-10 max-[720px]:gap-7">
       <StructuredData
         data={{
           "@context": "https://schema.org",
@@ -123,14 +122,6 @@ export default function Page({ searchParams }: PageProps) {
         </SectionErrorBoundary>
       </div>
 
-      <SectionErrorBoundary title="Quota allocation unavailable">
-        <Suspense fallback={<SectionSkeleton className="h-64" />}>
-          <QuotaAllocation searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
-
-      <Hairline />
-
       <SectionErrorBoundary title="Category breakdown unavailable">
         <Suspense fallback={<SectionSkeleton className="h-80" />}>
           <AllCategories searchParams={searchParams} />
@@ -147,15 +138,15 @@ export default function Page({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <OverviewGrid>
+      <OverviewGrid className="gap-10 max-[720px]:gap-9 lg:grid-cols-[1.2fr_1fr] lg:gap-x-16 min-[901px]:grid-cols-[1.2fr_1fr] min-[901px]:gap-x-16">
+        <SectionErrorBoundary title="Quota allocation unavailable">
+          <Suspense fallback={<SectionSkeleton className="h-64" />}>
+            <QuotaAllocation searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
         <SectionErrorBoundary title="PQP rates unavailable">
           <Suspense fallback={<SectionSkeleton className="h-64" />}>
             <PqpCeiling />
-          </Suspense>
-        </SectionErrorBoundary>
-        <SectionErrorBoundary title="Bidding calendar unavailable">
-          <Suspense fallback={<SectionSkeleton className="h-48" />}>
-            <BiddingCalendar />
           </Suspense>
         </SectionErrorBoundary>
       </OverviewGrid>
