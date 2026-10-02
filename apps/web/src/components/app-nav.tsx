@@ -31,12 +31,13 @@ const getActiveHref = (pathname: string) =>
     (a, b) => b.href.length - a.href.length,
   )[0]?.href;
 
-const pillClassName = (isActive: boolean) =>
+// MMNav text links: muted 14px labels, with the current one underlined in the
+// accent. They stretch to the bar's full height and `-mb-px` drops the
+// underline onto the bar's hairline rather than just above it.
+const linkClassName = (isActive: boolean) =>
   cn(
-    "h-auto gap-2 rounded-full px-6 py-3.5 font-semibold text-base transition-shadow",
-    isActive
-      ? "bg-accent font-bold text-accent-foreground"
-      : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
+    "-mb-px flex h-auto min-w-0 items-center gap-1.25 whitespace-nowrap rounded-none border-transparent border-b-2 bg-transparent px-0 font-medium text-sm transition-colors hover:bg-transparent hover:text-foreground data-[hovered=true]:bg-transparent data-[pressed=true]:bg-transparent",
+    isActive ? "border-accent font-semibold text-foreground" : "text-muted",
   );
 
 // Menu chrome from the MMNav comp: rows are 14px-radius pills rather than the
@@ -109,14 +110,11 @@ function MobileMenuLink({
   );
 }
 
-/** The Telegram call to action, in the bar on desktop and the menu on phones. */
-function GetUpdatesLink({ className }: { className?: string }) {
+/** The Telegram call to action, in the bar at every width. */
+function GetUpdatesLink() {
   return (
     <Link
-      className={cn(
-        "rounded-full bg-foreground px-6 py-3.5 font-bold text-accent-foreground text-sm transition-colors hover:bg-muted",
-        className,
-      )}
+      className="inline-flex h-8.5 shrink-0 items-center whitespace-nowrap rounded-lg bg-foreground px-3 font-medium text-[13.5px] text-background transition-opacity hover:opacity-85"
       href={SOCIAL_URLS.telegram}
       rel="noopener noreferrer"
       target="_blank"
@@ -143,38 +141,45 @@ export function AppNav({
   return (
     // `position="static"` and `maxWidth="full"` because the bar sits in flow
     // inside the layout column, which already owns the page measure and gutter.
+    // The bar is 60px (56px on phones) over a hairline, per the MMNav comp.
     <Navbar
       aria-label="Main navigation"
+      className="border-separator border-b [--navbar-height:3.5rem] md:[--navbar-height:3.75rem]"
       maxWidth="full"
       navigate={(href) => router.push(href)}
       position="static"
     >
-      <Navbar.Header className="gap-4 px-0">
+      {/* The header is the query container: it is w-full in the Pro CSS, so
+          its width tracks the layout column rather than its own content. */}
+      <Navbar.Header className="@container gap-5 px-0 min-[1101px]:gap-8">
         <Navbar.Brand>
           <Link
             aria-label="MotorMetrics home"
-            className="flex shrink-0 items-center gap-3 text-foreground no-underline"
+            className="flex shrink-0 items-center gap-2.25 text-foreground no-underline"
             href="/"
           >
-            <LogoMark first="currentColor" second="var(--accent)" size={40} />
+            <span className="flex size-7.5 shrink-0 items-center justify-center rounded-lg border border-separator">
+              <LogoMark first="currentColor" second="var(--accent)" size={22} />
+            </span>
             <Wordmark
-              className="hidden text-2xl lg:inline"
+              className="text-[19px] md:text-[21px]"
               first="currentColor"
               second="var(--accent)"
             />
           </Link>
         </Navbar.Brand>
 
-        {/* Laid out in full the pills wrap onto three rows on a phone and eat
-            half the first screen, so below `md` they move into the menu. */}
-        <Navbar.Content className="hidden flex-wrap items-center gap-2 md:flex">
+        {/* The full row needs about 840px, so below a 56rem header (@4xl) the
+            links move into the menu. */}
+        <Navbar.Content className="@4xl:flex hidden @4xl:items-stretch gap-4 self-stretch min-[1101px]:gap-6">
           {PRIMARY_NAV_ITEMS.map(({ href, label, sections }) => {
             const isActive = href === activeHref;
 
             if (!sections) {
               return (
                 <Link
-                  className={cn(pillClassName(isActive), "px-7")}
+                  aria-current={isActive ? "page" : undefined}
+                  className={linkClassName(isActive)}
                   href={href}
                   key={href}
                 >
@@ -193,9 +198,16 @@ export function AppNav({
 
             return (
               <Dropdown key={href}>
-                <Button className={pillClassName(isActive)} variant="tertiary">
+                <Button
+                  aria-current={isActive ? "true" : undefined}
+                  className={linkClassName(isActive)}
+                  variant="tertiary"
+                >
                   {label}
-                  <ChevronDown className="size-4 shrink-0" strokeWidth={2.25} />
+                  <ChevronDown
+                    className="size-3.5 shrink-0"
+                    strokeWidth={2.25}
+                  />
                 </Button>
                 <Dropdown.Popover
                   className="rounded-lg"
@@ -237,14 +249,12 @@ export function AppNav({
 
           <Dropdown>
             <Button
-              className={cn(
-                pillClassName(false),
-                isMoreActive && "bg-accent-soft-2 font-bold text-accent-deep",
-              )}
+              aria-current={isMoreActive ? "true" : undefined}
+              className={linkClassName(isMoreActive)}
               variant="tertiary"
             >
               More
-              <ChevronDown className="size-4 shrink-0" strokeWidth={2.25} />
+              <ChevronDown className="size-3.5 shrink-0" strokeWidth={2.25} />
             </Button>
             <Dropdown.Popover className="rounded-lg" placement="bottom start">
               <Dropdown.Menu
@@ -266,9 +276,9 @@ export function AppNav({
 
         <Navbar.Spacer />
 
-        <GetUpdatesLink className="hidden md:block" />
+        <GetUpdatesLink />
 
-        <Navbar.MenuToggle className="md:hidden" />
+        <Navbar.MenuToggle className="@4xl:hidden" />
       </Navbar.Header>
 
       <Navbar.Menu className="gap-4">
@@ -325,8 +335,6 @@ export function AppNav({
             ))}
           </div>
         </div>
-
-        <GetUpdatesLink className="text-center" />
       </Navbar.Menu>
     </Navbar>
   );
