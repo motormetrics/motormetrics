@@ -3,6 +3,7 @@ import {
   changeRatio,
   formatExercise,
   formatExerciseTick,
+  formatPremiumChange,
   groupByExercise,
   nextExercise,
   recordHighs,
@@ -74,6 +75,26 @@ describe("changeRatio", () => {
 
   it("returns zero when there is no usable baseline", () => {
     expect(changeRatio(103_000, 0)).toBe(0);
+  });
+});
+
+describe("formatPremiumChange", () => {
+  const previous = { biddingNo: 1, month: "2026-08", premium: 130_500 };
+
+  it("states a rise with the percentage and the dollar change", () => {
+    expect(formatPremiumChange(133_110, previous)).toBe(
+      "+2.0% (+$2,610) vs first bidding, Aug at $130,500",
+    );
+  });
+
+  it("states a fall with a true minus", () => {
+    expect(formatPremiumChange(127_890, previous)).toBe(
+      "\u22122.0% (\u2212$2,610) vs first bidding, Aug at $130,500",
+    );
+  });
+
+  it("says so when there is no earlier exercise", () => {
+    expect(formatPremiumChange(130_500)).toBe("No earlier exercise to compare");
   });
 });
 

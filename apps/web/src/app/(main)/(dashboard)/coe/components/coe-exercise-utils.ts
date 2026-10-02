@@ -1,3 +1,4 @@
+import { formatCurrency } from "@motormetrics/utils/format-currency";
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import type { COECategory, COEResult } from "@web/types";
 import {
@@ -180,6 +181,25 @@ export const formatExerciseTick = (exercise: {
 }): string => `${formatMonthShortName(exercise.month)} ${exercise.biddingNo}`;
 
 export { changeRatio } from "@web/utils/change-ratio";
+
+/**
+ * The grey sentence under the headline premium, e.g. "+2.0% (+$2,610) vs first
+ * bidding, Sep at $130,500". Signs use a true minus (U+2212), never colour.
+ */
+export function formatPremiumChange(
+  premium: number,
+  previous?: { biddingNo: number; month: string; premium: number },
+): string {
+  if (!previous?.premium) {
+    return "No earlier exercise to compare";
+  }
+
+  const difference = premium - previous.premium;
+  const sign = difference < 0 ? "−" : "+";
+  const percentage = Math.abs((difference / previous.premium) * 100).toFixed(1);
+
+  return `${sign}${percentage}% (${sign}${formatCurrency(Math.abs(difference))}) vs ${biddingOrdinal(previous.biddingNo)} bidding, ${formatMonthShortName(previous.month)} at ${formatCurrency(previous.premium)}`;
+}
 
 /** Successful bids as a percentage of bids received; 0 when none were received. */
 export function successRate(bidsSuccess: number, bidsReceived: number): number {

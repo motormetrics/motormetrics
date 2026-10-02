@@ -116,19 +116,18 @@ export default function Page({ searchParams }: PageProps) {
           title="Latest COE results"
         />
 
-        <OverviewGrid>
-          <SectionErrorBoundary title="COE premium unavailable">
-            <Suspense fallback={<SectionSkeleton className="h-[150px]" />}>
-              <CoeHeadline searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-          <SectionErrorBoundary title="Quota allocation unavailable">
-            <Suspense fallback={<SectionSkeleton className="h-64" />}>
-              <QuotaAllocation searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-        </OverviewGrid>
+        <SectionErrorBoundary title="COE premium unavailable">
+          <Suspense fallback={<SectionSkeleton className="h-[150px]" />}>
+            <CoeHeadline searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
       </div>
+
+      <SectionErrorBoundary title="Quota allocation unavailable">
+        <Suspense fallback={<SectionSkeleton className="h-64" />}>
+          <QuotaAllocation searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
 
       <Hairline />
 
