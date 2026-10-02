@@ -65,9 +65,15 @@ export async function generateMetadata(): Promise<Metadata> {
 async function LatestExerciseSub() {
   const latest = groupByExercise(await getCoeResults()).at(-1);
 
-  return latest
-    ? `Results of the ${biddingOrdinal(latest.biddingNo)} bidding, ${formatMonth(latest.month)} · Source: LTA via DataMall`
-    : null;
+  return latest ? (
+    <>
+      Results of the{" "}
+      <span className="font-semibold text-foreground">
+        {biddingOrdinal(latest.biddingNo)} bidding, {formatMonth(latest.month)}
+      </span>{" "}
+      · Source: LTA via DataMall
+    </>
+  ) : null;
 }
 
 function SectionSkeleton({ className }: { className: string }) {
