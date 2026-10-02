@@ -18,12 +18,16 @@ import {
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { SourceNote } from "@web/components/shared/overview";
+import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useState } from "react";
 
-type ColumnKey = SortKey | "bids" | "ratio";
+type ColumnKey = SortKey | "bids" | "ratio" | "trend";
 
-/** Bids and Bids/COE are read across, not ranked, so they do not sort. */
+/**
+ * Bids and Bids/COE are read across, not ranked, so they do not sort; nor
+ * does the sparkline, which is a shape rather than a figure.
+ */
 const COLUMNS: {
   align: "left" | "right";
   key: ColumnKey;
@@ -36,13 +40,15 @@ const COLUMNS: {
   { align: "right", key: "quota", label: "Quota", sortable: true },
   { align: "right", key: "bids", label: "Bids", sortable: false },
   { align: "right", key: "ratio", label: "Bids/COE", sortable: false },
+  { align: "right", key: "trend", label: "Last 24 exercises", sortable: false },
 ];
 
 /**
  * Fixed figure columns so the rows line up under their headers. The narrowest
  * step exists because the comp's tracks add up to 380px of figures, which is
  * wider than a 320px phone leaves the table once the page gutter is out.
- * Below 720px the demand columns drop out for the meta line under the name.
+ * Below 720px the demand columns drop out for the meta line under the name;
+ * the sparklines only appear above 1100px, where the figures leave room.
  */
 const FIGURE_COLUMN_CLASSES: Record<Exclude<ColumnKey, "category">, string> = {
   premium: "w-[4.75rem] sm:w-[6.5rem] lg:w-[130px]",
@@ -50,6 +56,7 @@ const FIGURE_COLUMN_CLASSES: Record<Exclude<ColumnKey, "category">, string> = {
   bids: "w-[4.5rem] max-[720px]:hidden lg:w-[90px]",
   ratio: "w-[4.5rem] max-[720px]:hidden lg:w-[90px]",
   change: "w-[4.25rem] sm:w-[5.5rem] lg:w-[110px]",
+  trend: "hidden w-[150px] min-[1101px]:table-cell",
 };
 
 const formatCount = (value: number): string => value.toLocaleString("en-SG");
@@ -233,6 +240,17 @@ export function AllCategoriesTable({
                     </Table.Cell>
                     <Table.Cell className={cn(CELL_CLASS, DEMAND_CELL_CLASS)}>
                       {bidsPerCoe(row)}
+                    </Table.Cell>
+                    <Table.Cell
+                      className={cn(CELL_CLASS, FIGURE_COLUMN_CLASSES.trend)}
+                    >
+                      <SparklineChart
+                        data={row.series}
+                        format={{ currency: "SGD", style: "currency" }}
+                        height={30}
+                        name="Premium"
+                        title={`${row.category} premiums over the last ${row.series.length} exercises`}
+                      />
                     </Table.Cell>
                   </Table.Row>
                 );

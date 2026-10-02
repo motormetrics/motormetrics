@@ -30,6 +30,11 @@ const rows: CategoryRow[] = [
     description: "Cars up to 1,600cc and 130bhp",
     premium: 96_000,
     quota: 1_200,
+    series: [
+      { label: "Aug 2", value: 92_000 },
+      { label: "Sep 1", value: 94_000 },
+      { label: "Sep 2", value: 96_000 },
+    ],
   },
   {
     bidsReceived: 1_135,
@@ -39,6 +44,7 @@ const rows: CategoryRow[] = [
     description: "Cars above 1,600cc or 130bhp",
     premium: 118_000,
     quota: 900,
+    series: [],
   },
   {
     bidsReceived: 532,
@@ -48,6 +54,7 @@ const rows: CategoryRow[] = [
     description: "Goods vehicles and buses",
     premium: 72_000,
     quota: 400,
+    series: [],
   },
   {
     bidsReceived: 605,
@@ -57,6 +64,7 @@ const rows: CategoryRow[] = [
     description: "Motorcycles",
     premium: 9_500,
     quota: 500,
+    series: [],
   },
   {
     bidsReceived: 431,
@@ -66,6 +74,7 @@ const rows: CategoryRow[] = [
     description: "Open category",
     premium: 120_000,
     quota: 300,
+    series: [],
   },
 ];
 
@@ -136,6 +145,21 @@ describe("AllCategoriesTable", () => {
       .toBeInTheDocument();
     await expect
       .element(screen.getByText("1,200 quota · 1,507 bids · 1.26×"))
+      .toBeInTheDocument();
+  });
+
+  it("should add an unsortable sparkline column for the recent exercises", async () => {
+    const screen = await renderTable();
+
+    await expect
+      .element(screen.getByRole("columnheader", { name: "Last 24 exercises" }))
+      .not.toHaveAttribute("aria-sort");
+    await expect
+      .element(
+        screen.getByRole("img", {
+          name: "Category A premiums over the last 3 exercises",
+        }),
+      )
       .toBeInTheDocument();
   });
 });

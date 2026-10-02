@@ -5,6 +5,7 @@ import {
   CATEGORY_DESCRIPTIONS,
   COE_CATEGORIES,
   changeRatio,
+  formatExerciseTick,
   groupByExercise,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
@@ -12,6 +13,9 @@ import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/com
 import { SectionLink } from "@web/components/shared/overview";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
+
+/** Exercises behind each row's sparkline — a year of twice-monthly bidding. */
+const SERIES_LENGTH = 24;
 
 /**
  * Every category's latest result side by side. The rows are shaped here, in
@@ -33,6 +37,7 @@ export async function AllCategories({
   const exercises = groupByExercise(results);
   const latest = exercises.at(-1);
   const previous = exercises.at(-2);
+  const recent = exercises.slice(-SERIES_LENGTH);
 
   if (!latest) {
     return null;
@@ -52,6 +57,12 @@ export async function AllCategories({
       description: CATEGORY_DESCRIPTIONS[category],
       premium,
       quota: figures?.quota ?? 0,
+      series: recent.flatMap((exercise) => {
+        const value = exercise.results[category]?.premium;
+        return value === undefined
+          ? []
+          : [{ label: formatExerciseTick(exercise), value }];
+      }),
     };
   });
 

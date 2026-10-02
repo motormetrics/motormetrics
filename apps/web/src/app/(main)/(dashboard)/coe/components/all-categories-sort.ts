@@ -8,6 +8,8 @@ export interface CategoryRow {
   description: string;
   premium: number;
   quota: number;
+  /** Premiums over the recent exercises, oldest first, for the sparkline. */
+  series: { label: string; value: number }[];
 }
 
 export const SORT_KEYS = ["category", "premium", "quota", "change"] as const;

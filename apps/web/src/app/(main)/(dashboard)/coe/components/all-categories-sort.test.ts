@@ -20,6 +20,7 @@ const row = (
   description: "",
   premium,
   quota,
+  series: [],
 });
 
 const rows = [
