@@ -1,3 +1,9 @@
+## [5.27.0](https://github.com/motormetrics/motormetrics/compare/v5.26.5...v5.27.0) (2026-10-02)
+
+### Features
+
+* **web:** add deregistration value to the parf calculator ([1af1088](https://github.com/motormetrics/motormetrics/commit/1af10885b9f407bad01245d0106f28cb690e8c64))
+
 ## [5.26.5](https://github.com/motormetrics/motormetrics/compare/v5.26.4...v5.26.5) (2026-10-02)
 
 ### Bug Fixes
