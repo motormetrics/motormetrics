@@ -10,8 +10,9 @@ import { cn } from "@heroui/react";
  * same, which is why this lives beside the pages that need it rather than in
  * `components/shared`.
  *
- * `/coe/results` imports this too — the two COE report pages share the reading,
- * so they share the component.
+ * `/coe/results` and `/coe/pqp` import this too — the COE report pages share
+ * the reading, so they share the component. Pass the raw change: negating it
+ * to flip the tone would also flip the printed sign.
  */
 export function PremiumDelta({
   className,
