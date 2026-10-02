@@ -87,7 +87,7 @@ export function SharePill({
   return (
     <Dropdown>
       <Button
-        className="h-8.5 gap-2 rounded-lg px-3.5 font-medium text-[13.5px]"
+        className="h-8.5 gap-2 rounded-lg bg-surface px-3.5 font-medium text-[13.5px] hover:bg-surface-secondary"
         variant="outline"
       >
         <Share2 className="size-4 shrink-0" strokeWidth={2} />
