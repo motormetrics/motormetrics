@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, cn, ToggleButton, ToggleButtonGroup } from "@heroui/react";
+import { Button, cn } from "@heroui/react";
+import { Segment } from "@heroui-pro/react";
 import {
   CATEGORY_KEYS,
   type CategoryKey,
@@ -12,6 +13,16 @@ import {
 import { useQueryState } from "nuqs";
 import posthog from "posthog-js";
 import { type ReactNode, useTransition } from "react";
+
+/*
+ * The Pro segment ships with 12px container and 10px item and indicator radii.
+ * The restyle squares every switch to 6px, so the radii are overridden here at
+ * the call site (`*:` reaches the indicator, the item's only child element).
+ * At 720px and below the switch spans the row and its items share the width.
+ */
+const SEGMENT_CLASS = "rounded-lg border border-separator max-[720px]:w-full";
+const SEGMENT_ITEM_CLASS =
+  "rounded-lg *:rounded-lg max-[720px]:flex-1 max-[720px]:px-2";
 
 /**
  * Every control on the COE overview writes to the URL with `shallow: false`,
@@ -40,37 +51,25 @@ export function useCoeCategory() {
   return { isPending, selectCategory };
 }
 
-/** The A–E circles at the head of the page. */
+/** The A–E switch at the head of the page. */
 export function CategoryTabs({ selected }: { selected: CategoryKey }) {
   const { isPending, selectCategory } = useCoeCategory();
 
   return (
-    <ToggleButtonGroup
+    <Segment
       aria-label="COE category"
-      className={cn("flex flex-wrap gap-2", isPending && "opacity-70")}
-      disallowEmptySelection
-      isDetached
-      onSelectionChange={(keys) => {
-        const [key] = [...keys];
-        if (key === undefined) {
-          return;
-        }
-        selectCategory(key as CategoryKey);
-      }}
-      selectedKeys={[selected]}
-      selectionMode="single"
+      className={cn(SEGMENT_CLASS, isPending && "opacity-70")}
+      onSelectionChange={(key) => selectCategory(key as CategoryKey)}
+      selectedKey={selected}
+      size="md"
+      variant="ghost"
     >
       {CATEGORY_KEYS.map((key) => (
-        <ToggleButton
-          aria-label={`Category ${key}`}
-          className="size-11 shrink-0 rounded-full bg-default p-0 font-extrabold text-base text-muted-strong transition-[filter] hover:bg-default hover:brightness-105 data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
-          id={key}
-          key={key}
-        >
-          {key}
-        </ToggleButton>
+        <Segment.Item className={SEGMENT_ITEM_CLASS} id={key} key={key}>
+          Cat {key}
+        </Segment.Item>
       ))}
-    </ToggleButtonGroup>
+    </Segment>
   );
 }
 
@@ -109,12 +108,7 @@ export function CategorySelect({
   );
 }
 
-/**
- * The range pills beside the "Premiums by exercise" heading.
- *
- * The three labels run wider than a phone laid out in a row, so the pills
- * wrap onto a second line rather than pushing the page sideways.
- */
+/** The range switch beside the "Premiums by exercise" heading. */
 export function RangeTabs() {
   const [isPending, startTransition] = useTransition();
   const [range, setRange] = useQueryState(
@@ -126,34 +120,25 @@ export function RangeTabs() {
   );
 
   return (
-    <ToggleButtonGroup
+    <Segment
       aria-label="Exercise range"
-      className={cn("flex flex-wrap gap-2", isPending && "opacity-70")}
-      disallowEmptySelection
-      isDetached
-      onSelectionChange={(keys) => {
-        const [option] = [...keys];
-        if (option === undefined) {
-          return;
-        }
+      className={cn(SEGMENT_CLASS, isPending && "opacity-70")}
+      onSelectionChange={(option) => {
         posthog.capture("dashboard_filter_changed", {
           filter: "range",
           value: option,
         });
         setRange(option as ExerciseRange);
       }}
-      selectedKeys={[range]}
-      selectionMode="single"
+      selectedKey={range}
+      size="md"
+      variant="ghost"
     >
       {EXERCISE_RANGES.map((option) => (
-        <ToggleButton
-          className="h-auto whitespace-nowrap rounded-full bg-default px-[18px] py-2.5 font-semibold text-foreground/75 text-sm transition-[filter] hover:bg-default hover:brightness-105 data-[selected=true]:bg-accent data-[selected=true]:font-extrabold data-[selected=true]:text-accent-foreground"
-          id={option}
-          key={option}
-        >
+        <Segment.Item className={SEGMENT_ITEM_CLASS} id={option} key={option}>
           {RANGE_LABELS[option]}
-        </ToggleButton>
+        </Segment.Item>
       ))}
-    </ToggleButtonGroup>
+    </Segment>
   );
 }
