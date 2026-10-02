@@ -14,11 +14,17 @@ import type { ReactNode } from "react";
  * the bento-family ones do not — passing it is what distinguishes the two
  * openings. The comps set the title two pixels apart between families (50 vs
  * 52); that is below the threshold worth a variant, so both use one scale.
+ *
+ * `eyebrow` and `sub` are the Hybrid comps' framing: a small uppercase label
+ * naming the dataset above the title, and a muted line under it for the date
+ * and source. `sub` takes a node so a page can stream it in its own Suspense.
  */
 export function PageHead({
   badge,
   controls,
   description,
+  eyebrow,
+  sub,
   title,
 }: {
   /** Status chip rendered beside the title, e.g. a "Beta" marker. */
@@ -26,15 +32,30 @@ export function PageHead({
   controls?: ReactNode;
   /** Lede paragraph. Report-family pages set it; bento-family pages omit it. */
   description?: string;
+  /** Uppercase label above the title, e.g. "Certificate of Entitlement". */
+  eyebrow?: string;
+  /** Muted line under the title, usually the period and the source. */
+  sub?: ReactNode;
   title: string;
 }) {
   return (
     <div className="flex flex-wrap items-end gap-6">
       <div className={cn("flex flex-col gap-2", description && "max-w-prose")}>
+        {eyebrow ? (
+          <Typography.Paragraph
+            className="font-semibold text-xs uppercase tracking-[0.06em]"
+            color="muted"
+          >
+            {eyebrow}
+          </Typography.Paragraph>
+        ) : null}
         <div className="flex flex-wrap items-center gap-4">
           <Typography.Heading level={1}>{title}</Typography.Heading>
           {badge}
         </div>
+        {/* A div, not a paragraph: a streamed `sub` may fall back to a block
+            skeleton. */}
+        {sub ? <div className="text-[13.5px] text-muted">{sub}</div> : null}
         {description ? (
           <Typography.Paragraph color="muted">
             {description}

@@ -3,7 +3,9 @@ import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { AllCategories } from "@web/app/(main)/(dashboard)/coe/components/all-categories";
 import { BiddingCalendar } from "@web/app/(main)/(dashboard)/coe/components/bidding-calendar";
 import {
+  biddingOrdinal,
   formatExercise,
+  formatMonth,
   groupByExercise,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { CoeHeadline } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
@@ -16,7 +18,7 @@ import {
   OverviewGrid,
   OverviewPage,
 } from "@web/components/shared/overview";
-import { EyebrowValue, PageEyebrow } from "@web/components/shared/page-eyebrow";
+import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import { generateDataCatalogSchema } from "@web/lib/metadata";
@@ -59,11 +61,13 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-/** Names the exercise the whole page is reporting on. */
-async function LatestExerciseEyebrow() {
+/** Names the exercise the whole page is reporting on, and its source. */
+async function LatestExerciseSub() {
   const latest = groupByExercise(await getCoeResults()).at(-1);
 
-  return latest ? <EyebrowValue>{formatExercise(latest)}</EyebrowValue> : null;
+  return latest
+    ? `Results of the ${biddingOrdinal(latest.biddingNo)} bidding, ${formatMonth(latest.month)} · Source: LTA via DataMall`
+    : null;
 }
 
 function SectionSkeleton({ className }: { className: string }) {
@@ -96,13 +100,13 @@ export default function Page({ searchParams }: PageProps) {
       />
 
       <div className="flex flex-col gap-7">
-        <PageEyebrow
-          control={
-            <Suspense fallback={<Skeleton className="h-5 w-48 rounded-lg" />}>
-              <LatestExerciseEyebrow />
+        <PageHead
+          eyebrow="Certificate of Entitlement"
+          sub={
+            <Suspense fallback={<Skeleton className="h-5 w-72 rounded-lg" />}>
+              <LatestExerciseSub />
             </Suspense>
           }
-          section="Certificate of Entitlement"
           title="Latest COE results"
         />
 
