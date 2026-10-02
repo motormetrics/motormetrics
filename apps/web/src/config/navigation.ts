@@ -65,7 +65,7 @@ const socialMedia: SocialMedia[] = [
 export const navLinks: NavLinks = {
   cars: [
     {
-      title: "New Registrations",
+      title: "New registrations",
       url: "/cars/registrations",
       icon: FilePlus,
       description: "Monthly car registration statistics and trends",
@@ -84,19 +84,19 @@ export const navLinks: NavLinks = {
       badge: "beta",
     },
     {
-      title: "Fuel Types",
+      title: "Fuel types",
       url: "/cars/fuel-types",
       icon: Fuel,
       description: "Breakdown by petrol, diesel, hybrid and electric",
     },
     {
-      title: "Vehicle Types",
+      title: "Vehicle types",
       url: "/cars/vehicle-types",
       icon: Car,
       description: "Analysis of saloons, hatchbacks, SUVs and more",
     },
     {
-      title: "Vehicle Population",
+      title: "Vehicle population",
       url: "/cars/annual",
       icon: Calendar,
       description: "Yearly vehicle population and registration trends",
@@ -104,14 +104,14 @@ export const navLinks: NavLinks = {
   ],
   electric: [
     {
-      title: "EV Adoption",
+      title: "EV adoption",
       url: "/cars/electric-vehicles",
       icon: Zap,
       description: "BEV, PHEV and hybrid adoption trends and market share",
       badge: "new",
     },
     {
-      title: "EV Charging",
+      title: "EV charging",
       url: "/cars/electric-vehicles/charging",
       icon: PlugZap,
       description: "Live charger availability, prices and busy hours",
@@ -120,14 +120,14 @@ export const navLinks: NavLinks = {
   ],
   tools: [
     {
-      title: "PARF Calculator",
+      title: "PARF calculator",
       url: "/cars/parf",
       icon: Calculator,
       description: "PARF rebate, COE rebate and deregistration value",
       badge: "new",
     },
     {
-      title: "ARF Calculator",
+      title: "ARF calculator",
       url: "/cars/arf",
       icon: Calculator,
       description: "Calculate ARF from a car's OMV",
@@ -136,19 +136,19 @@ export const navLinks: NavLinks = {
   ],
   coe: [
     {
-      title: "Premiums by Category",
+      title: "Premiums by category",
       url: "/coe/premiums",
       icon: BarChart3,
       description: "Every exercise's premium for each category, Cat A to E",
     },
     {
-      title: "Price History",
+      title: "Price history",
       url: "/coe/results",
       icon: TrendingUp,
       description: "COE prices by year, trends and record highs",
     },
     {
-      title: "PQP Rates",
+      title: "PQP rates",
       url: "/coe/pqp",
       icon: Calculator,
       description: "Prevailing quota premiums and calculations",
@@ -202,7 +202,7 @@ export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
 ];
 
 /** Eyebrow above MORE_NAV_ITEMS, matching the pills' section labels. */
-export const MORE_NAV_SECTION_LABEL = "About this site";
+export const MORE_NAV_SECTION_LABEL = "Company";
 
 /**
  * Everything the pills do not surface, behind the shell nav's "More" menu. The
