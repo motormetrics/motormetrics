@@ -281,6 +281,47 @@ export function premiumAxisTicks(values: number[]): number[] {
   );
 }
 
+export interface BidsAgainstQuotaRow {
+  bids: number;
+  /** Bid bar width, as a percentage of the shared scale. */
+  bidWidth: number;
+  category: COECategory;
+  /** Bids beyond the quota; 0 when bids fall short of it. */
+  overflow: number;
+  quota: number;
+  /** Quota span width, as a percentage of the shared scale. */
+  quotaWidth: number;
+  /** Bids per COE to 2 decimal places, e.g. "1.67". */
+  ratio: string;
+}
+
+/**
+ * Bids and quota per category for one exercise, on one zero-based scale set
+ * by the largest figure in the exercise, so every bar reads against the same
+ * axis and no quota span runs past the track.
+ */
+export function bidsAgainstQuota(exercise: CoeExercise): BidsAgainstQuotaRow[] {
+  const figures = COE_CATEGORIES.map((category) => ({
+    bids: exercise.results[category]?.bidsReceived ?? 0,
+    category,
+    quota: exercise.results[category]?.quota ?? 0,
+  }));
+  const scale = Math.max(
+    ...figures.flatMap((figure) => [figure.bids, figure.quota]),
+    1,
+  );
+
+  return figures.map(({ bids, category, quota }) => ({
+    bidWidth: (bids / scale) * 100,
+    bids,
+    category,
+    overflow: Math.max(bids - quota, 0),
+    quota,
+    quotaWidth: (quota / scale) * 100,
+    ratio: (quota > 0 ? bids / quota : 0).toFixed(2),
+  }));
+}
+
 /** Successful bids as a percentage of bids received; 0 when none were received. */
 export function successRate(bidsSuccess: number, bidsReceived: number): number {
   return bidsReceived > 0 ? (bidsSuccess / bidsReceived) * 100 : 0;

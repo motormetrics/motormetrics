@@ -1,5 +1,6 @@
 import {
   biddingOrdinal,
+  bidsAgainstQuota,
   changeRatio,
   formatExercise,
   formatExerciseTick,
@@ -241,5 +242,46 @@ describe("premiumRangeStats", () => {
 
   it("should return undefined for an empty range", () => {
     expect(premiumRangeStats([])).toBeUndefined();
+  });
+});
+
+describe("bidsAgainstQuota", () => {
+  const exercise = groupByExercise([
+    {
+      ...result("2026-09", 2, "Category A", 100_000),
+      bidsReceived: 1500,
+      quota: 1000,
+    },
+    {
+      ...result("2026-09", 2, "Category B", 120_000),
+      bidsReceived: 3000,
+      quota: 1200,
+    },
+    {
+      ...result("2026-09", 2, "Category D", 9000),
+      bidsReceived: 400,
+      quota: 500,
+    },
+  ])[0];
+  const rows = bidsAgainstQuota(exercise);
+  const row = (category: COEResult["vehicleClass"]) =>
+    rows.find((item) => item.category === category);
+
+  it("should clamp the overflow at 0 when bids fall short of the quota", () => {
+    expect(row("Category D")?.overflow).toBe(0);
+    expect(row("Category A")?.overflow).toBe(500);
+  });
+
+  it("should size every bar against one shared scale", () => {
+    expect(row("Category B")?.bidWidth).toBe(100);
+    expect(row("Category A")?.bidWidth).toBe(50);
+    expect(row("Category B")?.quotaWidth).toBe(40);
+    expect(row("Category C")).toMatchObject({ bidWidth: 0, quotaWidth: 0 });
+  });
+
+  it("should give bids per COE to 2 decimal places", () => {
+    expect(row("Category B")?.ratio).toBe("2.50");
+    expect(row("Category D")?.ratio).toBe("0.80");
+    expect(row("Category C")?.ratio).toBe("0.00");
   });
 });
