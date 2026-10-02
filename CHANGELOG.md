@@ -1,3 +1,13 @@
+## [5.26.2](https://github.com/motormetrics/motormetrics/compare/v5.26.1...v5.26.2) (2026-10-02)
+
+### Bug Fixes
+
+* **web:** give current PARF rates in the ARF guide FAQ ([3205a21](https://github.com/motormetrics/motormetrics/commit/3205a216254b0496bda591632129804e18982340)), closes [#1170](https://github.com/motormetrics/motormetrics/issues/1170)
+* **web:** measure makes change over the selected period ([01d21b5](https://github.com/motormetrics/motormetrics/commit/01d21b508a439581d8452cb6ff097fd42c6aa02e)), closes [#1172](https://github.com/motormetrics/motormetrics/issues/1172)
+* **web:** register the policy blog category ([b0e2067](https://github.com/motormetrics/motormetrics/commit/b0e2067a6bf0d73a06cf79a41251801fa1ad59d2)), closes [#1171](https://github.com/motormetrics/motormetrics/issues/1171)
+* **web:** show PQP changes with the correct sign ([833d1e0](https://github.com/motormetrics/motormetrics/commit/833d1e0331df6c3c1918b387e95448262ff7b70c)), closes [#1169](https://github.com/motormetrics/motormetrics/issues/1169)
+* **web:** stop exporting rangeWindow ([dc94294](https://github.com/motormetrics/motormetrics/commit/dc94294b07c94237d4edf638cfedbb81b9c39ca0))
+
 ## [5.26.1](https://github.com/motormetrics/motormetrics/compare/v5.26.0...v5.26.1) (2026-09-24)
 
 ### Bug Fixes
