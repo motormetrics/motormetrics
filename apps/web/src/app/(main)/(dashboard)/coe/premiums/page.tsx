@@ -15,9 +15,9 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-const title = "COE Premiums and Trends";
+const title = "COE Premiums by Category";
 const description =
-  "Certificate of Entitlement (COE) analysis hub for Singapore vehicle registration. View latest premiums, trends, and category-specific insights.";
+  "COE premiums for each category, Cat A to Cat E: every exercise's closing premium, with the quota and bids behind it.";
 
 export const metadata: Metadata = {
   title,
@@ -51,7 +51,7 @@ export default function COEPremiumsPage({ searchParams }: PageProps) {
           </Suspense>
         }
         description="Quota premiums close at the end of every bidding exercise. Pick a category to see its full history, quota and bidding activity."
-        title="COE premiums"
+        title="COE premiums by category"
       />
 
       <SectionErrorBoundary title="COE premiums unavailable">

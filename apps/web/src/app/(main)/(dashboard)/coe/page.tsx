@@ -1,4 +1,5 @@
 import { Skeleton } from "@heroui/react";
+import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { AllCategories } from "@web/app/(main)/(dashboard)/coe/components/all-categories";
 import { BiddingCalendar } from "@web/app/(main)/(dashboard)/coe/components/bidding-calendar";
 import {
@@ -25,28 +26,38 @@ import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 
-const title = "COE Bidding Results Singapore";
-const description =
-  "Certificate of Entitlement (COE) data for Singapore. View premiums, historical results, and PQP rates.";
+export async function generateMetadata(): Promise<Metadata> {
+  const latest = groupByExercise(await getCoeResults()).at(-1);
+  const categoryA = latest?.results["Category A"]?.premium;
+  const categoryB = latest?.results["Category B"]?.premium;
 
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    ...baseOpenGraph,
+  // The latest premiums in the snippet answer a "latest COE results" search
+  // before the click, and change with every exercise.
+  const title = "Latest COE Results Singapore";
+  const description =
+    latest && categoryA !== undefined && categoryB !== undefined
+      ? `${formatExercise(latest)}: Cat A ${formatCurrency(categoryA)}, Cat B ${formatCurrency(categoryB)}. Premiums, quota and bids for every COE category, and the next bidding date.`
+      : "The latest COE bidding results in Singapore: premiums, quota and bids for every category, and the next bidding date.";
+
+  return {
     title,
     description,
-    url: `${SITE_URL}/coe`,
-  },
-  twitter: {
-    ...baseTwitter,
-    title,
-    description,
-  },
-  alternates: {
-    canonical: "/coe",
-  },
-};
+    openGraph: {
+      ...baseOpenGraph,
+      title,
+      description,
+      url: `${SITE_URL}/coe`,
+    },
+    twitter: {
+      ...baseTwitter,
+      title,
+      description,
+    },
+    alternates: {
+      canonical: "/coe",
+    },
+  };
+}
 
 /** Names the exercise the whole page is reporting on. */
 async function LatestExerciseEyebrow() {
@@ -92,7 +103,7 @@ export default function Page({ searchParams }: PageProps) {
             </Suspense>
           }
           section="Certificate of Entitlement"
-          title="COE overview"
+          title="Latest COE results"
         />
 
         <OverviewGrid>
