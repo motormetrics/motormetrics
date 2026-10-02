@@ -52,6 +52,22 @@ describe("AppNav", () => {
       .toHaveAttribute("href", SOCIAL_URLS.telegram);
   });
 
+  it("should split the Cars menu into sections with separators between them", async () => {
+    await page.viewport(1280, 800);
+
+    const screen = await render(<AppNav />);
+    await screen.getByRole("button", { name: "Cars" }).click();
+
+    const menu = screen.getByRole("menu");
+    await expect.element(menu).toBeVisible();
+    for (const header of ["Electric", "Vehicle data", "Tools"]) {
+      await expect
+        .element(menu.getByText(header, { exact: true }))
+        .toBeVisible();
+    }
+    expect(menu.getByRole("separator").elements()).toHaveLength(2);
+  });
+
   // The browser suite loads no Tailwind, so the collapse is checked through
   // the container-query classes rather than computed visibility.
   it("should collapse the links behind the menu toggle below a 56rem header", async () => {

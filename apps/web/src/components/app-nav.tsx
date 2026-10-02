@@ -1,7 +1,7 @@
 "use client";
 
 import type { Key } from "@heroui/react";
-import { Button, cn, Dropdown, Header, Label } from "@heroui/react";
+import { Button, cn, Dropdown, Header, Label, Separator } from "@heroui/react";
 import { Navbar } from "@heroui-pro/react";
 import { LogoMark, Wordmark } from "@web/components/brand-logo";
 import { NavBadge } from "@web/components/shared/chips";
@@ -15,6 +15,7 @@ import { SOCIAL_URLS } from "@web/config/socials";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { Fragment } from "react";
 
 const matchesPath = (pathname: string, href: string) => {
   if (href === "/") {
@@ -40,20 +41,19 @@ const linkClassName = (isActive: boolean) =>
     isActive ? "border-accent font-semibold text-foreground" : "text-muted",
   );
 
-// Menu chrome from the MMNav comp: rows are 14px-radius pills rather than the
-// 32px HeroUI default, and section labels are small uppercase eyebrows.
+// Menu chrome from the MMNav comp: rows are 4px-radius 14px labels rather
+// than the 32px HeroUI default.
 const menuItemClassName =
-  "rounded-sm px-3.5 py-2.25 font-semibold text-muted-strong text-sm";
+  "rounded-sm px-3.5 py-2.25 font-medium text-muted-strong text-sm";
 
-// HeroUI's .menu-section ships flat (gap-0), so the eyebrow reads as just
-// another row by default, and spacing alone cannot fix that — the rows sit on
-// a ~35px rhythm that a gap has to clearly beat before it registers as a
-// break. Nothing else in this UI carries a border, so the separation is tonal:
-// the eyebrow takes the warm surface tier while the rows keep the white
-// overlay. It stays inside the menu padding and shares the rows' px-3.5 and
-// radius, so it reads as a tinted label row rather than a slab.
+// Section labels are plain 11.5px uppercase eyebrows. The hairline Separator
+// between sections marks the break, so the eyebrow needs no tint of its own.
+// The phone sheet shares this class.
 const menuHeaderClassName =
-  "col-span-full mb-1.5 rounded-sm bg-surface-secondary px-3.5 py-2.5 font-bold text-subtle text-xs uppercase tracking-widest";
+  "col-span-full px-3.5 pt-2 pb-1 font-semibold text-[11.5px] text-subtle uppercase tracking-[0.06em]";
+
+// Spans the menu's columns so it rules across the whole popover.
+const menuSeparatorClassName = "col-span-full mx-1 my-1.5 w-auto";
 
 // The comp runs a long menu in two columns. Short menus stay in one so the
 // popover never opens wider than the handful of rows it holds.
@@ -214,36 +214,40 @@ export function AppNav({
                   />
                 </Button>
                 <Dropdown.Popover
-                  className="rounded-lg"
+                  className="rounded-xl border border-separator"
                   placement="bottom start"
                 >
                   <Dropdown.Menu
                     className={menuClassName(rowCount)}
                     onAction={handleNavigate}
                   >
-                    {sections.map((section) => (
-                      <Dropdown.Section
-                        className={menuSectionClassName(rowCount)}
-                        key={section.label}
-                      >
-                        <Header className={menuHeaderClassName}>
-                          {section.label}
-                        </Header>
-                        {/* Reads "Overview" but announces "Cars overview" — the
-                            eyebrow names the group, not the section it links to. */}
-                        {section.withOverview ? (
-                          <Dropdown.Item
-                            aria-label={`${label} overview`}
-                            className={menuItemClassName}
-                            id={href}
-                            key={href}
-                            textValue={`${label} overview`}
-                          >
-                            <Label>Overview</Label>
-                          </Dropdown.Item>
+                    {sections.map((section, index) => (
+                      <Fragment key={section.label}>
+                        {index > 0 ? (
+                          <Separator className={menuSeparatorClassName} />
                         ) : null}
-                        <NavMenuItems items={section.items} />
-                      </Dropdown.Section>
+                        <Dropdown.Section
+                          className={menuSectionClassName(rowCount)}
+                        >
+                          <Header className={menuHeaderClassName}>
+                            {section.label}
+                          </Header>
+                          {/* Reads "Overview" but announces "Cars overview" — the
+                            eyebrow names the group, not the section it links to. */}
+                          {section.withOverview ? (
+                            <Dropdown.Item
+                              aria-label={`${label} overview`}
+                              className={menuItemClassName}
+                              id={href}
+                              key={href}
+                              textValue={`${label} overview`}
+                            >
+                              <Label>Overview</Label>
+                            </Dropdown.Item>
+                          ) : null}
+                          <NavMenuItems items={section.items} />
+                        </Dropdown.Section>
+                      </Fragment>
                     ))}
                   </Dropdown.Menu>
                 </Dropdown.Popover>
@@ -260,7 +264,10 @@ export function AppNav({
               More
               <ChevronDown className="size-3.5 shrink-0" strokeWidth={2.25} />
             </Button>
-            <Dropdown.Popover className="rounded-lg" placement="bottom start">
+            <Dropdown.Popover
+              className="rounded-xl border border-separator"
+              placement="bottom start"
+            >
               <Dropdown.Menu
                 className={menuClassName(moreNavItems.length)}
                 onAction={handleNavigate}
