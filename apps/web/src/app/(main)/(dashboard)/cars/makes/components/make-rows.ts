@@ -13,6 +13,7 @@ import {
   getFuelTypeData,
   getMakeRegistrationStats,
 } from "@web/queries/cars";
+import { getMakeTotalsInRange } from "@web/queries/cars/makes/period-totals";
 import { getCarLogoMap } from "@web/queries/logos";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { cacheLife, cacheTag } from "next/cache";
@@ -49,7 +50,7 @@ export interface MakeRow {
   slug: string;
   /** Rolling 12-month registrations, oldest first. */
   trend: number[];
-  /** Percentage change against the same months a year earlier. */
+  /** Percentage change against the same period a year earlier. */
   yoyChange: number | null;
 }
 
@@ -77,6 +78,36 @@ interface FuelRow {
 export function rollingMonths(latestMonth: string): string[] {
   const start = shiftMonth(latestMonth, -11);
   return Array.from({ length: 12 }, (_, index) => shiftMonth(start, index));
+}
+
+interface MonthWindow {
+  end: string;
+  start: string;
+}
+
+/** The months the active range covers, ending at `latestMonth`. */
+function rangeWindow(latestMonth: string, range: Range): MonthWindow {
+  if (range === "month") {
+    return { end: latestMonth, start: latestMonth };
+  }
+  if (range === "12m") {
+    return { end: latestMonth, start: shiftMonth(latestMonth, -11) };
+  }
+  return { end: latestMonth, start: `${latestMonth.slice(0, 4)}-01` };
+}
+
+/**
+ * The same period a year earlier, which every range's change is measured
+ * against: the same month, the same January-to-month span, or the twelve
+ * months before the rolling twelve.
+ */
+export function priorWindow(latestMonth: string, range: Range): MonthWindow {
+  const { end, start } = rangeWindow(latestMonth, range);
+  return { end: shiftMonth(end, -12), start: shiftMonth(start, -12) };
+}
+
+function percentChange(current: number, previous: number): number | null {
+  return previous > 0 ? ((current - previous) / previous) * 100 : null;
 }
 
 /**
@@ -116,11 +147,16 @@ export function finaliseRows(
  * be supplied separately — `trend` carries no month labels, and a make that
  * skipped a month has a shorter array, so its last entry is not reliably the
  * latest month.
+ *
+ * The query's `yoyChange` is the year-to-date change only, so the other two
+ * ranges measure theirs against `priorCountByMake`, each make's total over
+ * `priorWindow()`.
  */
 export function buildTotalsFromStats(
   stats: MakeRegistrationStat[],
   range: Range,
   monthCountByMake: Record<string, number>,
+  priorCountByMake: Record<string, number> = {},
 ): MakeTotals[] {
   return stats.map((stat) => {
     const trend = stat.trend.map((point) => point.value);
@@ -131,7 +167,12 @@ export function buildTotalsFromStats(
       count = monthCountByMake[stat.make] ?? 0;
     }
 
-    return { count, make: stat.make, trend, yoyChange: stat.yoyChange };
+    const yoyChange =
+      range === "ytd"
+        ? stat.yoyChange
+        : percentChange(count, priorCountByMake[stat.make] ?? 0);
+
+    return { count, make: stat.make, trend, yoyChange };
   });
 }
 
@@ -143,9 +184,9 @@ export function buildTotalsFromStats(
  * hyphens into SQL wildcards, so asking for "Petrol-Electric" also returns the
  * plug-in variant — wanted for the Hybrid tab, not for an exact fuel type.
  *
- * The year-on-year window mirrors `getMakeRegistrationStats()`: January to the
- * latest month, against the same months a year earlier. Both paths feed the same
- * delta chips and the same footnote, so they have to measure the same thing.
+ * The change compares the active range against `priorWindow()`, as the
+ * all-fuels path does. Both paths feed the same delta chips and the same
+ * footnote, so they have to measure the same thing.
  */
 export function buildTotalsFromFuelRows(
   rows: FuelRow[],
@@ -153,63 +194,40 @@ export function buildTotalsFromFuelRows(
   latestMonth: string,
   range: Range,
 ): MakeTotals[] {
-  const latestYear = latestMonth.slice(0, 4);
-  const previousYear = String(Number(latestYear) - 1);
-  const previousStart = `${previousYear}-01`;
-  const previousEnd = `${previousYear}-${latestMonth.slice(5)}`;
   const months = rollingMonths(latestMonth);
-  const rollingStart = months[0];
+  const current = rangeWindow(latestMonth, range);
+  const prior = priorWindow(latestMonth, range);
 
-  const totals = new Map<
-    string,
-    { currentYear: number; monthly: Map<string, number>; previousYear: number }
-  >();
+  const monthlyByMake = new Map<string, Map<string, number>>();
 
   for (const row of rows) {
     if (!isMatch(row.fuelType)) {
       continue;
     }
 
-    const entry = totals.get(row.make) ?? {
-      currentYear: 0,
-      monthly: new Map<string, number>(),
-      previousYear: 0,
-    };
-
-    if (row.month.startsWith(`${latestYear}-`)) {
-      entry.currentYear += row.count;
-    }
-    if (row.month >= previousStart && row.month <= previousEnd) {
-      entry.previousYear += row.count;
-    }
-    if (row.month >= rollingStart && row.month <= latestMonth) {
-      entry.monthly.set(
-        row.month,
-        (entry.monthly.get(row.month) ?? 0) + row.count,
-      );
-    }
-
-    totals.set(row.make, entry);
+    const monthly = monthlyByMake.get(row.make) ?? new Map<string, number>();
+    monthly.set(row.month, (monthly.get(row.month) ?? 0) + row.count);
+    monthlyByMake.set(row.make, monthly);
   }
 
-  return [...totals].map(([make, entry]) => {
-    const trend = months.map((month) => entry.monthly.get(month) ?? 0);
-    let count = entry.currentYear;
-    if (range === "12m") {
-      count = trend.reduce((sum, value) => sum + value, 0);
-    } else if (range === "month") {
-      count = entry.monthly.get(latestMonth) ?? 0;
+  const sumWindow = (monthly: Map<string, number>, window: MonthWindow) => {
+    let sum = 0;
+    for (const [month, count] of monthly) {
+      if (month >= window.start && month <= window.end) {
+        sum += count;
+      }
     }
+    return sum;
+  };
+
+  return [...monthlyByMake].map(([make, monthly]) => {
+    const count = sumWindow(monthly, current);
 
     return {
       count,
       make,
-      trend,
-      yoyChange:
-        entry.previousYear > 0
-          ? ((entry.currentYear - entry.previousYear) / entry.previousYear) *
-            100
-          : null,
+      trend: months.map((month) => monthly.get(month) ?? 0),
+      yoyChange: percentChange(count, sumWindow(monthly, prior)),
     };
   });
 }
@@ -282,13 +300,25 @@ export async function loadMakeRows(
       range,
     );
   } else {
-    const [stats, monthCountByMake] = await Promise.all([
+    const prior = priorWindow(latestMonth, range);
+    const [stats, monthCountByMake, priorTotals] = await Promise.all([
       getMakeRegistrationStats(),
       range === "month"
         ? loadMonthCounts(latestMonth, fuelTypes)
         : Promise.resolve({}),
+      range === "ytd"
+        ? Promise.resolve([])
+        : getMakeTotalsInRange(prior.start, prior.end),
     ]);
-    totals = buildTotalsFromStats(stats, range, monthCountByMake);
+    const priorCountByMake = Object.fromEntries(
+      priorTotals.map((item) => [item.make, item.count]),
+    );
+    totals = buildTotalsFromStats(
+      stats,
+      range,
+      monthCountByMake,
+      priorCountByMake,
+    );
   }
 
   const rows = finaliseRows(totals, logoUrlBySlug);
