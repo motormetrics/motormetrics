@@ -160,11 +160,12 @@
     /* Backdrop */
     --backdrop: rgba(22, 32, 37, 0.45);
 
-    /* Geometry. --radius drives HeroUI's own components (Button, Input, Card);
-       Claude Design puts everyday controls at 22px. The rounded-* ladder is
-       restated in @theme below — see the note there for why it has to be. */
-    --radius: 1.375rem; /* 22px — controls, inner cards, rows */
-    --field-radius: 1.375rem;
+    /* Geometry. --radius drives HeroUI's own components (Button, Input, Card).
+       Square, as in the Hybrid page designs: everyday controls at 6px. The
+       rounded-* ladder is restated in @theme below — see the note there for
+       why it has to be. */
+    --radius: 0.375rem; /* 6px — controls, inner cards, rows */
+    --field-radius: 0.375rem;
 
     /* Elevation — soft, ink-tinted, never black */
     --surface-shadow:
@@ -173,28 +174,24 @@
     --field-shadow: 0 1px 2px 0 rgba(35, 42, 46, 0.05);
     --hover-shadow: 0 3px 10px 0 rgba(35, 42, 46, 0.08);
 
-    /* Chart palette — one categorical set of distinct hues, ordered to keep
-       adjacent series far apart. Not a sequential ramp: in every chart here the
-       magnitude is already carried by bar length, arc length or an adjacent
-       number, so colour is free to carry identity — which make, which fuel
-       type — and a monochrome ramp would only make series harder to tell apart.
-       Charts cap at six series.
+    /* Chart palette — Claude Design's ramp, six slate blues from the accent
+       down to neutral (rank 1 highest, 6 lowest). Charts cap at six series.
+       Adjacent steps are close, so a chart that has to tell two series apart
+       should take steps that sit well apart (1 and 4, say) rather than
+       neighbours.
 
-       Note --chart-2 (2.90:1), --chart-4 (2.79:1) and --chart-5 (1.70:1) sit
-       below WCAG 1.4.11's 3:1 against --background. That guideline covers
-       graphics *required* to understand the content; every chart here labels
-       each series in text with its value, so colour is associative rather than
-       load-bearing. Keep the text labels — they are what makes this palette
-       defensible.
-
-       Claude Design ships only a sequential ramp and no categorical palette;
-       raised upstream. */
-    --chart-1: #33586f; /* slate */
-    --chart-2: #c9803f; /* ochre */
-    --chart-3: #5f8ba8; /* blue */
-    --chart-4: #7a9e63; /* green */
-    --chart-5: #9cc4da; /* pale blue */
-    --chart-6: #b0728f; /* mauve */
+       Against --background: --chart-1 6.96:1, --chart-2 4.12:1, --chart-3
+       3.35:1, --chart-4 1.78:1, --chart-5 1.35:1, --chart-6 1.15:1. The last
+       three sit below WCAG 1.4.11's 3:1, which covers graphics *required* to
+       understand the content; every chart here labels each series in text
+       with its value, so colour is associative rather than load-bearing. Keep
+       the text labels — they are what makes this palette defensible. */
+    --chart-1: #33586f;
+    --chart-2: #4e7c9b;
+    --chart-3: #5f8ba8;
+    --chart-4: #9dbfd3;
+    --chart-5: #c3d8e4;
+    --chart-6: #dce7ec;
     --chart-grid: var(--border);
   }
 
@@ -277,8 +274,8 @@
     --field-shadow: 0 0 0 0 transparent inset;
     --hover-shadow: 0 0 0 0 transparent inset;
 
-    /* Same hues on the dark canvas. Only the slate needs lifting to clear 3:1
-       against --surface-secondary; the rest already do. */
+    /* Same ramp on the dark canvas. Only the darkest step needs lifting to
+       clear 3:1 against --surface-secondary; the rest already do. */
     --chart-1: #5a7e96;
     --chart-grid: var(--border);
   }
@@ -289,7 +286,7 @@
    --color-surface-secondary and the --color-*-soft* family) via
    themes/shared/theme.css. */
 @theme inline {
-  --font-sans: var(--font-urbanist);
+  --font-sans: var(--font-geist);
 
   --color-ink-surface: var(--ink-surface);
   --color-ink-surface-foreground: var(--ink-surface-foreground);
@@ -320,23 +317,21 @@
    This has to be stated in full rather than inherited. HeroUI overrides only
    part of Tailwind's radius scale — sm/md/xl/2xl/3xl are redefined as
    calc(var(--radius) * n) while xs/lg/4xl fall through to Tailwind's own
-   fixed defaults. Those two halves only agree when --radius is Tailwind's 8px.
-   Claude Design puts --radius at 22px, which pulled the ladder apart: it was
-   shipping rounded-lg at 8px (Tailwind default) but rounded-sm at 11px
-   (22 x 0.5), so `lg` was rounder than `sm`, and rounded-2xl reached 44px.
+   fixed defaults. Those two halves only agree when --radius is Tailwind's 8px,
+   so with --radius at 6px the steps are pinned here to keep them monotonic.
 
-   The steps below are monotonic and land on Claude Design's ladder:
-   14px small chips and icon wells, 22px controls and inner cards (= --radius),
-   32px panels, 36px bento cards, 40px the rail. Pills use rounded-full. */
+   The ladder is tight to match the square Hybrid page designs: 2px bar ends,
+   6px controls and inner cards (= --radius), 8px panels, 10px bento cards,
+   12px the rail. Pills use rounded-full. */
 @theme {
-  --radius-xs: 0.5rem; /* 8px */
-  --radius-sm: 0.875rem; /* 14px — small chips, icon wells */
-  --radius-md: 1.125rem; /* 18px */
-  --radius-lg: 1.375rem; /* 22px — controls, inner cards, rows (= --radius) */
-  --radius-xl: 1.625rem; /* 26px */
-  --radius-2xl: 2rem; /* 32px — panels */
-  --radius-3xl: 2.25rem; /* 36px — bento cards */
-  --radius-4xl: 2.5rem; /* 40px — the rail */
+  --radius-xs: 0.125rem; /* 2px — bar ends */
+  --radius-sm: 0.25rem; /* 4px — small chips, icon wells */
+  --radius-md: 0.3125rem; /* 5px */
+  --radius-lg: 0.375rem; /* 6px — controls, inner cards, rows (= --radius) */
+  --radius-xl: 0.5rem; /* 8px */
+  --radius-2xl: 0.5rem; /* 8px — panels */
+  --radius-3xl: 0.625rem; /* 10px — bento cards */
+  --radius-4xl: 0.75rem; /* 12px — the rail */
 }
 
 /* Reusable keyframe animations */
