@@ -1,61 +1,57 @@
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
-
-vi.mock("@web/lib/ev-charging", () => ({
-  extractLastUpdated: vi.fn(),
-  fetchBatch: vi.fn(),
-  parseBatch: vi.fn(),
-}));
-
-import {
-  extractLastUpdated,
-  fetchBatch,
-  parseBatch,
-} from "@web/lib/ev-charging";
 import { getEvChargingSnapshot } from "@web/queries/ev-charging/snapshot";
-import { cacheLifeMock, cacheTagMock } from "@web/queries/test-utils";
+import {
+  cacheLifeMock,
+  cacheTagMock,
+  queueSelect,
+  resetDbMocks,
+} from "@web/queries/test-utils";
+
+const storedRow = {
+  evCpId: "A",
+  locationId: "103851_018989",
+  chargerId: "C1",
+  stationName: "Plaza Singapura",
+  address: "68 Orchard Road",
+  postalCode: "238839",
+  longitude: 103.851,
+  latitude: 1.301,
+  operator: "SP Mobility",
+  operationHours: "24 hours",
+  position: "B2",
+  plugType: "CCS2",
+  powerRating: "DC",
+  chargingSpeedKw: 50,
+  price: 0.6,
+  priceType: "$/kWh",
+  status: "occupied",
+  observedAt: new Date("2026-09-03T12:55:00Z"),
+};
 
 describe("getEvChargingSnapshot", () => {
-  afterEach(() => {
-    vi.unstubAllEnvs();
-    vi.clearAllMocks();
+  beforeEach(() => {
+    resetDbMocks();
   });
 
-  it("should return an empty snapshot without an account key", async () => {
-    vi.stubEnv("LTA_DATAMALL_ACCOUNT_KEY", "");
+  it("should return an empty snapshot before any batch is stored", async () => {
+    queueSelect([]);
 
     await expect(getEvChargingSnapshot()).resolves.toEqual({
       observedAt: null,
       records: [],
     });
-    expect(fetchBatch).not.toHaveBeenCalled();
     expect(cacheLifeMock).toHaveBeenCalledWith("max");
     expect(cacheTagMock).toHaveBeenCalledWith(EV_CHARGING_LIVE_CACHE_TAG);
   });
 
-  it("should fetch, parse and stamp the feed time", async () => {
-    vi.stubEnv("LTA_DATAMALL_ACCOUNT_KEY", "key");
-    vi.mocked(fetchBatch).mockResolvedValueOnce({ raw: true });
-    vi.mocked(parseBatch).mockReturnValueOnce([{ evCpId: "A" } as never]);
-    vi.mocked(extractLastUpdated).mockReturnValueOnce(
-      new Date("2026-09-03T12:55:00Z"),
-    );
+  it("should return the stored connectors stamped with the batch time", async () => {
+    queueSelect([storedRow]);
+
+    const { observedAt: _observedAt, ...record } = storedRow;
 
     await expect(getEvChargingSnapshot()).resolves.toEqual({
       observedAt: "2026-09-03T12:55:00.000Z",
-      records: [{ evCpId: "A" }],
-    });
-    expect(fetchBatch).toHaveBeenCalledWith("key");
-  });
-
-  it("should leave observedAt null when the feed carries no time", async () => {
-    vi.stubEnv("LTA_DATAMALL_ACCOUNT_KEY", "key");
-    vi.mocked(fetchBatch).mockResolvedValueOnce({});
-    vi.mocked(parseBatch).mockReturnValueOnce([]);
-    vi.mocked(extractLastUpdated).mockReturnValueOnce(null);
-
-    await expect(getEvChargingSnapshot()).resolves.toEqual({
-      observedAt: null,
-      records: [],
+      records: [record],
     });
   });
 });
