@@ -128,6 +128,21 @@ describe("AllCategoriesTable", () => {
       .toBeVisible();
   });
 
+  it("should point the sort arrow down when sorted descending", async () => {
+    const screen = await renderTable();
+
+    await screen.getByRole("columnheader", { name: "Category" }).click();
+    await screen.getByRole("columnheader", { name: "Category" }).click();
+
+    const header = screen.getByRole("columnheader", { name: "Category" });
+    await expect.element(header).toHaveAttribute("aria-sort", "descending");
+    expect(
+      header
+        .element()
+        .querySelector('svg.lucide-arrow-up[data-direction="descending"]'),
+    ).not.toBeNull();
+  });
+
   it("should show bids and bids per COE without making them sortable", async () => {
     const screen = await renderTable();
 
