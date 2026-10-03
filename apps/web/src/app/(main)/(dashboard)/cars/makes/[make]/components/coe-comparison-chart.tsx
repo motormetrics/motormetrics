@@ -28,7 +28,7 @@ export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
         height={300}
         aria-label="Dual-axis chart comparing monthly registrations with COE Category A and B premiums"
       >
-        <ComposedChart.Grid vertical={false} strokeDasharray="3 3" />
+        <ComposedChart.Grid vertical={false} />
         <ComposedChart.XAxis
           dataKey="month"
           tickFormatter={formatDateToMonthYear}

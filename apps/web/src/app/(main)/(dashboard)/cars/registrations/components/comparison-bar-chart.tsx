@@ -53,7 +53,7 @@ export function ComparisonBarChart({
       <Card.Content>
         <div className="flex flex-col gap-4">
           <BarChart data={chartData} height={height} layout="vertical">
-            <BarChart.Grid horizontal={false} strokeDasharray="3 3" />
+            <BarChart.Grid horizontal={false} />
             <BarChart.XAxis
               type="number"
               tickFormatter={formatNumber}
