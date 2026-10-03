@@ -79,10 +79,11 @@ export async function ChargingSummary() {
       <div className="flex flex-col gap-3">
         <ProgressBar
           aria-label="Share of the 2030 target installed"
+          size="lg"
           value={targetShare}
         >
-          <ProgressBar.Track className="h-3 rounded-full bg-surface-secondary">
-            <ProgressBar.Fill className="rounded-full" />
+          <ProgressBar.Track>
+            <ProgressBar.Fill />
           </ProgressBar.Track>
         </ProgressBar>
         <Typography.Paragraph

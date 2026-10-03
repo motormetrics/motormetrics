@@ -17,4 +17,19 @@ describe("ChargingSummary", () => {
     await expect.element(growth).toHaveClass("text-muted-strong");
     expect(screen.container.querySelector(".chip")).not.toBeInTheDocument();
   });
+
+  it("should use HeroUI's large target bar with no track overrides", async () => {
+    const screen = await render(await ChargingSummary());
+
+    await expect
+      .element(
+        screen.getByRole("progressbar", {
+          name: "Share of the 2030 target installed",
+        }),
+      )
+      .toHaveClass("progress-bar--lg");
+    expect(
+      screen.container.querySelector(".progress-bar__track"),
+    ).not.toHaveClass("rounded-full");
+  });
 });

@@ -119,6 +119,21 @@ describe("DimensionTable", () => {
     ).toBe("var(--chart-1)");
   });
 
+  it("should use HeroUI's large share bar with no track overrides", async () => {
+    const screen = await renderTable();
+
+    await expect
+      .element(
+        screen.getByRole("progressbar", {
+          name: "TOYOTA share of the largest",
+        }),
+      )
+      .toHaveClass("progress-bar--lg");
+    expect(
+      screen.container.querySelector(".progress-bar__track"),
+    ).not.toHaveClass("rounded-full");
+  });
+
   it("should show a dash where a row has no comparable period", async () => {
     const screen = await renderTable();
 

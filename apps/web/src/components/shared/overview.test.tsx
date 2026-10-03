@@ -86,6 +86,16 @@ describe("BarRow", () => {
       .element(screen.getByRole("progressbar", { name: "A" }))
       .toHaveAttribute("aria-valuenow", "100");
   });
+
+  it("should use HeroUI's large bar with no track overrides", async () => {
+    const screen = await render(<BarRow label="A" share={40} value="1" />);
+    await expect
+      .element(screen.getByRole("progressbar", { name: "A" }))
+      .toHaveClass("progress-bar--lg");
+    expect(
+      screen.container.querySelector(".progress-bar__track"),
+    ).not.toHaveClass("rounded-full");
+  });
 });
 
 describe("SparklineChart", () => {
