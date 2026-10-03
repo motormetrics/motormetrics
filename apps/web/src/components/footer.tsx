@@ -1,5 +1,5 @@
 import { Typography } from "@heroui/react";
-import { LogoMark, Wordmark } from "@web/components/brand-logo";
+import { LogoMark } from "@web/components/brand-logo";
 import { SITE_TITLE } from "@web/config";
 import {
   FOOTER_NAV_ITEMS,
@@ -17,31 +17,26 @@ export function Footer({
   navItems?: readonly NavItem[];
 }) {
   return (
-    <footer className="mt-auto flex flex-wrap items-center gap-x-7 gap-y-4 border-separator border-t pt-6">
+    <footer className="mt-auto flex flex-col items-start gap-3 border-separator border-t pt-[18px] min-[721px]:flex-row min-[721px]:items-center min-[721px]:gap-4 min-[721px]:pt-5">
       <Link
         aria-label={`${SITE_TITLE} home`}
-        className="flex items-center gap-3 text-foreground"
+        className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-separator text-foreground"
         href="/"
       >
         <LogoMark
           first="currentColor"
           second="var(--accent)"
-          size={20}
+          size={18}
           strokeWidth={8}
-        />
-        <Wordmark
-          className="text-[15px]"
-          first="currentColor"
-          second="var(--accent)"
         />
       </Link>
 
       <nav aria-label="Footer navigation">
-        <ul className="flex flex-wrap items-center gap-5">
+        <ul className="flex flex-wrap items-center gap-x-5 gap-y-1.5 min-[721px]:ml-2">
           {navItems.map(({ href, label }) => (
             <li key={href}>
               <Link
-                className="font-semibold text-muted text-sm transition-colors hover:text-accent-strong"
+                className="font-medium text-[13px] text-muted transition-colors hover:text-accent"
                 href={href}
               >
                 {label}
@@ -56,7 +51,7 @@ export function Footer({
           <li key={title}>
             <Link
               aria-label={title}
-              className="block text-muted transition-colors hover:text-accent-strong"
+              className="block text-muted transition-colors hover:text-accent"
               href={url}
               rel="me noreferrer"
               target="_blank"
@@ -67,10 +62,14 @@ export function Footer({
         ))}
       </ul>
 
-      <Typography.Paragraph color="muted" size="xs" className="ml-auto">
-        © {COPYRIGHT_YEAR} {SITE_TITLE} · Data provided by{" "}
+      <Typography.Paragraph
+        className="text-left min-[721px]:ml-auto min-[721px]:text-right"
+        color="muted"
+        size="xs"
+      >
+        © {COPYRIGHT_YEAR} {SITE_TITLE} · Data from{" "}
         <Link
-          className="transition-colors hover:text-accent-strong"
+          className="transition-colors hover:text-accent"
           href="https://datamall.lta.gov.sg"
           rel="noopener noreferrer"
           target="_blank"

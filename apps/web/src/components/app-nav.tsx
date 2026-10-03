@@ -1,7 +1,7 @@
 "use client";
 
 import type { Key } from "@heroui/react";
-import { Button, cn, Dropdown, Header, Label } from "@heroui/react";
+import { Button, cn, Dropdown, Header, Label, Separator } from "@heroui/react";
 import { Navbar } from "@heroui-pro/react";
 import { LogoMark, Wordmark } from "@web/components/brand-logo";
 import { NavBadge } from "@web/components/shared/chips";
@@ -15,6 +15,7 @@ import { SOCIAL_URLS } from "@web/config/socials";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { Fragment } from "react";
 
 const matchesPath = (pathname: string, href: string) => {
   if (href === "/") {
@@ -31,28 +32,28 @@ const getActiveHref = (pathname: string) =>
     (a, b) => b.href.length - a.href.length,
   )[0]?.href;
 
-const pillClassName = (isActive: boolean) =>
+// MMNav text links: muted 14px labels, with the current one underlined in the
+// accent. They stretch to the bar's full height and `-mb-px` drops the
+// underline onto the bar's hairline rather than just above it.
+const linkClassName = (isActive: boolean) =>
   cn(
-    "h-auto gap-2 rounded-full px-6 py-3.5 font-semibold text-base transition-shadow",
-    isActive
-      ? "bg-accent font-bold text-accent-foreground"
-      : "bg-surface text-muted hover:text-foreground hover:shadow-surface",
+    "-mb-px flex h-auto min-w-0 items-center gap-1.25 whitespace-nowrap rounded-none border-transparent border-b-2 bg-transparent px-0 font-medium text-sm transition-colors hover:bg-transparent hover:text-foreground data-[hovered=true]:bg-transparent data-[pressed=true]:bg-transparent",
+    isActive ? "border-accent font-semibold text-foreground" : "text-muted",
   );
 
-// Menu chrome from the MMNav comp: rows are 14px-radius pills rather than the
-// 32px HeroUI default, and section labels are small uppercase eyebrows.
+// Menu chrome from the MMNav comp: rows are 4px-radius 14px labels rather
+// than the 32px HeroUI default.
 const menuItemClassName =
-  "rounded-sm px-3.5 py-2.25 font-semibold text-muted-strong text-sm";
+  "rounded-sm px-3.5 py-2.25 font-medium text-muted-strong text-sm";
 
-// HeroUI's .menu-section ships flat (gap-0), so the eyebrow reads as just
-// another row by default, and spacing alone cannot fix that — the rows sit on
-// a ~35px rhythm that a gap has to clearly beat before it registers as a
-// break. Nothing else in this UI carries a border, so the separation is tonal:
-// the eyebrow takes the warm surface tier while the rows keep the white
-// overlay. It stays inside the menu padding and shares the rows' px-3.5 and
-// radius, so it reads as a tinted label row rather than a slab.
+// Section labels are plain 11.5px uppercase eyebrows. The hairline Separator
+// between sections marks the break, so the eyebrow needs no tint of its own.
+// The phone sheet shares this class.
 const menuHeaderClassName =
-  "col-span-full mb-1.5 rounded-sm bg-surface-secondary px-3.5 py-2.5 font-bold text-subtle text-xs uppercase tracking-widest";
+  "col-span-full px-3.5 pt-2 pb-1 font-semibold text-[11.5px] text-subtle uppercase tracking-[0.06em]";
+
+// Spans the menu's columns so it rules across the whole popover.
+const menuSeparatorClassName = "col-span-full mx-1 my-1.5 w-auto";
 
 // The comp runs a long menu in two columns. Short menus stay in one so the
 // popover never opens wider than the handful of rows it holds.
@@ -85,13 +86,19 @@ function NavMenuItems({ items }: { items: readonly NavigationItem[] }) {
   ));
 }
 
-/** One row of the phone menu. Pressing it closes the menu on its own. */
+/**
+ * One row of the phone sheet. Pressing it closes the menu on its own. Rows are
+ * 15px with a 4px radius, and the current one takes the accent tint, per the
+ * MMNav comp. A long label wraps rather than pushing its column wider.
+ */
 function MobileMenuLink({
+  ariaLabel,
   badge,
   href,
   isCurrent,
   label,
 }: {
+  ariaLabel?: string;
   badge?: NavigationItem["badge"];
   href: string;
   isCurrent: boolean;
@@ -99,24 +106,22 @@ function MobileMenuLink({
 }) {
   return (
     <Navbar.MenuItem
-      className="flex items-center gap-2 py-2.5 font-semibold text-base"
+      aria-label={ariaLabel}
+      className="flex min-w-0 items-center gap-2 rounded-sm px-3.5 py-2.75 font-medium text-[15px] text-muted-strong data-[current=true]:bg-accent-soft data-[current=true]:font-semibold data-[current=true]:text-accent"
       href={href}
       isCurrent={isCurrent}
     >
-      {label}
+      <span className="min-w-0">{label}</span>
       <NavBadge badge={badge} />
     </Navbar.MenuItem>
   );
 }
 
-/** The Telegram call to action, in the bar on desktop and the menu on phones. */
-function GetUpdatesLink({ className }: { className?: string }) {
+/** The Telegram call to action, in the bar at every width. */
+function GetUpdatesLink() {
   return (
     <Link
-      className={cn(
-        "rounded-full bg-foreground px-6 py-3.5 font-bold text-accent-foreground text-sm transition-colors hover:bg-muted",
-        className,
-      )}
+      className="inline-flex h-8.5 shrink-0 items-center whitespace-nowrap rounded-lg bg-foreground px-3 font-medium text-[13.5px] text-background transition-opacity hover:opacity-85"
       href={SOCIAL_URLS.telegram}
       rel="noopener noreferrer"
       target="_blank"
@@ -143,38 +148,49 @@ export function AppNav({
   return (
     // `position="static"` and `maxWidth="full"` because the bar sits in flow
     // inside the layout column, which already owns the page measure and gutter.
+    // The bar is 60px (56px on phones) over a hairline, per the MMNav comp.
     <Navbar
       aria-label="Main navigation"
+      className="@container border-separator border-b [--navbar-height:3.5rem] md:[--navbar-height:3.75rem]"
       maxWidth="full"
       navigate={(href) => router.push(href)}
       position="static"
     >
-      <Navbar.Header className="gap-4 px-0">
+      {/* The header is the query container: it is w-full in the Pro CSS, so
+          its width tracks the layout column rather than its own content.
+          Once collapsed, the gap drops to 12px so the brand, CTA and toggle
+          fit a 360px phone, per the MMNav comp. An element cannot query
+          itself, so that gap reads the root, which is also @container and
+          exactly as wide. */}
+      <Navbar.Header className="@container @max-4xl:gap-3 gap-5 px-0 min-[1101px]:gap-8">
         <Navbar.Brand>
           <Link
             aria-label="MotorMetrics home"
-            className="flex shrink-0 items-center gap-3 text-foreground no-underline"
+            className="flex shrink-0 items-center gap-2.25 text-foreground no-underline"
             href="/"
           >
-            <LogoMark first="currentColor" second="var(--accent)" size={40} />
+            <span className="flex size-7.5 shrink-0 items-center justify-center rounded-lg border border-separator">
+              <LogoMark first="currentColor" second="var(--accent)" size={22} />
+            </span>
             <Wordmark
-              className="hidden text-2xl lg:inline"
+              className="text-[19px] md:text-[21px]"
               first="currentColor"
               second="var(--accent)"
             />
           </Link>
         </Navbar.Brand>
 
-        {/* Laid out in full the pills wrap onto three rows on a phone and eat
-            half the first screen, so below `md` they move into the menu. */}
-        <Navbar.Content className="hidden flex-wrap items-center gap-2 md:flex">
+        {/* The full row needs about 840px, so below a 56rem header (@4xl) the
+            links move into the menu. */}
+        <Navbar.Content className="@4xl:flex hidden @4xl:items-stretch gap-4 self-stretch min-[1101px]:gap-6">
           {PRIMARY_NAV_ITEMS.map(({ href, label, sections }) => {
             const isActive = href === activeHref;
 
             if (!sections) {
               return (
                 <Link
-                  className={cn(pillClassName(isActive), "px-7")}
+                  aria-current={isActive ? "page" : undefined}
+                  className={linkClassName(isActive)}
                   href={href}
                   key={href}
                 >
@@ -193,41 +209,52 @@ export function AppNav({
 
             return (
               <Dropdown key={href}>
-                <Button className={pillClassName(isActive)} variant="tertiary">
+                <Button
+                  aria-current={isActive ? "true" : undefined}
+                  className={linkClassName(isActive)}
+                  variant="tertiary"
+                >
                   {label}
-                  <ChevronDown className="size-4 shrink-0" strokeWidth={2.25} />
+                  <ChevronDown
+                    className="size-3.5 shrink-0"
+                    strokeWidth={2.25}
+                  />
                 </Button>
                 <Dropdown.Popover
-                  className="rounded-lg"
+                  className="rounded-xl border border-separator"
                   placement="bottom start"
                 >
                   <Dropdown.Menu
                     className={menuClassName(rowCount)}
                     onAction={handleNavigate}
                   >
-                    {sections.map((section) => (
-                      <Dropdown.Section
-                        className={menuSectionClassName(rowCount)}
-                        key={section.label}
-                      >
-                        <Header className={menuHeaderClassName}>
-                          {section.label}
-                        </Header>
-                        {/* Reads "Overview" but announces "Cars overview" — the
-                            eyebrow names the group, not the section it links to. */}
-                        {section.withOverview ? (
-                          <Dropdown.Item
-                            aria-label={`${label} overview`}
-                            className={menuItemClassName}
-                            id={href}
-                            key={href}
-                            textValue={`${label} overview`}
-                          >
-                            <Label>Overview</Label>
-                          </Dropdown.Item>
+                    {sections.map((section, index) => (
+                      <Fragment key={section.label}>
+                        {index > 0 ? (
+                          <Separator className={menuSeparatorClassName} />
                         ) : null}
-                        <NavMenuItems items={section.items} />
-                      </Dropdown.Section>
+                        <Dropdown.Section
+                          className={menuSectionClassName(rowCount)}
+                        >
+                          <Header className={menuHeaderClassName}>
+                            {section.label}
+                          </Header>
+                          {/* Reads "Overview" but announces "Cars overview" — the
+                            eyebrow names the group, not the section it links to. */}
+                          {section.withOverview ? (
+                            <Dropdown.Item
+                              aria-label={`${label} overview`}
+                              className={menuItemClassName}
+                              id={href}
+                              key={href}
+                              textValue={`${label} overview`}
+                            >
+                              <Label>Overview</Label>
+                            </Dropdown.Item>
+                          ) : null}
+                          <NavMenuItems items={section.items} />
+                        </Dropdown.Section>
+                      </Fragment>
                     ))}
                   </Dropdown.Menu>
                 </Dropdown.Popover>
@@ -237,16 +264,17 @@ export function AppNav({
 
           <Dropdown>
             <Button
-              className={cn(
-                pillClassName(false),
-                isMoreActive && "bg-accent-soft-2 font-bold text-accent-deep",
-              )}
+              aria-current={isMoreActive ? "true" : undefined}
+              className={linkClassName(isMoreActive)}
               variant="tertiary"
             >
               More
-              <ChevronDown className="size-4 shrink-0" strokeWidth={2.25} />
+              <ChevronDown className="size-3.5 shrink-0" strokeWidth={2.25} />
             </Button>
-            <Dropdown.Popover className="rounded-lg" placement="bottom start">
+            <Dropdown.Popover
+              className="rounded-xl border border-separator"
+              placement="bottom start"
+            >
               <Dropdown.Menu
                 className={menuClassName(moreNavItems.length)}
                 onAction={handleNavigate}
@@ -266,67 +294,68 @@ export function AppNav({
 
         <Navbar.Spacer />
 
-        <GetUpdatesLink className="hidden md:block" />
+        <GetUpdatesLink />
 
-        <Navbar.MenuToggle className="md:hidden" />
+        {/* A 34px bordered square, matching the CTA's height. */}
+        <Navbar.MenuToggle className="@4xl:hidden size-8.5 shrink-0 rounded-lg border border-border" />
       </Navbar.Header>
 
-      <Navbar.Menu className="gap-4">
-        <div className="flex flex-col gap-1">
-          {PRIMARY_NAV_ITEMS.map(({ href, label, sections }) => {
-            if (!sections) {
-              return (
+      {/* The phone sheet: an Explore group of the primary links, then every
+          dropdown group and Company, each ruled off by a hairline. Rows run in
+          two columns, and the eyebrows and rules span both. HeroUI keeps the
+          full-height panel and the scroll lock. */}
+      <Navbar.Menu className="grid grid-cols-2 content-start gap-x-2 gap-y-0.5 px-0 pt-2">
+        <Header className={menuHeaderClassName}>Explore</Header>
+        {PRIMARY_NAV_ITEMS.map(({ href, label }) => (
+          <MobileMenuLink
+            href={href}
+            isCurrent={href === activeHref}
+            key={href}
+            label={label}
+          />
+        ))}
+
+        {PRIMARY_NAV_ITEMS.flatMap(({ href, label, sections = [] }) =>
+          sections.map((section) => (
+            <Fragment key={section.label}>
+              <Separator className={menuSeparatorClassName} />
+              <Header className={menuHeaderClassName}>{section.label}</Header>
+              {/* Explore already marks the section, so this row is current only
+                  on the section's own page. */}
+              {section.withOverview ? (
                 <MobileMenuLink
+                  ariaLabel={`${label} overview`}
                   href={href}
-                  isCurrent={href === activeHref}
-                  key={href}
-                  label={label}
+                  isCurrent={pathname === href}
+                  label="Overview"
                 />
-              );
-            }
+              ) : null}
+              {section.items.map(({ badge, title, url }) => (
+                <MobileMenuLink
+                  badge={badge}
+                  href={url}
+                  isCurrent={matchesPath(pathname, url)}
+                  key={url}
+                  label={title}
+                />
+              ))}
+            </Fragment>
+          )),
+        )}
 
-            // The pill's own dropdown flattens into eyebrows plus their rows, so
-            // the whole tree is reachable without a second level of tapping.
-            return sections.map((section) => (
-              <div className="flex flex-col gap-1" key={section.label}>
-                <Header className={menuHeaderClassName}>{section.label}</Header>
-                {section.withOverview ? (
-                  <MobileMenuLink
-                    href={href}
-                    isCurrent={href === activeHref}
-                    label={`${label} overview`}
-                  />
-                ) : null}
-                {section.items.map(({ badge, title, url }) => (
-                  <MobileMenuLink
-                    badge={badge}
-                    href={url}
-                    isCurrent={matchesPath(pathname, url)}
-                    key={url}
-                    label={title}
-                  />
-                ))}
-              </div>
-            ));
-          })}
-
-          <div className="flex flex-col gap-1">
-            <Header className={menuHeaderClassName}>
-              {MORE_NAV_SECTION_LABEL}
-            </Header>
-            {moreNavItems.map(({ badge, title, url }) => (
-              <MobileMenuLink
-                badge={badge}
-                href={url}
-                isCurrent={matchesPath(pathname, url)}
-                key={url}
-                label={title}
-              />
-            ))}
-          </div>
-        </div>
-
-        <GetUpdatesLink className="text-center" />
+        <Separator className={menuSeparatorClassName} />
+        <Header className={menuHeaderClassName}>
+          {MORE_NAV_SECTION_LABEL}
+        </Header>
+        {moreNavItems.map(({ badge, title, url }) => (
+          <MobileMenuLink
+            badge={badge}
+            href={url}
+            isCurrent={matchesPath(pathname, url)}
+            key={url}
+            label={title}
+          />
+        ))}
       </Navbar.Menu>
     </Navbar>
   );
