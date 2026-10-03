@@ -7,7 +7,7 @@ import {
   SearchField,
   Typography,
 } from "@heroui/react";
-import { NumberValue } from "@heroui-pro/react";
+import { type DataGridSortDescriptor, NumberValue } from "@heroui-pro/react";
 import { FuelTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/fuel-tabs";
 import type { MakeRow } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import type { FuelFilter } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
@@ -38,7 +38,6 @@ const COLLAPSED_ROWS = 10;
 const MIN_COUNT_FOR_CHANGE = 20;
 
 type SortKey = "count" | "make" | "yoyChange";
-type SortDirection = "asc" | "desc";
 
 const COLUMNS: {
   align: "left" | "right";
@@ -138,8 +137,10 @@ export function MakesTable({
   rows: MakesTableRow[];
 }) {
   const [query, setQuery] = useState("");
-  const [sortKey, setSortKey] = useState<SortKey>("count");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [descriptor, setDescriptor] = useState<DataGridSortDescriptor>({
+    column: "count",
+    direction: "descending",
+  });
   const [isExpanded, setIsExpanded] = useState(false);
 
   const visibleRows = useMemo(() => {
@@ -149,10 +150,10 @@ export function MakesTable({
       : rows;
 
     return [...filtered].sort((a, b) => {
-      const order = compareRows(a, b, sortKey);
-      return sortDirection === "asc" ? order : -order;
+      const order = compareRows(a, b, descriptor.column as SortKey);
+      return descriptor.direction === "descending" ? -order : order;
     });
-  }, [query, rows, sortDirection, sortKey]);
+  }, [descriptor, query, rows]);
 
   // A search is already a narrowing, so matches are never truncated on top of
   // it — collapsing only applies to the unfiltered list.
@@ -168,12 +169,18 @@ export function MakesTable({
   const leadCount = rows[0]?.count || 1;
 
   const toggleSort = (key: SortKey) => {
-    if (key === sortKey) {
-      setSortDirection((current) => (current === "asc" ? "desc" : "asc"));
+    if (key === descriptor.column) {
+      setDescriptor((current) => ({
+        column: current.column,
+        direction:
+          current.direction === "ascending" ? "descending" : "ascending",
+      }));
       return;
     }
-    setSortKey(key);
-    setSortDirection(key === "make" ? "asc" : "desc");
+    setDescriptor({
+      column: key,
+      direction: key === "make" ? "ascending" : "descending",
+    });
   };
 
   return (
@@ -211,15 +218,16 @@ export function MakesTable({
           color="muted"
           size="sm"
         >
-          Sorted by {SORT_LABELS[sortKey]},{" "}
-          {sortDirection === "asc" ? "ascending" : "descending"}
+          Sorted by {SORT_LABELS[descriptor.column as SortKey]},{" "}
+          {descriptor.direction}
         </Typography.Paragraph>
       </div>
 
       <div className="flex flex-col">
         <div className={cn(GRID_CLASS, "border-separator border-b px-2 pb-3")}>
           {COLUMNS.map((column) => {
-            const isActive = column.key !== null && column.key === sortKey;
+            const isActive =
+              column.key !== null && column.key === descriptor.column;
             const className = cn(
               "font-semibold text-[13px]",
               column.align === "right" ? "text-right" : "text-left",
@@ -258,7 +266,11 @@ export function MakesTable({
                   label={column.label}
                   shortLabel={column.shortLabel}
                 />
-                {isActive ? (sortDirection === "asc" ? " ↑" : " ↓") : ""}
+                {isActive
+                  ? descriptor.direction === "ascending"
+                    ? " ↑"
+                    : " ↓"
+                  : ""}
               </Button>
             );
           })}
