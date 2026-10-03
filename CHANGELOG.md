@@ -1,3 +1,38 @@
+## [5.31.0](https://github.com/motormetrics/motormetrics/compare/v5.30.0...v5.31.0) (2026-10-03)
+
+### Features
+
+* **web:** add bids and bids per COE to the COE categories table ([61bd7f3](https://github.com/motormetrics/motormetrics/commit/61bd7f34f7f78e7e36b256ce56da65306646c150))
+* **web:** add last-24-exercises sparklines to the COE table ([db14398](https://github.com/motormetrics/motormetrics/commit/db143981858cfe0680a9fff7c51d29df5896a62d))
+* **web:** add left axis and end label to the premium trend chart ([1ffcdcc](https://github.com/motormetrics/motormetrics/commit/1ffcdcc0314801d40e4e083e99a75ea776f85b5a))
+* **web:** add PQP and next exercise cells to the COE headline ([1d94042](https://github.com/motormetrics/motormetrics/commit/1d94042edd11b81678b66972d9b0b3ec2255e176))
+* **web:** chart COE bidding history as a line with a stats strip ([c08e2e0](https://github.com/motormetrics/motormetrics/commit/c08e2e0c2617951c0b07797cd91c1e8478c48f10))
+* **web:** chart COE bids against quota on one shared scale ([6549550](https://github.com/motormetrics/motormetrics/commit/6549550cbd1173588507771a2f59f4dc47b77851))
+* **web:** lay out the COE headline with a change sentence and stats ([b02019b](https://github.com/motormetrics/motormetrics/commit/b02019b26b95fd20ee331cc11ca359bdd0aedda0))
+* **web:** lay the phone nav sheet out in two columns ([a8b181c](https://github.com/motormetrics/motormetrics/commit/a8b181ce445fbdf03383d14dbb908b69176bb4cf))
+* **web:** restyle footer with framed mark and hairline meta line ([c7f14bc](https://github.com/motormetrics/motormetrics/commit/c7f14bcacbd1c04b9b9864dee933c616ac8699c2))
+* **web:** restyle nav bar as text links with a container collapse ([509bed4](https://github.com/motormetrics/motormetrics/commit/509bed4fbdb44ceeba5580bce0773388ff6963d8))
+* **web:** restyle nav dropdowns with hairline section separators ([f187618](https://github.com/motormetrics/motormetrics/commit/f187618040d6effa43c2602ded1de878ac5d4a50))
+* **web:** restyle the PQP list and finish the COE overview layout ([3886485](https://github.com/motormetrics/motormetrics/commit/38864855f18c6672ca1ad798df2f068c8bfa4c00))
+* **web:** sentence-case nav labels and name More section Company ([5dbc39c](https://github.com/motormetrics/motormetrics/commit/5dbc39c605f097abe8a87a344f3b4d80fbb72f7e))
+* **web:** sit the nav flush against the top of the page ([1ee190a](https://github.com/motormetrics/motormetrics/commit/1ee190afb775e735124d019d151125f0c42552c2))
+* **web:** square the COE categories table and move it above the chart ([fe4ca99](https://github.com/motormetrics/motormetrics/commit/fe4ca998e0b8f15d6baef73614eb8f85778e777d))
+* **web:** square the COE category and range switches ([9734242](https://github.com/motormetrics/motormetrics/commit/973424262a95b077bd60c54ca1bfb308bbbf9018))
+
+### Bug Fixes
+
+* **web:** describe COE bids as bids per COE, not oversubscribed ([1e355e6](https://github.com/motormetrics/motormetrics/commit/1e355e6b12a51cc4d4b2cb3c2a85f61555998925))
+* **web:** draw COE table sparklines as thin lines with an end dot ([742a2c9](https://github.com/motormetrics/motormetrics/commit/742a2c9ad1f5a2904423bdcf6cecb0a3168190e2))
+* **web:** drop the rounded sand header bar from the COE table ([caf4d17](https://github.com/motormetrics/motormetrics/commit/caf4d17c3753a6bb61f2a4f9846f6de5594507ba))
+* **web:** drop the trend chart end label and margin on phones ([2a93405](https://github.com/motormetrics/motormetrics/commit/2a9340577afda7f5bb8eaec4873d2c84f6550382))
+* **web:** export StatCell for the bidding history stats strip ([a2f45aa](https://github.com/motormetrics/motormetrics/commit/a2f45aaf303dffb8a48e7032c6650192aa2711bd))
+* **web:** keep StatCell private until it has a second user ([7d4ea7e](https://github.com/motormetrics/motormetrics/commit/7d4ea7e4248a5bdfe190672108c99717594bf2d0))
+* **web:** left-align category names in the COE table ([be87cea](https://github.com/motormetrics/motormetrics/commit/be87cea7b414e75bbe1839cdad9708e3285fbc78))
+* **web:** move the COE table change column after premium ([30b393d](https://github.com/motormetrics/motormetrics/commit/30b393d71b8b35f14108adfe94a2a0f3d12b75c9))
+* **web:** name the year and category in the COE history tooltip ([ff35132](https://github.com/motormetrics/motormetrics/commit/ff35132d5e3781fda9159dd88f44a8bc0e1fa814))
+* **web:** narrow the collapsed nav bar gap so it fits 360px ([6090e5a](https://github.com/motormetrics/motormetrics/commit/6090e5aaf3f939c666272e513afae36e407b8d52))
+* **web:** span the exercise range switch across phone rows ([2cf018e](https://github.com/motormetrics/motormetrics/commit/2cf018efc793dce8722480c317b86c9af13b9a72))
+
 ## [5.30.0](https://github.com/motormetrics/motormetrics/compare/v5.29.0...v5.30.0) (2026-10-03)
 
 ### Features
