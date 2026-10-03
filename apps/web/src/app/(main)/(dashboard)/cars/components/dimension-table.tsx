@@ -207,17 +207,14 @@ export function DimensionTable({
       <div className="flex flex-wrap items-center gap-4">
         <SearchField
           aria-label={labels.searchLabel}
-          className="w-full max-w-[340px]"
+          className="w-full max-w-xs"
           onChange={setQuery}
           value={query}
         >
-          <SearchField.Group className="h-auto gap-2.5 rounded-full border-0 bg-surface px-5 py-3 text-muted shadow-none">
-            <SearchField.SearchIcon className="ml-0 size-[18px] text-muted" />
-            <SearchField.Input
-              className="px-0 font-semibold text-[15px] text-foreground placeholder:text-muted"
-              placeholder={searchHint}
-            />
-            <SearchField.ClearButton className="mr-0" />
+          <SearchField.Group>
+            <SearchField.SearchIcon />
+            <SearchField.Input placeholder={searchHint} />
+            <SearchField.ClearButton />
           </SearchField.Group>
         </SearchField>
         <Typography.Paragraph
