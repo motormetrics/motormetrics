@@ -1,6 +1,7 @@
 import {
   buildPopulationSeries,
   changeRatio,
+  compareClasses,
   type PopulationRow,
   rankClasses,
   sortClasses,
@@ -90,21 +91,44 @@ describe("sortClasses", () => {
   ];
 
   it("should sort by name ascending", () => {
-    expect(sortClasses(ranked, "name", "asc").map((row) => row.name)).toEqual([
-      "Buses",
-      "Cars",
-      "Taxis",
-    ]);
+    expect(
+      sortClasses(ranked, "name", "ascending").map((row) => row.name),
+    ).toEqual(["Buses", "Cars", "Taxis"]);
   });
 
   it("should sort a missing change below every real one", () => {
     expect(
-      sortClasses(ranked, "change", "desc").map((row) => row.name),
+      sortClasses(ranked, "change", "descending").map((row) => row.name),
     ).toEqual(["Cars", "Taxis", "Buses"]);
   });
 
   it("should not mutate the input", () => {
-    sortClasses(ranked, "population", "asc");
+    sortClasses(ranked, "population", "ascending");
     expect(ranked[0].name).toBe("Cars");
+  });
+});
+
+describe("compareClasses", () => {
+  const withChange = {
+    change: -0.07,
+    colour: "a",
+    name: "Taxis",
+    population: 110,
+    share: 15,
+  };
+  const withoutChange = {
+    change: null,
+    colour: "b",
+    name: "Buses",
+    population: 20,
+    share: 5,
+  };
+
+  it("should treat a missing change as the lowest value, ascending", () => {
+    expect(compareClasses(withoutChange, withChange, "change")).toBeLessThan(0);
+    expect(compareClasses(withChange, withoutChange, "change")).toBeGreaterThan(
+      0,
+    );
+    expect(compareClasses(withoutChange, withoutChange, "change")).toBe(0);
   });
 });

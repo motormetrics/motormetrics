@@ -1,12 +1,17 @@
 "use client";
 
-import { Button, cn, ProgressBar, Typography } from "@heroui/react";
+import {
+  Button,
+  cn,
+  ProgressBar,
+  type SortDescriptor,
+  Typography,
+} from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
   CARS,
   type ClassRank,
   type ClassSortKey,
-  type SortDirection,
   sortClasses,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { DeltaChip } from "@web/components/shared/delta-chip";
@@ -53,22 +58,33 @@ export function ClassesTable({
   rows: ClassRank[];
   year: string;
 }) {
-  const [sortKey, setSortKey] = useState<ClassSortKey>("population");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [descriptor, setDescriptor] = useState<SortDescriptor>({
+    column: "population",
+    direction: "descending",
+  });
+  // Only `toggleSort` sets the column, and always to a ClassSortKey.
+  const sortKey = descriptor.column as ClassSortKey;
 
   const sorted = useMemo(
-    () => sortClasses(rows, sortKey, sortDirection),
-    [rows, sortDirection, sortKey],
+    () => sortClasses(rows, sortKey, descriptor.direction),
+    [descriptor.direction, rows, sortKey],
   );
   const largest = Math.max(...rows.map((row) => row.population), 1);
 
   const toggleSort = (key: ClassSortKey) => {
-    if (key === sortKey) {
-      setSortDirection((current) => (current === "asc" ? "desc" : "asc"));
-      return;
-    }
-    setSortKey(key);
-    setSortDirection(key === "name" ? "asc" : "desc");
+    setDescriptor((current) => {
+      if (key === current.column) {
+        return {
+          column: key,
+          direction:
+            current.direction === "ascending" ? "descending" : "ascending",
+        };
+      }
+      return {
+        column: key,
+        direction: key === "name" ? "ascending" : "descending",
+      };
+    });
   };
 
   return (
@@ -116,7 +132,11 @@ export function ClassesTable({
                 variant="ghost"
               >
                 {column.label}
-                {isActive ? (sortDirection === "asc" ? " ↑" : " ↓") : ""}
+                {isActive
+                  ? descriptor.direction === "ascending"
+                    ? " ↑"
+                    : " ↓"
+                  : ""}
               </Button>
             );
           })}
@@ -199,8 +219,7 @@ export function ClassesTable({
       <Typography.Paragraph color="muted" size="sm">
         Population counts are taken at 31 December each year.
         {previousYear === null ? null : ` Change is against ${previousYear}.`}{" "}
-        Sorted by {SORT_LABELS[sortKey]},{" "}
-        {sortDirection === "asc" ? "ascending" : "descending"}.
+        Sorted by {SORT_LABELS[sortKey]}, {descriptor.direction}.
       </Typography.Paragraph>
     </div>
   );

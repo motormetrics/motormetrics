@@ -179,7 +179,33 @@ export function rankClasses(entities: PopulationEntity[]): ClassRank[] {
 }
 
 export type ClassSortKey = "change" | "name" | "population";
-export type SortDirection = "asc" | "desc";
+/** The direction words of a react-aria `SortDescriptor`. */
+export type SortDirection = "ascending" | "descending";
+
+/**
+ * Orders two ranked classes on one column, ascending. Shaped as a per-column
+ * comparator so a data grid can take it as the column's sort function.
+ */
+export function compareClasses(
+  first: ClassRank,
+  second: ClassRank,
+  key: ClassSortKey,
+): number {
+  if (key === "name") {
+    return first.name.localeCompare(second.name, "en-SG");
+  }
+  if (key === "change") {
+    // A class with no prior year sorts as the lowest value rather than
+    // pretending to be a 0% change.
+    const left = first.change ?? Number.NEGATIVE_INFINITY;
+    const right = second.change ?? Number.NEGATIVE_INFINITY;
+    if (left === right) {
+      return 0;
+    }
+    return left < right ? -1 : 1;
+  }
+  return first.population - second.population;
+}
 
 /** Sorts a copy of the ranked classes on one column. */
 export function sortClasses(
@@ -187,22 +213,9 @@ export function sortClasses(
   key: ClassSortKey,
   direction: SortDirection,
 ): ClassRank[] {
-  const sign = direction === "asc" ? 1 : -1;
+  const sign = direction === "ascending" ? 1 : -1;
 
-  return [...rows].sort((first, second) => {
-    if (key === "name") {
-      return sign * first.name.localeCompare(second.name, "en-SG");
-    }
-    if (key === "change") {
-      // A class with no prior year sorts as the lowest value rather than
-      // pretending to be a 0% change.
-      const left = first.change ?? Number.NEGATIVE_INFINITY;
-      const right = second.change ?? Number.NEGATIVE_INFINITY;
-      if (left === right) {
-        return 0;
-      }
-      return sign * (left < right ? -1 : 1);
-    }
-    return sign * (first.population - second.population);
-  });
+  return [...rows].sort(
+    (first, second) => sign * compareClasses(first, second, key),
+  );
 }
