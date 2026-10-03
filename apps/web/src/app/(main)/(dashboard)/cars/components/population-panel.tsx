@@ -1,4 +1,3 @@
-import { Chip } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { BarRow } from "@web/components/shared/bar-row";
 import { Headline, SectionHead } from "@web/components/shared/overview";
@@ -65,21 +64,15 @@ export async function PopulationPanel() {
       <Headline
         delta={
           changeRatio !== null && previous ? (
-            <Chip
-              className="rounded-full bg-accent-soft font-bold text-accent-strong tabular-nums"
-              size="lg"
-              variant="soft"
-            >
-              <Chip.Label>
-                <NumberValue
-                  maximumFractionDigits={1}
-                  signDisplay="exceptZero"
-                  style="percent"
-                  value={changeRatio}
-                />{" "}
-                on {previous.year}
-              </Chip.Label>
-            </Chip>
+            <span className="text-muted-strong tabular-nums">
+              {changeRatio < 0 ? "−" : "+"}
+              <NumberValue
+                maximumFractionDigits={1}
+                style="percent"
+                value={Math.abs(changeRatio)}
+              />{" "}
+              on {previous.year}
+            </span>
           ) : undefined
         }
         size="md"

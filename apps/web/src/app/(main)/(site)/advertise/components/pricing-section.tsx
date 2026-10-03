@@ -64,7 +64,7 @@ export function PricingSection() {
                 <Typography.Heading level={3}>{name}</Typography.Heading>
                 {featured ? (
                   <Chip
-                    className="ml-auto font-bold"
+                    className="ml-auto"
                     color="accent"
                     size="sm"
                     variant="primary"

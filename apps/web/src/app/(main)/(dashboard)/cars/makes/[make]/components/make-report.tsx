@@ -325,8 +325,8 @@ export async function MakeReport({
                   {String(rowRank).padStart(2, "0")}
                 </ReportCell>
                 <ReportCell>
-                  <Chip className="whitespace-nowrap rounded-full bg-surface-secondary px-3 py-1.5 font-bold text-muted-strong text-sm">
-                    <Chip.Label className="px-0">{rowFuelType}</Chip.Label>
+                  <Chip size="lg">
+                    <Chip.Label>{rowFuelType}</Chip.Label>
                   </Chip>
                 </ReportCell>
                 <ReportCell className="font-bold text-base">

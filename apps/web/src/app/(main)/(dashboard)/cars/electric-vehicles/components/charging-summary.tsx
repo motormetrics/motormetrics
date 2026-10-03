@@ -1,4 +1,4 @@
-import { Chip, ProgressBar, Typography } from "@heroui/react";
+import { ProgressBar, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-network";
@@ -59,17 +59,11 @@ export async function ChargingSummary() {
         }
         delta={
           growth?.growthPercent != null ? (
-            <Chip
-              className="rounded-full px-3.5 py-2 font-bold text-accent-strong text-sm tabular-nums"
-              color="accent"
-              variant="soft"
-            >
-              <Chip.Label className="px-0">
-                {growth.growthPercent >= 0 ? "+" : "−"}
-                {Math.abs(growth.growthPercent).toFixed(0)}% on{" "}
-                {formatDateToMonthYear(shiftMonth(growth.asOf, -12))}
-              </Chip.Label>
-            </Chip>
+            <span className="text-muted-strong tabular-nums">
+              {growth.growthPercent >= 0 ? "+" : "−"}
+              {Math.abs(growth.growthPercent).toFixed(0)}% on{" "}
+              {formatDateToMonthYear(shiftMonth(growth.asOf, -12))}
+            </span>
           ) : undefined
         }
         size="md"
