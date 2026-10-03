@@ -172,31 +172,35 @@ export function DimensionTable({
         eyebrow="Registrations"
         title={labels.title}
         trailing={
-          <Segment
-            aria-label="Dimension"
-            className="max-w-full"
-            onSelectionChange={(option) => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: "dimension",
-                value: option,
-              });
-              setQuery("");
-              setSortDescriptor({
-                column: "count",
-                direction: "descending",
-              });
-              setDimension(option as CarDimension);
-            }}
-            selectedKey={dimension}
-            size="md"
-            variant="ghost"
-          >
-            {CAR_DIMENSIONS.map((option) => (
-              <Segment.Item id={option} key={option}>
-                {DIMENSION_LABELS[option].tab}
-              </Segment.Item>
-            ))}
-          </Segment>
+          // Segment is a non-wrapping inline-flex, so a row wider than a phone
+          // (the three dimension tabs, about 296px) scrolls sideways inside
+          // this wrapper instead of pushing the page wider.
+          <div className="max-w-full overflow-x-auto">
+            <Segment
+              aria-label="Dimension"
+              onSelectionChange={(option) => {
+                posthog.capture("dashboard_filter_changed", {
+                  filter: "dimension",
+                  value: option,
+                });
+                setQuery("");
+                setSortDescriptor({
+                  column: "count",
+                  direction: "descending",
+                });
+                setDimension(option as CarDimension);
+              }}
+              selectedKey={dimension}
+              size="md"
+              variant="ghost"
+            >
+              {CAR_DIMENSIONS.map((option) => (
+                <Segment.Item id={option} key={option}>
+                  {DIMENSION_LABELS[option].tab}
+                </Segment.Item>
+              ))}
+            </Segment>
+          </div>
         }
       />
 

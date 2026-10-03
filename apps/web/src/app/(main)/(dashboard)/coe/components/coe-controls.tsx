@@ -15,12 +15,15 @@ import posthog from "posthog-js";
 import { type ReactNode, useTransition } from "react";
 
 /*
- * The radius and padding come from HeroUI's Segment. The only override is
- * layout: at 720px and below the switch spans the row and its items share
- * the width.
+ * The radius comes from HeroUI's Segment. The overrides are layout: at 720px
+ * and below the switch spans the row and its items share the width. The items
+ * also drop to 8px side padding there, because Segment items never wrap or
+ * shrink below their label: at HeroUI's 16px the five "Cat X" items (about
+ * 340px) and the three "N exercises" items (about 333px) overflow the 288px
+ * content column of a 320px phone.
  */
 const SEGMENT_CLASS = "max-[720px]:w-full";
-const SEGMENT_ITEM_CLASS = "max-[720px]:flex-1";
+const SEGMENT_ITEM_CLASS = "max-[720px]:flex-1 max-[720px]:px-2";
 
 /**
  * Every control on the COE overview writes to the URL with `shallow: false`,
