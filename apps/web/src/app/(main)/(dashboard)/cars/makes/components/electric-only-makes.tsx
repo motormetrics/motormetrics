@@ -25,7 +25,7 @@ export async function ElectricOnlyMakes() {
 
       <div className="flex flex-wrap items-center gap-3.5">
         <Headline size="md" value={`${summary.sharePercent.toFixed(1)}%`} />
-        <Typography.Paragraph className="font-medium" color="muted">
+        <Typography.Paragraph weight="medium" color="muted">
           of registrations
         </Typography.Paragraph>
       </div>

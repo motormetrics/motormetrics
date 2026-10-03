@@ -36,7 +36,10 @@ export function PostCard({
         {post.title}
       </Typography.Heading>
       {showExcerpt && excerpt ? (
-        <Typography.Paragraph className="line-clamp-3 text-muted leading-normal">
+        <Typography.Paragraph
+          className="line-clamp-3 leading-normal"
+          color="muted"
+        >
           {excerpt}
         </Typography.Paragraph>
       ) : null}

@@ -53,10 +53,13 @@ export async function ConcentrationCard({
   return (
     <div className="flex flex-col gap-[18px]">
       <div className="flex flex-col gap-2.5">
-        <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+        <Typography.Paragraph
+          className="text-muted-strong text-xl"
+          weight="semibold"
+        >
           Concentration
         </Typography.Paragraph>
-        <Typography.Paragraph className="font-medium" color="muted">
+        <Typography.Paragraph weight="medium" color="muted">
           Top five makes against the rest
         </Typography.Paragraph>
       </div>
@@ -86,11 +89,7 @@ export async function ConcentrationCard({
             <span className="font-extrabold text-[33px] tabular-nums leading-none tracking-tight">
               {leadersShare.toFixed(0)}%
             </span>
-            <Typography.Paragraph
-              className="font-semibold"
-              color="muted"
-              size="sm"
-            >
+            <Typography.Paragraph weight="semibold" color="muted" size="sm">
               top five share
             </Typography.Paragraph>
           </div>
@@ -105,7 +104,8 @@ export async function ConcentrationCard({
                 style={{ background: segment.color }}
               />
               <Typography.Paragraph
-                className="font-semibold text-[15.5px] text-foreground/85"
+                className="text-[15.5px] text-foreground/85"
+                weight="semibold"
                 size="sm"
                 truncate
               >

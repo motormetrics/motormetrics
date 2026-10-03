@@ -24,7 +24,7 @@ export function GuideCard({ guide }: { guide: Guide }) {
       <Typography.Heading level={3} className="leading-tight">
         {guide.title}
       </Typography.Heading>
-      <Typography.Paragraph className="text-muted leading-normal">
+      <Typography.Paragraph className="leading-normal" color="muted">
         {guide.excerpt}
       </Typography.Paragraph>
       <div className="mt-auto flex items-center gap-2.5 pt-3.5">

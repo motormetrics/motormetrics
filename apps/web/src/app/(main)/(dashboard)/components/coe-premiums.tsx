@@ -72,7 +72,8 @@ export function CoePremiums({ series }: { series: CoeCategorySeries[] }) {
           ))}
         </ToggleButtonGroup>
         <Typography.Paragraph
-          className="font-semibold text-[15px] sm:pl-2"
+          className="text-[15px] sm:pl-2"
+          weight="semibold"
           color="muted"
           size="sm"
         >

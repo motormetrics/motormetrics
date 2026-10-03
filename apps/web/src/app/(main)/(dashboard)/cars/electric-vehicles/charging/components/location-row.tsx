@@ -52,7 +52,8 @@ export function LocationRow({
         <div className="flex min-w-0 flex-col">
           <Typography.Paragraph
             size="sm"
-            className="truncate font-semibold text-foreground/85"
+            className="truncate text-foreground/85"
+            weight="semibold"
           >
             {title}
           </Typography.Paragraph>

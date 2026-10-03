@@ -28,7 +28,7 @@ export function PageEyebrow({
       <Typography.Heading className="sr-only" level={1}>
         {title}
       </Typography.Heading>
-      <Typography.Paragraph className="font-semibold" color="muted">
+      <Typography.Paragraph weight="semibold" color="muted">
         {section} ·
       </Typography.Paragraph>
       {control}
@@ -42,7 +42,7 @@ export function PageEyebrow({
 /** The bold accent value beside the section label, where no control is needed. */
 export function EyebrowValue({ children }: { children: ReactNode }) {
   return (
-    <Typography.Paragraph className="font-bold text-accent-strong">
+    <Typography.Paragraph className="text-accent-strong" weight="bold">
       {children}
     </Typography.Paragraph>
   );

@@ -37,7 +37,8 @@ export async function RecentChanges() {
         <div className="flex flex-col gap-3">
           <Typography.Paragraph
             size="sm"
-            className="font-bold text-accent-foreground"
+            className="text-accent-foreground"
+            weight="bold"
           >
             New chargers
           </Typography.Paragraph>
@@ -72,7 +73,8 @@ export async function RecentChanges() {
         <div className="flex flex-col gap-3">
           <Typography.Paragraph
             size="sm"
-            className="font-bold text-accent-foreground"
+            className="text-accent-foreground"
+            weight="bold"
           >
             Price changes
           </Typography.Paragraph>

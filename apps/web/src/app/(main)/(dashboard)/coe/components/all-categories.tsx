@@ -70,7 +70,9 @@ export async function AllCategories({
     <div className="flex flex-col gap-3">
       <div className="flex items-end gap-4">
         <Typography.Heading
-          className="font-semibold text-muted text-xs uppercase tracking-[0.06em] min-[721px]:sr-only"
+          className="text-xs uppercase tracking-[0.06em] min-[721px]:sr-only"
+          weight="semibold"
+          color="muted"
           level={2}
         >
           All categories

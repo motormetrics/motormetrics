@@ -236,7 +236,8 @@ export function MakesTable({
           </SearchField.Group>
         </SearchField>
         <Typography.Paragraph
-          className="whitespace-nowrap font-semibold text-[13.5px] sm:ml-auto"
+          className="whitespace-nowrap text-[13.5px] sm:ml-auto"
+          weight="semibold"
           color="muted"
           size="sm"
         >
@@ -318,7 +319,8 @@ export function MakesTable({
                 <MakeAvatar logoUrl={row.logoUrl} make={row.make} size={28} />
               </span>
               <Typography.Paragraph
-                className="font-semibold text-foreground/85 text-sm sm:text-base"
+                className="text-foreground/85 text-sm sm:text-base"
+                weight="semibold"
                 truncate
               >
                 {row.make}
@@ -356,7 +358,7 @@ export function MakesTable({
             {row.yoyChange === null || row.count < MIN_COUNT_FOR_CHANGE ? (
               <Typography.Paragraph
                 align="end"
-                className="font-semibold"
+                weight="semibold"
                 color="muted"
                 size="sm"
                 title={
@@ -381,7 +383,8 @@ export function MakesTable({
 
         {visibleRows.length === 0 ? (
           <Typography.Paragraph
-            className="px-2 py-8 font-semibold text-[15px]"
+            className="px-2 py-8 text-[15px]"
+            weight="semibold"
             color="muted"
             size="sm"
           >
@@ -402,7 +405,8 @@ export function MakesTable({
       ) : null}
 
       <Typography.Paragraph
-        className="font-medium text-[13.5px]"
+        className="text-[13.5px]"
+        weight="medium"
         color="muted"
         size="sm"
       >

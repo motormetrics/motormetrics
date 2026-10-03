@@ -93,7 +93,8 @@ export async function ChargingSummary() {
           </ProgressBar.Track>
         </ProgressBar>
         <Typography.Paragraph
-          className="font-medium text-[13.5px]"
+          className="text-[13.5px]"
+          weight="medium"
           color="muted"
           size="sm"
         >

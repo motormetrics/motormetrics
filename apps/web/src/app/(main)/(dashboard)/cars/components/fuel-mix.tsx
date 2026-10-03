@@ -59,10 +59,13 @@ export async function FuelMix({
   return (
     <div className="flex flex-col gap-[18px]">
       <div className="flex flex-col gap-2.5">
-        <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+        <Typography.Paragraph
+          className="text-muted-strong text-xl"
+          weight="semibold"
+        >
           Fuel mix
         </Typography.Paragraph>
-        <Typography.Paragraph className="font-medium" color="muted">
+        <Typography.Paragraph weight="medium" color="muted">
           {formatMonthName(month)} registrations by powertrain
         </Typography.Paragraph>
         {segments.length === 0 ? (
@@ -102,11 +105,7 @@ export async function FuelMix({
                   value={registrations.total}
                 />
               </span>
-              <Typography.Paragraph
-                className="font-semibold"
-                color="muted"
-                size="sm"
-              >
+              <Typography.Paragraph weight="semibold" color="muted" size="sm">
                 {formatMonthName(month)}
               </Typography.Paragraph>
             </div>
@@ -120,7 +119,10 @@ export async function FuelMix({
                   className="size-[11px] shrink-0 rounded-full"
                   style={{ background: segment.color }}
                 />
-                <Typography.Paragraph className="font-semibold text-foreground/85">
+                <Typography.Paragraph
+                  className="text-foreground/85"
+                  weight="semibold"
+                >
                   {segment.label}
                 </Typography.Paragraph>
                 <span className="ml-auto font-extrabold text-base tabular-nums">

@@ -233,7 +233,8 @@ export function DimensionTable({
           </SearchField.Group>
         </SearchField>
         <Typography.Paragraph
-          className="ml-auto whitespace-nowrap font-semibold"
+          className="ml-auto whitespace-nowrap"
+          weight="semibold"
           color="muted"
           size="sm"
         >
@@ -311,7 +312,8 @@ export function DimensionTable({
                         size={28}
                       />
                       <Typography.Paragraph
-                        className="font-semibold text-foreground/85"
+                        className="text-foreground/85"
+                        weight="semibold"
                         truncate
                       >
                         {row.name}
@@ -345,7 +347,7 @@ export function DimensionTable({
                   <Table.Cell className="text-right">
                     {row.yoyChange === null ? (
                       <Typography.Paragraph
-                        className="font-semibold"
+                        weight="semibold"
                         color="muted"
                         size="sm"
                       >

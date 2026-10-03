@@ -72,13 +72,15 @@ export async function MoversRail({
                   />
                   <div className="flex min-w-0 flex-col gap-px">
                     <Typography.Paragraph
-                      className="font-bold text-[17px]"
+                      className="text-[17px]"
+                      weight="bold"
                       truncate
                     >
                       {mover.name}
                     </Typography.Paragraph>
                     <Typography.Paragraph
-                      className="font-medium tabular-nums"
+                      className="tabular-nums"
+                      weight="medium"
                       color="muted"
                       size="sm"
                     >

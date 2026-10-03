@@ -102,7 +102,8 @@ export async function CoeSection() {
         {pqpMonths && pqpRows.length > 0 ? (
           <div className="flex flex-col gap-3">
             <Typography.Paragraph
-              className="font-semibold text-[15px]"
+              className="text-[15px]"
+              weight="semibold"
               color="muted"
               size="sm"
             >
@@ -119,11 +120,7 @@ export async function CoeSection() {
                 />
               ))}
             </ul>
-            <Typography.Paragraph
-              className="font-medium"
-              color="muted"
-              size="sm"
-            >
+            <Typography.Paragraph weight="medium" color="muted" size="sm">
               3-month moving average of premiums · renew 5 or 10 years
             </Typography.Paragraph>
           </div>

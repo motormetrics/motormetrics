@@ -417,7 +417,7 @@ export function ChargingMapView() {
   return (
     <>
       <div className="flex flex-col gap-1">
-        <Typography.Paragraph className="text-muted">
+        <Typography.Paragraph color="muted">
           Live availability by site
         </Typography.Paragraph>
         <Typography.Heading level={3}>Chargers in {scope}</Typography.Heading>

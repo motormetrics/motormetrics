@@ -199,7 +199,8 @@ export function ClassesTable({
 
               {row.change === null ? (
                 <Typography.Paragraph
-                  className="text-right font-semibold"
+                  weight="semibold"
+                  align="end"
                   color="muted"
                   size="sm"
                 >

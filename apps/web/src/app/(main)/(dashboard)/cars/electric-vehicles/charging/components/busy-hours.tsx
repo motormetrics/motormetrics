@@ -24,9 +24,7 @@ export async function BusyHours() {
     return (
       <SurfaceCard className="gap-4 p-7">
         <div className="flex flex-col gap-1">
-          <Typography.Paragraph className="text-muted">
-            Busy hours
-          </Typography.Paragraph>
+          <Typography.Paragraph color="muted">Busy hours</Typography.Paragraph>
           <Typography.Heading level={3}>Busiest hour</Typography.Heading>
         </div>
         <Typography.Paragraph color="muted" size="sm">
@@ -43,9 +41,7 @@ export async function BusyHours() {
   return (
     <SurfaceCard className="gap-4 p-7">
       <div className="flex flex-col gap-1">
-        <Typography.Paragraph className="text-muted">
-          Busy hours
-        </Typography.Paragraph>
+        <Typography.Paragraph color="muted">Busy hours</Typography.Paragraph>
         <Typography.Heading level={3}>
           Busiest at {formatHour(peak.hour)} ·{" "}
           {peak.utilisationPercent.toFixed(0)}% in use
