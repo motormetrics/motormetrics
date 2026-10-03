@@ -65,7 +65,11 @@ const formatCount = (value: number): string => value.toLocaleString("en-SG");
 const bidsPerCoe = (row: CategoryRow): string =>
   row.quota > 0 ? `${(row.bidsReceived / row.quota).toFixed(2)}×` : "—";
 
-const CELL_CLASS = "border-separator border-b px-1 py-3 sm:px-3";
+/**
+ * Narrower than HeroUI's px-4: at 320px its padding eats most of the fixed
+ * figure columns and the premiums clip. The row rule comes from HeroUI.
+ */
+const CELL_CLASS = "px-1 sm:px-3";
 
 const DEMAND_CELL_CLASS =
   "text-right text-[14.5px] text-muted-strong max-[720px]:hidden";
@@ -79,8 +83,9 @@ const DEMAND_CELL_CLASS =
  *
  * A real table rather than the comp's CSS grid: sortable column headers
  * need `aria-sort` on a `columnheader`, which only means something inside a
- * table. The selected row is marked by a tint and a 3px accent rule on its
- * leading edge, drawn on the first cell so it does not depend on row shadows.
+ * table. The header, row rules and row hover are HeroUI's secondary variant.
+ * The selected row is marked by a tint and a 3px accent rule on its leading
+ * edge, drawn on the first cell so it does not depend on row shadows.
  */
 export function AllCategoriesTable({
   rows,
@@ -117,60 +122,56 @@ export function AllCategoriesTable({
             sortDescriptor={sortDescriptor}
           >
             <Table.Header>
-              {COLUMNS.map((column) => {
-                const isActive = column.key === sort.key;
-                return (
-                  <Table.Column
-                    allowsSorting={column.sortable}
-                    className={cn(
-                      "rounded-none bg-transparent pb-3 font-semibold text-[13px] after:hidden",
-                      CELL_CLASS,
-                      column.key !== "category" &&
-                        FIGURE_COLUMN_CLASSES[column.key],
-                      column.align === "right" ? "text-right" : "text-left",
-                      isActive ? "text-accent-strong" : "text-muted",
-                      !isActive && column.sortable && "hover:text-muted-strong",
-                    )}
-                    id={column.key}
-                    isRowHeader={column.key === "category"}
-                    key={column.key}
-                  >
-                    {({ sortDirection }) =>
-                      column.sortable ? (
-                        <Table.SortableColumnHeader
-                          className={cn(
-                            "inline-flex items-center gap-1",
-                            column.align === "right" && "justify-end",
-                          )}
-                          indicator={
-                            <ArrowUp
-                              aria-hidden
-                              className="size-3.5"
-                              strokeWidth={2.5}
-                            />
-                          }
-                          sortDirection={sortDirection}
-                        >
-                          {column.label}
-                        </Table.SortableColumnHeader>
-                      ) : (
-                        column.label
-                      )
-                    }
-                  </Table.Column>
-                );
-              })}
+              {COLUMNS.map((column) => (
+                <Table.Column
+                  allowsSorting={column.sortable}
+                  className={cn(
+                    CELL_CLASS,
+                    column.key !== "category" &&
+                      FIGURE_COLUMN_CLASSES[column.key],
+                    column.align === "right" ? "text-right" : "text-left",
+                  )}
+                  id={column.key}
+                  isRowHeader={column.key === "category"}
+                  key={column.key}
+                >
+                  {({ sortDirection }) =>
+                    column.sortable ? (
+                      <Table.SortableColumnHeader
+                        className={cn(
+                          "inline-flex items-center gap-1",
+                          column.align === "right" && "justify-end",
+                        )}
+                        indicator={
+                          <ArrowUp
+                            aria-hidden
+                            className="size-3.5"
+                            strokeWidth={2.5}
+                          />
+                        }
+                        sortDirection={sortDirection}
+                      >
+                        {column.label}
+                      </Table.SortableColumnHeader>
+                    ) : (
+                      column.label
+                    )
+                  }
+                </Table.Column>
+              ))}
             </Table.Header>
             <Table.Body>
               {sorted.map((row) => {
                 const isActive = row.categoryKey === selected;
                 return (
+                  // No selectionMode here, and HeroUI's own selected style
+                  // (bg-surface/10) is all but invisible, so the active
+                  // category keeps its tint and leading accent rule.
                   <Table.Row
                     className={cn(
-                      "cursor-pointer transition-colors",
-                      isActive
-                        ? "bg-accent-soft-2 [&>td:first-child]:shadow-[inset_3px_0_0_var(--accent)]"
-                        : "hover:bg-default",
+                      "cursor-pointer",
+                      isActive &&
+                        "bg-accent-soft-2 [&>td:first-child]:shadow-[inset_3px_0_0_var(--accent)]",
                     )}
                     id={row.categoryKey}
                     key={row.categoryKey}
