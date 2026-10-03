@@ -1,7 +1,6 @@
 {
   "name": "@motormetrics/logos",
   "description": "Car make logo storage and retrieval for MotorMetrics",
-  "version": "5.31.0",
   "type": "module",
   "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",

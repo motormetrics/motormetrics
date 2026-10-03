@@ -89,10 +89,6 @@ column names are `camelCase`. This is intentional — do not "fix" it to match o
 
 *See [packages/database/AGENTS.md](packages/database/AGENTS.md) for detailed schemas and migrations.*
 
-## Release Process
-
-Automated via semantic-release with unified "v" prefix versioning (v1.0.0, v1.1.0, v2.0.0). See `release-management` and `changelog` skills for release workflows.
-
 ## Documentation Maintenance
 
 - **Root AGENTS.md**: Monorepo-wide guidelines, tooling, cross-cutting concerns

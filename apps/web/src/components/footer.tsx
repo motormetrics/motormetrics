@@ -7,7 +7,6 @@ import {
   navLinks,
 } from "@web/config/navigation";
 import Link from "next/link";
-import { version } from "../../package.json";
 
 const COPYRIGHT_YEAR = new Date().getFullYear();
 
@@ -75,8 +74,7 @@ export function Footer({
           target="_blank"
         >
           LTA DataMall
-        </Link>{" "}
-        · v{version}
+        </Link>
       </Typography.Paragraph>
     </footer>
   );
