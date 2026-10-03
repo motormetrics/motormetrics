@@ -22,7 +22,7 @@ import type { ReactNode } from "react";
  * One cell of a ruled two-column stat grid: a small label, the figure and a
  * muted note. Odd cells sit flush left; even cells carry the vertical rule.
  */
-function StatCell({
+export function StatCell({
   label,
   note,
   value,
