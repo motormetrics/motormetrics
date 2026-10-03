@@ -78,8 +78,8 @@ async function LatestExerciseSub() {
 function SectionSkeleton({ className }: { className: string }) {
   return (
     <div className="flex flex-col gap-4">
-      <Skeleton className="h-4 w-32 rounded-lg" />
-      <Skeleton className="h-12 w-56 rounded-lg" />
+      <Skeleton className="h-4 w-32" />
+      <Skeleton className="h-12 w-56" />
       <Skeleton className={`rounded-2xl ${className}`} />
     </div>
   );
@@ -108,7 +108,7 @@ export default function Page({ searchParams }: PageProps) {
         <PageHead
           eyebrow="Certificate of Entitlement"
           sub={
-            <Suspense fallback={<Skeleton className="h-5 w-72 rounded-lg" />}>
+            <Suspense fallback={<Skeleton className="h-5 w-72" />}>
               <LatestExerciseSub />
             </Suspense>
           }

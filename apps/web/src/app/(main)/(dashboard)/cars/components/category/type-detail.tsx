@@ -216,11 +216,11 @@ function TypeDetailHeadSkeleton() {
   return (
     <div className="flex flex-wrap items-end gap-6">
       <div className="flex max-w-prose flex-col gap-2">
-        <Skeleton className="h-12 w-64 rounded-lg" />
-        <Skeleton className="h-5 w-full rounded-lg" />
+        <Skeleton className="h-12 w-64" />
+        <Skeleton className="h-5 w-full" />
       </div>
       <div className="flex min-w-0 max-w-full flex-wrap items-center gap-3 sm:ml-auto">
-        <Skeleton className="h-10 w-40 rounded-full" />
+        <Skeleton className="h-10 w-40" />
       </div>
     </div>
   );

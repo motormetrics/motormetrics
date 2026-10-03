@@ -75,9 +75,9 @@ function CardSkeleton({ className = "" }: { className?: string }) {
   return (
     <div className={`rounded-4xl bg-surface p-7 shadow-surface ${className}`}>
       <div className="flex flex-col gap-4">
-        <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="h-12 w-40 rounded-lg" />
-        <Skeleton className="h-6 w-44 rounded-full" />
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-12 w-40" />
+        <Skeleton className="h-6 w-44" />
       </div>
     </div>
   );
@@ -112,14 +112,14 @@ export default function ChargingPage({ searchParams }: PageProps) {
           </Chip>
         }
         controls={
-          <Suspense fallback={<Skeleton className="h-12 w-56 rounded-full" />}>
+          <Suspense fallback={<Skeleton className="h-12 w-56" />}>
             <DistrictControl searchParams={searchParams} />
           </Suspense>
         }
         title="EV charging"
       />
 
-      <Suspense fallback={<Skeleton className="h-16 max-w-prose rounded-lg" />}>
+      <Suspense fallback={<Skeleton className="h-16 max-w-prose" />}>
         <ChargingIntro />
       </Suspense>
 

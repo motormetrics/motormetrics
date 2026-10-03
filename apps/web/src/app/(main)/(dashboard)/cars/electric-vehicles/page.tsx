@@ -74,10 +74,10 @@ interface PageProps {
 function HeadlineSkeleton() {
   return (
     <div className="flex flex-col gap-4">
-      <Skeleton className="h-5 w-56 rounded-lg" />
-      <Skeleton className="h-16 w-48 rounded-lg" />
-      <Skeleton className="h-5 w-72 rounded-lg" />
-      <Skeleton className="h-[150px] w-full rounded-lg" />
+      <Skeleton className="h-5 w-56" />
+      <Skeleton className="h-16 w-48" />
+      <Skeleton className="h-5 w-72" />
+      <Skeleton className="h-[150px] w-full" />
     </div>
   );
 }
@@ -85,9 +85,9 @@ function HeadlineSkeleton() {
 function SectionSkeleton({ className = "h-64" }: { className?: string }) {
   return (
     <div className="flex flex-col gap-4">
-      <Skeleton className="h-4 w-24 rounded-lg" />
-      <Skeleton className="h-8 w-48 rounded-lg" />
-      <Skeleton className={`w-full rounded-lg ${className}`} />
+      <Skeleton className="h-4 w-24" />
+      <Skeleton className="h-8 w-48" />
+      <Skeleton className={`w-full ${className}`} />
     </div>
   );
 }
@@ -115,7 +115,7 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
 
       <PageEyebrow
         control={
-          <Suspense fallback={<Skeleton className="h-6 w-32 rounded-lg" />}>
+          <Suspense fallback={<Skeleton className="h-6 w-32" />}>
             <MonthControl searchParams={searchParams} />
           </Suspense>
         }

@@ -47,12 +47,12 @@ export function MakesContentSection({
       {/* Who leads, and how tightly the market is held */}
       <OverviewGrid>
         <SectionErrorBoundary title="Leading make unavailable">
-          <Suspense fallback={<Skeleton className="h-80 w-full rounded-lg" />}>
+          <Suspense fallback={<Skeleton className="h-80 w-full" />}>
             <LeadingMakeCard searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>
         <SectionErrorBoundary title="Market concentration unavailable">
-          <Suspense fallback={<Skeleton className="h-80 w-full rounded-lg" />}>
+          <Suspense fallback={<Skeleton className="h-80 w-full" />}>
             <ConcentrationCard searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>
@@ -61,9 +61,7 @@ export function MakesContentSection({
       <Hairline />
 
       <SectionErrorBoundary title="Makes table unavailable">
-        <Suspense
-          fallback={<Skeleton className="h-[720px] w-full rounded-lg" />}
-        >
+        <Suspense fallback={<Skeleton className="h-[720px] w-full" />}>
           <AllMakesCard searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -72,12 +70,12 @@ export function MakesContentSection({
 
       <OverviewGrid>
         <SectionErrorBoundary title="Movers unavailable">
-          <Suspense fallback={<Skeleton className="h-96 w-full rounded-lg" />}>
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
             <FastestGrowing searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>
         <SectionErrorBoundary title="Electric-only makes unavailable">
-          <Suspense fallback={<Skeleton className="h-96 w-full rounded-lg" />}>
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
             <ElectricOnlyMakes />
           </Suspense>
         </SectionErrorBoundary>

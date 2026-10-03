@@ -56,7 +56,7 @@ export default function CarMakesPage({ searchParams }: PageProps) {
     <OverviewPage>
       <PageEyebrow
         control={
-          <Suspense fallback={<Skeleton className="h-6 w-28 rounded-full" />}>
+          <Suspense fallback={<Skeleton className="h-6 w-28" />}>
             <RangeMenu />
           </Suspense>
         }

@@ -66,7 +66,7 @@ export default function CarsPage({ searchParams }: PageProps) {
       <div className="flex flex-col gap-7">
         <PageEyebrow
           control={
-            <Suspense fallback={<Skeleton className="h-6 w-36 rounded-full" />}>
+            <Suspense fallback={<Skeleton className="h-6 w-36" />}>
               <CarsMonthPicker searchParams={searchParams} />
             </Suspense>
           }
@@ -76,16 +76,12 @@ export default function CarsPage({ searchParams }: PageProps) {
 
         <OverviewGrid>
           <SectionErrorBoundary title="Registration summary unavailable">
-            <Suspense
-              fallback={<Skeleton className="h-72 w-full rounded-lg" />}
-            >
+            <Suspense fallback={<Skeleton className="h-72 w-full" />}>
               <RegistrationsHero searchParams={searchParams} />
             </Suspense>
           </SectionErrorBoundary>
           <SectionErrorBoundary title="Fuel mix unavailable">
-            <Suspense
-              fallback={<Skeleton className="h-72 w-full rounded-lg" />}
-            >
+            <Suspense fallback={<Skeleton className="h-72 w-full" />}>
               <FuelMix searchParams={searchParams} />
             </Suspense>
           </SectionErrorBoundary>
@@ -96,9 +92,7 @@ export default function CarsPage({ searchParams }: PageProps) {
 
       {/* The searchable, sortable dimension table */}
       <SectionErrorBoundary title="Registration breakdown unavailable">
-        <Suspense
-          fallback={<Skeleton className="h-[640px] w-full rounded-lg" />}
-        >
+        <Suspense fallback={<Skeleton className="h-[640px] w-full" />}>
           <DimensionPanel searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -107,12 +101,12 @@ export default function CarsPage({ searchParams }: PageProps) {
 
       <OverviewGrid>
         <SectionErrorBoundary title="Movers unavailable">
-          <Suspense fallback={<Skeleton className="h-96 w-full rounded-lg" />}>
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
             <MoversRail searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>
         <SectionErrorBoundary title="Vehicle population unavailable">
-          <Suspense fallback={<Skeleton className="h-96 w-full rounded-lg" />}>
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
             <PopulationPanel />
           </Suspense>
         </SectionErrorBoundary>

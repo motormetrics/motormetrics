@@ -65,21 +65,21 @@ function PopulationSkeleton() {
     <>
       <OverviewGrid>
         <div className="flex flex-col gap-4">
-          <Skeleton className="h-6 w-40 rounded-lg" />
-          <Skeleton className="h-16 w-72 rounded-lg" />
-          <Skeleton className="h-5 w-full max-w-md rounded-lg" />
-          <Skeleton className="h-[150px] w-full rounded-lg" />
+          <Skeleton className="h-6 w-40" />
+          <Skeleton className="h-16 w-72" />
+          <Skeleton className="h-5 w-full max-w-md" />
+          <Skeleton className="h-[150px] w-full" />
         </div>
         <div className="flex flex-col gap-4">
-          <Skeleton className="h-6 w-24 rounded-lg" />
-          <Skeleton className="h-5 w-40 rounded-lg" />
+          <Skeleton className="h-6 w-24" />
+          <Skeleton className="h-5 w-40" />
           <Skeleton className="size-[172px] rounded-full" />
         </div>
       </OverviewGrid>
       <Hairline />
-      <Skeleton className="h-[320px] w-full rounded-lg" />
+      <Skeleton className="h-[320px] w-full" />
       <Hairline />
-      <Skeleton className="h-[420px] w-full rounded-lg" />
+      <Skeleton className="h-[420px] w-full" />
     </>
   );
 }

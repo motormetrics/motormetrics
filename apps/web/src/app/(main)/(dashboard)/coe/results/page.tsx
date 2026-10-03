@@ -113,7 +113,7 @@ const structuredData: WithContext<WebPage> = {
 /** One pill per category, sized to the real `SeriesFilter` buttons. */
 function PillsSkeleton() {
   return COE_CATEGORIES.map((category) => (
-    <Skeleton className="h-10 w-36 rounded-full" key={category} />
+    <Skeleton className="h-10 w-36" key={category} />
   ));
 }
 
@@ -122,9 +122,9 @@ function HeadlineSkeleton() {
   return (
     <div className="flex flex-wrap items-end gap-12">
       <div className="flex min-w-0 flex-col gap-2">
-        <Skeleton className="h-6 w-72 rounded-lg" />
-        <Skeleton className="h-16 w-56 rounded-lg lg:h-20" />
-        <Skeleton className="h-5 w-80 rounded-lg" />
+        <Skeleton className="h-6 w-72" />
+        <Skeleton className="h-16 w-56 lg:h-20" />
+        <Skeleton className="h-5 w-80" />
       </div>
       <div className="ml-auto grid w-full grid-cols-2 gap-x-6 gap-y-5 sm:flex sm:w-auto sm:flex-wrap sm:gap-0">
         {["cat-a", "cat-b", "cat-e", "quota"].map((key) => (
@@ -132,9 +132,9 @@ function HeadlineSkeleton() {
             className="flex flex-col gap-1.5 border-border sm:border-l sm:px-6"
             key={key}
           >
-            <Skeleton className="h-5 w-28 rounded-lg" />
-            <Skeleton className="h-7 w-24 rounded-lg" />
-            <Skeleton className="h-4 w-32 rounded-lg" />
+            <Skeleton className="h-5 w-28" />
+            <Skeleton className="h-7 w-24" />
+            <Skeleton className="h-4 w-32" />
           </div>
         ))}
       </div>
@@ -158,7 +158,7 @@ function RowsSkeleton({ cells, rows }: { cells: number; rows: number }) {
           // biome-ignore lint/suspicious/noArrayIndexKey: skeleton cells are static placeholders
           key={cellIndex}
         >
-          <Skeleton className="h-4 w-full rounded-lg" />
+          <Skeleton className="h-4 w-full" />
         </ReportCell>
       ))}
     </ReportRow>
@@ -169,9 +169,9 @@ function RowsSkeleton({ cells, rows }: { cells: number; rows: number }) {
 function QuotaSkeleton() {
   return (
     <div className="flex flex-col gap-4">
-      <Skeleton className="h-7 w-52 rounded-lg" />
-      <Skeleton className="h-4 w-64 rounded-lg" />
-      <Skeleton className="h-[280px] w-full rounded-lg" />
+      <Skeleton className="h-7 w-52" />
+      <Skeleton className="h-4 w-64" />
+      <Skeleton className="h-[280px] w-full" />
     </div>
   );
 }
