@@ -16,7 +16,10 @@ const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
 
 vi.mock("posthog-js", () => ({ default: { capture } }));
 
-const wrapper = withNuqsTestingAdapter({ searchParams: {}, onUrlUpdate });
+// With memory, a second header press builds on the first, as the real URL
+// does. A fresh adapter per render keeps that memory from leaking across tests.
+const createWrapper = () =>
+  withNuqsTestingAdapter({ hasMemory: true, onUrlUpdate, searchParams: {} });
 
 const rows: MakesTableRow[] = [
   {
@@ -62,7 +65,7 @@ const manyRows: MakesTableRow[] = Array.from({ length: 25 }, (_, index) => ({
 const renderTable = (rowsToRender: MakesTableRow[] = rows) =>
   render(
     <MakesTable fuel={null} rangeLabel="Year to date" rows={rowsToRender} />,
-    { wrapper },
+    { wrapper: createWrapper() },
   );
 
 /** The URL a sort header press last wrote. */
@@ -74,10 +77,9 @@ const makeNames = (screen: RenderResult) =>
     .elements()
     .map((link) => link.getAttribute("href")?.replace("/cars/makes/", ""));
 
-// Rows are real anchors, so a click would navigate the test iframe away.
-// Cancelling the default is safe here: React Aria drives `onPress` from pointer
-// events, not from the click default action, so the row still reports its
-// selection.
+// Make names are real anchors, so a click would navigate the test iframe away.
+// Cancelling the default is safe here: the link's own `onClick` still runs, so
+// the selection is still reported.
 const preventNavigation = (event: MouseEvent) => event.preventDefault();
 
 describe("MakesTable", () => {
@@ -108,8 +110,8 @@ describe("MakesTable", () => {
   it("should keep the default sort out of the URL", async () => {
     const screen = await renderTable();
 
-    await screen.getByRole("button", { name: /Make/ }).click();
-    await screen.getByRole("button", { name: /Registrations/ }).click();
+    await screen.getByRole("columnheader", { name: /Make/ }).click();
+    await screen.getByRole("columnheader", { name: /Registrations/ }).click();
 
     await expect.poll(() => lastUrlUpdate()?.queryString).toBe("");
   });
@@ -179,7 +181,7 @@ describe("MakesTable", () => {
   it("should write the sort to the URL shallowly, replacing history", async () => {
     const screen = await renderTable();
 
-    await screen.getByRole("button", { name: /Change/ }).click();
+    await screen.getByRole("columnheader", { name: /Change/ }).click();
 
     await vi.waitFor(() => expect(onUrlUpdate).toHaveBeenCalled());
     const update = lastUrlUpdate();
@@ -220,7 +222,7 @@ describe("MakesTable", () => {
   it("should sort by make name ascending on the first click of that header", async () => {
     const screen = await renderTable();
 
-    await screen.getByRole("button", { name: /Make/ }).click();
+    await screen.getByRole("columnheader", { name: /Make/ }).click();
 
     await expect
       .poll(() => makeNames(screen))
@@ -231,7 +233,7 @@ describe("MakesTable", () => {
   it("should reverse the direction when the active header is clicked again", async () => {
     const screen = await renderTable();
 
-    await screen.getByRole("button", { name: /Registrations/ }).click();
+    await screen.getByRole("columnheader", { name: /Registrations/ }).click();
 
     await expect
       .poll(() => makeNames(screen))
@@ -239,14 +241,23 @@ describe("MakesTable", () => {
     expect(lastUrlUpdate()?.queryString).toBe("?dir=asc");
   });
 
-  it("should sink makes without a year-on-year figure when sorting by change", async () => {
+  it("should put makes without a year-on-year figure lowest when sorting by change", async () => {
     const screen = await renderTable();
+    const changeHeader = screen.getByRole("columnheader", { name: /Change/ });
 
-    await screen.getByRole("button", { name: /Change/ }).click();
+    // The first press sorts descending, the second ascending; either way the
+    // make with no comparison sits at the low end.
+    await changeHeader.click();
 
     await expect
       .poll(() => makeNames(screen))
       .toEqual(["byd", "toyota", "mazda"]);
+
+    await changeHeader.click();
+
+    await expect
+      .poll(() => makeNames(screen))
+      .toEqual(["mazda", "toyota", "byd"]);
   });
 
   it("should capture car_make_selected when a row is opened", async () => {
@@ -274,7 +285,7 @@ describe("MakesTable", () => {
   it("should render a dash instead of a delta chip when there is no comparison", async () => {
     const screen = await renderTable();
 
-    const mazdaRow = screen.getByRole("link").nth(2);
+    const mazdaRow = screen.getByRole("row", { name: /MAZDA/ });
 
     await expect.element(mazdaRow.getByText("—")).toBeVisible();
   });
@@ -314,7 +325,7 @@ describe("MakesTable", () => {
   it("should mark the active powertrain tab and offer the rest", async () => {
     const screen = await render(
       <MakesTable fuel="Electric" rangeLabel="Year to date" rows={rows} />,
-      { wrapper },
+      { wrapper: createWrapper() },
     );
 
     await expect

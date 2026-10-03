@@ -1,13 +1,12 @@
 "use client";
 
+import { Button, ProgressBar, SearchField, Typography } from "@heroui/react";
 import {
-  Button,
-  cn,
-  ProgressBar,
-  SearchField,
-  Typography,
-} from "@heroui/react";
-import { type DataGridSortDescriptor, NumberValue } from "@heroui-pro/react";
+  DataGrid,
+  type DataGridColumn,
+  type DataGridSortDescriptor,
+  NumberValue,
+} from "@heroui-pro/react";
 import { FuelTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/fuel-tabs";
 import type { MakeRow } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import {
@@ -43,53 +42,11 @@ const COLLAPSED_ROWS = 10;
  */
 const MIN_COUNT_FOR_CHANGE = 20;
 
-const COLUMNS: {
-  align: "left" | "right";
-  key: SortKey | null;
-  label: string;
-  /** Shown below `sm`, where the full word is wider than its column. */
-  shortLabel?: string;
-}[] = [
-  { align: "left", key: "make", label: "Make" },
-  { align: "right", key: "count", label: "Registrations", shortLabel: "Regs" },
-  { align: "left", key: null, label: "Share" },
-  { align: "right", key: "yoyChange", label: "Change", shortLabel: "YoY" },
-];
-
-/** The label pair a header cell renders, one per breakpoint. */
-function ColumnLabel({
-  label,
-  shortLabel,
-}: {
-  label: string;
-  shortLabel?: string;
-}) {
-  if (!shortLabel) {
-    return <>{label}</>;
-  }
-
-  return (
-    <>
-      <span className="sm:hidden">{shortLabel}</span>
-      <span className="hidden sm:inline">{label}</span>
-    </>
-  );
-}
-
 const SORT_LABELS: Record<SortKey, string> = {
   count: "registrations",
   make: "name",
   yoyChange: "change",
 };
-
-/**
- * Below `sm` the share bar is dropped and the remaining columns tighten,
- * because the first column is what pays for them: at the desktop widths it
- * was left with about 90px, all of which the rank and the logo took, and every
- * make name truncated to nothing.
- */
-const GRID_CLASS =
-  "grid grid-cols-[minmax(0,1fr)_56px_52px] items-center gap-2 sm:grid-cols-[minmax(0,1fr)_120px_minmax(120px,220px)_110px] sm:gap-4";
 
 /**
  * Keeps the funnel that used to be fed by the makes-page search autocomplete.
@@ -164,13 +121,122 @@ export function MakesTable({
   // already in the URL's sort, which need not be by registrations.
   const leadCount = Math.max(1, ...rows.map((row) => row.count));
 
-  const toggleSort = (key: SortKey) => {
+  // The grid hands back React Aria's next descriptor, which starts every new
+  // column ascending. Only Make reads naturally that way, so a fresh column
+  // takes its own first direction here and only a repeat press flips it.
+  const handleSortChange = ({ column, direction }: DataGridSortDescriptor) => {
+    const key = column as SortKey;
     if (key === sort) {
-      setSortParams({ dir: dir === "asc" ? "desc" : "asc" });
+      setSortParams({ dir: direction === "ascending" ? "asc" : "desc" });
       return;
     }
     setSortParams({ sort: key, dir: key === "make" ? "asc" : "desc" });
   };
+
+  const columns: DataGridColumn<MakesTableRow>[] = [
+    {
+      allowsSorting: true,
+      cell: (row) => (
+        <span className="flex min-w-0 items-center gap-3">
+          <Typography.Paragraph
+            className="w-6 shrink-0 tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {row.rank}
+          </Typography.Paragraph>
+          <MakeAvatar
+            className="shrink-0"
+            logoUrl={row.logoUrl}
+            make={row.make}
+            size="sm"
+          />
+          {/* The row can no longer be an anchor, so the name carries the link. */}
+          <Link
+            className="min-w-0"
+            href={`/cars/makes/${row.slug}`}
+            onClick={() => trackMakeSelected(row.make)}
+          >
+            <Typography.Paragraph truncate>{row.make}</Typography.Paragraph>
+          </Link>
+        </span>
+      ),
+      header: "Make",
+      id: "make",
+      isRowHeader: true,
+      minWidth: 180,
+      pinned: "start",
+    },
+    {
+      align: "end",
+      allowsSorting: true,
+      cell: (row) => (
+        <NumberValue
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={row.count}
+        />
+      ),
+      header: "Registrations",
+      id: "count",
+      width: 130,
+    },
+    {
+      cell: (row) => (
+        <span className="flex items-center gap-2">
+          <ProgressBar
+            aria-label={`${row.make} share of the leader`}
+            className="min-w-0 flex-1"
+            size="lg"
+            style={
+              {
+                "--progress-bar-fill": `var(--chart-${Math.min(6, row.rank)})`,
+              } as CSSProperties
+            }
+            value={Math.max(2, (row.count / leadCount) * 100)}
+          >
+            <ProgressBar.Track>
+              <ProgressBar.Fill />
+            </ProgressBar.Track>
+          </ProgressBar>
+          <Typography.Paragraph
+            align="end"
+            className="w-12 shrink-0 tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {row.share.toFixed(1)}%
+          </Typography.Paragraph>
+        </span>
+      ),
+      header: "Share",
+      id: "share",
+      minWidth: 180,
+    },
+    {
+      align: "end",
+      allowsSorting: true,
+      cell: (row) =>
+        row.yoyChange === null || row.count < MIN_COUNT_FOR_CHANGE ? (
+          <Typography.Paragraph
+            color="muted"
+            size="sm"
+            title={
+              row.yoyChange === null
+                ? "No registrations in the same period a year earlier"
+                : `Too few registrations for a meaningful year-on-year change (under ${MIN_COUNT_FOR_CHANGE})`
+            }
+          >
+            —
+          </Typography.Paragraph>
+        ) : (
+          <DeltaChip value={row.yoyChange} />
+        ),
+      header: "Change",
+      id: "yoyChange",
+      width: 100,
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-6">
@@ -212,155 +278,17 @@ export function MakesTable({
         </Typography.Paragraph>
       </div>
 
-      <div className="flex flex-col">
-        <div className={cn(GRID_CLASS, "border-separator border-b px-2 pb-3")}>
-          {COLUMNS.map((column) => {
-            const isActive =
-              column.key !== null && column.key === descriptor.column;
-            const className = cn(
-              "font-semibold text-[13px]",
-              column.align === "right" ? "text-right" : "text-left",
-              column.label === "Share" && "hidden sm:block",
-              isActive ? "text-accent-strong" : "text-muted",
-            );
-
-            if (column.key === null) {
-              return (
-                <Typography.Paragraph
-                  className={className}
-                  key={column.label}
-                  size="xs"
-                >
-                  <ColumnLabel
-                    label={column.label}
-                    shortLabel={column.shortLabel}
-                  />
-                </Typography.Paragraph>
-              );
-            }
-
-            const sortKeyForColumn = column.key;
-            return (
-              <Button
-                className={cn(
-                  className,
-                  "h-auto justify-start gap-0 rounded-none bg-transparent p-0 hover:bg-transparent data-[pressed=true]:scale-100",
-                  column.align === "right" && "justify-end",
-                )}
-                key={column.label}
-                onPress={() => toggleSort(sortKeyForColumn)}
-                variant="ghost"
-              >
-                <ColumnLabel
-                  label={column.label}
-                  shortLabel={column.shortLabel}
-                />
-                {isActive
-                  ? descriptor.direction === "ascending"
-                    ? " ↑"
-                    : " ↓"
-                  : ""}
-              </Button>
-            );
-          })}
-        </div>
-
-        {displayedRows.map((row) => (
-          <Link
-            className={cn(
-              GRID_CLASS,
-              "border-separator border-b px-2 py-[15px] text-foreground no-underline transition-colors hover:bg-default",
-            )}
-            href={`/cars/makes/${row.slug}`}
-            key={row.make}
-            onClick={() => trackMakeSelected(row.make)}
-          >
-            <div className="flex min-w-0 items-center gap-3">
-              <span
-                className={cn(
-                  "w-[26px] shrink-0 text-[15px] tabular-nums",
-                  row.rank <= 3
-                    ? "font-extrabold text-accent-strong"
-                    : "font-bold text-muted",
-                )}
-              >
-                {row.rank}
-              </span>
-              <span className="hidden shrink-0 sm:block">
-                <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="sm" />
-              </span>
-              <Typography.Paragraph
-                className="text-foreground/85 text-sm sm:text-base"
-                weight="semibold"
-                truncate
-              >
-                {row.make}
-              </Typography.Paragraph>
-            </div>
-
-            <span className="text-right font-extrabold text-sm tabular-nums sm:text-base">
-              <NumberValue
-                locale="en-SG"
-                maximumFractionDigits={0}
-                value={row.count}
-              />
-            </span>
-
-            <span className="hidden items-center gap-2.5 sm:flex">
-              <ProgressBar
-                aria-label={`${row.make} share of the leader`}
-                className="min-w-0 flex-1"
-                style={
-                  {
-                    "--progress-bar-fill": `var(--chart-${Math.min(6, row.rank)})`,
-                  } as CSSProperties
-                }
-                value={Math.max(2, (row.count / leadCount) * 100)}
-              >
-                <ProgressBar.Track className="h-2.5 rounded-full bg-surface-secondary">
-                  <ProgressBar.Fill className="rounded-full" />
-                </ProgressBar.Track>
-              </ProgressBar>
-              <span className="w-11 text-right font-bold text-[13.5px] text-muted-strong tabular-nums">
-                {row.share.toFixed(1)}%
-              </span>
-            </span>
-
-            {row.yoyChange === null || row.count < MIN_COUNT_FOR_CHANGE ? (
-              <Typography.Paragraph
-                align="end"
-                weight="semibold"
-                color="muted"
-                size="sm"
-                title={
-                  row.yoyChange === null
-                    ? "No registrations in the same period a year earlier"
-                    : `Too few registrations for a meaningful year-on-year change (under ${MIN_COUNT_FOR_CHANGE})`
-                }
-              >
-                —
-              </Typography.Paragraph>
-            ) : (
-              <DeltaChip
-                // At the inherited 16px, "+22.5%" is ~54px wide and overruns the 52px phone column.
-                className="justify-self-end max-sm:text-xs"
-                value={row.yoyChange}
-              />
-            )}
-          </Link>
-        ))}
-
-        {visibleRows.length === 0 ? (
-          <Typography.Paragraph
-            className="px-2 py-8 text-[15px]"
-            weight="semibold"
-            color="muted"
-            size="sm"
-          >
-            Nothing matches “{query}”.
-          </Typography.Paragraph>
-        ) : null}
-      </div>
+      <DataGrid
+        aria-label="Makes"
+        columns={columns}
+        contentClassName="min-w-[560px]"
+        data={displayedRows}
+        getRowId={(row) => row.slug}
+        onSortChange={handleSortChange}
+        renderEmptyState={() => `Nothing matches “${query}”.`}
+        sortDescriptor={descriptor}
+        variant="secondary"
+      />
 
       {!isSearching && visibleRows.length > COLLAPSED_ROWS ? (
         <Button
@@ -380,8 +308,7 @@ export function MakesTable({
         size="sm"
       >
         Change compares against the same period a year earlier, and is withheld
-        below {MIN_COUNT_FOR_CHANGE} registrations. Select a row to open the
-        make.
+        below {MIN_COUNT_FOR_CHANGE} registrations. Select a make to open it.
       </Typography.Paragraph>
     </div>
   );
