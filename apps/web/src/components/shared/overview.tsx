@@ -54,7 +54,7 @@ export function OverviewGrid({
 
 /** The hairline that separates one section from the next. */
 export function Hairline({ className }: { className?: string }) {
-  return <Separator className={cn("bg-separator", className)} />;
+  return <Separator className={className} />;
 }
 
 /**

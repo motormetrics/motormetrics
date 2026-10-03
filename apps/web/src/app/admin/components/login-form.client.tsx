@@ -70,7 +70,7 @@ export function LoginFormClient({ googleButtonContent }: LoginFormClientProps) {
         <TextField
           isRequired
           isDisabled={isLoading}
-          className="flex flex-col gap-2"
+          className="gap-2"
           type="email"
         >
           <Label>Email</Label>
@@ -84,7 +84,7 @@ export function LoginFormClient({ googleButtonContent }: LoginFormClientProps) {
         <TextField
           isRequired
           isDisabled={isLoading}
-          className="flex flex-col gap-2"
+          className="gap-2"
           type="password"
         >
           <Label>Password</Label>

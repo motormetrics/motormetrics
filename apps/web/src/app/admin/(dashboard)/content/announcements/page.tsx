@@ -34,7 +34,7 @@ export default function AnnouncementsPage() {
         <Card.Header>
           <Card.Title>Instructions</Card.Title>
         </Card.Header>
-        <Card.Content className="flex flex-col gap-4 text-muted text-sm">
+        <Card.Content className="gap-4 text-muted text-sm">
           <div className="flex items-start gap-2">
             <span className="font-medium text-foreground">1.</span>
             <span>

@@ -12,11 +12,7 @@ export function FaqSection() {
   return (
     <section className="grid items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-14">
       <Typography.Heading level={2}>Common questions</Typography.Heading>
-      <Accordion
-        className="w-full"
-        defaultExpandedKeys={[FAQS[0].question]}
-        variant="surface"
-      >
+      <Accordion defaultExpandedKeys={[FAQS[0].question]} variant="surface">
         {FAQS.map(({ answer, question }) => (
           <Accordion.Item id={question} key={question}>
             <Accordion.Heading>
@@ -28,7 +24,7 @@ export function FaqSection() {
               </Accordion.Trigger>
             </Accordion.Heading>
             <Accordion.Panel>
-              <Accordion.Body className="max-w-prose text-base text-muted leading-relaxed">
+              <Accordion.Body className="max-w-prose text-base leading-relaxed">
                 {answer}
               </Accordion.Body>
             </Accordion.Panel>

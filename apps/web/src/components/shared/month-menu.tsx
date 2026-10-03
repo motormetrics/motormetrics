@@ -61,7 +61,7 @@ export function MonthMenu({
         {formatDateToMonthYear(month)}
         <ChevronDown aria-hidden className="size-4" strokeWidth={2.25} />
       </Button>
-      <Dropdown.Popover className="max-h-96 min-w-52 overflow-y-auto">
+      <Dropdown.Popover className="max-h-96 min-w-52">
         <Dropdown.Menu
           onAction={(key) => {
             posthog.capture("dashboard_filter_changed", {

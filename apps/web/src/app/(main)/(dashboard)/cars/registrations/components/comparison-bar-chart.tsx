@@ -42,7 +42,7 @@ export function ComparisonBarChart({
 
   return (
     <Card>
-      <Card.Header className="flex flex-col items-start gap-2">
+      <Card.Header className="items-start gap-2">
         <Typography.Heading level={4}>{title}</Typography.Heading>
         {description && (
           <Typography.Paragraph color="muted" size="sm">
@@ -53,11 +53,7 @@ export function ComparisonBarChart({
       <Card.Content>
         <div className="flex flex-col gap-4">
           <BarChart data={chartData} height={height} layout="vertical">
-            <BarChart.Grid
-              horizontal={false}
-              strokeDasharray="3 3"
-              className="stroke-chart-grid"
-            />
+            <BarChart.Grid horizontal={false} strokeDasharray="3 3" />
             <BarChart.XAxis
               type="number"
               tickFormatter={formatNumber}

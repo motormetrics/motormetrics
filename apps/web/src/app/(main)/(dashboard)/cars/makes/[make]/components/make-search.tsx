@@ -26,7 +26,7 @@ export function MakeSearch({ makes }: MakeSearchProps) {
   return (
     <ComboBox onSelectionChange={handleSelectionChange}>
       <Label className="sr-only">Search make</Label>
-      <ComboBox.InputGroup className="relative">
+      <ComboBox.InputGroup>
         <Search
           aria-hidden
           className="pointer-events-none absolute top-1/2 left-3.5 z-10 size-4 -translate-y-1/2 text-muted"

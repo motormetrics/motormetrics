@@ -105,7 +105,7 @@ export function AllCategoriesTable({
         <Table.ScrollContainer>
           <Table.Content
             aria-label="COE categories"
-            className="w-full table-fixed border-separate border-spacing-0 tabular-nums"
+            className="table-fixed tabular-nums"
             onRowAction={(key) => selectCategory(key as CategoryKey)}
             onSortChange={(descriptor) =>
               setSort({

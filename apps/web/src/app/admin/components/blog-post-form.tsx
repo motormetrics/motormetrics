@@ -268,8 +268,8 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
             Basic information about the blog post
           </Card.Description>
         </Card.Header>
-        <Card.Content className="flex flex-col gap-4">
-          <TextField isRequired className="flex flex-col gap-2">
+        <Card.Content className="gap-4">
+          <TextField isRequired className="gap-2">
             <Label>Title</Label>
             <Input
               name="title"
@@ -279,7 +279,7 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
             />
           </TextField>
 
-          <TextField className="flex flex-col gap-2">
+          <TextField className="gap-2">
             <Label>Excerpt</Label>
             <Input
               name="excerpt"
@@ -289,7 +289,7 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
             />
           </TextField>
 
-          <TextField isRequired className="flex flex-col gap-2">
+          <TextField isRequired className="gap-2">
             <Label>Content</Label>
             <TextArea
               name="content"
@@ -300,7 +300,7 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
             />
           </TextField>
 
-          <TextField className="flex flex-col gap-2">
+          <TextField className="gap-2">
             <Label>Tags</Label>
             <Input
               name="tags"
@@ -319,9 +319,9 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
             Optional data source and publication settings
           </Card.Description>
         </Card.Header>
-        <Card.Content className="flex flex-col gap-4">
+        <Card.Content className="gap-4">
           <div className="grid grid-cols-2 gap-4">
-            <TextField className="flex flex-col gap-2">
+            <TextField className="gap-2">
               <Label>Month</Label>
               <Input
                 name="month"
@@ -330,7 +330,7 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
                 onChange={(e) => setMonth(e.target.value)}
               />
             </TextField>
-            <TextField className="flex flex-col gap-2">
+            <TextField className="gap-2">
               <Label>Data Type</Label>
               <Input
                 name="dataType"
@@ -387,7 +387,7 @@ export function BlogPostForm({ mode, defaultValues }: BlogPostFormProps) {
           </div>
         </Card.Header>
         {highlights.length > 0 && (
-          <Card.Content className="flex flex-col gap-4">
+          <Card.Content className="gap-4">
             {highlights.map((highlight, index) => (
               <div
                 key={highlight.id}

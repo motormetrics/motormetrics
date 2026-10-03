@@ -48,7 +48,6 @@ export function BarRow({
       </div>
       <ProgressBar
         aria-labelledby={labelId}
-        className="w-full"
         value={Math.min(Math.max(share, 0), 100)}
       >
         <ProgressBar.Track className="h-3 rounded-full bg-surface-secondary">
