@@ -1,3 +1,18 @@
+## [5.30.0](https://github.com/motormetrics/motormetrics/compare/v5.29.0...v5.30.0) (2026-10-03)
+
+### Features
+
+* **web:** lay the phone nav sheet out in two columns ([67b61d5](https://github.com/motormetrics/motormetrics/commit/67b61d56f1312609e7444ad36f3ff942355d065b))
+* **web:** restyle footer with framed mark and hairline meta line ([66c8e06](https://github.com/motormetrics/motormetrics/commit/66c8e06903a2a5c52fec561e398875dcce7a4923))
+* **web:** restyle nav bar as text links with a container collapse ([c732337](https://github.com/motormetrics/motormetrics/commit/c732337a4fcaa6506273dfa81a971a4d27566514))
+* **web:** restyle nav dropdowns with hairline section separators ([3865440](https://github.com/motormetrics/motormetrics/commit/38654401999e9ca44c1c3dd9ac092635ff8c1cbd))
+* **web:** sentence-case nav labels and name More section Company ([42183aa](https://github.com/motormetrics/motormetrics/commit/42183aaee70fbd3c1e56976c400d0e7f1d2c0864))
+* **web:** sit the nav flush against the top of the page ([cd5d36a](https://github.com/motormetrics/motormetrics/commit/cd5d36a29cc934090641c11e734f03ba11a1cb9a))
+
+### Bug Fixes
+
+* **web:** narrow the collapsed nav bar gap so it fits 360px ([3f48fd8](https://github.com/motormetrics/motormetrics/commit/3f48fd8e98d0bcc81742c88a7997bd7bdb153b60))
+
 ## [5.29.0](https://github.com/motormetrics/motormetrics/compare/v5.28.0...v5.29.0) (2026-10-03)
 
 ### Features
