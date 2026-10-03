@@ -172,7 +172,7 @@ export function AllCategoriesTable({
                     <Table.Cell className={CELL_CLASS}>
                       <CategorySelect
                         category={row.categoryKey}
-                        className="flex min-w-0 flex-col gap-0.5"
+                        className="flex min-w-0 flex-col items-start gap-0.5"
                         isActive={isActive}
                         label={`Show ${row.category}`}
                       >
