@@ -1,7 +1,7 @@
 "use client";
 
-import { ToggleButton, ToggleButtonGroup, Typography } from "@heroui/react";
-import { NumberValue } from "@heroui-pro/react";
+import { Typography } from "@heroui/react";
+import { NumberValue, Segment } from "@heroui-pro/react";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { changeRatio } from "@web/utils/change-ratio";
@@ -21,7 +21,7 @@ export interface CoeCategorySeries {
 const CHART_HEIGHT = 200;
 
 /**
- * The left half of the COE section: category circles, the latest premium for
+ * The left half of the COE section: the category switch, the latest premium for
  * the chosen category and its trend. A client island only for the selection —
  * every series arrives computed from the server.
  */
@@ -39,38 +39,28 @@ export function CoePremiums({ series }: { series: CoeCategorySeries[] }) {
 
   return (
     <div className="flex flex-col gap-3.5">
-      {/* Five 44px circles plus their gaps want 252px, which a 320px phone can
-          give this row but not with the name beside them — so it wraps. */}
+      {/* The A–E switch and the category name share a row, which wraps on a
+          phone too narrow for both. */}
       <div className="flex flex-wrap items-center gap-2">
-        <ToggleButtonGroup
+        <Segment
           aria-label="COE category"
-          className="flex flex-wrap gap-2"
-          disallowEmptySelection
-          isDetached
-          onSelectionChange={(keys) => {
-            const [category] = [...keys];
-            if (category === undefined) {
-              return;
-            }
+          onSelectionChange={(category) => {
             posthog.capture("dashboard_filter_changed", {
               filter: "category",
               value: category,
             });
             setSelected(String(category));
           }}
-          selectedKeys={[active.category]}
-          selectionMode="single"
+          selectedKey={active.category}
+          size="md"
+          variant="ghost"
         >
           {series.map((item) => (
-            <ToggleButton
-              className="size-11 rounded-full bg-default p-0 font-extrabold text-base text-muted-strong transition-colors hover:bg-accent-soft data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
-              id={item.category}
-              key={item.category}
-            >
+            <Segment.Item id={item.category} key={item.category}>
               {item.label}
-            </ToggleButton>
+            </Segment.Item>
           ))}
-        </ToggleButtonGroup>
+        </Segment>
         <Typography.Paragraph
           className="text-[15px] sm:pl-2"
           weight="semibold"

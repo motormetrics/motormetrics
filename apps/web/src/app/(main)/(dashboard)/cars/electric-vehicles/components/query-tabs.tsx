@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, ToggleButton, ToggleButtonGroup } from "@heroui/react";
+import { Segment } from "@heroui-pro/react";
 import { parseAsString, useQueryState } from "nuqs";
 import posthog from "posthog-js";
 
@@ -12,7 +12,10 @@ interface QueryTabsProps<Value extends string> {
   param: string;
   /** Currently selected key, as resolved on the server. */
   value: Value;
-  /** `pill` for the v3 tab rows, `segmented` for the charging controls. */
+  /**
+   * `pill` renders Segment's ghost variant for the tab rows; `segmented` its
+   * default variant for the charging controls.
+   */
   variant?: "pill" | "segmented";
 }
 
@@ -38,42 +41,28 @@ export function QueryTabs<Value extends string>({
   );
 
   return (
-    <ToggleButtonGroup
-      aria-label={ariaLabel}
-      className={cn(
-        "flex min-w-0 flex-wrap gap-2",
-        variant === "segmented" && "gap-1.5 rounded-full bg-default p-1.5",
-      )}
-      disallowEmptySelection
-      isDetached
-      onSelectionChange={(keys) => {
-        const [key] = [...keys];
-        if (key === undefined) {
-          return;
-        }
-        posthog.capture("dashboard_filter_changed", {
-          filter: param,
-          value: key,
-        });
-        setValue(String(key));
-      }}
-      selectedKeys={[value]}
-      selectionMode="single"
-    >
-      {options.map((option) => (
-        <ToggleButton
-          className={cn(
-            "h-auto whitespace-nowrap rounded-full bg-transparent font-semibold text-sm transition-colors data-[selected=true]:font-extrabold",
-            variant === "segmented"
-              ? "px-4 py-2 text-muted hover:bg-transparent data-[selected=true]:bg-surface data-[selected=true]:text-foreground data-[selected=true]:shadow-surface"
-              : "bg-default px-[18px] py-2.5 text-foreground/75 hover:bg-default hover:brightness-[1.03] data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground",
-          )}
-          id={option.key}
-          key={option.key}
-        >
-          {option.label}
-        </ToggleButton>
-      ))}
-    </ToggleButtonGroup>
+    // Segment is a non-wrapping inline-flex, so a row wider than a phone (the
+    // four powertrain tabs) scrolls sideways inside this wrapper instead.
+    <div className="max-w-full overflow-x-auto">
+      <Segment
+        aria-label={ariaLabel}
+        onSelectionChange={(key) => {
+          posthog.capture("dashboard_filter_changed", {
+            filter: param,
+            value: key,
+          });
+          setValue(String(key));
+        }}
+        selectedKey={value}
+        size="md"
+        variant={variant === "segmented" ? "default" : "ghost"}
+      >
+        {options.map((option) => (
+          <Segment.Item id={option.key} key={option.key}>
+            {option.label}
+          </Segment.Item>
+        ))}
+      </Segment>
+    </div>
   );
 }

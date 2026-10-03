@@ -15,14 +15,12 @@ import posthog from "posthog-js";
 import { type ReactNode, useTransition } from "react";
 
 /*
- * The Pro segment ships with 12px container and 10px item and indicator radii.
- * The restyle squares every switch to 6px, so the radii are overridden here at
- * the call site (`*:` reaches the indicator, the item's only child element).
- * At 720px and below the switch spans the row and its items share the width.
+ * The radius and padding come from HeroUI's Segment. The only override is
+ * layout: at 720px and below the switch spans the row and its items share
+ * the width.
  */
-const SEGMENT_CLASS = "rounded-lg border border-separator max-[720px]:w-full";
-const SEGMENT_ITEM_CLASS =
-  "rounded-lg *:rounded-lg max-[720px]:flex-1 max-[720px]:px-2";
+const SEGMENT_CLASS = "max-[720px]:w-full";
+const SEGMENT_ITEM_CLASS = "max-[720px]:flex-1";
 
 /**
  * Every control on the COE overview writes to the URL with `shallow: false`,
