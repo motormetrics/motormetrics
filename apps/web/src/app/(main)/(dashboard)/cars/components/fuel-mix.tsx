@@ -1,6 +1,7 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
+import { Text } from "@web/components/shared/text";
 import { getCarsData } from "@web/queries/cars";
 import {
   type DonutSegment,
@@ -59,12 +60,9 @@ export async function FuelMix({
   return (
     <div className="flex flex-col gap-[18px]">
       <div className="flex flex-col gap-2.5">
-        <Typography.Paragraph
-          className="text-muted-strong text-xl"
-          weight="semibold"
-        >
+        <Text.Paragraph tone="strong" className="text-xl" weight="semibold">
           Fuel mix
-        </Typography.Paragraph>
+        </Text.Paragraph>
         <Typography.Paragraph weight="medium" color="muted">
           {formatMonthName(month)} registrations by powertrain
         </Typography.Paragraph>
@@ -119,10 +117,7 @@ export async function FuelMix({
                   className="size-[11px] shrink-0 rounded-full"
                   style={{ background: segment.color }}
                 />
-                <Typography.Paragraph
-                  className="text-foreground/85"
-                  weight="semibold"
-                >
+                <Typography.Paragraph weight="semibold">
                   {segment.label}
                 </Typography.Paragraph>
                 <span className="ml-auto font-extrabold text-base tabular-nums">

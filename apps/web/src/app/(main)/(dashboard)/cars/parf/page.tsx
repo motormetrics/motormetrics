@@ -3,6 +3,7 @@ import { PARFCalculator } from "@web/app/(main)/(dashboard)/cars/parf/components
 import { PARFComparisonTable } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-comparison-table";
 import { PageHead } from "@web/components/shared/page-head";
 import { Report, ReportSection } from "@web/components/shared/report";
+import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -80,7 +81,7 @@ export default function PARFCalculatorPage() {
             It has never been laid up, and its COE has never been renewed.
           </li>
         </ul>
-        <Typography.Paragraph className="text-muted-strong">
+        <Text.Paragraph tone="strong">
           Your deregistration value is the PARF rebate plus a COE rebate for the
           months left on the COE.{" "}
           <Link
@@ -94,7 +95,7 @@ export default function PARFCalculatorPage() {
             PARF guide
           </Link>{" "}
           explains when deregistering early pays off.
-        </Typography.Paragraph>
+        </Text.Paragraph>
       </ReportSection>
 
       <Typography.Paragraph color="muted" size="sm">

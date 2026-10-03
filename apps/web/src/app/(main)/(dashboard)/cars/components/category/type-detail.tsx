@@ -25,6 +25,7 @@ import {
   ShareBar,
 } from "@web/components/shared/report-table";
 import { SkeletonCard } from "@web/components/shared/skeleton";
+import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -392,9 +393,9 @@ async function TypeDetailContent({
           >
             The full electric picture →
           </Typography.Heading>
-          <Typography.Paragraph size="sm" className="text-muted-strong">
+          <Text.Paragraph size="sm" tone="strong">
             Adoption, charging and the makes leading it, on one page
-          </Typography.Paragraph>
+          </Text.Paragraph>
         </Link>
       ) : null}
 

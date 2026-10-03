@@ -92,10 +92,7 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
               className="size-[11px] shrink-0 rounded-full"
               style={{ background: segment.colour }}
             />
-            <Typography.Paragraph
-              className="text-foreground/85"
-              weight="semibold"
-            >
+            <Typography.Paragraph weight="semibold">
               {segment.label}
             </Typography.Paragraph>
             <span className="ml-auto font-extrabold text-base tabular-nums">

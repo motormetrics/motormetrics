@@ -3,6 +3,7 @@ import {
   ELECTRIC,
   type PopulationEntity,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
+import { Text } from "@web/components/shared/text";
 import {
   type DonutSegment,
   donutArcs,
@@ -69,12 +70,9 @@ export function FuelMixRing({
   return (
     <div className="flex flex-col gap-[18px]">
       <div className="flex flex-col gap-2.5">
-        <Typography.Paragraph
-          className="text-muted-strong text-xl"
-          weight="semibold"
-        >
+        <Text.Paragraph tone="strong" className="text-xl" weight="semibold">
           Fuel mix
-        </Typography.Paragraph>
+        </Text.Paragraph>
         <Typography.Paragraph weight="medium" color="muted">
           {entity.name} by fuel type
         </Typography.Paragraph>
@@ -126,10 +124,7 @@ export function FuelMixRing({
                   className="size-[11px] shrink-0 rounded-full"
                   style={{ background: segment.color }}
                 />
-                <Typography.Paragraph
-                  className="text-foreground/85"
-                  weight="semibold"
-                >
+                <Typography.Paragraph weight="semibold">
                   {segment.label}
                 </Typography.Paragraph>
                 <span className="ml-auto font-extrabold text-base tabular-nums">

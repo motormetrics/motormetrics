@@ -296,11 +296,7 @@ export function DimensionTable({
                         make={row.name}
                         size="sm"
                       />
-                      <Typography.Paragraph
-                        className="text-foreground/85"
-                        weight="semibold"
-                        truncate
-                      >
+                      <Typography.Paragraph weight="semibold" truncate>
                         {row.name}
                       </Typography.Paragraph>
                     </div>

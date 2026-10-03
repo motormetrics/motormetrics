@@ -1,4 +1,3 @@
-import { Typography } from "@heroui/react";
 import type { CategoryRow } from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
 import { AllCategoriesTable } from "@web/app/(main)/(dashboard)/coe/components/all-categories-table";
 import {
@@ -11,6 +10,7 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { SectionLink } from "@web/components/shared/overview";
+import { Text } from "@web/components/shared/text";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
 
@@ -69,14 +69,15 @@ export async function AllCategories({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-end gap-4">
-        <Typography.Heading
-          className="text-xs uppercase tracking-[0.06em] min-[721px]:sr-only"
+        <Text.Heading
+          eyebrow
+          className="min-[721px]:sr-only"
           weight="semibold"
           color="muted"
           level={2}
         >
           All categories
-        </Typography.Heading>
+        </Text.Heading>
         <SectionLink href="/coe/results">All COE results</SectionLink>
       </div>
       <AllCategoriesTable rows={rows} selected={selected} />

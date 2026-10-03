@@ -4,6 +4,7 @@ import { loadElectricOnlyMakes } from "@web/app/(main)/(dashboard)/cars/makes/co
 import { BarRow } from "@web/components/shared/bar-row";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { Headline, SectionHead } from "@web/components/shared/overview";
+import { Text } from "@web/components/shared/text";
 
 export async function ElectricOnlyMakes() {
   const summary = await loadElectricOnlyMakes();
@@ -38,12 +39,9 @@ export async function ElectricOnlyMakes() {
             label={
               <>
                 <MakeAvatar logoUrl={make.logoUrl} make={make.make} size="sm" />
-                <Typography.Paragraph
-                  className="[color:inherit] [font-weight:inherit]"
-                  truncate
-                >
+                <Text.Paragraph tone="inherit" truncate>
                   {make.make}
-                </Typography.Paragraph>
+                </Text.Paragraph>
               </>
             }
             share={(make.count / leadCount) * 100}

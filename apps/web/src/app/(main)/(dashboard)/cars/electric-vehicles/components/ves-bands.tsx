@@ -40,10 +40,7 @@ export function VesBands() {
             >
               {row.band}
             </span>
-            <Typography.Paragraph
-              className="text-foreground/85"
-              weight="semibold"
-            >
+            <Typography.Paragraph weight="semibold">
               {row.note}
             </Typography.Paragraph>
             <span className="ml-auto font-extrabold text-lg tabular-nums">

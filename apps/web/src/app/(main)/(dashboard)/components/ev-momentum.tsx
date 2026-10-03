@@ -98,11 +98,7 @@ export async function EvMomentum() {
                   make={item.make}
                   size="sm"
                 />
-                <Typography.Paragraph
-                  className="text-foreground/85"
-                  weight="semibold"
-                  truncate
-                >
+                <Typography.Paragraph weight="semibold" truncate>
                   {item.make}
                 </Typography.Paragraph>
                 <span className="ml-auto font-extrabold text-base tabular-nums">
