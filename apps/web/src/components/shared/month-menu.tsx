@@ -53,7 +53,7 @@ export function MonthMenu({
         {formatDateToMonthYear(month)}
         <ChevronDown aria-hidden className="size-4" strokeWidth={2.25} />
       </Button>
-      <Dropdown.Popover className="max-h-96 min-w-52">
+      <Dropdown.Popover className="max-h-96">
         <Dropdown.Menu
           onAction={(key) => {
             posthog.capture("dashboard_filter_changed", {
@@ -62,6 +62,8 @@ export function MonthMenu({
             });
             setMonth(String(key));
           }}
+          selectedKeys={[month]}
+          selectionMode="single"
         >
           {years.map(([year, monthsOfYear]) => (
             <Dropdown.Section key={year}>
@@ -69,19 +71,10 @@ export function MonthMenu({
               {monthsOfYear.map((monthOfYear) => {
                 const value = `${year}-${monthOfYear}`;
                 const label = formatDateToMonthYear(value);
-                const isActive = value === month;
 
                 return (
-                  <Dropdown.Item
-                    className={
-                      isActive
-                        ? "bg-accent-soft-2 font-bold text-accent-deep"
-                        : undefined
-                    }
-                    id={value}
-                    key={value}
-                    textValue={label}
-                  >
+                  <Dropdown.Item id={value} key={value} textValue={label}>
+                    <Dropdown.ItemIndicator />
                     <Label>{label}</Label>
                   </Dropdown.Item>
                 );

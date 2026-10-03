@@ -39,7 +39,7 @@ export function RangeMenu() {
         {RANGE_LABELS[range]}
         <ChevronDown aria-hidden className="size-4" strokeWidth={2.25} />
       </Button>
-      <Dropdown.Popover className="min-w-52">
+      <Dropdown.Popover>
         <Dropdown.Menu
           onAction={(key) => {
             const next = String(key);
@@ -52,25 +52,19 @@ export function RangeMenu() {
             });
             setRange(next);
           }}
+          selectedKeys={[range]}
+          selectionMode="single"
         >
-          {RANGES.map((option) => {
-            const isActive = option === range;
-
-            return (
-              <Dropdown.Item
-                className={
-                  isActive
-                    ? "bg-accent-soft-2 font-bold text-accent-deep"
-                    : undefined
-                }
-                id={option}
-                key={option}
-                textValue={RANGE_LABELS[option]}
-              >
-                <Label>{RANGE_LABELS[option]}</Label>
-              </Dropdown.Item>
-            );
-          })}
+          {RANGES.map((option) => (
+            <Dropdown.Item
+              id={option}
+              key={option}
+              textValue={RANGE_LABELS[option]}
+            >
+              <Dropdown.ItemIndicator />
+              <Label>{RANGE_LABELS[option]}</Label>
+            </Dropdown.Item>
+          ))}
         </Dropdown.Menu>
       </Dropdown.Popover>
     </Dropdown>

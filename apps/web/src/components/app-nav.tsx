@@ -41,16 +41,8 @@ const linkClassName = (isActive: boolean) =>
     isActive ? "border-accent font-semibold text-foreground" : "text-muted",
   );
 
-// Menu chrome from the MMNav comp: rows are 4px-radius 14px labels rather
-// than the 32px HeroUI default.
-const menuItemClassName =
-  "rounded-sm px-3.5 py-2.25 font-medium text-muted-strong text-sm";
-
-// Section labels are plain 11.5px uppercase eyebrows. The hairline Separator
-// between sections marks the break, so the eyebrow needs no tint of its own.
-// The phone sheet shares this class.
-const menuHeaderClassName =
-  "col-span-full px-3.5 pt-2 pb-1 font-semibold text-[11.5px] text-subtle uppercase tracking-[0.06em]";
+// Section labels span the menu's columns. The phone sheet shares this class.
+const menuHeaderClassName = "col-span-full";
 
 // Spans the menu's columns so it rules across the whole popover.
 const menuSeparatorClassName = "col-span-full mx-1 my-1.5 w-auto";
@@ -72,12 +64,7 @@ const menuSectionClassName = (itemCount: number) =>
 
 function NavMenuItems({ items }: { items: readonly NavigationItem[] }) {
   return items.map(({ badge, title, url }) => (
-    <Dropdown.Item
-      className={menuItemClassName}
-      id={url}
-      key={url}
-      textValue={title}
-    >
+    <Dropdown.Item id={url} key={url} textValue={title}>
       <Label className="flex min-w-0 flex-1 items-center gap-2">
         <span className="truncate">{title}</span>
         <NavBadge badge={badge} />
@@ -220,10 +207,7 @@ export function AppNav({
                     strokeWidth={2.25}
                   />
                 </Button>
-                <Dropdown.Popover
-                  className="rounded-xl border border-separator"
-                  placement="bottom start"
-                >
+                <Dropdown.Popover placement="bottom start">
                   <Dropdown.Menu
                     className={menuClassName(rowCount)}
                     onAction={handleNavigate}
@@ -244,7 +228,6 @@ export function AppNav({
                           {section.withOverview ? (
                             <Dropdown.Item
                               aria-label={`${label} overview`}
-                              className={menuItemClassName}
                               id={href}
                               key={href}
                               textValue={`${label} overview`}
@@ -271,10 +254,7 @@ export function AppNav({
               More
               <ChevronDown className="size-3.5 shrink-0" strokeWidth={2.25} />
             </Button>
-            <Dropdown.Popover
-              className="rounded-xl border border-separator"
-              placement="bottom start"
-            >
+            <Dropdown.Popover placement="bottom start">
               <Dropdown.Menu
                 className={menuClassName(moreNavItems.length)}
                 onAction={handleNavigate}
@@ -296,8 +276,7 @@ export function AppNav({
 
         <GetUpdatesLink />
 
-        {/* A 34px bordered square, matching the CTA's height. */}
-        <Navbar.MenuToggle className="@4xl:hidden size-8.5 shrink-0 border border-border" />
+        <Navbar.MenuToggle className="@4xl:hidden shrink-0" />
       </Navbar.Header>
 
       {/* The phone sheet: an Explore group of the primary links, then every

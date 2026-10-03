@@ -90,7 +90,7 @@ export function SharePill({
         <Share2 className="size-4 shrink-0" strokeWidth={2} />
         Share
       </Button>
-      <Dropdown.Popover className="min-w-58" placement="bottom end">
+      <Dropdown.Popover placement="bottom end">
         <Dropdown.Menu onAction={handleAction}>
           <Dropdown.Section>
             <Header>Share this page</Header>
