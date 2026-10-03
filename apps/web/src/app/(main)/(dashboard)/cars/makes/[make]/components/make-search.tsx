@@ -1,6 +1,6 @@
 "use client";
 
-import { ComboBox, Input, Label, ListBox } from "@heroui/react";
+import { ComboBox, Input, ListBox } from "@heroui/react";
 
 import { slugify } from "@motormetrics/utils/slugify";
 import type { Make } from "@web/types";
@@ -24,8 +24,10 @@ export function MakeSearch({ makes }: MakeSearchProps) {
   };
 
   return (
-    <ComboBox onSelectionChange={handleSelectionChange}>
-      <Label className="sr-only">Search make</Label>
+    <ComboBox
+      aria-label="Search make"
+      onSelectionChange={handleSelectionChange}
+    >
       <ComboBox.InputGroup>
         <Search
           aria-hidden

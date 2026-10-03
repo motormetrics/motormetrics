@@ -1,5 +1,5 @@
 import { cn, ProgressBar } from "@heroui/react";
-import { type ReactNode, useId } from "react";
+import { type CSSProperties, type ReactNode, useId } from "react";
 
 /**
  * One labelled proportion bar — the v3 comps' ranked list, used for top makes,
@@ -48,13 +48,11 @@ export function BarRow({
       </div>
       <ProgressBar
         aria-labelledby={labelId}
+        style={{ "--progress-bar-fill": color } as CSSProperties}
         value={Math.min(Math.max(share, 0), 100)}
       >
         <ProgressBar.Track className="h-3 rounded-full bg-surface-secondary">
-          <ProgressBar.Fill
-            className="rounded-full"
-            style={{ background: color }}
-          />
+          <ProgressBar.Fill className="rounded-full" />
         </ProgressBar.Track>
       </ProgressBar>
     </div>

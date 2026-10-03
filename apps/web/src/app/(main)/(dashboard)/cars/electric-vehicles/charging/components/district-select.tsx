@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  ComboBox,
-  Header,
-  Input,
-  Label,
-  ListBox,
-  Separator,
-} from "@heroui/react";
+import { ComboBox, Header, Input, ListBox, Separator } from "@heroui/react";
 import {
   POSTAL_DISTRICTS,
   type PostalRegion,
@@ -34,6 +27,7 @@ export function DistrictSelect({ district }: { district: string }) {
 
   return (
     <ComboBox
+      aria-label="District"
       selectedKey={district || ALL_SINGAPORE}
       onSelectionChange={(key) => {
         const value = key === ALL_SINGAPORE || key == null ? "" : String(key);
@@ -44,7 +38,6 @@ export function DistrictSelect({ district }: { district: string }) {
         setDistrict(value);
       }}
     >
-      <Label className="sr-only">District</Label>
       <ComboBox.InputGroup>
         <MapPin
           aria-hidden

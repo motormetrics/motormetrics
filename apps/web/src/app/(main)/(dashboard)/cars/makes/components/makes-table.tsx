@@ -16,7 +16,7 @@ import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead } from "@web/components/shared/overview";
 import Link from "next/link";
 import posthog from "posthog-js";
-import { useMemo, useState } from "react";
+import { type CSSProperties, useMemo, useState } from "react";
 
 /** The trend series only feeds the headline sparkline, so it never crosses over. */
 export type MakesTableRow = Omit<MakeRow, "trend">;
@@ -339,15 +339,15 @@ export function MakesTable({
               <ProgressBar
                 aria-label={`${row.make} share of the leader`}
                 className="min-w-0 flex-1"
+                style={
+                  {
+                    "--progress-bar-fill": `var(--chart-${Math.min(6, row.rank)})`,
+                  } as CSSProperties
+                }
                 value={Math.max(2, (row.count / leadCount) * 100)}
               >
                 <ProgressBar.Track className="h-2.5 rounded-full bg-surface-secondary">
-                  <ProgressBar.Fill
-                    className="rounded-full"
-                    style={{
-                      backgroundColor: `var(--chart-${Math.min(6, row.rank)})`,
-                    }}
-                  />
+                  <ProgressBar.Fill className="rounded-full" />
                 </ProgressBar.Track>
               </ProgressBar>
               <span className="w-11 text-right font-bold text-[13.5px] text-muted-strong tabular-nums">

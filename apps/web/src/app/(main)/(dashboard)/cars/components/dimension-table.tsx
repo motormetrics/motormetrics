@@ -23,7 +23,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
-import { useMemo, useState, useTransition } from "react";
+import { type CSSProperties, useMemo, useState, useTransition } from "react";
 
 type SortKey = "name" | "count" | "yoyChange";
 type SortDirection = "asc" | "desc";
@@ -328,15 +328,15 @@ export function DimensionTable({
                       <ProgressBar
                         aria-label={`${row.name} share of the largest`}
                         className="w-24 shrink-0 lg:w-40"
+                        style={
+                          {
+                            "--progress-bar-fill": `var(--chart-${Math.min(CHART_COLOURS, row.rank)})`,
+                          } as CSSProperties
+                        }
                         value={(row.count / largestCount) * 100}
                       >
                         <ProgressBar.Track className="h-2.5 rounded-full bg-surface-secondary">
-                          <ProgressBar.Fill
-                            className="rounded-full"
-                            style={{
-                              background: `var(--chart-${Math.min(CHART_COLOURS, row.rank)})`,
-                            }}
-                          />
+                          <ProgressBar.Fill className="rounded-full" />
                         </ProgressBar.Track>
                       </ProgressBar>
                       <span className="w-11 text-right font-bold text-muted-strong text-sm tabular-nums">
