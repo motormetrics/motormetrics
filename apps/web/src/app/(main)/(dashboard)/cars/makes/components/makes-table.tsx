@@ -341,7 +341,8 @@ export function MakesTable({
               </Typography.Paragraph>
             ) : (
               <DeltaChip
-                className="justify-self-end text-xs sm:text-base"
+                // At the inherited 16px, "+22.5%" is ~54px wide and overruns the 52px phone column.
+                className="justify-self-end max-sm:text-xs"
                 value={row.yoyChange}
               />
             )}

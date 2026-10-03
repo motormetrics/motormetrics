@@ -186,7 +186,8 @@ export function ClassesTable({
                 </Typography.Paragraph>
               ) : (
                 <DeltaChip
-                  className="justify-self-end text-xs sm:text-base"
+                  // At the inherited 16px, "+123.4%" is ~63px wide and fills the 64px phone column.
+                  className="justify-self-end max-sm:text-xs"
                   value={row.change * 100}
                 />
               )}
