@@ -1,10 +1,14 @@
 import {
   biddingOrdinal,
+  bidsAgainstQuota,
   changeRatio,
   formatExercise,
   formatExerciseTick,
+  formatPremiumChange,
   groupByExercise,
   nextExercise,
+  premiumAxisTicks,
+  premiumRangeStats,
   recordHighs,
   summariseByYear,
   toCategory,
@@ -74,6 +78,26 @@ describe("changeRatio", () => {
 
   it("returns zero when there is no usable baseline", () => {
     expect(changeRatio(103_000, 0)).toBe(0);
+  });
+});
+
+describe("formatPremiumChange", () => {
+  const previous = { biddingNo: 1, month: "2026-08", premium: 130_500 };
+
+  it("states a rise with the percentage and the dollar change", () => {
+    expect(formatPremiumChange(133_110, previous)).toBe(
+      "+2.0% (+$2,610) vs first bidding, Aug at $130,500",
+    );
+  });
+
+  it("states a fall with a true minus", () => {
+    expect(formatPremiumChange(127_890, previous)).toBe(
+      "\u22122.0% (\u2212$2,610) vs first bidding, Aug at $130,500",
+    );
+  });
+
+  it("says so when there is no earlier exercise", () => {
+    expect(formatPremiumChange(130_500)).toBe("No earlier exercise to compare");
   });
 });
 
@@ -159,5 +183,105 @@ describe("recordHighs", () => {
     expect(highs["Category A"]?.key).toBe("2023-09:1");
     expect(highs["Category B"]?.key).toBe("2024-02:1");
     expect(highs["Category C"]).toBeUndefined();
+  });
+});
+
+describe("premiumAxisTicks", () => {
+  it("should pick a round step that covers the lowest and highest premium", () => {
+    expect(premiumAxisTicks([101_200, 104_300, 98_900, 107_100])).toEqual([
+      97_500, 100_000, 102_500, 105_000, 107_500,
+    ]);
+  });
+
+  it("should widen the step for a long, volatile range", () => {
+    expect(premiumAxisTicks([30_000, 150_000])).toEqual([
+      0, 50_000, 100_000, 150_000,
+    ]);
+  });
+
+  it("should give a flat series two ticks around its value", () => {
+    expect(premiumAxisTicks([104_000, 104_000])).toEqual([104_000, 104_250]);
+    expect(premiumAxisTicks([104_100])).toEqual([104_000, 104_250]);
+  });
+
+  it("should return no ticks for an empty series", () => {
+    expect(premiumAxisTicks([])).toEqual([]);
+  });
+});
+
+describe("premiumRangeStats", () => {
+  const view = [
+    { biddingNo: 1, month: "2026-07", premium: 100_000 },
+    { biddingNo: 2, month: "2026-07", premium: 96_000 },
+    { biddingNo: 1, month: "2026-08", premium: 108_000 },
+    { biddingNo: 2, month: "2026-08", premium: 96_000 },
+    { biddingNo: 1, month: "2026-09", premium: 105_000 },
+  ];
+
+  it("should return the latest, high and low exercises with the change over the range", () => {
+    expect(premiumRangeStats(view)).toEqual({
+      change: 0.05,
+      first: view[0],
+      high: view[2],
+      latest: view[4],
+      low: view[1],
+    });
+  });
+
+  it("should keep the earliest exercise on a tie", () => {
+    expect(premiumRangeStats(view)?.low).toEqual({
+      biddingNo: 2,
+      month: "2026-07",
+      premium: 96_000,
+    });
+  });
+
+  it("should report a fall as a negative change", () => {
+    expect(premiumRangeStats(view.slice(2, 4))?.change).toBeCloseTo(-0.1111, 4);
+  });
+
+  it("should return undefined for an empty range", () => {
+    expect(premiumRangeStats([])).toBeUndefined();
+  });
+});
+
+describe("bidsAgainstQuota", () => {
+  const exercise = groupByExercise([
+    {
+      ...result("2026-09", 2, "Category A", 100_000),
+      bidsReceived: 1500,
+      quota: 1000,
+    },
+    {
+      ...result("2026-09", 2, "Category B", 120_000),
+      bidsReceived: 3000,
+      quota: 1200,
+    },
+    {
+      ...result("2026-09", 2, "Category D", 9000),
+      bidsReceived: 400,
+      quota: 500,
+    },
+  ])[0];
+  const rows = bidsAgainstQuota(exercise);
+  const row = (category: COEResult["vehicleClass"]) =>
+    rows.find((item) => item.category === category);
+
+  it("should clamp the overflow at 0 when bids fall short of the quota", () => {
+    expect(row("Category D")?.overflow).toBe(0);
+    expect(row("Category A")?.overflow).toBe(500);
+  });
+
+  it("should size every bar against one shared scale", () => {
+    expect(row("Category B")?.bidWidth).toBe(100);
+    expect(row("Category A")?.bidWidth).toBe(50);
+    expect(row("Category B")?.quotaWidth).toBe(40);
+    expect(row("Category C")).toMatchObject({ bidWidth: 0, quotaWidth: 0 });
+  });
+
+  it("should give bids per COE to 2 decimal places", () => {
+    expect(row("Category B")?.ratio).toBe("2.50");
+    expect(row("Category D")?.ratio).toBe("0.80");
+    expect(row("Category C")?.ratio).toBe("0.00");
   });
 });

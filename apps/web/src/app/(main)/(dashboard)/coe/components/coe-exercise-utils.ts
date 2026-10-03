@@ -1,3 +1,4 @@
+import { formatCurrency } from "@motormetrics/utils/format-currency";
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import type { COECategory, COEResult } from "@web/types";
 import {
@@ -181,6 +182,146 @@ export const formatExerciseTick = (exercise: {
 
 export { changeRatio } from "@web/utils/change-ratio";
 
+/**
+ * The grey sentence under the headline premium, e.g. "+2.0% (+$2,610) vs first
+ * bidding, Sep at $130,500". Signs use a true minus (U+2212), never colour.
+ */
+export function formatPremiumChange(
+  premium: number,
+  previous?: { biddingNo: number; month: string; premium: number },
+): string {
+  if (!previous?.premium) {
+    return "No earlier exercise to compare";
+  }
+
+  const difference = premium - previous.premium;
+  const sign = difference < 0 ? "−" : "+";
+  const percentage = Math.abs((difference / previous.premium) * 100).toFixed(1);
+
+  return `${sign}${percentage}% (${sign}${formatCurrency(Math.abs(difference))}) vs ${biddingOrdinal(previous.biddingNo)} bidding, ${formatMonthShortName(previous.month)} at ${formatCurrency(previous.premium)}`;
+}
+
+export interface ExercisePremium {
+  biddingNo: number;
+  month: string;
+  premium: number;
+}
+
+export interface PremiumRangeStats {
+  /** The exercise the range opens on, which the change is measured from. */
+  first: ExercisePremium;
+  high: ExercisePremium;
+  latest: ExercisePremium;
+  low: ExercisePremium;
+  /** Change from the first exercise to the latest, as a ratio. */
+  change: number;
+}
+
+/**
+ * Latest, high and low premium across a run of exercises, oldest first, and
+ * the change from its first exercise to its last. The earliest exercise wins a
+ * tie for the high or the low. `undefined` for an empty run.
+ */
+export function premiumRangeStats(
+  view: ExercisePremium[],
+): PremiumRangeStats | undefined {
+  const first = view[0];
+  const latest = view.at(-1);
+  if (!first || !latest) {
+    return undefined;
+  }
+
+  let high = first;
+  let low = first;
+  for (const exercise of view) {
+    if (exercise.premium > high.premium) {
+      high = exercise;
+    }
+    if (exercise.premium < low.premium) {
+      low = exercise;
+    }
+  }
+
+  return {
+    change: first.premium
+      ? (latest.premium - first.premium) / first.premium
+      : 0,
+    first,
+    high,
+    latest,
+    low,
+  };
+}
+
+const AXIS_STEPS = [
+  250, 500, 1000, 2000, 2500, 5000, 10_000, 20_000, 25_000, 50_000, 100_000,
+];
+
+/**
+ * Y-axis ticks for a premium chart: a round step of about a quarter of the
+ * range, running from just below the lowest value to just above the highest.
+ * A flat series still gets two ticks, so the line sits on a real scale.
+ */
+export function premiumAxisTicks(values: number[]): number[] {
+  if (values.length === 0) {
+    return [];
+  }
+
+  const high = Math.max(...values);
+  const low = Math.min(...values);
+  const step =
+    AXIS_STEPS.find((candidate) => candidate >= (high - low) / 4) ??
+    AXIS_STEPS[AXIS_STEPS.length - 1];
+  const first = Math.floor(low / step) * step;
+  const last = Math.max(Math.ceil(high / step) * step, first + step);
+
+  return Array.from(
+    { length: (last - first) / step + 1 },
+    (_, index) => first + index * step,
+  );
+}
+
+export interface BidsAgainstQuotaRow {
+  bids: number;
+  /** Bid bar width, as a percentage of the shared scale. */
+  bidWidth: number;
+  category: COECategory;
+  /** Bids beyond the quota; 0 when bids fall short of it. */
+  overflow: number;
+  quota: number;
+  /** Quota span width, as a percentage of the shared scale. */
+  quotaWidth: number;
+  /** Bids per COE to 2 decimal places, e.g. "1.67". */
+  ratio: string;
+}
+
+/**
+ * Bids and quota per category for one exercise, on one zero-based scale set
+ * by the largest figure in the exercise, so every bar reads against the same
+ * axis and no quota span runs past the track.
+ */
+export function bidsAgainstQuota(exercise: CoeExercise): BidsAgainstQuotaRow[] {
+  const figures = COE_CATEGORIES.map((category) => ({
+    bids: exercise.results[category]?.bidsReceived ?? 0,
+    category,
+    quota: exercise.results[category]?.quota ?? 0,
+  }));
+  const scale = Math.max(
+    ...figures.flatMap((figure) => [figure.bids, figure.quota]),
+    1,
+  );
+
+  return figures.map(({ bids, category, quota }) => ({
+    bidWidth: (bids / scale) * 100,
+    bids,
+    category,
+    overflow: Math.max(bids - quota, 0),
+    quota,
+    quotaWidth: (quota / scale) * 100,
+    ratio: (quota > 0 ? bids / quota : 0).toFixed(2),
+  }));
+}
+
 /** Successful bids as a percentage of bids received; 0 when none were received. */
 export function successRate(bidsSuccess: number, bidsReceived: number): number {
   return bidsReceived > 0 ? (bidsSuccess / bidsReceived) * 100 : 0;
@@ -190,8 +331,8 @@ export function successRate(bidsSuccess: number, bidsReceived: number): number {
  * The exercise that follows the given one: the second round of the same month,
  * or the first round of the next month.
  *
- * Derived from the data rather than from the calendar, so the bidding calendar
- * panel needs no current-time read (see `components/footer.tsx`).
+ * Derived from the data rather than from the calendar, so the PQP section's
+ * "next exercise" note needs no current-time read (see `components/footer.tsx`).
  */
 export function nextExercise(exercise: { biddingNo: number; month: string }): {
   biddingNo: number;

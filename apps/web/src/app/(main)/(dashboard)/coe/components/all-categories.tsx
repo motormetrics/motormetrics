@@ -1,21 +1,28 @@
+import { Typography } from "@heroui/react";
 import type { CategoryRow } from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
 import { AllCategoriesTable } from "@web/app/(main)/(dashboard)/coe/components/all-categories-table";
 import {
   CATEGORY_DESCRIPTIONS,
   COE_CATEGORIES,
   changeRatio,
-  formatExercise,
+  formatExerciseTick,
   groupByExercise,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
-import { SectionHead } from "@web/components/shared/overview";
+import { SectionLink } from "@web/components/shared/overview";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
+
+/** Exercises behind each row's sparkline — a year of twice-monthly bidding. */
+const SERIES_LENGTH = 24;
 
 /**
  * Every category's latest result side by side. The rows are shaped here, in
  * category order; the client table sorts them and selects a category on click.
+ *
+ * The table carries no visible title on desktop, where it sits straight under
+ * the headline; below 720px an "All categories" eyebrow names the list.
  */
 export async function AllCategories({
   searchParams,
@@ -30,14 +37,17 @@ export async function AllCategories({
   const exercises = groupByExercise(results);
   const latest = exercises.at(-1);
   const previous = exercises.at(-2);
+  const recent = exercises.slice(-SERIES_LENGTH);
 
   if (!latest) {
     return null;
   }
 
   const rows: CategoryRow[] = COE_CATEGORIES.map((category) => {
-    const premium = latest.results[category]?.premium ?? 0;
+    const figures = latest.results[category];
+    const premium = figures?.premium ?? 0;
     return {
+      bidsReceived: figures?.bidsReceived ?? 0,
       category,
       categoryKey: toCategoryKey(category),
       changeRatio: changeRatio(
@@ -46,18 +56,27 @@ export async function AllCategories({
       ),
       description: CATEGORY_DESCRIPTIONS[category],
       premium,
-      quota: latest.results[category]?.quota ?? 0,
+      quota: figures?.quota ?? 0,
+      series: recent.flatMap((exercise) => {
+        const value = exercise.results[category]?.premium;
+        return value === undefined
+          ? []
+          : [{ label: formatExerciseTick(exercise), value }];
+      }),
     };
   });
 
   return (
-    <div className="flex flex-col gap-6">
-      <SectionHead
-        caption={`${formatExercise(latest)} · select a category for its bidding history`}
-        eyebrow="Latest results"
-        link={{ href: "/coe/results", label: "All COE results" }}
-        title="All categories"
-      />
+    <div className="flex flex-col gap-3">
+      <div className="flex items-end gap-4">
+        <Typography.Heading
+          className="font-semibold text-muted text-xs uppercase tracking-[0.06em] min-[721px]:sr-only"
+          level={2}
+        >
+          All categories
+        </Typography.Heading>
+        <SectionLink href="/coe/results">All COE results</SectionLink>
+      </div>
       <AllCategoriesTable rows={rows} selected={selected} />
     </div>
   );

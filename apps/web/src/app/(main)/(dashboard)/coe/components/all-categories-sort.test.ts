@@ -13,12 +13,14 @@ const row = (
   quota: number,
   changeRatio: number,
 ): CategoryRow => ({
+  bidsReceived: quota * 2,
   category: `Category ${categoryKey}`,
   categoryKey,
   changeRatio,
   description: "",
   premium,
   quota,
+  series: [],
 });
 
 const rows = [

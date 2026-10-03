@@ -21,9 +21,9 @@ export const EXERCISE_RANGES = ["6", "12", "24"] as const;
 export type ExerciseRange = (typeof EXERCISE_RANGES)[number];
 
 export const RANGE_LABELS: Record<ExerciseRange, string> = {
-  "6": "Last 6 exercises",
-  "12": "Last 12 exercises",
-  "24": "Last 24 exercises",
+  "6": "6 exercises",
+  "12": "12 exercises",
+  "24": "24 exercises",
 };
 
 export const coeOverviewSearchParams = {
