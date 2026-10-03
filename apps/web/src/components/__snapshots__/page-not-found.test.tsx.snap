@@ -40,7 +40,7 @@ exports[`PageNotFound > renders the 404 error message 1`] = `
           class="flex flex-col gap-4 sm:flex-row"
         >
           <a
-            class="button button--lg button--primary no-underline"
+            class="button button--lg button--primary"
             href="/"
           >
             <svg

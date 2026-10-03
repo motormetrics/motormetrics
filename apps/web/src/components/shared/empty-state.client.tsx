@@ -10,7 +10,6 @@ export function DefaultActions() {
     <div className="flex items-center gap-4">
       <Link
         className={buttonVariants({
-          className: "rounded-full no-underline",
           variant: "outline",
         })}
         href="/"
@@ -18,11 +17,7 @@ export function DefaultActions() {
         <Home className="size-4" />
         Go Home
       </Link>
-      <Button
-        className="rounded-full"
-        variant="outline"
-        onPress={() => history.back()}
-      >
+      <Button variant="outline" onPress={() => history.back()}>
         <RotateCcw className="size-4" />
         Go Back
       </Button>

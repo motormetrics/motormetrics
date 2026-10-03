@@ -99,7 +99,6 @@ export function PricingSection() {
               <div className="mt-auto w-full pt-3">
                 <Link
                   className={buttonVariants({
-                    className: "rounded-full no-underline",
                     fullWidth: true,
                     variant: featured ? "primary" : "secondary",
                   })}

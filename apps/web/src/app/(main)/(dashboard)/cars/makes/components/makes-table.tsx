@@ -364,9 +364,9 @@ export function MakesTable({
       {!isSearching && visibleRows.length > COLLAPSED_ROWS ? (
         <Button
           aria-expanded={isExpanded}
-          className="h-auto self-center rounded-full px-6 py-3 font-bold text-muted text-sm transition-colors hover:text-foreground"
+          className="self-center"
           onPress={() => setIsExpanded((current) => !current)}
-          variant="tertiary"
+          variant="ghost"
         >
           {isExpanded ? "Show fewer" : `Show all ${visibleRows.length} makes`}
         </Button>

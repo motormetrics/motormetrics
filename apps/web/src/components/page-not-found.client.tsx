@@ -10,7 +10,6 @@ export function NavigationButtons() {
     <div className="flex flex-col gap-4 sm:flex-row">
       <Link
         className={buttonVariants({
-          className: "no-underline",
           size: "lg",
           variant: "primary",
         })}
