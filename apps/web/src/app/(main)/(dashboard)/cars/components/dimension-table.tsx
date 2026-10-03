@@ -177,7 +177,6 @@ export function DimensionTable({
           </>
         }
         eyebrow="Registrations"
-        size="lg"
         title={labels.title}
         trailing={
           <ToggleButtonGroup

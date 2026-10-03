@@ -70,7 +70,6 @@ export async function PremiumsByExercise({
       <SectionHead
         caption={`${category} · hover a column for the premium`}
         eyebrow="Bidding history"
-        size="lg"
         title="Premiums by exercise"
         trailing={<RangeTabs />}
       />

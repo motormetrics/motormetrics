@@ -1,18 +1,12 @@
 import { cn } from "@heroui/react";
 
 /**
- * Signed change on a premium, as plain coloured text rather than a pill — the
- * comps reserve the pill for the headline and use bare text inside tables.
- *
- * The sentiment is inverted against `DeltaText` in `shared/report-table.tsx`: a
- * rising COE premium is bad news for a buyer, so a rise is drawn in the caution
- * tone and a fall in the positive one. Everything else about the two is the
- * same, which is why this lives beside the pages that need it rather than in
- * `components/shared`.
+ * Signed change on a premium, as plain grey text with a true minus (U+2212).
+ * The Hybrid design leaves the sign to carry the direction, with no colour or
+ * arrow, matching `CostTrendChip` in the headline.
  *
  * `/coe/results` and `/coe/pqp` import this too — the COE report pages share
- * the reading, so they share the component. Pass the raw change: negating it
- * to flip the tone would also flip the printed sign.
+ * the reading, so they share the component.
  */
 export function PremiumDelta({
   className,
@@ -38,18 +32,17 @@ export function PremiumDelta({
     );
   }
 
-  const isUp = ratio > 0;
+  const sign = ratio > 0 ? "+" : "−";
+  const percentage = Math.abs(ratio * 100).toFixed(1);
 
   return (
     <span
       className={cn(
-        "font-bold text-base tabular-nums",
-        isUp ? "text-warning-soft-foreground" : "text-success-soft-foreground",
+        "font-bold text-base text-muted-strong tabular-nums",
         className,
       )}
     >
-      {isUp ? "+" : "−"}
-      {Math.abs(ratio * 100).toFixed(1)}%
+      {`${sign}${percentage}%`}
     </span>
   );
 }

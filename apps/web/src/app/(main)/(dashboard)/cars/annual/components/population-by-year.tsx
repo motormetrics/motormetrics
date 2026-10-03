@@ -54,7 +54,6 @@ export function PopulationByYear({
       <SectionHead
         caption={`${entity.name} · hover a column for detail`}
         eyebrow="Trend"
-        size="lg"
         title="Population by year"
       />
       <ColumnChart baseline="trimmed" columns={columns} height={260} />

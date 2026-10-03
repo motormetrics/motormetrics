@@ -48,8 +48,8 @@ const TARGETS = [
 ] as const;
 
 /**
- * The comps' single accent "Share" pill, which opens a menu of targets over a
- * copy-link row.
+ * The comps' square outline "Share" button, which opens a menu of targets over
+ * a copy-link row.
  *
  * The blog's `ShareButtons` lays the same four targets out as a row of icon
  * buttons, which suits an article footer but not the page head, where the comp
@@ -87,8 +87,8 @@ export function SharePill({
   return (
     <Dropdown>
       <Button
-        className="h-auto gap-2.5 rounded-full bg-accent px-6 py-3.5 font-bold text-accent-foreground text-sm transition-[filter] hover:brightness-105"
-        variant="tertiary"
+        className="h-8.5 gap-2 rounded-lg bg-surface px-3.5 font-medium text-[13.5px] hover:bg-surface-secondary"
+        variant="outline"
       >
         <Share2 className="size-4 shrink-0" strokeWidth={2} />
         Share
@@ -99,7 +99,7 @@ export function SharePill({
             <Header>Share this page</Header>
             {TARGETS.map(({ icon: Icon, label }) => (
               <Dropdown.Item id={label} key={label} textValue={label}>
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent-strong">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-accent/15 text-accent-strong">
                   <Icon className="size-4" />
                 </span>
                 <Label>{label}</Label>
@@ -112,7 +112,7 @@ export function SharePill({
               id={COPY_KEY}
               textValue={copied ? "Link copied" : "Copy link"}
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent-strong">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-accent/15 text-accent-strong">
                 {copied ? (
                   <Check className="size-4 text-success" />
                 ) : (

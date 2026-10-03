@@ -1,5 +1,9 @@
 import { BarRow } from "@web/components/shared/bar-row";
-import { Headline, SectionHead } from "@web/components/shared/overview";
+import {
+  Headline,
+  SectionHead,
+  SourceNote,
+} from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { render } from "vitest-browser-react";
 
@@ -23,6 +27,26 @@ describe("SectionHead", () => {
     await expect
       .element(screen.getByRole("link", { name: "All makes" }))
       .toHaveAttribute("href", "/cars/makes");
+  });
+
+  it("should set the eyebrow in uppercase", async () => {
+    const screen = await render(
+      <SectionHead eyebrow="Registrations" title="Top makes" />,
+    );
+    await expect
+      .element(screen.getByText("Registrations"))
+      .toHaveClass("uppercase");
+  });
+});
+
+describe("SourceNote", () => {
+  it("should render the source line as a paragraph", async () => {
+    const screen = await render(
+      <SourceNote>Source: LTA via DataMall</SourceNote>,
+    );
+    const note = screen.getByText("Source: LTA via DataMall");
+    await expect.element(note).toBeInTheDocument();
+    expect(note.element().tagName).toBe("P");
   });
 });
 

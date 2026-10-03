@@ -62,15 +62,14 @@ export function Hairline({ className }: { className?: string }) {
  * heading, a muted caption qualifying the figures, and an optional link out to
  * the page that carries the full data.
  *
- * `size` follows the comps: the page's main sections run the heading at 30px,
- * the paired half-width ones at 26px.
+ * The Hybrid comps run one scale for every section: a 12px uppercase eyebrow,
+ * a 24px heading (21px on phones) and a 13.5px caption.
  */
 export function SectionHead({
   caption,
   className,
   eyebrow,
   link,
-  size = "md",
   title,
   trailing,
 }: {
@@ -79,32 +78,27 @@ export function SectionHead({
   eyebrow: string;
   /** "All COE results", "All makes" — the text link to the full dataset. */
   link?: { href: string; label: string };
-  size?: "md" | "lg";
   title: ReactNode;
   /** A control instead of a link — range pills, dimension tabs. */
   trailing?: ReactNode;
 }) {
   return (
     <div className={cn("flex flex-wrap items-end gap-4", className)}>
-      <div className="flex min-w-0 flex-col gap-1.5">
-        <Typography.Paragraph className="font-semibold" color="muted" size="sm">
+      <div className="flex min-w-0 flex-col gap-1">
+        <Typography.Paragraph
+          className="font-semibold text-xs uppercase tracking-[0.06em]"
+          color="muted"
+        >
           {eyebrow}
         </Typography.Paragraph>
         <Typography.Heading
-          className={cn(
-            "font-bold tracking-tight",
-            size === "lg" ? "text-[30px]" : "text-[26px]",
-          )}
+          className="font-bold text-[21px] tracking-[-0.015em] md:text-2xl"
           level={2}
         >
           {title}
         </Typography.Heading>
         {caption ? (
-          <Typography.Paragraph
-            className="font-medium text-[15px]"
-            color="muted"
-            size="sm"
-          >
+          <Typography.Paragraph className="text-[13.5px]" color="muted">
             {caption}
           </Typography.Paragraph>
         ) : null}
@@ -132,14 +126,32 @@ export function SectionLink({
   return (
     <Link
       className={cn(
-        "ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-bold text-[15px] text-accent-strong no-underline transition-colors hover:text-accent-deep",
+        "ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-semibold text-[13.5px] text-accent-strong no-underline transition-colors hover:text-accent-deep",
         className,
       )}
       href={href}
     >
       {children}
-      <ArrowUpRight aria-hidden className="size-4" strokeWidth={2.25} />
+      <ArrowUpRight aria-hidden className="size-3.5" strokeWidth={2.25} />
     </Link>
+  );
+}
+
+/**
+ * The muted line that closes a section: the source, a definition or the
+ * period the figures cover.
+ */
+export function SourceNote({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <Typography.Paragraph className={cn("text-xs", className)} color="muted">
+      {children}
+    </Typography.Paragraph>
   );
 }
 

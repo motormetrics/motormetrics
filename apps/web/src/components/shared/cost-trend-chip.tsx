@@ -1,37 +1,28 @@
-"use client";
-
-import { TrendChip } from "@heroui-pro/react";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { cn } from "@heroui/react";
 
 /**
- * Trend chip for figures where a fall is good news (COE premiums, PQP rates).
+ * Signed change for figures where a fall is good news (COE premiums, PQP rates).
  *
- * `trend` drives both the colour and the default arrow in HeroUI Pro, so the
- * sentiment is inverted on `trend` while the arrow is overridden to follow the
- * actual sign — otherwise the chip reads as a contradiction like "↑ -5.3%".
- *
- * The variant is left at TrendChip's `soft` default: the comps use a pale fill
- * with dark text throughout, matching `DeltaChip`'s soft tone beside it. The
- * solid `primary` fill reads as a different component on the same row.
- *
- * This must stay a client component: TrendChip only suppresses its default
- * arrow when it can identify a `TrendChip.Indicator` child, and that identity
- * check fails across the server/client boundary, rendering two arrows.
+ * Rendered as plain grey text with a true minus (U+2212): the Hybrid design
+ * leaves the sign to carry the direction, with no colour or arrow.
  */
-export function CostTrendChip({ changeRatio }: { changeRatio: number }) {
+export function CostTrendChip({
+  changeRatio,
+  className,
+}: {
+  changeRatio: number;
+  className?: string;
+}) {
   if (changeRatio === 0) {
     return null;
   }
 
-  const isUp = changeRatio > 0;
-  const Arrow = isUp ? ArrowUp : ArrowDown;
+  const sign = changeRatio > 0 ? "+" : "−";
+  const percentage = Math.abs(changeRatio * 100).toFixed(1);
 
   return (
-    <TrendChip trend={isUp ? "down" : "up"}>
-      <TrendChip.Indicator>
-        <Arrow />
-      </TrendChip.Indicator>
-      {`${isUp ? "+" : ""}${(changeRatio * 100).toFixed(1)}%`}
-    </TrendChip>
+    <span className={cn("text-muted-strong tabular-nums", className)}>
+      {`${sign}${percentage}%`}
+    </span>
   );
 }
