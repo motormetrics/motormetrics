@@ -91,7 +91,7 @@ column names are `camelCase`. This is intentional — do not "fix" it to match o
 
 ## Release Process
 
-Automated via semantic-release with unified "v" prefix versioning (v1.0.0, v1.1.0, v2.0.0). See `release-management` and `changelog` skills for release workflows.
+Managed by release-please with unified "v" prefix versioning (v1.0.0, v1.1.0, v2.0.0). Merges to `main` update a Release PR; merging that PR tags and publishes the release. Claude decides when to merge it, per the `release-management` skill. See `release-management` and `changelog` skills for release workflows.
 
 ## Documentation Maintenance
 

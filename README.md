@@ -186,7 +186,6 @@ This project uses **pnpm catalog** for centralised dependency version management
 **Root-level dependencies** (not in catalog):
 - Build tools: `turbo` (^2.6.3)
 - Code quality: `@biomejs/biome` (2.3.0), `husky` (^9.1.7), `lint-staged` (^16.1.5)
-- Release management: `semantic-release` (^24.0.0)
 
 This ensures version consistency across all workspace packages and simplifies dependency upgrades.
 

@@ -63,11 +63,6 @@
       "groupName": "Vercel"
     },
     {
-      "description": "Group semantic-release packages",
-      "matchPackageNames": ["semantic-release", "@semantic-release/*"],
-      "groupName": "Semantic Release"
-    },
-    {
       "description": "Group @commitlint packages",
       "matchPackageNames": ["@commitlint/*"],
       "groupName": "Commitlint"
