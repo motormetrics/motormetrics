@@ -41,6 +41,19 @@ describe("PageHead", () => {
       .toBeInTheDocument();
   });
 
+  it("should size the eyebrow with HeroUI's xs paragraph", async () => {
+    const screen = await render(
+      createElement(PageHead, {
+        eyebrow: "Certificate of Entitlement",
+        title: "Latest COE results",
+      }),
+    );
+
+    await expect
+      .element(screen.getByText("Certificate of Entitlement"))
+      .toHaveClass("typography--body-xs");
+  });
+
   it("should omit the eyebrow and sub when not passed", async () => {
     const screen = await render(
       createElement(PageHead, { title: "Latest COE results" }),

@@ -86,12 +86,7 @@ export async function ChargingSummary() {
             <ProgressBar.Fill />
           </ProgressBar.Track>
         </ProgressBar>
-        <Typography.Paragraph
-          className="text-[13.5px]"
-          weight="medium"
-          color="muted"
-          size="sm"
-        >
+        <Typography.Paragraph weight="medium" color="muted" size="sm">
           {targetShare.toFixed(0)}% of the 2030 target installed
         </Typography.Paragraph>
       </div>

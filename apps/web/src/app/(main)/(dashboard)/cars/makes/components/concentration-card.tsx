@@ -104,9 +104,8 @@ export async function ConcentrationCard({
                 style={{ background: segment.color }}
               />
               <Typography.Paragraph
-                className="text-[15.5px] text-foreground/85"
+                className="text-foreground/85"
                 weight="semibold"
-                size="sm"
                 truncate
               >
                 {segment.label}

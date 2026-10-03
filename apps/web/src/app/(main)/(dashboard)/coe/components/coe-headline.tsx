@@ -33,13 +33,13 @@ export function StatCell({
 }) {
   return (
     <div className="flex min-w-0 flex-col gap-[3px] border-separator border-b py-3.5 pr-4 even:border-l even:pl-4">
-      <Typography.Paragraph className="text-xs" weight="semibold" color="muted">
+      <Typography.Paragraph weight="semibold" color="muted" size="xs">
         {label}
       </Typography.Paragraph>
       <span className="font-semibold text-[22px] tabular-nums tracking-[-0.01em]">
         {value}
       </span>
-      <Typography.Paragraph className="text-xs tabular-nums" color="muted">
+      <Typography.Paragraph className="tabular-nums" color="muted" size="xs">
         {note}
       </Typography.Paragraph>
     </div>
@@ -94,7 +94,7 @@ export async function CoeHeadline({
     <div className="grid gap-5 min-[901px]:grid-cols-[1.15fr_1fr] min-[901px]:items-end min-[901px]:gap-14">
       <div className="flex min-w-0 flex-col gap-3">
         <CategoryTabs selected={categoryKey} />
-        <Typography.Paragraph className="text-[15px] text-muted-strong">
+        <Typography.Paragraph className="text-muted-strong">
           <span className="font-semibold text-accent-strong">{category}</span>
           {` · ${CATEGORY_DESCRIPTIONS[category]}`}
         </Typography.Paragraph>
@@ -107,10 +107,7 @@ export async function CoeHeadline({
             value={premium}
           />
         </span>
-        <Typography.Paragraph
-          className="text-[15px] tabular-nums"
-          color="muted"
-        >
+        <Typography.Paragraph className="tabular-nums" color="muted">
           {formatPremiumChange(
             premium,
             previous && previousPremium !== undefined

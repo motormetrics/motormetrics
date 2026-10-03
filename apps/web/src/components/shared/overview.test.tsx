@@ -37,6 +37,22 @@ describe("SectionHead", () => {
       .element(screen.getByText("Registrations"))
       .toHaveClass("uppercase");
   });
+
+  it("should size the eyebrow and caption with HeroUI's scale", async () => {
+    const screen = await render(
+      <SectionHead
+        caption="2025 year to date"
+        eyebrow="Registrations"
+        title="Top makes"
+      />,
+    );
+    await expect
+      .element(screen.getByText("Registrations"))
+      .toHaveClass("typography--body-xs");
+    await expect
+      .element(screen.getByText("2025 year to date"))
+      .toHaveClass("typography--body-sm");
+  });
 });
 
 describe("SourceNote", () => {
@@ -47,6 +63,15 @@ describe("SourceNote", () => {
     const note = screen.getByText("Source: LTA via DataMall");
     await expect.element(note).toBeInTheDocument();
     expect(note.element().tagName).toBe("P");
+  });
+
+  it("should use HeroUI's xs paragraph size", async () => {
+    const screen = await render(
+      <SourceNote>Source: LTA via DataMall</SourceNote>,
+    );
+    const note = screen.getByText("Source: LTA via DataMall");
+    await expect.element(note).toHaveClass("typography--body-xs");
+    await expect.element(note).not.toHaveClass("text-xs");
   });
 });
 

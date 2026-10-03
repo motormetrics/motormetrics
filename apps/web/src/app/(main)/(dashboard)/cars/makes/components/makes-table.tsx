@@ -267,7 +267,7 @@ export function MakesTable({
           </SearchField.Group>
         </SearchField>
         <Typography.Paragraph
-          className="whitespace-nowrap text-[13.5px] sm:ml-auto"
+          className="whitespace-nowrap sm:ml-auto"
           weight="semibold"
           color="muted"
           size="sm"
@@ -300,12 +300,7 @@ export function MakesTable({
         </Button>
       ) : null}
 
-      <Typography.Paragraph
-        className="text-[13.5px]"
-        weight="medium"
-        color="muted"
-        size="sm"
-      >
+      <Typography.Paragraph weight="medium" color="muted" size="sm">
         Change compares against the same period a year earlier, and is withheld
         below {MIN_COUNT_FOR_CHANGE} registrations. Select a make to open it.
       </Typography.Paragraph>

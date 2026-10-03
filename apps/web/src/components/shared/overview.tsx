@@ -86,21 +86,22 @@ export function SectionHead({
     <div className={cn("flex flex-wrap items-end gap-4", className)}>
       <div className="flex min-w-0 flex-col gap-1">
         <Typography.Paragraph
-          className="text-xs uppercase tracking-[0.06em]"
+          className="uppercase tracking-[0.06em]"
           weight="semibold"
           color="muted"
+          size="xs"
         >
           {eyebrow}
         </Typography.Paragraph>
         <Typography.Heading
-          className="text-[21px] tracking-[-0.015em] md:text-2xl"
+          className="text-xl md:text-2xl"
           weight="bold"
           level={2}
         >
           {title}
         </Typography.Heading>
         {caption ? (
-          <Typography.Paragraph className="text-[13.5px]" color="muted">
+          <Typography.Paragraph color="muted" size="sm">
             {caption}
           </Typography.Paragraph>
         ) : null}
@@ -151,7 +152,7 @@ export function SourceNote({
   className?: string;
 }) {
   return (
-    <Typography.Paragraph className={cn("text-xs", className)} color="muted">
+    <Typography.Paragraph className={className} color="muted" size="xs">
       {children}
     </Typography.Paragraph>
   );

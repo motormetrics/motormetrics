@@ -62,7 +62,7 @@ export function CoePremiums({ series }: { series: CoeCategorySeries[] }) {
           ))}
         </Segment>
         <Typography.Paragraph
-          className="text-[15px] sm:pl-2"
+          className="sm:pl-2"
           weight="semibold"
           color="muted"
           size="sm"
