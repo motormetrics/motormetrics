@@ -68,7 +68,6 @@ export async function MoversRail({
                   <MakeAvatar
                     logoUrl={logoUrlBySlug[slug] ?? null}
                     make={mover.name}
-                    size={40}
                   />
                   <div className="flex min-w-0 flex-col gap-px">
                     <Typography.Paragraph

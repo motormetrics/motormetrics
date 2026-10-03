@@ -1,50 +1,42 @@
-import { Avatar, cn } from "@heroui/react";
+import { Avatar } from "@heroui/react";
 import Image from "next/image";
+
+/** Rendered widths of HeroUI Avatar's sizes, so next/image fetches the right width. */
+const IMAGE_SIZES = { sm: "32px", md: "40px", lg: "48px" } as const;
 
 /**
  * Brand disc used by every make in the layout.
  *
- * Falls back to the make's initial on an accent-soft circle, as the comp does —
- * logo coverage is incomplete, and a missing image would otherwise read as a
- * hole in the row rather than a brand without a mark.
+ * A plain HeroUI Avatar: its own sizes, token radius and default colours.
+ * Without a logo it shows HeroUI's default grey monogram — logo coverage is
+ * incomplete, and a missing image would otherwise read as a hole in the row
+ * rather than a brand without a mark.
  */
 export function MakeAvatar({
   className,
   logoUrl,
   make,
-  size,
+  size = "md",
 }: {
+  /** Layout only (spacing, placement). */
   className?: string;
   logoUrl: string | null;
   make: string;
-  /** Diameter in pixels; the monogram scales with it. */
-  size: number;
+  size?: "sm" | "md" | "lg";
 }) {
   return (
-    <Avatar
-      className={cn(
-        "rounded-full bg-accent/15 font-extrabold text-accent-strong leading-none",
-        className,
-      )}
-      style={{
-        fontSize: `${Math.round(size * 0.38)}px`,
-        height: `${size}px`,
-        width: `${size}px`,
-      }}
-    >
+    <Avatar className={className} size={size}>
       {logoUrl ? (
+        // object-contain: brand marks are not square and must not be cropped.
         <Image
           alt={`${make} logo`}
-          className="size-[78%] object-contain"
-          height={size}
+          className="object-contain"
+          fill
+          sizes={IMAGE_SIZES[size]}
           src={logoUrl}
-          width={size}
         />
       ) : (
-        <Avatar.Fallback
-          aria-hidden
-          className="bg-transparent font-extrabold text-[length:inherit] text-accent-strong"
-        >
+        <Avatar.Fallback aria-hidden>
           {make.charAt(0).toUpperCase()}
         </Avatar.Fallback>
       )}

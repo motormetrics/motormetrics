@@ -35,7 +35,7 @@ export async function LeadingMakeCard({
         }
         label={
           <span className="flex items-center gap-3">
-            <MakeAvatar logoUrl={leader.logoUrl} make={leader.make} size={36} />
+            <MakeAvatar logoUrl={leader.logoUrl} make={leader.make} />
             {leader.make} leads the market
           </span>
         }

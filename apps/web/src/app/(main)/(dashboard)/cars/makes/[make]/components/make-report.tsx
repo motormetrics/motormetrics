@@ -420,7 +420,7 @@ export async function MakeReport({
                     <MakeAvatar
                       logoUrl={logoUrlBySlug[slug] ?? null}
                       make={peerMake}
-                      size={30}
+                      size="sm"
                     />
                     <Link
                       className={

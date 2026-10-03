@@ -286,7 +286,7 @@ export function MakesTable({
                 {row.rank}
               </span>
               <span className="hidden shrink-0 sm:block">
-                <MakeAvatar logoUrl={row.logoUrl} make={row.make} size={28} />
+                <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="sm" />
               </span>
               <Typography.Paragraph
                 className="text-foreground/85 text-sm sm:text-base"

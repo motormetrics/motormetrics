@@ -55,7 +55,7 @@ export async function EvLeaderboard({ month }: { month: string }) {
                     <MakeAvatar
                       logoUrl={logoUrlBySlug[slug] ?? null}
                       make={item.make}
-                      size={28}
+                      size="sm"
                     />
                     <Typography.Paragraph
                       className="[color:inherit] [font-weight:inherit]"

@@ -297,7 +297,7 @@ export function DimensionTable({
                             : null
                         }
                         make={row.name}
-                        size={28}
+                        size="sm"
                       />
                       <Typography.Paragraph
                         className="text-foreground/85"
