@@ -1,3 +1,19 @@
+## [5.29.0](https://github.com/motormetrics/motormetrics/compare/v5.28.0...v5.29.0) (2026-10-03)
+
+### Features
+
+* **web:** add page head eyebrow and source line to COE overview ([0d9198f](https://github.com/motormetrics/motormetrics/commit/0d9198f2faf93beabf99f6952f79689377c434c3))
+* **web:** add sand chart token for fossil fuel series ([abe9573](https://github.com/motormetrics/motormetrics/commit/abe957311c395aed5c28b015a542cbb0d3706ebc))
+* **web:** restyle section heads and add a shared source note ([471e7a7](https://github.com/motormetrics/motormetrics/commit/471e7a79482ce3c6f7d380a91a40d43ea22c3587))
+* **web:** show COE premium changes as plain grey text ([3b6e6d5](https://github.com/motormetrics/motormetrics/commit/3b6e6d551a0ea96f0fc66563aaf5aff9af9ecdb7))
+* **web:** show COE report table changes as plain grey text ([722692c](https://github.com/motormetrics/motormetrics/commit/722692c5defdafd3469978c824fd05ba7fd166d2))
+* **web:** square the Share button and its menu icons ([46ba98c](https://github.com/motormetrics/motormetrics/commit/46ba98c8b1aedb20281995cf15f9420d9e02c7ce))
+
+### Bug Fixes
+
+* **web:** bold the exercise name in the COE page head ([3afec14](https://github.com/motormetrics/motormetrics/commit/3afec14869c76e6c2fda12638caf385c7960c4e4))
+* **web:** give the Share button a white surface ([577c9b5](https://github.com/motormetrics/motormetrics/commit/577c9b505a3af7862017ab414fd4a9376dbf69a9))
+
 ## [5.28.0](https://github.com/motormetrics/motormetrics/compare/v5.27.0...v5.28.0) (2026-10-02)
 
 ### Features
