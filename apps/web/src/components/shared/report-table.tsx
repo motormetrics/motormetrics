@@ -140,11 +140,9 @@ export function ShareBar({
 }
 
 /**
- * Signed change as plain coloured text rather than a pill — the comps reserve
- * the pill for the headline figure and use bare text inside tables.
- *
- * A rise in registrations is good news, so the sentiment follows the sign. For
- * figures where a rise is bad news, see `shared/cost-trend-chip.tsx`.
+ * Signed change as plain grey text with a true minus (U+2212), the table-sized
+ * counterpart of `shared/delta-chip.tsx`: the sign carries the direction, with
+ * no colour, pill or arrow.
  */
 export function DeltaText({
   unit = "%",
@@ -153,16 +151,9 @@ export function DeltaText({
   unit?: "%" | "pp";
   value: number;
 }) {
-  const isUp = value >= 0;
-
   return (
-    <span
-      className={cn(
-        "font-bold text-base tabular-nums",
-        isUp ? "text-success-soft-foreground" : "text-warning-soft-foreground",
-      )}
-    >
-      {isUp ? "+" : "−"}
+    <span className="text-base text-muted-strong tabular-nums">
+      {value >= 0 ? "+" : "−"}
       {Math.abs(value).toFixed(1)}
       {unit}
     </span>

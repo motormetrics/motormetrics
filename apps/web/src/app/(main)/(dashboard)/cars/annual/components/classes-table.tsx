@@ -39,26 +39,6 @@ const GRID_CLASS =
   "grid grid-cols-[minmax(0,1fr)_88px_64px] items-center gap-2 sm:grid-cols-[minmax(0,1fr)_140px_minmax(120px,220px)_110px] sm:gap-4";
 
 /**
- * The change figure as bare coloured text, for the phone column where the
- * chip would overrun the population figure beside it.
- */
-function ChangeText({ value }: { value: number }) {
-  return (
-    <span
-      className={cn(
-        "text-right font-bold text-xs tabular-nums",
-        value >= 0
-          ? "text-success-soft-foreground"
-          : "text-warning-soft-foreground",
-      )}
-    >
-      {value >= 0 ? "+" : "−"}
-      {Math.abs(value).toFixed(1)}%
-    </span>
-  );
-}
-
-/**
  * Every vehicle class at the latest year end, sortable on any column, with
  * cars tinted so the page's subject reads in context. Sort is view-only, so
  * it lives in local state and never touches the URL.
@@ -205,15 +185,10 @@ export function ClassesTable({
                   —
                 </Typography.Paragraph>
               ) : (
-                <>
-                  <span className="text-right sm:hidden">
-                    <ChangeText value={row.change * 100} />
-                  </span>
-                  <DeltaChip
-                    className="hidden justify-self-end sm:flex"
-                    value={row.change * 100}
-                  />
-                </>
+                <DeltaChip
+                  className="justify-self-end text-xs sm:text-base"
+                  value={row.change * 100}
+                />
               )}
             </div>
           );

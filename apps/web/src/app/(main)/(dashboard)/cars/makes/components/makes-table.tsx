@@ -89,36 +89,6 @@ const GRID_CLASS =
   "grid grid-cols-[minmax(0,1fr)_56px_52px] items-center gap-2 sm:grid-cols-[minmax(0,1fr)_120px_minmax(120px,220px)_110px] sm:gap-4";
 
 /**
- * The change figure as bare coloured text.
- *
- * `DeltaChip` is 86px of pill against a 52px column on a phone, and it was
- * overrunning the registrations figure beside it. The chip returns from `sm`,
- * where the row has the width for it.
- */
-function ChangeText({
-  className,
-  value,
-}: {
-  className?: string;
-  value: number;
-}) {
-  return (
-    <span
-      className={cn(
-        "text-right font-bold text-xs tabular-nums",
-        value >= 0
-          ? "text-success-soft-foreground"
-          : "text-warning-soft-foreground",
-        className,
-      )}
-    >
-      {value >= 0 ? "+" : "−"}
-      {Math.abs(value).toFixed(1)}%
-    </span>
-  );
-}
-
-/**
  * Keeps the funnel that used to be fed by the makes-page search autocomplete.
  *
  * The event name and its `make` property are deliberately unchanged from the
@@ -370,13 +340,10 @@ export function MakesTable({
                 —
               </Typography.Paragraph>
             ) : (
-              <>
-                <ChangeText className="sm:hidden" value={row.yoyChange} />
-                <DeltaChip
-                  className="hidden justify-self-end sm:flex"
-                  value={row.yoyChange}
-                />
-              </>
+              <DeltaChip
+                className="justify-self-end text-xs sm:text-base"
+                value={row.yoyChange}
+              />
             )}
           </Link>
         ))}
