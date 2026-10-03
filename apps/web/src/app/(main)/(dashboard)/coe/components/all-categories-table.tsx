@@ -59,6 +59,18 @@ const FIGURE_COLUMN_CLASSES: Record<Exclude<ColumnKey, "category">, string> = {
   trend: "hidden w-[150px] min-[1101px]:table-cell",
 };
 
+/**
+ * HeroUI rounds the header card's end and drops the column tick on the
+ * `:last-child` th, which is the trend column even while it is hidden. These
+ * repeat that on whichever column ends the visible header at each width.
+ */
+const HEADER_END_CLASSES: Partial<Record<ColumnKey, string>> = {
+  change:
+    "max-[720px]:rounded-e-[min(32px,var(--radius-2xl))] max-[720px]:after:hidden",
+  ratio:
+    "min-[720px]:max-[1101px]:rounded-e-[min(32px,var(--radius-2xl))] min-[720px]:max-[1101px]:after:hidden",
+};
+
 const formatCount = (value: number): string => value.toLocaleString("en-SG");
 
 /** "1.26×"; a dash when the quota is missing rather than dividing by zero. */
@@ -129,6 +141,7 @@ export function AllCategoriesTable({
                     CELL_CLASS,
                     column.key !== "category" &&
                       FIGURE_COLUMN_CLASSES[column.key],
+                    HEADER_END_CLASSES[column.key],
                     column.align === "right" ? "text-right" : "text-left",
                   )}
                   id={column.key}
