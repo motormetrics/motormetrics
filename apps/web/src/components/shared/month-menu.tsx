@@ -11,8 +11,7 @@ import { useEffect, useMemo, useRef, useTransition } from "react";
 
 /**
  * The month picker the v3 comps put in the page eyebrow: the selected month
- * as a bold accent label with a chevron, opening a menu of months grouped by
- * year.
+ * as a ghost button with a chevron, opening a menu of months grouped by year.
  *
  * Writes the same `month` search param as `MonthSelector`, with
  * `shallow: false` so the server re-renders the page for the new month. The
@@ -50,14 +49,7 @@ export function MonthMenu({
 
   return (
     <Dropdown>
-      <Button
-        aria-label="Month"
-        className={
-          "h-auto gap-2 rounded-full bg-transparent p-0 font-bold text-accent-strong text-base transition-colors hover:bg-transparent hover:text-accent-deep data-[pressed]:bg-transparent"
-        }
-        isPending={isPending}
-        variant="tertiary"
-      >
+      <Button aria-label="Month" isPending={isPending} variant="ghost">
         {formatDateToMonthYear(month)}
         <ChevronDown aria-hidden className="size-4" strokeWidth={2.25} />
       </Button>

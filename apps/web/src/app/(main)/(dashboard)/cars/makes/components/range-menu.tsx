@@ -13,7 +13,7 @@ import { useTransition } from "react";
 
 /**
  * The period picker in the page eyebrow — the makes-page counterpart of
- * `shared/month-menu.tsx`: the selected range as a bold accent label with a
+ * `shared/month-menu.tsx`: the selected range as a ghost button with a
  * chevron, opening a menu of the three periods.
  *
  * Writes the `range` search param with `shallow: false` so every section
@@ -33,11 +33,8 @@ export function RangeMenu() {
     <Dropdown>
       <Button
         aria-label="Registration period"
-        className={
-          "h-auto gap-2 rounded-full bg-transparent p-0 font-bold text-accent-strong text-base transition-colors hover:bg-transparent hover:text-accent-deep data-[pressed]:bg-transparent"
-        }
         isPending={isPending}
-        variant="tertiary"
+        variant="ghost"
       >
         {RANGE_LABELS[range]}
         <ChevronDown aria-hidden className="size-4" strokeWidth={2.25} />

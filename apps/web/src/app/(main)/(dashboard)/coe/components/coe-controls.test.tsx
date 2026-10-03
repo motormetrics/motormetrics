@@ -1,4 +1,5 @@
 import {
+  CategorySelect,
   CategoryTabs,
   RangeTabs,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
@@ -83,5 +84,28 @@ describe("RangeTabs", () => {
       filter: "range",
       value: "24",
     });
+  });
+});
+
+describe("CategorySelect", () => {
+  it("should render a pressed ghost button that selects its category", async () => {
+    const screen = await render(
+      <CategorySelect category="D" isActive label="Select Category D">
+        <span>Category D</span>
+      </CategorySelect>,
+      { wrapper },
+    );
+
+    const button = screen.getByRole("button", { name: "Select Category D" });
+    await expect.element(button).toHaveAttribute("aria-pressed", "true");
+    await expect.element(button).toHaveClass("button--ghost");
+
+    await button.click();
+
+    await expect
+      .poll(() =>
+        onUrlUpdate.mock.calls.at(-1)?.[0].searchParams.get("category"),
+      )
+      .toBe("D");
   });
 });
