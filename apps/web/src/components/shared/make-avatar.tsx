@@ -1,8 +1,12 @@
 import { Avatar } from "@heroui/react";
 import Image from "next/image";
 
-/** Rendered widths of HeroUI Avatar's sizes, so next/image fetches the right width. */
-const IMAGE_SIZES = { sm: "32px", md: "40px", lg: "48px" } as const;
+/**
+ * Logo box per HeroUI Avatar size, about 75% of its 32/40/48px square. The
+ * inset keeps brand marks off the avatar's rounded, overflow-hidden corners,
+ * which would otherwise clip any logo drawn to its edge.
+ */
+const LOGO_SIZES = { sm: 24, md: 30, lg: 36 } as const;
 
 /**
  * Brand disc used by every make in the layout.
@@ -31,9 +35,9 @@ export function MakeAvatar({
         <Image
           alt={`${make} logo`}
           className="object-contain"
-          fill
-          sizes={IMAGE_SIZES[size]}
+          height={LOGO_SIZES[size]}
           src={logoUrl}
+          width={LOGO_SIZES[size]}
         />
       ) : (
         <Avatar.Fallback aria-hidden>

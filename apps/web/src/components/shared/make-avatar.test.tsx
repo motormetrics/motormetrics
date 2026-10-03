@@ -28,6 +28,14 @@ describe("MakeAvatar", () => {
       .toBeInTheDocument();
   });
 
+  it("should inset the logo inside the avatar's rounded corners", async () => {
+    const screen = await render(
+      <MakeAvatar logoUrl="https://cdn.example/bmw.png" make="BMW" />,
+    );
+    const logo = screen.getByRole("img", { name: "BMW logo" }).element();
+    expect(logo.getAttribute("width")).toBe("30");
+  });
+
   it("should render a hidden initial when there is no logo", async () => {
     const screen = await render(<MakeAvatar logoUrl={null} make="audi" />);
     const initial = screen.getByText("A", { exact: true }).element();
