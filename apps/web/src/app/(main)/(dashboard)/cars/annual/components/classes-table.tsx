@@ -1,33 +1,16 @@
 "use client";
 
-import {
-  Button,
-  cn,
-  ProgressBar,
-  type SortDescriptor,
-  Typography,
-} from "@heroui/react";
-import { NumberValue } from "@heroui-pro/react";
+import { ProgressBar, type SortDescriptor, Typography } from "@heroui/react";
+import { DataGrid, type DataGridColumn, NumberValue } from "@heroui-pro/react";
 import {
   CARS,
   type ClassRank,
   type ClassSortKey,
-  sortClasses,
+  compareClasses,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { SectionHead } from "@web/components/shared/overview";
-import { type CSSProperties, useMemo, useState } from "react";
-
-const COLUMNS: {
-  align: "left" | "right";
-  key: ClassSortKey | null;
-  label: string;
-}[] = [
-  { align: "left", key: "name", label: "Vehicle class" },
-  { align: "right", key: "population", label: "Population" },
-  { align: "left", key: null, label: "Share" },
-  { align: "right", key: "change", label: "Change" },
-];
+import { type CSSProperties, useState } from "react";
 
 const SORT_LABELS: Record<ClassSortKey, string> = {
   change: "change",
@@ -36,17 +19,9 @@ const SORT_LABELS: Record<ClassSortKey, string> = {
 };
 
 /**
- * Below `sm` the share bar is dropped and the remaining columns tighten, the
- * way the makes table does: the class name is what pays for the bar, and on a
- * phone it would truncate to nothing beside it.
- */
-const GRID_CLASS =
-  "grid grid-cols-[minmax(0,1fr)_88px_64px] items-center gap-2 sm:grid-cols-[minmax(0,1fr)_140px_minmax(120px,220px)_110px] sm:gap-4";
-
-/**
  * Every vehicle class at the latest year end, sortable on any column, with
- * cars tinted so the page's subject reads in context. Sort is view-only, so
- * it lives in local state and never touches the URL.
+ * cars set in bold so the page's subject reads in context. DataGrid sorts the
+ * rows itself; the descriptor is mirrored here only to word the caption.
  */
 export function ClassesTable({
   previousYear,
@@ -62,30 +37,95 @@ export function ClassesTable({
     column: "population",
     direction: "descending",
   });
-  // Only `toggleSort` sets the column, and always to a ClassSortKey.
+  // Only the sortable columns can be sorted, and their ids are ClassSortKeys.
   const sortKey = descriptor.column as ClassSortKey;
-
-  const sorted = useMemo(
-    () => sortClasses(rows, sortKey, descriptor.direction),
-    [descriptor.direction, rows, sortKey],
-  );
   const largest = Math.max(...rows.map((row) => row.population), 1);
 
-  const toggleSort = (key: ClassSortKey) => {
-    setDescriptor((current) => {
-      if (key === current.column) {
-        return {
-          column: key,
-          direction:
-            current.direction === "ascending" ? "descending" : "ascending",
-        };
-      }
-      return {
-        column: key,
-        direction: key === "name" ? "ascending" : "descending",
-      };
-    });
-  };
+  const columns: DataGridColumn<ClassRank>[] = [
+    {
+      allowsSorting: true,
+      cell: (row) => (
+        <span className="flex min-w-0 items-center gap-3">
+          <span
+            aria-hidden
+            className="size-3 shrink-0 rounded-full"
+            style={{ background: row.colour }}
+          />
+          <Typography.Paragraph
+            truncate
+            weight={row.name === CARS ? "bold" : undefined}
+          >
+            {row.name}
+          </Typography.Paragraph>
+        </span>
+      ),
+      header: "Vehicle class",
+      id: "name",
+      isRowHeader: true,
+      minWidth: 180,
+      pinned: "start",
+      sortFn: (first, second) => compareClasses(first, second, "name"),
+    },
+    {
+      align: "end",
+      allowsSorting: true,
+      cell: (row) => (
+        <NumberValue
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={row.population}
+        />
+      ),
+      header: "Population",
+      id: "population",
+      sortFn: (first, second) => compareClasses(first, second, "population"),
+      width: 120,
+    },
+    {
+      cell: (row) => (
+        <span className="flex items-center gap-2">
+          <ProgressBar
+            aria-label={`${row.name} share of the largest class`}
+            className="min-w-0 flex-1"
+            size="lg"
+            style={{ "--progress-bar-fill": row.colour } as CSSProperties}
+            value={(row.population / largest) * 100}
+          >
+            <ProgressBar.Track>
+              <ProgressBar.Fill />
+            </ProgressBar.Track>
+          </ProgressBar>
+          <Typography.Paragraph
+            align="end"
+            className="w-12 shrink-0 tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {row.share.toFixed(1)}%
+          </Typography.Paragraph>
+        </span>
+      ),
+      header: "Share",
+      id: "share",
+      minWidth: 180,
+    },
+    {
+      align: "end",
+      allowsSorting: true,
+      cell: (row) =>
+        row.change === null ? (
+          <Typography.Paragraph color="muted" size="sm">
+            —
+          </Typography.Paragraph>
+        ) : (
+          <DeltaChip value={row.change * 100} />
+        ),
+      header: "Change",
+      id: "change",
+      sortFn: (first, second) => compareClasses(first, second, "change"),
+      width: 100,
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-6">
@@ -95,126 +135,19 @@ export function ClassesTable({
         title="All vehicle classes"
       />
 
-      <div className="flex flex-col">
-        <div className={cn(GRID_CLASS, "border-separator border-b px-2 pb-3")}>
-          {COLUMNS.map((column) => {
-            const isActive = column.key !== null && column.key === sortKey;
-            const className = cn(
-              "font-semibold text-[13px]",
-              column.align === "right" ? "text-right" : "text-left",
-              column.label === "Share" && "hidden sm:block",
-              isActive ? "text-accent-strong" : "text-muted",
-            );
-
-            if (column.key === null) {
-              return (
-                <Typography.Paragraph
-                  className={className}
-                  color="muted"
-                  key={column.label}
-                  size="xs"
-                >
-                  {column.label}
-                </Typography.Paragraph>
-              );
-            }
-
-            const sortKeyForColumn = column.key;
-            return (
-              <Button
-                className={cn(
-                  className,
-                  "h-auto justify-start gap-0 rounded-none bg-transparent p-0 hover:bg-transparent data-[pressed=true]:scale-100",
-                  column.align === "right" && "justify-end",
-                )}
-                key={column.label}
-                onPress={() => toggleSort(sortKeyForColumn)}
-                variant="ghost"
-              >
-                {column.label}
-                {isActive
-                  ? descriptor.direction === "ascending"
-                    ? " ↑"
-                    : " ↓"
-                  : ""}
-              </Button>
-            );
-          })}
-        </div>
-
-        {sorted.map((row) => {
-          const isCars = row.name === CARS;
-          return (
-            <div
-              className={cn(
-                GRID_CLASS,
-                "border-separator border-b px-2 py-[15px]",
-                isCars && "rounded-[14px] bg-accent-soft-2",
-              )}
-              key={row.name}
-            >
-              <span className="flex min-w-0 items-center gap-3">
-                <span
-                  aria-hidden
-                  className="size-3 shrink-0 rounded-full"
-                  style={{ background: row.colour }}
-                />
-                <span
-                  className={cn(
-                    "truncate text-base",
-                    isCars
-                      ? "font-extrabold text-accent-strong"
-                      : "font-semibold text-foreground/85",
-                  )}
-                >
-                  {row.name}
-                </span>
-              </span>
-
-              <span className="text-right font-extrabold text-base tabular-nums">
-                <NumberValue
-                  locale="en-SG"
-                  maximumFractionDigits={0}
-                  value={row.population}
-                />
-              </span>
-
-              <span className="hidden items-center gap-2.5 sm:flex">
-                <ProgressBar
-                  aria-label={`${row.name} share of the largest class`}
-                  className="min-w-0 flex-1"
-                  style={{ "--progress-bar-fill": row.colour } as CSSProperties}
-                  value={(row.population / largest) * 100}
-                >
-                  <ProgressBar.Track className="h-2.5 rounded-full bg-surface-secondary">
-                    <ProgressBar.Fill className="rounded-full" />
-                  </ProgressBar.Track>
-                </ProgressBar>
-                <span className="w-11 text-right font-bold text-[13.5px] text-muted-strong tabular-nums">
-                  {row.share.toFixed(1)}%
-                </span>
-              </span>
-
-              {row.change === null ? (
-                <Typography.Paragraph
-                  weight="semibold"
-                  align="end"
-                  color="muted"
-                  size="sm"
-                >
-                  —
-                </Typography.Paragraph>
-              ) : (
-                <DeltaChip
-                  // At the inherited 16px, "+123.4%" is ~63px wide and fills the 64px phone column.
-                  className="justify-self-end max-sm:text-xs"
-                  value={row.change * 100}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <DataGrid
+        aria-label="Vehicle classes"
+        columns={columns}
+        contentClassName="min-w-[560px]"
+        data={rows}
+        defaultSortDescriptor={{
+          column: "population",
+          direction: "descending",
+        }}
+        getRowId={(row) => row.name}
+        onSortChange={setDescriptor}
+        variant="secondary"
+      />
 
       <Typography.Paragraph color="muted" size="sm">
         Population counts are taken at 31 December each year.

@@ -31,15 +31,51 @@ const rows: ClassRank[] = [
 const renderTable = () =>
   render(<ClassesTable previousYear="2024" rows={rows} year="2025" />);
 
+const rowNames = (screen: Awaited<ReturnType<typeof renderTable>>) =>
+  screen
+    .getByText(/^(Buses|Cars|Taxis)$/)
+    .elements()
+    .map((element) => element.textContent);
+
 describe("ClassesTable", () => {
   it("should list the largest population first", async () => {
     const screen = await renderTable();
 
-    const names = screen
-      .getByText(/^(Buses|Cars|Taxis)$/)
-      .elements()
-      .map((element) => element.textContent);
-    expect(names).toEqual(["Cars", "Taxis", "Buses"]);
+    expect(rowNames(screen)).toEqual(["Cars", "Taxis", "Buses"]);
+  });
+
+  it("should mark the population column as sorted descending", async () => {
+    const screen = await renderTable();
+
+    await expect
+      .element(screen.getByRole("columnheader", { name: "Population" }))
+      .toHaveAttribute("aria-sort", "descending");
+  });
+
+  it("should sort names ascending when the class header is clicked", async () => {
+    const screen = await renderTable();
+
+    const header = screen.getByRole("columnheader", { name: "Vehicle class" });
+    await header.click();
+
+    await expect.element(header).toHaveAttribute("aria-sort", "ascending");
+    expect(rowNames(screen)).toEqual(["Buses", "Cars", "Taxis"]);
+    await expect
+      .element(screen.getByText(/Sorted by name, ascending\./))
+      .toBeVisible();
+  });
+
+  it("should flip population to ascending on a second click", async () => {
+    const screen = await renderTable();
+
+    const header = screen.getByRole("columnheader", { name: "Population" });
+    await header.click();
+
+    await expect.element(header).toHaveAttribute("aria-sort", "ascending");
+    expect(rowNames(screen)).toEqual(["Buses", "Taxis", "Cars"]);
+    await expect
+      .element(screen.getByText(/Sorted by population, ascending\./))
+      .toBeVisible();
   });
 
   it("should state the default sort in the caption", async () => {
