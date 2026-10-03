@@ -16,7 +16,7 @@ export function FaqSection() {
         {FAQS.map(({ answer, question }) => (
           <Accordion.Item id={question} key={question}>
             <Accordion.Heading>
-              <Accordion.Trigger className="font-bold text-lg tracking-tight">
+              <Accordion.Trigger>
                 {question}
                 <Accordion.Indicator>
                   <ChevronDown />
@@ -24,9 +24,7 @@ export function FaqSection() {
               </Accordion.Trigger>
             </Accordion.Heading>
             <Accordion.Panel>
-              <Accordion.Body className="max-w-prose text-base leading-relaxed">
-                {answer}
-              </Accordion.Body>
+              <Accordion.Body className="max-w-prose">{answer}</Accordion.Body>
             </Accordion.Panel>
           </Accordion.Item>
         ))}
