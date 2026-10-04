@@ -33,6 +33,20 @@
 * **web:** narrow the collapsed nav bar gap so it fits 360px ([6090e5a](https://github.com/motormetrics/motormetrics/commit/6090e5aaf3f939c666272e513afae36e407b8d52))
 * **web:** span the exercise range switch across phone rows ([2cf018e](https://github.com/motormetrics/motormetrics/commit/2cf018efc793dce8722480c317b86c9af13b9a72))
 
+## [5.31.1](https://github.com/motormetrics/motormetrics/compare/v5.31.0...v5.31.1) (2026-10-04)
+
+
+### Bug Fixes
+
+* **web:** drop the DataGrid selected-row override ([9f63e50](https://github.com/motormetrics/motormetrics/commit/9f63e50940a1712578b60a195272831f0315f21c))
+* **web:** keep the segment switches inside a 320px phone ([049cb9f](https://github.com/motormetrics/motormetrics/commit/049cb9f24a725c414fa94ca18f69d8ccfcc25eba))
+* **web:** point the COE table sort arrow down when descending ([72c8969](https://github.com/motormetrics/motormetrics/commit/72c89699fb2a1ceecb0bf0d6b2bd100b9a38aa32))
+* **web:** prebundle Drizzle dependencies for browser tests ([6095925](https://github.com/motormetrics/motormetrics/commit/60959253e195e4bae3bbe603b17af020bb5d4537))
+* **web:** round the COE header's last visible column ([588e8f2](https://github.com/motormetrics/motormetrics/commit/588e8f277eac625cd34675af3d762332fba70e66))
+* **web:** start figure columns largest first in the classes grid ([4c901b4](https://github.com/motormetrics/motormetrics/commit/4c901b4254ea63dd28b72b319692fa756fa397ca))
+* **web:** start figure columns largest first in the makes grid ([33ad35d](https://github.com/motormetrics/motormetrics/commit/33ad35dbee676574f323501ce0f7299b3ce9ac78))
+* **web:** tint selected DataGrid rows instead of a pink pinned cell ([c7569c8](https://github.com/motormetrics/motormetrics/commit/c7569c85026ef29f2502484b06298674676c764e))
+
 ## [5.30.0](https://github.com/motormetrics/motormetrics/compare/v5.29.0...v5.30.0) (2026-10-03)
 
 ### Features
