@@ -12,7 +12,7 @@ export interface CategoryRow {
   series: { label: string; value: number }[];
 }
 
-export const SORT_KEYS = ["category", "premium", "quota", "change"] as const;
+const SORT_KEYS = ["category", "premium", "quota", "change"] as const;
 export type SortKey = (typeof SORT_KEYS)[number];
 export type SortDirection = "asc" | "desc";
 

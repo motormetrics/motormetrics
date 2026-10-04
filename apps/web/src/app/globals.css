@@ -54,7 +54,10 @@
     --foreground: var(--eclipse);
 
     /* Surfaces */
-    --surface: var(--white);
+    /* Pure white with an explicit hue. A hueless white makes HeroUI Pro's
+       oklch colour-mix (DataGrid's selected pinned cell) carry chroma with no
+       hue, which the browser draws pink. Hue 90 matches the sand surfaces. */
+    --surface: oklch(100% 0 90);
     --surface-foreground: var(--foreground);
     --surface-secondary: #efece3; /* warm sand — rails, wells */
     --surface-secondary-foreground: var(--foreground);
@@ -373,5 +376,19 @@
   50% {
     opacity: 0.8;
     transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* HeroUI component overrides. Keep this list short: each one exists only
+   because no HeroUI prop, variant or theme token can do the job. */
+@layer components {
+  /* A selected DataGrid row is drawn as surface at 10% over white, which is
+     invisible, so tint the whole row with the soft accent instead. The pinned
+     selector matches DataGrid's own selected pinned cell rule. */
+  [data-slot="data-grid"] .table__row[data-selected="true"] .table__cell,
+  [data-slot="data-grid"]
+    .table__row[data-selected="true"]
+    [data-pinned].table__cell {
+    background-color: var(--accent-soft-2);
   }
 }
