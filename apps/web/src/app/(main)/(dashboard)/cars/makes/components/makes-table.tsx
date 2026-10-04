@@ -13,6 +13,7 @@ import type { MakeRow } from "@web/app/(main)/(dashboard)/cars/makes/components/
 import {
   type FuelFilter,
   type SortKey,
+  sortMakeRows,
   sortSearchParams,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
@@ -103,23 +104,6 @@ function trackMakeSelected(make: string) {
   posthog.capture("car_make_selected", { make, source: "makes_table" });
 }
 
-function compareRows(a: MakesTableRow, b: MakesTableRow, key: SortKey): number {
-  if (key === "make") {
-    return a.make.localeCompare(b.make);
-  }
-  if (key === "yoyChange") {
-    // A make with no prior year to compare against sorts as the lowest value
-    // rather than pretending to be a 0% change.
-    const left = a.yoyChange ?? Number.NEGATIVE_INFINITY;
-    const right = b.yoyChange ?? Number.NEGATIVE_INFINITY;
-    if (left === right) {
-      return 0;
-    }
-    return left < right ? -1 : 1;
-  }
-  return a.count - b.count;
-}
-
 /**
  * The "All makes" section: heading, powertrain tabs, search and the sortable
  * table.
@@ -162,11 +146,8 @@ export function MakesTable({
       ? rows.filter((row) => row.make.toLowerCase().includes(needle))
       : rows;
 
-    return [...filtered].sort((a, b) => {
-      const order = compareRows(a, b, descriptor.column as SortKey);
-      return descriptor.direction === "descending" ? -order : order;
-    });
-  }, [descriptor, query, rows]);
+    return sortMakeRows(filtered, sort, dir);
+  }, [dir, query, rows, sort]);
 
   // A search is already a narrowing, so matches are never truncated on top of
   // it — collapsing only applies to the unfiltered list.
@@ -178,8 +159,10 @@ export function MakesTable({
     : visibleRows;
 
   // Bars are scaled to the leader, as the comp does, so the top row always
-  // fills its track whatever its share of the whole.
-  const leadCount = rows[0]?.count || 1;
+  // fills its track whatever its share of the whole. The leader is looked up
+  // rather than read off `rows[0]`, because the server hands the rows over
+  // already in the URL's sort, which need not be by registrations.
+  const leadCount = Math.max(1, ...rows.map((row) => row.count));
 
   const toggleSort = (key: SortKey) => {
     if (key === sort) {

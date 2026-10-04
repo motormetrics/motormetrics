@@ -2,6 +2,7 @@ import {
   MakesTable,
   type MakesTableRow,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-table";
+import { sortMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import {
   type OnUrlUpdateFunction,
   withNuqsTestingAdapter,
@@ -127,6 +128,52 @@ describe("MakesTable", () => {
     await expect
       .element(screen.getByText(/Sorted by name, ascending/))
       .toBeVisible();
+  });
+
+  it("should order rows the way the server sorts them for the URL", () => {
+    const names = (sorted: MakesTableRow[]) => sorted.map((row) => row.slug);
+
+    expect(names(sortMakeRows(rows, "make", "asc"))).toEqual([
+      "byd",
+      "mazda",
+      "toyota",
+    ]);
+    expect(names(sortMakeRows(rows, "count", "desc"))).toEqual([
+      "toyota",
+      "byd",
+      "mazda",
+    ]);
+    expect(names(sortMakeRows(rows, "yoyChange", "desc"))).toEqual([
+      "byd",
+      "toyota",
+      "mazda",
+    ]);
+  });
+
+  it("should scale the share bars to the leader when rows arrive sorted by name", async () => {
+    const screen = await render(
+      <MakesTable
+        fuel={null}
+        rangeLabel="Year to date"
+        rows={sortMakeRows(rows, "make", "asc")}
+      />,
+      {
+        wrapper: withNuqsTestingAdapter({
+          searchParams: { dir: "asc", sort: "make" },
+        }),
+      },
+    );
+
+    await expect
+      .element(
+        screen.getByRole("progressbar", { name: "TOYOTA share of the leader" }),
+      )
+      .toHaveAttribute("aria-valuenow", "100");
+    await expect
+      .element(
+        screen.getByRole("progressbar", { name: "BYD share of the leader" }),
+      )
+      .toHaveAttribute("aria-valuenow", "62.5");
   });
 
   it("should write the sort to the URL shallowly, replacing history", async () => {
