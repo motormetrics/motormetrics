@@ -241,7 +241,7 @@ describe("MakesTable", () => {
     expect(lastUrlUpdate()?.queryString).toBe("?dir=asc");
   });
 
-  it("should put makes without a year-on-year figure lowest when sorting by change", async () => {
+  it("should sink makes without a year-on-year figure when sorting by change", async () => {
     const screen = await renderTable();
     const changeHeader = screen.getByRole("columnheader", { name: /Change/ });
 
@@ -252,6 +252,9 @@ describe("MakesTable", () => {
     await expect
       .poll(() => makeNames(screen))
       .toEqual(["byd", "toyota", "mazda"]);
+    await expect
+      .element(changeHeader)
+      .toHaveAttribute("aria-sort", "descending");
 
     await changeHeader.click();
 
