@@ -1,15 +1,8 @@
 "use client";
 
 import type { SortDescriptor } from "@heroui/react";
-import {
-  cn,
-  ProgressBar,
-  SearchField,
-  Table,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from "@heroui/react";
+import { cn, ProgressBar, SearchField, Table, Typography } from "@heroui/react";
+import { Segment } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import {
   CAR_DIMENSIONS,
@@ -179,40 +172,35 @@ export function DimensionTable({
         eyebrow="Registrations"
         title={labels.title}
         trailing={
-          <ToggleButtonGroup
-            aria-label="Dimension"
-            className="flex min-w-0 flex-wrap gap-2"
-            disallowEmptySelection
-            isDetached
-            onSelectionChange={(keys) => {
-              const [option] = [...keys];
-              if (option === undefined) {
-                return;
-              }
-              posthog.capture("dashboard_filter_changed", {
-                filter: "dimension",
-                value: option,
-              });
-              setQuery("");
-              setSortDescriptor({
-                column: "count",
-                direction: "descending",
-              });
-              setDimension(option as CarDimension);
-            }}
-            selectedKeys={[dimension]}
-            selectionMode="single"
-          >
-            {CAR_DIMENSIONS.map((option) => (
-              <ToggleButton
-                className="h-auto whitespace-nowrap rounded-full bg-default px-[18px] py-2.5 font-semibold text-foreground/75 text-sm transition-colors hover:bg-accent-soft data-[selected=true]:bg-accent data-[selected=true]:font-extrabold data-[selected=true]:text-accent-foreground"
-                id={option}
-                key={option}
-              >
-                {DIMENSION_LABELS[option].tab}
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
+          // Segment is a non-wrapping inline-flex, so a row wider than a phone
+          // (the three dimension tabs, about 296px) scrolls sideways inside
+          // this wrapper instead of pushing the page wider.
+          <div className="max-w-full overflow-x-auto">
+            <Segment
+              aria-label="Dimension"
+              onSelectionChange={(option) => {
+                posthog.capture("dashboard_filter_changed", {
+                  filter: "dimension",
+                  value: option,
+                });
+                setQuery("");
+                setSortDescriptor({
+                  column: "count",
+                  direction: "descending",
+                });
+                setDimension(option as CarDimension);
+              }}
+              selectedKey={dimension}
+              size="md"
+              variant="ghost"
+            >
+              {CAR_DIMENSIONS.map((option) => (
+                <Segment.Item id={option} key={option}>
+                  {DIMENSION_LABELS[option].tab}
+                </Segment.Item>
+              ))}
+            </Segment>
+          </div>
         }
       />
 
@@ -309,7 +297,7 @@ export function DimensionTable({
                             : null
                         }
                         make={row.name}
-                        size={28}
+                        size="sm"
                       />
                       <Typography.Paragraph
                         className="text-foreground/85"

@@ -78,7 +78,7 @@ export function CtaSection() {
         </Typography.Paragraph>
         <a
           className={buttonVariants({
-            className: "self-start rounded-full no-underline",
+            className: "self-start",
             variant: "primary",
           })}
           href={`mailto:${ADVERTISE_EMAIL}`}

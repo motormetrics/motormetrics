@@ -43,7 +43,7 @@ export function CtaSection() {
       </div>
       <Link
         className={buttonVariants({
-          className: "rounded-full no-underline lg:ml-auto",
+          className: "lg:ml-auto",
           size: "lg",
           variant: "secondary",
         })}

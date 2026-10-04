@@ -64,7 +64,7 @@ export function PricingSection() {
                 <Typography.Heading level={3}>{name}</Typography.Heading>
                 {featured ? (
                   <Chip
-                    className="ml-auto font-bold"
+                    className="ml-auto"
                     color="accent"
                     size="sm"
                     variant="primary"
@@ -99,7 +99,6 @@ export function PricingSection() {
               <div className="mt-auto w-full pt-3">
                 <Link
                   className={buttonVariants({
-                    className: "rounded-full no-underline",
                     fullWidth: true,
                     variant: featured ? "primary" : "secondary",
                   })}

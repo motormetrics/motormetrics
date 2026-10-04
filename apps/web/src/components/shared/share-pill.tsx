@@ -48,7 +48,7 @@ const TARGETS = [
 ] as const;
 
 /**
- * The comps' square outline "Share" button, which opens a menu of targets over
+ * The comps' outline "Share" button, which opens a menu of targets over
  * a copy-link row.
  *
  * The blog's `ShareButtons` lays the same four targets out as a row of icon
@@ -86,10 +86,7 @@ export function SharePill({
 
   return (
     <Dropdown>
-      <Button
-        className="h-8.5 gap-2 rounded-lg bg-surface px-3.5 font-medium text-[13.5px] hover:bg-surface-secondary"
-        variant="outline"
-      >
+      <Button size="sm" variant="outline">
         <Share2 className="size-4 shrink-0" strokeWidth={2} />
         Share
       </Button>

@@ -43,7 +43,7 @@ export async function TopMakes() {
                 <MakeAvatar
                   logoUrl={logoUrlBySlug[slugify(item.make)] ?? null}
                   make={item.make}
-                  size={28}
+                  size="sm"
                 />
                 <Typography.Paragraph
                   className="[color:inherit] [font-weight:inherit]"

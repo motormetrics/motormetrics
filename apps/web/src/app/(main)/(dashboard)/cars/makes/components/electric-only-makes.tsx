@@ -37,7 +37,7 @@ export async function ElectricOnlyMakes() {
             key={make.make}
             label={
               <>
-                <MakeAvatar logoUrl={make.logoUrl} make={make.make} size={28} />
+                <MakeAvatar logoUrl={make.logoUrl} make={make.make} size="sm" />
                 <Typography.Paragraph
                   className="[color:inherit] [font-weight:inherit]"
                   truncate

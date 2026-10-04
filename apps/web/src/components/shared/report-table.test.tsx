@@ -127,14 +127,14 @@ describe("DeltaText", () => {
     const screen = await render(<DeltaText value={12.34} />);
     await expect
       .element(screen.getByText("+12.3%"))
-      .toHaveClass("text-success-soft-foreground");
+      .toHaveClass("text-muted-strong");
   });
 
   it("should render a fall with a leading minus", async () => {
     const screen = await render(<DeltaText value={-4.5} />);
     await expect
       .element(screen.getByText("−4.5%"))
-      .toHaveClass("text-warning-soft-foreground");
+      .toHaveClass("text-muted-strong");
   });
 
   it("should treat zero as a rise", async () => {

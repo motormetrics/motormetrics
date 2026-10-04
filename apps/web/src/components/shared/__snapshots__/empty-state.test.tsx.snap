@@ -54,7 +54,7 @@ exports[`EmptyState > should render default title and description 1`] = `
       class="flex items-center gap-4"
     >
       <a
-        class="button button--md button--outline rounded-full no-underline"
+        class="button button--md button--outline"
         href="/"
       >
         <svg
@@ -80,7 +80,7 @@ exports[`EmptyState > should render default title and description 1`] = `
         Go Home
       </a>
       <button
-        class="button button--md button--outline rounded-full"
+        class="button button--md button--outline"
         data-rac=""
         data-react-aria-pressable="true"
         data-slot="button"

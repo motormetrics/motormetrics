@@ -181,6 +181,18 @@ describe("MakesTable", () => {
     await expect.element(mazdaRow.getByText("—")).toBeVisible();
   });
 
+  it("should render the change once, as plain grey text", async () => {
+    const screen = await renderTable();
+
+    const change = screen.getByText("+22.5%");
+
+    expect(change.elements()).toHaveLength(1);
+    await expect.element(change).toBeVisible();
+    await expect
+      .element(change)
+      .not.toHaveClass("text-success-soft-foreground");
+  });
+
   it("should collapse a long list to the first ten makes", async () => {
     const screen = await renderTable(manyRows);
 

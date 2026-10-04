@@ -57,7 +57,7 @@ export async function FastestGrowing({
               className="flex items-center gap-3.5 border-separator border-b py-3.5 text-foreground no-underline transition-colors hover:bg-default"
               href={`/cars/makes/${row.slug}`}
             >
-              <MakeAvatar logoUrl={row.logoUrl} make={row.make} size={40} />
+              <MakeAvatar logoUrl={row.logoUrl} make={row.make} />
               <div className="flex min-w-0 flex-col gap-px">
                 <Typography.Paragraph
                   className="text-[17px]"

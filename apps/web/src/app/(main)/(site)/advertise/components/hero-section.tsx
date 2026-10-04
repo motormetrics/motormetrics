@@ -26,7 +26,6 @@ export function HeroSection() {
       <div className="flex flex-wrap gap-3 pt-2">
         <Link
           className={buttonVariants({
-            className: "rounded-full no-underline",
             size: "lg",
             variant: "primary",
           })}
@@ -37,7 +36,6 @@ export function HeroSection() {
         </Link>
         <Link
           className={buttonVariants({
-            className: "rounded-full no-underline",
             size: "lg",
             variant: "secondary",
           })}

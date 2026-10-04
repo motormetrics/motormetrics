@@ -47,12 +47,8 @@ export function ElectricFleet({
           />
         </span>
         {population > 0 ? (
-          <Chip
-            className="rounded-full px-3.5 py-2 font-bold text-accent-strong text-sm"
-            color="accent"
-            variant="soft"
-          >
-            <Chip.Label className="px-0">
+          <Chip color="accent" size="lg" variant="soft">
+            <Chip.Label>
               {((electric / population) * 100).toFixed(1)}% of{" "}
               {entity.name.toLowerCase()}
             </Chip.Label>

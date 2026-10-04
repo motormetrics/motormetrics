@@ -96,7 +96,7 @@ export async function EvMomentum() {
                 <MakeAvatar
                   logoUrl={logoUrlBySlug[slugify(item.make)] ?? null}
                   make={item.make}
-                  size={28}
+                  size="sm"
                 />
                 <Typography.Paragraph
                   className="text-foreground/85"
