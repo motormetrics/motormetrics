@@ -34,7 +34,7 @@ export function PqpRateRow({
           {description}
         </span>
       </span>
-      <span className="text-right font-semibold text-[15px] tabular-nums">
+      <span className="text-right font-semibold text-base tabular-nums">
         <NumberValue
           currency="SGD"
           locale="en-SG"
@@ -43,10 +43,7 @@ export function PqpRateRow({
           value={value}
         />
       </span>
-      <CostTrendChip
-        changeRatio={changeRatio}
-        className="text-right text-[13.5px]"
-      />
+      <CostTrendChip changeRatio={changeRatio} className="text-right text-sm" />
     </li>
   );
 }

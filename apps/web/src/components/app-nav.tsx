@@ -94,7 +94,7 @@ function MobileMenuLink({
   return (
     <Navbar.MenuItem
       aria-label={ariaLabel}
-      className="flex min-w-0 items-center gap-2 rounded-sm px-3.5 py-2.75 font-medium text-[15px] text-muted-strong data-[current=true]:bg-accent-soft data-[current=true]:font-semibold data-[current=true]:text-accent"
+      className="flex min-w-0 items-center gap-2 rounded-sm px-3.5 py-2.75 font-medium text-base text-muted-strong data-[current=true]:bg-accent-soft data-[current=true]:font-semibold data-[current=true]:text-accent"
       href={href}
       isCurrent={isCurrent}
     >
@@ -108,7 +108,7 @@ function MobileMenuLink({
 function GetUpdatesLink() {
   return (
     <Link
-      className="inline-flex h-8.5 shrink-0 items-center whitespace-nowrap rounded-lg bg-foreground px-3 font-medium text-[13.5px] text-background transition-opacity hover:opacity-85"
+      className="inline-flex h-8.5 shrink-0 items-center whitespace-nowrap rounded-lg bg-foreground px-3 font-medium text-background text-sm transition-opacity hover:opacity-85"
       href={SOCIAL_URLS.telegram}
       rel="noopener noreferrer"
       target="_blank"
@@ -160,7 +160,7 @@ export function AppNav({
               <LogoMark first="currentColor" second="var(--accent)" size={22} />
             </span>
             <Wordmark
-              className="text-[19px] md:text-[21px]"
+              className="text-lg md:text-xl"
               first="currentColor"
               second="var(--accent)"
             />

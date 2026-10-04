@@ -39,7 +39,7 @@ export function ElectricFleet({
       />
 
       <div className="flex flex-wrap items-center gap-3.5">
-        <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight lg:text-[52px]">
+        <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}

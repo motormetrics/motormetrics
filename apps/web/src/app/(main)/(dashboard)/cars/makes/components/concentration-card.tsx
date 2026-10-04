@@ -85,7 +85,7 @@ export async function ConcentrationCard({
             </g>
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-            <span className="font-extrabold text-[33px] tabular-nums leading-none tracking-tight">
+            <span className="font-extrabold text-3xl tabular-nums leading-none tracking-tight">
               {leadersShare.toFixed(0)}%
             </span>
             <Typography.Paragraph weight="semibold" color="muted" size="sm">
@@ -105,7 +105,7 @@ export async function ConcentrationCard({
               <Typography.Paragraph weight="semibold" truncate>
                 {segment.label}
               </Typography.Paragraph>
-              <span className="ml-auto shrink-0 font-extrabold text-[15.5px] tabular-nums">
+              <span className="ml-auto shrink-0 font-extrabold text-base tabular-nums">
                 {((segment.value / ringTotal) * 100).toFixed(1)}%
               </span>
             </li>

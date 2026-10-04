@@ -130,7 +130,7 @@ export async function RegistrationTrend({
               name="Registrations"
               title={`${heading.title} over the ${series.length} months to ${monthLabel}`}
             />
-            <div className="flex justify-between font-semibold text-[13px] text-muted">
+            <div className="flex justify-between font-semibold text-muted text-sm">
               <span>
                 {formatDateToMonthYear(visibleMonths.at(0)?.month ?? "")}
               </span>

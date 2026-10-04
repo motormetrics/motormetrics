@@ -41,7 +41,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
       >
         <li>
           <a
-            class="font-medium text-[13px] text-muted transition-colors hover:text-accent"
+            class="font-medium text-muted text-sm transition-colors hover:text-accent"
             href="/about"
           >
             About
@@ -49,7 +49,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
         </li>
         <li>
           <a
-            class="font-medium text-[13px] text-muted transition-colors hover:text-accent"
+            class="font-medium text-muted text-sm transition-colors hover:text-accent"
             href="/learn"
           >
             Learn
@@ -57,7 +57,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
         </li>
         <li>
           <a
-            class="font-medium text-[13px] text-muted transition-colors hover:text-accent"
+            class="font-medium text-muted text-sm transition-colors hover:text-accent"
             href="/contact"
           >
             Contact
@@ -65,7 +65,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
         </li>
         <li>
           <a
-            class="font-medium text-[13px] text-muted transition-colors hover:text-accent"
+            class="font-medium text-muted text-sm transition-colors hover:text-accent"
             href="/legal/privacy-policy"
           >
             Privacy
@@ -73,7 +73,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
         </li>
         <li>
           <a
-            class="font-medium text-[13px] text-muted transition-colors hover:text-accent"
+            class="font-medium text-muted text-sm transition-colors hover:text-accent"
             href="/legal/terms-of-service"
           >
             Terms

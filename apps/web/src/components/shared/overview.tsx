@@ -125,7 +125,7 @@ export function SectionLink({
   return (
     <Link
       className={cn(
-        "ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-semibold text-[13.5px] text-accent-strong no-underline transition-colors hover:text-accent-deep",
+        "ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep",
         className,
       )}
       href={href}
@@ -188,7 +188,7 @@ export function Headline({
         <span
           className={cn(
             "font-extrabold tabular-nums leading-none tracking-tight",
-            size === "lg" ? "text-6xl lg:text-7xl" : "text-5xl lg:text-[52px]",
+            size === "lg" ? "text-6xl lg:text-7xl" : "text-5xl",
           )}
         >
           {value}

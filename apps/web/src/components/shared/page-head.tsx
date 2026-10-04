@@ -1,4 +1,5 @@
 import { cn, Typography } from "@heroui/react";
+import { typographyVariants } from "@heroui/styles";
 import { SharePill } from "@web/components/shared/share-pill";
 import { Text } from "@web/components/shared/text";
 import type { ReactNode } from "react";
@@ -53,7 +54,16 @@ export function PageHead({
         </div>
         {/* A div, not a paragraph: a streamed `sub` may fall back to a block
             skeleton. */}
-        {sub ? <div className="text-[13.5px] text-muted">{sub}</div> : null}
+        {sub ? (
+          <div
+            className={typographyVariants({
+              color: "muted",
+              type: "body-sm",
+            }).base()}
+          >
+            {sub}
+          </div>
+        ) : null}
         {description ? (
           <Typography.Paragraph color="muted">
             {description}

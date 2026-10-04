@@ -1,8 +1,13 @@
 "use client";
 
-import type { SortDescriptor } from "@heroui/react";
-import { cn, ProgressBar, SearchField, Table, Typography } from "@heroui/react";
-import { Segment } from "@heroui-pro/react";
+import { cn, ProgressBar, SearchField, Typography } from "@heroui/react";
+import {
+  DataGrid,
+  type DataGridColumn,
+  type DataGridSortDescriptor,
+  NumberValue,
+  Segment,
+} from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import {
   CAR_DIMENSIONS,
@@ -25,29 +30,11 @@ type SortDirection = "asc" | "desc";
 const CHART_COLOURS = 6;
 
 /**
- * 26rem is wider than this table gets on a phone, which left the
- * registrations column cut mid-figure and the share column off screen. Below
- * `sm` the floor comes off and the share column is dropped, which is what
- * makes the remaining columns fit without scrolling.
- */
-const TABLE_MIN_WIDTH_CLASS = "min-w-0 sm:min-w-[26rem]";
-
-/** The share column restates the count, so it is the one to drop on a phone. */
-const SHARE_COLUMN_CLASS = "hidden sm:table-cell";
-
-/** Ranks up to this are picked out in the accent rather than the neutral. */
-const PODIUM = 3;
-
-/**
  * Rows shown before the reader asks for the rest. The full list runs to every
  * make on record, whose tail is dozens of marques on one or two registrations —
  * a long scroll that buries the makes actually carrying the market.
  */
 const COLLAPSED_ROWS = 10;
-
-const numberFormatter = new Intl.NumberFormat("en-SG", {
-  maximumFractionDigits: 0,
-});
 
 const SORT_LABELS: Record<SortKey, string> = {
   name: "name",
@@ -90,9 +77,9 @@ function compareStats(
  * the URL, and a search box plus sortable headers that only reorder what has
  * already been fetched.
  *
- * A real `<table>` rather than the comp's CSS grid: sortable column headers
- * need `aria-sort` on a `columnheader`, and overriding a table's `display` to
- * lay it out as a grid strips those semantics in most browsers.
+ * The sort is controlled, and so applied here, because the list is collapsed
+ * to its first rows after sorting. The name column is pinned, so a phone
+ * scrolls the figures sideways rather than losing a column.
  */
 export function DimensionTable({
   dimension,
@@ -114,7 +101,7 @@ export function DimensionTable({
       .withOptions({ shallow: false, startTransition }),
   );
   const [query, setQuery] = useState("");
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+  const [sortDescriptor, setSortDescriptor] = useState<DataGridSortDescriptor>({
     column: "count",
     direction: "descending",
   });
@@ -157,6 +144,105 @@ export function DimensionTable({
     dimension === "make"
       ? `Search ${rows.length} makes …`
       : `${labels.searchLabel} …`;
+
+  const columns: DataGridColumn<RankedStat>[] = [
+    {
+      allowsSorting: true,
+      cell: (row) => (
+        <span className="flex min-w-0 items-center gap-3">
+          {/* Typography has no numeral prop; tabular-nums keeps the ranks aligned. */}
+          <Typography.Paragraph
+            className="w-6 shrink-0 tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {row.rank}
+          </Typography.Paragraph>
+          <MakeAvatar
+            className="shrink-0"
+            logoUrl={
+              dimension === "make"
+                ? (logoUrlBySlug[slugify(row.name)] ?? null)
+                : null
+            }
+            make={row.name}
+            size="sm"
+          />
+          <Typography.Paragraph truncate>{row.name}</Typography.Paragraph>
+        </span>
+      ),
+      header: labels.column,
+      id: "name",
+      isRowHeader: true,
+      minWidth: 180,
+      pinned: "start",
+    },
+    {
+      align: "end",
+      allowsSorting: true,
+      cell: (row) => (
+        <NumberValue
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={row.count}
+        />
+      ),
+      header: "Registrations",
+      id: "count",
+      width: 130,
+    },
+    {
+      // `share` is derived from `count`, so sorting on it would only duplicate
+      // the registrations column.
+      cell: (row) => (
+        <span className="flex items-center gap-2">
+          <ProgressBar
+            aria-label={`${row.name} share of the largest`}
+            className="min-w-0 flex-1"
+            size="lg"
+            style={
+              {
+                "--progress-bar-fill": `var(--chart-${Math.min(CHART_COLOURS, row.rank)})`,
+              } as CSSProperties
+            }
+            value={(row.count / largestCount) * 100}
+          >
+            <ProgressBar.Track>
+              <ProgressBar.Fill />
+            </ProgressBar.Track>
+          </ProgressBar>
+          {/* Typography has no numeral prop; tabular-nums keeps the shares aligned. */}
+          <Typography.Paragraph
+            align="end"
+            className="w-12 shrink-0 tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {row.share.toFixed(1)}%
+          </Typography.Paragraph>
+        </span>
+      ),
+      header: "Share",
+      id: "share",
+      minWidth: 180,
+    },
+    {
+      align: "end",
+      allowsSorting: true,
+      cell: (row) =>
+        row.yoyChange === null ? (
+          <Typography.Paragraph color="muted" size="sm">
+            <span aria-hidden>—</span>
+            <span className="sr-only">No comparable period</span>
+          </Typography.Paragraph>
+        ) : (
+          <DeltaChip value={row.yoyChange} />
+        ),
+      header: "Change",
+      id: "yoyChange",
+      width: 100,
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-6">
@@ -230,128 +316,19 @@ export function DimensionTable({
         </Typography.Paragraph>
       </div>
 
-      <Table
+      <DataGrid
+        aria-label={`${labels.title}, year to date through ${monthLabel}`}
+        // Dims the stale rows while the next dimension loads.
         className={cn("transition-opacity", isPending && "opacity-60")}
+        columns={columns}
+        contentClassName="min-w-140"
+        data={displayed}
+        getRowId={(row) => row.name}
+        onSortChange={setSortDescriptor}
+        renderEmptyState={() => `Nothing matches “${query}”.`}
+        sortDescriptor={sortDescriptor}
         variant="secondary"
-      >
-        <Table.ScrollContainer>
-          <Table.Content
-            aria-label={`${labels.title}, year to date through ${monthLabel}`}
-            className={TABLE_MIN_WIDTH_CLASS}
-            onSortChange={setSortDescriptor}
-            sortDescriptor={sortDescriptor}
-          >
-            <Table.Header>
-              <Table.Column allowsSorting id="name" isRowHeader>
-                {({ sortDirection }) => (
-                  <Table.SortableColumnHeader sortDirection={sortDirection}>
-                    {labels.column}
-                  </Table.SortableColumnHeader>
-                )}
-              </Table.Column>
-              <Table.Column allowsSorting id="count">
-                {({ sortDirection }) => (
-                  <Table.SortableColumnHeader sortDirection={sortDirection}>
-                    {/* The full word holds this column at 112px, which is the
-                        last 19px standing between the table and a phone. */}
-                    <span className="sm:hidden">Regs</span>
-                    <span className="hidden sm:inline">Registrations</span>
-                  </Table.SortableColumnHeader>
-                )}
-              </Table.Column>
-              {/* `share` is derived from `count`, so sorting on it would only
-                  duplicate the registrations column. */}
-              <Table.Column className={SHARE_COLUMN_CLASS} id="share">
-                Share
-              </Table.Column>
-              <Table.Column allowsSorting id="yoyChange">
-                {({ sortDirection }) => (
-                  <Table.SortableColumnHeader sortDirection={sortDirection}>
-                    Change
-                  </Table.SortableColumnHeader>
-                )}
-              </Table.Column>
-            </Table.Header>
-            <Table.Body>
-              {displayed.map((row) => (
-                <Table.Row id={row.name} key={row.name}>
-                  <Table.Cell>
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span
-                        className={cn(
-                          "w-6 shrink-0 text-[15px] tabular-nums",
-                          row.rank <= PODIUM
-                            ? "font-extrabold text-accent-strong"
-                            : "font-bold text-muted",
-                        )}
-                      >
-                        {row.rank}
-                      </span>
-                      <MakeAvatar
-                        logoUrl={
-                          dimension === "make"
-                            ? (logoUrlBySlug[slugify(row.name)] ?? null)
-                            : null
-                        }
-                        make={row.name}
-                        size="sm"
-                      />
-                      <Typography.Paragraph weight="semibold" truncate>
-                        {row.name}
-                      </Typography.Paragraph>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell className="text-right font-extrabold text-base tabular-nums">
-                    {numberFormatter.format(row.count)}
-                  </Table.Cell>
-                  <Table.Cell className={SHARE_COLUMN_CLASS}>
-                    <span className="flex items-center gap-2.5">
-                      <ProgressBar
-                        aria-label={`${row.name} share of the largest`}
-                        className="w-24 shrink-0 lg:w-40"
-                        style={
-                          {
-                            "--progress-bar-fill": `var(--chart-${Math.min(CHART_COLOURS, row.rank)})`,
-                          } as CSSProperties
-                        }
-                        size="lg"
-                        value={(row.count / largestCount) * 100}
-                      >
-                        <ProgressBar.Track>
-                          <ProgressBar.Fill />
-                        </ProgressBar.Track>
-                      </ProgressBar>
-                      <span className="w-11 text-right font-bold text-muted-strong text-sm tabular-nums">
-                        {row.share.toFixed(1)}%
-                      </span>
-                    </span>
-                  </Table.Cell>
-                  <Table.Cell className="text-right">
-                    {row.yoyChange === null ? (
-                      <Typography.Paragraph
-                        weight="semibold"
-                        color="muted"
-                        size="sm"
-                      >
-                        <span aria-hidden>—</span>
-                        <span className="sr-only">No comparable period</span>
-                      </Typography.Paragraph>
-                    ) : (
-                      <DeltaChip value={row.yoyChange} />
-                    )}
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Content>
-        </Table.ScrollContainer>
-      </Table>
-
-      {visible.length === 0 ? (
-        <Typography.Paragraph color="muted" size="sm" className="px-2 py-9">
-          Nothing matches “{query}”.
-        </Typography.Paragraph>
-      ) : null}
+      />
 
       {isTruncated ? (
         <Link

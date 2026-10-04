@@ -91,7 +91,7 @@ export async function FuelMix() {
             </g>
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-            <span className="font-extrabold text-[33px] tabular-nums tracking-tight">
+            <span className="font-extrabold text-3xl tabular-nums tracking-tight">
               <NumberValue
                 maximumFractionDigits={1}
                 notation="compact"
