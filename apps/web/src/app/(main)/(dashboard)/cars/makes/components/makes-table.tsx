@@ -138,6 +138,7 @@ export function MakesTable({
       allowsSorting: true,
       cell: (row) => (
         <span className="flex min-w-0 items-center gap-3">
+          {/* Typography has no numeral prop; tabular-nums keeps the ranks aligned. */}
           <Typography.Paragraph
             className="w-6 shrink-0 tabular-nums"
             color="muted"
@@ -199,6 +200,7 @@ export function MakesTable({
               <ProgressBar.Fill />
             </ProgressBar.Track>
           </ProgressBar>
+          {/* Typography has no numeral prop; tabular-nums keeps the shares aligned. */}
           <Typography.Paragraph
             align="end"
             className="w-12 shrink-0 tabular-nums"
@@ -281,7 +283,7 @@ export function MakesTable({
       <DataGrid
         aria-label="Makes"
         columns={columns}
-        contentClassName="min-w-[560px]"
+        contentClassName="min-w-140"
         data={displayedRows}
         getRowId={(row) => row.slug}
         onSortChange={handleSortChange}
