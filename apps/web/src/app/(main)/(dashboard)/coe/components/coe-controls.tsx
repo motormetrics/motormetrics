@@ -20,7 +20,8 @@ import { type ReactNode, useTransition } from "react";
  * also drop to 8px side padding there, because Segment items never wrap or
  * shrink below their label: at HeroUI's 16px the five "Cat X" items (about
  * 340px) and the three "N exercises" items (about 333px) overflow the 288px
- * content column of a 320px phone.
+ * content column of a 320px phone. 720px is the COE page's shared phone
+ * breakpoint (page.tsx, pqp-rate-row.tsx), which no Tailwind step matches.
  */
 const SEGMENT_CLASS = "max-[720px]:w-full";
 const SEGMENT_ITEM_CLASS = "max-[720px]:flex-1 max-[720px]:px-2";
