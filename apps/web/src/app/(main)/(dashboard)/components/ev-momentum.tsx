@@ -90,7 +90,7 @@ export async function EvMomentum() {
                 className="flex items-center gap-3.5 border-separator border-t py-3"
                 key={item.make}
               >
-                <span className="w-5 font-bold text-[15px] text-muted tabular-nums">
+                <span className="w-5 font-bold text-base text-muted tabular-nums">
                   {rank + 1}
                 </span>
                 <MakeAvatar

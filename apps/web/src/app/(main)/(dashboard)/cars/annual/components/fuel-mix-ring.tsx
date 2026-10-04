@@ -108,7 +108,7 @@ export function FuelMixRing({
               </g>
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-              <span className="font-extrabold text-[33px] tabular-nums tracking-tight">
+              <span className="font-extrabold text-3xl tabular-nums tracking-tight">
                 {total > 0 ? ((electric / total) * 100).toFixed(1) : "0.0"}%
               </span>
               <Typography.Paragraph weight="semibold" color="muted" size="sm">

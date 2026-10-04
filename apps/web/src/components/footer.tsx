@@ -36,7 +36,7 @@ export function Footer({
           {navItems.map(({ href, label }) => (
             <li key={href}>
               <Link
-                className="font-medium text-[13px] text-muted transition-colors hover:text-accent"
+                className="font-medium text-muted text-sm transition-colors hover:text-accent"
                 href={href}
               >
                 {label}

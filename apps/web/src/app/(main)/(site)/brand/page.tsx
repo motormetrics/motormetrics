@@ -161,7 +161,7 @@ export default function BrandPage() {
             <div className="relative size-40">
               <div className="absolute inset-0 rounded-xs border-[1.5px] border-chart-4 border-dashed" />
               <LogoMark className="absolute top-8 left-8" size={96} />
-              <span className="absolute top-1.5 right-0 left-0 text-center font-bold text-[11px] text-chart-4">
+              <span className="absolute top-1.5 right-0 left-0 text-center font-bold text-chart-4 text-xs">
                 x
               </span>
             </div>
@@ -325,6 +325,7 @@ export default function BrandPage() {
             />
           </Dont>
           <Dont caption="Capitalise the wordmark">
+            {/* Specimen: drawn at the wordmark size it misuses. */}
             <span
               className="font-extrabold text-[26px] tracking-[-0.03em]"
               style={{ color: MARK_INK }}
@@ -351,6 +352,7 @@ export default function BrandPage() {
             </Typography.Paragraph>
           </div>
           <div className="flex flex-col gap-3 rounded-2xl bg-surface p-7">
+            {/* Specimen: set at the wordmark's 30px so the two compare. */}
             <span className="font-bold text-[30px] text-accent-deep leading-none tracking-tight dark:text-foreground">
               MotorMetrics
             </span>

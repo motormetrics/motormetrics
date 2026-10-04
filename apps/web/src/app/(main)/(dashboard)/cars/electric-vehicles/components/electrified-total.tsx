@@ -66,7 +66,7 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
       <div className="flex h-10 overflow-hidden rounded-full">
         {split.map((segment) => (
           <span
-            className="inline-flex items-center justify-center font-extrabold text-[13px] tabular-nums"
+            className="inline-flex items-center justify-center font-extrabold text-sm tabular-nums"
             key={segment.label}
             style={{
               background: segment.colour,

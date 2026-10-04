@@ -279,7 +279,7 @@ export function DimensionTable({
                     <div className="flex min-w-0 items-center gap-3">
                       <span
                         className={cn(
-                          "w-6 shrink-0 text-[15px] tabular-nums",
+                          "w-6 shrink-0 text-base tabular-nums",
                           row.rank <= PODIUM
                             ? "font-extrabold text-accent-strong"
                             : "font-bold text-muted",

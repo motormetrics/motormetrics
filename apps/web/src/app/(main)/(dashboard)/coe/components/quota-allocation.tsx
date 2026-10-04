@@ -58,7 +58,7 @@ export async function QuotaAllocation({
         title="Bids against quota"
       />
 
-      <div className="flex gap-[18px] text-[12.5px] text-muted-strong">
+      <div className="flex gap-[18px] text-muted-strong text-xs">
         <LegendKey color="var(--chart-1)" label="Quota" />
         <LegendKey color="var(--chart-5)" label="Bids above quota" />
       </div>
@@ -94,7 +94,7 @@ export async function QuotaAllocation({
                     }}
                   />
                 </span>
-                <span className="whitespace-nowrap text-right text-[13px] text-muted-strong tabular-nums">
+                <span className="whitespace-nowrap text-right text-muted-strong text-sm tabular-nums">
                   {label}{" "}
                   <b className="font-semibold text-foreground">{row.ratio}×</b>
                 </span>

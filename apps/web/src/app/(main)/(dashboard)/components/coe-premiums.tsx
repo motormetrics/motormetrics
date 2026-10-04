@@ -72,7 +72,7 @@ export function CoePremiums({ series }: { series: CoeCategorySeries[] }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-3.5">
-        <span className="font-extrabold text-5xl tabular-nums tracking-tight lg:text-[60px]">
+        <span className="font-extrabold text-5xl tabular-nums tracking-tight lg:text-6xl">
           <NumberValue
             currency="SGD"
             locale="en-SG"

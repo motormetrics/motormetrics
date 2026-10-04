@@ -53,7 +53,7 @@ export function PageHead({
         </div>
         {/* A div, not a paragraph: a streamed `sub` may fall back to a block
             skeleton. */}
-        {sub ? <div className="text-[13.5px] text-muted">{sub}</div> : null}
+        {sub ? <div className="text-muted text-sm">{sub}</div> : null}
         {description ? (
           <Typography.Paragraph color="muted">
             {description}

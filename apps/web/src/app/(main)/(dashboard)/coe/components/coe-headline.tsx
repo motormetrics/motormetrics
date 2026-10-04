@@ -37,7 +37,7 @@ export function StatCell({
       <Typography.Paragraph weight="semibold" color="muted" size="xs">
         {label}
       </Typography.Paragraph>
-      <span className="font-semibold text-[22px] tabular-nums tracking-[-0.01em]">
+      <span className="font-semibold text-2xl tabular-nums tracking-[-0.01em]">
         {value}
       </span>
       <Typography.Paragraph className="tabular-nums" color="muted" size="xs">
@@ -99,7 +99,7 @@ export async function CoeHeadline({
           <span className="font-semibold text-accent-strong">{category}</span>
           {` · ${CATEGORY_DESCRIPTIONS[category]}`}
         </Text.Paragraph>
-        <span className="font-extrabold text-[46px] tabular-nums leading-[0.95] tracking-[-0.03em] min-[721px]:text-[60px]">
+        <span className="font-extrabold text-5xl tabular-nums leading-[0.95] tracking-[-0.03em] min-[721px]:text-6xl">
           <NumberValue
             currency="SGD"
             locale="en-SG"
