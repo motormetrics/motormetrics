@@ -378,17 +378,3 @@
     transform: translate(-50%, -50%) scale(1.1);
   }
 }
-
-/* HeroUI component overrides. Keep this list short: each one exists only
-   because no HeroUI prop, variant or theme token can do the job. */
-@layer components {
-  /* A selected DataGrid row is drawn as surface at 10% over white, which is
-     invisible, so tint the whole row with the soft accent instead. The pinned
-     selector matches DataGrid's own selected pinned cell rule. */
-  [data-slot="data-grid"] .table__row[data-selected="true"] .table__cell,
-  [data-slot="data-grid"]
-    .table__row[data-selected="true"]
-    [data-pinned].table__cell {
-    background-color: var(--accent-soft-2);
-  }
-}
