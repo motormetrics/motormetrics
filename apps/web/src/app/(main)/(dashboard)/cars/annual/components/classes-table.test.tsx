@@ -78,6 +78,19 @@ describe("ClassesTable", () => {
       .toBeVisible();
   });
 
+  it("should sort change descending on its first click", async () => {
+    const screen = await renderTable();
+
+    const header = screen.getByRole("columnheader", { name: "Change" });
+    await header.click();
+
+    await expect.element(header).toHaveAttribute("aria-sort", "descending");
+    expect(rowNames(screen)).toEqual(["Cars", "Taxis", "Buses"]);
+    await expect
+      .element(screen.getByText(/Sorted by change, descending\./))
+      .toBeVisible();
+  });
+
   it("should state the default sort in the caption", async () => {
     const screen = await renderTable();
 

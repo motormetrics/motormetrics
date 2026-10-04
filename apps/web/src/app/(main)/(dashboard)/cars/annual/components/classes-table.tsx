@@ -6,7 +6,7 @@ import {
   CARS,
   type ClassRank,
   type ClassSortKey,
-  compareClasses,
+  sortClasses,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { SectionHead } from "@web/components/shared/overview";
@@ -20,8 +20,9 @@ const SORT_LABELS: Record<ClassSortKey, string> = {
 
 /**
  * Every vehicle class at the latest year end, sortable on any column, with
- * cars set in bold so the page's subject reads in context. DataGrid sorts the
- * rows itself; the descriptor is mirrored here only to word the caption.
+ * cars set in bold so the page's subject reads in context. The sort is
+ * controlled, and so applied here, because a figure column starts largest
+ * first rather than at React Aria's ascending default.
  */
 export function ClassesTable({
   previousYear,
@@ -64,7 +65,6 @@ export function ClassesTable({
       isRowHeader: true,
       minWidth: 180,
       pinned: "start",
-      sortFn: (first, second) => compareClasses(first, second, "name"),
     },
     {
       align: "end",
@@ -78,7 +78,6 @@ export function ClassesTable({
       ),
       header: "Population",
       id: "population",
-      sortFn: (first, second) => compareClasses(first, second, "population"),
       width: 120,
     },
     {
@@ -123,7 +122,6 @@ export function ClassesTable({
         ),
       header: "Change",
       id: "change",
-      sortFn: (first, second) => compareClasses(first, second, "change"),
       width: 100,
     },
   ];
@@ -140,13 +138,17 @@ export function ClassesTable({
         aria-label="Vehicle classes"
         columns={columns}
         contentClassName="min-w-140"
-        data={rows}
-        defaultSortDescriptor={{
-          column: "population",
-          direction: "descending",
-        }}
+        data={sortClasses(rows, sortKey, descriptor.direction)}
         getRowId={(row) => row.name}
-        onSortChange={setDescriptor}
+        onSortChange={(next) =>
+          // Only name keeps React Aria's ascending start on a new column.
+          setDescriptor(
+            next.column === descriptor.column || next.column === "name"
+              ? next
+              : { column: next.column, direction: "descending" },
+          )
+        }
+        sortDescriptor={descriptor}
         variant="secondary"
       />
 
