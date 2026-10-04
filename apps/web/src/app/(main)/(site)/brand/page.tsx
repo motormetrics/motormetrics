@@ -352,8 +352,7 @@ export default function BrandPage() {
             </Typography.Paragraph>
           </div>
           <div className="flex flex-col gap-3 rounded-2xl bg-surface p-7">
-            {/* Specimen: set at the wordmark's 30px so the two compare. */}
-            <span className="font-bold text-[30px] text-accent-deep leading-none tracking-tight dark:text-foreground">
+            <span className="font-bold text-3xl text-accent-deep leading-none tracking-tight dark:text-foreground">
               MotorMetrics
             </span>
             <Typography.Paragraph color="muted">
