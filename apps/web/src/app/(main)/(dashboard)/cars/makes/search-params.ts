@@ -32,10 +32,10 @@ export function isFuelFilter(value: string | null): value is FuelFilter {
 }
 
 /** Columns the "All makes" table can be sorted by. */
-export const SORT_KEYS = ["count", "make", "yoyChange"] as const;
+const SORT_KEYS = ["count", "make", "yoyChange"] as const;
 export type SortKey = (typeof SORT_KEYS)[number];
 
-export const SORT_DIRECTIONS = ["asc", "desc"] as const;
+const SORT_DIRECTIONS = ["asc", "desc"] as const;
 export type SortDirection = (typeof SORT_DIRECTIONS)[number];
 
 /**
