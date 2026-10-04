@@ -132,6 +132,47 @@ describe("MakesTable", () => {
       .toBeVisible();
   });
 
+  it("should mark the grid header the URL sorts by", async () => {
+    const screen = await render(
+      <MakesTable fuel={null} rangeLabel="Year to date" rows={rows} />,
+      {
+        wrapper: withNuqsTestingAdapter({
+          searchParams: { dir: "asc", sort: "yoyChange" },
+        }),
+      },
+    );
+
+    await expect
+      .element(screen.getByRole("columnheader", { name: /Change/ }))
+      .toHaveAttribute("aria-sort", "ascending");
+    await expect
+      .element(screen.getByRole("columnheader", { name: /Registrations/ }))
+      .not.toHaveAttribute("aria-sort", "descending");
+  });
+
+  it("should start a newly pressed figure column descending, whatever the URL's direction", async () => {
+    const screen = await render(
+      <MakesTable fuel={null} rangeLabel="Year to date" rows={rows} />,
+      {
+        wrapper: withNuqsTestingAdapter({
+          hasMemory: true,
+          onUrlUpdate,
+          searchParams: { dir: "asc", sort: "make" },
+        }),
+      },
+    );
+
+    await screen.getByRole("columnheader", { name: /Change/ }).click();
+
+    await expect
+      .poll(() => makeNames(screen))
+      .toEqual(["byd", "toyota", "mazda"]);
+    expect(lastUrlUpdate()?.queryString).toBe("?sort=yoyChange");
+    await expect
+      .element(screen.getByText(/Sorted by change, descending/))
+      .toBeVisible();
+  });
+
   it("should order rows the way the server sorts them for the URL", () => {
     const names = (sorted: MakesTableRow[]) => sorted.map((row) => row.slug);
 
