@@ -54,7 +54,10 @@
     --foreground: var(--eclipse);
 
     /* Surfaces */
-    --surface: var(--white);
+    /* Pure white with an explicit hue. A hueless white makes HeroUI Pro's
+       oklch colour-mix (DataGrid's selected pinned cell) carry chroma with no
+       hue, which the browser draws pink. Hue 90 matches the sand surfaces. */
+    --surface: oklch(100% 0 90);
     --surface-foreground: var(--foreground);
     --surface-secondary: #efece3; /* warm sand — rails, wells */
     --surface-secondary-foreground: var(--foreground);
