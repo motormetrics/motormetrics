@@ -1,21 +1,12 @@
 import type { CategoryRow } from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
 import { AllCategoriesTable } from "@web/app/(main)/(dashboard)/coe/components/all-categories-table";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render } from "vitest-browser-react";
 
+const selectCategory = vi.fn();
+
 vi.mock("@web/app/(main)/(dashboard)/coe/components/coe-controls", () => ({
-  CategorySelect: ({
-    children,
-    label,
-  }: {
-    children: React.ReactNode;
-    label: string;
-  }) => (
-    <button aria-label={label} type="button">
-      {children}
-    </button>
-  ),
-  useCoeCategory: () => ({ selectCategory: vi.fn() }),
+  useCoeCategory: () => ({ selectCategory }),
 }));
 
 vi.mock("posthog-js", () => ({ default: { capture: vi.fn() } }));
@@ -80,25 +71,30 @@ const rows: CategoryRow[] = [
 
 type TableScreen = Awaited<ReturnType<typeof renderTable>>;
 
+/** The category names in the order the rows render. */
 const rowLabels = (screen: TableScreen) =>
   screen
-    .getByRole("button", { name: /^Show / })
+    .getByRole("rowheader")
     .elements()
-    .map((row) => row.getAttribute("aria-label"));
+    .map((cell) => cell.textContent?.match(/Category [A-E]/)?.[0]);
 
 const renderTable = () =>
   render(<AllCategoriesTable rows={rows} selected="A" />);
 
 describe("AllCategoriesTable", () => {
+  beforeEach(() => {
+    selectCategory.mockClear();
+  });
+
   it("should open on the highest premium first", async () => {
     const screen = await renderTable();
 
     expect(rowLabels(screen)).toEqual([
-      "Show Category E",
-      "Show Category B",
-      "Show Category A",
-      "Show Category C",
-      "Show Category D",
+      "Category E",
+      "Category B",
+      "Category A",
+      "Category C",
+      "Category D",
     ]);
     await expect
       .element(screen.getByRole("columnheader", { name: "Premium" }))
@@ -117,18 +113,18 @@ describe("AllCategoriesTable", () => {
       .element(screen.getByRole("columnheader", { name: "Category" }))
       .toHaveAttribute("aria-sort", "ascending");
     expect(rowLabels(screen)).toEqual([
-      "Show Category A",
-      "Show Category B",
-      "Show Category C",
-      "Show Category D",
-      "Show Category E",
+      "Category A",
+      "Category B",
+      "Category C",
+      "Category D",
+      "Category E",
     ]);
     await expect
       .element(screen.getByText(/Sorted by category, ascending/))
       .toBeVisible();
   });
 
-  it("should point the sort arrow down when sorted descending", async () => {
+  it("should flip the direction when the sorted header is pressed again", async () => {
     const screen = await renderTable();
 
     await screen.getByRole("columnheader", { name: "Category" }).click();
@@ -136,11 +132,19 @@ describe("AllCategoriesTable", () => {
 
     const header = screen.getByRole("columnheader", { name: "Category" });
     await expect.element(header).toHaveAttribute("aria-sort", "descending");
-    expect(
-      header
-        .element()
-        .querySelector('svg.lucide-arrow-up[data-direction="descending"]'),
-    ).not.toBeNull();
+    expect(rowLabels(screen)[0]).toBe("Category E");
+  });
+
+  it("should mark the active category and select another on press", async () => {
+    const screen = await renderTable();
+
+    await expect
+      .element(screen.getByRole("row", { name: /Category A/ }))
+      .toHaveAttribute("aria-selected", "true");
+
+    await screen.getByRole("row", { name: /Category B/ }).click();
+
+    expect(selectCategory).toHaveBeenCalledWith("B");
   });
 
   it("should show bids and bids per COE without making them sortable", async () => {
@@ -157,9 +161,6 @@ describe("AllCategoriesTable", () => {
       .toBeInTheDocument();
     await expect
       .element(screen.getByRole("gridcell", { name: "1.44×", exact: true }))
-      .toBeInTheDocument();
-    await expect
-      .element(screen.getByText("1,200 quota · 1,507 bids · 1.26×"))
       .toBeInTheDocument();
   });
 
