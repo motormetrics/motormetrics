@@ -11,7 +11,8 @@ import { tv, type VariantProps } from "tailwind-variants";
  *   foreground than `color="muted"`.
  * - `tone="inherit"`: takes the colour and weight from the parent, so a link's
  *   hover colour reaches the text inside it.
- * - `eyebrow`: the small uppercase label above a heading.
+ * - `eyebrow`: the uppercase label above a heading. Its size comes from
+ *   Typography's own `size="xs"`, not from this variant.
  */
 export const textVariants = tv({
   variants: {
@@ -21,7 +22,7 @@ export const textVariants = tv({
       inherit: "text-inherit [font-weight:inherit]",
     },
     eyebrow: {
-      true: "text-xs leading-5 uppercase",
+      true: "uppercase",
     },
   },
 });

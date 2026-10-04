@@ -54,6 +54,7 @@ export async function ConcentrationCard({
   return (
     <div className="flex flex-col gap-[18px]">
       <div className="flex flex-col gap-2.5">
+        {/* Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>. */}
         <Text.Paragraph tone="strong" className="text-xl" weight="semibold">
           Concentration
         </Text.Paragraph>

@@ -7,7 +7,7 @@ describe("textVariants", () => {
     expect(textVariants({ tone: "inherit" })).toBe(
       "text-inherit [font-weight:inherit]",
     );
-    expect(textVariants({ eyebrow: true })).toBe("text-xs leading-5 uppercase");
+    expect(textVariants({ eyebrow: true })).toBe("uppercase");
   });
 
   it("should keep a layout class passed alongside a variant", () => {
@@ -56,12 +56,25 @@ describe("Text.Paragraph", () => {
 describe("Text.Heading", () => {
   it("should keep the heading level", async () => {
     const screen = await render(
-      <Text.Heading eyebrow level={2}>
-        All categories
-      </Text.Heading>,
+      <Text.Heading level={2}>All categories</Text.Heading>,
     );
     const heading = screen.getByRole("heading", { level: 2 });
     await expect.element(heading).toHaveTextContent("All categories");
+    await expect.element(heading).toHaveClass("typography--h2");
+  });
+});
+
+describe("Text.Paragraph as a heading", () => {
+  it("should keep the body-xs scale on an eyebrow exposed as a heading", async () => {
+    const screen = await render(
+      <Text.Paragraph eyebrow role="heading" aria-level={2} size="xs">
+        All categories
+      </Text.Paragraph>,
+    );
+    const heading = screen.getByRole("heading", { level: 2 });
+    await expect.element(heading).toHaveTextContent("All categories");
+    await expect.element(heading).toHaveClass("typography--body-xs");
     await expect.element(heading).toHaveClass("uppercase");
+    await expect.element(heading).not.toHaveClass("typography--h2");
   });
 });

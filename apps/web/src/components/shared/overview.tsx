@@ -179,6 +179,7 @@ export function Headline({
   return (
     <div className={cn("flex flex-col gap-2.5", className)}>
       {label ? (
+        // Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>.
         <Text.Paragraph tone="strong" className="text-xl" weight="semibold">
           {label}
         </Text.Paragraph>

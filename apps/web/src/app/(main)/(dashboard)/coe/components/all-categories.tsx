@@ -69,15 +69,19 @@ export async function AllCategories({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-end gap-4">
-        <Text.Heading
+        {/* A paragraph-scale heading: Typography.Heading has no xs size, and
+            render needs a client-only function. */}
+        <Text.Paragraph
           eyebrow
+          role="heading"
+          aria-level={2}
           className="min-[721px]:sr-only"
           weight="semibold"
           color="muted"
-          level={2}
+          size="xs"
         >
           All categories
-        </Text.Heading>
+        </Text.Paragraph>
         <SectionLink href="/coe/results">All COE results</SectionLink>
       </div>
       <AllCategoriesTable rows={rows} selected={selected} />
