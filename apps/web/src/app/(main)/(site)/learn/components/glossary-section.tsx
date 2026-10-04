@@ -22,7 +22,7 @@ export function GlossarySection() {
     >
       <div className="flex flex-col gap-3">
         <Typography.Heading level={2}>Glossary</Typography.Heading>
-        <Typography.Paragraph className="text-muted leading-normal">
+        <Typography.Paragraph className="leading-normal" color="muted">
           The abbreviations that appear on every invoice, quotation and bidding
           result, in one place.
         </Typography.Paragraph>

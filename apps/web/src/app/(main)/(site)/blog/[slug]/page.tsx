@@ -276,7 +276,10 @@ async function Post({ params }: PageProps) {
       <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-14">
         <article className="flex min-w-0 flex-col gap-7">
           {lede ? (
-            <Typography.Paragraph className="font-medium text-2xl text-foreground leading-normal">
+            <Typography.Paragraph
+              className="text-2xl text-foreground leading-normal"
+              weight="medium"
+            >
               {lede}
             </Typography.Paragraph>
           ) : null}

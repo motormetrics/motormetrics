@@ -75,7 +75,7 @@ export function DatasetsSection() {
         {datasets.map(({ description, href, icon: Icon, title }) => (
           <Link className="no-underline" href={href} key={title}>
             <Card className="h-full transition-shadow hover:shadow-hover">
-              <Card.Content className="flex flex-col gap-3">
+              <Card.Content className="gap-3">
                 <span className="flex size-12 items-center justify-center rounded-full bg-accent-soft text-accent-strong">
                   <Icon className="size-5.5" />
                 </span>

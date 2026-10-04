@@ -75,9 +75,7 @@ export function DataSourcesSection() {
             key={title}
           >
             <ReportEyebrow>{title}</ReportEyebrow>
-            <Typography.Paragraph className="text-muted">
-              {detail}
-            </Typography.Paragraph>
+            <Typography.Paragraph color="muted">{detail}</Typography.Paragraph>
           </div>
         ))}
       </div>

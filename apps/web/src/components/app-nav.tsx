@@ -297,14 +297,14 @@ export function AppNav({
         <GetUpdatesLink />
 
         {/* A 34px bordered square, matching the CTA's height. */}
-        <Navbar.MenuToggle className="@4xl:hidden size-8.5 shrink-0 rounded-lg border border-border" />
+        <Navbar.MenuToggle className="@4xl:hidden size-8.5 shrink-0 border border-border" />
       </Navbar.Header>
 
       {/* The phone sheet: an Explore group of the primary links, then every
           dropdown group and Company, each ruled off by a hairline. Rows run in
           two columns, and the eyebrows and rules span both. HeroUI keeps the
           full-height panel and the scroll lock. */}
-      <Navbar.Menu className="grid grid-cols-2 content-start gap-x-2 gap-y-0.5 px-0 pt-2">
+      <Navbar.Menu className="grid grid-cols-2 content-start gap-x-2 gap-y-0.5 px-0">
         <Header className={menuHeaderClassName}>Explore</Header>
         {PRIMARY_NAV_ITEMS.map(({ href, label }) => (
           <MobileMenuLink

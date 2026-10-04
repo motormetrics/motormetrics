@@ -46,7 +46,7 @@ exports[`Skeleton components > should render SkeletonBentoCard 1`] = `
     data-slot="card"
   >
     <div
-      class="card__header flex flex-col items-start gap-2"
+      class="card__header items-start gap-2"
       data-slot="card-header"
     >
       <div
@@ -57,7 +57,7 @@ exports[`Skeleton components > should render SkeletonBentoCard 1`] = `
       />
     </div>
     <div
-      class="card__content flex flex-col gap-4"
+      class="card__content gap-4"
       data-slot="card-content"
     >
       <div

@@ -13,9 +13,7 @@ const Dashboard = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <Card.Header className="flex flex-row items-center justify-between pb-2">
-            <Card.Title className="font-medium text-sm">
-              System Status
-            </Card.Title>
+            <Card.Title>System Status</Card.Title>
             <Server className="size-4 text-muted" />
           </Card.Header>
           <Card.Content>
@@ -32,9 +30,7 @@ const Dashboard = () => {
 
         <Card>
           <Card.Header className="flex flex-row items-center justify-between pb-2">
-            <Card.Title className="font-medium text-sm">
-              Maintenance Mode
-            </Card.Title>
+            <Card.Title>Maintenance Mode</Card.Title>
             <Wrench className="size-4 text-muted" />
           </Card.Header>
           <Card.Content>
@@ -47,7 +43,7 @@ const Dashboard = () => {
 
         <Card>
           <Card.Header className="flex flex-row items-center justify-between pb-2">
-            <Card.Title className="font-medium text-sm">Database</Card.Title>
+            <Card.Title>Database</Card.Title>
             <Database className="size-4 text-muted" />
           </Card.Header>
           <Card.Content>
@@ -69,7 +65,7 @@ const Dashboard = () => {
         <Card.Header>
           <Card.Title>Quick Actions</Card.Title>
         </Card.Header>
-        <Card.Content className="flex flex-col gap-4">
+        <Card.Content className="gap-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Button variant="outline" className="flex h-20 flex-col gap-2">
               <RefreshCw className="size-6" />

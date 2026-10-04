@@ -8,9 +8,13 @@ const wrapper = withNuqsTestingAdapter({
 
 vi.mock("@heroui/react", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>();
-  const ComboBox = ({ children }: { children?: React.ReactNode }) => (
-    <select aria-label="Month">{children}</select>
-  );
+  const ComboBox = ({
+    "aria-label": ariaLabel,
+    children,
+  }: {
+    "aria-label"?: string;
+    children?: React.ReactNode;
+  }) => <select aria-label={ariaLabel}>{children}</select>;
   ComboBox.InputGroup = () => null;
   ComboBox.Popover = ({ children }: { children?: React.ReactNode }) => children;
   ComboBox.Trigger = () => null;
@@ -31,7 +35,6 @@ vi.mock("@heroui/react", async (importOriginal) => {
     ComboBox,
     Header: () => null,
     Input: () => null,
-    Label: () => null,
     ListBox,
     Separator: () => null,
     toast: { info: vi.fn() },
@@ -54,7 +57,9 @@ describe("MonthSelector", () => {
       { wrapper },
     );
     expect(screen.container).toMatchSnapshot();
-    await expect.element(screen.getByRole("combobox")).toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("combobox", { name: "Month" }))
+      .toBeInTheDocument();
   });
 
   it("should render with empty months array", async () => {

@@ -71,7 +71,7 @@ export function TrendsComparison({
       }}
     >
       <Label>{label}</Label>
-      <ComboBox.InputGroup className="relative">
+      <ComboBox.InputGroup>
         <Calendar
           aria-hidden
           className="pointer-events-none absolute top-1/2 left-3.5 z-10 size-4 -translate-y-1/2 text-muted"
@@ -89,7 +89,7 @@ export function TrendsComparison({
     <Drawer.Backdrop isOpen={isOpen} onOpenChange={onOpenChange} variant="blur">
       <Drawer.Content placement="bottom">
         <Drawer.Dialog>
-          <Drawer.Header className="flex flex-col items-center gap-4 pb-2">
+          <Drawer.Header className="items-center gap-4 pb-2">
             <div className="h-1 w-12 rounded-full bg-default" />
             <div className="flex w-full flex-col gap-4 text-center">
               <Typography.Heading level={2}>

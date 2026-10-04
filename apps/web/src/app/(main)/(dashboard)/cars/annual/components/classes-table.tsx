@@ -11,7 +11,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { SectionHead } from "@web/components/shared/overview";
-import { useMemo, useState } from "react";
+import { type CSSProperties, useMemo, useState } from "react";
 
 const COLUMNS: {
   align: "left" | "right";
@@ -183,13 +183,11 @@ export function ClassesTable({
                 <ProgressBar
                   aria-label={`${row.name} share of the largest class`}
                   className="min-w-0 flex-1"
+                  style={{ "--progress-bar-fill": row.colour } as CSSProperties}
                   value={(row.population / largest) * 100}
                 >
                   <ProgressBar.Track className="h-2.5 rounded-full bg-surface-secondary">
-                    <ProgressBar.Fill
-                      className="rounded-full"
-                      style={{ background: row.colour }}
-                    />
+                    <ProgressBar.Fill className="rounded-full" />
                   </ProgressBar.Track>
                 </ProgressBar>
                 <span className="w-11 text-right font-bold text-[13.5px] text-muted-strong tabular-nums">
@@ -199,7 +197,8 @@ export function ClassesTable({
 
               {row.change === null ? (
                 <Typography.Paragraph
-                  className="text-right font-semibold"
+                  weight="semibold"
+                  align="end"
                   color="muted"
                   size="sm"
                 >

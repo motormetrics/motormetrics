@@ -60,13 +60,15 @@ export async function FastestGrowing({
               <MakeAvatar logoUrl={row.logoUrl} make={row.make} size={40} />
               <div className="flex min-w-0 flex-col gap-px">
                 <Typography.Paragraph
-                  className="font-bold text-[17px]"
+                  className="text-[17px]"
+                  weight="bold"
                   truncate
                 >
                   {row.make}
                 </Typography.Paragraph>
                 <Typography.Paragraph
-                  className="font-medium text-[13.5px] tabular-nums"
+                  className="text-[13.5px] tabular-nums"
+                  weight="medium"
                   color="muted"
                   size="sm"
                 >

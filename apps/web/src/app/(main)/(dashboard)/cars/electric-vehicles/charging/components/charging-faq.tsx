@@ -13,7 +13,6 @@ export function ChargingFaq({ faqs }: { faqs: Faq[] }) {
     >
       <Typography.Heading level={2}>Common questions</Typography.Heading>
       <Accordion
-        className="w-full"
         defaultExpandedKeys={[faqs[0]?.question ?? ""]}
         variant="surface"
       >
@@ -28,7 +27,7 @@ export function ChargingFaq({ faqs }: { faqs: Faq[] }) {
               </Accordion.Trigger>
             </Accordion.Heading>
             <Accordion.Panel>
-              <Accordion.Body className="max-w-prose text-base text-muted leading-relaxed">
+              <Accordion.Body className="max-w-prose text-base leading-relaxed">
                 {answer}
               </Accordion.Body>
             </Accordion.Panel>

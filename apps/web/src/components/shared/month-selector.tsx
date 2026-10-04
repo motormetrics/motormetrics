@@ -4,7 +4,6 @@ import {
   ComboBox,
   Header,
   Input,
-  Label,
   ListBox,
   Separator,
   toast,
@@ -45,6 +44,7 @@ export function MonthSelector({
 
   return (
     <ComboBox
+      aria-label="Month"
       selectedKey={month}
       onSelectionChange={(key) => {
         posthog.capture("dashboard_filter_changed", {
@@ -54,8 +54,7 @@ export function MonthSelector({
         setMonth(key as string);
       }}
     >
-      <Label className="sr-only">Month</Label>
-      <ComboBox.InputGroup className="relative">
+      <ComboBox.InputGroup>
         <Calendar
           aria-hidden
           className="pointer-events-none absolute top-1/2 left-3.5 z-10 size-4 -translate-y-1/2 text-muted"

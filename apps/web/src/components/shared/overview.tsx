@@ -54,7 +54,7 @@ export function OverviewGrid({
 
 /** The hairline that separates one section from the next. */
 export function Hairline({ className }: { className?: string }) {
-  return <Separator className={cn("bg-separator", className)} />;
+  return <Separator className={className} />;
 }
 
 /**
@@ -86,13 +86,15 @@ export function SectionHead({
     <div className={cn("flex flex-wrap items-end gap-4", className)}>
       <div className="flex min-w-0 flex-col gap-1">
         <Typography.Paragraph
-          className="font-semibold text-xs uppercase tracking-[0.06em]"
+          className="text-xs uppercase tracking-[0.06em]"
+          weight="semibold"
           color="muted"
         >
           {eyebrow}
         </Typography.Paragraph>
         <Typography.Heading
-          className="font-bold text-[21px] tracking-[-0.015em] md:text-2xl"
+          className="text-[21px] tracking-[-0.015em] md:text-2xl"
+          weight="bold"
           level={2}
         >
           {title}
@@ -180,7 +182,10 @@ export function Headline({
   return (
     <div className={cn("flex flex-col gap-2.5", className)}>
       {label ? (
-        <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+        <Typography.Paragraph
+          className="text-muted-strong text-xl"
+          weight="semibold"
+        >
           {label}
         </Typography.Paragraph>
       ) : null}
@@ -196,7 +201,11 @@ export function Headline({
         {delta}
       </div>
       {caption ? (
-        <Typography.Paragraph className="text-pretty font-medium" color="muted">
+        <Typography.Paragraph
+          className="text-pretty"
+          weight="medium"
+          color="muted"
+        >
           {caption}
         </Typography.Paragraph>
       ) : null}

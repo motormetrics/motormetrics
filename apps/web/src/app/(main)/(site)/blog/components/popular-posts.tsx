@@ -26,7 +26,7 @@ export function PopularPosts({ posts }: { posts: PostWithViews[] }) {
 
   return (
     <SurfaceCard className="gap-5">
-      <Typography.Paragraph className="font-semibold" color="muted">
+      <Typography.Paragraph weight="semibold" color="muted">
         Most read
       </Typography.Paragraph>
       <ol className="flex flex-col gap-4">

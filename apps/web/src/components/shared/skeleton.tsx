@@ -20,12 +20,12 @@ export function SkeletonChart({ className }: SkeletonProps) {
  */
 export function SkeletonBentoCard({ className }: SkeletonProps) {
   return (
-    <Card className={cn(className)}>
-      <Card.Header className="flex flex-col items-start gap-2">
+    <Card className={className}>
+      <Card.Header className="items-start gap-2">
         <HeroUISkeleton className="h-6 w-40 rounded-lg" />
         <HeroUISkeleton className="h-4 w-full rounded-lg" />
       </Card.Header>
-      <Card.Content className="flex flex-col gap-4">
+      <Card.Content className="gap-4">
         <HeroUISkeleton className="h-24 w-full rounded-lg" />
       </Card.Content>
     </Card>

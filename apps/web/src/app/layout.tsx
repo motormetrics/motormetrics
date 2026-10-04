@@ -2,13 +2,12 @@ import { cn } from "@heroui/react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "@web/app/providers";
-import LoadingIndicator from "@web/components/loading-indicator";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@web/config";
 import { BotIdClient } from "botid/client";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import { type ReactNode, Suspense } from "react";
+import type { ReactNode } from "react";
 import "./globals.css";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 
@@ -80,12 +79,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       </head>
       <body className="bg-background text-foreground">
         <Providers>
-          <NuqsAdapter>
-            <Suspense fallback={null}>
-              <LoadingIndicator />
-            </Suspense>
-            {children}
-          </NuqsAdapter>
+          <NuqsAdapter>{children}</NuqsAdapter>
         </Providers>
         <Analytics />
         <SpeedInsights />

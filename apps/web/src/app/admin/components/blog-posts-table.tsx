@@ -418,7 +418,7 @@ export function BlogPostsTable({ posts, previews }: BlogPostsTableProps) {
             {posts.length !== 1 ? "s" : ""}
           </Card.Description>
         </Card.Header>
-        <Card.Content className="flex flex-col gap-4">
+        <Card.Content className="gap-4">
           {/* Search */}
           <TextField
             aria-label="Search blog posts"

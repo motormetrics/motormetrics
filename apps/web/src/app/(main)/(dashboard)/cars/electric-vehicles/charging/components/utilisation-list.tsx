@@ -27,7 +27,7 @@ export function UtilisationList({ order, searchParams }: UtilisationListProps) {
   return (
     <SurfaceCard className="gap-4 p-7">
       <div className="flex flex-col gap-1">
-        <Typography.Paragraph className="text-muted">
+        <Typography.Paragraph color="muted">
           {order === "busiest" ? "Highest" : "Lowest"} average use
         </Typography.Paragraph>
         <Typography.Heading level={3}>

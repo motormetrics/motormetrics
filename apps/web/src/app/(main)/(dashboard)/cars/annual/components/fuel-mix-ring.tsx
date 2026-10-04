@@ -69,10 +69,13 @@ export function FuelMixRing({
   return (
     <div className="flex flex-col gap-[18px]">
       <div className="flex flex-col gap-2.5">
-        <Typography.Paragraph className="font-semibold text-muted-strong text-xl">
+        <Typography.Paragraph
+          className="text-muted-strong text-xl"
+          weight="semibold"
+        >
           Fuel mix
         </Typography.Paragraph>
-        <Typography.Paragraph className="font-medium" color="muted">
+        <Typography.Paragraph weight="medium" color="muted">
           {entity.name} by fuel type
         </Typography.Paragraph>
         {segments.length === 0 ? (
@@ -109,11 +112,7 @@ export function FuelMixRing({
               <span className="font-extrabold text-[33px] tabular-nums tracking-tight">
                 {total > 0 ? ((electric / total) * 100).toFixed(1) : "0.0"}%
               </span>
-              <Typography.Paragraph
-                className="font-semibold"
-                color="muted"
-                size="sm"
-              >
+              <Typography.Paragraph weight="semibold" color="muted" size="sm">
                 electric
               </Typography.Paragraph>
             </div>
@@ -127,7 +126,10 @@ export function FuelMixRing({
                   className="size-[11px] shrink-0 rounded-full"
                   style={{ background: segment.color }}
                 />
-                <Typography.Paragraph className="font-semibold text-foreground/85">
+                <Typography.Paragraph
+                  className="text-foreground/85"
+                  weight="semibold"
+                >
                   {segment.label}
                 </Typography.Paragraph>
                 <span className="ml-auto font-extrabold text-base tabular-nums">

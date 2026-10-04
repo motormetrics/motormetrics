@@ -85,13 +85,10 @@ export function AnnouncementForm() {
             Create or modify the announcement that will be displayed to users
           </Card.Description>
         </Card.Header>
-        <Card.Content className="flex flex-col gap-6">
+        <Card.Content className="gap-6">
           {/* Enable/Disable Toggle */}
           <div className="flex items-center justify-between">
-            <Label
-              htmlFor="enable-announcement"
-              className="font-medium text-base"
-            >
+            <Label htmlFor="enable-announcement" className="text-base">
               Enable Announcement
             </Label>
             <Button
@@ -110,7 +107,7 @@ export function AnnouncementForm() {
           </div>
 
           {/* Announcement Text Input */}
-          <TextField isDisabled={!isEnabled} className="flex flex-col gap-2">
+          <TextField isDisabled={!isEnabled} className="gap-2">
             <Label>Announcement Text</Label>
             <Input
               name="announcement-text"

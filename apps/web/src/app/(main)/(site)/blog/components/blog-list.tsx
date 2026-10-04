@@ -89,7 +89,7 @@ export function BlogList({ categories, posts, query }: BlogListProps) {
           ))}
         </div>
       ) : (
-        <Typography.Paragraph className="font-semibold" color="muted">
+        <Typography.Paragraph weight="semibold" color="muted">
           {query
             ? `No posts match “${query}”.`
             : "No posts under this topic yet."}

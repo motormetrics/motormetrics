@@ -392,11 +392,7 @@ async function TypeDetailContent({
           >
             The full electric picture →
           </Typography.Heading>
-          <Typography.Paragraph
-            color="muted"
-            size="sm"
-            className="text-muted-strong"
-          >
+          <Typography.Paragraph size="sm" className="text-muted-strong">
             Adoption, charging and the makes leading it, on one page
           </Typography.Paragraph>
         </Link>

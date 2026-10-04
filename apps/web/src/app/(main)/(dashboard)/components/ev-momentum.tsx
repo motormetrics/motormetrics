@@ -99,7 +99,8 @@ export async function EvMomentum() {
                   size={28}
                 />
                 <Typography.Paragraph
-                  className="font-semibold text-foreground/85"
+                  className="text-foreground/85"
+                  weight="semibold"
                   truncate
                 >
                   {item.make}

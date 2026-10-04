@@ -33,7 +33,7 @@ export function StatCell({
 }) {
   return (
     <div className="flex min-w-0 flex-col gap-[3px] border-separator border-b py-3.5 pr-4 even:border-l even:pl-4">
-      <Typography.Paragraph className="font-semibold text-xs" color="muted">
+      <Typography.Paragraph className="text-xs" weight="semibold" color="muted">
         {label}
       </Typography.Paragraph>
       <span className="font-semibold text-[22px] tabular-nums tracking-[-0.01em]">

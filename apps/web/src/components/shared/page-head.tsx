@@ -43,7 +43,8 @@ export function PageHead({
       <div className={cn("flex flex-col gap-2", description && "max-w-prose")}>
         {eyebrow ? (
           <Typography.Paragraph
-            className="font-semibold text-xs uppercase tracking-[0.06em]"
+            className="text-xs uppercase tracking-[0.06em]"
+            weight="semibold"
             color="muted"
           >
             {eyebrow}

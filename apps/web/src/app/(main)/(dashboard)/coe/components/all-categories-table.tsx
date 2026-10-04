@@ -19,7 +19,7 @@ import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/sea
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { SourceNote } from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { useState } from "react";
 
 type ColumnKey = SortKey | "bids" | "ratio" | "trend";
@@ -105,7 +105,7 @@ export function AllCategoriesTable({
         <Table.ScrollContainer>
           <Table.Content
             aria-label="COE categories"
-            className="w-full table-fixed border-separate border-spacing-0 tabular-nums"
+            className="table-fixed tabular-nums"
             onRowAction={(key) => selectCategory(key as CategoryKey)}
             onSortChange={(descriptor) =>
               setSort({
@@ -119,7 +119,6 @@ export function AllCategoriesTable({
             <Table.Header>
               {COLUMNS.map((column) => {
                 const isActive = column.key === sort.key;
-                const Arrow = sort.direction === "asc" ? ArrowUp : ArrowDown;
                 return (
                   <Table.Column
                     allowsSorting={column.sortable}
@@ -144,7 +143,7 @@ export function AllCategoriesTable({
                             column.align === "right" && "justify-end",
                           )}
                           indicator={
-                            <Arrow
+                            <ArrowUp
                               aria-hidden
                               className="size-3.5"
                               strokeWidth={2.5}

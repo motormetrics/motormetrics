@@ -120,14 +120,11 @@ export function MaintenanceForm({ initialConfig }: MaintenanceFormProps) {
             Configure when and how maintenance mode will be activated
           </Card.Description>
         </Card.Header>
-        <Card.Content className="flex flex-col gap-6">
+        <Card.Content className="gap-6">
           {/* Enable/Disable Toggle */}
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
-              <Label
-                htmlFor="maintenance-toggle"
-                className="font-medium text-base"
-              >
+              <Label htmlFor="maintenance-toggle" className="text-base">
                 Enable Maintenance Mode
               </Label>
               <p className="text-muted text-sm">
@@ -150,7 +147,7 @@ export function MaintenanceForm({ initialConfig }: MaintenanceFormProps) {
           {isMaintenanceEnabled && (
             <>
               {/* Maintenance Message */}
-              <TextField className="flex flex-col gap-2">
+              <TextField className="gap-2">
                 <Label>Maintenance Message</Label>
                 <Input
                   name="maintenance-message"
@@ -169,7 +166,7 @@ export function MaintenanceForm({ initialConfig }: MaintenanceFormProps) {
               <div className="rounded-lg border bg-surface/50 p-4">
                 <div className="mb-2 flex items-center gap-2">
                   <Globe className="size-4" />
-                  <Label className="font-medium text-base">Service Scope</Label>
+                  <Label className="text-base">Service Scope</Label>
                 </div>
                 <p className="text-muted text-sm">
                   Maintenance mode affects the web application only

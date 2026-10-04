@@ -22,10 +22,10 @@ export function ComparisonSummary({ monthA, monthB }: ComparisonSummaryProps) {
 
   return (
     <Card>
-      <Card.Header className="flex flex-col items-start gap-2">
+      <Card.Header className="items-start gap-2">
         <Typography.Heading level={4}>Total Registrations</Typography.Heading>
       </Card.Header>
-      <Card.Content className="flex flex-col gap-4">
+      <Card.Content className="gap-4">
         <KPIGroup>
           <KPI>
             <KPI.Header>

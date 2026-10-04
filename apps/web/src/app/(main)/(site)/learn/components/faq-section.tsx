@@ -20,7 +20,7 @@ export function FAQSection() {
     >
       <div className="flex flex-col gap-3 lg:sticky lg:top-9 lg:self-start">
         <Typography.Heading level={2}>Frequently asked</Typography.Heading>
-        <Typography.Paragraph className="text-muted leading-normal">
+        <Typography.Paragraph className="leading-normal" color="muted">
           The questions that come up most often about bidding, rebates and where
           the figures on this site come from.
         </Typography.Paragraph>
@@ -41,7 +41,7 @@ export function FAQSection() {
                   </Accordion.Heading>
                   <Accordion.Panel>
                     <Accordion.Body>
-                      <Typography.Paragraph className="text-muted">
+                      <Typography.Paragraph color="muted">
                         {answer}
                       </Typography.Paragraph>
                     </Accordion.Body>

@@ -28,7 +28,7 @@ export async function EvCharging() {
         link={LINK}
         title="EV charging"
       />
-      <Typography.Paragraph className="font-medium" color="muted">
+      <Typography.Paragraph weight="medium" color="muted">
         <NumberValue
           locale="en-SG"
           maximumFractionDigits={0}

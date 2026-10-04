@@ -112,7 +112,7 @@ export function PricingSection() {
           </Card>
         ))}
       </div>
-      <Typography.Paragraph color="muted" size="xs" className="text-subtle">
+      <Typography.Paragraph size="xs" className="text-subtle">
         Rates are in Singapore dollars. Creative must be static — no autoplay,
         no interstitials.
       </Typography.Paragraph>
