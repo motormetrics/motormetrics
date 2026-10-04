@@ -95,6 +95,7 @@ export function ClassesTable({
               <ProgressBar.Fill />
             </ProgressBar.Track>
           </ProgressBar>
+          {/* Typography has no numeral prop; tabular-nums keeps the shares aligned. */}
           <Typography.Paragraph
             align="end"
             className="w-12 shrink-0 tabular-nums"
@@ -138,7 +139,7 @@ export function ClassesTable({
       <DataGrid
         aria-label="Vehicle classes"
         columns={columns}
-        contentClassName="min-w-[560px]"
+        contentClassName="min-w-140"
         data={rows}
         defaultSortDescriptor={{
           column: "population",
