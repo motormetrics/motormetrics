@@ -59,17 +59,17 @@ const renderTable = (rowsToRender: DimensionStat[] = rows) =>
   );
 
 /**
- * Row order as the reader sees it, header row excluded.
+ * Row order as the reader sees it, read from the row headers so the header
+ * row is left out.
  *
- * A sortable HeroUI table is an ARIA grid, so the name column is the row's
+ * A sortable DataGrid is an ARIA grid, so the name column is the row's
  * `rowheader` and the remaining columns are `gridcell` — there is no `cell`.
  */
 const visibleNames = (screen: RenderResult) =>
   screen
-    .getByRole("row")
-    .all()
-    .slice(1)
-    .map((row) => spokenText(row.getByRole("rowheader").first().element()));
+    .getByRole("rowheader")
+    .elements()
+    .map((cell) => spokenText(cell));
 
 /**
  * Text as a screen reader announces it: the avatar's monogram is
@@ -197,7 +197,10 @@ describe("DimensionTable", () => {
 
     await searchBox(screen).fill("zzz");
 
-    await expect.poll(() => visibleNames(screen)).toEqual([]);
+    // DataGrid's empty state is itself a row header, so count the share bars.
+    await expect
+      .poll(() => screen.getByRole("progressbar").elements())
+      .toHaveLength(0);
     await expect
       .element(screen.getByText("Nothing matches “zzz”."))
       .toBeVisible();
