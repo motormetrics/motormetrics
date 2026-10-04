@@ -52,7 +52,9 @@ export function PageHead({
           {badge}
         </div>
         {/* A div, not a paragraph: a streamed `sub` may fall back to a block
-            skeleton. */}
+            skeleton. Typography only swaps its element through a function
+            `render` prop, which this server component cannot pass to it, so
+            the div carries Typography's body-sm muted classes by hand. */}
         {sub ? <div className="text-muted text-sm">{sub}</div> : null}
         {description ? (
           <Typography.Paragraph color="muted">
