@@ -2,16 +2,20 @@ import {
   MakesTable,
   type MakesTableRow,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-table";
-import { withNuqsTestingAdapter } from "nuqs/adapters/testing";
+import {
+  type OnUrlUpdateFunction,
+  withNuqsTestingAdapter,
+} from "nuqs/adapters/testing";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { userEvent } from "vitest/browser";
 import { type RenderResult, render } from "vitest-browser-react";
 
 const capture = vi.hoisted(() => vi.fn());
+const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
 
 vi.mock("posthog-js", () => ({ default: { capture } }));
 
-const wrapper = withNuqsTestingAdapter({ searchParams: {} });
+const wrapper = withNuqsTestingAdapter({ searchParams: {}, onUrlUpdate });
 
 const rows: MakesTableRow[] = [
   {
@@ -60,6 +64,9 @@ const renderTable = (rowsToRender: MakesTableRow[] = rows) =>
     { wrapper },
   );
 
+/** The URL a sort header press last wrote. */
+const lastUrlUpdate = () => onUrlUpdate.mock.calls.at(-1)?.[0];
+
 const makeNames = (screen: RenderResult) =>
   screen
     .getByRole("link")
@@ -75,6 +82,7 @@ const preventNavigation = (event: MouseEvent) => event.preventDefault();
 describe("MakesTable", () => {
   beforeEach(() => {
     capture.mockClear();
+    onUrlUpdate.mockClear();
     document.addEventListener("click", preventNavigation, true);
   });
 
@@ -94,6 +102,47 @@ describe("MakesTable", () => {
     await expect
       .element(screen.getByText(/Sorted by registrations, descending/))
       .toBeVisible();
+  });
+
+  it("should keep the default sort out of the URL", async () => {
+    const screen = await renderTable();
+
+    await screen.getByRole("button", { name: /Make/ }).click();
+    await screen.getByRole("button", { name: /Registrations/ }).click();
+
+    await expect.poll(() => lastUrlUpdate()?.queryString).toBe("");
+  });
+
+  it("should open on the sort the URL carries", async () => {
+    const screen = await render(
+      <MakesTable fuel={null} rangeLabel="Year to date" rows={rows} />,
+      {
+        wrapper: withNuqsTestingAdapter({
+          searchParams: { dir: "asc", sort: "make" },
+        }),
+      },
+    );
+
+    expect(makeNames(screen)).toEqual(["byd", "mazda", "toyota"]);
+    await expect
+      .element(screen.getByText(/Sorted by name, ascending/))
+      .toBeVisible();
+  });
+
+  it("should write the sort to the URL shallowly, replacing history", async () => {
+    const screen = await renderTable();
+
+    await screen.getByRole("button", { name: /Change/ }).click();
+
+    await vi.waitFor(() => expect(onUrlUpdate).toHaveBeenCalled());
+    const update = lastUrlUpdate();
+    expect(update?.searchParams.get("sort")).toBe("yoyChange");
+    // Descending is the default direction, so it is cleared from the URL.
+    expect(update?.searchParams.has("dir")).toBe(false);
+    expect(update?.options).toMatchObject({
+      history: "replace",
+      shallow: true,
+    });
   });
 
   it("should filter rows by the search query", async () => {
@@ -129,6 +178,7 @@ describe("MakesTable", () => {
     await expect
       .poll(() => makeNames(screen))
       .toEqual(["byd", "mazda", "toyota"]);
+    expect(lastUrlUpdate()?.queryString).toBe("?sort=make&dir=asc");
   });
 
   it("should reverse the direction when the active header is clicked again", async () => {
@@ -139,6 +189,7 @@ describe("MakesTable", () => {
     await expect
       .poll(() => makeNames(screen))
       .toEqual(["mazda", "byd", "toyota"]);
+    expect(lastUrlUpdate()?.queryString).toBe("?dir=asc");
   });
 
   it("should sink makes without a year-on-year figure when sorting by change", async () => {

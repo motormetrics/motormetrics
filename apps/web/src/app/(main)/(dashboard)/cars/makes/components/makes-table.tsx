@@ -10,11 +10,16 @@ import {
 import { type DataGridSortDescriptor, NumberValue } from "@heroui-pro/react";
 import { FuelTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/fuel-tabs";
 import type { MakeRow } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
-import type { FuelFilter } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
+import {
+  type FuelFilter,
+  type SortKey,
+  sortSearchParams,
+} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead } from "@web/components/shared/overview";
 import Link from "next/link";
+import { useQueryStates } from "nuqs";
 import posthog from "posthog-js";
 import { type CSSProperties, useMemo, useState } from "react";
 
@@ -36,8 +41,6 @@ const COLLAPSED_ROWS = 10;
  * eye to read the loudest number as the biggest story.
  */
 const MIN_COUNT_FOR_CHANGE = 20;
-
-type SortKey = "count" | "make" | "yoyChange";
 
 const COLUMNS: {
   align: "left" | "right";
@@ -121,11 +124,14 @@ function compareRows(a: MakesTableRow, b: MakesTableRow, key: SortKey): number {
  * The "All makes" section: heading, powertrain tabs, search and the sortable
  * table.
  *
- * Search and column sort are view-only, so they live in local state here and
- * never touch the URL — only the range menu and the fuel tabs, which change
- * what the server has to aggregate, do that. The heading lives in here rather
- * than in the server parent because its caption counts the rows the search
- * leaves visible.
+ * The column sort lives in the URL as `?sort=…&dir=…`, so a sorted view can be
+ * shared, but it is written shallowly: re-sorting happens here, on rows the
+ * client already holds, and needs no server round trip. It replaces the
+ * history entry rather than pushing one, so the back button leaves the page
+ * instead of stepping through every sort. The search is local state only.
+ *
+ * The heading lives in here rather than in the server parent because its
+ * caption counts the rows the search leaves visible.
  */
 export function MakesTable({
   fuel,
@@ -137,10 +143,17 @@ export function MakesTable({
   rows: MakesTableRow[];
 }) {
   const [query, setQuery] = useState("");
-  const [descriptor, setDescriptor] = useState<DataGridSortDescriptor>({
-    column: "count",
-    direction: "descending",
+  const [{ dir, sort }, setSortParams] = useQueryStates(sortSearchParams, {
+    history: "replace",
+    shallow: true,
   });
+  const descriptor = useMemo<DataGridSortDescriptor>(
+    () => ({
+      column: sort,
+      direction: dir === "asc" ? "ascending" : "descending",
+    }),
+    [dir, sort],
+  );
   const [isExpanded, setIsExpanded] = useState(false);
 
   const visibleRows = useMemo(() => {
@@ -169,18 +182,11 @@ export function MakesTable({
   const leadCount = rows[0]?.count || 1;
 
   const toggleSort = (key: SortKey) => {
-    if (key === descriptor.column) {
-      setDescriptor((current) => ({
-        column: current.column,
-        direction:
-          current.direction === "ascending" ? "descending" : "ascending",
-      }));
+    if (key === sort) {
+      setSortParams({ dir: dir === "asc" ? "desc" : "asc" });
       return;
     }
-    setDescriptor({
-      column: key,
-      direction: key === "make" ? "ascending" : "descending",
-    });
+    setSortParams({ sort: key, dir: key === "make" ? "asc" : "desc" });
   };
 
   return (

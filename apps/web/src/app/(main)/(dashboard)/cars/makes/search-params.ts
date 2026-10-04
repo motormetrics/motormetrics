@@ -31,10 +31,29 @@ export function isFuelFilter(value: string | null): value is FuelFilter {
   return FUEL_FILTERS.includes(value as FuelFilter);
 }
 
+/** Columns the "All makes" table can be sorted by. */
+export const SORT_KEYS = ["count", "make", "yoyChange"] as const;
+export type SortKey = (typeof SORT_KEYS)[number];
+
+export const SORT_DIRECTIONS = ["asc", "desc"] as const;
+export type SortDirection = (typeof SORT_DIRECTIONS)[number];
+
+/**
+ * The table sort, shared by the server loader and the client table so both
+ * read `?sort=…&dir=…` the same way. The defaults are the table's natural
+ * order, and nuqs clears a default from the URL, so the default view stays
+ * clean.
+ */
+export const sortSearchParams = {
+  sort: parseAsStringLiteral(SORT_KEYS).withDefault("count"),
+  dir: parseAsStringLiteral(SORT_DIRECTIONS).withDefault("desc"),
+};
+
 export const searchParams = {
   /** Fuel type to narrow the table to. `null` is the "All" tab. */
   fuel: parseAsString,
   range: parseAsStringLiteral(RANGES).withDefault("ytd"),
+  ...sortSearchParams,
 };
 
 export const loadSearchParams = createLoader(searchParams);
