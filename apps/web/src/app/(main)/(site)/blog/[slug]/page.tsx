@@ -164,15 +164,15 @@ function PostSkeleton() {
   return (
     <>
       <div className="flex max-w-prose flex-col gap-4">
-        <Skeleton className="h-4 w-40 rounded-lg" />
-        <Skeleton className="h-12 w-full rounded-lg" />
-        <Skeleton className="h-5 w-64 rounded-lg" />
+        <Skeleton className="h-4 w-40" />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-5 w-64" />
       </div>
       <Skeleton className="aspect-12/5 w-full rounded-4xl" />
       <div className="flex flex-col gap-4">
-        <Skeleton className="h-6 w-full rounded-lg" />
-        <Skeleton className="h-6 w-5/6 rounded-lg" />
-        <Skeleton className="h-6 w-4/6 rounded-lg" />
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-6 w-5/6" />
+        <Skeleton className="h-6 w-4/6" />
       </div>
     </>
   );

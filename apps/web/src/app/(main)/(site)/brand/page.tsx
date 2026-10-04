@@ -294,7 +294,7 @@ export default function BrandPage() {
         </div>
         <Typography.Paragraph
           color="muted"
-          className="max-w-3xl text-pretty text-[15px] leading-relaxed"
+          className="max-w-3xl text-pretty leading-relaxed"
         >
           The cost of standardising is two things. The mark always appears in
           its cream frame, so on a dark surface it reads as a tile rather than
@@ -343,7 +343,7 @@ export default function BrandPage() {
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
           <div className="flex flex-col gap-3 rounded-2xl bg-surface p-7">
             <Wordmark className="text-[30px]" />
-            <Typography.Paragraph color="muted" className="text-[15px]">
+            <Typography.Paragraph color="muted">
               The wordmark is a graphic. Always lowercase, always Urbanist 800
               with the two-tone split. Use it wherever type can actually be set:
               the nav, the footer mark, share cards, docs and decks. Icon slots
@@ -354,7 +354,7 @@ export default function BrandPage() {
             <span className="font-bold text-[30px] text-accent-deep leading-none tracking-tight dark:text-foreground">
               MotorMetrics
             </span>
-            <Typography.Paragraph color="muted" className="text-[15px]">
+            <Typography.Paragraph color="muted">
               The name is a proper noun. In running copy, page titles, meta
               descriptions and legal text, write MotorMetrics with two capitals:
               &ldquo;&copy; 2026 MotorMetrics&rdquo;, &ldquo;About
@@ -367,7 +367,7 @@ export default function BrandPage() {
 
       <section className="flex flex-col gap-2.5">
         <SectionHeading>Files</SectionHeading>
-        <Typography.Paragraph color="muted" className="text-[15px] leading-7">
+        <Typography.Paragraph color="muted">
           {FILES.map((file, index) => (
             <span key={file}>
               {index > 0 ? " · " : null}

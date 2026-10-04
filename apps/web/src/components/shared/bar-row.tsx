@@ -49,10 +49,11 @@ export function BarRow({
       <ProgressBar
         aria-labelledby={labelId}
         style={{ "--progress-bar-fill": color } as CSSProperties}
+        size="lg"
         value={Math.min(Math.max(share, 0), 100)}
       >
-        <ProgressBar.Track className="h-3 rounded-full bg-surface-secondary">
-          <ProgressBar.Fill className="rounded-full" />
+        <ProgressBar.Track>
+          <ProgressBar.Fill />
         </ProgressBar.Track>
       </ProgressBar>
     </div>

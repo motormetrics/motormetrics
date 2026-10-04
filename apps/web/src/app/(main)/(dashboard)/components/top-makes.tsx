@@ -1,9 +1,9 @@
-import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import { BarRow } from "@web/components/shared/bar-row";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead } from "@web/components/shared/overview";
+import { Text } from "@web/components/shared/text";
 import { getTopMakesByYear } from "@web/queries/cars";
 import { getCarLogoMap } from "@web/queries/logos";
 import { getLatestMonth } from "@web/utils/dates/months";
@@ -45,12 +45,9 @@ export async function TopMakes() {
                   make={item.make}
                   size="sm"
                 />
-                <Typography.Paragraph
-                  className="[color:inherit] [font-weight:inherit]"
-                  truncate
-                >
+                <Text.Paragraph tone="inherit" truncate>
                   {item.make}
-                </Typography.Paragraph>
+                </Text.Paragraph>
               </>
             }
             share={(item.value / leader) * 100}

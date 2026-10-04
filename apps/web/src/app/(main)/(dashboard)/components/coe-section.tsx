@@ -101,12 +101,7 @@ export async function CoeSection() {
 
         {pqpMonths && pqpRows.length > 0 ? (
           <div className="flex flex-col gap-3">
-            <Typography.Paragraph
-              className="text-[15px]"
-              weight="semibold"
-              color="muted"
-              size="sm"
-            >
+            <Typography.Paragraph weight="semibold" color="muted" size="sm">
               PQP · {formatMonthName(pqpMonths.current)} renewal rates
             </Typography.Paragraph>
             <ul className="flex flex-col">

@@ -131,14 +131,14 @@ function GuideSkeleton() {
   return (
     <>
       <div className="flex max-w-prose flex-col gap-4">
-        <Skeleton className="h-4 w-32 rounded-lg" />
-        <Skeleton className="h-12 w-full rounded-lg" />
-        <Skeleton className="h-5 w-3/4 rounded-lg" />
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-5 w-3/4" />
       </div>
       <div className="flex flex-col gap-4">
-        <Skeleton className="h-6 w-full rounded-lg" />
-        <Skeleton className="h-6 w-5/6 rounded-lg" />
-        <Skeleton className="h-6 w-4/6 rounded-lg" />
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-6 w-5/6" />
+        <Skeleton className="h-6 w-4/6" />
       </div>
     </>
   );

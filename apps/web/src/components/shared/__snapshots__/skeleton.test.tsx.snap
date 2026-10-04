@@ -6,16 +6,16 @@ exports[`Skeleton components > should render GridSkeleton 1`] = `
     class="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
   >
     <div
-      class="skeleton skeleton--shimmer h-32 w-full rounded-lg"
+      class="skeleton skeleton--shimmer h-32 w-full"
     />
     <div
-      class="skeleton skeleton--shimmer h-32 w-full rounded-lg"
+      class="skeleton skeleton--shimmer h-32 w-full"
     />
     <div
-      class="skeleton skeleton--shimmer h-32 w-full rounded-lg"
+      class="skeleton skeleton--shimmer h-32 w-full"
     />
     <div
-      class="skeleton skeleton--shimmer h-32 w-full rounded-lg"
+      class="skeleton skeleton--shimmer h-32 w-full"
     />
   </div>
 </div>
@@ -27,13 +27,13 @@ exports[`Skeleton components > should render ListSkeleton 1`] = `
     class="flex flex-col gap-4"
   >
     <div
-      class="skeleton skeleton--shimmer w-full rounded-lg h-20"
+      class="skeleton skeleton--shimmer w-full h-20"
     />
     <div
-      class="skeleton skeleton--shimmer w-full rounded-lg h-20"
+      class="skeleton skeleton--shimmer w-full h-20"
     />
     <div
-      class="skeleton skeleton--shimmer w-full rounded-lg h-20"
+      class="skeleton skeleton--shimmer w-full h-20"
     />
   </div>
 </div>
@@ -50,10 +50,10 @@ exports[`Skeleton components > should render SkeletonBentoCard 1`] = `
       data-slot="card-header"
     >
       <div
-        class="skeleton skeleton--shimmer h-6 w-40 rounded-lg"
+        class="skeleton skeleton--shimmer h-6 w-40"
       />
       <div
-        class="skeleton skeleton--shimmer h-4 w-full rounded-lg"
+        class="skeleton skeleton--shimmer h-4 w-full"
       />
     </div>
     <div
@@ -61,7 +61,7 @@ exports[`Skeleton components > should render SkeletonBentoCard 1`] = `
       data-slot="card-content"
     >
       <div
-        class="skeleton skeleton--shimmer h-24 w-full rounded-lg"
+        class="skeleton skeleton--shimmer h-24 w-full"
       />
     </div>
   </div>
@@ -71,7 +71,7 @@ exports[`Skeleton components > should render SkeletonBentoCard 1`] = `
 exports[`Skeleton components > should render SkeletonCard 1`] = `
 <div>
   <div
-    class="skeleton skeleton--shimmer h-32 w-full rounded-lg"
+    class="skeleton skeleton--shimmer h-32 w-full"
   />
 </div>
 `;
@@ -79,7 +79,7 @@ exports[`Skeleton components > should render SkeletonCard 1`] = `
 exports[`Skeleton components > should render SkeletonChart 1`] = `
 <div>
   <div
-    class="skeleton skeleton--shimmer h-80 w-full rounded-lg"
+    class="skeleton skeleton--shimmer h-80 w-full"
   />
 </div>
 `;

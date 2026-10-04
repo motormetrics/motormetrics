@@ -256,21 +256,18 @@ export function MakesTable({
       <div className="flex flex-wrap items-center gap-4">
         <SearchField
           aria-label="Search makes"
-          className="w-full sm:w-[340px]"
+          className="w-full max-w-xs"
           onChange={setQuery}
           value={query}
         >
-          <SearchField.Group className="h-auto gap-2.5 rounded-full border-0 bg-surface px-5 py-3 text-muted shadow-none">
-            <SearchField.SearchIcon className="ml-0 size-[18px] text-muted" />
-            <SearchField.Input
-              className="px-0 font-semibold text-[15px] text-foreground placeholder:text-muted"
-              placeholder={`Search ${rows.length} makes …`}
-            />
-            <SearchField.ClearButton className="mr-0" />
+          <SearchField.Group>
+            <SearchField.SearchIcon />
+            <SearchField.Input placeholder={`Search ${rows.length} makes …`} />
+            <SearchField.ClearButton />
           </SearchField.Group>
         </SearchField>
         <Typography.Paragraph
-          className="whitespace-nowrap text-[13.5px] sm:ml-auto"
+          className="whitespace-nowrap sm:ml-auto"
           weight="semibold"
           color="muted"
           size="sm"
@@ -303,12 +300,7 @@ export function MakesTable({
         </Button>
       ) : null}
 
-      <Typography.Paragraph
-        className="text-[13.5px]"
-        weight="medium"
-        color="muted"
-        size="sm"
-      >
+      <Typography.Paragraph weight="medium" color="muted" size="sm">
         Change compares against the same period a year earlier, and is withheld
         below {MIN_COUNT_FOR_CHANGE} registrations. Select a make to open it.
       </Typography.Paragraph>

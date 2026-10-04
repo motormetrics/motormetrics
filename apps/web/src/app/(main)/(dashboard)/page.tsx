@@ -115,9 +115,9 @@ async function LatestMonth() {
 function BlockSkeleton({ chartHeight }: { chartHeight: string }) {
   return (
     <div className="flex flex-col gap-4">
-      <Skeleton className="h-5 w-40 rounded-lg" />
-      <Skeleton className="h-14 w-56 rounded-lg" />
-      <Skeleton className="h-4 w-72 rounded-lg" />
+      <Skeleton className="h-5 w-40" />
+      <Skeleton className="h-14 w-56" />
+      <Skeleton className="h-4 w-72" />
       <Skeleton className={`w-full rounded-2xl ${chartHeight}`} />
     </div>
   );
@@ -133,9 +133,7 @@ export default function HomePage() {
         <div className="flex flex-col gap-7">
           <PageEyebrow
             control={
-              <Suspense
-                fallback={<Skeleton className="h-6 w-36 rounded-full" />}
-              >
+              <Suspense fallback={<Skeleton className="h-6 w-36" />}>
                 <LatestMonth />
               </Suspense>
             }

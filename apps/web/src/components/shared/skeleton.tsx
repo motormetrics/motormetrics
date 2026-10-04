@@ -6,11 +6,11 @@ interface SkeletonProps {
 
 // Base skeleton primitives
 export function SkeletonCard({ className }: SkeletonProps) {
-  return <HeroUISkeleton className={cn("h-32 w-full rounded-lg", className)} />;
+  return <HeroUISkeleton className={cn("h-32 w-full", className)} />;
 }
 
 export function SkeletonChart({ className }: SkeletonProps) {
-  return <HeroUISkeleton className={cn("h-80 w-full rounded-lg", className)} />;
+  return <HeroUISkeleton className={cn("h-80 w-full", className)} />;
 }
 
 // Composed skeleton components for dashboard
@@ -22,11 +22,11 @@ export function SkeletonBentoCard({ className }: SkeletonProps) {
   return (
     <Card className={className}>
       <Card.Header className="items-start gap-2">
-        <HeroUISkeleton className="h-6 w-40 rounded-lg" />
-        <HeroUISkeleton className="h-4 w-full rounded-lg" />
+        <HeroUISkeleton className="h-6 w-40" />
+        <HeroUISkeleton className="h-4 w-full" />
       </Card.Header>
       <Card.Content className="gap-4">
-        <HeroUISkeleton className="h-24 w-full rounded-lg" />
+        <HeroUISkeleton className="h-24 w-full" />
       </Card.Content>
     </Card>
   );
@@ -70,7 +70,7 @@ export function ListSkeleton({
         <HeroUISkeleton
           // biome-ignore lint/suspicious/noArrayIndexKey: skeleton items are static placeholders
           key={i}
-          className={cn("w-full rounded-lg", itemHeight)}
+          className={cn("w-full", itemHeight)}
         />
       ))}
     </div>

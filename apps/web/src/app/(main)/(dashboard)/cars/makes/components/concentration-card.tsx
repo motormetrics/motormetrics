@@ -1,6 +1,7 @@
 import { Typography } from "@heroui/react";
 import { loadMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
+import { Text } from "@web/components/shared/text";
 import {
   type DonutSegment,
   donutArcs,
@@ -53,12 +54,10 @@ export async function ConcentrationCard({
   return (
     <div className="flex flex-col gap-[18px]">
       <div className="flex flex-col gap-2.5">
-        <Typography.Paragraph
-          className="text-muted-strong text-xl"
-          weight="semibold"
-        >
+        {/* Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>. */}
+        <Text.Paragraph tone="strong" className="text-xl" weight="semibold">
           Concentration
-        </Typography.Paragraph>
+        </Text.Paragraph>
         <Typography.Paragraph weight="medium" color="muted">
           Top five makes against the rest
         </Typography.Paragraph>
@@ -103,12 +102,7 @@ export async function ConcentrationCard({
                 className="size-[11px] shrink-0 rounded-full"
                 style={{ background: segment.color }}
               />
-              <Typography.Paragraph
-                className="text-[15.5px] text-foreground/85"
-                weight="semibold"
-                size="sm"
-                truncate
-              >
+              <Typography.Paragraph weight="semibold" truncate>
                 {segment.label}
               </Typography.Paragraph>
               <span className="ml-auto shrink-0 font-extrabold text-[15.5px] tabular-nums">

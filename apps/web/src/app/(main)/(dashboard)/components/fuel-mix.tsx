@@ -112,10 +112,7 @@ export async function FuelMix() {
                 className="size-[11px] shrink-0 rounded-full"
                 style={{ background: segment.color }}
               />
-              <Typography.Paragraph
-                className="text-foreground/85"
-                weight="semibold"
-              >
+              <Typography.Paragraph weight="semibold">
                 {segment.label}
               </Typography.Paragraph>
               <span className="ml-auto font-extrabold text-base tabular-nums">

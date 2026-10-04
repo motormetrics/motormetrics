@@ -1,4 +1,5 @@
 import { cn, Separator, Typography } from "@heroui/react";
+import { Text } from "@web/components/shared/text";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -85,22 +86,18 @@ export function SectionHead({
   return (
     <div className={cn("flex flex-wrap items-end gap-4", className)}>
       <div className="flex min-w-0 flex-col gap-1">
-        <Typography.Paragraph
-          className="text-xs uppercase tracking-[0.06em]"
-          weight="semibold"
-          color="muted"
-        >
+        <Text.Paragraph eyebrow weight="semibold" color="muted" size="xs">
           {eyebrow}
-        </Typography.Paragraph>
+        </Text.Paragraph>
         <Typography.Heading
-          className="text-[21px] tracking-[-0.015em] md:text-2xl"
+          className="text-xl md:text-2xl"
           weight="bold"
           level={2}
         >
           {title}
         </Typography.Heading>
         {caption ? (
-          <Typography.Paragraph className="text-[13.5px]" color="muted">
+          <Typography.Paragraph color="muted" size="sm">
             {caption}
           </Typography.Paragraph>
         ) : null}
@@ -151,7 +148,7 @@ export function SourceNote({
   className?: string;
 }) {
   return (
-    <Typography.Paragraph className={cn("text-xs", className)} color="muted">
+    <Typography.Paragraph className={className} color="muted" size="xs">
       {children}
     </Typography.Paragraph>
   );
@@ -182,12 +179,10 @@ export function Headline({
   return (
     <div className={cn("flex flex-col gap-2.5", className)}>
       {label ? (
-        <Typography.Paragraph
-          className="text-muted-strong text-xl"
-          weight="semibold"
-        >
+        // Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>.
+        <Text.Paragraph tone="strong" className="text-xl" weight="semibold">
           {label}
-        </Typography.Paragraph>
+        </Text.Paragraph>
       ) : null}
       <div className="flex flex-wrap items-center gap-4">
         <span

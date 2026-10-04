@@ -30,7 +30,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
             <stop offset="95%" stopColor="var(--chart-1)" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <AreaChart.Grid vertical={false} strokeDasharray="3 3" />
+        <AreaChart.Grid vertical={false} />
         <AreaChart.XAxis
           dataKey="date"
           tickLine={false}

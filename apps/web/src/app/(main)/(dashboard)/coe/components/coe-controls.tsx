@@ -98,10 +98,7 @@ export function CategorySelect({
     <Button
       aria-label={label}
       aria-pressed={isActive}
-      className={cn(
-        "h-auto w-full justify-start rounded-none bg-transparent p-0 text-left font-[inherit] text-[length:inherit] text-inherit hover:bg-transparent data-[pressed=true]:scale-100",
-        className,
-      )}
+      className={cn("h-auto w-full justify-start p-0 text-left", className)}
       onPress={() => selectCategory(category)}
       variant="ghost"
     >

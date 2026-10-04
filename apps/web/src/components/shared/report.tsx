@@ -1,4 +1,5 @@
 import { cn, Typography } from "@heroui/react";
+import { Text } from "@web/components/shared/text";
 import type { ReactNode } from "react";
 
 /**
@@ -130,9 +131,7 @@ export function ReportHeadline({
           a flex item will not shrink below its content otherwise, and the
           longer labels run past a small phone. */}
       <div className="flex min-w-0 flex-col gap-2">
-        <Typography.Paragraph className="text-muted-strong">
-          {label}
-        </Typography.Paragraph>
+        <Text.Paragraph tone="strong">{label}</Text.Paragraph>
         {/* Wraps only when the figure and its pill will not sit side by side,
             which on these headlines is below about 360px. */}
         <div className="flex flex-wrap items-center gap-4">

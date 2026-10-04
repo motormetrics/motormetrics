@@ -41,7 +41,7 @@ export function PriceList({ order, searchParams }: PriceListProps) {
             {order === "cheapest" ? "Cheapest" : "Most expensive"} charging
           </Typography.Heading>
         </div>
-        <Suspense fallback={<Skeleton className="h-11 w-28 rounded-full" />}>
+        <Suspense fallback={<Skeleton className="h-11 w-28" />}>
           <PowerToggle searchParams={searchParams} />
         </Suspense>
       </div>
