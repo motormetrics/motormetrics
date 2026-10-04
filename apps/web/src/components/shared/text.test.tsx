@@ -5,7 +5,7 @@ describe("textVariants", () => {
   it("should map each variant to its classes", () => {
     expect(textVariants({ tone: "strong" })).toBe("text-muted-strong");
     expect(textVariants({ tone: "inherit" })).toBe(
-      "[color:inherit] [font-weight:inherit]",
+      "text-inherit [font-weight:inherit]",
     );
     expect(textVariants({ eyebrow: true })).toBe("text-xs leading-5 uppercase");
   });
@@ -36,7 +36,7 @@ describe("Text.Paragraph", () => {
       <Text.Paragraph tone="inherit">Toyota</Text.Paragraph>,
     );
     const paragraph = screen.getByText("Toyota");
-    await expect.element(paragraph).toHaveClass("[color:inherit]");
+    await expect.element(paragraph).toHaveClass("text-inherit");
     await expect.element(paragraph).not.toHaveClass("typography--color-muted");
     await expect.element(paragraph).not.toHaveAttribute("tone");
   });

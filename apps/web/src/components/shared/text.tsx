@@ -17,7 +17,8 @@ export const textVariants = tv({
   variants: {
     tone: {
       strong: "text-muted-strong",
-      inherit: "[color:inherit] [font-weight:inherit]",
+      // Tailwind has no font-weight inherit utility, so that half stays arbitrary.
+      inherit: "text-inherit [font-weight:inherit]",
     },
     eyebrow: {
       true: "text-xs leading-5 uppercase",
