@@ -160,7 +160,7 @@ export function AppNav({
               <LogoMark first="currentColor" second="var(--accent)" size={22} />
             </span>
             <Wordmark
-              className="text-[19px] md:text-[21px]"
+              className="text-lg md:text-xl"
               first="currentColor"
               second="var(--accent)"
             />

@@ -113,7 +113,7 @@ export default function BrandPage() {
         style={{ background: WHITE }}
       >
         <LogoMark size={96} />
-        <Wordmark className="text-6xl md:text-[76px]" />
+        <Wordmark className="text-6xl md:text-7xl" />
       </section>
 
       <section className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
@@ -123,7 +123,7 @@ export default function BrandPage() {
             style={{ background: WHITE }}
           >
             <LogoMark size={56} />
-            <Wordmark className="text-[28px]" />
+            <Wordmark className="text-3xl" />
           </div>
         </Figure>
         <Figure
@@ -135,7 +135,7 @@ export default function BrandPage() {
           >
             <LogoMark first={WHITE} second={MARK_ACCENT_ON_DARK} size={44} />
             <Wordmark
-              className="text-[30px]"
+              className="text-3xl"
               first={WHITE}
               second={MARK_ACCENT_ON_DARK}
             />
@@ -147,7 +147,7 @@ export default function BrandPage() {
             style={{ background: MARK_ACCENT }}
           >
             <LogoMark first={WHITE} second={WHITE} size={44} />
-            <Wordmark className="text-[30px]" first={WHITE} mono />
+            <Wordmark className="text-3xl" first={WHITE} mono />
           </div>
         </Figure>
       </section>
@@ -325,9 +325,9 @@ export default function BrandPage() {
             />
           </Dont>
           <Dont caption="Capitalise the wordmark">
-            {/* Specimen: drawn at the wordmark size it misuses. */}
+            {/* Specimen: set at the size of the wordmarks around it. */}
             <span
-              className="font-extrabold text-[26px] tracking-[-0.03em]"
+              className="font-extrabold text-3xl tracking-[-0.03em]"
               style={{ color: MARK_INK }}
             >
               Motor<span style={{ color: MARK_ACCENT }}>Metrics</span>
@@ -343,7 +343,7 @@ export default function BrandPage() {
         <SectionHeading>Wordmark vs. name</SectionHeading>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
           <div className="flex flex-col gap-3 rounded-2xl bg-surface p-7">
-            <Wordmark className="text-[30px]" />
+            <Wordmark className="text-3xl" />
             <Typography.Paragraph color="muted">
               The wordmark is a graphic. Always lowercase, always Urbanist 800
               with the two-tone split. Use it wherever type can actually be set:
