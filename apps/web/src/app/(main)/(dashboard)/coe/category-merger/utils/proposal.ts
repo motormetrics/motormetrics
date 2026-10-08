@@ -19,6 +19,8 @@ export interface FeebateBand {
   adjustment: number;
   /** OMV percentile range of 2025 registrations, as LTA states it. */
   percentile: string;
+  /** Share of 2025 registrations in the band, in percent: the width of `percentile`. */
+  share: number;
   /** LTA's "typical models", which it calls non-exhaustive. */
   models: string[];
 }
@@ -29,6 +31,7 @@ export const THREE_BANDS: FeebateBand[] = [
     band: 1,
     adjustment: -15_000,
     percentile: "0–35th",
+    share: 35,
     models: [
       "BYD Atto 3",
       "BYD E6",
@@ -48,6 +51,7 @@ export const THREE_BANDS: FeebateBand[] = [
     band: 2,
     adjustment: 0,
     percentile: "35–50th",
+    share: 15,
     models: [
       "Audi A3",
       "BYD Sealion 7 Dynamic",
@@ -61,6 +65,7 @@ export const THREE_BANDS: FeebateBand[] = [
     band: 3,
     adjustment: 15_000,
     percentile: "Above 50th",
+    share: 50,
     models: [
       "Audi Q3",
       "BMW 216",
@@ -84,6 +89,7 @@ export const FIVE_BANDS: FeebateBand[] = [
     band: 1,
     adjustment: -15_000,
     percentile: "0–10th",
+    share: 10,
     models: [
       "BYD E6",
       "Honda Jazz",
@@ -97,6 +103,7 @@ export const FIVE_BANDS: FeebateBand[] = [
     band: 2,
     adjustment: -7_500,
     percentile: "10–35th",
+    share: 25,
     models: [
       "BYD Atto 3",
       "Honda Freed",
@@ -110,6 +117,7 @@ export const FIVE_BANDS: FeebateBand[] = [
     band: 3,
     adjustment: 0,
     percentile: "35–50th",
+    share: 15,
     models: [
       "Audi A3",
       "BYD Sealion 7 Dynamic",
@@ -123,6 +131,7 @@ export const FIVE_BANDS: FeebateBand[] = [
     band: 4,
     adjustment: 7_500,
     percentile: "50–75th",
+    share: 25,
     models: [
       "Audi Q3",
       "BMW 216",
@@ -136,6 +145,7 @@ export const FIVE_BANDS: FeebateBand[] = [
     band: 5,
     adjustment: 15_000,
     percentile: "Above 75th",
+    share: 25,
     models: [
       "BMW iX2",
       "Denza D9",

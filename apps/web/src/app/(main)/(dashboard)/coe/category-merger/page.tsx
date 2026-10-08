@@ -1,9 +1,13 @@
-import { Typography } from "@heroui/react";
+import { Card, cn, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { CategoryMergerFaq } from "@web/app/(main)/(dashboard)/coe/category-merger/components/category-merger-faq";
+import { CombinedPool } from "@web/app/(main)/(dashboard)/coe/category-merger/components/combined-pool";
 import { CATEGORY_MERGER_FAQS } from "@web/app/(main)/(dashboard)/coe/category-merger/components/faq-data";
 import { FeebateBands } from "@web/app/(main)/(dashboard)/coe/category-merger/components/feebate-bands";
+import { FeebateSpread } from "@web/app/(main)/(dashboard)/coe/category-merger/components/feebate-spread";
 import { PremiumGap } from "@web/app/(main)/(dashboard)/coe/category-merger/components/premium-gap";
+import { Reasons } from "@web/app/(main)/(dashboard)/coe/category-merger/components/reasons";
+import { SystemComparison } from "@web/app/(main)/(dashboard)/coe/category-merger/components/system-comparison";
 import {
   CONSULTATION_PAPER_URL,
   FEEDBACK_URL,
@@ -30,7 +34,7 @@ import {
   generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, CircleSlash, Truck } from "lucide-react";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import type { Article, WithContext } from "schema-dts";
@@ -76,16 +80,18 @@ const articleSchema: WithContext<Article> = {
   isBasedOn: CONSULTATION_PAPER_URL,
 };
 
-/** A muted bulleted list, for the points that read better apart than run on. */
-function Points({ items }: { items: string[] }) {
-  return (
-    <ul className="flex max-w-prose list-disc flex-col gap-2 pl-5 text-muted">
-      {items.map((item) => (
-        <li key={item}>{item}</li>
-      ))}
-    </ul>
-  );
-}
+const CATEGORY_E_OPTIONS = [
+  {
+    icon: CircleSlash,
+    title: "Remove Category E",
+    detail: "Urgent buyers would wait for the next exercise instead.",
+  },
+  {
+    icon: Truck,
+    title: "Keep it, for cars only",
+    detail: "Protects the supply of Category C COEs for goods vehicles.",
+  },
+];
 
 export default function CategoryMergerPage() {
   return (
@@ -142,14 +148,10 @@ export default function CategoryMergerPage() {
         </Typography.Paragraph>
         <Typography.Paragraph className="max-w-prose" color="muted">
           A feebate would then be applied to that price, based on the car model:
+          a rebate for lower-value cars, no adjustment for mid-range ones and a
+          surcharge for higher-value ones.
         </Typography.Paragraph>
-        <Points
-          items={[
-            "Buyers of lower-value cars would receive a rebate.",
-            "Buyers of mid-range cars would see no adjustment.",
-            "Buyers of higher-value cars would pay a surcharge.",
-          ]}
-        />
+        <SystemComparison />
         <Typography.Paragraph className="max-w-prose" color="muted">
           LTA says the aim is to keep a meaningful difference between what
           mass-market and luxury car buyers pay, not to change overall COE
@@ -158,14 +160,7 @@ export default function CategoryMergerPage() {
       </ReportSection>
 
       <ReportSection title="Why LTA wants to change it">
-        <Points
-          items={[
-            "Engine capacity and power no longer separate mass-market cars from higher-value ones as well as they did when the split was set in 1999.",
-            "Electric cars are software-driven, so makers can tune power to fit Category A. LTA notes the same Tesla Model Y can fall into either category, depending on its power rating.",
-            "Buyers of both kinds of car increasingly compete for Category A COEs. Between February and June 2026, the Category A premium closed above Category B three times.",
-            "LTA adds that from the point of view of road space and congestion, a mass-market car and a luxury car have broadly the same impact.",
-          ]}
-        />
+        <Reasons />
       </ReportSection>
 
       <ReportSection
@@ -175,6 +170,18 @@ export default function CategoryMergerPage() {
         <SectionErrorBoundary title="Premium history unavailable">
           <Suspense fallback={<SkeletonCard className="h-[460px] w-full" />}>
             <PremiumGap />
+          </Suspense>
+        </SectionErrorBoundary>
+      </ReportSection>
+
+      <ReportSection caption="Latest exercise" title="One pool instead of two">
+        <Typography.Paragraph className="max-w-prose" color="muted">
+          Under the proposal, Category A and B quotas would be offered as one
+          pool, with every car buyer bidding against every other.
+        </Typography.Paragraph>
+        <SectionErrorBoundary title="Latest quotas unavailable">
+          <Suspense fallback={<SkeletonCard className="h-[220px] w-full" />}>
+            <CombinedPool />
           </Suspense>
         </SectionErrorBoundary>
       </ReportSection>
@@ -203,6 +210,22 @@ export default function CategoryMergerPage() {
         </Typography.Paragraph>
       </ReportSection>
 
+      <ReportSection
+        caption="Today's gap against the proposed one"
+        title="How big a $30,000 spread is"
+      >
+        <Typography.Paragraph className="max-w-prose" color="muted">
+          LTA&apos;s aim is to keep a meaningful difference between what
+          mass-market and luxury buyers pay. Here is the difference its bands
+          would set, beside the one Category A and B produce today.
+        </Typography.Paragraph>
+        <SectionErrorBoundary title="Premium comparison unavailable">
+          <Suspense fallback={<SkeletonCard className="h-[320px] w-full" />}>
+            <FeebateSpread />
+          </Suspense>
+        </SectionErrorBoundary>
+      </ReportSection>
+
       <ReportSection title="COE renewals and Category E">
         <Typography.Paragraph className="max-w-prose" color="muted">
           A merged category would have one COE price and one Prevailing Quota
@@ -216,15 +239,39 @@ export default function CategoryMergerPage() {
           buyers wait for the next exercise, or keep it for cars only, which
           would protect the supply of Category C COEs for goods vehicles.
         </Typography.Paragraph>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {CATEGORY_E_OPTIONS.map(({ detail, icon: Icon, title }) => (
+            <Card key={title}>
+              <Card.Content className="flex flex-row gap-4">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-default">
+                  <Icon aria-hidden className="size-5" />
+                </span>
+                <div className="flex flex-col gap-1">
+                  <Typography.Paragraph weight="semibold">
+                    {title}
+                  </Typography.Paragraph>
+                  <Typography.Paragraph color="muted" size="sm">
+                    {detail}
+                  </Typography.Paragraph>
+                </div>
+              </Card.Content>
+            </Card>
+          ))}
+        </div>
       </ReportSection>
 
       <ReportSection title="Timeline">
-        <ol className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {/* A rail of dots: horizontal from `lg`, a vertical rail below it. */}
+        <ol className="grid grid-cols-1 gap-6 border-border border-l-2 pl-6 lg:grid-cols-4 lg:border-t-2 lg:border-l-0 lg:pt-6 lg:pl-0">
           {MILESTONES.map(({ date, detail, label }) => (
-            <li
-              className="flex flex-col gap-2 border-border border-t pt-4"
-              key={label}
-            >
+            <li className="relative flex flex-col gap-2" key={label}>
+              <span
+                aria-hidden
+                className={cn(
+                  "absolute top-1 -left-[32px] size-3.5 rounded-full lg:-top-[32px] lg:left-0",
+                  label === "Feedback closes" ? "bg-danger" : "bg-accent",
+                )}
+              />
               <ReportEyebrow>{date}</ReportEyebrow>
               <Typography.Paragraph weight="semibold">
                 {label}
