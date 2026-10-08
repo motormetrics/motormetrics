@@ -8,7 +8,7 @@ import {
   MILESTONES,
   PUBLISHED_DATE,
   THREE_BANDS,
-} from "@web/app/(main)/(dashboard)/coe/category-merger/lib/proposal";
+} from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
 import { PageHead } from "@web/components/shared/page-head";
 import {
   Report,

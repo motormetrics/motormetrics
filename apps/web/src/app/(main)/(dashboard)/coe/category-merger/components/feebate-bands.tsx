@@ -2,7 +2,7 @@ import { Typography } from "@heroui/react";
 import {
   type FeebateBand,
   formatAdjustment,
-} from "@web/app/(main)/(dashboard)/coe/category-merger/lib/proposal";
+} from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
 import {
   ReportCell,
   ReportRow,
