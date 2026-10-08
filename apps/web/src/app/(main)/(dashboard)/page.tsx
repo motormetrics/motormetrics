@@ -1,5 +1,6 @@
 import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { CategoryMergerCallout } from "@web/app/(main)/(dashboard)/components/category-merger-callout";
 import { CoeSection } from "@web/app/(main)/(dashboard)/components/coe-section";
 import { DeregistrationsHeadline } from "@web/app/(main)/(dashboard)/components/deregistrations-headline";
 import { EvCharging } from "@web/app/(main)/(dashboard)/components/ev-charging";
@@ -130,6 +131,8 @@ export default function HomePage() {
       <OrganizationStructuredData />
 
       <OverviewPage>
+        <CategoryMergerCallout />
+
         <div className="flex flex-col gap-7">
           <PageEyebrow
             control={

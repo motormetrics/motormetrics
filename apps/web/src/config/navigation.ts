@@ -10,6 +10,7 @@ import {
   Fuel,
   type LucideIcon,
   PlugZap,
+  Scale,
   TrendingUp,
   Zap,
 } from "lucide-react";
@@ -152,6 +153,13 @@ export const navLinks: NavLinks = {
       url: "/coe/pqp",
       icon: Calculator,
       description: "Prevailing quota premiums and calculations",
+    },
+    {
+      title: "Category merger proposal",
+      url: "/coe/category-merger",
+      icon: Scale,
+      description: "LTA's proposal to merge Cat A and B, explained",
+      badge: "new",
     },
   ],
   socialMedia: sortByName(socialMedia, { sortKey: "title" }),
