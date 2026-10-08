@@ -9,71 +9,48 @@ Car make logo storage and retrieval for the MotorMetrics monorepo.
 - Downloads a logo from carlogos.org and stores it
 - Normalises make names into consistent kebab-case storage keys
 
-Readers never list Blob. They read the manifest, one operation, and the web app caches that
-under the `logos` tag in `apps/web/src/queries/logos`. The logos workflow is the only writer.
-
 ## Usage
 
 ```typescript
-import {
-  bootstrapManifest,
-  manifestToLogos,
-  readManifest,
-  writeManifest,
-} from "@motormetrics/logos/services/manifest";
-import { downloadLogo } from "@motormetrics/logos/services/scraper";
-import type { CarLogo, LogoManifest } from "@motormetrics/logos/types";
+import { manifestToLogos, readManifest } from "@motormetrics/logos/services/manifest";
 import { normaliseMake } from "@motormetrics/logos/utils/normalise-make";
 
-const manifest = (await readManifest()) ?? (await bootstrapManifest());
-const logos = manifestToLogos(manifest);
-const result = await downloadLogo("BYD");
+const manifest = await readManifest();
+const logos = manifest ? manifestToLogos(manifest) : [];
 normaliseMake("Mercedes-Benz"); // "mercedes-benz"
 ```
 
-## Exports
+Consumers only read the manifest. The [web logos workflow](../../apps/web/src/workflows/logos/index.ts)
+bootstraps and persists it when absent, downloads logos for newly seen makes,
+then invalidates the web cache. `downloadLogo()` uploads an image but does not
+update the manifest itself.
 
-| Function            | Blob ops | Purpose                                                        |
-| ------------------- | -------- | -------------------------------------------------------------- |
-| `readManifest`      | 1        | Fetch the manifest, or `null` if none has been written         |
-| `writeManifest`     | 1        | Overwrite the manifest                                         |
-| `bootstrapManifest` | 1 per 1000 blobs | Build a manifest from existing images, first run only  |
-| `manifestToLogos`   | 0        | Entries with an image, as `CarLogo[]`                          |
-| `downloadLogo`      | 1        | Fetch from carlogos.org and store, overwriting any existing    |
-| `uploadLogo`        | 1        | Store an image buffer for a make                               |
-| `normaliseMake`     | 0        | Strip `logo` affixes and slugify                               |
+## Workflow Behaviour
 
-```typescript
-interface CarLogo { make: string; url: string; filename: string }
-
-type LogoStatus = "found" | "missing" | "manual";
-
-interface LogoEntry {
-  make: string;
-  status: LogoStatus;
-  url: string | null;
-  pathname: string | null;
-  sourceUrl: string | null;
-  checkedAt: string;
-  lastError: string | null;
-}
-
-interface LogoManifest { version: 1; updatedAt: string; logos: Record<string, LogoEntry> }
-```
+Public subpaths are listed in [package.json](package.json), and manifest types are defined in [src/types/index.ts](src/types/index.ts).
 
 `missing` entries are never retried by the workflow. `manual` entries are never overwritten.
+Transient download failures are left out of the manifest and retried on a later run.
+The image cache header is one year; the manifest cache header is 60 seconds.
 
 ## Environment
 
-- `BLOB_READ_WRITE_TOKEN`: Vercel Blob token
+Blob access uses `BLOB_STORE_ID` and `VERCEL_OIDC_TOKEN` in Vercel-linked
+environments. Standalone scripts can alternatively export `BLOB_READ_WRITE_TOKEN`,
+as shown in [.env.example](.env.example). The package does not load environment
+files itself. See the [Blob authentication reference](https://github.com/vercel/storage/blob/main/_autodocs/configuration.md).
 
 ## Commands
 
 ```bash
-pnpm test
-pnpm typecheck
+pnpm --filter @motormetrics/logos test
+pnpm --filter @motormetrics/logos typecheck
 ```
+
+Run these from the repository root after `pnpm install`, using the toolchain
+versions in the [root manifest](../../package.json). This package has no build
+step; consumers import TypeScript through the subpaths in [package.json](package.json).
 
 ## License
 
-MIT
+[MIT](../../LICENSE)

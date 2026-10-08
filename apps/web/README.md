@@ -1,133 +1,61 @@
-# MotorMetrics
+# MotorMetrics Web
 
-A comprehensive analytics platform for Singapore's car market, providing insights into car registrations, COE (
-Certificate of Entitlement) bidding results, and market trends.
+The Next.js application for MotorMetrics hosts Singapore car market dashboards, ownership tools, EV charging maps, blog content, the admin interface, REST routes and data workflows.
 
-## Features
+## Local Development
 
-- **Car Registration Analytics**: Track registrations by make, fuel type, and vehicle type
-- **COE Bidding Results**: Monitor COE premiums and bidding trends
-- **Trend Analysis**: Month-over-month and year-over-year comparisons
-- **Interactive Charts**: Responsive data visualisation with Recharts
-- **Geographic Insights**: User analytics by location
-- **Performance Optimization**: Next.js 16 Cache Components with `"use cache"` directives for optimal data fetching
+Follow the [root setup instructions](../../README.md#getting-started) to install dependencies, configure the [environment template](.env.example) and apply the development database schema.
 
-## Tech Stack
+The development script runs `portless motormetrics next dev`. Open the URL it prints for `motormetrics.localhost`; set `NEXT_PUBLIC_SITE_URL` and your OAuth configuration to match. The `predev` and `prebuild` hooks copy MapLibre's worker assets into `public/maplibre` automatically.
 
-- **Next.js 16** with App Router, React 19, and Cache Components
-- **TypeScript** with strict type checking
-- **Tailwind CSS v4** for styling
-- **Drizzle ORM** with PostgreSQL (Neon Database)
-- **Zustand** for state management
-- **HeroUI v3** (`@heroui/react`) and **HeroUI Pro** (`@heroui-pro/react`) components on Tailwind CSS v4
-- **Vitest** for unit testing, **Playwright** for E2E testing
-- **Vercel** for deployment
+See [AGENTS.md](AGENTS.md) for Blob, Flags, QStash and other integration settings.
 
-## Getting Started
+## Commands
 
-### Prerequisites
-
-- Node.js >= 22
-- pnpm 11.0.0
-
-### Installation
+From the repository root:
 
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd web
-
-# Install dependencies
-pnpm install
-
-# Set up environment variables
-cp .env.example .env.local
-# Edit .env.local with your configuration
-
-# Run database migrations
-pnpm migrate
+pnpm dev:web
+pnpm build:web
+pnpm start:web
+pnpm lint:web
+pnpm typecheck:web
+pnpm test:web
+pnpm test:integration:web
 ```
 
-### Development
+Additional scripts can be run from `apps/web`:
 
 ```bash
-# Start development server
-pnpm dev
+pnpm format
+pnpm test:watch
+pnpm test:e2e
+pnpm test:e2e:ui
+pnpm analyse
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+Biome handles linting, formatting and import organisation.
 
-## Available Scripts
+## Testing
 
-### Development
-- `pnpm dev` - Start development server (uses Turbopack)
-- `pnpm build` - Build for production (uses Turbopack)
-- `pnpm start` - Start production server
+Vitest runs two projects: Node unit tests (`*.test.ts`) and browser component tests (`*.test.tsx`) in headless Chromium. Component tests use `vitest-browser-react`. Coverage is enabled in the [Vitest configuration](vitest.config.ts).
 
-### Testing
-- `pnpm test` - Run unit tests with Vitest
-- `pnpm test:run` - Run tests once
-- `pnpm test:coverage` - Run unit tests with coverage
-- `pnpm test:e2e` - Run E2E tests with Playwright
-- `pnpm test:e2e:ui` - Run E2E tests with Playwright UI
+Install Chromium from the repository root before running browser tests:
 
-### Code Quality
-- `pnpm lint` - Run ESLint
-
-### Database
-- `pnpm migrate` - Run database migrations
-
-## Project Structure
-
-```
-src/
-├── app/                           # Next.js App Router - pages, layouts, API routes
-│   ├── (main)/                   # Main site layout group
-│   │   ├── (dashboard)/          # Data dashboard route group (cars, COE data)
-│   │   │   ├── cars/             # Car data routes (registrations, fuel-types, etc.)
-│   │   │   │   └── components/   # Cars route-specific components (co-located)
-│   │   │   └── coe/              # COE data routes (results, premiums, pqp)
-│   │   │       └── components/   # COE route-specific components (co-located)
-│   │   ├── blog/                 # Blog routes
-│   │   │   ├── actions/          # Blog-specific server actions (co-located)
-│   │   │   └── components/       # Blog-specific components (co-located)
-│   │   └── about/, faq/          # Static pages
-│   ├── (social)/                 # Social media redirect routes with UTM tracking
-│   ├── admin/                    # Admin interface for content management
-│   ├── api/                      # API routes (analytics, OG images, revalidation)
-│   └── store/                    # Zustand store slices
-├── actions/                      # Server actions (maintenance tasks)
-├── queries/                      # Data fetching queries (cars, COE, logos) with tests
-├── components/                   # Shared React components
-│   ├── coe/                      # Shared COE components
-│   ├── dashboard/                # Shared dashboard components
-│   └── shared/                   # Generic shared components
-├── config/                       # App configuration (DB, Redis, navigation)
-├── lib/                          # Shared data fetching and business logic
-├── schema/                       # Drizzle database schemas
-├── types/                        # TypeScript definitions
-└── utils/                        # Utility functions with comprehensive tests
+```bash
+pnpm turbo run @motormetrics/web#playwright:install
 ```
 
-## Contributing
+Workflow integration tests use [vitest.integration.config.ts](vitest.integration.config.ts). Playwright E2E tests live in `tests/`; their [configuration](playwright.config.ts) starts `pnpm dev` and expects `http://localhost:3000`. Ensure the server is reachable at that address when running them, since normal development uses Portless.
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run tests and linting: `pnpm test:coverage && pnpm lint`
-6. Submit a pull request
+## Implementation
+
+Pages and API routes live in `src/app`; route-specific components, actions and queries sit alongside their consuming route. Shared queries live in `src/queries`, workflows in `src/workflows`, and database schemas in `packages/database`. See [AGENTS.md](AGENTS.md) for implementation conventions and [package.json](package.json) for dependencies and scripts.
 
 ## Deployment
 
-Automatic deployment via Vercel:
+[vercel.ts](vercel.ts) defines the Singapore region and cron schedules. Hourly live charging ingestion is scheduled separately through QStash. See the [root deployment guidance](../../README.md#deployment) for production, previews and database migration behaviour.
 
-- **dev**: [dev.motormetrics.app](https://dev.motormetrics.app)
-- **prod**: [motormetrics.app](https://motormetrics.app)
+## License
 
-Production deploys from the `main` branch. Pull requests get preview deployments, which
-serve as the pre-production environment.
-
-## Repo Activity
-
-![Alt](https://repobeats.axiom.co/api/embed/a95b438e1fccbaeed2d9128859b7b13f6b6d531f.svg "Repobeats analytics image")
+[MIT](../../LICENSE)

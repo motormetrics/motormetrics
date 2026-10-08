@@ -7,14 +7,13 @@ provider traffic is routed through Vercel AI Gateway.
 
 | Workload | Gateway model |
 | --- | --- |
-| Blog generation | `openai/gpt-5.6-luna` |
+| Blog generation | `google/gemini-2.5-flash` |
 | Post and query embeddings | `google/gemini-embedding-2` |
 | Hero images | `openai/gpt-image-2` |
 
-Blog generation uses `max` reasoning, OpenAI Code Interpreter, the existing Zod
-post schema, and OpenTelemetry tracing. Distinct Gateway generation IDs across all
-model steps are looked up and summed into the exact billed cost only when every
-step lookup succeeds. Gemini 2 embeddings use 768 dimensions.
+Blog generation validates structured output against the Zod post schema. The
+monthly workflow supplies pre-computed figures for the model to quote.
+Embeddings use 768 dimensions.
 
 ## Usage
 
@@ -25,16 +24,21 @@ import { generateBlogContent } from "@motormetrics/ai/generate-post";
 
 const post = await generateBlogContent({
   data: tokenisedData,
-  month: "October 2024",
-  dataType: "cars",
+  month: "2024-10",
+  dataType: "monthly-update",
 });
 
 console.log(post.postId, post.title, post.slug);
 ```
 
-`generateBlogContent()` and `regenerateBlogContent()` keep the same public
-signature and both persist the generated post. Persistence is idempotent for a
+`generateBlogContent()` and `regenerateBlogContent()` both persist the generated post. Persistence is idempotent for a
 given `month` and `dataType`.
+
+The current web workflow generates one `monthly-update` post once registrations,
+COE, PQP and deregistrations are available for the same month. Other supported
+data types remain available for existing content. Regeneration preserves the
+saved post's slug. Hero images are generated separately; the monthly workflow's
+hero-image step is currently disabled.
 
 When called from a Vercel WDK workflow, assign WDK's durable fetch before making
 the AI call:
@@ -59,13 +63,15 @@ import {
 
 const documentEmbedding = await generateDocumentEmbedding({
   title: savedPost.title,
+  excerpt: savedPost.excerpt,
   content: savedPost.content,
 });
 
 const queryEmbedding = await generateQueryEmbedding("electric car trends");
 ```
 
-Document inputs are formatted as `title: … | text: …`. Query inputs are
+Document inputs include the optional excerpt and the first 2,000 characters of
+content, formatted as `title: … | text: …`. Query inputs are
 formatted as `task: search result | query: …`; this distinction is required by
 Gemini Embedding 2 for retrieval quality.
 
@@ -85,25 +91,31 @@ DATABASE_URL=
 call `savePost()`, so `DATABASE_URL` is required for the generate-and-save flow
 outside an already configured web deployment.
 
-Required for hero-image upload (when not running on Vercel with a linked Blob
-store that injects the token automatically):
+Hero-image upload requires Blob authentication. Vercel-linked environments use
+`BLOB_STORE_ID` and `VERCEL_OIDC_TOKEN`; standalone scripts can alternatively use:
 
 ```bash
 BLOB_READ_WRITE_TOKEN=
 ```
 
-`generateHeroImage()` always uploads via `@vercel/blob`, so local runs and
-non-Vercel environments need `BLOB_READ_WRITE_TOKEN` even after Gateway auth is
-configured.
+`generateHeroImage()` uploads via `@vercel/blob` and returns the image URL and
+pathname. It does not update a post itself; the workflow calls
+`updatePostHeroImage()` separately. See the [Blob authentication reference](https://github.com/vercel/storage/blob/main/_autodocs/configuration.md).
+
+Set `NEXT_PUBLIC_SITE_URL` and `REVALIDATE_TOKEN` to request web cache invalidation
+after saving a post. Without the token, this invalidation is skipped. Export
+credentials into the process environment for standalone package scripts;
+the scripts do not automatically load the web application's `.env.local`.
 
 No direct provider API key is required.
 
-## Embedding migration rollout
+## Replacing Legacy Embeddings
 
 Gemini Embedding 2 vectors are incompatible with legacy Gemini Embedding 001
 vectors, even though both are stored at 768 dimensions. This migration replaces
 the existing `posts.embedding` values in place and requires a short semantic
-search maintenance window.
+search maintenance window. This procedure is only needed for databases that
+still contain legacy vectors; normal setup does not require a reset.
 
 Prerequisites: export `DATABASE_URL` (PostgreSQL) and `AI_GATEWAY_API_KEY`
 before running either migration command. Both scripts fail fast with a clear
@@ -129,8 +141,8 @@ error if `DATABASE_URL` is missing.
    Set `EMBEDDING_BACKFILL_BATCH_SIZE` to change the default batch size of 25.
    The job updates only rows where `embedding` is null, so it is resumable and
    idempotent after the one-time reset.
-4. Confirm the command reports `remaining: 0`, deploy the Gemini 2 release, and
-   resume post writes and semantic features.
+4. Confirm the command reports `failed: 0` and `remaining: 0`, then resume post
+   writes and semantic features using the Gemini 2 model.
 
 No database schema migration is required because both models use 768 dimensions.
 
@@ -141,9 +153,10 @@ pnpm --filter @motormetrics/ai test
 pnpm --filter @motormetrics/ai typecheck
 ```
 
-Key dependencies are `ai`, `@ai-sdk/gateway`, `@ai-sdk/openai`, and the
-MotorMetrics database and utility packages.
+Run these commands from the repository root after installing dependencies with
+pnpm. Use the Node.js and pnpm versions in the [root manifest](../../package.json).
+Public entry points and dependencies are listed in the [package manifest](package.json).
 
 ## License
 
-MIT
+[MIT](../../LICENSE)

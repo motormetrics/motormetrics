@@ -1,45 +1,52 @@
-# docs
+# MotorMetrics Documentation
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+The Fumadocs documentation application for MotorMetrics, built with Next.js and MDX. Current content covers car registrations, COE results, deregistrations and API rate limiting.
 
-Run development server:
+## Development
+
+Use the Node.js and pnpm versions pinned in the [root manifest](../../package.json). From the repository root:
 
 ```bash
-npm run dev
-# or
-pnpm dev
-# or
-yarn dev
+pnpm install
+pnpm --filter @motormetrics/docs dev
 ```
 
-Open http://localhost:3000 with your browser to see the result.
+Open the URL printed by Next.js. The default port is 3000, which may already be occupied by another application.
 
-## Explore
+```bash
+pnpm --filter @motormetrics/docs build
+pnpm --filter @motormetrics/docs start
+pnpm --filter @motormetrics/docs types:check
+pnpm --filter @motormetrics/docs lint
+pnpm --filter @motormetrics/docs format
+```
 
-In the project, you can see:
+`postinstall` generates the MDX collections. `types:check` regenerates those collections and Next.js route types before running TypeScript checks.
 
-- `lib/source.ts`: Code for content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
-- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep.
+## Editing Content
 
-| Route                     | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `app/(home)`              | The route group for your landing page and other pages. |
-| `app/docs`                | The documentation layout and pages.                    |
-| `app/api/search/route.ts` | The Route Handler for search.                          |
+Add or update MDX files in [content/docs](content/docs/) and adjust `meta.json` for navigation. [source.config.ts](source.config.ts) defines the content collection and frontmatter schema.
 
-### Fumadocs MDX
+| Path | Purpose |
+| --- | --- |
+| `src/lib/source.ts` | Content loader, page images and processed text |
+| `src/lib/layout.shared.tsx` | Shared layout options |
+| `src/mdx-components.tsx` | MDX component mappings |
+| `src/app/(home)/` | Landing page |
+| `src/app/docs/` | Documentation layout and pages |
+| `src/app/api/search/route.ts` | Search endpoint |
+| `src/app/og/docs/[...slug]/route.tsx` | Documentation share images |
 
-A `source.config.ts` config file has been included, you can customise different options like frontmatter schema.
+## Text Exports
 
-Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
+The app provides `/llms.txt` as a page index, `/llms-full.txt` as combined processed documentation, and `/llms.mdx/docs/<slug>` for individual pages. [next.config.mjs](next.config.mjs) also rewrites `/docs/<slug>.mdx` to the individual text endpoint.
 
-## Learn More
+## Related Documentation
 
-To learn more about Next.js and Fumadocs, take a look at the following
-resources:
+- [Root README](../../README.md): Repository setup and architecture.
+- [Package manifest](package.json): Dependencies and scripts.
+- [Fumadocs documentation](https://fumadocs.dev/docs): Framework reference.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Fumadocs](https://fumadocs.dev) - learn about Fumadocs
+## License
+
+[MIT](../../LICENSE)

@@ -1,244 +1,137 @@
 # MotorMetrics
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## Overview
+MotorMetrics tracks Singapore's car market through registration statistics, Certificate of Entitlement (COE) bidding results, renewal premiums and fleet data.
 
-This monorepo provides a complete platform for MotorMetrics, tracking Singapore's car registration statistics and Certificate of Entitlement (COE) data. The system includes:
+## Features
 
-- **Web Application**: Next.js 16 frontend with Cache Components, co-located route components, enhanced homepage featuring latest COE results, interactive charts, analytics, AI-generated blog content, and integrated admin interface at `/admin` path. Also hosts the data updater workflows.
-- **Integrated Data Updater**: Vercel WDK workflow-based system for fetching and processing LTA data (consolidated into web application)
-- **LLM Blog Generation**: Automated blog post creation using Vercel AI SDK with Google Gemini for market insights (runs within web workflows)
-- **Social Media Integration**: Automated posting to Discord, LinkedIn, Telegram, and Twitter with trackable redirect routes (triggered by web workflows)
-- **MCP Server**: Published npm package for blog post CRUD operations via Claude Code
-- **Documentation Site**: Fumadocs-powered documentation for technical guides and API reference
-- **Infrastructure**: Vercel deployment with automatic CI/CD
-
-## System Overview
-
-```mermaid
-graph TB
-    subgraph "Frontend & Workflows"
-        WEB[Web App<br/>Next.js 16]
-        BLOG[Blog Posts<br/>AI Generated]
-        WORKFLOWS[Data Workflows<br/>Vercel WDK]
-        LLM[Vercel AI SDK<br/>Blog Generation]
-    end
-
-    subgraph "Data Layer"
-        DB[(PostgreSQL<br/>Neon)]
-        REDIS[(Redis Cache<br/>Upstash)]
-    end
-
-    subgraph "External APIs"
-        LTA[LTA DataMall<br/>Gov Data]
-    end
-
-    subgraph "Social Platforms"
-        DISCORD[Discord]
-        LINKEDIN[LinkedIn]
-        TWITTER[Twitter]
-        TELEGRAM[Telegram]
-    end
-
-    subgraph "Infrastructure"
-        VERCEL[Vercel<br/>Edge Network]
-    end
-
-    WEB --> WORKFLOWS
-    WEB --> DB
-    WEB --> REDIS
-
-    WORKFLOWS --> LTA
-    WORKFLOWS --> DB
-    WORKFLOWS --> LLM
-    LLM --> BLOG
-
-    WORKFLOWS --> DISCORD
-    WORKFLOWS --> LINKEDIN
-    WORKFLOWS --> TWITTER
-    WORKFLOWS --> TELEGRAM
-
-    WEB --> VERCEL
-
-    classDef frontend fill:#e1f5fe
-    classDef backend fill:#f3e5f5
-    classDef data fill:#e8f5e8
-    classDef external fill:#fff3e0
-    classDef social fill:#fce4ec
-    classDef infra fill:#f1f8e9
-
-    class WEB,BLOG,WORKFLOWS,LLM frontend
-    class DB,REDIS data
-    class LTA external
-    class DISCORD,LINKEDIN,TWITTER,TELEGRAM social
-    class VERCEL infra
-```
-
-## Project Structure
-
-```
-motormetrics/
-├── apps/
-│   ├── docs/         # Fumadocs documentation site (Next.js 16)
-│   │   ├── content/         # MDX documentation files
-│   │   ├── src/app/         # Next.js App Router with docs layout
-│   │   └── src/lib/         # Fumadocs source adapter and shared config
-│   ├── mcp/          # MCP server for blog post CRUD (published to npm)
-│   │   └── src/             # TypeScript server implementation
-│   ├── web/          # Next.js 16 frontend application with integrated workflows
-│   │   ├── src/app/         # Next.js App Router pages and layouts
-│   │   │   ├── (social)/    # Social media redirect routes with UTM tracking
-│   │   │   ├── admin/       # Integrated admin interface for content management
-│   │   │   ├── blog/        # Blog pages with AI-generated content
-│   │   │   └── api/workflows/  # Vercel WDK workflow endpoints
-│   │   ├── src/lib/workflows/  # Data updater workflows and social media integration
-│   │   ├── src/queries/     # Data fetching queries (cars, COE, logos) with comprehensive tests
-│   │   ├── src/actions/     # Server actions (maintenance tasks)
-│   │   ├── src/components/  # React components with comprehensive tests
-│   │   ├── src/utils/       # Web-specific utility functions
-│   │   └── src/config/      # Database, Redis, and platform configurations
-├── packages/
-│   ├── ai/           # AI-powered blog generation package
-│   │   ├── src/generate-post.ts  # 2-step blog generation
-│   │   └── src/schemas.ts        # Zod schemas for structured output
-│   ├── database/     # Database schema and migrations (Drizzle ORM)
-│   │   ├── src/schema/      # Schema definitions for all tables
-│   │   └── migrations/      # Database migration files
-│   ├── logos/        # Car logo management with Vercel Blob storage
-│   ├── types/        # Shared TypeScript types
-│   └── utils/        # Shared utility functions and Redis configuration
-```
-
-## Technologies
-
-- **Frontend**: Next.js 16.1 with Cache Components, React 19.2, TypeScript 5.8
-- **UI Library**: HeroUI v3 (`@heroui/react`) and HeroUI Pro (`@heroui-pro/react`) on Tailwind CSS v4
-- **Styling**: Tailwind CSS v4.1 with custom configuration
-- **Backend**: Node.js 22, TypeScript with strict mode
-- **API Framework**: Hono with OpenAPI documentation
-- **Database**: Neon Serverless PostgreSQL with Drizzle ORM
-- **Caching**: Upstash Redis for API responses and analytics
-- **Infrastructure**: Vercel with automatic deployments
-- **Scheduling**: Vercel WDK Workflows with Vercel Cron for data processing
-- **LLM Integration**: Vercel AI SDK with Google Gemini for blog content generation
-- **Package Management**: pnpm v12.3.4 workspace with catalog for centralised dependency management
-- **Build Tools**: Turbo v2.6.3 for monorepo orchestration, Turbopack for fast development builds
-- **Testing**: Vitest v4.0.15 (unit), Playwright (E2E) with comprehensive coverage
-- **Linting & Formatting**: Biome v2.3.0 for consistent code style, formatting, and import organisation
-
-## Documentation
-
-For developers working on this codebase, detailed component-specific guidance is available:
-
-- **[Root AGENTS.md](AGENTS.md)** - Overall project guidance and conventions
-- **[Web Application](apps/web/AGENTS.md)** - Next.js development, HeroUI components, blog features, and data updater workflows
-- **[AI Package](packages/ai/AGENTS.md)** - AI-powered blog generation with Vercel AI SDK and Google Gemini
-- **[Database Package](packages/database/AGENTS.md)** - Schema management, migrations, and TypeScript integration
-- **[Logos Package](packages/logos/AGENTS.md)** - Car logo management with Vercel Blob storage
-
-### Product Documentation
-
-Forward-looking product proposals and opportunity assessments are available in
-the [`docs/product/`](docs/product/) directory:
-
-- **[Mobile App Opportunity](docs/product/2026-07-29-mobile-app-opportunity.md)** -
-  Product thesis and validation path for a personalised vehicle companion
-- **[Advertiser Dashboard](docs/product/2026-04-05-advertiser-dashboard-design.md)** -
-  Design proposal for a self-serve advertising platform
-
-### Architecture Documentation
-
-System architecture diagrams are available in the `docs/` directory:
-
-- **[docs/architecture/](docs/architecture/)** - Architecture documentation with Mermaid diagrams
-- **[docs/diagrams/](docs/diagrams/)** - Source Mermaid diagram files
+- **Car market dashboards**: Registrations by make, fuel type and vehicle type, annual trends, deregistrations and vehicle population.
+- **COE analytics**: Bidding results, premium trends and Prevailing Quota Premium (PQP) renewal prices.
+- **EV charging**: Charging locations on an interactive map, with live availability ingestion.
+- **Ownership tools**: Additional Registration Fee (ARF) and Preferential Additional Registration Fee (PARF) calculators, alongside educational guides.
+- **Monthly market updates**: AI-generated posts combining registrations, COE, PQP and deregistrations once all datasets have a complete month.
+- **Content administration**: An integrated `/admin` interface with Google OAuth, blog editing, announcements and workflow controls.
+- **Developer access**: REST routes in the web application, a blog-management MCP server and a Fumadocs documentation site.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js >= 22
-- pnpm v12.3.4
+Use the Node.js and pnpm versions pinned through `devEngines` in [package.json](package.json). Use pnpm for all workspace commands.
+
+You will also need a development PostgreSQL database and Upstash Redis credentials for data-backed pages.
 
 ### Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/motormetrics/motormetrics.git
 cd motormetrics
-
-# Install dependencies
 pnpm install
+cp apps/web/.env.example apps/web/.env.local
 ```
 
-#### Dependency Management
+Fill in `apps/web/.env.local` before starting the web application. The [environment template](apps/web/.env.example) lists the web integrations; configure credentials for the features you intend to use.
 
-This project uses **pnpm catalog** for centralised dependency version management. Shared dependencies (React, Next.js, TypeScript, testing tools, etc.) are defined in `pnpm-workspace.yaml` and referenced by workspace packages using the `catalog:` protocol.
-
-**Key catalog packages:**
-- React ecosystem: `react` (^19.2.3), `react-dom` (^19.2.3), `next` (^16.1.0)
-- TypeScript & types: `typescript` (^5.8.3), `@types/node` (^22.16.4), `@types/react` (^19.2.0), `@types/react-dom` (^19.2.0)
-- Testing tools: `vitest` (^4.0.15), `@vitest/coverage-v8` (^4.0.15)
-- AI & LLM: `ai`, `@ai-sdk/gateway`, `@ai-sdk/openai`
-- Utilities: `date-fns` (^3.6.0), `zod` (^4.1.13), `sonner` (2.0.7)
-
-**Root-level dependencies** (not in catalog):
-- Build tools: `turbo` (^2.6.3)
-- Code quality: `@biomejs/biome` (2.3.0), `husky` (^9.1.7), `lint-staged` (^16.1.5)
-
-This ensures version consistency across all workspace packages and simplifies dependency upgrades.
-
-### Development
+Database commands run in `packages/database`, so they do not read the web application's `.env.local`. Export `DATABASE_URL` in your shell, pointing at your **development** database, before applying the schema:
 
 ```bash
-# Development
-pnpm dev                    # Run all development servers
-pnpm dev:web               # Web application only
-cd apps/web && pnpm dev    # Web application development
-
-# Build
-pnpm build                 # Build all applications
-pnpm build:web             # Build web application only
-
-# Testing
-pnpm test                  # Run all unit tests
-pnpm test:watch            # Run tests in watch mode
-pnpm test:coverage         # Run tests with coverage
-pnpm test:web              # Run web tests only
-cd apps/web && pnpm test   # Web tests only
-
-# E2E Testing (Web App)
-pnpm -F /web test:e2e       # Run Playwright E2E tests
-pnpm -F /web test:e2e:ui    # Run E2E tests with Playwright UI
-
-# Code Quality
-pnpm lint                  # Run Biome linting on all packages
-pnpm format                # Run Biome formatting on all packages
-pnpm lint:web              # Lint web application only
-cd apps/web && pnpm lint   # Lint web application only
-
-# Database
-pnpm db:migrate            # Run database migrations
-pnpm db:migrate:check      # Check migration status
-pnpm db:generate           # Generate new migrations
-pnpm db:push               # Push schema changes
+export DATABASE_URL='postgresql://user:password@host:5432/database'
+pnpm db:push
+pnpm dev:web
 ```
 
-### Deployment
+The web development script uses Portless with the hostname `motormetrics.localhost`; use the URL printed when it starts. Set `NEXT_PUBLIC_SITE_URL` and your OAuth configuration to match it.
 
-Deployment is handled automatically by Vercel:
-- **Production**: Push to `main` branch triggers automatic deployment
-- **Preview**: Pull requests get automatic preview deployments
+Development databases use `db:push`. Staging and production use committed migrations; see [packages/database/AGENTS.md](packages/database/AGENTS.md) before making schema changes.
 
-## API Endpoints
+## Development Commands
 
-### Web Application Workflows (apps/web)
+Run these from the repository root:
 
-**Workflow Endpoints (Vercel Cron Triggered):**
-- `GET /api/workflows/cars` - Car data processing workflow
-- `GET /api/workflows/coe` - COE data processing workflow
-- `GET /api/workflows/deregistrations` - Vehicle deregistration processing workflow
+```bash
+# Development and builds
+pnpm dev                          # All workspace development processes
+pnpm dev:web                      # Web application
+pnpm build                        # All applications
+pnpm build:web                    # Web application
+
+# Testing
+pnpm test                         # Workspace tests
+pnpm test:watch                   # Watch mode
+pnpm test:web                     # Web unit and browser component tests
+pnpm test:integration:web         # Web workflow integration tests
+
+# Code quality
+pnpm lint                         # Biome checks
+pnpm format                       # Format workspace code
+pnpm typecheck                    # Workspace type checks
+pnpm lint:web                     # Web Biome checks
+pnpm typecheck:web                # Web type checks
+
+# Database and authentication
+pnpm db:push                      # Apply schema to development database
+pnpm db:generate                  # Generate migrations for review
+pnpm db:check                     # Check migration consistency
+pnpm db:migrate                   # Apply migrations to a migration-managed database
+pnpm auth:generate                # Generate authentication schema
+```
+
+See the [web README](apps/web/README.md#testing) for browser installation and E2E testing.
+
+## Project Structure
+
+```text
+motormetrics/
+├── apps/
+│   ├── docs/                 # Fumadocs documentation site
+│   ├── mcp/                  # @motormetrics/mcp blog-management server
+│   └── web/                  # Dashboards, admin, REST routes and workflows
+├── packages/
+│   ├── ai/                 # Blog generation, hero images and embeddings
+│   ├── database/           # Drizzle schema and migrations
+│   ├── logos/              # Car logos backed by Vercel Blob
+│   ├── types/              # Shared TypeScript types
+│   └── utils/              # Shared utilities and Redis configuration
+└── docs/
+    ├── architecture/       # Architecture documentation
+    ├── diagrams/           # Mermaid diagram sources
+    └── product/            # Product proposals
+```
+
+## Technology
+
+- **Web**: Next.js 16 with Cache Components, React 19, TypeScript, HeroUI v3, HeroUI Pro and Tailwind CSS v4.
+- **Data**: Neon PostgreSQL, Drizzle ORM, Upstash Redis and Vercel Blob.
+- **Workflows**: Vercel Workflow DevKit, Vercel Cron and Upstash QStash for hourly live charging ingestion.
+- **AI**: Vercel AI SDK with Google Gemini through AI Gateway.
+- **Authentication and analytics**: Better Auth with Google OAuth, PostHog and Vercel Analytics.
+- **Tooling**: pnpm workspaces, Turborepo, Biome, Vitest Browser Mode and Playwright.
+
+Shared dependency versions live in [pnpm-workspace.yaml](pnpm-workspace.yaml) and are referenced with `catalog:`. Toolchain pins and root scripts live in [package.json](package.json); package-specific dependencies live in each package's manifest.
+
+## API and Workflows
+
+REST handlers and data workflows run within the web application. See [API routes](apps/web/src/app/api/v1/), [workflow implementations](apps/web/src/workflows/) and [cron configuration](apps/web/vercel.ts) for the current endpoints and schedules. Hourly live charging ingestion is scheduled separately through QStash.
+
+The [MCP server README](apps/mcp/README.md) describes the blog and maintenance tools and client setup. [Architecture documentation](docs/architecture/) provides system diagrams.
+
+## Deployment
+
+Pushes to `main` deploy production on Vercel at [motormetrics.app](https://motormetrics.app). Pull requests receive preview deployments.
+
+The web application's `vercel-build` applies pending database migrations before building. **Preview deployments apply migrations to the shared staging Neon branch**, so an unmerged PR's migration persists there. Development uses `db:push` and receives no migrations.
+
+## Documentation
+
+- [Root AGENTS.md](AGENTS.md): Repository conventions and workflows.
+- [Web application guidance](apps/web/AGENTS.md): Routing, UI, caching, testing and environment configuration.
+- [AI package](packages/ai/README.md): Blog generation and embeddings.
+- [Database guidance](packages/database/AGENTS.md): Schema changes and migration workflow.
+- [Logos package](packages/logos/README.md): Logo storage and management.
+- [Documentation site](apps/docs/README.md): Fumadocs application.
+- [Architecture](docs/architecture/): System, database, infrastructure and workflows.
+- [Product proposals](docs/product/): Opportunity assessments and design proposals.
 
 ## License
 
