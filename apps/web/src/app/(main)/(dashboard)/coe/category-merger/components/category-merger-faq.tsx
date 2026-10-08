@@ -1,0 +1,37 @@
+"use client";
+
+import { Accordion, Typography } from "@heroui/react";
+import type { Faq } from "@web/app/(main)/(dashboard)/coe/category-merger/components/faq-data";
+import { ChevronDown } from "lucide-react";
+
+/** The FAQ accordion; client-side only for the expand and collapse. */
+export function CategoryMergerFaq({ faqs }: { faqs: Faq[] }) {
+  return (
+    <section
+      className="grid scroll-mt-24 items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-14"
+      id="faq"
+    >
+      <Typography.Heading level={2}>Common questions</Typography.Heading>
+      <Accordion
+        defaultExpandedKeys={[faqs[0]?.question ?? ""]}
+        variant="surface"
+      >
+        {faqs.map(({ answer, question }) => (
+          <Accordion.Item id={question} key={question}>
+            <Accordion.Heading>
+              <Accordion.Trigger>
+                {question}
+                <Accordion.Indicator>
+                  <ChevronDown />
+                </Accordion.Indicator>
+              </Accordion.Trigger>
+            </Accordion.Heading>
+            <Accordion.Panel>
+              <Accordion.Body className="max-w-prose">{answer}</Accordion.Body>
+            </Accordion.Panel>
+          </Accordion.Item>
+        ))}
+      </Accordion>
+    </section>
+  );
+}

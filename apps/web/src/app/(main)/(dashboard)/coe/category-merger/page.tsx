@@ -1,5 +1,7 @@
 import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
+import { CategoryMergerFaq } from "@web/app/(main)/(dashboard)/coe/category-merger/components/category-merger-faq";
+import { CATEGORY_MERGER_FAQS } from "@web/app/(main)/(dashboard)/coe/category-merger/components/faq-data";
 import { FeebateBands } from "@web/app/(main)/(dashboard)/coe/category-merger/components/feebate-bands";
 import {
   CONSULTATION_PAPER_URL,
@@ -20,7 +22,10 @@ import {
 } from "@web/components/shared/report";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { generateBreadcrumbSchema } from "@web/lib/metadata";
+import {
+  generateBreadcrumbSchema,
+  generateFAQPageSchema,
+} from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
@@ -90,6 +95,12 @@ export default function CategoryMergerPage() {
             { name: "COE", path: "/coe" },
             { name: "Category merger", path },
           ]),
+        }}
+      />
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: CATEGORY_MERGER_FAQS }]),
         }}
       />
 
@@ -238,6 +249,8 @@ export default function CategoryMergerPage() {
           </a>
         </div>
       </ReportSection>
+
+      <CategoryMergerFaq faqs={CATEGORY_MERGER_FAQS} />
 
       <ReportNote title="About this page">
         <Typography.Paragraph color="muted" size="sm">
