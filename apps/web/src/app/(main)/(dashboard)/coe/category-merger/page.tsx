@@ -3,6 +3,7 @@ import { buttonVariants } from "@heroui/styles";
 import { CategoryMergerFaq } from "@web/app/(main)/(dashboard)/coe/category-merger/components/category-merger-faq";
 import { CATEGORY_MERGER_FAQS } from "@web/app/(main)/(dashboard)/coe/category-merger/components/faq-data";
 import { FeebateBands } from "@web/app/(main)/(dashboard)/coe/category-merger/components/feebate-bands";
+import { PremiumGap } from "@web/app/(main)/(dashboard)/coe/category-merger/components/premium-gap";
 import {
   CONSULTATION_PAPER_URL,
   FEEDBACK_URL,
@@ -11,6 +12,7 @@ import {
   PUBLISHED_DATE,
   THREE_BANDS,
 } from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { PageHead } from "@web/components/shared/page-head";
 import {
   Report,
@@ -20,6 +22,7 @@ import {
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
+import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -29,6 +32,7 @@ import {
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import type { Article, WithContext } from "schema-dts";
 
 const path = "/coe/category-merger";
@@ -162,6 +166,17 @@ export default function CategoryMergerPage() {
             "LTA adds that from the point of view of road space and congestion, a mass-market car and a luxury car have broadly the same impact.",
           ]}
         />
+      </ReportSection>
+
+      <ReportSection
+        caption="Ten years of closing premiums"
+        title="How close Category A and B have come"
+      >
+        <SectionErrorBoundary title="Premium history unavailable">
+          <Suspense fallback={<SkeletonCard className="h-[460px] w-full" />}>
+            <PremiumGap />
+          </Suspense>
+        </SectionErrorBoundary>
       </ReportSection>
 
       <ReportSection title="How the feebate bands would work">
