@@ -280,7 +280,7 @@ export function AppNav({
       </Navbar.Header>
 
       {/* The phone sheet: an Explore group of the primary links, then every
-          dropdown group and Company, each ruled off by a hairline. Rows run in
+          dropdown group and More, each ruled off by a hairline. Rows run in
           two columns, and the eyebrows and rules span both. HeroUI keeps the
           full-height panel and the scroll lock. */}
       <Navbar.Menu className="grid grid-cols-2 content-start gap-x-2 gap-y-0.5 px-0">
