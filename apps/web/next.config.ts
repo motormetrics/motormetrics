@@ -44,7 +44,6 @@ const nextConfig: NextConfig = {
     browserToTerminal: "warn",
   },
   experimental: {
-    appNewScrollHandler: true,
     mcpServer: true,
     turbopackFileSystemCacheForBuild: true,
     turbopackRustReactCompiler: true,
