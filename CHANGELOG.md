@@ -33,6 +33,24 @@
 * **web:** narrow the collapsed nav bar gap so it fits 360px ([6090e5a](https://github.com/motormetrics/motormetrics/commit/6090e5aaf3f939c666272e513afae36e407b8d52))
 * **web:** span the exercise range switch across phone rows ([2cf018e](https://github.com/motormetrics/motormetrics/commit/2cf018efc793dce8722480c317b86c9af13b9a72))
 
+## [5.32.0](https://github.com/motormetrics/motormetrics/compare/v5.31.1...v5.32.0) (2026-10-09)
+
+
+### Features
+
+* **web:** add COE category merger proposal page ([78c5b3f](https://github.com/motormetrics/motormetrics/commit/78c5b3fdc30c8a3eda9dd565544bcf72041b6673))
+* **web:** add FAQ to COE category merger page ([9e26feb](https://github.com/motormetrics/motormetrics/commit/9e26feb4bfb90cee60886dc80a97276fc2081a73))
+* **web:** add share images for COE category merger page ([d9956c6](https://github.com/motormetrics/motormetrics/commit/d9956c67916564ed2912f0f25434487d4248e55e))
+* **web:** add visuals to category merger page ([130488c](https://github.com/motormetrics/motormetrics/commit/130488c62d5faeb38e74404e9d982c5690bfb719))
+* **web:** chart the Cat A and B premium gap ([0fa2d64](https://github.com/motormetrics/motormetrics/commit/0fa2d641203c4dae9512fa802177ccd6eaebd9ab))
+* **web:** link the COE category merger page from home and nav ([c30da8f](https://github.com/motormetrics/motormetrics/commit/c30da8f42b466104dbda447e7c0024bae1a55f66))
+
+
+### Bug Fixes
+
+* **web:** add lastmod to category merger sitemap entry ([5a567b9](https://github.com/motormetrics/motormetrics/commit/5a567b99221fb51571b6f228fef155d47d9b620b))
+* **web:** rename nav section label to More ([7420d40](https://github.com/motormetrics/motormetrics/commit/7420d400b05ae782686596d16f0287d50c638a7a))
+
 ## [5.31.1](https://github.com/motormetrics/motormetrics/compare/v5.31.0...v5.31.1) (2026-10-04)
 
 
