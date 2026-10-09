@@ -46,6 +46,8 @@ const nextConfig: NextConfig = {
   experimental: {
     mcpServer: true,
     turbopackFileSystemCacheForBuild: true,
+    turbopackGc: true,
+    turbopackLazyDynamicImports: true,
     turbopackRustReactCompiler: true,
     typedEnv: true,
   },
