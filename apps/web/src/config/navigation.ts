@@ -210,7 +210,7 @@ export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
 ];
 
 /** Eyebrow above MORE_NAV_ITEMS, matching the pills' section labels. */
-export const MORE_NAV_SECTION_LABEL = "Company";
+export const MORE_NAV_SECTION_LABEL = "More";
 
 /**
  * Everything the pills do not surface, behind the shell nav's "More" menu. The

@@ -98,10 +98,12 @@ describe("AppNav", () => {
       "Vehicle data",
       "Tools",
       "COE data",
-      "Company",
+      "More",
     ]) {
+      // "More" also labels the desktop dropdown trigger; the sheet's eyebrow
+      // comes after it in the DOM.
       await expect
-        .element(screen.getByText(header, { exact: true }))
+        .element(screen.getByText(header, { exact: true }).last())
         .toBeVisible();
     }
     await expect
