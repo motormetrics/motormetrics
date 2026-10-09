@@ -5,6 +5,7 @@ export const config: VercelConfig = {
     deploymentEnabled: {
       "dependabot/**": false,
       "renovate/**": false,
+      "release-please--**": false,
     },
   },
   relatedProjects: ["prj_fyAvupEssH3LO4OQFDWplinVFlaI"],
