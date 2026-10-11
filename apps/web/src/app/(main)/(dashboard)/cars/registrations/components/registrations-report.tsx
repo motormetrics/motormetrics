@@ -1,15 +1,19 @@
 import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { MonthlyChart } from "@web/app/(main)/(dashboard)/cars/components/monthly-chart";
 import {
   FuelTypeTabs,
   RangeTabs,
 } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
 import { RegistrationsHeadline } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-headline";
+import { RegistrationsTrendChart } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-trend-chart";
+import { trendPoints } from "@web/app/(main)/(dashboard)/cars/registrations/components/trend-points";
 import {
   loadSearchParams,
   RANGE_MONTHS,
+  type Range,
 } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
@@ -32,14 +36,18 @@ import {
   getYearlyRegistrations,
 } from "@web/queries/cars/yearly-statistics";
 import { percentageChange } from "@web/utils/change-ratio";
-import {
-  formatChartMonth,
-  formatMonthLabel,
-} from "@web/utils/dates/format-month";
+import { formatMonthLabel } from "@web/utils/dates/format-month";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
+
+/** What each range covers, for the chart's caption. */
+const RANGE_CAPTIONS: Record<Range, string> = {
+  "1Y": "Last 12 months",
+  "3Y": "Last 3 years",
+  All: "Every month on record",
+};
 
 function lookup(
   rows: { count: number; label: string }[],
@@ -76,11 +84,11 @@ export async function RegistrationsReport({
   ]);
 
   const formattedMonth = formatDateToMonthYear(month);
-  const showYear = range !== "1Y";
-  const chartData = series.map(({ month: seriesMonth, total }) => ({
-    label: formatChartMonth(seriesMonth, showYear),
-    total,
-  }));
+  const latestMonth = series.at(-1)?.month ?? month;
+  const ticks = axisTicks(
+    series.map(({ total }) => total),
+    { zero: true },
+  );
 
   // The headline follows the filter: the fuel type's own count when one is
   // selected, the month's full total otherwise.
@@ -151,7 +159,29 @@ export async function RegistrationsReport({
         value={headlineValue}
       />
 
-      <MonthlyChart data={chartData} />
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${RANGE_CAPTIONS[range]} to ${formatDateToMonthYear(latestMonth)} · hover or tap a bar for its value`}
+          eyebrow="Trend"
+          title={
+            fuelType
+              ? `${fuelType} registrations by month`
+              : "Registrations by month"
+          }
+        />
+        <RegistrationsTrendChart
+          data={trendPoints(series, month)}
+          seriesName={fuelType ? `${fuelType} cars` : "New cars"}
+          ticks={ticks}
+        />
+        <SourceNote>
+          {fuelType
+            ? `New ${fuelType} car registrations, all makes.`
+            : "New car registrations, all makes and fuel types."}{" "}
+          The chart always runs to the latest month;{" "}
+          {formatDateToMonthYear(month)} is highlighted.
+        </SourceNote>
+      </section>
 
       <ReportSection
         caption={`${formattedMonth} · all makes`}
