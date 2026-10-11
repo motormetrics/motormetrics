@@ -2,10 +2,18 @@ import {
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import { ShareColumns } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/share-columns";
-import { SectionHead } from "@web/components/shared/overview";
+import {
+  type ShareColumn,
+  ShareColumns,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/share-columns";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
-import { formatChartMonth } from "@web/utils/dates/format-month";
+import {
+  formatChartMonth,
+  formatMonthName,
+  formatMonthShortLabel,
+} from "@web/utils/dates/format-month";
 
 /** Months of history the column chart shows, matching the comp's eight bars. */
 const COLUMN_COUNT = 8;
@@ -20,39 +28,51 @@ export async function AdoptionByMonth({ month }: { month: string }) {
     trend.map((point) => point.month),
     month,
   );
+  const selectedMonth = trend[index]?.month;
 
-  if (index < 0) {
+  if (!selectedMonth) {
     return null;
   }
 
   const shares = batteryElectricShares(trend, marketShare);
   const start = Math.max(0, index - COLUMN_COUNT + 1);
-  const columns = trend.slice(start, index + 1).map((point, offset) => {
-    const share = shares[start + offset] ?? 0;
-    return {
-      key: point.month,
-      label: formatChartMonth(point.month),
-      value: share,
-      valueLabel: `${share.toFixed(0)}%`,
-    };
-  });
-
-  const firstYear = columns.at(0)?.key.slice(0, 4);
-  const lastYear = columns.at(-1)?.key.slice(0, 4);
-  const period = firstYear === lastYear ? lastYear : `${firstYear}–${lastYear}`;
+  const columns: ShareColumn[] = trend
+    .slice(start, index + 1)
+    .map((point, offset) => {
+      const share = shares[start + offset] ?? 0;
+      const isSelected = point.month === selectedMonth;
+      return {
+        key: point.month,
+        label: formatChartMonth(point.month),
+        other: isSelected ? 0 : share,
+        selected: isSelected ? share : 0,
+        share,
+        title: formatMonthShortLabel(point.month),
+        year:
+          offset === 0 || point.month.endsWith("-01")
+            ? point.month.slice(0, 4)
+            : "",
+      };
+    });
+  const ticks = axisTicks(
+    columns.map((column) => column.share),
+    { zero: true },
+  );
 
   return (
-    <div className="flex flex-col gap-6">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
-        caption={`EV share of all new car registrations · ${period}`}
+        caption={`EV share of all new car registrations · ${columns.length} months to ${formatMonthName(selectedMonth)}`}
         eyebrow="Adoption"
         title="Share by month"
       />
 
-      <ShareColumns
-        columns={columns}
-        selectedMonth={trend[index]?.month ?? month}
-      />
-    </div>
+      <ShareColumns columns={columns} ticks={ticks} />
+
+      <SourceNote>
+        Battery-electric share of each month&apos;s new car registrations.
+        Y-axis starts at zero.
+      </SourceNote>
+    </section>
   );
 }

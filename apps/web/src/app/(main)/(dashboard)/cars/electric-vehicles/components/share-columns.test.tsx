@@ -1,4 +1,7 @@
-import { ShareColumns } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/share-columns";
+import {
+  type ShareColumn,
+  ShareColumns,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/share-columns";
 import {
   type OnUrlUpdateFunction,
   withNuqsTestingAdapter,
@@ -16,10 +19,20 @@ const wrapper = withNuqsTestingAdapter({
   onUrlUpdate,
 });
 
-const columns = [
-  { key: "2025-08", label: "Aug", value: 24.1, valueLabel: "24%" },
-  { key: "2025-09", label: "Sep", value: 28.4, valueLabel: "28%" },
-  { key: "2025-10", label: "Oct", value: 30.4, valueLabel: "30%" },
+const column = (key: string, share: number, isSelected: boolean) => ({
+  key,
+  label: key.slice(5),
+  other: isSelected ? 0 : share,
+  selected: isSelected ? share : 0,
+  share,
+  title: key,
+  year: "",
+});
+
+const columns: ShareColumn[] = [
+  column("2025-08", 24.1, false),
+  column("2025-09", 28.4, false),
+  column("2025-10", 30.4, true),
 ];
 
 describe("ShareColumns", () => {
@@ -28,27 +41,35 @@ describe("ShareColumns", () => {
     capture.mockClear();
   });
 
-  it("should mark only the selected month as pressed", async () => {
+  it("should draw the selected month in the darker series", async () => {
     const screen = await render(
-      <ShareColumns columns={columns} selectedMonth="2025-09" />,
+      <ShareColumns columns={columns} ticks={[0, 10, 20, 30, 40]} />,
       { wrapper },
     );
 
-    await expect
-      .element(screen.getByRole("button", { name: "Sep: 28%" }))
-      .toHaveAttribute("aria-pressed", "true");
-    await expect
-      .element(screen.getByRole("button", { name: "Oct: 30%" }))
-      .toHaveAttribute("aria-pressed", "false");
+    await vi.waitFor(() =>
+      expect(
+        screen.container.querySelectorAll(
+          '.recharts-bar-rectangle path[fill="var(--chart-1)"]',
+        ),
+      ).toHaveLength(1),
+    );
   });
 
   it("should move the page to the month behind the column that was clicked", async () => {
     const screen = await render(
-      <ShareColumns columns={columns} selectedMonth="2025-10" />,
+      <ShareColumns columns={columns} ticks={[0, 10, 20, 30, 40]} />,
       { wrapper },
     );
 
-    await screen.getByRole("button", { name: "Aug: 24%" }).click();
+    const firstColumn = await vi.waitFor(() => {
+      const bar = screen.container.querySelector(
+        '.recharts-bar-rectangle path[fill="var(--chart-5)"]',
+      );
+      expect(bar).not.toBeNull();
+      return bar as SVGPathElement;
+    });
+    firstColumn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
     // nuqs flushes URL updates asynchronously.
     await vi.waitFor(() => expect(onUrlUpdate).toHaveBeenCalledOnce());
