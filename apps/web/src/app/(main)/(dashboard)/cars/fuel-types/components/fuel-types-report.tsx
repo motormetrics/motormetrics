@@ -15,9 +15,9 @@ import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-serie
 import {
   Hairline,
   SectionHead,
+  SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
-import { ReportNote, ReportSection } from "@web/components/shared/report";
 import { FUEL_TYPE_LINKS } from "@web/config";
 import {
   type CategoryMonthlyPoint,
@@ -32,7 +32,6 @@ import {
 } from "@web/utils/dates/format-month";
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
-import Link from "next/link";
 import {
   createLoader,
   parseAsString,
@@ -372,55 +371,60 @@ export async function FuelTypesReport({
 
       <Hairline />
 
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
-        <ReportSection caption={periodLabel} title="Leading makes by fuel type">
-          <div className="flex flex-col">
+      <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-7 lg:gap-14">
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-4">
+          <SectionHead
+            caption={`${periodLabel} · top three makes in each`}
+            eyebrow="Makes"
+            title="Leading makes by fuel type"
+          />
+          <ul className="flex flex-col">
             {leaders.map(({ makes, name, total: typeTotal }) => (
-              <div
-                className="flex flex-wrap items-baseline gap-5 border-border border-b py-4"
+              <li
+                className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-separator border-b py-3"
                 key={name}
               >
-                <span className="w-[150px] shrink-0 font-bold text-base">
+                <span className="w-44 shrink-0 font-semibold text-sm max-md:w-auto max-md:flex-1">
                   {name}
                 </span>
-                <span className="font-semibold text-base text-muted-strong">
+                <span className="min-w-0 flex-1 text-muted-strong text-sm max-md:order-last max-md:basis-full">
                   {makes.map(({ make }) => make).join(", ") || "—"}
                 </span>
                 {makes[0] ? (
-                  <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
+                  <span className="whitespace-nowrap text-right text-muted text-xs tabular-nums">
                     {makes[0].make}{" "}
                     {percentageOf(makes[0].count, typeTotal).toFixed(1)}% of{" "}
                     {name}
                   </span>
                 ) : null}
-              </div>
+              </li>
             ))}
-          </div>
-        </ReportSection>
+          </ul>
+          <SourceNote>
+            Share is of that fuel type's registrations in the period.
+          </SourceNote>
+        </section>
 
-        <ReportNote title="How LTA classifies fuel types">
-          <Typography.Paragraph>
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-3">
+          <SectionHead eyebrow="Method" title="How LTA classifies fuel types" />
+          <Typography.Paragraph className="text-muted-strong" size="sm">
             LTA records the fuel type at registration, and reports plug-in
             hybrids separately from the hybrids that only charge themselves.
             Only battery-electric cars count as Electric.
           </Typography.Paragraph>
-          <Typography.Paragraph>
-            Figures here are new registrations, not the fleet on the road — the
+          <Typography.Paragraph className="text-muted-strong" size="sm">
+            Figures here are new registrations, not the fleet on the road. The
             population mix shifts far more slowly.
           </Typography.Paragraph>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/fuel-types/electric"
-          >
-            Electric in detail →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/vehicle-types"
-          >
-            Vehicle types →
-          </Link>
-        </ReportNote>
+          <div className="flex flex-wrap gap-5">
+            <SectionLink className="ml-0" href="/cars/fuel-types/electric">
+              Electric in detail
+            </SectionLink>
+            <SectionLink className="ml-0" href="/cars/vehicle-types">
+              Vehicle types
+            </SectionLink>
+          </div>
+        </section>
       </div>
     </>
   );
