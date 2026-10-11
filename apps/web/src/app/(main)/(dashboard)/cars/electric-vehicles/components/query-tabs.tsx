@@ -1,8 +1,10 @@
 "use client";
 
+import { cn } from "@heroui/react";
 import { Segment } from "@heroui-pro/react";
 import { parseAsString, useQueryState } from "nuqs";
 import posthog from "posthog-js";
+import { useTransition } from "react";
 
 interface QueryTabsProps<Value extends string> {
   /** Accessible name for the group, since the tabs carry no visible label. */
@@ -35,10 +37,14 @@ export function QueryTabs<Value extends string>({
   value,
   variant = "pill",
 }: QueryTabsProps<Value>) {
+  const [isPending, startTransition] = useTransition();
   const [, setValue] = useQueryState(
     param,
-    parseAsString.withDefault(value).withOptions({ shallow: false }),
+    parseAsString
+      .withDefault(value)
+      .withOptions({ shallow: false, startTransition }),
   );
+  const isPill = variant === "pill";
 
   return (
     // Segment is a non-wrapping inline-flex, so a row wider than a phone (the
@@ -46,6 +52,7 @@ export function QueryTabs<Value extends string>({
     <div className="max-w-full overflow-x-auto">
       <Segment
         aria-label={ariaLabel}
+        className={cn(isPill && "max-md:w-full", isPending && "opacity-70")}
         onSelectionChange={(key) => {
           posthog.capture("dashboard_filter_changed", {
             filter: param,
@@ -54,11 +61,15 @@ export function QueryTabs<Value extends string>({
           setValue(String(key));
         }}
         selectedKey={value}
-        size="md"
-        variant={variant === "segmented" ? "default" : "ghost"}
+        size={isPill ? "sm" : "md"}
+        variant={isPill ? "ghost" : "default"}
       >
         {options.map((option) => (
-          <Segment.Item id={option.key} key={option.key}>
+          <Segment.Item
+            className={cn(isPill && "max-md:flex-1 max-md:px-2")}
+            id={option.key}
+            key={option.key}
+          >
             {option.label}
           </Segment.Item>
         ))}
