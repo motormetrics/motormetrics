@@ -16,11 +16,6 @@ import {
   SourceNote,
   StatCell,
 } from "@web/components/shared/overview";
-import {
-  ReportHeadline,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
 import { Text } from "@web/components/shared/text";
 import { compactCurrency } from "@web/utils/formatting/chart-axis";
 import posthog from "posthog-js";
@@ -354,35 +349,52 @@ export function PARFCalculator() {
 
       <Hairline />
 
-      <ReportSection
-        caption="PARF rebate plus COE rebate"
-        title="Deregistration value"
-      >
-        <ReportHeadline
-          label="Deregistration value after Budget 2026"
-          stats={
-            <>
-              <ReportStat
-                label="COE rebate"
-                note={`${monthsLeft} of ${COE_MONTHS} months unused`}
-                value={formatCurrency(coeRebate)}
-              />
-              <ReportStat
-                label="PARF rebate"
-                note="after Budget 2026"
-                value={formatCurrency(result.newRebate)}
-              />
-              <ReportStat
-                label="Before Budget 2026"
-                note="COEs up to the 1st February 2026 exercise"
-                value={formatCurrency(coeRebate + result.oldRebate)}
-              />
-            </>
-          }
-          sub={`${formatCurrency(premium)} COE premium × ${monthsLeft} ÷ ${COE_MONTHS} months, plus the PARF rebate above`}
-          value={formatCurrency(coeRebate + result.newRebate)}
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption="PARF rebate plus COE rebate"
+          eyebrow="When you deregister"
+          title="Deregistration value"
         />
-      </ReportSection>
+        <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
+          <div className="flex min-w-0 flex-col gap-3">
+            <Text.Paragraph tone="strong">
+              <span className="font-semibold text-accent-strong">
+                Deregistration value
+              </span>{" "}
+              · after Budget 2026
+            </Text.Paragraph>
+            <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight">
+              {formatCurrency(coeRebate + result.newRebate)}
+            </span>
+            <SourceNote className="tabular-nums">
+              {formatCurrency(premium)} COE premium × {monthsLeft} ÷{" "}
+              {COE_MONTHS} months, plus the PARF rebate above
+            </SourceNote>
+          </div>
+          <div className="grid grid-cols-2 border-separator border-t">
+            <StatCell
+              label="COE rebate"
+              note={`${monthsLeft} of ${COE_MONTHS} months unused`}
+              value={formatCurrency(coeRebate)}
+            />
+            <StatCell
+              label="PARF rebate"
+              note="after Budget 2026"
+              value={formatCurrency(result.newRebate)}
+            />
+            <StatCell
+              label="Before Budget 2026"
+              note="COEs up to the 1st February 2026 exercise"
+              value={formatCurrency(coeRebate + result.oldRebate)}
+            />
+            <StatCell
+              label="Difference"
+              note="less under the new schedule"
+              value={formatCurrency(result.shortfall)}
+            />
+          </div>
+        </div>
+      </section>
 
       <Hairline />
 
