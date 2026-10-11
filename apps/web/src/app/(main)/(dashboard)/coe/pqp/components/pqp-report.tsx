@@ -1,6 +1,7 @@
 import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
+  biddingOrdinal,
   CATEGORY_DESCRIPTIONS,
   formatMonth,
   groupByExercise,
@@ -12,11 +13,11 @@ import {
   type PQPSeries,
   type PQPTrendPoint,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-chart";
-import {
-  PQPComparisonChart,
-  type PQPComparisonPoint,
-} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-comparison-chart";
 import { PQPHeadline } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-headline";
+import {
+  PQPPremiumBars,
+  type PQPPremiumPoint,
+} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-premium-bars";
 import {
   type PQPRateRow,
   PQPRatesTable,
@@ -29,8 +30,13 @@ import {
   type PQPCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { ReportNote, ReportSection } from "@web/components/shared/report";
+import {
+  Hairline,
+  SectionHead,
+  SectionLink,
+  SourceNote,
+} from "@web/components/shared/overview";
+import { ReportSection } from "@web/components/shared/report";
 import {
   ReportCell,
   ReportRow,
@@ -42,7 +48,6 @@ import {
   formatChartMonth,
   formatMonthName,
 } from "@web/utils/dates/format-month";
-import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
 /** `A` → `Category A`, the key the query and the types use. */
@@ -158,15 +163,18 @@ export async function PQPReport({
     };
   });
 
-  const comparisonData: PQPComparisonPoint[] = PQP_CATEGORY_KEYS.map((key) => {
+  const premiumBars: PQPPremiumPoint[] = PQP_CATEGORY_KEYS.map((key) => {
     const name = categoryName(key);
-
     return {
       category: `Cat ${key}`,
-      latestPremium: comparisonByCategory.get(name)?.latestPremium ?? 0,
-      pqpRate: ascending.at(-1)?.[name] ?? 0,
+      pqp: ascending.at(-1)?.[name] ?? 0,
+      premium: comparisonByCategory.get(name)?.latestPremium ?? 0,
     };
   });
+  const premiumTicks = axisTicks(
+    premiumBars.flatMap((point) => [point.pqp, point.premium]),
+    { zero: true },
+  );
 
   return (
     <>
@@ -200,16 +208,7 @@ export async function PQPReport({
         </SourceNote>
       </section>
 
-      <ReportSection
-        caption={`${formattedMonth} · both figures at the full ten-year value`}
-        title="PQP against the closing premium"
-      >
-        <PQPComparisonChart data={comparisonData} />
-        <Typography.Paragraph color="muted" size="sm">
-          A bar above the dashed line means the market is bidding above the
-          renewal rate; a bar below it means renewing is the dearer of the two.
-        </Typography.Paragraph>
-      </ReportSection>
+      <Hairline />
 
       <section className="flex flex-col gap-4">
         <SectionHead
@@ -230,6 +229,54 @@ export async function PQPReport({
           B only; there is no PQP for Category E.
         </SourceNote>
       </section>
+
+      <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-7">
+          <SectionHead
+            caption={`${formattedMonth} PQP and the latest premium · both at the full 10-year value`}
+            eyebrow="Renewing or bidding"
+            title="PQP against the closing premium"
+          />
+          <PQPPremiumBars
+            data={premiumBars}
+            selected={`Cat ${category}`}
+            ticks={premiumTicks}
+          />
+          <SourceNote>
+            Bars start at $0 on a shared scale.
+            {latestExercise
+              ? ` The latest premium is from the ${biddingOrdinal(latestExercise.biddingNo)} bidding exercise of ${formatMonth(latestExercise.month)}.`
+              : null}
+          </SourceNote>
+        </section>
+
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-5">
+          <SectionHead
+            eyebrow="Reading the numbers"
+            title="How the PQP is set"
+          />
+          <Typography.Paragraph className="text-muted-strong">
+            LTA averages the closing premiums in that category over the last
+            three months, across both exercises, and publishes it as the rate
+            for the coming month. It therefore lags the market rather than
+            leading it.
+          </Typography.Paragraph>
+          <Typography.Paragraph className="text-muted-strong">
+            A 5-year renewal costs half the PQP, but the car cannot be renewed
+            again after that term.
+          </Typography.Paragraph>
+          <div className="flex flex-col items-start gap-2">
+            <SectionLink className="ml-0" href="/coe/premiums">
+              Premium trends
+            </SectionLink>
+            <SectionLink className="ml-0" href="/cars/parf">
+              PARF rebate calculator
+            </SectionLink>
+          </div>
+        </section>
+      </div>
+
+      <Hairline />
 
       <ReportSection
         caption={`Published PQP per category · ${term}-year renewal`}
@@ -280,7 +327,7 @@ export async function PQPReport({
         </ReportTable>
       </ReportSection>
 
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
+      <div>
         <ReportSection
           caption="What the price does not tell you"
           title="Renewing versus bidding"
@@ -301,31 +348,6 @@ export async function PQPReport({
             ))}
           </div>
         </ReportSection>
-
-        <ReportNote title="How the PQP is set">
-          <Typography.Paragraph>
-            LTA averages the closing premiums in that category over the last
-            three months, across both exercises, and publishes it as the rate
-            for the coming month. It therefore lags the market rather than
-            leading it.
-          </Typography.Paragraph>
-          <Typography.Paragraph>
-            A five-year renewal costs half the PQP, but the car cannot be
-            renewed again after that term.
-          </Typography.Paragraph>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/coe/premiums"
-          >
-            Premium trends →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/parf"
-          >
-            PARF rebate calculator →
-          </Link>
-        </ReportNote>
       </div>
 
       <UnreleasedFeature>
