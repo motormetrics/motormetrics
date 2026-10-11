@@ -1,18 +1,11 @@
 import { slugify } from "@motormetrics/utils/slugify";
-import {
-  TypeDetail,
-  type TypeDetailConfig,
-  typeDetailMeta,
-} from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
+import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
+import { FuelTypeReport } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/fuel-type-report";
 import { SITE_URL } from "@web/config";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { checkFuelTypeIfExist, getDistinctFuelTypes } from "@web/queries/cars";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
-
-const config: TypeDetailConfig = {
-  category: "fuel-types",
-};
 
 interface PageProps {
   params: Promise<{ type: string }>;
@@ -26,7 +19,7 @@ export async function generateMetadata({
 
   const result = await checkFuelTypeIfExist(type);
   const { title, description, canonical } = typeDetailMeta(
-    config.category,
+    "fuel-types",
     type,
     result?.fuelType,
   );
@@ -58,7 +51,5 @@ export async function generateStaticParams() {
 }
 
 export default function Page({ params, searchParams }: PageProps) {
-  return (
-    <TypeDetail config={config} params={params} searchParams={searchParams} />
-  );
+  return <FuelTypeReport params={params} searchParams={searchParams} />;
 }
