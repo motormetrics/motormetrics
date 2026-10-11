@@ -44,11 +44,11 @@ describe("ClassesTable", () => {
     expect(rowNames(screen)).toEqual(["Cars", "Taxis", "Buses"]);
   });
 
-  it("should mark the population column as sorted descending", async () => {
+  it("should mark the vehicles column as sorted descending", async () => {
     const screen = await renderTable();
 
     await expect
-      .element(screen.getByRole("columnheader", { name: "Population" }))
+      .element(screen.getByRole("columnheader", { name: "Vehicles" }))
       .toHaveAttribute("aria-sort", "descending");
   });
 
@@ -65,23 +65,23 @@ describe("ClassesTable", () => {
       .toBeVisible();
   });
 
-  it("should flip population to ascending on a second click", async () => {
+  it("should flip vehicles to ascending on a second click", async () => {
     const screen = await renderTable();
 
-    const header = screen.getByRole("columnheader", { name: "Population" });
+    const header = screen.getByRole("columnheader", { name: "Vehicles" });
     await header.click();
 
     await expect.element(header).toHaveAttribute("aria-sort", "ascending");
     expect(rowNames(screen)).toEqual(["Buses", "Taxis", "Cars"]);
     await expect
-      .element(screen.getByText(/Sorted by population, ascending\./))
+      .element(screen.getByText(/Sorted by vehicles, ascending\./))
       .toBeVisible();
   });
 
   it("should sort change descending on its first click", async () => {
     const screen = await renderTable();
 
-    const header = screen.getByRole("columnheader", { name: "Change" });
+    const header = screen.getByRole("columnheader", { name: "vs 2024" });
     await header.click();
 
     await expect.element(header).toHaveAttribute("aria-sort", "descending");
@@ -95,7 +95,7 @@ describe("ClassesTable", () => {
     const screen = await renderTable();
 
     await expect
-      .element(screen.getByText(/Sorted by population, descending\./))
+      .element(screen.getByText(/Sorted by vehicles, descending\./))
       .toBeVisible();
   });
 
