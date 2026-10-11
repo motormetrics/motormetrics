@@ -1,17 +1,25 @@
-import { Skeleton } from "@heroui/react";
+import { Skeleton, Typography } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import { CoeComparisonChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/coe-comparison-chart";
 import { MakeReport } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
 import { MakeSearch } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-search";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
+import { RegistrationsChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/registrations-chart";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { MonthMenu } from "@web/components/shared/month-menu";
-import { OverviewPage } from "@web/components/shared/overview";
+import {
+  Hairline,
+  OverviewPage,
+  SectionHead,
+  SectionLink,
+  SourceNote,
+} from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
-import { ReportSection } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
+import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import {
@@ -24,6 +32,10 @@ import { getMakeCoeComparison } from "@web/queries/cars/makes/coe-comparison";
 import { getMakeFromSlug } from "@web/queries/cars/makes/get-make-from-slug";
 import { getCarLogoMap } from "@web/queries/logos";
 import type { Make } from "@web/types";
+import {
+  formatChartMonth,
+  formatMonthLabel,
+} from "@web/utils/dates/format-month";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -144,19 +156,40 @@ export default function CarMakePage({
         </Suspense>
       </SectionErrorBoundary>
 
-      {/* The comp has no COE block. Kept because it is working functionality
-          rather than styling, and parked at the foot so it does not interrupt
-          the report above it. */}
-      <ReportSection
-        caption="Bars are monthly registrations; lines are the Category A and B premiums"
-        title="Registrations against COE premiums"
-      >
-        <SectionErrorBoundary title="COE comparison unavailable">
-          <Suspense fallback={<SkeletonCard className="h-[300px] w-full" />}>
-            <CarMakeCoeSection params={params} />
-          </Suspense>
-        </SectionErrorBoundary>
-      </ReportSection>
+      <Hairline />
+
+      <SectionErrorBoundary title="COE comparison unavailable">
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+          <CarMakeCoeSection params={params} />
+        </Suspense>
+      </SectionErrorBoundary>
+
+      <Hairline />
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
+        <div className="flex flex-col gap-2.5">
+          <Text.Paragraph eyebrow weight="semibold" color="muted" size="xs">
+            Reading a make page
+          </Text.Paragraph>
+          <Typography.Paragraph size="sm">
+            Registrations are counted by make as recorded at registration, so
+            rebadged and parallel-imported cars appear under the same name as
+            authorised-dealer stock.
+          </Typography.Paragraph>
+          <Typography.Paragraph size="sm">
+            LTA reports registrations by make, fuel type and vehicle type — not
+            by model, so there are no model-level figures anywhere on the site.
+          </Typography.Paragraph>
+        </div>
+        <div className="flex flex-wrap items-end gap-6 lg:justify-end">
+          <SectionLink className="ml-0" href="/cars/makes">
+            All makes
+          </SectionLink>
+          <SectionLink className="ml-0" href="/cars/fuel-types">
+            Fuel types
+          </SectionLink>
+        </div>
+      </div>
     </OverviewPage>
   );
 }
@@ -291,5 +324,64 @@ async function CarMakeCoeSection({ params }: Pick<PageProps, "params">) {
   const { exactMake } = await resolveMake(params);
   const coeComparison = await getMakeCoeComparison(exactMake);
 
-  return <CoeComparisonChart data={coeComparison} />;
+  const first = coeComparison[0];
+  const last = coeComparison.at(-1);
+  if (!first || !last) {
+    return null;
+  }
+
+  // Each month carries its label, and its year under the first month and
+  // every January, for both charts' axes.
+  const months = coeComparison.map(({ month }, index) => ({
+    label: formatChartMonth(month),
+    title: formatMonthLabel(month),
+    year: index === 0 || month.endsWith("-01") ? month.slice(0, 4) : "",
+  }));
+  const premiums = coeComparison.flatMap(
+    ({ categoryAPremium, categoryBPremium }) => [
+      categoryAPremium,
+      categoryBPremium,
+    ],
+  );
+
+  return (
+    <section className="flex min-w-0 flex-col gap-4">
+      <SectionHead
+        caption={`${formatMonthLabel(first.month)} to ${formatMonthLabel(last.month)} · ${exactMake} registrations, then Category A and B premiums on the same months`}
+        eyebrow="Context"
+        title="Registrations against COE premiums"
+      />
+      <RegistrationsChart
+        data={coeComparison.map(({ registrations }, index) => {
+          const isLatest = index === coeComparison.length - 1;
+          return {
+            ...months[index],
+            count: registrations,
+            earlier: isLatest ? 0 : registrations,
+            latest: isLatest ? registrations : 0,
+          };
+        })}
+        ticks={axisTicks(
+          coeComparison.map(({ registrations }) => registrations),
+          { zero: true },
+        )}
+      />
+      <SourceNote>
+        {exactMake} registrations by month, all fuel types.
+      </SourceNote>
+      <CoeComparisonChart
+        data={coeComparison.map(
+          ({ categoryAPremium, categoryBPremium }, index) => ({
+            ...months[index],
+            categoryA: categoryAPremium,
+            categoryB: categoryBPremium,
+          }),
+        )}
+        ticks={axisTicks(premiums, { zero: false })}
+      />
+      <SourceNote>
+        COE premium in S$ by month. The axis does not start at zero.
+      </SourceNote>
+    </section>
+  );
 }

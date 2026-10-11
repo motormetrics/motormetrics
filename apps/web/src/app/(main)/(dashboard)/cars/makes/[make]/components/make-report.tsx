@@ -22,11 +22,9 @@ import { MakeAvatar } from "@web/components/shared/make-avatar";
 import {
   Hairline,
   SectionHead,
-  SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
 import { Count } from "@web/components/shared/report-table";
-import { Text } from "@web/components/shared/text";
 import {
   getMakeCrossTab,
   getMakeTotalsInRange,
@@ -579,33 +577,6 @@ export async function MakeReport({
               All fuel types, whatever the fuel type switch is set to.
             </SourceNote>
           </section>
-        </div>
-      </div>
-
-      <Hairline />
-
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
-        <div className="flex flex-col gap-2.5">
-          <Text.Paragraph eyebrow weight="semibold" color="muted" size="xs">
-            Reading a make page
-          </Text.Paragraph>
-          <Typography.Paragraph size="sm">
-            Registrations are counted by make as recorded at registration, so
-            rebadged and parallel-imported cars appear under the same name as
-            authorised-dealer stock.
-          </Typography.Paragraph>
-          <Typography.Paragraph size="sm">
-            LTA reports registrations by make, fuel type and vehicle type — not
-            by model, so there are no model-level figures anywhere on the site.
-          </Typography.Paragraph>
-        </div>
-        <div className="flex flex-wrap items-end gap-6 lg:justify-end">
-          <SectionLink className="ml-0" href="/cars/makes">
-            All makes
-          </SectionLink>
-          <SectionLink className="ml-0" href="/cars/fuel-types">
-            Fuel types
-          </SectionLink>
         </div>
       </div>
     </>
