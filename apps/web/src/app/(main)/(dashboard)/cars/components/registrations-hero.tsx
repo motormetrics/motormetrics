@@ -1,8 +1,6 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
-import { DeltaChip } from "@web/components/shared/delta-chip";
-import { Headline } from "@web/components/shared/overview";
-import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import {
   getDimensionStats,
   getMonthlyRegistrationTotals,
@@ -19,13 +17,13 @@ import type { SearchParams } from "nuqs/server";
  */
 const HISTORY_LIMIT = 360;
 
-/** Months drawn in the headline sparkline. */
-const SPARK_MONTHS = 12;
+/** "+26.0%", with a true minus for a fall. */
+const formatSignedPercent = (ratio: number): string =>
+  `${ratio < 0 ? "−" : "+"}${Math.abs(ratio * 100).toFixed(1)}%`;
 
 /**
  * The page's opening figure: the month's registrations, the change on the
- * month before, the year to date and the leading make, over a sparkline of
- * the twelve months to the selected one.
+ * month before, the year to date and the leading make.
  */
 export async function RegistrationsHero({
   searchParams,
@@ -47,57 +45,43 @@ export async function RegistrationsHero({
   const current = history[selectedIndex];
   const previous = history.at(-2);
   const previousTotal = previous?.total ?? 0;
-  const changeRatio =
-    previousTotal > 0 ? (current.total - previousTotal) / previousTotal : 0;
+  const difference = current.total - previousTotal;
 
   const year = month.slice(0, 4);
   const yearToDate = history
     .filter((row) => row.month.startsWith(year))
     .reduce((total, row) => total + row.total, 0);
-
-  const series = history.slice(-SPARK_MONTHS).map((row) => ({
-    label: formatMonthLabel(row.month),
-    value: row.total,
-  }));
   const leader = makeStats[0];
 
   return (
-    <div className="flex flex-col gap-[18px]">
-      <Headline
-        caption={
-          <>
-            vs{" "}
-            {previous ? formatMonthName(previous.month) : "the previous month"}{" "}
-            ·{" "}
-            <NumberValue
-              locale="en-SG"
-              maximumFractionDigits={0}
-              value={yearToDate}
-            />{" "}
-            year to date
-            {leader ? (
-              <>
-                {" · "}
-                {leader.name} leads with {leader.share.toFixed(1)}%
-              </>
-            ) : null}
-          </>
-        }
-        delta={<DeltaChip value={changeRatio * 100} />}
-        label="New car registrations"
-        value={
-          <NumberValue
-            locale="en-SG"
-            maximumFractionDigits={0}
-            value={current.total}
-          />
-        }
-      />
-      <SparklineChart
-        data={series}
-        name="Registrations"
-        title={`Monthly registrations over the ${series.length} months to ${formatMonthLabel(month)}`}
-      />
+    <div className="flex min-w-0 flex-col gap-3">
+      <Typography.Paragraph color="muted" size="xs" weight="semibold">
+        New cars registered in {formatMonthLabel(month)}
+      </Typography.Paragraph>
+      <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
+        <NumberValue
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={current.total}
+        />
+      </span>
+      {previous && previousTotal > 0 ? (
+        <Typography.Paragraph className="tabular-nums" color="muted">
+          <span className="font-semibold text-foreground">
+            {formatSignedPercent(difference / previousTotal)}
+          </span>{" "}
+          ({difference < 0 ? "−" : "+"}
+          {Math.abs(difference).toLocaleString("en-SG")}) vs{" "}
+          {formatMonthName(previous.month)} at{" "}
+          {previousTotal.toLocaleString("en-SG")}
+        </Typography.Paragraph>
+      ) : null}
+      <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
+        {yearToDate.toLocaleString("en-SG")} so far in {year}
+        {leader
+          ? ` · ${leader.name} leads with ${leader.share.toFixed(1)}%`
+          : null}
+      </Typography.Paragraph>
     </div>
   );
 }
