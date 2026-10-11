@@ -7,10 +7,12 @@ import {
   CATEGORY_DESCRIPTIONS,
   COE_CATEGORIES,
   changeRatio,
+  type ExercisePremium,
   formatExercise,
   formatMonth,
   formatPremiumChange,
   premiumAxisTicks,
+  premiumRangeStats,
   successRate,
   toCategory,
   toCategoryKey,
@@ -32,13 +34,12 @@ import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import {
   Hairline,
   SectionHead,
+  SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
-import { ReportNote, ReportSection } from "@web/components/shared/report";
 import { Text } from "@web/components/shared/text";
 import { getCategoryExercises, getExercisePair } from "@web/queries/coe";
 import { formatMonthShortName } from "@web/utils/dates/format-month";
-import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
 /** The comp lists a year of exercises under the chart. */
@@ -65,7 +66,8 @@ const TICK_MONTHS: Record<PremiumRange, number> = {
 
 /**
  * One band of the premium-range block: where a window's low and high sit on a
- * track scaled to the category's all-time high.
+ * track from $0 to the category's all-time high, with the exercise each was
+ * set in.
  */
 function PremiumRangeBar({
   high,
@@ -73,32 +75,44 @@ function PremiumRangeBar({
   low,
   scale,
 }: {
-  high: number;
+  high: ExercisePremium;
   label: string;
-  low: number;
+  low: ExercisePremium;
   scale: number;
 }) {
   const ceiling = scale || 1;
-  const left = Math.min((low / ceiling) * 100, 100);
-  const width = Math.max(((high - low) / ceiling) * 100, 2);
+  const left = Math.min((low.premium / ceiling) * 100, 100);
+  const width = Math.max(((high.premium - low.premium) / ceiling) * 100, 1);
 
   return (
-    <div className="flex flex-col gap-2.5">
-      <div className="flex items-baseline gap-4">
-        <span className="font-bold text-base text-foreground">{label}</span>
-        <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
-          spread {formatCurrency(high - low)}
-        </span>
+    <div className="flex flex-col gap-2">
+      <div className="flex items-baseline gap-3">
+        <span className="font-semibold text-sm">{label}</span>
+        <SourceNote className="ml-auto whitespace-nowrap tabular-nums">
+          spread {formatCurrency(high.premium - low.premium)}
+        </SourceNote>
       </div>
-      <div className="relative h-3 rounded-full bg-surface-secondary">
+      <div className="relative h-3 border-border border-l bg-surface-secondary">
         <span
-          className="absolute inset-y-0 rounded-full bg-chart-1"
+          className="absolute inset-y-0 bg-chart-1"
           style={{ left: `${left.toFixed(1)}%`, width: `${width.toFixed(1)}%` }}
         />
       </div>
-      <div className="flex font-bold text-muted-strong text-sm tabular-nums">
-        <span>{formatCurrency(low)}</span>
-        <span className="ml-auto">{formatCurrency(high)}</span>
+      <div className="flex flex-wrap gap-3 text-muted-strong text-sm tabular-nums">
+        <span>
+          Low{" "}
+          <span className="font-semibold text-foreground">
+            {formatCurrency(low.premium)}
+          </span>{" "}
+          <span className="text-muted text-xs">{exerciseStamp(low)}</span>
+        </span>
+        <span className="ml-auto text-right">
+          High{" "}
+          <span className="font-semibold text-foreground">
+            {formatCurrency(high.premium)}
+          </span>{" "}
+          <span className="text-muted text-xs">{exerciseStamp(high)}</span>
+        </span>
       </div>
     </div>
   );
@@ -183,7 +197,10 @@ export async function PremiumsReport({
 
   const allPremiums = allExercises.map(({ premium }) => premium);
   const allTimeHigh = allPremiums.length ? Math.max(...allPremiums) : 0;
-  const allTimeLow = allPremiums.length ? Math.min(...allPremiums) : 0;
+  const yearRange = premiumRangeStats(
+    history.filter(({ month }) => month.startsWith(`${year}-`)),
+  );
+  const allTimeRange = premiumRangeStats(allExercises);
 
   const currentRows = new Map(
     current.rows.map((row) => [row.vehicleClass, row]),
@@ -410,47 +427,62 @@ export async function PremiumsReport({
 
       <Hairline />
 
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
-        <ReportSection title="Premium range">
+      <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-7">
+          <SectionHead
+            caption="Lowest to highest closing premium · shared scale from $0"
+            eyebrow="Range"
+            title={`${category} premium range`}
+          />
           <div className="flex flex-col gap-6">
-            <PremiumRangeBar
-              high={yearHigh}
-              label={`${year} year to date`}
-              low={yearLow}
-              scale={allTimeHigh}
-            />
-            <PremiumRangeBar
-              high={allTimeHigh}
-              label="All-time"
-              low={allTimeLow}
-              scale={allTimeHigh}
-            />
+            {yearRange ? (
+              <PremiumRangeBar
+                high={yearRange.high}
+                label={`${year} year to date`}
+                low={yearRange.low}
+                scale={allTimeHigh}
+              />
+            ) : null}
+            {allTimeRange ? (
+              <PremiumRangeBar
+                high={allTimeRange.high}
+                label="All-time"
+                low={allTimeRange.low}
+                scale={allTimeHigh}
+              />
+            ) : null}
           </div>
-        </ReportSection>
+          <SourceNote>
+            All-time covers every exercise
+            {allTimeRange
+              ? ` from ${formatMonth(allTimeRange.first.month)}`
+              : ""}
+            . No exercises were held from April to June 2020.
+          </SourceNote>
+        </section>
 
-        <ReportNote title="How to read this">
-          <Typography.Paragraph>
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-5">
+          <SectionHead
+            eyebrow="Reading the numbers"
+            title="How premiums are set"
+          />
+          <Typography.Paragraph className="text-muted-strong">
             A premium is the price of the last successful bid in an exercise, so
-            it is set by demand rather than announced in advance. A decrease is
-            shown in green.
+            it is set by demand rather than announced in advance.
           </Typography.Paragraph>
-          <Typography.Paragraph>
-            Renewing an existing COE uses the PQP instead — the three-month
+          <Typography.Paragraph className="text-muted-strong">
+            Renewing an existing COE uses the PQP instead: the three-month
             moving average of premiums in that category.
           </Typography.Paragraph>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/coe/pqp"
-          >
-            PQP rates in full →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/coe/results"
-          >
-            Bidding results by exercise →
-          </Link>
-        </ReportNote>
+          <div className="flex flex-col items-start gap-2">
+            <SectionLink className="ml-0" href="/coe/pqp">
+              PQP rates
+            </SectionLink>
+            <SectionLink className="ml-0" href="/coe/results">
+              Results by exercise
+            </SectionLink>
+          </div>
+        </section>
       </div>
     </>
   );
