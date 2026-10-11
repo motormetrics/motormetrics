@@ -1,8 +1,9 @@
 import { Skeleton, Typography } from "@heroui/react";
-import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { formatOrdinal } from "@motormetrics/utils/format-ordinal";
 import { slugify } from "@motormetrics/utils/slugify";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
+import { MakeTable } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/make-table";
+import { MonthTable } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/month-table";
 import {
   DEFAULT_PERIOD,
   PERIOD_LABELS,
@@ -27,7 +28,6 @@ import { PageHead } from "@web/components/shared/page-head";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
-  DeltaText,
   ReportCell,
   ReportRow,
   ReportTable,
@@ -44,6 +44,7 @@ import {
   getTypeMakesInWindow,
   getTypeMonthlySeries,
 } from "@web/queries/cars/type-detail";
+import { getCarLogoMap } from "@web/queries/logos";
 import { percentageChange } from "@web/utils/change-ratio";
 import {
   formatChartMonth,
@@ -210,9 +211,10 @@ async function VehicleTypeContent({
     paramsPromise,
     loadVehicleTypeSearchParams(searchParamsPromise),
   ]);
-  const [{ month }, value] = await Promise.all([
+  const [{ month }, value, logoUrlBySlug] = await Promise.all([
     getMonthOrLatest(parsedMonth, "cars"),
     resolveVehicleType(type),
+    getCarLogoMap(),
   ]);
   if (!value) {
     notFound();
@@ -251,8 +253,13 @@ async function VehicleTypeContent({
   const previousByMake = new Map(
     previousMakes.map((row) => [row.make, row.count]),
   );
-  const makeLeader = makes[0]?.count ?? 0;
-  const listedMakes = makes.slice(0, MAKE_LIMIT);
+  const makeRows = makes.slice(0, MAKE_LIMIT).map(({ count, make }, index) => ({
+    change: percentageChange(count, previousByMake.get(make) ?? 0),
+    count,
+    logoUrl: logoUrlBySlug[slugify(make)] ?? null,
+    make,
+    rank: index + 1,
+  }));
 
   // The busiest month in the charted year, the latest of any tie.
   const bestMonth = series.reduce<(typeof series)[number] | undefined>(
@@ -288,11 +295,6 @@ async function VehicleTypeContent({
       value: (bestMonth?.count ?? 0).toLocaleString("en-SG"),
     },
   ];
-
-  const monthRows = [...series].reverse();
-  const monthShareLeader = series.length
-    ? Math.max(...series.map(({ count, total }) => share(count, total)))
-    : 0;
 
   const { title, description, canonical } = typeDetailMeta(
     "vehicle-types",
@@ -413,108 +415,42 @@ async function VehicleTypeContent({
 
       <Hairline />
 
-      <ReportSection
-        caption={`${periodLabel}${makes.length > MAKE_LIMIT ? ` · top ${MAKE_LIMIT} of ${makes.length} makes` : ""}`}
-        title={`${displayName} by make`}
-      >
-        <ReportTable
-          columns={[
-            { label: "#", width: "60px" },
-            { label: "Make" },
-            { align: "end", label: "Registrations" },
-            { align: "end", label: "Share of type" },
-            { label: "", width: "280px" },
-            { align: "end", label: "Vs a year earlier", width: "140px" },
-          ]}
-        >
-          {listedMakes.map(({ count, make }, index) => (
-            <ReportRow key={make}>
-              <ReportCell className="font-bold text-muted text-sm">
-                {String(index + 1).padStart(2, "0")}
-              </ReportCell>
-              <ReportCell className="font-bold text-base">
-                <Link
-                  className="hover:text-accent-strong"
-                  href={`/cars/makes/${slugify(make)}`}
-                >
-                  {make}
-                </Link>
-              </ReportCell>
-              <ReportCell align="end" className="font-extrabold text-lg">
-                <Count value={count} />
-              </ReportCell>
-              <ReportCell align="end" className="font-semibold text-muted">
-                {share(count, typeTotal).toFixed(1)}%
-              </ReportCell>
-              <ReportCell>
-                <ShareBar
-                  isLeader={index === 0}
-                  share={share(count, makeLeader)}
-                />
-              </ReportCell>
-              <ReportCell align="end">
-                <DeltaText
-                  value={percentageChange(count, previousByMake.get(make) ?? 0)}
-                />
-              </ReportCell>
-            </ReportRow>
-          ))}
-        </ReportTable>
-      </ReportSection>
+      <section className="flex min-w-0 flex-col gap-4">
+        <SectionHead
+          caption={`${periodLabel}${makes.length > MAKE_LIMIT ? ` · top ${MAKE_LIMIT} of ${makes.length} makes` : ""}`}
+          eyebrow="Makes"
+          title={`${displayName} by make`}
+        />
+        <MakeTable
+          rows={makeRows}
+          total={typeTotal}
+          vehicleType={displayName}
+        />
+        <SourceNote>
+          Share is of {typeTotal.toLocaleString("en-SG")} {displayName}{" "}
+          registrations in the period. Change compares against the same period a
+          year earlier. Colour is not used for direction.
+        </SourceNote>
+      </section>
 
-      <ReportSection
-        caption={`${displayName} against the whole market`}
-        title="Month by month"
-      >
-        <ReportTable
-          columns={[
-            { label: "Month" },
-            { align: "end", label: displayName },
-            { align: "end", label: "All cars" },
-            { align: "end", label: "Share" },
-            { label: "", width: "280px" },
-            { align: "end", label: "Vs last month", width: "130px" },
-          ]}
-        >
-          {monthRows.map(({ count, month: rowMonth, total }, index) => {
-            // `monthRows` runs newest first, so the month before this one is
-            // the next entry along.
-            const previousCount = monthRows[index + 1]?.count;
+      <Hairline />
 
-            return (
-              <ReportRow isActive={rowMonth === month} key={rowMonth}>
-                <ReportCell className="font-bold">
-                  {formatDateToMonthYear(rowMonth)}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold text-lg">
-                  <Count value={count} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  <Count value={total} />
-                </ReportCell>
-                <ReportCell
-                  align="end"
-                  className="font-bold text-accent-strong"
-                >
-                  {share(count, total).toFixed(1)}%
-                </ReportCell>
-                <ReportCell>
-                  <ShareBar
-                    share={share(share(count, total), monthShareLeader || 1)}
-                  />
-                </ReportCell>
-                <ReportCell align="end">
-                  {previousCount === undefined ? (
-                    <span className="font-bold text-muted">—</span>
-                  ) : (
-                    <DeltaText value={percentageChange(count, previousCount)} />
-                  )}
-                </ReportCell>
-              </ReportRow>
-            );
-          })}
-        </ReportTable>
-      </ReportSection>
+      <section className="flex min-w-0 flex-col gap-4">
+        <SectionHead
+          caption={`${periodRange("12m", month)}, newest first`}
+          eyebrow="Month by month"
+          title={`${displayName} against the whole market`}
+        />
+        <MonthTable
+          rows={[...series].reverse()}
+          selectedMonth={month}
+          vehicleType={displayName}
+        />
+        <SourceNote>
+          Share is {displayName} registrations as a share of all new cars that
+          month.
+        </SourceNote>
+      </section>
 
       <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
         <div className="flex flex-col gap-10">
