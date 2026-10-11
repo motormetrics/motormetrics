@@ -136,7 +136,7 @@ export default function HomePage() {
       <StructuredData data={webSiteSchema} />
       <OrganizationStructuredData />
 
-      <OverviewPage className="gap-10 max-[720px]:gap-7">
+      <OverviewPage className="gap-10 max-md:gap-7">
         <CategoryMergerCallout />
 
         <div className="flex flex-col gap-7">
@@ -151,7 +151,7 @@ export default function HomePage() {
           />
 
           <SectionErrorBoundary title="Headline figures unavailable">
-            <Suspense fallback={<Skeleton className="h-[188px] w-full" />}>
+            <Suspense fallback={<Skeleton className="h-48 w-full" />}>
               <KpiStrip />
             </Suspense>
           </SectionErrorBoundary>

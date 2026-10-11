@@ -47,7 +47,7 @@ interface KpiProps {
 
 /**
  * One cell of the strip: label, figure, change on the previous month, a
- * 12-month sparkline and a muted note. Four across above 900px, two-by-two
+ * 12-month sparkline and a muted note. Four across from lg, two-by-two
  * below; the rules between cells follow the layout.
  */
 function Kpi({
@@ -60,11 +60,11 @@ function Kpi({
   versus,
 }: KpiProps) {
   return (
-    <div className="flex min-w-0 flex-col gap-1.5 border-separator px-3 pt-3.5 pb-3 first:pl-0 max-[900px]:nth-[n+3]:border-t max-[900px]:even:border-l max-[900px]:odd:pl-0 min-[901px]:not-first:border-l min-[721px]:px-5 min-[721px]:pt-[18px] min-[721px]:pb-4">
+    <div className="flex min-w-0 flex-col gap-1.5 border-separator px-3 pt-3.5 pb-3 first:pl-0 max-lg:nth-[n+3]:border-t max-lg:even:border-l max-lg:odd:pl-0 md:px-5 md:pt-4.5 md:pb-4 lg:not-first:border-l">
       <Typography.Paragraph weight="semibold" color="muted" size="xs">
         {label}
       </Typography.Paragraph>
-      <span className="font-extrabold text-[1.75rem] tabular-nums leading-none tracking-[-0.03em] min-[1101px]:text-[2.5rem] min-[721px]:text-[2.125rem]">
+      <span className="font-extrabold text-3xl tabular-nums leading-none tracking-tight md:text-4xl">
         {value}
       </span>
       <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
@@ -281,7 +281,7 @@ export async function KpiStrip() {
 
   return (
     <div className="flex flex-col gap-2.5">
-      <div className="grid grid-cols-2 border-separator border-y min-[901px]:grid-cols-4">
+      <div className="grid grid-cols-2 border-separator border-y lg:grid-cols-4">
         {kpis.map((kpi) => (
           <Kpi key={kpi.label} {...kpi} />
         ))}
