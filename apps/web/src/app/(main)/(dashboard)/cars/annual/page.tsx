@@ -1,7 +1,7 @@
 import { Skeleton } from "@heroui/react";
 import { ClassesTable } from "@web/app/(main)/(dashboard)/cars/annual/components/classes-table";
 import { ElectricFleet } from "@web/app/(main)/(dashboard)/cars/annual/components/electric-fleet";
-import { FuelMixRing } from "@web/app/(main)/(dashboard)/cars/annual/components/fuel-mix-ring";
+import { FuelSplit } from "@web/app/(main)/(dashboard)/cars/annual/components/fuel-split";
 import { PopulationByYear } from "@web/app/(main)/(dashboard)/cars/annual/components/population-by-year";
 import { PopulationHeadline } from "@web/app/(main)/(dashboard)/cars/annual/components/population-headline";
 import {
@@ -63,19 +63,19 @@ const structuredData: WithContext<WebPage> = {
 function PopulationSkeleton() {
   return (
     <>
-      <OverviewGrid>
-        <div className="flex flex-col gap-4">
-          <Skeleton className="h-6 w-40" />
+      <div className="grid grid-cols-1 items-end gap-10 lg:grid-cols-2 lg:gap-14">
+        <div className="flex flex-col gap-3">
+          <Skeleton className="h-4 w-32" />
           <Skeleton className="h-16 w-72" />
           <Skeleton className="h-5 w-full max-w-md" />
-          <Skeleton className="h-[150px] w-full" />
+          <Skeleton className="h-5 w-80" />
         </div>
-        <div className="flex flex-col gap-4">
-          <Skeleton className="h-6 w-24" />
-          <Skeleton className="h-5 w-40" />
-          <Skeleton className="size-[172px] rounded-full" />
+        <div className="flex flex-col gap-3">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-56 w-full" />
         </div>
-      </OverviewGrid>
+      </div>
       <Hairline />
       <Skeleton className="h-[320px] w-full" />
       <Hairline />
@@ -185,17 +185,18 @@ async function PopulationSections() {
     );
   }
 
+  const classes = rankClasses(data.entities);
+
   return (
     <>
-      <OverviewGrid>
+      <div className="grid grid-cols-1 items-end gap-10 lg:grid-cols-2 lg:gap-14">
         <PopulationHeadline
+          allVehicles={classes.reduce((sum, row) => sum + row.population, 0)}
           entity={cars}
           previousYear={data.previousYear}
-          year={data.year}
-          years={data.years}
         />
-        <FuelMixRing entity={cars} year={data.year} />
-      </OverviewGrid>
+        <FuelSplit entity={cars} year={data.year} />
+      </div>
 
       <Hairline />
 
@@ -205,7 +206,7 @@ async function PopulationSections() {
 
       <ClassesTable
         previousYear={data.previousYear}
-        rows={rankClasses(data.entities)}
+        rows={classes}
         year={data.year}
       />
 
