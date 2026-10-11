@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/components/category-badge";
 import {
@@ -15,21 +16,19 @@ import {
   summariseByYear,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
 import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
 import { ResultsChart } from "@web/app/(main)/(dashboard)/coe/results/components/results-chart";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params";
-import {
-  ReportHeadline,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
+import { ReportSection } from "@web/components/shared/report";
 import {
   Count,
   ReportCell,
   ReportRow,
   ReportTable,
 } from "@web/components/shared/report-table";
+import { Text } from "@web/components/shared/text";
 import { getCoeResults, getCoeResultsByPeriod } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
 import type { SearchParams } from "nuqs/server";
@@ -89,7 +88,27 @@ async function loadExercises(searchParams: Promise<SearchParams>) {
   };
 }
 
-/** The bids-per-quota figure and the premiums beside it. */
+/** Names the exercise the page leads with, and its source. */
+export async function LatestExerciseSub({ searchParams }: RegionProps) {
+  const { exercises } = await loadExercises(searchParams);
+  const latest = exercises.at(-1);
+
+  return latest ? (
+    <>
+      Latest:{" "}
+      <span className="font-semibold text-foreground">
+        {formatExercise(latest)}
+      </span>{" "}
+      · Source: LTA via DataMall
+    </>
+  ) : null;
+}
+
+/**
+ * The opening block: bids per quota across every category in the latest
+ * exercise, and a ruled grid of the car premiums and the quota beside it.
+ * Stacks into one column below lg.
+ */
 export async function ResultsHeadline({ searchParams }: RegionProps) {
   const { exercises } = await loadExercises(searchParams);
 
@@ -105,39 +124,50 @@ export async function ResultsHeadline({ searchParams }: RegionProps) {
   const bidsPerQuota = totalQuota > 0 ? totalBids / totalQuota : 0;
 
   return (
-    <ReportHeadline
-      delta={
-        <span className="inline-flex items-center whitespace-nowrap rounded-full bg-accent-soft-2 px-4 py-2 font-bold text-accent-strong text-sm">
-          bids per quota
+    <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
+      <div className="flex min-w-0 flex-col gap-3">
+        <Text.Paragraph tone="strong">
+          <span className="font-semibold text-accent-strong">
+            Bids per quota
+          </span>{" "}
+          · all five categories
+        </Text.Paragraph>
+        <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
+          {bidsPerQuota.toFixed(2)}×
         </span>
-      }
-      label={`Latest exercise · ${formatMonth(latest.month)} · ${biddingOrdinal(latest.biddingNo)} bidding`}
-      stats={
-        <>
-          {HIGHLIGHT_CATEGORIES.map((category) => {
-            const premium = premiumOf(latest, category) ?? 0;
-            return (
-              <ReportStat
-                key={category}
-                label={`${category} premium`}
-                note={movementNote(
-                  premium,
-                  previous && premiumOf(previous, category),
-                )}
-                value={formatCurrency(premium)}
-              />
-            );
-          })}
-          <ReportStat
-            label="Quota"
-            note="this exercise"
-            value={<Count value={totalQuota} />}
-          />
-        </>
-      }
-      sub={`${totalBids.toLocaleString("en-SG")} bids against a quota of ${totalQuota.toLocaleString("en-SG")} across all five categories`}
-      value={`${bidsPerQuota.toFixed(2)}×`}
-    />
+        <Typography.Paragraph className="tabular-nums" color="muted">
+          <span className="font-semibold text-foreground">
+            {totalBids.toLocaleString("en-SG")}
+          </span>{" "}
+          bids against a quota of{" "}
+          <span className="font-semibold text-foreground">
+            {totalQuota.toLocaleString("en-SG")}
+          </span>
+        </Typography.Paragraph>
+      </div>
+
+      <div className="grid grid-cols-2 border-separator border-t">
+        {HIGHLIGHT_CATEGORIES.map((category) => {
+          const premium = premiumOf(latest, category) ?? 0;
+          return (
+            <StatCell
+              key={category}
+              label={`${category} premium`}
+              note={movementNote(
+                premium,
+                previous && premiumOf(previous, category),
+              )}
+              value={formatCurrency(premium)}
+            />
+          );
+        })}
+        <StatCell
+          label="Quota"
+          note="this exercise"
+          value={totalQuota.toLocaleString("en-SG")}
+        />
+      </div>
+    </div>
   );
 }
 

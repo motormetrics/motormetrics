@@ -4,6 +4,7 @@ import {
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
+  LatestExerciseSub,
   PremiumsByYearRows,
   QuotaAndDemand,
   RecordHighRows,
@@ -13,9 +14,9 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-report";
 import { SeriesFilter } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { OverviewPage } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
 import {
-  Report,
   ReportFilterBar,
   ReportNote,
   ReportSection,
@@ -117,24 +118,21 @@ function PillsSkeleton() {
   ));
 }
 
-/** Mirrors `ReportHeadline` — the label, the oversized figure, and the stat cells. */
+/** Mirrors `ResultsHeadline`: the figure on the left, the 2×2 stat grid. */
 function HeadlineSkeleton() {
   return (
-    <div className="flex flex-wrap items-end gap-12">
-      <div className="flex min-w-0 flex-col gap-2">
-        <Skeleton className="h-6 w-72" />
-        <Skeleton className="h-16 w-56 lg:h-20" />
-        <Skeleton className="h-5 w-80" />
+    <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
+      <div className="flex flex-col gap-3">
+        <Skeleton className="h-6 w-56" />
+        <Skeleton className="h-14 w-48" />
+        <Skeleton className="h-5 w-72" />
       </div>
-      <div className="ml-auto grid w-full grid-cols-2 gap-x-6 gap-y-5 sm:flex sm:w-auto sm:flex-wrap sm:gap-0">
+      <div className="grid grid-cols-2 gap-px">
         {["cat-a", "cat-b", "cat-e", "quota"].map((key) => (
-          <div
-            className="flex flex-col gap-1.5 border-border sm:border-l sm:px-6"
-            key={key}
-          >
-            <Skeleton className="h-5 w-28" />
+          <div className="flex flex-col gap-1.5 py-3.5" key={key}>
+            <Skeleton className="h-4 w-28" />
             <Skeleton className="h-7 w-24" />
-            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 w-36" />
           </div>
         ))}
       </div>
@@ -178,7 +176,7 @@ function QuotaSkeleton() {
 
 export default function COEResultsPage({ searchParams }: PageProps) {
   return (
-    <Report>
+    <OverviewPage className="gap-10 max-md:gap-7">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -198,7 +196,12 @@ export default function COEResultsPage({ searchParams }: PageProps) {
       />
 
       <PageHead
-        description="Closing premiums for every category in every exercise, with yearly averages, record highs, and the quota and bids behind each result."
+        eyebrow="Certificate of Entitlement"
+        sub={
+          <Suspense fallback={<Skeleton className="h-5 w-80" />}>
+            <LatestExerciseSub searchParams={searchParams} />
+          </Suspense>
+        }
         title="COE price history and trends"
       />
 
@@ -321,6 +324,6 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           </Link>
         </ReportNote>
       </div>
-    </Report>
+    </OverviewPage>
   );
 }
