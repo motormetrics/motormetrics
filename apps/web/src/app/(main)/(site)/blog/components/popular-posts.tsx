@@ -1,7 +1,6 @@
 import { Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
 import { getCategoryConfig } from "@web/app/(main)/(site)/blog/components/post/utils";
-import { SurfaceCard } from "@web/components/shared/bento";
 import Link from "next/link";
 
 interface PostWithViews extends SelectPost {
@@ -14,10 +13,8 @@ const views = new Intl.NumberFormat("en-SG", {
 });
 
 /**
- * The comp pairs the featured panel with a white "at a glance" card of
- * headline figures. Those figures belong to the dashboard, not the blog, so
- * the card carries the posts readers open most instead — the one signal the
- * blog owns.
+ * The posts readers open most, as a ruled list under the featured card — the
+ * one signal the blog owns that the comp has no slot for.
  */
 export function PopularPosts({ posts }: { posts: PostWithViews[] }) {
   if (posts.length === 0) {
@@ -25,28 +22,28 @@ export function PopularPosts({ posts }: { posts: PostWithViews[] }) {
   }
 
   return (
-    <SurfaceCard className="gap-5">
-      <Typography.Paragraph weight="semibold" color="muted">
+    <section className="flex flex-col">
+      <Typography.Heading
+        className="border-border border-b pb-2 font-semibold text-muted text-xs"
+        level={2}
+      >
         Most read
-      </Typography.Paragraph>
-      <ol className="flex flex-col gap-4">
+      </Typography.Heading>
+      <ol className="flex flex-col">
         {posts.map((post, index) => (
-          <li
-            className="border-border border-t pt-4 first:border-t-0 first:pt-0"
-            key={post.id}
-          >
+          <li className="border-separator border-b" key={post.id}>
             <Link
-              className="group flex items-baseline gap-4 text-foreground no-underline"
+              className="group flex items-baseline gap-4 py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
               href={`/blog/${post.slug}`}
             >
-              <span className="w-6 shrink-0 font-extrabold text-2xl text-muted tabular-nums leading-none tracking-tight">
+              <span className="w-5 shrink-0 text-muted text-sm tabular-nums">
                 {index + 1}
               </span>
-              <span className="flex min-w-0 flex-col gap-1">
-                <span className="line-clamp-2 font-bold text-base leading-snug transition-colors group-hover:text-accent-strong">
+              <span className="flex min-w-0 flex-1 flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-4">
+                <span className="min-w-0 flex-1 font-semibold text-sm transition-colors group-hover:text-accent-strong">
                   {post.title}
                 </span>
-                <span className="font-semibold text-muted text-sm">
+                <span className="shrink-0 text-muted text-xs tabular-nums">
                   {getCategoryConfig(post).label} ·{" "}
                   {views.format(post.viewCount)} views
                 </span>
@@ -55,6 +52,6 @@ export function PopularPosts({ posts }: { posts: PostWithViews[] }) {
           </li>
         ))}
       </ol>
-    </SurfaceCard>
+    </section>
   );
 }
