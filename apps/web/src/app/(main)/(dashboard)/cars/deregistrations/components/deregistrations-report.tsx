@@ -7,21 +7,16 @@ import {
   DeregistrationsChart,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-chart";
 import { DeregistrationsHeadline } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-headline";
+import { MonthTable } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/month-table";
 import { stackedPoints } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/stacked-points";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import {
   Hairline,
   SectionHead,
+  SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
-import { ReportNote, ReportSection } from "@web/components/shared/report";
-import {
-  Count,
-  ReportCell,
-  ReportRow,
-  ReportTable,
-} from "@web/components/shared/report-table";
 import { getDeregistrations } from "@web/queries/deregistrations";
 import {
   formatMonthLabel,
@@ -29,7 +24,6 @@ import {
 } from "@web/utils/dates/format-month";
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
-import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
 /** How far back the trend chart and the month-by-month table reach. */
@@ -247,67 +241,51 @@ export async function DeregistrationsReport({
         </SourceNote>
       </section>
 
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
-        <ReportSection
-          caption={`${SERIES_MONTHS} months to ${formattedMonth}`}
-          title="Month by month"
-        >
-          <ReportTable
-            columns={[
-              { label: "Month" },
-              { align: "end", label: "Total" },
-              ...CATEGORIES.map(({ label }) => ({
-                align: "end" as const,
-                label,
-              })),
-            ]}
-          >
-            {[...monthlyRows].reverse().map((row) => (
-              <ReportRow isActive={row.month === month} key={row.month}>
-                <ReportCell className="font-bold text-base">
-                  {formatDateToMonthYear(row.month)}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold text-base">
-                  <Count value={row.total} />
-                </ReportCell>
-                {row.counts.map((count, index) => (
-                  <ReportCell
-                    align="end"
-                    className="font-semibold text-muted"
-                    key={CATEGORIES[index].name}
-                  >
-                    <Count value={count} />
-                  </ReportCell>
-                ))}
-              </ReportRow>
-            ))}
-          </ReportTable>
-        </ReportSection>
+      <Hairline />
 
-        <ReportNote title="What a deregistration is">
-          <Typography.Paragraph>
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${SERIES_MONTHS} months to ${formatMonthLabel(month)}`}
+          eyebrow="Deregistrations"
+          title="Month by month"
+        />
+        <MonthTable rows={[...monthlyRows].reverse()} selectedMonth={month} />
+        <SourceNote>
+          Exempt is vehicles exempted from the Vehicle Quota System. Narrower
+          screens show fewer category columns; the total always includes every
+          category.
+        </SourceNote>
+      </section>
+
+      <Hairline />
+
+      <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-14">
+        <section className="flex flex-col gap-4">
+          <SectionHead
+            eyebrow="About the data"
+            title="What a deregistration is"
+          />
+          <Typography.Paragraph className="max-w-prose text-muted-strong">
             A vehicle is deregistered when it is scrapped or exported, which is
             what releases its COE back into the quota. Deregistrations in one
             month therefore set much of the supply bid for in later exercises.
           </Typography.Paragraph>
-          <Typography.Paragraph>
+        </section>
+        <div className="flex flex-col gap-4 lg:pt-1">
+          <Typography.Paragraph className="max-w-prose text-muted-strong">
             The categories are the COE ones the vehicle held, so a
             deregistration is counted against the quota it returns to rather
             than the body type of the car.
           </Typography.Paragraph>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/coe/results"
-          >
-            COE bidding results →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/registrations"
-          >
-            New registrations →
-          </Link>
-        </ReportNote>
+          <div className="flex flex-wrap gap-5">
+            <SectionLink className="ml-0" href="/coe/results">
+              COE bidding results
+            </SectionLink>
+            <SectionLink className="ml-0" href="/cars/registrations">
+              New registrations
+            </SectionLink>
+          </div>
+        </div>
       </div>
     </>
   );
