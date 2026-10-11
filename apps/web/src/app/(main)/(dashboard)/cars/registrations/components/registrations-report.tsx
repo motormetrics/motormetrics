@@ -5,17 +5,12 @@ import {
   FuelTypeTabs,
   RangeTabs,
 } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
+import { RegistrationsHeadline } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-headline";
 import {
   loadSearchParams,
   RANGE_MONTHS,
 } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
-import { DeltaChip } from "@web/components/shared/delta-chip";
-import {
-  ReportHeadline,
-  ReportNote,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
+import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
   DeltaText,
@@ -37,7 +32,10 @@ import {
   getYearlyRegistrations,
 } from "@web/queries/cars/yearly-statistics";
 import { percentageChange } from "@web/utils/change-ratio";
-import { formatChartMonth } from "@web/utils/dates/format-month";
+import {
+  formatChartMonth,
+  formatMonthLabel,
+} from "@web/utils/dates/format-month";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 import Link from "next/link";
@@ -125,39 +123,32 @@ export async function RegistrationsReport({
         </div>
       </div>
 
-      <ReportHeadline
-        delta={
-          <DeltaChip value={percentageChange(headlineValue, previousValue)} />
-        }
+      <RegistrationsHeadline
         label={
           fuelType ? `${fuelType} cars registered` : "All new car registrations"
         }
-        stats={
-          <>
-            <ReportStat
-              label="Previous month"
-              note={formatDateToMonthYear(comparison.previousMonth.period)}
-              value={<Count value={previousValue} />}
-            />
-            <ReportStat
-              label={`${year} year to date`}
-              note={`${series.filter(({ month: m }) => m.startsWith(`${year}-`)).length} months`}
-              value={<Count value={yearToDateTotal} />}
-            />
-            <ReportStat
-              label="Monthly average"
-              note="last 12 months"
-              value={<Count value={monthlyAverage} />}
-            />
-            <ReportStat
-              label="Best month"
-              note="last 12 months"
-              value={<Count value={bestMonth} />}
-            />
-          </>
-        }
-        sub={`${formattedMonth} · ${fuelType ? `${((headlineValue / (registrations.total || 1)) * 100).toFixed(1)}% of the month` : "every fuel type"}`}
-        value={<Count value={headlineValue} />}
+        previousMonth={comparison.previousMonth.period}
+        previousValue={previousValue}
+        stats={[
+          {
+            label: "Previous month",
+            note: formatMonthLabel(comparison.previousMonth.period),
+            value: previousValue,
+          },
+          {
+            label: `${year} year to date`,
+            note: `${series.filter(({ month: m }) => m.startsWith(`${year}-`)).length} months`,
+            value: yearToDateTotal,
+          },
+          {
+            label: "Monthly average",
+            note: "last 12 months",
+            value: monthlyAverage,
+          },
+          { label: "Best month", note: "last 12 months", value: bestMonth },
+        ]}
+        sub={`${formatMonthLabel(month)} · ${fuelType ? `${((headlineValue / (registrations.total || 1)) * 100).toFixed(1)}% of the month` : "every fuel type"}`}
+        value={headlineValue}
       />
 
       <MonthlyChart data={chartData} />
