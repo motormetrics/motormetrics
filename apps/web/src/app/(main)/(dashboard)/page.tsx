@@ -177,7 +177,7 @@ export default function HomePage() {
 
         <Hairline />
 
-        <OverviewGrid className="gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-x-14 lg:max-xl:gap-x-9">
+        <OverviewGrid className="gap-10 lg:grid-cols-7 lg:gap-x-14 lg:max-xl:gap-x-9 lg:*:col-span-3 lg:*:first:col-span-4">
           <SectionErrorBoundary title="COE premiums unavailable">
             <Suspense fallback={<BlockSkeleton chartHeight="h-60" />}>
               <CoePremiumTable />
