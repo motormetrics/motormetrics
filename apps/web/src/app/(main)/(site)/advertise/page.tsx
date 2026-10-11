@@ -78,6 +78,7 @@ export default async function AdvertisePage() {
         <Hairline />
         <PlacementsSection />
         <PricingSection />
+        <Hairline />
         <CtaSection />
       </SitePage>
     </>

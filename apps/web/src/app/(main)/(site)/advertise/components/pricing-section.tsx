@@ -1,5 +1,7 @@
-import { Card, Chip, cn, Typography } from "@heroui/react";
+import { Chip, cn, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { Text } from "@web/components/shared/text";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
@@ -44,77 +46,83 @@ const plans = [
   },
 ];
 
+/**
+ * The packages on bordered surfaces, three across from lg, two at md and
+ * stacked on phones. The featured package takes the accent border.
+ */
 export function PricingSection() {
   return (
-    <section className="flex scroll-mt-24 flex-col gap-7" id="pricing">
-      <div className="grid items-start gap-4 lg:grid-cols-[300px_1fr] lg:gap-14">
-        <Typography.Heading level={2}>Packages</Typography.Heading>
-        <Typography.Paragraph className="max-w-prose text-lg">
-          Booked by the month. No long-term commitment.
-        </Typography.Paragraph>
-      </div>
-      <div className="grid gap-6 lg:grid-cols-3">
+    <section className="flex scroll-mt-24 flex-col gap-4" id="pricing">
+      <SectionHead
+        caption="Booked by the month. No long-term commitment."
+        eyebrow="Rates"
+        title="Packages"
+      />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {plans.map(({ cta, features, featured, name, note, price }) => (
-          <Card
-            className={cn("h-full", featured && "border-2 border-accent")}
+          <div
+            className={cn(
+              "flex min-w-0 flex-col gap-3 rounded-lg border bg-surface p-5",
+              featured ? "border-accent" : "border-separator",
+            )}
             key={name}
           >
-            <Card.Content className="flex h-full flex-col gap-3.5">
-              <div className="flex items-center gap-3">
-                <Typography.Heading level={3}>{name}</Typography.Heading>
-                {featured ? (
-                  <Chip
-                    className="ml-auto"
-                    color="accent"
-                    size="sm"
-                    variant="primary"
-                  >
-                    Most booked
-                  </Chip>
-                ) : null}
-              </div>
-              <div className="flex items-baseline gap-2">
-                <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight">
-                  {price}
-                </span>
-                <span className="font-semibold text-muted text-sm">
-                  per month
-                </span>
-              </div>
-              <Typography.Paragraph className="leading-normal">
-                {note}
-              </Typography.Paragraph>
-              <div className="flex flex-col gap-2.5 pt-1">
-                {features.map((feature) => (
-                  <div className="flex items-start gap-2.5" key={feature}>
-                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent-strong">
-                      <Check className="size-3" strokeWidth={3} />
-                    </span>
-                    <span className="font-semibold text-muted-strong text-sm leading-normal">
-                      {feature}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-auto w-full pt-3">
-                <Link
-                  className={buttonVariants({
-                    fullWidth: true,
-                    variant: featured ? "primary" : "secondary",
-                  })}
-                  href="#contact"
+            <div className="flex items-center gap-3">
+              <Typography.Heading className="text-xl" level={3} weight="bold">
+                {name}
+              </Typography.Heading>
+              {featured ? (
+                <Chip
+                  className="ml-auto"
+                  color="accent"
+                  size="sm"
+                  variant="primary"
                 >
-                  {cta}
-                </Link>
-              </div>
-            </Card.Content>
-          </Card>
+                  Most booked
+                </Chip>
+              ) : null}
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="font-extrabold text-3xl tabular-nums leading-none tracking-tight">
+                {price}
+              </span>
+              <span className="text-muted text-sm">per month</span>
+            </div>
+            <Text.Paragraph className="leading-normal" size="sm" tone="strong">
+              {note}
+            </Text.Paragraph>
+            <div className="flex flex-col">
+              {features.map((feature) => (
+                <div
+                  className="flex items-start gap-2.5 border-separator border-t py-2 text-muted-strong text-sm leading-normal"
+                  key={feature}
+                >
+                  <Check
+                    aria-hidden
+                    className="mt-0.5 size-4 shrink-0 text-accent-strong"
+                    strokeWidth={2.5}
+                  />
+                  {feature}
+                </div>
+              ))}
+            </div>
+            <Link
+              className={buttonVariants({
+                className: "mt-auto",
+                fullWidth: true,
+                variant: featured ? "primary" : "outline",
+              })}
+              href="#contact"
+            >
+              {cta}
+            </Link>
+          </div>
         ))}
       </div>
-      <Typography.Paragraph size="xs" className="text-subtle">
+      <SourceNote>
         Rates are in Singapore dollars. Creative must be static — no autoplay,
         no interstitials.
-      </Typography.Paragraph>
+      </SourceNote>
     </section>
   );
 }
