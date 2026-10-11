@@ -44,6 +44,7 @@
 !**/.claude/agents/
 !**/.claude/skills/
 !**/.claude/commands/
+!**/.claude/rules/
 !**/.claude/settings.json
 
 # Turborepo

@@ -1,20 +1,9 @@
 import {
-  nextMonth,
-  pqpMonthsFor,
+  axisTicks,
   sumByMonth,
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { describe, expect, it } from "vitest";
-
-describe("nextMonth", () => {
-  it("should step to the following month", () => {
-    expect(nextMonth("2025-10")).toBe("2025-11");
-  });
-
-  it("should roll December into January of the next year", () => {
-    expect(nextMonth("2025-12")).toBe("2026-01");
-  });
-});
 
 describe("sumByMonth", () => {
   it("should add every category into one total per month, oldest first", () => {
@@ -54,29 +43,24 @@ describe("windowEndingAt", () => {
   });
 });
 
-describe("pqpMonthsFor", () => {
-  it("should quote the month after the selection and the month before it", () => {
-    expect(pqpMonthsFor(["2025-09", "2025-11", "2025-10"], "2025-10")).toEqual({
-      current: "2025-11",
-      previous: "2025-10",
-    });
+describe("axisTicks", () => {
+  it("should anchor counts at zero on a round step", () => {
+    expect(axisTicks([4266, 6390, 4549], { zero: true })).toEqual([
+      0, 2000, 4000, 6000, 8000,
+    ]);
   });
 
-  it("should fall back to the newest published month before the target", () => {
-    expect(pqpMonthsFor(["2025-09", "2025-10"], "2025-10")).toEqual({
-      current: "2025-10",
-      previous: "2025-09",
-    });
+  it("should span only the data when not anchored at zero", () => {
+    expect(axisTicks([48.4, 70.1, 63.3], { zero: false })).toEqual([
+      40, 50, 60, 70, 80,
+    ]);
   });
 
-  it("should use the earliest month when nothing has been published yet", () => {
-    expect(pqpMonthsFor(["2026-01", "2026-02"], "2025-10")).toEqual({
-      current: "2026-01",
-      previous: undefined,
-    });
+  it("should give a flat series one step of height", () => {
+    expect(axisTicks([5, 5], { zero: false })).toEqual([5, 6]);
   });
 
-  it("should return null with no published months", () => {
-    expect(pqpMonthsFor([], "2025-10")).toBeNull();
+  it("should return no ticks for an empty series", () => {
+    expect(axisTicks([], { zero: true })).toEqual([]);
   });
 });
