@@ -11,6 +11,7 @@ import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium
 import {
   PQPChart,
   type PQPSeries,
+  type PQPTrendPoint,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-chart";
 import {
   PQPComparisonChart,
@@ -24,6 +25,8 @@ import {
   PQP_CATEGORY_KEYS,
   type PQPCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   ReportCell,
@@ -32,6 +35,7 @@ import {
 } from "@web/components/shared/report-table";
 import { getCoeResults, getPQPOverview } from "@web/queries/coe";
 import type { Pqp } from "@web/types/coe";
+import { formatChartMonth } from "@web/utils/dates/format-month";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
@@ -105,14 +109,16 @@ export async function PQPReport({
     a.month.localeCompare(b.month),
   );
 
-  const series: PQPSeries[] = PQP_CATEGORY_KEYS.map((key, index) => ({
-    color: `var(--chart-${index + 1})`,
+  const series: PQPSeries[] = PQP_CATEGORY_KEYS.map((key) => ({
     key: categoryName(key),
     label: `Category ${key}`,
   }));
 
-  const chartData = ascending.map((point) => ({
-    label: formatMonth(point.month, "short"),
+  const chartData: PQPTrendPoint[] = ascending.map((point, index) => ({
+    label: formatChartMonth(point.month),
+    title: formatMonth(point.month),
+    year:
+      index === 0 || point.month.endsWith("-01") ? point.month.slice(0, 4) : "",
     ...Object.fromEntries(
       PQP_CATEGORY_KEYS.map((key) => [
         categoryName(key),
@@ -120,6 +126,15 @@ export async function PQPReport({
       ]),
     ),
   }));
+  const chartTicks = axisTicks(
+    chartData.flatMap((point) =>
+      PQP_CATEGORY_KEYS.map((key) => Number(point[categoryName(key)])),
+    ),
+    { zero: false },
+  );
+  const chartStep =
+    chartTicks.length > 1 ? chartTicks[1] - chartTicks[0] : undefined;
+  const firstMonth = ascending[0]?.month;
 
   const comparisonData: PQPComparisonPoint[] = PQP_CATEGORY_KEYS.map((key) => {
     const name = categoryName(key);
@@ -144,12 +159,24 @@ export async function PQPReport({
         term={term}
       />
 
-      <div className="flex flex-col gap-3.5">
-        <PQPChart data={chartData} series={series} />
-        <Typography.Paragraph color="muted" size="sm">
-          Rates are quoted for a {term}-year renewal.
-        </Typography.Paragraph>
-      </div>
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${firstMonth ? `${formatMonth(firstMonth)} to ` : ""}${formattedMonth} · ${term}-year renewal`}
+          eyebrow="Trend"
+          title="PQP by month"
+        />
+        <PQPChart
+          data={chartData}
+          selected={selected}
+          series={series}
+          ticks={chartTicks}
+        />
+        <SourceNote>
+          Source: LTA via DataMall · PQP published for each month, {term}-year
+          renewal · Y-axis does not start at zero
+          {chartStep ? `; gridlines every ${formatCurrency(chartStep)}.` : "."}
+        </SourceNote>
+      </section>
 
       <ReportSection
         caption={`${formattedMonth} · both figures at the full ten-year value`}
