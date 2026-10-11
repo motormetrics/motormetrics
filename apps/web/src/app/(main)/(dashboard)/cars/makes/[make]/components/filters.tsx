@@ -1,13 +1,18 @@
 "use client";
 
 import { cn } from "@heroui/react";
+import { Segment } from "@heroui-pro/react";
 import {
+  isRange,
   RANGE_LABELS,
   RANGES,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
 import { useTransition } from "react";
+
+/** Segment keys must be strings, so the unfiltered view gets one of its own. */
+const ALL_FUEL_TYPES = "all";
 
 /*
  * URL state with `shallow: false` throughout, so the server re-renders the
@@ -26,39 +31,34 @@ export function PeriodTabs() {
   );
 
   return (
-    <fieldset
-      className={cn(
-        "m-0 flex flex-wrap gap-2 border-none p-0",
-        isPending && "opacity-70",
-      )}
+    <Segment
+      aria-label="Period"
+      className={cn("max-md:w-full", isPending && "opacity-70")}
+      onSelectionChange={(key) => {
+        const next = String(key);
+        if (!isRange(next)) {
+          return;
+        }
+        posthog.capture("dashboard_filter_changed", {
+          filter: "range",
+          value: next,
+        });
+        setRange(next);
+      }}
+      selectedKey={range}
+      size="sm"
+      variant="ghost"
     >
-      <legend className="sr-only">Period</legend>
-      {RANGES.map((option) => {
-        const isActive = option === range;
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "cursor-pointer whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
-              isActive
-                ? "bg-accent font-bold text-accent-foreground"
-                : "bg-surface font-semibold text-muted hover:text-foreground",
-            )}
-            key={option}
-            onClick={() => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: "range",
-                value: option,
-              });
-              setRange(option);
-            }}
-            type="button"
-          >
-            {RANGE_LABELS[option]}
-          </button>
-        );
-      })}
-    </fieldset>
+      {RANGES.map((option) => (
+        <Segment.Item
+          className="max-md:flex-1 max-md:px-2"
+          id={option}
+          key={option}
+        >
+          {RANGE_LABELS[option]}
+        </Segment.Item>
+      ))}
+    </Segment>
   );
 }
 
@@ -74,44 +74,32 @@ export function FuelTypeTabs({ fuelTypes }: { fuelTypes: string[] }) {
     parseAsString.withOptions({ shallow: false, startTransition }),
   );
 
-  const options: { key: string | null; label: string }[] = [
-    { key: null, label: "All" },
-    ...fuelTypes.map((fuelType) => ({ key: fuelType, label: fuelType })),
-  ];
-
   return (
-    <fieldset
-      className={cn(
-        "m-0 flex flex-wrap gap-1 rounded-[1.25rem] border-none bg-surface-secondary p-1",
-        isPending && "opacity-70",
-      )}
-    >
-      <legend className="sr-only">Fuel type</legend>
-      {options.map(({ key, label }) => {
-        const isActive = key === selected;
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "cursor-pointer whitespace-nowrap rounded-full px-4 py-[7px] text-sm transition-colors",
-              isActive
-                ? "bg-surface font-extrabold text-foreground shadow-surface"
-                : "font-semibold text-muted hover:text-foreground",
-            )}
-            key={label}
-            onClick={() => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: "fuel_type",
-                value: key,
-              });
-              setSelected(key);
-            }}
-            type="button"
-          >
-            {label}
-          </button>
-        );
-      })}
-    </fieldset>
+    // Five fuel types run wider than a phone, so the switch scrolls in its own
+    // row rather than stretching the page.
+    <div className="max-w-full overflow-x-auto">
+      <Segment
+        aria-label="Fuel type"
+        className={cn(isPending && "opacity-70")}
+        onSelectionChange={(key) => {
+          const next = key === ALL_FUEL_TYPES ? null : String(key);
+          posthog.capture("dashboard_filter_changed", {
+            filter: "fuel_type",
+            value: next,
+          });
+          setSelected(next);
+        }}
+        selectedKey={selected ?? ALL_FUEL_TYPES}
+        size="sm"
+        variant="ghost"
+      >
+        <Segment.Item id={ALL_FUEL_TYPES}>All</Segment.Item>
+        {fuelTypes.map((fuelType) => (
+          <Segment.Item id={fuelType} key={fuelType}>
+            {fuelType}
+          </Segment.Item>
+        ))}
+      </Segment>
+    </div>
   );
 }

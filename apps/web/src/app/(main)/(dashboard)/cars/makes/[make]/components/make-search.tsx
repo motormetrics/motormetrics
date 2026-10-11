@@ -33,7 +33,7 @@ export function MakeSearch({ makes }: MakeSearchProps) {
           aria-hidden
           className="pointer-events-none absolute top-1/2 left-3.5 z-10 size-4 -translate-y-1/2 text-muted"
         />
-        <Input className="pl-10" placeholder="Search make..." />
+        <Input className="pl-10" placeholder="Search make" />
         <ComboBox.Trigger />
       </ComboBox.InputGroup>
       <ComboBox.Popover>

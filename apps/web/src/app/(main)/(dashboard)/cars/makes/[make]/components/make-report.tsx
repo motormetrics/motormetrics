@@ -6,16 +6,15 @@ import {
   FuelTypeTabs,
   PeriodTabs,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/filters";
+import { periodWindow } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
 import {
   loadSearchParams,
   RANGE_LABELS,
-  type Range,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { EmptyState } from "@web/components/shared/empty-state";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import {
-  ReportFilterBar,
   ReportHeadline,
   ReportNote,
   ReportSection,
@@ -45,22 +44,6 @@ import type { SearchParams } from "nuqs/server";
 
 /** How many makes the peer list shows, the current one always among them. */
 const PEER_COUNT = 5;
-
-/** The `YYYY-MM` window a period covers, anchored on the selected month. */
-function periodWindow(
-  month: string,
-  range: Range,
-): { end: string; start: string } {
-  if (range === "month") {
-    return { end: month, start: month };
-  }
-
-  if (range === "12m") {
-    return { end: month, start: shiftMonth(month, -11) };
-  }
-
-  return { end: month, start: `${month.slice(0, 4)}-01` };
-}
 
 function monthsBetween(start: string, end: string): string[] {
   const months: string[] = [];
@@ -239,13 +222,18 @@ export async function MakeReport({
 
   return (
     <>
-      <ReportFilterBar
-        label="Period"
-        trailing={<FuelTypeTabs fuelTypes={fuelTypeOptions} />}
-        trailingLabel="Fuel type"
-      >
-        <PeriodTabs />
-      </ReportFilterBar>
+      {/* The comp rules the switches off from the head, each under its own
+          label; on phones they stack. */}
+      <div className="flex flex-col gap-3.5 border-border border-y py-3.5 md:flex-row md:flex-wrap md:items-end md:gap-6">
+        <div className="flex min-w-0 flex-col gap-1.5">
+          <span className="font-semibold text-muted text-xs">Period</span>
+          <PeriodTabs />
+        </div>
+        <div className="flex min-w-0 flex-col gap-1.5">
+          <span className="font-semibold text-muted text-xs">Fuel type</span>
+          <FuelTypeTabs fuelTypes={fuelTypeOptions} />
+        </div>
+      </div>
 
       <ReportHeadline
         delta={<DeltaChip value={percentageChange(total, previousTotal)} />}
