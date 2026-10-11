@@ -1,25 +1,29 @@
 import { Chip, Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
-import { MonthlyChart } from "@web/app/(main)/(dashboard)/cars/components/monthly-chart";
 import {
   FuelTypeTabs,
   PeriodTabs,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/filters";
-import { periodWindow } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
+import {
+  periodLabel,
+  periodWindow,
+} from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
+import { RegistrationsChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/registrations-chart";
 import {
   loadSearchParams,
   RANGE_LABELS,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { EmptyState } from "@web/components/shared/empty-state";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import {
-  ReportHeadline,
-  ReportNote,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
+  Hairline,
+  SectionHead,
+  SourceNote,
+} from "@web/components/shared/overview";
+import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
   DeltaText,
@@ -35,7 +39,10 @@ import {
 } from "@web/queries/cars/makes/period-totals";
 import { getCarLogoMap } from "@web/queries/logos";
 import { percentageChange } from "@web/utils/change-ratio";
-import { formatChartMonth } from "@web/utils/dates/format-month";
+import {
+  formatChartMonth,
+  formatMonthLabel,
+} from "@web/utils/dates/format-month";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
@@ -199,7 +206,6 @@ export async function MakeReport({
       share: (count / (market || 1)) * 100,
     };
   });
-  const showYear = seriesMonths.length > 12;
   const shareLeader = Math.max(...series.map((entry) => entry.share), 0);
 
   const marketTotal = sumBy(
@@ -220,6 +226,44 @@ export async function MakeReport({
       ? formatDateToMonthYear(month)
       : `${formatDateToMonthYear(start)} – ${formatDateToMonthYear(end)}`;
 
+  // The comp's two-by-two grid beside the headline; the mix cells drop out
+  // when the make registered nothing in the period.
+  const stats = [
+    {
+      label: "Share of market",
+      note: periodCaption,
+      value: percentage(total, marketTotal),
+    },
+    {
+      label: "Rank",
+      note: fuelType
+        ? "overall, all fuel types"
+        : `of ${makeTotals.length} makes`,
+      value: rank > 0 ? `#${rank}` : "—",
+    },
+    ...(topFuel
+      ? [
+          {
+            label: `${topFuel.name} share`,
+            note: `of ${make} registrations`,
+            value: percentage(topFuel.count, makeTotal),
+          },
+        ]
+      : []),
+    ...(topVehicle
+      ? [
+          {
+            label: `${formatVehicleType(topVehicle.name)} share`,
+            note: "most common vehicle type",
+            value: percentage(topVehicle.count, makeTotal),
+          },
+        ]
+      : []),
+  ];
+  // The chart runs over the year to date, or the trailing year when the
+  // period is a single month.
+  const seriesRange = range === "ytd" && start !== end ? "ytd" : "12m";
+
   return (
     <>
       {/* The comp rules the switches off from the head, each under its own
@@ -235,55 +279,83 @@ export async function MakeReport({
         </div>
       </div>
 
-      <ReportHeadline
-        delta={<DeltaChip value={percentageChange(total, previousTotal)} />}
-        label={`${fuelType ? `${fuelType} ` : ""}${make} registrations`}
-        stats={
-          <>
-            <ReportStat
-              label="Share of market"
-              note={periodCaption}
-              value={percentage(total, marketTotal)}
-            />
-            <ReportStat
-              label="Rank"
-              note={
-                fuelType
-                  ? "overall, all fuel types"
-                  : `of ${makeTotals.length} makes`
-              }
-              value={rank > 0 ? `#${rank}` : "—"}
-            />
-            {topFuel ? (
-              <ReportStat
-                label={`${topFuel.name} share`}
-                note={`of ${make} registrations`}
-                value={percentage(topFuel.count, makeTotal)}
-              />
-            ) : null}
-            {topVehicle ? (
-              <ReportStat
-                label={`${formatVehicleType(topVehicle.name)} share`}
-                note="most common vehicle type"
-                value={percentage(topVehicle.count, makeTotal)}
-              />
-            ) : null}
-          </>
-        }
-        sub={
-          fuelType
-            ? `${rangeLabel} · ${percentage(total, makeTotal)} of ${make} registrations`
-            : `${rangeLabel} · ${percentage(total, marketTotal)} of all registrations`
-        }
-        value={<Count value={total} />}
-      />
+      <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-2 lg:gap-14">
+        <div className="flex min-w-0 flex-col gap-3">
+          <span className="font-semibold text-muted text-xs">
+            {fuelType ? `${fuelType} ` : ""}
+            {make} registrations
+          </span>
+          <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
+            <Count value={total} />
+          </span>
+          <Typography.Paragraph color="muted">
+            <DeltaChip
+              className="font-semibold text-foreground"
+              value={percentageChange(total, previousTotal)}
+            />{" "}
+            against the same period a year earlier
+          </Typography.Paragraph>
+          <Typography.Paragraph
+            className="tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {fuelType
+              ? `${rangeLabel} · ${percentage(total, makeTotal)} of ${make} registrations`
+              : `${rangeLabel} · ${percentage(total, marketTotal)} of all registrations`}
+          </Typography.Paragraph>
+        </div>
+        <div className="grid grid-cols-2 border-border border-t">
+          {stats.map((stat) => (
+            <div
+              className="flex min-w-0 flex-col gap-1 border-separator border-b py-3.5 pr-4 even:border-l even:pl-4"
+              key={stat.label}
+            >
+              <span className="truncate font-semibold text-muted text-xs">
+                {stat.label}
+              </span>
+              <span className="font-semibold text-xl tabular-nums tracking-tight md:text-2xl">
+                {stat.value}
+              </span>
+              <span className="truncate text-muted text-xs">{stat.note}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
-      <MonthlyChart
-        data={series.map(({ count, month: seriesMonth }) => ({
-          label: formatChartMonth(seriesMonth, showYear),
-          total: count,
-        }))}
-      />
+      <section className="flex min-w-0 flex-col gap-4">
+        <SectionHead
+          caption={`${periodLabel(month, seriesRange)} · hover or tap a bar for its value`}
+          eyebrow="Trend"
+          title={`${make}${fuelType ? ` ${fuelType}` : ""} registrations by month`}
+        />
+        <RegistrationsChart
+          data={series.map(({ count, month: seriesMonth }, index) => {
+            const isSelected = seriesMonth === month;
+            return {
+              count,
+              earlier: isSelected ? 0 : count,
+              label: formatChartMonth(seriesMonth),
+              latest: isSelected ? count : 0,
+              title: formatMonthLabel(seriesMonth),
+              year:
+                index === 0 || seriesMonth.endsWith("-01")
+                  ? seriesMonth.slice(0, 4)
+                  : "",
+            };
+          })}
+          ticks={axisTicks(
+            series.map(({ count }) => count),
+            { zero: true },
+          )}
+        />
+        <SourceNote>
+          New car registrations, {make}
+          {fuelType ? `, ${fuelType} only.` : ", all fuel types."}
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <ReportSection
         caption={`${periodCaption} · against the same months a year earlier`}
