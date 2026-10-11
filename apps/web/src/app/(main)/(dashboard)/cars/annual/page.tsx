@@ -16,7 +16,7 @@ import {
   OverviewGrid,
   OverviewPage,
 } from "@web/components/shared/overview";
-import { EyebrowValue, PageEyebrow } from "@web/components/shared/page-eyebrow";
+import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -105,11 +105,15 @@ export default function AnnualPage() {
         }}
       />
 
-      <OverviewPage>
-        <PageEyebrow
-          control={<EyebrowValue>{CARS}</EyebrowValue>}
-          section="Vehicle population"
-          title="Annual vehicle population"
+      <OverviewPage className="gap-10 max-md:gap-7">
+        <PageHead
+          eyebrow="Vehicle data"
+          sub={
+            <Suspense fallback={<Skeleton className="h-5 w-72" />}>
+              <PopulationSub />
+            </Suspense>
+          }
+          title="Vehicle population"
         />
 
         <SectionErrorBoundary title="Vehicle population unavailable">
@@ -118,6 +122,33 @@ export default function AnnualPage() {
           </Suspense>
         </SectionErrorBoundary>
       </OverviewPage>
+    </>
+  );
+}
+
+/**
+ * Names the year end the page reports and its source. Reads the same cached
+ * query as the sections below, so it costs no extra request.
+ */
+async function PopulationSub() {
+  const rows = await getVehiclePopulationByCategoryAndFuelType();
+  const year = rows.reduce(
+    (latest, row) => (row.year > latest ? row.year : latest),
+    "",
+  );
+
+  return (
+    <>
+      {year ? (
+        <>
+          Registered at{" "}
+          <span className="font-semibold text-foreground">
+            31 December {year}
+          </span>{" "}
+          ·{" "}
+        </>
+      ) : null}
+      counted once a year · Source: LTA via DataMall
     </>
   );
 }
