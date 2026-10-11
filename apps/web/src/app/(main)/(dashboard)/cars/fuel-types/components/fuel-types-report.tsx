@@ -1,20 +1,17 @@
 import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
-import { MeasureTabs } from "@web/app/(main)/(dashboard)/cars/components/category/category-filters";
 import {
   type CategorySeries,
   CategoryShareChart,
 } from "@web/app/(main)/(dashboard)/cars/components/category/category-share-chart";
-import { PeriodTabs } from "@web/app/(main)/(dashboard)/cars/components/category/period-tabs";
-import { DeltaChip } from "@web/components/shared/delta-chip";
 import {
-  ReportFilterBar,
-  ReportHeadline,
-  ReportNote,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
+  MeasureSegment,
+  PeriodSegment,
+} from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-filters";
+import { FuelTypesHeadline } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-headline";
+import { Hairline, SectionHead } from "@web/components/shared/overview";
+import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
   DeltaText,
@@ -30,7 +27,10 @@ import {
   getCategoryTotals,
   getTopMakesByCategory,
 } from "@web/queries/cars/category-report";
-import { formatChartMonth } from "@web/utils/dates/format-month";
+import {
+  formatChartMonth,
+  formatMonthLabel,
+} from "@web/utils/dates/format-month";
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import Link from "next/link";
@@ -47,16 +47,6 @@ import {
  * keeps the shared report.
  */
 const PERIODS = ["month", "ytd"] as const;
-
-const PERIOD_LABELS: Record<(typeof PERIODS)[number], string> = {
-  month: "This month",
-  ytd: "Year to date",
-};
-
-const PERIOD_OPTIONS = PERIODS.map((key) => ({
-  key,
-  label: PERIOD_LABELS[key],
-}));
 
 const loadFuelTypesSearchParams = createLoader({
   measure: parseAsStringLiteral(["share", "volume"] as const).withDefault(
@@ -81,6 +71,26 @@ const DESCRIPTIONS: Record<string, string> = {
 };
 
 const URL_PATH = "/cars/fuel-types";
+
+/**
+ * The comp's colour for each LTA fuel label, shared by the mix bar, the trend
+ * and the tables; anything else takes the lightest ramp step.
+ */
+const FUEL_COLOURS: Record<string, string> = {
+  Diesel: "var(--muted)",
+  Electric: "var(--chart-1)",
+  Petrol: "var(--chart-sand)",
+  "Petrol-Electric": "var(--chart-3)",
+  "Petrol-Electric (Plug-In)": "var(--chart-5)",
+};
+
+const FALLBACK_COLOUR = "var(--chart-6)";
+
+const fuelColour = (name: string): string =>
+  FUEL_COLOURS[name] ?? FALLBACK_COLOUR;
+
+/** The fuel type the headline features, when the period has any. */
+const FEATURED_FUEL = "Electric";
 
 /** How far back the trend chart reaches from the selected month. */
 const SERIES_MONTHS = 12;
@@ -138,7 +148,7 @@ export async function FuelTypesReport({
 
   const formattedMonth = formatDateToMonthYear(month);
   const periodLabel =
-    period === "ytd" ? `${year} year to date` : formattedMonth;
+    period === "ytd" ? `${year} year to date` : formatMonthLabel(month);
 
   const rows = totals.filter(({ count }) => count > 0);
 
@@ -156,19 +166,25 @@ export async function FuelTypesReport({
     priorTotals.map(({ count, name }) => [name, count]),
   );
 
-  const leader = rows[0];
-  const leaderShare = percentageOf(leader.count, total);
-  const leaderPriorShare = percentageOf(
-    priorByName.get(leader.name) ?? 0,
+  const mix = rows.map(({ count, name }) => ({
+    color: fuelColour(name),
+    count,
+    name,
+    share: percentageOf(count, total),
+  }));
+  // Electric is the comp's subject; a period without any falls back to the
+  // largest fuel type so the headline still reads.
+  const featured = mix.find(({ name }) => name === FEATURED_FUEL) ?? mix[0];
+  const featuredPriorShare = percentageOf(
+    priorByName.get(featured.name) ?? 0,
     priorTotal,
   );
 
-  // The chart and the month-by-month table plot the same leading types, so a
-  // colour means the same thing in both. Rows past the sixth reuse the ramp —
-  // they are not plotted, so nothing is mistaken for a charted line.
+  // The chart and the month-by-month table plot the same leading types, and
+  // each fuel type keeps one colour wherever it appears.
   const chartedTypes = rows.slice(0, CHARTED_TYPES);
   const chartSeries: CategorySeries[] = chartedTypes.map(({ name }, index) => ({
-    color: `var(--chart-${index + 1})`,
+    color: fuelColour(name),
     key: `type${index}`,
     label: name,
   }));
@@ -205,36 +221,41 @@ export async function FuelTypesReport({
 
   return (
     <>
-      <ReportFilterBar
-        label="Period"
-        trailing={<MeasureTabs />}
-        trailingLabel="Measure"
-      >
-        <PeriodTabs defaultKey="month" options={PERIOD_OPTIONS} />
-      </ReportFilterBar>
+      <div className="flex flex-col gap-5">
+        <div className="flex">
+          <PeriodSegment />
+        </div>
+        <FuelTypesHeadline
+          change={featured.share - featuredPriorShare}
+          changeLabel={String(year - 1)}
+          featured={featured}
+          // Rows that round to 0.0% would draw nothing; the table lists them.
+          mix={mix.filter(({ share }) => share >= 0.05)}
+          periodLabel={periodLabel}
+          total={total}
+        />
+      </div>
 
-      <ReportHeadline
-        delta={<DeltaChip unit="pp" value={leaderShare - leaderPriorShare} />}
-        label={`${leader.name} share of registrations`}
-        stats={rows
-          .slice(0, 4)
-          .map(({ count, name }) => (
-            <ReportStat
-              key={name}
-              label={name}
-              note={`${count.toLocaleString("en-SG")} cars`}
-              value={`${percentageOf(count, total).toFixed(1)}%`}
-            />
-          ))}
-        sub={`${leader.count.toLocaleString("en-SG")} of ${total.toLocaleString("en-SG")} cars · ${periodLabel} · change against ${year - 1}`}
-        value={`${leaderShare.toFixed(1)}%`}
-      />
+      <Hairline />
 
-      <CategoryShareChart
-        data={chartData}
-        measure={measure}
-        series={chartSeries}
-      />
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          eyebrow="Trend"
+          title={
+            measure === "share"
+              ? "Share of registrations by fuel type"
+              : "Registrations by fuel type"
+          }
+          trailing={<MeasureSegment />}
+        />
+        <CategoryShareChart
+          data={chartData}
+          measure={measure}
+          series={chartSeries}
+        />
+      </section>
+
+      <Hairline />
 
       <ReportSection
         caption={`${periodLabel} · ${rows.length} recorded by LTA`}
@@ -267,7 +288,7 @@ export async function FuelTypesReport({
                     <span
                       className="size-3.5 shrink-0 rounded"
                       style={{
-                        backgroundColor: `var(--chart-${(index % CHARTED_TYPES) + 1})`,
+                        backgroundColor: fuelColour(name),
                       }}
                     />
                     <Link
