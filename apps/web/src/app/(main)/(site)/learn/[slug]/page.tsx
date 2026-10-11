@@ -6,6 +6,7 @@ import {
   getAllGuideSlugs,
   getGuideBySlug,
 } from "@web/app/(main)/(site)/learn/lib/guides";
+import { Hairline } from "@web/components/shared/overview";
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -118,7 +119,7 @@ async function GuideContent({
  */
 export default function GuidePage({ params }: PageProps) {
   return (
-    <SitePage className="gap-14">
+    <SitePage className="gap-10 max-md:gap-7">
       <Suspense fallback={<GuideSkeleton />}>
         <Guide params={params} />
       </Suspense>
@@ -207,6 +208,8 @@ async function Guide({ params }: PageProps) {
       />
 
       <GuideHead guide={guide} />
+
+      <Hairline />
 
       <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-14">
         <GuideContent content={guide.content} slug={guide.slug} />
