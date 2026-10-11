@@ -2,11 +2,10 @@ import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { CategoryMergerCallout } from "@web/app/(main)/(dashboard)/components/category-merger-callout";
 import { CoeSection } from "@web/app/(main)/(dashboard)/components/coe-section";
-import { DeregistrationsHeadline } from "@web/app/(main)/(dashboard)/components/deregistrations-headline";
 import { EvCharging } from "@web/app/(main)/(dashboard)/components/ev-charging";
 import { EvMomentum } from "@web/app/(main)/(dashboard)/components/ev-momentum";
 import { FuelMix } from "@web/app/(main)/(dashboard)/components/fuel-mix";
-import { RegistrationsHeadline } from "@web/app/(main)/(dashboard)/components/registrations-headline";
+import { KpiStrip } from "@web/app/(main)/(dashboard)/components/kpi-strip";
 import { TopMakes } from "@web/app/(main)/(dashboard)/components/top-makes";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import {
@@ -14,7 +13,7 @@ import {
   OverviewGrid,
   OverviewPage,
 } from "@web/components/shared/overview";
-import { EyebrowValue, PageEyebrow } from "@web/components/shared/page-eyebrow";
+import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
@@ -103,13 +102,20 @@ function OrganizationStructuredData() {
 }
 
 /**
- * The homepage always shows the latest month, so the eyebrow names it rather
- * than offering a picker; each block links to the page that can change it.
+ * The homepage always shows the latest month, so the sub names it rather than
+ * offering a picker; each section links to the page that can change it.
  */
-async function LatestMonth() {
+async function LatestMonthSub() {
   const month = await getLatestMonth("cars");
 
-  return <EyebrowValue>{formatDateToMonthYear(month)}</EyebrowValue>;
+  return (
+    <>
+      <span className="font-semibold text-foreground">
+        {formatDateToMonthYear(month)}
+      </span>{" "}
+      registrations and COE results · Source: LTA via DataMall
+    </>
+  );
 }
 
 /** A section-shaped placeholder: eyebrow, figure, then the chart area. */
@@ -130,32 +136,25 @@ export default function HomePage() {
       <StructuredData data={webSiteSchema} />
       <OrganizationStructuredData />
 
-      <OverviewPage>
+      <OverviewPage className="gap-10 max-[720px]:gap-7">
         <CategoryMergerCallout />
 
         <div className="flex flex-col gap-7">
-          <PageEyebrow
-            control={
-              <Suspense fallback={<Skeleton className="h-6 w-36" />}>
-                <LatestMonth />
+          <PageHead
+            eyebrow="Singapore car market"
+            sub={
+              <Suspense fallback={<Skeleton className="h-5 w-72" />}>
+                <LatestMonthSub />
               </Suspense>
             }
-            section="Singapore car market"
-            title="Overview"
+            title="Market overview"
           />
 
-          <OverviewGrid>
-            <SectionErrorBoundary title="Registrations unavailable">
-              <Suspense fallback={<BlockSkeleton chartHeight="h-[150px]" />}>
-                <RegistrationsHeadline />
-              </Suspense>
-            </SectionErrorBoundary>
-            <SectionErrorBoundary title="Deregistrations unavailable">
-              <Suspense fallback={<BlockSkeleton chartHeight="h-[170px]" />}>
-                <DeregistrationsHeadline />
-              </Suspense>
-            </SectionErrorBoundary>
-          </OverviewGrid>
+          <SectionErrorBoundary title="Headline figures unavailable">
+            <Suspense fallback={<Skeleton className="h-[188px] w-full" />}>
+              <KpiStrip />
+            </Suspense>
+          </SectionErrorBoundary>
         </div>
 
         <Hairline />
