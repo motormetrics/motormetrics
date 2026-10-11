@@ -39,7 +39,6 @@
     "@neondatabase/serverless": "1.1.0",
     "@number-flow/react": "0.6.0",
     "@react-aria/utils": "3.34.1",
-    "@ruchernchong/number-format": "2.3.5",
     "@tanstack/react-table": "8.21.3",
     "@upstash/ratelimit": "2.0.8",
     "@upstash/redis": "catalog:",
