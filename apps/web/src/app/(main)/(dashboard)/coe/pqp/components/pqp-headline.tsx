@@ -7,7 +7,6 @@ import {
   formatMonth,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
 import {
   CategoryTabs,
   TermTabs,
@@ -17,7 +16,7 @@ import {
   type PQPCategoryKey,
   type PQPTerm,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
-import { SourceNote } from "@web/components/shared/overview";
+import { SourceNote, StatCell } from "@web/components/shared/overview";
 import { Text } from "@web/components/shared/text";
 import { formatMonthName } from "@web/utils/dates/format-month";
 
