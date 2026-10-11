@@ -2,7 +2,6 @@ import { Skeleton, Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { formatOrdinal } from "@motormetrics/utils/format-ordinal";
 import { slugify } from "@motormetrics/utils/slugify";
-import { TypeChart } from "@web/app/(main)/(dashboard)/cars/components/category/type-chart";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
 import {
   DEFAULT_PERIOD,
@@ -13,10 +12,17 @@ import {
   SERIES_MONTHS,
 } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/period";
 import { PeriodSegment } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/period-segment";
+import { RegistrationsChart } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/registrations-chart";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MonthMenu } from "@web/components/shared/month-menu";
-import { OverviewPage } from "@web/components/shared/overview";
+import {
+  Hairline,
+  OverviewPage,
+  SectionHead,
+  SourceNote,
+} from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
@@ -41,6 +47,7 @@ import {
 import { percentageChange } from "@web/utils/change-ratio";
 import {
   formatChartMonth,
+  formatMonthLabel,
   formatMonthShortLabel,
 } from "@web/utils/dates/format-month";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
@@ -282,10 +289,6 @@ async function VehicleTypeContent({
     },
   ];
 
-  const chartData = series.map(({ count, month: seriesMonth }) => ({
-    count,
-    label: formatChartMonth(seriesMonth),
-  }));
   const monthRows = [...series].reverse();
   const monthShareLeader = series.length
     ? Math.max(...series.map(({ count, total }) => share(count, total)))
@@ -373,7 +376,42 @@ async function VehicleTypeContent({
         </div>
       </div>
 
-      <TypeChart data={chartData} />
+      <section className="flex min-w-0 flex-col gap-4">
+        <SectionHead
+          caption={`${periodRange("12m", month)} · hover or tap a bar for its value`}
+          eyebrow="Trend"
+          title={`${displayName} registrations by month`}
+        />
+        <RegistrationsChart
+          data={series.map(({ count, month: seriesMonth, total }, index) => {
+            const isSelected = seriesMonth === month;
+            return {
+              count,
+              earlier: isSelected ? 0 : count,
+              label: formatChartMonth(seriesMonth),
+              latest: isSelected ? count : 0,
+              market: total,
+              title: formatMonthLabel(seriesMonth),
+              year:
+                index === 0 || seriesMonth.endsWith("-01")
+                  ? seriesMonth.slice(0, 4)
+                  : "",
+            };
+          })}
+          ticks={axisTicks(
+            series.map(({ count }) => count),
+            { zero: true },
+          )}
+          vehicleType={displayName}
+        />
+        <SourceNote>
+          New {displayName} registrations, all makes and fuel types. The chart
+          covers the {SERIES_MONTHS} months to the selected month whatever the
+          period switch is set to. Y-axis starts at zero.
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <ReportSection
         caption={`${periodLabel}${makes.length > MAKE_LIMIT ? ` · top ${MAKE_LIMIT} of ${makes.length} makes` : ""}`}
