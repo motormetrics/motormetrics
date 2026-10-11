@@ -1,49 +1,43 @@
-import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
-import { ArrowUpRight } from "lucide-react";
+import { PageHead } from "@web/components/shared/page-head";
+import { SITE_TITLE } from "@web/config";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+/**
+ * The shared page head, with the two calls to action beneath it. On phones
+ * the buttons split the row between them.
+ */
 export function HeroSection() {
   return (
-    <section className="flex flex-col gap-6">
-      <span className="self-start rounded-full bg-accent-soft px-4 py-2 font-bold text-accent-strong text-sm">
-        Advertise with us
-      </span>
-      <Typography.Heading
-        level={1}
-        className="max-w-4xl text-5xl leading-none lg:text-6xl"
-      >
-        Reach people at the moment they are pricing a car
-      </Typography.Heading>
-      <Typography.Paragraph
-        color="muted"
-        className="max-w-prose text-xl leading-normal"
-      >
-        Readers arrive with a specific question: what a COE closed at, what a
-        renewal costs, which makes are moving. Placements sit beside that
-        answer, not on top of it.
-      </Typography.Paragraph>
-      <div className="flex flex-wrap gap-3 pt-2">
+    <div className="flex flex-col gap-4">
+      <PageHead
+        description={`${SITE_TITLE} readers arrive with a specific question: what a COE closed at, what a renewal costs, which makes are moving. Placements sit beside that answer, not on top of it.`}
+        eyebrow="Advertise with us"
+        sub="Audience figures from site analytics · last 30 days"
+        title="Reach people at the moment they are pricing a car"
+      />
+      <div className="flex flex-wrap gap-2">
         <Link
           className={buttonVariants({
-            size: "lg",
+            className: "max-md:flex-1",
             variant: "primary",
           })}
           href="#contact"
         >
           Enquire about a placement
-          <ArrowUpRight className="size-4" />
+          <ArrowRight aria-hidden className="size-4" />
         </Link>
         <Link
           className={buttonVariants({
-            size: "lg",
-            variant: "secondary",
+            className: "max-md:flex-1",
+            variant: "outline",
           })}
           href="#placements"
         >
           See the placements
         </Link>
       </div>
-    </section>
+    </div>
   );
 }

@@ -1,14 +1,14 @@
 "use client";
 
-import { Typography } from "@heroui/react";
 import { ChartTooltip, NumberValue } from "@heroui-pro/react";
 import { AreaChart } from "@heroui-pro/react/area-chart";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import type { DailyTraffic } from "@web/lib/posthog";
 
 /**
  * The comp has no chart here, but the figures above it are real and this is
  * where they came from, so it stays — restyled to the comp's bare treatment:
- * a heading, a caption and the plot straight on the page, with no card.
+ * the section head and the plot straight on the page, with no card.
  */
 export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
   if (data.length === 0) {
@@ -17,12 +17,11 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-baseline gap-4">
-        <Typography.Heading level={2}>Daily visitors</Typography.Heading>
-        <Typography.Paragraph>
-          Last 30 days · unique visitors per day
-        </Typography.Paragraph>
-      </div>
+      <SectionHead
+        caption="Last 30 days · unique visitors per day"
+        eyebrow="Traffic"
+        title="Daily visitors"
+      />
       <AreaChart data={data} height={300}>
         <defs>
           <linearGradient id="fillVisitors" x1="0" y1="0" x2="0" y2="1">
@@ -89,6 +88,7 @@ export function TrafficChartSection({ data }: { data: DailyTraffic[] }) {
           strokeWidth={2}
         />
       </AreaChart>
+      <SourceNote>Source: site analytics.</SourceNote>
     </section>
   );
 }
