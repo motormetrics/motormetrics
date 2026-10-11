@@ -1,5 +1,5 @@
+import { cn } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { BarRow } from "@web/components/shared/bar-row";
 import { Headline, SectionHead } from "@web/components/shared/overview";
 import {
   getVehiclePopulationByYearAndFuelType,
@@ -8,9 +8,6 @@ import {
 
 /** Fuel types listed individually before the tail is folded into "Others". */
 const NAMED_ROWS = 5;
-
-/** Ranks past this share the last chart colour rather than wrapping around. */
-const CHART_COLOURS = 6;
 
 /**
  * How many vehicles are actually on the road, against the registrations the
@@ -53,7 +50,7 @@ export async function PopulationPanel() {
   const largestTotal = rows[0]?.total ?? 1;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <SectionHead
         caption={`All vehicles registered in Singapore · ${latest.year}`}
         eyebrow="Vehicle population"
@@ -85,18 +82,41 @@ export async function PopulationPanel() {
         }
       />
 
-      <ul className="flex flex-col gap-3.5">
-        {rows.map((row, index) => (
-          <li key={row.label}>
-            <BarRow
-              color={`var(--chart-${Math.min(CHART_COLOURS, index + 1)})`}
-              label={row.label}
-              share={(row.total / largestTotal) * 100}
-              value={`${((row.total / latest.total) * 100).toFixed(1)}%`}
-            />
-          </li>
-        ))}
-      </ul>
+      <div className="flex flex-col">
+        <div className="flex items-end gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+          <span className="w-44 shrink-0 max-md:w-auto max-md:flex-1">
+            Fuel type
+          </span>
+          <span className="flex-1 max-md:w-24 max-md:flex-none" />
+          <span className="w-14 shrink-0 text-right">Share</span>
+        </div>
+        <ul className="flex flex-col">
+          {rows.map((row, index) => (
+            <li
+              className="flex items-center gap-3 border-separator border-b py-2"
+              key={row.label}
+            >
+              <span className="w-44 shrink-0 truncate text-sm max-md:w-auto max-md:min-w-0 max-md:flex-1">
+                {row.label}
+              </span>
+              <span className="block h-2.5 flex-1 bg-surface-secondary max-md:w-24 max-md:flex-none">
+                <span
+                  className={cn(
+                    "block h-full",
+                    index === 0 ? "bg-chart-1" : "bg-chart-3",
+                  )}
+                  style={{
+                    width: `${((row.total / largestTotal) * 100).toFixed(1)}%`,
+                  }}
+                />
+              </span>
+              <span className="w-14 shrink-0 text-right font-semibold text-sm tabular-nums">
+                {((row.total / latest.total) * 100).toFixed(1)}%
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
