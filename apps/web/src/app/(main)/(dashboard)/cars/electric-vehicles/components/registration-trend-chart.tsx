@@ -81,7 +81,7 @@ export function RegistrationTrendChart({
     <AreaChart
       data={data}
       height={isPhone ? 250 : 300}
-      margin={{ bottom: 0, left: 0, right: isPhone ? 12 : 64, top: 12 }}
+      margin={{ bottom: 0, left: 0, right: isPhone ? 20 : 64, top: 12 }}
     >
       <defs>
         <linearGradient id="evTrendFill" x1="0" x2="0" y1="0" y2="1">
