@@ -1,13 +1,9 @@
 import { Skeleton, Typography } from "@heroui/react";
 import {
-  COE_CATEGORIES,
-  toCategoryKey,
-} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import {
   LatestExerciseSub,
-  PremiumsByYearRows,
+  PremiumsByYear,
   QuotaAndDemand,
-  RecordHighRows,
+  RecordHighs,
   ResultsByExercise,
   ResultsChartPanel,
   ResultsHeadline,
@@ -17,14 +13,10 @@ import {
   Hairline,
   OverviewPage,
   SectionHead,
+  SourceNote,
 } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
-import { ReportNote, ReportSection } from "@web/components/shared/report";
-import {
-  ReportCell,
-  ReportRow,
-  ReportTable,
-} from "@web/components/shared/report-table";
+import { ReportNote } from "@web/components/shared/report";
 import { SkeletonCard, SkeletonChart } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -46,21 +38,6 @@ interface PageProps {
 const title = "COE Price History and Trends";
 const description =
   "Singapore COE price history for Cat A to E: every bidding result, yearly averages and record highs, with 12-month, 5-year, 10-year and all-time charts.";
-
-const YEAR_COLUMNS = [
-  { label: "Year" },
-  ...COE_CATEGORIES.map((category) => ({
-    align: "end" as const,
-    label: `Cat ${toCategoryKey(category)}`,
-  })),
-];
-
-const RECORD_COLUMNS = [
-  { label: "Cat", width: "64px" },
-  { label: "Description" },
-  { align: "end" as const, label: "Record premium" },
-  { label: "Exercise" },
-];
 
 export const metadata: Metadata = {
   title,
@@ -136,29 +113,6 @@ function HeadlineSkeleton() {
   );
 }
 
-/**
- * Placeholder rows for a suspended table body. Built from `ReportRow` and
- * `ReportCell` rather than bare `<tr>`s so the fallback keeps the real row
- * height and the table does not jump when the data lands.
- */
-function RowsSkeleton({ cells, rows }: { cells: number; rows: number }) {
-  return Array.from({ length: rows }).map((_, rowIndex) => (
-    <ReportRow
-      // biome-ignore lint/suspicious/noArrayIndexKey: skeleton rows are static placeholders
-      key={rowIndex}
-    >
-      {Array.from({ length: cells }).map((__, cellIndex) => (
-        <ReportCell
-          // biome-ignore lint/suspicious/noArrayIndexKey: skeleton cells are static placeholders
-          key={cellIndex}
-        >
-          <Skeleton className="h-4 w-full" />
-        </ReportCell>
-      ))}
-    </ReportRow>
-  ));
-}
-
 /** The quota section's heading and table, which are both data-derived. */
 function QuotaSkeleton() {
   return (
@@ -230,40 +184,39 @@ export default function COEResultsPage({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <ReportSection
-        caption="Average closing premium across each year's exercises, with the year's high"
-        title="COE prices by year"
-      >
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption="Mean of each year's exercises, with the year's high · the current year is year to date"
+          eyebrow="By year"
+          title="Average closing premium"
+        />
         <SectionErrorBoundary title="Yearly COE prices unavailable">
-          <ReportTable columns={YEAR_COLUMNS}>
-            <Suspense
-              fallback={<RowsSkeleton cells={YEAR_COLUMNS.length} rows={8} />}
-            >
-              <PremiumsByYearRows />
-            </Suspense>
-          </ReportTable>
+          <Suspense fallback={<SkeletonCard className="h-96 w-full" />}>
+            <PremiumsByYear />
+          </Suspense>
         </SectionErrorBoundary>
-      </ReportSection>
+      </section>
 
-      <ReportSection
-        caption="The highest closing premium each category has reached"
-        title="Record COE prices"
-      >
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption="Every exercise on record"
+          eyebrow="Records"
+          title="Highest closing premium by category"
+        />
         <SectionErrorBoundary title="Record COE prices unavailable">
-          <ReportTable columns={RECORD_COLUMNS}>
-            <Suspense
-              fallback={
-                <RowsSkeleton
-                  cells={RECORD_COLUMNS.length}
-                  rows={COE_CATEGORIES.length}
-                />
-              }
-            >
-              <RecordHighRows />
-            </Suspense>
-          </ReportTable>
+          <Suspense fallback={<SkeletonCard className="h-72 w-full" />}>
+            <RecordHighs />
+          </Suspense>
         </SectionErrorBoundary>
-      </ReportSection>
+        <SourceNote>
+          Quota premium at the close of the exercise in which each record was
+          set.
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
         <SectionErrorBoundary title="Quota and demand unavailable">

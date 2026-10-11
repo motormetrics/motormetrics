@@ -244,6 +244,9 @@ const EXERCISE_ROW =
 const EXERCISE_CELL =
   "flex w-28 shrink-0 flex-col items-end gap-px max-lg:w-24 max-md:w-16";
 const BIDS_CELL = "w-24 shrink-0 text-right max-xl:hidden";
+/** The yearly list's phone fold: a narrow year, the cells sharing the rest. */
+const YEAR_LABEL = "max-md:w-10 max-md:flex-none";
+const YEAR_CELL = "max-md:w-auto max-md:min-w-0 max-md:flex-1";
 /** Categories C and D are dropped on phones, leaving the car categories. */
 const PHONE_HIDDEN: COECategory[] = ["Category C", "Category D"];
 
@@ -319,28 +322,7 @@ export async function ResultsByExercise({ searchParams }: RegionProps) {
 
   return (
     <ShowMoreRows
-      header={
-        <div
-          className={cn(
-            EXERCISE_ROW,
-            "items-end border-border pt-0 font-semibold text-muted text-xs",
-          )}
-        >
-          <span className="min-w-0 flex-1">Exercise</span>
-          {COE_CATEGORIES.map((category) => (
-            <span
-              className={cn(
-                EXERCISE_CELL,
-                PHONE_HIDDEN.includes(category) && "max-md:hidden",
-              )}
-              key={category}
-            >
-              Cat {toCategoryKey(category)}
-            </span>
-          ))}
-          <span className={BIDS_CELL}>Total bids</span>
-        </div>
-      }
+      header={<CategoryHeader label="Exercise" trailing="Total bids" />}
       initial={12}
       lessLabel="Show 12 exercises"
       moreLabel={`Show all ${rows.length} exercises`}
@@ -354,65 +336,150 @@ export async function ResultsByExercise({ searchParams }: RegionProps) {
   );
 }
 
-/**
- * One row per calendar year across the whole dataset. It reads every result
- * rather than the selected period and takes no search params, so it
- * prerenders into the static shell.
- */
-export async function PremiumsByYearRows() {
-  const years = summariseByYear(groupByExercise(await getCoeResults()));
-
-  return years.map(({ year, categories }) => (
-    <ReportRow key={year}>
-      <ReportCell className="font-bold text-base">{year}</ReportCell>
-      {COE_CATEGORIES.map((category) => {
-        const figures = categories[category];
-
-        return (
-          <ReportCell align="end" key={category}>
-            {figures ? (
-              <div className="flex flex-col items-end gap-0.5">
-                <span className="font-extrabold text-base">
-                  {formatCurrency(figures.average)}
-                </span>
-                <span className="font-medium text-muted text-xs">
-                  high {formatCurrency(figures.high)}
-                </span>
-              </div>
-            ) : (
-              "—"
-            )}
-          </ReportCell>
-        );
-      })}
-    </ReportRow>
-  ));
+/** The column header for the category-by-column lists. */
+function CategoryHeader({
+  isYear = false,
+  label,
+  trailing,
+}: {
+  /** Folds like the yearly rows on phones. */
+  isYear?: boolean;
+  label: string;
+  trailing?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        EXERCISE_ROW,
+        "items-end border-border pt-0 font-semibold text-muted text-xs",
+      )}
+    >
+      <span className={cn("min-w-0 flex-1", isYear && YEAR_LABEL)}>
+        {label}
+      </span>
+      {COE_CATEGORIES.map((category) => (
+        <span
+          className={cn(
+            EXERCISE_CELL,
+            isYear && YEAR_CELL,
+            PHONE_HIDDEN.includes(category) && "max-md:hidden",
+          )}
+          key={category}
+        >
+          Cat {toCategoryKey(category)}
+        </span>
+      ))}
+      {trailing ? <span className={BIDS_CELL}>{trailing}</span> : null}
+    </div>
+  );
 }
 
+/**
+ * One row per calendar year across the whole dataset, newest first: the mean
+ * closing premium and the year's high. It reads every result rather than the
+ * selected period and takes no search params, so it prerenders into the
+ * static shell.
+ */
+export async function PremiumsByYear() {
+  const years = summariseByYear(groupByExercise(await getCoeResults()));
+  const newest = years[0]?.year;
+  const oldest = years.at(-1)?.year;
+  const shown = 6;
+
+  const rows = years.map(({ year, categories }) => (
+    <li className={EXERCISE_ROW} key={year}>
+      <span
+        className={cn(
+          "min-w-0 flex-1 font-semibold text-sm tabular-nums",
+          YEAR_LABEL,
+        )}
+      >
+        {year}
+      </span>
+      {COE_CATEGORIES.map((category) => {
+        const figures = categories[category];
+        return (
+          <span
+            className={cn(
+              EXERCISE_CELL,
+              YEAR_CELL,
+              PHONE_HIDDEN.includes(category) && "max-md:hidden",
+            )}
+            key={category}
+          >
+            <span className="font-semibold text-base tabular-nums max-md:text-sm">
+              {figures ? formatCurrency(figures.average) : "—"}
+            </span>
+            <span className="whitespace-nowrap text-muted text-xs tabular-nums">
+              {figures ? `high ${formatCurrency(figures.high)}` : "—"}
+            </span>
+          </span>
+        );
+      })}
+    </li>
+  ));
+
+  return (
+    <ShowMoreRows
+      header={<CategoryHeader isYear label="Year" />}
+      initial={shown}
+      lessLabel={`Show ${years[shown - 1]?.year} to ${newest}`}
+      moreLabel={`Show every year since ${oldest}`}
+      noun="years"
+      rows={rows}
+    >
+      No exercises were held from April to June 2020, so 2020 averages 18
+      exercises.
+    </ShowMoreRows>
+  );
+}
+
+/** Shared by the records header and rows. */
+const RECORD_ROW =
+  "flex items-baseline gap-4 border-separator border-b px-3 py-3 max-md:flex-wrap max-md:gap-x-3 max-md:gap-y-0.5 max-md:px-1.5";
+
 /** The highest closing premium each category has ever reached. */
-export async function RecordHighRows() {
+export async function RecordHighs() {
   const highs = recordHighs(groupByExercise(await getCoeResults()));
 
-  return COE_CATEGORIES.map((category) => {
-    const exercise = highs[category];
-
-    return (
-      <ReportRow key={category}>
-        <ReportCell>
-          <CategoryBadge categoryKey={toCategoryKey(category)} />
-        </ReportCell>
-        <ReportCell className="font-semibold text-base">
-          {CATEGORY_DESCRIPTIONS[category]}
-        </ReportCell>
-        <ReportCell align="end" className="font-extrabold text-base">
-          {exercise ? formatCurrency(premiumOf(exercise, category) ?? 0) : "—"}
-        </ReportCell>
-        <ReportCell className="font-semibold text-muted">
-          {exercise ? formatExercise(exercise) : "—"}
-        </ReportCell>
-      </ReportRow>
-    );
-  });
+  return (
+    <div className="flex flex-col">
+      <div
+        className={cn(
+          RECORD_ROW,
+          "items-end border-border pt-0 font-semibold text-muted text-xs max-md:hidden",
+        )}
+      >
+        <span className="w-24 shrink-0">Category</span>
+        <span className="min-w-0 flex-1">Description</span>
+        <span className="w-32 shrink-0 text-right">Record</span>
+        <span className="w-60 shrink-0 text-right">Exercise</span>
+      </div>
+      <ol className="flex flex-col">
+        {COE_CATEGORIES.map((category) => {
+          const exercise = highs[category];
+          return (
+            <li className={RECORD_ROW} key={category}>
+              <span className="w-24 shrink-0 whitespace-nowrap font-semibold text-sm max-md:w-auto max-md:flex-1">
+                {category}
+              </span>
+              <span className="min-w-0 flex-1 truncate text-muted text-sm max-md:hidden">
+                {CATEGORY_DESCRIPTIONS[category]}
+              </span>
+              <span className="w-32 shrink-0 text-right font-semibold text-base tabular-nums max-md:w-auto">
+                {exercise
+                  ? formatCurrency(premiumOf(exercise, category) ?? 0)
+                  : "—"}
+              </span>
+              <span className="w-60 shrink-0 text-right text-muted-strong text-sm max-md:w-full max-md:text-left max-md:text-xs">
+                {exercise ? formatExercise(exercise) : "—"}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
 }
 
 /**
