@@ -1,10 +1,13 @@
-import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { loadMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
-import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
+import {
+  isFuelFilter,
+  loadSearchParams,
+  RANGE_LABELS,
+} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import { SectionHead } from "@web/components/shared/overview";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
@@ -41,46 +44,50 @@ export async function FastestGrowing({
   }
 
   const previousYear = Number(latestMonth.slice(0, 4)) - 1;
+  const fuelSuffix = isFuelFilter(fuel) ? ` of ${fuel.toLowerCase()} cars` : "";
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-w-0 flex-col gap-4">
       <SectionHead
-        caption={`Against the same period in ${previousYear}`}
+        caption={`${RANGE_LABELS[range]}${fuelSuffix}, against the same period in ${previousYear}`}
         eyebrow="Movers · year on year"
         title="Fastest growing"
       />
 
-      <ul className="flex flex-col">
+      <div className="flex flex-col">
+        <div className="flex items-center gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+          <span className="min-w-0 flex-1">Make</span>
+          <span className="w-20 text-right md:w-24">Registered</span>
+          <span className="w-20 text-right md:w-24">Change</span>
+        </div>
         {movers.map((row) => (
-          <li key={row.make}>
-            <Link
-              className="flex items-center gap-3.5 border-separator border-b py-3.5 text-foreground no-underline transition-colors hover:bg-default"
-              href={`/cars/makes/${row.slug}`}
-            >
-              <MakeAvatar logoUrl={row.logoUrl} make={row.make} />
-              <div className="flex min-w-0 flex-col gap-px">
-                <Typography.Paragraph weight="bold" truncate>
-                  {row.make}
-                </Typography.Paragraph>
-                <Typography.Paragraph
-                  className="tabular-nums"
-                  weight="medium"
-                  color="muted"
-                  size="sm"
-                >
-                  <NumberValue
-                    locale="en-SG"
-                    maximumFractionDigits={0}
-                    value={row.count}
-                  />{" "}
-                  registered
-                </Typography.Paragraph>
-              </div>
-              <DeltaChip className="ml-auto" value={row.yoyChange ?? 0} />
-            </Link>
-          </li>
+          <Link
+            className="flex items-center gap-3 border-separator border-b py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
+            href={`/cars/makes/${row.slug}`}
+            key={row.make}
+          >
+            <span className="flex min-w-0 flex-1 items-center gap-2.5">
+              <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="sm" />
+              <span className="truncate font-medium text-sm">{row.make}</span>
+            </span>
+            <span className="w-20 text-right font-semibold text-sm tabular-nums md:w-24">
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={row.count}
+              />
+            </span>
+            <DeltaChip
+              className="w-20 text-right text-sm md:w-24"
+              value={row.yoyChange ?? 0}
+            />
+          </Link>
         ))}
-      </ul>
+      </div>
+
+      <SourceNote>
+        Large percentages often sit on small bases a year earlier.
+      </SourceNote>
     </div>
   );
 }
