@@ -6,7 +6,7 @@ import { loadSearchParams } from "@web/app/(main)/(site)/blog/search-params";
 import { PageHead } from "@web/components/shared/page-head";
 import { SitePage } from "@web/components/shared/site-page";
 import {
-  GridSkeleton,
+  ListSkeleton,
   SkeletonBentoCard,
 } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
@@ -118,11 +118,8 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
         <Suspense
           fallback={
             <>
-              <SkeletonBentoCard className="min-h-80" />
-              <GridSkeleton
-                columns="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-                count={6}
-              />
+              <SkeletonBentoCard className="min-h-72" />
+              <ListSkeleton count={6} />
             </>
           }
         >
