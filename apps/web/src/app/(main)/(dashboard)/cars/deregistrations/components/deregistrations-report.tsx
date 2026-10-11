@@ -6,7 +6,10 @@ import {
   DeregistrationsChart,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-chart";
 import { DeregistrationsHeadline } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-headline";
+import { stackedPoints } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/stacked-points";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
@@ -18,7 +21,6 @@ import {
 } from "@web/components/shared/report-table";
 import { getDeregistrations } from "@web/queries/deregistrations";
 import {
-  formatChartMonth,
   formatMonthLabel,
   formatMonthShortLabel,
 } from "@web/utils/dates/format-month";
@@ -30,22 +32,50 @@ import type { SearchParams } from "nuqs/server";
 /** How far back the trend chart and the month-by-month table reach. */
 const SERIES_MONTHS = 12;
 
-/** How many categories the chart plots and the monthly table columns. */
-const CHARTED_CATEGORIES = 6;
-
 /**
  * LTA's categories in the comp's order, with what each name means for the
- * table's description column. Authored copy keyed by the value exactly as the
- * deregistration feed records it.
+ * table's description column, the colour the chart and tables share, and the
+ * shorter label the legend uses. Authored copy keyed by the value exactly as
+ * the deregistration feed records it.
+ *
+ * Taxis and exempt vehicles take neutral tones rather than more slate steps,
+ * as in the comp, so the four COE categories read as the main series.
  */
 const CATEGORIES = [
-  { description: "Cars up to 1,600cc and 130bhp", name: "Category A" },
-  { description: "Cars above 1,600cc or 130bhp", name: "Category B" },
-  { description: "Goods vehicles and buses", name: "Category C" },
-  { description: "Motorcycles", name: "Category D" },
-  { description: "Taxis, which draw on their own quota", name: "Taxis" },
   {
+    color: "var(--chart-1)",
+    description: "Cars up to 1,600cc and 130bhp",
+    label: "Category A",
+    name: "Category A",
+  },
+  {
+    color: "var(--chart-3)",
+    description: "Cars above 1,600cc or 130bhp",
+    label: "Category B",
+    name: "Category B",
+  },
+  {
+    color: "var(--chart-5)",
+    description: "Goods vehicles and buses",
+    label: "Category C",
+    name: "Category C",
+  },
+  {
+    color: "var(--chart-sand)",
+    description: "Motorcycles",
+    label: "Category D",
+    name: "Category D",
+  },
+  {
+    color: "var(--subtle)",
+    description: "Taxis, which draw on their own quota",
+    label: "Taxis",
+    name: "Taxis",
+  },
+  {
+    color: "var(--border)",
     description: "Vehicles outside the quota system",
+    label: "Exempt from VQS",
     name: "Vehicles Exempted From VQS",
   },
 ];
@@ -122,35 +152,21 @@ export async function DeregistrationsReport({
   const priorTotal = sumOf(priorTotals);
   const yearAgoTotal = sumOf(yearAgoTotals);
 
-  // The chart and the month-by-month table plot the same leading categories,
-  // so a colour means the same thing in both.
-  const chartedCategories = rows.slice(0, CHARTED_CATEGORIES);
-  const chartSeries: DeregistrationSeries[] = chartedCategories.map(
-    ({ category }, index) => ({
-      color: `var(--chart-${index + 1})`,
-      key: `category${index}`,
-      label: category,
-    }),
+  // The chart and the month-by-month table share the category order and
+  // colours, so a colour means the same thing in both.
+  const chartSeries: DeregistrationSeries[] = CATEGORIES.map(
+    ({ color, label }) => ({ color, label }),
   );
 
   const monthlyRows = seriesMonths.map((seriesMonth) => {
     const monthTotals = totalsForMonth(records, seriesMonth);
 
     return {
-      cells: chartedCategories.map(({ category }) => ({
-        count: monthTotals.get(category) ?? 0,
-      })),
+      counts: CATEGORIES.map(({ name }) => monthTotals.get(name) ?? 0),
       month: seriesMonth,
       total: sumOf(monthTotals),
     };
   });
-
-  const chartData = monthlyRows.map(({ cells, month: seriesMonth }) => ({
-    label: formatChartMonth(seriesMonth),
-    ...Object.fromEntries(
-      cells.map(({ count }, index) => [`category${index}`, count]),
-    ),
-  }));
 
   return (
     <>
@@ -174,7 +190,25 @@ export async function DeregistrationsReport({
         value={total}
       />
 
-      <DeregistrationsChart data={chartData} series={chartSeries} />
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${SERIES_MONTHS} months to ${formatMonthShortLabel(month)} · stacked by category · hover or tap a column`}
+          eyebrow="Trend"
+          title="Deregistrations by month"
+        />
+        <DeregistrationsChart
+          data={stackedPoints(monthlyRows, month)}
+          series={chartSeries}
+          ticks={axisTicks(
+            monthlyRows.map(({ total: monthTotal }) => monthTotal),
+            { zero: true },
+          )}
+        />
+        <SourceNote>
+          All vehicle types, counted against the COE category each vehicle held.{" "}
+          {formatMonthShortLabel(month)} is highlighted.
+        </SourceNote>
+      </section>
 
       <ReportSection
         caption={`${formattedMonth} · change against ${formatDateToMonthYear(yearAgoMonth)}`}
@@ -201,7 +235,9 @@ export async function DeregistrationsReport({
                     <span
                       className="size-3.5 shrink-0 rounded"
                       style={{
-                        backgroundColor: `var(--chart-${(index % CHARTED_CATEGORIES) + 1})`,
+                        backgroundColor:
+                          CATEGORIES.find(({ name }) => name === category)
+                            ?.color ?? "var(--chart-6)",
                       }}
                     />
                     {category}
@@ -244,9 +280,9 @@ export async function DeregistrationsReport({
             columns={[
               { label: "Month" },
               { align: "end", label: "Total" },
-              ...chartedCategories.map(({ category }) => ({
+              ...CATEGORIES.map(({ label }) => ({
                 align: "end" as const,
-                label: category,
+                label,
               })),
             ]}
           >
@@ -258,11 +294,11 @@ export async function DeregistrationsReport({
                 <ReportCell align="end" className="font-extrabold text-base">
                   <Count value={row.total} />
                 </ReportCell>
-                {row.cells.map(({ count }, index) => (
+                {row.counts.map((count, index) => (
                   <ReportCell
                     align="end"
                     className="font-semibold text-muted"
-                    key={chartedCategories[index].category}
+                    key={CATEGORIES[index].name}
                   >
                     <Count value={count} />
                   </ReportCell>
