@@ -8,7 +8,6 @@ import {
   type CoeExercise,
   changeRatio,
   formatExercise,
-  formatExerciseTick,
   formatMonth,
   groupByExercise,
   recordHighs,
@@ -19,8 +18,14 @@ import {
 import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
 import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
-import { ResultsChart } from "@web/app/(main)/(dashboard)/coe/results/components/results-chart";
+import {
+  ResultsChart,
+  type ResultsPoint,
+} from "@web/app/(main)/(dashboard)/coe/results/components/results-chart";
+import { SeriesFilter } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { ReportSection } from "@web/components/shared/report";
 import {
   Count,
@@ -31,6 +36,7 @@ import {
 import { Text } from "@web/components/shared/text";
 import { getCoeResults, getCoeResultsByPeriod } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
+import { formatMonthShortName } from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
 
 /** The three categories the comp calls out beside the headline. */
@@ -171,7 +177,10 @@ export async function ResultsHeadline({ searchParams }: RegionProps) {
   );
 }
 
-/** The premium-by-exercise lines for whichever categories are switched on. */
+/**
+ * The premium-by-exercise lines for whichever categories are switched on,
+ * under a head naming the span and carrying the series toggles.
+ */
 export async function ResultsChartPanel({ searchParams }: RegionProps) {
   const { exercises, selected } = await loadExercises(searchParams);
 
@@ -179,9 +188,13 @@ export async function ResultsChartPanel({ searchParams }: RegionProps) {
     selected.includes(category),
   );
 
-  const chartData = exercises.map((exercise) => {
-    const point: Record<string, number | string> = {
-      label: formatExerciseTick(exercise),
+  const chartData: ResultsPoint[] = exercises.map((exercise) => {
+    const [year, month] = exercise.month.split("-").map(Number);
+    const point: ResultsPoint = {
+      biddingNo: exercise.biddingNo,
+      label: formatMonthShortName(exercise.month),
+      monthIndex: year * 12 + month - 1,
+      title: `${formatMonth(exercise.month, "short")} · ${exercise.biddingNo === 1 ? "1st" : "2nd"}`,
     };
 
     for (const category of plotted) {
@@ -190,8 +203,38 @@ export async function ResultsChartPanel({ searchParams }: RegionProps) {
 
     return point;
   });
+  const ticks = axisTicks(
+    chartData.flatMap((point) =>
+      plotted.map((category) => Number(point[category])),
+    ),
+    { zero: false },
+  );
+  const step = ticks.length > 1 ? ticks[1] - ticks[0] : undefined;
+  const first = exercises[0];
+  const latest = exercises.at(-1);
 
-  return <ResultsChart categories={plotted} data={chartData} />;
+  return (
+    <section className="flex flex-col gap-4">
+      <SectionHead
+        caption={
+          first && latest
+            ? `${formatMonth(first.month)} to ${formatMonth(latest.month)} · select categories to plot`
+            : undefined
+        }
+        eyebrow={`Last ${exercises.length} exercises`}
+        title="Closing premium by category"
+        trailing={<SeriesFilter />}
+      />
+      <ResultsChart categories={plotted} data={chartData} ticks={ticks} />
+      <SourceNote>
+        Source: LTA via DataMall · Quota premium at the close of each exercise ·
+        Y-axis does not start at zero
+        {step ? `; gridlines every ${formatCurrency(step)}.` : "."} Category D
+        premiums sit an order of magnitude below the car categories, so adding
+        it flattens the other lines.
+      </SourceNote>
+    </section>
+  );
 }
 
 /**

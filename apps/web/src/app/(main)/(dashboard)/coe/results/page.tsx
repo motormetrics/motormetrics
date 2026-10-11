@@ -12,15 +12,10 @@ import {
   ResultsChartPanel,
   ResultsHeadline,
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-report";
-import { SeriesFilter } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { OverviewPage } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
-import {
-  ReportFilterBar,
-  ReportNote,
-  ReportSection,
-} from "@web/components/shared/report";
+import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   ReportCell,
   ReportRow,
@@ -111,11 +106,21 @@ const structuredData: WithContext<WebPage> = {
   },
 };
 
-/** One pill per category, sized to the real `SeriesFilter` buttons. */
-function PillsSkeleton() {
-  return COE_CATEGORIES.map((category) => (
-    <Skeleton className="h-10 w-36" key={category} />
-  ));
+/** The chart section's head, toggles and plot. */
+function ChartSkeleton() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-end gap-4">
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-7 w-72" />
+          <Skeleton className="h-4 w-80" />
+        </div>
+        <Skeleton className="h-8 w-80 sm:ml-auto" />
+      </div>
+      <SkeletonChart />
+    </div>
+  );
 }
 
 /** Mirrors `ResultsHeadline`: the figure on the left, the 2×2 stat grid. */
@@ -205,41 +210,17 @@ export default function COEResultsPage({ searchParams }: PageProps) {
         title="COE price history and trends"
       />
 
-      {/* The bar's own furniture — the eyebrow, the hint, the rules — is static
-          and prerenders. The pills themselves read URL data via `useQueryState`,
-          so they need their own boundary or the prerender bails. On a client
-          navigation the hook resolves straight from the router store, so this
-          fallback is only ever seen on a cold load. */}
-      <ReportFilterBar
-        label="Series"
-        trailing={
-          <Typography.Paragraph color="muted" size="sm">
-            Tap a category to add or remove it from the chart
-          </Typography.Paragraph>
-        }
-      >
-        <Suspense fallback={<PillsSkeleton />}>
-          <SeriesFilter />
-        </Suspense>
-      </ReportFilterBar>
-
       <SectionErrorBoundary title="Latest exercise unavailable">
         <Suspense fallback={<HeadlineSkeleton />}>
           <ResultsHeadline searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
 
-      <div className="flex flex-col gap-3.5">
-        <SectionErrorBoundary title="Premium chart unavailable">
-          <Suspense fallback={<SkeletonChart />}>
-            <ResultsChartPanel searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
-        <Typography.Paragraph color="muted" size="sm">
-          Category D premiums sit an order of magnitude below the car categories
-          — add it to the chart and the other lines flatten.
-        </Typography.Paragraph>
-      </div>
+      <SectionErrorBoundary title="Premium chart unavailable">
+        <Suspense fallback={<ChartSkeleton />}>
+          <ResultsChartPanel searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
 
       <ReportSection
         caption="Average closing premium across each year's exercises, with the year's high"
