@@ -13,7 +13,6 @@ import {
   summariseByYear,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
 import {
   ResultsChart,
@@ -24,7 +23,11 @@ import { ShowMoreRows } from "@web/app/(main)/(dashboard)/coe/results/components
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import {
+  SectionHead,
+  SourceNote,
+  StatCell,
+} from "@web/components/shared/overview";
 import { Text } from "@web/components/shared/text";
 import { getCoeResults, getCoeResultsByPeriod } from "@web/queries/coe";
 import type { COECategory } from "@web/types";

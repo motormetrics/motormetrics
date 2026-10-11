@@ -17,7 +17,6 @@ import {
   toCategory,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
 import { PremiumsCategoryTable } from "@web/app/(main)/(dashboard)/coe/premiums/components/categories-table";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/coe/premiums/components/filters";
@@ -36,6 +35,7 @@ import {
   SectionHead,
   SectionLink,
   SourceNote,
+  StatCell,
 } from "@web/components/shared/overview";
 import { Text } from "@web/components/shared/text";
 import { getCategoryExercises, getExercisePair } from "@web/queries/coe";
