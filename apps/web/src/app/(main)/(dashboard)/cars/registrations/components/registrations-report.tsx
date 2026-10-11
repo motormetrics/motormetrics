@@ -1,10 +1,14 @@
-import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { slugify } from "@motormetrics/utils/slugify";
 import {
   FuelTypeTabs,
   RangeTabs,
 } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
 import { FuelTypeTable } from "@web/app/(main)/(dashboard)/cars/registrations/components/fuel-type-table";
+import {
+  TopMakesTable,
+  VehicleTypeTable,
+} from "@web/app/(main)/(dashboard)/cars/registrations/components/makes-and-types";
 import { RegistrationsHeadline } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-headline";
 import { RegistrationsTrendChart } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-trend-chart";
 import { trendPoints } from "@web/app/(main)/(dashboard)/cars/registrations/components/trend-points";
@@ -19,15 +23,6 @@ import {
   SectionHead,
   SourceNote,
 } from "@web/components/shared/overview";
-import { ReportNote, ReportSection } from "@web/components/shared/report";
-import {
-  Count,
-  DeltaText,
-  ReportCell,
-  ReportRow,
-  ReportTable,
-  ShareBar,
-} from "@web/components/shared/report-table";
 import { getDistinctFuelTypes } from "@web/queries/cars";
 import {
   getCarsComparison,
@@ -40,6 +35,7 @@ import {
   getTopMakesByYear,
   getYearlyRegistrations,
 } from "@web/queries/cars/yearly-statistics";
+import { getCarLogoMap } from "@web/queries/logos";
 import { percentageChange } from "@web/utils/change-ratio";
 import {
   formatChartMonth,
@@ -47,7 +43,6 @@ import {
 } from "@web/utils/dates/format-month";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
-import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
 /** What each range covers, for the chart's caption. */
@@ -84,12 +79,14 @@ export async function RegistrationsReport({
   ]);
   const year = Number(month.slice(0, 4));
 
-  const [registrations, comparison, yearToDate, topMakes] = await Promise.all([
-    getCarsData(month),
-    getCarsComparison(month),
-    getYearToDateByFuelType(year),
-    getTopMakesByYear(year, 10),
-  ]);
+  const [registrations, comparison, yearToDate, topMakes, logoUrlBySlug] =
+    await Promise.all([
+      getCarsData(month),
+      getCarsComparison(month),
+      getYearToDateByFuelType(year),
+      getTopMakesByYear(year, 10),
+      getCarLogoMap(),
+    ]);
 
   const latestMonth = series.at(-1)?.month ?? month;
   const ticks = axisTicks(
@@ -119,7 +116,6 @@ export async function RegistrationsReport({
 
   const yearTotal =
     yearlyTotals.find((entry) => entry.year === year)?.total ?? 0;
-  const makeLeader = topMakes[0]?.value ?? 0;
 
   return (
     <>
@@ -227,101 +223,60 @@ export async function RegistrationsReport({
 
       <Hairline />
 
-      <ReportSection caption={`${year} year to date`} title="Top makes">
-        <ReportTable
-          columns={[
-            { label: "#", width: "60px" },
-            { label: "Make" },
-            { align: "end", label: "Registrations" },
-            { align: "end", label: "Share" },
-            { label: "", width: "300px" },
-          ]}
-        >
-          {topMakes.map(({ make, value }, index) => (
-            <ReportRow key={make}>
-              <ReportCell className="font-bold text-muted text-sm">
-                {String(index + 1).padStart(2, "0")}
-              </ReportCell>
-              <ReportCell className="font-bold text-base">{make}</ReportCell>
-              <ReportCell align="end" className="font-extrabold text-lg">
-                <Count value={value} />
-              </ReportCell>
-              <ReportCell align="end" className="font-semibold text-muted">
-                {((value / (yearTotal || 1)) * 100).toFixed(1)}%
-              </ReportCell>
-              <ReportCell>
-                <ShareBar
-                  isLeader={index === 0}
-                  share={(value / (makeLeader || 1)) * 100}
-                />
-              </ReportCell>
-            </ReportRow>
-          ))}
-        </ReportTable>
-      </ReportSection>
+      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-14">
+        <section className="flex min-w-0 flex-col gap-4">
+          <SectionHead
+            caption={`${year} year to date · all fuel types`}
+            eyebrow="Registrations"
+            link={{ href: "/cars/makes", label: "All makes" }}
+            title="Top makes"
+          />
+          <TopMakesTable
+            makes={topMakes.map(({ make, value }) => ({
+              logoUrl: logoUrlBySlug[slugify(make)] ?? null,
+              make,
+              value,
+            }))}
+            total={yearTotal}
+          />
+          <SourceNote>
+            New car registrations by make,{" "}
+            {latestMonth.startsWith(`${year}-`)
+              ? `January to ${formatMonthLabel(latestMonth)}`
+              : `the whole of ${year}`}
+            . Not affected by the month or fuel filters.
+          </SourceNote>
+        </section>
 
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
-        <ReportSection title="By vehicle type">
-          <ReportTable
-            columns={[
-              { label: "Type" },
-              { align: "end", label: "Registrations" },
-              { align: "end", label: "Share" },
-              { align: "end", label: `Vs ${year - 1}`, width: "110px" },
-            ]}
-          >
-            {registrations.vehicleType.map(({ count, name }) => (
-              <ReportRow key={name}>
-                <ReportCell className="font-semibold">
-                  {formatVehicleType(name)}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold">
-                  <Count value={count} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  {((count / (registrations.total || 1)) * 100).toFixed(1)}%
-                </ReportCell>
-                <ReportCell align="end">
-                  <DeltaText
-                    value={percentageChange(
-                      count,
-                      lookup(comparison.previousYear.vehicleType, name),
-                    )}
-                  />
-                </ReportCell>
-              </ReportRow>
-            ))}
-          </ReportTable>
-        </ReportSection>
-
-        <ReportNote title="How this is counted">
-          <Typography.Paragraph>
+        <section className="flex min-w-0 flex-col gap-4">
+          <SectionHead
+            caption={`${formatMonthLabel(month)} · against ${formatMonthLabel(comparison.previousYear.period)}`}
+            eyebrow="Registrations"
+            link={{
+              href: "/cars/vehicle-types",
+              label: "Vehicle types in full",
+            }}
+            title="By vehicle type"
+          />
+          <VehicleTypeTable
+            previousYear={year - 1}
+            rows={registrations.vehicleType.map(({ count, name }) => ({
+              change: percentageChange(
+                count,
+                lookup(comparison.previousYear.vehicleType, name),
+              ),
+              count,
+              name: formatVehicleType(name),
+            }))}
+            total={registrations.total}
+          />
+          <SourceNote>
             A car counts in the month it is registered, which can lag the
-            bidding exercise that won its COE by several weeks.
-          </Typography.Paragraph>
-          <Typography.Paragraph>
-            Figures cover cars only. Other vehicle classes are counted
-            separately under their own categories.
-          </Typography.Paragraph>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/makes"
-          >
-            All makes →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/fuel-types"
-          >
-            Fuel types in full →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/vehicle-types"
-          >
-            Vehicle types in full →
-          </Link>
-        </ReportNote>
+            bidding exercise that won its COE by several weeks. Figures cover
+            cars only; other vehicle classes are counted separately under their
+            own categories.
+          </SourceNote>
+        </section>
       </div>
     </>
   );
