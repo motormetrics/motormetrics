@@ -1,24 +1,43 @@
 "use client";
 
 import { Input, Label, ListBox, Select, Typography } from "@heroui/react";
+import { ChartTooltip } from "@heroui-pro/react";
+import { BarChart } from "@heroui-pro/react/bar-chart";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   AGE_BRACKETS,
   NEW_CAP,
   OLD_CAP,
 } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
-import { SourceNote, StatCell } from "@web/components/shared/overview";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import {
+  Hairline,
+  SectionHead,
+  SourceNote,
+  StatCell,
+} from "@web/components/shared/overview";
 import {
   ReportHeadline,
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
 import { Text } from "@web/components/shared/text";
+import { compactCurrency } from "@web/utils/formatting/chart-axis";
 import posthog from "posthog-js";
 import { useMemo, useState } from "react";
 
 /** A COE runs for 10 years; the COE rebate is pro-rated over its months. */
 const COE_MONTHS = 120;
+
+/** One bar of the old-against-new comparison. */
+interface CompareRow {
+  [key: string]: number | string;
+  after: number;
+  before: number;
+  color: string;
+  label: string;
+  value: number;
+}
 
 /** "−60.0%", with a true minus for a fall. */
 const formatSignedPercent = (ratio: number): string =>
@@ -74,6 +93,27 @@ export function PARFCalculator() {
       shortfall: oldRebate - newRebate,
     };
   }, [arf, bracket]);
+
+  // Each row fills one series, so the two bars take different colours.
+  const compareRows: CompareRow[] = [
+    {
+      after: 0,
+      before: result.oldRebate,
+      color: "var(--chart-3)",
+      label: "Before Budget 2026",
+      value: result.oldRebate,
+    },
+    {
+      after: result.newRebate,
+      before: 0,
+      color: "var(--chart-1)",
+      label: "After Budget 2026",
+      value: result.newRebate,
+    },
+  ];
+  const compareTicks = axisTicks([result.oldRebate, result.newRebate, 1], {
+    zero: true,
+  });
 
   // LTA pro-rates the COE rebate over the 10-year COE by the months unused.
   const coeRebate = (premium * monthsLeft) / COE_MONTHS;
@@ -231,6 +271,76 @@ export function PARFCalculator() {
           />
         </div>
       </div>
+
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${formatCurrency(arf)} ARF · ${bracket.label}`}
+          eyebrow="Old and new schedules"
+          title="What this deregistration returns"
+        />
+        <BarChart
+          data={compareRows}
+          height={compareRows.length * 56 + 28}
+          layout="vertical"
+          margin={{ bottom: 0, left: 0, right: 16, top: 0 }}
+        >
+          <BarChart.Grid horizontal={false} />
+          <BarChart.XAxis
+            domain={[0, compareTicks.at(-1) ?? "auto"]}
+            tickFormatter={compactCurrency}
+            ticks={compareTicks}
+            type="number"
+          />
+          <BarChart.YAxis
+            dataKey="label"
+            tickMargin={8}
+            type="category"
+            width={160}
+          />
+          <BarChart.Bar
+            barSize={18}
+            dataKey="before"
+            fill="var(--chart-3)"
+            radius={[0, 2, 2, 0]}
+            stackId="rebate"
+          />
+          <BarChart.Bar
+            barSize={18}
+            dataKey="after"
+            fill="var(--chart-1)"
+            radius={[0, 2, 2, 0]}
+            stackId="rebate"
+          />
+          <BarChart.Tooltip
+            content={({ active, payload }) => {
+              const row = payload?.[0]?.payload as CompareRow | undefined;
+              if (!active || !row) {
+                return null;
+              }
+              return (
+                <ChartTooltip>
+                  <ChartTooltip.Header>{row.label}</ChartTooltip.Header>
+                  <ChartTooltip.Item>
+                    <ChartTooltip.Indicator color={row.color} />
+                    <ChartTooltip.Label>PARF rebate</ChartTooltip.Label>
+                    <ChartTooltip.Value>
+                      {formatCurrency(row.value)}
+                    </ChartTooltip.Value>
+                  </ChartTooltip.Item>
+                </ChartTooltip>
+              );
+            }}
+          />
+        </BarChart>
+        <SourceNote>
+          Bars start at $0 on a shared scale.{" "}
+          {bracket.oldRate === 0
+            ? "Neither schedule pays a rebate past 10 years."
+            : `On these figures the new schedule returns ${formatCurrency(result.shortfall)} less than the old one: ${formatCurrency(result.newRebate)} against ${formatCurrency(result.oldRebate)}.`}
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <ReportSection
         caption="PARF rebate plus COE rebate"
