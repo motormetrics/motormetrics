@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
 import {
@@ -22,17 +22,11 @@ import { MakeAvatar } from "@web/components/shared/make-avatar";
 import {
   Hairline,
   SectionHead,
+  SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
-import { ReportNote, ReportSection } from "@web/components/shared/report";
-import {
-  Count,
-  DeltaText,
-  ReportCell,
-  ReportRow,
-  ReportTable,
-  ShareBar,
-} from "@web/components/shared/report-table";
+import { Count } from "@web/components/shared/report-table";
+import { Text } from "@web/components/shared/text";
 import {
   getMakeCrossTab,
   getMakeTotalsInRange,
@@ -206,7 +200,6 @@ export async function MakeReport({
       share: (count / (market || 1)) * 100,
     };
   });
-  const shareLeader = Math.max(...series.map((entry) => entry.share), 0);
 
   const marketTotal = sumBy(
     monthsBetween(start, end),
@@ -225,6 +218,28 @@ export async function MakeReport({
     range === "month"
       ? formatDateToMonthYear(month)
       : `${formatDateToMonthYear(start)} – ${formatDateToMonthYear(end)}`;
+
+  // Every fuel type the make registered in the period, whatever the switch
+  // is set to, each with the two vehicle types that carry its volume.
+  const fuelMix = fuelTotals.map(({ count, name }, index) => {
+    const leading = tally(
+      windowRows.filter((row) => row.fuelType === name),
+      (row) => row.vehicleType,
+      (row) => row.count,
+    )
+      .slice(0, 2)
+      .map(({ name: vehicleType }) => formatVehicleType(vehicleType));
+
+    return {
+      color: `var(--chart-${(index % 6) + 1})`,
+      count,
+      name,
+      note:
+        leading.length > 1
+          ? `${leading.join(" and ")} carry the volume`
+          : `All of it ${leading[0]}`,
+    };
+  });
 
   // The comp's two-by-two grid beside the headline; the mix cells drop out
   // when the make registered nothing in the period.
@@ -391,159 +406,207 @@ export async function MakeReport({
 
       <Hairline />
 
-      <ReportSection
-        caption={`${make} against the whole market`}
-        title="Month by month"
-      >
-        <ReportTable
-          columns={[
-            { label: "Month" },
-            { align: "end", label: make },
-            { align: "end", label: "All cars" },
-            { align: "end", label: "Share" },
-            { label: "", width: "280px" },
-            { align: "end", label: "Vs last month", width: "140px" },
-          ]}
-        >
-          {series
-            .map((entry, index) => ({
-              ...entry,
-              previous: index > 0 ? series[index - 1].count : null,
-            }))
-            .reverse()
-            .map(({ count, market, month: seriesMonth, previous, share }) => (
-              <ReportRow isActive={seriesMonth === month} key={seriesMonth}>
-                <ReportCell className="font-bold text-base">
-                  {formatDateToMonthYear(seriesMonth)}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold text-lg">
-                  <Count value={count} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  <Count value={market} />
-                </ReportCell>
-                <ReportCell
-                  align="end"
-                  className="font-bold text-accent-strong"
-                >
-                  {share.toFixed(1)}%
-                </ReportCell>
-                <ReportCell>
-                  <ShareBar share={(share / (shareLeader || 1)) * 100} />
-                </ReportCell>
-                <ReportCell align="end">
-                  {previous === null ? (
-                    <span className="font-bold text-muted">—</span>
-                  ) : (
-                    <DeltaText value={percentageChange(count, previous)} />
+      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-11 lg:gap-14">
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-6">
+          <SectionHead
+            caption={`${periodLabel(month, seriesRange)}, newest first`}
+            eyebrow="Month by month"
+            title={`${make} against the whole market`}
+          />
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2 border-border border-b pb-2 font-semibold text-muted text-xs md:gap-3">
+              <span className="min-w-0 flex-1">Month</span>
+              <span className="w-12 truncate text-right md:w-16">{make}</span>
+              <span className="w-12 text-right md:w-16">
+                <span className="max-md:hidden">All cars</span>
+                <span className="md:hidden">All</span>
+              </span>
+              <span className="w-12 text-right md:w-16">Share</span>
+              <span className="w-14 text-right md:w-24">
+                <span className="max-md:hidden">vs last month</span>
+                <span className="md:hidden">vs prev</span>
+              </span>
+            </div>
+            {series
+              .map((entry, index) => ({
+                ...entry,
+                previous: index > 0 ? series[index - 1].count : null,
+              }))
+              .reverse()
+              .map(({ count, market, month: seriesMonth, previous, share }) => (
+                <div
+                  className={cn(
+                    "flex items-center gap-2 border-separator border-b py-2 text-sm tabular-nums md:gap-3",
+                    seriesMonth === month && "bg-surface-secondary",
                   )}
-                </ReportCell>
-              </ReportRow>
-            ))}
-        </ReportTable>
-      </ReportSection>
+                  key={seriesMonth}
+                >
+                  <span className="min-w-0 flex-1 truncate font-medium">
+                    {formatDateToMonthYear(seriesMonth)}
+                  </span>
+                  <span className="w-12 text-right font-semibold md:w-16">
+                    <Count value={count} />
+                  </span>
+                  <span className="w-12 text-right text-muted md:w-16">
+                    <Count value={market} />
+                  </span>
+                  <span className="w-12 text-right text-muted md:w-16">
+                    {share.toFixed(1)}%
+                  </span>
+                  {previous === null ? (
+                    <span className="w-14 text-right text-muted md:w-24">
+                      —
+                    </span>
+                  ) : (
+                    <DeltaChip
+                      className="w-14 text-right md:w-24"
+                      value={percentageChange(count, previous)}
+                    />
+                  )}
+                </div>
+              ))}
+          </div>
+          <SourceNote>
+            Share is {make}
+            {fuelType ? ` ${fuelType}` : ""} registrations as a share of all new
+            cars that month.
+          </SourceNote>
+        </section>
 
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
-        <div className="flex flex-col gap-10">
-          <ReportSection caption={periodCaption} title="Against other makes">
+        <div className="flex min-w-0 flex-col gap-10 lg:col-span-5">
+          <section className="flex min-w-0 flex-col gap-4">
+            <SectionHead
+              caption={`${periodCaption} · all fuel types`}
+              eyebrow="Peers"
+              link={{ href: "/cars/makes", label: "All makes" }}
+              title="Against other makes"
+            />
             <div className="flex flex-col">
               {peers.map(({ count, make: peerMake }) => {
                 const isCurrent = peerMake === make;
                 const slug = slugify(peerMake);
                 return (
                   <div
-                    className="flex items-center gap-5 border-border border-b py-3.5"
+                    className="flex items-center gap-3 border-separator border-b py-2"
                     key={peerMake}
                   >
-                    <MakeAvatar
-                      logoUrl={logoUrlBySlug[slug] ?? null}
-                      make={peerMake}
-                      size="sm"
-                    />
-                    <Link
-                      className={
-                        isCurrent
-                          ? "w-[10.625rem] shrink-0 font-extrabold text-accent-strong"
-                          : "w-[10.625rem] shrink-0 font-semibold hover:text-accent-strong"
-                      }
-                      href={`/cars/makes/${slug}`}
-                    >
-                      {peerMake}
-                    </Link>
-                    <div className="flex-1">
-                      <ShareBar
-                        isLeader={isCurrent}
-                        share={(count / (peerLeader || 1)) * 100}
+                    <span className="flex min-w-0 flex-1 items-center gap-2.5 md:w-36 md:flex-none">
+                      <MakeAvatar
+                        logoUrl={logoUrlBySlug[slug] ?? null}
+                        make={peerMake}
+                        size="sm"
                       />
-                    </div>
-                    <span className="w-[4.5rem] text-right font-extrabold tabular-nums">
+                      <Link
+                        className={cn(
+                          "truncate text-sm no-underline",
+                          isCurrent
+                            ? "font-semibold text-accent-strong"
+                            : "font-medium text-foreground hover:text-accent-strong",
+                        )}
+                        href={`/cars/makes/${slug}`}
+                      >
+                        {peerMake}
+                      </Link>
+                    </span>
+                    <span className="block h-2.5 min-w-0 flex-1 bg-surface-secondary max-md:hidden">
+                      <span
+                        className="block h-full rounded-r-xs"
+                        style={{
+                          background: isCurrent
+                            ? "var(--chart-1)"
+                            : "var(--chart-5)",
+                          width: `${((count / (peerLeader || 1)) * 100).toFixed(1)}%`,
+                        }}
+                      />
+                    </span>
+                    <span className="w-16 text-right font-semibold text-sm tabular-nums">
                       <Count value={count} />
                     </span>
                   </div>
                 );
               })}
             </div>
-          </ReportSection>
+            <SourceNote>
+              The largest makes by registrations in the period, always including{" "}
+              {make}.
+            </SourceNote>
+          </section>
 
-          <ReportSection
-            caption={`share of every ${make} registered`}
-            title="Fuel type mix"
-          >
-            <div className="flex flex-col">
-              {fuelTotals.map(({ count, name }) => {
-                const leading = tally(
-                  windowRows.filter((row) => row.fuelType === name),
-                  (row) => row.vehicleType,
-                  (row) => row.count,
-                )
-                  .slice(0, 2)
-                  .map(({ name: vehicleType }) =>
-                    formatVehicleType(vehicleType),
-                  );
-
-                return (
-                  <div
-                    className="flex flex-wrap items-baseline gap-5 border-border border-b py-3.5"
-                    key={name}
-                  >
-                    <span className="w-[8.125rem] shrink-0 font-bold">
-                      {name}
-                    </span>
-                    <Typography.Paragraph color="muted" size="sm">
-                      {leading.length > 1
-                        ? `${leading.join(" and ")} carry the volume`
-                        : `all of it ${leading[0]}`}
-                    </Typography.Paragraph>
-                    <span className="ml-auto font-extrabold tabular-nums">
-                      {percentage(count, makeTotal)}
-                    </span>
-                  </div>
-                );
-              })}
+          <section className="flex min-w-0 flex-col gap-4">
+            <SectionHead
+              caption={`Share of every ${make} registered · ${periodCaption}`}
+              eyebrow="Mix"
+              title="Fuel type mix"
+            />
+            <div
+              aria-label={`Share of ${make} registrations by fuel type`}
+              className="flex h-4 gap-0.5"
+              role="img"
+            >
+              {fuelMix.map(({ color, count, name }) => (
+                <span
+                  className="block h-full"
+                  key={name}
+                  style={{
+                    background: color,
+                    width: `${((count / (makeTotal || 1)) * 100).toFixed(2)}%`,
+                  }}
+                />
+              ))}
             </div>
-          </ReportSection>
+            <ul className="flex flex-col">
+              {fuelMix.map(({ color, count, name, note }) => (
+                <li
+                  className="flex items-center gap-2.5 border-separator border-b py-2"
+                  key={name}
+                >
+                  <span
+                    aria-hidden
+                    className="size-3 shrink-0 rounded-xs"
+                    style={{ background: color }}
+                  />
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <span className="truncate text-sm">{name}</span>
+                    <span className="truncate text-muted text-xs">{note}</span>
+                  </span>
+                  <span className="font-semibold text-sm tabular-nums">
+                    {percentage(count, makeTotal)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <SourceNote>
+              All fuel types, whatever the fuel type switch is set to.
+            </SourceNote>
+          </section>
         </div>
+      </div>
 
-        <ReportNote title="Reading a make page">
-          <Typography.Paragraph>
+      <Hairline />
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
+        <div className="flex flex-col gap-2.5">
+          <Text.Paragraph eyebrow weight="semibold" color="muted" size="xs">
+            Reading a make page
+          </Text.Paragraph>
+          <Typography.Paragraph size="sm">
             Registrations are counted by make as recorded at registration, so
             rebadged and parallel-imported cars appear under the same name as
             authorised-dealer stock.
           </Typography.Paragraph>
-          <Typography.Paragraph>
+          <Typography.Paragraph size="sm">
             LTA reports registrations by make, fuel type and vehicle type — not
             by model, so there are no model-level figures anywhere on the site.
           </Typography.Paragraph>
-          <Link className="font-bold text-accent-strong" href="/cars/makes">
-            All makes →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong"
-            href="/cars/fuel-types"
-          >
-            Fuel types →
-          </Link>
-        </ReportNote>
+        </div>
+        <div className="flex flex-wrap items-end gap-6 lg:justify-end">
+          <SectionLink className="ml-0" href="/cars/makes">
+            All makes
+          </SectionLink>
+          <SectionLink className="ml-0" href="/cars/fuel-types">
+            Fuel types
+          </SectionLink>
+        </div>
       </div>
     </>
   );
