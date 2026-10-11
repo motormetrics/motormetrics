@@ -20,9 +20,15 @@ import { getLatestMonth } from "@web/utils/dates/months";
 
 const TREND_MONTHS = 12;
 
-/** Category, premium, change and trend; the trend drops out below 1100px. */
-const ROW_GRID =
-  "grid grid-cols-[minmax(0,1fr)_120px_90px_140px] items-center gap-4 max-[1100px]:grid-cols-[minmax(0,1fr)_110px_80px] max-[720px]:grid-cols-[minmax(0,1fr)_96px_60px] max-[720px]:gap-2.5";
+/**
+ * Category, premium, change and trend, shared by the header and every row so
+ * the columns line up. The trend drops out below xl.
+ */
+const ROW = "flex items-center gap-4 max-md:gap-2.5";
+const CATEGORY_CELL = "min-w-0 flex-1";
+const PREMIUM_CELL = "w-30 shrink-0 text-right max-xl:w-28 max-md:w-24";
+const CHANGE_CELL = "w-22 shrink-0 text-right max-xl:w-20 max-md:w-15";
+const TREND_CELL = "w-35 shrink-0 max-xl:hidden";
 
 /**
  * Every COE category at a glance: the latest premium, its change on the
@@ -59,7 +65,7 @@ export async function CoePremiumTable() {
   const previousMonth = rows[0]?.previous?.month;
 
   return (
-    <section className="flex min-w-0 flex-col gap-[18px]">
+    <section className="flex min-w-0 flex-col gap-4.5">
       <SectionHead
         caption={formatExercise(exercise)}
         eyebrow="Certificate of Entitlement"
@@ -70,26 +76,28 @@ export async function CoePremiumTable() {
       <div className="flex flex-col">
         <div
           className={cn(
-            ROW_GRID,
+            ROW,
             "border-border border-b pb-2 font-semibold text-muted text-xs",
           )}
         >
-          <span>Category</span>
-          <span className="text-right">Premium</span>
-          <span className="text-right">
+          <span className={CATEGORY_CELL}>Category</span>
+          <span className={PREMIUM_CELL}>Premium</span>
+          <span className={CHANGE_CELL}>
             {previousMonth ? `vs ${formatMonthShortName(previousMonth)}` : ""}
           </span>
-          <span className="text-right max-[1100px]:hidden">
+          <span className={cn(TREND_CELL, "text-right")}>
             Last {TREND_MONTHS} months
           </span>
         </div>
         <ul className="flex flex-col">
           {rows.map((row) => (
             <li
-              className={cn(ROW_GRID, "border-separator border-b py-[11px]")}
+              className={cn(ROW, "border-separator border-b py-3")}
               key={row.category}
             >
-              <span className="flex min-w-0 items-baseline gap-2.5">
+              <span
+                className={cn(CATEGORY_CELL, "flex items-baseline gap-2.5")}
+              >
                 <b className="whitespace-nowrap font-semibold text-sm">
                   Cat {toCategoryKey(row.category)}
                 </b>
@@ -97,7 +105,12 @@ export async function CoePremiumTable() {
                   {CATEGORY_DESCRIPTIONS[row.category]}
                 </span>
               </span>
-              <span className="text-right font-semibold text-base tabular-nums">
+              <span
+                className={cn(
+                  PREMIUM_CELL,
+                  "font-semibold text-base tabular-nums",
+                )}
+              >
                 <NumberValue
                   currency="SGD"
                   locale="en-SG"
@@ -108,11 +121,11 @@ export async function CoePremiumTable() {
               </span>
               {/* Wrapped: the chip renders nothing for no change, which would
                   pull the trend into this column. */}
-              <span className="text-right text-sm">
+              <span className={cn(CHANGE_CELL, "text-sm")}>
                 <CostTrendChip changeRatio={row.changeRatio} />
               </span>
               <SparklineChart
-                className="max-[1100px]:hidden"
+                className={TREND_CELL}
                 color="var(--chart-3)"
                 data={row.series.map((point) => ({
                   label: formatMonthLabel(point.month),
