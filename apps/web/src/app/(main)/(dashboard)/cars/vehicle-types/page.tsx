@@ -1,7 +1,12 @@
 import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/search-params";
-import { VehicleTypesReport } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-report";
+import { PeriodSegment } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-filters";
+import {
+  loadVehicleTypesSearchParams,
+  periodLabelFor,
+  VehicleTypesReport,
+} from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-report";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthMenu } from "@web/components/shared/month-menu";
 import { OverviewPage } from "@web/components/shared/overview";
@@ -10,7 +15,6 @@ import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { formatMonthLabel } from "@web/utils/dates/format-month";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
@@ -61,9 +65,16 @@ export default function Page({ searchParams }: PageProps) {
     <OverviewPage className="gap-10 max-md:gap-7">
       <PageHead
         controls={
-          <Suspense fallback={<Skeleton className="h-8 w-36" />}>
-            <VehicleTypesMonthPicker searchParams={searchParams} />
-          </Suspense>
+          <>
+            {/* nuqs reads the URL on the client, so the segment needs its own
+                boundary to keep the static shell. */}
+            <Suspense fallback={<Skeleton className="h-8 w-48" />}>
+              <PeriodSegment />
+            </Suspense>
+            <Suspense fallback={<Skeleton className="h-8 w-36" />}>
+              <VehicleTypesMonthPicker searchParams={searchParams} />
+            </Suspense>
+          </>
         }
         eyebrow="Cars"
         sub={
@@ -84,22 +95,23 @@ export default function Page({ searchParams }: PageProps) {
   );
 }
 
-/** Names what the page counts, the month it reports and its source. */
+/** Names the period the page reports, what it counts and its source. */
 async function VehicleTypesMonthSub({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const { month: parsedMonth } = await loadSearchParams(searchParams);
+  const { month: parsedMonth, period } =
+    await loadVehicleTypesSearchParams(searchParams);
   const { month } = await getMonthOrLatest(parsedMonth, "cars");
 
   return (
     <>
-      The vehicle types behind each month's new car registrations ·{" "}
       <span className="font-semibold text-foreground">
-        {formatMonthLabel(month)}
+        {periodLabelFor(period, month)}
       </span>{" "}
-      · Source: LTA via DataMall
+      · the vehicle types behind new car registrations · Source: LTA via
+      DataMall
     </>
   );
 }

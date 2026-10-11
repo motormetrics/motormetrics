@@ -1,20 +1,14 @@
 import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
-import { MeasureTabs } from "@web/app/(main)/(dashboard)/cars/components/category/category-filters";
 import {
   type CategorySeries,
   CategoryShareChart,
 } from "@web/app/(main)/(dashboard)/cars/components/category/category-share-chart";
-import { PeriodTabs } from "@web/app/(main)/(dashboard)/cars/components/category/period-tabs";
-import { DeltaChip } from "@web/components/shared/delta-chip";
-import {
-  ReportFilterBar,
-  ReportHeadline,
-  ReportNote,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
+import { MeasureSegment } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-filters";
+import { VehicleTypesHeadline } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-headline";
+import { Hairline } from "@web/components/shared/overview";
+import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
   DeltaText,
@@ -30,7 +24,11 @@ import {
   getElectricShareByVehicleType,
   getTopMakesByCategory,
 } from "@web/queries/cars/category-report";
-import { formatChartMonth } from "@web/utils/dates/format-month";
+import {
+  formatChartMonth,
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
@@ -49,17 +47,7 @@ import {
  */
 const PERIODS = ["month", "ytd"] as const;
 
-const PERIOD_LABELS: Record<(typeof PERIODS)[number], string> = {
-  month: "This month",
-  ytd: "Year to date",
-};
-
-const PERIOD_OPTIONS = PERIODS.map((key) => ({
-  key,
-  label: PERIOD_LABELS[key],
-}));
-
-const loadVehicleTypesSearchParams = createLoader({
+export const loadVehicleTypesSearchParams = createLoader({
   measure: parseAsStringLiteral(["share", "volume"] as const).withDefault(
     "share",
   ),
@@ -85,6 +73,35 @@ const DESCRIPTIONS: Record<string, string> = {
 };
 
 const URL_PATH = "/cars/vehicle-types";
+
+/**
+ * The comp's colour for each LTA vehicle type, shared by the mix bar, the
+ * trend and the tables; anything else takes the lightest ramp step.
+ */
+const VEHICLE_COLOURS: Record<string, string> = {
+  "Coupe/Convertible": "var(--chart-5)",
+  Hatchback: "var(--muted)",
+  "Multi-purpose Vehicle": "var(--chart-3)",
+  Sedan: "var(--chart-sand)",
+  "Sports Utility Vehicle": "var(--chart-1)",
+  // The comp's dark sand has no token; the mid slate step stands in.
+  "Station-wagon": "var(--chart-4)",
+};
+
+const FALLBACK_COLOUR = "var(--chart-6)";
+
+const vehicleColour = (name: string): string =>
+  VEHICLE_COLOURS[name] ?? FALLBACK_COLOUR;
+
+/** The vehicle type the headline features, when the period has any. */
+const FEATURED_TYPE = "Sports Utility Vehicle";
+
+/** "August 2026" for a month, "2026 year to date" for the year so far. */
+export function periodLabelFor(period: "month" | "ytd", month: string): string {
+  return period === "ytd"
+    ? `${month.slice(0, 4)} year to date`
+    : formatMonthLabel(month);
+}
 
 /** How far back the trend chart reaches from the selected month. */
 const SERIES_MONTHS = 12;
@@ -143,8 +160,12 @@ export async function VehicleTypesReport({
     ]);
 
   const formattedMonth = formatDateToMonthYear(month);
-  const periodLabel =
-    period === "ytd" ? `${year} year to date` : formattedMonth;
+  const periodLabel = periodLabelFor(period, month);
+  // The period in running text, so the year to date names its months.
+  const periodSpan =
+    period === "ytd"
+      ? `January to ${formatMonthName(month)} ${year}`
+      : formatMonthLabel(month);
 
   const rows = totals.filter(({ count }) => count > 0);
 
@@ -168,19 +189,26 @@ export async function VehicleTypesReport({
     ]),
   );
 
-  const leader = rows[0];
-  const leaderShare = percentageOf(leader.count, total);
-  const leaderPriorShare = percentageOf(
-    priorByName.get(leader.name) ?? 0,
+  const mix = rows.map(({ count, name }) => ({
+    color: vehicleColour(name),
+    count,
+    label: formatVehicleType(name),
+    name,
+    share: percentageOf(count, total),
+  }));
+  // SUVs are the comp's subject; a period without any falls back to the
+  // largest vehicle type so the headline still reads.
+  const featured = mix.find(({ name }) => name === FEATURED_TYPE) ?? mix[0];
+  const featuredPriorShare = percentageOf(
+    priorByName.get(featured.name) ?? 0,
     priorTotal,
   );
 
-  // The chart and the month-by-month table plot the same leading types, so a
-  // colour means the same thing in both. Rows past the sixth reuse the ramp —
-  // they are not plotted, so nothing is mistaken for a charted line.
+  // The chart and the month-by-month table plot the same leading types, and
+  // each keeps one colour wherever it appears.
   const chartedTypes = rows.slice(0, CHARTED_TYPES);
   const chartSeries: CategorySeries[] = chartedTypes.map(({ name }, index) => ({
-    color: `var(--chart-${index + 1})`,
+    color: vehicleColour(name),
     key: `type${index}`,
     label: formatVehicleType(name),
   }));
@@ -217,31 +245,22 @@ export async function VehicleTypesReport({
 
   return (
     <>
-      <ReportFilterBar
-        label="Period"
-        trailing={<MeasureTabs />}
-        trailingLabel="Measure"
-      >
-        <PeriodTabs defaultKey="month" options={PERIOD_OPTIONS} />
-      </ReportFilterBar>
-
-      <ReportHeadline
-        delta={<DeltaChip unit="pp" value={leaderShare - leaderPriorShare} />}
-        label={`${formatVehicleType(leader.name)} share of registrations`}
-        stats={rows
-          .slice(0, 4)
-          .map(({ count, name }) => (
-            <ReportStat
-              key={name}
-              label={formatVehicleType(name)}
-              note={`${count.toLocaleString("en-SG")} cars`}
-              value={`${percentageOf(count, total).toFixed(1)}%`}
-            />
-          ))}
-        sub={`${leader.count.toLocaleString("en-SG")} of ${total.toLocaleString("en-SG")} cars · ${periodLabel} · change against ${year - 1}`}
-        value={`${leaderShare.toFixed(1)}%`}
+      <VehicleTypesHeadline
+        change={featured.share - featuredPriorShare}
+        changeLabel={String(year - 1)}
+        featured={featured}
+        // Rows that round to 0.0% would draw nothing; the table lists them.
+        mix={mix.filter(({ share }) => share >= 0.05)}
+        periodLabel={periodLabel}
+        periodSpan={periodSpan}
+        total={total}
       />
 
+      <Hairline />
+
+      <div className="flex">
+        <MeasureSegment />
+      </div>
       <CategoryShareChart
         data={chartData}
         measure={measure}
@@ -281,7 +300,7 @@ export async function VehicleTypesReport({
                     <span
                       className="size-3.5 shrink-0 rounded"
                       style={{
-                        backgroundColor: `var(--chart-${(index % CHARTED_TYPES) + 1})`,
+                        backgroundColor: vehicleColour(name),
                       }}
                     />
                     <Link
