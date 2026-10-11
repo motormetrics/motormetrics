@@ -60,7 +60,7 @@ function Kpi({
   versus,
 }: KpiProps) {
   return (
-    <div className="flex min-w-0 flex-col gap-1.5 border-separator px-3 pt-3.5 pb-3 first:pl-0 max-lg:nth-[n+3]:border-t max-lg:even:border-l max-lg:odd:pl-0 md:px-5 md:pt-4.5 md:pb-4 lg:not-first:border-l">
+    <div className="flex min-w-0 flex-col gap-1.5 border-separator px-3 pt-3.5 pb-3 first:pl-0 max-lg:nth-[n+3]:border-t max-lg:even:border-l max-lg:odd:pl-0 md:px-5 md:pt-4 md:pb-4 lg:not-first:border-l">
       <Typography.Paragraph weight="semibold" color="muted" size="xs">
         {label}
       </Typography.Paragraph>
