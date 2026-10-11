@@ -207,14 +207,14 @@ export default function HomePage() {
 
         <Hairline />
 
-        <OverviewGrid className="gap-10 min-[901px]:grid-cols-[1.35fr_1fr] min-[901px]:gap-x-14 max-[1100px]:min-[901px]:gap-x-9">
+        <OverviewGrid className="gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-x-14 lg:max-xl:gap-x-9">
           <SectionErrorBoundary title="EV share unavailable">
-            <Suspense fallback={<BlockSkeleton chartHeight="h-[260px]" />}>
+            <Suspense fallback={<BlockSkeleton chartHeight="h-64" />}>
               <EvShare />
             </Suspense>
           </SectionErrorBoundary>
           <SectionErrorBoundary title="EV makes unavailable">
-            <Suspense fallback={<BlockSkeleton chartHeight="h-[200px]" />}>
+            <Suspense fallback={<BlockSkeleton chartHeight="h-50" />}>
               <EvMakes />
             </Suspense>
           </SectionErrorBoundary>

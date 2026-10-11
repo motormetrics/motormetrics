@@ -38,8 +38,11 @@ interface TickProps {
   y?: number | string;
 }
 
-/** The comp's phone geometry: no end label and every third month ticked. */
-const PHONE_QUERY = "(max-width: 720px)";
+/**
+ * Phone geometry below Tailwind's `md`: no end label and every third month
+ * ticked.
+ */
+const PHONE_QUERY = "(width < 48rem)";
 
 const subscribePhone = (onChange: () => void) => {
   const query = window.matchMedia(PHONE_QUERY);

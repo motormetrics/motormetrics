@@ -16,8 +16,12 @@ import { getLatestMonth } from "@web/utils/dates/months";
 
 const TOP_MAKES = 3;
 
-const ROW_GRID =
-  "grid grid-cols-[20px_minmax(0,1fr)_64px_56px] items-center gap-3";
+/** Rank, make, cars and share, shared by the header and every row. */
+const ROW = "flex items-center gap-3";
+const RANK_CELL = "w-5 shrink-0";
+const MAKE_CELL = "min-w-0 flex-1";
+const CARS_CELL = "w-16 shrink-0 text-right";
+const SHARE_CELL = "w-14 shrink-0 text-right";
 
 /**
  * The month's three biggest battery-electric makes, then the size of the
@@ -45,7 +49,7 @@ export async function EvMakes() {
   const monthTotal = point?.BEV || 1;
 
   return (
-    <section className="flex min-w-0 flex-col gap-[18px]">
+    <section className="flex min-w-0 flex-col gap-4.5">
       <SectionHead
         caption={`${formatMonthLabel(point?.month ?? month)} · battery-electric registrations`}
         eyebrow="Electric vehicles"
@@ -56,25 +60,27 @@ export async function EvMakes() {
         <div className="flex flex-col">
           <div
             className={cn(
-              ROW_GRID,
+              ROW,
               "border-border border-b pb-2 font-semibold text-muted text-xs",
             )}
           >
-            <span>#</span>
-            <span>Make</span>
-            <span className="text-right">Cars</span>
-            <span className="text-right">Share</span>
+            <span className={RANK_CELL}>#</span>
+            <span className={MAKE_CELL}>Make</span>
+            <span className={CARS_CELL}>Cars</span>
+            <span className={SHARE_CELL}>Share</span>
           </div>
           <ol className="flex flex-col">
             {makes.map((item, rank) => (
               <li
-                className={cn(ROW_GRID, "border-separator border-b py-2.5")}
+                className={cn(ROW, "border-separator border-b py-2.5")}
                 key={item.make}
               >
-                <span className="text-muted text-sm tabular-nums">
+                <span
+                  className={cn(RANK_CELL, "text-muted text-sm tabular-nums")}
+                >
                   {rank + 1}
                 </span>
-                <span className="flex min-w-0 items-center gap-2.5">
+                <span className={cn(MAKE_CELL, "flex items-center gap-2.5")}>
                   <MakeAvatar
                     logoUrl={logoUrlBySlug[slugify(item.make)] ?? null}
                     make={item.make}
@@ -84,14 +90,24 @@ export async function EvMakes() {
                     {item.make}
                   </span>
                 </span>
-                <span className="text-right font-semibold text-sm tabular-nums">
+                <span
+                  className={cn(
+                    CARS_CELL,
+                    "font-semibold text-sm tabular-nums",
+                  )}
+                >
                   <NumberValue
                     locale="en-SG"
                     maximumFractionDigits={0}
                     value={item.count}
                   />
                 </span>
-                <span className="text-right text-muted-strong text-sm tabular-nums">
+                <span
+                  className={cn(
+                    SHARE_CELL,
+                    "text-muted-strong text-sm tabular-nums",
+                  )}
+                >
                   {((item.count / monthTotal) * 100).toFixed(1)}%
                 </span>
               </li>
@@ -106,7 +122,7 @@ export async function EvMakes() {
             Public charging
           </Typography.Paragraph>
           <Typography.Paragraph className="tabular-nums">
-            <span className="font-extrabold text-[1.625rem] tracking-[-0.02em]">
+            <span className="font-extrabold text-2xl tracking-tight">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
