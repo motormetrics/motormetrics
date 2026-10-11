@@ -1,6 +1,12 @@
 "use client";
 
-import { Button, ProgressBar, SearchField, Typography } from "@heroui/react";
+import {
+  Button,
+  cn,
+  ProgressBar,
+  SearchField,
+  Typography,
+} from "@heroui/react";
 import {
   DataGrid,
   type DataGridColumn,
@@ -17,7 +23,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import { SectionHead } from "@web/components/shared/overview";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import posthog from "posthog-js";
@@ -78,10 +84,13 @@ export function MakesTable({
   fuel,
   rangeLabel,
   rows,
+  total,
 }: {
   fuel: FuelFilter | null;
   rangeLabel: string;
   rows: MakesTableRow[];
+  /** Registrations across every make in the range, which the shares are of. */
+  total: number;
 }) {
   const [query, setQuery] = useState("");
   const [{ dir, sort }, setSortParams] = useQueryStates(sortSearchParams, {
@@ -139,10 +148,15 @@ export function MakesTable({
       cell: (row) => (
         <span className="flex min-w-0 items-center gap-3">
           {/* Typography has no numeral prop; tabular-nums keeps the ranks aligned. */}
+          {/* The comp picks out the podium: the top three ranks in accent. */}
           <Typography.Paragraph
-            className="w-6 shrink-0 tabular-nums"
+            className={cn(
+              "w-6 shrink-0 tabular-nums",
+              row.rank <= 3 && "text-accent-strong",
+            )}
             color="muted"
             size="sm"
+            weight={row.rank <= 3 ? "semibold" : undefined}
           >
             {row.rank}
           </Typography.Paragraph>
@@ -191,7 +205,8 @@ export function MakesTable({
             size="lg"
             style={
               {
-                "--progress-bar-fill": `var(--chart-${Math.min(6, row.rank)})`,
+                "--progress-bar-fill":
+                  row.rank === 1 ? "var(--chart-1)" : "var(--chart-3)",
               } as CSSProperties
             }
             value={Math.max(2, (row.count / leadCount) * 100)}
@@ -262,19 +277,14 @@ export function MakesTable({
         >
           <SearchField.Group>
             <SearchField.SearchIcon />
-            <SearchField.Input placeholder={`Search ${rows.length} makes …`} />
+            <SearchField.Input placeholder="Search makes…" />
             <SearchField.ClearButton />
           </SearchField.Group>
         </SearchField>
-        <Typography.Paragraph
-          className="whitespace-nowrap sm:ml-auto"
-          weight="semibold"
-          color="muted"
-          size="sm"
-        >
+        <SourceNote className="max-md:hidden md:ml-auto">
           Sorted by {SORT_LABELS[descriptor.column as SortKey]},{" "}
-          {descriptor.direction}
-        </Typography.Paragraph>
+          {descriptor.direction} · select a column heading to sort
+        </SourceNote>
       </div>
 
       <DataGrid
@@ -289,21 +299,27 @@ export function MakesTable({
         variant="secondary"
       />
 
-      {!isSearching && visibleRows.length > COLLAPSED_ROWS ? (
-        <Button
-          aria-expanded={isExpanded}
-          className="self-center"
-          onPress={() => setIsExpanded((current) => !current)}
-          variant="ghost"
-        >
-          {isExpanded ? "Show fewer" : `Show all ${visibleRows.length} makes`}
-        </Button>
-      ) : null}
-
-      <Typography.Paragraph weight="medium" color="muted" size="sm">
-        Change compares against the same period a year earlier, and is withheld
-        below {MIN_COUNT_FOR_CHANGE} registrations. Select a make to open it.
-      </Typography.Paragraph>
+      <div className="flex flex-wrap items-center gap-4">
+        {!isSearching && visibleRows.length > COLLAPSED_ROWS ? (
+          <Button
+            aria-expanded={isExpanded}
+            onPress={() => setIsExpanded((current) => !current)}
+            size="sm"
+            variant="outline"
+          >
+            {isExpanded
+              ? `Show top ${COLLAPSED_ROWS} only`
+              : `Show all ${visibleRows.length} makes`}
+          </Button>
+        ) : null}
+        <SourceNote>
+          Share is of {total.toLocaleString("en-SG")} registrations
+          {fuel ? ` of ${fuel.toLowerCase()} cars` : ""}. Change compares
+          against the same period a year earlier and is withheld below{" "}
+          {MIN_COUNT_FOR_CHANGE} registrations. Colour is not used for
+          direction.
+        </SourceNote>
+      </div>
     </div>
   );
 }

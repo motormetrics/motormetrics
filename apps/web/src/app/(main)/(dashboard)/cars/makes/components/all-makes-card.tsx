@@ -14,12 +14,13 @@ export async function AllMakesCard({
   searchParams: Promise<SearchParams>;
 }) {
   const { dir, fuel, range, sort } = await loadSearchParams(searchParams);
-  const { rows } = await loadMakeRows(range, fuel);
+  const { rows, total } = await loadMakeRows(range, fuel);
 
   return (
     <MakesTable
       fuel={isFuelFilter(fuel) ? fuel : null}
       rangeLabel={RANGE_LABELS[range]}
+      total={total}
       rows={sortMakeRows(
         rows.map(({ trend: _trend, ...row }) => row),
         sort,

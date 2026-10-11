@@ -64,7 +64,12 @@ const manyRows: MakesTableRow[] = Array.from({ length: 25 }, (_, index) => ({
 
 const renderTable = (rowsToRender: MakesTableRow[] = rows) =>
   render(
-    <MakesTable fuel={null} rangeLabel="Year to date" rows={rowsToRender} />,
+    <MakesTable
+      fuel={null}
+      rangeLabel="Year to date"
+      rows={rowsToRender}
+      total={1000}
+    />,
     { wrapper: createWrapper() },
   );
 
@@ -118,7 +123,12 @@ describe("MakesTable", () => {
 
   it("should open on the sort the URL carries", async () => {
     const screen = await render(
-      <MakesTable fuel={null} rangeLabel="Year to date" rows={rows} />,
+      <MakesTable
+        fuel={null}
+        rangeLabel="Year to date"
+        rows={rows}
+        total={1000}
+      />,
       {
         wrapper: withNuqsTestingAdapter({
           searchParams: { dir: "asc", sort: "make" },
@@ -134,7 +144,12 @@ describe("MakesTable", () => {
 
   it("should mark the grid header the URL sorts by", async () => {
     const screen = await render(
-      <MakesTable fuel={null} rangeLabel="Year to date" rows={rows} />,
+      <MakesTable
+        fuel={null}
+        rangeLabel="Year to date"
+        rows={rows}
+        total={1000}
+      />,
       {
         wrapper: withNuqsTestingAdapter({
           searchParams: { dir: "asc", sort: "yoyChange" },
@@ -152,7 +167,12 @@ describe("MakesTable", () => {
 
   it("should start a newly pressed figure column descending, whatever the URL's direction", async () => {
     const screen = await render(
-      <MakesTable fuel={null} rangeLabel="Year to date" rows={rows} />,
+      <MakesTable
+        fuel={null}
+        rangeLabel="Year to date"
+        rows={rows}
+        total={1000}
+      />,
       {
         wrapper: withNuqsTestingAdapter({
           hasMemory: true,
@@ -199,6 +219,7 @@ describe("MakesTable", () => {
         fuel={null}
         rangeLabel="Year to date"
         rows={sortMakeRows(rows, "make", "asc")}
+        total={1000}
       />,
       {
         wrapper: withNuqsTestingAdapter({
@@ -362,13 +383,18 @@ describe("MakesTable", () => {
 
     await expect.poll(() => makeNames(screen)).toHaveLength(25);
     await expect
-      .element(screen.getByRole("button", { name: "Show fewer" }))
+      .element(screen.getByRole("button", { name: "Show top 10 only" }))
       .toBeVisible();
   });
 
   it("should mark the active powertrain tab and offer the rest", async () => {
     const screen = await render(
-      <MakesTable fuel="Electric" rangeLabel="Year to date" rows={rows} />,
+      <MakesTable
+        fuel="Electric"
+        rangeLabel="Year to date"
+        rows={rows}
+        total={1000}
+      />,
       { wrapper: createWrapper() },
     );
 
