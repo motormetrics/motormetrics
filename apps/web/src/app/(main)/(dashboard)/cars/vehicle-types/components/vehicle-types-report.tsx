@@ -15,9 +15,9 @@ import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-serie
 import {
   Hairline,
   SectionHead,
+  SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
-import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   type CategoryMonthlyPoint,
   getCategoryMonthlySeries,
@@ -34,7 +34,6 @@ import {
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
-import Link from "next/link";
 import {
   createLoader,
   parseAsString,
@@ -370,57 +369,65 @@ export async function VehicleTypesReport({
 
       <Hairline />
 
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
-        <ReportSection
-          caption={periodLabel}
-          title="Leading makes by vehicle type"
-        >
-          <div className="flex flex-col">
+      <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-7 lg:gap-14">
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-4">
+          <SectionHead
+            caption={`${periodLabel} · top three makes in each type`}
+            eyebrow="Makes"
+            title="Leading makes by vehicle type"
+          />
+          <ul className="flex flex-col">
             {leaders.map(({ makes, name, total: typeTotal }) => (
-              <div
-                className="flex flex-wrap items-baseline gap-5 border-border border-b py-4"
+              <li
+                className="flex items-baseline gap-4 border-separator border-b py-3 max-md:flex-col max-md:gap-0.5"
                 key={name}
               >
-                <span className="w-[150px] shrink-0 font-bold text-base">
+                <span className="w-40 shrink-0 font-semibold text-sm">
                   {formatVehicleType(name)}
                 </span>
-                <span className="font-semibold text-base text-muted-strong">
-                  {makes.map(({ make }) => make).join(", ") || "—"}
-                </span>
-                {makes[0] ? (
-                  <span className="ml-auto whitespace-nowrap font-semibold text-muted text-sm">
-                    {makes[0].make}{" "}
-                    {percentageOf(makes[0].count, typeTotal).toFixed(1)}% of{" "}
-                    {formatVehicleType(name)}
+                <span className="flex min-w-0 flex-col gap-0.5">
+                  <span className="text-sm">
+                    {makes.map(({ make }) => make).join(", ") || "—"}
                   </span>
-                ) : null}
-              </div>
+                  {makes[0] ? (
+                    <span className="text-subtle text-xs tabular-nums">
+                      {makes[0].make}{" "}
+                      {percentageOf(makes[0].count, typeTotal).toFixed(1)}% of{" "}
+                      {formatVehicleType(name)}
+                    </span>
+                  ) : null}
+                </span>
+              </li>
             ))}
-          </div>
-        </ReportSection>
+          </ul>
+          <SourceNote>
+            Share is the leading make's share of that vehicle type's
+            registrations.
+          </SourceNote>
+        </section>
 
-        <ReportNote title="How LTA classifies vehicle types">
-          <Typography.Paragraph>
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-3">
+          <SectionHead
+            eyebrow="Method"
+            title="How LTA classifies vehicle types"
+          />
+          <Typography.Paragraph className="text-muted-strong" size="sm">
             LTA records the vehicle type at registration, so every car counts
             once, under the class on its registration record.
           </Typography.Paragraph>
-          <Typography.Paragraph>
-            Vehicle type does not determine COE category — engine capacity and
+          <Typography.Paragraph className="text-muted-strong" size="sm">
+            Vehicle type does not determine COE category. Engine capacity and
             power output do.
           </Typography.Paragraph>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/vehicle-types/hatchback"
-          >
-            Hatchbacks in detail →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/fuel-types"
-          >
-            Fuel types →
-          </Link>
-        </ReportNote>
+          <div className="flex flex-wrap gap-5">
+            <SectionLink className="ml-0" href="/cars/vehicle-types/hatchback">
+              Hatchbacks in detail
+            </SectionLink>
+            <SectionLink className="ml-0" href="/cars/fuel-types">
+              Fuel types
+            </SectionLink>
+          </div>
+        </section>
       </div>
     </>
   );
