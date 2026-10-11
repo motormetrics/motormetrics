@@ -1,6 +1,5 @@
 import { Typography } from "@heroui/react";
-import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { slugify } from "@motormetrics/utils/slugify";
+import { FuelTable } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-table";
 import {
   type FuelSeries,
   type FuelTrendPoint,
@@ -11,6 +10,7 @@ import {
   PeriodSegment,
 } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-filters";
 import { FuelTypesHeadline } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-headline";
+import { MonthTable } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/month-table";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import {
   Hairline,
@@ -18,14 +18,6 @@ import {
   SourceNote,
 } from "@web/components/shared/overview";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
-import {
-  Count,
-  DeltaText,
-  ReportCell,
-  ReportRow,
-  ReportTable,
-  ShareBar,
-} from "@web/components/shared/report-table";
 import { FUEL_TYPE_LINKS } from "@web/config";
 import {
   type CategoryMonthlyPoint,
@@ -76,8 +68,6 @@ const DESCRIPTIONS: Record<string, string> = {
   ),
   Others: "Fuel types LTA does not report separately",
 };
-
-const URL_PATH = "/cars/fuel-types";
 
 /**
  * The comp's colour for each LTA fuel label, shared by the mix bar, the trend
@@ -172,7 +162,6 @@ export async function FuelTypesReport({
     getTopMakesByCategory("fuelType", periodMonths),
   ]);
 
-  const formattedMonth = formatDateToMonthYear(month);
   const periodLabel =
     period === "ytd" ? `${year} year to date` : formatMonthLabel(month);
 
@@ -224,6 +213,18 @@ export async function FuelTypesReport({
     .slice(0, CHARTED_TYPES)
     .map(([name]) => ({ name }))
     .sort((a, b) => fuelRank(a.name) - fuelRank(b.name));
+  // Fuel types the chart and month table leave out, and the most any of them
+  // registered in a single month, so the note can say why.
+  const chartedNames = new Set(chartedTypes.map(({ name }) => name));
+  const omittedTypes = [...seriesTotals.entries()]
+    .filter(([name, count]) => count > 0 && !chartedNames.has(name))
+    .map(([name]) => name);
+  const omittedMonthlyMax = Math.max(
+    0,
+    ...series
+      .filter(({ name }) => omittedTypes.includes(name))
+      .map(({ count }) => count),
+  );
   const chartSeries: FuelSeries[] = chartedTypes.map(({ name }, index) => ({
     color: fuelColour(name),
     key: `type${index}`,
@@ -321,109 +322,55 @@ export async function FuelTypesReport({
 
       <Hairline />
 
-      <ReportSection
-        caption={`${periodLabel} · ${rows.length} recorded by LTA`}
-        title="All fuel types"
-      >
-        <ReportTable
-          columns={[
-            { label: "Fuel type" },
-            { label: "Description" },
-            {
-              align: "end",
-              label: period === "ytd" ? "Year to date" : "Registrations",
-            },
-            { align: "end", label: "Share" },
-            { label: "", width: "200px" },
-            { align: "end", label: `Vs ${year - 1}`, width: "120px" },
-          ]}
-        >
-          {rows.map(({ count, name }, index) => {
-            const share = percentageOf(count, total);
-            const priorShare = percentageOf(
-              priorByName.get(name) ?? 0,
-              priorTotal,
-            );
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${periodLabel} · ${rows.length} recorded by LTA`}
+          eyebrow="Registrations"
+          title="All fuel types"
+        />
+        <FuelTable
+          countLabel={period === "ytd" ? "Year to date" : "Cars"}
+          rows={mix.map(({ color, count, name, share }) => ({
+            change:
+              share - percentageOf(priorByName.get(name) ?? 0, priorTotal),
+            color,
+            count,
+            description: DESCRIPTIONS[name] ?? "—",
+            name,
+            share,
+          }))}
+          yearAgoLabel={String(year - 1)}
+        />
+        <SourceNote>
+          Share is of {total.toLocaleString("en-SG")} new cars. Change is in
+          percentage points against the same period of {year - 1}; colour is not
+          used for direction. Select a column heading to sort.
+        </SourceNote>
+      </section>
 
-            return (
-              <ReportRow key={name}>
-                <ReportCell className="font-bold text-base">
-                  <span className="flex items-center gap-3">
-                    <span
-                      className="size-3.5 shrink-0 rounded"
-                      style={{
-                        backgroundColor: fuelColour(name),
-                      }}
-                    />
-                    <Link
-                      className="text-foreground hover:text-accent-strong"
-                      href={`${URL_PATH}/${slugify(name)}`}
-                    >
-                      {name}
-                    </Link>
-                  </span>
-                </ReportCell>
-                <ReportCell className="font-medium text-muted-strong text-sm">
-                  {DESCRIPTIONS[name] ?? "—"}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold text-lg">
-                  <Count value={count} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  {share.toFixed(1)}%
-                </ReportCell>
-                <ReportCell>
-                  <ShareBar isLeader={index === 0} share={share} />
-                </ReportCell>
-                <ReportCell align="end">
-                  <DeltaText unit="pp" value={share - priorShare} />
-                </ReportCell>
-              </ReportRow>
-            );
-          })}
-        </ReportTable>
-      </ReportSection>
+      <Hairline />
 
-      <ReportSection
-        caption={`Share of each month's registrations · ${SERIES_MONTHS} months to ${formattedMonth}`}
-        title="Month by month"
-      >
-        <ReportTable
-          columns={[
-            { label: "Month" },
-            { align: "end", label: "Total" },
-            ...chartedTypes.map(({ name }) => ({
-              align: "end" as const,
-              label: name,
-            })),
-          ]}
-        >
-          {[...monthlyRows].reverse().map((row) => (
-            <ReportRow isActive={row.month === month} key={row.month}>
-              <ReportCell className="font-bold text-base">
-                {formatDateToMonthYear(row.month)}
-              </ReportCell>
-              <ReportCell align="end" className="font-semibold text-muted">
-                <Count value={row.total} />
-              </ReportCell>
-              {row.cells.map(({ count, share }, index) => (
-                <ReportCell
-                  align="end"
-                  key={chartedTypes[index].name}
-                  className="whitespace-nowrap"
-                >
-                  <span className="font-extrabold text-base">
-                    {share.toFixed(1)}%
-                  </span>
-                  <span className="ml-2 font-medium text-muted text-xs">
-                    <Count value={count} />
-                  </span>
-                </ReportCell>
-              ))}
-            </ReportRow>
-          ))}
-        </ReportTable>
-      </ReportSection>
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${SERIES_MONTHS} months to ${formatMonthLabel(month)}`}
+          eyebrow="Month by month"
+          title="Share of each month's registrations"
+        />
+        <MonthTable
+          fuelTypes={chartedTypes.map(({ name }) => name)}
+          rows={[...monthlyRows].reverse()}
+          selectedMonth={month}
+        />
+        <SourceNote>
+          Share of all new car registrations in each month, with the number of
+          cars.
+          {omittedTypes.length > 0
+            ? ` ${omittedTypes.join(", ")} ${omittedTypes.length === 1 ? "is" : "are"} not shown: no more than ${omittedMonthlyMax.toLocaleString("en-SG")} ${omittedMonthlyMax === 1 ? "car was" : "cars were"} registered in any of these months.`
+            : null}
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
         <ReportSection caption={periodLabel} title="Leading makes by fuel type">
