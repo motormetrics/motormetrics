@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { CategoryTabs } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
@@ -16,7 +16,6 @@ import {
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
-import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
 import { PremiumsCategoryTable } from "@web/app/(main)/(dashboard)/coe/premiums/components/categories-table";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/coe/premiums/components/filters";
@@ -29,18 +28,13 @@ import {
   type PremiumRange,
   RANGE_EXERCISES,
 } from "@web/app/(main)/(dashboard)/coe/premiums/search-params";
+import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import {
   Hairline,
   SectionHead,
   SourceNote,
 } from "@web/components/shared/overview";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
-import {
-  Count,
-  ReportCell,
-  ReportRow,
-  ReportTable,
-} from "@web/components/shared/report-table";
 import { Text } from "@web/components/shared/text";
 import { getCategoryExercises, getExercisePair } from "@web/queries/coe";
 import { formatMonthShortName } from "@web/utils/dates/format-month";
@@ -53,6 +47,14 @@ const HISTORY_ROWS = 12;
 /** "Sep 2026 · 2nd", the short name for an exercise. */
 const exerciseStamp = (exercise: { biddingNo: number; month: string }) =>
   `${formatMonth(exercise.month, "short")} · ${exercise.biddingNo === 1 ? "1st" : "2nd"}`;
+
+/** Shared by the history header and rows, so the columns line up. */
+const HISTORY_ROW =
+  "flex items-center gap-4 border-separator border-b px-3 py-2.5 max-md:flex-wrap max-md:gap-y-1 max-md:px-2.5";
+const HISTORY_PREMIUM = "w-32 shrink-0 text-right max-lg:w-28";
+const HISTORY_CHANGE = "w-24 shrink-0 text-right max-lg:w-20";
+const HISTORY_FIGURE = "w-20 shrink-0 text-right max-md:hidden";
+const HISTORY_RATE = "w-48 shrink-0 max-lg:w-36 max-md:hidden";
 
 /** Months between x ticks for each range, on desktop. */
 const TICK_MONTHS: Record<PremiumRange, number> = {
@@ -308,52 +310,105 @@ export async function PremiumsReport({
 
       <Hairline />
 
-      <ReportSection
-        caption={`${category} · last ${historyRows.length} exercises`}
-        title="Bidding history"
-      >
-        <ReportTable
-          columns={[
-            { label: "Exercise" },
-            { align: "end", label: "Premium" },
-            { align: "end", label: "Change" },
-            { align: "end", label: "Quota" },
-            { align: "end", label: "Bids" },
-            { label: "Success rate", width: "240px" },
-          ]}
-        >
-          {historyRows.map(({ exercise, ratio }) => {
-            const rate = successRate(
-              exercise.bidsSuccess,
-              exercise.bidsReceived,
-            );
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`To ${formatExercise(current)} · most recent first`}
+          eyebrow="Bidding history"
+          title={`${category}, last ${historyRows.length} exercises`}
+        />
+        <div className="flex flex-col">
+          <div
+            className={cn(
+              HISTORY_ROW,
+              "items-end border-border pt-0 pb-2.5 font-semibold text-muted text-xs max-md:hidden",
+            )}
+          >
+            <span className="min-w-0 flex-1">Exercise</span>
+            <span className={HISTORY_PREMIUM}>Premium</span>
+            <span className={HISTORY_CHANGE}>Change</span>
+            <span className={HISTORY_FIGURE}>Quota</span>
+            <span className={HISTORY_FIGURE}>Bids</span>
+            <span className={HISTORY_RATE}>Success rate</span>
+          </div>
+          <span className="border-border border-b pb-2 font-semibold text-muted text-xs uppercase tracking-wide md:hidden">
+            Exercise · premium
+          </span>
+          <ol className="flex flex-col">
+            {historyRows.map(({ exercise, ratio }, index) => {
+              const rate = successRate(
+                exercise.bidsSuccess,
+                exercise.bidsReceived,
+              );
 
-            return (
-              <ReportRow key={`${exercise.month}:${exercise.biddingNo}`}>
-                <ReportCell className="font-semibold text-base">
-                  {formatMonth(exercise.month, "short")} ·{" "}
-                  {biddingOrdinal(exercise.biddingNo)}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold text-lg">
-                  {formatCurrency(exercise.premium)}
-                </ReportCell>
-                <ReportCell align="end">
-                  <PremiumDelta ratio={ratio} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  <Count value={exercise.quota} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  <Count value={exercise.bidsReceived} />
-                </ReportCell>
-                <ReportCell>
-                  <SuccessRateCell rate={rate} />
-                </ReportCell>
-              </ReportRow>
-            );
-          })}
-        </ReportTable>
-      </ReportSection>
+              return (
+                <li
+                  className={cn(
+                    HISTORY_ROW,
+                    index === 0 && "bg-surface-secondary",
+                  )}
+                  key={`${exercise.month}:${exercise.biddingNo}`}
+                >
+                  <span className="min-w-0 flex-1 font-medium text-sm">
+                    {exerciseStamp(exercise)}
+                  </span>
+                  <span className="flex shrink-0 flex-col items-end gap-0.5 md:contents">
+                    <span
+                      className={cn(
+                        HISTORY_PREMIUM,
+                        "font-semibold text-base tabular-nums max-md:w-auto",
+                      )}
+                    >
+                      {formatCurrency(exercise.premium)}
+                    </span>
+                    <span
+                      className={cn(
+                        HISTORY_CHANGE,
+                        "text-sm tabular-nums max-md:w-auto",
+                      )}
+                    >
+                      {ratio === null || ratio === 0 ? (
+                        <span className="text-muted">—</span>
+                      ) : (
+                        <CostTrendChip changeRatio={ratio} />
+                      )}
+                    </span>
+                  </span>
+                  <span
+                    className={cn(
+                      HISTORY_FIGURE,
+                      "text-muted-strong text-sm tabular-nums",
+                    )}
+                  >
+                    {exercise.quota.toLocaleString("en-SG")}
+                  </span>
+                  <span
+                    className={cn(
+                      HISTORY_FIGURE,
+                      "text-muted-strong text-sm tabular-nums",
+                    )}
+                  >
+                    {exercise.bidsReceived.toLocaleString("en-SG")}
+                  </span>
+                  <span className={HISTORY_RATE}>
+                    <SuccessRateCell rate={rate} />
+                  </span>
+                  <span className="w-full text-muted text-sm tabular-nums md:hidden">
+                    {exercise.quota.toLocaleString("en-SG")} quota ·{" "}
+                    {exercise.bidsReceived.toLocaleString("en-SG")} bids ·{" "}
+                    {rate.toFixed(0)}% success
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+        <SourceNote>
+          Success rate is successful bids as a share of bids received. Change is
+          against the previous exercise.
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
         <ReportSection title="Premium range">
