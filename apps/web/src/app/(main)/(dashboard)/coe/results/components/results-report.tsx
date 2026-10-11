@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/components/category-badge";
 import {
@@ -16,15 +16,16 @@ import {
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
-import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
 import {
   ResultsChart,
   type ResultsPoint,
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-chart";
 import { SeriesFilter } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
+import { ShowMoreRows } from "@web/app/(main)/(dashboard)/coe/results/components/show-more-rows";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { ReportSection } from "@web/components/shared/report";
 import {
@@ -237,11 +238,20 @@ export async function ResultsChartPanel({ searchParams }: RegionProps) {
   );
 }
 
+/** Shared by the column header and every row, so the columns line up. */
+const EXERCISE_ROW =
+  "flex items-center gap-3 border-separator border-b px-3 py-2.5 max-md:px-1.5";
+const EXERCISE_CELL =
+  "flex w-28 shrink-0 flex-col items-end gap-px max-lg:w-24 max-md:w-16";
+const BIDS_CELL = "w-24 shrink-0 text-right max-xl:hidden";
+/** Categories C and D are dropped on phones, leaving the car categories. */
+const PHONE_HIDDEN: COECategory[] = ["Category C", "Category D"];
+
 /**
- * Only the rows. The table's own `<thead>` is static, so it stays in the page
- * shell and paints before these resolve.
+ * Every exercise in the period, most recent first, with each category's
+ * change on the exercise before. The first twelve show until expanded.
  */
-export async function ResultsByExerciseRows({ searchParams }: RegionProps) {
+export async function ResultsByExercise({ searchParams }: RegionProps) {
   const { exercises } = await loadExercises(searchParams);
 
   const latest = exercises.at(-1);
@@ -250,49 +260,98 @@ export async function ResultsByExerciseRows({ searchParams }: RegionProps) {
     return null;
   }
 
-  const tableRows = exercises
+  const rows = exercises
     .map((exercise, index) => ({ exercise, previous: exercises[index - 1] }))
-    .reverse();
-
-  return tableRows.map(({ exercise, previous: earlier }) => (
-    <ReportRow isActive={exercise.key === latest.key} key={exercise.key}>
-      <ReportCell>
-        <div className="flex flex-col gap-0.5">
-          <span className="font-bold text-base">
-            {formatMonth(exercise.month)}
+    .reverse()
+    .map(({ exercise, previous: earlier }) => (
+      <li
+        className={cn(
+          EXERCISE_ROW,
+          exercise.key === latest.key && "bg-surface-secondary",
+        )}
+        key={exercise.key}
+      >
+        <span className="flex min-w-0 flex-1 flex-col gap-px">
+          <span className="whitespace-nowrap font-semibold text-sm">
+            <span className="max-md:hidden">{formatMonth(exercise.month)}</span>
+            <span className="md:hidden">
+              {formatMonth(exercise.month, "short")}
+            </span>
           </span>
-          <span className="font-medium text-muted text-xs">
-            {biddingOrdinal(exercise.biddingNo)} bidding exercise
+          <span className="text-muted text-xs">
+            {exercise.biddingNo === 1 ? "1st" : "2nd"}
+            <span className="max-md:hidden"> bidding exercise</span>
           </span>
-        </div>
-      </ReportCell>
-      {COE_CATEGORIES.map((category) => {
-        const premium = premiumOf(exercise, category);
-        const earlierPremium = earlier && premiumOf(earlier, category);
-
-        return (
-          <ReportCell align="end" key={category}>
-            <div className="flex flex-col items-end gap-0.5">
-              <span className="font-extrabold text-base">
+        </span>
+        {COE_CATEGORIES.map((category) => {
+          const premium = premiumOf(exercise, category);
+          const earlierPremium = earlier && premiumOf(earlier, category);
+          return (
+            <span
+              className={cn(
+                EXERCISE_CELL,
+                PHONE_HIDDEN.includes(category) && "max-md:hidden",
+              )}
+              key={category}
+            >
+              <span className="font-semibold text-base tabular-nums max-md:text-sm">
                 {premium === undefined ? "—" : formatCurrency(premium)}
               </span>
-              <PremiumDelta
-                className="text-xs"
-                ratio={
-                  premium !== undefined && earlierPremium
-                    ? changeRatio(premium, earlierPremium)
-                    : null
-                }
-              />
-            </div>
-          </ReportCell>
-        );
-      })}
-      <ReportCell align="end" className="font-semibold text-muted">
-        <Count value={totalFor(exercise, "bidsReceived")} />
-      </ReportCell>
-    </ReportRow>
-  ));
+              <span className="text-muted text-xs tabular-nums">
+                {premium !== undefined && earlierPremium ? (
+                  <CostTrendChip
+                    changeRatio={changeRatio(premium, earlierPremium)}
+                  />
+                ) : (
+                  "—"
+                )}
+              </span>
+            </span>
+          );
+        })}
+        <span
+          className={cn(BIDS_CELL, "text-muted-strong text-sm tabular-nums")}
+        >
+          {totalFor(exercise, "bidsReceived").toLocaleString("en-SG")}
+        </span>
+      </li>
+    ));
+
+  return (
+    <ShowMoreRows
+      header={
+        <div
+          className={cn(
+            EXERCISE_ROW,
+            "items-end border-border pt-0 font-semibold text-muted text-xs",
+          )}
+        >
+          <span className="min-w-0 flex-1">Exercise</span>
+          {COE_CATEGORIES.map((category) => (
+            <span
+              className={cn(
+                EXERCISE_CELL,
+                PHONE_HIDDEN.includes(category) && "max-md:hidden",
+              )}
+              key={category}
+            >
+              Cat {toCategoryKey(category)}
+            </span>
+          ))}
+          <span className={BIDS_CELL}>Total bids</span>
+        </div>
+      }
+      initial={12}
+      lessLabel="Show 12 exercises"
+      moreLabel={`Show all ${rows.length} exercises`}
+      noun="exercises"
+      rows={rows}
+    >
+      <span className="md:hidden">
+        Categories C and D appear on wider screens.
+      </span>
+    </ShowMoreRows>
+  );
 }
 
 /**

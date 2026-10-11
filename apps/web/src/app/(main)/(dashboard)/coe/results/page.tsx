@@ -8,12 +8,16 @@ import {
   PremiumsByYearRows,
   QuotaAndDemand,
   RecordHighRows,
-  ResultsByExerciseRows,
+  ResultsByExercise,
   ResultsChartPanel,
   ResultsHeadline,
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-report";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { OverviewPage } from "@web/components/shared/overview";
+import {
+  Hairline,
+  OverviewPage,
+  SectionHead,
+} from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
@@ -21,7 +25,7 @@ import {
   ReportRow,
   ReportTable,
 } from "@web/components/shared/report-table";
-import { SkeletonChart } from "@web/components/shared/skeleton";
+import { SkeletonCard, SkeletonChart } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -42,19 +46,6 @@ interface PageProps {
 const title = "COE Price History and Trends";
 const description =
   "Singapore COE price history for Cat A to E: every bidding result, yearly averages and record highs, with 12-month, 5-year, 10-year and all-time charts.";
-
-/**
- * Static: every label comes from `COE_CATEGORIES`, so the table's `<thead>`
- * renders into the shell and only the rows below it wait on the data.
- */
-const EXERCISE_COLUMNS = [
-  { label: "Exercise" },
-  ...COE_CATEGORIES.map((category) => ({
-    align: "end" as const,
-    label: `Cat ${toCategoryKey(category)}`,
-  })),
-  { align: "end" as const, label: "Total bids" },
-];
 
 const YEAR_COLUMNS = [
   { label: "Year" },
@@ -222,6 +213,23 @@ export default function COEResultsPage({ searchParams }: PageProps) {
         </Suspense>
       </SectionErrorBoundary>
 
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption="Most recent first · change against the previous exercise"
+          eyebrow="Results by exercise"
+          title="Closing premium per category"
+        />
+        <SectionErrorBoundary title="COE results unavailable">
+          <Suspense fallback={<SkeletonCard className="h-96 w-full" />}>
+            <ResultsByExercise searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </section>
+
+      <Hairline />
+
       <ReportSection
         caption="Average closing premium across each year's exercises, with the year's high"
         title="COE prices by year"
@@ -252,23 +260,6 @@ export default function COEResultsPage({ searchParams }: PageProps) {
               }
             >
               <RecordHighRows />
-            </Suspense>
-          </ReportTable>
-        </SectionErrorBoundary>
-      </ReportSection>
-
-      <ReportSection
-        caption="Closing premium per category · most recent first"
-        title="Results by exercise"
-      >
-        <SectionErrorBoundary title="COE results unavailable">
-          <ReportTable columns={EXERCISE_COLUMNS}>
-            <Suspense
-              fallback={
-                <RowsSkeleton cells={EXERCISE_COLUMNS.length} rows={8} />
-              }
-            >
-              <ResultsByExerciseRows searchParams={searchParams} />
             </Suspense>
           </ReportTable>
         </SectionErrorBoundary>
