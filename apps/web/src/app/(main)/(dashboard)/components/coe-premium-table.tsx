@@ -26,9 +26,9 @@ const TREND_MONTHS = 12;
  */
 const ROW = "flex items-center gap-4 max-md:gap-2.5";
 const CATEGORY_CELL = "min-w-0 flex-1";
-const PREMIUM_CELL = "w-30 shrink-0 text-right max-xl:w-28 max-md:w-24";
-const CHANGE_CELL = "w-22 shrink-0 text-right max-xl:w-20 max-md:w-15";
-const TREND_CELL = "w-35 shrink-0 max-xl:hidden";
+const PREMIUM_CELL = "w-28 shrink-0 text-right max-md:w-24";
+const CHANGE_CELL = "w-20 shrink-0 text-right max-md:w-14";
+const TREND_CELL = "w-36 shrink-0 max-xl:hidden";
 
 /**
  * Every COE category at a glance: the latest premium, its change on the
@@ -65,7 +65,7 @@ export async function CoePremiumTable() {
   const previousMonth = rows[0]?.previous?.month;
 
   return (
-    <section className="flex min-w-0 flex-col gap-4.5">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={formatExercise(exercise)}
         eyebrow="Certificate of Entitlement"

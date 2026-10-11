@@ -184,7 +184,7 @@ export default function HomePage() {
             </Suspense>
           </SectionErrorBoundary>
           <SectionErrorBoundary title="PQP rates unavailable">
-            <Suspense fallback={<BlockSkeleton chartHeight="h-50" />}>
+            <Suspense fallback={<BlockSkeleton chartHeight="h-48" />}>
               <PqpCeiling />
             </Suspense>
           </SectionErrorBoundary>
