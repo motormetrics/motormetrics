@@ -1,9 +1,6 @@
 import { slugify } from "@motormetrics/utils/slugify";
-import {
-  TypeDetail,
-  type TypeDetailConfig,
-  typeDetailMeta,
-} from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
+import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
+import { VehicleTypeReport } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/vehicle-type-report";
 import { SITE_URL } from "@web/config";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import {
@@ -12,10 +9,6 @@ import {
 } from "@web/queries/cars";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
-
-const config: TypeDetailConfig = {
-  category: "vehicle-types",
-};
 
 interface PageProps {
   params: Promise<{ type: string }>;
@@ -29,7 +22,7 @@ export async function generateMetadata({
 
   const result = await checkVehicleTypeIfExist(type);
   const { title, description, canonical } = typeDetailMeta(
-    config.category,
+    "vehicle-types",
     type,
     result?.vehicleType,
   );
@@ -63,7 +56,5 @@ export async function generateStaticParams() {
 }
 
 export default function Page({ params, searchParams }: PageProps) {
-  return (
-    <TypeDetail config={config} params={params} searchParams={searchParams} />
-  );
+  return <VehicleTypeReport params={params} searchParams={searchParams} />;
 }
