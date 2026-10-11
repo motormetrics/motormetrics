@@ -1,13 +1,13 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
-import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/components/category-badge";
 import { CategoryTabs } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
   biddingOrdinal,
   CATEGORY_DESCRIPTIONS,
   COE_CATEGORIES,
   changeRatio,
+  formatExercise,
   formatMonth,
   formatPremiumChange,
   premiumAxisTicks,
@@ -18,6 +18,7 @@ import {
 import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
 import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
+import { PremiumsCategoryTable } from "@web/app/(main)/(dashboard)/coe/premiums/components/categories-table";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/coe/premiums/components/filters";
 import {
   type PremiumPoint,
@@ -59,11 +60,6 @@ const TICK_MONTHS: Record<PremiumRange, number> = {
   "3Y": 6,
   All: 24,
 };
-
-/** Bids received against the quota, e.g. `1.35×`. */
-function bidsPerQuota(bidsReceived: number, quota: number): string {
-  return `${(quota > 0 ? bidsReceived / quota : 0).toFixed(2)}×`;
-}
 
 /**
  * One band of the premium-range block: where a window's low and high sit on a
@@ -280,63 +276,37 @@ export async function PremiumsReport({
 
       <Hairline />
 
-      <ReportSection
-        caption={`${formatMonth(current.month)} · ${biddingOrdinal(current.biddingNo)} bidding exercise`}
-        title="All categories"
-      >
-        <ReportTable
-          columns={[
-            { label: "Cat", width: "74px" },
-            { label: "Description" },
-            { align: "end", label: "Quota" },
-            { align: "end", label: "Bids" },
-            { align: "end", label: "Bids / quota" },
-            { align: "end", label: "Premium" },
-            { align: "end", label: "Vs previous", width: "120px" },
-          ]}
-        >
-          {COE_CATEGORIES.map((entry) => {
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption="Quota, bids and closing premium · select a row to chart it"
+          eyebrow="All categories"
+          title={formatExercise(current)}
+        />
+        <PremiumsCategoryTable
+          rows={COE_CATEGORIES.map((entry) => {
             const row = currentRows.get(entry);
             const previousRow = previousRows.get(entry);
-            const isActive = entry === category;
-
-            return (
-              <ReportRow isActive={isActive} key={entry}>
-                <ReportCell>
-                  <CategoryBadge
-                    categoryKey={toCategoryKey(entry)}
-                    isActive={isActive}
-                  />
-                </ReportCell>
-                <ReportCell className="font-semibold text-base">
-                  {CATEGORY_DESCRIPTIONS[entry]}
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  <Count value={row?.quota ?? 0} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  <Count value={row?.bidsReceived ?? 0} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  {bidsPerQuota(row?.bidsReceived ?? 0, row?.quota ?? 0)}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold text-lg">
-                  {formatCurrency(row?.premium ?? 0)}
-                </ReportCell>
-                <ReportCell align="end">
-                  <PremiumDelta
-                    ratio={
-                      row && previousRow
-                        ? changeRatio(row.premium, previousRow.premium)
-                        : null
-                    }
-                  />
-                </ReportCell>
-              </ReportRow>
-            );
+            return {
+              bidsReceived: row?.bidsReceived ?? 0,
+              changeRatio:
+                row && previousRow
+                  ? changeRatio(row.premium, previousRow.premium)
+                  : null,
+              description: CATEGORY_DESCRIPTIONS[entry],
+              key: toCategoryKey(entry),
+              premium: row?.premium ?? 0,
+              quota: row?.quota ?? 0,
+            };
           })}
-        </ReportTable>
-      </ReportSection>
+          selected={categoryKey}
+        />
+        <SourceNote>
+          Quota premium at the close of the exercise. Change is against the
+          previous exercise; colour is not used for direction.
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <ReportSection
         caption={`${category} · last ${historyRows.length} exercises`}
