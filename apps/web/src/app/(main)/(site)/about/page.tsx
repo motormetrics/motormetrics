@@ -6,6 +6,7 @@ import { FaqSection } from "@web/app/(main)/(site)/about/components/faq-section"
 import { HeroSection } from "@web/app/(main)/(site)/about/components/hero-section";
 import { MissionSection } from "@web/app/(main)/(site)/about/components/mission-section";
 import { StatsSection } from "@web/app/(main)/(site)/about/components/stats-section";
+import { Hairline } from "@web/components/shared/overview";
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
@@ -108,10 +109,11 @@ export default function AboutPage() {
         data={{ "@context": "https://schema.org", ...faqSchema }}
       />
 
-      <SitePage>
+      <SitePage className="gap-10 max-md:gap-7">
         <HeroSection />
         <StatsSection />
         <MissionSection />
+        <Hairline />
         <DatasetsSection />
         <DataSection />
         <FaqSection />

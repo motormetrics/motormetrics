@@ -1,54 +1,43 @@
-import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
-import { ArrowUpRight } from "lucide-react";
+import { PageHead } from "@web/components/shared/page-head";
+import { SITE_TITLE } from "@web/config";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 /**
- * The comp opens the `(site)` pages on an eyebrow pill and an oversized
- * title — larger than the dashboard `PageHead`, which is why this is
- * written here rather than reusing it. There is also no share pill: these are
- * prose pages, not a figure anyone would send on.
+ * The shared page head, with the comp's two calls to action beneath it. On
+ * phones the buttons split the row between them.
  */
 export function HeroSection() {
   return (
-    <section className="flex flex-col gap-6">
-      <span className="self-start rounded-full bg-accent-soft px-4 py-2 font-bold text-accent-strong text-sm">
-        Singapore car market data
-      </span>
-      <Typography.Heading
-        level={1}
-        className="max-w-4xl text-5xl leading-none lg:text-7xl"
-      >
-        Making sense of Singapore&apos;s car market
-      </Typography.Heading>
-      <Typography.Paragraph
-        color="muted"
-        className="max-w-3xl text-2xl leading-normal"
-      >
-        Vehicle registration data and COE bidding results, presented in a way
-        that is easier to understand. No spreadsheets required.
-      </Typography.Paragraph>
-      <div className="flex flex-wrap gap-3 pt-2">
+    <div className="flex flex-col gap-4">
+      <PageHead
+        description="Vehicle registration data and COE bidding results, presented in a way that is easier to understand. No spreadsheets required."
+        eyebrow="Singapore car market data"
+        sub={`About ${SITE_TITLE} · Source: LTA via DataMall`}
+        title="Making sense of Singapore's car market"
+      />
+      <div className="flex flex-wrap gap-2">
         <Link
           className={buttonVariants({
-            size: "lg",
+            className: "max-md:flex-1",
             variant: "primary",
           })}
           href="/"
         >
           Explore the data
-          <ArrowUpRight className="size-4" />
+          <ArrowRight aria-hidden className="size-4" />
         </Link>
         <Link
           className={buttonVariants({
-            size: "lg",
-            variant: "secondary",
+            className: "max-md:flex-1",
+            variant: "outline",
           })}
           href="/learn"
         >
           Read the guides
         </Link>
       </div>
-    </section>
+    </div>
   );
 }
