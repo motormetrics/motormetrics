@@ -1,6 +1,8 @@
 import { Typography } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/components/category-badge";
+import { CategoryTabs } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
   biddingOrdinal,
   CATEGORY_DESCRIPTIONS,
@@ -8,35 +10,28 @@ import {
   changeRatio,
   formatExerciseTick,
   formatMonth,
+  formatPremiumChange,
   successRate,
   toCategory,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
 import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
-import {
-  CategoryTabs,
-  RangeTabs,
-} from "@web/app/(main)/(dashboard)/coe/premiums/components/filters";
+import { RangeTabs } from "@web/app/(main)/(dashboard)/coe/premiums/components/filters";
 import { PremiumTrendChart } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-trend-chart";
 import {
   loadSearchParams,
   RANGE_EXERCISES,
 } from "@web/app/(main)/(dashboard)/coe/premiums/search-params";
-import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
-import {
-  ReportFilterBar,
-  ReportHeadline,
-  ReportNote,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
+import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
   ReportCell,
   ReportRow,
   ReportTable,
 } from "@web/components/shared/report-table";
+import { Text } from "@web/components/shared/text";
 import { getCategoryExercises, getExercisePair } from "@web/queries/coe";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
@@ -176,50 +171,58 @@ export async function PremiumsReport({
 
   return (
     <>
-      <ReportFilterBar
-        label="Category"
-        trailing={<RangeTabs />}
-        trailingLabel="Range"
-      >
-        <CategoryTabs />
-      </ReportFilterBar>
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
+        <div className="flex min-w-0 flex-col gap-3">
+          <CategoryTabs selected={categoryKey} />
+          <Text.Paragraph tone="strong">
+            <span className="font-semibold text-accent-strong">{category}</span>
+            {` · ${CATEGORY_DESCRIPTIONS[category]}`}
+          </Text.Paragraph>
+          <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
+            <NumberValue
+              currency="SGD"
+              locale="en-SG"
+              maximumFractionDigits={0}
+              style="currency"
+              value={latest.premium}
+            />
+          </span>
+          <Typography.Paragraph className="tabular-nums" color="muted">
+            {formatPremiumChange(latest.premium, prior ?? undefined)}
+          </Typography.Paragraph>
+        </div>
 
-      <ReportHeadline
-        delta={
-          <CostTrendChip
-            changeRatio={changeRatio(latest.premium, prior?.premium ?? 0)}
+        <div className="grid grid-cols-2 border-separator border-t">
+          <StatCell
+            label="Previous exercise"
+            note={
+              prior
+                ? `${formatMonth(prior.month, "short")} · ${biddingOrdinal(prior.biddingNo)}`
+                : "None earlier"
+            }
+            value={prior ? formatCurrency(prior.premium) : "—"}
           />
-        }
-        label={`${category} · ${CATEGORY_DESCRIPTIONS[category]}`}
-        stats={
-          <>
-            {prior ? (
-              <ReportStat
-                label="Previous exercise"
-                note={`${formatMonth(prior.month, "short")} · ${biddingOrdinal(prior.biddingNo)}`}
-                value={formatCurrency(prior.premium)}
-              />
-            ) : null}
-            <ReportStat
-              label={`${year} average`}
-              note={`${yearPremiums.length} exercises`}
-              value={formatCurrency(yearAverage)}
-            />
-            <ReportStat
-              label={`${year} high`}
-              note="year to date"
-              value={formatCurrency(yearHigh)}
-            />
-            <ReportStat
-              label={`${year} low`}
-              note="year to date"
-              value={formatCurrency(yearLow)}
-            />
-          </>
-        }
-        sub={`${formatMonth(current.month)} · ${biddingOrdinal(current.biddingNo)} bidding exercise · quota premium at close`}
-        value={formatCurrency(latest.premium)}
-      />
+          <StatCell
+            label={`${year} average`}
+            note={`${yearPremiums.length} exercises`}
+            value={formatCurrency(yearAverage)}
+          />
+          <StatCell
+            label={`${year} high`}
+            note="year to date"
+            value={formatCurrency(yearHigh)}
+          />
+          <StatCell
+            label={`${year} low`}
+            note="year to date"
+            value={formatCurrency(yearLow)}
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <RangeTabs />
+      </div>
 
       <PremiumTrendChart
         data={series.map((exercise) => ({
