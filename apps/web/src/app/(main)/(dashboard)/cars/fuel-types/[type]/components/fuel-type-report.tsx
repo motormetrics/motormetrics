@@ -1,13 +1,20 @@
 import { Skeleton, Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
-import { TypeChart } from "@web/app/(main)/(dashboard)/cars/components/category/type-chart";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
 import { PeriodSegment } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/period-segment";
+import { RegistrationsChart } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/registrations-chart";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MonthMenu } from "@web/components/shared/month-menu";
-import { OverviewPage, SectionLink } from "@web/components/shared/overview";
+import {
+  Hairline,
+  OverviewPage,
+  SectionHead,
+  SectionLink,
+  SourceNote,
+} from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
@@ -277,10 +284,6 @@ async function FuelTypeContent({
     undefined,
   );
 
-  const chartData = series.map(({ count, month: seriesMonth }) => ({
-    count,
-    label: formatChartMonth(seriesMonth),
-  }));
   const monthRows = [...series].reverse();
   const monthShareLeader = series.length
     ? Math.max(...series.map(({ count, total }) => share(count, total)))
@@ -404,7 +407,40 @@ async function FuelTypeContent({
         </div>
       </div>
 
-      <TypeChart data={chartData} />
+      <section className="flex min-w-0 flex-col gap-4">
+        <SectionHead
+          caption={`${series.length} months to ${formatMonthLabel(month)} · hover or tap a bar for its value`}
+          eyebrow="Trend"
+          title={`${value} registrations by month`}
+        />
+        <RegistrationsChart
+          data={series.map(({ count, month: seriesMonth, total }, index) => {
+            const isSelected = seriesMonth === month;
+            return {
+              count,
+              earlier: isSelected ? 0 : count,
+              label: formatChartMonth(seriesMonth),
+              latest: isSelected ? count : 0,
+              market: total,
+              title: formatMonthLabel(seriesMonth),
+              year:
+                index === 0 || seriesMonth.endsWith("-01")
+                  ? seriesMonth.slice(0, 4)
+                  : "",
+            };
+          })}
+          fuelType={value}
+          ticks={axisTicks(
+            series.map(({ count }) => count),
+            { zero: true },
+          )}
+        />
+        <SourceNote>
+          {value} new car registrations each month. Y-axis starts at zero.
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <ReportSection
         caption={`${periodLabel}${makes.length > MAKE_LIMIT ? ` · top ${MAKE_LIMIT} of ${makes.length} makes` : ""}`}
