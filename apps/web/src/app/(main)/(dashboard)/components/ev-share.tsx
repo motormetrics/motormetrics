@@ -66,7 +66,7 @@ export async function EvShare() {
   const step = ticks.length > 1 ? ticks[1] - ticks[0] : undefined;
 
   return (
-    <section className="flex min-w-0 flex-col gap-4.5">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption="Battery-electric share of monthly registrations"
         eyebrow="Electric vehicles"

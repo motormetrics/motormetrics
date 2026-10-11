@@ -49,7 +49,7 @@ export async function EvMakes() {
   const monthTotal = point?.BEV || 1;
 
   return (
-    <section className="flex min-w-0 flex-col gap-4.5">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={`${formatMonthLabel(point?.month ?? month)} · battery-electric registrations`}
         eyebrow="Electric vehicles"

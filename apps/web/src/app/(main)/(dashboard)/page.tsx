@@ -214,7 +214,7 @@ export default function HomePage() {
             </Suspense>
           </SectionErrorBoundary>
           <SectionErrorBoundary title="EV makes unavailable">
-            <Suspense fallback={<BlockSkeleton chartHeight="h-50" />}>
+            <Suspense fallback={<BlockSkeleton chartHeight="h-48" />}>
               <EvMakes />
             </Suspense>
           </SectionErrorBoundary>
