@@ -207,3 +207,31 @@ export function Headline({
     </div>
   );
 }
+
+/**
+ * One cell of a ruled two-column stat grid: a small label, the figure and a
+ * muted note. Odd cells sit flush left; even cells carry the vertical rule.
+ */
+export function StatCell({
+  label,
+  note,
+  value,
+}: {
+  label: string;
+  note: ReactNode;
+  value: ReactNode;
+}) {
+  return (
+    <div className="flex min-w-0 flex-col gap-[3px] border-separator border-b py-3.5 pr-4 even:border-l even:pl-4">
+      <Typography.Paragraph weight="semibold" color="muted" size="xs">
+        {label}
+      </Typography.Paragraph>
+      <span className="font-semibold text-2xl tabular-nums tracking-[-0.01em]">
+        {value}
+      </span>
+      <Typography.Paragraph className="tabular-nums" color="muted" size="xs">
+        {note}
+      </Typography.Paragraph>
+    </div>
+  );
+}

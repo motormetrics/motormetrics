@@ -1,8 +1,9 @@
 import { Typography } from "@heroui/react";
 import { PARFCalculator } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-calculator";
 import { PARFComparisonTable } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-comparison-table";
+import { OverviewPage } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
-import { Report, ReportSection } from "@web/components/shared/report";
+import { ReportSection } from "@web/components/shared/report";
 import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -49,7 +50,7 @@ const structuredData: WithContext<WebPage> = {
 
 export default function PARFCalculatorPage() {
   return (
-    <Report>
+    <OverviewPage className="gap-10 max-md:gap-7">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -63,7 +64,16 @@ export default function PARFCalculatorPage() {
       />
 
       <PageHead
-        description="The PARF rebate is the part of your ARF you get back when you deregister a car before it turns 10. See what it returns under the Budget 2026 schedule, how much that is short of the old one, and your car's deregistration value once the COE rebate is added."
+        eyebrow="Calculator"
+        sub={
+          <>
+            Budget 2026 rebate schedule, effective from the{" "}
+            <span className="font-semibold text-foreground">
+              Second bidding, February 2026
+            </span>{" "}
+            · Source: LTA
+          </>
+        }
         title="PARF rebate calculator"
       />
 
@@ -113,6 +123,6 @@ export default function PARFCalculatorPage() {
         </Link>
         .
       </Typography.Paragraph>
-    </Report>
+    </OverviewPage>
   );
 }

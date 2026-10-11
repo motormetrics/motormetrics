@@ -10,10 +10,13 @@ import {
   premiumRangeStats,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { PremiumTrendChart } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-trend-chart";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import {
+  SectionHead,
+  SourceNote,
+  StatCell,
+} from "@web/components/shared/overview";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
 

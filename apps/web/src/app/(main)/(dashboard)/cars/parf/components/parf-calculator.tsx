@@ -1,15 +1,14 @@
 "use client";
 
-import { Input, Label, ListBox, Select } from "@heroui/react";
+import { Input, Label, ListBox, Select, Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   AGE_BRACKETS,
   NEW_CAP,
   OLD_CAP,
 } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
-import { DeltaChip } from "@web/components/shared/delta-chip";
+import { SourceNote, StatCell } from "@web/components/shared/overview";
 import {
-  ReportEyebrow,
   ReportHeadline,
   ReportSection,
   ReportStat,
@@ -20,6 +19,19 @@ import { useMemo, useState } from "react";
 
 /** A COE runs for 10 years; the COE rebate is pro-rated over its months. */
 const COE_MONTHS = 120;
+
+/** "−60.0%", with a true minus for a fall. */
+const formatSignedPercent = (ratio: number): string =>
+  `${ratio < 0 ? "−" : "+"}${Math.abs(ratio * 100).toFixed(1)}%`;
+
+/**
+ * The small label above each calculator field. A span rather than
+ * `Typography.Paragraph`: inside the `Select` that renders react-aria's `Text`,
+ * which demands a slot.
+ */
+function FieldLabel({ children }: { children: string }) {
+  return <span className="font-semibold text-muted text-xs">{children}</span>;
+}
 
 /**
  * The calculator strip and the headline it drives.
@@ -68,9 +80,9 @@ export function PARFCalculator() {
 
   return (
     <>
-      <div className="flex flex-wrap items-end gap-6 border-border border-y py-4">
-        <div className="flex flex-col gap-2">
-          <ReportEyebrow>ARF paid</ReportEyebrow>
+      <div className="flex flex-wrap items-end gap-5 border-border border-t border-b border-b-separator py-5 max-md:flex-col max-md:items-stretch">
+        <div className="flex w-60 flex-col gap-2 max-md:w-full">
+          <FieldLabel>ARF paid</FieldLabel>
           <Input
             aria-label="ARF paid"
             inputMode="numeric"
@@ -86,7 +98,7 @@ export function PARFCalculator() {
             value={arfInput}
           />
         </div>
-        <div className="flex min-w-64 flex-col gap-2">
+        <div className="flex w-72 flex-col gap-2 max-md:w-full">
           <Select
             onChange={(key) => {
               if (!key) return;
@@ -99,7 +111,7 @@ export function PARFCalculator() {
             value={bracketKey}
           >
             <Label>
-              <ReportEyebrow>Age at deregistration</ReportEyebrow>
+              <FieldLabel>Age at deregistration</FieldLabel>
             </Label>
             <Select.Trigger>
               <Select.Value />
@@ -117,8 +129,8 @@ export function PARFCalculator() {
             </Select.Popover>
           </Select>
         </div>
-        <div className="flex flex-col gap-2">
-          <ReportEyebrow>COE premium paid</ReportEyebrow>
+        <div className="flex w-52 flex-col gap-2 max-md:w-full">
+          <FieldLabel>COE premium paid</FieldLabel>
           <Input
             aria-label="COE premium paid"
             inputMode="numeric"
@@ -134,8 +146,8 @@ export function PARFCalculator() {
             value={premiumInput}
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <ReportEyebrow>Months left on COE</ReportEyebrow>
+        <div className="flex w-44 flex-col gap-2 max-md:w-full">
+          <FieldLabel>Months left on COE</FieldLabel>
           <Input
             aria-label="Months left on COE"
             inputMode="numeric"
@@ -153,60 +165,72 @@ export function PARFCalculator() {
         </div>
       </div>
 
-      <ReportHeadline
-        delta={
-          result.oldRebate > 0 ? (
-            <DeltaChip value={(-result.shortfall / result.oldRebate) * 100} />
-          ) : undefined
-        }
-        label="Rebate after Budget 2026"
-        stats={
-          <>
-            <ReportStat
-              label="Before Budget 2026"
-              note={
-                // The $60,000 cap only covers COEs from February 2023, so an
-                // older COE would get the uncapped figure.
-                result.oldCapped
-                  ? `capped at ${formatCurrency(OLD_CAP)} · ${formatCurrency(result.oldUncapped)} for COEs before Feb 2023`
-                  : `${(bracket.oldRate * 100).toFixed(0)}% of ARF`
-              }
-              value={formatCurrency(result.oldRebate)}
-            />
-            <ReportStat
-              label="Shortfall"
-              note="less in your hand"
-              value={formatCurrency(result.shortfall)}
-            />
-            <ReportStat
-              label="New rate"
-              note={
-                result.newCapped
-                  ? `capped at ${formatCurrency(NEW_CAP)}`
-                  : "of the ARF paid"
-              }
-              value={`${(bracket.newRate * 100).toFixed(0)}%`}
-            />
-          </>
-        }
-        sub={
-          bracket.oldRate === 0
-            ? "No PARF rebate is given for vehicles over 10 years old, under either schedule."
-            : `${formatCurrency(arf)} ARF · ${bracket.label.toLowerCase()} · rebate capped at ${formatCurrency(NEW_CAP)}`
-        }
-        value={formatCurrency(result.newRebate)}
-      />
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
+        <div className="flex min-w-0 flex-col gap-3">
+          <Text.Paragraph tone="strong">
+            <span className="font-semibold text-accent-strong">
+              Rebate after Budget 2026
+            </span>
+            {` · ${bracket.label}`}
+          </Text.Paragraph>
+          <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
+            {formatCurrency(result.newRebate)}
+          </span>
+          {bracket.oldRate === 0 ? (
+            <Typography.Paragraph color="muted">
+              No PARF rebate is given for vehicles over 10 years old, under
+              either schedule.
+            </Typography.Paragraph>
+          ) : result.oldRebate > 0 ? (
+            <Typography.Paragraph className="tabular-nums" color="muted">
+              <span className="font-semibold text-foreground">
+                {formatSignedPercent(
+                  (result.newRebate - result.oldRebate) / result.oldRebate,
+                )}
+              </span>{" "}
+              (−{formatCurrency(result.shortfall)}) vs{" "}
+              {formatCurrency(result.oldRebate)} under the old schedule
+            </Typography.Paragraph>
+          ) : null}
+          <SourceNote className="tabular-nums">
+            {formatCurrency(arf)} ARF · {bracket.label} · rebate capped at{" "}
+            {formatCurrency(NEW_CAP)}
+          </SourceNote>
+        </div>
 
-      {result.shortfall > 0 ? (
-        <Text.Paragraph tone="strong">
-          On these figures the new schedule returns{" "}
-          <strong className="text-foreground">
-            {formatCurrency(result.shortfall)} less
-          </strong>{" "}
-          than the old one — {formatCurrency(result.newRebate)} against{" "}
-          {formatCurrency(result.oldRebate)}.
-        </Text.Paragraph>
-      ) : null}
+        <div className="grid grid-cols-2 border-separator border-t">
+          <StatCell
+            label="Before Budget 2026"
+            note={
+              // The $60,000 cap only covers COEs from February 2023, so an
+              // older COE would get the uncapped figure.
+              result.oldCapped
+                ? `capped at ${formatCurrency(OLD_CAP)} · ${formatCurrency(result.oldUncapped)} for COEs before Feb 2023`
+                : `${(bracket.oldRate * 100).toFixed(0)}% of ARF`
+            }
+            value={formatCurrency(result.oldRebate)}
+          />
+          <StatCell
+            label="Shortfall"
+            note="less in your hand"
+            value={formatCurrency(result.shortfall)}
+          />
+          <StatCell
+            label="New rate"
+            note={
+              result.newCapped
+                ? `capped at ${formatCurrency(NEW_CAP)}`
+                : "of the ARF paid"
+            }
+            value={`${(bracket.newRate * 100).toFixed(0)}%`}
+          />
+          <StatCell
+            label="Rebate cap"
+            note={`was ${formatCurrency(OLD_CAP)}`}
+            value={formatCurrency(NEW_CAP)}
+          />
+        </div>
+      </div>
 
       <ReportSection
         caption="PARF rebate plus COE rebate"

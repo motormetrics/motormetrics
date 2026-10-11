@@ -12,40 +12,12 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
+import { StatCell } from "@web/components/shared/overview";
 import { Text } from "@web/components/shared/text";
 import { getCoeResults, getPqpRates } from "@web/queries/coe";
 import type { Pqp } from "@web/types";
 import { formatMonthName } from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
-import type { ReactNode } from "react";
-
-/**
- * One cell of a ruled two-column stat grid: a small label, the figure and a
- * muted note. Odd cells sit flush left; even cells carry the vertical rule.
- */
-export function StatCell({
-  label,
-  note,
-  value,
-}: {
-  label: string;
-  note: ReactNode;
-  value: ReactNode;
-}) {
-  return (
-    <div className="flex min-w-0 flex-col gap-[3px] border-separator border-b py-3.5 pr-4 even:border-l even:pl-4">
-      <Typography.Paragraph weight="semibold" color="muted" size="xs">
-        {label}
-      </Typography.Paragraph>
-      <span className="font-semibold text-2xl tabular-nums tracking-[-0.01em]">
-        {value}
-      </span>
-      <Typography.Paragraph className="tabular-nums" color="muted" size="xs">
-        {note}
-      </Typography.Paragraph>
-    </div>
-  );
-}
 
 /**
  * The opening block of /coe: the category switch, the selected category's
@@ -178,3 +150,6 @@ export async function CoeHeadline({
     </div>
   );
 }
+
+/** Moved to `shared/overview`; re-exported while the open COE stacks import it from here. */
+export { StatCell };
