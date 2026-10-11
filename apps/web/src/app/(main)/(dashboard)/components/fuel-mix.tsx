@@ -1,41 +1,42 @@
-import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { SectionHead } from "@web/components/shared/overview";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { getYearToDateByFuelType } from "@web/queries/cars";
-import { donutArcs, RING_RADIUS } from "@web/utils/charts/donut-arcs";
 import { getLatestMonth } from "@web/utils/dates/months";
 
 /**
- * The powertrains the ring shows, in drawing order. LTA records hybrids as
- * `Petrol-Electric`, `Diesel-Electric` and their plug-in variants, so anything
- * with an `-Electric` suffix folds into one hybrid slice.
+ * The powertrains the bar shows. LTA records hybrids as `Petrol-Electric`,
+ * `Diesel-Electric` and their plug-in variants, so anything with an
+ * `-Electric` suffix folds into one hybrid segment.
  */
 const POWERTRAINS = [
   {
     color: "var(--chart-1)",
-    label: "Petrol",
-    match: (name: string) => name === "Petrol",
-  },
-  {
-    color: "var(--chart-3)",
     label: "Electric",
     match: (name: string) => name === "Electric",
   },
   {
-    color: "var(--chart-5)",
+    color: "var(--chart-3)",
     label: "Hybrid",
     match: (name: string) => name.includes("-Electric"),
   },
   {
-    color: "var(--chart-2)",
+    color: "var(--chart-sand)",
+    label: "Petrol",
+    match: (name: string) => name === "Petrol",
+  },
+  {
+    color: "var(--muted)",
     label: "Diesel",
     match: (name: string) => name === "Diesel",
   },
 ];
 
-const OTHER = { color: "var(--chart-6)", label: "Other" };
+const OTHER = { color: "var(--chart-5)", label: "Other" };
 
-/** Registrations by powertrain for the selected month's year. */
+/**
+ * Registrations by powertrain for the year to date: one stacked share bar,
+ * then a row per powertrain, largest first.
+ */
 export async function FuelMix() {
   const month = await getLatestMonth("cars");
   const year = Number(month.slice(0, 4));
@@ -57,71 +58,61 @@ export async function FuelMix() {
   if (total > accounted) {
     slices.push({ ...OTHER, value: total - accounted });
   }
-
-  const segments = slices.filter((slice) => slice.value > 0);
-  const arcs = donutArcs(segments);
+  const segments = slices
+    .map((slice) => ({ ...slice, share: (slice.value / total) * 100 }))
+    .sort((left, right) => right.value - left.value);
 
   return (
-    <section className="flex flex-col gap-6">
+    <section className="flex min-w-0 flex-col gap-[18px]">
       <SectionHead
         caption={`${year} year to date · by powertrain`}
         eyebrow="Registrations"
         link={{ href: "/cars/fuel-types", label: "All fuel types" }}
         title="Fuel mix"
       />
-      <div className="flex flex-wrap items-center gap-9">
-        <div className="relative size-[172px] shrink-0">
-          <svg className="block size-[172px]" role="img" viewBox="0 0 190 190">
-            <title>{`Registrations by powertrain, ${year} year to date`}</title>
-            <g transform="rotate(-90 95 95)">
-              {arcs.map((arc) => (
-                <circle
-                  cx={95}
-                  cy={95}
-                  fill="none"
-                  key={arc.key}
-                  r={RING_RADIUS}
-                  stroke={arc.color}
-                  strokeDasharray={arc.dashArray}
-                  strokeDashoffset={arc.dashOffset}
-                  strokeLinecap="round"
-                  strokeWidth={24}
-                />
-              ))}
-            </g>
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-            <span className="font-extrabold text-3xl tabular-nums tracking-tight">
-              <NumberValue
-                maximumFractionDigits={1}
-                notation="compact"
-                value={total}
-              />
-            </span>
-            <Typography.Paragraph weight="semibold" color="muted" size="sm">
-              registrations
-            </Typography.Paragraph>
-          </div>
-        </div>
 
-        <ul className="flex min-w-[180px] flex-1 flex-col gap-3">
-          {segments.map((segment) => (
-            <li className="flex items-center gap-2.5" key={segment.label}>
-              <span
-                aria-hidden
-                className="size-[11px] shrink-0 rounded-full"
-                style={{ background: segment.color }}
-              />
-              <Typography.Paragraph weight="semibold">
-                {segment.label}
-              </Typography.Paragraph>
-              <span className="ml-auto font-extrabold text-base tabular-nums">
-                {((segment.value / total) * 100).toFixed(1)}%
-              </span>
-            </li>
+      <div
+        aria-label={segments
+          .map((segment) => `${segment.label} ${segment.share.toFixed(1)}%`)
+          .join(", ")}
+        className="flex h-[18px] gap-0.5"
+        role="img"
+      >
+        {segments
+          .filter((segment) => segment.value > 0)
+          .map((segment) => (
+            <span
+              className="block h-full"
+              key={segment.label}
+              style={{ background: segment.color, width: `${segment.share}%` }}
+            />
           ))}
-        </ul>
       </div>
+
+      <ul className="flex flex-col">
+        {segments.map((segment) => (
+          <li
+            className="grid grid-cols-[14px_minmax(0,1fr)_70px] items-center gap-2.5 border-separator border-b py-2.5"
+            key={segment.label}
+          >
+            <span
+              aria-hidden
+              className="block size-3 rounded-xs"
+              style={{ background: segment.color }}
+            />
+            <span className="text-sm">{segment.label}</span>
+            <span className="text-right font-semibold text-sm tabular-nums">
+              {segment.share.toFixed(1)}%
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <SourceNote>
+        Share of{" "}
+        <NumberValue locale="en-SG" maximumFractionDigits={0} value={total} />{" "}
+        new car registrations. Hybrid includes plug-in hybrids.
+      </SourceNote>
     </section>
   );
 }
