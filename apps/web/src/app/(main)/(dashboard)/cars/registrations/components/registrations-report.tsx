@@ -11,7 +11,6 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import {
-  ReportFilterBar,
   ReportHeadline,
   ReportNote,
   ReportSection,
@@ -111,13 +110,20 @@ export async function RegistrationsReport({
 
   return (
     <>
-      <ReportFilterBar
-        label="Fuel type"
-        trailing={<RangeTabs />}
-        trailingLabel="Range"
-      >
-        <FuelTypeTabs fuelTypes={fuelTypes.map(({ fuelType: name }) => name)} />
-      </ReportFilterBar>
+      {/* Fuel type narrows the headline and the chart; range sets the chart
+          window. Each label sits over its own control, as in the comp. */}
+      <div className="flex flex-wrap items-end gap-6 border-border border-y py-4 max-md:flex-col max-md:items-stretch max-md:gap-4">
+        <div className="flex min-w-0 max-w-full flex-col gap-2">
+          <span className="font-semibold text-muted text-xs">Fuel type</span>
+          <FuelTypeTabs
+            fuelTypes={fuelTypes.map(({ fuelType: name }) => name)}
+          />
+        </div>
+        <div className="flex flex-col gap-2 md:ml-auto">
+          <span className="font-semibold text-muted text-xs">Range</span>
+          <RangeTabs />
+        </div>
+      </div>
 
       <ReportHeadline
         delta={

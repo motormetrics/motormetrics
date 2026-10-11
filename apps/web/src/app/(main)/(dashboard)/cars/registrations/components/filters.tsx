@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@heroui/react";
+import { Segment } from "@heroui-pro/react";
 import { RANGES } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
 import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
@@ -12,6 +13,10 @@ import { useTransition } from "react";
  * registration data crosses into the client bundle. Same approach as
  * `cars/makes/components/range-menu.tsx`.
  */
+
+/** Segment keys cannot be null, so the unfiltered view takes its own key. */
+const ALL_FUEL_TYPES = "all";
+
 /**
  * Fuel types as LTA records them, passed in from the server rather than listed
  * here — a new value in a DataMall drop should appear on its own.
@@ -23,45 +28,33 @@ export function FuelTypeTabs({ fuelTypes }: { fuelTypes: string[] }) {
     parseAsString.withOptions({ shallow: false, startTransition }),
   );
 
-  const options: { key: string | null; label: string }[] = [
-    { key: null, label: "All fuel types" },
-    ...fuelTypes.map((fuelType) => ({ key: fuelType, label: fuelType })),
-  ];
-
   return (
-    <fieldset
-      className={cn(
-        "m-0 flex flex-wrap gap-2 border-none p-0",
-        isPending && "opacity-70",
-      )}
-    >
-      <legend className="sr-only">Fuel type</legend>
-      {options.map(({ key, label }) => {
-        const isActive = key === selected;
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "cursor-pointer whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
-              isActive
-                ? "bg-accent font-bold text-accent-foreground"
-                : "bg-surface font-semibold text-muted hover:text-foreground",
-            )}
-            key={label}
-            onClick={() => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: "fuel_type",
-                value: key,
-              });
-              setSelected(key);
-            }}
-            type="button"
-          >
-            {label}
-          </button>
-        );
-      })}
-    </fieldset>
+    // The comp scrolls the fuel types sideways on a phone rather than letting
+    // six labels squeeze into one row.
+    <div className="max-w-full overflow-x-auto">
+      <Segment
+        aria-label="Fuel type"
+        className={cn(isPending && "opacity-70")}
+        onSelectionChange={(key) => {
+          const next = key === ALL_FUEL_TYPES ? null : String(key);
+          posthog.capture("dashboard_filter_changed", {
+            filter: "fuel_type",
+            value: next,
+          });
+          setSelected(next);
+        }}
+        selectedKey={selected ?? ALL_FUEL_TYPES}
+        size="sm"
+        variant="ghost"
+      >
+        <Segment.Item id={ALL_FUEL_TYPES}>All fuel types</Segment.Item>
+        {fuelTypes.map((fuelType) => (
+          <Segment.Item id={fuelType} key={fuelType}>
+            {fuelType}
+          </Segment.Item>
+        ))}
+      </Segment>
+    </div>
   );
 }
 
@@ -76,38 +69,33 @@ export function RangeTabs() {
   );
 
   return (
-    <fieldset
-      className={cn(
-        "m-0 flex gap-1 rounded-full border-none bg-surface-secondary p-1",
-        isPending && "opacity-70",
-      )}
+    <Segment
+      aria-label="Chart range"
+      className={cn("max-md:w-full", isPending && "opacity-70")}
+      onSelectionChange={(key) => {
+        const next = RANGES.find((option) => option === key);
+        if (!next) {
+          return;
+        }
+        posthog.capture("dashboard_filter_changed", {
+          filter: "range",
+          value: next,
+        });
+        setRange(next);
+      }}
+      selectedKey={range}
+      size="sm"
+      variant="ghost"
     >
-      <legend className="sr-only">Chart range</legend>
-      {RANGES.map((option) => {
-        const isActive = option === range;
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "cursor-pointer rounded-full px-4 py-[7px] text-sm transition-colors",
-              isActive
-                ? "bg-surface font-extrabold text-foreground shadow-surface"
-                : "font-semibold text-muted hover:text-foreground",
-            )}
-            key={option}
-            onClick={() => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: "range",
-                value: option,
-              });
-              setRange(option);
-            }}
-            type="button"
-          >
-            {option}
-          </button>
-        );
-      })}
-    </fieldset>
+      {RANGES.map((option) => (
+        <Segment.Item
+          className="max-md:flex-1 max-md:px-2"
+          id={option}
+          key={option}
+        >
+          {option}
+        </Segment.Item>
+      ))}
+    </Segment>
   );
 }
