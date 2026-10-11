@@ -2,15 +2,21 @@ import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
 import {
-  type CategorySeries,
-  CategoryShareChart,
-} from "@web/app/(main)/(dashboard)/cars/components/category/category-share-chart";
+  type FuelSeries,
+  type FuelTrendPoint,
+  FuelTypesChart,
+} from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-chart";
 import {
   MeasureSegment,
   PeriodSegment,
 } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-filters";
 import { FuelTypesHeadline } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-headline";
-import { Hairline, SectionHead } from "@web/components/shared/overview";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import {
+  Hairline,
+  SectionHead,
+  SourceNote,
+} from "@web/components/shared/overview";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
@@ -30,6 +36,7 @@ import {
 import {
   formatChartMonth,
   formatMonthLabel,
+  formatMonthShortLabel,
 } from "@web/utils/dates/format-month";
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
@@ -95,8 +102,27 @@ const FEATURED_FUEL = "Electric";
 /** How far back the trend chart reaches from the selected month. */
 const SERIES_MONTHS = 12;
 
-/** How many types the chart plots and the month-by-month table columns. */
-const CHARTED_TYPES = 6;
+/**
+ * How many fuel types the chart plots and the month-by-month table columns:
+ * the four with the most registrations over the twelve months, as the comp
+ * draws Electric, both petrol hybrids and Petrol. The rest are a handful of
+ * cars a month and would lie flat along the axis.
+ */
+const CHARTED_TYPES = 4;
+
+/** The comp's series order; a fuel type outside it sorts after these. */
+const FUEL_ORDER = [
+  "Electric",
+  "Petrol-Electric",
+  "Petrol-Electric (Plug-In)",
+  "Petrol",
+  "Diesel",
+];
+
+const fuelRank = (name: string): number => {
+  const rank = FUEL_ORDER.indexOf(name);
+  return rank === -1 ? FUEL_ORDER.length : rank;
+};
 
 /** January through `month`, for the year-to-date view. */
 function yearToDateMonths(month: string): string[] {
@@ -180,19 +206,29 @@ export async function FuelTypesReport({
     priorTotal,
   );
 
-  // The chart and the month-by-month table plot the same leading types, and
-  // each fuel type keeps one colour wherever it appears.
-  const chartedTypes = rows.slice(0, CHARTED_TYPES);
-  const chartSeries: CategorySeries[] = chartedTypes.map(({ name }, index) => ({
+  const byMonth = new Map<string, CategoryMonthlyPoint[]>();
+  const seriesTotals = new Map<string, number>();
+  for (const point of series) {
+    byMonth.set(point.month, [...(byMonth.get(point.month) ?? []), point]);
+    seriesTotals.set(
+      point.name,
+      (seriesTotals.get(point.name) ?? 0) + point.count,
+    );
+  }
+
+  // The chart and the month-by-month table plot the same fuel types, in the
+  // comp's order, and each keeps one colour wherever it appears.
+  const chartedTypes = [...seriesTotals.entries()]
+    .filter(([, count]) => count > 0)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, CHARTED_TYPES)
+    .map(([name]) => ({ name }))
+    .sort((a, b) => fuelRank(a.name) - fuelRank(b.name));
+  const chartSeries: FuelSeries[] = chartedTypes.map(({ name }, index) => ({
     color: fuelColour(name),
     key: `type${index}`,
     label: name,
   }));
-
-  const byMonth = new Map<string, CategoryMonthlyPoint[]>();
-  for (const point of series) {
-    byMonth.set(point.month, [...(byMonth.get(point.month) ?? []), point]);
-  }
 
   const monthlyRows = seriesMonths.map((seriesMonth) => {
     const points = byMonth.get(seriesMonth) ?? [];
@@ -209,15 +245,30 @@ export async function FuelTypesReport({
     };
   });
 
-  const chartData = monthlyRows.map(({ cells, month: seriesMonth }) => ({
-    label: formatChartMonth(seriesMonth),
-    ...Object.fromEntries(
-      cells.map(({ count, share }, index) => [
-        `type${index}`,
-        measure === "share" ? Number(share.toFixed(1)) : count,
-      ]),
+  const chartData: FuelTrendPoint[] = monthlyRows.map(
+    ({ cells, month: seriesMonth, total: monthTotal }, index) => ({
+      label: formatChartMonth(seriesMonth),
+      title: formatMonthShortLabel(seriesMonth),
+      total: monthTotal,
+      year:
+        index === 0 || seriesMonth.endsWith("-01")
+          ? seriesMonth.slice(0, 4)
+          : "",
+      ...Object.fromEntries(
+        cells.map(({ count, share }, index) => [
+          `type${index}`,
+          measure === "share" ? Number(share.toFixed(1)) : count,
+        ]),
+      ),
+    }),
+  );
+  const chartTicks = axisTicks(
+    chartData.flatMap((point) =>
+      chartSeries.map(({ key }) => Number(point[key])),
     ),
-  }));
+    { zero: true },
+  );
+  const gridStep = (chartTicks[1] ?? 0) - (chartTicks[0] ?? 0);
 
   return (
     <>
@@ -240,6 +291,7 @@ export async function FuelTypesReport({
 
       <section className="flex flex-col gap-4">
         <SectionHead
+          caption={`${SERIES_MONTHS} months to ${formatMonthLabel(month)} · hover or tap for values`}
           eyebrow="Trend"
           title={
             measure === "share"
@@ -248,11 +300,23 @@ export async function FuelTypesReport({
           }
           trailing={<MeasureSegment />}
         />
-        <CategoryShareChart
+        <FuelTypesChart
           data={chartData}
           measure={measure}
           series={chartSeries}
+          ticks={chartTicks}
         />
+        <SourceNote>
+          Source: LTA via DataMall ·{" "}
+          {measure === "share"
+            ? "Share of each month's new car registrations"
+            : "New car registrations each month"}{" "}
+          · Y-axis starts at zero; gridlines every{" "}
+          {measure === "share"
+            ? `${gridStep} pts`
+            : `${gridStep.toLocaleString("en-SG")} cars`}
+          .
+        </SourceNote>
       </section>
 
       <Hairline />
