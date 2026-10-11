@@ -7,6 +7,7 @@ import { GlossarySection } from "@web/app/(main)/(site)/learn/components/glossar
 import { GuidesSection } from "@web/app/(main)/(site)/learn/components/guides-section";
 import { LearnStats } from "@web/app/(main)/(site)/learn/components/learn-stats";
 import { GUIDES } from "@web/app/(main)/(site)/learn/lib/guides";
+import { Hairline } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
@@ -94,8 +95,11 @@ export default function LearnPage() {
         <LearnStats />
         <FeaturedGuide />
         <GuidesSection />
+        <Hairline />
         <GlossarySection />
+        <Hairline />
         <FAQSection />
+        <Hairline />
         <DataSourcesSection />
       </SitePage>
     </>

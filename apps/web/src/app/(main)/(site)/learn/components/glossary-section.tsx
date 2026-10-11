@@ -1,72 +1,76 @@
-import { Typography } from "@heroui/react";
 import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
 import { getAllGuideSlugs } from "@web/app/(main)/(site)/learn/lib/guides";
-import { ReportEyebrow } from "@web/components/shared/report";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { Text } from "@web/components/shared/text";
 import Link from "next/link";
 
 const guideSlugs = getAllGuideSlugs();
 
+const termCount = GLOSSARY_CATEGORIES.reduce(
+  (total, category) => total + category.terms.length,
+  0,
+);
+
 /**
- * The comp sets the glossary as a heading in a narrow left column against a
- * two-up list of hairline-topped terms — no cards, the rules do the dividing.
- *
- * The comp draws one flat list; the data is grouped into five categories and
- * the grouping is worth keeping, so each category opens with a small caps label
- * over its own two-up list.
+ * The glossary: a heading in a narrow left column against the categories two
+ * up, each a ruled list of term and definition under a small label. Terms with
+ * a guide of their own link to it.
  */
 export function GlossarySection() {
   return (
     <section
-      className="grid scroll-mt-24 grid-cols-1 gap-10 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14"
+      className="grid scroll-mt-24 grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-14"
       id="glossary"
     >
-      <div className="flex flex-col gap-3">
-        <Typography.Heading level={2}>Glossary</Typography.Heading>
-        <Typography.Paragraph className="leading-normal" color="muted">
-          The abbreviations that appear on every invoice, quotation and bidding
-          result, in one place.
-        </Typography.Paragraph>
-      </div>
+      <SectionHead
+        caption="The abbreviations that appear on every invoice, quotation and bidding result, in one place."
+        eyebrow="Reference"
+        title="Glossary"
+      />
 
-      <div className="flex flex-col gap-10">
-        {GLOSSARY_CATEGORIES.map((category) => (
-          <div className="flex flex-col gap-5" key={category.title}>
-            <ReportEyebrow>{category.title}</ReportEyebrow>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div className="flex min-w-0 flex-col gap-4 lg:col-span-3">
+        <div className="grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2">
+          {GLOSSARY_CATEGORIES.map((category) => (
+            <div className="flex min-w-0 flex-col" key={category.title}>
+              <span className="border-border border-b pb-2 font-semibold text-muted text-xs">
+                {category.title}
+              </span>
               {category.terms.map(({ definition, term }) => {
                 const slug = term.toLowerCase();
-                const hasGuide = guideSlugs.includes(slug);
 
                 return (
                   <div
-                    className="flex flex-col gap-1 border-border border-t pt-4"
+                    className="flex items-baseline gap-3.5 border-separator border-b py-2.5 max-md:flex-col max-md:gap-0.5"
                     key={term}
                   >
-                    {hasGuide ? (
+                    {guideSlugs.includes(slug) ? (
                       <Link
-                        className="font-bold text-accent-strong text-base no-underline transition-colors hover:text-accent-deep"
+                        className="w-24 shrink-0 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
                         href={`/learn/${slug}`}
                       >
                         {term} →
                       </Link>
                     ) : (
-                      <span className="font-bold text-accent-strong text-base">
+                      <span className="w-24 shrink-0 font-semibold text-sm">
                         {term}
                       </span>
                     )}
-                    <Typography.Paragraph
-                      color="muted"
+                    <Text.Paragraph
+                      className="min-w-0 flex-1 leading-normal"
                       size="sm"
-                      className="leading-normal"
+                      tone="strong"
                     >
                       {definition}
-                    </Typography.Paragraph>
+                    </Text.Paragraph>
                   </div>
                 );
               })}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+        <SourceNote>
+          {termCount} terms. Linked terms have a full guide.
+        </SourceNote>
       </div>
     </section>
   );

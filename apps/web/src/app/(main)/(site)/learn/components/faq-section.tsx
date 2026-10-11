@@ -1,13 +1,18 @@
 "use client";
 
-import { Accordion, Typography } from "@heroui/react";
+import { Accordion } from "@heroui/react";
 import { FAQ_SECTIONS } from "@web/app/(main)/(site)/learn/components/faq-data";
-import { ReportEyebrow } from "@web/components/shared/report";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { Text } from "@web/components/shared/text";
+
+const questionCount = FAQ_SECTIONS.reduce(
+  (total, section) => total + section.items.length,
+  0,
+);
 
 /**
- * The questions, laid out the way the comp lays out the glossary: a heading in
- * a narrow left column, the content in the wide one, hairlines rather than
- * cards.
+ * The questions, laid out like the glossary: a heading in a narrow left
+ * column, and in the wide one each group under a small ruled label.
  *
  * Client-side for the accordion alone; the questions themselves come from
  * `faq-data`, which the page also reads to build the FAQPage schema.
@@ -15,21 +20,22 @@ import { ReportEyebrow } from "@web/components/shared/report";
 export function FAQSection() {
   return (
     <section
-      className="grid scroll-mt-24 grid-cols-1 gap-10 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14"
+      className="grid scroll-mt-24 grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-14"
       id="faq"
     >
-      <div className="flex flex-col gap-3 lg:sticky lg:top-9 lg:self-start">
-        <Typography.Heading level={2}>Frequently asked</Typography.Heading>
-        <Typography.Paragraph className="leading-normal" color="muted">
-          The questions that come up most often about bidding, rebates and where
-          the figures on this site come from.
-        </Typography.Paragraph>
-      </div>
+      <SectionHead
+        caption="The questions that come up most often about bidding, rebates and where the figures on this site come from."
+        className="lg:sticky lg:top-9"
+        eyebrow="FAQ"
+        title="Frequently asked"
+      />
 
-      <div className="flex flex-col gap-9">
+      <div className="flex min-w-0 flex-col gap-7 lg:col-span-3">
         {FAQ_SECTIONS.map((section) => (
-          <div className="flex flex-col gap-4" key={section.title}>
-            <ReportEyebrow>{section.title}</ReportEyebrow>
+          <div className="flex flex-col" key={section.title}>
+            <span className="border-border border-b pb-2 font-semibold text-muted text-xs">
+              {section.title}
+            </span>
             <Accordion>
               {section.items.map(({ answer, question }) => (
                 <Accordion.Item key={question}>
@@ -41,9 +47,9 @@ export function FAQSection() {
                   </Accordion.Heading>
                   <Accordion.Panel>
                     <Accordion.Body>
-                      <Typography.Paragraph color="muted">
+                      <Text.Paragraph className="max-w-2xl" tone="strong">
                         {answer}
-                      </Typography.Paragraph>
+                      </Text.Paragraph>
                     </Accordion.Body>
                   </Accordion.Panel>
                 </Accordion.Item>
@@ -51,6 +57,9 @@ export function FAQSection() {
             </Accordion>
           </div>
         ))}
+        <SourceNote>
+          {questionCount} questions. Select a question to read the answer.
+        </SourceNote>
       </div>
     </section>
   );

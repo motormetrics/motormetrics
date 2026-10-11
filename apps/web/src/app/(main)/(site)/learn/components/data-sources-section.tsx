@@ -1,5 +1,6 @@
-import { Typography } from "@heroui/react";
-import { ReportEyebrow } from "@web/components/shared/report";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { Text } from "@web/components/shared/text";
+import { SITE_TITLE } from "@web/config";
 import type { ReactNode } from "react";
 
 const FACTS: { detail: ReactNode; title: string }[] = [
@@ -44,41 +45,45 @@ const FACTS: { detail: ReactNode; title: string }[] = [
 ];
 
 /**
- * Where the figures come from, in the same narrow-heading layout as the
- * glossary and the FAQ. Cards would overstate four short paragraphs, so the
- * facts are hairline-ruled rows.
+ * Where the figures come from: the four facts as a two-up ruled grid under a
+ * section head, with the link out to DataMall hard right.
  */
 export function DataSourcesSection() {
   return (
-    <section
-      className="grid scroll-mt-24 grid-cols-1 gap-10 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-14"
-      id="data-sources"
-    >
-      <div className="flex flex-col gap-3">
-        <Typography.Heading level={2}>
-          Where the data comes from
-        </Typography.Heading>
-        <a
-          className="font-bold text-accent-strong text-base no-underline transition-colors hover:text-accent-deep"
-          href="https://datamall.lta.gov.sg"
-          rel="noreferrer"
-          target="_blank"
-        >
-          LTA DataMall →
-        </a>
-      </div>
+    <section className="flex scroll-mt-24 flex-col gap-4" id="data-sources">
+      <SectionHead
+        eyebrow="Provenance"
+        title="Where the data comes from"
+        trailing={
+          <a
+            className="whitespace-nowrap font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+            href="https://datamall.lta.gov.sg"
+            rel="noreferrer"
+            target="_blank"
+          >
+            LTA DataMall →
+          </a>
+        }
+      />
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="grid grid-cols-1 border-border border-t md:grid-cols-2">
         {FACTS.map(({ detail, title }) => (
           <div
-            className="flex flex-col gap-2 border-border border-t pt-4"
+            className="flex flex-col gap-1.5 border-separator border-b py-3.5 md:py-4 md:even:border-l md:even:pl-6 md:odd:pr-6"
             key={title}
           >
-            <ReportEyebrow>{title}</ReportEyebrow>
-            <Typography.Paragraph color="muted">{detail}</Typography.Paragraph>
+            <span className="font-semibold text-muted text-xs">{title}</span>
+            <Text.Paragraph className="leading-relaxed" size="sm" tone="strong">
+              {detail}
+            </Text.Paragraph>
           </div>
         ))}
       </div>
+
+      <SourceNote>
+        Source: LTA via DataMall. {SITE_TITLE} is not affiliated with the
+        Singapore government.
+      </SourceNote>
     </section>
   );
 }
