@@ -26,7 +26,7 @@ const SEGMENT_CLASS = "max-md:w-full";
 const SEGMENT_ITEM_CLASS = "max-md:flex-1 max-md:px-2";
 
 /** The category switch and every selectable row read and write one value. */
-export function usePQPCategory(categories: readonly PQPCategoryKey[]) {
+function usePQPCategory(categories: readonly PQPCategoryKey[]) {
   const [isPending, startTransition] = useTransition();
   const [category, setCategory] = useQueryState(
     "category",
