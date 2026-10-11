@@ -4,6 +4,7 @@ import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/components/catego
 import {
   CATEGORY_DESCRIPTIONS,
   formatMonth,
+  groupByExercise,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
@@ -15,10 +16,7 @@ import {
   PQPComparisonChart,
   type PQPComparisonPoint,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-comparison-chart";
-import {
-  CategoryTabs,
-  TermTabs,
-} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-filters";
+import { PQPHeadline } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-headline";
 import { RenewalComparison } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal-comparison";
 import { UnreleasedFeature } from "@web/app/(main)/(dashboard)/coe/pqp/components/unreleased-feature";
 import {
@@ -26,20 +24,13 @@ import {
   PQP_CATEGORY_KEYS,
   type PQPCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
-import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
-import {
-  ReportFilterBar,
-  ReportHeadline,
-  ReportNote,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
+import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   ReportCell,
   ReportRow,
   ReportTable,
 } from "@web/components/shared/report-table";
-import { getPQPOverview } from "@web/queries/coe";
+import { getCoeResults, getPQPOverview } from "@web/queries/coe";
 import type { Pqp } from "@web/types/coe";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
@@ -81,8 +72,14 @@ export async function PQPReport({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const { category, term } = await loadSearchParams(searchParams);
-  const overview = await getPQPOverview();
+  const [{ category, term }, overview, coeResults] = await Promise.all([
+    loadSearchParams(searchParams),
+    getPQPOverview(),
+    getCoeResults(),
+  ]);
+  // The overview's latest premium is from the newest exercise, which the
+  // headline names.
+  const latestExercise = groupByExercise(coeResults).at(-1);
   const { comparison, latestMonth, tableRows, trendData } = overview;
 
   if (!latestMonth || tableRows.length === 0) {
@@ -107,10 +104,6 @@ export async function PQPReport({
   const ascending = [...trendData].sort((a, b) =>
     a.month.localeCompare(b.month),
   );
-  const latestRate = ascending.at(-1)?.[selected] ?? 0;
-  const priorRate = ascending.at(-2)?.[selected] ?? 0;
-  const threeMonthsAgoRate = ascending.at(-4)?.[selected] ?? 0;
-  const headlineChange = changePercent(latestRate, priorRate);
 
   const series: PQPSeries[] = PQP_CATEGORY_KEYS.map((key, index) => ({
     color: `var(--chart-${index + 1})`,
@@ -140,47 +133,15 @@ export async function PQPReport({
 
   return (
     <>
-      <ReportFilterBar
-        label="Category"
-        trailing={<TermTabs />}
-        trailingLabel="Renewal"
-      >
-        <CategoryTabs categories={PQP_CATEGORY_KEYS} />
-      </ReportFilterBar>
-
-      <ReportHeadline
-        delta={
-          headlineChange === null ? undefined : (
-            <CostTrendChip changeRatio={headlineChange / 100} />
-          )
-        }
-        label={`Category ${category} · ${CATEGORY_DESCRIPTIONS[toCategory(category)]}`}
-        stats={
-          <>
-            <ReportStat
-              label="Previous month"
-              note="published rate"
-              value={formatCurrency(priorRate * termFactor)}
-            />
-            <ReportStat
-              label="Latest premium"
-              note="most recent exercise"
-              value={formatCurrency(headlineComparison?.latestPremium ?? 0)}
-            />
-            <ReportStat
-              label={`${otherTerm}-year renewal`}
-              note={otherTerm === "10" ? "the full PQP" : "half the PQP"}
-              value={formatCurrency(latestRate * otherFactor)}
-            />
-            <ReportStat
-              label="Three months ago"
-              note="published rate"
-              value={formatCurrency(threeMonthsAgoRate * termFactor)}
-            />
-          </>
-        }
-        sub={`${term}-year renewal · three-month average of premiums to ${formattedMonth}`}
-        value={formatCurrency(latestRate * termFactor)}
+      <PQPHeadline
+        category={category}
+        latestExercise={latestExercise}
+        latestPremium={headlineComparison?.latestPremium ?? 0}
+        rates={ascending.map((point) => ({
+          month: point.month,
+          rate: point[selected],
+        }))}
+        term={term}
       />
 
       <div className="flex flex-col gap-3.5">
