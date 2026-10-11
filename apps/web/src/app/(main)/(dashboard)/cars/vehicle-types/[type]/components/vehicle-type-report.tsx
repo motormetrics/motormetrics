@@ -1,4 +1,4 @@
-import { Skeleton, Typography } from "@heroui/react";
+import { cn, Skeleton, Typography } from "@heroui/react";
 import { formatOrdinal } from "@motormetrics/utils/format-ordinal";
 import { slugify } from "@motormetrics/utils/slugify";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
@@ -25,15 +25,9 @@ import {
   SourceNote,
 } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
-import { ReportNote, ReportSection } from "@web/components/shared/report";
-import {
-  Count,
-  ReportCell,
-  ReportRow,
-  ReportTable,
-  ShareBar,
-} from "@web/components/shared/report-table";
+import { Count } from "@web/components/shared/report-table";
 import { SkeletonCard } from "@web/components/shared/skeleton";
+import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -83,6 +77,21 @@ const loadVehicleTypeSearchParams = createLoader({
 interface VehicleTypeReportProps {
   params: Promise<{ type: string }>;
   searchParams: Promise<SearchParams>;
+}
+
+/**
+ * The comp's fuel colours: slate for electric and hybrid, sand for petrol.
+ * Any other LTA fuel type takes the palest slate step.
+ */
+const FUEL_COLOURS: Record<string, string> = {
+  Electric: "var(--chart-1)",
+  Petrol: "var(--chart-sand)",
+  "Petrol-Electric": "var(--chart-3)",
+  "Petrol-Electric (Plug-In)": "var(--chart-4)",
+};
+
+function fuelColour(fuelType: string): string {
+  return FUEL_COLOURS[fuelType] ?? "var(--chart-6)";
 }
 
 function share(part: number, whole: number): number {
@@ -435,117 +444,165 @@ async function VehicleTypeContent({
 
       <Hairline />
 
-      <section className="flex min-w-0 flex-col gap-4">
-        <SectionHead
-          caption={`${periodRange("12m", month)}, newest first`}
-          eyebrow="Month by month"
-          title={`${displayName} against the whole market`}
-        />
-        <MonthTable
-          rows={[...series].reverse()}
-          selectedMonth={month}
-          vehicleType={displayName}
-        />
-        <SourceNote>
-          Share is {displayName} registrations as a share of all new cars that
-          month.
-        </SourceNote>
-      </section>
+      <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-11 lg:gap-14">
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-6">
+          <SectionHead
+            caption={`${periodRange("12m", month)}, newest first`}
+            eyebrow="Month by month"
+            title={`${displayName} against the whole market`}
+          />
+          <MonthTable
+            rows={[...series].reverse()}
+            selectedMonth={month}
+            vehicleType={displayName}
+          />
+          <SourceNote>
+            Share is {displayName} registrations as a share of all new cars that
+            month.
+          </SourceNote>
+        </section>
 
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
-        <div className="flex flex-col gap-10">
-          <ReportSection
-            caption={periodLabel}
-            title="Against other vehicle types"
-          >
-            <div className="flex flex-col">
+        <div className="flex min-w-0 flex-col gap-10 lg:col-span-5">
+          <section className="flex min-w-0 flex-col gap-4">
+            <SectionHead
+              caption={periodRange(period, month)}
+              eyebrow="Peers"
+              link={{ href: "/cars/vehicle-types", label: "All vehicle types" }}
+              title="Against other vehicle types"
+            />
+            <ul className="flex flex-col">
               {distribution.map((peer) => {
                 const isSelected = peer.name === value;
 
                 return (
-                  <div
-                    className="flex items-center gap-5 border-border border-b py-3.5"
+                  <li
+                    aria-current={isSelected ? "page" : undefined}
+                    className="flex items-center gap-3 border-separator border-b py-2.5"
                     key={peer.name}
                   >
                     <span
-                      className={
-                        isSelected
-                          ? "w-48 shrink-0 font-extrabold text-accent-strong text-base"
-                          : "w-48 shrink-0 font-semibold text-base"
-                      }
+                      className={cn(
+                        "min-w-0 flex-1 truncate text-sm md:w-36 md:flex-none",
+                        isSelected && "font-semibold text-accent-strong",
+                      )}
                     >
                       {formatVehicleType(peer.name)}
                     </span>
-                    <div className="flex-1">
-                      <ShareBar
-                        isLeader={isSelected}
-                        share={share(peer.count, peerLeader)}
+                    <span className="block h-2.5 min-w-0 flex-1 bg-surface-secondary max-md:hidden">
+                      <span
+                        className="block h-full rounded-r-xs"
+                        style={{
+                          background: isSelected
+                            ? "var(--chart-1)"
+                            : "var(--chart-5)",
+                          width: `${share(peer.count, peerLeader).toFixed(1)}%`,
+                        }}
                       />
-                    </div>
-                    <span className="w-20 text-right font-extrabold text-base tabular-nums">
-                      <Count value={peer.count} />
                     </span>
-                  </div>
+                    <span className="w-16 shrink-0 text-right font-semibold text-sm tabular-nums">
+                      {peer.count.toLocaleString("en-SG")}
+                    </span>
+                  </li>
                 );
               })}
-            </div>
-          </ReportSection>
+            </ul>
+            <SourceNote>
+              New car registrations by vehicle type in the period.
+            </SourceNote>
+          </section>
 
-          <ReportSection
-            caption={`${displayName} · ${periodLabel.toLowerCase()}`}
-            title="By fuel type"
-          >
-            <ReportTable
-              columns={[
-                { label: "Fuel type" },
-                { align: "end", label: "Registrations" },
-                { align: "end", label: "Share" },
-                { label: "", width: "200px" },
-              ]}
-            >
-              {crossMix.map(({ count, name }, index) => (
-                <ReportRow key={name}>
-                  <ReportCell className="font-semibold">{name}</ReportCell>
-                  <ReportCell align="end" className="font-extrabold">
-                    <Count value={count} />
-                  </ReportCell>
-                  <ReportCell align="end" className="font-semibold text-muted">
-                    {share(count, typeTotal).toFixed(1)}%
-                  </ReportCell>
-                  <ReportCell>
-                    <ShareBar
-                      isLeader={index === 0}
-                      share={share(count, crossMix[0]?.count ?? 0)}
-                    />
-                  </ReportCell>
-                </ReportRow>
+          <section className="flex min-w-0 flex-col gap-4">
+            <SectionHead
+              caption={`${displayName} · ${periodLabel.toLowerCase()}`}
+              eyebrow="Mix"
+              title="By fuel type"
+            />
+            {/* One segment per fuel type, sized by its share of the type. */}
+            <div aria-hidden="true" className="flex h-4 gap-0.5">
+              {crossMix.map(({ count, name }) => (
+                <span
+                  className="block h-full"
+                  key={name}
+                  style={{
+                    background: fuelColour(name),
+                    width: `${share(count, typeTotal).toFixed(1)}%`,
+                  }}
+                />
               ))}
-            </ReportTable>
-          </ReportSection>
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-end gap-2.5 border-border border-b pb-2 font-semibold text-muted text-xs">
+                <span className="w-3 shrink-0" />
+                <span className="min-w-0 flex-1">Fuel type</span>
+                <span className="w-16 shrink-0 text-right">Cars</span>
+                <span className="w-14 shrink-0 text-right">Share</span>
+              </div>
+              <ul className="flex flex-col">
+                {crossMix.map(({ count, name }) => (
+                  <li
+                    className="flex items-center gap-2.5 border-separator border-b py-2.5"
+                    key={name}
+                  >
+                    <span
+                      className="block size-3 shrink-0 rounded-xs"
+                      style={{ background: fuelColour(name) }}
+                    />
+                    <span className="min-w-0 flex-1 truncate text-sm">
+                      {name}
+                    </span>
+                    <span className="w-16 shrink-0 text-right text-sm tabular-nums">
+                      {count.toLocaleString("en-SG")}
+                    </span>
+                    <span className="w-14 shrink-0 text-right font-semibold text-sm tabular-nums">
+                      {share(count, typeTotal).toFixed(1)}%
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <SourceNote>
+              Share of {displayName} registrations in the period.
+            </SourceNote>
+          </section>
         </div>
+      </div>
 
-        <ReportNote title="How this is counted">
-          <Typography.Paragraph>
+      <Hairline />
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
+        <section className="flex flex-col gap-2.5">
+          <Text.Paragraph color="muted" eyebrow size="xs" weight="semibold">
+            How this is counted
+          </Text.Paragraph>
+          <Typography.Paragraph size="sm">
             A car counts in the month it is registered, under the vehicle type
             LTA records against it.
           </Typography.Paragraph>
-          <Typography.Paragraph>
-            Vehicle types are LTA's own values, shortened only for display — the
+          <Typography.Paragraph size="sm">
+            Vehicle types are LTA's own values, shortened only for display. The
             underlying figures are unchanged.
           </Typography.Paragraph>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/vehicle-types"
-          >
-            All vehicle types →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/cars/registrations"
-          >
-            Every registration this month →
-          </Link>
-        </ReportNote>
+        </section>
+        <nav
+          aria-label="Related pages"
+          className="flex flex-col gap-2.5 lg:self-end"
+        >
+          {[
+            { href: "/cars/vehicle-types", label: "All vehicle types" },
+            {
+              href: "/cars/registrations",
+              label: "Every registration this month",
+            },
+          ].map(({ href, label }) => (
+            <Link
+              className="whitespace-nowrap font-semibold text-accent-strong text-sm hover:text-accent-deep"
+              href={href}
+              key={href}
+            >
+              {label} →
+            </Link>
+          ))}
+        </nav>
       </div>
     </>
   );
