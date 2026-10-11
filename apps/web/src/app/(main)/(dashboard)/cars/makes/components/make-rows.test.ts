@@ -3,6 +3,7 @@ import {
   buildTotalsFromStats,
   finaliseRows,
   matchesFuelFilter,
+  periodLabel,
   priorWindow,
   rollingMonths,
   selectElectricOnlyMakes,
@@ -40,6 +41,20 @@ describe("rollingMonths", () => {
     expect(months).toHaveLength(12);
     expect(months[0]).toBe("2024-04");
     expect(months.at(-1)).toBe("2025-03");
+  });
+});
+
+describe("periodLabel", () => {
+  it("names the single month for this month", () => {
+    expect(periodLabel("2026-08", "month")).toBe("August 2026");
+  });
+
+  it("drops the start year when the range sits within one year", () => {
+    expect(periodLabel("2026-08", "ytd")).toBe("January to August 2026");
+  });
+
+  it("keeps both years when the range crosses one", () => {
+    expect(periodLabel("2026-08", "12m")).toBe("September 2025 to August 2026");
   });
 });
 
