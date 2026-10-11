@@ -1,7 +1,9 @@
+import { Skeleton } from "@heroui/react";
+import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { PQPReport } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-report";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { OverviewPage } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
-import { Report } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -10,6 +12,7 @@ import {
   generateDatasetSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import { getPQPOverview } from "@web/queries/coe";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
@@ -50,13 +53,28 @@ const structuredData: WithContext<WebPage> = {
   },
 };
 
+/** Names the month whose published rates the page reports, and its source. */
+async function LatestPQPSub() {
+  const { latestMonth } = await getPQPOverview();
+
+  return latestMonth ? (
+    <>
+      Prevailing quota premium for{" "}
+      <span className="font-semibold text-foreground">
+        {formatMonth(latestMonth)}
+      </span>{" "}
+      · Source: LTA via DataMall
+    </>
+  ) : null;
+}
+
 interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
 export default function PQPRatesPage({ searchParams }: PageProps) {
   return (
-    <Report>
+    <OverviewPage className="gap-10 max-md:gap-7">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -76,7 +94,12 @@ export default function PQPRatesPage({ searchParams }: PageProps) {
       />
 
       <PageHead
-        description="What it costs to renew a COE instead of bidding for one, category by category."
+        eyebrow="Certificate of Entitlement"
+        sub={
+          <Suspense fallback={<Skeleton className="h-5 w-72" />}>
+            <LatestPQPSub />
+          </Suspense>
+        }
         title="PQP rates"
       />
 
@@ -85,6 +108,6 @@ export default function PQPRatesPage({ searchParams }: PageProps) {
           <PQPReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
-    </Report>
+    </OverviewPage>
   );
 }

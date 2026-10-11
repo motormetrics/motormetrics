@@ -1,14 +1,15 @@
 "use client";
 
 import { cn } from "@heroui/react";
+import { Segment } from "@heroui-pro/react";
 import type { PQPCategoryKey } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
 import { useTransition } from "react";
 
 /**
- * The two controls the comp puts in the filter bar: which category the page
- * reports on, and which renewal term its figures are quoted for.
+ * The two switches at the head of the page: which category it reports on, and
+ * which renewal term its figures are quoted for.
  *
  * `shallow: false` throughout, so the server re-renders the report against the
  * new selection and no rate data crosses into the client bundle.
@@ -20,13 +21,33 @@ import { useTransition } from "react";
  */
 const TERMS = ["5", "10"] as const;
 
-const TERM_LABELS: Record<(typeof TERMS)[number], string> = {
-  "5": "5 years",
-  "10": "10 years",
-};
+/** On phones each switch spans the row and its items share the width. */
+const SEGMENT_CLASS = "max-md:w-full";
+const SEGMENT_ITEM_CLASS = "max-md:flex-1 max-md:px-2";
+
+/** The category switch and every selectable row read and write one value. */
+export function usePQPCategory(categories: readonly PQPCategoryKey[]) {
+  const [isPending, startTransition] = useTransition();
+  const [category, setCategory] = useQueryState(
+    "category",
+    parseAsStringLiteral(categories)
+      .withDefault(categories[0])
+      .withOptions({ shallow: false, startTransition }),
+  );
+
+  const selectCategory = (option: PQPCategoryKey) => {
+    posthog.capture("dashboard_filter_changed", {
+      filter: "category",
+      value: option,
+    });
+    setCategory(option);
+  };
+
+  return { category, isPending, selectCategory };
+}
 
 /**
- * Which category the headline, the charts and the stat cells report on.
+ * Which category the headline, the chart and the stat cells report on.
  *
  * The list is a prop rather than a constant here: it is owned by
  * `PQP_REPORTED_CATEGORIES` in the query, and a `"use client"` module cannot
@@ -37,48 +58,23 @@ export function CategoryTabs({
 }: {
   categories: readonly PQPCategoryKey[];
 }) {
-  const [isPending, startTransition] = useTransition();
-  const [category, setCategory] = useQueryState(
-    "category",
-    parseAsStringLiteral(categories)
-      .withDefault(categories[0])
-      .withOptions({ shallow: false, startTransition }),
-  );
+  const { category, isPending, selectCategory } = usePQPCategory(categories);
 
   return (
-    <fieldset
-      className={cn(
-        "m-0 flex flex-wrap gap-2 border-none p-0",
-        isPending && "opacity-70",
-      )}
+    <Segment
+      aria-label="COE category"
+      className={cn(SEGMENT_CLASS, isPending && "opacity-70")}
+      onSelectionChange={(key) => selectCategory(key as PQPCategoryKey)}
+      selectedKey={category}
+      size="md"
+      variant="ghost"
     >
-      <legend className="sr-only">Category</legend>
-      {categories.map((option) => {
-        const isActive = option === category;
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "cursor-pointer whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
-              isActive
-                ? "bg-accent font-bold text-accent-foreground"
-                : "bg-surface font-semibold text-muted hover:text-foreground",
-            )}
-            key={option}
-            onClick={() => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: "category",
-                value: option,
-              });
-              setCategory(option);
-            }}
-            type="button"
-          >
-            Cat {option}
-          </button>
-        );
-      })}
-    </fieldset>
+      {categories.map((option) => (
+        <Segment.Item className={SEGMENT_ITEM_CLASS} id={option} key={option}>
+          Cat {option}
+        </Segment.Item>
+      ))}
+    </Segment>
   );
 }
 
@@ -98,38 +94,25 @@ export function TermTabs() {
   );
 
   return (
-    <fieldset
-      className={cn(
-        "m-0 flex gap-1 rounded-full border-none bg-surface-secondary p-1",
-        isPending && "opacity-70",
-      )}
+    <Segment
+      aria-label="Renewal term"
+      className={cn(SEGMENT_CLASS, isPending && "opacity-70")}
+      onSelectionChange={(key) => {
+        posthog.capture("dashboard_filter_changed", {
+          filter: "term",
+          value: key,
+        });
+        setTerm(key as (typeof TERMS)[number]);
+      }}
+      selectedKey={term}
+      size="md"
+      variant="ghost"
     >
-      <legend className="sr-only">Renewal term</legend>
-      {TERMS.map((option) => {
-        const isActive = option === term;
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "cursor-pointer rounded-full px-4 py-[7px] text-sm transition-colors",
-              isActive
-                ? "bg-surface font-extrabold text-foreground shadow-surface"
-                : "font-semibold text-muted hover:text-foreground",
-            )}
-            key={option}
-            onClick={() => {
-              posthog.capture("dashboard_filter_changed", {
-                filter: "term",
-                value: option,
-              });
-              setTerm(option);
-            }}
-            type="button"
-          >
-            {TERM_LABELS[option]}
-          </button>
-        );
-      })}
-    </fieldset>
+      {TERMS.map((option) => (
+        <Segment.Item className={SEGMENT_ITEM_CLASS} id={option} key={option}>
+          {option}-year renewal
+        </Segment.Item>
+      ))}
+    </Segment>
   );
 }
