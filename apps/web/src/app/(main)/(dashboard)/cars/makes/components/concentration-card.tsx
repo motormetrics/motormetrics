@@ -1,20 +1,28 @@
 import { Typography } from "@heroui/react";
-import { loadMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
-import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
-import { Text } from "@web/components/shared/text";
 import {
-  type DonutSegment,
-  donutArcs,
-  RING_RADIUS,
-} from "@web/utils/charts/donut-arcs";
+  loadMakeRows,
+  periodLabel,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import {
+  isFuelFilter,
+  loadSearchParams,
+} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
+import { SourceNote } from "@web/components/shared/overview";
 import type { SearchParams } from "nuqs/server";
 
-/** How many makes the ring breaks out before folding the rest together. */
+/** How many makes the bar breaks out before folding the rest together. */
 const LEADERS = 5;
 
+interface Segment {
+  color: string;
+  label: string;
+  value: number;
+}
+
 /**
- * The "Concentration" block: the top five makes against the rest, drawn as a
- * gapped ring with its legend beside it.
+ * The "Concentration" block: the top five makes against the rest, as one
+ * stacked bar of shares with a ruled legend beneath, as the Hybrid comp draws
+ * it.
  */
 export async function ConcentrationCard({
   searchParams,
@@ -22,16 +30,16 @@ export async function ConcentrationCard({
   searchParams: Promise<SearchParams>;
 }) {
   const { fuel, range } = await loadSearchParams(searchParams);
-  const { rows, total } = await loadMakeRows(range, fuel);
+  const { latestMonth, rows, total } = await loadMakeRows(range, fuel);
 
-  if (rows.length === 0) {
+  if (rows.length === 0 || !latestMonth) {
     return null;
   }
 
   const leaders = rows.slice(0, LEADERS);
   const rest = rows.slice(LEADERS).reduce((sum, row) => sum + row.count, 0);
 
-  const segments: DonutSegment[] = leaders.map((row, index) => ({
+  const segments: Segment[] = leaders.map((row, index) => ({
     color: `var(--chart-${index + 1})`,
     label: row.make,
     value: row.count,
@@ -44,74 +52,65 @@ export async function ConcentrationCard({
     });
   }
 
-  const leadersTotal = leaders.reduce((sum, row) => sum + row.count, 0);
-  const leadersShare = total > 0 ? (leadersTotal / total) * 100 : 0;
-  const ringTotal = total || 1;
   // The leaders plus the folded tail cover every row, so the segments sum to
   // `total`.
-  const arcs = donutArcs(segments);
+  const barTotal = total || 1;
+  const leadersShare = ((total - rest) / barTotal) * 100;
 
   return (
-    <div className="flex flex-col gap-[18px]">
-      <div className="flex flex-col gap-2.5">
-        {/* Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>. */}
-        <Text.Paragraph tone="strong" className="text-xl" weight="semibold">
-          Concentration
-        </Text.Paragraph>
-        <Typography.Paragraph weight="medium" color="muted">
-          Top five makes against the rest
+    <div className="flex min-w-0 flex-col gap-3">
+      <Typography.Paragraph color="muted" size="xs" weight="semibold">
+        Concentration · top five makes against the rest
+      </Typography.Paragraph>
+      <div className="flex flex-wrap items-baseline gap-2.5">
+        <span className="font-bold text-3xl tabular-nums tracking-tight">
+          {leadersShare.toFixed(0)}%
+        </span>
+        <Typography.Paragraph color="muted" size="sm">
+          of registrations held by the five largest makes
         </Typography.Paragraph>
       </div>
-
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-9">
-        <div className="relative size-[172px] shrink-0">
-          <svg className="block size-full" role="img" viewBox="0 0 190 190">
-            <title>Share of registrations held by the five largest makes</title>
-            <g transform="rotate(-90 95 95)">
-              {arcs.map((arc) => (
-                <circle
-                  cx={95}
-                  cy={95}
-                  fill="none"
-                  key={arc.key}
-                  r={RING_RADIUS}
-                  stroke={arc.color}
-                  strokeDasharray={arc.dashArray}
-                  strokeDashoffset={arc.dashOffset}
-                  strokeLinecap="round"
-                  strokeWidth={24}
-                />
-              ))}
-            </g>
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-            <span className="font-extrabold text-3xl tabular-nums leading-none tracking-tight">
-              {leadersShare.toFixed(0)}%
-            </span>
-            <Typography.Paragraph weight="semibold" color="muted" size="sm">
-              top five share
-            </Typography.Paragraph>
-          </div>
-        </div>
-
-        <ul className="flex min-w-0 flex-1 flex-col gap-2.5">
-          {segments.map((segment) => (
-            <li className="flex items-center gap-2.5" key={segment.label}>
-              <span
-                aria-hidden
-                className="size-[11px] shrink-0 rounded-full"
-                style={{ background: segment.color }}
-              />
-              <Typography.Paragraph weight="semibold" truncate>
-                {segment.label}
-              </Typography.Paragraph>
-              <span className="ml-auto shrink-0 font-extrabold text-base tabular-nums">
-                {((segment.value / ringTotal) * 100).toFixed(1)}%
-              </span>
-            </li>
-          ))}
-        </ul>
+      <div
+        aria-label="Share of registrations held by the five largest makes"
+        className="flex h-4 gap-0.5"
+        role="img"
+      >
+        {segments.map((segment) => (
+          <span
+            className="block h-full"
+            key={segment.label}
+            style={{
+              background: segment.color,
+              width: `${((segment.value / barTotal) * 100).toFixed(2)}%`,
+            }}
+          />
+        ))}
       </div>
+      <ul className="flex flex-col">
+        {segments.map((segment) => (
+          <li
+            className="flex items-center gap-2.5 border-separator border-b py-2"
+            key={segment.label}
+          >
+            <span
+              aria-hidden
+              className="size-3 shrink-0 rounded-xs"
+              style={{ background: segment.color }}
+            />
+            <span className="min-w-0 flex-1 truncate text-sm">
+              {segment.label}
+            </span>
+            <span className="font-semibold text-sm tabular-nums">
+              {((segment.value / barTotal) * 100).toFixed(1)}%
+            </span>
+          </li>
+        ))}
+      </ul>
+      <SourceNote>
+        Share of {total.toLocaleString("en-SG")} registrations
+        {isFuelFilter(fuel) ? ` of ${fuel.toLowerCase()} cars` : ""},{" "}
+        {periodLabel(latestMonth, range)}.
+      </SourceNote>
     </div>
   );
 }

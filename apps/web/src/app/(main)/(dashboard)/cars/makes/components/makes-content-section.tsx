@@ -45,7 +45,7 @@ export function MakesContentSection({
       </Suspense>
 
       {/* Who leads, and how tightly the market is held */}
-      <OverviewGrid>
+      <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-14">
         <SectionErrorBoundary title="Leading make unavailable">
           <Suspense fallback={<Skeleton className="h-80 w-full" />}>
             <LeadingMakeCard searchParams={searchParams} />
@@ -56,7 +56,7 @@ export function MakesContentSection({
             <ConcentrationCard searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>
-      </OverviewGrid>
+      </div>
 
       <Hairline />
 
