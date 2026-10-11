@@ -1,5 +1,5 @@
-import { Typography } from "@heroui/react";
 import { PostCard } from "@web/app/(main)/(site)/blog/components/post-card";
+import { Hairline, SectionHead } from "@web/components/shared/overview";
 import { getRelatedPosts } from "@web/queries/posts/popularity";
 
 interface RelatedPostsProps {
@@ -18,14 +18,23 @@ export async function RelatedPosts({
     return null;
   }
 
+  // The rule above belongs to the section, so a post with no neighbours
+  // leaves no stray line.
   return (
-    <section className="flex flex-col gap-7">
-      <Typography.Heading level={2}>Read next</Typography.Heading>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {relatedPosts.map((post) => (
-          <PostCard key={post.id} post={post} showExcerpt={false} />
-        ))}
-      </div>
-    </section>
+    <>
+      <Hairline />
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          eyebrow="Keep reading"
+          link={{ href: "/blog", label: "All posts" }}
+          title="Read next"
+        />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {relatedPosts.map((post) => (
+            <PostCard key={post.id} post={post} showExcerpt={false} />
+          ))}
+        </div>
+      </section>
+    </>
   );
 }
