@@ -1,22 +1,15 @@
 import { Skeleton, Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { formatOrdinal } from "@motormetrics/utils/format-ordinal";
 import { slugify } from "@motormetrics/utils/slugify";
-import { PeriodTabs } from "@web/app/(main)/(dashboard)/cars/components/category/period-tabs";
 import { TypeChart } from "@web/app/(main)/(dashboard)/cars/components/category/type-chart";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
+import { PeriodSegment } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/period-segment";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MonthMenu } from "@web/components/shared/month-menu";
-import { OverviewPage } from "@web/components/shared/overview";
+import { OverviewPage, SectionLink } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
-import {
-  ReportFilterBar,
-  ReportHeadline,
-  ReportNote,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
+import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
   DeltaText,
@@ -26,7 +19,6 @@ import {
   ShareBar,
 } from "@web/components/shared/report-table";
 import { SkeletonCard } from "@web/components/shared/skeleton";
-import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -41,6 +33,7 @@ import { percentageChange } from "@web/utils/change-ratio";
 import {
   formatChartMonth,
   formatMonthLabel,
+  formatMonthShortLabel,
 } from "@web/utils/dates/format-month";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
@@ -108,6 +101,19 @@ function periodWindow(
   }
 
   return { from: shiftMonth(month, -(SERIES_MONTHS - 1)), to: month };
+}
+
+/** "August 2026", "2026 year to date" or "Last 12 months", as the comp words each window. */
+function periodCaption(period: Period, month: string): string {
+  if (period === "month") {
+    return formatMonthLabel(month);
+  }
+
+  if (period === "ytd") {
+    return `${month.slice(0, 4)} year to date`;
+  }
+
+  return PERIOD_LABELS["12m"];
 }
 
 function share(part: number, whole: number): number {
@@ -230,7 +236,7 @@ async function FuelTypeContent({
     notFound();
   }
 
-  const periodLabel = PERIOD_LABELS[period];
+  const periodLabel = periodCaption(period, month);
 
   const { from, to } = periodWindow(period, month);
   const previousFrom = shiftMonth(from, -12);
@@ -265,8 +271,11 @@ async function FuelTypeContent({
   const makeLeader = makes[0]?.count ?? 0;
   const listedMakes = makes.slice(0, MAKE_LIMIT);
 
-  const seriesCounts = series.map(({ count }) => count);
-  const bestMonth = seriesCounts.length ? Math.max(...seriesCounts) : 0;
+  // The busiest month in the charted year, the latest of any tie.
+  const bestMonth = series.reduce<(typeof series)[number] | undefined>(
+    (best, point) => (!best || point.count >= best.count ? point : best),
+    undefined,
+  );
 
   const chartData = series.map(({ count, month: seriesMonth }) => ({
     count,
@@ -278,6 +287,29 @@ async function FuelTypeContent({
     : 0;
 
   const isElectric = value === "Electric";
+  const marketShare = `${share(typeTotal, marketTotal).toFixed(1)}%`;
+
+  // The comp's two-by-two grid beside the headline figure.
+  const stats = [
+    { label: "Share of registrations", note: periodLabel, value: marketShare },
+    {
+      label: "Rank",
+      note: `of ${distribution.length} fuel types`,
+      value: rank > 0 ? `#${rank}` : "—",
+    },
+    {
+      label: "Makes",
+      note: `with ${value} registrations`,
+      value: makes.length.toLocaleString("en-SG"),
+    },
+    {
+      label: "Best month",
+      note: bestMonth
+        ? `${formatMonthShortLabel(bestMonth.month)} · last ${series.length} months`
+        : `last ${series.length} months`,
+      value: (bestMonth?.count ?? 0).toLocaleString("en-SG"),
+    },
+  ];
 
   const { title, description, canonical } = typeDetailMeta(
     "fuel-types",
@@ -317,69 +349,60 @@ async function FuelTypeContent({
         }}
       />
 
-      <ReportFilterBar
-        label="Period"
-        trailing={
-          <Typography.Paragraph color="muted" size="sm">
-            Figures are new registrations, not the fleet on the road
-          </Typography.Paragraph>
-        }
-      >
-        <PeriodTabs defaultKey={DEFAULT_PERIOD} options={PERIOD_OPTIONS} />
-      </ReportFilterBar>
+      <div className="flex flex-col gap-5">
+        <div className="flex flex-wrap items-center gap-4">
+          <PeriodSegment defaultKey={DEFAULT_PERIOD} options={PERIOD_OPTIONS} />
+          {/* The comp draws a second, wide bento page for Electric. That page
+              is deliberately not built — `/cars/electric-vehicles` already
+              tells the electric story — so this links there instead. */}
+          {isElectric ? (
+            <SectionLink href="/cars/electric-vehicles">
+              Adoption, charging and leading makes
+            </SectionLink>
+          ) : null}
+        </div>
 
-      {/* The comp draws a second, wide bento page for Electric. That page is
-          deliberately not built — `/cars/electric-vehicles` already tells the
-          electric story — so the fuel type page points at it instead. */}
-      {isElectric ? (
-        <Link
-          className="group flex flex-wrap items-baseline gap-3 rounded-xl border border-accent-border bg-accent-soft-2 px-6 py-5"
-          href="/cars/electric-vehicles"
-        >
-          <Typography.Heading
-            level={3}
-            className="text-accent-strong text-lg group-hover:underline"
-          >
-            The full electric picture →
-          </Typography.Heading>
-          <Text.Paragraph size="sm" tone="strong">
-            Adoption, charging and the makes leading it, on one page
-          </Text.Paragraph>
-        </Link>
-      ) : null}
-
-      <ReportHeadline
-        delta={
-          <DeltaChip value={percentageChange(typeTotal, previousTypeTotal)} />
-        }
-        label={`${value} registrations`}
-        stats={
-          <>
-            <ReportStat
-              label="Share of registrations"
-              note={periodLabel.toLowerCase()}
-              value={`${share(typeTotal, marketTotal).toFixed(1)}%`}
-            />
-            <ReportStat
-              label="Rank"
-              note={`of ${distribution.length} fuel types`}
-              value={rank > 0 ? `#${rank}` : "—"}
-            />
-            <ReportStat
-              label="Makes"
-              note="with registrations"
-              value={<Count value={makes.length} />}
-            />
-            <ReportStat
-              label="Best month"
-              note={`last ${series.length} months`}
-              value={<Count value={bestMonth} />}
-            />
-          </>
-        }
-        sub={`${periodLabel} · ${share(typeTotal, marketTotal).toFixed(1)}% of all registrations${rank > 0 ? ` · ${formatOrdinal(rank)} largest of ${distribution.length} fuel types` : ""}`}
-        value={<Count value={typeTotal} />}
-      />
+        <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-2 lg:gap-14">
+          <div className="flex min-w-0 flex-col gap-3">
+            <span className="font-semibold text-muted text-xs">
+              {value} cars registered · {periodLabel}
+            </span>
+            <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
+              <Count value={typeTotal} />
+            </span>
+            <Typography.Paragraph className="tabular-nums" color="muted">
+              <DeltaChip
+                className="font-semibold text-foreground"
+                value={percentageChange(typeTotal, previousTypeTotal)}
+              />{" "}
+              on a year earlier
+            </Typography.Paragraph>
+            <Typography.Paragraph
+              className="tabular-nums"
+              color="muted"
+              size="sm"
+            >
+              {marketShare} of all new car registrations
+            </Typography.Paragraph>
+          </div>
+          <div className="grid grid-cols-2 border-border border-t">
+            {stats.map((stat) => (
+              <div
+                className="flex min-w-0 flex-col gap-1 border-separator border-b py-3.5 pr-4 even:border-l even:pl-4"
+                key={stat.label}
+              >
+                <span className="truncate font-semibold text-muted text-xs">
+                  {stat.label}
+                </span>
+                <span className="font-semibold text-xl tabular-nums tracking-tight md:text-2xl">
+                  {stat.value}
+                </span>
+                <span className="truncate text-muted text-xs">{stat.note}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <TypeChart data={chartData} />
 
@@ -523,7 +546,7 @@ async function FuelTypeContent({
           </ReportSection>
 
           <ReportSection
-            caption={`${value} · ${periodLabel.toLowerCase()}`}
+            caption={`${value} · ${periodLabel}`}
             title="By vehicle type"
           >
             <ReportTable
