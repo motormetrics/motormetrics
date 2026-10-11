@@ -1,6 +1,7 @@
 import { Typography } from "@heroui/react";
 import type { SelectDeregistration } from "@motormetrics/database/schema";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { CategoryTable } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/category-table";
 import {
   type DeregistrationSeries,
   DeregistrationsChart,
@@ -9,15 +10,17 @@ import { DeregistrationsHeadline } from "@web/app/(main)/(dashboard)/cars/deregi
 import { stackedPoints } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/stacked-points";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import {
+  Hairline,
+  SectionHead,
+  SourceNote,
+} from "@web/components/shared/overview";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
-  DeltaText,
   ReportCell,
   ReportRow,
   ReportTable,
-  ShareBar,
 } from "@web/components/shared/report-table";
 import { getDeregistrations } from "@web/queries/deregistrations";
 import {
@@ -210,66 +213,39 @@ export async function DeregistrationsReport({
         </SourceNote>
       </section>
 
-      <ReportSection
-        caption={`${formattedMonth} · change against ${formatDateToMonthYear(yearAgoMonth)}`}
-        title="By category"
-      >
-        <ReportTable
-          columns={[
-            { label: "Category" },
-            { label: "Description" },
-            { align: "end", label: "Deregistrations" },
-            { align: "end", label: "Share" },
-            { label: "", width: "200px" },
-            { align: "end", label: "Vs a year earlier", width: "150px" },
-          ]}
-        >
-          {rows.map(({ category, count }, index) => {
-            const share = percentageOf(count, total);
-            const yearAgoCount = yearAgoTotals.get(category) ?? 0;
+      <Hairline />
 
-            return (
-              <ReportRow key={category}>
-                <ReportCell className="font-bold text-base">
-                  <span className="flex items-center gap-3">
-                    <span
-                      className="size-3.5 shrink-0 rounded"
-                      style={{
-                        backgroundColor:
-                          CATEGORIES.find(({ name }) => name === category)
-                            ?.color ?? "var(--chart-6)",
-                      }}
-                    />
-                    {category}
-                  </span>
-                </ReportCell>
-                <ReportCell className="font-medium text-muted-strong text-sm">
-                  {CATEGORIES.find(({ name }) => name === category)
-                    ?.description ?? "—"}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold text-lg">
-                  <Count value={count} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  {share.toFixed(1)}%
-                </ReportCell>
-                <ReportCell>
-                  <ShareBar isLeader={index === 0} share={share} />
-                </ReportCell>
-                <ReportCell align="end">
-                  {yearAgoCount > 0 ? (
-                    <DeltaText
-                      value={percentageOf(count - yearAgoCount, yearAgoCount)}
-                    />
-                  ) : (
-                    <span className="font-semibold text-muted text-sm">—</span>
-                  )}
-                </ReportCell>
-              </ReportRow>
-            );
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${formatMonthLabel(month)} · change against ${formatMonthLabel(yearAgoMonth)}`}
+          eyebrow="Deregistrations"
+          title="By category"
+        />
+        <CategoryTable
+          rows={rows.map(({ category, count }) => {
+            const yearAgoCount = yearAgoTotals.get(category) ?? 0;
+            const details = CATEGORIES.find(({ name }) => name === category);
+
+            return {
+              category,
+              color: details?.color ?? "var(--chart-6)",
+              count,
+              description: details?.description ?? "—",
+              share: percentageOf(count, total),
+              yearAgoChange:
+                yearAgoCount > 0
+                  ? percentageOf(count - yearAgoCount, yearAgoCount)
+                  : null,
+            };
           })}
-        </ReportTable>
-      </ReportSection>
+          yearAgoLabel={yearAgoMonth.slice(0, 4)}
+        />
+        <SourceNote>
+          Share is of {total.toLocaleString("en-SG")} deregistrations in{" "}
+          {formatMonthLabel(month)}. Change is against the same month a year
+          earlier; colour is not used for direction.
+        </SourceNote>
+      </section>
 
       <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
         <ReportSection
