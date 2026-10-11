@@ -220,6 +220,8 @@ async function Guide({ params }: PageProps) {
         </div>
       </div>
 
+      <Hairline />
+
       <RelatedGuides guide={guide} />
     </>
   );
