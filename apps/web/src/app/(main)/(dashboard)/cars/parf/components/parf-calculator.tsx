@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, Label, ListBox, Select, Typography } from "@heroui/react";
+import { cn, Input, Label, ListBox, Select, Typography } from "@heroui/react";
 import { ChartTooltip } from "@heroui-pro/react";
 import { BarChart } from "@heroui-pro/react/bar-chart";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
@@ -28,6 +28,15 @@ import { useMemo, useState } from "react";
 
 /** A COE runs for 10 years; the COE rebate is pro-rated over its months. */
 const COE_MONTHS = 120;
+
+/** Shared by the schedule header and rows, so the columns line up. */
+const SCHEDULE_ROW = "flex items-center gap-4 px-3 max-md:gap-2 max-md:px-1.5";
+const RATE_CELL = "w-20 shrink-0 text-right max-md:w-14";
+const CHANGE_CELL = "w-24 shrink-0 text-right max-md:hidden";
+const BARS_CELL = "w-48 shrink-0 max-lg:hidden";
+const REBATE_CELL = "w-28 shrink-0 text-right max-md:w-20";
+/** The bars' scale: the highest rate either schedule pays. */
+const TOP_RATE = 0.75;
 
 /** One bar of the old-against-new comparison. */
 interface CompareRow {
@@ -78,6 +87,14 @@ export function PARFCalculator() {
     COE_MONTHS,
   );
 
+  const selectBracket = (key: string) => {
+    posthog.capture("parf_calculator_used", {
+      bracket: AGE_BRACKETS[Number(key)]?.label,
+      field: "bracket",
+    });
+    setBracketKey(key);
+  };
+
   const result = useMemo(() => {
     const oldUncapped = arf * bracket.oldRate;
     const newUncapped = arf * bracket.newRate;
@@ -99,7 +116,7 @@ export function PARFCalculator() {
     {
       after: 0,
       before: result.oldRebate,
-      color: "var(--chart-3)",
+      color: "var(--chart-4)",
       label: "Before Budget 2026",
       value: result.oldRebate,
     },
@@ -141,12 +158,7 @@ export function PARFCalculator() {
         <div className="flex w-72 flex-col gap-2 max-md:w-full">
           <Select
             onChange={(key) => {
-              if (!key) return;
-              posthog.capture("parf_calculator_used", {
-                bracket: AGE_BRACKETS[Number(key)]?.label,
-                field: "bracket",
-              });
-              setBracketKey(String(key));
+              if (key) selectBracket(String(key));
             }}
             value={bracketKey}
           >
@@ -300,7 +312,7 @@ export function PARFCalculator() {
           <BarChart.Bar
             barSize={18}
             dataKey="before"
-            fill="var(--chart-3)"
+            fill="var(--chart-4)"
             radius={[0, 2, 2, 0]}
             stackId="rebate"
           />
@@ -371,6 +383,127 @@ export function PARFCalculator() {
           value={formatCurrency(coeRebate + result.newRebate)}
         />
       </ReportSection>
+
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`Rebate cap ${formatCurrency(OLD_CAP)} → ${formatCurrency(NEW_CAP)} · select a row to use that age`}
+          eyebrow="Rate schedule"
+          title="Rebate rates by vehicle age"
+        />
+        <div className="flex flex-col">
+          <div
+            className={cn(
+              SCHEDULE_ROW,
+              "items-end border-border border-b pb-2.5 font-semibold text-muted text-xs",
+            )}
+          >
+            <span className="min-w-0 flex-1">Vehicle age</span>
+            <span className={RATE_CELL}>Before</span>
+            <span className={RATE_CELL}>After</span>
+            <span className={CHANGE_CELL}>Change</span>
+            <span className={BARS_CELL}>Before and after, 0 to 75%</span>
+            <span className={REBATE_CELL}>Your rebate</span>
+          </div>
+          {AGE_BRACKETS.map(({ key, label, newRate, oldRate }) => {
+            const isActive = key === bracket.key;
+            const change = (newRate - oldRate) * 100;
+            return (
+              <button
+                aria-label={`Use ${label}`}
+                aria-pressed={isActive}
+                className={cn(
+                  SCHEDULE_ROW,
+                  "w-full cursor-pointer border-separator border-b border-l-2 py-3 text-left transition-colors hover:bg-surface-secondary",
+                  isActive
+                    ? "border-l-accent bg-accent-soft"
+                    : "border-l-transparent",
+                )}
+                key={key}
+                onClick={() => selectBracket(key)}
+                type="button"
+              >
+                <span
+                  className={cn(
+                    "min-w-0 flex-1 text-sm",
+                    isActive
+                      ? "font-bold text-accent-strong"
+                      : "font-medium text-foreground",
+                  )}
+                >
+                  {label}
+                </span>
+                <span
+                  className={cn(RATE_CELL, "text-muted text-sm tabular-nums")}
+                >
+                  {(oldRate * 100).toFixed(0)}%
+                </span>
+                <span
+                  className={cn(
+                    RATE_CELL,
+                    "font-semibold text-base tabular-nums",
+                  )}
+                >
+                  {(newRate * 100).toFixed(0)}%
+                </span>
+                <span
+                  className={cn(
+                    CHANGE_CELL,
+                    "text-muted-strong text-sm tabular-nums",
+                  )}
+                >
+                  {change === 0
+                    ? "No change"
+                    : `${change < 0 ? "−" : "+"}${Math.abs(change).toFixed(1)}pp`}
+                </span>
+                <span className={cn(BARS_CELL, "flex flex-col gap-1")}>
+                  <span className="block h-1.5 bg-surface-secondary">
+                    <span
+                      className="block h-full bg-chart-4"
+                      style={{
+                        width: `${((oldRate / TOP_RATE) * 100).toFixed(1)}%`,
+                      }}
+                    />
+                  </span>
+                  <span className="block h-1.5 bg-surface-secondary">
+                    <span
+                      className={cn(
+                        "block h-full",
+                        isActive ? "bg-chart-1" : "bg-chart-3",
+                      )}
+                      style={{
+                        width: `${((newRate / TOP_RATE) * 100).toFixed(1)}%`,
+                      }}
+                    />
+                  </span>
+                </span>
+                <span
+                  className={cn(
+                    REBATE_CELL,
+                    "font-semibold text-accent-strong text-sm tabular-nums",
+                  )}
+                >
+                  {formatCurrency(Math.min(arf * newRate, NEW_CAP))}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <SourceNote>
+          Rates apply to the ARF paid on the vehicle, and the rebate is capped
+          whichever bracket it falls in. Under the old schedule, the{" "}
+          {formatCurrency(OLD_CAP)} cap covers COEs from the 2nd February 2023
+          exercise onwards; COEs obtained before that have no cap. “Your rebate”
+          uses the new schedule and the ARF entered above.{" "}
+          <span className="max-lg:hidden">
+            In the bars, light is the old rate and dark is the new one.
+          </span>
+          <span className="md:hidden">
+            Change is 45 percentage points in every bracket up to 10 years.
+          </span>
+        </SourceNote>
+      </section>
     </>
   );
 }

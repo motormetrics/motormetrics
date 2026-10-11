@@ -1,6 +1,5 @@
 import { Typography } from "@heroui/react";
 import { PARFCalculator } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-calculator";
-import { PARFComparisonTable } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-comparison-table";
 import { OverviewPage } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
 import { ReportSection } from "@web/components/shared/report";
@@ -78,7 +77,6 @@ export default function PARFCalculatorPage() {
       />
 
       <PARFCalculator />
-      <PARFComparisonTable />
 
       <ReportSection title="Who gets a PARF rebate">
         <ul className="flex list-disc flex-col gap-2 pl-5 text-muted-strong">
