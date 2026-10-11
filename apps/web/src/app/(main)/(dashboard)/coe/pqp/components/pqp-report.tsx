@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   biddingOrdinal,
@@ -7,7 +7,6 @@ import {
   groupByExercise,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
 import {
   PQPChart,
   type PQPSeries,
@@ -30,18 +29,13 @@ import {
   type PQPCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import {
   Hairline,
   SectionHead,
   SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
-import { ReportSection } from "@web/components/shared/report";
-import {
-  ReportCell,
-  ReportRow,
-  ReportTable,
-} from "@web/components/shared/report-table";
 import { getCoeResults, getPQPOverview } from "@web/queries/coe";
 import type { Pqp } from "@web/types/coe";
 import {
@@ -78,9 +72,8 @@ const RENEWAL_TRADEOFFS: { label: string; note: string }[] = [
   },
 ];
 
-function changePercent(current: number, previous: number): number | null {
-  return previous > 0 ? ((current - previous) / previous) * 100 : null;
-}
+/** The two category columns of the month-by-month list. */
+const MONTH_CELL = "w-36 shrink-0 text-right max-md:w-24";
 
 export async function PQPReport({
   searchParams,
@@ -144,6 +137,7 @@ export async function PQPReport({
   const chartStep =
     chartTicks.length > 1 ? chartTicks[1] - chartTicks[0] : undefined;
   const firstMonth = ascending[0]?.month;
+  const oldestMonth = tableRows.at(-1)?.month;
   const previousMonth = ascending.at(-2)?.month;
 
   const rateRows: PQPRateRow[] = PQP_CATEGORY_KEYS.map((key) => {
@@ -278,77 +272,94 @@ export async function PQPReport({
 
       <Hairline />
 
-      <ReportSection
-        caption={`Published PQP per category · ${term}-year renewal`}
-        title="Month by month"
-      >
-        <ReportTable
-          columns={[
-            { label: "Month" },
-            ...PQP_CATEGORY_KEYS.map((key) => ({
-              align: "end" as const,
-              label: `Cat ${key}`,
-            })),
-          ]}
-        >
-          {tableRows.map((row, index) => {
-            const earlier = tableRows[index + 1];
-
-            return (
-              <ReportRow isActive={row.month === latestMonth} key={row.key}>
-                <ReportCell className="font-bold text-base">
-                  {formatMonth(row.month)}
-                </ReportCell>
-                {PQP_CATEGORY_KEYS.map((key) => {
-                  const name = categoryName(key);
-                  const rate = row[name];
-                  const monthChange = earlier
-                    ? changePercent(rate, earlier[name])
-                    : null;
-
-                  return (
-                    <ReportCell align="end" key={key}>
-                      <div className="flex flex-col items-end gap-0.5">
-                        <span className="font-extrabold text-base">
-                          {rate > 0 ? formatCurrency(rate * termFactor) : "—"}
-                        </span>
-                        {monthChange === null ? null : (
-                          <span className="text-xs">
-                            <PremiumDelta ratio={monthChange / 100} />
-                          </span>
-                        )}
-                      </div>
-                    </ReportCell>
-                  );
-                })}
-              </ReportRow>
-            );
-          })}
-        </ReportTable>
-      </ReportSection>
-
-      <div>
-        <ReportSection
-          caption="What the price does not tell you"
-          title="Renewing versus bidding"
-        >
-          <div className="flex flex-col">
-            {RENEWAL_TRADEOFFS.map(({ label, note }) => (
-              <div
-                className="flex flex-wrap items-baseline gap-5 border-border border-b py-4"
-                key={label}
-              >
-                <span className="w-[190px] shrink-0 font-bold text-base">
-                  {label}
-                </span>
-                <span className="font-medium text-base text-muted-strong">
-                  {note}
-                </span>
-              </div>
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${term}-year renewal · most recent first · change against the previous month`}
+          eyebrow="Month by month"
+          title="Published PQP per category"
+        />
+        <div className="flex flex-col">
+          <div className="flex items-end gap-3.5 border-border border-b px-3 pb-2.5 font-semibold text-muted text-xs max-md:px-1.5">
+            <span className="min-w-0 flex-1">Month</span>
+            {PQP_CATEGORY_KEYS.map((key) => (
+              <span className={MONTH_CELL} key={key}>
+                Cat {key}
+              </span>
             ))}
           </div>
-        </ReportSection>
-      </div>
+          <ol className="flex flex-col">
+            {tableRows.map((row, index) => {
+              const earlier = tableRows[index + 1];
+              return (
+                <li
+                  className={cn(
+                    "flex items-center gap-3.5 border-separator border-b px-3 py-2.5 max-md:px-1.5",
+                    row.month === latestMonth && "bg-surface-secondary",
+                  )}
+                  key={row.key}
+                >
+                  <span className="min-w-0 flex-1 font-semibold text-sm">
+                    {formatMonth(row.month)}
+                  </span>
+                  {PQP_CATEGORY_KEYS.map((key) => {
+                    const name = categoryName(key);
+                    const rate = row[name];
+                    const earlierRate = earlier?.[name] ?? 0;
+                    return (
+                      <span
+                        className={cn(
+                          MONTH_CELL,
+                          "flex flex-col items-end gap-px",
+                        )}
+                        key={key}
+                      >
+                        <span className="font-semibold text-base tabular-nums">
+                          {rate > 0 ? formatCurrency(rate * termFactor) : "—"}
+                        </span>
+                        <span className="text-muted text-xs tabular-nums">
+                          {earlier && earlierRate > 0 && rate > 0 ? (
+                            <CostTrendChip
+                              changeRatio={(rate - earlierRate) / earlierRate}
+                            />
+                          ) : (
+                            "—"
+                          )}
+                        </span>
+                      </span>
+                    );
+                  })}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+        <SourceNote>
+          PQP as published for each month.
+          {oldestMonth
+            ? ` ${formatMonth(oldestMonth)} is the first month shown, so it has no change.`
+            : null}
+        </SourceNote>
+      </section>
+
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          eyebrow="Renewing versus bidding"
+          title="What the price does not tell you"
+        />
+        <dl className="flex flex-col border-border border-t">
+          {RENEWAL_TRADEOFFS.map(({ label, note }) => (
+            <div
+              className="flex items-baseline gap-5 border-separator border-b py-3 max-md:flex-col max-md:gap-1"
+              key={label}
+            >
+              <dt className="w-44 shrink-0 font-semibold text-sm">{label}</dt>
+              <dd className="text-muted-strong text-sm">{note}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
       <UnreleasedFeature>
         <RenewalComparison
