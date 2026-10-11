@@ -3,8 +3,8 @@ import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-
 import { PqpCeiling } from "@web/app/(main)/(dashboard)/coe/components/pqp-ceiling";
 import { CategoryMergerCallout } from "@web/app/(main)/(dashboard)/components/category-merger-callout";
 import { CoePremiumTable } from "@web/app/(main)/(dashboard)/components/coe-premium-table";
-import { EvCharging } from "@web/app/(main)/(dashboard)/components/ev-charging";
-import { EvMomentum } from "@web/app/(main)/(dashboard)/components/ev-momentum";
+import { EvMakes } from "@web/app/(main)/(dashboard)/components/ev-makes";
+import { EvShare } from "@web/app/(main)/(dashboard)/components/ev-share";
 import { FuelMix } from "@web/app/(main)/(dashboard)/components/fuel-mix";
 import { KpiStrip } from "@web/app/(main)/(dashboard)/components/kpi-strip";
 import {
@@ -207,15 +207,15 @@ export default function HomePage() {
 
         <Hairline />
 
-        <OverviewGrid>
-          <SectionErrorBoundary title="Electric momentum unavailable">
-            <Suspense fallback={<BlockSkeleton chartHeight="h-[240px]" />}>
-              <EvMomentum />
+        <OverviewGrid className="gap-10 min-[901px]:grid-cols-[1.35fr_1fr] min-[901px]:gap-x-14 max-[1100px]:min-[901px]:gap-x-9">
+          <SectionErrorBoundary title="EV share unavailable">
+            <Suspense fallback={<BlockSkeleton chartHeight="h-[260px]" />}>
+              <EvShare />
             </Suspense>
           </SectionErrorBoundary>
-          <SectionErrorBoundary title="EV charging unavailable">
-            <Suspense fallback={<BlockSkeleton chartHeight="h-[160px]" />}>
-              <EvCharging />
+          <SectionErrorBoundary title="EV makes unavailable">
+            <Suspense fallback={<BlockSkeleton chartHeight="h-[200px]" />}>
+              <EvMakes />
             </Suspense>
           </SectionErrorBoundary>
         </OverviewGrid>
