@@ -1,11 +1,18 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
+import {
+  RegistrationsTrendChart,
+  type TrendPoint,
+} from "@web/app/(main)/(dashboard)/cars/components/registrations-trend-chart";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import {
   getDimensionStats,
   getMonthlyRegistrationTotals,
 } from "@web/queries/cars";
 import {
+  formatChartMonth,
   formatMonthLabel,
   formatMonthName,
 } from "@web/utils/dates/format-month";
@@ -83,5 +90,55 @@ export async function RegistrationsHero({
           : null}
       </Typography.Paragraph>
     </div>
+  );
+}
+
+/** Months drawn in the trend chart. */
+const TREND_MONTHS = 12;
+
+/**
+ * The twelve months to the selected one as zero-based columns, under a
+ * section head; the selected month is the darker column.
+ */
+export async function RegistrationsTrend({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const month = await resolveCarsMonth(searchParams);
+  const monthlyTotals = await getMonthlyRegistrationTotals(HISTORY_LIMIT);
+
+  const selectedIndex = monthlyTotals.findIndex((row) => row.month === month);
+  if (selectedIndex < 0) {
+    return null;
+  }
+
+  const window = monthlyTotals.slice(
+    Math.max(0, selectedIndex + 1 - TREND_MONTHS),
+    selectedIndex + 1,
+  );
+  const data: TrendPoint[] = window.map((row, index) => ({
+    label: formatChartMonth(row.month),
+    other: row.month === month ? 0 : row.total,
+    selected: row.month === month ? row.total : 0,
+    title: formatMonthLabel(row.month),
+    total: row.total,
+    year: index === 0 || row.month.endsWith("-01") ? row.month.slice(0, 4) : "",
+  }));
+  const ticks = axisTicks(
+    window.map((row) => row.total),
+    { zero: true },
+  );
+
+  return (
+    <section className="flex flex-col gap-4">
+      <SectionHead
+        caption={`${window.length} months to ${formatMonthLabel(month)} · hover or tap a bar for its value`}
+        eyebrow="Trend"
+        title="Registrations by month"
+      />
+      <RegistrationsTrendChart data={data} ticks={ticks} />
+      <SourceNote>New car registrations, all makes and fuel types.</SourceNote>
+    </section>
   );
 }

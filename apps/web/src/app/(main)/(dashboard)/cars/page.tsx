@@ -4,7 +4,10 @@ import { DimensionPanel } from "@web/app/(main)/(dashboard)/cars/components/dime
 import { FuelMix } from "@web/app/(main)/(dashboard)/cars/components/fuel-mix";
 import { MoversRail } from "@web/app/(main)/(dashboard)/cars/components/movers-rail";
 import { PopulationPanel } from "@web/app/(main)/(dashboard)/cars/components/population-panel";
-import { RegistrationsHero } from "@web/app/(main)/(dashboard)/cars/components/registrations-hero";
+import {
+  RegistrationsHero,
+  RegistrationsTrend,
+} from "@web/app/(main)/(dashboard)/cars/components/registrations-hero";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import {
@@ -105,6 +108,12 @@ export default function CarsPage({ searchParams }: PageProps) {
           </Suspense>
         </SectionErrorBoundary>
       </div>
+
+      <SectionErrorBoundary title="Registration trend unavailable">
+        <Suspense fallback={<Skeleton className="h-80 w-full" />}>
+          <RegistrationsTrend searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
 
       <Hairline />
 
