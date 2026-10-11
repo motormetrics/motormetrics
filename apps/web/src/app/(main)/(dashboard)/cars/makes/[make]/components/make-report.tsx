@@ -1,10 +1,11 @@
-import { Chip, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
 import {
   FuelTypeTabs,
   PeriodTabs,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/filters";
+import { MixTable } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/mix-table";
 import {
   periodLabel,
   periodWindow,
@@ -182,7 +183,6 @@ export async function MakeReport({
       vehicleType,
     };
   });
-  const mixLeader = mixRows[0]?.count ?? 0;
 
   const makeByMonth = new Map<string, number>();
   for (const row of crossTab) {
@@ -357,61 +357,39 @@ export async function MakeReport({
 
       <Hairline />
 
-      <ReportSection
-        caption={`${periodCaption} · against the same months a year earlier`}
-        title="Fuel type and vehicle type"
-      >
-        <ReportTable
-          columns={[
-            { label: "#", width: "60px" },
-            { label: "Fuel type" },
-            { label: "Vehicle type" },
-            { align: "end", label: "Registrations" },
-            { align: "end", label: "Share" },
-            { label: "", width: "220px" },
-            { align: "end", label: "Vs year earlier", width: "140px" },
-          ]}
-        >
-          {mixRows.map(
+      <section className="flex min-w-0 flex-col gap-4">
+        <SectionHead
+          caption={`${periodCaption} · against the same months a year earlier`}
+          eyebrow="Breakdown"
+          title="Fuel type and vehicle type"
+        />
+        <MixTable
+          rows={mixRows.map(
             ({
               count,
               fuelType: rowFuelType,
               previous,
-              rank: rowRank,
+              rank,
               vehicleType,
-            }) => (
-              <ReportRow key={`${rowFuelType}|${vehicleType}`}>
-                <ReportCell className="font-bold text-muted text-sm">
-                  {String(rowRank).padStart(2, "0")}
-                </ReportCell>
-                <ReportCell>
-                  <Chip size="lg">
-                    <Chip.Label>{rowFuelType}</Chip.Label>
-                  </Chip>
-                </ReportCell>
-                <ReportCell className="font-bold text-base">
-                  {formatVehicleType(vehicleType)}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold text-lg">
-                  <Count value={count} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  {percentage(count, total)}
-                </ReportCell>
-                <ReportCell>
-                  <ShareBar
-                    isLeader={rowRank === 1}
-                    share={(count / (mixLeader || 1)) * 100}
-                  />
-                </ReportCell>
-                <ReportCell align="end">
-                  <DeltaText value={percentageChange(count, previous)} />
-                </ReportCell>
-              </ReportRow>
-            ),
+            }) => ({
+              change: percentageChange(count, previous),
+              count,
+              fuelType: rowFuelType,
+              rank,
+              vehicleType: formatVehicleType(vehicleType),
+            }),
           )}
-        </ReportTable>
-      </ReportSection>
+          total={total}
+        />
+        <SourceNote>
+          Share is of {total.toLocaleString("en-SG")}{" "}
+          {fuelType ? `${fuelType} ` : ""}
+          {make} registrations in the period. Change compares against the same
+          months a year earlier.
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <ReportSection
         caption={`${make} against the whole market`}
