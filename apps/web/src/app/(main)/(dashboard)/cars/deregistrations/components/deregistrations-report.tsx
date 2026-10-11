@@ -5,14 +5,9 @@ import {
   type DeregistrationSeries,
   DeregistrationsChart,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-chart";
+import { DeregistrationsHeadline } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-headline";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
-import { DeltaChip } from "@web/components/shared/delta-chip";
-import {
-  ReportHeadline,
-  ReportNote,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
+import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
   DeltaText,
@@ -22,7 +17,11 @@ import {
   ShareBar,
 } from "@web/components/shared/report-table";
 import { getDeregistrations } from "@web/queries/deregistrations";
-import { formatChartMonth } from "@web/utils/dates/format-month";
+import {
+  formatChartMonth,
+  formatMonthLabel,
+  formatMonthShortLabel,
+} from "@web/utils/dates/format-month";
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import Link from "next/link";
@@ -35,17 +34,24 @@ const SERIES_MONTHS = 12;
 const CHARTED_CATEGORIES = 6;
 
 /**
- * What LTA's category names mean, for the table's description column. Authored
- * copy keyed by the value exactly as the deregistration feed records it.
+ * LTA's categories in the comp's order, with what each name means for the
+ * table's description column. Authored copy keyed by the value exactly as the
+ * deregistration feed records it.
  */
-const CATEGORY_DESCRIPTIONS: Record<string, string> = {
-  "Category A": "Cars up to 1,600cc and 130bhp",
-  "Category B": "Cars above 1,600cc or 130bhp",
-  "Category C": "Goods vehicles and buses",
-  "Category D": "Motorcycles",
-  "Vehicles Exempted From VQS": "Vehicles outside the quota system",
-  Taxis: "Taxis, which draw on their own quota",
-};
+const CATEGORIES = [
+  { description: "Cars up to 1,600cc and 130bhp", name: "Category A" },
+  { description: "Cars above 1,600cc or 130bhp", name: "Category B" },
+  { description: "Goods vehicles and buses", name: "Category C" },
+  { description: "Motorcycles", name: "Category D" },
+  { description: "Taxis, which draw on their own quota", name: "Taxis" },
+  {
+    description: "Vehicles outside the quota system",
+    name: "Vehicles Exempted From VQS",
+  },
+];
+
+/** The four COE categories the headline sets beside the month's total. */
+const HEADLINE_CATEGORIES = CATEGORIES.slice(0, 4);
 
 function percentageOf(count: number, total: number): number {
   return total > 0 ? (count / total) * 100 : 0;
@@ -148,29 +154,24 @@ export async function DeregistrationsReport({
 
   return (
     <>
-      <ReportHeadline
-        delta={
-          priorTotal > 0 ? (
-            <DeltaChip value={percentageOf(total - priorTotal, priorTotal)} />
-          ) : undefined
-        }
-        label={`Deregistrations · ${formattedMonth}`}
-        stats={rows
-          .slice(0, 4)
-          .map(({ category, count }) => (
-            <ReportStat
-              key={category}
-              label={category}
-              note={`${percentageOf(count, total).toFixed(1)}% of the month`}
-              value={count.toLocaleString("en-SG")}
-            />
-          ))}
+      <DeregistrationsHeadline
+        label={`Vehicles deregistered in ${formatMonthLabel(month)}`}
+        previousMonth={priorMonth}
+        previousValue={priorTotal}
+        stats={HEADLINE_CATEGORIES.map(({ name }) => {
+          const count = totals.get(name) ?? 0;
+          return {
+            label: name,
+            note: `${percentageOf(count, total).toFixed(1)}% of the month`,
+            value: count,
+          };
+        })}
         sub={
           yearAgoTotal > 0
-            ? `${rows.length} categories · ${percentageOf(total - yearAgoTotal, yearAgoTotal) >= 0 ? "up" : "down"} ${Math.abs(percentageOf(total - yearAgoTotal, yearAgoTotal)).toFixed(1)}% on ${formatDateToMonthYear(yearAgoMonth)}`
-            : `${rows.length} categories · no figures for ${formatDateToMonthYear(yearAgoMonth)} to compare against`
+            ? `${rows.length} categories · ${percentageOf(total - yearAgoTotal, yearAgoTotal) >= 0 ? "up" : "down"} ${Math.abs(percentageOf(total - yearAgoTotal, yearAgoTotal)).toFixed(1)}% on ${formatMonthShortLabel(yearAgoMonth)}`
+            : `${rows.length} categories · no figures for ${formatMonthShortLabel(yearAgoMonth)} to compare against`
         }
-        value={total.toLocaleString("en-SG")}
+        value={total}
       />
 
       <DeregistrationsChart data={chartData} series={chartSeries} />
@@ -207,7 +208,8 @@ export async function DeregistrationsReport({
                   </span>
                 </ReportCell>
                 <ReportCell className="font-medium text-muted-strong text-sm">
-                  {CATEGORY_DESCRIPTIONS[category] ?? "—"}
+                  {CATEGORIES.find(({ name }) => name === category)
+                    ?.description ?? "—"}
                 </ReportCell>
                 <ReportCell align="end" className="font-extrabold text-lg">
                   <Count value={count} />
