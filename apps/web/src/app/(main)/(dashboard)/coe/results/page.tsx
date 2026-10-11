@@ -1,31 +1,23 @@
 import { Skeleton, Typography } from "@heroui/react";
 import {
-  COE_CATEGORIES,
-  toCategoryKey,
-} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import {
-  PremiumsByYearRows,
+  LatestExerciseSub,
+  PremiumsByYear,
   QuotaAndDemand,
-  RecordHighRows,
-  ResultsByExerciseRows,
+  RecordHighs,
+  ResultsByExercise,
   ResultsChartPanel,
   ResultsHeadline,
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-report";
-import { SeriesFilter } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import {
+  Hairline,
+  OverviewPage,
+  SectionHead,
+  SectionLink,
+  SourceNote,
+} from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
-import {
-  Report,
-  ReportFilterBar,
-  ReportNote,
-  ReportSection,
-} from "@web/components/shared/report";
-import {
-  ReportCell,
-  ReportRow,
-  ReportTable,
-} from "@web/components/shared/report-table";
-import { SkeletonChart } from "@web/components/shared/skeleton";
+import { SkeletonCard, SkeletonChart } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -34,7 +26,6 @@ import {
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
-import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
@@ -46,34 +37,6 @@ interface PageProps {
 const title = "COE Price History and Trends";
 const description =
   "Singapore COE price history for Cat A to E: every bidding result, yearly averages and record highs, with 12-month, 5-year, 10-year and all-time charts.";
-
-/**
- * Static: every label comes from `COE_CATEGORIES`, so the table's `<thead>`
- * renders into the shell and only the rows below it wait on the data.
- */
-const EXERCISE_COLUMNS = [
-  { label: "Exercise" },
-  ...COE_CATEGORIES.map((category) => ({
-    align: "end" as const,
-    label: `Cat ${toCategoryKey(category)}`,
-  })),
-  { align: "end" as const, label: "Total bids" },
-];
-
-const YEAR_COLUMNS = [
-  { label: "Year" },
-  ...COE_CATEGORIES.map((category) => ({
-    align: "end" as const,
-    label: `Cat ${toCategoryKey(category)}`,
-  })),
-];
-
-const RECORD_COLUMNS = [
-  { label: "Cat", width: "64px" },
-  { label: "Description" },
-  { align: "end" as const, label: "Record premium" },
-  { label: "Exercise" },
-];
 
 export const metadata: Metadata = {
   title,
@@ -110,59 +73,43 @@ const structuredData: WithContext<WebPage> = {
   },
 };
 
-/** One pill per category, sized to the real `SeriesFilter` buttons. */
-function PillsSkeleton() {
-  return COE_CATEGORIES.map((category) => (
-    <Skeleton className="h-10 w-36" key={category} />
-  ));
+/** The chart section's head, toggles and plot. */
+function ChartSkeleton() {
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-end gap-4">
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-7 w-72" />
+          <Skeleton className="h-4 w-80" />
+        </div>
+        <Skeleton className="h-8 w-80 sm:ml-auto" />
+      </div>
+      <SkeletonChart />
+    </div>
+  );
 }
 
-/** Mirrors `ReportHeadline` — the label, the oversized figure, and the stat cells. */
+/** Mirrors `ResultsHeadline`: the figure on the left, the 2×2 stat grid. */
 function HeadlineSkeleton() {
   return (
-    <div className="flex flex-wrap items-end gap-12">
-      <div className="flex min-w-0 flex-col gap-2">
-        <Skeleton className="h-6 w-72" />
-        <Skeleton className="h-16 w-56 lg:h-20" />
-        <Skeleton className="h-5 w-80" />
+    <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
+      <div className="flex flex-col gap-3">
+        <Skeleton className="h-6 w-56" />
+        <Skeleton className="h-14 w-48" />
+        <Skeleton className="h-5 w-72" />
       </div>
-      <div className="ml-auto grid w-full grid-cols-2 gap-x-6 gap-y-5 sm:flex sm:w-auto sm:flex-wrap sm:gap-0">
+      <div className="grid grid-cols-2 gap-px">
         {["cat-a", "cat-b", "cat-e", "quota"].map((key) => (
-          <div
-            className="flex flex-col gap-1.5 border-border sm:border-l sm:px-6"
-            key={key}
-          >
-            <Skeleton className="h-5 w-28" />
+          <div className="flex flex-col gap-1.5 py-3.5" key={key}>
+            <Skeleton className="h-4 w-28" />
             <Skeleton className="h-7 w-24" />
-            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-4 w-36" />
           </div>
         ))}
       </div>
     </div>
   );
-}
-
-/**
- * Placeholder rows for a suspended table body. Built from `ReportRow` and
- * `ReportCell` rather than bare `<tr>`s so the fallback keeps the real row
- * height and the table does not jump when the data lands.
- */
-function RowsSkeleton({ cells, rows }: { cells: number; rows: number }) {
-  return Array.from({ length: rows }).map((_, rowIndex) => (
-    <ReportRow
-      // biome-ignore lint/suspicious/noArrayIndexKey: skeleton rows are static placeholders
-      key={rowIndex}
-    >
-      {Array.from({ length: cells }).map((__, cellIndex) => (
-        <ReportCell
-          // biome-ignore lint/suspicious/noArrayIndexKey: skeleton cells are static placeholders
-          key={cellIndex}
-        >
-          <Skeleton className="h-4 w-full" />
-        </ReportCell>
-      ))}
-    </ReportRow>
-  ));
 }
 
 /** The quota section's heading and table, which are both data-derived. */
@@ -178,7 +125,7 @@ function QuotaSkeleton() {
 
 export default function COEResultsPage({ searchParams }: PageProps) {
   return (
-    <Report>
+    <OverviewPage className="gap-10 max-md:gap-7">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -198,27 +145,14 @@ export default function COEResultsPage({ searchParams }: PageProps) {
       />
 
       <PageHead
-        description="Closing premiums for every category in every exercise, with yearly averages, record highs, and the quota and bids behind each result."
+        eyebrow="Certificate of Entitlement"
+        sub={
+          <Suspense fallback={<Skeleton className="h-5 w-80" />}>
+            <LatestExerciseSub searchParams={searchParams} />
+          </Suspense>
+        }
         title="COE price history and trends"
       />
-
-      {/* The bar's own furniture — the eyebrow, the hint, the rules — is static
-          and prerenders. The pills themselves read URL data via `useQueryState`,
-          so they need their own boundary or the prerender bails. On a client
-          navigation the hook resolves straight from the router store, so this
-          fallback is only ever seen on a cold load. */}
-      <ReportFilterBar
-        label="Series"
-        trailing={
-          <Typography.Paragraph color="muted" size="sm">
-            Tap a category to add or remove it from the chart
-          </Typography.Paragraph>
-        }
-      >
-        <Suspense fallback={<PillsSkeleton />}>
-          <SeriesFilter />
-        </Suspense>
-      </ReportFilterBar>
 
       <SectionErrorBoundary title="Latest exercise unavailable">
         <Suspense fallback={<HeadlineSkeleton />}>
@@ -226,101 +160,96 @@ export default function COEResultsPage({ searchParams }: PageProps) {
         </Suspense>
       </SectionErrorBoundary>
 
-      <div className="flex flex-col gap-3.5">
-        <SectionErrorBoundary title="Premium chart unavailable">
-          <Suspense fallback={<SkeletonChart />}>
-            <ResultsChartPanel searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
-        <Typography.Paragraph color="muted" size="sm">
-          Category D premiums sit an order of magnitude below the car categories
-          — add it to the chart and the other lines flatten.
-        </Typography.Paragraph>
-      </div>
+      <SectionErrorBoundary title="Premium chart unavailable">
+        <Suspense fallback={<ChartSkeleton />}>
+          <ResultsChartPanel searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
 
-      <ReportSection
-        caption="Average closing premium across each year's exercises, with the year's high"
-        title="COE prices by year"
-      >
-        <SectionErrorBoundary title="Yearly COE prices unavailable">
-          <ReportTable columns={YEAR_COLUMNS}>
-            <Suspense
-              fallback={<RowsSkeleton cells={YEAR_COLUMNS.length} rows={8} />}
-            >
-              <PremiumsByYearRows />
-            </Suspense>
-          </ReportTable>
-        </SectionErrorBoundary>
-      </ReportSection>
+      <Hairline />
 
-      <ReportSection
-        caption="The highest closing premium each category has reached"
-        title="Record COE prices"
-      >
-        <SectionErrorBoundary title="Record COE prices unavailable">
-          <ReportTable columns={RECORD_COLUMNS}>
-            <Suspense
-              fallback={
-                <RowsSkeleton
-                  cells={RECORD_COLUMNS.length}
-                  rows={COE_CATEGORIES.length}
-                />
-              }
-            >
-              <RecordHighRows />
-            </Suspense>
-          </ReportTable>
-        </SectionErrorBoundary>
-      </ReportSection>
-
-      <ReportSection
-        caption="Closing premium per category · most recent first"
-        title="Results by exercise"
-      >
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption="Most recent first · change against the previous exercise"
+          eyebrow="Results by exercise"
+          title="Closing premium per category"
+        />
         <SectionErrorBoundary title="COE results unavailable">
-          <ReportTable columns={EXERCISE_COLUMNS}>
-            <Suspense
-              fallback={
-                <RowsSkeleton cells={EXERCISE_COLUMNS.length} rows={8} />
-              }
-            >
-              <ResultsByExerciseRows searchParams={searchParams} />
-            </Suspense>
-          </ReportTable>
-        </SectionErrorBoundary>
-      </ReportSection>
-
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
-        <SectionErrorBoundary title="Quota and demand unavailable">
-          <Suspense fallback={<QuotaSkeleton />}>
-            <QuotaAndDemand searchParams={searchParams} />
+          <Suspense fallback={<SkeletonCard className="h-96 w-full" />}>
+            <ResultsByExercise searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>
+      </section>
 
-        <ReportNote title="How an exercise runs">
-          <Typography.Paragraph>
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption="Mean of each year's exercises, with the year's high · the current year is year to date"
+          eyebrow="By year"
+          title="Average closing premium"
+        />
+        <SectionErrorBoundary title="Yearly COE prices unavailable">
+          <Suspense fallback={<SkeletonCard className="h-96 w-full" />}>
+            <PremiumsByYear />
+          </Suspense>
+        </SectionErrorBoundary>
+      </section>
+
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption="Every exercise on record"
+          eyebrow="Records"
+          title="Highest closing premium by category"
+        />
+        <SectionErrorBoundary title="Record COE prices unavailable">
+          <Suspense fallback={<SkeletonCard className="h-72 w-full" />}>
+            <RecordHighs />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SourceNote>
+          Quota premium at the close of the exercise in which each record was
+          set.
+        </SourceNote>
+      </section>
+
+      <Hairline />
+
+      <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+        <div className="min-w-0 lg:col-span-7">
+          <SectionErrorBoundary title="Quota and demand unavailable">
+            <Suspense fallback={<QuotaSkeleton />}>
+              <QuotaAndDemand searchParams={searchParams} />
+            </Suspense>
+          </SectionErrorBoundary>
+        </div>
+
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-5">
+          <SectionHead
+            eyebrow="Reading the numbers"
+            title="How an exercise runs"
+          />
+          <Typography.Paragraph className="text-muted-strong">
             Bidding opens at 12pm on the first Monday and third Monday of each
             month and closes at 4pm on the third day. The premium is the lowest
             successful bid, so everyone who wins pays the same price.
           </Typography.Paragraph>
-          <Typography.Paragraph>
+          <Typography.Paragraph className="text-muted-strong">
             Quotas are set quarterly from deregistrations and the allowed growth
             in the vehicle population.
           </Typography.Paragraph>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/coe/premiums"
-          >
-            Premium trends by category →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/coe/pqp"
-          >
-            PQP renewal rates →
-          </Link>
-        </ReportNote>
+          <div className="flex flex-col items-start gap-2">
+            <SectionLink className="ml-0" href="/coe/premiums">
+              Premium trends by category
+            </SectionLink>
+            <SectionLink className="ml-0" href="/coe/pqp">
+              PQP renewal rates
+            </SectionLink>
+          </div>
+        </section>
       </div>
-    </Report>
+    </OverviewPage>
   );
 }

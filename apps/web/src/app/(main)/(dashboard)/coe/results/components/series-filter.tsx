@@ -1,7 +1,10 @@
 "use client";
 
-import { cn } from "@heroui/react";
-import { COE_CATEGORIES } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { cn, type Key, ToggleButton, ToggleButtonGroup } from "@heroui/react";
+import {
+  COE_CATEGORIES,
+  toCategoryKey,
+} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { coeSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params";
 import type { COECategory } from "@web/types";
 import { useQueryState } from "nuqs";
@@ -20,7 +23,8 @@ export const CATEGORY_COLOURS: Record<COECategory, string> = Object.fromEntries(
 ) as Record<COECategory, string>;
 
 /**
- * The category pills that add and remove series from the chart.
+ * The category toggles that add and remove series from the chart. At least
+ * one stays on.
  *
  * Writes to the URL with `shallow: false` so the chart stays server-rendered —
  * the premiums never reach the client bundle, only the series that are on.
@@ -32,53 +36,47 @@ export function SeriesFilter() {
     coeSearchParams.categories.withOptions({ shallow: false, startTransition }),
   );
 
-  const toggle = (category: COECategory) => {
+  const onSelectionChange = (keys: Set<Key>) => {
+    const next = COE_CATEGORIES.filter((category) => keys.has(category));
+    const toggled = COE_CATEGORIES.find(
+      (category) => selected.includes(category) !== next.includes(category),
+    );
     posthog.capture("dashboard_filter_changed", {
       filter: "series",
-      value: category,
+      value: toggled,
     });
-    setSelected(
-      selected.includes(category)
-        ? selected.filter((entry) => entry !== category)
-        : [...selected, category],
-    );
+    setSelected(next);
   };
 
   return (
-    <fieldset
-      className={cn(
-        "m-0 flex flex-wrap gap-2 border-none p-0",
-        isPending && "opacity-70",
-      )}
+    <ToggleButtonGroup
+      aria-label="Categories plotted"
+      className={cn("max-md:w-full", isPending && "opacity-70")}
+      disallowEmptySelection
+      onSelectionChange={onSelectionChange}
+      selectedKeys={selected}
+      selectionMode="multiple"
+      size="sm"
     >
-      <legend className="sr-only">Categories plotted</legend>
-      {COE_CATEGORIES.map((category) => {
-        const isActive = selected.includes(category);
-        return (
-          <button
-            aria-pressed={isActive}
-            className={cn(
-              "inline-flex cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-full px-[18px] py-2.5 text-sm transition-colors",
-              isActive
-                ? "bg-surface font-bold text-foreground shadow-surface"
-                : "bg-surface-secondary font-semibold text-muted hover:text-foreground",
-            )}
-            key={category}
-            onClick={() => toggle(category)}
-            type="button"
-          >
-            <span
-              className="size-2.5 shrink-0 rounded-full"
-              style={{
-                background: isActive
-                  ? CATEGORY_COLOURS[category]
-                  : "var(--border)",
-              }}
-            />
-            {category}
-          </button>
-        );
-      })}
-    </fieldset>
+      {COE_CATEGORIES.map((category, index) => (
+        <ToggleButton
+          className="max-md:flex-1 max-md:px-1"
+          id={category}
+          key={category}
+        >
+          {index > 0 ? <ToggleButtonGroup.Separator /> : null}
+          <span
+            aria-hidden
+            className="size-2.5 shrink-0 rounded-xs"
+            style={{
+              background: selected.includes(category)
+                ? CATEGORY_COLOURS[category]
+                : "var(--border)",
+            }}
+          />
+          Cat {toCategoryKey(category)}
+        </ToggleButton>
+      ))}
+    </ToggleButtonGroup>
   );
 }
