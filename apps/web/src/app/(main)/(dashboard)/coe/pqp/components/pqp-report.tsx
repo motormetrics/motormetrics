@@ -1,6 +1,5 @@
 import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
-import { CategoryBadge } from "@web/app/(main)/(dashboard)/coe/components/category-badge";
 import {
   CATEGORY_DESCRIPTIONS,
   formatMonth,
@@ -18,6 +17,10 @@ import {
   type PQPComparisonPoint,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-comparison-chart";
 import { PQPHeadline } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-headline";
+import {
+  type PQPRateRow,
+  PQPRatesTable,
+} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-rates-table";
 import { RenewalComparison } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal-comparison";
 import { UnreleasedFeature } from "@web/app/(main)/(dashboard)/coe/pqp/components/unreleased-feature";
 import {
@@ -35,7 +38,10 @@ import {
 } from "@web/components/shared/report-table";
 import { getCoeResults, getPQPOverview } from "@web/queries/coe";
 import type { Pqp } from "@web/types/coe";
-import { formatChartMonth } from "@web/utils/dates/format-month";
+import {
+  formatChartMonth,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
@@ -94,8 +100,6 @@ export async function PQPReport({
   // rate itself is what LTA publishes, so the term scales it rather than
   // selecting a different figure.
   const termFactor = term === "5" ? 0.5 : 1;
-  const otherTerm = term === "5" ? "10" : "5";
-  const otherFactor = term === "5" ? 1 : 0.5;
 
   const formattedMonth = formatMonth(latestMonth);
   const selected = categoryName(category);
@@ -135,6 +139,24 @@ export async function PQPReport({
   const chartStep =
     chartTicks.length > 1 ? chartTicks[1] - chartTicks[0] : undefined;
   const firstMonth = ascending[0]?.month;
+  const previousMonth = ascending.at(-2)?.month;
+
+  const rateRows: PQPRateRow[] = PQP_CATEGORY_KEYS.map((key) => {
+    const name = categoryName(key);
+    const rate = ascending.at(-1)?.[name] ?? 0;
+    const priorRate = ascending.at(-2)?.[name] ?? 0;
+    const premium = comparisonByCategory.get(name)?.latestPremium ?? 0;
+
+    return {
+      changeRatio: priorRate > 0 ? (rate - priorRate) / priorRate : null,
+      description: CATEGORY_DESCRIPTIONS[toCategory(key)],
+      // The comp's definition: how far the market sits above the renewal rate.
+      gapRatio: premium > 0 ? (premium - rate) / premium : null,
+      key,
+      latestPremium: premium,
+      tenYear: rate,
+    };
+  });
 
   const comparisonData: PQPComparisonPoint[] = PQP_CATEGORY_KEYS.map((key) => {
     const name = categoryName(key);
@@ -189,74 +211,25 @@ export async function PQPReport({
         </Typography.Paragraph>
       </ReportSection>
 
-      <ReportSection
-        caption={`${formattedMonth} · published rates for a ${term}-year renewal`}
-        title="Rates by category"
-      >
-        <ReportTable
-          columns={[
-            { label: "Cat", width: "74px" },
-            { label: "Description" },
-            { align: "end", label: `${term}-year cost` },
-            { align: "end", label: `${otherTerm}-year cost` },
-            { align: "end", label: "Latest premium" },
-            { align: "end", label: "Gap to premium" },
-            { align: "end", label: "Vs last month", width: "130px" },
-          ]}
-        >
-          {PQP_CATEGORY_KEYS.map((key) => {
-            const name = categoryName(key);
-            const rate = ascending.at(-1)?.[name] ?? 0;
-            const priorCategoryRate = ascending.at(-2)?.[name] ?? 0;
-            const monthChange = changePercent(rate, priorCategoryRate);
-            const row = comparisonByCategory.get(name);
-            const premium = row?.latestPremium ?? 0;
-            const gap = changePercent(rate, premium);
-
-            return (
-              <ReportRow isActive={key === category} key={key}>
-                <ReportCell>
-                  <CategoryBadge
-                    categoryKey={key}
-                    isActive={key === category}
-                  />
-                </ReportCell>
-                <ReportCell className="font-semibold text-base">
-                  {CATEGORY_DESCRIPTIONS[toCategory(key)]}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold text-lg">
-                  {formatCurrency(rate * termFactor)}
-                </ReportCell>
-                <ReportCell
-                  align="end"
-                  className="font-bold text-accent-strong text-base"
-                >
-                  {formatCurrency(rate * otherFactor)}
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  {formatCurrency(premium)}
-                </ReportCell>
-                <ReportCell align="end">
-                  {gap === null ? (
-                    <span className="font-semibold text-muted text-sm">—</span>
-                  ) : (
-                    // A rate above the premium is bad news for a renewal, so
-                    // the sentiment is inverted against the raw sign.
-                    <PremiumDelta ratio={gap / 100} />
-                  )}
-                </ReportCell>
-                <ReportCell align="end">
-                  {monthChange === null ? (
-                    <span className="font-semibold text-muted text-sm">—</span>
-                  ) : (
-                    <PremiumDelta ratio={monthChange / 100} />
-                  )}
-                </ReportCell>
-              </ReportRow>
-            );
-          })}
-        </ReportTable>
-      </ReportSection>
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption="Select a row to switch the headline and chart"
+          eyebrow="Rates by category"
+          title={`${formattedMonth} published rates`}
+        />
+        <PQPRatesTable
+          categories={PQP_CATEGORY_KEYS}
+          previousMonthLabel={
+            previousMonth ? formatMonthName(previousMonth) : "last month"
+          }
+          rows={rateRows}
+        />
+        <SourceNote>
+          5-year cost is half the PQP. Gap is the latest closing premium minus
+          the PQP, as a share of the premium. PQP is listed for Categories A and
+          B only; there is no PQP for Category E.
+        </SourceNote>
+      </section>
 
       <ReportSection
         caption={`Published PQP per category · ${term}-year renewal`}
