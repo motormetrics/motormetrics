@@ -47,7 +47,7 @@ export async function RegistrationsByMonth() {
   }
 
   return (
-    <section className="flex min-w-0 flex-col gap-[18px]">
+    <section className="flex min-w-0 flex-col gap-4.5">
       <SectionHead
         className="flex-nowrap"
         caption={`Last ${series.length} months`}
@@ -88,7 +88,7 @@ export async function DeregistrationsByMonth() {
   }
 
   return (
-    <section className="flex min-w-0 flex-col gap-[18px]">
+    <section className="flex min-w-0 flex-col gap-4.5">
       <SectionHead
         className="flex-nowrap"
         caption={`${formatMonthLabel(first.month)} to ${formatMonthLabel(last.month)}`}

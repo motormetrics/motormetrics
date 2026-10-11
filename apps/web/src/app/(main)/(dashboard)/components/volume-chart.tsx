@@ -85,7 +85,7 @@ export function VolumeChart({
           const isLatest = (payload?.index ?? index) === lastIndex;
           return (
             <text
-              className="fill-muted text-xs tabular-nums max-[720px]:text-[10.5px]"
+              className="fill-muted text-xs tabular-nums"
               textAnchor="middle"
               x={x}
               y={y}

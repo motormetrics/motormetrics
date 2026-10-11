@@ -161,14 +161,14 @@ export default function HomePage() {
           </SectionErrorBoundary>
         </div>
 
-        <OverviewGrid className="gap-10 min-[901px]:grid-cols-2 min-[901px]:gap-x-14 max-[1100px]:min-[901px]:gap-x-9">
+        <OverviewGrid className="gap-10 lg:grid-cols-2 lg:gap-x-14 lg:max-xl:gap-x-9">
           <SectionErrorBoundary title="Registrations unavailable">
-            <Suspense fallback={<BlockSkeleton chartHeight="h-[250px]" />}>
+            <Suspense fallback={<BlockSkeleton chartHeight="h-64" />}>
               <RegistrationsByMonth />
             </Suspense>
           </SectionErrorBoundary>
           <SectionErrorBoundary title="Deregistrations unavailable">
-            <Suspense fallback={<BlockSkeleton chartHeight="h-[250px]" />}>
+            <Suspense fallback={<BlockSkeleton chartHeight="h-64" />}>
               <DeregistrationsByMonth />
             </Suspense>
           </SectionErrorBoundary>
