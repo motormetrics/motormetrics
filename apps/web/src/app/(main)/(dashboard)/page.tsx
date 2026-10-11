@@ -6,6 +6,10 @@ import { EvCharging } from "@web/app/(main)/(dashboard)/components/ev-charging";
 import { EvMomentum } from "@web/app/(main)/(dashboard)/components/ev-momentum";
 import { FuelMix } from "@web/app/(main)/(dashboard)/components/fuel-mix";
 import { KpiStrip } from "@web/app/(main)/(dashboard)/components/kpi-strip";
+import {
+  DeregistrationsByMonth,
+  RegistrationsByMonth,
+} from "@web/app/(main)/(dashboard)/components/monthly-volumes";
 import { TopMakes } from "@web/app/(main)/(dashboard)/components/top-makes";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import {
@@ -156,6 +160,19 @@ export default function HomePage() {
             </Suspense>
           </SectionErrorBoundary>
         </div>
+
+        <OverviewGrid className="gap-10 min-[901px]:grid-cols-2 min-[901px]:gap-x-14 max-[1100px]:min-[901px]:gap-x-9">
+          <SectionErrorBoundary title="Registrations unavailable">
+            <Suspense fallback={<BlockSkeleton chartHeight="h-[250px]" />}>
+              <RegistrationsByMonth />
+            </Suspense>
+          </SectionErrorBoundary>
+          <SectionErrorBoundary title="Deregistrations unavailable">
+            <Suspense fallback={<BlockSkeleton chartHeight="h-[250px]" />}>
+              <DeregistrationsByMonth />
+            </Suspense>
+          </SectionErrorBoundary>
+        </OverviewGrid>
 
         <Hairline />
 

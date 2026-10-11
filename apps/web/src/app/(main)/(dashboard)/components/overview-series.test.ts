@@ -1,4 +1,5 @@
 import {
+  axisTicks,
   nextMonth,
   pqpMonthsFor,
   sumByMonth,
@@ -78,5 +79,27 @@ describe("pqpMonthsFor", () => {
 
   it("should return null with no published months", () => {
     expect(pqpMonthsFor([], "2025-10")).toBeNull();
+  });
+});
+
+describe("axisTicks", () => {
+  it("should anchor counts at zero on a round step", () => {
+    expect(axisTicks([4266, 6390, 4549], { zero: true })).toEqual([
+      0, 2000, 4000, 6000, 8000,
+    ]);
+  });
+
+  it("should span only the data when not anchored at zero", () => {
+    expect(axisTicks([48.4, 70.1, 63.3], { zero: false })).toEqual([
+      40, 50, 60, 70, 80,
+    ]);
+  });
+
+  it("should give a flat series one step of height", () => {
+    expect(axisTicks([5, 5], { zero: false })).toEqual([5, 6]);
+  });
+
+  it("should return no ticks for an empty series", () => {
+    expect(axisTicks([], { zero: true })).toEqual([]);
   });
 });
