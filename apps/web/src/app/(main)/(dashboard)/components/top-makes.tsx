@@ -11,9 +11,16 @@ import type { CSSProperties } from "react";
 
 const ROW_COUNT = 5;
 
-/** Rank, make, bar, cars, share; the bar drops out on phones. */
-const ROW_GRID =
-  "grid grid-cols-[20px_150px_minmax(0,1fr)_64px_52px] items-center gap-3 max-[720px]:grid-cols-[18px_minmax(0,1fr)_56px_46px] max-[720px]:gap-2.5";
+/**
+ * Rank, make, bar, cars and share, shared by the header and every row so the
+ * columns line up. The bar drops out on phones and the make takes its room.
+ */
+const ROW = "flex items-center gap-3 max-md:gap-2.5";
+const RANK_CELL = "w-5 shrink-0";
+const MAKE_CELL = "w-38 shrink-0 max-md:min-w-0 max-md:flex-1";
+const BAR_CELL = "min-w-0 flex-1 max-md:hidden";
+const CARS_CELL = "w-16 shrink-0 text-right max-md:w-14";
+const SHARE_CELL = "w-13 shrink-0 text-right max-md:w-12";
 
 /**
  * The five best-selling makes this year, each with its share of every new
@@ -36,7 +43,7 @@ export async function TopMakes() {
   const leader = makes[0].value || 1;
 
   return (
-    <section className="flex min-w-0 flex-col gap-[18px]">
+    <section className="flex min-w-0 flex-col gap-4.5">
       <SectionHead
         caption={
           <>
@@ -57,26 +64,28 @@ export async function TopMakes() {
       <div className="flex flex-col">
         <div
           className={cn(
-            ROW_GRID,
+            ROW,
             "border-border border-b pb-2 font-semibold text-muted text-xs",
           )}
         >
-          <span>#</span>
-          <span>Make</span>
-          <span className="max-[720px]:hidden" />
-          <span className="text-right">Cars</span>
-          <span className="text-right">Share</span>
+          <span className={RANK_CELL}>#</span>
+          <span className={MAKE_CELL}>Make</span>
+          <span className={BAR_CELL} />
+          <span className={CARS_CELL}>Cars</span>
+          <span className={SHARE_CELL}>Share</span>
         </div>
         <ol className="flex flex-col">
           {makes.map((item, index) => (
             <li
-              className={cn(ROW_GRID, "border-separator border-b py-[9px]")}
+              className={cn(ROW, "border-separator border-b py-2.5")}
               key={item.make}
             >
-              <span className="text-muted text-sm tabular-nums">
+              <span
+                className={cn(RANK_CELL, "text-muted text-sm tabular-nums")}
+              >
                 {index + 1}
               </span>
-              <span className="flex min-w-0 items-center gap-2.5">
+              <span className={cn(MAKE_CELL, "flex items-center gap-2.5")}>
                 <MakeAvatar
                   logoUrl={logoUrlBySlug[slugify(item.make)] ?? null}
                   make={item.make}
@@ -88,7 +97,7 @@ export async function TopMakes() {
               </span>
               <ProgressBar
                 aria-label={`${item.make} against the leader`}
-                className="max-[720px]:hidden"
+                className={BAR_CELL}
                 style={
                   {
                     "--progress-bar-fill":
@@ -101,14 +110,21 @@ export async function TopMakes() {
                   <ProgressBar.Fill />
                 </ProgressBar.Track>
               </ProgressBar>
-              <span className="text-right font-semibold text-sm tabular-nums">
+              <span
+                className={cn(CARS_CELL, "font-semibold text-sm tabular-nums")}
+              >
                 <NumberValue
                   locale="en-SG"
                   maximumFractionDigits={0}
                   value={item.value}
                 />
               </span>
-              <span className="text-right text-muted-strong text-sm tabular-nums">
+              <span
+                className={cn(
+                  SHARE_CELL,
+                  "text-muted-strong text-sm tabular-nums",
+                )}
+              >
                 {((item.value / total) * 100).toFixed(1)}%
               </span>
             </li>
