@@ -1,21 +1,9 @@
 import {
   axisTicks,
-  nextMonth,
-  pqpMonthsFor,
   sumByMonth,
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { describe, expect, it } from "vitest";
-
-describe("nextMonth", () => {
-  it("should step to the following month", () => {
-    expect(nextMonth("2025-10")).toBe("2025-11");
-  });
-
-  it("should roll December into January of the next year", () => {
-    expect(nextMonth("2025-12")).toBe("2026-01");
-  });
-});
 
 describe("sumByMonth", () => {
   it("should add every category into one total per month, oldest first", () => {
@@ -52,33 +40,6 @@ describe("windowEndingAt", () => {
 
   it("should return nothing when every entry is after the month", () => {
     expect(windowEndingAt(series, "2024-12", 8)).toEqual([]);
-  });
-});
-
-describe("pqpMonthsFor", () => {
-  it("should quote the month after the selection and the month before it", () => {
-    expect(pqpMonthsFor(["2025-09", "2025-11", "2025-10"], "2025-10")).toEqual({
-      current: "2025-11",
-      previous: "2025-10",
-    });
-  });
-
-  it("should fall back to the newest published month before the target", () => {
-    expect(pqpMonthsFor(["2025-09", "2025-10"], "2025-10")).toEqual({
-      current: "2025-10",
-      previous: "2025-09",
-    });
-  });
-
-  it("should use the earliest month when nothing has been published yet", () => {
-    expect(pqpMonthsFor(["2026-01", "2026-02"], "2025-10")).toEqual({
-      current: "2026-01",
-      previous: undefined,
-    });
-  });
-
-  it("should return null with no published months", () => {
-    expect(pqpMonthsFor([], "2025-10")).toBeNull();
   });
 });
 

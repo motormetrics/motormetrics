@@ -1,7 +1,8 @@
 import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { PqpCeiling } from "@web/app/(main)/(dashboard)/coe/components/pqp-ceiling";
 import { CategoryMergerCallout } from "@web/app/(main)/(dashboard)/components/category-merger-callout";
-import { CoeSection } from "@web/app/(main)/(dashboard)/components/coe-section";
+import { CoePremiumTable } from "@web/app/(main)/(dashboard)/components/coe-premium-table";
 import { EvCharging } from "@web/app/(main)/(dashboard)/components/ev-charging";
 import { EvMomentum } from "@web/app/(main)/(dashboard)/components/ev-momentum";
 import { FuelMix } from "@web/app/(main)/(dashboard)/components/fuel-mix";
@@ -176,11 +177,18 @@ export default function HomePage() {
 
         <Hairline />
 
-        <SectionErrorBoundary title="COE premiums unavailable">
-          <Suspense fallback={<BlockSkeleton chartHeight="h-[200px]" />}>
-            <CoeSection />
-          </Suspense>
-        </SectionErrorBoundary>
+        <OverviewGrid className="gap-10 min-[901px]:grid-cols-[1.35fr_1fr] min-[901px]:gap-x-14 max-[1100px]:min-[901px]:gap-x-9">
+          <SectionErrorBoundary title="COE premiums unavailable">
+            <Suspense fallback={<BlockSkeleton chartHeight="h-[240px]" />}>
+              <CoePremiumTable />
+            </Suspense>
+          </SectionErrorBoundary>
+          <SectionErrorBoundary title="PQP rates unavailable">
+            <Suspense fallback={<BlockSkeleton chartHeight="h-[200px]" />}>
+              <PqpCeiling />
+            </Suspense>
+          </SectionErrorBoundary>
+        </OverviewGrid>
 
         <Hairline />
 
