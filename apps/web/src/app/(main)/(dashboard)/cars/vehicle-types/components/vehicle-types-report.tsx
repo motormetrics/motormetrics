@@ -2,12 +2,18 @@ import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
 import {
-  type CategorySeries,
-  CategoryShareChart,
-} from "@web/app/(main)/(dashboard)/cars/components/category/category-share-chart";
+  type VehicleSeries,
+  type VehicleTrendPoint,
+  VehicleTypesChart,
+} from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-chart";
 import { MeasureSegment } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-filters";
 import { VehicleTypesHeadline } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-headline";
-import { Hairline } from "@web/components/shared/overview";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import {
+  Hairline,
+  SectionHead,
+  SourceNote,
+} from "@web/components/shared/overview";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
@@ -28,6 +34,7 @@ import {
   formatChartMonth,
   formatMonthLabel,
   formatMonthName,
+  formatMonthShortLabel,
 } from "@web/utils/dates/format-month";
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
@@ -204,19 +211,29 @@ export async function VehicleTypesReport({
     priorTotal,
   );
 
-  // The chart and the month-by-month table plot the same leading types, and
-  // each keeps one colour wherever it appears.
-  const chartedTypes = rows.slice(0, CHARTED_TYPES);
-  const chartSeries: CategorySeries[] = chartedTypes.map(({ name }, index) => ({
+  const byMonth = new Map<string, CategoryMonthlyPoint[]>();
+  const seriesTotals = new Map<string, number>();
+  for (const point of series) {
+    byMonth.set(point.month, [...(byMonth.get(point.month) ?? []), point]);
+    seriesTotals.set(
+      point.name,
+      (seriesTotals.get(point.name) ?? 0) + point.count,
+    );
+  }
+
+  // The chart and the month-by-month table plot the same types — the leaders
+  // over the twelve months, whatever the period switch says — and each keeps
+  // one colour wherever it appears.
+  const chartedTypes = [...seriesTotals.entries()]
+    .filter(([, count]) => count > 0)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, CHARTED_TYPES)
+    .map(([name]) => ({ name }));
+  const chartSeries: VehicleSeries[] = chartedTypes.map(({ name }, index) => ({
     color: vehicleColour(name),
     key: `type${index}`,
     label: formatVehicleType(name),
   }));
-
-  const byMonth = new Map<string, CategoryMonthlyPoint[]>();
-  for (const point of series) {
-    byMonth.set(point.month, [...(byMonth.get(point.month) ?? []), point]);
-  }
 
   const monthlyRows = seriesMonths.map((seriesMonth) => {
     const points = byMonth.get(seriesMonth) ?? [];
@@ -233,15 +250,30 @@ export async function VehicleTypesReport({
     };
   });
 
-  const chartData = monthlyRows.map(({ cells, month: seriesMonth }) => ({
-    label: formatChartMonth(seriesMonth),
-    ...Object.fromEntries(
-      cells.map(({ count, share }, index) => [
-        `type${index}`,
-        measure === "share" ? Number(share.toFixed(1)) : count,
-      ]),
+  const chartData: VehicleTrendPoint[] = monthlyRows.map(
+    ({ cells, month: seriesMonth, total: monthTotal }, index) => ({
+      label: formatChartMonth(seriesMonth),
+      title: formatMonthShortLabel(seriesMonth),
+      total: monthTotal,
+      year:
+        index === 0 || seriesMonth.endsWith("-01")
+          ? seriesMonth.slice(0, 4)
+          : "",
+      ...Object.fromEntries(
+        cells.map(({ count, share }, index) => [
+          `type${index}`,
+          measure === "share" ? Number(share.toFixed(1)) : count,
+        ]),
+      ),
+    }),
+  );
+  const chartTicks = axisTicks(
+    chartData.flatMap((point) =>
+      chartSeries.map(({ key }) => Number(point[key])),
     ),
-  }));
+    { zero: true },
+  );
+  const gridStep = (chartTicks[1] ?? 0) - (chartTicks[0] ?? 0);
 
   return (
     <>
@@ -258,14 +290,37 @@ export async function VehicleTypesReport({
 
       <Hairline />
 
-      <div className="flex">
-        <MeasureSegment />
-      </div>
-      <CategoryShareChart
-        data={chartData}
-        measure={measure}
-        series={chartSeries}
-      />
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${formatMonthLabel(seriesMonths[0])} to ${formatMonthLabel(month)} · hover or tap for each month`}
+          eyebrow="Trend"
+          title={
+            measure === "share"
+              ? "Share of registrations by vehicle type"
+              : "Registrations by vehicle type"
+          }
+          trailing={<MeasureSegment />}
+        />
+        <VehicleTypesChart
+          data={chartData}
+          measure={measure}
+          series={chartSeries}
+          ticks={chartTicks}
+        />
+        <SourceNote>
+          {measure === "share"
+            ? "Share of each month's new car registrations"
+            : "New car registrations by month"}
+          . Y-axis starts at zero; gridlines every{" "}
+          {measure === "share"
+            ? `${gridStep} points`
+            : `${gridStep.toLocaleString("en-SG")} cars`}
+          . The trend covers {SERIES_MONTHS} months whatever the period switch
+          is set to.
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <ReportSection
         caption={`${periodLabel} · ${rows.length} recorded by LTA`}
