@@ -11,11 +11,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { EmptyState } from "@web/components/shared/empty-state";
-import {
-  Hairline,
-  OverviewGrid,
-  OverviewPage,
-} from "@web/components/shared/overview";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -77,9 +73,9 @@ function PopulationSkeleton() {
         </div>
       </div>
       <Hairline />
-      <Skeleton className="h-[320px] w-full" />
+      <Skeleton className="h-80 w-full" />
       <Hairline />
-      <Skeleton className="h-[420px] w-full" />
+      <Skeleton className="h-96 w-full" />
     </>
   );
 }
@@ -204,17 +200,14 @@ async function PopulationSections() {
 
       <Hairline />
 
-      <ClassesTable
-        previousYear={data.previousYear}
-        rows={classes}
-        year={data.year}
-      />
-
-      <Hairline />
-
-      <OverviewGrid>
+      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-9 lg:gap-14 lg:*:col-span-4 lg:*:first:col-span-5">
+        <ClassesTable
+          previousYear={data.previousYear}
+          rows={classes}
+          year={data.year}
+        />
         <ElectricFleet entity={cars} years={data.years} />
-      </OverviewGrid>
+      </div>
     </>
   );
 }
