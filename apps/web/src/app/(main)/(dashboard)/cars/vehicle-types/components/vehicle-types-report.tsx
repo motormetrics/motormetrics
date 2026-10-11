@@ -1,6 +1,9 @@
 import { Typography } from "@heroui/react";
-import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { slugify } from "@motormetrics/utils/slugify";
+import {
+  MonthTable,
+  PHONE_COLUMNS,
+} from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/month-table";
+import { VehicleTable } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-table";
 import {
   type VehicleSeries,
   type VehicleTrendPoint,
@@ -15,14 +18,6 @@ import {
   SourceNote,
 } from "@web/components/shared/overview";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
-import {
-  Count,
-  DeltaText,
-  ReportCell,
-  ReportRow,
-  ReportTable,
-  ShareBar,
-} from "@web/components/shared/report-table";
 import {
   type CategoryMonthlyPoint,
   getCategoryMonthlySeries,
@@ -78,8 +73,6 @@ const DESCRIPTIONS: Record<string, string> = {
   "Sports Utility Vehicle": "Raised ride height, often with all-wheel drive",
   "Station-wagon": "Extended roof over the load area, tailgate at the rear",
 };
-
-const URL_PATH = "/cars/vehicle-types";
 
 /**
  * The comp's colour for each LTA vehicle type, shared by the mix bar, the
@@ -166,7 +159,6 @@ export async function VehicleTypesReport({
       getElectricShareByVehicleType(periodMonths),
     ]);
 
-  const formattedMonth = formatDateToMonthYear(month);
   const periodLabel = periodLabelFor(period, month);
   // The period in running text, so the year to date names its months.
   const periodSpan =
@@ -229,6 +221,10 @@ export async function VehicleTypesReport({
     .sort(([, a], [, b]) => b - a)
     .slice(0, CHARTED_TYPES)
     .map(([name]) => ({ name }));
+  // Phones keep the leading types only; the source note names the rest.
+  const phoneHiddenTypes = chartedTypes
+    .slice(PHONE_COLUMNS)
+    .map(({ name }) => formatVehicleType(name));
   const chartSeries: VehicleSeries[] = chartedTypes.map(({ name }, index) => ({
     color: vehicleColour(name),
     key: `type${index}`,
@@ -322,116 +318,57 @@ export async function VehicleTypesReport({
 
       <Hairline />
 
-      <ReportSection
-        caption={`${periodLabel} · ${rows.length} recorded by LTA`}
-        title="All vehicle types"
-      >
-        <ReportTable
-          columns={[
-            { label: "Vehicle type" },
-            { label: "Description" },
-            {
-              align: "end",
-              label: period === "ytd" ? "Year to date" : "Registrations",
-            },
-            { align: "end", label: "Share" },
-            { label: "", width: "200px" },
-            { align: "end", label: "Electric" },
-            { align: "end", label: `Vs ${year - 1}`, width: "120px" },
-          ]}
-        >
-          {rows.map(({ count, name }, index) => {
-            const share = percentageOf(count, total);
-            const priorShare = percentageOf(
-              priorByName.get(name) ?? 0,
-              priorTotal,
-            );
-            const electricShare = electricByName.get(name);
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${periodLabel} · ${rows.length} recorded by LTA · select a column heading to sort`}
+          eyebrow="Registrations"
+          title="All vehicle types"
+        />
+        <VehicleTable
+          countLabel={period === "ytd" ? "Year to date" : "Registrations"}
+          rows={mix.map(({ color, count, label, name, share }) => ({
+            change:
+              share - percentageOf(priorByName.get(name) ?? 0, priorTotal),
+            color,
+            count,
+            description: DESCRIPTIONS[name] ?? "—",
+            electric: electricByName.get(name) ?? null,
+            label,
+            name,
+            share,
+          }))}
+          yearAgoLabel={String(year - 1)}
+        />
+        <SourceNote>
+          Electric is the battery-electric share of each type. Change is in
+          percentage points of share against the same period in {year - 1}.
+          Colour is not used for direction.
+        </SourceNote>
+      </section>
 
-            return (
-              <ReportRow key={name}>
-                <ReportCell className="font-bold text-base">
-                  <span className="flex items-center gap-3">
-                    <span
-                      className="size-3.5 shrink-0 rounded"
-                      style={{
-                        backgroundColor: vehicleColour(name),
-                      }}
-                    />
-                    <Link
-                      className="text-foreground hover:text-accent-strong"
-                      href={`${URL_PATH}/${slugify(name)}`}
-                    >
-                      {formatVehicleType(name)}
-                    </Link>
-                  </span>
-                </ReportCell>
-                <ReportCell className="font-medium text-muted-strong text-sm">
-                  {DESCRIPTIONS[name] ?? "—"}
-                </ReportCell>
-                <ReportCell align="end" className="font-extrabold text-lg">
-                  <Count value={count} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  {share.toFixed(1)}%
-                </ReportCell>
-                <ReportCell>
-                  <ShareBar isLeader={index === 0} share={share} />
-                </ReportCell>
-                <ReportCell align="end" className="font-semibold text-muted">
-                  {electricShare === undefined
-                    ? "—"
-                    : `${electricShare.toFixed(1)}%`}
-                </ReportCell>
-                <ReportCell align="end">
-                  <DeltaText unit="pp" value={share - priorShare} />
-                </ReportCell>
-              </ReportRow>
-            );
-          })}
-        </ReportTable>
-      </ReportSection>
+      <Hairline />
 
-      <ReportSection
-        caption={`Share of each month's registrations · ${SERIES_MONTHS} months to ${formattedMonth}`}
-        title="Month by month"
-      >
-        <ReportTable
-          columns={[
-            { label: "Month" },
-            { align: "end", label: "Total" },
-            ...chartedTypes.map(({ name }) => ({
-              align: "end" as const,
-              label: formatVehicleType(name),
-            })),
-          ]}
-        >
-          {[...monthlyRows].reverse().map((row) => (
-            <ReportRow isActive={row.month === month} key={row.month}>
-              <ReportCell className="font-bold text-base">
-                {formatDateToMonthYear(row.month)}
-              </ReportCell>
-              <ReportCell align="end" className="font-semibold text-muted">
-                <Count value={row.total} />
-              </ReportCell>
-              {row.cells.map(({ count, share }, index) => (
-                <ReportCell
-                  align="end"
-                  key={chartedTypes[index].name}
-                  className="whitespace-nowrap"
-                >
-                  <span className="font-extrabold text-base">
-                    {share.toFixed(1)}%
-                  </span>
-                  <span className="ml-2 font-medium text-muted text-xs">
-                    <Count value={count} />
-                  </span>
-                </ReportCell>
-              ))}
-            </ReportRow>
-          ))}
-        </ReportTable>
-      </ReportSection>
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={`${SERIES_MONTHS} months to ${formatMonthLabel(month)}, newest first`}
+          eyebrow="Month by month"
+          title="Share of each month's registrations"
+        />
+        <MonthTable
+          rows={[...monthlyRows].reverse()}
+          selectedMonth={month}
+          vehicleTypes={chartedTypes.map(({ name }) => name)}
+        />
+        <SourceNote>
+          Share of each month's new car registrations, with the car count
+          beneath on wider screens.
+          {phoneHiddenTypes.length > 0
+            ? ` ${phoneHiddenTypes.join(", ")} and the monthly total are hidden on small screens.`
+            : " The monthly total is hidden on small screens."}
+        </SourceNote>
+      </section>
+
+      <Hairline />
 
       <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
         <ReportSection
