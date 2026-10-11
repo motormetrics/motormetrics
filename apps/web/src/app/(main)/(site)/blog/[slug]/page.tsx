@@ -10,6 +10,7 @@ import { PostNavigation } from "@web/app/(main)/(site)/blog/components/post-navi
 import { PostSidebar } from "@web/app/(main)/(site)/blog/components/post-sidebar";
 import { ProgressBar } from "@web/app/(main)/(site)/blog/components/progress-bar";
 import { RelatedPosts } from "@web/app/(main)/(site)/blog/components/related-posts";
+import { Hairline } from "@web/components/shared/overview";
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -150,7 +151,7 @@ export default function BlogPostPage({ params }: PageProps) {
     <>
       <ProgressBar />
 
-      <SitePage className="gap-14">
+      <SitePage className="gap-10 max-md:gap-7">
         <Suspense fallback={<PostSkeleton />}>
           <Post params={params} />
         </Suspense>
@@ -259,6 +260,8 @@ async function Post({ params }: PageProps) {
         publishedAt={publishedDate}
         readingTimeText={readingTime(post.content).text}
       />
+
+      <Hairline />
 
       {post.heroImage ? (
         <div className="relative aspect-12/5 w-full overflow-hidden rounded-4xl bg-surface-secondary shadow-surface">
