@@ -1,57 +1,49 @@
 import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
+import { Text } from "@web/components/shared/text";
 import { navLinks } from "@web/config/navigation";
-import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 /**
- * The comp closes on a gradient panel inviting readers to subscribe. There is
- * no mailing list, so the same panel carries the channels that do exist — the
- * social accounts each release is posted to.
- *
- * `--accent-gradient` is fixed blue in both themes, so the copy takes
- * `--ink-surface-foreground` (white either way) rather than a token that flips.
+ * The closing panel: where each release is posted, on a bordered surface with
+ * the social accounts and the way into the dashboard on the right. There is no
+ * mailing list, so the accounts are the only channels offered.
  */
 export function CtaSection() {
   return (
-    <section className="flex flex-col items-start gap-8 rounded-4xl bg-[image:var(--accent-gradient)] p-8 text-ink-surface-foreground lg:flex-row lg:items-center lg:p-14">
-      <div className="flex max-w-prose flex-col gap-3">
+    <section className="flex flex-col gap-5 rounded-lg border border-separator bg-surface px-4 py-5 md:px-7 md:py-6 lg:flex-row lg:items-center lg:gap-8">
+      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
         <Typography.Heading
+          className="text-xl md:text-2xl"
           level={2}
-          className="text-ink-surface-foreground lg:text-4xl"
+          weight="bold"
         >
           Get the numbers when they land
         </Typography.Heading>
-        <Typography.Paragraph className="text-ink-surface-foreground/85 text-lg leading-normal">
+        <Text.Paragraph className="max-w-xl" tone="strong">
           New COE results and registration figures are posted as soon as they
           publish. Nothing else.
-        </Typography.Paragraph>
-        <div className="flex flex-wrap gap-3 pt-2">
+        </Text.Paragraph>
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
           {navLinks.socialMedia.map(({ icon: Icon, title, url }) => (
             <a
-              className="inline-flex items-center gap-2 rounded-full border border-ink-surface-foreground/25 px-4 py-2 font-semibold text-ink-surface-foreground text-sm no-underline transition-colors hover:bg-ink-surface-foreground/10"
+              className={buttonVariants({ variant: "outline" })}
               href={url}
               key={title}
               rel="me noreferrer"
               target="_blank"
             >
-              <Icon className="size-4" />
+              <Icon aria-hidden className="size-4" />
               {title}
             </a>
           ))}
         </div>
+        <Link className={buttonVariants({ variant: "primary" })} href="/">
+          Explore the dashboard
+        </Link>
       </div>
-      <Link
-        className={buttonVariants({
-          className: "lg:ml-auto",
-          size: "lg",
-          variant: "secondary",
-        })}
-        href="/"
-      >
-        Explore the dashboard
-        <ArrowUpRight className="size-4" />
-      </Link>
     </section>
   );
 }

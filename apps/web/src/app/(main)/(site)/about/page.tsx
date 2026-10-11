@@ -115,7 +115,9 @@ export default function AboutPage() {
         <MissionSection />
         <Hairline />
         <DatasetsSection />
+        <Hairline />
         <DataSection />
+        <Hairline />
         <FaqSection />
         <CtaSection />
       </SitePage>
