@@ -13,10 +13,10 @@ import {
   Hairline,
   OverviewPage,
   SectionHead,
+  SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
-import { ReportNote } from "@web/components/shared/report";
 import { SkeletonCard, SkeletonChart } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -26,7 +26,6 @@ import {
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
-import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
@@ -218,36 +217,38 @@ export default function COEResultsPage({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <div className="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_380px]">
-        <SectionErrorBoundary title="Quota and demand unavailable">
-          <Suspense fallback={<QuotaSkeleton />}>
-            <QuotaAndDemand searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
+      <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
+        <div className="min-w-0 lg:col-span-7">
+          <SectionErrorBoundary title="Quota and demand unavailable">
+            <Suspense fallback={<QuotaSkeleton />}>
+              <QuotaAndDemand searchParams={searchParams} />
+            </Suspense>
+          </SectionErrorBoundary>
+        </div>
 
-        <ReportNote title="How an exercise runs">
-          <Typography.Paragraph>
+        <section className="flex min-w-0 flex-col gap-4 lg:col-span-5">
+          <SectionHead
+            eyebrow="Reading the numbers"
+            title="How an exercise runs"
+          />
+          <Typography.Paragraph className="text-muted-strong">
             Bidding opens at 12pm on the first Monday and third Monday of each
             month and closes at 4pm on the third day. The premium is the lowest
             successful bid, so everyone who wins pays the same price.
           </Typography.Paragraph>
-          <Typography.Paragraph>
+          <Typography.Paragraph className="text-muted-strong">
             Quotas are set quarterly from deregistrations and the allowed growth
             in the vehicle population.
           </Typography.Paragraph>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/coe/premiums"
-          >
-            Premium trends by category →
-          </Link>
-          <Link
-            className="font-bold text-accent-strong text-base"
-            href="/coe/pqp"
-          >
-            PQP renewal rates →
-          </Link>
-        </ReportNote>
+          <div className="flex flex-col items-start gap-2">
+            <SectionLink className="ml-0" href="/coe/premiums">
+              Premium trends by category
+            </SectionLink>
+            <SectionLink className="ml-0" href="/coe/pqp">
+              PQP renewal rates
+            </SectionLink>
+          </div>
+        </section>
       </div>
     </OverviewPage>
   );
