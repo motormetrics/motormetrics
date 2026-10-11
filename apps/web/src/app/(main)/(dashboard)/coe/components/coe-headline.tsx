@@ -150,11 +150,3 @@ export async function CoeHeadline({
     </div>
   );
 }
-
-/**
- * Moved to `shared/overview`. Re-exported while the open `/coe/results` and
- * `/coe/premiums` stacks still import it from here; remove once both merge.
- *
- * @public
- */
-export { StatCell };
