@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@heroui/react";
 import { ChartTooltip } from "@heroui-pro/react";
 import { BarChart } from "@heroui-pro/react/bar-chart";
 import { formatNumber } from "@motormetrics/utils/format-currency";
@@ -81,11 +82,23 @@ export function VolumeChart({
         height={44}
         interval={0}
         tick={({ index, payload, x, y }: TickProps) => {
-          const point = data[payload?.index ?? index ?? 0];
-          const isLatest = (payload?.index ?? index) === lastIndex;
+          const position = payload?.index ?? index ?? 0;
+          const point = data[position];
+          const isLatest = position === lastIndex;
+          // Twelve ticks collide below md, so phones draw every other month,
+          // anchored to the newest. The first month may then go unticked, so
+          // the first drawn tick carries its year instead.
+          const hiddenOnPhone = (lastIndex - position) % 2 === 1;
+          const phoneYear =
+            !point?.year && position === lastIndex % 2
+              ? point?.title.slice(-4)
+              : "";
           return (
             <text
-              className="fill-muted text-xs tabular-nums"
+              className={cn(
+                "fill-muted text-xs tabular-nums",
+                hiddenOnPhone && "max-md:hidden",
+              )}
               textAnchor="middle"
               x={x}
               y={y}
@@ -100,6 +113,11 @@ export function VolumeChart({
               {point?.year ? (
                 <tspan className="font-semibold" dy="1.25em" x={x}>
                   {point.year}
+                </tspan>
+              ) : null}
+              {phoneYear ? (
+                <tspan className="font-semibold md:hidden" dy="1.25em" x={x}>
+                  {phoneYear}
                 </tspan>
               ) : null}
             </text>

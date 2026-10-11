@@ -49,7 +49,7 @@ export async function RegistrationsByMonth() {
   return (
     <section className="flex min-w-0 flex-col gap-4.5">
       <SectionHead
-        className="flex-nowrap"
+        className="lg:flex-nowrap"
         caption={`Last ${series.length} months`}
         eyebrow="Registrations"
         link={{ href: "/cars", label: "All registrations" }}
@@ -90,7 +90,7 @@ export async function DeregistrationsByMonth() {
   return (
     <section className="flex min-w-0 flex-col gap-4.5">
       <SectionHead
-        className="flex-nowrap"
+        className="lg:flex-nowrap"
         caption={`${formatMonthLabel(first.month)} to ${formatMonthLabel(last.month)}`}
         eyebrow="Deregistrations"
         link={{ href: "/cars/deregistrations", label: "All deregistrations" }}
