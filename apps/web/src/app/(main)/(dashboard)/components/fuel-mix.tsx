@@ -63,7 +63,7 @@ export async function FuelMix() {
     .sort((left, right) => right.value - left.value);
 
   return (
-    <section className="flex min-w-0 flex-col gap-4.5">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={`${year} year to date · by powertrain`}
         eyebrow="Registrations"
@@ -75,7 +75,7 @@ export async function FuelMix() {
         aria-label={segments
           .map((segment) => `${segment.label} ${segment.share.toFixed(1)}%`)
           .join(", ")}
-        className="flex h-4.5 gap-0.5"
+        className="flex h-4 gap-0.5"
         role="img"
       >
         {segments
@@ -101,7 +101,7 @@ export async function FuelMix() {
               style={{ background: segment.color }}
             />
             <span className="min-w-0 flex-1 text-sm">{segment.label}</span>
-            <span className="w-18 shrink-0 text-right font-semibold text-sm tabular-nums">
+            <span className="w-16 shrink-0 text-right font-semibold text-sm tabular-nums">
               {segment.share.toFixed(1)}%
             </span>
           </li>

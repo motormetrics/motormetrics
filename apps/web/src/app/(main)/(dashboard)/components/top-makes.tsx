@@ -17,10 +17,10 @@ const ROW_COUNT = 5;
  */
 const ROW = "flex items-center gap-3 max-md:gap-2.5";
 const RANK_CELL = "w-5 shrink-0";
-const MAKE_CELL = "w-38 shrink-0 max-md:min-w-0 max-md:flex-1";
+const MAKE_CELL = "w-40 shrink-0 max-md:min-w-0 max-md:flex-1";
 const BAR_CELL = "min-w-0 flex-1 max-md:hidden";
 const CARS_CELL = "w-16 shrink-0 text-right max-md:w-14";
-const SHARE_CELL = "w-13 shrink-0 text-right max-md:w-12";
+const SHARE_CELL = "w-12 shrink-0 text-right";
 
 /**
  * The five best-selling makes this year, each with its share of every new
@@ -43,7 +43,7 @@ export async function TopMakes() {
   const leader = makes[0].value || 1;
 
   return (
-    <section className="flex min-w-0 flex-col gap-4.5">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={
           <>
