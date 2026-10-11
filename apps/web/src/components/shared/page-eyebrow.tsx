@@ -17,7 +17,7 @@ export function PageEyebrow({
   title,
 }: {
   className?: string;
-  /** `MonthMenu`, or `EyebrowValue` for a fixed label. */
+  /** `MonthMenu`, or a bold value where there is nothing to choose. */
   control?: ReactNode;
   /** The dataset the page belongs to — "Singapore car market", "Cars · Makes". */
   section: string;
@@ -36,14 +36,5 @@ export function PageEyebrow({
         <SharePill title={title} />
       </div>
     </div>
-  );
-}
-
-/** The bold accent value beside the section label, where no control is needed. */
-export function EyebrowValue({ children }: { children: ReactNode }) {
-  return (
-    <Typography.Paragraph className="text-accent-strong" weight="bold">
-      {children}
-    </Typography.Paragraph>
   );
 }
