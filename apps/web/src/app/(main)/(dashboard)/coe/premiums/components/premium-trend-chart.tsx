@@ -7,14 +7,25 @@ import { premiumAxisTicks } from "@web/app/(main)/(dashboard)/coe/components/coe
 import { compactCurrency } from "@web/utils/formatting/chart-axis";
 import { useSyncExternalStore } from "react";
 
-type PremiumPoint = {
+export type PremiumPoint = {
+  /** Read with `monthIndex` when `tickMonths` is set. */
+  biddingNo?: number;
   label: string;
-  /** The tooltip header when the axis label alone is ambiguous, e.g. no year. */
-  title?: string;
+  /** Months since year zero, so ticks land on the same months every load. */
+  monthIndex?: number;
+  /** The tooltip header, e.g. "Sep 2026 · 2nd". */
+  title: string;
   premium: number;
   /** Change from the previous exercise as a ratio, e.g. `0.02` for +2.0%. */
   change?: number;
 };
+
+interface TickProps {
+  index?: number;
+  payload?: { index?: number };
+  x?: number | string;
+  y?: number | string;
+}
 
 interface PointProps {
   cx?: number;
@@ -30,8 +41,8 @@ interface GridLineProps {
   index?: number;
 }
 
-/** The design's phone geometry: no end label and a narrow right margin. */
-const PHONE_QUERY = "(max-width: 720px)";
+/** Phone geometry below Tailwind's `md`: no end label, half the ticks. */
+const PHONE_QUERY = "(width < 48rem)";
 
 const subscribePhone = (onChange: () => void) => {
   const query = window.matchMedia(PHONE_QUERY);
@@ -60,10 +71,16 @@ const formatChange = (change: number): string =>
 export function PremiumTrendChart({
   data,
   domain,
+  tickMonths,
   ticks,
 }: {
   data: PremiumPoint[];
   domain?: [number, number];
+  /**
+   * Months between x ticks on desktop, on first exercises; phones double it,
+   * and 12 or more shows years only. Without it every label is a tick.
+   */
+  tickMonths?: number;
   ticks?: number[];
 }) {
   const axisTicks =
@@ -75,6 +92,15 @@ export function PremiumTrendChart({
     isPhoneViewport,
     () => false,
   );
+  const every = tickMonths && (isPhone ? tickMonths * 2 : tickMonths);
+  const yearOnly = every !== undefined && every >= 12;
+  const ticked = every
+    ? data.flatMap((point, position) =>
+        point.biddingNo === 1 && (point.monthIndex ?? 0) % every === 0
+          ? [position]
+          : [],
+      )
+    : [];
 
   return (
     <AreaChart
@@ -103,7 +129,45 @@ export function PremiumTrendChart({
         )}
         vertical={false}
       />
-      <AreaChart.XAxis dataKey="label" tickMargin={8} />
+      {every ? (
+        <AreaChart.XAxis
+          dataKey="label"
+          height={44}
+          interval={0}
+          tick={({ index, payload, x, y }: TickProps) => {
+            const position = payload?.index ?? index ?? 0;
+            const point = data[position];
+            if (!point || !ticked.includes(position)) {
+              return <g />;
+            }
+            const monthIndex = point.monthIndex ?? 0;
+            const year = String(Math.floor(monthIndex / 12));
+            // January and the first drawn tick carry the year under the month.
+            const showYear =
+              !yearOnly && (monthIndex % 12 === 0 || position === ticked[0]);
+            return (
+              <text
+                className="fill-muted text-xs tabular-nums"
+                textAnchor="middle"
+                x={x}
+                y={y}
+              >
+                <tspan dy="0.9em" x={x}>
+                  {yearOnly ? year : point.label}
+                </tspan>
+                {showYear ? (
+                  <tspan className="font-semibold" dy="1.25em" x={x}>
+                    {year}
+                  </tspan>
+                ) : null}
+              </text>
+            );
+          }}
+          tickMargin={6}
+        />
+      ) : (
+        <AreaChart.XAxis dataKey="label" tickMargin={8} />
+      )}
       <AreaChart.YAxis
         domain={axisDomain}
         orientation="left"
@@ -139,7 +203,7 @@ export function PremiumTrendChart({
         type="monotone"
       />
       <AreaChart.Tooltip
-        content={({ active, label, payload }) => {
+        content={({ active, payload }) => {
           const point = payload?.[0]?.payload as PremiumPoint | undefined;
           if (!active || !point) {
             return null;
@@ -147,7 +211,7 @@ export function PremiumTrendChart({
 
           return (
             <ChartTooltip>
-              <ChartTooltip.Header>{point.title ?? label}</ChartTooltip.Header>
+              <ChartTooltip.Header>{point.title}</ChartTooltip.Header>
               <ChartTooltip.Item>
                 <ChartTooltip.Indicator color="var(--chart-1)" />
                 <ChartTooltip.Label>Premium</ChartTooltip.Label>

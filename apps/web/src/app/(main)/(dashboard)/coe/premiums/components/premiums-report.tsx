@@ -8,9 +8,9 @@ import {
   CATEGORY_DESCRIPTIONS,
   COE_CATEGORIES,
   changeRatio,
-  formatExerciseTick,
   formatMonth,
   formatPremiumChange,
+  premiumAxisTicks,
   successRate,
   toCategory,
   toCategoryKey,
@@ -19,11 +19,20 @@ import { StatCell } from "@web/app/(main)/(dashboard)/coe/components/coe-headlin
 import { PremiumDelta } from "@web/app/(main)/(dashboard)/coe/components/premium-delta";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/coe/premiums/components/filters";
-import { PremiumTrendChart } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-trend-chart";
+import {
+  type PremiumPoint,
+  PremiumTrendChart,
+} from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-trend-chart";
 import {
   loadSearchParams,
+  type PremiumRange,
   RANGE_EXERCISES,
 } from "@web/app/(main)/(dashboard)/coe/premiums/search-params";
+import {
+  Hairline,
+  SectionHead,
+  SourceNote,
+} from "@web/components/shared/overview";
 import { ReportNote, ReportSection } from "@web/components/shared/report";
 import {
   Count,
@@ -33,21 +42,23 @@ import {
 } from "@web/components/shared/report-table";
 import { Text } from "@web/components/shared/text";
 import { getCategoryExercises, getExercisePair } from "@web/queries/coe";
+import { formatMonthShortName } from "@web/utils/dates/format-month";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
 /** The comp lists a year of exercises under the chart. */
 const HISTORY_ROWS = 12;
 
-/** "Oct 2", or "Oct 2 '24" once the window spans more than a year. */
-function exerciseTick(
-  exercise: { biddingNo: number; month: string },
-  showYear: boolean,
-): string {
-  const tick = formatExerciseTick(exercise);
+/** "Sep 2026 · 2nd", the short name for an exercise. */
+const exerciseStamp = (exercise: { biddingNo: number; month: string }) =>
+  `${formatMonth(exercise.month, "short")} · ${exercise.biddingNo === 1 ? "1st" : "2nd"}`;
 
-  return showYear ? `${tick} '${exercise.month.slice(2, 4)}` : tick;
-}
+/** Months between x ticks for each range, on desktop. */
+const TICK_MONTHS: Record<PremiumRange, number> = {
+  "1Y": 2,
+  "3Y": 6,
+  All: 24,
+};
 
 /** Bids received against the quota, e.g. `1.35×`. */
 function bidsPerQuota(bidsReceived: number, quota: number): string {
@@ -132,7 +143,32 @@ export async function PremiumsReport({
 
   const prior = history.at(-2) ?? null;
   const series = history.slice(-RANGE_EXERCISES[range]);
-  const showYear = range !== "1Y";
+  const chartData: PremiumPoint[] = series.map((exercise, index) => {
+    const [yearPart, monthPart] = exercise.month.split("-").map(Number);
+    const earlier = series[index - 1];
+    return {
+      biddingNo: exercise.biddingNo,
+      change: earlier
+        ? changeRatio(exercise.premium, earlier.premium)
+        : undefined,
+      label: formatMonthShortName(exercise.month),
+      monthIndex: yearPart * 12 + monthPart - 1,
+      premium: exercise.premium,
+      title: exerciseStamp(exercise),
+    };
+  });
+  const chartTicks = premiumAxisTicks(series.map(({ premium }) => premium));
+  const chartStep =
+    chartTicks.length > 1 ? chartTicks[1] - chartTicks[0] : undefined;
+  const gridlines = chartStep
+    ? `gridlines every ${formatCurrency(chartStep)}.`
+    : "";
+  const axisNote =
+    (chartTicks[0] ?? 0) > 0
+      ? `Y-axis does not start at zero; ${gridlines}`
+      : `Starts at $0; ${gridlines}`;
+  const firstPoint = chartData[0];
+  const lastPoint = chartData.at(-1);
 
   const year = Number(latest.month.slice(0, 4));
   const yearPremiums = history
@@ -220,16 +256,29 @@ export async function PremiumsReport({
         </div>
       </div>
 
-      <div className="flex justify-end">
-        <RangeTabs />
-      </div>
+      <section className="flex flex-col gap-4">
+        <SectionHead
+          caption={
+            firstPoint && lastPoint
+              ? `${series.length} exercises, ${firstPoint.title} to ${lastPoint.title}`
+              : undefined
+          }
+          eyebrow="Premium history"
+          title={`${category} premium by exercise`}
+          trailing={<RangeTabs />}
+        />
+        <PremiumTrendChart
+          data={chartData}
+          tickMonths={TICK_MONTHS[range]}
+          ticks={chartTicks}
+        />
+        <SourceNote>
+          Source: LTA via DataMall · Quota premium at the close of each exercise
+          · {axisNote}
+        </SourceNote>
+      </section>
 
-      <PremiumTrendChart
-        data={series.map((exercise) => ({
-          label: exerciseTick(exercise, showYear),
-          premium: exercise.premium,
-        }))}
-      />
+      <Hairline />
 
       <ReportSection
         caption={`${formatMonth(current.month)} · ${biddingOrdinal(current.biddingNo)} bidding exercise`}
