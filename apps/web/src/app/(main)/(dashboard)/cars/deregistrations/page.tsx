@@ -1,9 +1,11 @@
+import { Skeleton } from "@heroui/react";
+import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { DeregistrationsReport } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-report";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { MonthSelector } from "@web/components/shared/month-selector";
+import { MonthMenu } from "@web/components/shared/month-menu";
+import { OverviewPage } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
-import { Report } from "@web/components/shared/report";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -66,7 +68,7 @@ const structuredData: WithContext<WebPage> = {
 
 export default function DeregistrationsPage({ searchParams }: PageProps) {
   return (
-    <Report>
+    <OverviewPage className="gap-10 max-md:gap-7">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -87,11 +89,16 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
 
       <PageHead
         controls={
-          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
-            <DeregistrationsHeaderMeta searchParams={searchParams} />
+          <Suspense fallback={<Skeleton className="h-8 w-36" />}>
+            <DeregistrationsMonthPicker searchParams={searchParams} />
           </Suspense>
         }
-        description="Vehicles scrapped or exported each month, by the COE category their quota returns to."
+        eyebrow="Vehicle data"
+        sub={
+          <Suspense fallback={<Skeleton className="h-5 w-72" />}>
+            <DeregistrationsMonthSub searchParams={searchParams} />
+          </Suspense>
+        }
         title="Vehicle deregistrations"
       />
 
@@ -100,11 +107,31 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
           <DeregistrationsReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
-    </Report>
+    </OverviewPage>
   );
 }
 
-async function DeregistrationsHeaderMeta({
+/** Names the month the page reports, what it counts and its source. */
+async function DeregistrationsMonthSub({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { month: parsedMonth } = await loadSearchParams(searchParams);
+  const { month } = await getMonthOrLatest(parsedMonth, "deregistrations");
+
+  return (
+    <>
+      <span className="font-semibold text-foreground">
+        {formatDateToMonthYear(month)}
+      </span>{" "}
+      · scrapped or exported, by the COE category the quota returns to · Source:
+      LTA via DataMall
+    </>
+  );
+}
+
+async function DeregistrationsMonthPicker({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
@@ -117,7 +144,7 @@ async function DeregistrationsHeaderMeta({
   ]);
 
   return (
-    <MonthSelector
+    <MonthMenu
       latestMonth={months[0]}
       months={months}
       wasAdjusted={wasAdjusted}
