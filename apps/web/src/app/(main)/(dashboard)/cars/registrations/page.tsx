@@ -13,7 +13,6 @@ import {
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
@@ -96,7 +95,14 @@ export default function Page({ searchParams }: PageProps) {
       />
 
       <SectionErrorBoundary title="Registration data unavailable">
-        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+        <Suspense
+          fallback={
+            <div className="flex flex-col gap-4">
+              <Skeleton className="h-96 w-full" />
+              <Skeleton className="h-96 w-full" />
+            </div>
+          }
+        >
           <RegistrationsReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -113,7 +119,7 @@ export default function Page({ searchParams }: PageProps) {
           title="Compare months"
         />
         <SectionErrorBoundary title="Comparison unavailable">
-          <Suspense fallback={<SkeletonCard className="h-12 w-52" />}>
+          <Suspense fallback={<Skeleton className="h-12 w-52" />}>
             <CarsCompareSection searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>

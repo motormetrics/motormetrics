@@ -1,5 +1,5 @@
+import { Skeleton } from "@heroui/react";
 import { BlogList } from "@web/app/(main)/(site)/blog/components/blog-list";
-import { ListSkeleton } from "@web/components/shared/skeleton";
 import { getAllPosts, searchPosts } from "@web/queries/posts";
 import { Suspense } from "react";
 
@@ -41,7 +41,17 @@ async function BlogListContent({ query }: BlogListSectionProps) {
 
 export function BlogListSection({ query }: BlogListSectionProps) {
   return (
-    <Suspense key={query} fallback={<ListSkeleton count={6} />}>
+    <Suspense
+      key={query}
+      fallback={
+        <div className="flex flex-col gap-4">
+          {Array.from({ length: 6 }, (_, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: skeleton items are static placeholders
+            <Skeleton key={index} className="h-20 w-full" />
+          ))}
+        </div>
+      }
+    >
       <BlogListContent query={query} />
     </Suspense>
   );

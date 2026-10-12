@@ -1,14 +1,10 @@
-import { Skeleton } from "@heroui/react";
+import { Card, Skeleton } from "@heroui/react";
 import { BlogListSection } from "@web/app/(main)/(site)/blog/components/blog-list-section";
 import { BlogSearchInput } from "@web/app/(main)/(site)/blog/components/blog-search-input";
 import { FeaturedSection } from "@web/app/(main)/(site)/blog/components/featured-section";
 import { loadSearchParams } from "@web/app/(main)/(site)/blog/search-params";
 import { PageHead } from "@web/components/shared/page-head";
 import { SitePage } from "@web/components/shared/site-page";
-import {
-  ListSkeleton,
-  SkeletonBentoCard,
-} from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getAllPosts } from "@web/queries/posts";
@@ -118,8 +114,21 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
         <Suspense
           fallback={
             <>
-              <SkeletonBentoCard className="min-h-72" />
-              <ListSkeleton count={6} />
+              <Card className="min-h-72">
+                <Card.Header className="items-start gap-2">
+                  <Skeleton className="h-6 w-40" />
+                  <Skeleton className="h-4 w-full" />
+                </Card.Header>
+                <Card.Content className="gap-4">
+                  <Skeleton className="h-24 w-full" />
+                </Card.Content>
+              </Card>
+              <div className="flex flex-col gap-4">
+                {Array.from({ length: 6 }, (_, index) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: skeleton items are static placeholders
+                  <Skeleton key={index} className="h-20 w-full" />
+                ))}
+              </div>
             </>
           }
         >

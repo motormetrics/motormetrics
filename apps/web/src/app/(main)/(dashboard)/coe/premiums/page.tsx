@@ -8,7 +8,6 @@ import { MonthSelector } from "@web/components/shared/month-selector";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
@@ -53,7 +52,7 @@ export default function COEPremiumsPage({ searchParams }: PageProps) {
     <OverviewPage className="gap-10 max-md:gap-7">
       <PageHead
         controls={
-          <Suspense fallback={<SkeletonCard className="h-10 w-40" />}>
+          <Suspense fallback={<Skeleton className="h-10 w-40" />}>
             <PremiumsHeaderMeta />
           </Suspense>
         }
@@ -67,7 +66,14 @@ export default function COEPremiumsPage({ searchParams }: PageProps) {
       />
 
       <SectionErrorBoundary title="COE premiums unavailable">
-        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+        <Suspense
+          fallback={
+            <div className="flex flex-col gap-4">
+              <Skeleton className="h-96 w-full" />
+              <Skeleton className="h-96 w-full" />
+            </div>
+          }
+        >
           <PremiumsReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>

@@ -1,4 +1,4 @@
-import { Card, cn, Typography } from "@heroui/react";
+import { Card, cn, Skeleton, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { CombinedPool } from "@web/app/(main)/(dashboard)/coe/category-merger/components/combined-pool";
 import { CATEGORY_MERGER_FAQS } from "@web/app/(main)/(dashboard)/coe/category-merger/components/faq-data";
@@ -26,7 +26,6 @@ import {
   ReportSection,
   ReportStat,
 } from "@web/components/shared/report";
-import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -168,7 +167,7 @@ export default function CategoryMergerPage() {
         title="How close Category A and B have come"
       >
         <SectionErrorBoundary title="Premium history unavailable">
-          <Suspense fallback={<SkeletonCard className="h-[460px] w-full" />}>
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
             <PremiumGap />
           </Suspense>
         </SectionErrorBoundary>
@@ -180,7 +179,7 @@ export default function CategoryMergerPage() {
           pool, with every car buyer bidding against every other.
         </Typography.Paragraph>
         <SectionErrorBoundary title="Latest quotas unavailable">
-          <Suspense fallback={<SkeletonCard className="h-[220px] w-full" />}>
+          <Suspense fallback={<Skeleton className="h-56 w-full" />}>
             <CombinedPool />
           </Suspense>
         </SectionErrorBoundary>
@@ -220,7 +219,7 @@ export default function CategoryMergerPage() {
           would set, beside the one Category A and B produce today.
         </Typography.Paragraph>
         <SectionErrorBoundary title="Premium comparison unavailable">
-          <Suspense fallback={<SkeletonCard className="h-[320px] w-full" />}>
+          <Suspense fallback={<Skeleton className="h-80 w-full" />}>
             <FeebateSpread />
           </Suspense>
         </SectionErrorBoundary>

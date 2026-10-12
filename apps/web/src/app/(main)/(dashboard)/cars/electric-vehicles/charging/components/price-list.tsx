@@ -3,7 +3,6 @@ import { LocationRow } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { QueryTabs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/query-tabs";
 import { SurfaceCard } from "@web/components/shared/bento";
-import { ListSkeleton } from "@web/components/shared/skeleton";
 import { getPostalDistrict } from "@web/config/postal-districts";
 import {
   getEvChargingPriceRankings,
@@ -46,7 +45,16 @@ export function PriceList({ order, searchParams }: PriceListProps) {
         </Suspense>
       </div>
 
-      <Suspense fallback={<ListSkeleton count={10} itemHeight="h-10" />}>
+      <Suspense
+        fallback={
+          <div className="flex flex-col gap-4">
+            {Array.from({ length: 10 }, (_, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: skeleton items are static placeholders
+              <Skeleton key={index} className="h-10 w-full" />
+            ))}
+          </div>
+        }
+      >
         <PriceRows order={order} searchParams={searchParams} />
       </Suspense>
     </SurfaceCard>

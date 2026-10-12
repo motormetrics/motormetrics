@@ -21,7 +21,6 @@ import {
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { Count } from "@web/components/shared/report-table";
-import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -133,7 +132,14 @@ export function FuelTypeReport({ params, searchParams }: FuelTypeReportProps) {
       </Suspense>
 
       <SectionErrorBoundary title="Registration data unavailable">
-        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+        <Suspense
+          fallback={
+            <div className="flex flex-col gap-4">
+              <Skeleton className="h-96 w-full" />
+              <Skeleton className="h-96 w-full" />
+            </div>
+          }
+        >
           <FuelTypeContent params={params} searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>

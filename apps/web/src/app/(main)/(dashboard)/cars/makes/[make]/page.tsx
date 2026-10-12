@@ -20,7 +20,6 @@ import {
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import { SkeletonCard } from "@web/components/shared/skeleton";
 import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
@@ -151,7 +150,14 @@ export default function CarMakePage({
       </Suspense>
 
       <SectionErrorBoundary title="Make data unavailable">
-        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+        <Suspense
+          fallback={
+            <div className="flex flex-col gap-4">
+              <Skeleton className="h-96 w-full" />
+              <Skeleton className="h-96 w-full" />
+            </div>
+          }
+        >
           <MakeReportSection
             params={params}
             searchParams={searchParamsPromise}
@@ -276,7 +282,7 @@ async function MakeHead({ params, searchParams }: PageProps) {
         // Nested on purpose: the month and make pickers fetch data of their
         // own, so the H1 lands as soon as the slug resolves instead of
         // waiting on them.
-        <Suspense fallback={<SkeletonCard className="h-10 w-80" />}>
+        <Suspense fallback={<Skeleton className="h-10 w-80" />}>
           <CarMakeHeaderMeta searchParams={searchParams} />
         </Suspense>
       }
