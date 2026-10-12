@@ -2,6 +2,7 @@ import {
   biddingOrdinal,
   bidsAgainstQuota,
   changeRatio,
+  describePremiumMove,
   formatExercise,
   formatExerciseTick,
   formatPremiumChange,
@@ -11,6 +12,7 @@ import {
   premiumRangeStats,
   recordHighs,
   summariseByYear,
+  summariseExercise,
   toCategory,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
@@ -183,6 +185,80 @@ describe("recordHighs", () => {
     expect(highs["Category A"]?.key).toBe("2023-09:1");
     expect(highs["Category B"]?.key).toBe("2024-02:1");
     expect(highs["Category C"]).toBeUndefined();
+  });
+});
+
+/** Category A premiums, one per exercise, starting at the first bidding of Jan 2025. */
+const seriesA = (premiums: number[]) =>
+  groupByExercise(
+    premiums.map((premium, index) =>
+      result(
+        `2025-${String(Math.floor(index / 2) + 1).padStart(2, "0")}`,
+        (index % 2) + 1,
+        "Category A",
+        premium,
+      ),
+    ),
+  );
+
+describe("describePremiumMove", () => {
+  it("should name the last exercise that was as high", () => {
+    const exercises = seriesA([
+      130_000, 110_000, 111_000, 112_000, 113_000, 114_000, 115_000, 120_000,
+      126_000,
+    ]);
+
+    expect(describePremiumMove(exercises, "Category A")).toBe(
+      "Cat A rose $6,000 to $126,000, its highest since Jan 2025",
+    );
+  });
+
+  it("should leave out a high that reaches back under three months", () => {
+    const exercises = seriesA([125_000, 110_000, 120_000]);
+
+    expect(describePremiumMove(exercises, "Category A")).toBe(
+      "Cat A rose $10,000 to $120,000",
+    );
+  });
+
+  it("should call a new high or low a record", () => {
+    expect(describePremiumMove(seriesA([100_000, 105_000]), "Category A")).toBe(
+      "Cat A rose $5,000 to $105,000, a record high",
+    );
+    expect(describePremiumMove(seriesA([100_000, 95_000]), "Category A")).toBe(
+      "Cat A fell $5,000 to $95,000, a record low",
+    );
+  });
+
+  it("should handle an unchanged premium, a first exercise and a missing category", () => {
+    expect(describePremiumMove(seriesA([100_000, 100_000]), "Category A")).toBe(
+      "Cat A held at $100,000",
+    );
+    expect(describePremiumMove(seriesA([100_000]), "Category A")).toBe(
+      "Cat A closed at $100,000",
+    );
+    expect(
+      describePremiumMove(seriesA([100_000]), "Category B"),
+    ).toBeUndefined();
+  });
+});
+
+describe("summariseExercise", () => {
+  it("should lead with the exercise and join Cat A and B", () => {
+    const exercises = groupByExercise([
+      result("2026-09", 2, "Category A", 125_000),
+      result("2026-09", 2, "Category B", 131_000),
+      result("2026-10", 1, "Category A", 130_001),
+      result("2026-10", 1, "Category B", 130_100),
+    ]);
+
+    expect(summariseExercise(exercises)).toBe(
+      "First bidding, October 2026: Cat A rose $5,001 to $130,001, a record high; Cat B fell $900 to $130,100, a record low.",
+    );
+  });
+
+  it("should return nothing without results", () => {
+    expect(summariseExercise([])).toBeUndefined();
   });
 });
 

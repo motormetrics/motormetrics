@@ -201,6 +201,71 @@ export function formatPremiumChange(
   return `${sign}${percentage}% (${sign}${formatCurrency(Math.abs(difference))}) vs ${biddingOrdinal(previous.biddingNo)} bidding, ${formatMonthShortName(previous.month)} at ${formatCurrency(previous.premium)}`;
 }
 
+/** Three months of twice-monthly bidding: a shorter "highest since" is noise. */
+const MIN_SINCE_EXERCISES = 6;
+
+/**
+ * One category's move in the latest exercise, e.g. "Cat A rose $4,611 to
+ * $130,001, its highest since Sep 2025". Plain text under the category table gives
+ * search engines the result as a sentence, not only as chart and table cells.
+ */
+export function describePremiumMove(
+  exercises: CoeExercise[],
+  category: COECategory,
+): string | undefined {
+  const premium = exercises.at(-1)?.results[category]?.premium;
+  if (premium === undefined) {
+    return undefined;
+  }
+
+  const label = category.replace("Category", "Cat");
+  const earlier = exercises.slice(0, -1);
+  const previous = earlier.at(-1)?.results[category]?.premium;
+  if (previous === undefined) {
+    return `${label} closed at ${formatCurrency(premium)}`;
+  }
+
+  const difference = premium - previous;
+  if (difference === 0) {
+    return `${label} held at ${formatCurrency(premium)}`;
+  }
+
+  const rose = difference > 0;
+  const move = `${label} ${rose ? "rose" : "fell"} ${formatCurrency(Math.abs(difference))} to ${formatCurrency(premium)}`;
+  // The last earlier exercise that matched or beat this premium, or for a
+  // fall, the last one at or below it.
+  const sinceIndex = earlier.findLastIndex((exercise) => {
+    const value = exercise.results[category]?.premium;
+    return value !== undefined && (rose ? value >= premium : value <= premium);
+  });
+
+  if (sinceIndex === -1) {
+    return `${move}, a record ${rose ? "high" : "low"}`;
+  }
+  if (earlier.length - sinceIndex >= MIN_SINCE_EXERCISES) {
+    return `${move}, its ${rose ? "highest" : "lowest"} since ${formatMonthShortLabel(earlier[sinceIndex].month)}`;
+  }
+  return move;
+}
+
+/**
+ * The summary line under the "All categories" table, e.g. "First bidding,
+ * October 2026: Cat A rose …; Cat B fell …." Cat A and B carry most searches.
+ */
+export function summariseExercise(
+  exercises: CoeExercise[],
+): string | undefined {
+  const latest = exercises.at(-1);
+  const moves = (["Category A", "Category B"] as const).flatMap((category) => {
+    const move = describePremiumMove(exercises, category);
+    return move ? [move] : [];
+  });
+
+  return latest && moves.length > 0
+    ? `${formatExercise(latest)}: ${moves.join("; ")}.`
+    : undefined;
+}
+
 export interface ExercisePremium {
   biddingNo: number;
   month: string;
