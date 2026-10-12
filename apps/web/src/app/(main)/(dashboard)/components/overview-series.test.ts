@@ -1,6 +1,7 @@
 import {
   axisTicks,
   sumByMonth,
+  summariseMonth,
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { describe, expect, it } from "vitest";
@@ -62,5 +63,55 @@ describe("axisTicks", () => {
 
   it("should return no ticks for an empty series", () => {
     expect(axisTicks([], { zero: true })).toEqual([]);
+  });
+});
+
+describe("summariseMonth", () => {
+  const series = [
+    { month: "2025-12", total: 4500 },
+    { month: "2026-01", total: 3900 },
+    { month: "2026-02", total: 3800 },
+    { month: "2026-03", total: 3964 },
+    { month: "2026-04", total: 4210 },
+  ];
+
+  it("should name the month, the change and the last month as high", () => {
+    expect(
+      summariseMonth(series, "2026-04", "new cars registered", "BMW led"),
+    ).toBe(
+      "April 2026: 4,210 new cars registered, up 6.2% on March, the most since December 2025; BMW led.",
+    );
+  });
+
+  it("should leave out a low that reaches back under three months", () => {
+    expect(summariseMonth(series, "2026-02", "new cars registered")).toBe(
+      "February 2026: 3,800 new cars registered, down 2.6% on January.",
+    );
+  });
+
+  it("should name the year of a previous month in another year", () => {
+    expect(summariseMonth(series, "2026-01", "vehicles deregistered")).toBe(
+      "January 2026: 3,900 vehicles deregistered, down 13.3% on December 2025.",
+    );
+  });
+
+  it("should state an unchanged month and a month with no earlier figure", () => {
+    const flat = [
+      { month: "2026-01", total: 3900 },
+      { month: "2026-02", total: 3900 },
+    ];
+
+    expect(summariseMonth(flat, "2026-02", "new cars registered")).toBe(
+      "February 2026: 3,900 new cars registered, unchanged on January.",
+    );
+    expect(summariseMonth(flat, "2026-01", "new cars registered")).toBe(
+      "January 2026: 3,900 new cars registered.",
+    );
+  });
+
+  it("should return nothing for a month the series lacks", () => {
+    expect(
+      summariseMonth(series, "2026-05", "new cars registered"),
+    ).toBeUndefined();
   });
 });

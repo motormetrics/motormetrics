@@ -5,7 +5,10 @@ import {
   type TrendPoint,
 } from "@web/app/(main)/(dashboard)/cars/components/registrations-trend-chart";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
-import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import {
+  axisTicks,
+  summariseMonth,
+} from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import {
   getDimensionStats,
@@ -129,6 +132,18 @@ export async function RegistrationsTrend({
     window.map((row) => row.total),
     { zero: true },
   );
+  // The full history, so "the most since" can reach past the chart window.
+  const history = monthlyTotals.slice(0, selectedIndex + 1);
+  const year = month.slice(0, 4);
+  const yearToDate = history
+    .filter((row) => row.month.startsWith(year))
+    .reduce((total, row) => total + row.total, 0);
+  const summary = summariseMonth(
+    history,
+    month,
+    "new cars registered",
+    `${yearToDate.toLocaleString("en-SG")} so far in ${year}`,
+  );
 
   return (
     <section className="flex flex-col gap-4">
@@ -138,6 +153,11 @@ export async function RegistrationsTrend({
         title="Registrations by month"
       />
       <RegistrationsTrendChart data={data} ticks={ticks} />
+      {summary ? (
+        <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
+          {summary}
+        </Typography.Paragraph>
+      ) : null}
       <SourceNote>New car registrations, all makes and fuel types.</SourceNote>
     </section>
   );
