@@ -110,7 +110,7 @@ function GetUpdatesLink() {
     <Link
       className="inline-flex h-8.5 shrink-0 items-center whitespace-nowrap rounded-lg bg-foreground px-3 font-medium text-background text-sm transition-opacity hover:opacity-85"
       href={SOCIAL_URLS.telegram}
-      rel="noopener noreferrer"
+      rel="noopener noreferrer nofollow"
       target="_blank"
     >
       Get updates

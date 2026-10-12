@@ -32,7 +32,7 @@ export function CtaSection() {
               className={buttonVariants({ variant: "outline" })}
               href={url}
               key={title}
-              rel="me noreferrer"
+              rel="me noreferrer nofollow"
               target="_blank"
             >
               <Icon aria-hidden className="size-4" />

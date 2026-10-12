@@ -85,7 +85,7 @@ export default function ARFCalculatorPage() {
         <Link
           className="font-bold text-accent-strong"
           href="https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/upfront-vehicle-costs/tax-structure.html"
-          rel="noreferrer"
+          rel="noreferrer nofollow"
           target="_blank"
         >
           LTA

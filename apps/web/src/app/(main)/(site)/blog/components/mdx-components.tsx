@@ -26,7 +26,13 @@ type MdxProps<T extends keyof JSX.IntrinsicElements> = Omit<
   "color" | "align"
 >;
 
-function MdxLink({ href = "", children, className, ...props }: MdxLinkProps) {
+/** Internal links stay followed; external ones open in a new tab, nofollow. */
+export function MdxLink({
+  href = "",
+  children,
+  className,
+  ...props
+}: MdxLinkProps) {
   const isInternalLink = href.startsWith("/") || href.startsWith("#");
   const linkClassName = [
     "font-medium text-accent-strong underline underline-offset-4",

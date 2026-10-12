@@ -2,10 +2,27 @@ import { BarRow } from "@web/components/shared/bar-row";
 import {
   Headline,
   SectionHead,
+  SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { render } from "vitest-browser-react";
+
+describe("SectionLink", () => {
+  it("should pass rel through for an external link", async () => {
+    const screen = await render(
+      <SectionLink
+        href="https://www.lta.gov.sg"
+        rel="noopener noreferrer nofollow"
+      >
+        LTA announcement
+      </SectionLink>,
+    );
+    await expect
+      .element(screen.getByRole("link", { name: "LTA announcement" }))
+      .toHaveAttribute("rel", "noopener noreferrer nofollow");
+  });
+});
 
 describe("SectionHead", () => {
   it("should render the eyebrow, heading, caption and link", async () => {

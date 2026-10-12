@@ -1,4 +1,5 @@
 import { Skeleton } from "@heroui/react";
+import { MdxLink } from "@web/app/(main)/(site)/blog/components/mdx-components";
 import { GuideHead } from "@web/app/(main)/(site)/learn/[slug]/components/guide-head";
 import { GuideSidebar } from "@web/app/(main)/(site)/learn/[slug]/components/guide-sidebar";
 import { RelatedGuides } from "@web/app/(main)/(site)/learn/[slug]/components/related-guides";
@@ -89,6 +90,7 @@ async function GuideContent({
   return (
     <article className="prose dark:prose-invert max-w-prose prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted-strong prose-p:text-muted-strong prose-strong:text-foreground prose-td:text-muted-strong prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
       <MDXRemote
+        components={{ a: MdxLink }}
         source={content}
         options={{
           mdxOptions: {
