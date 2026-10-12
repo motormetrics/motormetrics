@@ -1,5 +1,5 @@
 import { BlogList } from "@web/app/(main)/(site)/blog/components/blog-list";
-import { GridSkeleton } from "@web/components/shared/skeleton";
+import { ListSkeleton } from "@web/components/shared/skeleton";
 import { getAllPosts, searchPosts } from "@web/queries/posts";
 import { Suspense } from "react";
 
@@ -21,30 +21,27 @@ async function BlogListContent({ query }: BlogListSectionProps) {
 
   const posts = await getAllPosts();
 
-  // Read from every published post, before the featured one is sliced off,
-  // so its topic still gets a pill.
+  // Read from every published post, featured one included, so its topic
+  // still gets a tab.
   const categories = [
     ...new Set(posts.flatMap((post) => (post.dataType ? [post.dataType] : []))),
   ].sort((a, b) => a.localeCompare(b));
 
-  // The newest post is the featured panel above, so the grid starts at the
-  // second — the comp never shows the same post twice on the page.
+  // The newest post is the featured card above, so "All" starts at the
+  // second; the comp still lists it under its own topic.
   return (
-    <BlogList categories={categories} posts={posts.slice(1)} query={query} />
+    <BlogList
+      categories={categories}
+      featuredId={posts[0]?.id}
+      posts={posts}
+      query={query}
+    />
   );
 }
 
 export function BlogListSection({ query }: BlogListSectionProps) {
   return (
-    <Suspense
-      key={query}
-      fallback={
-        <GridSkeleton
-          columns="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-          count={6}
-        />
-      }
-    >
+    <Suspense key={query} fallback={<ListSkeleton count={6} />}>
       <BlogListContent query={query} />
     </Suspense>
   );

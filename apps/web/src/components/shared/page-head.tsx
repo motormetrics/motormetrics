@@ -2,7 +2,7 @@ import { cn, Typography } from "@heroui/react";
 import { typographyVariants } from "@heroui/styles";
 import { SharePill } from "@web/components/shared/share-pill";
 import { Text } from "@web/components/shared/text";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 /**
  * Oversized title, with an optional slot for the controls the comps park on
@@ -23,6 +23,7 @@ import type { ReactNode } from "react";
  */
 export function PageHead({
   badge,
+  contentType,
   controls,
   description,
   eyebrow,
@@ -31,6 +32,8 @@ export function PageHead({
 }: {
   /** Status chip rendered beside the title, e.g. a "Beta" marker. */
   badge?: ReactNode;
+  /** What the share pill reports to analytics; dashboards by default. */
+  contentType?: ComponentProps<typeof SharePill>["contentType"];
   controls?: ReactNode;
   /** Lede paragraph. Report-family pages set it; bento-family pages omit it. */
   description?: string;
@@ -75,7 +78,7 @@ export function PageHead({
           page. */}
       <div className="flex min-w-0 max-w-full flex-wrap items-center gap-3 sm:ml-auto">
         {controls}
-        <SharePill title={title} />
+        <SharePill contentType={contentType} title={title} />
       </div>
     </div>
   );

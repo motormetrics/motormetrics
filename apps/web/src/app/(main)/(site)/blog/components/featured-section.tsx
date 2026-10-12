@@ -1,15 +1,15 @@
 import { FeaturedPost } from "@web/app/(main)/(site)/blog/components/featured-post";
 import { PopularPostsSection } from "@web/app/(main)/(site)/blog/components/popular-posts-section";
+import { SourceNote } from "@web/components/shared/overview";
 import { SkeletonBentoCard } from "@web/components/shared/skeleton";
 import { blogPopularPosts } from "@web/flags";
 import { getAllPosts } from "@web/queries/posts";
 import { Suspense } from "react";
 
 /**
- * The comp's two-up opening: the featured post on the left, a white card on
- * the right. The right card is flag-gated, so the grid is decided here — with
- * the flag off the featured panel takes the full width rather than leaving an
- * empty column beside it.
+ * The featured card, with its source line when it quotes figures. The comp
+ * has no place for the flag-gated "Most read" list, so with the flag on it
+ * follows the card as its own ruled block.
  */
 async function FeaturedContent() {
   const [posts, showPopular] = await Promise.all([
@@ -22,21 +22,27 @@ async function FeaturedContent() {
     return null;
   }
 
-  if (!showPopular) {
-    return <FeaturedPost post={featured} />;
-  }
+  const hasFigures =
+    Array.isArray(featured.highlights) && featured.highlights.length > 0;
 
   return (
-    <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1.15fr_1fr]">
-      <FeaturedPost post={featured} />
-      <PopularPostsSection />
-    </div>
+    <>
+      <div className="flex flex-col gap-2.5">
+        <FeaturedPost post={featured} />
+        {hasFigures ? (
+          <SourceNote>
+            Figures quoted in the featured post. Source: LTA via DataMall.
+          </SourceNote>
+        ) : null}
+      </div>
+      {showPopular ? <PopularPostsSection /> : null}
+    </>
   );
 }
 
 export function FeaturedSection() {
   return (
-    <Suspense fallback={<SkeletonBentoCard className="min-h-80" />}>
+    <Suspense fallback={<SkeletonBentoCard className="min-h-72" />}>
       <FeaturedContent />
     </Suspense>
   );

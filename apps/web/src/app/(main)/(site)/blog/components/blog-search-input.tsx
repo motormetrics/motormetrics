@@ -14,8 +14,7 @@ export function BlogSearchInput() {
   return (
     <SearchField
       aria-label="Search blog posts"
-      className="max-w-md"
-      fullWidth
+      className="w-72 max-w-full"
       onChange={setQuery}
       value={query}
     >

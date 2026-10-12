@@ -1,15 +1,18 @@
-import { BlogHead } from "@web/app/(main)/(site)/blog/components/blog-head";
+import { Skeleton } from "@heroui/react";
 import { BlogListSection } from "@web/app/(main)/(site)/blog/components/blog-list-section";
 import { BlogSearchInput } from "@web/app/(main)/(site)/blog/components/blog-search-input";
 import { FeaturedSection } from "@web/app/(main)/(site)/blog/components/featured-section";
 import { loadSearchParams } from "@web/app/(main)/(site)/blog/search-params";
+import { PageHead } from "@web/components/shared/page-head";
 import { SitePage } from "@web/components/shared/site-page";
 import {
-  GridSkeleton,
+  ListSkeleton,
   SkeletonBentoCard,
 } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import { getAllPosts } from "@web/queries/posts";
+import { formatDate } from "@web/utils/dates/format-date";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
@@ -71,26 +74,52 @@ async function BlogBody({
   );
 }
 
+/** The head's date line: when the newest post went out. */
+async function LatestPostLine() {
+  const [latest] = await getAllPosts();
+
+  return (
+    <>
+      {latest ? (
+        <>
+          Latest post{" "}
+          <span className="font-semibold text-foreground">
+            {formatDate(latest.publishedAt ?? latest.createdAt)}
+          </span>{" "}
+          ·{" "}
+        </>
+      ) : null}
+      Source: LTA via DataMall
+    </>
+  );
+}
+
 export default function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <>
       <StructuredData data={structuredData} />
-      <SitePage>
-        <BlogHead
+      <SitePage className="gap-10 max-md:gap-7">
+        <PageHead
+          contentType="blog"
+          controls={
+            <Suspense>
+              <BlogSearchInput />
+            </Suspense>
+          }
           description="Short reads on registrations, COE bidding and the electric shift. Published after each release, never before."
-          title="What the numbers did this month."
+          eyebrow="Market commentary"
+          sub={
+            <Suspense fallback={<Skeleton className="h-5 w-64 rounded-md" />}>
+              <LatestPostLine />
+            </Suspense>
+          }
+          title="What the numbers did this month"
         />
-        <Suspense>
-          <BlogSearchInput />
-        </Suspense>
         <Suspense
           fallback={
             <>
-              <SkeletonBentoCard className="min-h-80" />
-              <GridSkeleton
-                columns="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-                count={6}
-              />
+              <SkeletonBentoCard className="min-h-72" />
+              <ListSkeleton count={6} />
             </>
           }
         >
