@@ -1,8 +1,8 @@
 import { cn, Skeleton, Typography } from "@heroui/react";
 import { formatOrdinal } from "@motormetrics/utils/format-ordinal";
 import { slugify } from "@motormetrics/utils/slugify";
-import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
 import { summariseType } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
+import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/type-meta";
 import { MakeTable } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/make-table";
 import { MonthTable } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/month-table";
 import {
@@ -55,12 +55,6 @@ import type { SearchParams } from "nuqs/server";
 import { createLoader, parseAsString, parseAsStringLiteral } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
-
-/*
- * A vehicle-only copy of `cars/components/category/type-detail.tsx`, so the
- * vehicle type page can move to the Hybrid comp while the shared report stays
- * in place for any page not yet ported.
- */
 
 const PERIOD_OPTIONS = PERIODS.map((key) => ({
   key,

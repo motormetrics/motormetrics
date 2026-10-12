@@ -40,11 +40,6 @@ import {
   type SearchParams,
 } from "nuqs/server";
 
-/**
- * The fuel-type half of `cars/components/category/category-report.tsx`,
- * split off so this page can follow its own comp while `/cars/vehicle-types`
- * keeps the shared report.
- */
 const PERIODS = ["month", "ytd"] as const;
 
 const loadFuelTypesSearchParams = createLoader({
