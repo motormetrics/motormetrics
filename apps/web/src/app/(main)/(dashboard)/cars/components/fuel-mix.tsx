@@ -1,13 +1,7 @@
 import { Typography } from "@heroui/react";
-import { NumberValue } from "@heroui-pro/react";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
-import { Text } from "@web/components/shared/text";
 import { getCarsData } from "@web/queries/cars";
-import {
-  type DonutSegment,
-  donutArcs,
-  RING_RADIUS,
-} from "@web/utils/charts/donut-arcs";
+import type { DonutSegment } from "@web/utils/charts/donut-arcs";
 import {
   formatMonthLabel,
   formatMonthName,
@@ -21,8 +15,8 @@ import type { SearchParams } from "nuqs/server";
 const NAMED_SEGMENTS = 5;
 
 /**
- * The month's registrations by powertrain: the ring with the month total at
- * its centre and the legend beside it, as the v3 comp draws it.
+ * The month's registrations by powertrain: a stacked bar of the shares with
+ * a ruled legend beneath, as the Hybrid comp draws it.
  */
 export async function FuelMix({
   searchParams,
@@ -55,80 +49,54 @@ export async function FuelMix({
   }
 
   const total = segments.reduce((sum, segment) => sum + segment.value, 0) || 1;
-  const arcs = donutArcs(segments);
 
   return (
-    <div className="flex flex-col gap-[18px]">
-      <div className="flex flex-col gap-2.5">
-        {/* Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>. */}
-        <Text.Paragraph tone="strong" className="text-xl" weight="semibold">
-          Fuel mix
-        </Text.Paragraph>
-        <Typography.Paragraph weight="medium" color="muted">
-          {formatMonthName(month)} registrations by powertrain
+    <div className="flex min-w-0 flex-col gap-3">
+      <Typography.Paragraph color="muted" size="xs" weight="semibold">
+        {formatMonthName(month)} by powertrain
+      </Typography.Paragraph>
+      {segments.length === 0 ? (
+        <Typography.Paragraph color="muted" size="sm">
+          No registrations recorded for {formatMonthLabel(month)}.
         </Typography.Paragraph>
-        {segments.length === 0 ? (
-          <Typography.Paragraph color="muted" size="sm">
-            No registrations recorded for {formatMonthLabel(month)}.
-          </Typography.Paragraph>
-        ) : null}
-      </div>
-
-      {segments.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-9">
-          <div className="relative size-[172px] shrink-0">
-            <svg className="block" role="img" viewBox="0 0 190 190">
-              <title>{`Registrations by fuel type, ${formatMonthLabel(month)}`}</title>
-              <g transform="rotate(-90 95 95)">
-                {arcs.map((arc) => (
-                  <circle
-                    cx={95}
-                    cy={95}
-                    fill="none"
-                    key={arc.key}
-                    r={RING_RADIUS}
-                    stroke={arc.color}
-                    strokeDasharray={arc.dashArray}
-                    strokeDashoffset={arc.dashOffset}
-                    strokeLinecap="round"
-                    strokeWidth={24}
-                  />
-                ))}
-              </g>
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-              <span className="font-extrabold text-3xl tabular-nums leading-none tracking-tight">
-                <NumberValue
-                  locale="en-SG"
-                  maximumFractionDigits={0}
-                  value={registrations.total}
-                />
-              </span>
-              <Typography.Paragraph weight="semibold" color="muted" size="sm">
-                {formatMonthName(month)}
-              </Typography.Paragraph>
-            </div>
-          </div>
-
-          <ul className="flex min-w-48 flex-1 flex-col gap-3">
+      ) : (
+        <>
+          <div
+            aria-label={`Registrations by fuel type, ${formatMonthLabel(month)}`}
+            className="flex h-4 gap-0.5"
+            role="img"
+          >
             {segments.map((segment) => (
-              <li className="flex items-center gap-2.5" key={segment.label}>
+              <span
+                className="block h-full"
+                key={segment.label}
+                style={{
+                  background: segment.color,
+                  width: `${((segment.value / total) * 100).toFixed(2)}%`,
+                }}
+              />
+            ))}
+          </div>
+          <ul className="flex flex-col">
+            {segments.map((segment) => (
+              <li
+                className="flex items-center gap-2.5 border-separator border-b py-2"
+                key={segment.label}
+              >
                 <span
                   aria-hidden
-                  className="size-[11px] shrink-0 rounded-full"
+                  className="size-3 shrink-0 rounded-xs"
                   style={{ background: segment.color }}
                 />
-                <Typography.Paragraph weight="semibold">
-                  {segment.label}
-                </Typography.Paragraph>
-                <span className="ml-auto font-extrabold text-base tabular-nums">
+                <span className="min-w-0 flex-1 text-sm">{segment.label}</span>
+                <span className="font-semibold text-sm tabular-nums">
                   {((segment.value / total) * 100).toFixed(1)}%
                 </span>
               </li>
             ))}
           </ul>
-        </div>
-      ) : null}
+        </>
+      )}
     </div>
   );
 }

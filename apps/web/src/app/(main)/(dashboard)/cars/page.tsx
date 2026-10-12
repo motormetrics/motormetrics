@@ -4,18 +4,23 @@ import { DimensionPanel } from "@web/app/(main)/(dashboard)/cars/components/dime
 import { FuelMix } from "@web/app/(main)/(dashboard)/cars/components/fuel-mix";
 import { MoversRail } from "@web/app/(main)/(dashboard)/cars/components/movers-rail";
 import { PopulationPanel } from "@web/app/(main)/(dashboard)/cars/components/population-panel";
-import { RegistrationsHero } from "@web/app/(main)/(dashboard)/cars/components/registrations-hero";
+import {
+  RegistrationsHero,
+  RegistrationsTrend,
+} from "@web/app/(main)/(dashboard)/cars/components/registrations-hero";
+import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import {
   Hairline,
   OverviewGrid,
   OverviewPage,
 } from "@web/components/shared/overview";
-import { PageEyebrow } from "@web/components/shared/page-eyebrow";
+import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import { generateDataCatalogSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import { formatMonthLabel } from "@web/utils/dates/format-month";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
@@ -47,6 +52,20 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
+/** Names the month the page reports, and its source. */
+async function CarsMonthSub({ searchParams }: PageProps) {
+  const month = await resolveCarsMonth(searchParams);
+
+  return (
+    <>
+      <span className="font-semibold text-foreground">
+        {formatMonthLabel(month)}
+      </span>{" "}
+      · Source: LTA via DataMall
+    </>
+  );
+}
+
 export default function CarsPage({ searchParams }: PageProps) {
   return (
     <OverviewPage>
@@ -62,31 +81,39 @@ export default function CarsPage({ searchParams }: PageProps) {
         }}
       />
 
-      {/* Headline — the eyebrow, the month's figure and its fuel split */}
-      <div className="flex flex-col gap-7">
-        <PageEyebrow
-          control={
-            <Suspense fallback={<Skeleton className="h-6 w-36" />}>
-              <CarsMonthPicker searchParams={searchParams} />
-            </Suspense>
-          }
-          section="Cars"
-          title="Cars"
-        />
+      <PageHead
+        controls={
+          <Suspense fallback={<Skeleton className="h-8 w-36" />}>
+            <CarsMonthPicker searchParams={searchParams} />
+          </Suspense>
+        }
+        eyebrow="Cars"
+        sub={
+          <Suspense fallback={<Skeleton className="h-5 w-56" />}>
+            <CarsMonthSub searchParams={searchParams} />
+          </Suspense>
+        }
+        title="New car registrations"
+      />
 
-        <OverviewGrid>
-          <SectionErrorBoundary title="Registration summary unavailable">
-            <Suspense fallback={<Skeleton className="h-72 w-full" />}>
-              <RegistrationsHero searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-          <SectionErrorBoundary title="Fuel mix unavailable">
-            <Suspense fallback={<Skeleton className="h-72 w-full" />}>
-              <FuelMix searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-        </OverviewGrid>
+      <div className="grid gap-10 lg:grid-cols-2 lg:items-end lg:gap-14">
+        <SectionErrorBoundary title="Registration summary unavailable">
+          <Suspense fallback={<Skeleton className="h-48 w-full" />}>
+            <RegistrationsHero searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SectionErrorBoundary title="Fuel mix unavailable">
+          <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+            <FuelMix searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
       </div>
+
+      <SectionErrorBoundary title="Registration trend unavailable">
+        <Suspense fallback={<Skeleton className="h-80 w-full" />}>
+          <RegistrationsTrend searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
 
       <Hairline />
 
