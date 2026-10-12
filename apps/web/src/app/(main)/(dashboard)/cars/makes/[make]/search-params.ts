@@ -7,6 +7,7 @@ import { createLoader, parseAsString, parseAsStringLiteral } from "nuqs/server";
  * (`cars/makes/search-params.ts`) so the two pages read the same way.
  */
 export {
+  isRange,
   RANGE_LABELS,
   RANGES,
   type Range,

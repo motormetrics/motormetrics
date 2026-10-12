@@ -1,117 +1,141 @@
 "use client";
 
-import { ComposedChart } from "@heroui-pro/react/composed-chart";
-import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { numberFormat } from "@ruchernchong/number-format";
-import type { MakeCoeComparisonData } from "@web/queries/cars/makes/coe-comparison";
+import { ChartTooltip } from "@heroui-pro/react";
+import { LineChart } from "@heroui-pro/react/line-chart";
+import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { compactCurrency } from "@web/utils/formatting/chart-axis";
 
-interface CoeComparisonChartProps {
-  data: MakeCoeComparisonData[];
+// A type alias rather than an interface: the chart wants
+// `Record<string, string | number>`, and only an alias is assignable to one.
+export type PremiumPoint = {
+  categoryA: number;
+  categoryB: number;
+  /** "Aug". */
+  label: string;
+  /** "August 2026", the tooltip header. */
+  title: string;
+  /** "2026" under the first month and every January; empty elsewhere. */
+  year: string;
+};
+
+const SERIES = [
+  { color: "var(--chart-1)", key: "categoryA", label: "Category A premium" },
+  { color: "var(--chart-sand)", key: "categoryB", label: "Category B premium" },
+] as const;
+
+interface TickProps {
+  index?: number;
+  payload?: { index?: number };
+  x?: number | string;
+  y?: number | string;
 }
 
 /**
- * Recharts calls a tick formatter as `(value, index)`, and `numberFormat`
- * reads a second argument as its options — which for the zero tick renders
- * "NaNundefined". Dropping the index is the whole fix.
+ * Category A and B premiums on the same months as the registration bars
+ * above, as two lines. The axis spans the premiums rather than starting at
+ * zero, so their movement does not flatten; the caption says so.
  */
-function formatPremiumTick(value: number): string {
-  return numberFormat(value);
-}
-
-export function CoeComparisonChart({ data }: CoeComparisonChartProps) {
-  const chartData = data.map((item) => ({ ...item }));
-
+export function CoeComparisonChart({
+  data,
+  ticks,
+}: {
+  data: PremiumPoint[];
+  /** Ticks from `axisTicks` without a zero anchor. */
+  ticks: number[];
+}) {
   return (
-    <div className="flex flex-col gap-4">
-      <ComposedChart
-        data={chartData}
-        height={300}
-        aria-label="Dual-axis chart comparing monthly registrations with COE Category A and B premiums"
-      >
-        <ComposedChart.Grid vertical={false} />
-        <ComposedChart.XAxis
-          dataKey="month"
-          tickFormatter={formatDateToMonthYear}
-          tickMargin={8}
-        />
-
-        {/* Left Y-axis for registrations */}
-        <ComposedChart.YAxis
-          yAxisId="registrations"
-          type="number"
-          orientation="left"
-          label={{
-            angle: -90,
-            position: "insideLeft",
-            style: { textAnchor: "middle" },
-            value: "Registrations",
-          }}
-        />
-
-        {/* Right Y-axis for COE premiums */}
-        <ComposedChart.YAxis
-          yAxisId="premium"
-          orientation="right"
-          domain={[
-            (dataMin: number) => Math.floor(dataMin / 10000) * 10000,
-            (dataMax: number) => Math.ceil(dataMax / 10000) * 10000,
-          ]}
-          tickFormatter={formatPremiumTick}
-          label={{
-            angle: 90,
-            position: "insideRight",
-            style: { textAnchor: "middle" },
-            value: "COE Premium (S$)",
-          }}
-        />
-
-        <ComposedChart.Tooltip
-          cursor={{ fill: "var(--muted)", opacity: 0.2 }}
-          content={<ComposedChart.TooltipContent />}
-        />
-
-        <ComposedChart.Bar
-          dataKey="registrations"
-          yAxisId="registrations"
-          fill="var(--chart-1)"
-          radius={[4, 4, 0, 0]}
-          maxBarSize={40}
-        />
-
-        <ComposedChart.Line
-          dataKey="categoryAPremium"
-          yAxisId="premium"
-          type="monotone"
-          dot={false}
-          stroke="var(--chart-2)"
-          strokeWidth={2}
-        />
-
-        <ComposedChart.Line
-          dataKey="categoryBPremium"
-          yAxisId="premium"
-          type="monotone"
-          dot={false}
-          stroke="var(--chart-3)"
-          strokeWidth={2}
-          strokeDasharray="10 10"
-        />
-      </ComposedChart>
-      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
-        {[
-          { color: "var(--chart-1)", label: "Registrations" },
-          { color: "var(--chart-2)", label: "Category A Premium" },
-          { color: "var(--chart-3)", label: "Category B Premium" },
-        ].map((item) => (
-          <div key={item.label} className="flex items-center gap-2">
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+        {SERIES.map(({ color, key, label }) => (
+          <span
+            className="inline-flex items-center gap-2 text-muted text-sm"
+            key={key}
+          >
             <span
-              className="size-2.5 rounded-full"
-              style={{ backgroundColor: item.color }}
+              aria-hidden
+              className="h-0.5 w-4"
+              style={{ backgroundColor: color }}
             />
-            <span className="text-muted text-xs">{item.label}</span>
-          </div>
+            {label}
+          </span>
         ))}
       </div>
+      <LineChart
+        data={data}
+        height={250}
+        margin={{ bottom: 0, left: 0, right: 8, top: 8 }}
+      >
+        <LineChart.Grid vertical={false} />
+        <LineChart.XAxis
+          dataKey="label"
+          height={40}
+          interval="preserveEnd"
+          minTickGap={12}
+          tick={({ index, payload, x, y }: TickProps) => {
+            const point = data[payload?.index ?? index ?? 0];
+            return (
+              <text
+                className="fill-muted text-xs tabular-nums"
+                textAnchor="middle"
+                x={x}
+                y={y}
+              >
+                <tspan dy="0.9em" x={x}>
+                  {point?.label}
+                </tspan>
+                {point?.year ? (
+                  <tspan className="font-semibold" dy="1.25em" x={x}>
+                    {point.year}
+                  </tspan>
+                ) : null}
+              </text>
+            );
+          }}
+          tickMargin={6}
+        />
+        <LineChart.YAxis
+          domain={[ticks[0] ?? "auto", ticks.at(-1) ?? "auto"]}
+          orientation="left"
+          tickFormatter={compactCurrency}
+          ticks={ticks}
+          width={52}
+        />
+        {SERIES.map(({ color, key, label }) => (
+          <LineChart.Line
+            dataKey={key}
+            dot={false}
+            key={key}
+            name={label}
+            stroke={color}
+            strokeWidth={2}
+            type="linear"
+          />
+        ))}
+        <LineChart.Tooltip
+          content={({ active, payload }) => {
+            const point = payload?.[0]?.payload as PremiumPoint | undefined;
+            if (!active || !point) {
+              return null;
+            }
+            return (
+              <ChartTooltip>
+                <ChartTooltip.Header>{point.title}</ChartTooltip.Header>
+                {SERIES.map(({ color, key }) => (
+                  <ChartTooltip.Item key={key}>
+                    <ChartTooltip.Indicator color={color} />
+                    <ChartTooltip.Label>
+                      {key === "categoryA" ? "Cat A" : "Cat B"}
+                    </ChartTooltip.Label>
+                    <ChartTooltip.Value>
+                      {formatCurrency(point[key])}
+                    </ChartTooltip.Value>
+                  </ChartTooltip.Item>
+                ))}
+              </ChartTooltip>
+            );
+          }}
+        />
+      </LineChart>
     </div>
   );
 }

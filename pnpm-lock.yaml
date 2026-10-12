@@ -408,9 +408,6 @@ importers:
       '@react-aria/utils':
         specifier: 3.34.1
         version: 3.34.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@ruchernchong/number-format':
-        specifier: 2.3.5
-        version: 2.3.5
       '@tanstack/react-table':
         specifier: 8.21.3
         version: 8.21.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -3665,9 +3662,6 @@ packages:
 
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
-
-  '@ruchernchong/number-format@2.3.5':
-    resolution: {integrity: sha512-+7oPu9XvbLoss136jKV+orOhm5gGmqBU/a2UbBSti9Z/1k2Nrq2Paeabn9T2xyGuUU5Ky3+m2MZytYyJDlLXAQ==}
 
   '@sec-ant/readable-stream@0.4.1':
     resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
@@ -11392,8 +11386,6 @@ snapshots:
   '@rolldown/pluginutils@1.0.0-rc.7': {}
 
   '@rolldown/pluginutils@1.0.1': {}
-
-  '@ruchernchong/number-format@2.3.5': {}
 
   '@sec-ant/readable-stream@0.4.1': {}
 
