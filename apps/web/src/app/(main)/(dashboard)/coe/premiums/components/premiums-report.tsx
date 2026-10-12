@@ -14,6 +14,7 @@ import {
   premiumAxisTicks,
   premiumRangeStats,
   successRate,
+  summariseCategoryExercise,
   toCategory,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
@@ -154,6 +155,7 @@ export async function PremiumsReport({
   }
 
   const prior = history.at(-2) ?? null;
+  const summary = summariseCategoryExercise(history, category);
   const series = history.slice(-RANGE_EXERCISES[range]);
   const chartData: PremiumPoint[] = series.map((exercise, index) => {
     const [yearPart, monthPart] = exercise.month.split("-").map(Number);
@@ -287,6 +289,15 @@ export async function PremiumsReport({
           tickMonths={TICK_MONTHS[range]}
           ticks={chartTicks}
         />
+        {summary ? (
+          <Typography.Paragraph
+            className="tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {summary}
+          </Typography.Paragraph>
+        ) : null}
         <SourceNote>
           Source: LTA via DataMall · Quota premium at the close of each exercise
           · {axisNote}

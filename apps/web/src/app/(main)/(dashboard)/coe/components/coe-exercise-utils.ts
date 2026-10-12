@@ -1,8 +1,10 @@
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import type { COECategory, COEResult } from "@web/types";
+import type { Pqp } from "@web/types/coe";
 import {
   formatMonthLabel,
+  formatMonthName,
   formatMonthShortLabel,
   formatMonthShortName,
 } from "@web/utils/dates/format-month";
@@ -264,6 +266,102 @@ export function summariseExercise(
   return latest && moves.length > 0
     ? `${formatExercise(latest)}: ${moves.join("; ")}.`
     : undefined;
+}
+
+/**
+ * The summary line under the premium chart on `/coe/premiums`, e.g. "Second
+ * bidding, September 2026: Cat B rose …." The history is one category's
+ * exercises, oldest first, up to the exercise the page shows.
+ */
+export function summariseCategoryExercise(
+  history: (CategoryFigures & { biddingNo: number; month: string })[],
+  category: COECategory,
+): string | undefined {
+  const latest = history.at(-1);
+  const move = describePremiumMove(
+    history.map(({ biddingNo, month, ...figures }) => ({
+      biddingNo,
+      key: `${month}:${biddingNo}`,
+      month,
+      results: { [category]: figures },
+    })),
+    category,
+  );
+
+  return latest && move ? `${formatExercise(latest)}: ${move}.` : undefined;
+}
+
+/** "up $4,200 on September", "down $900 on September" or "level with September". */
+const describeChange = (current: number, previous: number, against: string) => {
+  const difference = current - previous;
+  if (difference === 0) {
+    return `level with ${against}`;
+  }
+  return `${difference > 0 ? "up" : "down"} ${formatCurrency(Math.abs(difference))} on ${against}`;
+};
+
+/**
+ * The summary line under the yearly averages on `/coe/results`, e.g. "2026
+ * average: Cat A $105,100, up $8,200 on 2025's $96,900; Cat B …." Takes years
+ * newest first, as `summariseByYear` returns them.
+ */
+export function summariseYears(years: CoeYear[]): string | undefined {
+  const [current, previous] = years;
+  const averages = (["Category A", "Category B"] as const).flatMap(
+    (category) => {
+      const average = current?.categories[category]?.average;
+      if (average === undefined) {
+        return [];
+      }
+      const label = `${category.replace("Category", "Cat")} ${formatCurrency(average)}`;
+      const prior = previous?.categories[category]?.average;
+      return prior === undefined
+        ? [label]
+        : [
+            `${label}, ${describeChange(average, prior, `${previous.year}'s ${formatCurrency(prior)}`)}`,
+          ];
+    },
+  );
+
+  return current && averages.length > 0
+    ? `${current.year} average: ${averages.join("; ")}.`
+    : undefined;
+}
+
+/**
+ * The summary line under the PQP rates table, e.g. "October 2026 PQP for a
+ * 10-year renewal: Cat A $X, up $Y on September; Cat B …. A 5-year renewal
+ * costs half: …." Always the published 10-year rate, whichever term is
+ * selected, and only Cat A and B, the categories the page reports. Takes the
+ * months oldest first.
+ */
+export function summarisePQP(
+  rates: ({ month: string } & Pick<Pqp.Rates, "Category A" | "Category B">)[],
+): string | undefined {
+  const latest = rates.at(-1);
+  const previous = rates.at(-2);
+  const reported = (["Category A", "Category B"] as const).filter(
+    (category) => (latest?.[category] ?? 0) > 0,
+  );
+  if (!latest || reported.length === 0) {
+    return undefined;
+  }
+
+  const label = (category: (typeof reported)[number]) =>
+    category.replace("Category", "Cat");
+  const moves = reported.map((category) => {
+    const rate = `${label(category)} ${formatCurrency(latest[category])}`;
+    const prior = previous?.[category];
+    return previous && prior
+      ? `${rate}, ${describeChange(latest[category], prior, formatMonthName(previous.month))}`
+      : rate;
+  });
+  const halves = reported.map(
+    (category) =>
+      `${formatCurrency(latest[category] / 2)} for ${label(category)}`,
+  );
+
+  return `${formatMonthLabel(latest.month)} PQP for a 10-year renewal: ${moves.join("; ")}. A 5-year renewal costs half: ${halves.join(" and ")}.`;
 }
 
 export interface ExercisePremium {
