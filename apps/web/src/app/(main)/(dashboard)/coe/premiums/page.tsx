@@ -4,7 +4,7 @@ import { PREMIUMS_FAQS } from "@web/app/(main)/(dashboard)/coe/premiums/componen
 import { PremiumsReport } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-report";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/premiums/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { MonthSelector } from "@web/components/shared/month-selector";
+import { MonthMenu } from "@web/components/shared/month-menu";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
@@ -94,7 +94,7 @@ export default function COEPremiumsPage({ searchParams }: PageProps) {
 async function PremiumsHeaderMeta() {
   const months = (await getCoeMonths()).map(({ month }) => month);
 
-  return <MonthSelector latestMonth={months[0]} months={months} />;
+  return <MonthMenu latestMonth={months[0]} months={months} />;
 }
 
 /** Names the exercise the page reports, and its source. */

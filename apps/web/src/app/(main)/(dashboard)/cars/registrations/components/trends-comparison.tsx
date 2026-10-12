@@ -1,15 +1,25 @@
 "use client";
 
-import { ComboBox, Drawer, Input, Label, Typography } from "@heroui/react";
+import {
+  Drawer,
+  Header,
+  Label,
+  ListBox,
+  Select,
+  Separator,
+  Typography,
+} from "@heroui/react";
+import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { ComparisonBarChart } from "@web/app/(main)/(dashboard)/cars/registrations/components/comparison-bar-chart";
 import { ComparisonSummary } from "@web/app/(main)/(dashboard)/cars/registrations/components/comparison-summary";
-import { MonthListBox } from "@web/components/shared/month-selector";
 import type { ComparisonData } from "@web/queries/cars/compare";
 import type { Month } from "@web/types";
+import { groupByYear } from "@web/utils/group-by-year";
 import { format, subMonths } from "date-fns";
 import { Calendar } from "lucide-react";
 import { parseAsString, useQueryStates } from "nuqs";
 import posthog from "posthog-js";
+import { useMemo } from "react";
 
 interface TrendsComparisonProps {
   isOpen: boolean;
@@ -53,36 +63,56 @@ export function TrendsComparison({
   const monthA = compareA ?? currentMonth;
   const monthB = compareB ?? getDefaultMonthB(currentMonth, months);
 
+  const years = useMemo(
+    () => Object.entries(groupByYear(months)).reverse(),
+    [months],
+  );
+
   const renderMonthPicker = (
     label: string,
     filter: "compare_a" | "compare_b",
     value: string,
     onChange: (val: string) => void,
   ) => (
-    <ComboBox
-      selectedKey={value}
-      onSelectionChange={(key) => {
+    <Select
+      placeholder={label}
+      value={value}
+      onChange={(key) => {
         if (!key) return;
         posthog.capture("dashboard_filter_changed", {
           filter,
           value: key,
         });
-        onChange(key as string);
+        onChange(String(key));
       }}
     >
       <Label>{label}</Label>
-      <ComboBox.InputGroup>
-        <Calendar
-          aria-hidden
-          className="pointer-events-none absolute top-1/2 left-3.5 z-10 size-4 -translate-y-1/2 text-muted"
-        />
-        <Input className="pl-10" placeholder={label} />
-        <ComboBox.Trigger />
-      </ComboBox.InputGroup>
-      <ComboBox.Popover>
-        <MonthListBox months={months} />
-      </ComboBox.Popover>
-    </ComboBox>
+      <Select.Trigger className="gap-2">
+        <Calendar aria-hidden className="size-4 shrink-0 text-muted" />
+        <Select.Value />
+        <Select.Indicator />
+      </Select.Trigger>
+      <Select.Popover>
+        <ListBox>
+          {years.map(([year, yearMonths], index) => (
+            <ListBox.Section key={year}>
+              {index > 0 && <Separator />}
+              <Header>{year}</Header>
+              {yearMonths.map((yearMonth) => {
+                const date = `${year}-${yearMonth}`;
+                const monthLabel = formatDateToMonthYear(date);
+                return (
+                  <ListBox.Item key={date} id={date} textValue={monthLabel}>
+                    {monthLabel}
+                    <ListBox.ItemIndicator />
+                  </ListBox.Item>
+                );
+              })}
+            </ListBox.Section>
+          ))}
+        </ListBox>
+      </Select.Popover>
+    </Select>
   );
 
   return (
