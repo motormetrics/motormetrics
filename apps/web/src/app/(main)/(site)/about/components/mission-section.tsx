@@ -1,32 +1,36 @@
-import { Typography } from "@heroui/react";
+import { SectionHead } from "@web/components/shared/overview";
+import { Text } from "@web/components/shared/text";
 import { SITE_TITLE } from "@web/config";
 import Link from "next/link";
 
 /**
- * The comp runs the prose blocks as a two-column split: the heading holds a
- * fixed 300px rail on the left and the paragraphs take the rest. It collapses
- * to a single column below `lg`, where 300px would leave the text too narrow.
+ * The comp runs the prose blocks as a two-column split: the section head in a
+ * narrow rail on the left and the paragraphs in the rest. It collapses to a
+ * single column below `lg`, where the rail would leave the text too narrow.
  */
 export function MissionSection() {
   return (
-    <section className="grid items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-14">
-      <Typography.Heading level={2}>What we do</Typography.Heading>
-      <div className="flex flex-col gap-5">
-        <Typography.Paragraph className="text-lg">
+    <section className="grid grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-14">
+      <SectionHead eyebrow="The project" title="What we do" />
+      <div className="flex min-w-0 max-w-2xl flex-col gap-4 lg:col-span-3">
+        <Text.Paragraph className="leading-relaxed md:text-lg" tone="strong">
           Each time LTA publishes, we pull the latest figures from DataMall,
           check them against the previous release, and turn them into charts you
           can read in a few seconds. Registrations, deregistrations, COE
           premiums, PQP rates, fuel type mix and the vehicle population all sit
           on one platform.
-        </Typography.Paragraph>
-        <Typography.Paragraph className="text-lg">
+        </Text.Paragraph>
+        <Text.Paragraph className="leading-relaxed md:text-lg" tone="strong">
           The raw data is public, but it arrives as spreadsheets with column
-          headers like <em>MonthOfRegistration</em> and no context. We do the
-          joining, the naming and the arithmetic, then show the trend beside the
-          number so you can tell whether this month&apos;s premium is high or
-          low.
-        </Typography.Paragraph>
-        <Typography.Paragraph className="text-lg">
+          headers like{" "}
+          <code className="rounded bg-surface-secondary px-1 font-mono text-foreground text-sm">
+            MonthOfRegistration
+          </code>{" "}
+          and no context. We do the joining, the naming and the arithmetic, then
+          show the trend beside the number so you can tell whether this
+          month&apos;s premium is high or low.
+        </Text.Paragraph>
+        <Text.Paragraph className="leading-relaxed md:text-lg" tone="strong">
           {SITE_TITLE} is free and open. There is no account to create and
           nothing behind a paywall. It is an independent project, built and
           maintained by{" "}
@@ -39,7 +43,7 @@ export function MissionSection() {
             Ru Chern
           </Link>
           , a software engineer, alongside a full-time job.
-        </Typography.Paragraph>
+        </Text.Paragraph>
       </div>
     </section>
   );
