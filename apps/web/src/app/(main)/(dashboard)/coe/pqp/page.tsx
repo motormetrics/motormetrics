@@ -1,8 +1,10 @@
 import { Skeleton } from "@heroui/react";
 import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { PQP_FAQS } from "@web/app/(main)/(dashboard)/coe/pqp/components/faq-data";
 import { PQPReport } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-report";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { OverviewPage } from "@web/components/shared/overview";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
@@ -10,6 +12,7 @@ import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
+  generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getPQPOverview } from "@web/queries/coe";
@@ -108,6 +111,16 @@ export default function PQPRatesPage({ searchParams }: PageProps) {
           <PQPReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: PQP_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={PQP_FAQS} />
     </OverviewPage>
   );
 }

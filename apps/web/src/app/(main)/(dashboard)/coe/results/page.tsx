@@ -1,4 +1,5 @@
 import { Skeleton, Typography } from "@heroui/react";
+import { RESULTS_FAQS } from "@web/app/(main)/(dashboard)/coe/results/components/faq-data";
 import {
   LatestExerciseSub,
   PremiumsByYear,
@@ -16,6 +17,7 @@ import {
   SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { SkeletonCard, SkeletonChart } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
@@ -23,6 +25,7 @@ import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
+  generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
@@ -250,6 +253,16 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           </div>
         </section>
       </div>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: RESULTS_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={RESULTS_FAQS} />
     </OverviewPage>
   );
 }

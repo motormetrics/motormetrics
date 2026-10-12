@@ -8,6 +8,7 @@ import {
   groupByExercise,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { CoeHeadline } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
+import { COE_FAQS } from "@web/app/(main)/(dashboard)/coe/components/faq-data";
 import { PqpCeiling } from "@web/app/(main)/(dashboard)/coe/components/pqp-ceiling";
 import { PremiumsByExercise } from "@web/app/(main)/(dashboard)/coe/components/premiums-by-exercise";
 import { QuotaAllocation } from "@web/app/(main)/(dashboard)/coe/components/quota-allocation";
@@ -17,10 +18,14 @@ import {
   OverviewGrid,
   OverviewPage,
 } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
-import { generateDataCatalogSchema } from "@web/lib/metadata";
+import {
+  generateDataCatalogSchema,
+  generateFAQPageSchema,
+} from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getCoeResults } from "@web/queries/coe";
 import type { Metadata } from "next";
@@ -150,6 +155,16 @@ export default function Page({ searchParams }: PageProps) {
           </Suspense>
         </SectionErrorBoundary>
       </OverviewGrid>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: COE_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={COE_FAQS} />
     </OverviewPage>
   );
 }

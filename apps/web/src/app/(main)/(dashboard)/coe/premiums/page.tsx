@@ -1,13 +1,17 @@
 import { Skeleton } from "@heroui/react";
 import { formatExercise } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { PREMIUMS_FAQS } from "@web/app/(main)/(dashboard)/coe/premiums/components/faq-data";
 import { PremiumsReport } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-report";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/premiums/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthSelector } from "@web/components/shared/month-selector";
-import { OverviewPage } from "@web/components/shared/overview";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { SkeletonCard } from "@web/components/shared/skeleton";
+import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
+import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getCoeMonths, getExercisePair } from "@web/queries/coe";
 import type { Metadata } from "next";
@@ -67,6 +71,16 @@ export default function COEPremiumsPage({ searchParams }: PageProps) {
           <PremiumsReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: PREMIUMS_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={PREMIUMS_FAQS} />
     </OverviewPage>
   );
 }

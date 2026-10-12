@@ -1,7 +1,4 @@
-export interface Faq {
-  answer: string;
-  question: string;
-}
+import type { Faq } from "@web/components/shared/page-faq";
 
 /**
  * The questions people are searching since LTA published the paper, worded the

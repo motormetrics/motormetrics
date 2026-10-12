@@ -1,10 +1,12 @@
 import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { DeregistrationsReport } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-report";
+import { DEREGISTRATIONS_FAQS } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/faq-data";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthMenu } from "@web/components/shared/month-menu";
-import { OverviewPage } from "@web/components/shared/overview";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
@@ -12,6 +14,7 @@ import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
+  generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import {
@@ -107,6 +110,16 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
           <DeregistrationsReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: DEREGISTRATIONS_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={DEREGISTRATIONS_FAQS} />
     </OverviewPage>
   );
 }

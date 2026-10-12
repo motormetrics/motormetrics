@@ -1,6 +1,7 @@
 import { Skeleton, Typography } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import { CoeComparisonChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/coe-comparison-chart";
+import { buildMakeFaqs } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/faq-data";
 import { MakeReport } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
 import { MakeSearch } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-search";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
@@ -17,6 +18,7 @@ import {
   SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { Text } from "@web/components/shared/text";
@@ -25,6 +27,7 @@ import { SITE_URL } from "@web/config";
 import {
   createWebPageStructuredData,
   generateBreadcrumbSchema,
+  generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getDistinctMakes } from "@web/queries/cars";
@@ -190,7 +193,31 @@ export default function CarMakePage({
           </SectionLink>
         </div>
       </div>
+
+      <Hairline />
+
+      <Suspense fallback={null}>
+        <MakeFaq params={params} />
+      </Suspense>
     </OverviewPage>
+  );
+}
+
+/** The questions, templated with the make name, and their FAQPage schema. */
+async function MakeFaq({ params }: Pick<PageProps, "params">) {
+  const { exactMake } = await resolveMake(params);
+  const faqs = buildMakeFaqs(exactMake);
+
+  return (
+    <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: faqs }]),
+        }}
+      />
+      <PageFaq faqs={faqs} />
+    </>
   );
 }
 

@@ -3,6 +3,7 @@ import { formatOrdinal } from "@motormetrics/utils/format-ordinal";
 import { slugify } from "@motormetrics/utils/slugify";
 import { summariseType } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/type-meta";
+import { buildVehicleTypeFaqs } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/faq-data";
 import { MakeTable } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/make-table";
 import { MonthTable } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/month-table";
 import {
@@ -25,13 +26,17 @@ import {
   SectionHead,
   SourceNote,
 } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { Count } from "@web/components/shared/report-table";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { generateBreadcrumbSchema } from "@web/lib/metadata";
+import {
+  generateBreadcrumbSchema,
+  generateFAQPageSchema,
+} from "@web/lib/metadata";
 import { checkVehicleTypeIfExist } from "@web/queries/cars";
 import {
   getTypeCrossMixInWindow,
@@ -319,6 +324,7 @@ async function VehicleTypeContent({
     type,
     value,
   );
+  const faqs = buildVehicleTypeFaqs(displayName);
   const structuredData: WithContext<WebPage> = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -618,6 +624,16 @@ async function VehicleTypeContent({
           ))}
         </nav>
       </div>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: faqs }]),
+        }}
+      />
+      <PageFaq faqs={faqs} />
     </>
   );
 }

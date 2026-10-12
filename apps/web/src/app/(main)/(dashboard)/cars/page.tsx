@@ -1,6 +1,7 @@
 import { Skeleton } from "@heroui/react";
 import { CarsMonthPicker } from "@web/app/(main)/(dashboard)/cars/components/cars-month-picker";
 import { DimensionPanel } from "@web/app/(main)/(dashboard)/cars/components/dimension-panel";
+import { CARS_FAQS } from "@web/app/(main)/(dashboard)/cars/components/faq-data";
 import { FuelMix } from "@web/app/(main)/(dashboard)/cars/components/fuel-mix";
 import { MoversRail } from "@web/app/(main)/(dashboard)/cars/components/movers-rail";
 import { PopulationPanel } from "@web/app/(main)/(dashboard)/cars/components/population-panel";
@@ -15,10 +16,14 @@ import {
   OverviewGrid,
   OverviewPage,
 } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
-import { generateDataCatalogSchema } from "@web/lib/metadata";
+import {
+  generateDataCatalogSchema,
+  generateFAQPageSchema,
+} from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
 import type { Metadata } from "next";
@@ -138,6 +143,16 @@ export default function CarsPage({ searchParams }: PageProps) {
           </Suspense>
         </SectionErrorBoundary>
       </OverviewGrid>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: CARS_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={CARS_FAQS} />
     </OverviewPage>
   );
 }

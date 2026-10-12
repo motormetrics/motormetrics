@@ -1,4 +1,5 @@
 import { Typography } from "@heroui/react";
+import { PARF_FAQS } from "@web/app/(main)/(dashboard)/cars/parf/components/faq-data";
 import { PARFCalculator } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-calculator";
 import {
   Hairline,
@@ -6,11 +7,15 @@ import {
   SectionHead,
   SectionLink,
 } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { generateBreadcrumbSchema } from "@web/lib/metadata";
+import {
+  generateBreadcrumbSchema,
+  generateFAQPageSchema,
+} from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -162,6 +167,16 @@ export default function PARFCalculatorPage() {
           </div>
         </section>
       </div>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: PARF_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={PARF_FAQS} />
     </OverviewPage>
   );
 }

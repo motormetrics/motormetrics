@@ -4,6 +4,7 @@ import { ChargingSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehic
 import { ElectrifiedTotal } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/electrified-total";
 import { EvLeaderboard } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-leaderboard";
 import { EvShareHero } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-share-hero";
+import { ELECTRIC_VEHICLES_FAQS } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/faq-data";
 import { RegistrationTrend } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/registration-trend";
 import { VesBands } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ves-bands";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
@@ -15,12 +16,14 @@ import {
   OverviewGrid,
   OverviewPage,
 } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
+  generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getEvMarketShare } from "@web/queries/cars";
@@ -139,6 +142,16 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
       >
         <EvOverview searchParams={searchParams} />
       </Suspense>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: ELECTRIC_VEHICLES_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={ELECTRIC_VEHICLES_FAQS} />
     </OverviewPage>
   );
 }

@@ -1,6 +1,5 @@
 import { Card, cn, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
-import { CategoryMergerFaq } from "@web/app/(main)/(dashboard)/coe/category-merger/components/category-merger-faq";
 import { CombinedPool } from "@web/app/(main)/(dashboard)/coe/category-merger/components/combined-pool";
 import { CATEGORY_MERGER_FAQS } from "@web/app/(main)/(dashboard)/coe/category-merger/components/faq-data";
 import { FeebateBands } from "@web/app/(main)/(dashboard)/coe/category-merger/components/feebate-bands";
@@ -17,6 +16,7 @@ import {
   THREE_BANDS,
 } from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import {
   Report,
@@ -312,7 +312,7 @@ export default function CategoryMergerPage() {
         </div>
       </ReportSection>
 
-      <CategoryMergerFaq faqs={CATEGORY_MERGER_FAQS} />
+      <PageFaq expandFirst faqs={CATEGORY_MERGER_FAQS} />
 
       <ReportNote title="About this page">
         <Typography.Paragraph color="muted" size="sm">
