@@ -15,6 +15,10 @@ import {
 } from "@web/queries/cars";
 import { getMakeTotalsInRange } from "@web/queries/cars/makes/period-totals";
 import { getCarLogoMap } from "@web/queries/logos";
+import {
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -94,6 +98,23 @@ function rangeWindow(latestMonth: string, range: Range): MonthWindow {
     return { end: latestMonth, start: shiftMonth(latestMonth, -11) };
   }
   return { end: latestMonth, start: `${latestMonth.slice(0, 4)}-01` };
+}
+
+/**
+ * The active range in words: "August 2026", "January to August 2026" or
+ * "September 2025 to August 2026". The start drops its year when it shares
+ * the end's.
+ */
+export function periodLabel(latestMonth: string, range: Range): string {
+  const { end, start } = rangeWindow(latestMonth, range);
+  if (start === end) {
+    return formatMonthLabel(end);
+  }
+  const from =
+    start.slice(0, 4) === end.slice(0, 4)
+      ? formatMonthName(start)
+      : formatMonthLabel(start);
+  return `${from} to ${formatMonthLabel(end)}`;
 }
 
 /**
