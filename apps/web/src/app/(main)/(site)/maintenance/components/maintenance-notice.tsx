@@ -217,7 +217,7 @@ export function MaintenanceNotice() {
             href={SOCIAL_URLS.twitter}
             className="flex items-center gap-2 font-medium text-accent-strong text-sm"
             target="_blank"
-            rel="noreferrer"
+            rel="me noreferrer nofollow"
           >
             <MessageCircle className="size-4" />
             Follow updates on Twitter

@@ -89,7 +89,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
           aria-label="GitHub"
           class="block text-muted transition-colors hover:text-accent"
           href="/github"
-          rel="me noreferrer"
+          rel="me noreferrer nofollow"
           target="_blank"
         >
           <svg
@@ -114,7 +114,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
           aria-label="Instagram"
           class="block text-muted transition-colors hover:text-accent"
           href="/instagram"
-          rel="me noreferrer"
+          rel="me noreferrer nofollow"
           target="_blank"
         >
           <svg
@@ -139,7 +139,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
           aria-label="Telegram"
           class="block text-muted transition-colors hover:text-accent"
           href="/telegram"
-          rel="me noreferrer"
+          rel="me noreferrer nofollow"
           target="_blank"
         >
           <svg
@@ -164,7 +164,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
           aria-label="X"
           class="block text-muted transition-colors hover:text-accent"
           href="/x"
-          rel="me noreferrer"
+          rel="me noreferrer nofollow"
           target="_blank"
         >
           <svg
@@ -199,7 +199,7 @@ exports[`Footer > should render the shell footer with navigation and version inf
       <a
         class="transition-colors hover:text-accent"
         href="https://datamall.lta.gov.sg"
-        rel="noopener noreferrer"
+        rel="noopener noreferrer nofollow"
         target="_blank"
       >
         LTA DataMall

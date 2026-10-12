@@ -72,7 +72,11 @@ export default function ContactPage() {
         <p>
           The codebase is public. If a chart is wrong, a page fails to load or
           you would like to see a new breakdown, open an issue on the{" "}
-          <a href={GITHUB_REPO_URL} rel="noopener noreferrer" target="_blank">
+          <a
+            href={GITHUB_REPO_URL}
+            rel="noopener noreferrer nofollow"
+            target="_blank"
+          >
             GitHub repository
           </a>
           . Pull requests are welcome.
