@@ -1,11 +1,10 @@
-import { Typography } from "@heroui/react";
 import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import {
   getAllGuideSlugs,
   getGuideHeadings,
 } from "@web/app/(main)/(site)/learn/lib/guides";
-import { InkPanel } from "@web/components/shared/bento";
+import { Text } from "@web/components/shared/text";
 import type { Route } from "next";
 import Link from "next/link";
 
@@ -17,13 +16,23 @@ const DEFINITIONS = new Map(
 
 const guideSlugs = getAllGuideSlugs();
 
+/** The small label that opens each rail section, over its rule. */
+function RailLabel({ children }: { children: string }) {
+  return (
+    <span className="border-border border-b pb-2 font-semibold text-muted text-xs">
+      {children}
+    </span>
+  );
+}
+
 /**
- * The comp's right-hand rail: contents, the terms the guide leans on, and the
- * pages carrying the live figures.
+ * The right-hand rail: contents, the terms the guide leans on, and the pages
+ * carrying the live figures, each a ruled list under a small label.
  *
  * The contents are read out of the guide's own markdown rather than listed
  * separately, so they cannot fall out of step with the article, and the ids
- * match the ones `rehype-slug` gives the rendered headings.
+ * match the ones `rehype-slug` gives the rendered headings. Below lg the
+ * contents drop and the other two sit side by side.
  */
 export function GuideSidebar({ guide }: { guide: Guide }) {
   const headings = getGuideHeadings(guide.content);
@@ -35,20 +44,15 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
     );
 
   return (
-    <aside className="flex flex-col gap-6 lg:sticky lg:top-9">
+    <aside className="flex flex-col gap-7 max-md:grid-cols-1 max-lg:grid max-lg:grid-cols-2 lg:sticky lg:top-4">
       {headings.length > 0 ? (
-        <nav
-          aria-label="On this page"
-          className="flex flex-col gap-3.5 rounded-2xl bg-surface-secondary p-7"
-        >
-          <Typography.Heading level={4} className="text-base">
-            In this guide
-          </Typography.Heading>
-          <ol className="flex flex-col gap-0.5">
+        <nav aria-label="On this page" className="flex flex-col max-lg:hidden">
+          <RailLabel>In this guide</RailLabel>
+          <ol className="flex flex-col pt-1.5">
             {headings.map(({ id, title }) => (
               <li key={id}>
                 <Link
-                  className="block rounded-lg px-3 py-2 font-semibold text-muted text-sm no-underline transition-colors hover:bg-surface hover:text-foreground"
+                  className="block border-transparent border-l-2 py-1.5 pl-2.5 text-muted-strong text-sm no-underline transition-colors hover:border-l-chart-5 hover:text-accent-strong"
                   href={`#${id}` as Route}
                 >
                   {title}
@@ -60,37 +64,33 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
       ) : null}
 
       {terms.length > 0 ? (
-        <div className="flex flex-col gap-3.5 rounded-2xl bg-surface p-7 shadow-surface">
-          <Typography.Heading level={4} className="text-base">
-            Key terms
-          </Typography.Heading>
+        <div className="flex flex-col">
+          <RailLabel>Key terms</RailLabel>
           {terms.map(({ definition, term }) => {
             const slug = term.toLowerCase();
 
             return (
               <div
-                className="flex flex-col gap-1 border-border border-t pt-3"
+                className="flex flex-col gap-1 border-separator border-b py-2.5"
                 key={term}
               >
                 {guideSlugs.includes(slug) ? (
                   <Link
-                    className="font-bold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+                    className="font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
                     href={`/learn/${slug}`}
                   >
                     {term} →
                   </Link>
                 ) : (
-                  <span className="font-bold text-accent-strong text-sm">
-                    {term}
-                  </span>
+                  <span className="font-semibold text-sm">{term}</span>
                 )}
-                <Typography.Paragraph
-                  color="muted"
-                  size="xs"
+                <Text.Paragraph
                   className="leading-normal"
+                  size="sm"
+                  tone="strong"
                 >
                   {definition}
-                </Typography.Paragraph>
+                </Text.Paragraph>
               </div>
             );
           })}
@@ -98,20 +98,18 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
       ) : null}
 
       {guide.relatedLinks.length > 0 ? (
-        <InkPanel className="rounded-2xl">
-          <Typography.Paragraph className="text-accent-foreground/85">
-            Check the current figures
-          </Typography.Paragraph>
+        <div className="flex flex-col">
+          <RailLabel>Check the current figures</RailLabel>
           {guide.relatedLinks.map(({ href, label }) => (
             <Link
-              className="font-bold text-accent-on-dark text-sm no-underline transition-colors hover:text-accent-foreground"
+              className="border-separator border-b py-2.5 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
               href={href as Route}
               key={href}
             >
               {label} →
             </Link>
           ))}
-        </InkPanel>
+        </div>
       ) : null}
     </aside>
   );

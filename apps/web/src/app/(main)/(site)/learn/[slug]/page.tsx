@@ -6,6 +6,7 @@ import {
   getAllGuideSlugs,
   getGuideBySlug,
 } from "@web/app/(main)/(site)/learn/lib/guides";
+import { Hairline } from "@web/components/shared/overview";
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -86,7 +87,7 @@ async function GuideContent({
   cacheTag(`learn:${slug}`);
 
   return (
-    <article className="prose dark:prose-invert max-w-prose prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted prose-p:text-muted prose-strong:text-foreground prose-td:text-muted prose-th:text-foreground prose-p:leading-relaxed prose-headings:tracking-tight">
+    <article className="prose dark:prose-invert max-w-prose prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted-strong prose-p:text-muted-strong prose-strong:text-foreground prose-td:text-muted-strong prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
       <MDXRemote
         source={content}
         options={{
@@ -118,7 +119,7 @@ async function GuideContent({
  */
 export default function GuidePage({ params }: PageProps) {
   return (
-    <SitePage className="gap-14">
+    <SitePage className="gap-10 max-md:gap-7">
       <Suspense fallback={<GuideSkeleton />}>
         <Guide params={params} />
       </Suspense>
@@ -208,10 +209,18 @@ async function Guide({ params }: PageProps) {
 
       <GuideHead guide={guide} />
 
-      <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-14">
-        <GuideContent content={guide.content} slug={guide.slug} />
-        <GuideSidebar guide={guide} />
+      <Hairline />
+
+      <div className="grid grid-cols-1 items-start gap-9 lg:grid-cols-12 lg:gap-16">
+        <div className="min-w-0 lg:col-span-8">
+          <GuideContent content={guide.content} slug={guide.slug} />
+        </div>
+        <div className="lg:col-span-4 xl:col-span-3 xl:col-start-10">
+          <GuideSidebar guide={guide} />
+        </div>
       </div>
+
+      <Hairline />
 
       <RelatedGuides guide={guide} />
     </>

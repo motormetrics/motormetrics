@@ -2,21 +2,23 @@ import { Typography } from "@heroui/react";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import { getReadingMinutes } from "@web/app/(main)/(site)/learn/lib/guides";
 import { SharePill } from "@web/components/shared/share-pill";
+import { Text } from "@web/components/shared/text";
 import Link from "next/link";
 
 /**
- * The comp's guide opening: breadcrumb, term pill, title, lede, then the
- * reading estimate, the revision date and the share control on one line.
+ * The guide opening: breadcrumb, an eyebrow naming the term, the title, the
+ * lede, then the reading estimate, the revision date and the share control on
+ * one line.
  *
- * Capped at the comp's 860px so the title breaks over a reading measure rather
- * than the full 1180px page.
+ * Held to a reading measure so the title breaks over the article's width
+ * rather than the full page.
  */
 export function GuideHead({ guide }: { guide: Guide }) {
   return (
-    <div className="flex max-w-4xl flex-col gap-5">
+    <div className="flex max-w-3xl flex-col gap-2.5">
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center gap-2 font-semibold text-muted text-sm"
+        className="flex flex-wrap items-center gap-2 text-muted text-sm"
       >
         <Link
           className="text-muted no-underline transition-colors hover:text-accent-strong"
@@ -41,35 +43,42 @@ export function GuideHead({ guide }: { guide: Guide }) {
         </span>
       </nav>
 
-      <span className="self-start rounded-full bg-accent-soft-2 px-4 py-2 font-bold text-accent-strong text-sm">
-        {guide.term}
-      </span>
+      <Text.Paragraph
+        className="pt-1.5"
+        color="muted"
+        eyebrow
+        size="xs"
+        weight="semibold"
+      >
+        Guide · {guide.term}
+      </Text.Paragraph>
 
-      <Typography.Heading level={1} className="text-5xl leading-none">
+      <Typography.Heading className="text-3xl md:text-4xl" level={1}>
         {guide.title}
       </Typography.Heading>
 
-      <Typography.Paragraph
-        color="muted"
-        className="max-w-prose leading-normal"
-      >
+      <Text.Paragraph className="max-w-2xl" tone="strong">
         {guide.excerpt}
-      </Typography.Paragraph>
+      </Text.Paragraph>
 
-      <div className="flex flex-wrap items-center gap-3.5">
-        <span className="font-semibold text-base text-muted">
-          {getReadingMinutes(guide.content)} min read
+      <div className="flex flex-wrap items-center gap-2.5 text-muted text-sm">
+        <span>{getReadingMinutes(guide.content)} min read</span>
+        <span aria-hidden className="text-border">
+          |
         </span>
-        <span aria-hidden className="size-1.5 rounded-full bg-border" />
-        <span className="font-semibold text-base text-muted">
+        <span>
           Updated{" "}
-          {new Date(guide.lastUpdated).toLocaleDateString("en-SG", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
+          <span className="font-semibold text-foreground">
+            {new Date(guide.lastUpdated).toLocaleDateString("en-SG", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </span>
         </span>
-        <SharePill contentType="guide" title={guide.title} />
+        <span className="ml-auto">
+          <SharePill contentType="guide" title={guide.title} />
+        </span>
       </div>
     </div>
   );
