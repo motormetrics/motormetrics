@@ -1,7 +1,6 @@
 import {
   ADVERTISE_FOOTER_ITEM,
   ADVERTISE_MORE_ITEM,
-  BLOG_MORE_ITEM,
   FOOTER_NAV_ITEMS,
   MORE_NAV_ITEMS,
   type NavItem,
@@ -10,16 +9,10 @@ import {
 
 export function moreNavItems({
   advertise,
-  blog,
 }: {
   advertise: boolean;
-  blog: boolean;
 }): NavigationItem[] {
-  return [
-    ...MORE_NAV_ITEMS,
-    ...(advertise ? [ADVERTISE_MORE_ITEM] : []),
-    ...(blog ? [BLOG_MORE_ITEM] : []),
-  ];
+  return [...MORE_NAV_ITEMS, ...(advertise ? [ADVERTISE_MORE_ITEM] : [])];
 }
 
 export function footerNavItems({

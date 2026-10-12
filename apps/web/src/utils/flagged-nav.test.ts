@@ -1,17 +1,18 @@
 import { footerNavItems, moreNavItems } from "@web/utils/flagged-nav";
 
 describe("moreNavItems", () => {
-  it("should include About only when advertise and blog flags are off", () => {
-    expect(moreNavItems({ advertise: false, blog: false })).toEqual([
+  it("should include About and Blog when the advertise flag is off", () => {
+    expect(moreNavItems({ advertise: false })).toEqual([
       { title: "About", url: "/about" },
+      { title: "Blog", url: "/blog" },
     ]);
   });
 
-  it("should append Advertise and Blog when those flags are on", () => {
-    expect(moreNavItems({ advertise: true, blog: true })).toEqual([
+  it("should append Advertise when the advertise flag is on", () => {
+    expect(moreNavItems({ advertise: true })).toEqual([
       { title: "About", url: "/about" },
-      { title: "Advertise", url: "/advertise" },
       { title: "Blog", url: "/blog" },
+      { title: "Advertise", url: "/advertise" },
     ]);
   });
 });
