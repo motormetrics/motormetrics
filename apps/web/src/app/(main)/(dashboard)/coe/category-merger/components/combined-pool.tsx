@@ -1,6 +1,6 @@
 import { Typography } from "@heroui/react";
+import { BarRow } from "@web/app/(main)/(dashboard)/coe/category-merger/components/bar-row";
 import { formatExercise } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { BarRow } from "@web/components/shared/bar-row";
 import { ReportStat } from "@web/components/shared/report";
 import { getLatestCoeResults } from "@web/queries/coe/latest-results";
 import type { COECategory } from "@web/types";

@@ -1,4 +1,3 @@
-import { BarRow } from "@web/components/shared/bar-row";
 import {
   Headline,
   SectionHead,
@@ -91,35 +90,6 @@ describe("Headline", () => {
     await expect.element(screen.getByText("6,100")).toBeInTheDocument();
     await expect.element(screen.getByText("+5.2%")).toBeInTheDocument();
     await expect.element(screen.getByText("vs September")).toBeInTheDocument();
-  });
-});
-
-describe("BarRow", () => {
-  it("should size the fill to the share", async () => {
-    const screen = await render(
-      <BarRow label="Toyota" share={60.25} value="6,843" />,
-    );
-    await expect.element(screen.getByText("Toyota")).toBeInTheDocument();
-    await expect
-      .element(screen.getByRole("progressbar", { name: "Toyota" }))
-      .toHaveAttribute("aria-valuenow", "60.25");
-  });
-
-  it("should clamp the share to the track", async () => {
-    const screen = await render(<BarRow label="A" share={140} value="1" />);
-    await expect
-      .element(screen.getByRole("progressbar", { name: "A" }))
-      .toHaveAttribute("aria-valuenow", "100");
-  });
-
-  it("should use HeroUI's large bar with no track overrides", async () => {
-    const screen = await render(<BarRow label="A" share={40} value="1" />);
-    await expect
-      .element(screen.getByRole("progressbar", { name: "A" }))
-      .toHaveClass("progress-bar--lg");
-    expect(
-      screen.container.querySelector(".progress-bar__track"),
-    ).not.toHaveClass("rounded-full");
   });
 });
 
