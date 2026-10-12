@@ -5,6 +5,7 @@ import { CategoryMergerCallout } from "@web/app/(main)/(dashboard)/components/ca
 import { CoePremiumTable } from "@web/app/(main)/(dashboard)/components/coe-premium-table";
 import { EvMakes } from "@web/app/(main)/(dashboard)/components/ev-makes";
 import { EvShare } from "@web/app/(main)/(dashboard)/components/ev-share";
+import { HOME_FAQS } from "@web/app/(main)/(dashboard)/components/faq-data";
 import { FuelMix } from "@web/app/(main)/(dashboard)/components/fuel-mix";
 import { KpiStrip } from "@web/app/(main)/(dashboard)/components/kpi-strip";
 import {
@@ -18,10 +19,12 @@ import {
   OverviewGrid,
   OverviewPage,
 } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
+import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getLatestMonth } from "@web/utils/dates/months";
 import type { Metadata } from "next";
@@ -219,6 +222,16 @@ export default function HomePage() {
             </Suspense>
           </SectionErrorBoundary>
         </OverviewGrid>
+
+        <Hairline />
+
+        <StructuredData
+          data={{
+            "@context": "https://schema.org",
+            ...generateFAQPageSchema([{ items: HOME_FAQS }]),
+          }}
+        />
+        <PageFaq faqs={HOME_FAQS} />
       </OverviewPage>
     </>
   );

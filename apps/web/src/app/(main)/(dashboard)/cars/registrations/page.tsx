@@ -1,6 +1,7 @@
 import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { CarsMonthPicker } from "@web/app/(main)/(dashboard)/cars/components/cars-month-picker";
+import { REGISTRATIONS_FAQS } from "@web/app/(main)/(dashboard)/cars/registrations/components/faq-data";
 import { RegistrationsReport } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-report";
 import { TrendsCompareButton } from "@web/app/(main)/(dashboard)/cars/registrations/components/trends-compare-button";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
@@ -10,9 +11,12 @@ import {
   OverviewPage,
   SectionHead,
 } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { SkeletonCard } from "@web/components/shared/skeleton";
+import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
+import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getComparisonData } from "@web/queries/cars/compare";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
@@ -114,6 +118,16 @@ export default function Page({ searchParams }: PageProps) {
           </Suspense>
         </SectionErrorBoundary>
       </section>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: REGISTRATIONS_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={REGISTRATIONS_FAQS} />
     </OverviewPage>
   );
 }

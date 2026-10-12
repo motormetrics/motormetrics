@@ -1,6 +1,7 @@
 import { Skeleton } from "@heroui/react";
 import { ClassesTable } from "@web/app/(main)/(dashboard)/cars/annual/components/classes-table";
 import { ElectricFleet } from "@web/app/(main)/(dashboard)/cars/annual/components/electric-fleet";
+import { ANNUAL_FAQS } from "@web/app/(main)/(dashboard)/cars/annual/components/faq-data";
 import { FuelSplit } from "@web/app/(main)/(dashboard)/cars/annual/components/fuel-split";
 import { PopulationByYear } from "@web/app/(main)/(dashboard)/cars/annual/components/population-by-year";
 import { PopulationHeadline } from "@web/app/(main)/(dashboard)/cars/annual/components/population-headline";
@@ -12,12 +13,14 @@ import {
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { EmptyState } from "@web/components/shared/empty-state";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,
   generateDatasetSchema,
+  generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph } from "@web/lib/metadata/social";
 import { getVehiclePopulationByCategoryAndFuelType } from "@web/queries/vehicle-population";
@@ -117,6 +120,16 @@ export default function AnnualPage() {
             <PopulationSections />
           </Suspense>
         </SectionErrorBoundary>
+
+        <Hairline />
+
+        <StructuredData
+          data={{
+            "@context": "https://schema.org",
+            ...generateFAQPageSchema([{ items: ANNUAL_FAQS }]),
+          }}
+        />
+        <PageFaq faqs={ANNUAL_FAQS} />
       </OverviewPage>
     </>
   );

@@ -1,12 +1,15 @@
 import { Skeleton } from "@heroui/react";
+import { MAKES_FAQS } from "@web/app/(main)/(dashboard)/cars/makes/components/faq-data";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { MakesContentSection } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-content-section";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/range-tabs";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
-import { OverviewPage } from "@web/components/shared/overview";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
+import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getCarsLatestMonth } from "@web/queries/cars";
 import type { Metadata } from "next";
@@ -95,6 +98,16 @@ export default function CarMakesPage({ searchParams }: PageProps) {
       />
       <StructuredData data={structuredData} />
       <MakesContentSection searchParams={searchParams} />
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: MAKES_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={MAKES_FAQS} />
     </OverviewPage>
   );
 }

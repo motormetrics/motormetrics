@@ -1,14 +1,17 @@
 import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { FUEL_TYPES_FAQS } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/faq-data";
 import { FuelTypesReport } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-report";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthMenu } from "@web/components/shared/month-menu";
-import { OverviewPage } from "@web/components/shared/overview";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
+import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
@@ -80,6 +83,16 @@ export default function Page({ searchParams }: PageProps) {
           <FuelTypesReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
+
+      <Hairline />
+
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: FUEL_TYPES_FAQS }]),
+        }}
+      />
+      <PageFaq faqs={FUEL_TYPES_FAQS} />
     </OverviewPage>
   );
 }
