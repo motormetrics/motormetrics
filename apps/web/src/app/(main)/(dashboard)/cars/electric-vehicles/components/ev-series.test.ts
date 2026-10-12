@@ -6,6 +6,7 @@ import {
   powertrainTotal,
   resolveMonthIndex,
   sliceRange,
+  summariseLeaderboard,
   yearToDateMakes,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import type { EvMarketShare, EvMonthlyTrend } from "@web/queries/cars";
@@ -224,5 +225,36 @@ describe("batteryElectricMakes", () => {
       { fuelType: "Electric", total: 0, makes: [{ make: "Ghost", count: 0 }] },
     ];
     expect(batteryElectricMakes(withZero)).toEqual([]);
+  });
+});
+
+describe("summariseLeaderboard", () => {
+  const makes = [
+    { make: "BMW", count: 1204 },
+    { make: "Mercedes-Benz", count: 980 },
+    { make: "Audi", count: 615 },
+    { make: "Porsche", count: 121 },
+  ];
+
+  it("should name the period, the total and the top three makes", () => {
+    expect(summariseLeaderboard(makes, "2026-09")).toBe(
+      "From January to September 2026, 2,920 battery-electric cars were registered; BMW led with 1,204, ahead of Mercedes-Benz and Audi.",
+    );
+  });
+
+  it("should name the single month in January", () => {
+    expect(summariseLeaderboard(makes.slice(0, 2), "2026-01")).toBe(
+      "In January 2026, 2,184 battery-electric cars were registered; BMW led with 1,204, ahead of Mercedes-Benz.",
+    );
+  });
+
+  it("should drop the runners-up when only one make registered", () => {
+    expect(summariseLeaderboard(makes.slice(0, 1), "2026-03")).toBe(
+      "From January to March 2026, 1,204 battery-electric cars were registered; BMW led with 1,204.",
+    );
+  });
+
+  it("should return undefined when there are no makes", () => {
+    expect(summariseLeaderboard([], "2026-09")).toBeUndefined();
   });
 });

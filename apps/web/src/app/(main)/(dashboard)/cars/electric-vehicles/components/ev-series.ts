@@ -9,6 +9,10 @@ import type {
   FuelTypeData,
 } from "@web/queries/cars";
 import type { FuelType, Make } from "@web/types/cars";
+import {
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
 
 /** Number of months each range keeps; `null` keeps the whole series. */
 const RANGE_MONTHS: Record<Range, number | null> = {
@@ -171,6 +175,36 @@ export function yearToDateMakes(
   return Array.from(totals, ([make, count]) => ({ make, count }))
     .filter(({ count }) => count > 0)
     .sort((a, b) => b.count - a.count || a.make.localeCompare(b.make));
+}
+
+/**
+ * The summary line under the EV makes leaderboard, e.g. "From January to
+ * September 2026, 2,920 battery-electric cars were registered; BMW led with
+ * 1,204, ahead of Mercedes-Benz and Audi." Plain text gives search engines
+ * the year's figures as a sentence, not only as table cells.
+ *
+ * `makes` is the full year-to-date ranking from `yearToDateMakes`, so the
+ * total counts every make, not just the ones the leaderboard shows.
+ */
+export function summariseLeaderboard(
+  makes: Make[],
+  month: string,
+): string | undefined {
+  const [leader, ...runnersUp] = makes;
+  if (!leader) {
+    return undefined;
+  }
+
+  const total = makes.reduce((sum, { count }) => sum + count, 0);
+  const period = month.endsWith("-01")
+    ? `In ${formatMonthLabel(month)}`
+    : `From January to ${formatMonthName(month)} ${month.slice(0, 4)}`;
+  const ahead = runnersUp
+    .slice(0, 2)
+    .map(({ make }) => make)
+    .join(" and ");
+
+  return `${period}, ${total.toLocaleString("en-SG")} battery-electric cars were registered; ${leader.make} led with ${leader.count.toLocaleString("en-SG")}${ahead ? `, ahead of ${ahead}` : ""}.`;
 }
 
 /**

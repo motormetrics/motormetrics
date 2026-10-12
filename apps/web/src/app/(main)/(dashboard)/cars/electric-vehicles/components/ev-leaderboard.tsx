@@ -1,6 +1,10 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
-import { yearToDateMakes } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+import {
+  summariseLeaderboard,
+  yearToDateMakes,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { EV_FUEL_TYPES } from "@web/config";
@@ -21,10 +25,9 @@ export async function EvLeaderboard({ month }: { month: string }) {
     getCarLogoMap(),
   ]);
 
-  const makes = yearToDateMakes(electric.data, EV_FUEL_TYPES.BEV, month).slice(
-    0,
-    LEADERBOARD_SIZE,
-  );
+  const ranking = yearToDateMakes(electric.data, EV_FUEL_TYPES.BEV, month);
+  const makes = ranking.slice(0, LEADERBOARD_SIZE);
+  const summary = summariseLeaderboard(ranking, month);
 
   if (makes.length === 0) {
     return null;
@@ -98,6 +101,12 @@ export async function EvLeaderboard({ month }: { month: string }) {
           })}
         </ol>
       </div>
+
+      {summary ? (
+        <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
+          {summary}
+        </Typography.Paragraph>
+      ) : null}
 
       <SourceNote>
         Year to date, January to {formatMonthLabel(month)}. Top six makes by
