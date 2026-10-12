@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 
 describe("PageNotFound", () => {
-  it("renders the 404 error message", async () => {
+  it("should render the 404 error message", async () => {
     const screen = await render(<PageNotFound />);
 
     expect(screen.container).toMatchSnapshot();
@@ -20,7 +20,7 @@ describe("PageNotFound", () => {
       .toBeInTheDocument();
   });
 
-  it("renders navigation buttons", async () => {
+  it("should render navigation buttons", async () => {
     const screen = await render(<PageNotFound />);
 
     await expect
@@ -41,7 +41,7 @@ describe("PageNotFound", () => {
     historyBackSpy.mockRestore();
   });
 
-  it("renders help text with links", async () => {
+  it("should render help text with links", async () => {
     const screen = await render(<PageNotFound />);
 
     await expect
@@ -52,7 +52,7 @@ describe("PageNotFound", () => {
       .toBeInTheDocument();
   });
 
-  it("has correct link href attributes", async () => {
+  it("should have correct link href attributes", async () => {
     const screen = await render(<PageNotFound />);
 
     await expect

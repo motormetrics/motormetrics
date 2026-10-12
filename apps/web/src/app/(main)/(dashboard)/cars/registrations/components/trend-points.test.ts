@@ -8,14 +8,14 @@ const seriesOf = (start: string, length: number) =>
   }));
 
 describe("trendPoints", () => {
-  it("puts the selected month in the darker series only", () => {
+  it("should put the selected month in the darker series only", () => {
     const points = trendPoints(seriesOf("2025-09", 12), "2026-01");
 
     expect(points[4]).toMatchObject({ other: 0, selected: 104, total: 104 });
     expect(points[3]).toMatchObject({ other: 103, selected: 0 });
   });
 
-  it("labels every month for a year, with the year on the first and January", () => {
+  it("should label every month for a year, with the year on the first and January", () => {
     const points = trendPoints(seriesOf("2025-09", 12), "2026-08");
 
     expect(points.map((point) => point.label)).toEqual([
@@ -38,7 +38,7 @@ describe("trendPoints", () => {
     expect(points[0].title).toBe("Sep 2025");
   });
 
-  it("marks only the first month and Januaries for three years", () => {
+  it("should mark only the first month and Januaries for three years", () => {
     const points = trendPoints(seriesOf("2023-09", 36), "2026-08");
     const marked = points.filter((point) => point.label);
 
@@ -50,7 +50,7 @@ describe("trendPoints", () => {
     ]);
   });
 
-  it("keeps only January year marks for longer ranges", () => {
+  it("should keep only January year marks for longer ranges", () => {
     const points = trendPoints(seriesOf("2016-01", 48), "2019-12");
 
     expect(points.every((point) => point.label === "")).toBe(true);

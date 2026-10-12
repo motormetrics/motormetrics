@@ -37,7 +37,7 @@ describe("getAllCarLogos", () => {
     cacheTagMock.mockClear();
   });
 
-  it("maps the manifest to logos and tags the cache", async () => {
+  it("should map the manifest to logos and tag the cache", async () => {
     readManifestMock.mockResolvedValueOnce({
       version: 1,
       updatedAt: "",
@@ -62,13 +62,13 @@ describe("getAllCarLogos", () => {
     expect(cacheTagMock).toHaveBeenCalledWith("logos");
   });
 
-  it("returns an empty list when no manifest exists yet", async () => {
+  it("should return an empty list when no manifest exists yet", async () => {
     readManifestMock.mockResolvedValueOnce(null);
 
     expect(await getAllCarLogos()).toEqual({ logos: [] });
   });
 
-  it("returns an error when blob access fails", async () => {
+  it("should return an error when blob access fails", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     readManifestMock.mockRejectedValueOnce(new Error("blob error"));
 
@@ -76,7 +76,7 @@ describe("getAllCarLogos", () => {
     consoleSpy.mockRestore();
   });
 
-  it("handles non-Error rejections", async () => {
+  it("should handle non-Error rejections", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     readManifestMock.mockRejectedValueOnce("string error");
 
@@ -86,7 +86,7 @@ describe("getAllCarLogos", () => {
 });
 
 describe("buildLogoMap", () => {
-  it("keys logo urls by slug and skips makes without one", () => {
+  it("should key logo urls by slug and skip makes without one", () => {
     expect(
       buildLogoMap([
         { make: "Mercedes Benz", filename: "mb.png", url: "https://x/mb.png" },

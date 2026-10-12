@@ -10,13 +10,13 @@ describe("entity existence checks", () => {
     resetDbMocks();
   });
 
-  it("returns undefined when fuel type does not exist", async () => {
+  it("should return undefined when fuel type does not exist", async () => {
     vi.mocked(dbMock.query.cars.findFirst).mockResolvedValueOnce(undefined);
 
     await expect(checkFuelTypeIfExist("hydrogen")).resolves.toBeUndefined();
   });
 
-  it("returns vehicle type when available", async () => {
+  it("should return vehicle type when available", async () => {
     vi.mocked(dbMock.query.cars.findFirst).mockResolvedValueOnce({
       vehicleType: "Sedan",
     });

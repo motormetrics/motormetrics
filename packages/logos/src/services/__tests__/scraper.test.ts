@@ -18,7 +18,7 @@ afterEach(() => {
 });
 
 describe("downloadLogo", () => {
-  it("downloads and uploads a logo at the minimum accepted size", async () => {
+  it("should download and upload a logo at the minimum accepted size", async () => {
     const buffer = new ArrayBuffer(100);
     fetchMock.mockResolvedValue(
       new Response(buffer, { headers: { "content-type": "image/png" } }),
@@ -47,7 +47,7 @@ describe("downloadLogo", () => {
     [404, true],
     [403, false],
     [500, false],
-  ])("handles HTTP %s", async (status, notFound) => {
+  ])("should handle HTTP %s", async (status, notFound) => {
     fetchMock.mockResolvedValue(new Response(null, { status }));
     await expect(downloadLogo("Mercedes Benz")).resolves.toEqual({
       success: false,
@@ -63,7 +63,7 @@ describe("downloadLogo", () => {
     "text/html",
     "application/json",
     "",
-  ])("treats a non-image response (%s) as missing", async (contentType) => {
+  ])("should treat a non-image response (%s) as missing", async (contentType) => {
     fetchMock.mockResolvedValue(
       new Response(null, {
         headers: contentType ? { "content-type": contentType } : {},
@@ -79,7 +79,9 @@ describe("downloadLogo", () => {
     expect(uploadLogo).not.toHaveBeenCalled();
   });
 
-  it.each([0, 99])("rejects a corrupted image of %s bytes", async (size) => {
+  it.each([
+    0, 99,
+  ])("should reject a corrupted image of %s bytes", async (size) => {
     fetchMock.mockResolvedValue(
       new Response(new ArrayBuffer(size), {
         headers: { "content-type": "image/png" },
@@ -98,7 +100,7 @@ describe("downloadLogo", () => {
   it.each([
     new Error("Network unavailable"),
     "unexpected failure",
-  ])("reports fetch failures", async (error) => {
+  ])("should report fetch failures", async (error) => {
     fetchMock.mockRejectedValue(error);
     await expect(downloadLogo("Mercedes Benz")).resolves.toEqual({
       success: false,
@@ -110,7 +112,7 @@ describe("downloadLogo", () => {
     expect(uploadLogo).not.toHaveBeenCalled();
   });
 
-  it("reports body read failures without uploading", async () => {
+  it("should report body read failures without uploading", async () => {
     const response = new Response(new ArrayBuffer(100), {
       headers: { "content-type": "image/png" },
     });
@@ -126,7 +128,7 @@ describe("downloadLogo", () => {
     expect(uploadLogo).not.toHaveBeenCalled();
   });
 
-  it("reports upload failures as retryable", async () => {
+  it("should report upload failures as retryable", async () => {
     fetchMock.mockResolvedValue(
       new Response(new ArrayBuffer(100), {
         headers: { "content-type": "image/png" },

@@ -84,12 +84,12 @@ describe("NotificationPrompt Component", () => {
     vi.useRealTimers();
   });
 
-  it("renders nothing directly", async () => {
+  it("should render nothing directly", async () => {
     const screen = await render(<NotificationPrompt />);
     expect(screen.container.firstChild).toBeNull();
   });
 
-  it("shows a delayed, temporary prompt when permission is undecided", async () => {
+  it("should show a delayed, temporary prompt when permission is undecided", async () => {
     await renderDelayedPrompt();
 
     expect(toast).toHaveBeenCalledWith(
@@ -114,7 +114,7 @@ describe("NotificationPrompt Component", () => {
   it.each([
     "granted",
     "denied",
-  ] as const)("does not prompt when permission is %s", async (permission) => {
+  ] as const)("should do not prompt when permission is %s", async (permission) => {
     globalThis.Notification = {
       requestPermission: vi.fn(),
       permission,
@@ -124,13 +124,13 @@ describe("NotificationPrompt Component", () => {
     expect(toast).not.toHaveBeenCalled();
   });
 
-  it("does not prompt after a previous dismissal", async () => {
+  it("should do not prompt after a previous dismissal", async () => {
     storage.set("motormetrics:notification-prompt-dismissed", "true");
     await renderDelayedPrompt();
     expect(toast).not.toHaveBeenCalled();
   });
 
-  it("requests permission only when Enable is pressed", async () => {
+  it("should request permission only when Enable is pressed", async () => {
     vi.mocked(globalThis.Notification.requestPermission).mockResolvedValue(
       "granted",
     );
@@ -153,7 +153,7 @@ describe("NotificationPrompt Component", () => {
     );
   });
 
-  it("dismisses without requesting permission", async () => {
+  it("should dismiss without requesting permission", async () => {
     await renderDelayedPrompt();
     const screen = await render(
       getFirstToastOptions().description as React.ReactElement,
@@ -172,7 +172,7 @@ describe("NotificationPrompt Component", () => {
     );
   });
 
-  it("shows guidance when the browser declines permission", async () => {
+  it("should show guidance when the browser declines permission", async () => {
     vi.mocked(globalThis.Notification.requestPermission).mockResolvedValue(
       "denied",
     );
@@ -191,7 +191,7 @@ describe("NotificationPrompt Component", () => {
     );
   });
 
-  it("remembers when the toast closes", async () => {
+  it("should remember when the toast closes", async () => {
     await renderDelayedPrompt();
     getFirstToastOptions().onClose?.();
 
@@ -201,7 +201,7 @@ describe("NotificationPrompt Component", () => {
     );
   });
 
-  it("does not prompt when the Notification API is unavailable", async () => {
+  it("should do not prompt when the Notification API is unavailable", async () => {
     delete (globalThis as Partial<typeof globalThis>).Notification;
     await renderDelayedPrompt();
     expect(toast).not.toHaveBeenCalled();

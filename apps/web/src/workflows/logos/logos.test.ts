@@ -61,7 +61,7 @@ describe("logosWorkflow", () => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
   });
 
-  it("does nothing when the manifest already covers every make", async () => {
+  it("should do nothing when the manifest already covers every make", async () => {
     vi.mocked(readManifest).mockResolvedValue(manifestWith("toyota", "bmw"));
     vi.mocked(getDistinctMakes).mockResolvedValue([
       { make: "TOYOTA" },
@@ -76,7 +76,7 @@ describe("logosWorkflow", () => {
     expect(revalidateTag).not.toHaveBeenCalled();
   });
 
-  it("fetches only unseen makes, records misses, and revalidates", async () => {
+  it("should fetch only unseen makes, record misses, and revalidate", async () => {
     vi.mocked(readManifest).mockResolvedValue(manifestWith("toyota"));
     vi.mocked(getDistinctMakes).mockResolvedValue([
       { make: "TOYOTA" },
@@ -116,7 +116,7 @@ describe("logosWorkflow", () => {
     expect(revalidateTag).toHaveBeenCalledWith("logos", "max");
   });
 
-  it("leaves a make out of the manifest on a retryable failure", async () => {
+  it("should leave a make out of the manifest on a retryable failure", async () => {
     vi.mocked(readManifest).mockResolvedValue(manifestWith());
     vi.mocked(getDistinctMakes).mockResolvedValue([{ make: "BYD" }]);
     vi.mocked(downloadLogo).mockResolvedValue({
@@ -134,7 +134,7 @@ describe("logosWorkflow", () => {
     expect(revalidateTag).not.toHaveBeenCalled();
   });
 
-  it("bootstraps and writes a manifest when none exists", async () => {
+  it("should bootstrap and write a manifest when none exists", async () => {
     vi.mocked(readManifest).mockResolvedValue(null);
     vi.mocked(bootstrapManifest).mockResolvedValue(manifestWith("toyota"));
     vi.mocked(getDistinctMakes).mockResolvedValue([{ make: "TOYOTA" }]);

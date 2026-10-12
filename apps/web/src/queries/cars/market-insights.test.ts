@@ -11,7 +11,7 @@ describe("car market insight queries", () => {
     resetDbMocks();
   });
 
-  it("returns top makes for the month", async () => {
+  it("should return top makes for the month", async () => {
     queueSelect([{ make: "Toyota", total: 15 }]);
 
     const result = await marketInsights.getTopMakes("2024-05");
@@ -19,7 +19,7 @@ describe("car market insight queries", () => {
     expect(result).toEqual([{ make: "Toyota", total: 15 }]);
   });
 
-  it("groups top makes for every fuel type", async () => {
+  it("should group top makes for every fuel type", async () => {
     // A single grouped query returns every fuel type / make pair for the month
     queueSelect([
       { fuelType: "Hybrid", make: "Toyota", count: 20 },
@@ -48,7 +48,7 @@ describe("car market insight queries", () => {
     expect(cacheTagMock).toHaveBeenCalledWith("cars:month:2024-06");
   });
 
-  it("reports every make in the fuel type total but only the top five", async () => {
+  it("should report every make in the fuel type total but only the top five", async () => {
     queueSelect(
       Array.from({ length: 7 }, (_, index) => ({
         fuelType: "Electric",
