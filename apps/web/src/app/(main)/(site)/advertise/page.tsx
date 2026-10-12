@@ -5,6 +5,7 @@ import { PlacementsSection } from "@web/app/(main)/(site)/advertise/components/p
 import { PricingSection } from "@web/app/(main)/(site)/advertise/components/pricing-section";
 import { StatsSection } from "@web/app/(main)/(site)/advertise/components/stats-section";
 import { TrafficChartSection } from "@web/app/(main)/(site)/advertise/components/traffic-chart-section";
+import { Hairline } from "@web/components/shared/overview";
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -69,13 +70,15 @@ export default async function AdvertisePage() {
     <>
       <StructuredData data={webPageSchema} />
 
-      <SitePage>
+      <SitePage className="gap-10 max-md:gap-7">
         <HeroSection />
         <StatsSection stats={stats} />
         <TrafficChartSection data={dailyTraffic} />
         <AudienceSection />
+        <Hairline />
         <PlacementsSection />
         <PricingSection />
+        <Hairline />
         <CtaSection />
       </SitePage>
     </>
