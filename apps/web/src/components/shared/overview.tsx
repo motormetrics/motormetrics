@@ -5,8 +5,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 /**
- * The v3 overview layout — the editorial rework of the bento in
- * `shared/bento.tsx`, and the overview-tier counterpart of `shared/report.tsx`.
+ * The v3 overview layout — the editorial rework of the card bento, and the
+ * overview-tier counterpart of `shared/report.tsx`.
  *
  * The v3 comps drop the cards altogether: every overview page is one column
  * of sections on the page background, ruled apart by hairlines, with each

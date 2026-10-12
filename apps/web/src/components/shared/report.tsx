@@ -3,7 +3,7 @@ import { Text } from "@web/components/shared/text";
 import type { ReactNode } from "react";
 
 /**
- * The v2 report layout — the editorial counterpart to `shared/bento.tsx`.
+ * The v2 report layout — the editorial counterpart to the card bento.
  *
  * The comps draw two distinct page families. Overview-tier pages use the bento:
  * a three-column grid of rounded cards. Every detail page instead uses a plain

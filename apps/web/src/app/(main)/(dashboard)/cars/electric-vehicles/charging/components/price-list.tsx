@@ -1,8 +1,7 @@
-import { Skeleton, Typography } from "@heroui/react";
+import { Card, Skeleton, Typography } from "@heroui/react";
 import { LocationRow } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/location-row";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { QueryTabs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/query-tabs";
-import { SurfaceCard } from "@web/components/shared/bento";
 import { getPostalDistrict } from "@web/config/postal-districts";
 import {
   getEvChargingPriceRankings,
@@ -30,7 +29,7 @@ interface PriceListProps {
  */
 export function PriceList({ order, searchParams }: PriceListProps) {
   return (
-    <SurfaceCard className="gap-4 p-7">
+    <Card className="gap-4 rounded-4xl p-7">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="flex flex-col gap-1">
           <Typography.Paragraph color="muted">
@@ -57,7 +56,7 @@ export function PriceList({ order, searchParams }: PriceListProps) {
       >
         <PriceRows order={order} searchParams={searchParams} />
       </Suspense>
-    </SurfaceCard>
+    </Card>
   );
 }
 

@@ -1,7 +1,6 @@
-import { Skeleton, Typography } from "@heroui/react";
+import { Card, Skeleton, Typography } from "@heroui/react";
 import { LocationRow } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/location-row";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
-import { SurfaceCard } from "@web/components/shared/bento";
 import { getPostalDistrict } from "@web/config/postal-districts";
 import {
   getEvChargingLocationUtilisation,
@@ -24,7 +23,7 @@ interface UtilisationListProps {
  */
 export function UtilisationList({ order, searchParams }: UtilisationListProps) {
   return (
-    <SurfaceCard className="gap-4 p-7">
+    <Card className="gap-4 rounded-4xl p-7">
       <div className="flex flex-col gap-1">
         <Typography.Paragraph color="muted">
           {order === "busiest" ? "Highest" : "Lowest"} average use
@@ -46,7 +45,7 @@ export function UtilisationList({ order, searchParams }: UtilisationListProps) {
       >
         <UtilisationRows order={order} searchParams={searchParams} />
       </Suspense>
-    </SurfaceCard>
+    </Card>
   );
 }
 
