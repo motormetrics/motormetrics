@@ -4,7 +4,7 @@ import { ChartTooltip } from "@heroui-pro/react";
 import { BarChart } from "@heroui-pro/react/bar-chart";
 import { parseAsString, useQueryState } from "nuqs";
 import posthog from "posthog-js";
-import { useSyncExternalStore, useTransition } from "react";
+import { useTransition } from "react";
 
 /** One month; `selected` or `other` carries the share, the other is zero. */
 export interface ShareColumn {
@@ -29,16 +29,6 @@ interface TickProps {
   y?: number | string;
 }
 
-const PHONE_QUERY = "(width < 48rem)";
-
-const subscribePhone = (onChange: () => void) => {
-  const query = window.matchMedia(PHONE_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-};
-
-const isPhoneViewport = () => window.matchMedia(PHONE_QUERY).matches;
-
 /**
  * The EV share by month as zero-based columns, the selected month darker.
  * Pro does not re-export Recharts' `Cell`, so the two shades are two stacked
@@ -61,11 +51,6 @@ export function ShareColumns({
     "month",
     parseAsString.withOptions({ shallow: false, startTransition }),
   );
-  const isPhone = useSyncExternalStore(
-    subscribePhone,
-    isPhoneViewport,
-    () => false,
-  );
 
   const select = (column?: { payload?: ShareColumn }) => {
     const month = column?.payload?.key;
@@ -83,14 +68,16 @@ export function ShareColumns({
     <BarChart
       className={isPending ? "opacity-70" : undefined}
       data={columns}
-      height={isPhone ? 200 : 230}
+      height={230}
       margin={{ bottom: 0, left: 0, right: 0, top: 8 }}
     >
       <BarChart.Grid vertical={false} />
       <BarChart.XAxis
         dataKey="label"
         height={40}
-        interval={0}
+        // Evenly spaced, widening the step until the labels fit; the first
+        // month is always drawn, so the opening year always shows.
+        interval="equidistantPreserveStart"
         tick={({ index, payload, x, y }: TickProps) => {
           const column = columns[payload?.index ?? index ?? 0];
           return (

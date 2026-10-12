@@ -2,7 +2,6 @@
 
 import { ChartTooltip } from "@heroui-pro/react";
 import { AreaChart } from "@heroui-pro/react/area-chart";
-import { useSyncExternalStore } from "react";
 
 export type EvSharePoint = {
   /** "Aug". */
@@ -38,20 +37,6 @@ interface TickProps {
   y?: number | string;
 }
 
-/**
- * Phone geometry below Tailwind's `md`: no end label and every third month
- * ticked.
- */
-const PHONE_QUERY = "(width < 48rem)";
-
-const subscribePhone = (onChange: () => void) => {
-  const query = window.matchMedia(PHONE_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-};
-
-const isPhoneViewport = () => window.matchMedia(PHONE_QUERY).matches;
-
 /** "+1.2 pts vs previous month", with a true minus for a fall. */
 const formatChange = (change: number): string =>
   `${change < 0 ? "−" : "+"}${Math.abs(change).toFixed(1)} pts vs previous month`;
@@ -73,18 +58,12 @@ export function EvShareChart({
   ticks: number[];
 }) {
   const lastIndex = data.length - 1;
-  const isPhone = useSyncExternalStore(
-    subscribePhone,
-    isPhoneViewport,
-    () => false,
-  );
-  const tickEvery = isPhone ? 3 : 2;
 
   return (
     <AreaChart
       data={data}
-      height={isPhone ? 240 : 260}
-      margin={{ bottom: 0, left: 0, right: isPhone ? 10 : 58, top: 12 }}
+      height={260}
+      margin={{ bottom: 0, left: 0, right: 58, top: 12 }}
     >
       <AreaChart.Grid
         horizontal={({ index, x1, x2, y1, y2 }: GridLineProps) => (
@@ -103,19 +82,12 @@ export function EvShareChart({
       <AreaChart.XAxis
         dataKey="label"
         height={44}
-        interval={0}
+        // Evenly spaced, widening the step until the labels fit; the first
+        // month is always drawn, so the opening year always shows.
+        interval="equidistantPreserveStart"
         tick={({ index, payload, x, y }: TickProps) => {
-          const position = payload?.index ?? index ?? 0;
-          // Anchored to the newest month so the last tick is always drawn.
-          if ((lastIndex - position) % tickEvery !== 0) {
-            return <g />;
-          }
-          const point = data[position];
-          // The first month may go unticked, so the first drawn tick carries
-          // its year instead.
-          const year =
-            point?.year ||
-            (position === lastIndex % tickEvery ? point?.title.slice(-4) : "");
+          const point = data[payload?.index ?? index ?? 0];
+          const year = point?.year;
           return (
             <text
               className="fill-muted text-xs tabular-nums"
@@ -161,7 +133,7 @@ export function EvShareChart({
                 stroke="var(--chart-1)"
                 strokeWidth={1.5}
               />
-              {index === lastIndex && !isPhone ? (
+              {index === lastIndex ? (
                 <text
                   className="fill-chart-1 font-semibold text-xs tabular-nums"
                   dominantBaseline="middle"

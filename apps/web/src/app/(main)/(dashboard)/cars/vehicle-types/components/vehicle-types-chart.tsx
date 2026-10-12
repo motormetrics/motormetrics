@@ -4,7 +4,6 @@ import { ChartTooltip } from "@heroui-pro/react";
 import { LineChart } from "@heroui-pro/react/line-chart";
 import { formatNumber } from "@motormetrics/utils/format-currency";
 import { compactCount } from "@web/utils/formatting/chart-axis";
-import { useSyncExternalStore } from "react";
 
 export interface VehicleSeries {
   /** Chart-colour custom property, shared with the headline and the tables. */
@@ -40,17 +39,6 @@ interface TickProps {
   y?: number | string;
 }
 
-/** Phone geometry below Tailwind's `md`: every third month ticked. */
-const PHONE_QUERY = "(width < 48rem)";
-
-const subscribePhone = (onChange: () => void) => {
-  const query = window.matchMedia(PHONE_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-};
-
-const isPhoneViewport = () => window.matchMedia(PHONE_QUERY).matches;
-
 /**
  * One line per charted vehicle type over twelve months, on a zero-based axis,
  * with a short-line legend above the plot as the comp draws it.
@@ -67,13 +55,6 @@ export function VehicleTypesChart({
   /** Ticks from `axisTicks`, anchored at zero. */
   ticks: number[];
 }) {
-  const lastIndex = data.length - 1;
-  const isPhone = useSyncExternalStore(
-    subscribePhone,
-    isPhoneViewport,
-    () => false,
-  );
-  const tickEvery = isPhone ? 3 : 1;
   const formatValue = (value: number) =>
     measure === "share" ? `${value.toFixed(1)}%` : formatNumber(value);
 
@@ -93,7 +74,7 @@ export function VehicleTypesChart({
       </ul>
       <LineChart
         data={data}
-        height={isPhone ? 270 : 320}
+        height={320}
         margin={{ bottom: 0, left: 0, right: 16, top: 12 }}
       >
         <LineChart.Grid
@@ -113,12 +94,12 @@ export function VehicleTypesChart({
         <LineChart.XAxis
           dataKey="label"
           height={40}
-          interval={0}
+          // Evenly spaced, widening the step until the labels fit; the
+          // first month is always drawn, so the opening year always shows.
+          interval="equidistantPreserveStart"
           tick={({ index, payload, x, y }: TickProps) => {
-            const position = payload?.index ?? index ?? 0;
-            const point = data[position];
-            // Anchored to the newest month so the last tick is always drawn.
-            if (!point || (lastIndex - position) % tickEvery !== 0) {
+            const point = data[payload?.index ?? index ?? 0];
+            if (!point) {
               return <g />;
             }
             return (
@@ -147,7 +128,7 @@ export function VehicleTypesChart({
             measure === "share" ? `${value}%` : compactCount(value)
           }
           ticks={ticks}
-          width={isPhone ? 40 : 48}
+          width={48}
         />
         {series.map(({ color, key, label }) => (
           <LineChart.Line

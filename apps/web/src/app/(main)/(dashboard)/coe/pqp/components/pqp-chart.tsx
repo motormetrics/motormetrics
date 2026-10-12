@@ -5,7 +5,6 @@ import { ChartTooltip } from "@heroui-pro/react";
 import { LineChart } from "@heroui-pro/react/line-chart";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { compactCurrency } from "@web/utils/formatting/chart-axis";
-import { useSyncExternalStore } from "react";
 
 export interface PQPSeries {
   /** The data key, e.g. `Category A`. */
@@ -45,20 +44,9 @@ interface TickProps {
   y?: number | string;
 }
 
-/** Phone geometry below Tailwind's `md`: no end labels, every third month. */
-const PHONE_QUERY = "(width < 48rem)";
-
-const subscribePhone = (onChange: () => void) => {
-  const query = window.matchMedia(PHONE_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-};
-
-const isPhoneViewport = () => window.matchMedia(PHONE_QUERY).matches;
-
 /** End labels closer than this, in px, are pushed apart. */
 const LABEL_CLEARANCE = 16;
-/** The desktop plot area's height: 300 less the top margin and the x-axis. */
+/** The plot area's height: 300 less the top margin and the x-axis. */
 const PLOT_HEIGHT = 244;
 
 /** "+0.4% vs previous month", with a true minus for a fall. */
@@ -89,12 +77,6 @@ export function PQPChart({
   ticks: number[];
 }) {
   const lastIndex = data.length - 1;
-  const isPhone = useSyncExternalStore(
-    subscribePhone,
-    isPhoneViewport,
-    () => false,
-  );
-  const tickEvery = isPhone ? 3 : 1;
   // The selected line is drawn last so it sits on top.
   const ordered = [...series].sort(
     (left, right) =>
@@ -140,8 +122,8 @@ export function PQPChart({
       </div>
       <LineChart
         data={data}
-        height={isPhone ? 260 : 300}
-        margin={{ bottom: 0, left: 0, right: isPhone ? 10 : 74, top: 12 }}
+        height={300}
+        margin={{ bottom: 0, left: 0, right: 74, top: 12 }}
       >
         <LineChart.Grid
           horizontal={({ index, x1, x2, y1, y2 }: GridLineProps) => (
@@ -160,21 +142,12 @@ export function PQPChart({
         <LineChart.XAxis
           dataKey="label"
           height={44}
-          interval={0}
+          // Evenly spaced, widening the step until the labels fit; the
+          // first month is always drawn, so the opening year always shows.
+          interval="equidistantPreserveStart"
           tick={({ index, payload, x, y }: TickProps) => {
-            const position = payload?.index ?? index ?? 0;
-            // Anchored to the newest month so the last tick is always drawn.
-            if ((lastIndex - position) % tickEvery !== 0) {
-              return <g />;
-            }
-            const point = data[position];
-            // The first month may go unticked, so the first drawn tick
-            // carries its year instead.
-            const year =
-              point?.year ||
-              (position === lastIndex % tickEvery
-                ? String(point?.title).slice(-4)
-                : "");
+            const point = data[payload?.index ?? index ?? 0];
+            const year = point?.year;
             return (
               <text
                 className="fill-muted text-xs tabular-nums"
@@ -222,7 +195,7 @@ export function PQPChart({
                       stroke={color}
                       strokeWidth={1.5}
                     />
-                    {index === lastIndex && !isPhone ? (
+                    {index === lastIndex ? (
                       <text
                         className={cn(
                           "font-semibold text-xs tabular-nums",
