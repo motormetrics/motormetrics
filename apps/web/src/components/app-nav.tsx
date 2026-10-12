@@ -1,10 +1,17 @@
 "use client";
 
 import type { Key } from "@heroui/react";
-import { Button, cn, Dropdown, Header, Label, Separator } from "@heroui/react";
+import {
+  Button,
+  Chip,
+  cn,
+  Dropdown,
+  Header,
+  Label,
+  Separator,
+} from "@heroui/react";
 import { Navbar } from "@heroui-pro/react";
 import { LogoMark, Wordmark } from "@web/components/brand-logo";
-import { NavBadge } from "@web/components/shared/chips";
 import {
   MORE_NAV_ITEMS,
   MORE_NAV_SECTION_LABEL,
@@ -61,6 +68,22 @@ const menuClassName = (itemCount: number) =>
 // own rows line up with the ones outside it.
 const menuSectionClassName = (itemCount: number) =>
   cn(menuGrid(itemCount), "col-span-full");
+
+/** HeroUI chip for a navigation item's `badge`, or nothing when it has none. */
+function NavBadge({ badge }: { badge?: NavigationItem["badge"] }) {
+  if (!badge) {
+    return null;
+  }
+  return (
+    <Chip
+      color={badge === "new" ? "accent" : "warning"}
+      size="sm"
+      variant="primary"
+    >
+      {badge === "new" ? "New" : "Beta"}
+    </Chip>
+  );
+}
 
 function NavMenuItems({ items }: { items: readonly NavigationItem[] }) {
   return items.map(({ badge, title, url }) => (

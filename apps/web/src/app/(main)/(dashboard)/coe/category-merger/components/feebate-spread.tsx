@@ -1,5 +1,6 @@
 import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { BarRow } from "@web/app/(main)/(dashboard)/coe/category-merger/components/bar-row";
 import {
   averageGap,
   EXERCISES_PER_YEAR,
@@ -8,7 +9,6 @@ import {
   widestGap,
 } from "@web/app/(main)/(dashboard)/coe/category-merger/components/premium-gap";
 import { THREE_BANDS } from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
-import { BarRow } from "@web/components/shared/bar-row";
 import { ReportStat } from "@web/components/shared/report";
 
 /** Both of LTA's options run from a $15,000 rebate to a $15,000 surcharge. */
