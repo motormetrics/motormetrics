@@ -1,5 +1,5 @@
 /** LTA's label for a battery-electric vehicle, used verbatim. */
-export const ELECTRIC = "Electric";
+const ELECTRIC = "Electric";
 
 /** LTA's vehicle type for private cars — the class the page is fixed on. */
 export const CARS = "Cars";

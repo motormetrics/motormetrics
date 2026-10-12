@@ -1,25 +1,11 @@
+import { PopulationChart } from "@web/app/(main)/(dashboard)/cars/annual/components/population-chart";
 import type { PopulationEntity } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
-import { ColumnChart } from "@web/components/shared/column-chart";
-import { SectionHead } from "@web/components/shared/overview";
-
-/** Years drawn in the column chart. */
-const CHART_YEARS = 10;
-
-const numberFormatter = new Intl.NumberFormat("en-SG", {
-  maximumFractionDigits: 0,
-});
-
-const formatChange = (previous: number | undefined, value: number) => {
-  if (previous === undefined || previous === 0) {
-    return "—";
-  }
-  const ratio = (value - previous) / previous;
-  return `${ratio >= 0 ? "+" : "−"}${Math.abs(ratio * 100).toFixed(1)}%`;
-};
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 
 /**
- * The run of years as columns. The series is computed on the server and the
- * chart is only a client island for its hover tooltip.
+ * Every year end on record as a line. The series is computed on the server
+ * and the chart is only a client island for its hover tooltip.
  */
 export function PopulationByYear({
   entity,
@@ -28,35 +14,38 @@ export function PopulationByYear({
   entity: PopulationEntity;
   years: string[];
 }) {
-  const offset = Math.max(0, years.length - CHART_YEARS);
-  const columns = years.slice(offset).map((year, index) => {
-    const position = offset + index;
-    const value = entity.series[position] ?? 0;
+  const data = years.map((year, index) => {
+    const population = entity.series[index] ?? 0;
+    const previous = entity.series[index - 1];
     return {
-      key: year,
-      label: year,
-      tooltip: {
-        rows: [
-          { label: "Population", value: numberFormatter.format(value) },
-          {
-            label: "Change",
-            value: formatChange(entity.series[position - 1], value),
-          },
-        ],
-        title: `${year} · ${entity.name}`,
-      },
-      value,
+      change:
+        previous === undefined || previous === 0
+          ? undefined
+          : (population - previous) / previous,
+      population,
+      year,
     };
   });
+  const ticks = axisTicks(entity.series, { zero: false });
+  const step = (ticks[1] ?? 0) - (ticks[0] ?? 0);
+  const name = entity.name.toLowerCase();
 
   return (
-    <div className="flex flex-col gap-7">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
-        caption={`${entity.name} · hover a column for detail`}
+        caption={`${years[0]} to ${years.at(-1)} · at 31 December each year · hover or tap for values`}
         eyebrow="Trend"
-        title="Population by year"
+        title={`${entity.name} on the road by year`}
       />
-      <ColumnChart baseline="trimmed" columns={columns} height={260} />
-    </div>
+      <PopulationChart data={data} ticks={ticks} />
+      <SourceNote>
+        Source: LTA via DataMall · {entity.name} registered at 31 December ·
+        Y-axis does not start at zero
+        {step > 0
+          ? `; gridlines every ${step.toLocaleString("en-SG")} ${name}`
+          : ""}
+        .
+      </SourceNote>
+    </section>
   );
 }
