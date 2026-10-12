@@ -6,6 +6,8 @@ import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glo
 import { GlossarySection } from "@web/app/(main)/(site)/learn/components/glossary-section";
 import { GuidesSection } from "@web/app/(main)/(site)/learn/components/guides-section";
 import { LearnStats } from "@web/app/(main)/(site)/learn/components/learn-stats";
+import { GUIDES } from "@web/app/(main)/(site)/learn/lib/guides";
+import { Hairline } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
@@ -76,16 +78,28 @@ export default function LearnPage() {
         data={{ "@context": "https://schema.org", ...breadcrumbSchema }}
       />
 
-      <SitePage>
+      <SitePage className="gap-10 max-md:gap-7">
         <PageHead
           description="COE, ARF, OMV, PARF and PQP, in plain language — the rules that set the price of a car in Singapore, with worked examples."
+          eyebrow="Guides"
+          sub={
+            <>
+              <span className="font-semibold text-foreground">
+                {GUIDES.length} guides
+              </span>{" "}
+              · Source: LTA via DataMall
+            </>
+          }
           title="Learn how car ownership costs actually work"
         />
         <LearnStats />
         <FeaturedGuide />
         <GuidesSection />
+        <Hairline />
         <GlossarySection />
+        <Hairline />
         <FAQSection />
+        <Hairline />
         <DataSourcesSection />
       </SitePage>
     </>

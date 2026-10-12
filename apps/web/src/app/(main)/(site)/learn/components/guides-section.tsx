@@ -1,29 +1,40 @@
-import { Typography } from "@heroui/react";
 import { GuideCard } from "@web/app/(main)/(site)/learn/components/guide-card";
-import { GUIDES } from "@web/app/(main)/(site)/learn/lib/guides";
+import {
+  GUIDES,
+  getReadingMinutes,
+} from "@web/app/(main)/(site)/learn/lib/guides";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 
 /**
- * The comp's "All guides" grid.
- *
- * The comp heads it with topic tabs (COE, Costs, Electric, Data). The guides
- * carry no topic, and all five sit under one heading anyway, so a filter would
- * be a control with nothing to do — the count stands in its place.
+ * The comp's "All guides" grid. The caption's reading time is the mean of the
+ * guides' own estimates, so it follows the guides as they are edited.
  */
 export function GuidesSection() {
-  return (
-    <section className="flex scroll-mt-24 flex-col gap-7" id="guides">
-      <div className="flex flex-wrap items-baseline gap-5">
-        <Typography.Heading level={2}>All guides</Typography.Heading>
-        <span className="font-semibold text-base text-muted">
-          {GUIDES.length} {GUIDES.length === 1 ? "guide" : "guides"}
-        </span>
-      </div>
+  const averageMinutes = Math.round(
+    GUIDES.reduce(
+      (total, guide) => total + getReadingMinutes(guide.content),
+      0,
+    ) / Math.max(1, GUIDES.length),
+  );
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+  return (
+    <section className="flex scroll-mt-24 flex-col gap-4" id="guides">
+      <SectionHead
+        caption={`${GUIDES.length} ${GUIDES.length === 1 ? "guide" : "guides"} · each about a ${averageMinutes} minute read`}
+        eyebrow="Guides"
+        title="All guides"
+      />
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {GUIDES.map((guide) => (
           <GuideCard guide={guide} key={guide.slug} />
         ))}
       </div>
+
+      <SourceNote>
+        Guides published on motormetrics.app/learn. Figures in each guide link
+        back to the live data pages.
+      </SourceNote>
     </section>
   );
 }
