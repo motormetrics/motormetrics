@@ -10,8 +10,6 @@ import Link from "next/link";
  * The post opening: breadcrumb, an eyebrow naming the topic, the title, then
  * the date, the reading estimate, the view count and the share control on one
  * ruled line.
- *
- * Held to a reading measure so the title breaks over the article's width.
  */
 export function PostHead({
   initialViewCount,
@@ -27,7 +25,7 @@ export function PostHead({
   const category = getCategoryConfig(post);
 
   return (
-    <div className="flex max-w-3xl flex-col gap-2.5">
+    <div className="flex flex-col gap-2.5">
       <nav
         aria-label="Breadcrumb"
         className="flex flex-wrap items-center gap-2 text-muted text-sm"

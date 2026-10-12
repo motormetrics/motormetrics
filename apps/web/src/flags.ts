@@ -7,10 +7,3 @@ export const advertisePage = flag<boolean>({
   defaultValue: false,
   adapter: vercelAdapter(),
 });
-
-/** Popular posts on blog pages. */
-export const blogPopularPosts = flag<boolean>({
-  key: "blog-popular-posts",
-  defaultValue: false,
-  adapter: vercelAdapter(),
-});
