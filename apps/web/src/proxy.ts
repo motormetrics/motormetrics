@@ -39,6 +39,23 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
+  // Agents asking for Markdown get the llms.txt summary of the homepage
+  // (acceptmarkdown.com). Fetched rather than rewritten so the route's
+  // text/plain Content-Type cannot win over text/markdown.
+  if (
+    pathname === "/" &&
+    request.headers.get("accept")?.includes("text/markdown")
+  ) {
+    const llmsTxt = await fetch(new URL("/llms.txt", request.url));
+    return new Response(await llmsTxt.text(), {
+      status: llmsTxt.status,
+      headers: {
+        "Content-Type": "text/markdown; charset=utf-8",
+        Vary: "Accept",
+      },
+    });
+  }
+
   const isAdminRoute = pathname.startsWith("/admin");
   const isAuthRoute = pathname.startsWith("/api/auth");
 
