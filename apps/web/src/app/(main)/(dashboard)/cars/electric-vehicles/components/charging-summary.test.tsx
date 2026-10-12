@@ -2,6 +2,11 @@ import { ChargingSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehic
 import { render } from "vitest-browser-react";
 
 vi.mock("@web/queries/ev-charging", () => ({
+  getEvChargingLiveSummary: async () => ({
+    connectors: 11_562,
+    locations: 2_776,
+    observedAt: "2026-10-01T17:40:00.000Z",
+  }),
   getEvChargingNetworkSummary: async () => ({ connectors: 15_000 }),
   getEvChargingRegistrationsByMonth: async () => [
     { count: 10_000, month: "2024-06" },
@@ -10,12 +15,21 @@ vi.mock("@web/queries/ev-charging", () => ({
 }));
 
 describe("ChargingSummary", () => {
-  it("should render the network growth as plain grey text", async () => {
+  it("should render the network growth as plain text, not a chip", async () => {
     const screen = await render(await ChargingSummary());
 
-    const growth = screen.getByText(/^\+50% on/);
-    await expect.element(growth).toHaveClass("text-muted-strong");
+    await expect.element(screen.getByText("+50%")).toBeInTheDocument();
     expect(screen.container.querySelector(".chip")).not.toBeInTheDocument();
+  });
+
+  it("should stamp the live feed in Singapore time", async () => {
+    const screen = await render(await ChargingSummary());
+
+    await expect
+      .element(
+        screen.getByText(/^Live feed · as of 1:40 am SGT, 2 October 2026$/),
+      )
+      .toBeInTheDocument();
   });
 
   it("should use HeroUI's large target bar with no track overrides", async () => {

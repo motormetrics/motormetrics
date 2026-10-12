@@ -1,13 +1,15 @@
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import { yearToDateMakes } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import { BarRow } from "@web/components/shared/bar-row";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import { SectionHead } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { EV_FUEL_TYPES } from "@web/config";
 import { getFuelTypeData } from "@web/queries/cars";
 import { getCarLogoMap } from "@web/queries/logos";
+import {
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
 import Link from "next/link";
 
 const LEADERBOARD_SIZE = 6;
@@ -31,50 +33,76 @@ export async function EvLeaderboard({ month }: { month: string }) {
   const leader = makes[0]?.count || 1;
 
   return (
-    <div className="flex flex-col gap-6">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
-        caption={`Battery-electric registrations · ${month.slice(0, 4)} year to date`}
-        eyebrow="Leaderboard"
+        caption={`Battery-electric registrations · ${month.slice(0, 4)} to ${formatMonthName(month)}`}
+        eyebrow="Makes"
         link={{ href: "/cars/makes", label: "All makes" }}
         title="EV makes"
       />
 
-      <ul className="flex flex-col gap-3.5">
-        {makes.map((item, index) => {
-          const slug = slugify(item.make);
+      <div className="flex flex-col">
+        <div className="flex items-center gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+          <span className="w-5">#</span>
+          <span className="min-w-0 flex-1 md:w-36 md:flex-none">Make</span>
+          <span className="min-w-0 flex-1 max-md:hidden" />
+          <span className="w-16 text-right">Cars</span>
+        </div>
+        <ol className="flex flex-col">
+          {makes.map((item, index) => {
+            const slug = slugify(item.make);
 
-          return (
-            <li key={item.make}>
-              <BarRow
-                color={`var(--chart-${index + 1})`}
-                label={
-                  <Link
-                    className="flex min-w-0 items-center gap-2.5 text-inherit no-underline transition-colors hover:text-accent-strong"
-                    href={`/cars/makes/${slug}`}
-                  >
-                    <MakeAvatar
-                      logoUrl={logoUrlBySlug[slug] ?? null}
-                      make={item.make}
-                      size="sm"
-                    />
-                    <Text.Paragraph tone="inherit" truncate>
-                      {item.make}
-                    </Text.Paragraph>
-                  </Link>
-                }
-                share={(item.count / leader) * 100}
-                value={
+            return (
+              <li
+                className="flex items-center gap-3 border-separator border-b py-2 hover:bg-surface-secondary"
+                key={item.make}
+              >
+                <span className="w-5 text-muted text-sm tabular-nums">
+                  {index + 1}
+                </span>
+                <Link
+                  className="flex min-w-0 flex-1 items-center gap-2.5 text-inherit no-underline transition-colors hover:text-accent-strong md:w-36 md:flex-none"
+                  href={`/cars/makes/${slug}`}
+                >
+                  <MakeAvatar
+                    logoUrl={logoUrlBySlug[slug] ?? null}
+                    make={item.make}
+                    size="sm"
+                  />
+                  <span className="truncate font-medium text-sm">
+                    {item.make}
+                  </span>
+                </Link>
+                <span
+                  aria-hidden
+                  className="block h-2.5 min-w-0 flex-1 bg-default max-md:hidden"
+                >
+                  <span
+                    className="block h-full rounded-r-xs"
+                    style={{
+                      background:
+                        index === 0 ? "var(--chart-1)" : "var(--chart-3)",
+                      width: `${((item.count / leader) * 100).toFixed(1)}%`,
+                    }}
+                  />
+                </span>
+                <span className="w-16 text-right font-semibold text-sm tabular-nums">
                   <NumberValue
                     locale="en-SG"
                     maximumFractionDigits={0}
                     value={item.count}
                   />
-                }
-              />
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+
+      <SourceNote>
+        Year to date, January to {formatMonthLabel(month)}. Top six makes by
+        battery-electric registrations.
+      </SourceNote>
+    </section>
   );
 }

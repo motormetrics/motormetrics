@@ -15,7 +15,7 @@ import {
   OverviewGrid,
   OverviewPage,
 } from "@web/components/shared/overview";
-import { PageEyebrow } from "@web/components/shared/page-eyebrow";
+import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -24,6 +24,7 @@ import {
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getEvMarketShare } from "@web/queries/cars";
+import { formatMonthLabel } from "@web/utils/dates/format-month";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import { Zap } from "lucide-react";
 import type { Metadata } from "next";
@@ -94,7 +95,7 @@ function SectionSkeleton({ className = "h-64" }: { className?: string }) {
 
 export default function ElectricVehiclesPage({ searchParams }: PageProps) {
   return (
-    <OverviewPage>
+    <OverviewPage className="gap-10 max-md:gap-7">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -113,14 +114,19 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
         }}
       />
 
-      <PageEyebrow
-        control={
-          <Suspense fallback={<Skeleton className="h-6 w-32" />}>
+      <PageHead
+        controls={
+          <Suspense fallback={<Skeleton className="h-8 w-36" />}>
             <MonthControl searchParams={searchParams} />
           </Suspense>
         }
-        section="Electric vehicles"
-        title="Electric vehicles"
+        eyebrow="Electric vehicles"
+        sub={
+          <Suspense fallback={<Skeleton className="h-5 w-72" />}>
+            <MonthSub searchParams={searchParams} />
+          </Suspense>
+        }
+        title="Electric vehicles in Singapore"
       />
 
       <Suspense
@@ -134,6 +140,21 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
         <EvOverview searchParams={searchParams} />
       </Suspense>
     </OverviewPage>
+  );
+}
+
+/** "August 2026 registrations · Source: LTA via DataMall", under the title. */
+async function MonthSub({ searchParams }: PageProps) {
+  const { month: requestedMonth } = await loadSearchParams(searchParams);
+  const { month } = await getMonthOrLatest(requestedMonth, "cars");
+
+  return (
+    <>
+      <span className="font-semibold text-foreground">
+        {formatMonthLabel(month)}
+      </span>{" "}
+      registrations · Source: LTA via DataMall
+    </>
   );
 }
 

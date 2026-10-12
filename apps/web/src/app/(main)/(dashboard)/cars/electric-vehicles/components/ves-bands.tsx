@@ -1,5 +1,4 @@
-import { cn, Typography } from "@heroui/react";
-import { SectionHead } from "@web/components/shared/overview";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 
 /**
  * Vehicular Emissions Scheme bands, as published by NEA.
@@ -16,7 +15,7 @@ const VES_BANDS = [
 
 export function VesBands() {
   return (
-    <div className="flex flex-col gap-6">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption="Vehicular Emissions Scheme bands most EVs qualify for"
         eyebrow="Incentives"
@@ -24,31 +23,32 @@ export function VesBands() {
         title="VES bands"
       />
 
-      <ul className="flex flex-col">
-        {VES_BANDS.map((row) => (
-          <li
-            className="flex items-center gap-3.5 border-separator border-b py-3.5"
-            key={row.band}
-          >
-            <span
-              className={cn(
-                "flex size-10 shrink-0 items-center justify-center rounded-full font-extrabold text-sm",
-                row.value === "$0"
-                  ? "bg-default text-muted-strong"
-                  : "bg-accent-soft text-accent-strong",
-              )}
+      <div className="flex flex-col">
+        <div className="flex items-center gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+          <span className="min-w-0 flex-1">Band</span>
+          <span className="w-24 text-right">Amount</span>
+        </div>
+        <ul className="flex flex-col">
+          {VES_BANDS.map((row) => (
+            <li
+              className="flex items-center gap-3 border-separator border-b py-2.5"
+              key={row.band}
             >
-              {row.band}
-            </span>
-            <Typography.Paragraph weight="semibold">
-              {row.note}
-            </Typography.Paragraph>
-            <span className="ml-auto font-extrabold text-lg tabular-nums">
-              {row.value}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
+              <span className="w-9 font-semibold text-sm">{row.band}</span>
+              <span className="min-w-0 flex-1 text-muted-strong text-sm">
+                {row.note}
+              </span>
+              <span className="w-24 text-right font-semibold tabular-nums">
+                {row.value}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <SourceNote>
+        Rebate amount for each Vehicular Emissions Scheme band.
+      </SourceNote>
+    </section>
   );
 }

@@ -23,7 +23,7 @@ interface PowertrainSegment {
  */
 export const POWERTRAIN_SEGMENTS: PowertrainSegment[] = [
   {
-    colour: "var(--accent)",
+    colour: "var(--chart-1)",
     key: "bev",
     label: "Battery-electric",
   },
@@ -45,10 +45,10 @@ export const POWERTRAIN_TABS: { key: Powertrain; label: string }[] = [
 ];
 
 /** Colour of everything that is neither battery-electric nor hybrid. */
-export const COMBUSTION_COLOUR = "var(--accent-soft)";
+export const COMBUSTION_COLOUR = "var(--chart-sand)";
 
-export const RANGE_NOTES: Record<Range, string> = {
+/** Period captions for the fixed ranges; "All" names its first month instead. */
+export const RANGE_NOTES: Record<Exclude<Range, "All">, string> = {
   "1Y": "12 months",
-  "3Y": "3 years",
-  All: "all months on record",
+  "3Y": "36 months",
 };

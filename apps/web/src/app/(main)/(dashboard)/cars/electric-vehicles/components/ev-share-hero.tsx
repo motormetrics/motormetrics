@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
   batteryElectricShares,
@@ -5,7 +6,6 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { ELECTRIC_POPULATION_FUEL_TYPE } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import { Headline } from "@web/components/shared/overview";
 import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 import {
@@ -63,34 +63,46 @@ export async function EvShareHero({ month }: { month: string }) {
     )
     .reduce((sum, row) => sum + row.total, 0);
 
+  const monthName = formatMonthName(point.month);
+  const previousMonth = trend[index - 1]?.month;
+
   return (
-    <div className="flex flex-col gap-2">
-      <Headline
-        caption={
+    <div className="flex flex-col gap-3">
+      <Typography.Paragraph color="muted" size="xs" weight="semibold">
+        EV share of new registrations · {monthName}
+      </Typography.Paragraph>
+      <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
+        {share.toFixed(1)}%
+      </span>
+      {previousMonth ? (
+        <Typography.Paragraph className="tabular-nums" color="muted">
+          <DeltaChip
+            className="font-semibold text-foreground"
+            unit="pp"
+            value={share - previousShare}
+          />{" "}
+          vs {formatMonthName(previousMonth)}
+        </Typography.Paragraph>
+      ) : null}
+      <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
+        <NumberValue
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={point.BEV}
+        />{" "}
+        battery-electric cars registered in {monthName}
+        {electricFleet > 0 ? (
           <>
+            {" · "}
             <NumberValue
               locale="en-SG"
               maximumFractionDigits={0}
-              value={point.BEV}
+              value={electricFleet}
             />{" "}
-            electric cars registered in {formatMonthName(point.month)}
-            {electricFleet > 0 ? (
-              <>
-                {" · "}
-                <NumberValue
-                  locale="en-SG"
-                  maximumFractionDigits={0}
-                  value={electricFleet}
-                />{" "}
-                EVs on the road
-              </>
-            ) : null}
+            EVs on the road
           </>
-        }
-        delta={<DeltaChip unit="pp" value={share - previousShare} />}
-        label="EV share of new registrations"
-        value={`${share.toFixed(1)}%`}
-      />
+        ) : null}
+      </Typography.Paragraph>
       <SparklineChart
         data={history}
         format={{

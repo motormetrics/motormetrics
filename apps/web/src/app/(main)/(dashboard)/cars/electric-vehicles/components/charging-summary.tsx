@@ -3,24 +3,45 @@ import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-network";
 import { CHARGING_POINT_TARGET_2030 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
-import { Headline, SectionHead } from "@web/components/shared/overview";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import {
+  getEvChargingLiveSummary,
   getEvChargingNetworkSummary,
   getEvChargingRegistrationsByMonth,
 } from "@web/queries/ev-charging";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 
+/** "1:40 am SGT, 2 October 2026", for the live feed line. */
+const formatObservedAt = (iso: string) => {
+  const observed = new Date(iso);
+  const time = observed.toLocaleString("en-SG", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "Asia/Singapore",
+  });
+  const date = observed.toLocaleString("en-SG", {
+    day: "numeric",
+    month: "long",
+    timeZone: "Asia/Singapore",
+    year: "numeric",
+  });
+  return `${time} SGT, ${date}`;
+};
+
 /**
- * Size of the public charging network against the 2030 target.
+ * Size of the public charging network against the 2030 target, with the
+ * hourly live feed's connector count beneath.
  *
  * Sourced from LTA DataMall's quarterly charging point registry; the section
  * is omitted until that registry has been ingested rather than showing an
- * invented figure.
+ * invented figure. The live line drops out on its own if the feed is empty
+ * or fails, so it never takes the registry figures down with it.
  */
 export async function ChargingSummary() {
-  const [network, monthly] = await Promise.all([
+  const [network, monthly, live] = await Promise.all([
     getEvChargingNetworkSummary(),
     getEvChargingRegistrationsByMonth(),
+    getEvChargingLiveSummary().catch(() => null),
   ]);
 
   if (network.connectors <= 0) {
@@ -34,7 +55,7 @@ export async function ChargingSummary() {
   );
 
   return (
-    <div className="flex flex-col gap-6">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption="Public charging points nationwide"
         eyebrow="Infrastructure"
@@ -45,38 +66,44 @@ export async function ChargingSummary() {
         title="Charging network"
       />
 
-      <Headline
-        caption={
-          <>
-            national target of{" "}
+      <div className="flex flex-wrap items-baseline gap-3">
+        <span className="font-bold text-3xl tabular-nums tracking-tight">
+          <NumberValue
+            locale="en-SG"
+            maximumFractionDigits={0}
+            value={network.connectors}
+          />
+        </span>
+        {growth?.growthPercent != null ? (
+          <Typography.Paragraph
+            className="tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            <span className="font-semibold text-foreground">
+              {growth.growthPercent >= 0 ? "+" : "−"}
+              {Math.abs(growth.growthPercent).toFixed(0)}%
+            </span>{" "}
+            on {formatDateToMonthYear(shiftMonth(growth.asOf, -12))}
+          </Typography.Paragraph>
+        ) : null}
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <div className="flex items-baseline justify-between gap-3 text-muted-strong text-sm">
+          <span>
+            Progress to the national target of{" "}
             <NumberValue
               locale="en-SG"
               maximumFractionDigits={0}
               value={CHARGING_POINT_TARGET_2030}
             />{" "}
             by 2030
-          </>
-        }
-        delta={
-          growth?.growthPercent != null ? (
-            <span className="text-muted-strong tabular-nums">
-              {growth.growthPercent >= 0 ? "+" : "−"}
-              {Math.abs(growth.growthPercent).toFixed(0)}% on{" "}
-              {formatDateToMonthYear(shiftMonth(growth.asOf, -12))}
-            </span>
-          ) : undefined
-        }
-        size="md"
-        value={
-          <NumberValue
-            locale="en-SG"
-            maximumFractionDigits={0}
-            value={network.connectors}
-          />
-        }
-      />
-
-      <div className="flex flex-col gap-3">
+          </span>
+          <span className="font-semibold text-foreground tabular-nums">
+            {targetShare.toFixed(1)}%
+          </span>
+        </div>
         <ProgressBar
           aria-label="Share of the 2030 target installed"
           size="lg"
@@ -86,10 +113,40 @@ export async function ChargingSummary() {
             <ProgressBar.Fill />
           </ProgressBar.Track>
         </ProgressBar>
-        <Typography.Paragraph weight="medium" color="muted" size="sm">
-          {targetShare.toFixed(0)}% of the 2030 target installed
-        </Typography.Paragraph>
       </div>
-    </div>
+
+      {live && live.connectors > 0 && live.observedAt ? (
+        <div className="flex flex-col gap-1 border-separator border-t pt-3.5">
+          <Typography.Paragraph color="muted" size="xs" weight="semibold">
+            Live feed · as of {formatObservedAt(live.observedAt)}
+          </Typography.Paragraph>
+          <Typography.Paragraph className="text-muted-strong text-sm tabular-nums">
+            <span className="font-semibold text-foreground">
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={live.connectors}
+              />
+            </span>{" "}
+            public connectors at{" "}
+            <span className="font-semibold text-foreground">
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={live.locations}
+              />
+            </span>{" "}
+            locations
+          </Typography.Paragraph>
+        </div>
+      ) : null}
+
+      <SourceNote>
+        Charging points from LTA, with the 2030 target of{" "}
+        {CHARGING_POINT_TARGET_2030.toLocaleString("en-SG")}. The live feed is
+        LTA DataMall EV Charging Points, refreshed hourly, and counts individual
+        connectors.
+      </SourceNote>
+    </section>
   );
 }

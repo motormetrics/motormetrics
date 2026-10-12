@@ -9,12 +9,9 @@ import {
   POWERTRAIN_SEGMENTS,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import { Headline } from "@web/components/shared/overview";
+import { SourceNote } from "@web/components/shared/overview";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 import { formatMonthName } from "@web/utils/dates/format-month";
-
-/** Below this share a segment has no room for its own label inside the bar. */
-const LABEL_THRESHOLD = 10;
 
 /** Battery-electric, plug-in and conventional hybrids as one combined share. */
 export async function ElectrifiedTotal({ month }: { month: string }) {
@@ -51,60 +48,81 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
 
   const split = buildRegistrationSplit(point, total, POWERTRAIN_SEGMENTS, {
     colour: COMBUSTION_COLOUR,
-    label: "Petrol & diesel",
+    label: "Petrol and diesel",
   });
+  const monthName = formatMonthName(point.month);
+  const previousMonth = trend[index - 1]?.month;
 
   return (
-    <div className="flex flex-col gap-5">
-      <Headline
-        caption={`battery-electric and hybrid combined · ${formatMonthName(point.month)}`}
-        delta={<DeltaChip unit="pp" value={electrifiedShare - previousShare} />}
-        label="Electrified total"
-        value={`${electrifiedShare.toFixed(1)}%`}
-      />
+    <div className="flex flex-col gap-3">
+      <Typography.Paragraph color="muted" size="xs" weight="semibold">
+        Electrified total · {monthName}
+      </Typography.Paragraph>
+      <div className="flex flex-wrap items-baseline gap-3">
+        <span className="font-bold text-3xl tabular-nums tracking-tight">
+          {electrifiedShare.toFixed(1)}%
+        </span>
+        {previousMonth ? (
+          <Typography.Paragraph className="tabular-nums" color="muted">
+            <DeltaChip
+              className="font-semibold text-foreground"
+              unit="pp"
+              value={electrifiedShare - previousShare}
+            />{" "}
+            vs {formatMonthName(previousMonth)}
+          </Typography.Paragraph>
+        ) : null}
+      </div>
 
-      <div className="flex h-10 overflow-hidden rounded-full">
+      <div
+        aria-label="Share of new car registrations by powertrain"
+        className="flex h-4 gap-0.5"
+        role="img"
+      >
         {split.map((segment) => (
           <span
-            className="inline-flex items-center justify-center font-extrabold text-sm tabular-nums"
+            className="block h-full"
             key={segment.label}
             style={{
               background: segment.colour,
-              color:
-                segment.colour === COMBUSTION_COLOUR
-                  ? "var(--accent-strong)"
-                  : "var(--accent-foreground)",
-              flex: `${segment.share.toFixed(2)} 1 0`,
+              width: `${segment.share.toFixed(2)}%`,
             }}
-          >
-            {segment.share >= LABEL_THRESHOLD
-              ? `${segment.share.toFixed(0)}%`
-              : ""}
-          </span>
+          />
         ))}
       </div>
 
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col">
         {split.map((segment) => (
-          <li className="flex items-center gap-2.5" key={segment.label}>
+          <li
+            className="flex items-center gap-2.5 border-separator border-b py-2"
+            key={segment.label}
+          >
             <span
               aria-hidden
-              className="size-[11px] shrink-0 rounded-full"
+              className="size-3 shrink-0 rounded-xs"
               style={{ background: segment.colour }}
             />
-            <Typography.Paragraph weight="semibold">
+            <span className="min-w-0 flex-1 truncate text-sm">
               {segment.label}
-            </Typography.Paragraph>
-            <span className="ml-auto font-extrabold text-base tabular-nums">
+            </span>
+            <span className="w-16 text-right font-semibold text-sm tabular-nums">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
                 value={segment.value}
               />
             </span>
+            <span className="w-14 text-right text-muted text-xs tabular-nums">
+              {segment.share.toFixed(1)}%
+            </span>
           </li>
         ))}
       </ul>
+
+      <SourceNote>
+        Electrified is battery-electric, plug-in hybrid and hybrid combined, as
+        a share of {total.toLocaleString("en-SG")} new cars.
+      </SourceNote>
     </div>
   );
 }
