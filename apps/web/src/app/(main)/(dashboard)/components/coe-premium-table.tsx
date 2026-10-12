@@ -5,10 +5,10 @@ import {
   formatExercise,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { CoePremiumSparkline } from "@web/app/(main)/(dashboard)/components/coe-premium-sparkline";
 import { windowEndingAt } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { getAllCoeCategoryTrends } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
 import { changeRatio } from "@web/utils/change-ratio";
@@ -124,21 +124,13 @@ export async function CoePremiumTable() {
               <span className={cn(CHANGE_CELL, "text-sm")}>
                 <CostTrendChip changeRatio={row.changeRatio} />
               </span>
-              <SparklineChart
+              <CoePremiumSparkline
+                category={row.category}
                 className={TREND_CELL}
-                color="var(--chart-3)"
                 data={row.series.map((point) => ({
                   label: formatMonthLabel(point.month),
                   value: point.premium,
                 }))}
-                endDot
-                fillOpacity={0}
-                format={{ currency: "SGD", style: "currency" }}
-                height={28}
-                margin={{ bottom: 3, left: 0, right: 3, top: 3 }}
-                name="Premium"
-                strokeWidth={1.5}
-                title={`${row.category} premiums over the last ${row.series.length} months`}
               />
             </li>
           ))}

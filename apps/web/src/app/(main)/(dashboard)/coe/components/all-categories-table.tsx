@@ -2,6 +2,7 @@
 
 import { type Selection, Typography } from "@heroui/react";
 import { DataGrid, type DataGridColumn, NumberValue } from "@heroui-pro/react";
+import { LineChart } from "@heroui-pro/react/line-chart";
 import {
   type CategoryRow,
   DEFAULT_SORT,
@@ -15,8 +16,14 @@ import { useCoeCategory } from "@web/app/(main)/(dashboard)/coe/components/coe-c
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { SourceNote } from "@web/components/shared/overview";
-import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { useState } from "react";
+
+/** Whole-dollar premiums for the trend tooltip. */
+const PREMIUM_FORMAT = new Intl.NumberFormat("en-SG", {
+  currency: "SGD",
+  maximumFractionDigits: 0,
+  style: "currency",
+});
 
 /** "1.26×"; a dash when the quota is missing rather than dividing by zero. */
 const bidsPerCoe = (row: CategoryRow): string =>
@@ -133,22 +140,50 @@ export function AllCategoriesTable({
       width: 90,
     },
     {
-      cell: (row) => (
-        <SparklineChart
-          color={
-            row.categoryKey === selected ? "var(--chart-1)" : "var(--chart-4)"
-          }
-          data={row.series}
-          endDot
-          fillOpacity={0}
-          format={{ currency: "SGD", style: "currency" }}
-          height={30}
-          margin={{ bottom: 3, left: 0, right: 3, top: 3 }}
-          name="Premium"
-          strokeWidth={1.5}
-          title={`${row.category} premiums over the last ${row.series.length} exercises`}
-        />
-      ),
+      cell: (row) => {
+        // A series too short to draw leaves the cell empty.
+        if (row.series.length < 2) {
+          return null;
+        }
+        const lastIndex = row.series.length - 1;
+        const color =
+          row.categoryKey === selected ? "var(--chart-1)" : "var(--chart-4)";
+        return (
+          <LineChart
+            aria-label={`${row.category} premiums over the last ${row.series.length} exercises`}
+            data={row.series}
+            height={30}
+            margin={{ bottom: 3, left: 0, right: 3, top: 3 }}
+            role="img"
+          >
+            <LineChart.XAxis dataKey="label" hide />
+            <LineChart.YAxis domain={["dataMin", "dataMax"]} hide />
+            <LineChart.Line
+              dataKey="value"
+              dot={({ cx, cy, index }) =>
+                index === lastIndex ? (
+                  <circle cx={cx} cy={cy} fill={color} key={index} r={2.5} />
+                ) : (
+                  <g key={index} />
+                )
+              }
+              name="Premium"
+              stroke={color}
+              strokeWidth={1.5}
+              type="monotone"
+            />
+            <LineChart.Tooltip
+              content={
+                <LineChart.TooltipContent
+                  valueFormatter={(value) =>
+                    PREMIUM_FORMAT.format(Number(value))
+                  }
+                />
+              }
+            />
+          </LineChart>
+        );
+      },
       header: "Last 24 exercises",
       id: "trend",
       width: 150,

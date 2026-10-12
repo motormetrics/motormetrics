@@ -4,7 +4,6 @@ import {
   SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
-import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { render } from "vitest-browser-react";
 
 describe("SectionLink", () => {
@@ -107,35 +106,5 @@ describe("Headline", () => {
     await expect.element(screen.getByText("6,100")).toBeInTheDocument();
     await expect.element(screen.getByText("+5.2%")).toBeInTheDocument();
     await expect.element(screen.getByText("vs September")).toBeInTheDocument();
-  });
-});
-
-describe("SparklineChart", () => {
-  it("should render nothing for a series too short to draw", async () => {
-    const screen = await render(
-      <SparklineChart
-        data={[{ label: "Jan", value: 1 }]}
-        name="Registrations"
-        title="One point"
-      />,
-    );
-    expect(screen.container).toBeEmptyDOMElement();
-  });
-
-  it("should name the chart for assistive technology", async () => {
-    const screen = await render(
-      <SparklineChart
-        data={[
-          { label: "Jan", value: 3 },
-          { label: "Feb", value: 5 },
-          { label: "Mar", value: 4 },
-        ]}
-        name="Registrations"
-        title="Registrations"
-      />,
-    );
-    await expect
-      .element(screen.getByRole("img", { name: "Registrations" }))
-      .toBeInTheDocument();
   });
 });
