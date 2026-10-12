@@ -1,50 +1,30 @@
+import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/search-params";
+import { PeriodSegment } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-filters";
 import {
-  type CategoryConfig,
-  CategoryOverview,
-} from "@web/app/(main)/(dashboard)/cars/components/category/category-overview";
-import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
-import { SITE_URL } from "@web/config";
+  loadVehicleTypesSearchParams,
+  periodLabelFor,
+  VehicleTypesReport,
+} from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-report";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { MonthMenu } from "@web/components/shared/month-menu";
+import { OverviewPage } from "@web/components/shared/overview";
+import { PageHead } from "@web/components/shared/page-head";
+import { SkeletonCard } from "@web/components/shared/skeleton";
+import { StructuredData } from "@web/components/structured-data";
+import { SITE_TITLE, SITE_URL } from "@web/config";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { getMonthOrLatest } from "@web/utils/dates/months";
+import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
+import type { WebPage, WithContext } from "schema-dts";
 
-/**
- * The table's description column is authored copy, not data — there is no
- * equivalent of `FUEL_TYPE_LINKS` descriptions for vehicle types, so these are
- * written here. Keys are the values exactly as LTA records them.
- */
-const descriptions: Record<string, string> = {
-  "Coupe/Convertible": "Two doors, with a fixed or folding roof",
-  Hatchback: "Rear door opens onto the cabin, with no separate boot",
-  "Multi-purpose Vehicle": "Tall single-volume cabin, usually with a third row",
-  "Multi-purpose Vehicle/Station-wagon":
-    "MPVs and station-wagons, recorded by LTA as one class",
-  Others: "Vehicle types LTA does not report separately",
-  Sedan: "Separate enclosed boot behind the cabin",
-  "Sports Utility Vehicle": "Raised ride height, often with all-wheel drive",
-  "Station-wagon": "Extended roof over the load area, tailgate at the rear",
-};
-
-const config: CategoryConfig = {
-  title: "Vehicle types",
-  apiDataField: "vehicleType",
-  singularLabel: "Vehicle type",
-  descriptions,
-  description:
-    "Comprehensive overview of all vehicle types in {month} Singapore car registrations. Compare sedans, hatchbacks, SUVs, MPVs and station-wagons.",
-  lede: "The vehicle types behind each month's new car registrations in Singapore.",
-  notes: [
-    "LTA records the vehicle type at registration, so every car counts once, under the class on its registration record.",
-    "Vehicle type does not determine COE category — engine capacity and power output do.",
-  ],
-  relatedLinks: [
-    { href: "/cars/vehicle-types/hatchback", label: "Hatchbacks in detail" },
-    { href: "/cars/fuel-types", label: "Fuel types" },
-  ],
-  urlPath: "/cars/vehicle-types",
-};
+const title = "Vehicle types";
+const description =
+  "Comprehensive overview of all vehicle types in {month} Singapore car registrations. Compare sedans, hatchbacks, SUVs, MPVs and station-wagons.";
+const canonical = "/cars/vehicle-types";
 
 interface PageProps {
   searchParams: Promise<SearchParams>;
@@ -57,23 +37,22 @@ export async function generateMetadata({
   const { month } = await getMonthOrLatest(parsedMonth, "cars");
   const formattedMonth = formatDateToMonthYear(month);
 
-  const title = "Car Registrations by Vehicle Type";
-  const description = config.description.replace("{month}", formattedMonth);
-  const canonical = config.urlPath;
+  const metaTitle = "Car Registrations by Vehicle Type";
+  const metaDescription = description.replace("{month}", formattedMonth);
 
   return {
-    title,
-    description,
+    title: metaTitle,
+    description: metaDescription,
     openGraph: {
       ...baseOpenGraph,
-      title,
-      description,
+      title: metaTitle,
+      description: metaDescription,
       url: `${SITE_URL}${canonical}`,
     },
     twitter: {
       ...baseTwitter,
-      title,
-      description,
+      title: metaTitle,
+      description: metaDescription,
     },
     alternates: {
       canonical,
@@ -82,5 +61,103 @@ export async function generateMetadata({
 }
 
 export default function Page({ searchParams }: PageProps) {
-  return <CategoryOverview config={config} searchParams={searchParams} />;
+  return (
+    <OverviewPage className="gap-10 max-md:gap-7">
+      <PageHead
+        controls={
+          <>
+            {/* nuqs reads the URL on the client, so the segment needs its own
+                boundary to keep the static shell. */}
+            <Suspense fallback={<Skeleton className="h-8 w-48" />}>
+              <PeriodSegment />
+            </Suspense>
+            <Suspense fallback={<Skeleton className="h-8 w-36" />}>
+              <VehicleTypesMonthPicker searchParams={searchParams} />
+            </Suspense>
+          </>
+        }
+        eyebrow="Cars"
+        sub={
+          <Suspense fallback={<Skeleton className="h-5 w-72" />}>
+            <VehicleTypesMonthSub searchParams={searchParams} />
+          </Suspense>
+        }
+        title={title}
+      />
+
+      <SectionErrorBoundary title="Vehicle types unavailable">
+        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+          <VehicleTypesStructuredData searchParams={searchParams} />
+          <VehicleTypesReport searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
+    </OverviewPage>
+  );
+}
+
+/** Names the period the page reports, what it counts and its source. */
+async function VehicleTypesMonthSub({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { month: parsedMonth, period } =
+    await loadVehicleTypesSearchParams(searchParams);
+  const { month } = await getMonthOrLatest(parsedMonth, "cars");
+
+  return (
+    <>
+      <span className="font-semibold text-foreground">
+        {periodLabelFor(period, month)}
+      </span>{" "}
+      · the vehicle types behind new car registrations · Source: LTA via
+      DataMall
+    </>
+  );
+}
+
+async function VehicleTypesMonthPicker({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { month: parsedMonth } = await loadSearchParams(searchParams);
+
+  const [months, { wasAdjusted }] = await Promise.all([
+    fetchMonthsForCars(),
+    getMonthOrLatest(parsedMonth, "cars"),
+  ]);
+
+  return (
+    <MonthMenu
+      latestMonth={months[0]}
+      months={months}
+      wasAdjusted={wasAdjusted}
+    />
+  );
+}
+
+async function VehicleTypesStructuredData({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { month: parsedMonth } = await loadSearchParams(searchParams);
+  const { month } = await getMonthOrLatest(parsedMonth, "cars");
+  const formattedMonth = formatDateToMonthYear(month);
+
+  const structuredData: WithContext<WebPage> = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `${formattedMonth} ${title}`,
+    description: description.replace("{month}", formattedMonth),
+    url: `${SITE_URL}${canonical}`,
+    publisher: {
+      "@type": "Organization",
+      name: SITE_TITLE,
+      url: SITE_URL,
+    },
+  };
+
+  return <StructuredData data={structuredData} />;
 }
