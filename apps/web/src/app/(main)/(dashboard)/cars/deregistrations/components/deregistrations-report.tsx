@@ -10,7 +10,10 @@ import { DeregistrationsHeadline } from "@web/app/(main)/(dashboard)/cars/deregi
 import { MonthTable } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/month-table";
 import { stackedPoints } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/stacked-points";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
-import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import {
+  axisTicks,
+  summariseMonth,
+} from "@web/app/(main)/(dashboard)/components/overview-series";
 import {
   Hairline,
   SectionHead,
@@ -164,6 +167,13 @@ export async function DeregistrationsReport({
       total: sumOf(monthTotals),
     };
   });
+  // Months before the feed begins total zero; they are gaps, not lows.
+  const summary = summariseMonth(
+    monthlyRows.filter((row) => row.total > 0),
+    month,
+    "vehicles deregistered",
+    `${rows[0].category} had the most at ${rows[0].count.toLocaleString("en-SG")}`,
+  );
 
   return (
     <>
@@ -201,6 +211,15 @@ export async function DeregistrationsReport({
             { zero: true },
           )}
         />
+        {summary ? (
+          <Typography.Paragraph
+            className="tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {summary}
+          </Typography.Paragraph>
+        ) : null}
         <SourceNote>
           All vehicle types, counted against the COE category each vehicle held.{" "}
           {formatMonthShortLabel(month)} is highlighted.
