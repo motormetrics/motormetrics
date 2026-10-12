@@ -7,7 +7,6 @@ import { toCategoryKey } from "@web/app/(main)/(dashboard)/coe/components/coe-ex
 import { CATEGORY_COLOURS } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import type { COECategory } from "@web/types";
 import { compactCurrency } from "@web/utils/formatting/chart-axis";
-import { useSyncExternalStore } from "react";
 
 /** One exercise; the category keys carry its closing premiums. */
 export type ResultsPoint = Record<string, number | string> & {
@@ -21,22 +20,13 @@ export type ResultsPoint = Record<string, number | string> & {
 };
 
 interface TickProps {
-  index?: number;
-  payload?: { index?: number };
+  payload?: { value?: string };
   x?: number | string;
   y?: number | string;
 }
 
-/** Phone geometry below Tailwind's `md`: a tick every fourth month. */
-const PHONE_QUERY = "(width < 48rem)";
-
-const subscribePhone = (onChange: () => void) => {
-  const query = window.matchMedia(PHONE_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-};
-
-const isPhoneViewport = () => window.matchMedia(PHONE_QUERY).matches;
+/** Months between x ticks, on first exercises. */
+const TICK_MONTHS = 2;
 
 /**
  * Closing premiums per exercise, one line per selected category, on a shared
@@ -55,14 +45,8 @@ export function ResultsChart({
   ticks: number[];
 }) {
   const lastIndex = data.length - 1;
-  const isPhone = useSyncExternalStore(
-    subscribePhone,
-    isPhoneViewport,
-    () => false,
-  );
-  const tickEvery = isPhone ? 4 : 2;
   const ticked = data.flatMap((point, position) =>
-    point.biddingNo === 1 && point.monthIndex % tickEvery === 0
+    point.biddingNo === 1 && point.monthIndex % TICK_MONTHS === 0
       ? [position]
       : [],
   );
@@ -70,19 +54,20 @@ export function ResultsChart({
   return (
     <LineChart
       data={data}
-      height={isPhone ? 270 : 320}
-      margin={{ bottom: 0, left: 0, right: isPhone ? 10 : 16, top: 12 }}
+      height={320}
+      margin={{ bottom: 0, left: 0, right: 16, top: 12 }}
     >
       <LineChart.Grid vertical={false} />
       <LineChart.XAxis
-        dataKey="label"
+        // Titles are unique per exercise, so the planned ticks can be named;
+        // Recharts then drops any of those that would collide.
+        dataKey="title"
         height={44}
-        interval={0}
-        tick={({ index, payload, x, y }: TickProps) => {
-          const position = payload?.index ?? index ?? 0;
-          if (!ticked.includes(position)) {
-            return <g />;
-          }
+        interval="preserveStartEnd"
+        tick={({ payload, x, y }: TickProps) => {
+          const position = data.findIndex(
+            (point) => point.title === payload?.value,
+          );
           const point = data[position];
           // January carries its year, and so does the first drawn tick.
           const year =
@@ -107,14 +92,18 @@ export function ResultsChart({
             </text>
           );
         }}
+        tickFormatter={(title: string) =>
+          data.find((point) => point.title === title)?.label ?? title
+        }
         tickMargin={6}
+        ticks={ticked.map((position) => data[position].title)}
       />
       <LineChart.YAxis
         domain={[ticks[0] ?? "auto", ticks.at(-1) ?? "auto"]}
         orientation="left"
         tickFormatter={compactCurrency}
         ticks={ticks}
-        width={isPhone ? 46 : 56}
+        width={56}
       />
       {categories.map((category) => {
         const color = CATEGORY_COLOURS[category];
