@@ -12,7 +12,10 @@ import {
   premiumRangeStats,
   recordHighs,
   summariseByYear,
+  summariseCategoryExercise,
   summariseExercise,
+  summarisePQP,
+  summariseYears,
   toCategory,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
@@ -259,6 +262,86 @@ describe("summariseExercise", () => {
 
   it("should return nothing without results", () => {
     expect(summariseExercise([])).toBeUndefined();
+  });
+});
+
+describe("summariseCategoryExercise", () => {
+  const figures = { bidsReceived: 2140, bidsSuccess: 1284, quota: 1284 };
+
+  it("should name the exercise and describe the category's move", () => {
+    expect(
+      summariseCategoryExercise(
+        [
+          { ...figures, biddingNo: 2, month: "2026-09", premium: 131_000 },
+          { ...figures, biddingNo: 1, month: "2026-10", premium: 128_500 },
+        ],
+        "Category B",
+      ),
+    ).toBe(
+      "First bidding, October 2026: Cat B fell $2,500 to $128,500, a record low.",
+    );
+  });
+
+  it("should return nothing without exercises", () => {
+    expect(summariseCategoryExercise([], "Category A")).toBeUndefined();
+  });
+});
+
+describe("summariseYears", () => {
+  it("should compare each car category's average with the year before", () => {
+    const years = summariseByYear(
+      groupByExercise([
+        result("2025-01", 1, "Category A", 90_000),
+        result("2025-06", 2, "Category A", 110_000),
+        result("2025-06", 2, "Category B", 125_000),
+        result("2026-01", 1, "Category A", 104_000),
+        result("2026-01", 1, "Category B", 125_000),
+        result("2026-01", 1, "Category E", 130_000),
+      ]),
+    );
+
+    expect(summariseYears(years)).toBe(
+      "2026 average: Cat A $104,000, up $4,000 on 2025's $100,000; Cat B $125,000, level with 2025's $125,000.",
+    );
+  });
+
+  it("should give the average alone in the first year and fall back to nothing", () => {
+    const years = summariseByYear(
+      groupByExercise([result("2026-01", 1, "Category A", 104_000)]),
+    );
+
+    expect(summariseYears(years)).toBe("2026 average: Cat A $104,000.");
+    expect(summariseYears([])).toBeUndefined();
+  });
+});
+
+describe("summarisePQP", () => {
+  const month = (value: string, categoryA: number, categoryB: number) => ({
+    month: value,
+    "Category A": categoryA,
+    "Category B": categoryB,
+  });
+
+  it("should give the 10-year rate, its change and the 5-year cost for Cat A and B", () => {
+    expect(
+      summarisePQP([
+        month("2026-09", 100_000, 120_500),
+        month("2026-10", 104_201, 119_000),
+      ]),
+    ).toBe(
+      "October 2026 PQP for a 10-year renewal: Cat A $104,201, up $4,201 on September; Cat B $119,000, down $1,500 on September. A 5-year renewal costs half: $52,101 for Cat A and $59,500 for Cat B.",
+    );
+  });
+
+  it("should leave out the change for the first month and skip an unreported category", () => {
+    expect(summarisePQP([month("2026-10", 104_000, 0)])).toBe(
+      "October 2026 PQP for a 10-year renewal: Cat A $104,000. A 5-year renewal costs half: $52,000 for Cat A.",
+    );
+  });
+
+  it("should return nothing without a published rate", () => {
+    expect(summarisePQP([])).toBeUndefined();
+    expect(summarisePQP([month("2026-10", 0, 0)])).toBeUndefined();
   });
 });
 

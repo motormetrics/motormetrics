@@ -11,6 +11,7 @@ import {
   recordHighs,
   successRate,
   summariseByYear,
+  summariseYears,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
@@ -370,7 +371,8 @@ function CategoryHeader({
 
 /**
  * One row per calendar year across the whole dataset, newest first: the mean
- * closing premium and the year's high. It reads every result rather than the
+ * closing premium and the year's high, with a one-line recap of Cat A and B
+ * against the year before. It reads every result rather than the
  * selected period and takes no search params, so it prerenders into the
  * static shell.
  */
@@ -379,6 +381,7 @@ export async function PremiumsByYear() {
   const newest = years[0]?.year;
   const oldest = years.at(-1)?.year;
   const shown = 6;
+  const summary = summariseYears(years);
 
   const rows = years.map(({ year, categories }) => (
     <li className={EXERCISE_ROW} key={year}>
@@ -414,17 +417,24 @@ export async function PremiumsByYear() {
   ));
 
   return (
-    <ShowMoreRows
-      header={<CategoryHeader isYear label="Year" />}
-      initial={shown}
-      lessLabel={`Show ${years[shown - 1]?.year} to ${newest}`}
-      moreLabel={`Show every year since ${oldest}`}
-      noun="years"
-      rows={rows}
-    >
-      No exercises were held from April to June 2020, so 2020 averages 18
-      exercises.
-    </ShowMoreRows>
+    <>
+      <ShowMoreRows
+        header={<CategoryHeader isYear label="Year" />}
+        initial={shown}
+        lessLabel={`Show ${years[shown - 1]?.year} to ${newest}`}
+        moreLabel={`Show every year since ${oldest}`}
+        noun="years"
+        rows={rows}
+      >
+        No exercises were held from April to June 2020, so 2020 averages 18
+        exercises.
+      </ShowMoreRows>
+      {summary ? (
+        <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
+          {summary}
+        </Typography.Paragraph>
+      ) : null}
+    </>
   );
 }
 

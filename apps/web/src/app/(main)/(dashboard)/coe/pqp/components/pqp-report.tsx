@@ -5,6 +5,7 @@ import {
   CATEGORY_DESCRIPTIONS,
   formatMonth,
   groupByExercise,
+  summarisePQP,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
@@ -139,6 +140,7 @@ export async function PQPReport({
   const firstMonth = ascending[0]?.month;
   const oldestMonth = tableRows.at(-1)?.month;
   const previousMonth = ascending.at(-2)?.month;
+  const summary = summarisePQP(ascending);
 
   const rateRows: PQPRateRow[] = PQP_CATEGORY_KEYS.map((key) => {
     const name = categoryName(key);
@@ -217,6 +219,15 @@ export async function PQPReport({
           }
           rows={rateRows}
         />
+        {summary ? (
+          <Typography.Paragraph
+            className="tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {summary}
+          </Typography.Paragraph>
+        ) : null}
         <SourceNote>
           5-year cost is half the PQP. Gap is the latest closing premium minus
           the PQP, as a share of the premium. PQP is listed for Categories A and
