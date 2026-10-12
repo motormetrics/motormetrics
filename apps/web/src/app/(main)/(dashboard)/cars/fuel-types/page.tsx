@@ -1,47 +1,26 @@
+import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import {
-  type CategoryConfig,
-  CategoryOverview,
-} from "@web/app/(main)/(dashboard)/cars/components/category/category-overview";
-import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
-import { FUEL_TYPE_LINKS, SITE_URL } from "@web/config";
+import { FuelTypesReport } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-report";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/search-params";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { MonthMenu } from "@web/components/shared/month-menu";
+import { OverviewPage } from "@web/components/shared/overview";
+import { PageHead } from "@web/components/shared/page-head";
+import { SkeletonCard } from "@web/components/shared/skeleton";
+import { StructuredData } from "@web/components/structured-data";
+import { SITE_TITLE, SITE_URL } from "@web/config";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { getMonthOrLatest } from "@web/utils/dates/months";
+import { formatMonthLabel } from "@web/utils/dates/format-month";
+import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
+import type { WebPage, WithContext } from "schema-dts";
 
-/**
- * The table's description column is authored copy, not data. Reusing the
- * navigation descriptions keeps one wording per fuel type across the site;
- * `Others` has no navigation entry because it has no detail page worth linking.
- */
-const descriptions: Record<string, string> = {
-  ...Object.fromEntries(
-    FUEL_TYPE_LINKS.filter(({ description }) => description).map(
-      ({ description, label }) => [label, description as string],
-    ),
-  ),
-  Others: "Fuel types LTA does not report separately",
-};
-
-const config: CategoryConfig = {
-  title: "Fuel types",
-  apiDataField: "fuelType",
-  singularLabel: "Fuel type",
-  descriptions,
-  description:
-    "Comprehensive overview of all fuel types in {month} Singapore car registrations. Compare petrol, diesel, electric and petrol-electric registrations.",
-  lede: "The fuel types behind each month's new car registrations in Singapore.",
-  notes: [
-    "LTA records the fuel type at registration, and reports plug-in hybrids separately from the hybrids that only charge themselves. Only battery-electric cars count as Electric.",
-    "Figures here are new registrations, not the fleet on the road — the population mix shifts far more slowly.",
-  ],
-  relatedLinks: [
-    { href: "/cars/fuel-types/electric", label: "Electric in detail" },
-    { href: "/cars/vehicle-types", label: "Vehicle types" },
-  ],
-  urlPath: "/cars/fuel-types",
-};
+const title = "Fuel types";
+const description =
+  "Comprehensive overview of all fuel types in {month} Singapore car registrations. Compare petrol, diesel, electric and petrol-electric registrations.";
+const canonical = "/cars/fuel-types";
 
 interface PageProps {
   searchParams: Promise<SearchParams>;
@@ -54,23 +33,22 @@ export async function generateMetadata({
   const { month } = await getMonthOrLatest(parsedMonth, "cars");
   const formattedMonth = formatDateToMonthYear(month);
 
-  const title = "Car Registrations by Fuel Type";
-  const description = config.description.replace("{month}", formattedMonth);
-  const canonical = config.urlPath;
+  const metaTitle = "Car Registrations by Fuel Type";
+  const metaDescription = description.replace("{month}", formattedMonth);
 
   return {
-    title,
-    description,
+    title: metaTitle,
+    description: metaDescription,
     openGraph: {
       ...baseOpenGraph,
-      title,
-      description,
+      title: metaTitle,
+      description: metaDescription,
       url: `${SITE_URL}${canonical}`,
     },
     twitter: {
       ...baseTwitter,
-      title,
-      description,
+      title: metaTitle,
+      description: metaDescription,
     },
     alternates: {
       canonical,
@@ -79,5 +57,95 @@ export async function generateMetadata({
 }
 
 export default function Page({ searchParams }: PageProps) {
-  return <CategoryOverview config={config} searchParams={searchParams} />;
+  return (
+    <OverviewPage className="gap-10 max-md:gap-7">
+      <PageHead
+        controls={
+          <Suspense fallback={<Skeleton className="h-8 w-36" />}>
+            <FuelTypesMonthPicker searchParams={searchParams} />
+          </Suspense>
+        }
+        eyebrow="Cars"
+        sub={
+          <Suspense fallback={<Skeleton className="h-5 w-72" />}>
+            <FuelTypesMonthSub searchParams={searchParams} />
+          </Suspense>
+        }
+        title={title}
+      />
+
+      <SectionErrorBoundary title="Fuel types unavailable">
+        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+          <FuelTypesStructuredData searchParams={searchParams} />
+          <FuelTypesReport searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
+    </OverviewPage>
+  );
+}
+
+/** Names what the page counts, the month it reports and its source. */
+async function FuelTypesMonthSub({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { month: parsedMonth } = await loadSearchParams(searchParams);
+  const { month } = await getMonthOrLatest(parsedMonth, "cars");
+
+  return (
+    <>
+      The fuel types behind each month's new car registrations ·{" "}
+      <span className="font-semibold text-foreground">
+        {formatMonthLabel(month)}
+      </span>{" "}
+      · Source: LTA via DataMall
+    </>
+  );
+}
+
+async function FuelTypesMonthPicker({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { month: parsedMonth } = await loadSearchParams(searchParams);
+
+  const [months, { wasAdjusted }] = await Promise.all([
+    fetchMonthsForCars(),
+    getMonthOrLatest(parsedMonth, "cars"),
+  ]);
+
+  return (
+    <MonthMenu
+      latestMonth={months[0]}
+      months={months}
+      wasAdjusted={wasAdjusted}
+    />
+  );
+}
+
+async function FuelTypesStructuredData({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { month: parsedMonth } = await loadSearchParams(searchParams);
+  const { month } = await getMonthOrLatest(parsedMonth, "cars");
+  const formattedMonth = formatDateToMonthYear(month);
+
+  const structuredData: WithContext<WebPage> = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `${formattedMonth} ${title}`,
+    description: description.replace("{month}", formattedMonth),
+    url: `${SITE_URL}${canonical}`,
+    publisher: {
+      "@type": "Organization",
+      name: SITE_TITLE,
+      url: SITE_URL,
+    },
+  };
+
+  return <StructuredData data={structuredData} />;
 }
