@@ -69,6 +69,63 @@ describe("proxy", () => {
     fetchSpy.mockRestore();
   });
 
+  it("should answer a missing page with a Markdown 404 when Markdown is requested", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(new Response(null, { status: 404 }));
+    const { proxy } = await import("@web/proxy");
+
+    const response = await proxy(
+      new NextRequest("http://localhost/no-such-page", {
+        headers: { accept: "text/markdown" },
+      }),
+    );
+
+    expect(fetchSpy).toHaveBeenCalledWith("http://localhost/no-such-page", {
+      method: "HEAD",
+      headers: { accept: "text/html" },
+      redirect: "manual",
+    });
+    expect(response.status).toBe(404);
+    expect(response.headers.get("content-type")).toBe(
+      "text/markdown; charset=utf-8",
+    );
+    expect(response.headers.get("vary")).toBe("Accept");
+    expect(await response.text()).toContain("http://localhost/llms.txt");
+    fetchSpy.mockRestore();
+  });
+
+  it("should pass an existing page through when Markdown is requested", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(new Response(null, { status: 200 }));
+    const { proxy } = await import("@web/proxy");
+
+    const response = await proxy(
+      new NextRequest("http://localhost/coe", {
+        headers: { accept: "text/markdown" },
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBeNull();
+    fetchSpy.mockRestore();
+  });
+
+  it("should not probe pages for browsers", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const { proxy } = await import("@web/proxy");
+
+    await proxy(
+      new NextRequest("http://localhost/no-such-page", {
+        headers: { accept: "text/html" },
+      }),
+    );
+
+    expect(fetchSpy).not.toHaveBeenCalled();
+    fetchSpy.mockRestore();
+  });
+
   it("should not serve Markdown to browsers requesting the homepage", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     const { proxy } = await import("@web/proxy");
