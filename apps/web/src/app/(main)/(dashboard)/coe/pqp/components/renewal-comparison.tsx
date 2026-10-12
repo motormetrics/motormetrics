@@ -1,10 +1,5 @@
-import { Typography } from "@heroui/react";
+import { cn, Table, Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
-import {
-  ReportCell,
-  ReportRow,
-  ReportTable,
-} from "@web/components/shared/report-table";
 import type { Pqp } from "@web/types/coe";
 
 /** The two terms a COE can be renewed for, and what each costs of the PQP. */
@@ -59,35 +54,52 @@ export function RenewalComparison({
           Against the latest closing premium, per category and term
         </Typography.Paragraph>
       </div>
-      <ReportTable
-        columns={[
-          { label: "Category and term" },
-          { align: "end", label: "Renew at the PQP" },
-          { align: "end", label: "Bid at the premium" },
-          { align: "end", label: "Difference", width: "180px" },
-        ]}
-      >
-        {rows.map((row) => (
-          <ReportRow
-            isActive={row.category === category && row.term === term}
-            key={row.key}
+      <Table variant="secondary">
+        <Table.ScrollContainer>
+          <Table.Content
+            aria-label="What renewing costs against bidding"
+            className="min-w-max tabular-nums"
           >
-            <ReportCell className="font-bold text-base">{row.label}</ReportCell>
-            <ReportCell align="end" className="font-extrabold text-lg">
-              {formatCurrency(row.renew)}
-            </ReportCell>
-            <ReportCell align="end" className="font-semibold text-muted">
-              {formatCurrency(row.bid)}
-            </ReportCell>
-            <ReportCell align="end">
-              <span className="font-bold text-base text-muted-strong tabular-nums">
-                {row.saving >= 0 ? "Saves " : "Costs "}
-                {formatCurrency(Math.abs(row.saving))}
-              </span>
-            </ReportCell>
-          </ReportRow>
-        ))}
-      </ReportTable>
+            <Table.Header>
+              <Table.Column isRowHeader>Category and term</Table.Column>
+              <Table.Column className="text-right">
+                Renew at the PQP
+              </Table.Column>
+              <Table.Column className="text-right">
+                Bid at the premium
+              </Table.Column>
+              <Table.Column className="text-right">Difference</Table.Column>
+            </Table.Header>
+            <Table.Body>
+              {rows.map((row) => (
+                <Table.Row
+                  className={cn(
+                    row.category === category &&
+                      row.term === term &&
+                      "bg-accent-soft-2",
+                  )}
+                  id={row.key}
+                  key={row.key}
+                >
+                  <Table.Cell className="font-bold text-base">
+                    {row.label}
+                  </Table.Cell>
+                  <Table.Cell className="text-right font-extrabold text-lg">
+                    {formatCurrency(row.renew)}
+                  </Table.Cell>
+                  <Table.Cell className="text-right font-semibold text-muted">
+                    {formatCurrency(row.bid)}
+                  </Table.Cell>
+                  <Table.Cell className="text-right font-bold text-base text-muted-strong">
+                    {row.saving >= 0 ? "Saves " : "Costs "}
+                    {formatCurrency(Math.abs(row.saving))}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+      </Table>
       <Typography.Paragraph color="muted" size="sm">
         Estimates only. Both figures exclude processing and registration fees,
         the PQP is a three-month moving average that moves every month, and a

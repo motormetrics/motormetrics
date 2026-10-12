@@ -1,4 +1,5 @@
 import { cn, Skeleton, Typography } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 import { formatOrdinal } from "@motormetrics/utils/format-ordinal";
 import { slugify } from "@motormetrics/utils/slugify";
 import { summariseType } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
@@ -28,7 +29,6 @@ import {
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import { Count } from "@web/components/shared/report-table";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -370,7 +370,11 @@ async function VehicleTypeContent({
               {displayName} registrations
             </span>
             <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
-              <Count value={typeTotal} />
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={typeTotal}
+              />
             </span>
             <Typography.Paragraph className="tabular-nums" color="muted">
               <DeltaChip

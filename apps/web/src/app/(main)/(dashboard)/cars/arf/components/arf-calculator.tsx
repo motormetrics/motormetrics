@@ -1,17 +1,12 @@
 "use client";
 
-import { Input, Label, ListBox, Select } from "@heroui/react";
+import { Input, Label, ListBox, Select, Table } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   ARF_SCHEDULES,
   calculateArf,
 } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-rates";
 import { Headline, StatCell } from "@web/components/shared/overview";
-import {
-  ReportCell,
-  ReportRow,
-  ReportTable,
-} from "@web/components/shared/report-table";
 import posthog from "posthog-js";
 import { useMemo, useState } from "react";
 
@@ -116,27 +111,35 @@ export function ARFCalculator() {
       </div>
 
       {bands.length > 0 ? (
-        <ReportTable
-          columns={[
-            { label: "OMV band" },
-            { align: "end", label: "Rate" },
-            { align: "end", label: "ARF" },
-          ]}
-        >
-          {bands.map(({ amount, from, rate, to }) => (
-            <ReportRow key={from}>
-              <ReportCell className="font-bold text-base">
-                {formatCurrency(from)} – {formatCurrency(to)}
-              </ReportCell>
-              <ReportCell align="end" className="font-semibold text-muted">
-                {formatRate(rate)}
-              </ReportCell>
-              <ReportCell align="end" className="font-extrabold text-base">
-                {formatCurrency(amount)}
-              </ReportCell>
-            </ReportRow>
-          ))}
-        </ReportTable>
+        <Table variant="secondary">
+          <Table.ScrollContainer>
+            <Table.Content
+              aria-label="ARF by OMV band"
+              className="tabular-nums"
+            >
+              <Table.Header>
+                <Table.Column isRowHeader>OMV band</Table.Column>
+                <Table.Column className="text-right">Rate</Table.Column>
+                <Table.Column className="text-right">ARF</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                {bands.map(({ amount, from, rate, to }) => (
+                  <Table.Row id={from} key={from}>
+                    <Table.Cell className="font-bold text-base">
+                      {formatCurrency(from)} – {formatCurrency(to)}
+                    </Table.Cell>
+                    <Table.Cell className="text-right font-semibold text-muted">
+                      {formatRate(rate)}
+                    </Table.Cell>
+                    <Table.Cell className="text-right font-extrabold text-base">
+                      {formatCurrency(amount)}
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
+        </Table>
       ) : null}
     </>
   );

@@ -1,6 +1,6 @@
 import { cn, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
-import { EmptyState } from "@heroui-pro/react";
+import { EmptyState, NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
 import {
@@ -27,7 +27,6 @@ import {
   SectionHead,
   SourceNote,
 } from "@web/components/shared/overview";
-import { Count } from "@web/components/shared/report-table";
 import {
   getMakeCrossTab,
   getMakeTotalsInRange,
@@ -339,7 +338,11 @@ export async function MakeReport({
             {make} registrations
           </span>
           <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
-            <Count value={total} />
+            <NumberValue
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={total}
+            />
           </span>
           <Typography.Paragraph color="muted">
             <DeltaChip
@@ -492,10 +495,18 @@ export async function MakeReport({
                     {formatDateToMonthYear(seriesMonth)}
                   </span>
                   <span className="w-12 text-right font-semibold md:w-16">
-                    <Count value={count} />
+                    <NumberValue
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      value={count}
+                    />
                   </span>
                   <span className="w-12 text-right text-muted md:w-16">
-                    <Count value={market} />
+                    <NumberValue
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      value={market}
+                    />
                   </span>
                   <span className="w-12 text-right text-muted md:w-16">
                     {share.toFixed(1)}%
@@ -567,7 +578,11 @@ export async function MakeReport({
                       />
                     </span>
                     <span className="w-16 text-right font-semibold text-sm tabular-nums">
-                      <Count value={count} />
+                      <NumberValue
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        value={count}
+                      />
                     </span>
                   </div>
                 );
