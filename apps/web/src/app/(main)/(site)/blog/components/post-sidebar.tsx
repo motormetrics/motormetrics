@@ -9,7 +9,7 @@ import { TableOfContents } from "@web/app/(main)/(site)/blog/components/table-of
  */
 export function PostSidebar({ post }: { post: SelectPost }) {
   return (
-    <aside className="flex flex-col gap-7 lg:sticky lg:top-4">
+    <aside className="flex flex-col gap-7">
       <TableOfContents />
       <FollowLinks post={post} />
     </aside>

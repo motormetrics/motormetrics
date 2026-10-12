@@ -103,8 +103,9 @@ export function BlogList({
         }
       />
 
-      <div className="flex flex-col">
-        <div className="flex gap-6 border-border border-b pb-2 font-semibold text-muted text-xs max-md:hidden">
+      {/* Pulled out by the rows' padding, so the hover fill has room while the text stays on the section's edge. */}
+      <div className="-mx-3 flex flex-col">
+        <div className="flex gap-6 border-border border-b px-3 pb-2 font-semibold text-muted text-xs max-md:hidden">
           <span className="w-24 shrink-0 lg:w-28">Published</span>
           <span className="min-w-0 flex-1">Post</span>
           <span className="w-24 shrink-0 text-right max-lg:hidden">Length</span>
@@ -112,7 +113,7 @@ export function BlogList({
 
         {visible.map((post) => (
           <Link
-            className="group flex flex-col gap-1.5 border-separator border-b py-3.5 text-foreground no-underline transition-colors hover:bg-surface-secondary md:flex-row md:gap-6 md:py-4"
+            className="group flex flex-col gap-1.5 border-separator border-b px-3 py-3.5 text-foreground no-underline transition-colors hover:bg-surface-secondary md:flex-row md:gap-6 md:py-4"
             href={`/blog/${post.slug}`}
             key={post.id}
           >
@@ -152,7 +153,7 @@ export function BlogList({
 
         {count === 0 ? (
           <Typography.Paragraph
-            className="border-separator border-b py-4"
+            className="border-separator border-b px-3 py-4"
             color="muted"
           >
             {query

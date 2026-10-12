@@ -293,7 +293,8 @@ async function Post({ params }: PageProps) {
           <PostNavigation previous={previousPost} next={nextPost} />
         </article>
 
-        <div className="lg:col-span-4 xl:col-span-3 xl:col-start-10">
+        {/* Sticky on the grid cell: the aside fills it, so has no room to stick. */}
+        <div className="lg:sticky lg:top-4 lg:col-span-4 xl:col-span-3 xl:col-start-10">
           <PostSidebar post={post} />
         </div>
       </div>
