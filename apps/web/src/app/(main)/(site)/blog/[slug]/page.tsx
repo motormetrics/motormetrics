@@ -10,6 +10,7 @@ import { PostNavigation } from "@web/app/(main)/(site)/blog/components/post-navi
 import { PostSidebar } from "@web/app/(main)/(site)/blog/components/post-sidebar";
 import { ProgressBar } from "@web/app/(main)/(site)/blog/components/progress-bar";
 import { RelatedPosts } from "@web/app/(main)/(site)/blog/components/related-posts";
+import { Hairline } from "@web/components/shared/overview";
 import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -104,7 +105,7 @@ async function Article({ slug, content }: { slug: string; content: string }) {
   cacheTag(`posts:slug:${slug}`);
 
   return (
-    <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted prose-p:text-muted prose-strong:text-foreground prose-td:text-muted prose-th:text-foreground prose-p:leading-relaxed prose-headings:tracking-tight">
+    <div className="prose dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted-strong prose-p:text-muted-strong prose-strong:text-foreground prose-td:text-muted-strong prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
       <MDXRemote
         source={content}
         components={mdxComponents}
@@ -150,7 +151,7 @@ export default function BlogPostPage({ params }: PageProps) {
     <>
       <ProgressBar />
 
-      <SitePage className="gap-14">
+      <SitePage className="gap-10 max-md:gap-7">
         <Suspense fallback={<PostSkeleton />}>
           <Post params={params} />
         </Suspense>
@@ -260,6 +261,8 @@ async function Post({ params }: PageProps) {
         readingTimeText={readingTime(post.content).text}
       />
 
+      <Hairline />
+
       {post.heroImage ? (
         <div className="relative aspect-12/5 w-full overflow-hidden rounded-4xl bg-surface-secondary shadow-surface">
           <Image
@@ -273,13 +276,10 @@ async function Post({ params }: PageProps) {
         </div>
       ) : null}
 
-      <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-14">
-        <article className="flex min-w-0 flex-col gap-7">
+      <div className="grid grid-cols-1 items-start gap-9 lg:grid-cols-12 lg:gap-16">
+        <article className="flex min-w-0 flex-col gap-6 lg:col-span-8">
           {lede ? (
-            <Typography.Paragraph
-              className="text-2xl text-foreground leading-normal"
-              weight="medium"
-            >
+            <Typography.Paragraph className="text-foreground text-lg leading-relaxed md:text-xl">
               {lede}
             </Typography.Paragraph>
           ) : null}
@@ -293,7 +293,9 @@ async function Post({ params }: PageProps) {
           <PostNavigation previous={previousPost} next={nextPost} />
         </article>
 
-        <PostSidebar post={post} />
+        <div className="lg:col-span-4 xl:col-span-3 xl:col-start-10">
+          <PostSidebar post={post} />
+        </div>
       </div>
 
       <RelatedPosts currentPostId={post.id} />

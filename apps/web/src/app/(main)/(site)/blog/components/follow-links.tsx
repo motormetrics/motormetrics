@@ -1,7 +1,5 @@
-import { Typography } from "@heroui/react";
 import type { SelectPost } from "@motormetrics/database/schema";
 import type { PostCategoryKey } from "@web/app/(main)/(site)/blog/components/post/utils";
-import { InkPanel } from "@web/components/shared/bento";
 import type { Route } from "next";
 import Link from "next/link";
 
@@ -57,25 +55,25 @@ const LINKS_BY_CATEGORY: Record<PostCategoryKey, FollowLink[]> = {
   ],
 };
 
-/** The comp's closing rail block: "Follow the figures". */
+/** The rail's closing list: "Follow the figures". */
 export function FollowLinks({ post }: { post: SelectPost }) {
   const links =
     LINKS_BY_CATEGORY[post.dataType as PostCategoryKey] ?? DEFAULT_LINKS;
 
   return (
-    <InkPanel className="rounded-2xl">
-      <Typography.Paragraph className="text-accent-foreground/85">
+    <div className="flex flex-col">
+      <span className="border-border border-b pb-2 font-semibold text-muted text-xs">
         Follow the figures
-      </Typography.Paragraph>
+      </span>
       {links.map(({ href, label }) => (
         <Link
-          className="font-bold text-accent-on-dark text-sm no-underline transition-colors hover:text-accent-foreground"
+          className="border-separator border-b py-2.5 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
           href={href}
           key={href}
         >
           {label} →
         </Link>
       ))}
-    </InkPanel>
+    </div>
   );
 }

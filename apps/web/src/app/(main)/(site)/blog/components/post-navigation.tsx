@@ -19,7 +19,7 @@ export function PostNavigation({ previous, next }: PostNavigationProps) {
   return (
     <nav
       aria-label="Post navigation"
-      className="grid grid-cols-1 gap-6 border-border border-t-2 pt-8 sm:grid-cols-2"
+      className="grid grid-cols-1 gap-6 border-border border-t pt-6 sm:grid-cols-2"
     >
       {previous ? (
         <Link

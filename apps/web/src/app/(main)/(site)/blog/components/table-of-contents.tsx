@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, Typography } from "@heroui/react";
+import { cn } from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -10,7 +10,7 @@ interface TocItem {
 }
 
 /**
- * The comp's "In this post" rail card. The headings are read out of the
+ * The rail's "In this post" list, marking the section in view. The headings are read out of the
  * rendered article, so the list cannot fall out of step with it, and the ids
  * are the ones `rehype-slug` gave the headings.
  */
@@ -68,26 +68,22 @@ export function TableOfContents() {
   }
 
   return (
-    <nav
-      aria-label="In this post"
-      className="flex flex-col gap-3.5 rounded-2xl bg-surface-secondary p-7"
-    >
-      <Typography.Heading level={4} className="text-base">
+    <nav aria-label="In this post" className="flex flex-col max-lg:hidden">
+      <span className="border-border border-b pb-2 font-semibold text-muted text-xs">
         In this post
-      </Typography.Heading>
-      <ol className="flex flex-col gap-0.5">
+      </span>
+      <ol className="flex flex-col pt-1.5">
         {headings.map((heading) => {
           const active = activeId === heading.id;
-
           return (
             <li key={heading.id}>
               <Link
                 aria-current={active ? "location" : undefined}
                 className={cn(
-                  "block rounded-lg px-3 py-2 text-sm no-underline transition-colors",
+                  "block border-l-2 py-1.5 pl-2.5 text-sm no-underline transition-colors",
                   active
-                    ? "bg-surface font-bold text-foreground"
-                    : "font-semibold text-muted hover:bg-surface hover:text-foreground",
+                    ? "border-l-accent font-semibold text-foreground"
+                    : "border-transparent text-muted-strong hover:border-l-chart-5 hover:text-accent-strong",
                 )}
                 href={`#${heading.id}`}
                 onClick={(event) => {
