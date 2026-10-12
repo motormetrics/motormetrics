@@ -39,13 +39,14 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
+  const wantsMarkdown =
+    request.method === "GET" &&
+    request.headers.get("accept")?.includes("text/markdown");
+
   // Agents asking for Markdown get the llms.txt summary of the homepage
   // (acceptmarkdown.com). Fetched rather than rewritten so the route's
   // text/plain Content-Type cannot win over text/markdown.
-  if (
-    pathname === "/" &&
-    request.headers.get("accept")?.includes("text/markdown")
-  ) {
+  if (wantsMarkdown && pathname === "/") {
     const llmsTxt = await fetch(new URL("/llms.txt", request.url));
     return new Response(await llmsTxt.text(), {
       status: llmsTxt.status,
@@ -54,6 +55,36 @@ export async function proxy(request: NextRequest) {
         Vary: "Accept",
       },
     });
+  }
+
+  // A proxy cannot know whether a path 404s, so probe it as HTML first and
+  // answer a miss with a Markdown error body. Only Markdown requests pay for
+  // the probe; HTML requests skip it, which also stops the probe recursing.
+  if (
+    wantsMarkdown &&
+    !pathname.startsWith("/api") &&
+    !pathname.startsWith("/admin")
+  ) {
+    const probe = await fetch(request.url, {
+      method: "HEAD",
+      headers: { accept: "text/html" },
+      redirect: "manual",
+    });
+
+    if (probe.status === 404) {
+      const llmsTxtUrl = new URL("/llms.txt", request.url);
+      const sitemapUrl = new URL("/sitemap.xml", request.url);
+      return new Response(
+        `# Page not found\n\nNo page exists at \`${pathname}\`. See [llms.txt](${llmsTxtUrl}) for a guide to the site, or the [sitemap](${sitemapUrl}) for every page.\n`,
+        {
+          status: 404,
+          headers: {
+            "Content-Type": "text/markdown; charset=utf-8",
+            Vary: "Accept",
+          },
+        },
+      );
+    }
   }
 
   const isAdminRoute = pathname.startsWith("/admin");
