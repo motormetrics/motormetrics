@@ -1,5 +1,5 @@
+import { Typography } from "@heroui/react";
 import { SectionHead } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { Layout, Rows3, StickyNote } from "lucide-react";
 
 const placements = [
@@ -47,13 +47,12 @@ export function PlacementsSection() {
               </span>
               <span className="font-semibold">{title}</span>
             </div>
-            <Text.Paragraph
-              className="min-w-0 flex-1 leading-normal"
+            <Typography.Paragraph
+              className="min-w-0 flex-1 text-muted-strong leading-normal"
               size="sm"
-              tone="strong"
             >
               {description}
-            </Text.Paragraph>
+            </Typography.Paragraph>
             <span className="shrink-0 font-semibold text-muted text-xs md:ml-auto">
               {where}
             </span>

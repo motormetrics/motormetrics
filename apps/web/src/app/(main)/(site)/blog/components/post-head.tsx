@@ -3,7 +3,6 @@ import type { SelectPost } from "@motormetrics/database/schema";
 import { getCategoryConfig } from "@web/app/(main)/(site)/blog/components/post/utils";
 import { ViewCounter } from "@web/app/(main)/(site)/blog/components/view-counter";
 import { SharePill } from "@web/components/shared/share-pill";
-import { Text } from "@web/components/shared/text";
 import Link from "next/link";
 
 /**
@@ -53,14 +52,13 @@ export function PostHead({
         </span>
       </nav>
 
-      <Text.Paragraph
-        className="pt-1.5 text-accent-strong"
-        eyebrow
+      <Typography.Paragraph
+        className="pt-1.5 text-accent-strong uppercase"
         size="xs"
         weight="semibold"
       >
         {category.label}
-      </Text.Paragraph>
+      </Typography.Paragraph>
 
       <Typography.Heading
         className="text-balance text-3xl md:text-4xl"

@@ -1,6 +1,5 @@
 import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
-import { Text } from "@web/components/shared/text";
 import { navLinks } from "@web/config/navigation";
 import Link from "next/link";
 
@@ -20,10 +19,10 @@ export function CtaSection() {
         >
           Get the numbers when they land
         </Typography.Heading>
-        <Text.Paragraph className="max-w-xl" tone="strong">
+        <Typography.Paragraph className="max-w-xl text-muted-strong">
           New COE results and registration figures are posted as soon as they
           publish. Nothing else.
-        </Text.Paragraph>
+        </Typography.Paragraph>
       </div>
       <div className="flex flex-col gap-2">
         <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">

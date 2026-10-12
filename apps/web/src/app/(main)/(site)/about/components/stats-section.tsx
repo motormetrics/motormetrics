@@ -1,5 +1,5 @@
+import { Typography } from "@heroui/react";
 import { SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 
 /**
  * Four figures as a ruled strip: four across from lg, two-by-two below, with
@@ -24,9 +24,12 @@ export function StatsSection() {
             <span className="font-extrabold text-3xl tabular-nums leading-none tracking-tight md:text-4xl">
               {value}
             </span>
-            <Text.Paragraph className="leading-snug" size="sm" tone="strong">
+            <Typography.Paragraph
+              className="text-muted-strong leading-snug"
+              size="sm"
+            >
               {label}
-            </Text.Paragraph>
+            </Typography.Paragraph>
           </div>
         ))}
       </div>

@@ -1,9 +1,8 @@
 "use client";
 
-import { Accordion } from "@heroui/react";
+import { Accordion, Typography } from "@heroui/react";
 import { FAQS } from "@web/app/(main)/(site)/about/components/faq-data";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { ChevronDown } from "lucide-react";
 
 /**
@@ -31,9 +30,9 @@ export function FaqSection() {
               </Accordion.Heading>
               <Accordion.Panel>
                 <Accordion.Body>
-                  <Text.Paragraph className="max-w-2xl" tone="strong">
+                  <Typography.Paragraph className="max-w-2xl text-muted-strong">
                     {answer}
-                  </Text.Paragraph>
+                  </Typography.Paragraph>
                 </Accordion.Body>
               </Accordion.Panel>
             </Accordion.Item>

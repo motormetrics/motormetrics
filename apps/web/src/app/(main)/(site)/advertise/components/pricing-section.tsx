@@ -1,7 +1,6 @@
 import { Chip, cn, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
@@ -88,9 +87,12 @@ export function PricingSection() {
               </span>
               <span className="text-muted text-sm">per month</span>
             </div>
-            <Text.Paragraph className="leading-normal" size="sm" tone="strong">
+            <Typography.Paragraph
+              className="text-muted-strong leading-normal"
+              size="sm"
+            >
               {note}
-            </Text.Paragraph>
+            </Typography.Paragraph>
             <div className="flex flex-col">
               {features.map((feature) => (
                 <div

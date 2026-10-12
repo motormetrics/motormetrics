@@ -1,8 +1,8 @@
+import { Typography } from "@heroui/react";
 import { FAQ_SECTIONS } from "@web/app/(main)/(site)/learn/components/faq-data";
 import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
 import { GUIDES } from "@web/app/(main)/(site)/learn/lib/guides";
 import { SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 
 /**
  * The four figures the comp runs under the head, as a ruled strip: four
@@ -52,9 +52,12 @@ export function LearnStats() {
             <span className="font-extrabold text-3xl tabular-nums leading-none tracking-tight md:text-4xl">
               {value}
             </span>
-            <Text.Paragraph className="leading-snug" size="sm" tone="strong">
+            <Typography.Paragraph
+              className="text-muted-strong leading-snug"
+              size="sm"
+            >
               {label}
-            </Text.Paragraph>
+            </Typography.Paragraph>
           </div>
         ))}
       </div>

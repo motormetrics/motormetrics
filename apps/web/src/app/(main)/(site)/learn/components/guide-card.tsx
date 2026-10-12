@@ -1,7 +1,6 @@
 import { Typography } from "@heroui/react";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import { getReadingMinutes } from "@web/app/(main)/(site)/learn/lib/guides";
-import { Text } from "@web/components/shared/text";
 import Link from "next/link";
 
 /**
@@ -18,14 +17,13 @@ export function GuideCard({ guide }: { guide: Guide }) {
       className="flex h-full min-w-0 flex-col gap-2.5 rounded-lg border border-separator bg-surface p-5 text-foreground no-underline transition-colors hover:border-accent-border"
       href={`/learn/${guide.slug}`}
     >
-      <Text.Paragraph
-        className="text-accent-strong"
-        eyebrow
+      <Typography.Paragraph
+        className="text-accent-strong uppercase"
         size="xs"
         weight="semibold"
       >
         {guide.term}
-      </Text.Paragraph>
+      </Typography.Paragraph>
       <Typography.Heading className="text-lg leading-tight" level={3}>
         {guide.title}
       </Typography.Heading>

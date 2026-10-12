@@ -1,6 +1,5 @@
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import {
   BarChart3,
   Car,
@@ -95,13 +94,12 @@ export function DatasetsSection() {
               <span className="font-semibold text-foreground transition-colors group-hover:text-accent-strong">
                 {title} →
               </span>
-              <Text.Paragraph
-                className="leading-normal"
+              <Typography.Paragraph
+                className="text-muted-strong leading-normal"
                 size="sm"
-                tone="strong"
               >
                 {description}
-              </Text.Paragraph>
+              </Typography.Paragraph>
             </span>
           </Link>
         ))}

@@ -9,7 +9,6 @@ import {
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -119,7 +118,7 @@ export default function PARFCalculatorPage() {
               </div>
             ))}
           </dl>
-          <Text.Paragraph tone="strong">
+          <Typography.Paragraph className="text-muted-strong">
             Your deregistration value is the PARF rebate plus a COE rebate for
             the months left on the COE.{" "}
             <Link
@@ -136,7 +135,7 @@ export default function PARFCalculatorPage() {
               PARF guide
             </Link>{" "}
             explains when deregistering early pays off.
-          </Text.Paragraph>
+          </Typography.Paragraph>
         </section>
 
         <section className="flex min-w-0 flex-col gap-4 lg:col-span-5">

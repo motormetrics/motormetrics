@@ -5,7 +5,6 @@ import {
   getGuideBySlug,
   getReadingMinutes,
 } from "@web/app/(main)/(site)/learn/lib/guides";
-import { Text } from "@web/components/shared/text";
 import { ArrowRight } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
@@ -25,20 +24,19 @@ export function FeaturedGuide() {
   return (
     <div className="grid grid-cols-1 gap-5 rounded-lg border border-separator bg-surface px-4 py-5 md:p-7 lg:grid-cols-4 lg:gap-10">
       <div className="flex min-w-0 flex-col gap-2.5 lg:col-span-3">
-        <Text.Paragraph
-          className="text-accent-strong"
-          eyebrow
+        <Typography.Paragraph
+          className="text-accent-strong uppercase"
           size="xs"
           weight="semibold"
         >
           Start here · {guide.term}
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <Typography.Heading className="text-2xl leading-tight" level={2}>
           {guide.title}
         </Typography.Heading>
-        <Text.Paragraph className="max-w-2xl" tone="strong">
+        <Typography.Paragraph className="max-w-2xl text-muted-strong">
           {guide.excerpt}
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <div className="flex flex-wrap items-center gap-3.5 pt-2">
           <Link
             className={buttonVariants({ variant: "primary" })}

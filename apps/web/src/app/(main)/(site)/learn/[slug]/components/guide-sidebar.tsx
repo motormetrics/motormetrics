@@ -1,10 +1,10 @@
+import { Typography } from "@heroui/react";
 import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import {
   getAllGuideSlugs,
   getGuideHeadings,
 } from "@web/app/(main)/(site)/learn/lib/guides";
-import { Text } from "@web/components/shared/text";
 import type { Route } from "next";
 import Link from "next/link";
 
@@ -84,13 +84,12 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
                 ) : (
                   <span className="font-semibold text-sm">{term}</span>
                 )}
-                <Text.Paragraph
-                  className="leading-normal"
+                <Typography.Paragraph
+                  className="text-muted-strong leading-normal"
                   size="sm"
-                  tone="strong"
                 >
                   {definition}
-                </Text.Paragraph>
+                </Typography.Paragraph>
               </div>
             );
           })}

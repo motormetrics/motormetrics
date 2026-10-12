@@ -13,7 +13,6 @@ import {
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { StatCell } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { getCoeResults, getPqpRates } from "@web/queries/coe";
 import type { Pqp } from "@web/types";
 import { formatMonthName } from "@web/utils/dates/format-month";
@@ -67,10 +66,10 @@ export async function CoeHeadline({
     <div className="grid gap-5 min-[901px]:grid-cols-[1.15fr_1fr] min-[901px]:items-end min-[901px]:gap-14">
       <div className="flex min-w-0 flex-col gap-3">
         <CategoryTabs selected={categoryKey} />
-        <Text.Paragraph tone="strong">
+        <Typography.Paragraph className="text-muted-strong">
           <span className="font-semibold text-accent-strong">{category}</span>
           {` · ${CATEGORY_DESCRIPTIONS[category]}`}
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <span className="font-extrabold text-5xl tabular-nums leading-[0.95] tracking-[-0.03em] min-[721px]:text-6xl">
           <NumberValue
             currency="SGD"

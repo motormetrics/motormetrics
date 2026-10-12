@@ -1,5 +1,4 @@
 import { cn, Separator, Typography } from "@heroui/react";
-import { Text } from "@web/components/shared/text";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -86,9 +85,14 @@ export function SectionHead({
   return (
     <div className={cn("flex flex-wrap items-end gap-4", className)}>
       <div className="flex min-w-0 flex-col gap-1">
-        <Text.Paragraph eyebrow weight="semibold" color="muted" size="xs">
+        <Typography.Paragraph
+          className="uppercase"
+          weight="semibold"
+          color="muted"
+          size="xs"
+        >
           {eyebrow}
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <Typography.Heading
           className="text-xl md:text-2xl"
           weight="bold"
@@ -184,9 +188,12 @@ export function Headline({
     <div className={cn("flex flex-col gap-2.5", className)}>
       {label ? (
         // Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>.
-        <Text.Paragraph tone="strong" className="text-xl" weight="semibold">
+        <Typography.Paragraph
+          className="text-muted-strong text-xl"
+          weight="semibold"
+        >
           {label}
-        </Text.Paragraph>
+        </Typography.Paragraph>
       ) : null}
       <div className="flex flex-wrap items-center gap-4">
         <span

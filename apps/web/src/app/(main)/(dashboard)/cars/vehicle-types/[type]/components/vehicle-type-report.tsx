@@ -29,7 +29,6 @@ import {
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { Count } from "@web/components/shared/report-table";
-import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -597,9 +596,14 @@ async function VehicleTypeContent({
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
         <section className="flex flex-col gap-2.5">
-          <Text.Paragraph color="muted" eyebrow size="xs" weight="semibold">
+          <Typography.Paragraph
+            className="uppercase"
+            color="muted"
+            size="xs"
+            weight="semibold"
+          >
             How this is counted
-          </Text.Paragraph>
+          </Typography.Paragraph>
           <Typography.Paragraph size="sm">
             A car counts in the month it is registered, under the vehicle type
             LTA records against it.

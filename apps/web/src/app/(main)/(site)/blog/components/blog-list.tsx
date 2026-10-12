@@ -9,7 +9,6 @@ import {
   POST_CATEGORIES,
 } from "@web/app/(main)/(site)/blog/components/post/utils";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { formatDate } from "@web/utils/dates/format-date";
 import Link from "next/link";
 import posthog from "posthog-js";
@@ -121,14 +120,13 @@ export function BlogList({
               {formatDate(post.publishedAt ?? post.createdAt)}
             </span>
             <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-              <Text.Paragraph
-                className="text-accent-strong"
-                eyebrow
+              <Typography.Paragraph
+                className="text-accent-strong uppercase"
                 size="xs"
                 weight="semibold"
               >
                 {getCategoryConfig(post).label}
-              </Text.Paragraph>
+              </Typography.Paragraph>
               <Typography.Heading
                 className="max-w-3xl text-lg leading-snug transition-colors group-hover:text-accent-strong md:text-xl"
                 level={3}

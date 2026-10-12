@@ -16,7 +16,6 @@ import {
   SourceNote,
   StatCell,
 } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { compactCurrency } from "@web/utils/formatting/chart-axis";
 import posthog from "posthog-js";
 import { useMemo, useState } from "react";
@@ -214,12 +213,12 @@ export function PARFCalculator() {
 
       <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
         <div className="flex min-w-0 flex-col gap-3">
-          <Text.Paragraph tone="strong">
+          <Typography.Paragraph className="text-muted-strong">
             <span className="font-semibold text-accent-strong">
               Rebate after Budget 2026
             </span>
             {` · ${bracket.label}`}
-          </Text.Paragraph>
+          </Typography.Paragraph>
           <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
             {formatCurrency(result.newRebate)}
           </span>
@@ -357,12 +356,12 @@ export function PARFCalculator() {
         />
         <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
           <div className="flex min-w-0 flex-col gap-3">
-            <Text.Paragraph tone="strong">
+            <Typography.Paragraph className="text-muted-strong">
               <span className="font-semibold text-accent-strong">
                 Deregistration value
               </span>{" "}
               · after Budget 2026
-            </Text.Paragraph>
+            </Typography.Paragraph>
             <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight">
               {formatCurrency(coeRebate + result.newRebate)}
             </span>

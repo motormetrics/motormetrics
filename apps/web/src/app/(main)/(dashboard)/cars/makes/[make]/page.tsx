@@ -20,7 +20,6 @@ import {
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import { Text } from "@web/components/shared/text";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import {
@@ -177,9 +176,14 @@ export default function CarMakePage({
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
         <div className="flex flex-col gap-2.5">
-          <Text.Paragraph eyebrow weight="semibold" color="muted" size="xs">
+          <Typography.Paragraph
+            className="uppercase"
+            weight="semibold"
+            color="muted"
+            size="xs"
+          >
             Reading a make page
-          </Text.Paragraph>
+          </Typography.Paragraph>
           <Typography.Paragraph size="sm">
             Registrations are counted by make as recorded at registration, so
             rebadged and parallel-imported cars appear under the same name as

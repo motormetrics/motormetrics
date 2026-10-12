@@ -38,7 +38,6 @@ import {
   SourceNote,
   StatCell,
 } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { getCategoryExercises, getExercisePair } from "@web/queries/coe";
 import { formatMonthShortName } from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
@@ -227,10 +226,10 @@ export async function PremiumsReport({
       <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
         <div className="flex min-w-0 flex-col gap-3">
           <CategoryTabs selected={categoryKey} />
-          <Text.Paragraph tone="strong">
+          <Typography.Paragraph className="text-muted-strong">
             <span className="font-semibold text-accent-strong">{category}</span>
             {` · ${CATEGORY_DESCRIPTIONS[category]}`}
-          </Text.Paragraph>
+          </Typography.Paragraph>
           <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
             <NumberValue
               currency="SGD"
