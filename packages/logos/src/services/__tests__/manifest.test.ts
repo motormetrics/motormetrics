@@ -42,7 +42,7 @@ afterEach(() => {
 });
 
 describe("readManifest", () => {
-  it("parses a stored manifest with one Blob read", async () => {
+  it("should parse a stored manifest with one Blob read", async () => {
     get.mockResolvedValue({
       statusCode: 200,
       stream: new Response(JSON.stringify(manifest)).body,
@@ -58,12 +58,12 @@ describe("readManifest", () => {
   it.each([
     null,
     { statusCode: 304 },
-  ])("returns null when no readable manifest is available", async (result) => {
+  ])("should return null when no readable manifest is available", async (result) => {
     get.mockResolvedValue(result);
     await expect(readManifest()).resolves.toBeNull();
   });
 
-  it("rejects malformed JSON", async () => {
+  it("should reject malformed JSON", async () => {
     get.mockResolvedValue({
       statusCode: 200,
       stream: new Response("invalid JSON").body,
@@ -71,7 +71,7 @@ describe("readManifest", () => {
     await expect(readManifest()).rejects.toBeInstanceOf(SyntaxError);
   });
 
-  it("propagates Blob read failures", async () => {
+  it("should propagate Blob read failures", async () => {
     const error = new Error("Blob unavailable");
     get.mockRejectedValue(error);
     await expect(readManifest()).rejects.toBe(error);
@@ -79,7 +79,7 @@ describe("readManifest", () => {
 });
 
 describe("writeManifest", () => {
-  it("refreshes the timestamp and preserves entries without mutating the input", async () => {
+  it("should refresh the timestamp and preserve entries without mutating the input", async () => {
     const original = structuredClone(manifest);
     const next = { ...manifest, updatedAt: timestamp };
     put.mockResolvedValue({ url: "https://blob/logos/manifest.json" });
@@ -100,7 +100,7 @@ describe("writeManifest", () => {
     expect(list).not.toHaveBeenCalled();
   });
 
-  it("propagates Blob write failures", async () => {
+  it("should propagate Blob write failures", async () => {
     const error = new Error("Write failed");
     put.mockRejectedValue(error);
     await expect(writeManifest(manifest)).rejects.toBe(error);
@@ -108,7 +108,7 @@ describe("writeManifest", () => {
 });
 
 describe("bootstrapManifest", () => {
-  it("creates an empty manifest when no logos exist", async () => {
+  it("should create an empty manifest when no logos exist", async () => {
     list.mockResolvedValue({ blobs: [], hasMore: false });
     await expect(bootstrapManifest()).resolves.toEqual({
       version: 1,
@@ -123,7 +123,7 @@ describe("bootstrapManifest", () => {
     expect(put).not.toHaveBeenCalled();
   });
 
-  it("collects every page and skips the manifest itself", async () => {
+  it("should collect every page and skip the manifest itself", async () => {
     list
       .mockResolvedValueOnce({
         blobs: [
@@ -181,7 +181,7 @@ describe("bootstrapManifest", () => {
     expect(get).not.toHaveBeenCalled();
   });
 
-  it("propagates failures on later pages instead of returning a partial manifest", async () => {
+  it("should propagate failures on later pages instead of returning a partial manifest", async () => {
     const error = new Error("List failed");
     list
       .mockResolvedValueOnce({
@@ -195,7 +195,7 @@ describe("bootstrapManifest", () => {
 });
 
 describe("manifestToLogos", () => {
-  it("excludes entries missing a URL or pathname even when their status is found", () => {
+  it("should exclude entries missing a URL or pathname even when their status is found", () => {
     expect(
       manifestToLogos({
         ...manifest,

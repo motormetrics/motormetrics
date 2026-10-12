@@ -71,7 +71,7 @@ describe("blog generation failure and metadata handling", () => {
     { gateway: {} },
     { gateway: { generationId: 123 } },
     { gateway: { generationId: "" } },
-  ])("saves without cost when no valid Gateway ID is available", async (providerMetadata) => {
+  ])("should save without cost when no valid Gateway ID is available", async (providerMetadata) => {
     generateText.mockResolvedValue({
       output,
       usage,
@@ -87,7 +87,7 @@ describe("blog generation failure and metadata handling", () => {
     );
   });
 
-  it("falls back to the last valid step ID when final metadata is absent", async () => {
+  it("should fall back to the last valid step ID when final metadata is absent", async () => {
     generateText.mockResolvedValue({
       output,
       usage,
@@ -112,7 +112,7 @@ describe("blog generation failure and metadata handling", () => {
     );
   });
 
-  it("handles a non-Error cost lookup rejection without discarding the post", async () => {
+  it("should handle a non-Error cost lookup rejection without discarding the post", async () => {
     generateText.mockResolvedValue({
       output,
       usage,
@@ -132,20 +132,20 @@ describe("blog generation failure and metadata handling", () => {
     );
   });
 
-  it("propagates model failures without attempting to save", async () => {
+  it("should propagate model failures without attempting to save", async () => {
     const error = new Error("Model unavailable");
     generateText.mockRejectedValue(error);
     await expect(generateBlogContent(options)).rejects.toBe(error);
     expect(savePost).not.toHaveBeenCalled();
   });
 
-  it("propagates persistence failures", async () => {
+  it("should propagate persistence failures", async () => {
     const error = new Error("Database unavailable");
     savePost.mockRejectedValue(error);
     await expect(generateBlogContent(options)).rejects.toBe(error);
   });
 
-  it("regenerates through the same structured rendering and persistence flow", async () => {
+  it("should regenerate through the same structured rendering and persistence flow", async () => {
     await expect(regenerateBlogContent(options)).resolves.toEqual({
       month: options.month,
       dataType: "cars",

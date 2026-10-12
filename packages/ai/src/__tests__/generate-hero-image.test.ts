@@ -42,7 +42,7 @@ beforeEach(() => {
 describe("generateHeroImage", () => {
   it.each(
     Object.keys(HERO_IMAGE_SUBJECTS) as Array<keyof typeof HERO_IMAGE_SUBJECTS>,
-  )("uses the subject and post context for %s", async (dataType) => {
+  )("should use the subject and post context for %s", async (dataType) => {
     await expect(generateHeroImage({ ...params, dataType })).resolves.toEqual({
       url: "https://blob/hero.png",
       pathname: "posts/hero/july-cars.png",
@@ -69,7 +69,7 @@ describe("generateHeroImage", () => {
     );
   });
 
-  it("uploads only the first image using its media type", async () => {
+  it("should upload only the first image using its media type", async () => {
     generateImage.mockResolvedValue({
       images: [
         {
@@ -90,7 +90,7 @@ describe("generateHeroImage", () => {
     );
   });
 
-  it("rejects empty image results without uploading", async () => {
+  it("should reject empty image results without uploading", async () => {
     generateImage.mockResolvedValue({ images: [] });
     await expect(generateHeroImage(params)).rejects.toThrow(
       "No image returned from gpt-image-2",
@@ -98,14 +98,14 @@ describe("generateHeroImage", () => {
     expect(uploadPostHeroImage).not.toHaveBeenCalled();
   });
 
-  it("propagates generation failures without uploading", async () => {
+  it("should propagate generation failures without uploading", async () => {
     const error = new Error("Generation failed");
     generateImage.mockRejectedValue(error);
     await expect(generateHeroImage(params)).rejects.toBe(error);
     expect(uploadPostHeroImage).not.toHaveBeenCalled();
   });
 
-  it("propagates upload failures for workflow retries", async () => {
+  it("should propagate upload failures for workflow retries", async () => {
     const error = new Error("Upload failed");
     uploadPostHeroImage.mockRejectedValue(error);
     await expect(generateHeroImage(params)).rejects.toBe(error);

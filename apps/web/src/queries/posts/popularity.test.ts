@@ -17,7 +17,7 @@ describe("getRelatedPosts", () => {
     getPostsByIdsMock.mockReset();
   });
 
-  it("ranks related posts from Gemini 2 document embeddings", async () => {
+  it("should rank related posts from Gemini 2 document embeddings", async () => {
     queueSelect([{ embedding: [0.1, 0.2, 0.3] }], [{ id: "related-post" }]);
     getPostsByIdsMock.mockResolvedValue([
       { id: "related-post", title: "Related analysis" },
@@ -29,7 +29,7 @@ describe("getRelatedPosts", () => {
     expect(getPostsByIdsMock).toHaveBeenCalledWith(["related-post"]);
   });
 
-  it("returns no recommendations until the current post is backfilled", async () => {
+  it("should return no recommendations until the current post is backfilled", async () => {
     queueSelect([{ embedding: null }]);
 
     await expect(getRelatedPosts("legacy-post", 3)).resolves.toEqual([]);

@@ -30,7 +30,7 @@ describe("Gemini 2 post embeddings", () => {
     });
   });
 
-  it("formats documents for asymmetric retrieval", () => {
+  it("should format documents for asymmetric retrieval", () => {
     expect(
       formatDocumentForEmbedding({
         title: " EV registrations ",
@@ -42,13 +42,13 @@ describe("Gemini 2 post embeddings", () => {
     );
   });
 
-  it("formats search queries with the Gemini 2 task instruction", () => {
+  it("should format search queries with the Gemini 2 task instruction", () => {
     expect(formatQueryForEmbedding(" electric car trends ")).toBe(
       "task: search result | query: electric car trends",
     );
   });
 
-  it("uses the Gateway Gemini 2 model with 768 dimensions for documents", async () => {
+  it("should use the Gateway Gemini 2 model with 768 dimensions for documents", async () => {
     await expect(
       generateDocumentEmbedding({
         title: "COE premiums",
@@ -68,7 +68,7 @@ describe("Gemini 2 post embeddings", () => {
     );
   });
 
-  it("uses the query-specific telemetry path", async () => {
+  it("should use the query-specific telemetry path", async () => {
     await generateQueryEmbedding("hybrid registrations");
 
     expect(embedMock).toHaveBeenCalledWith(
@@ -81,7 +81,7 @@ describe("Gemini 2 post embeddings", () => {
     );
   });
 
-  it("rejects an unexpected vector size before database persistence", async () => {
+  it("should reject an unexpected vector size before database persistence", async () => {
     embedMock.mockResolvedValueOnce({ embedding: [0.1, 0.2, 0.3] });
 
     await expect(

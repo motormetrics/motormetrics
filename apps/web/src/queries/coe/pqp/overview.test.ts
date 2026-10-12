@@ -14,7 +14,7 @@ describe("getPQPOverview", () => {
     resetDbMocks();
   });
 
-  it("provides an overview of PQP insights with savings calculations", async () => {
+  it("should provide an overview of PQP insights with savings calculations", async () => {
     // Recent PQP months, read in the first batch
     queueSelectDistinct([{ month: "2024-06" }]);
     queueSelect(
@@ -72,7 +72,7 @@ describe("getPQPOverview", () => {
     });
   });
 
-  it("handles empty PQP data gracefully", async () => {
+  it("should handle empty PQP data gracefully", async () => {
     queueSelectDistinct([]);
 
     const result = await getPQPOverview();

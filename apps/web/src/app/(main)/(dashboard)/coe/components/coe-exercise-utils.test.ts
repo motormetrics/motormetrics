@@ -38,7 +38,7 @@ const result = (
 });
 
 describe("groupByExercise", () => {
-  it("collapses rows into one entry per month and bidding round", () => {
+  it("should collapse rows into one entry per month and bidding round", () => {
     const exercises = groupByExercise([
       result("2026-04", 1, "Category A", 103_800),
       result("2026-04", 1, "Category B", 140_800),
@@ -54,7 +54,7 @@ describe("groupByExercise", () => {
     expect(exercises[1].results["Category A"]?.premium).toBe(103_000);
   });
 
-  it("orders oldest first regardless of input order", () => {
+  it("should order oldest first regardless of input order", () => {
     const exercises = groupByExercise([
       result("2026-04", 1, "Category A", 103_800),
       result("2025-12", 2, "Category A", 101_500),
@@ -70,18 +70,18 @@ describe("groupByExercise", () => {
     ]);
   });
 
-  it("returns an empty list when there are no results", () => {
+  it("should return an empty list when there are no results", () => {
     expect(groupByExercise([])).toEqual([]);
   });
 });
 
 describe("changeRatio", () => {
-  it("returns the signed change against the baseline", () => {
+  it("should return the signed change against the baseline", () => {
     expect(changeRatio(103_000, 103_800)).toBeCloseTo(-0.0077, 4);
     expect(changeRatio(104_200, 102_100)).toBeCloseTo(0.0206, 4);
   });
 
-  it("returns zero when there is no usable baseline", () => {
+  it("should return zero when there is no usable baseline", () => {
     expect(changeRatio(103_000, 0)).toBe(0);
   });
 });
@@ -89,39 +89,39 @@ describe("changeRatio", () => {
 describe("formatPremiumChange", () => {
   const previous = { biddingNo: 1, month: "2026-08", premium: 130_500 };
 
-  it("states a rise with the percentage and the dollar change", () => {
+  it("should state a rise with the percentage and the dollar change", () => {
     expect(formatPremiumChange(133_110, previous)).toBe(
       "+2.0% (+$2,610) vs first bidding, Aug at $130,500",
     );
   });
 
-  it("states a fall with a true minus", () => {
+  it("should state a fall with a true minus", () => {
     expect(formatPremiumChange(127_890, previous)).toBe(
       "\u22122.0% (\u2212$2,610) vs first bidding, Aug at $130,500",
     );
   });
 
-  it("says so when there is no earlier exercise", () => {
+  it("should say so when there is no earlier exercise", () => {
     expect(formatPremiumChange(130_500)).toBe("No earlier exercise to compare");
   });
 });
 
 describe("nextExercise", () => {
-  it("moves to the second round of the same month", () => {
+  it("should move to the second round of the same month", () => {
     expect(nextExercise({ biddingNo: 1, month: "2026-04" })).toEqual({
       biddingNo: 1 + 1,
       month: "2026-04",
     });
   });
 
-  it("moves to the first round of the next month", () => {
+  it("should move to the first round of the next month", () => {
     expect(nextExercise({ biddingNo: 2, month: "2026-04" })).toEqual({
       biddingNo: 1,
       month: "2026-05",
     });
   });
 
-  it("rolls the year over in December", () => {
+  it("should roll the year over in December", () => {
     expect(nextExercise({ biddingNo: 2, month: "2026-12" })).toEqual({
       biddingNo: 1,
       month: "2027-01",
@@ -130,25 +130,25 @@ describe("nextExercise", () => {
 });
 
 describe("labels", () => {
-  it("names an exercise in full", () => {
+  it("should name an exercise in full", () => {
     expect(formatExercise({ biddingNo: 2, month: "2026-04" })).toBe(
       "Second bidding, April 2026",
     );
   });
 
-  it("ticks an exercise short", () => {
+  it("should tick an exercise short", () => {
     expect(formatExerciseTick({ biddingNo: 1, month: "2026-04" })).toBe(
       "Apr 1",
     );
   });
 
-  it("falls back for an unexpected round", () => {
+  it("should fall back for an unexpected round", () => {
     expect(biddingOrdinal(9)).toBe("round 9");
   });
 });
 
 describe("category keys", () => {
-  it("round-trips between the URL key and the stored category", () => {
+  it("should round-trip between the URL key and the stored category", () => {
     expect(toCategory("B")).toBe("Category B");
     expect(toCategoryKey("Category B")).toBe("B");
   });

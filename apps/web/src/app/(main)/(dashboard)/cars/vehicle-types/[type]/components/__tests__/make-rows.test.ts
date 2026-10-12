@@ -12,13 +12,13 @@ const rows: MakeRow[] = [
 ];
 
 describe("sortMakeRows", () => {
-  it("orders by registrations, largest first", () => {
+  it("should order by registrations, largest first", () => {
     expect(sortMakeRows(rows, "count", "desc").map((row) => row.rank)).toEqual([
       1, 2, 3,
     ]);
   });
 
-  it("orders by change in either direction", () => {
+  it("should order by change in either direction", () => {
     expect(sortMakeRows(rows, "change", "desc").map((row) => row.make)).toEqual(
       ["BYD", "Audi", "BMW"],
     );
@@ -29,7 +29,7 @@ describe("sortMakeRows", () => {
     ]);
   });
 
-  it("orders makes alphabetically", () => {
+  it("should order makes alphabetically", () => {
     expect(sortMakeRows(rows, "make", "asc").map((row) => row.make)).toEqual([
       "Audi",
       "BMW",
@@ -37,14 +37,14 @@ describe("sortMakeRows", () => {
     ]);
   });
 
-  it("leaves the input untouched", () => {
+  it("should leave the input untouched", () => {
     sortMakeRows(rows, "make", "asc");
     expect(rows.map((row) => row.rank)).toEqual([1, 2, 3]);
   });
 });
 
 describe("defaultMakeDirection", () => {
-  it("opens the make column A to Z and figures largest first", () => {
+  it("should open the make column A to Z and figures largest first", () => {
     expect(defaultMakeDirection("make")).toBe("asc");
     expect(defaultMakeDirection("count")).toBe("desc");
     expect(defaultMakeDirection("change")).toBe("desc");

@@ -48,7 +48,7 @@ describe("monthly dataset queries", () => {
   it.each([
     getCarsAggregatedByMonth,
     getEvDataForMonth,
-  ])("aggregates positive registrations for the requested month", async (query) => {
+  ])("should aggregate positive registrations for the requested month", async (query) => {
     execute.mockResolvedValue({
       rows: [[month, "Toyota", "Electric", "SUV", 60]],
     });
@@ -77,7 +77,7 @@ describe("monthly dataset queries", () => {
     }
   });
 
-  it("fetches both car COE categories in exercise order", async () => {
+  it("should fetch both car COE categories in exercise order", async () => {
     const rows = [
       { month, vehicleClass: "Category A", biddingNo: 1, premium: 100000 },
     ];
@@ -90,7 +90,7 @@ describe("monthly dataset queries", () => {
     });
   });
 
-  it("aggregates deregistrations by category", async () => {
+  it("should aggregate deregistrations by category", async () => {
     execute.mockResolvedValue({ rows: [[month, "Category A", 40]] });
     await expect(getDeregistrationsForMonth(month)).resolves.toEqual([
       { month, category: "Category A", number: 40 },
@@ -106,7 +106,7 @@ describe("monthly dataset queries", () => {
   it.each([
     { rows: [[100]], total: 100 },
     { rows: [], total: 0 },
-  ])("returns total registrations with an empty-data fallback", async ({
+  ])("should return total registrations with an empty-data fallback", async ({
     rows,
     total,
   }) => {
@@ -118,7 +118,7 @@ describe("monthly dataset queries", () => {
     expect(params).toEqual([month, 0]);
   });
 
-  it("restricts PQP to the two car categories", async () => {
+  it("should restrict PQP to the two car categories", async () => {
     execute.mockResolvedValue({ rows: [[month, "Category B", 120000]] });
     await expect(getPqpForMonth(month)).resolves.toEqual([
       { month, vehicleClass: "Category B", pqp: 120000 },
@@ -130,7 +130,7 @@ describe("monthly dataset queries", () => {
 });
 
 describe("prior month queries", () => {
-  it("returns car history oldest first with the default three-month limit", async () => {
+  it("should return car history oldest first with the default three-month limit", async () => {
     execute.mockResolvedValue({
       rows: [
         ["2026-06", 100, 60, 60],
@@ -148,7 +148,7 @@ describe("prior month queries", () => {
     expect(params).toEqual([month, 0, 3]);
   });
 
-  it("returns deregistration history oldest first with a custom limit", async () => {
+  it("should return deregistration history oldest first with a custom limit", async () => {
     execute.mockResolvedValue({
       rows: [
         ["2026-06", 90],
@@ -164,7 +164,7 @@ describe("prior month queries", () => {
     expect(execute.mock.calls[0][1]).toEqual([month, 2]);
   });
 
-  it("limits PQP history by months times the two reported categories", async () => {
+  it("should limit PQP history by months times the two reported categories", async () => {
     execute.mockResolvedValue({
       rows: [
         ["2026-06", "Category A", 90000],
@@ -179,7 +179,7 @@ describe("prior month queries", () => {
   it.each([
     [getPriorMonthsCoeSummary, 3],
     [getCoePremiumsForPqpWindow, 4],
-  ] as const)("limits COE history by months before fetching all their exercises", async (query, defaultLimit) => {
+  ] as const)("should limit COE history by months before fetching all their exercises", async (query, defaultLimit) => {
     execute
       .mockResolvedValueOnce({ rows: [["2026-06"], ["2026-05"]] })
       .mockResolvedValueOnce({ rows: [] });
@@ -196,7 +196,7 @@ describe("prior month queries", () => {
   it.each([
     getPriorMonthsCoeSummary,
     getCoePremiumsForPqpWindow,
-  ])("skips the second query when no prior months exist", async (query) => {
+  ])("should skip the second query when no prior months exist", async (query) => {
     await expect(query(month, 2)).resolves.toEqual([]);
     expect(execute).toHaveBeenCalledTimes(1);
     expect(execute.mock.calls[0][1]).toEqual([month, 2]);
@@ -207,7 +207,7 @@ describe("getLatestCompleteMonth", () => {
   it.each([
     { rows: [[month]], expected: month },
     { rows: [], expected: null },
-  ])("requires all datasets and both COE exercises", async ({
+  ])("should require all datasets and both COE exercises", async ({
     rows,
     expected,
   }) => {
@@ -224,7 +224,7 @@ describe("getLatestCompleteMonth", () => {
 });
 
 describe("getMonthlyComputedFigures", () => {
-  it("returns zero totals and empty comparisons when datasets are empty", async () => {
+  it("should return zero totals and empty comparisons when datasets are empty", async () => {
     const result = await getMonthlyComputedFigures(month);
     expect(result).toMatchObject({
       month,
@@ -246,7 +246,7 @@ describe("getMonthlyComputedFigures", () => {
 
   it.each([
     0, 5,
-  ])("combines SQL figures and comparisons when diesel registrations are %s", async (diesel) => {
+  ])("should combine SQL figures and comparisons when diesel registrations are %s", async (diesel) => {
     execute.mockImplementation(async (sql) => {
       if (sql.includes('from "cars"')) {
         if (sql.includes('group by "cars"."month"')) {
@@ -390,7 +390,7 @@ describe("getMonthlyComputedFigures", () => {
     ]);
   });
 
-  it("omits comparisons for a missing exercise but preserves a zero premium", async () => {
+  it("should omit comparisons for a missing exercise but preserve a zero premium", async () => {
     execute.mockImplementation(async (sql) => {
       if (sql.includes('from "coe"'))
         return { rows: [["Category A", 100, 200, null, 100, 200, 0, null]] };
@@ -405,7 +405,7 @@ describe("getMonthlyComputedFigures", () => {
     });
   });
 
-  it("propagates SQL execution failures instead of reporting empty data", async () => {
+  it("should propagate SQL execution failures instead of reporting empty data", async () => {
     execute.mockRejectedValue(new Error("Database unavailable"));
     await expect(getMonthlyComputedFigures(month)).rejects.toThrow();
   });

@@ -13,7 +13,7 @@ describe("popular makes queries", () => {
     resetDbMocks();
   });
 
-  it("loads the latest year with registration data", async () => {
+  it("should load the latest year with registration data", async () => {
     dbMock.query.cars.findFirst.mockResolvedValue({ month: "2024-05" });
     queueSelect([{ make: "Honda" }]);
 
@@ -28,7 +28,7 @@ describe("popular makes queries", () => {
     );
   });
 
-  it("falls back to calendar year when latest month query returns no results", async () => {
+  it("should fall back to calendar year when latest month query returns no results", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2022-08-15"));
 

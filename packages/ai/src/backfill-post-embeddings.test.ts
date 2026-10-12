@@ -82,7 +82,7 @@ describe("backfillPostEmbeddings", () => {
     vi.clearAllMocks();
   });
 
-  it("processes batches and reports failed rows for a safe resume", async () => {
+  it("should process batches and report failed rows for a safe resume", async () => {
     const posts = [
       { id: "post-a", title: "A", excerpt: null, content: "Body A" },
       { id: "post-b", title: "B", excerpt: "Summary", content: "Body B" },
@@ -119,7 +119,7 @@ describe("backfillPostEmbeddings", () => {
     );
   });
 
-  it("does no writes when every post already has a Gemini 2 embedding", async () => {
+  it("should do no writes when every post already has a Gemini 2 embedding", async () => {
     const batchSelect = createBatchSelect([[]]);
     const countSelect = createCountSelect(0);
     vi.mocked(db.select)
@@ -136,13 +136,13 @@ describe("backfillPostEmbeddings", () => {
     expect(db.update).not.toHaveBeenCalled();
   });
 
-  it("rejects invalid batch sizes", async () => {
+  it("should reject invalid batch sizes", async () => {
     await expect(backfillPostEmbeddings({ batchSize: 0 })).rejects.toThrow(
       "must be a positive integer",
     );
   });
 
-  it("stringifies non-Error failures and defaults remaining when count is empty", async () => {
+  it("should stringify non-Error failures and default remaining when count is empty", async () => {
     const posts = [
       { id: "post-c", title: "C", excerpt: null, content: "Body C" },
     ];
@@ -177,7 +177,7 @@ describe("backfillPostEmbeddings", () => {
     );
   });
 
-  it("clears legacy embeddings only when reset is called explicitly", async () => {
+  it("should clear legacy embeddings only when reset is called explicitly", async () => {
     const updateChain = createUpdateChain();
     updateChain.returning.mockResolvedValueOnce([
       { id: "post-a" },
