@@ -7,6 +7,7 @@ import {
   priorWindow,
   rollingMonths,
   selectElectricOnlyMakes,
+  summariseLeaders,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { describe, expect, it } from "vitest";
 
@@ -262,5 +263,39 @@ describe("selectElectricOnlyMakes", () => {
 
     expect(summary.makes).toEqual([]);
     expect(summary.sharePercent).toBe(0);
+  });
+});
+
+describe("summariseLeaders", () => {
+  const leaders = [
+    { count: 7340, make: "BMW" },
+    { count: 6120, make: "Mercedes-Benz" },
+    { count: 3100, make: "Audi" },
+    { count: 900, make: "Porsche" },
+  ];
+
+  it("should name the leader and the two makes behind it", () => {
+    expect(summariseLeaders(leaders, "2026-08", "ytd")).toBe(
+      "From January to August 2026, BMW led with 7,340 registrations, ahead of Mercedes-Benz (6,120) and Audi (3,100).",
+    );
+  });
+
+  it("should open on the single month for the month range", () => {
+    expect(summariseLeaders(leaders.slice(0, 2), "2026-08", "month")).toBe(
+      "In August 2026, BMW led with 7,340 registrations, ahead of Mercedes-Benz (6,120).",
+    );
+  });
+
+  it("should name the fuel filter when one is active", () => {
+    expect(
+      summariseLeaders(leaders.slice(0, 1), "2026-08", "12m", "Electric"),
+    ).toBe(
+      "From September 2025 to August 2026, BMW led with 7,340 electric registrations.",
+    );
+  });
+
+  it("should return undefined without rows or a latest month", () => {
+    expect(summariseLeaders([], "2026-08", "ytd")).toBeUndefined();
+    expect(summariseLeaders(leaders, null, "ytd")).toBeUndefined();
   });
 });
