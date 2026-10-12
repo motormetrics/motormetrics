@@ -1,6 +1,6 @@
 import { cn, Skeleton, Typography } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
-import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
+import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/type-meta";
 import { MakeTable } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/make-table";
 import { MonthTable } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/month-table";
 import { PeriodSegment } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/period-segment";
@@ -45,12 +45,6 @@ import type { SearchParams } from "nuqs/server";
 import { createLoader, parseAsString, parseAsStringLiteral } from "nuqs/server";
 import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
-
-/*
- * A fuel-only copy of `cars/components/category/type-detail.tsx`, so the
- * fuel type page can move to the Hybrid comp while `/cars/vehicle-types/[type]`
- * keeps the shared report unchanged until its own port.
- */
 
 /**
  * The window every aggregate on the page is measured over, anchored on the

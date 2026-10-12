@@ -16,8 +16,7 @@ import { useTransition } from "react";
  *
  * The parsers are restated here rather than imported from `search-params.ts`
  * because a `"use client"` module cannot hand plain values back to a server
- * component — the same split `cars/components/category/category-filters.tsx`
- * uses.
+ * component.
  */
 const TERMS = ["5", "10"] as const;
 

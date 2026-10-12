@@ -1,5 +1,5 @@
 import { slugify } from "@motormetrics/utils/slugify";
-import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/category/type-detail";
+import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/type-meta";
 import { FuelTypeReport } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/fuel-type-report";
 import { SITE_URL } from "@web/config";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
