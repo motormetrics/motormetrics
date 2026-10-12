@@ -22,9 +22,11 @@ export function PopularPosts({ posts }: { posts: PostWithViews[] }) {
   }
 
   return (
-    <section className="flex flex-col">
+    // Pulled out by the rows' padding, so the hover fill has room while the
+    // text stays on the section's edge.
+    <section className="-mx-3 flex flex-col">
       <Typography.Heading
-        className="border-border border-b pb-2 font-semibold text-muted text-xs"
+        className="border-border border-b px-3 pb-2 font-semibold text-muted text-xs"
         level={2}
       >
         Most read
@@ -33,7 +35,7 @@ export function PopularPosts({ posts }: { posts: PostWithViews[] }) {
         {posts.map((post, index) => (
           <li className="border-separator border-b" key={post.id}>
             <Link
-              className="group flex items-baseline gap-4 py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
+              className="group flex items-baseline gap-4 px-3 py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
               href={`/blog/${post.slug}`}
             >
               <span className="w-5 shrink-0 text-muted text-sm tabular-nums">

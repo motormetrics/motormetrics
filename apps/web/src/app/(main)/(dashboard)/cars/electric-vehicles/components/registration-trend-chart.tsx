@@ -5,7 +5,6 @@ import { AreaChart } from "@heroui-pro/react/area-chart";
 import { trendTicks } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/trend-ticks";
 import type { Range } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
 import { compactCount } from "@web/utils/formatting/chart-axis";
-import { useSyncExternalStore } from "react";
 
 /** One month of the selected powertrain. */
 export interface RegistrationTrendPoint {
@@ -26,34 +25,23 @@ interface PointProps {
 }
 
 interface TickProps {
-  index?: number;
-  payload?: { index?: number };
+  payload?: { value?: string };
   x?: number | string;
   y?: number | string;
 }
 
-/** Months between x-axis ticks, per range; the comp thins harder on phones. */
-const TICK_EVERY: Record<"desktop" | "phone", Record<Range, number>> = {
-  desktop: { "1Y": 1, "3Y": 3, All: 6 },
-  phone: { "1Y": 3, "3Y": 12, All: 12 },
-};
+/**
+ * Months between x-axis ticks, per range. Recharts drops any that would
+ * collide on a narrow chart.
+ */
+const TICK_EVERY: Record<Range, number> = { "1Y": 1, "3Y": 3, All: 6 };
 
 /** Up to a year of months, every point carries a dot. */
 const DOT_LIMIT = 12;
 
-const PHONE_QUERY = "(width < 48rem)";
-
-const subscribePhone = (onChange: () => void) => {
-  const query = window.matchMedia(PHONE_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-};
-
-const isPhoneViewport = () => window.matchMedia(PHONE_QUERY).matches;
-
 /**
  * Monthly registrations for one powertrain as a zero-based line over a soft
- * fill, the newest month marked and, on wider screens, labelled.
+ * fill, the newest month marked and labelled.
  */
 export function RegistrationTrendChart({
   data,
@@ -65,14 +53,9 @@ export function RegistrationTrendChart({
   /** Zero-based ticks from `axisTicks`. */
   ticks: number[];
 }) {
-  const isPhone = useSyncExternalStore(
-    subscribePhone,
-    isPhoneViewport,
-    () => false,
-  );
   const monthTicks = trendTicks(
     data.map((point) => point.month),
-    TICK_EVERY[isPhone ? "phone" : "desktop"][range],
+    TICK_EVERY[range],
   );
   const lastIndex = data.length - 1;
   const showDots = data.length <= DOT_LIMIT;
@@ -80,8 +63,8 @@ export function RegistrationTrendChart({
   return (
     <AreaChart
       data={data}
-      height={isPhone ? 250 : 300}
-      margin={{ bottom: 0, left: 0, right: isPhone ? 20 : 64, top: 12 }}
+      height={300}
+      margin={{ bottom: 0, left: 0, right: 64, top: 12 }}
     >
       <defs>
         <linearGradient id="evTrendFill" x1="0" x2="0" y1="0" y2="1">
@@ -93,9 +76,14 @@ export function RegistrationTrendChart({
       <AreaChart.XAxis
         dataKey="month"
         height={40}
-        interval={0}
-        tick={({ index, payload, x, y }: TickProps) => {
-          const tick = monthTicks[payload?.index ?? index ?? 0];
+        // Only the planned months are ticks; Recharts drops any of those
+        // that would collide on a narrow chart.
+        interval="preserveStartEnd"
+        tick={({ payload, x, y }: TickProps) => {
+          const tick =
+            monthTicks[
+              data.findIndex((point) => point.month === payload?.value)
+            ];
           if (!tick) {
             return <g />;
           }
@@ -117,7 +105,14 @@ export function RegistrationTrendChart({
             </text>
           );
         }}
+        tickFormatter={(month: string) =>
+          monthTicks[data.findIndex((point) => point.month === month)]?.label ??
+          month
+        }
         tickMargin={6}
+        ticks={data
+          .filter((_, position) => monthTicks[position])
+          .map((point) => point.month)}
       />
       <AreaChart.YAxis
         domain={[0, ticks.at(-1) ?? "auto"]}
@@ -137,16 +132,14 @@ export function RegistrationTrendChart({
             return (
               <g key="last-point">
                 <circle cx={cx} cy={cy} fill="var(--chart-1)" r={4} />
-                {isPhone ? null : (
-                  <text
-                    className="fill-accent-strong font-semibold text-xs tabular-nums"
-                    dominantBaseline="middle"
-                    x={cx + 10}
-                    y={cy}
-                  >
-                    {data[lastIndex]?.value.toLocaleString("en-SG")}
-                  </text>
-                )}
+                <text
+                  className="fill-accent-strong font-semibold text-xs tabular-nums"
+                  dominantBaseline="middle"
+                  x={cx + 10}
+                  y={cy}
+                >
+                  {data[lastIndex]?.value.toLocaleString("en-SG")}
+                </text>
               </g>
             );
           }

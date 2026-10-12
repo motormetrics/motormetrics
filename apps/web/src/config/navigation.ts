@@ -218,18 +218,13 @@ export const MORE_NAV_SECTION_LABEL = "More";
  */
 export const MORE_NAV_ITEMS: NavigationItem[] = [
   { title: "About", url: "/about" },
+  { title: "Blog", url: "/blog" },
 ];
 
 /** Shown in More when the `advertise-nav` flag is on. */
 export const ADVERTISE_MORE_ITEM: NavigationItem = {
   title: "Advertise",
   url: "/advertise",
-};
-
-/** Shown in More when the `blog-nav` flag is on. `/blog` stays live either way. */
-export const BLOG_MORE_ITEM: NavigationItem = {
-  title: "Blog",
-  url: "/blog",
 };
 
 export const FOOTER_NAV_ITEMS = [

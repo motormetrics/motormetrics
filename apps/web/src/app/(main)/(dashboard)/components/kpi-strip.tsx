@@ -1,11 +1,14 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
+import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+import { biddingOrdinal } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
   sumByMonth,
+  summariseMonth,
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { DeltaChip } from "@web/components/shared/delta-chip";
@@ -279,6 +282,15 @@ export async function KpiStrip() {
     return null;
   }
 
+  const summary = summariseMonth(
+    registrations,
+    month,
+    "new cars registered",
+    premium
+      ? `Category A COE closed at ${formatCurrency(premium.premium)} in the ${biddingOrdinal(premium.biddingNo)} bidding of ${formatMonthName(premium.month)}`
+      : undefined,
+  );
+
   return (
     <div className="flex flex-col gap-2.5">
       <div className="grid grid-cols-2 border-separator border-y lg:grid-cols-4">
@@ -286,6 +298,11 @@ export async function KpiStrip() {
           <Kpi key={kpi.label} {...kpi} />
         ))}
       </div>
+      {summary ? (
+        <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
+          {summary}
+        </Typography.Paragraph>
+      ) : null}
       <SourceNote>
         Change is against the previous month; colour is not used for direction.
         Sparklines show the last {SPARK_MONTHS} months ({DEREGISTRATION_MONTHS}{" "}

@@ -7,7 +7,7 @@ describe("getPqpRates", () => {
     resetDbMocks();
   });
 
-  it("groups PQP rates by month and vehicle class", async () => {
+  it("should group PQP rates by month and vehicle class", async () => {
     queueSelect([
       {
         month: "2024-06",

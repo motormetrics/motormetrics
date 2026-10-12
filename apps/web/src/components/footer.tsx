@@ -53,7 +53,7 @@ export function Footer({
               aria-label={title}
               className="block text-muted transition-colors hover:text-accent"
               href={url}
-              rel="me noreferrer"
+              rel="me noreferrer nofollow"
               target="_blank"
             >
               <Icon aria-hidden="true" className="size-4" />
@@ -71,7 +71,7 @@ export function Footer({
         <Link
           className="transition-colors hover:text-accent"
           href="https://datamall.lta.gov.sg"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer nofollow"
           target="_blank"
         >
           LTA DataMall

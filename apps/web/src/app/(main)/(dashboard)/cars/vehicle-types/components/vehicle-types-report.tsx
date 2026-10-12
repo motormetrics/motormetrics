@@ -1,4 +1,5 @@
 import { Typography } from "@heroui/react";
+import { summariseMix } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
 import {
   MonthTable,
   PHONE_COLUMNS,
@@ -192,6 +193,7 @@ export async function VehicleTypesReport({
   // SUVs are the comp's subject; a period without any falls back to the
   // largest vehicle type so the headline still reads.
   const featured = mix.find(({ name }) => name === FEATURED_TYPE) ?? mix[0];
+  const summary = summariseMix(periodSpan, mix);
   const featuredPriorShare = percentageOf(
     priorByName.get(featured.name) ?? 0,
     priorTotal,
@@ -333,6 +335,15 @@ export async function VehicleTypesReport({
           }))}
           yearAgoLabel={String(year - 1)}
         />
+        {summary ? (
+          <Typography.Paragraph
+            className="tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {summary}
+          </Typography.Paragraph>
+        ) : null}
         <SourceNote>
           Electric is the battery-electric share of each type. Change is in
           percentage points of share against the same period in {year - 1}.

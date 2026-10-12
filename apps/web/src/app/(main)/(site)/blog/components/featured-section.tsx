@@ -2,20 +2,16 @@ import { FeaturedPost } from "@web/app/(main)/(site)/blog/components/featured-po
 import { PopularPostsSection } from "@web/app/(main)/(site)/blog/components/popular-posts-section";
 import { SourceNote } from "@web/components/shared/overview";
 import { SkeletonBentoCard } from "@web/components/shared/skeleton";
-import { blogPopularPosts } from "@web/flags";
 import { getAllPosts } from "@web/queries/posts";
 import { Suspense } from "react";
 
 /**
  * The featured card, with its source line when it quotes figures. The comp
- * has no place for the flag-gated "Most read" list, so with the flag on it
- * follows the card as its own ruled block.
+ * has no place for the "Most read" list, so it follows the card as its own
+ * ruled block.
  */
 async function FeaturedContent() {
-  const [posts, showPopular] = await Promise.all([
-    getAllPosts(),
-    blogPopularPosts(),
-  ]);
+  const posts = await getAllPosts();
   const featured = posts[0];
 
   if (!featured) {
@@ -35,7 +31,7 @@ async function FeaturedContent() {
           </SourceNote>
         ) : null}
       </div>
-      {showPopular ? <PopularPostsSection /> : null}
+      <PopularPostsSection />
     </>
   );
 }

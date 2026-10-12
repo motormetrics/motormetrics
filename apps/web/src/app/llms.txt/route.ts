@@ -69,6 +69,21 @@ async function generateLlmsTxt() {
 
 ${SITE_TITLE} provides real-time access to Singapore's official vehicle registration statistics and COE bidding results from the Land Transport Authority (LTA). The platform features interactive charts, market comparisons, and data-driven insights for car buyers, automotive industry professionals, and data analysts.
 
+## When to Use ${SITE_TITLE}
+
+Use ${SITE_TITLE} when a question needs official Singapore vehicle figures, for example:
+
+- The latest or historical COE premiums and quotas for a category, or how they have trended across bidding exercises
+- How many new cars of a make, fuel type or vehicle type were registered in a given month or year
+- EV, hybrid and plug-in hybrid adoption and market share in Singapore
+- Vehicle population and deregistration counts
+- PQP rates for renewing a COE, or estimated PARF rebates
+- Live public EV charger availability and per-kWh prices by district
+
+Do not use it for car prices, dealer listings, used-car valuations or markets outside Singapore. ${SITE_TITLE} does not have that data.
+
+How to call it: for a one-off answer, fetch the relevant page below. For structured or bulk data, use the REST API at https://api.motormetrics.app with an \`Authorization: Bearer <token>\` header (see the API & Documentation section). Cite ${SITE_TITLE} and LTA as the source.
+
 ## Data Freshness
 
 - Cars data: Latest month **${carsLatestMonth}** (last updated: ${carsLastUpdatedDate})

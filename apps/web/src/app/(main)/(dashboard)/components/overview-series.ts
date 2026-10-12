@@ -1,3 +1,10 @@
+import { formatPercentage } from "@motormetrics/utils/format-percentage";
+import { changeRatio } from "@web/utils/change-ratio";
+import {
+  formatMonthLabel,
+  formatMonthName,
+} from "@web/utils/dates/format-month";
+
 /**
  * Pure series helpers for the Overview page.
  *
@@ -77,4 +84,62 @@ export function axisTicks(values: number[], { zero }: { zero: boolean }) {
   return Array.from({ length: count + 1 }, (_, index) =>
     Number((first + index * step).toFixed(6)),
   );
+}
+
+/** Fewer months back and "the most since" is noise. */
+const MIN_SINCE_MONTHS = 3;
+
+/**
+ * The summary line under a monthly chart, e.g. "April 2026: 4,210 new cars
+ * registered, up 6.2% on March, the most since December 2025; BMW led." Plain
+ * text gives search engines the month as a sentence, not only as chart bars.
+ * `detail` is the page's own closing clause.
+ */
+export function summariseMonth(
+  series: MonthTotal[],
+  month: string,
+  unit: string,
+  detail?: string,
+): string | undefined {
+  const index = series.findIndex((row) => row.month === month);
+  if (index < 0) {
+    return undefined;
+  }
+
+  const { total } = series[index];
+  const parts = [
+    `${formatMonthLabel(month)}: ${total.toLocaleString("en-SG")} ${unit}`,
+  ];
+  const earlier = series.slice(0, index);
+  const previous = earlier.at(-1);
+
+  if (previous && previous.total > 0) {
+    const ratio = changeRatio(total, previous.total);
+    const previousName =
+      previous.month.slice(0, 4) === month.slice(0, 4)
+        ? formatMonthName(previous.month)
+        : formatMonthLabel(previous.month);
+
+    if (ratio === 0) {
+      parts.push(`unchanged on ${previousName}`);
+    } else {
+      const rose = ratio > 0;
+      parts.push(
+        `${rose ? "up" : "down"} ${formatPercentage(Math.abs(ratio * 100))} on ${previousName}`,
+      );
+
+      // The last earlier month that matched or beat this total, or for a
+      // fall, the last one at or below it.
+      const sinceIndex = earlier.findLastIndex((row) =>
+        rose ? row.total >= total : row.total <= total,
+      );
+      if (sinceIndex >= 0 && index - sinceIndex >= MIN_SINCE_MONTHS) {
+        parts.push(
+          `the ${rose ? "most" : "fewest"} since ${formatMonthLabel(earlier[sinceIndex].month)}`,
+        );
+      }
+    }
+  }
+
+  return `${parts.join(", ")}${detail ? `; ${detail}` : ""}.`;
 }

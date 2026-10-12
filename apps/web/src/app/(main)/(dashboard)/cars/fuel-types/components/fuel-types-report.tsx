@@ -1,4 +1,5 @@
 import { Typography } from "@heroui/react";
+import { summariseMix } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
 import { FuelTable } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-table";
 import {
   type FuelSeries,
@@ -184,6 +185,10 @@ export async function FuelTypesReport({
   // Electric is the comp's subject; a period without any falls back to the
   // largest fuel type so the headline still reads.
   const featured = mix.find(({ name }) => name === FEATURED_FUEL) ?? mix[0];
+  const summary = summariseMix(
+    periodLabel,
+    mix.map(({ name, share }) => ({ label: name, share })),
+  );
   const featuredPriorShare = percentageOf(
     priorByName.get(featured.name) ?? 0,
     priorTotal,
@@ -335,6 +340,15 @@ export async function FuelTypesReport({
           }))}
           yearAgoLabel={String(year - 1)}
         />
+        {summary ? (
+          <Typography.Paragraph
+            className="tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {summary}
+          </Typography.Paragraph>
+        ) : null}
         <SourceNote>
           Share is of {total.toLocaleString("en-SG")} new cars. Change is in
           percentage points against the same period of {year - 1}; colour is not

@@ -46,7 +46,7 @@ const manifest: LogoManifest = {
 };
 
 describe("manifestToLogos", () => {
-  it("keeps found and manual entries, drops missing, sorts by make", () => {
+  it("should keep found and manual entries, drops missing, sorts by make", () => {
     expect(manifestToLogos(manifest)).toEqual([
       { make: "byd", url: "https://blob/logos/byd.png", filename: "byd.png" },
       {
@@ -57,7 +57,7 @@ describe("manifestToLogos", () => {
     ]);
   });
 
-  it("returns an empty list for an empty manifest", () => {
+  it("should return an empty list for an empty manifest", () => {
     expect(manifestToLogos({ version: 1, updatedAt: "", logos: {} })).toEqual(
       [],
     );

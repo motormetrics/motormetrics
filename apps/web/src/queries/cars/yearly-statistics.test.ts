@@ -15,7 +15,7 @@ describe("yearly statistics queries", () => {
     resetDbMocks();
   });
 
-  it("aggregates yearly registration totals", async () => {
+  it("should aggregate yearly registration totals", async () => {
     // The query groups by month; the fold into years happens here
     queueSelect([
       { month: "2022-01", total: 100 },
@@ -33,7 +33,7 @@ describe("yearly statistics queries", () => {
     expect(cacheTagMock).toHaveBeenCalledWith("cars:annual");
   });
 
-  it("returns top makes for an explicit year", async () => {
+  it("should return top makes for an explicit year", async () => {
     // An explicit year skips the latest-year lookup, so there is one query
     queueSelect([{ make: "Tesla", value: 50 }]);
 
@@ -43,7 +43,7 @@ describe("yearly statistics queries", () => {
     expect(cacheTagMock).toHaveBeenCalledWith("cars:year:2024");
   });
 
-  it("derives latest year when no year is supplied", async () => {
+  it("should derive latest year when no year is supplied", async () => {
     // 1. latest month carrying registrations, 2. the makes for that year
     queueSelect([{ month: "2021-11" }], [{ make: "Toyota", value: 80 }]);
 
@@ -52,7 +52,7 @@ describe("yearly statistics queries", () => {
     expect(result).toEqual([{ make: "Toyota", value: 80 }]);
   });
 
-  it("returns an empty list when no data is present", async () => {
+  it("should return an empty list when no data is present", async () => {
     // The latest-month lookup comes back empty, so no second query runs
     queueSelect([]);
 

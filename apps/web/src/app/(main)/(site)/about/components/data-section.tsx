@@ -43,7 +43,7 @@ export function DataSection() {
           <Link
             className="font-medium text-accent-strong"
             href="https://datamall.lta.gov.sg"
-            rel="noreferrer"
+            rel="noreferrer nofollow"
             target="_blank"
           >
             DataMall

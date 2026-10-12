@@ -294,7 +294,7 @@ export default function CategoryMergerPage() {
           <a
             className={buttonVariants({ variant: "primary" })}
             href={FEEDBACK_URL}
-            rel="noreferrer"
+            rel="noreferrer nofollow"
             target="_blank"
           >
             Give feedback to LTA
@@ -303,7 +303,7 @@ export default function CategoryMergerPage() {
           <a
             className={buttonVariants({ variant: "secondary" })}
             href={CONSULTATION_PAPER_URL}
-            rel="noreferrer"
+            rel="noreferrer nofollow"
             target="_blank"
           >
             Read the consultation paper

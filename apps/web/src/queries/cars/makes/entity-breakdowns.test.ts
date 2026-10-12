@@ -10,7 +10,7 @@ describe("car make breakdown queries", () => {
     resetDbMocks();
   });
 
-  it("returns make details with summed totals", async () => {
+  it("should return make details with summed totals", async () => {
     // getMakeDetails now uses db.batch with 2 queries
     queueBatch([
       [{ total: 42 }],
@@ -39,7 +39,7 @@ describe("car make breakdown queries", () => {
     });
   });
 
-  it("returns fuel type aggregates for battery electric vehicles", async () => {
+  it("should return fuel type aggregates for battery electric vehicles", async () => {
     // getFuelTypeData now uses db.batch with 2 queries
     queueBatch([
       [{ total: 12 }],

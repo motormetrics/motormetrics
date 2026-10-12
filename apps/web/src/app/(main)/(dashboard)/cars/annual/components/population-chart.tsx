@@ -3,7 +3,6 @@
 import { ChartTooltip } from "@heroui-pro/react";
 import { AreaChart } from "@heroui-pro/react/area-chart";
 import { compactCount } from "@web/utils/formatting/chart-axis";
-import { useSyncExternalStore } from "react";
 
 export type PopulationPoint = {
   /** "2025". */
@@ -28,25 +27,13 @@ interface PointProps {
 }
 
 interface TickProps {
-  index?: number;
-  payload?: { index?: number };
+  payload?: { value?: string };
   x?: number | string;
   y?: number | string;
 }
 
-/**
- * Phone geometry below Tailwind's `md`: no end label and every fifth year
- * ticked.
- */
-const PHONE_QUERY = "(width < 48rem)";
-
-const subscribePhone = (onChange: () => void) => {
-  const query = window.matchMedia(PHONE_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-};
-
-const isPhoneViewport = () => window.matchMedia(PHONE_QUERY).matches;
+/** Years between x ticks, counted back from the newest. */
+const TICK_YEARS = 2;
 
 /** "+0.3% vs 2024", with a true minus for a fall. */
 const formatChange = (change: number, year: string): string =>
@@ -69,18 +56,12 @@ export function PopulationChart({
   ticks: number[];
 }) {
   const lastIndex = data.length - 1;
-  const isPhone = useSyncExternalStore(
-    subscribePhone,
-    isPhoneViewport,
-    () => false,
-  );
-  const tickEvery = isPhone ? 5 : 2;
 
   return (
     <AreaChart
       data={data}
-      height={isPhone ? 260 : 320}
-      margin={{ bottom: 0, left: 0, right: isPhone ? 16 : 56, top: 12 }}
+      height={320}
+      margin={{ bottom: 0, left: 0, right: 56, top: 12 }}
     >
       <AreaChart.Grid
         horizontal={({ index, x1, x2, y1, y2 }: GridLineProps) => (
@@ -98,13 +79,10 @@ export function PopulationChart({
       />
       <AreaChart.XAxis
         dataKey="year"
-        interval={0}
-        tick={({ index, payload, x, y }: TickProps) => {
-          const position = payload?.index ?? index ?? 0;
-          // Anchored to the newest year so the last tick is always drawn.
-          if ((lastIndex - position) % tickEvery !== 0) {
-            return <g />;
-          }
+        // Only every other year, counted back from the newest, is a tick;
+        // Recharts keeps the newest and drops any that would collide.
+        interval="preserveEnd"
+        tick={({ payload, x, y }: TickProps) => {
           return (
             <text
               className="fill-muted text-xs tabular-nums"
@@ -113,18 +91,21 @@ export function PopulationChart({
               x={x}
               y={y}
             >
-              {data[position]?.year}
+              {payload?.value}
             </text>
           );
         }}
         tickMargin={6}
+        ticks={data
+          .filter((_, position) => (lastIndex - position) % TICK_YEARS === 0)
+          .map((point) => point.year)}
       />
       <AreaChart.YAxis
         domain={[ticks[0] ?? "auto", ticks.at(-1) ?? "auto"]}
         orientation="left"
         tickFormatter={compactCount}
         ticks={ticks}
-        width={isPhone ? 44 : 56}
+        width={56}
       />
       <AreaChart.Area
         activeDot={{ fill: "var(--chart-1)", r: 4, strokeWidth: 0 }}
@@ -144,7 +125,7 @@ export function PopulationChart({
                 stroke="var(--chart-1)"
                 strokeWidth={1.5}
               />
-              {index === lastIndex && !isPhone ? (
+              {index === lastIndex ? (
                 <text
                   className="fill-chart-1 font-semibold text-xs tabular-nums"
                   dominantBaseline="middle"

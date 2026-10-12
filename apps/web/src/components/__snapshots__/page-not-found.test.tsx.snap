@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`PageNotFound > renders the 404 error message 1`] = `
+exports[`PageNotFound > should render the 404 error message 1`] = `
 <div>
   <div
     class="container mx-auto px-6 py-16"

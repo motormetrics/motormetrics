@@ -5,6 +5,7 @@ import {
   type PopulationRow,
   rankClasses,
   sortClasses,
+  summarisePopulation,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { describe, expect, it } from "vitest";
 
@@ -65,6 +66,37 @@ describe("changeRatio", () => {
   it("should return null without a prior year", () => {
     expect(changeRatio([100])).toBeNull();
     expect(changeRatio([0, 100])).toBeNull();
+  });
+});
+
+describe("summarisePopulation", () => {
+  it("should give the year end, the change on the year before and the electric share", () => {
+    const series = buildPopulationSeries(rows);
+    const cars = series?.entities.find((entity) => entity.name === "Cars");
+
+    expect(cars && summarisePopulation(cars, series?.years ?? [])).toBe(
+      "At 31 December 2025, 620 cars were on the road in Singapore, up 12.7% on 2024; 16.1% of them electric.",
+    );
+  });
+
+  it("should leave out what a single year without electric vehicles lacks", () => {
+    expect(
+      summarisePopulation(
+        { electric: [0], fuel: [], name: "Motorcycles", series: [140] },
+        ["2024"],
+      ),
+    ).toBe(
+      "At 31 December 2024, 140 motorcycles were on the road in Singapore.",
+    );
+  });
+
+  it("should return nothing for an empty series", () => {
+    expect(
+      summarisePopulation(
+        { electric: [], fuel: [], name: "Cars", series: [] },
+        [],
+      ),
+    ).toBeUndefined();
   });
 });
 

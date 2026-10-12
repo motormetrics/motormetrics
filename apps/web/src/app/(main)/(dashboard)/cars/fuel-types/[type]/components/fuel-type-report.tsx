@@ -1,5 +1,6 @@
 import { cn, Skeleton, Typography } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
+import { summariseType } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/type-meta";
 import { MakeTable } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/make-table";
 import { MonthTable } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/month-table";
@@ -259,6 +260,20 @@ async function FuelTypeContent({
   const previousTypeTotal =
     previousDistribution.find((row) => row.name === value)?.count ?? 0;
   const rank = distribution.findIndex((row) => row.name === value) + 1;
+  const previousMarketTotal = previousDistribution.reduce(
+    (sum, row) => sum + row.count,
+    0,
+  );
+  const summary = summariseType({
+    count: typeTotal,
+    label: value,
+    periodLabel: periodLabel,
+    previousShare:
+      previousMarketTotal > 0
+        ? share(previousTypeTotal, previousMarketTotal)
+        : undefined,
+    share: share(typeTotal, marketTotal),
+  });
   const peerLeader = distribution[0]?.count ?? 0;
 
   const previousByMake = new Map(
@@ -394,6 +409,9 @@ async function FuelTypeContent({
             ))}
           </div>
         </div>
+        <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
+          {summary}
+        </Typography.Paragraph>
       </div>
 
       <section className="flex min-w-0 flex-col gap-4">

@@ -1,3 +1,5 @@
+import { formatPercentage } from "@motormetrics/utils/format-percentage";
+
 /** LTA's label for a battery-electric vehicle, used verbatim. */
 const ELECTRIC = "Electric";
 
@@ -146,6 +148,38 @@ export function changeRatio(series: number[]): number | null {
     return null;
   }
   return (current - previous) / previous;
+}
+
+/**
+ * The summary line under the population chart, e.g. "At 31 December 2025,
+ * 620 cars were on the road in Singapore, up 12.7% on 2024; 16.1% of them
+ * electric." Plain text gives search engines the figure as a sentence.
+ */
+export function summarisePopulation(
+  entity: PopulationEntity,
+  years: string[],
+): string | undefined {
+  const year = years.at(-1);
+  const total = entity.series.at(-1);
+  if (!year || !total) {
+    return undefined;
+  }
+
+  const parts = [
+    `At 31 December ${year}, ${total.toLocaleString("en-SG")} ${entity.name.toLowerCase()} were on the road in Singapore`,
+  ];
+  const ratio = changeRatio(entity.series);
+  const previousYear = years.at(-2);
+  if (ratio !== null && previousYear) {
+    parts.push(
+      ratio === 0
+        ? `unchanged on ${previousYear}`
+        : `${ratio > 0 ? "up" : "down"} ${formatPercentage(Math.abs(ratio * 100))} on ${previousYear}`,
+    );
+  }
+
+  const electric = entity.electric.at(-1) ?? 0;
+  return `${parts.join(", ")}${electric > 0 ? `; ${formatPercentage((electric / total) * 100)} of them electric` : ""}.`;
 }
 
 /** One vehicle class as the table ranks it at the latest year end. */

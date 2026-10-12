@@ -47,4 +47,40 @@ describe("proxy", () => {
     expect(response.headers.get("x-middleware-request-x-nonce")).toBeTruthy();
     expect(response.headers.get("x-nonce")).toBeNull();
   });
+
+  it("should serve llms.txt as Markdown when the homepage is requested with Accept: text/markdown", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(new Response("# MotorMetrics"));
+    const { proxy } = await import("@web/proxy");
+
+    const response = await proxy(
+      new NextRequest("http://localhost/", {
+        headers: { accept: "text/markdown" },
+      }),
+    );
+
+    expect(fetchSpy).toHaveBeenCalledWith(new URL("http://localhost/llms.txt"));
+    expect(response.headers.get("content-type")).toBe(
+      "text/markdown; charset=utf-8",
+    );
+    expect(response.headers.get("vary")).toBe("Accept");
+    expect(await response.text()).toBe("# MotorMetrics");
+    fetchSpy.mockRestore();
+  });
+
+  it("should not serve Markdown to browsers requesting the homepage", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    const { proxy } = await import("@web/proxy");
+
+    const response = await proxy(
+      new NextRequest("http://localhost/", {
+        headers: { accept: "text/html" },
+      }),
+    );
+
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(response.headers.get("content-type")).toBeNull();
+    fetchSpy.mockRestore();
+  });
 });

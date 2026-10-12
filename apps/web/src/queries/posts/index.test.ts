@@ -18,7 +18,7 @@ describe("searchPosts", () => {
     generateQueryEmbeddingMock.mockResolvedValue([0.1, 0.2, 0.3]);
   });
 
-  it("returns keyword matches without generating an embedding", async () => {
+  it("should return keyword matches without generating an embedding", async () => {
     queueSelect([{ id: "keyword-post", title: "Electric cars" }]);
 
     await expect(searchPosts("electric")).resolves.toEqual([
@@ -27,7 +27,7 @@ describe("searchPosts", () => {
     expect(generateQueryEmbeddingMock).not.toHaveBeenCalled();
   });
 
-  it("uses the Gemini 2 query embedding for semantic fallback", async () => {
+  it("should use the Gemini 2 query embedding for semantic fallback", async () => {
     queueSelect([], [{ id: "semantic-post", title: "EV market share" }]);
 
     await expect(searchPosts("battery vehicle trends")).resolves.toEqual([
@@ -38,7 +38,7 @@ describe("searchPosts", () => {
     );
   });
 
-  it("degrades gracefully when query embedding generation fails", async () => {
+  it("should degrade gracefully when query embedding generation fails", async () => {
     queueSelect([]);
     generateQueryEmbeddingMock.mockRejectedValue(
       new Error("Gateway unavailable"),

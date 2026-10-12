@@ -7,6 +7,7 @@ import {
   priorWindow,
   rollingMonths,
   selectElectricOnlyMakes,
+  summariseLeaders,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { describe, expect, it } from "vitest";
 
@@ -35,7 +36,7 @@ const stats = [
 ];
 
 describe("rollingMonths", () => {
-  it("returns the twelve months ending at the given month, oldest first", () => {
+  it("should return the twelve months ending at the given month, oldest first", () => {
     const months = rollingMonths("2025-03");
 
     expect(months).toHaveLength(12);
@@ -45,21 +46,21 @@ describe("rollingMonths", () => {
 });
 
 describe("periodLabel", () => {
-  it("names the single month for this month", () => {
+  it("should name the single month for this month", () => {
     expect(periodLabel("2026-08", "month")).toBe("August 2026");
   });
 
-  it("drops the start year when the range sits within one year", () => {
+  it("should drop the start year when the range sits within one year", () => {
     expect(periodLabel("2026-08", "ytd")).toBe("January to August 2026");
   });
 
-  it("keeps both years when the range crosses one", () => {
+  it("should keep both years when the range crosses one", () => {
     expect(periodLabel("2026-08", "12m")).toBe("September 2025 to August 2026");
   });
 });
 
 describe("priorWindow", () => {
-  it("compares each range with the same period a year earlier", () => {
+  it("should compare each range with the same period a year earlier", () => {
     expect(priorWindow("2025-03", "month")).toEqual({
       end: "2024-03",
       start: "2024-03",
@@ -76,20 +77,20 @@ describe("priorWindow", () => {
 });
 
 describe("buildTotalsFromStats", () => {
-  it("uses the year-to-date count for the ytd range", () => {
+  it("should use the year-to-date count for the ytd range", () => {
     const totals = buildTotalsFromStats(stats, "ytd", {});
 
     expect(totals[0]).toMatchObject({ count: 1000, make: "TOYOTA" });
   });
 
-  it("sums the rolling trend for the twelve-month range", () => {
+  it("should sum the rolling trend for the twelve-month range", () => {
     const totals = buildTotalsFromStats(stats, "12m", {});
 
     expect(totals[0].count).toBe(100);
     expect(totals[1].count).toBe(50);
   });
 
-  it("takes the supplied per-month counts for the month range", () => {
+  it("should take the supplied per-month counts for the month range", () => {
     const totals = buildTotalsFromStats(stats, "month", { TOYOTA: 88 });
 
     expect(totals[0].count).toBe(88);
@@ -98,14 +99,14 @@ describe("buildTotalsFromStats", () => {
     expect(totals[1].count).toBe(0);
   });
 
-  it("carries the year-on-year change through unchanged", () => {
+  it("should carry the year-on-year change through unchanged", () => {
     const totals = buildTotalsFromStats(stats, "ytd", {});
 
     expect(totals[0].yoyChange).toBe(25);
     expect(totals[1].yoyChange).toBeNull();
   });
 
-  it("measures the month range against the prior-period counts", () => {
+  it("should measure the month range against the prior-period counts", () => {
     const totals = buildTotalsFromStats(
       stats,
       "month",
@@ -117,7 +118,7 @@ describe("buildTotalsFromStats", () => {
     expect(totals[1].yoyChange).toBe(50);
   });
 
-  it("measures the twelve-month range against the prior-period counts", () => {
+  it("should measure the twelve-month range against the prior-period counts", () => {
     const totals = buildTotalsFromStats(stats, "12m", {}, { TOYOTA: 80 });
 
     expect(totals[0].yoyChange).toBe(25);
@@ -167,7 +168,7 @@ describe("buildTotalsFromFuelRows", () => {
     expect(byd?.count).toBe(50);
   });
 
-  it("computes each range from the same rows", () => {
+  it("should compute each range from the same rows", () => {
     const month = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "month");
     const rolling = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "12m");
 
@@ -175,7 +176,7 @@ describe("buildTotalsFromFuelRows", () => {
     expect(rolling.find((item) => item.make === "BYD")?.count).toBe(57);
   });
 
-  it("aligns the trend to the twelve months ending at the latest month", () => {
+  it("should align the trend to the twelve months ending at the latest month", () => {
     const [byd] = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "ytd");
 
     expect(byd.trend).toHaveLength(12);
@@ -183,7 +184,7 @@ describe("buildTotalsFromFuelRows", () => {
     expect(byd.trend.at(-2)).toBe(20);
   });
 
-  it("compares against the same months a year earlier, not the whole year", () => {
+  it("should compare against the same months a year earlier, not the whole year", () => {
     const totals = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "ytd");
 
     // Jan–Feb 2025 is 50 against Jan–Feb 2024 of 10. Counting all of 2024
@@ -191,7 +192,7 @@ describe("buildTotalsFromFuelRows", () => {
     expect(totals.find((item) => item.make === "BYD")?.yoyChange).toBe(400);
   });
 
-  it("measures the month and twelve-month ranges against a year earlier", () => {
+  it("should measure the month and twelve-month ranges against a year earlier", () => {
     const month = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "month");
     const rolling = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "12m");
 
@@ -202,7 +203,7 @@ describe("buildTotalsFromFuelRows", () => {
     expect(rolling.find((item) => item.make === "BYD")?.yoyChange).toBe(470);
   });
 
-  it("reports no change when the make has no prior-year registrations", () => {
+  it("should report no change when the make has no prior-year registrations", () => {
     const totals = buildTotalsFromFuelRows(rows, isElectric, "2025-02", "ytd");
 
     expect(totals.find((item) => item.make === "TESLA")?.yoyChange).toBeNull();
@@ -216,21 +217,21 @@ describe("finaliseRows", () => {
     { count: 0, make: "SAAB", trend: [], yoyChange: null },
   ];
 
-  it("ranks by count and drops makes with nothing registered", () => {
+  it("should rank by count and drop makes with nothing registered", () => {
     const rows = finaliseRows(totals);
 
     expect(rows.map((row) => row.make)).toEqual(["TOYOTA", "BYD"]);
     expect(rows.map((row) => row.rank)).toEqual([1, 2]);
   });
 
-  it("shares each make out of the visible total", () => {
+  it("should share each make out of the visible total", () => {
     const rows = finaliseRows(totals);
 
     expect(rows[0].share).toBe(80);
     expect(rows[1].share).toBe(20);
   });
 
-  it("attaches a logo url by slug when one exists", () => {
+  it("should attach a logo url by slug when one exists", () => {
     const rows = finaliseRows(totals, { toyota: "https://x/toyota.png" });
 
     expect(rows[0].logoUrl).toBe("https://x/toyota.png");
@@ -239,7 +240,7 @@ describe("finaliseRows", () => {
 });
 
 describe("selectElectricOnlyMakes", () => {
-  it("keeps only makes whose whole year is battery-electric", () => {
+  it("should keep only makes whose whole year is battery-electric", () => {
     const summary = selectElectricOnlyMakes(
       stats,
       new Map([
@@ -251,16 +252,50 @@ describe("selectElectricOnlyMakes", () => {
     expect(summary.makes.map((make) => make.make)).toEqual(["BYD"]);
   });
 
-  it("reports their combined share of all registrations", () => {
+  it("should report their combined share of all registrations", () => {
     const summary = selectElectricOnlyMakes(stats, new Map([["BYD", 600]]));
 
     expect(summary.sharePercent).toBeCloseTo(37.5);
   });
 
-  it("reports a zero share when no make is electric-only", () => {
+  it("should report a zero share when no make is electric-only", () => {
     const summary = selectElectricOnlyMakes(stats, new Map());
 
     expect(summary.makes).toEqual([]);
     expect(summary.sharePercent).toBe(0);
+  });
+});
+
+describe("summariseLeaders", () => {
+  const leaders = [
+    { count: 7340, make: "BMW" },
+    { count: 6120, make: "Mercedes-Benz" },
+    { count: 3100, make: "Audi" },
+    { count: 900, make: "Porsche" },
+  ];
+
+  it("should name the leader and the two makes behind it", () => {
+    expect(summariseLeaders(leaders, "2026-08", "ytd")).toBe(
+      "From January to August 2026, BMW led with 7,340 registrations, ahead of Mercedes-Benz (6,120) and Audi (3,100).",
+    );
+  });
+
+  it("should open on the single month for the month range", () => {
+    expect(summariseLeaders(leaders.slice(0, 2), "2026-08", "month")).toBe(
+      "In August 2026, BMW led with 7,340 registrations, ahead of Mercedes-Benz (6,120).",
+    );
+  });
+
+  it("should name the fuel filter when one is active", () => {
+    expect(
+      summariseLeaders(leaders.slice(0, 1), "2026-08", "12m", "Electric"),
+    ).toBe(
+      "From September 2025 to August 2026, BMW led with 7,340 electric registrations.",
+    );
+  });
+
+  it("should return undefined without rows or a latest month", () => {
+    expect(summariseLeaders([], "2026-08", "ytd")).toBeUndefined();
+    expect(summariseLeaders(leaders, null, "ytd")).toBeUndefined();
   });
 });

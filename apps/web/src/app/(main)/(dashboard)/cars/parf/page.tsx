@@ -149,6 +149,7 @@ export default function PARFCalculatorPage() {
             <SectionLink
               className="ml-0"
               href="https://www.lta.gov.sg/content/ltagov/en/newsroom/2026/2/news-releases/revision-parf-rebate-schedule-cap.html"
+              rel="noopener noreferrer nofollow"
             >
               LTA announcement
             </SectionLink>

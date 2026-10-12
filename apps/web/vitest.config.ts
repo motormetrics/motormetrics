@@ -127,6 +127,7 @@ export default defineConfig({
             "next/cache",
             "next/image",
             "nuqs/server",
+            "reading-time",
           ],
         },
         test: {

@@ -33,7 +33,7 @@ const post: GeneratedPost = {
 };
 
 describe("renderPostContent", () => {
-  it("cleans headings and chart text, preserving prose and numeric values", () => {
+  it("should clean headings and chart text, preserving prose and numeric values", () => {
     const original = structuredClone(post);
     const rendered = renderPostContent(post);
     expect(rendered).toBe(
@@ -55,7 +55,7 @@ describe("renderPostContent", () => {
     expect(post).toEqual(original);
   });
 
-  it("serialises charts with null optional labels as valid JSON", () => {
+  it("should serialise charts with null optional labels as valid JSON", () => {
     const rendered = renderPostContent({
       ...post,
       sections: [
@@ -73,7 +73,7 @@ describe("renderPostContent", () => {
     });
   });
 
-  it("renders the lead when no sections exist", () => {
+  it("should render the lead when no sections exist", () => {
     expect(renderPostContent({ ...post, sections: [] })).toBe(
       "More cars arrived.",
     );
@@ -81,7 +81,7 @@ describe("renderPostContent", () => {
 });
 
 describe("collectHighlights", () => {
-  it("flattens highlights in section order", () => {
+  it("should flatten highlights in section order", () => {
     const second = { value: "$100,000", label: "COE", detail: "Premium" };
     expect(
       collectHighlights({
@@ -93,13 +93,13 @@ describe("collectHighlights", () => {
       }),
     ).toEqual([...post.sections[0].highlights, second]);
   });
-  it("returns no highlights for an empty post", () => {
+  it("should return no highlights for an empty post", () => {
     expect(collectHighlights({ ...post, sections: [] })).toEqual([]);
   });
 });
 
 describe("collectCategories", () => {
-  it("deduplicates categories in first-use order", () => {
+  it("should deduplicate categories in first-use order", () => {
     expect(
       collectCategories([
         ...post.sections,
@@ -110,7 +110,7 @@ describe("collectCategories", () => {
       ]),
     ).toEqual(["cars", "coe", "pqp", "deregistrations"]);
   });
-  it("returns an empty list for sections without categories", () => {
+  it("should return an empty list for sections without categories", () => {
     expect(
       collectCategories([{ ...post.sections[0], categories: [] }]),
     ).toEqual([]);

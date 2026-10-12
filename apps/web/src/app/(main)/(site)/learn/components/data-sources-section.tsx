@@ -58,7 +58,7 @@ export function DataSourcesSection() {
           <a
             className="whitespace-nowrap font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
             href="https://datamall.lta.gov.sg"
-            rel="noreferrer"
+            rel="noreferrer nofollow"
             target="_blank"
           >
             LTA DataMall →

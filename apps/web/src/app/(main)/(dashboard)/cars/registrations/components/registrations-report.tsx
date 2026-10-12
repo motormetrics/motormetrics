@@ -1,4 +1,6 @@
+import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { formatPercentage } from "@motormetrics/utils/format-percentage";
 import { slugify } from "@motormetrics/utils/slugify";
 import {
   FuelTypeTabs,
@@ -17,7 +19,10 @@ import {
   RANGE_MONTHS,
   type Range,
 } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
-import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import {
+  axisTicks,
+  summariseMonth,
+} from "@web/app/(main)/(dashboard)/components/overview-series";
 import {
   Hairline,
   SectionHead,
@@ -117,6 +122,16 @@ export async function RegistrationsReport({
   const yearTotal =
     yearlyTotals.find((entry) => entry.year === year)?.total ?? 0;
 
+  const leadingFuelType = registrations.fuelType[0];
+  const summary = summariseMonth(
+    series,
+    month,
+    fuelType ? `${fuelType} cars registered` : "new cars registered",
+    !fuelType && leadingFuelType && registrations.total > 0
+      ? `${leadingFuelType.name} cars led with ${formatPercentage((leadingFuelType.count / registrations.total) * 100)}`
+      : undefined,
+  );
+
   return (
     <>
       {/* Fuel type narrows the headline and the chart; range sets the chart
@@ -177,6 +192,15 @@ export async function RegistrationsReport({
           seriesName={fuelType ? `${fuelType} cars` : "New cars"}
           ticks={ticks}
         />
+        {summary ? (
+          <Typography.Paragraph
+            className="tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {summary}
+          </Typography.Paragraph>
+        ) : null}
         <SourceNote>
           {fuelType
             ? `New ${fuelType} car registrations, all makes.`

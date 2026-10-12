@@ -1,10 +1,17 @@
 "use client";
 
 import type { Key } from "@heroui/react";
-import { Button, cn, Dropdown, Header, Label, Separator } from "@heroui/react";
+import {
+  Button,
+  Chip,
+  cn,
+  Dropdown,
+  Header,
+  Label,
+  Separator,
+} from "@heroui/react";
 import { Navbar } from "@heroui-pro/react";
 import { LogoMark, Wordmark } from "@web/components/brand-logo";
-import { NavBadge } from "@web/components/shared/chips";
 import {
   MORE_NAV_ITEMS,
   MORE_NAV_SECTION_LABEL,
@@ -62,6 +69,22 @@ const menuClassName = (itemCount: number) =>
 const menuSectionClassName = (itemCount: number) =>
   cn(menuGrid(itemCount), "col-span-full");
 
+/** HeroUI chip for a navigation item's `badge`, or nothing when it has none. */
+function NavBadge({ badge }: { badge?: NavigationItem["badge"] }) {
+  if (!badge) {
+    return null;
+  }
+  return (
+    <Chip
+      color={badge === "new" ? "accent" : "warning"}
+      size="sm"
+      variant="primary"
+    >
+      {badge === "new" ? "New" : "Beta"}
+    </Chip>
+  );
+}
+
 function NavMenuItems({ items }: { items: readonly NavigationItem[] }) {
   return items.map(({ badge, title, url }) => (
     <Dropdown.Item id={url} key={url} textValue={title}>
@@ -110,7 +133,7 @@ function GetUpdatesLink() {
     <Link
       className="inline-flex h-8.5 shrink-0 items-center whitespace-nowrap rounded-lg bg-foreground px-3 font-medium text-background text-sm transition-opacity hover:opacity-85"
       href={SOCIAL_URLS.telegram}
-      rel="noopener noreferrer"
+      rel="me noopener noreferrer nofollow"
       target="_blank"
     >
       Get updates

@@ -117,13 +117,17 @@ export function SectionLink({
   children,
   className,
   href,
+  rel,
 }: {
   children: ReactNode;
   className?: string;
   href: string;
+  /** For an external `href`: `"noopener noreferrer nofollow"`. */
+  rel?: string;
 }) {
   return (
     <Link
+      rel={rel}
       className={cn(
         "ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep",
         className,

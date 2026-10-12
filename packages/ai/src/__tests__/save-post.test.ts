@@ -84,7 +84,7 @@ afterEach(() => {
 });
 
 describe("savePost", () => {
-  it("upserts monthly posts without changing the existing URL or publish date", async () => {
+  it("should upsert monthly posts without changing the existing URL or publish date", async () => {
     await expect(savePost(params)).resolves.toEqual(savedPost);
     expect(insert).toHaveBeenCalledExactlyOnceWith(posts);
     expect(values).toHaveBeenCalledExactlyOnceWith({
@@ -139,7 +139,7 @@ describe("savePost", () => {
     );
   });
 
-  it("honours an explicit monthly slug on insert", async () => {
+  it("should honour an explicit monthly slug on insert", async () => {
     await savePost({ ...params, slug: "stable-monthly-slug" });
     expect(values).toHaveBeenCalledWith(
       expect.objectContaining({ slug: "stable-monthly-slug" }),
@@ -147,7 +147,7 @@ describe("savePost", () => {
     expect(onConflictDoUpdate.mock.calls[0][0].set).not.toHaveProperty("slug");
   });
 
-  it("upserts evergreen posts by stable slug with a null month", async () => {
+  it("should upsert evergreen posts by stable slug with a null month", async () => {
     const { month: _month, ...base } = params;
     await savePost({ ...base, kind: "evergreen", slug: "coe-renewal-guide" });
     expect(values).toHaveBeenCalledWith(
@@ -163,7 +163,7 @@ describe("savePost", () => {
     expect(onConflictDoUpdate.mock.calls[0][0].set).not.toHaveProperty("slug");
   });
 
-  it("propagates insert failures without embedding or revalidation", async () => {
+  it("should propagate insert failures without embedding or revalidation", async () => {
     const error = new Error("Unique constraint violation");
     returning.mockRejectedValue(error);
     await expect(savePost(params)).rejects.toBe(error);
@@ -174,7 +174,7 @@ describe("savePost", () => {
   it.each([
     new Error("Embedding failed"),
     "Embedding failed",
-  ])("still revalidates and returns the saved post after embedding failure", async (error) => {
+  ])("should still revalidate and return the saved post after embedding failure", async (error) => {
     generateDocumentEmbedding.mockRejectedValue(error);
     await expect(savePost(params)).resolves.toEqual(savedPost);
     expect(update).not.toHaveBeenCalled();
@@ -185,13 +185,13 @@ describe("savePost", () => {
     );
   });
 
-  it("still revalidates after the embedding update fails", async () => {
+  it("should still revalidate after the embedding update fails", async () => {
     where.mockRejectedValue(new Error("Update failed"));
     await expect(savePost(params)).resolves.toEqual(savedPost);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
-  it("skips cache invalidation when no token is configured", async () => {
+  it("should skip cache invalidation when no token is configured", async () => {
     vi.stubEnv("REVALIDATE_TOKEN", undefined);
     await expect(savePost(params)).resolves.toEqual(savedPost);
     expect(fetchMock).not.toHaveBeenCalled();
@@ -200,7 +200,7 @@ describe("savePost", () => {
     );
   });
 
-  it("reports an HTTP revalidation failure without failing the save", async () => {
+  it("should report an HTTP revalidation failure without failing the save", async () => {
     fetchMock.mockResolvedValue(new Response("Unavailable", { status: 503 }));
     await expect(savePost(params)).resolves.toEqual(savedPost);
     expect(console.error).toHaveBeenCalledWith(
@@ -211,7 +211,7 @@ describe("savePost", () => {
   it.each([
     new Error("Network failed"),
     "Network failed",
-  ])("handles revalidation request failures", async (error) => {
+  ])("should handle revalidation request failures", async (error) => {
     fetchMock.mockRejectedValue(error);
     await expect(savePost(params)).resolves.toEqual(savedPost);
     expect(console.error).toHaveBeenCalledWith(
@@ -220,7 +220,7 @@ describe("savePost", () => {
     );
   });
 
-  it("handles invalid revalidation response JSON", async () => {
+  it("should handle invalid revalidation response JSON", async () => {
     fetchMock.mockResolvedValue(new Response("invalid JSON"));
     await expect(savePost(params)).resolves.toEqual(savedPost);
     expect(console.error).toHaveBeenCalledWith(
@@ -231,7 +231,7 @@ describe("savePost", () => {
 });
 
 describe("updatePostHeroImage", () => {
-  it("updates only the hero image and modification time for the requested post", async () => {
+  it("should update only the hero image and modification time for the requested post", async () => {
     await updatePostHeroImage("post-2", "https://blob/hero.png");
     expect(update).toHaveBeenCalledExactlyOnceWith(posts);
     expect(set).toHaveBeenCalledExactlyOnceWith({
@@ -245,7 +245,7 @@ describe("updatePostHeroImage", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("propagates update failures so the workflow can retry", async () => {
+  it("should propagate update failures so the workflow can retry", async () => {
     const error = new Error("Update failed");
     where.mockRejectedValue(error);
     await expect(

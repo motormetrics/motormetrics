@@ -6,11 +6,11 @@ import { SurveyPrompt } from "@web/components/survey-prompt";
 import { footerNavItems, moreNavItems } from "@web/utils/flagged-nav";
 import type { ReactNode } from "react";
 
-// advertise-nav and blog-nav previously gated these items per request via
-// the Flags SDK, which reads request headers and pulled every page out of
-// the static shell. The flags provider work is parked (#1019), so this
-// renders the declared defaultValue (false) statically instead.
-const moreItems = moreNavItems({ advertise: false, blog: false });
+// advertise-nav previously gated these items per request via the Flags SDK,
+// which reads request headers and pulled every page out of the static shell.
+// The flags provider work is parked (#1019), so this renders the declared
+// defaultValue (false) statically instead.
+const moreItems = moreNavItems({ advertise: false });
 const footerItems = footerNavItems({ advertise: false });
 
 export default function MainLayout({

@@ -16,7 +16,7 @@ describe("getContentType", () => {
     ["logo.unknown", "image/png"],
     ["logo", "image/png"],
     ["", "image/png"],
-  ])("maps %s to %s", (filename, contentType) => {
+  ])("should map %s to %s", (filename, contentType) => {
     expect(getContentType(filename)).toBe(contentType);
   });
 });
@@ -32,7 +32,7 @@ describe("getFileExtension", () => {
     ["image/png; charset=utf-8", "png"],
     ["application/octet-stream", "png"],
     ["", "png"],
-  ])("maps %s to %s", (contentType, extension) => {
+  ])("should map %s to %s", (contentType, extension) => {
     expect(getFileExtension(contentType)).toBe(extension);
   });
 });
@@ -46,7 +46,7 @@ describe("extractFileExtension", () => {
     ["https://source/logo", "png"],
     ["https://source/logo.", "png"],
     ["", "png"],
-  ])("extracts the extension from %s", (url, extension) => {
+  ])("should extract the extension from %s", (url, extension) => {
     expect(extractFileExtension(url)).toBe(extension);
   });
 });

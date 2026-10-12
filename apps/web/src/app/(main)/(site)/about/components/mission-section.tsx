@@ -37,7 +37,7 @@ export function MissionSection() {
           <Link
             className="font-medium text-accent-strong"
             href="https://ruchern.dev"
-            rel="noreferrer"
+            rel="noreferrer nofollow"
             target="_blank"
           >
             Ru Chern

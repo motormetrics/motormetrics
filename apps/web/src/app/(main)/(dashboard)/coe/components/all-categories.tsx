@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import type { CategoryRow } from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
 import { AllCategoriesTable } from "@web/app/(main)/(dashboard)/coe/components/all-categories-table";
 import {
@@ -6,6 +7,7 @@ import {
   changeRatio,
   formatExerciseTick,
   groupByExercise,
+  summariseExercise,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
@@ -22,7 +24,8 @@ const SERIES_LENGTH = 24;
  * category order; the client table sorts them and selects a category on click.
  *
  * The table carries no visible title on desktop, where it sits straight under
- * the headline; below 720px an "All categories" eyebrow names the list.
+ * the headline; below 720px an "All categories" eyebrow names the list. A
+ * one-line recap of Cat A and B follows the table.
  */
 export async function AllCategories({
   searchParams,
@@ -38,6 +41,7 @@ export async function AllCategories({
   const latest = exercises.at(-1);
   const previous = exercises.at(-2);
   const recent = exercises.slice(-SERIES_LENGTH);
+  const summary = summariseExercise(exercises);
 
   if (!latest) {
     return null;
@@ -85,6 +89,11 @@ export async function AllCategories({
         <SectionLink href="/coe/results">All COE results</SectionLink>
       </div>
       <AllCategoriesTable rows={rows} selected={selected} />
+      {summary ? (
+        <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
+          {summary}
+        </Typography.Paragraph>
+      ) : null}
     </div>
   );
 }

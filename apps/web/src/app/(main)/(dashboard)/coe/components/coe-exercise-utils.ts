@@ -1,8 +1,10 @@
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import type { COECategory, COEResult } from "@web/types";
+import type { Pqp } from "@web/types/coe";
 import {
   formatMonthLabel,
+  formatMonthName,
   formatMonthShortLabel,
   formatMonthShortName,
 } from "@web/utils/dates/format-month";
@@ -199,6 +201,167 @@ export function formatPremiumChange(
   const percentage = Math.abs((difference / previous.premium) * 100).toFixed(1);
 
   return `${sign}${percentage}% (${sign}${formatCurrency(Math.abs(difference))}) vs ${biddingOrdinal(previous.biddingNo)} bidding, ${formatMonthShortName(previous.month)} at ${formatCurrency(previous.premium)}`;
+}
+
+/** Three months of twice-monthly bidding: a shorter "highest since" is noise. */
+const MIN_SINCE_EXERCISES = 6;
+
+/**
+ * One category's move in the latest exercise, e.g. "Cat A rose $4,611 to
+ * $130,001, its highest since Sep 2025". Plain text under the category table gives
+ * search engines the result as a sentence, not only as chart and table cells.
+ */
+export function describePremiumMove(
+  exercises: CoeExercise[],
+  category: COECategory,
+): string | undefined {
+  const premium = exercises.at(-1)?.results[category]?.premium;
+  if (premium === undefined) {
+    return undefined;
+  }
+
+  const label = category.replace("Category", "Cat");
+  const earlier = exercises.slice(0, -1);
+  const previous = earlier.at(-1)?.results[category]?.premium;
+  if (previous === undefined) {
+    return `${label} closed at ${formatCurrency(premium)}`;
+  }
+
+  const difference = premium - previous;
+  if (difference === 0) {
+    return `${label} held at ${formatCurrency(premium)}`;
+  }
+
+  const rose = difference > 0;
+  const move = `${label} ${rose ? "rose" : "fell"} ${formatCurrency(Math.abs(difference))} to ${formatCurrency(premium)}`;
+  // The last earlier exercise that matched or beat this premium, or for a
+  // fall, the last one at or below it.
+  const sinceIndex = earlier.findLastIndex((exercise) => {
+    const value = exercise.results[category]?.premium;
+    return value !== undefined && (rose ? value >= premium : value <= premium);
+  });
+
+  if (sinceIndex === -1) {
+    return `${move}, a record ${rose ? "high" : "low"}`;
+  }
+  if (earlier.length - sinceIndex >= MIN_SINCE_EXERCISES) {
+    return `${move}, its ${rose ? "highest" : "lowest"} since ${formatMonthShortLabel(earlier[sinceIndex].month)}`;
+  }
+  return move;
+}
+
+/**
+ * The summary line under the "All categories" table, e.g. "First bidding,
+ * October 2026: Cat A rose …; Cat B fell …." Cat A and B carry most searches.
+ */
+export function summariseExercise(
+  exercises: CoeExercise[],
+): string | undefined {
+  const latest = exercises.at(-1);
+  const moves = (["Category A", "Category B"] as const).flatMap((category) => {
+    const move = describePremiumMove(exercises, category);
+    return move ? [move] : [];
+  });
+
+  return latest && moves.length > 0
+    ? `${formatExercise(latest)}: ${moves.join("; ")}.`
+    : undefined;
+}
+
+/**
+ * The summary line under the premium chart on `/coe/premiums`, e.g. "Second
+ * bidding, September 2026: Cat B rose …." The history is one category's
+ * exercises, oldest first, up to the exercise the page shows.
+ */
+export function summariseCategoryExercise(
+  history: (CategoryFigures & { biddingNo: number; month: string })[],
+  category: COECategory,
+): string | undefined {
+  const latest = history.at(-1);
+  const move = describePremiumMove(
+    history.map(({ biddingNo, month, ...figures }) => ({
+      biddingNo,
+      key: `${month}:${biddingNo}`,
+      month,
+      results: { [category]: figures },
+    })),
+    category,
+  );
+
+  return latest && move ? `${formatExercise(latest)}: ${move}.` : undefined;
+}
+
+/** "up $4,200 on September", "down $900 on September" or "level with September". */
+const describeChange = (current: number, previous: number, against: string) => {
+  const difference = current - previous;
+  if (difference === 0) {
+    return `level with ${against}`;
+  }
+  return `${difference > 0 ? "up" : "down"} ${formatCurrency(Math.abs(difference))} on ${against}`;
+};
+
+/**
+ * The summary line under the yearly averages on `/coe/results`, e.g. "2026
+ * average: Cat A $105,100, up $8,200 on 2025's $96,900; Cat B …." Takes years
+ * newest first, as `summariseByYear` returns them.
+ */
+export function summariseYears(years: CoeYear[]): string | undefined {
+  const [current, previous] = years;
+  const averages = (["Category A", "Category B"] as const).flatMap(
+    (category) => {
+      const average = current?.categories[category]?.average;
+      if (average === undefined) {
+        return [];
+      }
+      const label = `${category.replace("Category", "Cat")} ${formatCurrency(average)}`;
+      const prior = previous?.categories[category]?.average;
+      return prior === undefined
+        ? [label]
+        : [
+            `${label}, ${describeChange(average, prior, `${previous.year}'s ${formatCurrency(prior)}`)}`,
+          ];
+    },
+  );
+
+  return current && averages.length > 0
+    ? `${current.year} average: ${averages.join("; ")}.`
+    : undefined;
+}
+
+/**
+ * The summary line under the PQP rates table, e.g. "October 2026 PQP for a
+ * 10-year renewal: Cat A $X, up $Y on September; Cat B …. A 5-year renewal
+ * costs half: …." Always the published 10-year rate, whichever term is
+ * selected, and only Cat A and B, the categories the page reports. Takes the
+ * months oldest first.
+ */
+export function summarisePQP(
+  rates: ({ month: string } & Pick<Pqp.Rates, "Category A" | "Category B">)[],
+): string | undefined {
+  const latest = rates.at(-1);
+  const previous = rates.at(-2);
+  const reported = (["Category A", "Category B"] as const).filter(
+    (category) => (latest?.[category] ?? 0) > 0,
+  );
+  if (!latest || reported.length === 0) {
+    return undefined;
+  }
+
+  const label = (category: (typeof reported)[number]) =>
+    category.replace("Category", "Cat");
+  const moves = reported.map((category) => {
+    const rate = `${label(category)} ${formatCurrency(latest[category])}`;
+    const prior = previous?.[category];
+    return previous && prior
+      ? `${rate}, ${describeChange(latest[category], prior, formatMonthName(previous.month))}`
+      : rate;
+  });
+  const halves = reported.map(
+    (category) =>
+      `${formatCurrency(latest[category] / 2)} for ${label(category)}`,
+  );
+
+  return `${formatMonthLabel(latest.month)} PQP for a 10-year renewal: ${moves.join("; ")}. A 5-year renewal costs half: ${halves.join(" and ")}.`;
 }
 
 export interface ExercisePremium {

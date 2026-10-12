@@ -12,7 +12,7 @@ describe("uploadPostHeroImage", () => {
     ["image/jpeg", "jpeg", "image/jpeg"],
     ["image/webp", "webp", "image/webp"],
     ["unknown", "png", "unknown"],
-  ])("uploads with content type %s", async (contentType, extension, expectedType) => {
+  ])("should upload with content type %s", async (contentType, extension, expectedType) => {
     const body = Buffer.from("image bytes");
     const pathname = `posts/hero/monthly-update.${extension}`;
     put.mockResolvedValue({ url: "https://blob/hero", pathname });
@@ -30,7 +30,7 @@ describe("uploadPostHeroImage", () => {
     });
   });
 
-  it("propagates storage failures", async () => {
+  it("should propagate storage failures", async () => {
     const error = new Error("Upload failed");
     put.mockRejectedValue(error);
     await expect(
