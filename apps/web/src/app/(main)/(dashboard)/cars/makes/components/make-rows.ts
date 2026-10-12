@@ -117,6 +117,40 @@ export function periodLabel(latestMonth: string, range: Range): string {
   return `${from} to ${formatMonthLabel(end)}`;
 }
 
+/** How many makes the summary line names: the leader and two behind it. */
+const SUMMARY_MAKES = 3;
+
+/**
+ * The summary line under the "All makes" table, e.g. "From January to August
+ * 2026, BMW led with 7,340 registrations, ahead of Mercedes-Benz (6,120) and
+ * Audi (3,100)." Plain text gives search engines the ranking as a sentence.
+ */
+export function summariseLeaders(
+  rows: Pick<MakeRow, "count" | "make">[],
+  latestMonth: string | null,
+  range: Range,
+  fuel: FuelFilter | null = null,
+): string | undefined {
+  const [leader, ...runnersUp] = rows.slice(0, SUMMARY_MAKES);
+  if (!leader || !latestMonth) {
+    return undefined;
+  }
+
+  const period = `${range === "month" ? "In" : "From"} ${periodLabel(latestMonth, range)}`;
+  const registrations = fuel
+    ? `${fuel.toLowerCase()} registrations`
+    : "registrations";
+  const lead = `${period}, ${leader.make} led with ${leader.count.toLocaleString("en-SG")} ${registrations}`;
+  if (runnersUp.length === 0) {
+    return `${lead}.`;
+  }
+
+  const behind = runnersUp
+    .map(({ count, make }) => `${make} (${count.toLocaleString("en-SG")})`)
+    .join(" and ");
+  return `${lead}, ahead of ${behind}.`;
+}
+
 /**
  * The same period a year earlier, which every range's change is measured
  * against: the same month, the same January-to-month span, or the twelve

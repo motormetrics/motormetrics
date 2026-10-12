@@ -11,6 +11,7 @@ import {
   periodWindow,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
 import { RegistrationsChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/registrations-chart";
+import { summariseMake } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/summary";
 import {
   loadSearchParams,
   RANGE_LABELS,
@@ -211,6 +212,22 @@ export async function MakeReport({
   }
   const peerLeader = peers[0]?.count ?? 0;
 
+  // The summary line reads the selected month across every fuel type, whatever
+  // the switch is set to; the rank is the year to date's, so only on that range.
+  const countWhere = (match: (row: { month: string }) => boolean) =>
+    sumBy(crossTab.filter(match), (row) => row.count);
+  const summary = summariseMake({
+    count: countWhere((row) => row.month === month),
+    make,
+    marketCount: marketByMonth.get(month) ?? 0,
+    month,
+    previousCount: countWhere((row) => row.month === shiftMonth(month, -1)),
+    rank: range === "ytd" && rank > 0 ? rank : undefined,
+    yearToDate: countWhere(
+      (row) => row.month >= `${month.slice(0, 4)}-01` && row.month <= month,
+    ),
+  });
+
   const rangeLabel = RANGE_LABELS[range];
   const periodCaption =
     range === "month"
@@ -366,6 +383,15 @@ export async function MakeReport({
           New car registrations, {make}
           {fuelType ? `, ${fuelType} only.` : ", all fuel types."}
         </SourceNote>
+        {summary ? (
+          <Typography.Paragraph
+            className="tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {summary}
+          </Typography.Paragraph>
+        ) : null}
       </section>
 
       <Hairline />
