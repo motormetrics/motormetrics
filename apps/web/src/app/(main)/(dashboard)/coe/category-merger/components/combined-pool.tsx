@@ -1,7 +1,7 @@
 import { Typography } from "@heroui/react";
 import { BarRow } from "@web/app/(main)/(dashboard)/coe/category-merger/components/bar-row";
 import { formatExercise } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { ReportStat } from "@web/components/shared/report";
+import { StatCell } from "@web/components/shared/overview";
 import { getLatestCoeResults } from "@web/queries/coe/latest-results";
 import type { COECategory } from "@web/types";
 
@@ -47,24 +47,24 @@ export async function CombinedPool() {
           />
         ))}
       </div>
-      <div className="grid grid-cols-2 gap-x-6 gap-y-5 sm:flex sm:flex-wrap sm:gap-0">
-        <ReportStat
+      <div className="grid grid-cols-2 border-separator border-t">
+        <StatCell
           label="Combined quota"
           note="Category A plus B"
           value={formatWhole(quota)}
         />
-        <ReportStat
+        <StatCell
           label="Combined bids"
           note="bids received"
           value={formatWhole(bids)}
         />
-        <ReportStat
+        <StatCell
           label="Bids per COE, combined"
           note="one pool"
           value={bidsPerCoe(bids, quota)}
         />
         {categories.map((row) => (
-          <ReportStat
+          <StatCell
             key={row.category}
             label={`Bids per COE, ${row.category.replace("Category", "Cat")}`}
             note="today"

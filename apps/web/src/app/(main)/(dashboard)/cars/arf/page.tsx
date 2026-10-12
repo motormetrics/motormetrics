@@ -2,9 +2,9 @@ import { Typography } from "@heroui/react";
 import { ARFCalculator } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-calculator";
 import { ARFTierTable } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-tier-table";
 import { ARF_FAQS } from "@web/app/(main)/(dashboard)/cars/arf/components/faq-data";
+import { OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import { Report } from "@web/components/shared/report";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -55,7 +55,7 @@ const structuredData: WithContext<WebPage> = {
 
 export default function ARFCalculatorPage() {
   return (
-    <Report>
+    <OverviewPage className="gap-8">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -105,6 +105,6 @@ export default function ARFCalculatorPage() {
         }}
       />
       <PageFaq faqs={ARF_FAQS} />
-    </Report>
+    </OverviewPage>
   );
 }

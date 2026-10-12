@@ -1,7 +1,6 @@
 import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { ARF_SCHEDULES } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-rates";
-import { ReportSection } from "@web/components/shared/report";
 import {
   ReportCell,
   ReportRow,
@@ -24,10 +23,13 @@ function bandLabel(from: number, upTo: number | null): string {
 /** The current car ARF tiers, with the earlier schedules noted beneath. */
 export function ARFTierTable() {
   return (
-    <ReportSection
-      caption="Cars with COEs obtained from the 2nd bidding exercise, February 2023"
-      title="ARF rates by OMV"
-    >
+    <section className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-baseline gap-4">
+        <Typography.Heading level={2}>ARF rates by OMV</Typography.Heading>
+        <Typography.Paragraph>
+          Cars with COEs obtained from the 2nd bidding exercise, February 2023
+        </Typography.Paragraph>
+      </div>
       <ReportTable
         columns={[{ label: "OMV band" }, { align: "end", label: "ARF rate" }]}
       >
@@ -52,6 +54,6 @@ export function ARFTierTable() {
         up to $80,000 and 220% above that. Before February 2022, everything
         above $50,000 was taxed at 180%.
       </Typography.Paragraph>
-    </ReportSection>
+    </section>
   );
 }

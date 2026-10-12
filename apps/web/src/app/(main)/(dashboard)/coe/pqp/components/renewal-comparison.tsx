@@ -1,6 +1,5 @@
 import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
-import { ReportSection } from "@web/components/shared/report";
 import {
   ReportCell,
   ReportRow,
@@ -51,10 +50,15 @@ export function RenewalComparison({
   );
 
   return (
-    <ReportSection
-      caption="Against the latest closing premium, per category and term"
-      title="What renewing costs against bidding"
-    >
+    <section className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-baseline gap-4">
+        <Typography.Heading level={2}>
+          What renewing costs against bidding
+        </Typography.Heading>
+        <Typography.Paragraph>
+          Against the latest closing premium, per category and term
+        </Typography.Paragraph>
+      </div>
       <ReportTable
         columns={[
           { label: "Category and term" },
@@ -89,6 +93,6 @@ export function RenewalComparison({
         the PQP is a three-month moving average that moves every month, and a
         bid may close anywhere either side of the last premium.
       </Typography.Paragraph>
-    </ReportSection>
+    </section>
   );
 }

@@ -1,6 +1,5 @@
 import { Card, Typography } from "@heroui/react";
 import { SectionLink } from "@web/components/shared/overview";
-import { ReportEyebrow } from "@web/components/shared/report";
 
 /**
  * Points readers at the explainer for LTA's October 2026 proposal to merge COE
@@ -18,7 +17,14 @@ export function CategoryMergerCallout() {
       variant="secondary"
     >
       <div className="flex flex-col gap-1.5">
-        <ReportEyebrow>LTA public consultation · Closes 2 Nov</ReportEyebrow>
+        <Typography.Paragraph
+          className="uppercase tracking-wider"
+          color="muted"
+          size="xs"
+          weight="bold"
+        >
+          LTA public consultation · Closes 2 Nov
+        </Typography.Paragraph>
         <Typography.Paragraph weight="semibold">
           LTA proposes merging COE Categories A and B
         </Typography.Paragraph>

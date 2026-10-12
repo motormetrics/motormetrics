@@ -9,7 +9,7 @@ import {
   widestGap,
 } from "@web/app/(main)/(dashboard)/coe/category-merger/components/premium-gap";
 import { THREE_BANDS } from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
-import { ReportStat } from "@web/components/shared/report";
+import { StatCell } from "@web/components/shared/overview";
 
 /** Both of LTA's options run from a $15,000 rebate to a $15,000 surcharge. */
 const adjustments = THREE_BANDS.map(({ adjustment }) => adjustment);
@@ -67,13 +67,13 @@ export async function FeebateSpread() {
           />
         ))}
       </div>
-      <div className="grid grid-cols-2 gap-x-6 gap-y-5 sm:flex sm:flex-wrap sm:gap-0">
-        <ReportStat
+      <div className="grid grid-cols-2 border-separator border-t">
+        <StatCell
           label="Largest adjustment vs Cat A"
           note={`share of the ${latest.label} premium`}
           value={`${Math.round((LARGEST_ADJUSTMENT / latest.categoryA) * 100)}%`}
         />
-        <ReportStat
+        <StatCell
           label="Largest adjustment vs Cat B"
           note={`share of the ${latest.label} premium`}
           value={`${Math.round((LARGEST_ADJUSTMENT / latest.categoryB) * 100)}%`}
