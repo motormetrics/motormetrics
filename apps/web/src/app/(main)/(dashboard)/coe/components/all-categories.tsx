@@ -77,7 +77,7 @@ export async function AllCategories({
         <Typography.Paragraph
           role="heading"
           aria-level={2}
-          className="uppercase min-[721px]:sr-only"
+          className="uppercase md:sr-only"
           weight="semibold"
           color="muted"
           size="xs"
