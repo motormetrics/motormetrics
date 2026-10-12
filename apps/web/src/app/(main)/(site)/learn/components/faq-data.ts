@@ -25,7 +25,7 @@ export const FAQ_SECTIONS: FAQSectionData[] = [
       {
         question: "How does COE bidding work?",
         answer:
-          "COE bidding exercises are held twice monthly, typically on the first and third Wednesday of each month. Bidders submit their bids for different vehicle categories through authorised dealers or online platforms. COE is awarded to the highest bidders up to the quota available for each category. The lowest successful bid becomes the COE price for that category.",
+          "COE bidding exercises are held twice monthly. Each opens at 12pm on the first or third Monday of the month and closes at 4pm on the Wednesday. Bidders submit their bids for different vehicle categories through authorised dealers or online platforms. COE is awarded to the highest bidders up to the quota available for each category. The lowest successful bid becomes the COE price for that category.",
       },
       {
         question: "What are the COE categories?",
@@ -40,7 +40,7 @@ export const FAQ_SECTIONS: FAQSectionData[] = [
       {
         question: "What affects COE prices?",
         answer:
-          "COE prices are determined by supply and demand. Key factors include the monthly quota set by the government (based on vehicle scrappage and target vehicle population growth), economic conditions, consumer confidence, interest rates, and seasonal demand patterns. External factors like global chip shortages or new model launches can also influence demand.",
+          "COE prices are determined by supply and demand. Key factors include the quarterly quota set by LTA (based on vehicle scrappage and target vehicle population growth), economic conditions, consumer confidence, interest rates, and seasonal demand patterns. External factors like global chip shortages or new model launches can also influence demand.",
       },
     ],
   },
