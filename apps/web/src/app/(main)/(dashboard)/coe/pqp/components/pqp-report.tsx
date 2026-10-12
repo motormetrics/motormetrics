@@ -69,7 +69,7 @@ const RENEWAL_TRADEOFFS: { label: string; note: string }[] = [
   },
   {
     label: "Timing",
-    note: "Renew any time in the month before expiry, or up to a month after, with a late fee.",
+    note: "Renew any time before expiry, or up to a month after with a late fee. Renewing before the expiry month forfeits the unused months.",
   },
 ];
 

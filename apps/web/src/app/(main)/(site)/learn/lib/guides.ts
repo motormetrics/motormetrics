@@ -766,19 +766,20 @@ PQP rates vary by COE category:
 | **B** | Cars >1,600cc/130bhp | Higher |
 | **C** | Goods vehicles, buses | Lower |
 | **D** | Motorcycles | Lowest |
-| **E** | Open (any vehicle) | Highest |
 
-Check our [PQP Rates](/coe/pqp) page for current rates across all categories.
+Category E has no PQP of its own: LTA renews an open-category COE under the vehicle's corresponding category, A to D.
+
+Check our [PQP Rates](/coe/pqp) page for current Category A and B rates.
 
 ## The Renewal Process
 
-1. **Check eligibility**: Your COE must be expiring within 3 months
+1. **Choose when**: Renew any time before expiry, or up to 1 month after it with a late fee
 2. **Decide term**: Choose 5-year or 10-year renewal
 3. **Apply online**: Submit via OneMotoring
 4. **Pay PQP**: Complete payment before COE expiry
-5. **Receive new COE**: Valid from the day after original expiry
+5. **Receive new COE**: Starts the day after the old one expires if you renew in the expiry month; renew earlier and it starts on the 1st of the following month, forfeiting the unused months
 
-**Important**: If you miss the deadline, your car becomes illegal to drive and may be deregistered automatically.
+**Important**: If you do not renew within 1 month of expiry, LTA requires the vehicle to be disposed of.
 
 ## PQP Trends
 
@@ -790,7 +791,7 @@ PQP follows COE market trends with a lag due to the moving average calculation:
 ## Frequently Asked Questions
 
 ### Can I renew before my COE expires?
-You can apply for renewal up to 3 months before expiry, but the new COE period only starts after the current one ends.
+Yes, at any time. Renew in the month the COE expires and the new COE starts the day after expiry. Renew earlier and it starts on the 1st of the month after you renew, so you forfeit the unused months. You pay the PQP of the month before the expiry month when renewing early, or of the expiry month itself when renewing in that month.
 
 ### Can I renew again after a 5-year renewal?
 No. A 5-year renewal is final: when it expires, the car must be deregistered. Only a 10-year renewal allows for a subsequent renewal.
