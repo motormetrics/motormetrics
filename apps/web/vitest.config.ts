@@ -117,6 +117,8 @@ export default defineConfig({
           include: [
             "@heroui-pro/react/bar-chart",
             "@heroui-pro/react/kpi",
+            "@heroui-pro/react/line-chart",
+            "@heroui-pro/react/pie-chart",
             "@neondatabase/serverless",
             "@upstash/redis/cloudflare",
             "date-fns",
@@ -124,6 +126,7 @@ export default defineConfig({
             "drizzle-orm/neon-http",
             "drizzle-orm/pg-core",
             "motion/react",
+            "motion/react-client",
             "next/cache",
             "next/image",
             "nuqs/server",
