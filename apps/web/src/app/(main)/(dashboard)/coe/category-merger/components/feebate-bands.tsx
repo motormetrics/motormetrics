@@ -1,13 +1,8 @@
-import { cn, Typography } from "@heroui/react";
+import { cn, Table, Typography } from "@heroui/react";
 import {
   type FeebateBand,
   formatAdjustment,
 } from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
-import {
-  ReportCell,
-  ReportRow,
-  ReportTable,
-} from "@web/components/shared/report-table";
 
 /** Green for a rebate, red for a surcharge; the full $15,000 gets the solid tone. */
 const bandTone = (adjustment: number): string => {
@@ -138,31 +133,36 @@ export function FeebateBands({
     <div className="flex flex-col gap-4">
       <Typography.Heading level={3}>{title}</Typography.Heading>
       <BandShare bands={bands} />
-      <ReportTable
-        columns={[
-          { label: "Band" },
-          { label: "Adjustment" },
-          { label: "OMV percentile" },
-          { label: "Typical models (LTA, non-exhaustive)" },
-        ]}
-      >
-        {bands.map(({ adjustment, band, models, percentile }) => (
-          <ReportRow key={band}>
-            <ReportCell className="font-semibold">{band}</ReportCell>
-            <ReportCell className="whitespace-nowrap font-semibold">
-              {formatAdjustment(adjustment)}
-            </ReportCell>
-            <ReportCell className="whitespace-nowrap text-muted">
-              {percentile}
-            </ReportCell>
-            {/* Wraps rather than widening the scroll: a dozen model names on
-                one line would push the table past 1,000px. */}
-            <ReportCell className="min-w-72 max-w-xl whitespace-normal text-muted">
-              {models.join(", ")}
-            </ReportCell>
-          </ReportRow>
-        ))}
-      </ReportTable>
+      <Table variant="secondary">
+        <Table.ScrollContainer>
+          <Table.Content aria-label={title} className="min-w-max tabular-nums">
+            <Table.Header>
+              <Table.Column isRowHeader>Band</Table.Column>
+              <Table.Column>Adjustment</Table.Column>
+              <Table.Column>OMV percentile</Table.Column>
+              <Table.Column>Typical models (LTA, non-exhaustive)</Table.Column>
+            </Table.Header>
+            <Table.Body>
+              {bands.map(({ adjustment, band, models, percentile }) => (
+                <Table.Row id={band} key={band}>
+                  <Table.Cell className="font-semibold">{band}</Table.Cell>
+                  <Table.Cell className="whitespace-nowrap font-semibold">
+                    {formatAdjustment(adjustment)}
+                  </Table.Cell>
+                  <Table.Cell className="whitespace-nowrap text-muted">
+                    {percentile}
+                  </Table.Cell>
+                  {/* Wraps rather than widening the scroll: a dozen model
+                      names on one line would push the table past 1,000px. */}
+                  <Table.Cell className="min-w-72 max-w-xl whitespace-normal text-muted">
+                    {models.join(", ")}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+      </Table>
     </div>
   );
 }

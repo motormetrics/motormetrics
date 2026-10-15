@@ -1,20 +1,18 @@
 import { cn, Separator, Typography } from "@heroui/react";
-import { Text } from "@web/components/shared/text";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
 /**
- * The v3 overview layout — the editorial rework of the bento in
- * `shared/bento.tsx`, and the overview-tier counterpart of `shared/report.tsx`.
+ * The v3 overview layout — the editorial rework of the card bento.
  *
  * The v3 comps drop the cards altogether: every overview page is one column
  * of sections on the page background, ruled apart by hairlines, with each
  * section opening on the same eyebrow / heading / caption block and, where it
  * summarises a deeper page, an "All …" link hard right.
  *
- * Like `Report`, this owns the rhythm and not the width — every page shares
- * one measure, set on the shell in `(main)/layout.tsx`.
+ * This owns the rhythm and not the width — every page shares one measure, set
+ * on the shell in `(main)/layout.tsx`.
  */
 export function OverviewPage({
   children,
@@ -86,9 +84,14 @@ export function SectionHead({
   return (
     <div className={cn("flex flex-wrap items-end gap-4", className)}>
       <div className="flex min-w-0 flex-col gap-1">
-        <Text.Paragraph eyebrow weight="semibold" color="muted" size="xs">
+        <Typography.Paragraph
+          className="uppercase"
+          weight="semibold"
+          color="muted"
+          size="xs"
+        >
           {eyebrow}
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <Typography.Heading
           className="text-xl md:text-2xl"
           weight="bold"
@@ -160,8 +163,7 @@ export function SourceNote({
 
 /**
  * The 72px headline figure with its change pill and the caption beneath —
- * the top of every v3 page. `label` sits above the figure at 20px, which is
- * what distinguishes it from `ReportHeadline`'s 16px label.
+ * the top of every v3 page, with `label` above the figure at 20px.
  */
 export function Headline({
   caption,
@@ -184,9 +186,12 @@ export function Headline({
     <div className={cn("flex flex-col gap-2.5", className)}>
       {label ? (
         // Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>.
-        <Text.Paragraph tone="strong" className="text-xl" weight="semibold">
+        <Typography.Paragraph
+          className="text-muted-strong text-xl"
+          weight="semibold"
+        >
           {label}
-        </Text.Paragraph>
+        </Typography.Paragraph>
       ) : null}
       <div className="flex flex-wrap items-center gap-4">
         <span

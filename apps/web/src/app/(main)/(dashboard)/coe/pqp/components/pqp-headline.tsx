@@ -17,7 +17,6 @@ import {
   type PQPTerm,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { SourceNote, StatCell } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { formatMonthName } from "@web/utils/dates/format-month";
 
 /** A rate in one published month. */
@@ -76,12 +75,12 @@ export function PQPHeadline({
           <CategoryTabs categories={PQP_CATEGORY_KEYS} />
           <TermTabs />
         </div>
-        <Text.Paragraph tone="strong">
+        <Typography.Paragraph className="text-muted-strong">
           <span className="font-semibold text-accent-strong">
             Category {category}
           </span>
           {` · ${CATEGORY_DESCRIPTIONS[toCategory(category)]}`}
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
           <NumberValue
             currency="SGD"

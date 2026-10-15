@@ -1,4 +1,5 @@
 import { Chip, Skeleton } from "@heroui/react";
+import { EmptyState } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-section";
 import { Bento } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/bento";
@@ -15,7 +16,6 @@ import { RecentChanges } from "@web/app/(main)/(dashboard)/cars/electric-vehicle
 import { UtilisationList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-list";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { EmptyState } from "@web/components/shared/empty-state";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -171,16 +171,18 @@ async function ChargingEmptyState() {
   }
 
   return (
-    <EmptyState
-      description="Live charger availability is not available at the moment. Please check back later."
-      icon={
-        <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
-          <PlugZap className="size-8 text-muted" />
-        </div>
-      }
-      showDefaultActions={false}
-      title="No Live Data Available"
-    />
+    <EmptyState className="rounded-3xl bg-default/50" size="lg">
+      <EmptyState.Header>
+        <EmptyState.Media variant="icon">
+          <PlugZap />
+        </EmptyState.Media>
+        <EmptyState.Title>No Live Data Available</EmptyState.Title>
+        <EmptyState.Description className="max-w-sm">
+          Live charger availability is not available at the moment. Please check
+          back later.
+        </EmptyState.Description>
+      </EmptyState.Header>
+    </EmptyState>
   );
 }
 

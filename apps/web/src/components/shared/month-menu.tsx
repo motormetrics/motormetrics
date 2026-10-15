@@ -13,9 +13,8 @@ import { useEffect, useMemo, useRef, useTransition } from "react";
  * The month picker the v3 comps put in the page eyebrow: the selected month
  * as a ghost button with a chevron, opening a menu of months grouped by year.
  *
- * Writes the same `month` search param as `MonthSelector`, with
- * `shallow: false` so the server re-renders the page for the new month. The
- * combo box stays on the report pages, where the comps still draw a field.
+ * Writes the `month` search param with `shallow: false` so the server
+ * re-renders the page for the new month.
  */
 export function MonthMenu({
   latestMonth,

@@ -6,6 +6,7 @@ import {
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { biddingOrdinal } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { KpiSparkline } from "@web/app/(main)/(dashboard)/components/kpi-sparkline";
 import {
   sumByMonth,
   summariseMonth,
@@ -13,7 +14,6 @@ import {
 } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { SourceNote } from "@web/components/shared/overview";
-import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import {
   getEvMarketShare,
   getEvMonthlyTrend,
@@ -73,17 +73,7 @@ function Kpi({
       <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
         {change} {versus}
       </Typography.Paragraph>
-      <SparklineChart
-        className="pt-1"
-        data={spark}
-        fillOpacity={0}
-        format={sparkFormat}
-        height={32}
-        margin={{ bottom: 2, left: 0, right: 0, top: 2 }}
-        name={label}
-        strokeWidth={1.5}
-        title={`${label} over the last ${spark.length} months`}
-      />
+      <KpiSparkline data={spark} format={sparkFormat} label={label} />
       <SourceNote className="tabular-nums">{note}</SourceNote>
     </div>
   );

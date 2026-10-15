@@ -4,9 +4,9 @@ import {
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+import { EvShareSparkline } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-share-sparkline";
 import { ELECTRIC_POPULATION_FUEL_TYPE } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import { SparklineChart } from "@web/components/shared/sparkline-chart";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 import {
   getVehiclePopulationByYearAndFuelType,
@@ -103,16 +103,7 @@ export async function EvShareHero({ month }: { month: string }) {
           </>
         ) : null}
       </Typography.Paragraph>
-      <SparklineChart
-        data={history}
-        format={{
-          maximumFractionDigits: 1,
-          style: "unit",
-          unit: "percent",
-        }}
-        name="EV share"
-        title={`Battery-electric share of new car registrations over the last ${history.length} months`}
-      />
+      <EvShareSparkline data={history} />
     </div>
   );
 }

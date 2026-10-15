@@ -1,4 +1,5 @@
 import { cn, Skeleton, Typography } from "@heroui/react";
+import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import { summariseType } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/type-meta";
@@ -20,8 +21,6 @@ import {
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import { Count } from "@web/components/shared/report-table";
-import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -133,7 +132,14 @@ export function FuelTypeReport({ params, searchParams }: FuelTypeReportProps) {
       </Suspense>
 
       <SectionErrorBoundary title="Registration data unavailable">
-        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+        <Suspense
+          fallback={
+            <div className="flex flex-col gap-4">
+              <Skeleton className="h-96 w-full" />
+              <Skeleton className="h-96 w-full" />
+            </div>
+          }
+        >
           <FuelTypeContent params={params} searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -381,7 +387,11 @@ async function FuelTypeContent({
               {value} cars registered · {periodLabel}
             </span>
             <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
-              <Count value={typeTotal} />
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={typeTotal}
+              />
             </span>
             <Typography.Paragraph className="tabular-nums" color="muted">
               <DeltaChip

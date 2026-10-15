@@ -1,9 +1,8 @@
-import { Typography } from "@heroui/react";
+import { Surface, Typography } from "@heroui/react";
 import {
   describeConnectors,
   siteTitle,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/utils/describe-connectors";
-import { InkPanel } from "@web/components/shared/bento";
 import { districtForPostalCode } from "@web/config/postal-districts";
 import { getEvChargingRecentChanges } from "@web/queries/ev-charging";
 import { Sparkles } from "lucide-react";
@@ -23,7 +22,10 @@ export async function RecentChanges() {
   const { newLocations, priceChanges } = await getEvChargingRecentChanges();
 
   return (
-    <InkPanel>
+    <Surface
+      className="flex flex-col gap-3 rounded-4xl bg-foreground p-7"
+      variant="transparent"
+    >
       <div className="flex items-center gap-2.5">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
           <Sparkles className="size-5" />
@@ -105,6 +107,6 @@ export async function RecentChanges() {
           )}
         </div>
       </div>
-    </InkPanel>
+    </Surface>
   );
 }

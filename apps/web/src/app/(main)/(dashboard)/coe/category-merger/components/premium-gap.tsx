@@ -5,7 +5,7 @@ import {
   type PremiumGapPoint,
 } from "@web/app/(main)/(dashboard)/coe/category-merger/components/premium-gap-chart";
 import { groupByExercise } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { ReportStat } from "@web/components/shared/report";
+import { StatCell } from "@web/components/shared/overview";
 import { getCoeResultsByPeriod } from "@web/queries/coe/historical-results";
 import { formatChartMonth } from "@web/utils/dates/format-month";
 
@@ -71,23 +71,23 @@ export async function PremiumGap() {
   return (
     <div className="flex flex-col gap-6">
       <PremiumGapChart data={points} />
-      <div className="grid grid-cols-2 gap-x-6 gap-y-5 sm:flex sm:flex-wrap sm:gap-0">
-        <ReportStat
+      <div className="grid grid-cols-2 border-separator border-t">
+        <StatCell
           label="Latest gap"
           note={latest.label}
           value={formatCurrency(gapOf(latest))}
         />
-        <ReportStat
+        <StatCell
           label="Average gap, past year"
           note="Category B minus A"
           value={formatCurrency(Math.round(averageGap(pastYear)))}
         />
-        <ReportStat
+        <StatCell
           label="Widest gap, ten years"
           note={widest.label}
           value={formatCurrency(gapOf(widest))}
         />
-        <ReportStat
+        <StatCell
           label="Category A above B"
           note="exercises in the past year"
           value={String(timesAAboveB)}

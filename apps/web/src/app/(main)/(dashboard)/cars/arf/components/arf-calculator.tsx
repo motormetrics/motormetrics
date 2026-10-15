@@ -1,25 +1,23 @@
 "use client";
 
-import { Input, Label, ListBox, Select } from "@heroui/react";
+import { Input, Label, ListBox, Select, Table } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   ARF_SCHEDULES,
   calculateArf,
 } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-rates";
-import {
-  ReportEyebrow,
-  ReportHeadline,
-  ReportStat,
-} from "@web/components/shared/report";
-import {
-  ReportCell,
-  ReportRow,
-  ReportTable,
-} from "@web/components/shared/report-table";
+import { Headline, StatCell } from "@web/components/shared/overview";
 import posthog from "posthog-js";
 import { useMemo, useState } from "react";
 
 const formatRate = (rate: number) => `${Math.round(rate * 100)}%`;
+
+/**
+ * The small caps label above each field. A span rather than
+ * `Typography.Paragraph`: inside the `Select` that renders react-aria's `Text`,
+ * which demands a slot.
+ */
+const FIELD_LABEL = "font-bold text-muted text-xs uppercase tracking-wider";
 
 /**
  * The calculator strip, the headline it drives, and the band-by-band working
@@ -43,7 +41,7 @@ export function ARFCalculator() {
     <>
       <div className="flex flex-wrap items-end gap-6 border-border border-y py-4">
         <div className="flex flex-col gap-2">
-          <ReportEyebrow>OMV</ReportEyebrow>
+          <span className={FIELD_LABEL}>OMV</span>
           <Input
             aria-label="OMV"
             inputMode="numeric"
@@ -72,7 +70,7 @@ export function ARFCalculator() {
             value={scheduleKey}
           >
             <Label>
-              <ReportEyebrow>COE obtained</ReportEyebrow>
+              <span className={FIELD_LABEL}>COE obtained</span>
             </Label>
             <Select.Trigger>
               <Select.Value />
@@ -92,48 +90,56 @@ export function ARFCalculator() {
         </div>
       </div>
 
-      <ReportHeadline
-        label="ARF payable"
-        stats={
-          <>
-            <ReportStat
-              label="Effective rate"
-              note="ARF as a share of OMV"
-              value={omv > 0 ? formatRate(total / omv) : "—"}
-            />
-            <ReportStat
-              label="Top band"
-              note="rate on the last dollar of OMV"
-              value={topBand ? formatRate(topBand.rate) : "—"}
-            />
-          </>
-        }
-        sub={`${formatCurrency(omv)} OMV · COE obtained: ${schedule.label} · before VES and EEAI rebates`}
-        value={formatCurrency(total)}
-      />
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
+        <Headline
+          caption={`${formatCurrency(omv)} OMV · COE obtained: ${schedule.label} · before VES and EEAI rebates`}
+          label="ARF payable"
+          value={formatCurrency(total)}
+        />
+        <div className="grid grid-cols-2 border-separator border-t">
+          <StatCell
+            label="Effective rate"
+            note="ARF as a share of OMV"
+            value={omv > 0 ? formatRate(total / omv) : "—"}
+          />
+          <StatCell
+            label="Top band"
+            note="rate on the last dollar of OMV"
+            value={topBand ? formatRate(topBand.rate) : "—"}
+          />
+        </div>
+      </div>
 
       {bands.length > 0 ? (
-        <ReportTable
-          columns={[
-            { label: "OMV band" },
-            { align: "end", label: "Rate" },
-            { align: "end", label: "ARF" },
-          ]}
-        >
-          {bands.map(({ amount, from, rate, to }) => (
-            <ReportRow key={from}>
-              <ReportCell className="font-bold text-base">
-                {formatCurrency(from)} – {formatCurrency(to)}
-              </ReportCell>
-              <ReportCell align="end" className="font-semibold text-muted">
-                {formatRate(rate)}
-              </ReportCell>
-              <ReportCell align="end" className="font-extrabold text-base">
-                {formatCurrency(amount)}
-              </ReportCell>
-            </ReportRow>
-          ))}
-        </ReportTable>
+        <Table variant="secondary">
+          <Table.ScrollContainer>
+            <Table.Content
+              aria-label="ARF by OMV band"
+              className="tabular-nums"
+            >
+              <Table.Header>
+                <Table.Column isRowHeader>OMV band</Table.Column>
+                <Table.Column className="text-right">Rate</Table.Column>
+                <Table.Column className="text-right">ARF</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                {bands.map(({ amount, from, rate, to }) => (
+                  <Table.Row id={from} key={from}>
+                    <Table.Cell className="font-bold text-base">
+                      {formatCurrency(from)} – {formatCurrency(to)}
+                    </Table.Cell>
+                    <Table.Cell className="text-right font-semibold text-muted">
+                      {formatRate(rate)}
+                    </Table.Cell>
+                    <Table.Cell className="text-right font-extrabold text-base">
+                      {formatCurrency(amount)}
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
+        </Table>
       ) : null}
     </>
   );

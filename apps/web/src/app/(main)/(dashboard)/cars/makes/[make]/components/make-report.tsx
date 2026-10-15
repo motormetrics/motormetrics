@@ -1,10 +1,13 @@
 import { cn, Typography } from "@heroui/react";
+import { buttonVariants } from "@heroui/styles";
+import { EmptyState, NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
 import {
   FuelTypeTabs,
   PeriodTabs,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/filters";
+import { GoBackButton } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/go-back-button";
 import { MixTable } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/mix-table";
 import {
   periodLabel,
@@ -18,14 +21,12 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import { EmptyState } from "@web/components/shared/empty-state";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import {
   Hairline,
   SectionHead,
   SourceNote,
 } from "@web/components/shared/overview";
-import { Count } from "@web/components/shared/report-table";
 import {
   getMakeCrossTab,
   getMakeTotalsInRange,
@@ -40,6 +41,7 @@ import {
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
+import { FileQuestion, Home } from "lucide-react";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
@@ -113,7 +115,27 @@ export async function MakeReport({
   ]);
 
   if (crossTab.length === 0) {
-    return <EmptyState />;
+    return (
+      <EmptyState className="rounded-3xl bg-default/50" size="lg">
+        <EmptyState.Header>
+          <EmptyState.Media variant="icon">
+            <FileQuestion />
+          </EmptyState.Media>
+          <EmptyState.Title>No Data Available</EmptyState.Title>
+          <EmptyState.Description className="max-w-sm">
+            The requested data could not be found. Please try a different
+            selection.
+          </EmptyState.Description>
+        </EmptyState.Header>
+        <EmptyState.Content className="flex-row gap-4">
+          <Link className={buttonVariants({ variant: "outline" })} href="/">
+            <Home className="size-4" />
+            Go Home
+          </Link>
+          <GoBackButton />
+        </EmptyState.Content>
+      </EmptyState>
+    );
   }
 
   const matchesFuel = (row: { fuelType: string }) =>
@@ -316,7 +338,11 @@ export async function MakeReport({
             {make} registrations
           </span>
           <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
-            <Count value={total} />
+            <NumberValue
+              locale="en-SG"
+              maximumFractionDigits={0}
+              value={total}
+            />
           </span>
           <Typography.Paragraph color="muted">
             <DeltaChip
@@ -469,10 +495,18 @@ export async function MakeReport({
                     {formatDateToMonthYear(seriesMonth)}
                   </span>
                   <span className="w-12 text-right font-semibold md:w-16">
-                    <Count value={count} />
+                    <NumberValue
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      value={count}
+                    />
                   </span>
                   <span className="w-12 text-right text-muted md:w-16">
-                    <Count value={market} />
+                    <NumberValue
+                      locale="en-SG"
+                      maximumFractionDigits={0}
+                      value={market}
+                    />
                   </span>
                   <span className="w-12 text-right text-muted md:w-16">
                     {share.toFixed(1)}%
@@ -544,7 +578,11 @@ export async function MakeReport({
                       />
                     </span>
                     <span className="w-16 text-right font-semibold text-sm tabular-nums">
-                      <Count value={count} />
+                      <NumberValue
+                        locale="en-SG"
+                        maximumFractionDigits={0}
+                        value={count}
+                      />
                     </span>
                   </div>
                 );

@@ -1,4 +1,5 @@
 import { Skeleton } from "@heroui/react";
+import { EmptyState } from "@heroui-pro/react";
 import { ClassesTable } from "@web/app/(main)/(dashboard)/cars/annual/components/classes-table";
 import { ElectricFleet } from "@web/app/(main)/(dashboard)/cars/annual/components/electric-fleet";
 import { ANNUAL_FAQS } from "@web/app/(main)/(dashboard)/cars/annual/components/faq-data";
@@ -11,7 +12,6 @@ import {
   rankClasses,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { EmptyState } from "@web/components/shared/empty-state";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
@@ -181,16 +181,18 @@ async function PopulationSections() {
 
   if (!data || !cars) {
     return (
-      <EmptyState
-        description="Annual vehicle population data is not available at the moment. Please check back later."
-        icon={
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
-            <BarChart3 className="size-8 text-muted" />
-          </div>
-        }
-        showDefaultActions={false}
-        title="No Data Available Yet"
-      />
+      <EmptyState className="rounded-3xl bg-default/50" size="lg">
+        <EmptyState.Header>
+          <EmptyState.Media variant="icon">
+            <BarChart3 />
+          </EmptyState.Media>
+          <EmptyState.Title>No Data Available Yet</EmptyState.Title>
+          <EmptyState.Description className="max-w-sm">
+            Annual vehicle population data is not available at the moment.
+            Please check back later.
+          </EmptyState.Description>
+        </EmptyState.Header>
+      </EmptyState>
     );
   }
 

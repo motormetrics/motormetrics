@@ -1,4 +1,4 @@
-import { Card, cn, Typography } from "@heroui/react";
+import { Card, cn, Skeleton, Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { CombinedPool } from "@web/app/(main)/(dashboard)/coe/category-merger/components/combined-pool";
 import { CATEGORY_MERGER_FAQS } from "@web/app/(main)/(dashboard)/coe/category-merger/components/faq-data";
@@ -16,17 +16,13 @@ import {
   THREE_BANDS,
 } from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import {
+  Headline,
+  OverviewPage,
+  StatCell,
+} from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import {
-  Report,
-  ReportEyebrow,
-  ReportHeadline,
-  ReportNote,
-  ReportSection,
-  ReportStat,
-} from "@web/components/shared/report";
-import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -95,7 +91,7 @@ const CATEGORY_E_OPTIONS = [
 
 export default function CategoryMergerPage() {
   return (
-    <Report className="gap-12">
+    <OverviewPage className="gap-12">
       <StructuredData data={articleSchema} />
       <StructuredData
         data={{
@@ -121,24 +117,25 @@ export default function CategoryMergerPage() {
         title="LTA's COE Category Merger Proposal"
       />
 
-      <ReportHeadline
-        label="Largest proposed rebate or surcharge"
-        stats={
-          <>
-            <ReportStat label="Bands proposed" value="3 or 5" />
-            <ReportStat label="Feedback closes" note="11.59pm" value="2 Nov" />
-            <ReportStat
-              label="Cat A–B premium gap"
-              note="7 Oct 2026 exercise"
-              value="$99"
-            />
-          </>
-        }
-        sub="Applied on top of the COE price, by the car model's median OMV"
-        value="$15,000"
-      />
+      <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
+        <Headline
+          caption="Applied on top of the COE price, by the car model's median OMV"
+          label="Largest proposed rebate or surcharge"
+          value="$15,000"
+        />
+        <div className="grid grid-cols-2 border-separator border-t">
+          <StatCell label="Bands proposed" note={null} value="3 or 5" />
+          <StatCell label="Feedback closes" note="11.59pm" value="2 Nov" />
+          <StatCell
+            label="Cat A–B premium gap"
+            note="7 Oct 2026 exercise"
+            value="$99"
+          />
+        </div>
+      </div>
 
-      <ReportSection title="What LTA is proposing">
+      <section className="flex flex-col gap-4">
+        <Typography.Heading level={2}>What LTA is proposing</Typography.Heading>
         <Typography.Paragraph className="max-w-prose" color="muted">
           Today, car buyers bid in one of two categories. Category A covers cars
           up to 1,600cc and 130bhp, or electric cars up to 110kW. Category B
@@ -157,36 +154,53 @@ export default function CategoryMergerPage() {
           mass-market and luxury car buyers pay, not to change overall COE
           prices, which would still be set by demand and the available quota.
         </Typography.Paragraph>
-      </ReportSection>
+      </section>
 
-      <ReportSection title="Why LTA wants to change it">
+      <section className="flex flex-col gap-4">
+        <Typography.Heading level={2}>
+          Why LTA wants to change it
+        </Typography.Heading>
         <Reasons />
-      </ReportSection>
+      </section>
 
-      <ReportSection
-        caption="Ten years of closing premiums"
-        title="How close Category A and B have come"
-      >
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-baseline gap-4">
+          <Typography.Heading level={2}>
+            How close Category A and B have come
+          </Typography.Heading>
+          <Typography.Paragraph>
+            Ten years of closing premiums
+          </Typography.Paragraph>
+        </div>
         <SectionErrorBoundary title="Premium history unavailable">
-          <Suspense fallback={<SkeletonCard className="h-[460px] w-full" />}>
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
             <PremiumGap />
           </Suspense>
         </SectionErrorBoundary>
-      </ReportSection>
+      </section>
 
-      <ReportSection caption="Latest exercise" title="One pool instead of two">
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-baseline gap-4">
+          <Typography.Heading level={2}>
+            One pool instead of two
+          </Typography.Heading>
+          <Typography.Paragraph>Latest exercise</Typography.Paragraph>
+        </div>
         <Typography.Paragraph className="max-w-prose" color="muted">
           Under the proposal, Category A and B quotas would be offered as one
           pool, with every car buyer bidding against every other.
         </Typography.Paragraph>
         <SectionErrorBoundary title="Latest quotas unavailable">
-          <Suspense fallback={<SkeletonCard className="h-[220px] w-full" />}>
+          <Suspense fallback={<Skeleton className="h-56 w-full" />}>
             <CombinedPool />
           </Suspense>
         </SectionErrorBoundary>
-      </ReportSection>
+      </section>
 
-      <ReportSection title="How the feebate bands would work">
+      <section className="flex flex-col gap-4">
+        <Typography.Heading level={2}>
+          How the feebate bands would work
+        </Typography.Heading>
         <Typography.Paragraph className="max-w-prose" color="muted">
           LTA proposes to use each car model&apos;s median Open Market Value
           (OMV), which is the value declared to Customs at import and already
@@ -208,25 +222,33 @@ export default function CategoryMergerPage() {
         <Typography.Paragraph color="muted" size="sm">
           Indicative banding by LTA, based on cars registered in 2025.
         </Typography.Paragraph>
-      </ReportSection>
+      </section>
 
-      <ReportSection
-        caption="Today's gap against the proposed one"
-        title="How big a $30,000 spread is"
-      >
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-baseline gap-4">
+          <Typography.Heading level={2}>
+            How big a $30,000 spread is
+          </Typography.Heading>
+          <Typography.Paragraph>
+            Today's gap against the proposed one
+          </Typography.Paragraph>
+        </div>
         <Typography.Paragraph className="max-w-prose" color="muted">
           LTA&apos;s aim is to keep a meaningful difference between what
           mass-market and luxury buyers pay. Here is the difference its bands
           would set, beside the one Category A and B produce today.
         </Typography.Paragraph>
         <SectionErrorBoundary title="Premium comparison unavailable">
-          <Suspense fallback={<SkeletonCard className="h-[320px] w-full" />}>
+          <Suspense fallback={<Skeleton className="h-80 w-full" />}>
             <FeebateSpread />
           </Suspense>
         </SectionErrorBoundary>
-      </ReportSection>
+      </section>
 
-      <ReportSection title="COE renewals and Category E">
+      <section className="flex flex-col gap-4">
+        <Typography.Heading level={2}>
+          COE renewals and Category E
+        </Typography.Heading>
         <Typography.Paragraph className="max-w-prose" color="muted">
           A merged category would have one COE price and one Prevailing Quota
           Premium (PQP) for renewals. Because Category A and B prices have
@@ -258,9 +280,10 @@ export default function CategoryMergerPage() {
             </Card>
           ))}
         </div>
-      </ReportSection>
+      </section>
 
-      <ReportSection title="Timeline">
+      <section className="flex flex-col gap-4">
+        <Typography.Heading level={2}>Timeline</Typography.Heading>
         {/* A rail of dots: horizontal from `lg`, a vertical rail below it. */}
         <ol className="grid grid-cols-1 gap-6 border-border border-l-2 pl-6 lg:grid-cols-4 lg:border-t-2 lg:border-l-0 lg:pt-6 lg:pl-0">
           {MILESTONES.map(({ date, detail, label }) => (
@@ -272,7 +295,14 @@ export default function CategoryMergerPage() {
                   label === "Feedback closes" ? "bg-danger" : "bg-accent",
                 )}
               />
-              <ReportEyebrow>{date}</ReportEyebrow>
+              <Typography.Paragraph
+                className="uppercase tracking-wider"
+                color="muted"
+                size="xs"
+                weight="bold"
+              >
+                {date}
+              </Typography.Paragraph>
               <Typography.Paragraph weight="semibold">
                 {label}
               </Typography.Paragraph>
@@ -282,9 +312,10 @@ export default function CategoryMergerPage() {
             </li>
           ))}
         </ol>
-      </ReportSection>
+      </section>
 
-      <ReportSection title="Have your say">
+      <section className="flex flex-col gap-4">
+        <Typography.Heading level={2}>Have your say</Typography.Heading>
         <Typography.Paragraph className="max-w-prose" color="muted">
           LTA is collecting feedback on whether Categories A and B should merge,
           how the feebate should be designed, whether it should apply to
@@ -310,18 +341,23 @@ export default function CategoryMergerPage() {
             <ArrowUpRight className="size-4" />
           </a>
         </div>
-      </ReportSection>
+      </section>
 
       <PageFaq expandFirst faqs={CATEGORY_MERGER_FAQS} />
 
-      <ReportNote title="About this page">
+      {/* An h3 under the page's h2 sections, though 18px sits below h4's 20px:
+          dropping to h4 would skip a level in the outline for looks alone. */}
+      <aside className="flex flex-col gap-3.5 border-border lg:border-l lg:pl-10">
+        <Typography.Heading className="text-lg" level={3}>
+          About this page
+        </Typography.Heading>
         <Typography.Paragraph color="muted" size="sm">
           This page summarises LTA&apos;s consultation paper on COE
           categorisation for cars, published on 8 October 2026. The proposal,
           band options and model examples are LTA&apos;s; MotorMetrics has no
           part in the review. Figures may change once LTA concludes it.
         </Typography.Paragraph>
-      </ReportNote>
-    </Report>
+      </aside>
+    </OverviewPage>
   );
 }

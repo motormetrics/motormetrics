@@ -19,7 +19,6 @@ import {
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import { SkeletonCard, SkeletonChart } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -88,7 +87,7 @@ function ChartSkeleton() {
         </div>
         <Skeleton className="h-8 w-80 sm:ml-auto" />
       </div>
-      <SkeletonChart />
+      <Skeleton className="h-80 w-full" />
     </div>
   );
 }
@@ -178,7 +177,7 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           title="Closing premium per category"
         />
         <SectionErrorBoundary title="COE results unavailable">
-          <Suspense fallback={<SkeletonCard className="h-96 w-full" />}>
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
             <ResultsByExercise searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>
@@ -193,7 +192,7 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           title="Average closing premium"
         />
         <SectionErrorBoundary title="Yearly COE prices unavailable">
-          <Suspense fallback={<SkeletonCard className="h-96 w-full" />}>
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
             <PremiumsByYear />
           </Suspense>
         </SectionErrorBoundary>
@@ -208,7 +207,7 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           title="Highest closing premium by category"
         />
         <SectionErrorBoundary title="Record COE prices unavailable">
-          <Suspense fallback={<SkeletonCard className="h-72 w-full" />}>
+          <Suspense fallback={<Skeleton className="h-72 w-full" />}>
             <RecordHighs />
           </Suspense>
         </SectionErrorBoundary>

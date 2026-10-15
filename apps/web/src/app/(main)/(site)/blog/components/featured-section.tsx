@@ -1,7 +1,7 @@
+import { Card, Skeleton } from "@heroui/react";
 import { FeaturedPost } from "@web/app/(main)/(site)/blog/components/featured-post";
 import { PopularPostsSection } from "@web/app/(main)/(site)/blog/components/popular-posts-section";
 import { SourceNote } from "@web/components/shared/overview";
-import { SkeletonBentoCard } from "@web/components/shared/skeleton";
 import { getAllPosts } from "@web/queries/posts";
 import { Suspense } from "react";
 
@@ -38,7 +38,19 @@ async function FeaturedContent() {
 
 export function FeaturedSection() {
   return (
-    <Suspense fallback={<SkeletonBentoCard className="min-h-72" />}>
+    <Suspense
+      fallback={
+        <Card className="min-h-72">
+          <Card.Header className="items-start gap-2">
+            <Skeleton className="h-6 w-40" />
+            <Skeleton className="h-4 w-full" />
+          </Card.Header>
+          <Card.Content className="gap-4">
+            <Skeleton className="h-24 w-full" />
+          </Card.Content>
+        </Card>
+      }
+    >
       <FeaturedContent />
     </Suspense>
   );

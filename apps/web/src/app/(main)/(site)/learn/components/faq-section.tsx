@@ -1,9 +1,8 @@
 "use client";
 
-import { Accordion } from "@heroui/react";
+import { Accordion, Typography } from "@heroui/react";
 import { FAQ_SECTIONS } from "@web/app/(main)/(site)/learn/components/faq-data";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 
 const questionCount = FAQ_SECTIONS.reduce(
   (total, section) => total + section.items.length,
@@ -47,9 +46,9 @@ export function FAQSection() {
                   </Accordion.Heading>
                   <Accordion.Panel>
                     <Accordion.Body>
-                      <Text.Paragraph className="max-w-2xl" tone="strong">
+                      <Typography.Paragraph className="max-w-2xl text-muted-strong">
                         {answer}
-                      </Text.Paragraph>
+                      </Typography.Paragraph>
                     </Accordion.Body>
                   </Accordion.Panel>
                 </Accordion.Item>

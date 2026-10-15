@@ -1,5 +1,5 @@
+import { Typography } from "@heroui/react";
 import { SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import type { TrafficStats } from "@web/lib/posthog";
 
 /**
@@ -41,9 +41,12 @@ export function StatsSection({ stats }: { stats: TrafficStats }) {
             <span className="font-extrabold text-3xl tabular-nums leading-none tracking-tight md:text-4xl">
               {value}
             </span>
-            <Text.Paragraph className="leading-snug" size="sm" tone="strong">
+            <Typography.Paragraph
+              className="text-muted-strong leading-snug"
+              size="sm"
+            >
               {label}
-            </Text.Paragraph>
+            </Typography.Paragraph>
           </div>
         ))}
       </div>

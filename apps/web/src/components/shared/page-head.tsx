@@ -1,7 +1,6 @@
 import { cn, Typography } from "@heroui/react";
 import { typographyVariants } from "@heroui/styles";
 import { SharePill } from "@web/components/shared/share-pill";
-import { Text } from "@web/components/shared/text";
 import type { ComponentProps, ReactNode } from "react";
 
 /**
@@ -47,9 +46,14 @@ export function PageHead({
     <div className="flex flex-wrap items-end gap-6">
       <div className={cn("flex flex-col gap-2", description && "max-w-prose")}>
         {eyebrow ? (
-          <Text.Paragraph eyebrow weight="semibold" color="muted" size="xs">
+          <Typography.Paragraph
+            className="uppercase"
+            weight="semibold"
+            color="muted"
+            size="xs"
+          >
             {eyebrow}
-          </Text.Paragraph>
+          </Typography.Paragraph>
         ) : null}
         <div className="flex flex-wrap items-center gap-4">
           <Typography.Heading level={1}>{title}</Typography.Heading>

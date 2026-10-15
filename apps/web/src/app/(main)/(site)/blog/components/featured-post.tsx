@@ -6,7 +6,6 @@ import {
   getCategoryConfig,
   getReadingTime,
 } from "@web/app/(main)/(site)/blog/components/post/utils";
-import { Text } from "@web/components/shared/text";
 import { formatDate } from "@web/utils/dates/format-date";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
 import { ArrowRight } from "lucide-react";
@@ -40,14 +39,13 @@ export function FeaturedPost({ post }: { post: SelectPost }) {
           figures.length > 0 && "lg:col-span-5",
         )}
       >
-        <Text.Paragraph
-          className="text-accent-strong"
-          eyebrow
+        <Typography.Paragraph
+          className="text-accent-strong uppercase"
           size="xs"
           weight="semibold"
         >
           Featured · {getCategoryConfig(post).label}
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <Typography.Heading
           className="text-balance text-2xl leading-tight md:text-3xl"
           level={2}
@@ -55,9 +53,9 @@ export function FeaturedPost({ post }: { post: SelectPost }) {
           {post.title}
         </Typography.Heading>
         {post.excerpt ? (
-          <Text.Paragraph className="max-w-2xl" tone="strong">
+          <Typography.Paragraph className="max-w-2xl text-muted-strong">
             {post.excerpt}
-          </Text.Paragraph>
+          </Typography.Paragraph>
         ) : null}
         <div className="mt-auto flex flex-wrap items-center gap-3.5 pt-2.5">
           <Link

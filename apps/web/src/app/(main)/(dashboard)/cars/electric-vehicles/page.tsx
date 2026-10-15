@@ -1,4 +1,5 @@
 import { Skeleton } from "@heroui/react";
+import { EmptyState } from "@heroui-pro/react";
 import { AdoptionByMonth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-by-month";
 import { ChargingSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-summary";
 import { ElectrifiedTotal } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/electrified-total";
@@ -9,7 +10,6 @@ import { RegistrationTrend } from "@web/app/(main)/(dashboard)/cars/electric-veh
 import { VesBands } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ves-bands";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { EmptyState } from "@web/components/shared/empty-state";
 import { MonthMenu } from "@web/components/shared/month-menu";
 import {
   Hairline,
@@ -200,16 +200,18 @@ async function EvOverview({ searchParams }: PageProps) {
 
   if (marketShare.length === 0) {
     return (
-      <EmptyState
-        description="Electric vehicle registration data is not available at the moment. Please check back later."
-        icon={
-          <div className="flex size-16 items-center justify-center rounded-2xl bg-default">
-            <Zap className="size-8 text-muted" />
-          </div>
-        }
-        showDefaultActions={false}
-        title="No Data Available Yet"
-      />
+      <EmptyState className="rounded-3xl bg-default/50" size="lg">
+        <EmptyState.Header>
+          <EmptyState.Media variant="icon">
+            <Zap />
+          </EmptyState.Media>
+          <EmptyState.Title>No Data Available Yet</EmptyState.Title>
+          <EmptyState.Description className="max-w-sm">
+            Electric vehicle registration data is not available at the moment.
+            Please check back later.
+          </EmptyState.Description>
+        </EmptyState.Header>
+      </EmptyState>
     );
   }
 

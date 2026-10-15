@@ -1,7 +1,6 @@
 import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { Mail } from "lucide-react";
 import Link from "next/link";
 
@@ -42,10 +41,10 @@ export function CtaSection() {
           eyebrow="What we will not run"
           title="Rules that protect the data"
         />
-        <Text.Paragraph className="max-w-xl leading-relaxed" tone="strong">
+        <Typography.Paragraph className="max-w-xl text-muted-strong leading-relaxed">
           Advertising sits around the charts, never inside them. We decline
           anything that could be mistaken for a figure we publish.
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <div className="flex flex-col border-border border-t">
           {rules.map(({ note, number }) => (
             <div
@@ -55,9 +54,9 @@ export function CtaSection() {
               <span className="w-8 shrink-0 font-semibold text-accent-strong tabular-nums">
                 {number}
               </span>
-              <Text.Paragraph className="leading-normal" tone="strong">
+              <Typography.Paragraph className="text-muted-strong leading-normal">
                 {note}
-              </Text.Paragraph>
+              </Typography.Paragraph>
             </div>
           ))}
         </div>
@@ -68,10 +67,13 @@ export function CtaSection() {
         <Typography.Heading className="text-xl" level={3} weight="bold">
           Book a placement
         </Typography.Heading>
-        <Text.Paragraph className="leading-normal" size="sm" tone="strong">
+        <Typography.Paragraph
+          className="text-muted-strong leading-normal"
+          size="sm"
+        >
           Tell us the pages and the months you have in mind. We reply with
           availability, the rate and the creative spec.
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <a
           className={buttonVariants({ fullWidth: true, variant: "primary" })}
           href={`mailto:${ADVERTISE_EMAIL}`}

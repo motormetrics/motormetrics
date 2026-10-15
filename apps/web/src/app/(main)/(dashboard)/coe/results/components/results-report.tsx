@@ -29,7 +29,6 @@ import {
   SourceNote,
   StatCell,
 } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { getCoeResults, getCoeResultsByPeriod } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
 import { formatMonthShortName } from "@web/utils/dates/format-month";
@@ -128,12 +127,12 @@ export async function ResultsHeadline({ searchParams }: RegionProps) {
   return (
     <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
       <div className="flex min-w-0 flex-col gap-3">
-        <Text.Paragraph tone="strong">
+        <Typography.Paragraph className="text-muted-strong">
           <span className="font-semibold text-accent-strong">
             Bids per quota
           </span>{" "}
           · all five categories
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
           {bidsPerQuota.toFixed(2)}×
         </span>

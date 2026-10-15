@@ -1,7 +1,7 @@
+import { Typography } from "@heroui/react";
 import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
 import { getAllGuideSlugs } from "@web/app/(main)/(site)/learn/lib/guides";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import Link from "next/link";
 
 const guideSlugs = getAllGuideSlugs();
@@ -55,13 +55,12 @@ export function GlossarySection() {
                         {term}
                       </span>
                     )}
-                    <Text.Paragraph
-                      className="min-w-0 flex-1 leading-normal"
+                    <Typography.Paragraph
+                      className="min-w-0 flex-1 text-muted-strong leading-normal"
                       size="sm"
-                      tone="strong"
                     >
                       {definition}
-                    </Text.Paragraph>
+                    </Typography.Paragraph>
                   </div>
                 );
               })}

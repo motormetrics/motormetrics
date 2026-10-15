@@ -1,6 +1,6 @@
+import { Card } from "@heroui/react";
 import { ChargingMapView } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map-view";
 import { MAP_ANCHOR_ID } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
-import { SurfaceCard } from "@web/components/shared/bento";
 
 /**
  * Every public charging site on a map, coloured by live availability.
@@ -18,9 +18,9 @@ import { SurfaceCard } from "@web/components/shared/bento";
 export function ChargingMap() {
   return (
     <div className="scroll-mt-6" id={MAP_ANCHOR_ID}>
-      <SurfaceCard className="gap-4 p-7">
+      <Card className="gap-4 rounded-4xl p-7">
         <ChargingMapView />
-      </SurfaceCard>
+      </Card>
     </div>
   );
 }

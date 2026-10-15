@@ -115,8 +115,11 @@ export default defineConfig({
         // resulting reload breaks vi.mock factories on a cold cache.
         optimizeDeps: {
           include: [
+            "@heroui-pro/react/area-chart",
             "@heroui-pro/react/bar-chart",
             "@heroui-pro/react/kpi",
+            "@heroui-pro/react/line-chart",
+            "@heroui-pro/react/pie-chart",
             "@neondatabase/serverless",
             "@upstash/redis/cloudflare",
             "date-fns",
@@ -124,6 +127,7 @@ export default defineConfig({
             "drizzle-orm/neon-http",
             "drizzle-orm/pg-core",
             "motion/react",
+            "motion/react-client",
             "next/cache",
             "next/image",
             "nuqs/server",

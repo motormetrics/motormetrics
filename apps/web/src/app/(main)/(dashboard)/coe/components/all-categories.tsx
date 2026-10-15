@@ -12,7 +12,6 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { SectionLink } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { getCoeResults } from "@web/queries/coe";
 import type { SearchParams } from "nuqs/server";
 
@@ -75,17 +74,16 @@ export async function AllCategories({
       <div className="flex items-end gap-4">
         {/* A paragraph-scale heading: Typography.Heading has no xs size, and
             render needs a client-only function. */}
-        <Text.Paragraph
-          eyebrow
+        <Typography.Paragraph
           role="heading"
           aria-level={2}
-          className="min-[721px]:sr-only"
+          className="uppercase md:sr-only"
           weight="semibold"
           color="muted"
           size="xs"
         >
           All categories
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <SectionLink href="/coe/results">All COE results</SectionLink>
       </div>
       <AllCategoriesTable rows={rows} selected={selected} />

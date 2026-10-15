@@ -1,5 +1,5 @@
+import { Typography } from "@heroui/react";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import Link from "next/link";
 
 const provenance = [
@@ -34,10 +34,7 @@ export function DataSection() {
         title="One source, checked at every release"
       />
       <div className="flex min-w-0 flex-col gap-4 lg:col-span-3">
-        <Text.Paragraph
-          className="max-w-2xl leading-relaxed md:text-lg"
-          tone="strong"
-        >
+        <Typography.Paragraph className="max-w-2xl text-muted-strong leading-relaxed md:text-lg">
           Every figure on this site comes from Singapore&apos;s Land Transport
           Authority via{" "}
           <Link
@@ -50,7 +47,7 @@ export function DataSection() {
           </Link>
           . We do not estimate, model or fill gaps. When LTA revises a release,
           we revise with it.
-        </Text.Paragraph>
+        </Typography.Paragraph>
         <div className="grid grid-cols-1 rounded-lg border border-separator bg-surface md:grid-cols-3">
           {provenance.map(({ detail, heading, label }) => (
             <div
@@ -61,13 +58,12 @@ export function DataSection() {
                 {heading}
               </span>
               <span className="font-semibold text-sm">{label}</span>
-              <Text.Paragraph
-                className="leading-normal"
+              <Typography.Paragraph
+                className="text-muted-strong leading-normal"
                 size="sm"
-                tone="strong"
               >
                 {detail}
-              </Text.Paragraph>
+              </Typography.Paragraph>
             </div>
           ))}
         </div>

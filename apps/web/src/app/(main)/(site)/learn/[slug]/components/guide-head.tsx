@@ -2,7 +2,6 @@ import { Typography } from "@heroui/react";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import { getReadingMinutes } from "@web/app/(main)/(site)/learn/lib/guides";
 import { SharePill } from "@web/components/shared/share-pill";
-import { Text } from "@web/components/shared/text";
 import Link from "next/link";
 
 /**
@@ -43,23 +42,22 @@ export function GuideHead({ guide }: { guide: Guide }) {
         </span>
       </nav>
 
-      <Text.Paragraph
-        className="pt-1.5"
+      <Typography.Paragraph
+        className="pt-1.5 uppercase"
         color="muted"
-        eyebrow
         size="xs"
         weight="semibold"
       >
         Guide · {guide.term}
-      </Text.Paragraph>
+      </Typography.Paragraph>
 
       <Typography.Heading className="text-3xl md:text-4xl" level={1}>
         {guide.title}
       </Typography.Heading>
 
-      <Text.Paragraph className="max-w-2xl" tone="strong">
+      <Typography.Paragraph className="max-w-2xl text-muted-strong">
         {guide.excerpt}
-      </Text.Paragraph>
+      </Typography.Paragraph>
 
       <div className="flex flex-wrap items-center gap-2.5 text-muted text-sm">
         <span>{getReadingMinutes(guide.content)} min read</span>

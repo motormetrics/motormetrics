@@ -8,7 +8,6 @@ import { MonthMenu } from "@web/components/shared/month-menu";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
-import { SkeletonCard } from "@web/components/shared/skeleton";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
@@ -78,7 +77,14 @@ export default function Page({ searchParams }: PageProps) {
       />
 
       <SectionErrorBoundary title="Fuel types unavailable">
-        <Suspense fallback={<SkeletonCard className="h-[900px] w-full" />}>
+        <Suspense
+          fallback={
+            <div className="flex flex-col gap-4">
+              <Skeleton className="h-96 w-full" />
+              <Skeleton className="h-96 w-full" />
+            </div>
+          }
+        >
           <FuelTypesStructuredData searchParams={searchParams} />
           <FuelTypesReport searchParams={searchParams} />
         </Suspense>

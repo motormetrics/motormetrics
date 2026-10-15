@@ -1,5 +1,5 @@
+import { Typography } from "@heroui/react";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { Text } from "@web/components/shared/text";
 import { SITE_TITLE } from "@web/config";
 import type { ReactNode } from "react";
 
@@ -73,9 +73,12 @@ export function DataSourcesSection() {
             key={title}
           >
             <span className="font-semibold text-muted text-xs">{title}</span>
-            <Text.Paragraph className="leading-relaxed" size="sm" tone="strong">
+            <Typography.Paragraph
+              className="text-muted-strong leading-relaxed"
+              size="sm"
+            >
               {detail}
-            </Text.Paragraph>
+            </Typography.Paragraph>
           </div>
         ))}
       </div>
