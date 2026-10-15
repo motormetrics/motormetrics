@@ -8,7 +8,7 @@ import { SourceNote } from "@web/components/shared/overview";
 const stats = [
   { label: "Years of COE and registration history", value: "10+" },
   { label: "Car makes tracked every month", value: "50+" },
-  { label: "COE bidding exercises analysed", value: "120+" },
+  { label: "COE bidding exercises analysed", value: "390+" },
   { label: "Monthly data points across every dataset", value: "10,000+" },
 ];
 
