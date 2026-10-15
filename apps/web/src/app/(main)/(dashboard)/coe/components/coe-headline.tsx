@@ -4,6 +4,7 @@ import { CategoryTabs } from "@web/app/(main)/(dashboard)/coe/components/coe-con
 import {
   biddingOrdinal,
   CATEGORY_DESCRIPTIONS,
+  type CoeExercise,
   changeRatio,
   formatPremiumChange,
   groupByExercise,
@@ -15,14 +16,82 @@ import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/com
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { StatCell } from "@web/components/shared/overview";
 import { getCoeResults, getPqpRates } from "@web/queries/coe";
-import type { Pqp } from "@web/types";
+import type { COECategory, Pqp } from "@web/types";
 import { formatMonthName } from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
 
 /**
+ * Each category's latest premium with its change on the previous exercise:
+ * side by side for a pair from md up, stacked below it.
+ */
+function PremiumBlocks({
+  categories,
+  latest,
+  previous,
+  selected,
+}: {
+  categories: COECategory[];
+  latest: CoeExercise;
+  previous?: CoeExercise;
+  selected?: COECategory;
+}) {
+  const isPaired = categories.length > 1;
+
+  return (
+    <div className={cn("grid gap-5", isPaired && "md:grid-cols-2 md:gap-6")}>
+      {categories.map((shownCategory) => {
+        const premium = latest.results[shownCategory]?.premium ?? 0;
+        const previousPremium = previous?.results[shownCategory]?.premium;
+
+        return (
+          <div className="flex min-w-0 flex-col gap-3" key={shownCategory}>
+            <Typography.Paragraph className="text-muted-strong">
+              <span
+                className={cn(
+                  "font-semibold",
+                  shownCategory === selected
+                    ? "text-accent-strong"
+                    : "text-foreground",
+                )}
+              >
+                {shownCategory}
+              </span>
+              {` · ${CATEGORY_DESCRIPTIONS[shownCategory]}`}
+            </Typography.Paragraph>
+            <span
+              className={cn(
+                "font-extrabold text-5xl tabular-nums leading-none tracking-tight",
+                !isPaired && "md:text-6xl",
+              )}
+            >
+              <NumberValue
+                currency="SGD"
+                locale="en-SG"
+                maximumFractionDigits={0}
+                style="currency"
+                value={premium}
+              />
+            </span>
+            <Typography.Paragraph className="tabular-nums" color="muted">
+              {formatPremiumChange(
+                premium,
+                previous && previousPremium !== undefined
+                  ? { ...previous, premium: previousPremium }
+                  : undefined,
+              )}
+            </Typography.Paragraph>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
  * The opening block of /coe: the category switch, the selected category's
- * latest premium with its change on the previous exercise (A and B side by
- * side, see `pairedCategories`), and a ruled grid of that exercise's figures. Stacks into one column at 900px and below.
+ * latest premium with its change on the previous exercise (A and B together,
+ * see `pairedCategories`), and a ruled grid of that exercise's figures.
+ * Stacks into one column at 900px and below.
  */
 export async function CoeHeadline({
   searchParams,
@@ -67,53 +136,29 @@ export async function CoeHeadline({
     <div className="grid gap-5 min-[901px]:grid-cols-[1.15fr_1fr] min-[901px]:items-end min-[901px]:gap-14">
       <div className="flex min-w-0 flex-col gap-3">
         <CategoryTabs selected={categoryKey} />
-        <div
-          className={cn("grid gap-5", isPaired && "md:grid-cols-2 md:gap-6")}
-        >
-          {shown.map((shownCategory) => {
-            const premium = latest.results[shownCategory]?.premium ?? 0;
-            const previousPremium = previous?.results[shownCategory]?.premium;
-
-            return (
-              <div className="flex min-w-0 flex-col gap-3" key={shownCategory}>
-                <Typography.Paragraph className="text-muted-strong">
-                  <span
-                    className={cn(
-                      "font-semibold",
-                      shownCategory === category
-                        ? "text-accent-strong"
-                        : "text-foreground",
-                    )}
-                  >
-                    {shownCategory}
-                  </span>
-                  {` · ${CATEGORY_DESCRIPTIONS[shownCategory]}`}
-                </Typography.Paragraph>
-                <span
-                  className={cn(
-                    "font-extrabold text-5xl tabular-nums leading-none tracking-tight",
-                    !isPaired && "md:text-6xl",
-                  )}
-                >
-                  <NumberValue
-                    currency="SGD"
-                    locale="en-SG"
-                    maximumFractionDigits={0}
-                    style="currency"
-                    value={premium}
-                  />
-                </span>
-                <Typography.Paragraph className="tabular-nums" color="muted">
-                  {formatPremiumChange(
-                    premium,
-                    previous && previousPremium !== undefined
-                      ? { ...previous, premium: previousPremium }
-                      : undefined,
-                  )}
-                </Typography.Paragraph>
-              </div>
-            );
-          })}
+        {/*
+          The A and B pair is the tallest headline, so on the other tabs an
+          invisible copy of it shares the grid cell and holds the height:
+          switching category never moves the page below.
+        */}
+        <div className="grid">
+          {isPaired ? null : (
+            <div aria-hidden className="invisible col-start-1 row-start-1">
+              <PremiumBlocks
+                categories={pairedCategories("Category A")}
+                latest={latest}
+                previous={previous}
+              />
+            </div>
+          )}
+          <div className="col-start-1 row-start-1">
+            <PremiumBlocks
+              categories={shown}
+              latest={latest}
+              previous={previous}
+              selected={category}
+            />
+          </div>
         </div>
       </div>
 

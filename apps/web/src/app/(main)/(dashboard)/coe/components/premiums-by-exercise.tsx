@@ -1,7 +1,6 @@
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
-  CATEGORY_DESCRIPTIONS,
   changeRatio,
   type ExercisePremium,
   formatExerciseTick,
@@ -83,16 +82,14 @@ export async function PremiumsByExercise({
     <div className="flex flex-col gap-5">
       {/* At 720px and below the trailing slot spans the row so the switch can. */}
       <SectionHead
-        caption={
-          paired
-            ? `Figures for ${category}, with ${paired} alongside until the merged category is in force · change category above or in the table`
-            : `${CATEGORY_DESCRIPTIONS[category]} · change category above or in the table`
-        }
+        // Every tab keeps the same title, caption and legend shape, so
+        // switching category never changes their wrapped height.
+        caption={`Stats for ${category} · change category above or in the table`}
         className="max-[720px]:[&>:last-child]:w-full"
         eyebrow="Bidding history"
         title={
           paired
-            ? `${pairedCategories(category).join(" and ")} premiums by exercise`
+            ? "Cat A and B premiums by exercise"
             : `${category} premium by exercise`
         }
         trailing={<RangeTabs />}
@@ -121,26 +118,24 @@ export async function PremiumsByExercise({
               value={formatChange(stats.change)}
             />
           </div>
-          {paired ? (
-            <div className="flex gap-4 text-muted-strong text-xs">
-              {[
-                { color: "var(--chart-1)", name: category },
-                { color: "var(--chart-2)", name: paired },
-              ].map((series) => (
+          <div className="flex gap-4 text-muted-strong text-xs">
+            {[
+              { color: "var(--chart-1)", name: category },
+              ...(paired ? [{ color: "var(--chart-2)", name: paired }] : []),
+            ].map((series) => (
+              <span
+                className="inline-flex items-center gap-1.5"
+                key={series.name}
+              >
                 <span
-                  className="inline-flex items-center gap-1.5"
-                  key={series.name}
-                >
-                  <span
-                    aria-hidden
-                    className="h-2.5 w-3 rounded-xs"
-                    style={{ background: series.color }}
-                  />
-                  {series.name}
-                </span>
-              ))}
-            </div>
-          ) : null}
+                  aria-hidden
+                  className="h-2.5 w-3 rounded-xs"
+                  style={{ background: series.color }}
+                />
+                {series.name}
+              </span>
+            ))}
+          </div>
           <PremiumTrendChart
             data={view.map((exercise, index) => {
               const previous = withBaseline[index + offset - 1];
@@ -160,7 +155,8 @@ export async function PremiumsByExercise({
             pairedLabel={paired}
             ticks={ticks}
           />
-          <SourceNote>
+          {/* Holds three lines on phones, however long the gridline step. */}
+          <SourceNote className="max-md:min-h-16">
             Source: LTA via DataMall · Quota premium at close of each exercise ·
             Y-axis does not start at zero
             {step ? `; gridlines every ${formatCurrency(step)}.` : "."}
