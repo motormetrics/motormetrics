@@ -1,4 +1,4 @@
-import { createLoader, parseAsStringLiteral } from "nuqs/server";
+import { parseAsStringLiteral } from "nuqs/server";
 
 /**
  * URL state for the COE overview bento.
@@ -30,7 +30,3 @@ export const coeOverviewSearchParams = {
   category: parseAsStringLiteral(CATEGORY_KEYS).withDefault("A"),
   range: parseAsStringLiteral(EXERCISE_RANGES).withDefault("12"),
 };
-
-export const loadCoeOverviewSearchParams = createLoader(
-  coeOverviewSearchParams,
-);

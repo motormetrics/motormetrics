@@ -12,7 +12,7 @@ import {
   type SortState,
   sortCategoryRows,
 } from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
-import { useCoeCategory } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
+import { useCoeOverview } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import { SourceNote } from "@web/components/shared/overview";
@@ -34,19 +34,21 @@ const bidsPerCoe = (row: CategoryRow): string =>
  *
  * A client island only for the sort state: the rows arrive from the server in
  * category order and are re-ordered here without another fetch, so the sort is
- * controlled. Selecting a row selects its category through the URL, the same
- * as the circles up top. The category column is pinned and the rest scroll
- * sideways on narrow screens.
+ * controlled. Selecting a row hands its category to `onSelect`, which
+ * `AllCategoriesTableSelected` writes to the URL, the same as the switch up
+ * top. The category column is pinned and the rest scroll sideways on narrow
+ * screens.
  */
 export function AllCategoriesTable({
+  onSelect,
   rows,
   selected,
 }: {
+  onSelect?: (category: CategoryKey) => void;
   rows: CategoryRow[];
   selected: CategoryKey;
 }) {
   const [sort, setSort] = useState<SortState>(DEFAULT_SORT);
-  const { selectCategory } = useCoeCategory();
 
   const handleSelectionChange = (keys: Selection) => {
     // Single selection; pressing the selected row again would empty it, so
@@ -54,7 +56,7 @@ export function AllCategoriesTable({
     if (keys === "all") return;
     const [key] = keys;
     if (key !== undefined && key !== selected) {
-      selectCategory(key as CategoryKey);
+      onSelect?.(key as CategoryKey);
     }
   };
 
@@ -218,5 +220,18 @@ export function AllCategoriesTable({
         {describeSort(sort)}.
       </SourceNote>
     </div>
+  );
+}
+
+/** The table with the category in the URL selected; render inside `<Suspense>`. */
+export function AllCategoriesTableSelected({ rows }: { rows: CategoryRow[] }) {
+  const { category, selectCategory } = useCoeOverview();
+
+  return (
+    <AllCategoriesTable
+      onSelect={selectCategory}
+      rows={rows}
+      selected={category}
+    />
   );
 }
