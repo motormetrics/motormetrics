@@ -525,9 +525,6 @@ importers:
       tailwind-merge:
         specifier: 3.6.0
         version: 3.6.0
-      tailwind-variants:
-        specifier: 3.3.1
-        version: 3.3.1(tailwind-merge@3.6.0)(tailwindcss@4.3.0)
       twitter-api-v2:
         specifier: 1.29.0
         version: 1.29.0
