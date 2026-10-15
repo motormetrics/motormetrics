@@ -1,4 +1,3 @@
-import crypto from "node:crypto";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { auth } from "@web/lib/auth";
@@ -106,52 +105,20 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  const nonce = crypto.randomBytes(16).toString("base64");
-  const cspHeader = `
-      default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' *.motormetrics.app *.vercel-scripts.com vercel.live;
-      style-src 'self' 'unsafe-inline';
-      img-src 'self' blob: data: *.unsplash.com;
-      connect-src *;
-      font-src 'self';
-      frame-src 'self' vercel.live;
-      worker-src 'self' blob:;
-  `;
-  // TODO: Use this CSP after migrating to Vercel
-  // const cspHeader = `
-  //     default-src 'self';
-  //     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
-  //     style-src 'self' 'unsafe-inline';
-  //     img-src 'self' blob: data:;
-  //     connect-src *;
-  //     font-src 'self';
-  //     frame-src 'self' 'strict-dynamic';
-  //     worker-src 'self' blob:;
-  // `;
-
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-nonce", nonce);
-  requestHeaders.set(
-    "Permissions-Policy",
-    "camera=(), microphone=(), geolocation=(self), browsing-topics=()",
-  );
-
-  requestHeaders.set(
-    "Content-Security-Policy",
-    cspHeader.replace(/\s{2,}/g, " ").trim(),
-  );
-
-  requestHeaders.set("X-Robots-Tag", "all");
-
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|ingest(?:/|$)|monitoring(?:/|$)|favicon.ico|sitemap.xml|robots.txt).*)",
+    "/api/v1/:path*",
+    "/admin/:path*",
+    "/api/auth/:path*",
+    // Only Markdown requests reach the proxy for public pages, so page views,
+    // RSC navigations and prefetches skip Routing Middleware entirely.
+    {
+      source:
+        "/((?!_next/static|_next/image|api|ingest(?:/|$)|monitoring(?:/|$)|favicon.ico|sitemap.xml|robots.txt).*)",
+      has: [{ type: "header", key: "accept", value: ".*text/markdown.*" }],
+    },
   ],
 };
