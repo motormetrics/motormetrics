@@ -86,48 +86,47 @@ describe("AllCategoriesTable", () => {
     selectCategory.mockClear();
   });
 
-  it("should open on the highest premium first", async () => {
+  it("should open in category order", async () => {
     const screen = await renderTable();
 
     expect(rowLabels(screen)).toEqual([
-      "Category E",
-      "Category B",
       "Category A",
+      "Category B",
       "Category C",
       "Category D",
+      "Category E",
     ]);
     await expect
-      .element(screen.getByRole("columnheader", { name: "Premium" }))
-      .toHaveAttribute("aria-sort", "descending");
+      .element(screen.getByRole("columnheader", { name: "Category" }))
+      .toHaveAttribute("aria-sort", "ascending");
     await expect
-      .element(screen.getByText(/Sorted by premium, descending/))
+      .element(screen.getByText(/Sorted by category, ascending/))
       .toBeVisible();
   });
 
   it("should re-sort when a header is pressed", async () => {
     const screen = await renderTable();
 
-    await screen.getByRole("columnheader", { name: "Category" }).click();
+    await screen.getByRole("columnheader", { name: "Premium" }).click();
 
     await expect
-      .element(screen.getByRole("columnheader", { name: "Category" }))
-      .toHaveAttribute("aria-sort", "ascending");
+      .element(screen.getByRole("columnheader", { name: "Premium" }))
+      .toHaveAttribute("aria-sort", "descending");
     expect(rowLabels(screen)).toEqual([
-      "Category A",
+      "Category E",
       "Category B",
+      "Category A",
       "Category C",
       "Category D",
-      "Category E",
     ]);
     await expect
-      .element(screen.getByText(/Sorted by category, ascending/))
+      .element(screen.getByText(/Sorted by premium, descending/))
       .toBeVisible();
   });
 
   it("should flip the direction when the sorted header is pressed again", async () => {
     const screen = await renderTable();
 
-    await screen.getByRole("columnheader", { name: "Category" }).click();
     await screen.getByRole("columnheader", { name: "Category" }).click();
 
     const header = screen.getByRole("columnheader", { name: "Category" });
