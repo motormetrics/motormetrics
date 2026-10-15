@@ -1,14 +1,12 @@
 import { Skeleton, Typography } from "@heroui/react";
 import { RESULTS_FAQS } from "@web/app/(main)/(dashboard)/coe/results/components/faq-data";
-import {
-  LatestExerciseSub,
-  PremiumsByYear,
-  QuotaAndDemand,
-  RecordHighs,
-  ResultsByExercise,
-  ResultsChartPanel,
-  ResultsHeadline,
-} from "@web/app/(main)/(dashboard)/coe/results/components/results-report";
+import { LatestExerciseSub } from "@web/app/(main)/(dashboard)/coe/results/components/latest-exercise-sub";
+import { PremiumsByYear } from "@web/app/(main)/(dashboard)/coe/results/components/premiums-by-year";
+import { QuotaAndDemand } from "@web/app/(main)/(dashboard)/coe/results/components/quota-and-demand";
+import { RecordHighs } from "@web/app/(main)/(dashboard)/coe/results/components/record-highs";
+import { ResultsByExercise } from "@web/app/(main)/(dashboard)/coe/results/components/results-by-exercise";
+import { ResultsChartPanel } from "@web/app/(main)/(dashboard)/coe/results/components/results-chart-panel";
+import { ResultsHeadline } from "@web/app/(main)/(dashboard)/coe/results/components/results-headline";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import {
   Hairline,
