@@ -34,14 +34,20 @@ const rows = [
 const keys = (sorted: CategoryRow[]) => sorted.map((item) => item.categoryKey);
 
 describe("sortCategoryRows", () => {
-  it("should open on the highest premium first", () => {
+  it("should open in category order", () => {
     expect(keys(sortCategoryRows(rows, DEFAULT_SORT))).toEqual([
-      "E",
-      "B",
       "A",
+      "B",
       "C",
       "D",
+      "E",
     ]);
+  });
+
+  it("should sort by premium descending", () => {
+    expect(
+      keys(sortCategoryRows(rows, { direction: "desc", key: "premium" })),
+    ).toEqual(["E", "B", "A", "C", "D"]);
   });
 
   it("should sort by quota ascending", () => {
@@ -66,9 +72,9 @@ describe("sortCategoryRows", () => {
 
 describe("nextSort", () => {
   it("should flip the direction of the active column", () => {
-    expect(nextSort(DEFAULT_SORT, "premium")).toEqual({
-      direction: "asc",
-      key: "premium",
+    expect(nextSort(DEFAULT_SORT, "category")).toEqual({
+      direction: "desc",
+      key: "category",
     });
   });
 
@@ -77,18 +83,20 @@ describe("nextSort", () => {
       direction: "desc",
       key: "quota",
     });
-    expect(nextSort(DEFAULT_SORT, "category")).toEqual({
-      direction: "asc",
-      key: "category",
-    });
+    expect(nextSort({ direction: "desc", key: "premium" }, "category")).toEqual(
+      {
+        direction: "asc",
+        key: "category",
+      },
+    );
   });
 });
 
 describe("describeSort", () => {
   it("should name the column and direction for the footnote", () => {
-    expect(describeSort(DEFAULT_SORT)).toBe("premium, descending");
-    expect(describeSort({ direction: "asc", key: "category" })).toBe(
-      "category, ascending",
+    expect(describeSort(DEFAULT_SORT)).toBe("category, ascending");
+    expect(describeSort({ direction: "desc", key: "premium" })).toBe(
+      "premium, descending",
     );
   });
 });

@@ -15,6 +15,8 @@ export type PremiumPoint = {
   /** The tooltip header, e.g. "Sep 2026 · 2nd". */
   title: string;
   premium: number;
+  /** The paired category's premium in the same exercise, drawn as a second line. */
+  pairedPremium?: number;
   /** Change from the previous exercise as a ratio, e.g. `0.02` for +2.0%. */
   change?: number;
 };
@@ -58,11 +60,17 @@ const formatChange = (change: number): string =>
 export function PremiumTrendChart({
   data,
   domain,
+  label = "Premium",
+  pairedLabel,
   tickMonths,
   ticks,
 }: {
   data: PremiumPoint[];
   domain?: [number, number];
+  /** The series name in the tooltip. */
+  label?: string;
+  /** Names the `pairedPremium` line; without it only `premium` is drawn. */
+  pairedLabel?: string;
   /**
    * Months between x ticks, on first exercises; 12 or more shows years only.
    * Recharts drops any that would collide on a narrow chart. Without it
@@ -189,11 +197,42 @@ export function PremiumTrendChart({
           )
         }
         fill="url(#coePremiumFill)"
-        name="Premium"
+        name={label}
         stroke="var(--chart-1)"
         strokeWidth={3}
         type="monotone"
       />
+      {pairedLabel ? (
+        <AreaChart.Area
+          dataKey="pairedPremium"
+          dot={({ cx, cy, index }: PointProps) => {
+            const pairedPremium = data[lastIndex].pairedPremium;
+            return index === lastIndex &&
+              cx !== undefined &&
+              cy !== undefined &&
+              pairedPremium !== undefined ? (
+              <g key="paired-last-point">
+                <circle cx={cx} cy={cy} fill="var(--chart-2)" r={4} />
+                <text
+                  className="fill-foreground font-semibold text-xs tabular-nums"
+                  dominantBaseline="middle"
+                  x={cx + 10}
+                  y={cy}
+                >
+                  {formatCurrency(pairedPremium)}
+                </text>
+              </g>
+            ) : (
+              <g key={`paired-point-${index}`} />
+            );
+          }}
+          fill="none"
+          name={pairedLabel}
+          stroke="var(--chart-2)"
+          strokeWidth={3}
+          type="monotone"
+        />
+      ) : null}
       <AreaChart.Tooltip
         content={({ active, payload }) => {
           const point = payload?.[0]?.payload as PremiumPoint | undefined;
@@ -206,11 +245,20 @@ export function PremiumTrendChart({
               <ChartTooltip.Header>{point.title}</ChartTooltip.Header>
               <ChartTooltip.Item>
                 <ChartTooltip.Indicator color="var(--chart-1)" />
-                <ChartTooltip.Label>Premium</ChartTooltip.Label>
+                <ChartTooltip.Label>{label}</ChartTooltip.Label>
                 <ChartTooltip.Value>
                   {formatCurrency(point.premium)}
                 </ChartTooltip.Value>
               </ChartTooltip.Item>
+              {pairedLabel && point.pairedPremium !== undefined ? (
+                <ChartTooltip.Item>
+                  <ChartTooltip.Indicator color="var(--chart-2)" />
+                  <ChartTooltip.Label>{pairedLabel}</ChartTooltip.Label>
+                  <ChartTooltip.Value>
+                    {formatCurrency(point.pairedPremium)}
+                  </ChartTooltip.Value>
+                </ChartTooltip.Item>
+              ) : null}
               {point.change === undefined ? null : (
                 <span className="text-muted text-xs tabular-nums">
                   {formatChange(point.change)}

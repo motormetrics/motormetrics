@@ -21,8 +21,8 @@ export interface SortState {
   key: SortKey;
 }
 
-/** The comp opens on the dearest category first. */
-export const DEFAULT_SORT: SortState = { direction: "desc", key: "premium" };
+/** Opens in category order, A to E, so A and B sit together. */
+export const DEFAULT_SORT: SortState = { direction: "asc", key: "category" };
 
 /**
  * Clicking the active header flips its direction; clicking another header
