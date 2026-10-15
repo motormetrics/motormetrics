@@ -1,23 +1,18 @@
 import { Typography } from "@heroui/react";
-import { summariseMix } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
-import {
-  MonthTable,
-  PHONE_COLUMNS,
-} from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/month-table";
-import { VehicleTable } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-table";
-import {
-  type VehicleSeries,
-  type VehicleTrendPoint,
-  VehicleTypesChart,
-} from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-chart";
-import { MeasureSegment } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-filters";
+import type { VehicleSeries } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-chart";
 import { VehicleTypesHeadline } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-headline";
-import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { VehicleTypesLeaders } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-leaders";
+import { VehicleTypesMonthly } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-monthly";
+import { VehicleTypesRegistrations } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-registrations";
+import {
+  percentageOf,
+  SERIES_MONTHS,
+} from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-shared";
+import { VehicleTypesTrend } from "@web/app/(main)/(dashboard)/cars/vehicle-types/components/vehicle-types-trend";
 import {
   Hairline,
   SectionHead,
   SectionLink,
-  SourceNote,
 } from "@web/components/shared/overview";
 import {
   type CategoryMonthlyPoint,
@@ -27,10 +22,8 @@ import {
   getTopMakesByCategory,
 } from "@web/queries/cars/category-report";
 import {
-  formatChartMonth,
   formatMonthLabel,
   formatMonthName,
-  formatMonthShortLabel,
 } from "@web/utils/dates/format-month";
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
@@ -51,23 +44,6 @@ export const loadVehicleTypesSearchParams = createLoader({
   month: parseAsString,
   period: parseAsStringLiteral(PERIODS).withDefault("month"),
 });
-
-/**
- * The table's description column is authored copy, not data — there is no
- * equivalent of `FUEL_TYPE_LINKS` descriptions for vehicle types, so these are
- * written here. Keys are the values exactly as LTA records them.
- */
-const DESCRIPTIONS: Record<string, string> = {
-  "Coupe/Convertible": "Two doors, with a fixed or folding roof",
-  Hatchback: "Rear door opens onto the cabin, with no separate boot",
-  "Multi-purpose Vehicle": "Tall single-volume cabin, usually with a third row",
-  "Multi-purpose Vehicle/Station-wagon":
-    "MPVs and station-wagons, recorded by LTA as one class",
-  Others: "Vehicle types LTA does not report separately",
-  Sedan: "Separate enclosed boot behind the cabin",
-  "Sports Utility Vehicle": "Raised ride height, often with all-wheel drive",
-  "Station-wagon": "Extended roof over the load area, tailgate at the rear",
-};
 
 /**
  * The comp's colour for each LTA vehicle type, shared by the mix bar, the
@@ -98,9 +74,6 @@ export function periodLabelFor(period: "month" | "ytd", month: string): string {
     : formatMonthLabel(month);
 }
 
-/** How far back the trend chart reaches from the selected month. */
-const SERIES_MONTHS = 12;
-
 /** How many types the chart plots and the month-by-month table columns. */
 const CHARTED_TYPES = 6;
 
@@ -118,10 +91,6 @@ function yearToDateMonths(month: string): string[] {
 /** The same span a year earlier, for the year-on-year column. */
 function shiftedBackAYear(months: string[]): string[] {
   return months.map((month) => shiftMonth(month, -12));
-}
-
-function percentageOf(count: number, total: number): number {
-  return total > 0 ? (count / total) * 100 : 0;
 }
 
 function sumCounts(rows: { count: number }[]): number {
@@ -176,12 +145,6 @@ export async function VehicleTypesReport({
   const priorByName = new Map(
     priorTotals.map(({ count, name }) => [name, count]),
   );
-  const electricByName = new Map(
-    electricShares.map(({ electric, name, total: typeTotal }) => [
-      name,
-      percentageOf(electric, typeTotal),
-    ]),
-  );
 
   const mix = rows.map(({ count, name }) => ({
     color: vehicleColour(name),
@@ -193,7 +156,6 @@ export async function VehicleTypesReport({
   // SUVs are the comp's subject; a period without any falls back to the
   // largest vehicle type so the headline still reads.
   const featured = mix.find(({ name }) => name === FEATURED_TYPE) ?? mix[0];
-  const summary = summariseMix(periodSpan, mix);
   const featuredPriorShare = percentageOf(
     priorByName.get(featured.name) ?? 0,
     priorTotal,
@@ -217,10 +179,6 @@ export async function VehicleTypesReport({
     .sort(([, a], [, b]) => b - a)
     .slice(0, CHARTED_TYPES)
     .map(([name]) => ({ name }));
-  // Phones keep the leading types only; the source note names the rest.
-  const phoneHiddenTypes = chartedTypes
-    .slice(PHONE_COLUMNS)
-    .map(({ name }) => formatVehicleType(name));
   const chartSeries: VehicleSeries[] = chartedTypes.map(({ name }, index) => ({
     color: vehicleColour(name),
     key: `type${index}`,
@@ -242,31 +200,6 @@ export async function VehicleTypesReport({
     };
   });
 
-  const chartData: VehicleTrendPoint[] = monthlyRows.map(
-    ({ cells, month: seriesMonth, total: monthTotal }, index) => ({
-      label: formatChartMonth(seriesMonth),
-      title: formatMonthShortLabel(seriesMonth),
-      total: monthTotal,
-      year:
-        index === 0 || seriesMonth.endsWith("-01")
-          ? seriesMonth.slice(0, 4)
-          : "",
-      ...Object.fromEntries(
-        cells.map(({ count, share }, index) => [
-          `type${index}`,
-          measure === "share" ? Number(share.toFixed(1)) : count,
-        ]),
-      ),
-    }),
-  );
-  const chartTicks = axisTicks(
-    chartData.flatMap((point) =>
-      chartSeries.map(({ key }) => Number(point[key])),
-    ),
-    { zero: true },
-  );
-  const gridStep = (chartTicks[1] ?? 0) - (chartTicks[0] ?? 0);
-
   return (
     <>
       <VehicleTypesHeadline
@@ -282,135 +215,38 @@ export async function VehicleTypesReport({
 
       <Hairline />
 
-      <section className="flex flex-col gap-4">
-        <SectionHead
-          caption={`${formatMonthLabel(seriesMonths[0])} to ${formatMonthLabel(month)} · hover or tap for each month`}
-          eyebrow="Trend"
-          title={
-            measure === "share"
-              ? "Share of registrations by vehicle type"
-              : "Registrations by vehicle type"
-          }
-          trailing={<MeasureSegment />}
-        />
-        <VehicleTypesChart
-          data={chartData}
-          measure={measure}
-          series={chartSeries}
-          ticks={chartTicks}
-        />
-        <SourceNote>
-          {measure === "share"
-            ? "Share of each month's new car registrations"
-            : "New car registrations by month"}
-          . Y-axis starts at zero; gridlines every{" "}
-          {measure === "share"
-            ? `${gridStep} points`
-            : `${gridStep.toLocaleString("en-SG")} cars`}
-          . The trend covers {SERIES_MONTHS} months whatever the period switch
-          is set to.
-        </SourceNote>
-      </section>
+      <VehicleTypesTrend
+        chartSeries={chartSeries}
+        measure={measure}
+        month={month}
+        monthlyRows={monthlyRows}
+      />
 
       <Hairline />
 
-      <section className="flex flex-col gap-4">
-        <SectionHead
-          caption={`${periodLabel} · ${rows.length} recorded by LTA · select a column heading to sort`}
-          eyebrow="Registrations"
-          title="All vehicle types"
-        />
-        <VehicleTable
-          countLabel={period === "ytd" ? "Year to date" : "Registrations"}
-          rows={mix.map(({ color, count, label, name, share }) => ({
-            change:
-              share - percentageOf(priorByName.get(name) ?? 0, priorTotal),
-            color,
-            count,
-            description: DESCRIPTIONS[name] ?? "—",
-            electric: electricByName.get(name) ?? null,
-            label,
-            name,
-            share,
-          }))}
-          yearAgoLabel={String(year - 1)}
-        />
-        {summary ? (
-          <Typography.Paragraph
-            className="tabular-nums"
-            color="muted"
-            size="sm"
-          >
-            {summary}
-          </Typography.Paragraph>
-        ) : null}
-        <SourceNote>
-          Electric is the battery-electric share of each type. Change is in
-          percentage points of share against the same period in {year - 1}.
-          Colour is not used for direction.
-        </SourceNote>
-      </section>
+      <VehicleTypesRegistrations
+        electricShares={electricShares}
+        mix={mix}
+        period={period}
+        periodLabel={periodLabel}
+        periodSpan={periodSpan}
+        priorByName={priorByName}
+        priorTotal={priorTotal}
+        year={year}
+      />
 
       <Hairline />
 
-      <section className="flex flex-col gap-4">
-        <SectionHead
-          caption={`${SERIES_MONTHS} months to ${formatMonthLabel(month)}, newest first`}
-          eyebrow="Month by month"
-          title="Share of each month's registrations"
-        />
-        <MonthTable
-          rows={[...monthlyRows].reverse()}
-          selectedMonth={month}
-          vehicleTypes={chartedTypes.map(({ name }) => name)}
-        />
-        <SourceNote>
-          Share of each month's new car registrations, with the car count
-          beneath on wider screens.
-          {phoneHiddenTypes.length > 0
-            ? ` ${phoneHiddenTypes.join(", ")} and the monthly total are hidden on small screens.`
-            : " The monthly total is hidden on small screens."}
-        </SourceNote>
-      </section>
+      <VehicleTypesMonthly
+        month={month}
+        monthlyRows={monthlyRows}
+        vehicleTypes={chartedTypes.map(({ name }) => name)}
+      />
 
       <Hairline />
 
       <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-7 lg:gap-14">
-        <section className="flex min-w-0 flex-col gap-4 lg:col-span-4">
-          <SectionHead
-            caption={`${periodLabel} · top three makes in each type`}
-            eyebrow="Makes"
-            title="Leading makes by vehicle type"
-          />
-          <ul className="flex flex-col">
-            {leaders.map(({ makes, name, total: typeTotal }) => (
-              <li
-                className="flex items-baseline gap-4 border-separator border-b py-3 max-md:flex-col max-md:gap-0.5"
-                key={name}
-              >
-                <span className="w-40 shrink-0 font-semibold text-sm">
-                  {formatVehicleType(name)}
-                </span>
-                <span className="flex min-w-0 flex-col gap-0.5">
-                  <span className="text-sm">
-                    {makes.map(({ make }) => make).join(", ") || "—"}
-                  </span>
-                  {makes[0] ? (
-                    <span className="text-subtle text-xs tabular-nums">
-                      {makes[0].make}{" "}
-                      {percentageOf(makes[0].count, typeTotal).toFixed(1)}% of{" "}
-                      {formatVehicleType(name)}
-                    </span>
-                  ) : null}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <SourceNote>
-            Share is the leading make's share of that vehicle type's
-            registrations.
-          </SourceNote>
-        </section>
+        <VehicleTypesLeaders leaders={leaders} periodLabel={periodLabel} />
 
         <section className="flex min-w-0 flex-col gap-4 lg:col-span-3">
           <SectionHead
