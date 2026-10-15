@@ -3,6 +3,7 @@ import { buttonVariants } from "@heroui/styles";
 import { EmptyState, NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { slugify } from "@motormetrics/utils/slugify";
+import { TwoShadeTrendChart } from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
 import {
   FuelTypeTabs,
   PeriodTabs,
@@ -13,7 +14,6 @@ import {
   periodLabel,
   periodWindow,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
-import { RegistrationsChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/registrations-chart";
 import { summariseMake } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/summary";
 import {
   loadSearchParams,
@@ -385,7 +385,7 @@ export async function MakeReport({
           eyebrow="Trend"
           title={`${make}${fuelType ? ` ${fuelType}` : ""} registrations by month`}
         />
-        <RegistrationsChart
+        <TwoShadeTrendChart
           data={series.map(({ count, month: seriesMonth }, index) => {
             const isSelected = seriesMonth === month;
             return {
@@ -400,10 +400,14 @@ export async function MakeReport({
                   : "",
             };
           })}
+          height={220}
+          maxBarSize={40}
+          thinTicks
           ticks={axisTicks(
             series.map(({ count }) => count),
             { zero: true },
           )}
+          tooltipLabel="Registrations"
         />
         <SourceNote>
           New car registrations, {make}

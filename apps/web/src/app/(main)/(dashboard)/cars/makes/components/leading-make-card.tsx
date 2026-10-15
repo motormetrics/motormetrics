@@ -1,9 +1,9 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
-  LeaderTrendChart,
-  type LeaderTrendPoint,
-} from "@web/app/(main)/(dashboard)/cars/makes/components/leader-trend-chart";
+  TwoShadeTrendChart,
+  type TwoShadeTrendPoint,
+} from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
 import {
   loadMakeRows,
   periodLabel,
@@ -46,7 +46,7 @@ export async function LeadingMakeCard({
 
   const fuelWord = isFuelFilter(fuel) ? fuel.toLowerCase() : null;
   const months = rollingMonths(latestMonth);
-  const data: LeaderTrendPoint[] = leader.trend.map((count, index) => {
+  const data: TwoShadeTrendPoint[] = leader.trend.map((count, index) => {
     const month = months[index];
     const isLatest = index === leader.trend.length - 1;
     return {
@@ -89,9 +89,12 @@ export async function LeadingMakeCard({
         {RANGE_LABELS[range]}
       </Typography.Paragraph>
       <div className="mt-2.5">
-        <LeaderTrendChart
+        <TwoShadeTrendChart
           data={data}
+          height={210}
+          maxBarSize={30}
           ticks={axisTicks(leader.trend, { zero: true })}
+          tooltipLabel="Registrations"
         />
       </div>
       <SourceNote>
