@@ -1,36 +1,27 @@
 import { Typography } from "@heroui/react";
-import { summariseMix } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
-import { FuelTable } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-table";
-import {
-  type FuelSeries,
-  type FuelTrendPoint,
-  FuelTypesChart,
-} from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-chart";
-import {
-  MeasureSegment,
-  PeriodSegment,
-} from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-filters";
+import type { FuelSeries } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-chart";
+import { PeriodSegment } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-filters";
 import { FuelTypesHeadline } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-headline";
-import { MonthTable } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/month-table";
-import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { FuelTypesLeaders } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-leaders";
+import { FuelTypesMonthly } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-monthly";
+import { FuelTypesRegistrations } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-registrations";
+import {
+  percentageOf,
+  SERIES_MONTHS,
+} from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-shared";
+import { FuelTypesTrend } from "@web/app/(main)/(dashboard)/cars/fuel-types/components/fuel-types-trend";
 import {
   Hairline,
   SectionHead,
   SectionLink,
-  SourceNote,
 } from "@web/components/shared/overview";
-import { FUEL_TYPE_LINKS } from "@web/config";
 import {
   type CategoryMonthlyPoint,
   getCategoryMonthlySeries,
   getCategoryTotals,
   getTopMakesByCategory,
 } from "@web/queries/cars/category-report";
-import {
-  formatChartMonth,
-  formatMonthLabel,
-  formatMonthShortLabel,
-} from "@web/utils/dates/format-month";
+import { formatMonthLabel } from "@web/utils/dates/format-month";
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import {
@@ -51,20 +42,6 @@ const loadFuelTypesSearchParams = createLoader({
 });
 
 /**
- * The table's description column is authored copy, not data. Reusing the
- * navigation descriptions keeps one wording per fuel type across the site;
- * `Others` has no navigation entry because it has no detail page worth linking.
- */
-const DESCRIPTIONS: Record<string, string> = {
-  ...Object.fromEntries(
-    FUEL_TYPE_LINKS.filter(({ description }) => description).map(
-      ({ description, label }) => [label, description as string],
-    ),
-  ),
-  Others: "Fuel types LTA does not report separately",
-};
-
-/**
  * The comp's colour for each LTA fuel label, shared by the mix bar, the trend
  * and the tables; anything else takes the lightest ramp step.
  */
@@ -83,9 +60,6 @@ const fuelColour = (name: string): string =>
 
 /** The fuel type the headline features, when the period has any. */
 const FEATURED_FUEL = "Electric";
-
-/** How far back the trend chart reaches from the selected month. */
-const SERIES_MONTHS = 12;
 
 /**
  * How many fuel types the chart plots and the month-by-month table columns:
@@ -123,10 +97,6 @@ function yearToDateMonths(month: string): string[] {
 /** The same span a year earlier, for the year-on-year column. */
 function shiftedBackAYear(months: string[]): string[] {
   return months.map((month) => shiftMonth(month, -12));
-}
-
-function percentageOf(count: number, total: number): number {
-  return total > 0 ? (count / total) * 100 : 0;
 }
 
 function sumCounts(rows: { count: number }[]): number {
@@ -185,10 +155,6 @@ export async function FuelTypesReport({
   // Electric is the comp's subject; a period without any falls back to the
   // largest fuel type so the headline still reads.
   const featured = mix.find(({ name }) => name === FEATURED_FUEL) ?? mix[0];
-  const summary = summariseMix(
-    periodLabel,
-    mix.map(({ name, share }) => ({ label: name, share })),
-  );
   const featuredPriorShare = percentageOf(
     priorByName.get(featured.name) ?? 0,
     priorTotal,
@@ -245,31 +211,6 @@ export async function FuelTypesReport({
     };
   });
 
-  const chartData: FuelTrendPoint[] = monthlyRows.map(
-    ({ cells, month: seriesMonth, total: monthTotal }, index) => ({
-      label: formatChartMonth(seriesMonth),
-      title: formatMonthShortLabel(seriesMonth),
-      total: monthTotal,
-      year:
-        index === 0 || seriesMonth.endsWith("-01")
-          ? seriesMonth.slice(0, 4)
-          : "",
-      ...Object.fromEntries(
-        cells.map(({ count, share }, index) => [
-          `type${index}`,
-          measure === "share" ? Number(share.toFixed(1)) : count,
-        ]),
-      ),
-    }),
-  );
-  const chartTicks = axisTicks(
-    chartData.flatMap((point) =>
-      chartSeries.map(({ key }) => Number(point[key])),
-    ),
-    { zero: true },
-  );
-  const gridStep = (chartTicks[1] ?? 0) - (chartTicks[0] ?? 0);
-
   return (
     <>
       <div className="flex flex-col gap-5">
@@ -289,130 +230,39 @@ export async function FuelTypesReport({
 
       <Hairline />
 
-      <section className="flex flex-col gap-4">
-        <SectionHead
-          caption={`${SERIES_MONTHS} months to ${formatMonthLabel(month)} · hover or tap for values`}
-          eyebrow="Trend"
-          title={
-            measure === "share"
-              ? "Share of registrations by fuel type"
-              : "Registrations by fuel type"
-          }
-          trailing={<MeasureSegment />}
-        />
-        <FuelTypesChart
-          data={chartData}
-          measure={measure}
-          series={chartSeries}
-          ticks={chartTicks}
-        />
-        <SourceNote>
-          Source: LTA via DataMall ·{" "}
-          {measure === "share"
-            ? "Share of each month's new car registrations"
-            : "New car registrations each month"}{" "}
-          · Y-axis starts at zero; gridlines every{" "}
-          {measure === "share"
-            ? `${gridStep} pts`
-            : `${gridStep.toLocaleString("en-SG")} cars`}
-          .
-        </SourceNote>
-      </section>
+      <FuelTypesTrend
+        chartSeries={chartSeries}
+        measure={measure}
+        month={month}
+        monthlyRows={monthlyRows}
+      />
 
       <Hairline />
 
-      <section className="flex flex-col gap-4">
-        <SectionHead
-          caption={`${periodLabel} · ${rows.length} recorded by LTA`}
-          eyebrow="Registrations"
-          title="All fuel types"
-        />
-        <FuelTable
-          countLabel={period === "ytd" ? "Year to date" : "Cars"}
-          rows={mix.map(({ color, count, name, share }) => ({
-            change:
-              share - percentageOf(priorByName.get(name) ?? 0, priorTotal),
-            color,
-            count,
-            description: DESCRIPTIONS[name] ?? "—",
-            name,
-            share,
-          }))}
-          yearAgoLabel={String(year - 1)}
-        />
-        {summary ? (
-          <Typography.Paragraph
-            className="tabular-nums"
-            color="muted"
-            size="sm"
-          >
-            {summary}
-          </Typography.Paragraph>
-        ) : null}
-        <SourceNote>
-          Share is of {total.toLocaleString("en-SG")} new cars. Change is in
-          percentage points against the same period of {year - 1}; colour is not
-          used for direction. Select a column heading to sort.
-        </SourceNote>
-      </section>
+      <FuelTypesRegistrations
+        mix={mix}
+        period={period}
+        periodLabel={periodLabel}
+        priorByName={priorByName}
+        priorTotal={priorTotal}
+        total={total}
+        year={year}
+      />
 
       <Hairline />
 
-      <section className="flex flex-col gap-4">
-        <SectionHead
-          caption={`${SERIES_MONTHS} months to ${formatMonthLabel(month)}`}
-          eyebrow="Month by month"
-          title="Share of each month's registrations"
-        />
-        <MonthTable
-          fuelTypes={chartedTypes.map(({ name }) => name)}
-          rows={[...monthlyRows].reverse()}
-          selectedMonth={month}
-        />
-        <SourceNote>
-          Share of all new car registrations in each month, with the number of
-          cars.
-          {omittedTypes.length > 0
-            ? ` ${omittedTypes.join(", ")} ${omittedTypes.length === 1 ? "is" : "are"} not shown: no more than ${omittedMonthlyMax.toLocaleString("en-SG")} ${omittedMonthlyMax === 1 ? "car was" : "cars were"} registered in any of these months.`
-            : null}
-        </SourceNote>
-      </section>
+      <FuelTypesMonthly
+        fuelTypes={chartedTypes.map(({ name }) => name)}
+        month={month}
+        monthlyRows={monthlyRows}
+        omittedMonthlyMax={omittedMonthlyMax}
+        omittedTypes={omittedTypes}
+      />
 
       <Hairline />
 
       <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-7 lg:gap-14">
-        <section className="flex min-w-0 flex-col gap-4 lg:col-span-4">
-          <SectionHead
-            caption={`${periodLabel} · top three makes in each`}
-            eyebrow="Makes"
-            title="Leading makes by fuel type"
-          />
-          <ul className="flex flex-col">
-            {leaders.map(({ makes, name, total: typeTotal }) => (
-              <li
-                className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-separator border-b py-3"
-                key={name}
-              >
-                <span className="w-44 shrink-0 font-semibold text-sm max-md:w-auto max-md:flex-1">
-                  {name}
-                </span>
-                <span className="min-w-0 flex-1 text-muted-strong text-sm max-md:order-last max-md:basis-full">
-                  {makes.map(({ make }) => make).join(", ") || "—"}
-                </span>
-                {makes[0] ? (
-                  <span className="whitespace-nowrap text-right text-muted text-xs tabular-nums">
-                    {makes[0].make}{" "}
-                    {percentageOf(makes[0].count, typeTotal).toFixed(1)}% of{" "}
-                    {name}
-                  </span>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-          <SourceNote>
-            Share is of that fuel type's registrations in the period.
-          </SourceNote>
-        </section>
+        <FuelTypesLeaders leaders={leaders} periodLabel={periodLabel} />
 
         <section className="flex min-w-0 flex-col gap-4 lg:col-span-3">
           <SectionHead eyebrow="Method" title="How LTA classifies fuel types" />

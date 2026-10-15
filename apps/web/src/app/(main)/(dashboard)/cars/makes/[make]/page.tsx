@@ -1,11 +1,11 @@
 import { Skeleton, Typography } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
+import { TwoShadeTrendChart } from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
 import { CoeComparisonChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/coe-comparison-chart";
 import { buildMakeFaqs } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/faq-data";
 import { MakeReport } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
 import { MakeSearch } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-search";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
-import { RegistrationsChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/registrations-chart";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
@@ -388,7 +388,7 @@ async function CarMakeCoeSection({ params }: Pick<PageProps, "params">) {
         eyebrow="Context"
         title="Registrations against COE premiums"
       />
-      <RegistrationsChart
+      <TwoShadeTrendChart
         data={coeComparison.map(({ registrations }, index) => {
           const isLatest = index === coeComparison.length - 1;
           return {
@@ -398,10 +398,14 @@ async function CarMakeCoeSection({ params }: Pick<PageProps, "params">) {
             latest: isLatest ? registrations : 0,
           };
         })}
+        height={220}
+        maxBarSize={40}
+        thinTicks
         ticks={axisTicks(
           coeComparison.map(({ registrations }) => registrations),
           { zero: true },
         )}
+        tooltipLabel="Registrations"
       />
       <SourceNote>
         {exactMake} registrations by month, all fuel types.

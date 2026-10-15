@@ -1,9 +1,9 @@
 import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
-  RegistrationsTrendChart,
-  type TrendPoint,
-} from "@web/app/(main)/(dashboard)/cars/components/registrations-trend-chart";
+  TwoShadeTrendChart,
+  type TwoShadeTrendPoint,
+} from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
 import {
   axisTicks,
@@ -120,12 +120,12 @@ export async function RegistrationsTrend({
     Math.max(0, selectedIndex + 1 - TREND_MONTHS),
     selectedIndex + 1,
   );
-  const data: TrendPoint[] = window.map((row, index) => ({
+  const data: TwoShadeTrendPoint[] = window.map((row, index) => ({
+    count: row.total,
+    earlier: row.month === month ? 0 : row.total,
     label: formatChartMonth(row.month),
-    other: row.month === month ? 0 : row.total,
-    selected: row.month === month ? row.total : 0,
+    latest: row.month === month ? row.total : 0,
     title: formatMonthLabel(row.month),
-    total: row.total,
     year: index === 0 || row.month.endsWith("-01") ? row.month.slice(0, 4) : "",
   }));
   const ticks = axisTicks(
@@ -152,7 +152,13 @@ export async function RegistrationsTrend({
         eyebrow="Trend"
         title="Registrations by month"
       />
-      <RegistrationsTrendChart data={data} ticks={ticks} />
+      <TwoShadeTrendChart
+        data={data}
+        height={260}
+        maxBarSize={48}
+        ticks={ticks}
+        tooltipLabel="New cars"
+      />
       {summary ? (
         <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
           {summary}
