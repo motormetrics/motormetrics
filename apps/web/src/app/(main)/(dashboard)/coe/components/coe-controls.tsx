@@ -26,11 +26,49 @@ import { type ReactNode, useTransition } from "react";
 const SEGMENT_CLASS = "max-[720px]:w-full";
 const SEGMENT_ITEM_CLASS = "max-[720px]:flex-1 max-[720px]:px-2";
 
+const captureFilter = (filter: "category" | "range", value: string) =>
+  posthog.capture("dashboard_filter_changed", { filter, value });
+
 /**
- * Every control on the COE overview writes to the URL with `shallow: false`,
- * so the server re-renders the page with the new slice and the page itself
- * stays a server component. `startTransition` keeps the outgoing view on
- * screen while that round-trip is in flight.
+ * The COE overview's category and range. The controls write with
+ * `shallow: false`, so the server re-renders the page with the new selection
+ * and the sections stay server components. `startTransition` keeps the
+ * outgoing view on screen while that round-trip is in flight.
+ */
+export function useCoeOverview() {
+  const [, startTransition] = useTransition();
+  const [category, setCategory] = useQueryState(
+    "category",
+    coeOverviewSearchParams.category.withOptions({
+      shallow: false,
+      startTransition,
+    }),
+  );
+  const [range, setRange] = useQueryState(
+    "range",
+    coeOverviewSearchParams.range.withOptions({
+      shallow: false,
+      startTransition,
+    }),
+  );
+
+  const selectCategory = (key: CategoryKey) => {
+    captureFilter("category", key);
+    setCategory(key);
+  };
+
+  const selectRange = (option: ExerciseRange) => {
+    captureFilter("range", option);
+    setRange(option);
+  };
+
+  return { category, range, selectCategory, selectRange };
+}
+
+/**
+ * The category switch on `/coe/premiums`, which writes with `shallow: false`
+ * so the server re-renders that page with the new slice. `startTransition`
+ * keeps the outgoing view on screen while that round-trip is in flight.
  */
 export function useCoeCategory() {
   const [isPending, startTransition] = useTransition();
@@ -43,25 +81,44 @@ export function useCoeCategory() {
   );
 
   const selectCategory = (category: CategoryKey) => {
-    posthog.capture("dashboard_filter_changed", {
-      filter: "category",
-      value: category,
-    });
+    captureFilter("category", category);
     setCategory(category);
   };
 
   return { isPending, selectCategory };
 }
 
-/** The A–E switch at the head of the page. */
+/** The A–E switch on `/coe/premiums`, wired to the URL. */
 export function CategoryTabs({ selected }: { selected: CategoryKey }) {
   const { isPending, selectCategory } = useCoeCategory();
 
   return (
+    <CategorySegment
+      className={cn(isPending && "opacity-70")}
+      onSelect={selectCategory}
+      selected={selected}
+    />
+  );
+}
+
+/**
+ * The A–E switch itself. The selection and handler come in as props, so the
+ * overview's sections can draw it from the selection they are given.
+ */
+export function CategorySegment({
+  className,
+  onSelect,
+  selected,
+}: {
+  className?: string;
+  onSelect?: (category: CategoryKey) => void;
+  selected: CategoryKey;
+}) {
+  return (
     <Segment
       aria-label="COE category"
-      className={cn(SEGMENT_CLASS, isPending && "opacity-70")}
-      onSelectionChange={(key) => selectCategory(key as CategoryKey)}
+      className={cn(SEGMENT_CLASS, className)}
+      onSelectionChange={(key) => onSelect?.(key as CategoryKey)}
       selectedKey={selected}
       size="md"
       variant="ghost"
@@ -108,28 +165,19 @@ export function CategorySelect({
 }
 
 /** The range switch beside the "Premiums by exercise" heading. */
-export function RangeTabs() {
-  const [isPending, startTransition] = useTransition();
-  const [range, setRange] = useQueryState(
-    "range",
-    coeOverviewSearchParams.range.withOptions({
-      shallow: false,
-      startTransition,
-    }),
-  );
-
+export function RangeTabs({
+  onSelect,
+  selected,
+}: {
+  onSelect?: (range: ExerciseRange) => void;
+  selected: ExerciseRange;
+}) {
   return (
     <Segment
       aria-label="Exercise range"
-      className={cn(SEGMENT_CLASS, isPending && "opacity-70")}
-      onSelectionChange={(option) => {
-        posthog.capture("dashboard_filter_changed", {
-          filter: "range",
-          value: option,
-        });
-        setRange(option as ExerciseRange);
-      }}
-      selectedKey={range}
+      className={SEGMENT_CLASS}
+      onSelectionChange={(option) => onSelect?.(option as ExerciseRange)}
+      selectedKey={selected}
       size="md"
       variant="ghost"
     >

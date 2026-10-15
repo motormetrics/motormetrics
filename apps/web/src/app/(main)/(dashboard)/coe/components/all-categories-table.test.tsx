@@ -5,10 +5,6 @@ import { render } from "vitest-browser-react";
 
 const selectCategory = vi.fn();
 
-vi.mock("@web/app/(main)/(dashboard)/coe/components/coe-controls", () => ({
-  useCoeCategory: () => ({ selectCategory }),
-}));
-
 vi.mock("posthog-js", () => ({ default: { capture: vi.fn() } }));
 
 /** Deliberately not in premium order, so the default sort is visible. */
@@ -79,7 +75,9 @@ const rowLabels = (screen: TableScreen) =>
     .map((cell) => cell.textContent?.match(/Category [A-E]/)?.[0]);
 
 const renderTable = () =>
-  render(<AllCategoriesTable rows={rows} selected="A" />);
+  render(
+    <AllCategoriesTable onSelect={selectCategory} rows={rows} selected="A" />,
+  );
 
 describe("AllCategoriesTable", () => {
   beforeEach(() => {

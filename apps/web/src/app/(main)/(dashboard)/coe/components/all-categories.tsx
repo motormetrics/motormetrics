@@ -1,6 +1,6 @@
 import { Typography } from "@heroui/react";
 import type { CategoryRow } from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
-import { AllCategoriesTable } from "@web/app/(main)/(dashboard)/coe/components/all-categories-table";
+import { AllCategoriesTableSelected } from "@web/app/(main)/(dashboard)/coe/components/all-categories-table";
 import {
   CATEGORY_DESCRIPTIONS,
   COE_CATEGORIES,
@@ -86,7 +86,7 @@ export async function AllCategories({
         </Typography.Paragraph>
         <SectionLink href="/coe/results">All COE results</SectionLink>
       </div>
-      <AllCategoriesTable rows={rows} selected={selected} />
+      <AllCategoriesTableSelected rows={rows} selected={selected} />
       {summary ? (
         <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
           {summary}
