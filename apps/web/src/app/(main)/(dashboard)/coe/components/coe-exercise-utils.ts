@@ -26,6 +26,17 @@ export const CATEGORY_DESCRIPTIONS: Record<COECategory, string> = {
   "Category E": "Open category",
 };
 
+/**
+ * Categories A and B are read side by side until LTA's merged car category is
+ * in force, so selecting either on the overview shows both. Remove once the
+ * merger takes effect.
+ */
+const PAIRED_CATEGORIES: COECategory[] = ["Category A", "Category B"];
+
+/** The categories shown for a selection: A and B together, any other alone. */
+export const pairedCategories = (category: COECategory): COECategory[] =>
+  PAIRED_CATEGORIES.includes(category) ? PAIRED_CATEGORIES : [category];
+
 export const toCategory = (key: CategoryKey): COECategory =>
   `Category ${key}` as COECategory;
 

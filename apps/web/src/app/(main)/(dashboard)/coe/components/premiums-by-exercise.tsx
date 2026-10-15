@@ -6,6 +6,7 @@ import {
   type ExercisePremium,
   formatExerciseTick,
   groupByExercise,
+  pairedCategories,
   premiumAxisTicks,
   premiumRangeStats,
   toCategory,
@@ -44,11 +45,24 @@ export async function PremiumsByExercise({
   ]);
 
   const category = toCategory(categoryKey);
+  // A and B share the chart until the merger; the selected one leads.
+  const paired = pairedCategories(category).find(
+    (shownCategory) => shownCategory !== category,
+  );
   const exercises = groupByExercise(results).flatMap((exercise) => {
     const premium = exercise.results[category]?.premium;
     return premium === undefined
       ? []
-      : [{ biddingNo: exercise.biddingNo, month: exercise.month, premium }];
+      : [
+          {
+            biddingNo: exercise.biddingNo,
+            month: exercise.month,
+            pairedPremium: paired
+              ? exercise.results[paired]?.premium
+              : undefined,
+            premium,
+          },
+        ];
   });
   // One extra exercise so the first visible point still has a previous
   // exercise to measure its change against.
@@ -56,17 +70,31 @@ export async function PremiumsByExercise({
   const view = withBaseline.slice(-Number(range));
   const offset = withBaseline.length - view.length;
   const stats = premiumRangeStats(view);
-  const ticks = premiumAxisTicks(view.map((exercise) => exercise.premium));
+  const ticks = premiumAxisTicks(
+    view.flatMap((exercise) =>
+      exercise.pairedPremium === undefined
+        ? [exercise.premium]
+        : [exercise.premium, exercise.pairedPremium],
+    ),
+  );
   const step = ticks.length > 1 ? ticks[1] - ticks[0] : undefined;
 
   return (
     <div className="flex flex-col gap-5">
       {/* At 720px and below the trailing slot spans the row so the switch can. */}
       <SectionHead
-        caption={`${CATEGORY_DESCRIPTIONS[category]} · change category above or in the table`}
+        caption={
+          paired
+            ? `Figures for ${category}, with ${paired} alongside until the merged category is in force · change category above or in the table`
+            : `${CATEGORY_DESCRIPTIONS[category]} · change category above or in the table`
+        }
         className="max-[720px]:[&>:last-child]:w-full"
         eyebrow="Bidding history"
-        title={`${category} premium by exercise`}
+        title={
+          paired
+            ? `${pairedCategories(category).join(" and ")} premiums by exercise`
+            : `${category} premium by exercise`
+        }
         trailing={<RangeTabs />}
       />
       {stats ? (
@@ -93,6 +121,26 @@ export async function PremiumsByExercise({
               value={formatChange(stats.change)}
             />
           </div>
+          {paired ? (
+            <div className="flex gap-4 text-muted-strong text-xs">
+              {[
+                { color: "var(--chart-1)", name: category },
+                { color: "var(--chart-2)", name: paired },
+              ].map((series) => (
+                <span
+                  className="inline-flex items-center gap-1.5"
+                  key={series.name}
+                >
+                  <span
+                    aria-hidden
+                    className="h-2.5 w-3 rounded-xs"
+                    style={{ background: series.color }}
+                  />
+                  {series.name}
+                </span>
+              ))}
+            </div>
+          ) : null}
           <PremiumTrendChart
             data={view.map((exercise, index) => {
               const previous = withBaseline[index + offset - 1];
@@ -101,10 +149,15 @@ export async function PremiumsByExercise({
                   ? changeRatio(exercise.premium, previous.premium)
                   : undefined,
                 label: formatExerciseTick(exercise),
+                pairedPremium: exercise.pairedPremium,
                 premium: exercise.premium,
-                title: `${exerciseWithYear(exercise)} · ${category}`,
+                title: paired
+                  ? exerciseWithYear(exercise)
+                  : `${exerciseWithYear(exercise)} · ${category}`,
               };
             })}
+            label={paired ? category : undefined}
+            pairedLabel={paired}
             ticks={ticks}
           />
           <SourceNote>

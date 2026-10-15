@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { CategoryTabs } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
@@ -8,6 +8,7 @@ import {
   formatPremiumChange,
   groupByExercise,
   nextExercise,
+  pairedCategories,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
@@ -20,8 +21,8 @@ import type { SearchParams } from "nuqs/server";
 
 /**
  * The opening block of /coe: the category switch, the selected category's
- * latest premium with its change on the previous exercise, and a ruled grid
- * of that exercise's figures. Stacks into one column at 900px and below.
+ * latest premium with its change on the previous exercise (A and B side by
+ * side, see `pairedCategories`), and a ruled grid of that exercise's figures. Stacks into one column at 900px and below.
  */
 export async function CoeHeadline({
   searchParams,
@@ -43,9 +44,9 @@ export async function CoeHeadline({
   }
 
   const category = toCategory(categoryKey);
+  const shown = pairedCategories(category);
+  const isPaired = shown.length > 1;
   const figures = latest.results[category];
-  const premium = figures?.premium ?? 0;
-  const previousPremium = previous?.results[category]?.premium;
   const bidsPerCoe = figures?.quota
     ? `${(figures.bidsReceived / figures.quota).toFixed(2)} bids per COE`
     : "—";
@@ -66,27 +67,54 @@ export async function CoeHeadline({
     <div className="grid gap-5 min-[901px]:grid-cols-[1.15fr_1fr] min-[901px]:items-end min-[901px]:gap-14">
       <div className="flex min-w-0 flex-col gap-3">
         <CategoryTabs selected={categoryKey} />
-        <Typography.Paragraph className="text-muted-strong">
-          <span className="font-semibold text-accent-strong">{category}</span>
-          {` · ${CATEGORY_DESCRIPTIONS[category]}`}
-        </Typography.Paragraph>
-        <span className="font-extrabold text-5xl tabular-nums leading-[0.95] tracking-[-0.03em] min-[721px]:text-6xl">
-          <NumberValue
-            currency="SGD"
-            locale="en-SG"
-            maximumFractionDigits={0}
-            style="currency"
-            value={premium}
-          />
-        </span>
-        <Typography.Paragraph className="tabular-nums" color="muted">
-          {formatPremiumChange(
-            premium,
-            previous && previousPremium !== undefined
-              ? { ...previous, premium: previousPremium }
-              : undefined,
-          )}
-        </Typography.Paragraph>
+        <div
+          className={cn("grid gap-5", isPaired && "md:grid-cols-2 md:gap-6")}
+        >
+          {shown.map((shownCategory) => {
+            const premium = latest.results[shownCategory]?.premium ?? 0;
+            const previousPremium = previous?.results[shownCategory]?.premium;
+
+            return (
+              <div className="flex min-w-0 flex-col gap-3" key={shownCategory}>
+                <Typography.Paragraph className="text-muted-strong">
+                  <span
+                    className={cn(
+                      "font-semibold",
+                      shownCategory === category
+                        ? "text-accent-strong"
+                        : "text-foreground",
+                    )}
+                  >
+                    {shownCategory}
+                  </span>
+                  {` · ${CATEGORY_DESCRIPTIONS[shownCategory]}`}
+                </Typography.Paragraph>
+                <span
+                  className={cn(
+                    "font-extrabold text-5xl tabular-nums leading-none tracking-tight",
+                    !isPaired && "md:text-6xl",
+                  )}
+                >
+                  <NumberValue
+                    currency="SGD"
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    style="currency"
+                    value={premium}
+                  />
+                </span>
+                <Typography.Paragraph className="tabular-nums" color="muted">
+                  {formatPremiumChange(
+                    premium,
+                    previous && previousPremium !== undefined
+                      ? { ...previous, premium: previousPremium }
+                      : undefined,
+                  )}
+                </Typography.Paragraph>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 border-separator border-t">
