@@ -2,21 +2,43 @@
 
 ```sql
 SELECT
-    e.issue_id AS id,
-    max(timestamp) AS last_seen,
-    min(timestamp) AS first_seen,
-    argMax(properties.$exception_functions.-1, timestamp) AS function,
-    argMax(properties.$exception_sources.-1, timestamp) AS source,
-    count(DISTINCT uuid) AS occurrences,
-    count(DISTINCT nullIf($session_id, '')) AS sessions,
-    count(DISTINCT coalesce(nullIf(toString(person_id), '00000000-0000-0000-0000-000000000000'), distinct_id)) AS users,
-    sumForEach(arrayMap(bin -> if(and(greater(timestamp, bin), lessOrEquals(dateDiff('seconds', bin, timestamp), divide(dateDiff('seconds', toDateTime(toDateTime('2025-12-09 00:00:00.000000')), toDateTime(toDateTime('2025-12-10 00:00:00.000000'))), 20))), 1, 0), arrayMap(i -> dateAdd(toDateTime(toDateTime('2025-12-09 00:00:00.000000')), toIntervalSecond(multiply(i, divide(dateDiff('seconds', toDateTime(toDateTime('2025-12-09 00:00:00.000000')), toDateTime(toDateTime('2025-12-10 00:00:00.000000'))), 20)))), range(0, 20)))) AS volumeRange,
-    argMin(tuple(uuid, distinct_id, timestamp, properties), timestamp) AS first_event,
-    argMax(properties.$lib, timestamp) AS library
+    fp_state.issue_id AS id,
+    any(fp_state.issue_status) AS status,
+    any(fp_state.issue_severity) AS severity,
+    any(fp_state.issue_name) AS name,
+    any(fp_state.issue_description) AS description,
+    any(fp_state.assigned_user_id) AS assignee_user_id,
+    any(fp_state.assigned_role_id) AS assignee_role_id,
+    min(fp_state.first_seen) AS first_seen,
+    max(ev.last_seen_fp) AS last_seen,
+    argMaxMerge(ev.function_state) AS function,
+    argMaxMerge(ev.source_state) AS source,
+    sum(ev.occ) AS occurrences,
+    least(uniqMerge(ev.sessions_state), sum(ev.occ)) AS sessions,
+    least(uniqMerge(ev.users_state), sum(ev.occ)) AS users,
+    sumForEach(arrayMap(i -> if(equals(ev.bin_idx, i), ev.occ, _toUInt64(0)), range(0, 20))) AS volumeRange,
+    argMaxMerge(ev.library_state) AS library
 FROM
-    events AS e
+    (SELECT
+        cityHash64(JSONExtractString(e.properties, '$exception_fingerprint')) AS fp_hash,
+        max(timestamp) AS last_seen_fp,
+        argMaxState(properties.$exception_functions.-1, timestamp) AS function_state,
+        argMaxState(properties.$exception_sources.-1, timestamp) AS source_state,
+        argMaxState(properties.$lib, timestamp) AS library_state,
+        least(19, intDiv(dateDiff('seconds', toDateTime(toDateTime('2026-10-13 11:00:00.000000')), timestamp), greatest(1, intDiv(dateDiff('seconds', toDateTime(toDateTime('2026-10-13 11:00:00.000000')), toDateTime(toDateTime('2026-10-14 11:42:42.433992'))), 20)))) AS bin_idx,
+        count() AS occ,
+        uniqState(nullIf(e.$session_id, '')) AS sessions_state,
+        uniqState(coalesce(nullIf(toString(e.event_person_id), '00000000-0000-0000-0000-000000000000'), e.distinct_id)) AS users_state
+    FROM
+        events AS e
+    WHERE
+        and(equals(e.event, '$exception'), isNotNull(e.properties.$exception_fingerprint), true, greaterOrEquals(e.timestamp, toDateTime(toDateTime('2026-10-13 11:00:00.000000'))), lessOrEquals(e.timestamp, toDateTime(toDateTime('2026-10-14 11:42:42.433992'))), or(greater(multiSearchAnyCaseInsensitive(toString(e.properties.$exception_types), ['constant']), 0), greater(multiSearchAnyCaseInsensitive(toString(e.properties.$exception_values), ['constant']), 0), greater(multiSearchAnyCaseInsensitive(toString(e.properties.$exception_sources), ['constant']), 0), greater(multiSearchAnyCaseInsensitive(toString(e.properties.$exception_functions), ['constant']), 0), greater(multiSearchAnyCaseInsensitive(toString(e.properties.email), ['constant']), 0), greater(multiSearchAnyCaseInsensitive(toString(e.person.properties.email), ['constant']), 0)), equals(properties.tag, 'max_ai'))
+    GROUP BY
+        fp_hash,
+        bin_idx) AS ev
+    INNER JOIN error_tracking_fingerprint_issue_state AS fp_state ON equals(ev.fp_hash, fp_state.fp_hash)
 WHERE
-    and(equals(event, '$exception'), isNotNull(e.issue_id), equals(properties.tag, 'max_ai'), greaterOrEquals(timestamp, toDateTime(toDateTime('2025-12-09 00:00:00.000000'))), lessOrEquals(timestamp, toDateTime(toDateTime('2025-12-10 00:00:00.000000'))), or(greater(position(lower(properties.$exception_types), lower('constant')), 0), greater(position(lower(properties.$exception_values), lower('constant')), 0), greater(position(lower(properties.$exception_sources), lower('constant')), 0), greater(position(lower(properties.$exception_functions), lower('constant')), 0), greater(position(lower(properties.email), lower('constant')), 0), greater(position(lower(person.properties.email), lower('constant')), 0)))
+    isNotNull(fp_state.issue_id)
 GROUP BY
     id
 ORDER BY

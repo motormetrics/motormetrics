@@ -1,4 +1,6 @@
-# iOS - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# iOS
 
 The PostHog iOS SDK is a library that you can use to track events, identify users, record session replays, evaluate feature flags, run experiments, build surveys, and more.
 
@@ -12,10 +14,8 @@ PostHog is available through [CocoaPods](http://cocoapods.org) or you can add it
 
 Podfile
 
-PostHog AI
-
 ```ruby
-pod "PostHog", "~> 3.56.0"
+pod "PostHog", "~> 3.59.3"
 ```
 
 ### Swift Package Manager
@@ -26,19 +26,15 @@ For a Swift Package Manager based project, add PostHog as a dependency in your `
 
 Package.swift
 
-PostHog AI
-
 ```swift
 dependencies: [
-  .package(url: "https://github.com/PostHog/posthog-ios.git", from: "3.56.0")
+  .package(url: "https://github.com/PostHog/posthog-ios.git", from: "3.59.3")
 ],
 ```
 
 and then as a dependency for the Package target utilizing PostHog:
 
 Package.swift
-
-PostHog AI
 
 ```swift
 .target(
@@ -56,19 +52,20 @@ You can find more advanced configuration options in the [configuration page](/do
 
 Swift
 
-PostHog AI
-
 ```swift
 import Foundation
 import PostHog
 import UIKit
+
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         let POSTHOG_PROJECT_TOKEN = "<ph_project_token>"
         // usually 'https://us.i.posthog.com' or 'https://eu.i.posthog.com'
         let POSTHOG_HOST = "https://us.i.posthog.com"
+
         let config = PostHogConfig(projectToken: POSTHOG_PROJECT_TOKEN, host: POSTHOG_HOST)
         PostHogSDK.shared.setup(config)
+
         return true
     }
 }
@@ -78,22 +75,27 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 Swift
 
-PostHog AI
-
 ```swift
 import SwiftUI
 import PostHog
+
 @main
 struct YourGreatApp: App {
+
     // Add PostHog to your app's initializer.
     // If using UIApplicationDelegateAdaptor, see the UIKit tab.
+
     init() {
+
         let POSTHOG_PROJECT_TOKEN = "<ph_project_token>"
         // usually 'https://us.i.posthog.com' or 'https://eu.i.posthog.com'
         let POSTHOG_HOST = "https://us.i.posthog.com"
+
         let config = PostHogConfig(projectToken: POSTHOG_PROJECT_TOKEN, host: POSTHOG_HOST)
         PostHogSDK.shared.setup(config)
+
     }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -105,6 +107,10 @@ struct YourGreatApp: App {
 ## Identifying users
 
 > **Identifying users is required.** Call `posthog.identify('your-user-id')` after login to link events to a known user. This is what connects frontend event captures, [session replays](/docs/session-replay.md), [LLM traces](/docs/ai-engineering.md), and [error tracking](/docs/error-tracking.md) to the same person — and lets backend events link back too.
+>
+> Use a stable ID from your auth system when possible, not an email or display name. Send those as person properties instead. If your app has no other stable key, email works as a fallback if they are unique. Never a shared literal like `"anonymous"` or `"user"`, which pools many people onto one person and corrupts their data. When no ID is available at all, skip the identify and retain the anonymous distinct ID that's automatically assigned.
+>
+> Call `posthog.reset()` on logout, so the next person to use the browser doesn't inherit the last one's identity.
 >
 > See our guide on [identifying users](/docs/getting-started/identify-users.md) for how to set this up.
 
@@ -138,6 +144,10 @@ Method swizzling is particularly important for accurate session metrics tracking
 
 You can learn more about configuring method swizzling in the [configuration page](/docs/libraries/ios/configuration.md#method-swizzling).
 
+## Push notifications
+
+The iOS SDK can register a device for [Workflows](/docs/workflows.md) push notifications and capture when a user opens one. For setup, including automatic and manual registration, capturing opens, and identity verification, see [Push notifications](/docs/workflows/push-notifications.md).
+
 ## Next steps
 
 Now that you've installed the SDK, explore the configuration and usage options:
@@ -145,9 +155,9 @@ Now that you've installed the SDK, explore the configuration and usage options:
 -   [Learn about using all of the features of PostHog with iOS SDK](/docs/libraries/ios/usage.md)
 -   [Learn about configuration options for the iOS SDK](/docs/libraries/ios/configuration.md)
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 

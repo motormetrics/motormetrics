@@ -1,4 +1,6 @@
-# React Router V7 declarative mode - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# React Router V7 declarative mode
 
 This guide walks you through setting up PostHog for React Router V7 in declarative mode. If you're using React Router in another mode, find the guide for that mode in the [React Router page](/docs/libraries/react-router.md). If you're using React with another framework, go to the [React integration guide](/docs/libraries/react.md).
 
@@ -9,8 +11,6 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
     Required
 
     First, you'll need to install [`posthog-js`](https://github.com/posthog/posthog-js) and `@posthog/react` using your package manager. These packages allow you to capture **client-side** events.
-
-    PostHog AI
 
     ### npm
 
@@ -36,21 +36,29 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
     bun add posthog-js @posthog/react
     ```
 
+    > **If your site sets a Content-Security-Policy**, it needs to allow PostHog. This applies to the snippet and to package installs alike: the SDK lazy-loads extra bundles (session replay, surveys) from PostHog's CDN, and sends events to the ingestion host. PostHog serves from subdomains of `posthog.com` that change over time, so allow the wildcard:
+    >
+    > ```
+    > script-src 'self' https://*.posthog.com;
+    > connect-src 'self' https://*.posthog.com;
+    > worker-src 'self' blob: data:;
+    > ```
+    >
+    > `script-src` covers the snippet and the lazy-loaded bundles, `connect-src` covers event ingestion and feature flags, and `worker-src` covers session replay. The [toolbar needs a few more](/docs/advanced/content-security-policy.md), or use a [reverse proxy](/docs/advanced/proxy.md) so everything is first-party. Failing to do so causes silent failures where `capture` and `identify` calls never send, so the integration looks complete while zero events arrive. Remember `connect-src` falls back to `default-src`, so `default-src 'self'` blocks event delivery even when the script itself is bundled.
+
 2.  2
 
     ## Add your environment variables
 
     Required
 
-    Add your environment variables to your `.env.local` file and to your hosting provider (e.g. Vercel, Netlify, AWS). You can find your project token and host in [your project settings](https://us.posthog.com/settings/project). If you're using Vite, including `VITE_PUBLIC_` in their names ensures they are accessible in the frontend.
+    Add your environment variables to your `.env.local` file and to your hosting provider (e.g. Vercel, Netlify, AWS). You can find your project token and host in [your project settings](https://us.posthog.com/settings/project). If you're using Vite, prefixing variable names with `VITE_` ensures they are accessible in the frontend.
 
     .env.local
 
-    PostHog AI
-
     ```shell
-    VITE_PUBLIC_POSTHOG_TOKEN=<ph_project_token>
-    VITE_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+    VITE_POSTHOG_PROJECT_TOKEN=<ph_project_token>
+    VITE_POSTHOG_HOST=https://us.i.posthog.com
     ```
 
 3.  3
@@ -63,20 +71,22 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
 
     src/main.tsx
 
-    PostHog AI
-
     ```jsx
     import { StrictMode } from "react";
     import ReactDOM from "react-dom/client";
     import { BrowserRouter, Routes, Route } from "react-router";
+    
     import posthog from 'posthog-js';
     import { PostHogErrorBoundary, PostHogProvider } from '@posthog/react'
+    
     // Initialize PostHog
-    posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_TOKEN, {
-      api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-      defaults: '2026-01-30',
+    posthog.init(import.meta.env.VITE_POSTHOG_PROJECT_TOKEN, {
+      api_host: import.meta.env.VITE_POSTHOG_HOST,
+      defaults: '2026-05-30',
     });
+    
     const root = document.getElementById("root");
+    
     ReactDOM.createRoot(root).render(
       <StrictMode>
         {/* Pass PostHog client through PostHogProvider */}
@@ -103,11 +113,10 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
 
     React
 
-    PostHog AI
-
     ```jsx
     useEffect(() => {
       posthog?.capture('test') // using optional chaining (recommended)
+    
       if (posthog) {
         posthog.capture('test') // using an if statement
       }
@@ -128,10 +137,9 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
 
     TSX
 
-    PostHog AI
-
     ```jsx
     import { usePostHog } from '@posthog/react'
+    
     function App() {
       const posthog = usePostHog()
       return <button onClick={() => posthog?.capture('button_clicked')}>Click me</button>
@@ -150,10 +158,9 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
 
     TSX
 
-    PostHog AI
-
     ```jsx
     import { usePostHog } from '@posthog/react'
+    
     function App() {
       const posthog = usePostHog()
       return <button onClick={() => posthog?.capture('button_clicked')}>Click me</button>
@@ -174,15 +181,15 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
 
     TSX
 
-    PostHog AI
-
     ```jsx
     export default function Login() {
       const { user, login } = useAuth();
       const posthog = usePostHog();
+    
       const handleLogin = async (e: React.FormEvent) => {
         // existing code to handle login...
         const user = await login({ email, password });
+    
         posthog?.identify(user.email,
           {
             email: user.email,
@@ -191,6 +198,7 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
         );
         posthog?.capture('user_logged_in');
       };
+    
       return (
         <div>
           {/* ... existing code ... */}
@@ -211,8 +219,6 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
     PostHog can capture exceptions thrown in your app through an error boundary. PostHog provides a `PostHogErrorBoundary` component that you can use to capture exceptions. You can wrap your app with this component to capture exceptions.
 
     TSX
-
-    PostHog AI
 
     ```jsx
     ReactDOM.createRoot(root).render(
@@ -248,10 +254,9 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
 
     React
 
-    PostHog AI
-
     ```jsx
     import { PostHogCaptureOnViewed } from '@posthog/react'
+    
     function App() {
         return (
             <PostHogCaptureOnViewed name="hero-banner">
@@ -266,8 +271,6 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
     You can include additional properties with the event to provide more context:
 
     React
-
-    PostHog AI
 
     ```jsx
     <PostHogCaptureOnViewed
@@ -288,8 +291,6 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
 
     React
 
-    PostHog AI
-
     ```jsx
     <PostHogCaptureOnViewed
         name="product-gallery"
@@ -309,8 +310,6 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
     You can customize when elements are considered "viewed" by passing options to the `IntersectionObserver`:
 
     React
-
-    PostHog AI
 
     ```jsx
     <PostHogCaptureOnViewed
@@ -334,21 +333,19 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
 
     Now that you've set up PostHog for React Router V7 in declarative mode, you can continue to set up server-side analytics. You can find our other SDKs in the [SDKs page](/docs/libraries.md).
 
-    To help PostHog track your user sessions across the client and server, you'll need to add the `__add_tracing_headers: ['your-backend-domain1.com', 'your-backend-domain2.com', ...]` option to your PostHog initialization:
+    To help PostHog track your user sessions across the client and server, you'll need to add the `tracing_headers: ['your-backend-hostname1.com', 'your-backend-hostname2.com', ...]` option to your PostHog initialization:
 
     TSX
 
-    PostHog AI
-
     ```jsx
-    posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_TOKEN, {
-      api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-      defaults: '2026-01-30',
-      __add_tracing_headers: [ window.location.host, 'localhost' ],
+    posthog.init(import.meta.env.VITE_POSTHOG_PROJECT_TOKEN, {
+      api_host: import.meta.env.VITE_POSTHOG_HOST,
+      defaults: '2026-05-30',
+      tracing_headers: [ window.location.hostname, 'localhost' ],
     });
     ```
 
-    This adds the `X-POSTHOG-DISTINCT-ID` and `X-POSTHOG-SESSION-ID` headers to your requests, which you can later use on the server-side.
+    This adds the `X-POSTHOG-DISTINCT-ID` and `X-POSTHOG-SESSION-ID` headers to requests sent to the configured hostnames, which you can later use on the server-side.
 
 10.  9
 
@@ -367,9 +364,9 @@ This guide walks you through setting up PostHog for React Router V7 in declarati
      -   [PostHog AI](/docs/posthog-ai.md): After capturing events, use PostHog AI to help you understand your data and build insights.
      -   [Feature flags and experiments](/docs/libraries/react.md#feature-flags): Feature flag and experiment setup is the same as React. You can find more details in the React integration guide.
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 

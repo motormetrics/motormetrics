@@ -1,5 +1,7 @@
 # Supported functions
 abs
+accurateCast
+accurateCastOrNull
 acos
 acosh
 addDays
@@ -19,8 +21,10 @@ anyLast
 appendTrailingCharIfAbsent
 argMax
 argMaxMerge
+argMaxState
 argMin
 argMinMerge
+argMinState
 array
 array_agg
 arrayAll
@@ -167,6 +171,7 @@ countArgMinOrNull
 countArray
 countArrayOrDefault
 countArrayOrNull
+countDistinct
 countDistinctArgMax
 countDistinctArgMaxOrDefault
 countDistinctArgMaxOrNull
@@ -179,7 +184,6 @@ countDistinctArrayOrNull
 countDistinctForEach
 countDistinctForEachOrDefault
 countDistinctForEachOrNull
-countDistinctIf
 countDistinctMap
 countDistinctMapOrDefault
 countDistinctMapOrNull
@@ -218,6 +222,7 @@ cramersVBiasCorrected
 current_date
 current_timestamp
 cutFragment
+cutIPv6
 cutQueryString
 cutQueryStringAndFragment
 cutToFirstSignificantSubdomain
@@ -238,6 +243,7 @@ dateTrunc
 decodeURLComponent
 decodeURLFormComponent
 decodeXMLComponent
+defaultValueOfTypeName
 degrees
 deltaSum
 deltaSumTimestamp
@@ -247,6 +253,7 @@ divideDecimal
 domain
 domainWithoutWWW
 dotProduct
+dynamicType
 e
 empty
 encodeURLComponent
@@ -312,6 +319,7 @@ groupBitmapState
 groupBitmapXor
 groupBitOr
 groupBitXor
+grouping
 groupUniqArray
 groupUniqArrayArray
 h3CellAreaM2
@@ -385,8 +393,22 @@ intDiv
 intDivOrZero
 intExp10
 intExp2
+IPv4CIDRToRange
+IPv4NumToString
+IPv4StringToNum
+IPv4StringToNumOrDefault
+IPv4StringToNumOrNull
+IPv4ToIPv6
+IPv6CIDRToRange
+IPv6NumToString
+IPv6StringToNum
+IPv6StringToNumOrDefault
+IPv6StringToNumOrNull
 isFinite
 isInfinite
+isIPAddressInRange
+isIPv4String
+isIPv6String
 isNaN
 isNotNull
 isnull
@@ -459,6 +481,7 @@ mapAdd
 mapApply
 mapContains
 mapContainsKeyLike
+mapExists
 mapExtractKeyLike
 mapFilter
 mapFromArrays
@@ -495,6 +518,7 @@ maxOrNull
 maxState
 maxStateOrDefault
 maxStateOrNull
+MD5
 md5
 median
 medianArgMax
@@ -628,6 +652,8 @@ protocol
 quantile
 quantileExact
 quantiles
+quantilesMerge
+quantilesState
 queryString
 queryStringAndFragment
 radians
@@ -713,8 +739,10 @@ sumArray
 sumArrayOrDefault
 sumArrayOrNull
 sumForEach
+sumForEachMerge
 sumForEachOrDefault
 sumForEachOrNull
+sumForEachState
 sumMap
 sumMapMerge
 sumMapOrDefault
@@ -753,7 +781,9 @@ toDayOfWeek
 toDayOfYear
 toDecimal
 toFloat
+toFloat64OrNull
 toFloatOrDefault
+toFloatOrNull
 toFloatOrZero
 toHour
 toInt
@@ -765,7 +795,16 @@ toIntervalQuarter
 toIntervalSecond
 toIntervalWeek
 toIntervalYear
+toIntOrDefault
 toIntOrZero
+toIPv4
+toIPv4OrDefault
+toIPv4OrNull
+toIPv4OrZero
+toIPv6
+toIPv6OrDefault
+toIPv6OrNull
+toIPv6OrZero
 toISOWeek
 toISOYear
 toJSONString
@@ -835,6 +874,8 @@ tuplePlus
 tupleToNameValuePairs
 unhex
 uniq
+uniqCombined
+uniqCombined64
 uniqExact
 uniqExactMerge
 uniqExactState

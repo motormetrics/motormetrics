@@ -1,32 +1,11 @@
 {
   "version": 1,
   "skills": {
-    "ai-seo": {
-      "source": "coreyhaines31/marketingskills",
-      "sourceType": "github",
-      "skillPath": "skills/ai-seo/SKILL.md",
-      "computedHash": "a6befed362ed7127d051db085bc8be9470abbe87f70a40ee9a05e201dd8c693f"
-    },
-    "analytics-tracking": {
-      "source": "coreyhaines31/marketingskills",
-      "sourceType": "github",
-      "computedHash": "1ad3893d31e5df78cb4b4e16801f49acbdf82daed5f775748859ca7dc638d6d0"
-    },
-    "content-strategy": {
-      "source": "coreyhaines31/marketingskills",
-      "sourceType": "github",
-      "computedHash": "be124f3733b037fb8d859f275454ecd1c590759ef9ab184bea35ba1a0a38e14c"
-    },
-    "copywriting": {
-      "source": "coreyhaines31/marketingskills",
-      "sourceType": "github",
-      "computedHash": "2e83eda2221e97166172a0798e9b0379e34080595e107e2fc0cf580e9b3bbf7b"
-    },
     "flags-sdk": {
       "source": "vercel/flags",
       "sourceType": "github",
       "skillPath": "skills/flags-sdk/SKILL.md",
-      "computedHash": "547d5a321c284baa1fe75add8c47dbda59469ed8c5db0f2b226cef6644a727e3"
+      "computedHash": "7b95163cfdec82e48e5f6451e044003e60fb1a214413a0302797e1da7720ee22"
     },
     "heroui-react": {
       "source": "heroui-inc/heroui",
@@ -38,13 +17,13 @@
       "source": "posthog/skills",
       "sourceType": "github",
       "skillPath": "skills/omnibus/instrument-feature-flags/SKILL.md",
-      "computedHash": "af4c775dbfca98b023d92551f26e4c25119f20fb171e18fda7d56acea1b1246e"
+      "computedHash": "73d54f5c92171a199c4d4600ede3561733978db7a536e0d9841521708c124a41"
     },
     "instrument-product-analytics": {
       "source": "posthog/skills",
       "sourceType": "github",
       "skillPath": "skills/omnibus/instrument-product-analytics/SKILL.md",
-      "computedHash": "b8bba6f4200520284630680618a005bf56c8cdd6bb6c65c6ebaa4f6e06166d26"
+      "computedHash": "cecb07bfbd6f4f8ea09ae22ae68c5ca171ae946bee14bd1764a22b3b53de1066"
     },
     "integration-nextjs-app-router": {
       "source": "posthog/skills",
@@ -62,30 +41,25 @@
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-cache-components-adoption/SKILL.md",
-      "computedHash": "aaee0946eff1ddcdeee10525953d32a11310e470ef4a13a2ebb3aa79bc1ae769"
+      "computedHash": "825774334f00624aac9836ec4f29b8d62f1a6d5e31f81133bde0b4db17a3fa67"
     },
     "next-cache-components-optimizer": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-cache-components-optimizer/SKILL.md",
-      "computedHash": "b8d757a1fe10ebe7b10de1d5ee83f9bcdbd1de1e1147efc68cf249377f471067"
+      "computedHash": "7c1e21574ff39a11fc3874e4df2ab8a355154cc7b6bf4897ad570a2dd9e5a5f2"
     },
     "next-dev-loop": {
       "source": "vercel/next.js",
       "sourceType": "github",
       "skillPath": "skills/next-dev-loop/SKILL.md",
-      "computedHash": "aad97b32ba6efd31e92d063ec77120a694fe0d4a9401daf9af4c205cd5e21b07"
-    },
-    "page-cro": {
-      "source": "coreyhaines31/marketingskills",
-      "sourceType": "github",
-      "computedHash": "9505748dba2319487b285f8ab8c1e5417fce38a512d596e1c9e2e87b34b196e1"
+      "computedHash": "8ea79dc762e3915e411a33ab3ec74ee25fdce52bc458be4dbfc43cf9616542da"
     },
     "portless": {
       "source": "vercel-labs/portless",
       "sourceType": "github",
       "skillPath": "skills/portless/SKILL.md",
-      "computedHash": "4dd2cfba1475a35878d3936d4ce80047b800f7d7f65c9c6ddccb4638651d66a5"
+      "computedHash": "8d079a4c36926f53f29e6e43c49a5a77e448400cd14ac262cdffae56045e9329"
     },
     "posthog-debugger": {
       "source": "posthog/skills",
@@ -105,40 +79,23 @@
       "skillPath": "skills/team/customer-success/posthog-survey-creator/SKILL.md",
       "computedHash": "b0b2c62c0c8304d902bbfc44722e54c89c58bd96c5c7d65ef4bc57b7c141355e"
     },
-    "programmatic-seo": {
-      "source": "coreyhaines31/marketingskills",
-      "sourceType": "github",
-      "skillPath": "skills/programmatic-seo/SKILL.md",
-      "computedHash": "0bbdcbacfbe46fd78d774041ee49afd313505bb435b775dc246f4b8e6981d797"
-    },
     "querying-posthog-data": {
       "source": "posthog/skills",
       "sourceType": "github",
       "skillPath": "skills/omnibus/querying-posthog-data/SKILL.md",
-      "computedHash": "290ebd09de4236368fed7328a65fa30b9aee2babebaa38501420256df742d272"
-    },
-    "seo-audit": {
-      "source": "coreyhaines31/marketingskills",
-      "sourceType": "github",
-      "skillPath": "skills/seo-audit/SKILL.md",
-      "computedHash": "f2dc52130189068981f21e1c0bdc4471ac7cd9b08d8a1320604411aa0f950385"
-    },
-    "social-content": {
-      "source": "coreyhaines31/marketingskills",
-      "sourceType": "github",
-      "computedHash": "85ffbc05cf88939ba3ff643a315928185af16181470349dfbaad2880047c9900"
+      "computedHash": "09b3547861c407cc7105bee2fe66bba2a22d62cf651e49aa54bd874346bf99a1"
     },
     "survey-sdk-audit": {
       "source": "posthog/posthog",
       "sourceType": "github",
       "skillPath": ".agents/skills/survey-sdk-audit/SKILL.md",
-      "computedHash": "ab1e4ebf1fbf157aa33b81b8242aa7db0d906acd4105d44069537fb0aa47839c"
+      "computedHash": "212ffbac61e8cdc8b55b9457087bb61810adee319120ba75389977166dcaa5c5"
     },
     "turborepo": {
       "source": "vercel/turborepo",
       "sourceType": "github",
       "skillPath": "skills/turborepo/SKILL.md",
-      "computedHash": "a1ee68f55f7d232fbe095554f55e22c2080429a8a37c28adceaabad5fbe8a927"
+      "computedHash": "9681d8dfeb5e6cdff767f1bcaba5d7ac55732a9d6c02ee120f44229f8ec25e7e"
     }
   }
 }

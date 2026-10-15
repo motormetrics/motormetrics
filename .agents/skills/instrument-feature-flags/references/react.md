@@ -1,4 +1,6 @@
-# React Feature Flags installation - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# React Feature Flags installation
 
 1.  1
 
@@ -7,8 +9,6 @@
     Required
 
     Install [`posthog-js`](https://github.com/posthog/posthog-js) and `@posthog/react` using your package manager:
-
-    PostHog AI
 
     ### npm
 
@@ -28,21 +28,25 @@
     pnpm add posthog-js @posthog/react
     ```
 
+    ### bun
+
+    ```bash
+    bun add posthog-js @posthog/react
+    ```
+
 2.  2
 
     ## Add environment variables
 
     Required
 
-    Add your PostHog project token and host to your environment variables. For Vite-based React apps, use the `VITE_PUBLIC_` prefix:
+    Add your PostHog project token and host to your environment variables. For Vite-based React apps, use the `VITE_` prefix to expose them to the client:
 
     .env
 
-    PostHog AI
-
     ```bash
-    VITE_PUBLIC_POSTHOG_PROJECT_TOKEN=<ph_project_token>
-    VITE_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+    VITE_POSTHOG_PROJECT_TOKEN=<ph_project_token>
+    VITE_POSTHOG_HOST=https://us.i.posthog.com
     ```
 
 3.  3
@@ -55,21 +59,21 @@
 
     main.tsx
 
-    PostHog AI
-
     ```jsx
     import { StrictMode } from 'react'
     import { createRoot } from 'react-dom/client'
     import './index.css'
     import App from './App.jsx'
     import { PostHogProvider } from '@posthog/react'
+    
     const options = {
-      api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-      defaults: '2026-01-30',
+      api_host: import.meta.env.VITE_POSTHOG_HOST,
+      defaults: '2026-05-30',
     } as const
+    
     createRoot(document.getElementById('root')).render(
       <StrictMode>
-        <PostHogProvider apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN} options={options}>
+        <PostHogProvider apiKey={import.meta.env.VITE_POSTHOG_PROJECT_TOKEN} options={options}>
           <App />
         </PostHogProvider>
       </StrictMode>
@@ -90,15 +94,16 @@
 
     MyComponent.tsx
 
-    PostHog AI
-
     ```jsx
     import { usePostHog } from '@posthog/react'
+    
     function MyComponent() {
         const posthog = usePostHog()
+    
         function handleClick() {
             posthog.capture('button_clicked', { button_name: 'signup' })
         }
+    
         return <button onClick={handleClick}>Sign up</button>
     }
     ```
@@ -107,10 +112,9 @@
 
     utils/analytics.ts
 
-    PostHog AI
-
     ```jsx
     import posthog from 'posthog-js'
+    
     export function trackPurchase(amount: number) {
         posthog.capture('purchase_completed', { amount })
     }
@@ -128,8 +132,6 @@
 
     JavaScript
 
-    PostHog AI
-
     ```javascript
     posthog.capture('my_custom_event', { property: 'value' })
     ```
@@ -146,6 +148,7 @@
 
     ```jsx
     import { useFeatureFlagEnabled } from '@posthog/react'
+    
     function App() {
         const showWelcomeMessage = useFeatureFlagEnabled('flag-key')
         const payload = useFeatureFlagPayload('flag-key')
@@ -173,6 +176,7 @@
 
     ```jsx
     import { useFeatureFlagVariantKey } from '@posthog/react'
+    
     function App() {
         const variantKey = useFeatureFlagVariantKey('show-welcome-message')
         let welcomeMessage = ''
@@ -205,6 +209,7 @@
 
     ```jsx
     import { useFeatureFlagPayload, useFeatureFlagEnabled } from '@posthog/react'
+    
     function App() {
         const variant = useFeatureFlagEnabled('show-welcome-message')
         const payload = useFeatureFlagPayload('show-welcome-message')
@@ -232,10 +237,9 @@
 
     App.tsx
 
-    PostHog AI
-
     ```jsx
     import { PostHogFeature } from '@posthog/react'
+    
     function App() {
         return (
             <PostHogFeature flag='show-welcome-message' match={true}>
@@ -253,8 +257,6 @@
     If your flag has a payload, you can pass a function to children whose first argument is the payload:
 
     App.tsx
-
-    PostHog AI
 
     ```jsx
     <PostHogFeature flag='show-welcome-message' match={true}>
@@ -293,9 +295,9 @@
     | [How to do a phased rollout](/tutorials/phased-rollout.md) | Gradually roll out features to minimize risk |
     | [More tutorials](/docs/feature-flags/tutorials.md) | Other real-world examples and use cases |
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 

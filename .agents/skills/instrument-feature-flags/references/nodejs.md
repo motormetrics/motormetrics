@@ -1,4 +1,6 @@
-# Node.js Feature Flags installation - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# Node.js Feature Flags installation
 
 1.  1
 
@@ -7,8 +9,6 @@
     Required
 
     Install the PostHog Node.js library using your package manager:
-
-    PostHog AI
 
     ### npm
 
@@ -28,6 +28,12 @@
     pnpm add posthog-node
     ```
 
+    ### bun
+
+    ```bash
+    bun add posthog-node
+    ```
+
 2.  2
 
     ## Initialize PostHog
@@ -38,10 +44,9 @@
 
     Node.js
 
-    PostHog AI
-
     ```javascript
     import { PostHog } from 'posthog-node'
+    
     const client = new PostHog(
         '<ph_project_token>',
         {
@@ -59,8 +64,6 @@
     Once installed, you can manually send events to test your integration:
 
     Node.js
-
-    PostHog AI
 
     ```javascript
     client.capture({
@@ -123,8 +126,6 @@
 
     Node.js
 
-    PostHog AI
-
     ```javascript
     client.capture({
         distinctId: 'distinct_id_of_your_user',
@@ -138,8 +139,6 @@
     Include the `$feature/feature_flag_name` property in your event properties:
 
     Node.js
-
-    PostHog AI
 
     ```javascript
     client.capture({
@@ -207,9 +206,9 @@
     | [How to do a phased rollout](/tutorials/phased-rollout.md) | Gradually roll out features to minimize risk |
     | [More tutorials](/docs/feature-flags/tutorials.md) | Other real-world examples and use cases |
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 

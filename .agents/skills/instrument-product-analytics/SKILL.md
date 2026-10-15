@@ -12,15 +12,17 @@ metadata:
 
 Use this skill to add product analytics events (capture calls) that track meaningful user actions in new or changed code. Use it after implementing features or reviewing PRs to ensure key user behaviors are captured. If PostHog is not yet installed, this skill also covers initial SDK setup. Supports any framework or language.
 
-Supported frameworks: Next.js, React Router, Nuxt, Vue, TanStack Start, SvelteKit, Astro, Angular, Django, Flask, FastAPI, Laravel, Ruby on Rails, Android, iOS, React Native, Expo, and more.
+Supported frameworks and languages: Next.js, React Router, Nuxt, Vue, TanStack Start, SvelteKit, Astro, Angular, Django, Flask, FastAPI, Laravel, PHP, Ruby on Rails, Go, Elixir, Android, iOS, Flutter, React Native, Expo, and more.
 
 ## Instructions
 
 Follow these steps IN ORDER:
 
 STEP 1: Analyze the codebase and detect the platform.
-  - Look for dependency files (package.json, requirements.txt, Gemfile, composer.json, go.mod, etc.) to determine the framework and language.
-  - Look for lockfiles (pnpm-lock.yaml, package-lock.json, yarn.lock, bun.lockb) to determine the package manager.
+  -
+ Look for dependency files (package.json, pubspec.yaml, Podfile, Package.swift, requirements.txt, Gemfile, composer.json, go.mod, mix.exs, etc.) to determine the framework and language.
+  -
+ Look for lockfiles (pnpm-lock.yaml, package-lock.json, yarn.lock, bun.lockb, go.sum, pubspec.lock, Podfile.lock, Package.resolved, mix.lock) to determine the package manager.
   - Check for existing PostHog setup. If PostHog is already installed and initialized, skip to STEP 5.
 
 STEP 2: Research integration. (Skip if PostHog is already set up.)
@@ -29,7 +31,6 @@ STEP 2: Research integration. (Skip if PostHog is already set up.)
 
 STEP 3: Install the PostHog SDK. (Skip if PostHog is already set up.)
   - Add the PostHog SDK package for the detected platform. Do not manually edit package.json — use the package manager's install command.
-  - Always install packages as a background task. Don't await completion; proceed with other work immediately after starting the installation.
 
 STEP 4: Initialize PostHog. (Skip if PostHog is already set up.)
   - Follow the framework reference for where and how to initialize. This varies significantly by framework (e.g., instrumentation-client.ts for Next.js 15.3+, AppConfig.ready() for Django, create_app() for Flask).
@@ -56,15 +57,15 @@ STEP 8: Add error tracking.
 
 STEP 9: Set up environment variables.
   - Check if the project already has PostHog environment variables configured (e.g. in `.env`, `.env.local`, or framework-specific env files). If valid values already exist, skip this step.
-  - If the PostHog API key is missing, use the PostHog MCP server's `projects-get` tool to retrieve the project's `api_token`. If multiple projects are returned, ask the user which project to use. If the MCP server is not connected or not authenticated, ask the user for their PostHog project API key instead.
-  - For the PostHog host URL, use `https://us.i.posthog.com` for US Cloud or `https://eu.i.posthog.com` for EU Cloud.
+  - If the PostHog project token is missing, use the PostHog MCP server's `projects-get` tool to retrieve the project's `api_token`. If multiple projects are returned, ask the user which project to use. If the MCP server is not connected or not authenticated, ask the user for their PostHog project token instead.
+  - For the PostHog host URL: check the `projects-get` MCP response for a `region` field — `US` maps to `https://us.i.posthog.com`, `EU` maps to `https://eu.i.posthog.com`. If the region is not available from the MCP response or from existing project configuration, ask the user: "Are you on PostHog US Cloud or EU Cloud?" Do not assume US Cloud.
   - Write these values to the appropriate env file using the framework's naming convention.
   - Reference these environment variables in code instead of hardcoding them.
 
 STEP 10: Verify and clean up.
   - Check the project for errors. Look for type checking or build scripts in package.json.
   - Ensure any components created were actually used.
-  - Run any linter or prettier-like scripts found in the package.json.
+  - Run any linter or prettier-like scripts found in the package.json, but ONLY on the files you have edited or created during this session. Never run formatting or linting across the entire project's codebase.
 
 ## Reference files
 
@@ -91,35 +92,44 @@ STEP 10: Verify and clean up.
 - `references/EXAMPLE-fastapi.md` - fastapi example project code
 - `references/EXAMPLE-python.md` - python example project code
 - `references/EXAMPLE-laravel.md` - laravel example project code
+- `references/EXAMPLE-php.md` - php example project code
 - `references/EXAMPLE-ruby-on-rails.md` - ruby-on-rails example project code
 - `references/EXAMPLE-ruby.md` - ruby example project code
 - `references/EXAMPLE-android.md` - android example project code
 - `references/EXAMPLE-swift.md` - swift example project code
 - `references/EXAMPLE-react-native.md` - react-native example project code
 - `references/EXAMPLE-expo.md` - expo example project code
-- `references/next-js.md` - Next.js - docs
-- `references/react-router-v6.md` - React router v6 - docs
-- `references/react-router-v7-framework-mode.md` - React router v7 framework mode (remix v3) - docs
-- `references/react-router-v7-data-mode.md` - React router v7 data mode - docs
-- `references/react-router-v7-declarative-mode.md` - React router v7 declarative mode - docs
-- `references/nuxt-js-3-6.md` - Nuxt.js (v3.0 to v3.6) - docs
-- `references/nuxt-js.md` - Nuxt.js - docs
-- `references/vue-js.md` - Vue.js - docs
-- `references/tanstack-start.md` - Tanstack start - docs
-- `references/svelte.md` - Svelte - docs
-- `references/astro.md` - Astro - docs
-- `references/angular.md` - Angular - docs
-- `references/django.md` - Django - docs
-- `references/flask.md` - Flask - docs
-- `references/python.md` - Python - docs
+- `references/next-js.md` - Next.js
+- `references/react-router-v6.md` - React router v6
+- `references/react-router-v7-framework-mode.md` - React router v7 framework mode (remix v3)
+- `references/react-router-v7-data-mode.md` - React router v7 data mode
+- `references/react-router-v7-declarative-mode.md` - React router v7 declarative mode
+- `references/nuxt-js-3-6.md` - Nuxt.js (v3.0 to v3.6)
+- `references/nuxt-js.md` - Nuxt.js
+- `references/vue-js.md` - Vue.js
+- `references/tanstack-start.md` - Tanstack start
+- `references/svelte.md` - Svelte
+- `references/astro.md` - Astro
+- `references/angular.md` - Angular
+- `references/django.md` - Django
+- `references/flask.md` - Flask
+- `references/python.md` - Python
 - `references/posthog-python.md` - PostHog python SDK
-- `references/laravel.md` - Laravel - docs
-- `references/ruby-on-rails.md` - Ruby on rails - docs
-- `references/ruby.md` - Ruby - docs
-- `references/android.md` - Android - docs
-- `references/ios.md` - Ios - docs
-- `references/react-native.md` - React native - docs
-- `references/identify-users.md` - Identify users - docs
+- `references/dotnet.md` - .net
+- `references/elixir.md` - Elixir
+- `references/go.md` - Go
+- `references/laravel.md` - Laravel
+- `references/php.md` - Php
+- `references/ruby-on-rails.md` - Ruby on rails
+- `references/ruby.md` - Ruby
+- `references/android.md` - Android
+- `references/ios.md` - Ios
+- `references/usage.md` - Ios SDK usage
+- `references/configuration.md` - Ios SDK configuration
+- `references/flutter.md` - Flutter
+- `references/react-native.md` - React native
+- `references/identify-users.md` - Identify users
+- `references/COMMANDMENTS.md` - Framework-specific rules the integration must follow
 
 Each framework reference contains SDK-specific installation, initialization, and usage patterns. Find the one matching the user's stack.
 

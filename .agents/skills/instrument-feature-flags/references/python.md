@@ -1,4 +1,6 @@
-# Python Feature Flags installation - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# Python Feature Flags installation
 
 1.  1
 
@@ -9,8 +11,6 @@
     Install the PostHog Python library using pip:
 
     Terminal
-
-    PostHog AI
 
     ```bash
     pip install posthog
@@ -26,10 +26,9 @@
 
     Python
 
-    PostHog AI
-
     ```python
     from posthog import Posthog
+    
     posthog = Posthog(
         project_api_key='<ph_project_token>',
         host='https://us.i.posthog.com'
@@ -52,11 +51,9 @@
 
     Python
 
-    PostHog AI
-
     ```python
     import posthog
-    posthog.capture('user_123', 'user_signed_up', properties={'example_property': 'example_value'})
+    posthog.capture('user_signed_up', distinct_id='user_123', properties={'example_property': 'example_value'})
     ```
 
 4.  4
@@ -107,8 +104,6 @@
 
     Python
 
-    PostHog AI
-
     ```python
     posthog.capture(
         distinct_id="distinct_id_of_the_user",
@@ -122,8 +117,6 @@
     Include the `$feature/feature_flag_name` property in your event properties:
 
     Python
-
-    PostHog AI
 
     ```python
     posthog.capture(
@@ -182,9 +175,9 @@
     | [How to do a phased rollout](/tutorials/phased-rollout.md) | Gradually roll out features to minimize risk |
     | [More tutorials](/docs/feature-flags/tutorials.md) | Other real-world examples and use cases |
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 

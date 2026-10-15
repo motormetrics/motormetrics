@@ -11,9 +11,8 @@ FROM
         any(person_id) AS filtered_person_id,
         count() AS filtered_pageview_count,
         properties.$device_type AS breakdown_value,
-        session.session_id AS session_id,
-        any(session.$is_bounce) AS is_bounce,
-        min(session.$start_timestamp) AS start_timestamp
+        if(equals(bitAnd(bitShiftRight(events.$session_id_uuid, 76), 15), 7), events.$session_id, NULL) AS session_id,
+        any(if(equals(bitAnd(bitShiftRight(events.$session_id_uuid, 76), 15), 7), fromUnixTimestamp(intDiv(toInt(bitShiftRight(events.$session_id_uuid, 80)), 1000)), NULL)) AS start_timestamp
     FROM
         events
     WHERE
@@ -23,8 +22,6 @@ FROM
         breakdown_value)
 GROUP BY
     `context.columns.breakdown_value`
-HAVING
-    notEquals(`context.columns.breakdown_value`, NULL)
 ORDER BY
     `context.columns.visitors` DESC,
     `context.columns.views` DESC,

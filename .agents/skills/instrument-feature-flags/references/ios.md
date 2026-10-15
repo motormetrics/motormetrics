@@ -1,4 +1,6 @@
-# iOS Feature Flags installation - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# iOS Feature Flags installation
 
 1.  1
 
@@ -10,8 +12,6 @@
 
     Package.swift
 
-    PostHog AI
-
     ```swift
     dependencies: [
       .package(url: "https://github.com/PostHog/posthog-ios.git", from: "3.56.0")
@@ -21,8 +21,6 @@
     Or add PostHog to your Podfile:
 
     Podfile
-
-    PostHog AI
 
     ```ruby
     pod "PostHog", "~> 3.56"
@@ -38,18 +36,19 @@
 
     AppDelegate.swift
 
-    PostHog AI
-
     ```swift
     import Foundation
     import PostHog
     import UIKit
+    
     class AppDelegate: NSObject, UIApplicationDelegate {
         func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
             let POSTHOG_PROJECT_TOKEN = "<ph_project_token>"
             let POSTHOG_HOST = "https://us.i.posthog.com"
+    
             let config = PostHogConfig(projectToken: POSTHOG_PROJECT_TOKEN, host: POSTHOG_HOST)
             PostHogSDK.shared.setup(config)
+    
             return true
         }
     }
@@ -65,8 +64,6 @@
 
     Swift
 
-    PostHog AI
-
     ```swift
     PostHogSDK.shared.capture("button_clicked", properties: ["button_name": "signup"])
     ```
@@ -81,14 +78,12 @@
 
     Swift
 
-    PostHog AI
-
     ```swift
     let isMyFlagEnabled = PostHogSDK.shared.isFeatureEnabled("flag-key")
     if isMyFlagEnabled {
         // Do something differently for this user
         // Optional: fetch the payload
-        let matchedFlagPayload = PostHogSDK.shared.getFeatureFlagPayload("flag-key")
+        let matchedFlagPayload = PostHogSDK.shared.getFeatureFlagResult("flag-key")?.payload
     }
     ```
 
@@ -102,14 +97,12 @@
 
     Swift
 
-    PostHog AI
-
     ```swift
     let enabledVariant = PostHogSDK.shared.getFeatureFlag("flag-key")
     if enabledVariant == "variant-key" { // replace 'variant-key' with the key of your variant
         // Do something differently for this user
         // Optional: fetch the payload
-        let matchedFlagPayload = PostHogSDK.shared.getFeatureFlagPayload("flag-key")
+        let matchedFlagPayload = PostHogSDK.shared.getFeatureFlagResult("flag-key")?.payload
     }
     ```
 
@@ -137,9 +130,9 @@
     | [How to do a phased rollout](/tutorials/phased-rollout.md) | Gradually roll out features to minimize risk |
     | [More tutorials](/docs/feature-flags/tutorials.md) | Other real-world examples and use cases |
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 

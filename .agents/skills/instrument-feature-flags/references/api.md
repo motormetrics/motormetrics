@@ -1,4 +1,6 @@
-# API Feature Flags installation - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# API Feature Flags installation
 
 1.  1
 
@@ -7,8 +9,6 @@
     Required
 
     `flags` is the endpoint used to determine if a given flag is enabled for a certain user or not.
-
-    PostHog AI
 
     ### Basic request (flags only)
 
@@ -27,6 +27,7 @@
     ```python
     import requests
     import json
+    
     url = "https://us.i.posthog.com/flags?v=2"
     headers = {
         "Content-Type": "application/json"
@@ -74,8 +75,6 @@
 
     **Note:** This step is only required for events captured using our server-side SDKs or API.
 
-    PostHog AI
-
     ### Terminal
 
     ```bash
@@ -94,6 +93,7 @@
     ```python
     import requests
     import json
+    
     url = "https://us.i.posthog.com/i/v0/e/"
     headers = {
         "Content-Type": "application/json"
@@ -123,8 +123,6 @@
     1.  `$feature_flag_response`: This is the name of the variant the user has been assigned to e.g., "control" or "test"
     2.  `$feature_flag`: This is the key of the feature flag in your experiment.
 
-    PostHog AI
-
     ### Terminal
 
     ```bash
@@ -144,6 +142,7 @@
     ```python
     import requests
     import json
+    
     url = "https://us.i.posthog.com/i/v0/e/"
     headers = {
         "Content-Type": "application/json"
@@ -185,9 +184,9 @@
     | [How to do a phased rollout](/tutorials/phased-rollout.md) | Gradually roll out features to minimize risk |
     | [More tutorials](/docs/feature-flags/tutorials.md) | Other real-world examples and use cases |
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 

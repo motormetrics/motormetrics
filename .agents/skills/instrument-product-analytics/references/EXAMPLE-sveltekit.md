@@ -1,7 +1,7 @@
 # PostHog sveltekit Example Project
 
 Repository: https://github.com/PostHog/context-mill
-Path: basics/sveltekit
+Path: example-apps/sveltekit
 
 ---
 
@@ -216,6 +216,7 @@ PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 
 ```
 engine-strict=true
+min-release-age=7
 
 ```
 
@@ -349,6 +350,9 @@ export const handleError: HandleServerError = async ({ error, status, message })
 			message
 		}
 	});
+
+	// handleError runs per request; flush so the enqueued event sends before it returns
+	await posthog.flush();
 
 	return {
 		message,
@@ -579,7 +583,7 @@ export async function shutdownPostHog() {
 <div class="container">
 	{#if auth.user}
 		<h1>Welcome back, {auth.user.username}!</h1>
-		<p>You are now logged in. Check out the navigation to explore features.</p>
+		<p>You are logged in. Check out the navigation to explore features.</p>
 		<ul>
 			<li><a href="/burrito">Consider a burrito</a></li>
 			<li><a href="/profile">View your profile</a></li>

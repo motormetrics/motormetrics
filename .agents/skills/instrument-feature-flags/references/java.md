@@ -1,4 +1,6 @@
-# Java Feature Flags installation - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# Java Feature Flags installation
 
 The best way to install the PostHog Java SDK is with a build system like Gradle or Maven. This ensures you can easily upgrade to the latest versions.
 
@@ -9,8 +11,6 @@ Look up the latest version of [`com.posthog.posthog-server`](https://central.son
 All you need to do is add the `posthog-server` module to your `build.gradle`:
 
 build.gradle
-
-PostHog AI
 
 ```kotlin
 dependencies {
@@ -23,8 +23,6 @@ dependencies {
 All you need to do is add the `posthog-server` module to your `pom.xml`:
 
 pom.xml
-
-PostHog AI
 
 ```xml
 <dependency>
@@ -42,21 +40,23 @@ See [`com.posthog.posthog-server`](https://central.sonatype.com/artifact/com.pos
 
 Java
 
-PostHog AI
-
 ```java
 import com.posthog.server.PostHog;
 import com.posthog.server.PostHogConfig;
 import com.posthog.server.PostHogInterface;
+
 class Sample {
   private static final String POSTHOG_API_KEY = "<ph_project_token>";
   private static final String POSTHOG_HOST = "https://us.i.posthog.com";
+
   public static void main(String args[]) {
     PostHogConfig config = PostHogConfig
             .builder(POSTHOG_API_KEY)
             .host(POSTHOG_HOST)
             .build();
+
     PostHogInterface posthog = PostHog.with(config);
+
     posthog.flush(); // send any remaining events
     posthog.close(); // shut down the client
   }
@@ -75,8 +75,6 @@ To see detailed logging, set the debug configuration option to true.
 
 Java
 
-PostHog AI
-
 ```java
 PostHogConfig config = PostHogConfig
           .builder(POSTHOG_API_KEY)
@@ -85,9 +83,9 @@ PostHogConfig config = PostHogConfig
           .build();
 ```
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 

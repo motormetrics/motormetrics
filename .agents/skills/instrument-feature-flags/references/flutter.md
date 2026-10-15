@@ -1,4 +1,6 @@
-# Flutter Feature Flags installation - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# Flutter Feature Flags installation
 
 1.  1
 
@@ -9,8 +11,6 @@
     Add the PostHog Flutter SDK to your `pubspec.yaml`:
 
     pubspec.yaml
-
-    PostHog AI
 
     ```yaml
     posthog_flutter: ^5.24.0
@@ -28,8 +28,6 @@
 
     android/app/src/main/AndroidManifest.xml
 
-    PostHog AI
-
     ```xml
     <application>
       <activity>
@@ -46,8 +44,6 @@
 
     android/app/build.gradle
 
-    PostHog AI
-
     ```groovy
     defaultConfig {
       minSdkVersion 23
@@ -60,8 +56,6 @@
     Add these values to your `Info.plist`:
 
     ios/Runner/Info.plist
-
-    PostHog AI
 
     ```xml
     <dict>
@@ -81,8 +75,6 @@
 
     Podfile
 
-    PostHog AI
-
     ```ruby
     platform :ios, '13.0'
     # rest of your config
@@ -94,18 +86,16 @@
 
     web/index.html
 
-    PostHog AI
-
     ```html
     <!DOCTYPE html>
     <html>
       <head>
         ...
         <script>
-          !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+          !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}p||((p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",p.onerror=function(){p=null},(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r));var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],Object.defineProperty(u,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e}}),Object.defineProperty(u.people,"toString",{configurable:!0,enumerable:!0,writable:!0,value:function(){return u.toString(1)+".people (stub)"}}),o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
           posthog.init('<ph_project_token>', {
               api_host: 'https://us.i.posthog.com',
-              defaults: '2026-01-30',
+              defaults: '2026-05-30',
           })
         </script>
       </head>
@@ -125,10 +115,9 @@
 
     Dart
 
-    PostHog AI
-
     ```dart
     import 'package:posthog_flutter/posthog_flutter.dart';
+    
     await Posthog().capture(
         eventName: 'button_clicked',
         properties: {
@@ -147,14 +136,12 @@
 
     Dart
 
-    PostHog AI
-
     ```dart
     final isMyFlagEnabled = await Posthog().isFeatureEnabled('flag-key');
     if (isMyFlagEnabled) {
         // Do something differently for this user
         // Optional: fetch the payload
-        final matchedFlagPayload = await Posthog().getFeatureFlagPayload('flag-key');
+        final matchedFlagPayload = (await Posthog().getFeatureFlagResult('flag-key'))?.payload;
     }
     ```
 
@@ -168,14 +155,12 @@
 
     Dart
 
-    PostHog AI
-
     ```dart
     final enabledVariant = await Posthog().getFeatureFlag('flag-key');
     if (enabledVariant == 'variant-key') { // replace 'variant-key' with the key of your variant
         // Do something differently for this user
         // Optional: fetch the payload
-        final matchedFlagPayload = await Posthog().getFeatureFlagPayload('flag-key');
+        final matchedFlagPayload = (await Posthog().getFeatureFlagResult('flag-key'))?.payload;
     }
     ```
 
@@ -203,9 +188,9 @@
     | [How to do a phased rollout](/tutorials/phased-rollout.md) | Gradually roll out features to minimize risk |
     | [More tutorials](/docs/feature-flags/tutorials.md) | Other real-world examples and use cases |
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 

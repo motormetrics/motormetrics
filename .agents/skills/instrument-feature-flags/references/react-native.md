@@ -1,4 +1,6 @@
-# React Native Feature Flags installation - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# React Native Feature Flags installation
 
 1.  1
 
@@ -7,8 +9,6 @@
     Required
 
     Install the PostHog React Native library and its dependencies:
-
-    PostHog AI
 
     ### Expo
 
@@ -20,6 +20,7 @@
 
     ```bash
     yarn add posthog-react-native @react-native-async-storage/async-storage react-native-device-info react-native-localize
+    
     # for iOS
     cd ios && pod install
     ```
@@ -28,6 +29,7 @@
 
     ```bash
     npm i -s posthog-react-native @react-native-async-storage/async-storage react-native-device-info react-native-localize
+    
     # for iOS
     cd ios && pod install
     ```
@@ -42,10 +44,9 @@
 
     App.tsx
 
-    PostHog AI
-
     ```jsx
     import { PostHogProvider } from 'posthog-react-native'
+    
     export function MyApp() {
         return (
             <PostHogProvider
@@ -70,17 +71,18 @@
 
     Component.tsx
 
-    PostHog AI
-
     ```jsx
     import { usePostHog } from 'posthog-react-native'
+    
     function MyComponent() {
         const posthog = usePostHog()
+    
         const handlePress = () => {
             posthog.capture('button_pressed', {
                 button_name: 'signup'
             })
         }
+    
         return <Button onPress={handlePress} title="Sign Up" />
     }
     ```
@@ -95,18 +97,19 @@
 
     Component.tsx
 
-    PostHog AI
-
     ```jsx
     import { usePostHog } from 'posthog-react-native'
+    
     function MyComponent() {
         const posthog = usePostHog()
         const isMyFlagEnabled = posthog.isFeatureEnabled('flag-key')
+    
         if (isMyFlagEnabled) {
             // Do something differently for this user
             // Optional: fetch the payload
-            const matchedFlagPayload = posthog.getFeatureFlagPayload('flag-key')
+            const matchedFlagPayload = posthog.getFeatureFlagResult('flag-key')?.payload
         }
+    
         return <View>...</View>
     }
     ```
@@ -117,18 +120,19 @@
 
     Component.tsx
 
-    PostHog AI
-
     ```jsx
     import { usePostHog } from 'posthog-react-native'
+    
     function MyComponent() {
         const posthog = usePostHog()
         const enabledVariant = posthog.getFeatureFlag('flag-key')
+    
         if (enabledVariant === 'variant-key') { // replace 'variant-key' with the key of your variant
             // Do something differently for this user
             // Optional: fetch the payload
-            const matchedFlagPayload = posthog.getFeatureFlagPayload('flag-key')
+            const matchedFlagPayload = posthog.getFeatureFlagResult('flag-key')?.payload
         }
+    
         return <View>...</View>
     }
     ```
@@ -157,9 +161,9 @@
     | [How to do a phased rollout](/tutorials/phased-rollout.md) | Gradually roll out features to minimize risk |
     | [More tutorials](/docs/feature-flags/tutorials.md) | Other real-world examples and use cases |
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 

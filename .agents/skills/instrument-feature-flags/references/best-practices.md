@@ -1,4 +1,6 @@
-# Best practices for production-ready flags - Docs
+> AI agents: this is one page from PostHog's docs. Full index of Markdown docs for LLMs: https://posthog.com/llms.txt
+
+# Best practices for production-ready flags
 
 ## Checklist
 
@@ -24,8 +26,6 @@
 
 A flag hashes two things – the **flag key** and the **distinct ID** – and returns a deterministic result. Same inputs, same output. Every time.
 
-PostHog AI
-
 ```
 hash("my-experiment", "user-123") → 0.31 → always 0.31
 ```
@@ -39,8 +39,6 @@ On top of that, PostHog layers property targeting (does this user match?), rollo
 ### How the hash works
 
 PostHog uses SHA-1:
-
-PostHog AI
 
 ```
 hash_key = "{flag_key}.{distinct_id}"
@@ -133,8 +131,6 @@ If you can't bootstrap, use `onFeatureFlags()` to wait. This means you will need
 
 JavaScript
 
-PostHog AI
-
 ```javascript
 // Returns undefined before flags load – not false
 if (posthog.getFeatureFlag('my-experiment') === 'test') {
@@ -160,11 +156,11 @@ Pick the context based on where the flag is actually consumed. Server-side flags
 
 ### Clean up flags that have done their job
 
-A flag set to 100% of all users with no property targeting is a flag that has finished its job. It's always returning the same value – the rollout is complete, the experiment concluded, the feature is live. But the flag is still being evaluated on every request, still included in every SDK payload, and still adding to your bill.
+A flag set to 100% of all users with no property targeting is a flag that has finished its job. It's always returning the same value – the rollout is complete, the experiment concluded, the feature is live. If your SDK still evaluates that flag, it can keep making billable `/flags` requests, keep appearing in SDK payloads, and add clutter to your codebase.
 
-Remove the flag and hardcode the winning path. If you're not ready to remove it from code, at least archive it in PostHog so it stops being evaluated. Stale flags are the most common source of unnecessary flag evaluation cost. See [cleaning up stale flags](/docs/feature-flags/cleaning-up-stale-flags.md) for the full workflow and [cutting costs](/docs/feature-flags/cutting-costs.md) for more on reducing your bill.
+Remove the flag and hardcode the winning path. If you're not ready to remove it from code, at least archive it in PostHog so it stops being evaluated. Stale flags are the most common source of unnecessary flag evaluation. See [cleaning up stale flags](/docs/feature-flags/cleaning-up-stale-flags.md) for the full workflow and [cutting costs](/docs/feature-flags/cutting-costs.md) for more on reducing your bill.
 
-**An idea worth considering:** design your flag code paths with an escape hatch you control outside of PostHog. For example, a "gate flag" that your server reads once every 30 seconds (not per user) – when it's `true`, the feature is fully rolled out and your code skips the per-user flag evaluation entirely. This means you stop paying for per-user evaluations the moment a rollout is complete, even before you remove the flag from code. And you can dial it back by setting the gate flag to `false`. This is also another application of "evaluate once, not continuously" – if you cache flag results (even for stale flags), your per-evaluation costs drop to near zero while you wait for the code cleanup.
+**An idea worth considering:** design your flag code paths with an escape hatch you control outside of PostHog. For example, a "gate flag" that your server reads once every 30 seconds (not per user) – when it's `true`, the feature is fully rolled out and your code skips the per-user flag evaluation entirely. This means you stop making per-user `/flags` requests for that rollout as soon as it's complete, even before you remove the flag from code. And you can dial it back by setting the gate flag to `false`. This is also another application of "evaluate once, not continuously" – if you cache flag results, your per-user evaluation cost drops while you wait for the code cleanup.
 
 ### Disable client-side evaluation for server-side flags
 
@@ -181,8 +177,6 @@ Ad blockers can disable your Feature Flags, leading to users seeing the wrong ve
 The more locations a flag appears in your code, the more likely it is to cause problems – a developer removes it in one place but forgets another. If you use a flag in multiple places, wrap it in a single function:
 
 JavaScript
-
-PostHog AI
 
 ```javascript
 function useBetaFeature() {
@@ -222,9 +216,9 @@ Stale flags are the most common source of unnecessary cost. Beyond cleaning up f
 -   [Local evaluation](/docs/feature-flags/local-evaluation.md) – server-side evaluation for explicit input control
 -   [Bootstrapping](/docs/feature-flags/bootstrapping.md) – having flag values before the page renders
 
-### Community questions
+### Still have questions?
 
-Ask a question
+Ask PostHog AI
 
 ### Was this page useful?
 
