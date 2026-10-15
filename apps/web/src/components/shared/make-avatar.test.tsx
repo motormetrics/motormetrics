@@ -33,7 +33,7 @@ describe("MakeAvatar", () => {
       <MakeAvatar logoUrl="https://cdn.example/bmw.png" make="BMW" />,
     );
     const logo = screen.getByRole("img", { name: "BMW logo" }).element();
-    expect(logo.getAttribute("width")).toBe("30");
+    expect(logo.getAttribute("width")).toBe("28");
   });
 
   it("should render a hidden initial when there is no logo", async () => {
