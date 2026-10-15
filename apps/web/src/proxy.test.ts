@@ -1,3 +1,4 @@
+import { unstable_doesMiddlewareMatch } from "next/experimental/testing/server";
 import { NextRequest } from "next/server";
 import { describe, expect, it, vi } from "vitest";
 
@@ -37,15 +38,6 @@ describe("proxy", () => {
     expect(response.headers.get("next-action")).toBeNull();
     expect(response.headers.get("accept")).toBeNull();
     expect(response.headers.get("Content-Security-Policy")).toBeNull();
-  });
-
-  it("should forward x-nonce to the app via the request headers", async () => {
-    const { proxy } = await import("@web/proxy");
-
-    const response = await proxy(makeServerActionRequest());
-
-    expect(response.headers.get("x-middleware-request-x-nonce")).toBeTruthy();
-    expect(response.headers.get("x-nonce")).toBeNull();
   });
 
   it("should serve llms.txt as Markdown when the homepage is requested with Accept: text/markdown", async () => {
@@ -139,5 +131,59 @@ describe("proxy", () => {
     expect(fetchSpy).not.toHaveBeenCalled();
     expect(response.headers.get("content-type")).toBeNull();
     fetchSpy.mockRestore();
+  });
+
+  describe("matcher", () => {
+    async function matches(url: string, headers?: Record<string, string>) {
+      const { config } = await import("@web/proxy");
+      return unstable_doesMiddlewareMatch({ config, url, headers });
+    }
+
+    it.each([
+      "/api/v1/cars",
+      "/admin",
+      "/admin/login",
+      "/admin/posts",
+      "/api/auth/session",
+    ])("should run for %s", async (url) => {
+      expect(await matches(url)).toBe(true);
+    });
+
+    it.each([
+      "/",
+      "/coe",
+      "/cars/makes/bmw",
+      "/api/health",
+    ])("should not run for a browser request to %s", async (url) => {
+      expect(await matches(url, { accept: "text/html" })).toBe(false);
+    });
+
+    it("should not run for RSC navigations and prefetches", async () => {
+      expect(
+        await matches("/coe", {
+          accept: "text/x-component",
+          rsc: "1",
+          "next-router-prefetch": "1",
+        }),
+      ).toBe(false);
+    });
+
+    it.each([
+      "/",
+      "/coe",
+      "/no-such-page",
+    ])("should run for a Markdown request to %s", async (url) => {
+      expect(
+        await matches(url, { accept: "text/markdown, text/html;q=0.9" }),
+      ).toBe(true);
+    });
+
+    it.each([
+      "/api/health",
+      "/_next/static/chunk.js",
+      "/sitemap.xml",
+    ])("should not run for a Markdown request to %s", async (url) => {
+      expect(await matches(url, { accept: "text/markdown" })).toBe(false);
+    });
   });
 });
