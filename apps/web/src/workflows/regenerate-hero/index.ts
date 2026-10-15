@@ -95,7 +95,7 @@ export async function regenerateHeroWorkflow(
     handleAIError(error);
   }
 
-  await revalidatePostsCache();
+  await revalidatePostsCache(post.slug);
 
   return {
     message: `[REGENERATE-HERO] Successfully regenerated hero image for ${post.slug}`,

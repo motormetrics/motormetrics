@@ -93,7 +93,7 @@ export async function monthlyUpdateWorkflow(
   //   });
   // }
 
-  await revalidatePostsCache();
+  await revalidatePostsCache(post.slug);
 
   return {
     message: `[MONTHLY] Published update for ${month}`,

@@ -5,7 +5,10 @@ import {
 } from "@motormetrics/ai/generate-hero-image";
 import { updatePostHeroImage } from "@motormetrics/ai/save-post";
 import { slugify } from "@motormetrics/utils/slugify";
-import { getPostsWorkflowRevalidationTags } from "@web/lib/cache-tags";
+import {
+  getPostPublishRevalidationTags,
+  getPostsWorkflowRevalidationTags,
+} from "@web/lib/cache-tags";
 import type { WorkflowEvent } from "@web/workflows/shared/types";
 import { revalidateTag } from "next/cache";
 import { FatalError, getWritable, RetryableError } from "workflow";
@@ -29,11 +32,16 @@ export async function emitEvent(
 
 /**
  * Revalidate posts cache after publishing.
+ * Pass the slug to also bust that post's page cache, e.g. after its hero or
+ * content was regenerated.
  */
-export async function revalidatePostsCache(): Promise<void> {
+export async function revalidatePostsCache(slug?: string): Promise<void> {
   "use step";
 
-  for (const tag of getPostsWorkflowRevalidationTags()) {
+  const tags = slug
+    ? getPostPublishRevalidationTags(slug)
+    : getPostsWorkflowRevalidationTags();
+  for (const tag of tags) {
     revalidateTag(tag, "max");
   }
   console.log("[WORKFLOW] Posts cache invalidated");
