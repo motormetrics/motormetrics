@@ -83,12 +83,9 @@ export default function LearnPage() {
           description="COE, ARF, OMV, PARF and PQP, in plain language — the rules that set the price of a car in Singapore, with worked examples."
           eyebrow="Guides"
           sub={
-            <>
-              <span className="font-semibold text-foreground">
-                {GUIDES.length} guides
-              </span>{" "}
-              · Source: LTA via DataMall
-            </>
+            <span className="font-semibold text-foreground">
+              {GUIDES.length} guides
+            </span>
           }
           title="Learn how car ownership costs actually work"
         />
