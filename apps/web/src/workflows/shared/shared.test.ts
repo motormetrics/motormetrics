@@ -108,6 +108,21 @@ describe("revalidatePostsCache", () => {
 
     consoleSpy.mockRestore();
   });
+
+  it("should also revalidate the post page tag when given a slug", async () => {
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    await revalidatePostsCache("january-2024-car-registrations");
+
+    expect(revalidateTag).toHaveBeenCalledWith("posts:list", "max");
+    expect(revalidateTag).toHaveBeenCalledWith("posts:recent", "max");
+    expect(revalidateTag).toHaveBeenCalledWith(
+      "posts:slug:january-2024-car-registrations",
+      "max",
+    );
+
+    consoleSpy.mockRestore();
+  });
 });
 
 describe("generatePostHero", () => {

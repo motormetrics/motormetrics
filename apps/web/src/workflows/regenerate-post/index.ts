@@ -78,7 +78,7 @@ export async function regeneratePostWorkflow(
     });
   }
 
-  await revalidatePostsCache();
+  await revalidatePostsCache(post.slug);
 
   return {
     message: `[REGENERATE] Successfully regenerated ${dataType} post for ${month}`,

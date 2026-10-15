@@ -117,7 +117,9 @@ describe("regeneratePostWorkflow", () => {
       "regenerated-post-id",
       "https://blob.example/regen.png",
     );
-    expect(revalidatePostsCache).toHaveBeenCalled();
+    expect(revalidatePostsCache).toHaveBeenCalledWith(
+      "january-2024-car-registrations",
+    );
     expect(result.message).toBe(
       "[REGENERATE] Successfully regenerated cars post for 2024-01",
     );
