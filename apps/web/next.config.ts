@@ -9,6 +9,26 @@ const LEGACY_DOMAIN_REDIRECTS = [
   ["api.sgcarstrends.com", "api.motormetrics.app"],
 ] as const;
 
+// Static CSP, not nonce-based: a nonce needs a per-request render, which
+// would pull every page out of the static shell. vercel.live and pusher
+// serve the preview toolbar; cartocdn serves the EV charging map's styles,
+// tiles and glyphs.
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://vercel.live",
+  "style-src 'self' 'unsafe-inline' https://vercel.live",
+  "img-src 'self' blob: data: https://assets.motormetrics.app https://*.blob.vercel-storage.com https://images.unsplash.com https://*.basemaps.cartocdn.com https://vercel.live https://vercel.com",
+  "font-src 'self' data: https://vercel.live https://assets.vercel.com",
+  "connect-src 'self' https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://vercel.live wss://ws-us3.pusher.com",
+  "worker-src 'self' blob:",
+  "frame-src https://vercel.live",
+  "frame-ancestors 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
@@ -118,7 +138,16 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: CONTENT_SECURITY_POLICY,
+          },
+          {
+            key: "Permissions-Policy",
+            value:
+              "camera=(), microphone=(), geolocation=(self), browsing-topics=()",
           },
           {
             key: "X-DNS-Prefetch-Control",
