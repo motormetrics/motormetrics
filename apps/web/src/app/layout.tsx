@@ -73,7 +73,11 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <html lang="en" className={cn("scroll-smooth antialiased", geist.variable)}>
+    <html
+      lang="en"
+      className={cn("antialiased motion-safe:scroll-smooth", geist.variable)}
+      data-scroll-behavior="smooth"
+    >
       <head>
         <BotIdClient protect={protectedRoutes} />
       </head>
