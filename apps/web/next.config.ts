@@ -10,12 +10,12 @@ const LEGACY_DOMAIN_REDIRECTS = [
 ] as const;
 
 // Static CSP, not nonce-based: a nonce needs a per-request render, which
-// would pull every page out of the static shell. React needs 'unsafe-eval'
-// in development only. vercel.live and pusher serve the preview toolbar;
-// cartocdn serves the EV charging map's styles, tiles and glyphs.
+// would pull every page out of the static shell. vercel.live and pusher
+// serve the preview toolbar; cartocdn serves the EV charging map's styles,
+// tiles and glyphs.
 const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""} https://vercel.live`,
+  "script-src 'self' 'unsafe-inline' https://vercel.live",
   "style-src 'self' 'unsafe-inline' https://vercel.live",
   "img-src 'self' blob: data: https://assets.motormetrics.app https://*.blob.vercel-storage.com https://images.unsplash.com https://*.basemaps.cartocdn.com https://vercel.live https://vercel.com",
   "font-src 'self' data: https://vercel.live https://assets.vercel.com",
