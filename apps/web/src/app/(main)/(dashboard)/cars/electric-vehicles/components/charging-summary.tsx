@@ -5,43 +5,23 @@ import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/el
 import { CHARGING_POINT_TARGET_2030 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import {
-  getEvChargingLiveSummary,
   getEvChargingNetworkSummary,
   getEvChargingRegistrationsByMonth,
 } from "@web/queries/ev-charging";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 
-/** "1:40 am SGT, 2 October 2026", for the live feed line. */
-const formatObservedAt = (iso: string) => {
-  const observed = new Date(iso);
-  const time = observed.toLocaleString("en-SG", {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: "Asia/Singapore",
-  });
-  const date = observed.toLocaleString("en-SG", {
-    day: "numeric",
-    month: "long",
-    timeZone: "Asia/Singapore",
-    year: "numeric",
-  });
-  return `${time} SGT, ${date}`;
-};
-
 /**
- * Size of the public charging network against the 2030 target, with the
- * hourly live feed's connector count beneath.
+ * Size of the public charging network against the 2030 target. The hourly
+ * live feed lives on the charging page, so this section never reads it.
  *
  * Sourced from LTA DataMall's quarterly charging point registry; the section
  * is omitted until that registry has been ingested rather than showing an
- * invented figure. The live line drops out on its own if the feed is empty
- * or fails, so it never takes the registry figures down with it.
+ * invented figure.
  */
 export async function ChargingSummary() {
-  const [network, monthly, live] = await Promise.all([
+  const [network, monthly] = await Promise.all([
     getEvChargingNetworkSummary(),
     getEvChargingRegistrationsByMonth(),
-    getEvChargingLiveSummary().catch(() => null),
   ]);
 
   if (network.connectors <= 0) {
@@ -115,37 +95,9 @@ export async function ChargingSummary() {
         </ProgressBar>
       </div>
 
-      {live && live.connectors > 0 && live.observedAt ? (
-        <div className="flex flex-col gap-1 border-separator border-t pt-3.5">
-          <Typography.Paragraph color="muted" size="xs" weight="semibold">
-            Live feed · as of {formatObservedAt(live.observedAt)}
-          </Typography.Paragraph>
-          <Typography.Paragraph className="text-muted-strong text-sm tabular-nums">
-            <span className="font-semibold text-foreground">
-              <NumberValue
-                locale="en-SG"
-                maximumFractionDigits={0}
-                value={live.connectors}
-              />
-            </span>{" "}
-            public connectors at{" "}
-            <span className="font-semibold text-foreground">
-              <NumberValue
-                locale="en-SG"
-                maximumFractionDigits={0}
-                value={live.locations}
-              />
-            </span>{" "}
-            locations
-          </Typography.Paragraph>
-        </div>
-      ) : null}
-
       <SourceNote>
         Charging points from LTA, with the 2030 target of{" "}
-        {CHARGING_POINT_TARGET_2030.toLocaleString("en-SG")}. The live feed is
-        LTA DataMall EV Charging Points, refreshed hourly, and counts individual
-        connectors.
+        {CHARGING_POINT_TARGET_2030.toLocaleString("en-SG")}.
       </SourceNote>
     </section>
   );
