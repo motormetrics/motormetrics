@@ -33,6 +33,20 @@
 * **web:** narrow the collapsed nav bar gap so it fits 360px ([6090e5a](https://github.com/motormetrics/motormetrics/commit/6090e5aaf3f939c666272e513afae36e407b8d52))
 * **web:** span the exercise range switch across phone rows ([2cf018e](https://github.com/motormetrics/motormetrics/commit/2cf018efc793dce8722480c317b86c9af13b9a72))
 
+## [5.33.1](https://github.com/motormetrics/motormetrics/compare/v5.33.0...v5.33.1) (2026-10-15)
+
+
+### Bug Fixes
+
+* **web:** revalidate post page after hero regeneration ([3b670cc](https://github.com/motormetrics/motormetrics/commit/3b670cc8e27b3f4137c75024ea51f9d1e411ddcc))
+* **web:** send csp and permissions-policy response headers ([19fc665](https://github.com/motormetrics/motormetrics/commit/19fc665b48a620363e80219abdb26f3182b26e1e))
+
+
+### Performance Improvements
+
+* **web:** limit proxy to api, admin and markdown requests ([79180c1](https://github.com/motormetrics/motormetrics/commit/79180c197b5d7c0271615150c1edd9d6f7715da3))
+* **web:** prerender coe overview sections into the static shell ([1e4ff9e](https://github.com/motormetrics/motormetrics/commit/1e4ff9ea7134651eea03a2e32906e9b9f97d8d24))
+
 ## [5.33.0](https://github.com/motormetrics/motormetrics/compare/v5.32.0...v5.33.0) (2026-10-15)
 
 
