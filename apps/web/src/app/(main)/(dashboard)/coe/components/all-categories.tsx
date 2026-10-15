@@ -1,6 +1,9 @@
 import { Typography } from "@heroui/react";
 import type { CategoryRow } from "@web/app/(main)/(dashboard)/coe/components/all-categories-sort";
-import { AllCategoriesTableSelected } from "@web/app/(main)/(dashboard)/coe/components/all-categories-table";
+import {
+  AllCategoriesTable,
+  AllCategoriesTableSelected,
+} from "@web/app/(main)/(dashboard)/coe/components/all-categories-table";
 import {
   CATEGORY_DESCRIPTIONS,
   COE_CATEGORIES,
@@ -10,10 +13,10 @@ import {
   summariseExercise,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
+import { coeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { SectionLink } from "@web/components/shared/overview";
 import { getCoeResults } from "@web/queries/coe";
-import type { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
 
 /** Exercises behind each row's sparkline — a year of twice-monthly bidding. */
 const SERIES_LENGTH = 24;
@@ -26,17 +29,8 @@ const SERIES_LENGTH = 24;
  * the headline; below 720px an "All categories" eyebrow names the list. A
  * one-line recap of Cat A and B follows the table.
  */
-export async function AllCategories({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const [{ category: selected }, results] = await Promise.all([
-    loadCoeOverviewSearchParams(searchParams),
-    getCoeResults(),
-  ]);
-
-  const exercises = groupByExercise(results);
+export async function AllCategories() {
+  const exercises = groupByExercise(await getCoeResults());
   const latest = exercises.at(-1);
   const previous = exercises.at(-2);
   const recent = exercises.slice(-SERIES_LENGTH);
@@ -86,7 +80,16 @@ export async function AllCategories({
         </Typography.Paragraph>
         <SectionLink href="/coe/results">All COE results</SectionLink>
       </div>
-      <AllCategoriesTableSelected rows={rows} selected={selected} />
+      <Suspense
+        fallback={
+          <AllCategoriesTable
+            rows={rows}
+            selected={coeOverviewSearchParams.category.defaultValue}
+          />
+        }
+      >
+        <AllCategoriesTableSelected rows={rows} />
+      </Suspense>
       {summary ? (
         <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
           {summary}

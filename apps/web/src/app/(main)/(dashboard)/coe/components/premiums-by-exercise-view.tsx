@@ -177,21 +177,17 @@ export function PremiumsByExerciseView({
   );
 }
 
-/** The history with its range switch wired to the URL. */
+/** The history for the category and range in the URL; render inside `<Suspense>`. */
 export function PremiumsByExerciseSelected({
-  categoryKey,
   exercises,
-  range,
 }: {
-  categoryKey: CategoryKey;
   exercises: CoeExercise[];
-  range: ExerciseRange;
 }) {
-  const { selectRange } = useCoeOverview();
+  const { category, range, selectRange } = useCoeOverview();
 
   return (
     <PremiumsByExerciseView
-      categoryKey={categoryKey}
+      categoryKey={category}
       exercises={exercises}
       onSelectRange={selectRange}
       range={range}

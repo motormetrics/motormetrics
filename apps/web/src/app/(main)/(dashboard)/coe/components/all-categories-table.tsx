@@ -223,21 +223,15 @@ export function AllCategoriesTable({
   );
 }
 
-/** The table with row selection wired to the URL. */
-export function AllCategoriesTableSelected({
-  rows,
-  selected,
-}: {
-  rows: CategoryRow[];
-  selected: CategoryKey;
-}) {
-  const { selectCategory } = useCoeOverview();
+/** The table with the category in the URL selected; render inside `<Suspense>`. */
+export function AllCategoriesTableSelected({ rows }: { rows: CategoryRow[] }) {
+  const { category, selectCategory } = useCoeOverview();
 
   return (
     <AllCategoriesTable
       onSelect={selectCategory}
       rows={rows}
-      selected={selected}
+      selected={category}
     />
   );
 }

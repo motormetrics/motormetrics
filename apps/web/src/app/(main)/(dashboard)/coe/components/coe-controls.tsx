@@ -30,26 +30,20 @@ const captureFilter = (filter: "category" | "range", value: string) =>
   posthog.capture("dashboard_filter_changed", { filter, value });
 
 /**
- * The COE overview's category and range. The controls write with
- * `shallow: false`, so the server re-renders the page with the new selection
- * and the sections stay server components. `startTransition` keeps the
- * outgoing view on screen while that round-trip is in flight.
+ * The COE overview's category and range. Every section already holds the
+ * figures for every choice, so the controls write with `shallow: true` and a
+ * switch re-renders on the client without a server round-trip, keeping the
+ * page in the static shell. Reading the URL suspends during prerender, so only
+ * the sections' `*Selected` wrappers call this, each inside `<Suspense>`.
  */
 export function useCoeOverview() {
-  const [, startTransition] = useTransition();
   const [category, setCategory] = useQueryState(
     "category",
-    coeOverviewSearchParams.category.withOptions({
-      shallow: false,
-      startTransition,
-    }),
+    coeOverviewSearchParams.category.withOptions({ shallow: true }),
   );
   const [range, setRange] = useQueryState(
     "range",
-    coeOverviewSearchParams.range.withOptions({
-      shallow: false,
-      startTransition,
-    }),
+    coeOverviewSearchParams.range.withOptions({ shallow: true }),
   );
 
   const selectCategory = (key: CategoryKey) => {
@@ -103,7 +97,7 @@ export function CategoryTabs({ selected }: { selected: CategoryKey }) {
 
 /**
  * The A–E switch itself. The selection and handler come in as props, so the
- * overview's sections can draw it from the selection they are given.
+ * overview's prerendered fallback can draw it without reading the URL.
  */
 export function CategorySegment({
   className,

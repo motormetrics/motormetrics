@@ -29,7 +29,6 @@ import {
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getCoeResults } from "@web/queries/coe";
 import type { Metadata } from "next";
-import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -90,11 +89,7 @@ function SectionSkeleton({ className }: { className: string }) {
   );
 }
 
-interface PageProps {
-  searchParams: Promise<SearchParams>;
-}
-
-export default function Page({ searchParams }: PageProps) {
+export default function Page() {
   return (
     <OverviewPage className="gap-10 max-[720px]:gap-7">
       <StructuredData
@@ -122,14 +117,14 @@ export default function Page({ searchParams }: PageProps) {
 
         <SectionErrorBoundary title="COE premium unavailable">
           <Suspense fallback={<SectionSkeleton className="h-[150px]" />}>
-            <CoeHeadline searchParams={searchParams} />
+            <CoeHeadline />
           </Suspense>
         </SectionErrorBoundary>
       </div>
 
       <SectionErrorBoundary title="Category breakdown unavailable">
         <Suspense fallback={<SectionSkeleton className="h-80" />}>
-          <AllCategories searchParams={searchParams} />
+          <AllCategories />
         </Suspense>
       </SectionErrorBoundary>
 
@@ -137,7 +132,7 @@ export default function Page({ searchParams }: PageProps) {
 
       <SectionErrorBoundary title="Premium history unavailable">
         <Suspense fallback={<SectionSkeleton className="h-[260px]" />}>
-          <PremiumsByExercise searchParams={searchParams} />
+          <PremiumsByExercise />
         </Suspense>
       </SectionErrorBoundary>
 
@@ -146,7 +141,7 @@ export default function Page({ searchParams }: PageProps) {
       <OverviewGrid className="gap-10 max-[720px]:gap-9 lg:grid-cols-[1.2fr_1fr] lg:gap-x-16 min-[901px]:grid-cols-[1.2fr_1fr] min-[901px]:gap-x-16">
         <SectionErrorBoundary title="Quota allocation unavailable">
           <Suspense fallback={<SectionSkeleton className="h-64" />}>
-            <QuotaAllocation searchParams={searchParams} />
+            <QuotaAllocation />
           </Suspense>
         </SectionErrorBoundary>
         <SectionErrorBoundary title="PQP rates unavailable">

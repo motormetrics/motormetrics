@@ -101,7 +101,7 @@ describe("useCoeOverview", () => {
       .toBeChecked();
   });
 
-  it("should write the range to the server and capture the change", async () => {
+  it("should write the range shallowly and capture the change", async () => {
     const screen = await render(<OverviewControls />, { wrapper });
 
     await screen.getByRole("radio", { name: "24 exercises" }).click();
@@ -109,14 +109,14 @@ describe("useCoeOverview", () => {
     await expect
       .poll(() => onUrlUpdate.mock.calls.at(-1)?.[0].searchParams.get("range"))
       .toBe("24");
-    expect(onUrlUpdate.mock.calls.at(-1)?.[0].options.shallow).toBe(false);
+    expect(onUrlUpdate.mock.calls.at(-1)?.[0].options.shallow).toBe(true);
     expect(capture).toHaveBeenCalledWith("dashboard_filter_changed", {
       filter: "range",
       value: "24",
     });
   });
 
-  it("should write the category to the server", async () => {
+  it("should write the category shallowly", async () => {
     const screen = await render(<OverviewControls />, { wrapper });
 
     await screen.getByRole("radio", { name: "Cat E" }).click();
@@ -126,7 +126,7 @@ describe("useCoeOverview", () => {
         onUrlUpdate.mock.calls.at(-1)?.[0].searchParams.get("category"),
       )
       .toBe("E");
-    expect(onUrlUpdate.mock.calls.at(-1)?.[0].options.shallow).toBe(false);
+    expect(onUrlUpdate.mock.calls.at(-1)?.[0].options.shallow).toBe(true);
   });
 });
 

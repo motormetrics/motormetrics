@@ -103,7 +103,8 @@ function PremiumBlocks({
  * see `pairedCategories`), and a ruled grid of that exercise's figures.
  * Stacks into one column at 900px and below.
  *
- * Drawn from props alone; `CoeHeadlineSelected` wires the switch to the URL.
+ * Drawn from props alone, so the server can prerender it with the default
+ * category as the fallback of `CoeHeadlineSelected`.
  */
 export function CoeHeadlineView({
   categoryKey,
@@ -226,11 +227,15 @@ export function CoeHeadlineView({
   );
 }
 
-/** The headline with its category switch wired to the URL. */
-export function CoeHeadlineSelected(
-  props: CoeHeadlineData & { categoryKey: CategoryKey },
-) {
-  const { selectCategory } = useCoeOverview();
+/** The headline for the category in the URL; render inside `<Suspense>`. */
+export function CoeHeadlineSelected(props: CoeHeadlineData) {
+  const { category, selectCategory } = useCoeOverview();
 
-  return <CoeHeadlineView {...props} onSelectCategory={selectCategory} />;
+  return (
+    <CoeHeadlineView
+      {...props}
+      categoryKey={category}
+      onSelectCategory={selectCategory}
+    />
+  );
 }

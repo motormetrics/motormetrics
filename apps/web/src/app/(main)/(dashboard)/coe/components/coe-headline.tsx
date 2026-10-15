@@ -1,20 +1,19 @@
 import { groupByExercise } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { CoeHeadlineSelected } from "@web/app/(main)/(dashboard)/coe/components/coe-headline-view";
-import { loadCoeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
+import {
+  CoeHeadlineSelected,
+  CoeHeadlineView,
+} from "@web/app/(main)/(dashboard)/coe/components/coe-headline-view";
+import { coeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { getCoeResults, getPqpRates } from "@web/queries/coe";
-import type { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
 
 /**
- * The opening block of /coe. The figures for every category are shaped here;
- * the view draws the category in the URL.
+ * The opening block of /coe. The figures for every category are shaped here,
+ * in the static shell; the client view picks the one in the URL, and the
+ * fallback draws the default category so the shell holds real figures.
  */
-export async function CoeHeadline({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const [{ category }, results, pqpRates] = await Promise.all([
-    loadCoeOverviewSearchParams(searchParams),
+export async function CoeHeadline() {
+  const [results, pqpRates] = await Promise.all([
     getCoeResults(),
     getPqpRates(),
   ]);
@@ -37,5 +36,16 @@ export async function CoeHeadline({
     previous: exercises.at(-2),
   };
 
-  return <CoeHeadlineSelected {...data} categoryKey={category} />;
+  return (
+    <Suspense
+      fallback={
+        <CoeHeadlineView
+          {...data}
+          categoryKey={coeOverviewSearchParams.category.defaultValue}
+        />
+      }
+    >
+      <CoeHeadlineSelected {...data} />
+    </Suspense>
+  );
 }

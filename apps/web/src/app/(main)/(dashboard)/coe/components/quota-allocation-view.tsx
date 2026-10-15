@@ -1,4 +1,7 @@
+"use client";
+
 import { Tooltip } from "@heroui/react";
+import { useCoeOverview } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
   bidsAgainstQuota,
   type CoeExercise,
@@ -108,4 +111,11 @@ export function QuotaAllocationView({
       </SourceNote>
     </div>
   );
+}
+
+/** The bars with the category in the URL accented; render inside `<Suspense>`. */
+export function QuotaAllocationSelected({ latest }: { latest: CoeExercise }) {
+  const { category } = useCoeOverview();
+
+  return <QuotaAllocationView categoryKey={category} latest={latest} />;
 }
