@@ -1,5 +1,9 @@
 {
   "mcpServers": {
+    "gsc-motormetrics": {
+      "type": "http",
+      "url": "https://google-search-console-mcp-pi.vercel.app/mcp"
+    },
     "heroui-pro": {
       "type": "http",
       "url": "https://mcp.heroui.pro/mcp",
