@@ -9,6 +9,31 @@ const LEGACY_DOMAIN_REDIRECTS = [
   ["api.sgcarstrends.com", "api.motormetrics.app"],
 ] as const;
 
+// Removed or renamed pages that still hold search impressions; each points at
+// the closest page that replaced it.
+const LEGACY_PATH_REDIRECTS = [
+  ["/coe/trends", "/coe/results"],
+  ["/coe/bidding", "/coe"],
+  ["/cars/costs", "/cars/arf"],
+  ["/blog/understanding-coe-system-singapore", "/learn/coe"],
+  [
+    "/blog/electric-vehicles-dominate-singapore-market-february-2026",
+    "/blog/electric-vehicles-capture-majority-share-in-february-2026",
+  ],
+  [
+    "/blog/electric-vehicles-lead-singapore-market-october-2025",
+    "/blog/electric-vehicles-dominate-singapore-october-2025",
+  ],
+  [
+    "/blog/singapores-automotive-pulse-unpacking-october-2025-car-registration-trends",
+    "/blog/electric-vehicles-dominate-singapore-october-2025",
+  ],
+  [
+    "/blog/singapores-car-market-august-2025-analysis",
+    "/blog/electric-vehicles-surge-in-singapore-august-2025",
+  ],
+] as const;
+
 // Static CSP, not nonce-based: a nonce needs a per-request render, which
 // would pull every page out of the static shell. vercel.live and pusher
 // serve the preview toolbar; cartocdn serves the EV charging map's styles,
@@ -78,6 +103,11 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         has: [{ type: "host" as const, value: fromHost }],
         destination: `https://${toHost}/:path*`,
+        permanent: true,
+      })),
+      ...LEGACY_PATH_REDIRECTS.map(([source, destination]) => ({
+        source,
+        destination,
         permanent: true,
       })),
       {
