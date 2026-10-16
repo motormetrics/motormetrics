@@ -33,6 +33,13 @@
 * **web:** narrow the collapsed nav bar gap so it fits 360px ([6090e5a](https://github.com/motormetrics/motormetrics/commit/6090e5aaf3f939c666272e513afae36e407b8d52))
 * **web:** span the exercise range switch across phone rows ([2cf018e](https://github.com/motormetrics/motormetrics/commit/2cf018efc793dce8722480c317b86c9af13b9a72))
 
+## [5.33.2](https://github.com/motormetrics/motormetrics/compare/v5.33.1...v5.33.2) (2026-10-16)
+
+
+### Bug Fixes
+
+* **web:** redirect removed pages that still rank ([008ec35](https://github.com/motormetrics/motormetrics/commit/008ec3570fb12bb341545fc5bcf1cbee1a507937))
+
 ## [5.33.1](https://github.com/motormetrics/motormetrics/compare/v5.33.0...v5.33.1) (2026-10-15)
 
 
