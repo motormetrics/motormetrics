@@ -284,7 +284,10 @@ export function generateDataCatalogSchema(
       return {
         "@type": "Dataset" as const,
         name: config.name,
+        description: config.description,
         url: `${SITE_URL}${config.path}`,
+        creator: datasetBase.creator,
+        license: datasetBase.license,
       };
     }),
   };

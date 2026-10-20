@@ -231,7 +231,8 @@ export async function PQPReport({
         <SourceNote>
           5-year cost is half the PQP. Gap is the latest closing premium minus
           the PQP, as a share of the premium. PQP is listed for Categories A and
-          B only; there is no PQP for Category E.
+          B only. Category E has no PQP of its own: per LTA, a Category E COE is
+          renewed at the PQP of the vehicle's own category, A to D.
         </SourceNote>
       </section>
 

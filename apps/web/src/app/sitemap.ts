@@ -7,6 +7,7 @@ import {
   getDistinctMakes,
   getDistinctVehicleTypes,
 } from "@web/queries/cars";
+import { getCOELatestMonth } from "@web/queries/coe/latest-month";
 import { getAllPosts } from "@web/queries/posts";
 import type { MetadataRoute } from "next";
 import { cacheLife, cacheTag } from "next/cache";
@@ -14,14 +15,19 @@ import { cacheLife, cacheTag } from "next/cache";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   "use cache";
   cacheLife("max");
-  cacheTag("sitemap", "posts:list", "cars:makes");
+  cacheTag("sitemap", "posts:list", "cars:makes", "coe:months");
 
-  const [posts, makes, fuelTypes, vehicleTypes] = await Promise.all([
-    getAllPosts(),
-    getDistinctMakes(),
-    getDistinctFuelTypes(),
-    getDistinctVehicleTypes(),
-  ]);
+  const [posts, makes, fuelTypes, vehicleTypes, coeLatestMonth] =
+    await Promise.all([
+      getAllPosts(),
+      getDistinctMakes(),
+      getDistinctFuelTypes(),
+      getDistinctVehicleTypes(),
+      getCOELatestMonth(),
+    ]);
+  // A "YYYY-MM" month is a valid W3C datetime. The COE workflow updates PQP
+  // alongside the bidding results, so one date covers all four COE pages.
+  const coeLastModified = coeLatestMonth ?? undefined;
 
   return [
     {
@@ -83,18 +89,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${SITE_URL}/coe`,
+      lastModified: coeLastModified,
       changeFrequency: "monthly" as const,
     },
     {
       url: `${SITE_URL}/coe/premiums`,
+      lastModified: coeLastModified,
       changeFrequency: "monthly" as const,
     },
     {
       url: `${SITE_URL}/coe/results`,
+      lastModified: coeLastModified,
       changeFrequency: "monthly" as const,
     },
     {
       url: `${SITE_URL}/coe/pqp`,
+      lastModified: coeLastModified,
       changeFrequency: "monthly" as const,
     },
     {
