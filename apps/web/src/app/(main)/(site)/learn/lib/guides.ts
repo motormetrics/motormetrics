@@ -260,9 +260,9 @@ PARF is a government rebate. Scrap value is what scrapyards pay for the vehicle'
   {
     slug: "check-parf-rebate",
     term: "Deregistration Value",
-    title: "How to Check Your PARF Rebate and Deregistration Value",
+    title: "PARF Rebate Enquiry: How to Check Your PARF and COE Rebate",
     description:
-      "Your car's deregistration value is its PARF rebate plus its COE rebate. Check it on OneMotoring, or work it out yourself with our step-by-step example.",
+      "Enquire your car's PARF and COE rebate on OneMotoring, or estimate it yourself with a worked example. Includes the deregistration value formula.",
     excerpt:
       "Your car's deregistration value is the PARF rebate plus the COE rebate you get back when you deregister it. You can check the exact figure on OneMotoring, or estimate it yourself from the ARF and COE premium you paid.",
     content: `## What is Deregistration Value?
@@ -385,6 +385,8 @@ Yes, if the COE has been renewed and still has unused months. The PARF rebate is
 The **Additional Registration Fee (ARF)** is a tax levied when you first register a vehicle in Singapore. It's calculated based on the vehicle's Open Market Value (OMV) and uses a tiered rate structure designed to make luxury vehicles proportionally more expensive.
 
 ARF is one of the largest cost components when buying a car in Singapore, often exceeding the COE premium for higher-value vehicles.
+
+To work out the ARF for a specific car, use our [ARF Calculator](/cars/arf).
 
 ## ARF Tiers and Rates
 
