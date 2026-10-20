@@ -1,4 +1,8 @@
 import { Skeleton, Typography } from "@heroui/react";
+import {
+  formatExercise,
+  groupByExercise,
+} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { RESULTS_FAQS } from "@web/app/(main)/(dashboard)/coe/results/components/faq-data";
 import { LatestExerciseSub } from "@web/app/(main)/(dashboard)/coe/results/components/latest-exercise-sub";
 import { PremiumsByYear } from "@web/app/(main)/(dashboard)/coe/results/components/premiums-by-year";
@@ -25,6 +29,7 @@ import {
   generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import { getCoeResults } from "@web/queries/coe";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
@@ -34,31 +39,40 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-const title = "COE Price History and Trends";
+const title = "COE Bidding Results History and Price Charts";
 const description =
-  "Singapore COE price history for Cat A to E: every bidding result, yearly averages and record highs, with 12-month, 5-year, 10-year and all-time charts.";
+  "Singapore COE bidding results history for Cat A to E: every exercise, yearly averages and record highs, with 12-month, 5-year, 10-year and all-time charts.";
 
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    ...baseOpenGraph,
+export async function generateMetadata(): Promise<Metadata> {
+  const latest = groupByExercise(await getCoeResults()).at(-1);
+
+  // Naming the latest exercise keeps the snippet current with every result.
+  const pageDescription = latest
+    ? `Latest: ${formatExercise(latest)}. COE bidding results history for Cat A to E, with yearly averages, record highs and price charts.`
+    : description;
+
+  return {
     title,
-    description,
-    url: `${SITE_URL}/coe/results`,
-  },
-  twitter: {
-    ...baseTwitter,
-    title,
-    description,
-  },
-  alternates: {
-    canonical: "/coe/results",
-  },
-  authors: [{ name: SITE_TITLE, url: SITE_URL }],
-  creator: SITE_TITLE,
-  publisher: SITE_TITLE,
-};
+    description: pageDescription,
+    openGraph: {
+      ...baseOpenGraph,
+      title,
+      description: pageDescription,
+      url: `${SITE_URL}/coe/results`,
+    },
+    twitter: {
+      ...baseTwitter,
+      title,
+      description: pageDescription,
+    },
+    alternates: {
+      canonical: "/coe/results",
+    },
+    authors: [{ name: SITE_TITLE, url: SITE_URL }],
+    creator: SITE_TITLE,
+    publisher: SITE_TITLE,
+  };
+}
 
 const structuredData: WithContext<WebPage> = {
   "@context": "https://schema.org",
@@ -151,7 +165,7 @@ export default function COEResultsPage({ searchParams }: PageProps) {
             <LatestExerciseSub searchParams={searchParams} />
           </Suspense>
         }
-        title="COE price history and trends"
+        title="COE bidding results history"
       />
 
       <SectionErrorBoundary title="Latest exercise unavailable">
