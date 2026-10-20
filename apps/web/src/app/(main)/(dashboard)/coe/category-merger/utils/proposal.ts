@@ -13,6 +13,9 @@ export const FEEDBACK_URL = "https://go.gov.sg/coe-pcd-feedback";
 /** When LTA published the paper; the page's Article date. */
 export const PUBLISHED_DATE = "2026-10-08";
 
+/** When this page was last revised; the Article's `dateModified`. */
+export const MODIFIED_DATE = "2026-10-21";
+
 export interface FeebateBand {
   band: number;
   /** Negative for a rebate, positive for a surcharge, in dollars. */
