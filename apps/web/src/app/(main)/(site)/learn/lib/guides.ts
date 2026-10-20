@@ -127,7 +127,7 @@ Your deposit is returned, and you can bid again in the next exercise.
     term: "PARF",
     title: "What is PARF? How the Rebate Works and When to Deregister",
     description:
-      "PARF is the rebate you get back on your ARF when you deregister a car early. See how the PARF rebate is calculated, the rate schedule, and when deregistering pays off.",
+      "PARF is the part of your ARF refunded when you deregister a car early. See LTA's rebate rates by car age, the caps, and when deregistering pays off.",
     excerpt:
       "The Preferential Additional Registration Fee (PARF) rebate is money you get back when you deregister your car before the COE expires. Understanding PARF can save you thousands when deciding when to sell or scrap your vehicle.",
     content: `## What is PARF?
@@ -260,9 +260,9 @@ PARF is a government rebate. Scrap value is what scrapyards pay for the vehicle'
   {
     slug: "check-parf-rebate",
     term: "Deregistration Value",
-    title: "PARF Rebate Enquiry: How to Check Your PARF and COE Rebate",
+    title: "PARF Rebate Enquiry: LTA Link + Free Estimate",
     description:
-      "Enquire your car's PARF and COE rebate on OneMotoring, or estimate it yourself with a worked example. Includes the deregistration value formula.",
+      "Direct link to LTA's PARF/COE rebate enquiry on OneMotoring (Singpass login), or estimate yours with no login. Buyers and dealers can use an access code.",
     excerpt:
       "Your car's deregistration value is the PARF rebate plus the COE rebate you get back when you deregister it. You can check the exact figure on OneMotoring, or estimate it yourself from the ARF and COE premium you paid.",
     content: `## What is Deregistration Value?
@@ -278,14 +278,13 @@ Scrap or export value is separate. It is what a scrapyard or exporter pays you f
 
 ## How to Check Your PARF Rebate on OneMotoring
 
-The exact figure comes from LTA. Use the **Enquire PARF/COE Rebate for Registered Vehicle** e-service on [OneMotoring](https://onemotoring.lta.gov.sg):
+The exact figure comes from LTA. Use LTA's **Enquire PARF/COE Rebate for Registered Vehicle** e-service on [OneMotoring](https://onemotoring.lta.gov.sg/content/onemotoring/home/digitalservices/enquire-parf-coe-rebate-for-vehicles-not-yet-deregistered--requi.html) (login required):
 
 1. Log in to OneMotoring with Singpass and request an **LTA access code** under Digital Services. Since 30 June 2025 the rebate enquiry asks for one.
 2. Open the rebate enquiry and enter your **vehicle number** and the **access code**.
 3. Enter the **date you plan to deregister**. The rebate falls as the car ages, so the date changes the answer.
 4. The result shows your PARF rebate and COE rebate for that date.
-
-A dealer or scrapyard can run the same check for you if you give them the access code.
+5. Selling the car? Give the access code to the buyer, dealer or scrapyard so they can run the same enquiry.
 
 ## How to Calculate Deregistration Value Yourself
 
@@ -370,14 +369,14 @@ Yes, if the COE has been renewed and still has unused months. The PARF rebate is
       { label: "PARF Rebate Calculator", href: "/cars/parf" },
       { label: "Deregistration Statistics", href: "/cars/deregistrations" },
     ],
-    lastUpdated: "2026-09-25",
+    lastUpdated: "2026-10-21",
   },
   {
     slug: "arf",
     term: "ARF",
-    title: "What is ARF? Singapore ARF Rates and How It Is Calculated",
+    title: "What is ARF? 2026 Tier Rates (100–320%)",
     description:
-      "ARF (Additional Registration Fee) is the tiered tax paid when registering a car in Singapore. See the ARF rates, how ARF is calculated from OMV, and worked examples.",
+      "ARF is the tiered tax on a car's OMV at registration in Singapore. See LTA's current rates (100% to 320% since Feb 2023), worked examples and a calculator.",
     excerpt:
       "The Additional Registration Fee is a major component of car prices in Singapore. This tiered tax on vehicle value can add tens of thousands to your purchase:here's how it works.",
     content: `## What is ARF?
@@ -466,8 +465,8 @@ The tiered ARF system has evolved significantly:
 |------|--------|
 | 2013 | Introduced tiered structure (previously 100% flat rate) |
 | 2018 | Rates increased for higher tiers |
-| 2022 | New 220% tier for OMV above $80,000 |
-| 2023 | Major revision: 5-tier structure with rates up to 320% |
+| 2022 | New 220% top tier for OMV above $80,000 (**pre-Feb 2023, no longer applies**) |
+| 2023 | Current: 100/140/190/250/320% on $20,000 OMV bands, 320% above $80,000 |
 
 The February 2023 revision introduced steeper tiers to moderate demand for luxury vehicles while keeping entry-level cars more accessible.
 
@@ -518,12 +517,12 @@ No, ARF is mandatory for all new vehicle registrations in Singapore. There are n
       { label: "PARF Rebate Calculator", href: "/cars/parf" },
       { label: "Car Registrations", href: "/cars/registrations" },
     ],
-    lastUpdated: "2026-04-11",
+    lastUpdated: "2026-10-21",
   },
   {
     slug: "omv",
     term: "OMV",
-    title: "What is OMV? Open Market Value of Cars in Singapore",
+    title: "What is OMV? How It Sets Your ARF and PARF",
     description:
       "OMV (Open Market Value) is a car's price before Singapore taxes, assessed by Singapore Customs. Learn what OMV includes and how it sets your ARF and PARF.",
     excerpt:
@@ -690,7 +689,7 @@ Not exactly. Paper value for loans/insurance may differ from OMV as it includes 
   {
     slug: "pqp",
     term: "PQP",
-    title: "What is PQP? Prevailing Quota Premium and COE Renewal Costs",
+    title: "What is PQP? COE Renewal Cost Explained",
     description:
       "PQP (Prevailing Quota Premium) is the 3-month average COE price you pay to renew your COE. Learn how PQP is calculated and when to renew or deregister.",
     excerpt:
