@@ -1,4 +1,5 @@
 import { Skeleton } from "@heroui/react";
+import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { PQP_FAQS } from "@web/app/(main)/(dashboard)/coe/pqp/components/faq-data";
 import { PQPReport } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-report";
@@ -23,24 +24,50 @@ import type { WebPage, WithContext } from "schema-dts";
 const title = "Latest PQP Rates for COE Renewal";
 const description =
   "Current PQP (Prevailing Quota Premium) rates for Cat A and Cat B COE renewal in Singapore, averaged over the last 3 months of COE prices.";
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    ...baseOpenGraph,
-    title,
-    description,
-    url: `${SITE_URL}/coe/pqp`,
-  },
-  twitter: {
-    ...baseTwitter,
-    title,
-    description,
-  },
-  alternates: {
-    canonical: "/coe/pqp",
-  },
-};
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { latestMonth, categorySummaries } = await getPQPOverview();
+  const categoryA = categorySummaries.find(
+    (summary) => summary.category === "Category A",
+  );
+  const categoryB = categorySummaries.find(
+    (summary) => summary.category === "Category B",
+  );
+
+  // The month's rates in the title and snippet answer a "pqp coe renewal"
+  // search before the click, and change with every monthly publication.
+  const hasRates =
+    latestMonth !== null &&
+    categoryA !== undefined &&
+    categoryB !== undefined &&
+    categoryA.pqpRate > 0 &&
+    categoryB.pqpRate > 0;
+  const metadataTitle = hasRates
+    ? `COE PQP ${formatMonth(latestMonth, "short")}: Cat A ${formatCurrency(categoryA.pqpRate)}, Cat B ${formatCurrency(categoryB.pqpRate)}`
+    : title;
+  const metadataDescription = hasRates
+    ? `${formatMonth(latestMonth)} PQP for COE renewal: Cat A ${formatCurrency(categoryA.pqpRate)}, Cat B ${formatCurrency(categoryB.pqpRate)}. 5-year renewal at 50% of PQP: Cat A ${formatCurrency(categoryA.pqpCost5Year)}, Cat B ${formatCurrency(categoryB.pqpCost5Year)}.`
+    : description;
+
+  return {
+    title: metadataTitle,
+    description: metadataDescription,
+    openGraph: {
+      ...baseOpenGraph,
+      title: metadataTitle,
+      description: metadataDescription,
+      url: `${SITE_URL}/coe/pqp`,
+    },
+    twitter: {
+      ...baseTwitter,
+      title: metadataTitle,
+      description: metadataDescription,
+    },
+    alternates: {
+      canonical: "/coe/pqp",
+    },
+  };
+}
 
 const structuredData: WithContext<WebPage> = {
   "@context": "https://schema.org",
