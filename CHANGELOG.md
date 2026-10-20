@@ -33,6 +33,23 @@
 * **web:** narrow the collapsed nav bar gap so it fits 360px ([6090e5a](https://github.com/motormetrics/motormetrics/commit/6090e5aaf3f939c666272e513afae36e407b8d52))
 * **web:** span the exercise range switch across phone rows ([2cf018e](https://github.com/motormetrics/motormetrics/commit/2cf018efc793dce8722480c317b86c9af13b9a72))
 
+## [5.34.0](https://github.com/motormetrics/motormetrics/compare/v5.33.2...v5.34.0) (2026-10-20)
+
+
+### Features
+
+* **web:** date pqp page title and description from latest rates ([d9cd9d2](https://github.com/motormetrics/motormetrics/commit/d9cd9d26d6fbbaf3aafb0034cd91444fdb23d4cd))
+* **web:** retitle parf calculator and add rebate rate table ([8617340](https://github.com/motormetrics/motormetrics/commit/861734023d0201409660dc6f4a82a2b4ee405ef8))
+
+
+### Bug Fixes
+
+* **web:** add description, creator and license to datacatalog datasets ([dde87ce](https://github.com/motormetrics/motormetrics/commit/dde87ce0aab43a041eb904732ac5666a67e45a86))
+* **web:** restore bidding results wording on coe results page ([e9a09e5](https://github.com/motormetrics/motormetrics/commit/e9a09e517d0c5b94be272452c09eab0fcd90ea2d))
+* **web:** retitle category merger page around lta consultation ([ca272d4](https://github.com/motormetrics/motormetrics/commit/ca272d4ff117c710a80a3f080b5d2d49f0dadd18))
+* **web:** retitle PARF rebate guide and link ARF calculator ([281d2c1](https://github.com/motormetrics/motormetrics/commit/281d2c1451b5dbc32584eb17f5129a0210e35399))
+* **web:** tighten learn guide titles and label pre-2023 arf tier ([6b66f2c](https://github.com/motormetrics/motormetrics/commit/6b66f2c597b5fe07356e431a005eeaf55689fd30))
+
 ## [5.33.2](https://github.com/motormetrics/motormetrics/compare/v5.33.1...v5.33.2) (2026-10-16)
 
 
