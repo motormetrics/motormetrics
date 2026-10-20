@@ -12,6 +12,7 @@ import {
   FEEDBACK_URL,
   FIVE_BANDS,
   MILESTONES,
+  MODIFIED_DATE,
   PUBLISHED_DATE,
   THREE_BANDS,
 } from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
@@ -36,9 +37,9 @@ import { Suspense } from "react";
 import type { Article, WithContext } from "schema-dts";
 
 const path = "/coe/category-merger";
-const title = "COE Category Merger: LTA's Feebate Explained";
+const title = "LTA COE Cat A/B Merger Proposal: $15k Feebate Bands";
 const description =
-  "LTA proposes merging COE Cat A and B into one category, with a car value feebate of up to $15,000 to keep luxury and mass-market cars apart. See the bands, the models and how the new COE system would work.";
+  "LTA's COE Cat A/B merger consultation: up to $15,000 rebate or surcharge in 3 or 5 bands by car value. See the bands. Feedback closes 2 Nov 2026.";
 
 export const metadata: Metadata = {
   title,
@@ -49,6 +50,7 @@ export const metadata: Metadata = {
     description,
     type: "article",
     publishedTime: PUBLISHED_DATE,
+    modifiedTime: MODIFIED_DATE,
     url: `${SITE_URL}${path}`,
   },
   twitter: {
@@ -67,7 +69,7 @@ const articleSchema: WithContext<Article> = {
   headline: title,
   description,
   datePublished: PUBLISHED_DATE,
-  dateModified: PUBLISHED_DATE,
+  dateModified: MODIFIED_DATE,
   url: `${SITE_URL}${path}`,
   mainEntityOfPage: `${SITE_URL}${path}`,
   inLanguage: "en-SG",
@@ -133,6 +135,40 @@ export default function CategoryMergerPage() {
           />
         </div>
       </div>
+
+      <Card>
+        <Card.Content className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-1">
+            <Typography.Heading level={2} className="text-lg">
+              How to give feedback
+            </Typography.Heading>
+            <Typography.Paragraph color="muted" size="sm">
+              Written comments to LTA close at 11.59pm on Monday, 2 November
+              2026.
+            </Typography.Paragraph>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <a
+              className={buttonVariants({ variant: "primary" })}
+              href={FEEDBACK_URL}
+              rel="noreferrer nofollow"
+              target="_blank"
+            >
+              Give feedback to LTA
+              <ArrowUpRight className="size-4" />
+            </a>
+            <a
+              className={buttonVariants({ variant: "secondary" })}
+              href={CONSULTATION_PAPER_URL}
+              rel="noreferrer nofollow"
+              target="_blank"
+            >
+              Read the consultation paper
+              <ArrowUpRight className="size-4" />
+            </a>
+          </div>
+        </Card.Content>
+      </Card>
 
       <section className="flex flex-col gap-4">
         <Typography.Heading level={2}>What LTA is proposing</Typography.Heading>
@@ -312,35 +348,6 @@ export default function CategoryMergerPage() {
             </li>
           ))}
         </ol>
-      </section>
-
-      <section className="flex flex-col gap-4">
-        <Typography.Heading level={2}>Have your say</Typography.Heading>
-        <Typography.Paragraph className="max-w-prose" color="muted">
-          LTA is collecting feedback on whether Categories A and B should merge,
-          how the feebate should be designed, whether it should apply to
-          renewals, and what should happen to Category E.
-        </Typography.Paragraph>
-        <div className="flex flex-wrap gap-3">
-          <a
-            className={buttonVariants({ variant: "primary" })}
-            href={FEEDBACK_URL}
-            rel="noreferrer nofollow"
-            target="_blank"
-          >
-            Give feedback to LTA
-            <ArrowUpRight className="size-4" />
-          </a>
-          <a
-            className={buttonVariants({ variant: "secondary" })}
-            href={CONSULTATION_PAPER_URL}
-            rel="noreferrer nofollow"
-            target="_blank"
-          >
-            Read the consultation paper
-            <ArrowUpRight className="size-4" />
-          </a>
-        </div>
       </section>
 
       <PageFaq expandFirst faqs={CATEGORY_MERGER_FAQS} />

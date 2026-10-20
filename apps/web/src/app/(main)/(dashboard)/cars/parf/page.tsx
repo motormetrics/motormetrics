@@ -1,11 +1,18 @@
-import { Typography } from "@heroui/react";
+import { Table, Typography } from "@heroui/react";
+import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { PARF_FAQS } from "@web/app/(main)/(dashboard)/cars/parf/components/faq-data";
 import { PARFCalculator } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-calculator";
+import {
+  AGE_BRACKETS,
+  NEW_CAP,
+  OLD_CAP,
+} from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
 import {
   Hairline,
   OverviewPage,
   SectionHead,
   SectionLink,
+  SourceNote,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
@@ -20,9 +27,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { WebPage, WithContext } from "schema-dts";
 
-const title = "PARF Rebate Calculator and 2026 Rates";
+const title = "PARF Rebate Calculator 2026: Rates by Car Age";
 const description =
-  "Work out your PARF rebate, COE rebate and deregistration value. Budget 2026 cut the PARF rates from 75% to 30% of ARF and halved the cap to $30,000.";
+  "PARF rebate by car age: 75% to 50% of ARF for older COEs ($60,000 cap from Feb 2023), or 30% to 5% for COEs from Feb 2026, capped at $30,000.";
 export const metadata: Metadata = {
   title,
   description,
@@ -71,6 +78,9 @@ const ELIGIBILITY: { label: string; note: string }[] = [
   },
 ];
 
+const formatRate = (rate: number) =>
+  rate === 0 ? "No rebate" : `${(rate * 100).toFixed(0)}%`;
+
 export default function PARFCalculatorPage() {
   return (
     <OverviewPage className="gap-10 max-md:gap-7">
@@ -101,6 +111,47 @@ export default function PARFCalculatorPage() {
       />
 
       <PARFCalculator />
+
+      <Hairline />
+
+      <section className="flex min-w-0 flex-col gap-4">
+        <SectionHead
+          eyebrow="By COE bidding exercise"
+          title="PARF rebate rates by car age"
+        />
+        <Table variant="secondary">
+          <Table.ScrollContainer>
+            <Table.Content aria-label="PARF rebate as a percentage of ARF, by car age and COE bidding exercise">
+              <Table.Header>
+                <Table.Column isRowHeader>Car age</Table.Column>
+                <Table.Column>COE before 2nd Feb 2023</Table.Column>
+                <Table.Column>2nd Feb 2023 to 1st Feb 2026</Table.Column>
+                <Table.Column>From 2nd Feb 2026</Table.Column>
+              </Table.Header>
+              <Table.Body>
+                {AGE_BRACKETS.map(({ key, label, newRate, oldRate }) => (
+                  <Table.Row id={key} key={key}>
+                    <Table.Cell>{label}</Table.Cell>
+                    <Table.Cell>{formatRate(oldRate)}</Table.Cell>
+                    <Table.Cell>{formatRate(oldRate)}</Table.Cell>
+                    <Table.Cell>{formatRate(newRate)}</Table.Cell>
+                  </Table.Row>
+                ))}
+                <Table.Row id="cap">
+                  <Table.Cell>Rebate cap</Table.Cell>
+                  <Table.Cell>No cap</Table.Cell>
+                  <Table.Cell>{formatCurrency(OLD_CAP)}</Table.Cell>
+                  <Table.Cell>{formatCurrency(NEW_CAP)}</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table.Content>
+          </Table.ScrollContainer>
+        </Table>
+        <SourceNote>
+          Percentage of ARF paid. Source: LTA, OneMotoring PARF schedule updated
+          12 February 2026.
+        </SourceNote>
+      </section>
 
       <Hairline />
 
