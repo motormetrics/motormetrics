@@ -22,7 +22,6 @@ import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,
-  generateDatasetSchema,
   generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
@@ -100,12 +99,6 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
   return (
     <OverviewPage className="gap-10 max-md:gap-7">
       <StructuredData data={structuredData} />
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateDatasetSchema("electric-vehicles"),
-        }}
-      />
       <StructuredData
         data={{
           "@context": "https://schema.org",

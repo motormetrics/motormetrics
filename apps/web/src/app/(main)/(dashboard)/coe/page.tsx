@@ -22,10 +22,7 @@ import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
-import {
-  generateDataCatalogSchema,
-  generateFAQPageSchema,
-} from "@web/lib/metadata";
+import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getCoeResults } from "@web/queries/coe";
 import type { Metadata } from "next";
@@ -92,18 +89,6 @@ function SectionSkeleton({ className }: { className: string }) {
 export default function Page() {
   return (
     <OverviewPage className="gap-10 max-[720px]:gap-7">
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateDataCatalogSchema(
-            "Singapore COE Data Catalogue",
-            "Certificate of Entitlement bidding results, premium trends, and PQP rates for Singapore's vehicle quota system.",
-            "/coe",
-            ["coe-results", "coe-premiums", "coe-pqp"],
-          ),
-        }}
-      />
-
       <div className="flex flex-col gap-7">
         <PageHead
           eyebrow="Certificate of Entitlement"
