@@ -20,10 +20,7 @@ import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
-import {
-  generateDataCatalogSchema,
-  generateFAQPageSchema,
-} from "@web/lib/metadata";
+import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
 import type { Metadata } from "next";
@@ -74,18 +71,6 @@ async function CarsMonthSub({ searchParams }: PageProps) {
 export default function CarsPage({ searchParams }: PageProps) {
   return (
     <OverviewPage>
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateDataCatalogSchema(
-            "Singapore Vehicle Data Catalogue",
-            "Comprehensive collection of Singapore vehicle registration, deregistration, and population datasets sourced from the Land Transport Authority.",
-            "/cars",
-            ["registrations", "deregistrations", "annual", "electric-vehicles"],
-          ),
-        }}
-      />
-
       <PageHead
         controls={
           <Suspense fallback={<Skeleton className="h-8 w-36" />}>

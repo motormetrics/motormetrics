@@ -19,10 +19,7 @@ import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import {
-  generateBreadcrumbSchema,
-  generateDatasetSchema,
-} from "@web/lib/metadata";
+import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getEvChargingSnapshot } from "@web/queries/ev-charging";
 import { PlugZap } from "lucide-react";
@@ -87,12 +84,6 @@ export default function ChargingPage({ searchParams }: PageProps) {
   return (
     <>
       <StructuredData data={structuredData} />
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateDatasetSchema("ev-charging"),
-        }}
-      />
       <StructuredData
         data={{
           "@context": "https://schema.org",

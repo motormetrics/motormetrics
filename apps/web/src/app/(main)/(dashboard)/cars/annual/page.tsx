@@ -19,7 +19,6 @@ import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,
-  generateDatasetSchema,
   generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph } from "@web/lib/metadata/social";
@@ -87,12 +86,6 @@ export default function AnnualPage() {
   return (
     <>
       <StructuredData data={structuredData} />
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateDatasetSchema("annual"),
-        }}
-      />
       <StructuredData
         data={{
           "@context": "https://schema.org",
