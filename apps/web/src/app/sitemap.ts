@@ -1,4 +1,8 @@
 import { slugify } from "@motormetrics/utils/slugify";
+import {
+  COMPARE_PAIRS,
+  pairSlug,
+} from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import { PUBLISHED_DATE } from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
 import { getAllGuideSlugs } from "@web/app/(main)/(site)/learn/lib/guides";
 import { SITE_URL } from "@web/config";
@@ -65,6 +69,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...makes.map(({ make }) => ({
       url: `${SITE_URL}/cars/makes/${slugify(make)}`,
+      changeFrequency: "monthly" as const,
+    })),
+    ...COMPARE_PAIRS.map((pair) => ({
+      url: `${SITE_URL}/cars/makes/compare/${pairSlug(pair)}`,
       changeFrequency: "monthly" as const,
     })),
     {
