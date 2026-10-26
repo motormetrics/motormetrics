@@ -106,6 +106,7 @@ export default function CarMakesPage({ searchParams }: PageProps) {
       <Suspense fallback={null}>
         <ComparisonLinks
           eyebrow="Compare"
+          link={{ href: "/cars/makes/compare", label: "Compare any two makes" }}
           pairs={COMPARE_PAIRS}
           title="Popular comparisons"
         />

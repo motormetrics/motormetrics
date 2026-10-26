@@ -71,6 +71,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/cars/makes/${slugify(make)}`,
       changeFrequency: "monthly" as const,
     })),
+    {
+      url: `${SITE_URL}/cars/makes/compare`,
+      changeFrequency: "monthly" as const,
+    },
     ...COMPARE_PAIRS.map((pair) => ({
       url: `${SITE_URL}/cars/makes/compare/${pairSlug(pair)}`,
       changeFrequency: "monthly" as const,
