@@ -11,7 +11,7 @@ import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
  * under each. LTA's names are what readers search for and cite; the gloss is
  * what they mean.
  */
-export const FUEL_GLOSSES = [
+const FUEL_GLOSSES = [
   { fuelType: "Electric", gloss: "Battery electric" },
   { fuelType: "Petrol-Electric", gloss: "Hybrid" },
   { fuelType: "Petrol-Electric (Plug-In)", gloss: "Plug-in hybrid" },
