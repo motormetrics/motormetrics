@@ -29,6 +29,13 @@ export function findPair(slug: string): ComparePair | undefined {
   return COMPARE_PAIRS.find((pair) => pairSlug(pair) === slug);
 }
 
+/** The curated pairs a make slug appears in, in canonical order. */
+export function pairsWithMake(makeSlug: string): ComparePair[] {
+  return COMPARE_PAIRS.filter((pair) =>
+    (pair as readonly string[]).includes(makeSlug),
+  );
+}
+
 /** Every curated pair except the one `slug` names, in canonical order. */
 export function otherPairs(slug: string): ComparePair[] {
   return COMPARE_PAIRS.filter((pair) => pairSlug(pair) !== slug);

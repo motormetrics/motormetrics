@@ -3,6 +3,7 @@ import {
   findPair,
   otherPairs,
   pairSlug,
+  pairsWithMake,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import { describe, expect, it } from "vitest";
 
@@ -31,5 +32,20 @@ describe("pairs", () => {
       "toyota-vs-honda",
       "byd-vs-toyota",
     ]);
+  });
+
+  it("should list the pairs a make appears in, on either side", () => {
+    expect(pairsWithMake("audi").map(pairSlug)).toEqual([
+      "bmw-vs-audi",
+      "mercedes-benz-vs-audi",
+    ]);
+    expect(pairsWithMake("byd").map(pairSlug)).toEqual([
+      "byd-vs-tesla",
+      "byd-vs-toyota",
+    ]);
+  });
+
+  it("should list no pairs for a make outside the curated list", () => {
+    expect(pairsWithMake("volvo")).toEqual([]);
   });
 });

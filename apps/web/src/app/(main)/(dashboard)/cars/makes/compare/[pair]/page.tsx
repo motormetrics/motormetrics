@@ -1,6 +1,10 @@
 import { Chip, Skeleton, Typography } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
+import {
+  ComparisonLinks,
+  pairNames,
+} from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/comparison-links";
 import { TableDisclosure } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/disclosure";
 import { buildCompareFaqs } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/faq-data";
 import {
@@ -15,7 +19,6 @@ import { MonthlyTable } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pa
 import { PairMenu } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pair-menu";
 import {
   COMPARE_PAIRS,
-  type ComparePair,
   findPair,
   otherPairs,
   pairSlug,
@@ -36,7 +39,6 @@ import {
   Hairline,
   OverviewPage,
   SectionHead,
-  SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
@@ -49,7 +51,6 @@ import {
   generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { getMakeFromSlug } from "@web/queries/cars/makes/get-make-from-slug";
 import {
   getMakeCrossTab,
   getMarketMonthlyTotals,
@@ -88,18 +89,6 @@ const compareDescription = (nameA: string, nameB: string) =>
   `${nameA} vs ${nameB} new car registrations in Singapore: year-to-date totals, change on last year, market share, electric share, fuel and body type mix, and 24 months of monthly figures from LTA data.`;
 
 const comparePath = (slug: string) => `/cars/makes/compare/${slug}`;
-
-/** The display name of each make in a pair, as the make page shows it. */
-async function pairNames(
-  pair: ComparePair,
-): Promise<[string, string] | undefined> {
-  // A lambda rather than passing `getMakeFromSlug` to `map`: the index and
-  // array would become part of its `'use cache'` key.
-  const [nameA, nameB] = await Promise.all(
-    pair.map((makeSlug) => getMakeFromSlug(makeSlug)),
-  );
-  return nameA && nameB ? [nameA, nameB] : undefined;
-}
 
 export async function generateMetadata({
   params,
@@ -533,32 +522,13 @@ async function CompareFaq({ params }: PageProps) {
 /** Links to the other curated pairs and back to every make. */
 async function OtherComparisons({ params }: PageProps) {
   const { slug } = await resolvePair(params);
-  const pairs = await Promise.all(
-    otherPairs(slug).map(async (pair) => ({
-      names: await pairNames(pair),
-      slug: pairSlug(pair),
-    })),
-  );
 
   return (
-    <section className="flex flex-col gap-4">
-      <SectionHead eyebrow="Compare" title="Other comparisons" />
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-        {pairs.map(({ names, slug: otherSlug }) =>
-          names ? (
-            <SectionLink
-              className="ml-0"
-              href={comparePath(otherSlug)}
-              key={otherSlug}
-            >
-              {`${names[0]} vs ${names[1]}`}
-            </SectionLink>
-          ) : null,
-        )}
-        <SectionLink className="ml-0" href="/cars/makes">
-          All makes
-        </SectionLink>
-      </div>
-    </section>
+    <ComparisonLinks
+      eyebrow="Compare"
+      link={{ href: "/cars/makes", label: "All makes" }}
+      pairs={otherPairs(slug)}
+      title="Other comparisons"
+    />
   );
 }
