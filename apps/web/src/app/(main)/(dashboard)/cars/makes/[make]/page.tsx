@@ -7,6 +7,8 @@ import { MakeReport } from "@web/app/(main)/(dashboard)/cars/makes/[make]/compon
 import { MakeSearch } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-search";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
+import { ComparisonLinks } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/comparison-links";
+import { pairsWithMake } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
@@ -163,6 +165,10 @@ export default function CarMakePage({
           />
         </Suspense>
       </SectionErrorBoundary>
+
+      <Suspense fallback={null}>
+        <MakeComparisons params={params} />
+      </Suspense>
 
       <Hairline />
 
@@ -352,6 +358,30 @@ async function CarMakeHeaderMeta({
         latestMonth={months[0]}
         months={months}
         wasAdjusted={wasAdjusted}
+      />
+    </>
+  );
+}
+
+/**
+ * "Compare BMW with" links to the curated comparison pages this make appears
+ * in, with its own hairline above. Nothing for a make outside the list.
+ */
+async function MakeComparisons({ params }: Pick<PageProps, "params">) {
+  const { exactMake, make } = await resolveMake(params);
+  const pairs = pairsWithMake(make);
+
+  if (pairs.length === 0) {
+    return null;
+  }
+
+  return (
+    <>
+      <Hairline />
+      <ComparisonLinks
+        eyebrow="Compare"
+        pairs={pairs}
+        title={`Compare ${exactMake} with`}
       />
     </>
   );

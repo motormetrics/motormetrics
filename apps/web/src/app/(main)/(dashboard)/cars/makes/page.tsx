@@ -1,4 +1,6 @@
 import { Skeleton } from "@heroui/react";
+import { ComparisonLinks } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/comparison-links";
+import { COMPARE_PAIRS } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import { MAKES_FAQS } from "@web/app/(main)/(dashboard)/cars/makes/components/faq-data";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { MakesContentSection } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-content-section";
@@ -98,6 +100,16 @@ export default function CarMakesPage({ searchParams }: PageProps) {
       />
       <StructuredData data={structuredData} />
       <MakesContentSection searchParams={searchParams} />
+
+      <Hairline />
+
+      <Suspense fallback={null}>
+        <ComparisonLinks
+          eyebrow="Compare"
+          pairs={COMPARE_PAIRS}
+          title="Popular comparisons"
+        />
+      </Suspense>
 
       <Hairline />
 
