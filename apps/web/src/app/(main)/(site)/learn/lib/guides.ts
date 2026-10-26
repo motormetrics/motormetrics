@@ -260,7 +260,7 @@ PARF is a government rebate. Scrap value is what scrapyards pay for the vehicle'
   {
     slug: "check-parf-rebate",
     term: "Deregistration Value",
-    title: "PARF Rebate Enquiry: LTA Link + Free Estimate",
+    title: "How to Check Your PARF Rebate and Deregistration Value",
     description:
       "Direct link to LTA's PARF/COE rebate enquiry on OneMotoring (Singpass login), or estimate yours with no login. Buyers and dealers can use an access code.",
     excerpt:
