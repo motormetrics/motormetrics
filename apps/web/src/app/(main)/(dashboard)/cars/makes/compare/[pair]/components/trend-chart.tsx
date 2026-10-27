@@ -20,6 +20,38 @@ export type ComparePoint = {
 /** Make B's dash, on the line and on its legend swatch alike. */
 const DASH = "6 4";
 
+/** Make A solid, make B dashed, so the two never rest on colour alone. */
+const SERIES_STYLE = {
+  a: { color: "var(--chart-1)", dash: undefined },
+  b: { color: "var(--chart-sand)", dash: DASH },
+} as const;
+
+/**
+ * A short stroke in a make's line style. The legend and the summary table's
+ * column headers both use it, so a reader can match a column to its line.
+ */
+export function SeriesSwatch({
+  series,
+}: {
+  series: keyof typeof SERIES_STYLE;
+}) {
+  const { color, dash } = SERIES_STYLE[series];
+
+  return (
+    <svg aria-hidden="true" className="h-2 w-5 shrink-0" viewBox="0 0 20 8">
+      <line
+        stroke={color}
+        strokeDasharray={dash}
+        strokeWidth={2.5}
+        x1={0}
+        x2={20}
+        y1={4}
+        y2={4}
+      />
+    </svg>
+  );
+}
+
 interface TickProps {
   index?: number;
   payload?: { index?: number };
@@ -49,30 +81,20 @@ export function CompareTrendChart({
   ticks: number[];
 }) {
   const series = [
-    { color: "var(--chart-1)", dash: undefined, key: "a", label: nameA },
-    { color: "var(--chart-sand)", dash: DASH, key: "b", label: nameB },
+    { ...SERIES_STYLE.a, key: "a", label: nameA },
+    { ...SERIES_STYLE.b, key: "b", label: nameB },
   ] as const;
 
   return (
     <figure className="flex flex-col gap-3">
       <figcaption className="sr-only">{summary}</figcaption>
       <div aria-hidden className="flex flex-wrap items-center gap-x-5 gap-y-2">
-        {series.map(({ color, dash, key, label }) => (
+        {series.map(({ key, label }) => (
           <span
             className="inline-flex items-center gap-2 text-muted text-sm"
             key={key}
           >
-            <svg aria-hidden="true" className="h-2 w-5" viewBox="0 0 20 8">
-              <line
-                stroke={color}
-                strokeDasharray={dash}
-                strokeWidth={2.5}
-                x1={0}
-                x2={20}
-                y1={4}
-                y2={4}
-              />
-            </svg>
+            <SeriesSwatch series={key} />
             {label}
           </span>
         ))}

@@ -74,7 +74,8 @@ export function SectionHead({
 }: {
   caption?: ReactNode;
   className?: string;
-  eyebrow: string;
+  /** Left out where the heading already names the dataset. */
+  eyebrow?: string;
   /** "All COE results", "All makes" — the text link to the full dataset. */
   link?: { href: string; label: string };
   title: ReactNode;
@@ -84,14 +85,16 @@ export function SectionHead({
   return (
     <div className={cn("flex flex-wrap items-end gap-4", className)}>
       <div className="flex min-w-0 flex-col gap-1">
-        <Typography.Paragraph
-          className="uppercase"
-          weight="semibold"
-          color="muted"
-          size="xs"
-        >
-          {eyebrow}
-        </Typography.Paragraph>
+        {eyebrow ? (
+          <Typography.Paragraph
+            className="uppercase"
+            weight="semibold"
+            color="muted"
+            size="xs"
+          >
+            {eyebrow}
+          </Typography.Paragraph>
+        ) : null}
         <Typography.Heading
           className="text-xl md:text-2xl"
           weight="bold"

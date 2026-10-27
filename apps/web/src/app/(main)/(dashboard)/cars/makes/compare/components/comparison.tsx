@@ -214,12 +214,14 @@ async function CompareLead({ names }: ComparisonProps) {
   // The market total needs only the month, so it runs alongside the two
   // makes' reads rather than after them.
   const latest = getMonthOrLatest(null, "cars");
-  const [{ a, b, month, nameA, nameB }, marketTotals] = await Promise.all([
-    loadComparison(names, latest),
-    latest.then(({ month: latestMonth }) =>
-      getMarketMonthlyTotals(`${latestMonth.slice(0, 4)}-01`, latestMonth),
-    ),
-  ]);
+  const [{ a, b, month, nameA, nameB }, marketTotals, logoUrlBySlug] =
+    await Promise.all([
+      loadComparison(names, latest),
+      latest.then(({ month: latestMonth }) =>
+        getMarketMonthlyTotals(`${latestMonth.slice(0, 4)}-01`, latestMonth),
+      ),
+      getCarLogoMap(),
+    ]);
   const marketTotal = marketTotals.reduce((sum, { total }) => sum + total, 0);
 
   return (
@@ -232,6 +234,8 @@ async function CompareLead({ names }: ComparisonProps) {
       </Typography.Paragraph>
       <div className="flex flex-col gap-3">
         <SummaryTable
+          logoUrlA={logoUrlBySlug[slugify(nameA)] ?? null}
+          logoUrlB={logoUrlBySlug[slugify(nameB)] ?? null}
           nameA={nameA}
           nameB={nameB}
           rows={buildSummaryRows({ a, b, marketTotal, month })}
@@ -260,7 +264,6 @@ async function CompareTrend({ names }: ComparisonProps) {
     <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption="New registrations per month, all fuel types. The y-axis starts at zero."
-        eyebrow="Trend"
         title="Monthly registrations, last 24 months"
       />
       <CompareTrendChart
@@ -290,7 +293,6 @@ async function CompareMix({ names }: ComparisonProps) {
       <section className="flex min-w-0 flex-col gap-4">
         <SectionHead
           caption="Share of each make’s registrations"
-          eyebrow="Fuel type"
           title="How each make is powered"
         />
         <ShareTable
@@ -304,7 +306,6 @@ async function CompareMix({ names }: ComparisonProps) {
       <section className="flex min-w-0 flex-col gap-4">
         <SectionHead
           caption="Share of each make’s registrations"
-          eyebrow="Vehicle type"
           title="What body styles sell"
         />
         <ShareTable

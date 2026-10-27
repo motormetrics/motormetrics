@@ -1,5 +1,26 @@
 import { cn, Table, Typography } from "@heroui/react";
 import type { SummaryRow } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/summary";
+import { SeriesSwatch } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/trend-chart";
+import { MakeAvatar } from "@web/components/shared/make-avatar";
+
+/** A make's column header: its logo and its chart line, then its name. */
+function MakeHeader({
+  logoUrl,
+  name,
+  series,
+}: {
+  logoUrl: string | null;
+  name: string;
+  series: "a" | "b";
+}) {
+  return (
+    <span className="inline-flex items-center justify-end gap-2">
+      <MakeAvatar logoUrl={logoUrl} make={name} size="sm" />
+      <SeriesSwatch series={series} />
+      {name}
+    </span>
+  );
+}
 
 /**
  * The comparison's four measures side by side, with the gap between the two
@@ -8,10 +29,14 @@ import type { SummaryRow } from "@web/app/(main)/(dashboard)/cars/makes/compare/
  * the caption under the table says so once.
  */
 export function SummaryTable({
+  logoUrlA,
+  logoUrlB,
   nameA,
   nameB,
   rows,
 }: {
+  logoUrlA: string | null;
+  logoUrlB: string | null;
   nameA: string;
   nameB: string;
   rows: SummaryRow[];
@@ -25,8 +50,12 @@ export function SummaryTable({
         >
           <Table.Header>
             <Table.Column isRowHeader>Measure</Table.Column>
-            <Table.Column className="text-right">{nameA}</Table.Column>
-            <Table.Column className="text-right">{nameB}</Table.Column>
+            <Table.Column className="text-right">
+              <MakeHeader logoUrl={logoUrlA} name={nameA} series="a" />
+            </Table.Column>
+            <Table.Column className="text-right">
+              <MakeHeader logoUrl={logoUrlB} name={nameB} series="b" />
+            </Table.Column>
             <Table.Column className="text-right">Gap</Table.Column>
           </Table.Header>
           <Table.Body>
