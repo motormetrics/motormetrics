@@ -1,7 +1,6 @@
 import {
   axisTicks,
   type MonthTotal,
-  sumByMonth,
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
 import {
@@ -10,7 +9,6 @@ import {
 } from "@web/app/(main)/(dashboard)/components/volume-chart";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { getMonthlyRegistrationTotals } from "@web/queries/cars";
-import { getDeregistrations } from "@web/queries/deregistrations";
 import {
   formatChartMonth,
   formatMonthLabel,
@@ -18,9 +16,7 @@ import {
 import { getLatestMonth } from "@web/utils/dates/months";
 
 const REGISTRATION_MONTHS = 12;
-/** The deregistration feed is shorter, so its window is too. */
-const DEREGISTRATION_MONTHS = 8;
-/** Matches the KPI strip's query, so both read one cache entry. */
+/** Matches the lead band's query, so both read one cache entry. */
 const HISTORY_LIMIT = 24;
 
 /** Chart points, with the year under the first month and every January. */
@@ -64,50 +60,6 @@ export async function RegistrationsByMonth() {
         unit="new cars"
       />
       <SourceNote>New car registrations, all makes and fuel types.</SourceNote>
-    </section>
-  );
-}
-
-/**
- * Vehicles deregistered over the last eight months. The feed can trail
- * registrations, so the window ends at the newest month on record and the
- * caption names its span.
- */
-export async function DeregistrationsByMonth() {
-  const month = await getLatestMonth("cars");
-  const series = windowEndingAt(
-    sumByMonth(await getDeregistrations()),
-    month,
-    DEREGISTRATION_MONTHS,
-  );
-
-  const first = series[0];
-  const last = series.at(-1);
-  if (!first || !last) {
-    return null;
-  }
-
-  return (
-    <section className="flex min-w-0 flex-col gap-4">
-      <SectionHead
-        className="lg:flex-nowrap"
-        caption={`${formatMonthLabel(first.month)} to ${formatMonthLabel(last.month)}`}
-        eyebrow="Deregistrations"
-        link={{ href: "/cars/deregistrations", label: "All deregistrations" }}
-        title="Vehicles taken off the road"
-      />
-      <VolumeChart
-        data={toPoints(series)}
-        ticks={axisTicks(
-          series.map((row) => row.total),
-          { zero: true },
-        )}
-        unit="vehicles"
-      />
-      <SourceNote>
-        All vehicle types, not only cars, so not directly comparable with
-        registrations.
-      </SourceNote>
     </section>
   );
 }
