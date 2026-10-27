@@ -1,11 +1,9 @@
 import { Skeleton } from "@heroui/react";
 import { CategoryMergerCallout } from "@web/app/(main)/(dashboard)/components/category-merger-callout";
-import { CoePremiumTable } from "@web/app/(main)/(dashboard)/components/coe-premium-table";
-import { EvShare } from "@web/app/(main)/(dashboard)/components/ev-share";
 import { HOME_FAQS } from "@web/app/(main)/(dashboard)/components/faq-data";
 import { MarketLead } from "@web/app/(main)/(dashboard)/components/market-lead";
 import { MarketTiles } from "@web/app/(main)/(dashboard)/components/market-tiles";
-import { RegistrationsByMonth } from "@web/app/(main)/(dashboard)/components/monthly-volumes";
+import { MarketTrend } from "@web/app/(main)/(dashboard)/components/market-trend";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
@@ -107,18 +105,6 @@ const TILE_SKELETONS = [
   "charging",
 ];
 
-/** A section-shaped placeholder: eyebrow, figure, then the chart area. */
-function BlockSkeleton({ chartHeight }: { chartHeight: string }) {
-  return (
-    <div className="flex flex-col gap-4">
-      <Skeleton className="h-5 w-40" />
-      <Skeleton className="h-14 w-56" />
-      <Skeleton className="h-4 w-72" />
-      <Skeleton className={`w-full rounded-2xl ${chartHeight}`} />
-    </div>
-  );
-}
-
 export default function HomePage() {
   return (
     <>
@@ -165,25 +151,9 @@ export default function HomePage() {
 
         <Hairline />
 
-        <SectionErrorBoundary title="Registrations unavailable">
-          <Suspense fallback={<BlockSkeleton chartHeight="h-64" />}>
-            <RegistrationsByMonth />
-          </Suspense>
-        </SectionErrorBoundary>
-
-        <Hairline />
-
-        <SectionErrorBoundary title="COE premiums unavailable">
-          <Suspense fallback={<BlockSkeleton chartHeight="h-60" />}>
-            <CoePremiumTable />
-          </Suspense>
-        </SectionErrorBoundary>
-
-        <Hairline />
-
-        <SectionErrorBoundary title="EV share unavailable">
-          <Suspense fallback={<BlockSkeleton chartHeight="h-64" />}>
-            <EvShare />
+        <SectionErrorBoundary title="Trends unavailable">
+          <Suspense fallback={<Skeleton className="h-96 w-full rounded-4xl" />}>
+            <MarketTrend />
           </Suspense>
         </SectionErrorBoundary>
 
