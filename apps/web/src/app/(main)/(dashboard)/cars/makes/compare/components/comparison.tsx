@@ -48,7 +48,7 @@ import { getMonthOrLatest } from "@web/utils/dates/months";
 import { type ReactNode, Suspense } from "react";
 
 /** Both makes' DB names, in column order. */
-export interface ComparisonNames {
+interface ComparisonNames {
   nameA: string;
   nameB: string;
 }
@@ -65,7 +65,7 @@ interface ComparisonProps {
  * Both makes' figures for the latest month with car data. Each region calls
  * it for itself; the reads are `'use cache'`, so only the first one queries.
  */
-export async function loadComparison(
+async function loadComparison(
   names: Promise<ComparisonNames>,
   latest: Promise<{ month: string }> = getMonthOrLatest(null, "cars"),
 ) {
