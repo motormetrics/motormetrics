@@ -1,7 +1,7 @@
 import { Skeleton } from "@heroui/react";
-import { CategoryMergerCallout } from "@web/app/(main)/(dashboard)/components/category-merger-callout";
 import { HOME_FAQS } from "@web/app/(main)/(dashboard)/components/faq-data";
 import { MarketLead } from "@web/app/(main)/(dashboard)/components/market-lead";
+import { MarketLinks } from "@web/app/(main)/(dashboard)/components/market-links";
 import { MarketTiles } from "@web/app/(main)/(dashboard)/components/market-tiles";
 import { MarketTrend } from "@web/app/(main)/(dashboard)/components/market-trend";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
@@ -112,8 +112,6 @@ export default function HomePage() {
       <OrganizationStructuredData />
 
       <OverviewPage className="gap-10 max-md:gap-7">
-        <CategoryMergerCallout />
-
         <div className="flex flex-col gap-7">
           {/* The lead band names each half's period, since COE and
               registrations run on different clocks; the sub only sources it. */}
@@ -149,13 +147,13 @@ export default function HomePage() {
           </Suspense>
         </SectionErrorBoundary>
 
-        <Hairline />
-
         <SectionErrorBoundary title="Trends unavailable">
           <Suspense fallback={<Skeleton className="h-96 w-full rounded-4xl" />}>
             <MarketTrend />
           </Suspense>
         </SectionErrorBoundary>
+
+        <MarketLinks />
 
         <Hairline />
 
