@@ -33,6 +33,26 @@
 * **web:** narrow the collapsed nav bar gap so it fits 360px ([6090e5a](https://github.com/motormetrics/motormetrics/commit/6090e5aaf3f939c666272e513afae36e407b8d52))
 * **web:** span the exercise range switch across phone rows ([2cf018e](https://github.com/motormetrics/motormetrics/commit/2cf018efc793dce8722480c317b86c9af13b9a72))
 
+## [5.35.0](https://github.com/motormetrics/motormetrics/compare/v5.34.0...v5.35.0) (2026-10-27)
+
+
+### Features
+
+* **web:** add comparison fuel, body and faq rows ([3ae53d3](https://github.com/motormetrics/motormetrics/commit/3ae53d32f53db0a789b755561c469eb17cbed2c1))
+* **web:** add make comparison components ([0f5c864](https://github.com/motormetrics/motormetrics/commit/0f5c864e46b7f2ea15db55d3a62b64d3e88c6265))
+* **web:** add make comparison page ([cd1c082](https://github.com/motormetrics/motormetrics/commit/cd1c082fcb9ab34b2def816f31db3881ce18d9e9))
+* **web:** add make comparison pairs and figures ([9d09440](https://github.com/motormetrics/motormetrics/commit/9d09440f03bb660ea776a1601e530d9c55da621f))
+* **web:** add make comparison selectors ([a49cfa1](https://github.com/motormetrics/motormetrics/commit/a49cfa1b4302696d8bf49090ffa1db6f635f1d57))
+* **web:** add make comparison summary logic ([609b5ec](https://github.com/motormetrics/motormetrics/commit/609b5ecbc8fbc2fedf35a2a590711c6c0f1db6ae))
+* **web:** add page to compare any two makes ([0b159f5](https://github.com/motormetrics/motormetrics/commit/0b159f597f0a741ba2d396078892cf5236628163))
+* **web:** link to make comparisons ([3dc352f](https://github.com/motormetrics/motormetrics/commit/3dc352f1d326ebd40a11f5f14e92955925a5b589))
+* **web:** match make comparison to the mockup ([5f55ca7](https://github.com/motormetrics/motormetrics/commit/5f55ca704cec119969b6c6ecd8e4955d1e33f666))
+
+
+### Bug Fixes
+
+* **web:** restore original PARF rebate guide title ([32e5167](https://github.com/motormetrics/motormetrics/commit/32e5167508ca0fe033a10c6df2436598258f6899))
+
 ## [5.34.0](https://github.com/motormetrics/motormetrics/compare/v5.33.2...v5.34.0) (2026-10-20)
 
 
