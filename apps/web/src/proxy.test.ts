@@ -133,6 +133,44 @@ describe("proxy", () => {
     fetchSpy.mockRestore();
   });
 
+  describe("make comparison", () => {
+    async function compare(query: string) {
+      const { proxy } = await import("@web/proxy");
+      return proxy(
+        new NextRequest(`http://localhost/cars/makes/compare?${query}`, {
+          headers: { accept: "text/html" },
+        }),
+      );
+    }
+
+    it("should redirect a curated pair in canonical order to its page", async () => {
+      const response = await compare("make=bmw&make=mercedes-benz");
+
+      expect(response.status).toBe(307);
+      expect(response.headers.get("location")).toBe(
+        "http://localhost/cars/makes/compare/bmw-vs-mercedes-benz",
+      );
+    });
+
+    it("should normalise case, whitespace and repeats before matching", async () => {
+      const response = await compare("make=%20BMW&make=bmw&make=Audi");
+
+      expect(response.headers.get("location")).toBe(
+        "http://localhost/cars/makes/compare/bmw-vs-audi",
+      );
+    });
+
+    it.each([
+      "make=mercedes-benz&make=bmw",
+      "make=bmw&make=volvo",
+      "make=bmw",
+    ])("should leave %s to the page", async (query) => {
+      const response = await compare(query);
+
+      expect(response.headers.get("location")).toBeNull();
+    });
+  });
+
   describe("matcher", () => {
     async function matches(url: string, headers?: Record<string, string>) {
       const { config } = await import("@web/proxy");
@@ -156,6 +194,20 @@ describe("proxy", () => {
       "/api/health",
     ])("should not run for a browser request to %s", async (url) => {
       expect(await matches(url, { accept: "text/html" })).toBe(false);
+    });
+
+    it("should run for a make comparison with a make query", async () => {
+      expect(
+        await matches("/cars/makes/compare?make=bmw&make=audi", {
+          accept: "text/html",
+        }),
+      ).toBe(true);
+    });
+
+    it("should not run for the make comparison page without a make query", async () => {
+      expect(
+        await matches("/cars/makes/compare", { accept: "text/html" }),
+      ).toBe(false);
     });
 
     it("should not run for RSC navigations and prefetches", async () => {

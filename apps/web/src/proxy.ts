@@ -1,5 +1,10 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import {
+  findPair,
+  pairSlug,
+} from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
+import { comparePath } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/copy";
 import { auth } from "@web/lib/auth";
 import { type NextRequest, NextResponse } from "next/server";
 
@@ -36,6 +41,26 @@ export async function proxy(request: NextRequest) {
     response.headers.set("X-RateLimit-Remaining", remaining.toString());
     response.headers.set("X-RateLimit-Reset", reset.toString());
     return response;
+  }
+
+  // A curated pair picked in canonical order belongs on its own page. The page
+  // redirects too, but its metadata streams after the 200 is sent, so only a
+  // redirect here is a real 307. Unknown slugs ahead of the pair are left to
+  // the page, which knows every make.
+  if (pathname === "/cars/makes/compare") {
+    const [first, second] = new Set(
+      request.nextUrl.searchParams
+        .getAll("make")
+        .map((value) => value.trim().toLowerCase())
+        .filter(Boolean),
+    );
+    const curated =
+      first && second ? findPair(`${first}-vs-${second}`) : undefined;
+    if (curated) {
+      return NextResponse.redirect(
+        new URL(comparePath(pairSlug(curated)), request.url),
+      );
+    }
   }
 
   const wantsMarkdown =
@@ -113,6 +138,11 @@ export const config = {
     "/api/v1/:path*",
     "/admin/:path*",
     "/api/auth/:path*",
+    // Only selector submissions, for the curated-pair redirect.
+    {
+      source: "/cars/makes/compare",
+      has: [{ type: "query", key: "make" }],
+    },
     // Only Markdown requests reach the proxy for public pages, so page views,
     // RSC navigations and prefetches skip Routing Middleware entirely.
     {
