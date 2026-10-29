@@ -186,10 +186,8 @@ export async function PQPReport({
         term={term}
       />
 
-      <UnreleasedFeature>
-        <RenewalCalculator rates={trendData} />
-        <Hairline />
-      </UnreleasedFeature>
+      <RenewalCalculator rates={trendData} />
+      <Hairline />
 
       <section className="flex flex-col gap-4">
         <SectionHead
