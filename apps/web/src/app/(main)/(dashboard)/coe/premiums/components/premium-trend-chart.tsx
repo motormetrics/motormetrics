@@ -41,6 +41,14 @@ interface GridLineProps {
   index?: number;
 }
 
+const CHART_HEIGHT = 340;
+const CHART_TOP = 12;
+/** Recharts' default x-axis height, and the taller one with year lines. */
+const AXIS_HEIGHT = 30;
+const TICKED_AXIS_HEIGHT = 44;
+/** Room one `text-xs` end label needs before the next can sit beside it. */
+const LABEL_HEIGHT = 16;
+
 /** "+2.0% vs previous exercise", with a true minus for a fall. */
 const formatChange = (change: number): string =>
   `${change < 0 ? "−" : "+"}${Math.abs(change * 100).toFixed(1)}% vs previous exercise`;
@@ -84,6 +92,22 @@ export function PremiumTrendChart({
   const axisDomain = domain ?? [axisTicks[0], axisTicks[axisTicks.length - 1]];
   const lastIndex = data.length - 1;
   const every = tickMonths;
+
+  // The two end labels sit at their own points, so close finishes print on
+  // top of each other; push them apart by what they overlap, higher one up.
+  const last = data[lastIndex];
+  const plotHeight =
+    CHART_HEIGHT - CHART_TOP - (every ? TICKED_AXIS_HEIGHT : AXIS_HEIGHT);
+  const labelGap =
+    last?.pairedPremium === undefined
+      ? Number.POSITIVE_INFINITY
+      : (Math.abs(last.premium - last.pairedPremium) /
+          (axisDomain[1] - axisDomain[0])) *
+        plotHeight;
+  const nudge = Math.max(0, (LABEL_HEIGHT - labelGap) / 2);
+  const pairedAbove =
+    last?.pairedPremium !== undefined && last.pairedPremium > last.premium;
+  const labelOffset = pairedAbove ? nudge : -nudge;
   const yearOnly = every !== undefined && every >= 12;
   const ticked = every
     ? data.flatMap((point, position) =>
@@ -97,8 +121,8 @@ export function PremiumTrendChart({
     <AreaChart
       className="[&_.recharts-cartesian-axis-tick-value]:text-xs"
       data={data}
-      height={340}
-      margin={{ bottom: 0, left: 0, right: 84, top: 12 }}
+      height={CHART_HEIGHT}
+      margin={{ bottom: 0, left: 0, right: 84, top: CHART_TOP }}
     >
       <defs>
         <linearGradient id="coePremiumFill" x1="0" x2="0" y1="0" y2="1">
@@ -125,7 +149,7 @@ export function PremiumTrendChart({
           // Titles are unique per exercise, so the planned ticks can be
           // named; Recharts then drops any of those that would collide.
           dataKey="title"
-          height={44}
+          height={TICKED_AXIS_HEIGHT}
           interval="preserveStartEnd"
           tick={({ payload, x, y }: TickProps) => {
             const position = data.findIndex(
@@ -187,7 +211,7 @@ export function PremiumTrendChart({
                 className="fill-foreground font-semibold text-xs tabular-nums"
                 dominantBaseline="middle"
                 x={cx + 10}
-                y={cy}
+                y={cy + labelOffset}
               >
                 {formatCurrency(data[lastIndex].premium)}
               </text>
@@ -217,7 +241,7 @@ export function PremiumTrendChart({
                   className="fill-foreground font-semibold text-xs tabular-nums"
                   dominantBaseline="middle"
                   x={cx + 10}
-                  y={cy}
+                  y={cy - labelOffset}
                 >
                   {formatCurrency(pairedPremium)}
                 </text>
