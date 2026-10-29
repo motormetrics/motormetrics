@@ -187,7 +187,7 @@ export async function PQPReport({
       />
 
       <UnreleasedFeature>
-        <RenewalCalculator />
+        <RenewalCalculator rates={trendData} />
         <Hairline />
       </UnreleasedFeature>
 
