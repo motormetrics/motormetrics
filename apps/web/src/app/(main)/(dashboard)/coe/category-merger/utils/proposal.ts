@@ -8,7 +8,6 @@
 
 export const CONSULTATION_PAPER_URL =
   "https://file.go.gov.sg/coe-public-consult.pdf";
-export const FEEDBACK_URL = "https://go.gov.sg/coe-pcd-feedback";
 
 /** When LTA published the paper; the page's Article date. */
 export const PUBLISHED_DATE = "2026-10-08";
@@ -180,8 +179,8 @@ export const MILESTONES: Milestone[] = [
   },
   {
     date: "2 Nov 2026",
-    label: "Feedback closes",
-    detail: "Written comments are accepted until 11.59pm.",
+    label: "Feedback closed",
+    detail: "Written comments were accepted until 11.59pm.",
   },
   {
     date: "End 2026",
