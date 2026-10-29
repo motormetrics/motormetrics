@@ -32,6 +32,8 @@ const LEGACY_PATH_REDIRECTS = [
     "/blog/singapores-car-market-august-2025-analysis",
     "/blog/electric-vehicles-surge-in-singapore-august-2025",
   ],
+  // Added 2026-10-29, review 2027-10-29: the page moved into the blog.
+  ["/coe/category-merger", "/blog/lta-coe-category-merger-proposal"],
 ] as const;
 
 // Static CSP, not nonce-based: a nonce needs a per-request render, which

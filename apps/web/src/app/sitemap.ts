@@ -3,7 +3,6 @@ import {
   COMPARE_PAIRS,
   pairSlug,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
-import { PUBLISHED_DATE } from "@web/app/(main)/(dashboard)/coe/category-merger/utils/proposal";
 import { getAllGuideSlugs } from "@web/app/(main)/(site)/learn/lib/guides";
 import { SITE_URL } from "@web/config";
 import {
@@ -118,11 +117,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/coe/pqp`,
       lastModified: coeLastModified,
       changeFrequency: "monthly" as const,
-    },
-    {
-      url: `${SITE_URL}/coe/category-merger`,
-      lastModified: PUBLISHED_DATE,
-      changeFrequency: "weekly" as const,
     },
     {
       url: `${SITE_URL}/cars/annual`,

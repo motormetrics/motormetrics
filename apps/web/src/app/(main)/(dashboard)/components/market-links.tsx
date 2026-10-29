@@ -11,11 +11,11 @@ interface MarketLink {
 /**
  * The label names LTA without a closing date: whether the consultation is
  * still open depends on today, and the page cannot read the clock under Cache
- * Components. The merger page carries the dates.
+ * Components. The merger post carries the dates.
  */
 const MARKET_LINKS: MarketLink[] = [
   {
-    href: "/coe/category-merger",
+    href: "/blog/lta-coe-category-merger-proposal",
     label: "LTA consultation",
     title: "Merging Categories A and B",
   },
