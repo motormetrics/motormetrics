@@ -23,8 +23,6 @@ import {
   PQPRatesTable,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-rates-table";
 import { RenewalCalculator } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal-calculator";
-import { RenewalComparison } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal-comparison";
-import { UnreleasedFeature } from "@web/app/(main)/(dashboard)/coe/pqp/components/unreleased-feature";
 import {
   loadSearchParams,
   PQP_CATEGORY_KEYS,
@@ -376,14 +374,6 @@ export async function PQPReport({
           ))}
         </dl>
       </section>
-
-      <UnreleasedFeature>
-        <RenewalComparison
-          category={selected}
-          summaries={overview.categorySummaries}
-          term={term}
-        />
-      </UnreleasedFeature>
     </>
   );
 }
