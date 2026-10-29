@@ -33,6 +33,27 @@
 * **web:** narrow the collapsed nav bar gap so it fits 360px ([6090e5a](https://github.com/motormetrics/motormetrics/commit/6090e5aaf3f939c666272e513afae36e407b8d52))
 * **web:** span the exercise range switch across phone rows ([2cf018e](https://github.com/motormetrics/motormetrics/commit/2cf018efc793dce8722480c317b86c9af13b9a72))
 
+## [5.36.0](https://github.com/motormetrics/motormetrics/compare/v5.35.0...v5.36.0) (2026-10-29)
+
+
+### Features
+
+* **web:** add COE renewal calculator form ([79d9f1d](https://github.com/motormetrics/motormetrics/commit/79d9f1d6bbe7b86fdc42760866ffa41beb9194dc))
+* **web:** add COE renewal calculator results ([4acb276](https://github.com/motormetrics/motormetrics/commit/4acb276a75c4b2d06a8c127779484243d5f2507a))
+* **web:** add COE renewal cost and PARF maths ([31a8711](https://github.com/motormetrics/motormetrics/commit/31a87118dcfb7a6eaa765961dfe48385b718f11d))
+* **web:** add link cards and drop the merger callout ([aefd453](https://github.com/motormetrics/motormetrics/commit/aefd4532bae589a264070199a9889681c724278d))
+* **web:** add market tiles to the homepage ([a49a174](https://github.com/motormetrics/motormetrics/commit/a49a17459f73e3af09fb797b417eb462c88860eb))
+* **web:** add road tax maths for COE renewals ([f575738](https://github.com/motormetrics/motormetrics/commit/f5757383221d16de17a9cf26e246447e0f8326f3))
+* **web:** lead the homepage with a COE and new-car band ([da0fb61](https://github.com/motormetrics/motormetrics/commit/da0fb614ae617f1e70a00ab59a264000d7a28bed))
+* **web:** mark the coe merger consultation as closed ([520f594](https://github.com/motormetrics/motormetrics/commit/520f5945661b33ed2f7ee76473574efca76113a9))
+* **web:** merge homepage charts into one tabbed panel ([d06f6d8](https://github.com/motormetrics/motormetrics/commit/d06f6d82e65260c29bd3b886eb251a6f841b2eaa))
+* **web:** release the COE renewal calculator ([2599ab3](https://github.com/motormetrics/motormetrics/commit/2599ab305542f45f7edf99da44f71058f100417b))
+
+
+### Bug Fixes
+
+* **web:** stop coe chart end labels overlapping ([6bf1a4e](https://github.com/motormetrics/motormetrics/commit/6bf1a4e66dc30bcf525c019eeae3c979b13c803b))
+
 ## [5.35.0](https://github.com/motormetrics/motormetrics/compare/v5.34.0...v5.35.0) (2026-10-27)
 
 
