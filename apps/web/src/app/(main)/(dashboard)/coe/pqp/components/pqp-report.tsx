@@ -22,6 +22,7 @@ import {
   type PQPRateRow,
   PQPRatesTable,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-rates-table";
+import { RenewalCalculator } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal-calculator";
 import { RenewalComparison } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal-comparison";
 import { UnreleasedFeature } from "@web/app/(main)/(dashboard)/coe/pqp/components/unreleased-feature";
 import {
@@ -184,6 +185,11 @@ export async function PQPReport({
         }))}
         term={term}
       />
+
+      <UnreleasedFeature>
+        <RenewalCalculator />
+        <Hairline />
+      </UnreleasedFeature>
 
       <section className="flex flex-col gap-4">
         <SectionHead
