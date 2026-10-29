@@ -1,19 +1,9 @@
 import { db } from "@motormetrics/database/client";
 import { coe, type SelectCOE } from "@motormetrics/database/schema";
 import { getDateRangeForYear } from "@web/lib/coe/calculations";
-import { getCOELatestMonth } from "@web/queries/coe/latest-month";
 import type { COECategory } from "@web/types";
-import { subMonths } from "date-fns";
 import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-
-const COE_CATEGORIES: COECategory[] = [
-  "Category A",
-  "Category B",
-  "Category C",
-  "Category D",
-  "Category E",
-];
 
 const fetchCoeResults = async (
   startMonth: string,
@@ -31,18 +21,6 @@ const fetchCoeResults = async (
     .from(coe)
     .where(and(...filters))
     .orderBy(asc(coe.month), desc(coe.biddingNo));
-};
-
-const getDateRangeRolling12Months = (
-  endMonth: string,
-): { startMonth: string; endMonth: string } => {
-  const endDate = new Date(`${endMonth}-01`);
-  const startDate = subMonths(endDate, 11);
-
-  return {
-    startMonth: startDate.toISOString().slice(0, 7),
-    endMonth,
-  };
 };
 
 const upsertMonthlyTrend = (
@@ -89,50 +67,4 @@ export async function getCoeCategoryTrends(
   }
 
   return Array.from(monthlyTrends.values());
-}
-
-export async function getAllCoeCategoryTrends(
-  year?: number,
-): Promise<Record<COECategory, CoeMonthlyPremium[]>> {
-  "use cache";
-  cacheLife("max");
-  cacheTag("coe:trends");
-  if (year) {
-    cacheTag(`coe:year:${year}`);
-  }
-
-  let startMonth: string;
-  let endMonth: string;
-
-  if (year) {
-    ({ startMonth, endMonth } = getDateRangeForYear(year));
-  } else {
-    const latestMonth = await getCOELatestMonth();
-    if (!latestMonth) {
-      return Object.fromEntries(
-        COE_CATEGORIES.map((category) => [category, [] as CoeMonthlyPremium[]]),
-      ) as Record<COECategory, CoeMonthlyPremium[]>;
-    }
-    ({ startMonth, endMonth } = getDateRangeRolling12Months(latestMonth));
-  }
-
-  const results = await fetchCoeResults(startMonth, endMonth);
-
-  const categoryTrends = new Map<COECategory, Map<string, CoeMonthlyPremium>>();
-  for (const category of COE_CATEGORIES) {
-    categoryTrends.set(category, new Map());
-  }
-
-  for (const result of results) {
-    const categoryMap = categoryTrends.get(result.vehicleClass as COECategory);
-    if (!categoryMap) continue;
-    upsertMonthlyTrend(categoryMap, result);
-  }
-
-  return Object.fromEntries(
-    COE_CATEGORIES.map((category) => [
-      category,
-      Array.from(categoryTrends.get(category)?.values() ?? []),
-    ]),
-  ) as Record<COECategory, CoeMonthlyPremium[]>;
 }
