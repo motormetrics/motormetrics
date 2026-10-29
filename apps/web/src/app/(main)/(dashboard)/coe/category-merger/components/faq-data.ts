@@ -9,7 +9,7 @@ export const CATEGORY_MERGER_FAQS: Faq[] = [
   {
     question: "Are COE Category A and B merging?",
     answer:
-      "Not yet. On 8 October 2026, LTA proposed merging Categories A and B into a single category for cars and opened a public consultation. No decision has been made. LTA expects to complete its review by the end of 2026, after feedback closes on 2 November 2026.",
+      "Not yet. On 8 October 2026, LTA proposed merging Categories A and B into a single category for cars and opened a public consultation. No decision has been made. LTA expects to complete its review by the end of 2026, after feedback closed on 2 November 2026.",
   },
   {
     question: "What is the new COE system LTA is proposing?",
@@ -52,8 +52,8 @@ export const CATEGORY_MERGER_FAQS: Faq[] = [
       "LTA is asking for views on two options: remove Category E entirely, or keep it for cars only. Keeping it would still let urgent buyers register a car without waiting for the next exercise, while protecting the supply of Category C COEs for goods vehicles.",
   },
   {
-    question: "How do I give feedback on the COE proposal?",
+    question: "Can I still give feedback on the COE proposal?",
     answer:
-      "Submit written comments to LTA at go.gov.sg/coe-pcd-feedback by 11.59pm on 2 November 2026. LTA is asking whether the categories should merge, how the feebate should be designed, whether it should apply to renewals and what should happen to Category E.",
+      "No. Written comments to LTA closed at 11.59pm on 2 November 2026. LTA asked whether the categories should merge, how the feebate should be designed, whether it should apply to renewals and what should happen to Category E, and expects to finish its review by the end of 2026.",
   },
 ];

@@ -12,7 +12,7 @@ export default async function Image() {
 
   return new ImageResponse(
     <Article
-      byline="LTA public consultation · closes 2 Nov 2026"
+      byline="LTA public consultation · closed 2 Nov 2026"
       excerpt="Cat A and B would merge into one category, with a rebate or surcharge of up to $15,000 based on the car's value."
       height={size.height}
       tag="COE"

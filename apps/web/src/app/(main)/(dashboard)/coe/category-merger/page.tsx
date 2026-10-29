@@ -9,7 +9,6 @@ import { Reasons } from "@web/app/(main)/(dashboard)/coe/category-merger/compone
 import { SystemComparison } from "@web/app/(main)/(dashboard)/coe/category-merger/components/system-comparison";
 import {
   CONSULTATION_PAPER_URL,
-  FEEDBACK_URL,
   FIVE_BANDS,
   MILESTONES,
   MODIFIED_DATE,
@@ -39,7 +38,7 @@ import type { Article, WithContext } from "schema-dts";
 const path = "/coe/category-merger";
 const title = "LTA COE Cat A/B Merger Proposal: $15k Feebate Bands";
 const description =
-  "LTA's COE Cat A/B merger consultation: up to $15,000 rebate or surcharge in 3 or 5 bands by car value. See the bands. Feedback closes 2 Nov 2026.";
+  "LTA's COE Cat A/B merger consultation: up to $15,000 rebate or surcharge in 3 or 5 bands by car value. See the bands. Feedback closed 2 Nov 2026; LTA is reviewing it.";
 
 export const metadata: Metadata = {
   title,
@@ -113,9 +112,9 @@ export default function CategoryMergerPage() {
       />
 
       <PageHead
-        description="LTA has proposed merging COE Categories A and B into one category for cars. Instead of an engine-based split, a fee-and-rebate system, which LTA calls a feebate, would set buyers apart by the value of the car they choose. This is a proposal under public consultation, not a decision."
+        description="LTA has proposed merging COE Categories A and B into one category for cars. Instead of an engine-based split, a fee-and-rebate system, which LTA calls a feebate, would set buyers apart by the value of the car they choose. This is a proposal under review, not a decision."
         eyebrow="LTA public consultation"
-        sub="Published 8 October 2026 · Feedback closes 2 November 2026"
+        sub="Published 8 October 2026 · Feedback closed 2 November 2026"
         title="LTA's COE Category Merger Proposal"
       />
 
@@ -127,7 +126,7 @@ export default function CategoryMergerPage() {
         />
         <div className="grid grid-cols-2 border-separator border-t">
           <StatCell label="Bands proposed" note={null} value="3 or 5" />
-          <StatCell label="Feedback closes" note="11.59pm" value="2 Nov" />
+          <StatCell label="Feedback closed" note="11.59pm" value="2 Nov" />
           <StatCell
             label="Cat A–B premium gap"
             note="7 Oct 2026 exercise"
@@ -140,23 +139,14 @@ export default function CategoryMergerPage() {
         <Card.Content className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-1">
             <Typography.Heading level={2} className="text-lg">
-              How to give feedback
+              Consultation closed
             </Typography.Heading>
             <Typography.Paragraph color="muted" size="sm">
-              Written comments to LTA close at 11.59pm on Monday, 2 November
-              2026.
+              Written comments to LTA closed at 11.59pm on Monday, 2 November
+              2026. LTA expects to finish its review by the end of 2026.
             </Typography.Paragraph>
           </div>
           <div className="flex flex-wrap gap-3">
-            <a
-              className={buttonVariants({ variant: "primary" })}
-              href={FEEDBACK_URL}
-              rel="noreferrer nofollow"
-              target="_blank"
-            >
-              Give feedback to LTA
-              <ArrowUpRight className="size-4" />
-            </a>
             <a
               className={buttonVariants({ variant: "secondary" })}
               href={CONSULTATION_PAPER_URL}
@@ -328,7 +318,7 @@ export default function CategoryMergerPage() {
                 aria-hidden
                 className={cn(
                   "absolute top-1 -left-[32px] size-3.5 rounded-full lg:-top-[32px] lg:left-0",
-                  label === "Feedback closes" ? "bg-danger" : "bg-accent",
+                  label === "Feedback closed" ? "bg-danger" : "bg-accent",
                 )}
               />
               <Typography.Paragraph
