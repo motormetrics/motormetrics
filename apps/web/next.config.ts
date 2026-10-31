@@ -2,15 +2,6 @@ import { withBotId } from "botid/next/config";
 import type { NextConfig } from "next";
 import { withWorkflow } from "workflow/next";
 
-// Remove on 2026-12-01, along with the sgcarstrends.com domains in Vercel and
-// the announcement in `@web/config`. The domain itself expires on 2027-05-01.
-const LEGACY_DOMAIN_REDIRECTS = [
-  ["sgcarstrends.com", "motormetrics.app"],
-  ["www.sgcarstrends.com", "motormetrics.app"],
-  ["docs.sgcarstrends.com", "docs.motormetrics.app"],
-  ["api.sgcarstrends.com", "api.motormetrics.app"],
-] as const;
-
 // Removed or renamed pages that still hold search impressions; each points at
 // the closest page that replaced it.
 const LEGACY_PATH_REDIRECTS = [
@@ -103,12 +94,6 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
   async redirects() {
     return [
-      ...LEGACY_DOMAIN_REDIRECTS.map(([fromHost, toHost]) => ({
-        source: "/:path*",
-        has: [{ type: "host" as const, value: fromHost }],
-        destination: `https://${toHost}/:path*`,
-        permanent: true,
-      })),
       ...LEGACY_PATH_REDIRECTS.map(([source, destination]) => ({
         source,
         destination,
