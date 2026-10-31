@@ -58,6 +58,21 @@ export async function ChargingIntro() {
   );
 }
 
+/** The as-of line under the page title: when the snapshot was taken, and where from. */
+export async function ChargingSource() {
+  const { observedAt } = await getEvChargingSnapshot();
+  if (!observedAt) {
+    return null;
+  }
+
+  return (
+    <>
+      Updated {formatObservedAt(observedAt)} SGT · Advertised rates from LTA
+      DataMall, refreshed hourly
+    </>
+  );
+}
+
 export async function ChargingQuestions() {
   const { records } = await getEvChargingSnapshot();
   if (records.length === 0) {

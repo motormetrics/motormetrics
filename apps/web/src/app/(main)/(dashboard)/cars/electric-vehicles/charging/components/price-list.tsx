@@ -4,44 +4,44 @@ import { ZERO_RATE_DISCLAIMER } from "@web/app/(main)/(dashboard)/cars/electric-
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { QueryTabs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/query-tabs";
 import { getPostalDistrict } from "@web/config/postal-districts";
-import {
-  getEvChargingPriceRankings,
-  type PriceOrder,
-} from "@web/queries/ev-charging";
+import { getEvChargingPriceRankings } from "@web/queries/ev-charging";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 
 const POWER_OPTIONS = [
   { key: "AC" as const, label: "AC" },
-  { key: "DC" as const, label: "DC" },
+  { key: "DC" as const, label: "DC fast" },
+];
+
+const ORDER_OPTIONS = [
+  { key: "cheapest" as const, label: "Cheapest" },
+  { key: "priciest" as const, label: "Most expensive" },
 ];
 
 interface PriceListProps {
-  order: PriceOrder;
   searchParams: Promise<SearchParams>;
 }
 
 /**
- * Cheapest or priciest advertised per-kWh rates for one power rating.
+ * One ranked list of advertised per-kWh rates. Power rating and sort order
+ * are both URL params, set by the two switches beside the heading, so a
+ * change re-renders the list on the server.
  *
- * The card and header prerender into the static shell; the heading leaves the
- * power rating to the toggle beside it. The toggle and the rows read the URL,
- * so each streams in behind its own boundary.
+ * It replaces the separate cheapest and most-expensive cards, whose toggles
+ * wrote the same `power` param and so changed each other out of sight.
+ *
+ * The card prerenders into the static shell; the heading, switches and rows
+ * read the URL, so each streams in behind its own boundary.
  */
-export function PriceList({ order, searchParams }: PriceListProps) {
+export function PriceList({ searchParams }: PriceListProps) {
   return (
     <Card className="gap-4 rounded-4xl p-7">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div className="flex flex-col gap-1">
-          <Typography.Paragraph color="muted">
-            {order === "cheapest" ? "Lowest" : "Highest"} advertised price
-          </Typography.Paragraph>
-          <Typography.Heading level={3}>
-            {order === "cheapest" ? "Cheapest" : "Most expensive"} charging
-          </Typography.Heading>
-        </div>
-        <Suspense fallback={<Skeleton className="h-11 w-28" />}>
-          <PowerToggle searchParams={searchParams} />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Suspense fallback={<Skeleton className="h-8 w-72" />}>
+          <PriceHeading searchParams={searchParams} />
+        </Suspense>
+        <Suspense fallback={<Skeleton className="h-11 w-80" />}>
+          <PriceSwitches searchParams={searchParams} />
         </Suspense>
       </div>
 
@@ -55,29 +55,49 @@ export function PriceList({ order, searchParams }: PriceListProps) {
           </div>
         }
       >
-        <PriceRows order={order} searchParams={searchParams} />
+        <PriceRows searchParams={searchParams} />
       </Suspense>
     </Card>
   );
 }
 
-async function PowerToggle({
-  searchParams,
-}: Pick<PriceListProps, "searchParams">) {
-  const { power } = await loadSearchParams(searchParams);
+async function PriceHeading({ searchParams }: PriceListProps) {
+  const { district, order, power } = await loadSearchParams(searchParams);
+  const scope = getPostalDistrict(district)?.name ?? "Singapore";
+  const rank = order === "cheapest" ? "Cheapest" : "Most expensive";
+  const rating = power === "DC" ? "DC fast" : "AC";
+
   return (
-    <QueryTabs
-      ariaLabel="Power rating"
-      options={POWER_OPTIONS}
-      param="power"
-      value={power}
-      variant="segmented"
-    />
+    <Typography.Heading level={2}>
+      {`${rank} ${rating} chargers in ${scope}`}
+    </Typography.Heading>
   );
 }
 
-async function PriceRows({ order, searchParams }: PriceListProps) {
-  const { district, power } = await loadSearchParams(searchParams);
+async function PriceSwitches({ searchParams }: PriceListProps) {
+  const { order, power } = await loadSearchParams(searchParams);
+  return (
+    <div className="flex flex-wrap gap-2">
+      <QueryTabs
+        ariaLabel="Charger type"
+        options={POWER_OPTIONS}
+        param="power"
+        value={power}
+        variant="segmented"
+      />
+      <QueryTabs
+        ariaLabel="Sort by price"
+        options={ORDER_OPTIONS}
+        param="order"
+        value={order}
+        variant="segmented"
+      />
+    </div>
+  );
+}
+
+async function PriceRows({ searchParams }: PriceListProps) {
+  const { district, order, power } = await loadSearchParams(searchParams);
   const locations = await getEvChargingPriceRankings({
     powerRating: power,
     order,
@@ -92,7 +112,7 @@ async function PriceRows({ order, searchParams }: PriceListProps) {
           No {power} chargers with a per-kWh price in {scope} yet.
         </Typography.Paragraph>
       ) : (
-        <ul className="flex flex-col gap-3.5">
+        <ol className="flex flex-col gap-3.5">
           {locations.map((location, index) => (
             <LocationRow
               index={index}
@@ -101,7 +121,7 @@ async function PriceRows({ order, searchParams }: PriceListProps) {
               trailing={`$${location.pricePerKwh.toFixed(2)}/kWh`}
             />
           ))}
-        </ul>
+        </ol>
       )}
 
       <Typography.Paragraph color="muted" size="xs">

@@ -2,16 +2,18 @@ import { Chip, Skeleton } from "@heroui/react";
 import { EmptyState } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-section";
-import { Bento } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/bento";
+// import { Bento } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/bento";
 // import { BusyHours } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/busy-hours";
 import { ChargingMap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map";
 import {
-  ChargingIntro,
+  // ChargingIntro,
   ChargingQuestions,
+  ChargingSource,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-overview";
 import { DistrictSelect } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/district-select";
 import { LiveStatus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/live-status";
 import { PriceList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-list";
+import { PriceSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-summary";
 // import { RecentChanges } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/recent-changes";
 // import { UtilisationList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-list";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
@@ -107,11 +109,32 @@ export default function ChargingPage({ searchParams }: PageProps) {
             <DistrictControl searchParams={searchParams} />
           </Suspense>
         }
-        title="EV charging"
+        sub={
+          <Suspense fallback={<Skeleton className="h-4 w-80" />}>
+            <ChargingSource />
+          </Suspense>
+        }
+        title="EV charging prices"
       />
 
+      {/* The price tiles below carry these figures now; the as-of line moved
+          under the title.
       <Suspense fallback={<Skeleton className="h-16 max-w-prose" />}>
         <ChargingIntro />
+      </Suspense>
+      */}
+
+      <PriceSummary searchParams={searchParams} />
+
+      <Suspense
+        fallback={
+          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
+            <CardSkeleton className="h-96 lg:col-span-2" />
+            <CardSkeleton className="h-80" />
+          </div>
+        }
+      >
+        <ChargingBento searchParams={searchParams} />
       </Suspense>
 
       <AnimatedSection order={0}>
@@ -124,18 +147,6 @@ export default function ChargingPage({ searchParams }: PageProps) {
 
       <Suspense fallback={null}>
         <ChargingEmptyState />
-      </Suspense>
-
-      <Suspense
-        fallback={
-          <Bento>
-            <CardSkeleton className="h-80" />
-            <CardSkeleton className="h-[520px]" />
-            <CardSkeleton className="h-[520px]" />
-          </Bento>
-        }
-      >
-        <ChargingBento searchParams={searchParams} />
       </Suspense>
 
       <Suspense fallback={null}>
@@ -188,10 +199,17 @@ async function LiveStatusCard({ searchParams }: PageProps) {
  * params and its own query inside its own Suspense boundary.
  */
 function ChargingBento({ searchParams }: PageProps) {
-  // Prices lead: they are what search visitors come for. With the utilisation
-  // column paused there are two columns, so the 2xl three-column grid drops.
+  // Prices lead: they are what search visitors come for. One ranked list with
+  // shared AC/DC and sort switches replaces the separate cheapest and
+  // most-expensive cards; live status sits beside it.
   return (
-    <Bento className="2xl:grid-cols-2">
+    <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
+      <AnimatedSection className="lg:col-span-2" order={0}>
+        <SectionErrorBoundary title="Charger prices unavailable">
+          <PriceList searchParams={searchParams} />
+        </SectionErrorBoundary>
+      </AnimatedSection>
+      {/* Replaced by the single list above.
       <AnimatedGrid className="flex flex-col gap-6">
         <AnimatedSection>
           <SectionErrorBoundary title="Cheapest chargers unavailable">
@@ -204,6 +222,7 @@ function ChargingBento({ searchParams }: PageProps) {
           </SectionErrorBoundary>
         </AnimatedSection>
       </AnimatedGrid>
+      */}
 
       <AnimatedGrid className="flex flex-col gap-6">
         <AnimatedSection>
@@ -245,6 +264,6 @@ function ChargingBento({ searchParams }: PageProps) {
         </AnimatedSection>
       </AnimatedGrid>
       */}
-    </Bento>
+    </div>
   );
 }
