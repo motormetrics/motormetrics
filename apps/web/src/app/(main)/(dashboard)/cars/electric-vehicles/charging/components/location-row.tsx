@@ -11,6 +11,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/utils/describe-connectors";
 import { districtForPostalCode } from "@web/config/postal-districts";
 import type { EvChargingLocation } from "@web/queries/ev-charging";
+import { ChevronRight } from "lucide-react";
 import { useQueryState } from "nuqs";
 import type { ReactNode } from "react";
 
@@ -65,6 +66,12 @@ export function LocationRow({
         </div>
         <span className="ml-auto shrink-0 font-extrabold text-sm tabular-nums">
           {trailing}
+        </span>
+        {/* The row's click opens the site on the map; say so, since a hover
+            tint alone does not show it on touch screens. */}
+        <span className="flex shrink-0 items-center gap-0.5 font-semibold text-accent-strong text-xs">
+          Map
+          <ChevronRight aria-hidden className="size-4" />
         </span>
       </button>
     </li>
