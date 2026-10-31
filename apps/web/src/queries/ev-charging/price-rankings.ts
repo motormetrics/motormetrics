@@ -50,6 +50,8 @@ export async function getEvChargingPriceRankings({
       record.powerRating === powerRating &&
       record.priceType === PER_KWH &&
       record.price != null &&
+      // A $0.00 rate is a placeholder in the feed, not a free charger.
+      record.price > 0 &&
       inDistrict(record.postalCode, district),
   );
 

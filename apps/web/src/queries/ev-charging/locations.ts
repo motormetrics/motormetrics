@@ -62,7 +62,12 @@ export const groupLocations = (
         record.chargingSpeedKw,
       );
     }
-    if (record.priceType === PER_KWH && record.price != null) {
+    // A $0.00 rate is a placeholder in the feed, not a free charger.
+    if (
+      record.priceType === PER_KWH &&
+      record.price != null &&
+      record.price > 0
+    ) {
       location.minPricePerKwh = Math.min(
         location.minPricePerKwh ?? Number.POSITIVE_INFINITY,
         record.price,

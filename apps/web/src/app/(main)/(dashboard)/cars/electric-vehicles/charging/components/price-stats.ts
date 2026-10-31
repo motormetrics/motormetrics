@@ -19,7 +19,9 @@ const lowest = (records: ConnectorRecord[], powerRating: string) =>
     if (
       record.powerRating !== powerRating ||
       record.priceType !== PER_KWH ||
-      record.price == null
+      record.price == null ||
+      // A $0.00 rate is a placeholder in the feed, not a free charger.
+      record.price <= 0
     ) {
       return best;
     }
