@@ -1,5 +1,5 @@
 import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
-import { getEvChargingLocationUtilisation } from "@web/queries/ev-charging/location-utilisation";
+// import { getEvChargingLocationUtilisation } from "@web/queries/ev-charging/location-utilisation";
 import {
   type EvChargingLocation,
   groupLocations,
@@ -36,13 +36,15 @@ export async function getEvChargingMapSites(): Promise<EvChargingMapSite[]> {
   cacheLife("max");
   cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
 
-  const [{ records }, utilisation] = await Promise.all([
-    getEvChargingSnapshot(),
-    getEvChargingLocationUtilisation({ order: "busiest", limit: 10_000 }),
-  ]);
-  const utilisationByLocation = new Map(
-    utilisation.map((row) => [row.locationId, row.utilisationPercent]),
-  );
+  // Utilisation is paused along with the hourly history it reads from.
+  // const [{ records }, utilisation] = await Promise.all([
+  //   getEvChargingSnapshot(),
+  //   getEvChargingLocationUtilisation({ order: "busiest", limit: 10_000 }),
+  // ]);
+  // const utilisationByLocation = new Map(
+  //   utilisation.map((row) => [row.locationId, row.utilisationPercent]),
+  // );
+  const { records } = await getEvChargingSnapshot();
 
   const extrasByLocation = new Map<string, SiteExtras>();
   for (const record of records) {
@@ -78,8 +80,9 @@ export async function getEvChargingMapSites(): Promise<EvChargingMapSite[]> {
       available: extras.available,
       occupied: extras.occupied,
       unavailable: extras.unavailable,
-      utilisationPercent:
-        utilisationByLocation.get(location.locationId) ?? null,
+      // utilisationPercent:
+      //   utilisationByLocation.get(location.locationId) ?? null,
+      utilisationPercent: null,
     });
   }
   return sites;

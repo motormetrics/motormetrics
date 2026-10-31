@@ -1,7 +1,7 @@
 "use client";
 
 import { Typography } from "@heroui/react";
-import { Segment } from "@heroui-pro/react";
+// import { Segment } from "@heroui-pro/react";
 // biome-ignore lint/suspicious/noShadowRestrictedNames: HeroUI Pro Map component
 import { Map, type MapClusterLayerProps } from "@heroui-pro/react/map";
 import {
@@ -14,7 +14,7 @@ import { DistrictFocus } from "@web/app/(main)/(dashboard)/cars/electric-vehicle
 import { SiteFocus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/site-focus";
 import { SiteLocator } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/site-locator";
 import { SitePopup } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/site-popup";
-import { UtilisationHeatmap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-heatmap";
+// import { UtilisationHeatmap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-heatmap";
 import { siteParam } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { getPostalDistrict } from "@web/config/postal-districts";
 import type { EvChargingMapSite } from "@web/queries/ev-charging/map-sites";
@@ -30,9 +30,10 @@ const MAP_STYLES = {
   dark: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
 };
 
+// The "Busiest sites" mode is paused with the hourly utilisation history.
 const MAP_MODES = [
   { key: "availability", label: "Live availability" },
-  { key: "utilisation", label: "Busiest sites" },
+  // { key: "utilisation", label: "Busiest sites" },
 ] as const;
 
 type MapMode = (typeof MAP_MODES)[number]["key"];
@@ -40,8 +41,8 @@ type MapMode = (typeof MAP_MODES)[number]["key"];
 const MODE_LEGENDS: Record<MapMode, string> = {
   availability:
     "Green has free connectors · amber is full · grey is out of service",
-  utilisation:
-    "Warmer areas were occupied more often over the past week · sites under a day old are left out",
+  // utilisation:
+  //   "Warmer areas were occupied more often over the past week · sites under a day old are left out",
 };
 
 /** Serves the same array that used to arrive as props. */
@@ -151,6 +152,7 @@ export function ChargingMapView() {
         <Typography.Heading level={3}>Chargers in {scope}</Typography.Heading>
       </div>
 
+      {/* One mode is left, so the switcher is hidden until utilisation returns.
       <Segment
         aria-label="Map view"
         className="w-fit"
@@ -166,6 +168,7 @@ export function ChargingMapView() {
           </Segment.Item>
         ))}
       </Segment>
+      */}
 
       <div className="relative h-[480px] w-full overflow-hidden rounded-3xl">
         <Map
@@ -177,9 +180,9 @@ export function ChargingMapView() {
           <DistrictFocus district={district} sites={sites} />
           <SiteFocus onFocus={focusSite} site={focusedSite} />
 
-          {tokens && mode === "utilisation" ? (
+          {/* {tokens && mode === "utilisation" ? (
             <UtilisationHeatmap collection={collection} tokens={tokens} />
-          ) : null}
+          ) : null} */}
 
           {tokens && mode === "availability" ? (
             <Map.ClusterLayer<EvChargingMapSite>

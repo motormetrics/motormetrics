@@ -3,7 +3,7 @@ import { EmptyState } from "@heroui-pro/react";
 import { AnimatedGrid } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-section";
 import { Bento } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/bento";
-import { BusyHours } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/busy-hours";
+// import { BusyHours } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/busy-hours";
 import { ChargingMap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map";
 import {
   ChargingIntro,
@@ -12,8 +12,8 @@ import {
 import { DistrictSelect } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/district-select";
 import { LiveStatus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/live-status";
 import { PriceList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-list";
-import { RecentChanges } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/recent-changes";
-import { UtilisationList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-list";
+// import { RecentChanges } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/recent-changes";
+// import { UtilisationList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-list";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { PageHead } from "@web/components/shared/page-head";
@@ -31,19 +31,19 @@ import type { WebPage, WithContext } from "schema-dts";
 export const metadata: Metadata = {
   title: "Singapore EV Charging Prices and Availability",
   description:
-    "Live public EV charger availability across Singapore, with the cheapest and most expensive charging rates, busiest hours and locations, and new chargers this week.",
+    "Compare public EV charging prices across Singapore: the cheapest and most expensive rates per kWh, with live charger availability by district.",
   openGraph: {
     ...baseOpenGraph,
     title: "EV Charging - Live Singapore Charger Stats",
     description:
-      "Live availability, prices and busy hours for Singapore's public EV chargers.",
+      "Charging prices and live availability for Singapore's public EV chargers.",
     url: `${SITE_URL}/cars/electric-vehicles/charging`,
   },
   twitter: {
     ...baseTwitter,
     title: "EV Charging - Live Singapore Charger Stats",
     description:
-      "Live availability, prices and busy hours for Singapore's public EV chargers.",
+      "Charging prices and live availability for Singapore's public EV chargers.",
   },
   alternates: {
     canonical: "/cars/electric-vehicles/charging",
@@ -55,7 +55,7 @@ const structuredData: WithContext<WebPage> = {
   "@type": "WebPage",
   name: "EV Charging",
   description:
-    "Live public EV charger availability, prices and busy hours across Singapore",
+    "Public EV charging prices and live charger availability across Singapore",
   url: `${SITE_URL}/cars/electric-vehicles/charging`,
   publisher: {
     "@type": "Organization",
@@ -188,32 +188,10 @@ async function LiveStatusCard({ searchParams }: PageProps) {
  * params and its own query inside its own Suspense boundary.
  */
 function ChargingBento({ searchParams }: PageProps) {
+  // Prices lead: they are what search visitors come for. With the utilisation
+  // column paused there are two columns, so the 2xl three-column grid drops.
   return (
-    <Bento>
-      <AnimatedGrid className="flex flex-col gap-6">
-        <AnimatedSection>
-          <SectionErrorBoundary title="Live status unavailable">
-            <Suspense fallback={<CardSkeleton className="h-80" />}>
-              <LiveStatusCard searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-        <AnimatedSection>
-          <SectionErrorBoundary title="Busy hours unavailable">
-            <Suspense fallback={<CardSkeleton className="h-72" />}>
-              <BusyHours />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-        <AnimatedSection>
-          <SectionErrorBoundary title="Recent changes unavailable">
-            <Suspense fallback={<CardSkeleton className="h-72" />}>
-              <RecentChanges />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-      </AnimatedGrid>
-
+    <Bento className="2xl:grid-cols-2">
       <AnimatedGrid className="flex flex-col gap-6">
         <AnimatedSection>
           <SectionErrorBoundary title="Cheapest chargers unavailable">
@@ -229,6 +207,33 @@ function ChargingBento({ searchParams }: PageProps) {
 
       <AnimatedGrid className="flex flex-col gap-6">
         <AnimatedSection>
+          <SectionErrorBoundary title="Live status unavailable">
+            <Suspense fallback={<CardSkeleton className="h-80" />}>
+              <LiveStatusCard searchParams={searchParams} />
+            </Suspense>
+          </SectionErrorBoundary>
+        </AnimatedSection>
+        {/* Paused with the charging history tables (events and hourly).
+        <AnimatedSection>
+          <SectionErrorBoundary title="Busy hours unavailable">
+            <Suspense fallback={<CardSkeleton className="h-72" />}>
+              <BusyHours />
+            </Suspense>
+          </SectionErrorBoundary>
+        </AnimatedSection>
+        <AnimatedSection>
+          <SectionErrorBoundary title="Recent changes unavailable">
+            <Suspense fallback={<CardSkeleton className="h-72" />}>
+              <RecentChanges />
+            </Suspense>
+          </SectionErrorBoundary>
+        </AnimatedSection>
+        */}
+      </AnimatedGrid>
+
+      {/* Paused with the hourly utilisation history.
+      <AnimatedGrid className="flex flex-col gap-6">
+        <AnimatedSection>
           <SectionErrorBoundary title="Busiest locations unavailable">
             <UtilisationList order="busiest" searchParams={searchParams} />
           </SectionErrorBoundary>
@@ -239,6 +244,7 @@ function ChargingBento({ searchParams }: PageProps) {
           </SectionErrorBoundary>
         </AnimatedSection>
       </AnimatedGrid>
+      */}
     </Bento>
   );
 }
