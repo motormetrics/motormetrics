@@ -1,6 +1,6 @@
 {
   "name": "@motormetrics/mcp",
-  "version": "5.36.0",
+  "version": "5.37.0",
   "description": "MCP server for MotorMetrics blog post management",
   "type": "module",
   "bin": "dist/index.js",

@@ -33,6 +33,21 @@
 * **web:** narrow the collapsed nav bar gap so it fits 360px ([6090e5a](https://github.com/motormetrics/motormetrics/commit/6090e5aaf3f939c666272e513afae36e407b8d52))
 * **web:** span the exercise range switch across phone rows ([2cf018e](https://github.com/motormetrics/motormetrics/commit/2cf018efc793dce8722480c317b86c9af13b9a72))
 
+## [5.37.0](https://github.com/motormetrics/motormetrics/compare/v5.36.0...v5.37.0) (2026-10-31)
+
+
+### Features
+
+* **web:** lead ev charging page with prices ([5c5a99c](https://github.com/motormetrics/motormetrics/commit/5c5a99c10922a6c2e8a7bafeee7678fc7b0967be))
+* **web:** pause ev history and lead with prices ([10ad811](https://github.com/motormetrics/motormetrics/commit/10ad8114adc56f58d97625e5d683567d13343ff9))
+* **web:** run ev charging map edge to edge ([bf220d4](https://github.com/motormetrics/motormetrics/commit/bf220d4783422e202a7ca2693dfe8ee93beb25b5))
+
+
+### Bug Fixes
+
+* **web:** ignore $0.00 ev charging rates ([697d845](https://github.com/motormetrics/motormetrics/commit/697d845bb356b887c9271d4f764136233b94f862))
+* **web:** show $0.00 ev rates as published ([f356b76](https://github.com/motormetrics/motormetrics/commit/f356b76af55d23ad4ef457d791f5d9716b7ef3da))
+
 ## [5.36.0](https://github.com/motormetrics/motormetrics/compare/v5.35.0...v5.36.0) (2026-10-29)
 
 
