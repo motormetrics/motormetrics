@@ -64,16 +64,6 @@ describe("deriveChargingStats", () => {
     expect(stats.medianPerKwh).toBeNull();
   });
 
-  it("should leave $0.00 rates out of the cheapest and median figures", () => {
-    const stats = deriveChargingStats([
-      connector({ evCpId: "A", price: 0 }),
-      connector({ evCpId: "B", locationId: "L2", price: 0.5 }),
-    ]);
-
-    expect(stats.cheapestAc).toBe(0.5);
-    expect(stats.medianPerKwh).toBe(0.5);
-  });
-
   it("should average the two middle values for an even count", () => {
     const stats = deriveChargingStats([
       connector({ evCpId: "A", price: 0.4 }),

@@ -108,23 +108,6 @@ describe("getEvChargingPriceRankings", () => {
     expect(rows.map((row) => row.locationId)).toEqual(["L5"]);
   });
 
-  it("should leave out $0.00 rates, which are placeholders in the feed", async () => {
-    vi.mocked(getEvChargingSnapshot).mockResolvedValueOnce({
-      observedAt: null,
-      records: [
-        connector({ evCpId: "A", locationId: "L1", price: 0 }),
-        connector({ evCpId: "B", locationId: "L2", price: 0.6 }),
-      ],
-    });
-
-    const rows = await getEvChargingPriceRankings({
-      powerRating: "AC",
-      order: "cheapest",
-    });
-
-    expect(rows.map((row) => row.locationId)).toEqual(["L2"]);
-  });
-
   it("should tolerate connectors without a speed", async () => {
     vi.mocked(getEvChargingSnapshot).mockResolvedValueOnce({
       observedAt: null,

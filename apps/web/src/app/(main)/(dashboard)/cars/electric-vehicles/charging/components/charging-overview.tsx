@@ -4,6 +4,7 @@ import { buildChargingFaqs } from "@web/app/(main)/(dashboard)/cars/electric-veh
 import {
   deriveChargingStats,
   formatPerKwh,
+  ZERO_RATE_DISCLAIMER,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
 import { StructuredData } from "@web/components/structured-data";
 import { generateFAQPageSchema } from "@web/lib/metadata";
@@ -42,6 +43,11 @@ export async function ChargingIntro() {
         {formatPerKwh(stats.cheapestDc)}. Availability and prices below come
         from the Land Transport Authority's DataMall feed and refresh hourly.
       </Typography.Paragraph>
+      {stats.cheapestAc === 0 || stats.cheapestDc === 0 ? (
+        <Typography.Paragraph color="muted" size="sm">
+          {ZERO_RATE_DISCLAIMER}
+        </Typography.Paragraph>
+      ) : null}
       {observedAt ? (
         <Typography.Paragraph color="muted" size="sm">
           Last updated {formatObservedAt(observedAt)} SGT · Source: LTA DataMall

@@ -19,9 +19,7 @@ const lowest = (records: ConnectorRecord[], powerRating: string) =>
     if (
       record.powerRating !== powerRating ||
       record.priceType !== PER_KWH ||
-      record.price == null ||
-      // A $0.00 rate is a placeholder in the feed, not a free charger.
-      record.price <= 0
+      record.price == null
     ) {
       return best;
     }
@@ -60,6 +58,14 @@ export const deriveChargingStats = (
     ),
   };
 };
+
+/**
+ * Shown wherever a $0.00/kWh rate appears. The rate is LTA DataMall's, shown
+ * as published: the feed marks free charging separately (`free`), so a zero
+ * per-kWh rate may be free charging or a price the operator has not listed.
+ */
+export const ZERO_RATE_DISCLAIMER =
+  "$0.00/kWh is the rate as published on LTA DataMall. It may mean free charging or a price the operator has not listed, so check with the operator before you charge.";
 
 export const formatPerKwh = (price: number | null): string =>
   price == null ? "not advertised" : `$${price.toFixed(2)}/kWh`;

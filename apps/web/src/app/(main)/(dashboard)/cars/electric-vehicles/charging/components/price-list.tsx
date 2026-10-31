@@ -1,5 +1,6 @@
 import { Card, Skeleton, Typography } from "@heroui/react";
 import { LocationRow } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/location-row";
+import { ZERO_RATE_DISCLAIMER } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { QueryTabs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/query-tabs";
 import { getPostalDistrict } from "@web/config/postal-districts";
@@ -106,6 +107,11 @@ async function PriceRows({ order, searchParams }: PriceListProps) {
       <Typography.Paragraph color="muted" size="xs">
         Per-kWh rates from LTA DataMall · {scope}
       </Typography.Paragraph>
+      {locations.some((location) => location.pricePerKwh === 0) ? (
+        <Typography.Paragraph color="muted" size="xs">
+          {ZERO_RATE_DISCLAIMER}
+        </Typography.Paragraph>
+      ) : null}
     </>
   );
 }
