@@ -1,8 +1,9 @@
 import { db } from "@motormetrics/database/client";
 import {
-  evChargingEvents,
+  // Paused: see the history writes below.
+  // evChargingEvents,
   evConnectorStatus,
-  evLocationHourly,
+  // evLocationHourly,
   type InsertEvConnectorStatus,
 } from "@motormetrics/database/schema";
 import {
@@ -127,24 +128,29 @@ export const ingestLiveSnapshot = async (): Promise<IngestResult> => {
       });
   }
 
-  for (const rows of chunk(diff.events, BATCH_SIZE)) {
-    await db.insert(evChargingEvents).values(rows);
-  }
-
-  for (const rows of chunk(diff.hourly, BATCH_SIZE)) {
-    await db
-      .insert(evLocationHourly)
-      .values(rows)
-      .onConflictDoUpdate({
-        target: [evLocationHourly.locationId, evLocationHourly.hour],
-        set: {
-          samples: sql`${evLocationHourly.samples} + excluded.samples`,
-          connectorSamples: sql`${evLocationHourly.connectorSamples} + excluded.connector_samples`,
-          occupiedSamples: sql`${evLocationHourly.occupiedSamples} + excluded.occupied_samples`,
-          unavailableSamples: sql`${evLocationHourly.unavailableSamples} + excluded.unavailable_samples`,
-        },
-      });
-  }
+  // History writes are paused. The events log and hourly counters were ~96%
+  // of the database and grew ~450 MB a month, while the sections reading them
+  // (busy hours, busiest/quietest sites, recent changes) drew ~10 views a week.
+  // Only the current connector state above is kept, for prices and the map.
+  //
+  // for (const rows of chunk(diff.events, BATCH_SIZE)) {
+  //   await db.insert(evChargingEvents).values(rows);
+  // }
+  //
+  // for (const rows of chunk(diff.hourly, BATCH_SIZE)) {
+  //   await db
+  //     .insert(evLocationHourly)
+  //     .values(rows)
+  //     .onConflictDoUpdate({
+  //       target: [evLocationHourly.locationId, evLocationHourly.hour],
+  //       set: {
+  //         samples: sql`${evLocationHourly.samples} + excluded.samples`,
+  //         connectorSamples: sql`${evLocationHourly.connectorSamples} + excluded.connector_samples`,
+  //         occupiedSamples: sql`${evLocationHourly.occupiedSamples} + excluded.occupied_samples`,
+  //         unavailableSamples: sql`${evLocationHourly.unavailableSamples} + excluded.unavailable_samples`,
+  //       },
+  //     });
+  // }
 
   return {
     skipped: null,
