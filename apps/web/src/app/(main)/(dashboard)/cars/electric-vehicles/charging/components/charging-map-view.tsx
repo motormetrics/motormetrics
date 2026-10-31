@@ -8,7 +8,6 @@ import {
   ISLAND_CENTER,
   ISLAND_ZOOM,
   type MapTokens,
-  mapOverlapPx,
   readTokens,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map-shared";
 import { DistrictFocus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/district-focus";
@@ -187,7 +186,7 @@ export function ChargingMapView({
 
         The MapLibre credit sits in its bottom-right control corner, which the
         price cards cover. The arbitrary variants lift that corner by the
-        overlap (`mapOverlapPx`) so the credit stays visible; HeroUI's Map has
+        overlap so the credit stays visible; HeroUI's Map has
         no prop to place it.
       */}
       <div className="relative h-96 w-full overflow-hidden md:h-[640px] [&_.maplibregl-ctrl-bottom-right]:bottom-24 md:[&_.maplibregl-ctrl-bottom-right]:bottom-80">
@@ -287,7 +286,8 @@ export function ChargingMapView({
 /**
  * Pads the camera's bottom edge by the overlap, so the island, a fitted
  * district and a focused site centre in the part of the map the price cards
- * leave clear. Kept in step with the breakpoint as the window resizes.
+ * leave clear. The 96 and 320 px mirror the page's `-mt-24 md:-mt-80`, and
+ * follow the breakpoint as the window resizes.
  */
 function MapOverlap() {
   const { isLoaded, map } = useMap();
@@ -296,11 +296,16 @@ function MapOverlap() {
     if (!isLoaded || !map) {
       return;
     }
+    const wide = window.matchMedia("(width >= 48rem)");
     const applyPadding = () => {
-      map.setPadding({ top: 0, right: 0, bottom: mapOverlapPx(), left: 0 });
+      map.setPadding({
+        top: 0,
+        right: 0,
+        bottom: wide.matches ? 320 : 96,
+        left: 0,
+      });
     };
     applyPadding();
-    const wide = window.matchMedia("(width >= 48rem)");
     wide.addEventListener("change", applyPadding);
     return () => wide.removeEventListener("change", applyPadding);
   }, [isLoaded, map]);

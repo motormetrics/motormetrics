@@ -127,8 +127,8 @@ export default function ChargingPage({ searchParams }: PageProps) {
       {/*
         The map runs edge to edge under the title, and the price content is
         pulled up over its lower half. `-mt-24 md:-mt-80` must match
-        `mapOverlapPx` in charging-map-shared.ts, which pads the map's camera
-        by the same amount. One wrapper with no gap, so the overlap is exact.
+        `MapOverlap` in charging-map-view.tsx, which pads the map's camera by
+        the same amount. One wrapper with no gap, so the overlap is exact.
       */}
       <div className="flex flex-col">
         <AnimatedSection order={0}>

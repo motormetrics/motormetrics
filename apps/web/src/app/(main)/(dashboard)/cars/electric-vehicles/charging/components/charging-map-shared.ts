@@ -2,14 +2,6 @@
 export const ISLAND_CENTER: [number, number] = [103.82, 1.36];
 export const ISLAND_ZOOM = 10.5;
 
-/**
- * How far the price content overlaps the bottom of the map, in px. Mirrors
- * the page's `-mt-24 md:-mt-80`: a phone's map is shorter, so less of it is
- * covered.
- */
-export const mapOverlapPx = () =>
-  window.matchMedia("(width >= 48rem)").matches ? 320 : 96;
-
 /** MapLibre paints cannot read CSS variables, so tokens are resolved once. */
 export const readTokens = () => {
   const style = getComputedStyle(document.documentElement);
