@@ -2,6 +2,8 @@ import { withBotId } from "botid/next/config";
 import type { NextConfig } from "next";
 import { withWorkflow } from "workflow/next";
 
+// Remove on 2026-12-01, along with the sgcarstrends.com domains in Vercel and
+// the announcement in `@web/config`. The domain itself expires on 2027-05-01.
 const LEGACY_DOMAIN_REDIRECTS = [
   ["sgcarstrends.com", "motormetrics.app"],
   ["www.sgcarstrends.com", "motormetrics.app"],
