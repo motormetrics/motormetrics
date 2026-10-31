@@ -213,12 +213,6 @@ export const MORE_NAV_ITEMS: NavigationItem[] = [
   { title: "Blog", url: "/blog" },
 ];
 
-/** Shown in More when the `advertise-nav` flag is on. */
-export const ADVERTISE_MORE_ITEM: NavigationItem = {
-  title: "Advertise",
-  url: "/advertise",
-};
-
 export const FOOTER_NAV_ITEMS = [
   { href: "/about", label: "About" },
   { href: "/learn", label: "Learn" },
@@ -226,9 +220,3 @@ export const FOOTER_NAV_ITEMS = [
   { href: "/legal/privacy-policy", label: "Privacy" },
   { href: "/legal/terms-of-service", label: "Terms" },
 ] as const satisfies readonly NavItem[];
-
-/** Inserted after Learn when the `advertise-nav` flag is on. */
-export const ADVERTISE_FOOTER_ITEM = {
-  href: "/advertise",
-  label: "Advertise",
-} as const satisfies NavItem;
