@@ -1,6 +1,6 @@
 import { Chip, Skeleton } from "@heroui/react";
 import { EmptyState } from "@heroui-pro/react";
-import { AnimatedGrid } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-grid";
+// import { AnimatedGrid } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-section";
 // import { Bento } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/bento";
 // import { BusyHours } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/busy-hours";
@@ -11,7 +11,7 @@ import {
   ChargingSource,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-overview";
 import { DistrictSelect } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/district-select";
-import { LiveStatus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/live-status";
+// import { LiveStatus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/live-status";
 import { PriceList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-list";
 import { PriceSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-summary";
 // import { RecentChanges } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/recent-changes";
@@ -124,19 +124,36 @@ export default function ChargingPage({ searchParams }: PageProps) {
       </Suspense>
       */}
 
-      <PriceSummary searchParams={searchParams} />
+      {/*
+        The map runs edge to edge under the title, and the price content is
+        pulled up over its lower half. `-mt-24 md:-mt-80` must match
+        `MapOverlap` in charging-map-view.tsx, which pads the map's camera by
+        the same amount. One wrapper with no gap, so the overlap is exact.
+      */}
+      <div className="flex flex-col">
+        <AnimatedSection order={0}>
+          <SectionErrorBoundary title="Charger map unavailable">
+            <Suspense
+              fallback={
+                // Same bleed and heights as ChargingMap; see its comments.
+                <Skeleton className="-mx-4 h-96 rounded-none sm:-mx-6 md:h-[640px] lg:-mx-9" />
+              }
+            >
+              <ChargingMap searchParams={searchParams} />
+            </Suspense>
+          </SectionErrorBoundary>
+        </AnimatedSection>
 
-      <Suspense
-        fallback={
-          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
-            <CardSkeleton className="h-96 lg:col-span-2" />
-            <CardSkeleton className="h-80" />
-          </div>
-        }
-      >
-        <ChargingBento searchParams={searchParams} />
-      </Suspense>
+        <div className="relative z-10 -mt-24 flex flex-col gap-6 md:-mt-80">
+          <PriceSummary searchParams={searchParams} />
 
+          <Suspense fallback={<CardSkeleton className="h-96" />}>
+            <ChargingBento searchParams={searchParams} />
+          </Suspense>
+        </div>
+      </div>
+
+      {/* Moved above, as the full-bleed map the price content overlaps.
       <AnimatedSection order={0}>
         <SectionErrorBoundary title="Charger map unavailable">
           <Suspense fallback={<CardSkeleton className="h-[600px]" />}>
@@ -144,6 +161,7 @@ export default function ChargingPage({ searchParams }: PageProps) {
           </Suspense>
         </SectionErrorBoundary>
       </AnimatedSection>
+      */}
 
       <Suspense fallback={null}>
         <ChargingEmptyState />
@@ -188,10 +206,11 @@ async function ChargingEmptyState() {
   );
 }
 
-async function LiveStatusCard({ searchParams }: PageProps) {
-  const { district } = await loadSearchParams(searchParams);
-  return <LiveStatus district={district} />;
-}
+// Replaced by the live chip on the map (`LiveChip` in live-status.tsx).
+// async function LiveStatusCard({ searchParams }: PageProps) {
+//   const { district } = await loadSearchParams(searchParams);
+//   return <LiveStatus district={district} />;
+// }
 
 /**
  * The card grid. It awaits nothing itself: aggregating the cards' data here
@@ -201,10 +220,10 @@ async function LiveStatusCard({ searchParams }: PageProps) {
 function ChargingBento({ searchParams }: PageProps) {
   // Prices lead: they are what search visitors come for. One ranked list with
   // shared AC/DC and sort switches replaces the separate cheapest and
-  // most-expensive cards; live status sits beside it.
+  // most-expensive cards. Live status moved onto the map as a chip.
   return (
-    <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
-      <AnimatedSection className="lg:col-span-2" order={0}>
+    <div className="flex flex-col gap-6">
+      <AnimatedSection order={0}>
         <SectionErrorBoundary title="Charger prices unavailable">
           <PriceList searchParams={searchParams} />
         </SectionErrorBoundary>
@@ -224,6 +243,7 @@ function ChargingBento({ searchParams }: PageProps) {
       </AnimatedGrid>
       */}
 
+      {/* The live status card became the chip on the map (LiveChip).
       <AnimatedGrid className="flex flex-col gap-6">
         <AnimatedSection>
           <SectionErrorBoundary title="Live status unavailable">
@@ -232,7 +252,8 @@ function ChargingBento({ searchParams }: PageProps) {
             </Suspense>
           </SectionErrorBoundary>
         </AnimatedSection>
-        {/* Paused with the charging history tables (events and hourly).
+      */}
+      {/* Paused with the charging history tables (events and hourly).
         <AnimatedSection>
           <SectionErrorBoundary title="Busy hours unavailable">
             <Suspense fallback={<CardSkeleton className="h-72" />}>
@@ -248,7 +269,7 @@ function ChargingBento({ searchParams }: PageProps) {
           </SectionErrorBoundary>
         </AnimatedSection>
         */}
-      </AnimatedGrid>
+      {/* </AnimatedGrid> */}
 
       {/* Paused with the hourly utilisation history.
       <AnimatedGrid className="flex flex-col gap-6">

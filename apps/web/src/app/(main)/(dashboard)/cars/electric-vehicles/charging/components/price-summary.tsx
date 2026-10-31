@@ -39,6 +39,12 @@ function PriceTile({
       <Typography.Paragraph color="muted" size="sm" className="truncate">
         {caption}
       </Typography.Paragraph>
+      {/* Inside the tile, not under the row: below the tiles is the map. */}
+      {price === 0 ? (
+        <Typography.Paragraph color="muted" size="xs">
+          {ZERO_RATE_DISCLAIMER}
+        </Typography.Paragraph>
+      ) : null}
     </Card>
   );
 }
@@ -121,11 +127,13 @@ async function PriceTiles({ searchParams }: PriceSummaryProps) {
         label="Typical rate"
         price={stats.medianPerKwh}
       />
+      {/* Moved into each $0.00 tile: under the tiles this sat on the map.
       {cheapestDc?.pricePerKwh === 0 || cheapestAc?.pricePerKwh === 0 ? (
         <Typography.Paragraph className="md:col-span-3" color="muted" size="xs">
           {ZERO_RATE_DISCLAIMER}
         </Typography.Paragraph>
       ) : null}
+      */}
     </>
   );
 }
