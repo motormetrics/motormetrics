@@ -27,9 +27,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { WebPage, WithContext } from "schema-dts";
 
-const title = "PARF Rebate Calculator 2026: Rates by Car Age";
+const title = "PARF & COE Rebate Calculator: Estimate Deregistration Value";
 const description =
-  "PARF rebate by car age: 75% to 50% of ARF for older COEs ($60,000 cap from Feb 2023), or 30% to 5% for COEs from Feb 2026, capped at $30,000.";
+  "Enter ARF, car age and COE left to estimate your PARF rebate, COE rebate and deregistration value under old and Budget 2026 rates. No login needed.";
 export const metadata: Metadata = {
   title,
   description,
@@ -107,7 +107,7 @@ export default function PARFCalculatorPage() {
             · Source: LTA
           </>
         }
-        title="PARF rebate calculator"
+        title="PARF and COE rebate calculator"
       />
 
       <PARFCalculator />
