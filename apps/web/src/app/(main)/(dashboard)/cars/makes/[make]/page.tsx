@@ -78,9 +78,16 @@ const makeDescription = (make: string) =>
  * make with no registrations that month keeps the generic description.
  */
 async function loadMakeDescription(make: string): Promise<string> {
+  const summary = await loadMakeSummary(make);
+
+  return summary ? `${summary} Source: LTA.` : makeDescription(make);
+}
+
+/** The latest month's summary sentence, shared by the snippet and the FAQ. */
+async function loadMakeSummary(make: string): Promise<string | undefined> {
   const month = await getCarsLatestMonth();
   if (!month) {
-    return makeDescription(make);
+    return undefined;
   }
 
   const previousMonth = shiftMonth(month, -1);
@@ -95,7 +102,7 @@ async function loadMakeDescription(make: string): Promise<string> {
       .reduce((total, row) => total + row.count, 0);
   const yearEntry = yearTotals.find((entry) => entry.make === make);
 
-  const summary = summariseMake({
+  return summariseMake({
     count: countIn(month),
     make,
     marketCount: marketMonthly[0]?.total ?? 0,
@@ -104,8 +111,6 @@ async function loadMakeDescription(make: string): Promise<string> {
     rank: yearEntry ? yearTotals.indexOf(yearEntry) + 1 : undefined,
     yearToDate: yearEntry?.count ?? 0,
   });
-
-  return summary ? `${summary} Source: LTA.` : makeDescription(make);
 }
 
 export async function generateMetadata({
@@ -268,7 +273,7 @@ export default function CarMakePage({
 /** The questions, templated with the make name, and their FAQPage schema. */
 async function MakeFaq({ params }: Pick<PageProps, "params">) {
   const { exactMake } = await resolveMake(params);
-  const faqs = buildMakeFaqs(exactMake);
+  const faqs = buildMakeFaqs(exactMake, await loadMakeSummary(exactMake));
 
   return (
     <>

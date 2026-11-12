@@ -3,13 +3,14 @@ import type { Faq } from "@web/components/shared/page-faq";
 /**
  * Questions people search about one make, with its name in the wording they
  * search, such as "How many BMW cars are registered in Singapore?". Shared by
- * the accordion and the FAQPage schema so the two always match. Answers point
- * to the figures on the page rather than quote them, so they never go stale.
+ * the accordion and the FAQPage schema so the two always match. The first
+ * answer leads with `summary`, the latest month's figures in a sentence built
+ * from the same data as the page, when the make registered any that month.
  */
-export const buildMakeFaqs = (make: string): Faq[] => [
+export const buildMakeFaqs = (make: string, summary?: string): Faq[] => [
   {
     question: `How many ${make} cars are registered in Singapore?`,
-    answer: `The headline at the top of this page counts new ${make} car registrations in Singapore for the selected period, from LTA data. Use the month picker to change the month the page reports.`,
+    answer: `${summary ? `${summary} ` : ""}The headline at the top of this page counts new ${make} car registrations in Singapore for the selected period, from LTA data. Use the month picker to change the month the page reports.`,
   },
   {
     question: `What fuel types do ${make} cars in Singapore use?`,
