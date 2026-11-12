@@ -1,8 +1,12 @@
 import { Skeleton } from "@heroui/react";
 import { ComparisonLinks } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/comparison-links";
 import { COMPARE_PAIRS } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
-import { MAKES_FAQS } from "@web/app/(main)/(dashboard)/cars/makes/components/faq-data";
-import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { buildMakesFaqs } from "@web/app/(main)/(dashboard)/cars/makes/components/faq-data";
+import {
+  loadMakeRows,
+  periodLabel,
+  summariseLeaders,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { MakesContentSection } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-content-section";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/range-tabs";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
@@ -81,6 +85,27 @@ async function MakesPeriodSub({ searchParams }: PageProps) {
   );
 }
 
+/**
+ * The questions and their FAQPage schema. Quotes the year-to-date leaders
+ * whatever range is selected, so it reads no search params.
+ */
+async function MakesFaq() {
+  const { latestMonth, rows } = await loadMakeRows("ytd", null);
+  const faqs = buildMakesFaqs(summariseLeaders(rows, latestMonth, "ytd"));
+
+  return (
+    <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: faqs }]),
+        }}
+      />
+      <PageFaq faqs={faqs} />
+    </>
+  );
+}
+
 export default function CarMakesPage({ searchParams }: PageProps) {
   return (
     <OverviewPage className="gap-10 max-md:gap-7">
@@ -114,13 +139,9 @@ export default function CarMakesPage({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: MAKES_FAQS }]),
-        }}
-      />
-      <PageFaq faqs={MAKES_FAQS} />
+      <Suspense fallback={null}>
+        <MakesFaq />
+      </Suspense>
     </OverviewPage>
   );
 }
