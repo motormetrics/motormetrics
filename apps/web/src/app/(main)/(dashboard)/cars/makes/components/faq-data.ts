@@ -3,13 +3,13 @@ import type { Faq } from "@web/components/shared/page-faq";
 /**
  * Questions people search about car makes in Singapore, worded the way they
  * search them. Shared by the accordion and the FAQPage schema so the two always
- * match. Answers point to the figures on the page rather than quote them.
+ * match. The first answer leads with `summary`, the year-to-date leaders in a
+ * sentence built from the same data as the table.
  */
-export const MAKES_FAQS: Faq[] = [
+export const buildMakesFaqs = (summary?: string): Faq[] => [
   {
     question: "What is the most popular car brand in Singapore?",
-    answer:
-      "The leading make at the top of this page is the make with the most new car registrations in the selected range: this month, the year to date or the last 12 months. The All makes table ranks every other make below it.",
+    answer: `${summary ? `${summary} Source: LTA. ` : ""}The leading make at the top of this page is the make with the most new car registrations in the selected range: this month, the year to date or the last 12 months. The All makes table ranks every other make below it.`,
   },
   {
     question: "How many car makes are sold in Singapore?",

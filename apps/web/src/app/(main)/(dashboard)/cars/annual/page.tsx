@@ -2,7 +2,7 @@ import { Skeleton } from "@heroui/react";
 import { EmptyState } from "@heroui-pro/react";
 import { ClassesTable } from "@web/app/(main)/(dashboard)/cars/annual/components/classes-table";
 import { ElectricFleet } from "@web/app/(main)/(dashboard)/cars/annual/components/electric-fleet";
-import { ANNUAL_FAQS } from "@web/app/(main)/(dashboard)/cars/annual/components/faq-data";
+import { buildAnnualFaqs } from "@web/app/(main)/(dashboard)/cars/annual/components/faq-data";
 import { FuelSplit } from "@web/app/(main)/(dashboard)/cars/annual/components/fuel-split";
 import { PopulationByYear } from "@web/app/(main)/(dashboard)/cars/annual/components/population-by-year";
 import { PopulationHeadline } from "@web/app/(main)/(dashboard)/cars/annual/components/population-headline";
@@ -10,6 +10,7 @@ import {
   buildPopulationSeries,
   CARS,
   rankClasses,
+  summarisePopulation,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
@@ -82,6 +83,38 @@ function PopulationSkeleton() {
   );
 }
 
+/**
+ * The questions and their FAQPage schema, with the latest year end quoted.
+ * Reads the same cached query as the sections above.
+ */
+async function AnnualFaq() {
+  const rows = await getVehiclePopulationByCategoryAndFuelType();
+  const data = buildPopulationSeries(
+    rows.map((row) => ({
+      fuelType: row.fuelType,
+      name: row.category,
+      total: row.total,
+      year: row.year,
+    })),
+  );
+  const cars = data?.entities.find((entity) => entity.name === CARS);
+  const faqs = buildAnnualFaqs(
+    data && cars ? summarisePopulation(cars, data.years) : undefined,
+  );
+
+  return (
+    <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: faqs }]),
+        }}
+      />
+      <PageFaq faqs={faqs} />
+    </>
+  );
+}
+
 export default function AnnualPage() {
   return (
     <>
@@ -116,13 +149,9 @@ export default function AnnualPage() {
 
         <Hairline />
 
-        <StructuredData
-          data={{
-            "@context": "https://schema.org",
-            ...generateFAQPageSchema([{ items: ANNUAL_FAQS }]),
-          }}
-        />
-        <PageFaq faqs={ANNUAL_FAQS} />
+        <Suspense fallback={null}>
+          <AnnualFaq />
+        </Suspense>
       </OverviewPage>
     </>
   );

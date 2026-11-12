@@ -1,8 +1,10 @@
 import { Typography } from "@heroui/react";
+import { summariseType } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/type-meta";
 import { buildVehicleTypeFaqs } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/faq-data";
 import {
   PERIOD_LABELS,
+  periodRange,
   periodWindow,
   SERIES_MONTHS,
 } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/period";
@@ -14,6 +16,7 @@ import { VehicleTypePeers } from "@web/app/(main)/(dashboard)/cars/vehicle-types
 import {
   loadVehicleTypeSearchParams,
   resolveVehicleType,
+  share,
   type VehicleTypeReportProps,
 } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/vehicle-type-shared";
 import { VehicleTypeTrend } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/vehicle-type-trend";
@@ -86,12 +89,34 @@ export async function VehicleTypeContent({
   const marketTotal = distribution.reduce((sum, row) => sum + row.count, 0);
   const typeTotal = distribution.find((row) => row.name === value)?.count ?? 0;
 
+  // The headline's own summary sentence, repeated as the lead of the first FAQ
+  // answer so the answer states the figure rather than pointing at it.
+  const previousTypeTotal =
+    previousDistribution.find((row) => row.name === value)?.count ?? 0;
+  const previousMarketTotal = previousDistribution.reduce(
+    (sum, row) => sum + row.count,
+    0,
+  );
+  const summary =
+    typeTotal > 0
+      ? summariseType({
+          count: typeTotal,
+          label: displayName,
+          periodLabel: periodRange(period, month),
+          previousShare:
+            previousMarketTotal > 0
+              ? share(previousTypeTotal, previousMarketTotal)
+              : undefined,
+          share: share(typeTotal, marketTotal),
+        })
+      : undefined;
+
   const { title, description, canonical } = typeDetailMeta(
     "vehicle-types",
     type,
     value,
   );
-  const faqs = buildVehicleTypeFaqs(displayName);
+  const faqs = buildVehicleTypeFaqs(displayName, summary);
   const structuredData: WithContext<WebPage> = {
     "@context": "https://schema.org",
     "@type": "WebPage",

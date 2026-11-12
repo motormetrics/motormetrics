@@ -1,7 +1,8 @@
 import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { CarsMonthPicker } from "@web/app/(main)/(dashboard)/cars/components/cars-month-picker";
-import { REGISTRATIONS_FAQS } from "@web/app/(main)/(dashboard)/cars/registrations/components/faq-data";
+import { loadLatestRegistrationsSummary } from "@web/app/(main)/(dashboard)/cars/components/faq-data";
+import { buildRegistrationsFaqs } from "@web/app/(main)/(dashboard)/cars/registrations/components/faq-data";
 import { RegistrationsReport } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-report";
 import { TrendsCompareButton } from "@web/app/(main)/(dashboard)/cars/registrations/components/trends-compare-button";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
@@ -76,6 +77,23 @@ async function RegistrationsMonthSub({ searchParams }: PageProps) {
   );
 }
 
+/** The questions and their FAQPage schema, with the latest figures quoted. */
+async function RegistrationsFaq() {
+  const faqs = buildRegistrationsFaqs(await loadLatestRegistrationsSummary());
+
+  return (
+    <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: faqs }]),
+        }}
+      />
+      <PageFaq faqs={faqs} />
+    </>
+  );
+}
+
 export default function Page({ searchParams }: PageProps) {
   return (
     <OverviewPage className="gap-10 max-md:gap-7">
@@ -127,13 +145,9 @@ export default function Page({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: REGISTRATIONS_FAQS }]),
-        }}
-      />
-      <PageFaq faqs={REGISTRATIONS_FAQS} />
+      <Suspense fallback={null}>
+        <RegistrationsFaq />
+      </Suspense>
     </OverviewPage>
   );
 }

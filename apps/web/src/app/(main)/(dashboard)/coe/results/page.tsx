@@ -3,7 +3,7 @@ import {
   formatExercise,
   groupByExercise,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { RESULTS_FAQS } from "@web/app/(main)/(dashboard)/coe/results/components/faq-data";
+import { buildResultsFaqs } from "@web/app/(main)/(dashboard)/coe/results/components/faq-data";
 import { LatestExerciseSub } from "@web/app/(main)/(dashboard)/coe/results/components/latest-exercise-sub";
 import { PremiumsByYear } from "@web/app/(main)/(dashboard)/coe/results/components/premiums-by-year";
 import { QuotaAndDemand } from "@web/app/(main)/(dashboard)/coe/results/components/quota-and-demand";
@@ -41,6 +41,23 @@ interface PageProps {
 const title = "COE Bidding Results History and Price Charts";
 const description =
   "Singapore COE bidding results history for Cat A to E: every exercise, yearly averages and record highs, with 12-month, 5-year, 10-year and all-time charts.";
+
+/** The questions and their FAQPage schema, with the records and averages quoted. */
+async function ResultsFaq() {
+  const faqs = buildResultsFaqs(groupByExercise(await getCoeResults()));
+
+  return (
+    <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: faqs }]),
+        }}
+      />
+      <PageFaq faqs={faqs} />
+    </>
+  );
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const latest = groupByExercise(await getCoeResults()).at(-1);
@@ -260,13 +277,9 @@ export default function COEResultsPage({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: RESULTS_FAQS }]),
-        }}
-      />
-      <PageFaq faqs={RESULTS_FAQS} />
+      <Suspense fallback={null}>
+        <ResultsFaq />
+      </Suspense>
     </OverviewPage>
   );
 }

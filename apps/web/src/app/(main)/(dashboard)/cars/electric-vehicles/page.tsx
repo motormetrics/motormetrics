@@ -4,8 +4,12 @@ import { AdoptionByMonth } from "@web/app/(main)/(dashboard)/cars/electric-vehic
 import { ChargingSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-summary";
 import { ElectrifiedTotal } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/electrified-total";
 import { EvLeaderboard } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-leaderboard";
+import {
+  summariseLeaderboard,
+  yearToDateMakes,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { EvShareHero } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-share-hero";
-import { ELECTRIC_VEHICLES_FAQS } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/faq-data";
+import { buildElectricVehiclesFaqs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/faq-data";
 import { RegistrationTrend } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/registration-trend";
 import { VesBands } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ves-bands";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
@@ -19,13 +23,14 @@ import {
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
-import { SITE_TITLE, SITE_URL } from "@web/config";
+import { EV_FUEL_TYPES, SITE_TITLE, SITE_URL } from "@web/config";
 import {
   generateBreadcrumbSchema,
   generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { getEvMarketShare } from "@web/queries/cars";
+import { getEvMarketShare, getFuelTypeData } from "@web/queries/cars";
+import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import { Zap } from "lucide-react";
@@ -95,6 +100,37 @@ function SectionSkeleton({ className = "h-64" }: { className?: string }) {
   );
 }
 
+/**
+ * The questions and their FAQPage schema. Quotes the latest month's year to
+ * date whatever month is selected, so it reads no search params.
+ */
+async function ElectricVehiclesFaq() {
+  const [month, electric] = await Promise.all([
+    getCarsLatestMonth(),
+    getFuelTypeData(EV_FUEL_TYPES.BEV[0]),
+  ]);
+  const faqs = buildElectricVehiclesFaqs(
+    month
+      ? summariseLeaderboard(
+          yearToDateMakes(electric.data, EV_FUEL_TYPES.BEV, month),
+          month,
+        )
+      : undefined,
+  );
+
+  return (
+    <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: faqs }]),
+        }}
+      />
+      <PageFaq faqs={faqs} />
+    </>
+  );
+}
+
 export default function ElectricVehiclesPage({ searchParams }: PageProps) {
   return (
     <OverviewPage className="gap-10 max-md:gap-7">
@@ -138,13 +174,9 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: ELECTRIC_VEHICLES_FAQS }]),
-        }}
-      />
-      <PageFaq faqs={ELECTRIC_VEHICLES_FAQS} />
+      <Suspense fallback={null}>
+        <ElectricVehiclesFaq />
+      </Suspense>
     </OverviewPage>
   );
 }
