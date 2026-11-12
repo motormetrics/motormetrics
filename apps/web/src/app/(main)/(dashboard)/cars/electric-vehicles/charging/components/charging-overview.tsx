@@ -2,13 +2,12 @@ import { Typography } from "@heroui/react";
 import { ChargingFaq } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-faq";
 import { buildChargingFaqs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/faq-data";
 import {
-  deriveChargingStats,
   formatPerKwh,
+  getChargingStats,
   ZERO_RATE_DISCLAIMER,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
 import { StructuredData } from "@web/components/structured-data";
 import { generateFAQPageSchema } from "@web/lib/metadata";
-import { getEvChargingSnapshot } from "@web/queries/ev-charging";
 
 const formatObservedAt = (iso: string) =>
   new Date(iso).toLocaleString("en-SG", {
@@ -26,11 +25,10 @@ const formatObservedAt = (iso: string) =>
  * whose answers are also emitted as FAQPage structured data.
  */
 export async function ChargingIntro() {
-  const { observedAt, records } = await getEvChargingSnapshot();
-  if (records.length === 0) {
+  const { observedAt, stats } = await getChargingStats();
+  if (!stats) {
     return null;
   }
-  const stats = deriveChargingStats(records);
 
   return (
     <div className="flex max-w-prose flex-col gap-3">
@@ -60,7 +58,7 @@ export async function ChargingIntro() {
 
 /** The as-of line under the page title: when the snapshot was taken, and where from. */
 export async function ChargingSource() {
-  const { observedAt } = await getEvChargingSnapshot();
+  const { observedAt } = await getChargingStats();
   if (!observedAt) {
     return null;
   }
@@ -74,11 +72,11 @@ export async function ChargingSource() {
 }
 
 export async function ChargingQuestions() {
-  const { records } = await getEvChargingSnapshot();
-  if (records.length === 0) {
+  const { stats } = await getChargingStats();
+  if (!stats) {
     return null;
   }
-  const faqs = buildChargingFaqs(deriveChargingStats(records));
+  const faqs = buildChargingFaqs(stats);
 
   return (
     <>

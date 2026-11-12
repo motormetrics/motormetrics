@@ -1,6 +1,6 @@
 import { Card, Skeleton, Typography } from "@heroui/react";
 import {
-  deriveChargingStats,
+  getChargingStats,
   ZERO_RATE_DISCLAIMER,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
@@ -9,7 +9,6 @@ import { getPostalDistrict } from "@web/config/postal-districts";
 import {
   type EvChargingPricedLocation,
   getEvChargingPriceRankings,
-  getEvChargingSnapshot,
 } from "@web/queries/ev-charging";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
@@ -93,7 +92,7 @@ export function PriceSummary({ searchParams }: PriceSummaryProps) {
 async function PriceTiles({ searchParams }: PriceSummaryProps) {
   const { district } = await loadSearchParams(searchParams);
   const scope = getPostalDistrict(district)?.name ?? "Singapore";
-  const [[cheapestDc], [cheapestAc], { records }] = await Promise.all([
+  const [[cheapestDc], [cheapestAc], { stats }] = await Promise.all([
     getEvChargingPriceRankings({
       powerRating: "DC",
       order: "cheapest",
@@ -106,9 +105,8 @@ async function PriceTiles({ searchParams }: PriceSummaryProps) {
       district: district || undefined,
       limit: 1,
     }),
-    getEvChargingSnapshot(),
+    getChargingStats(),
   ]);
-  const stats = deriveChargingStats(records);
 
   return (
     <>
@@ -123,9 +121,9 @@ async function PriceTiles({ searchParams }: PriceSummaryProps) {
         price={cheapestAc?.pricePerKwh ?? null}
       />
       <PriceTile
-        caption={`Singapore median across ${stats.locations.toLocaleString("en-SG")} locations`}
+        caption={`Singapore median across ${(stats?.locations ?? 0).toLocaleString("en-SG")} locations`}
         label="Typical rate"
-        price={stats.medianPerKwh}
+        price={stats?.medianPerKwh ?? null}
       />
       {/* Moved into each $0.00 tile: under the tiles this sat on the map.
       {cheapestDc?.pricePerKwh === 0 || cheapestAc?.pricePerKwh === 0 ? (
