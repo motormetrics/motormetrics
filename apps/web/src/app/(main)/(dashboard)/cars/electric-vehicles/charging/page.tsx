@@ -11,8 +11,9 @@ import {
   ChargingSource,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-overview";
 import { DistrictSelect } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/district-select";
-// import { LiveStatus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/live-status";
 import { PriceList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-list";
+// import { LiveStatus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/live-status";
+import { getChargingStats } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
 import { PriceSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-summary";
 // import { RecentChanges } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/recent-changes";
 // import { UtilisationList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-list";
@@ -23,7 +24,6 @@ import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { getEvChargingSnapshot } from "@web/queries/ev-charging";
 import { PlugZap } from "lucide-react";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
@@ -185,8 +185,8 @@ async function DistrictControl({ searchParams }: PageProps) {
  * is ready.
  */
 async function ChargingEmptyState() {
-  const snapshot = await getEvChargingSnapshot();
-  if (snapshot.records.length > 0) {
+  const { stats } = await getChargingStats();
+  if (stats) {
     return null;
   }
 
