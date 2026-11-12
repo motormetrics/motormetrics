@@ -1,6 +1,9 @@
 import { Skeleton } from "@heroui/react";
-import { formatExercise } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { PREMIUMS_FAQS } from "@web/app/(main)/(dashboard)/coe/premiums/components/faq-data";
+import {
+  formatExercise,
+  groupByExercise,
+} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { buildPremiumsFaqs } from "@web/app/(main)/(dashboard)/coe/premiums/components/faq-data";
 import { PremiumsReport } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-report";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/premiums/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
@@ -12,7 +15,7 @@ import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { getCoeMonths, getExercisePair } from "@web/queries/coe";
+import { getCoeMonths, getCoeResults, getExercisePair } from "@web/queries/coe";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
@@ -80,14 +83,30 @@ export default function COEPremiumsPage({ searchParams }: PageProps) {
 
       <Hairline />
 
+      <Suspense fallback={null}>
+        <PremiumsFaq />
+      </Suspense>
+    </OverviewPage>
+  );
+}
+
+/**
+ * The questions and their FAQPage schema. Quotes the latest exercise whatever
+ * month is selected, so it reads no search params and stays in the static shell.
+ */
+async function PremiumsFaq() {
+  const faqs = buildPremiumsFaqs(groupByExercise(await getCoeResults()).at(-1));
+
+  return (
+    <>
       <StructuredData
         data={{
           "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: PREMIUMS_FAQS }]),
+          ...generateFAQPageSchema([{ items: faqs }]),
         }}
       />
-      <PageFaq faqs={PREMIUMS_FAQS} />
-    </OverviewPage>
+      <PageFaq faqs={faqs} />
+    </>
   );
 }
 
