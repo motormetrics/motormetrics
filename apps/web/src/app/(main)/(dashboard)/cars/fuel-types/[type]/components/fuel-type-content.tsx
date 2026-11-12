@@ -1,3 +1,4 @@
+import { summariseType } from "@web/app/(main)/(dashboard)/cars/components/category/type-summary";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/type-meta";
 import { buildFuelTypeFaqs } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/faq-data";
 import { FuelTypeBodyTypes } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/fuel-type-body-types";
@@ -11,6 +12,7 @@ import {
   PERIOD_LABELS,
   type Period,
   resolveFuelType,
+  share,
 } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/fuel-type-shared";
 import { FuelTypeTrend } from "@web/app/(main)/(dashboard)/cars/fuel-types/[type]/components/fuel-type-trend";
 import { Hairline } from "@web/components/shared/overview";
@@ -113,6 +115,28 @@ export async function FuelTypeContent({
   const marketTotal = distribution.reduce((sum, row) => sum + row.count, 0);
   const typeTotal = distribution.find((row) => row.name === value)?.count ?? 0;
 
+  // The headline's own summary sentence, repeated as the lead of the first FAQ
+  // answer so the answer states the figure rather than pointing at it.
+  const previousTypeTotal =
+    previousDistribution.find((row) => row.name === value)?.count ?? 0;
+  const previousMarketTotal = previousDistribution.reduce(
+    (sum, row) => sum + row.count,
+    0,
+  );
+  const summary =
+    typeTotal > 0
+      ? summariseType({
+          count: typeTotal,
+          label: value,
+          periodLabel: periodLabel,
+          previousShare:
+            previousMarketTotal > 0
+              ? share(previousTypeTotal, previousMarketTotal)
+              : undefined,
+          share: share(typeTotal, marketTotal),
+        })
+      : undefined;
+
   const isElectric = value === "Electric";
 
   const { title, description, canonical } = typeDetailMeta(
@@ -120,7 +144,7 @@ export async function FuelTypeContent({
     type,
     value,
   );
-  const faqs = buildFuelTypeFaqs(value);
+  const faqs = buildFuelTypeFaqs(value, summary);
   const structuredData: WithContext<WebPage> = {
     "@context": "https://schema.org",
     "@type": "WebPage",

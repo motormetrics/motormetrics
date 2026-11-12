@@ -4,13 +4,16 @@ import type { Faq } from "@web/components/shared/page-faq";
  * Questions people search about one fuel type, with its name in the wording
  * they search, such as "How many Electric cars are registered in Singapore?".
  * Shared by the accordion and the FAQPage schema so the two always match.
- * Answers point to the figures on the page rather than quote them, so they
- * never go stale.
+ * The first answer leads with `summary`, the period's figures in a sentence
+ * built from the same data as the headline.
  */
-export const buildFuelTypeFaqs = (fuelType: string): Faq[] => [
+export const buildFuelTypeFaqs = (
+  fuelType: string,
+  summary?: string,
+): Faq[] => [
   {
     question: `How many ${fuelType} cars are registered in Singapore?`,
-    answer: `The headline on this page counts new car registrations recorded as ${fuelType} for the selected period: this month, the year to date or the last 12 months. It counts new registrations, not the ${fuelType} cars already on the road.`,
+    answer: `${summary ? `${summary} Source: LTA. ` : ""}The headline on this page counts new car registrations recorded as ${fuelType} for the selected period: this month, the year to date or the last 12 months. It counts new registrations, not the ${fuelType} cars already on the road.`,
   },
   {
     question: `What share of new cars in Singapore are ${fuelType}?`,
