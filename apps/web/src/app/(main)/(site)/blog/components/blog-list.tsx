@@ -57,7 +57,6 @@ export function BlogList({
     topic === ALL
       ? posts.filter((post) => post.id !== featuredId)
       : posts.filter((post) => post.dataType === topic);
-  const visible = showAll ? filtered : filtered.slice(0, PAGE_SIZE);
 
   const count = filtered.length;
   const countLabel = `${topic === ALL ? "" : `${labels[topic] ?? topic} · `}${count} ${count === 1 ? "post" : "posts"}`;
@@ -110,9 +109,12 @@ export function BlogList({
           <span className="w-24 shrink-0 text-right max-lg:hidden">Length</span>
         </div>
 
-        {visible.map((post) => (
+        {/* Rows past the first page stay in the HTML, hidden, so every post
+          is linked from here before "Show all" is pressed. */}
+        {filtered.map((post, index) => (
           <Link
             className="group flex flex-col gap-1.5 border-separator border-b px-3 py-3.5 text-foreground no-underline transition-colors hover:bg-surface-secondary md:flex-row md:gap-6 md:py-4"
+            hidden={!showAll && index >= PAGE_SIZE}
             href={`/blog/${post.slug}`}
             key={post.id}
           >

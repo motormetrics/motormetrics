@@ -15,6 +15,23 @@ describe("Footer", () => {
     await expect.element(screen.getByText("Advertise")).not.toBeInTheDocument();
   });
 
+  it("should link every header section as a plain anchor", async () => {
+    const screen = await render(<Footer />);
+    const sections = screen.getByRole("navigation", { name: "Site sections" });
+
+    for (const [name, href] of [
+      ["Cars overview", "/cars"],
+      ["COE overview", "/coe"],
+      ["PARF calculator", "/cars/parf"],
+      ["EV charging", "/cars/electric-vehicles/charging"],
+      ["Premiums by category", "/coe/premiums"],
+    ]) {
+      await expect
+        .element(sections.getByRole("link", { name }))
+        .toHaveAttribute("href", href);
+    }
+  });
+
   it("should render Advertise when the flag is on, with social icons", async () => {
     const screen = await render(
       <Footer

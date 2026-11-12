@@ -85,6 +85,10 @@ describe("BlogList", () => {
     await expect
       .poll(() => screen.getByRole("heading", { level: 3 }).all().length)
       .toBe(12);
+    // The thirteenth row is hidden, not absent, so its link is still in the HTML.
+    expect(screen.container.querySelectorAll('a[href^="/blog/"]')).toHaveLength(
+      13,
+    );
 
     await screen.getByRole("button", { name: "Show all 13 posts" }).click();
 

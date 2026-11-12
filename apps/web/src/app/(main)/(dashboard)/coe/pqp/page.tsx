@@ -1,7 +1,7 @@
 import { Skeleton } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { PQP_FAQS } from "@web/app/(main)/(dashboard)/coe/pqp/components/faq-data";
+import { buildPqpFaqs } from "@web/app/(main)/(dashboard)/coe/pqp/components/faq-data";
 import { PQPReport } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-report";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
@@ -100,6 +100,44 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
+/** The questions and their FAQPage schema, with the month's rates quoted. */
+async function PqpFaq() {
+  const { latestMonth, categorySummaries } = await getPQPOverview();
+  const categoryA = categorySummaries.find(
+    (summary) => summary.category === "Category A",
+  );
+  const categoryB = categorySummaries.find(
+    (summary) => summary.category === "Category B",
+  );
+  const faqs = buildPqpFaqs(
+    latestMonth !== null &&
+      categoryA !== undefined &&
+      categoryB !== undefined &&
+      categoryA.pqpRate > 0 &&
+      categoryB.pqpRate > 0
+      ? {
+          month: formatMonth(latestMonth),
+          categoryA: formatCurrency(categoryA.pqpRate),
+          categoryB: formatCurrency(categoryB.pqpRate),
+          categoryA5Year: formatCurrency(categoryA.pqpCost5Year),
+          categoryB5Year: formatCurrency(categoryB.pqpCost5Year),
+        }
+      : undefined,
+  );
+
+  return (
+    <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: faqs }]),
+        }}
+      />
+      <PageFaq faqs={faqs} />
+    </>
+  );
+}
+
 export default function PQPRatesPage({ searchParams }: PageProps) {
   return (
     <OverviewPage className="gap-10 max-md:gap-7">
@@ -140,13 +178,9 @@ export default function PQPRatesPage({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: PQP_FAQS }]),
-        }}
-      />
-      <PageFaq faqs={PQP_FAQS} />
+      <Suspense fallback={null}>
+        <PqpFaq />
+      </Suspense>
     </OverviewPage>
   );
 }

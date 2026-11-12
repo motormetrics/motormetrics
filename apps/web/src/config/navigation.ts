@@ -216,6 +216,7 @@ export const MORE_NAV_ITEMS: NavigationItem[] = [
 export const FOOTER_NAV_ITEMS = [
   { href: "/about", label: "About" },
   { href: "/learn", label: "Learn" },
+  { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
   { href: "/legal/privacy-policy", label: "Privacy" },
   { href: "/legal/terms-of-service", label: "Terms" },
