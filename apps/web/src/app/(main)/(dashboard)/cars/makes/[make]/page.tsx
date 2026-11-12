@@ -6,6 +6,7 @@ import { buildMakeFaqs } from "@web/app/(main)/(dashboard)/cars/makes/[make]/com
 import { MakeReport } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
 import { MakeSearch } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-search";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
+import { summariseMake } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/summary";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { ComparisonLinks } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/comparison-links";
 import { pairsWithMake } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
@@ -31,14 +32,21 @@ import {
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getDistinctMakes } from "@web/queries/cars";
+import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { getMakeCoeComparison } from "@web/queries/cars/makes/coe-comparison";
 import { getMakeFromSlug } from "@web/queries/cars/makes/get-make-from-slug";
+import {
+  getMakeCrossTab,
+  getMakeTotalsInRange,
+  getMarketMonthlyTotals,
+} from "@web/queries/cars/makes/period-totals";
 import { getCarLogoMap } from "@web/queries/logos";
 import type { Make } from "@web/types";
 import {
   formatChartMonth,
   formatMonthLabel,
 } from "@web/utils/dates/format-month";
+import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -62,6 +70,44 @@ const makeTitle = (make: string) => `${make} Cars in Singapore`;
 const makeDescription = (make: string) =>
   `${make} cars overview. Historical car registration trends and monthly breakdown by fuel and vehicle types in Singapore.`;
 
+/**
+ * The latest month's figures as the search snippet, in the sentence the page
+ * already shows under the trend chart: "BMW registered 612 new cars in
+ * September 2026 … 7,340 so far in 2026, the 2nd-most of any make." A snippet
+ * that states the number is one a search engine or an assistant can quote. A
+ * make with no registrations that month keeps the generic description.
+ */
+async function loadMakeDescription(make: string): Promise<string> {
+  const month = await getCarsLatestMonth();
+  if (!month) {
+    return makeDescription(make);
+  }
+
+  const previousMonth = shiftMonth(month, -1);
+  const [crossTab, yearTotals, marketMonthly] = await Promise.all([
+    getMakeCrossTab(make),
+    getMakeTotalsInRange(`${month.slice(0, 4)}-01`, month),
+    getMarketMonthlyTotals(month, month),
+  ]);
+  const countIn = (target: string) =>
+    crossTab
+      .filter((row) => row.month === target)
+      .reduce((total, row) => total + row.count, 0);
+  const yearEntry = yearTotals.find((entry) => entry.make === make);
+
+  const summary = summariseMake({
+    count: countIn(month),
+    make,
+    marketCount: marketMonthly[0]?.total ?? 0,
+    month,
+    previousCount: countIn(previousMonth),
+    rank: yearEntry ? yearTotals.indexOf(yearEntry) + 1 : undefined,
+    yearToDate: yearEntry?.count ?? 0,
+  });
+
+  return summary ? `${summary} Source: LTA.` : makeDescription(make);
+}
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -77,7 +123,7 @@ export async function generateMetadata({
   }
 
   const title = makeTitle(exactMake);
-  const description = makeDescription(exactMake);
+  const description = await loadMakeDescription(exactMake);
   return {
     title,
     description,
@@ -241,7 +287,7 @@ async function MakeStructuredData({ params }: Pick<PageProps, "params">) {
   const { exactMake, make } = await resolveMake(params);
 
   const title = makeTitle(exactMake);
-  const description = makeDescription(exactMake);
+  const description = await loadMakeDescription(exactMake);
 
   return (
     <>
