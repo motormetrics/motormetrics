@@ -1,5 +1,9 @@
 import { Skeleton } from "@heroui/react";
-import { HOME_FAQS } from "@web/app/(main)/(dashboard)/components/faq-data";
+import {
+  loadMakeRows,
+  summariseLeaders,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { buildHomeFaqs } from "@web/app/(main)/(dashboard)/components/faq-data";
 import { MarketLead } from "@web/app/(main)/(dashboard)/components/market-lead";
 import { MarketLinks } from "@web/app/(main)/(dashboard)/components/market-links";
 import { MarketTiles } from "@web/app/(main)/(dashboard)/components/market-tiles";
@@ -105,6 +109,24 @@ const TILE_SKELETONS = [
   "charging",
 ];
 
+/** The questions and their FAQPage schema, with the leading makes quoted. */
+async function HomeFaq() {
+  const { latestMonth, rows } = await loadMakeRows("ytd", null);
+  const faqs = buildHomeFaqs(summariseLeaders(rows, latestMonth, "ytd"));
+
+  return (
+    <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: faqs }]),
+        }}
+      />
+      <PageFaq faqs={faqs} />
+    </>
+  );
+}
+
 export default function HomePage() {
   return (
     <>
@@ -157,13 +179,9 @@ export default function HomePage() {
 
         <Hairline />
 
-        <StructuredData
-          data={{
-            "@context": "https://schema.org",
-            ...generateFAQPageSchema([{ items: HOME_FAQS }]),
-          }}
-        />
-        <PageFaq faqs={HOME_FAQS} />
+        <Suspense fallback={null}>
+          <HomeFaq />
+        </Suspense>
       </OverviewPage>
     </>
   );

@@ -6,7 +6,7 @@ import { SITE_TITLE } from "@web/config";
  * search them. Shared by the accordion and the FAQPage schema so the two always
  * match. Answers point to the figures on the page rather than quote them.
  */
-export const HOME_FAQS: Faq[] = [
+export const buildHomeFaqs = (summary?: string): Faq[] => [
   {
     question: `Where does ${SITE_TITLE} get its data?`,
     answer:
@@ -29,7 +29,6 @@ export const HOME_FAQS: Faq[] = [
   },
   {
     question: "Which car makes are the most popular in Singapore?",
-    answer:
-      "The top makes section on this page ranks makes by new car registrations so far this year, with each make's share. The Makes page ranks every make for the month, the year to date or the last 12 months.",
+    answer: `${summary ? `${summary} Source: LTA. ` : ""}The top makes section on this page ranks makes by new car registrations so far this year, with each make's share. The Makes page ranks every make for the month, the year to date or the last 12 months.`,
   },
 ];

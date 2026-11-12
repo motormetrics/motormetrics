@@ -3,13 +3,13 @@ import type { Faq } from "@web/components/shared/page-faq";
 /**
  * Questions people search about Singapore's vehicle population, worded the way
  * they search them. Shared by the accordion and the FAQPage schema so the two
- * always match. Answers point to the figures on the page rather than quote them.
+ * always match. The first answer leads with `summary`, the latest year end in a
+ * sentence built from the same data as the chart.
  */
-export const ANNUAL_FAQS: Faq[] = [
+export const buildAnnualFaqs = (summary?: string): Faq[] => [
   {
     question: "How many cars are there in Singapore?",
-    answer:
-      "The headline on this page gives the number of cars registered in Singapore at 31 December of the latest year LTA has published, with the change on the year before and the cars' share of all vehicles.",
+    answer: `${summary ? `${summary} Source: LTA. ` : ""}The headline on this page gives the number of cars registered in Singapore at 31 December of the latest year LTA has published, with the change on the year before and the cars' share of all vehicles.`,
   },
   {
     question: "How many vehicles are on the road in Singapore?",
