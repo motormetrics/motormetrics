@@ -1,10 +1,9 @@
-import { Typography } from "@heroui/react";
 import {
   loadMakeRows,
   periodLabel,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
-import { SourceNote } from "@web/components/shared/overview";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import type { SearchParams } from "nuqs/server";
 
 /** How many makes the bar breaks out before folding the rest together. */
@@ -17,9 +16,8 @@ interface Segment {
 }
 
 /**
- * The "Concentration" block: the top five makes against the rest, as one
- * stacked bar of shares with a ruled legend beneath, as the Hybrid comp draws
- * it.
+ * Figure 2: the top five makes against the rest, as one stacked bar of shares
+ * with a tile per slice beneath, as Direction D draws it.
  */
 export async function ConcentrationCard({
   searchParams,
@@ -55,18 +53,12 @@ export async function ConcentrationCard({
   const leadersShare = ((total - rest) / barTotal) * 100;
 
   return (
-    <div className="flex min-w-0 flex-col gap-3">
-      <Typography.Paragraph color="muted" size="xs" weight="semibold">
-        Concentration · top five makes against the rest
-      </Typography.Paragraph>
-      <div className="flex flex-wrap items-baseline gap-2.5">
-        <span className="font-bold text-3xl tabular-nums tracking-tight">
-          {leadersShare.toFixed(0)}%
-        </span>
-        <Typography.Paragraph color="muted" size="sm">
-          of registrations held by the five largest makes
-        </Typography.Paragraph>
-      </div>
+    <div className="@container flex min-w-0 flex-col gap-4">
+      <SectionHead
+        caption={`The five largest makes held ${leadersShare.toFixed(0)}% of registrations; ${leaders[0].make} alone held ${((leaders[0].count / barTotal) * 100).toFixed(1)}%.`}
+        eyebrow="Figure 2 · Concentration"
+        title="Top five makes against the rest"
+      />
       <div
         aria-label="Share of registrations held by the five largest makes"
         className="flex h-4 gap-0.5"
@@ -83,22 +75,27 @@ export async function ConcentrationCard({
           />
         ))}
       </div>
-      <ul className="flex flex-col">
+      {/* One tile per slice: two across on a phone, all six in a row once
+          the page is wide enough. */}
+      <ul className="grid @3xl:grid-cols-3 @6xl:grid-cols-6 grid-cols-2 gap-x-6">
         {segments.map((segment) => (
           <li
-            className="flex items-center gap-2.5 border-separator border-b py-2"
+            className="flex flex-col gap-0.5 border-separator border-t py-3"
             key={segment.label}
           >
-            <span
-              aria-hidden
-              className="size-3 shrink-0 rounded-xs"
-              style={{ background: segment.color }}
-            />
-            <span className="min-w-0 flex-1 truncate text-sm">
-              {segment.label}
+            <span className="flex items-center gap-2 text-muted text-xs">
+              <span
+                aria-hidden
+                className="size-2.5 shrink-0 rounded-xs"
+                style={{ background: segment.color }}
+              />
+              <span className="truncate">{segment.label}</span>
             </span>
-            <span className="font-semibold text-sm tabular-nums">
+            <span className="font-bold text-xl tabular-nums">
               {((segment.value / barTotal) * 100).toFixed(1)}%
+            </span>
+            <span className="text-muted text-xs tabular-nums">
+              {segment.value.toLocaleString("en-SG")} cars
             </span>
           </li>
         ))}

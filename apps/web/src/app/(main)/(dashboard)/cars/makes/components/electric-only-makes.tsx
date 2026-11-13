@@ -24,7 +24,7 @@ export async function ElectricOnlyMakes() {
     <div className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={`Makes selling only battery-electric cars · ${summary.sharePercent.toFixed(1)}% of registrations`}
-        eyebrow="Electric vehicles"
+        eyebrow="Figure 5 · Electric vehicles"
         link={{ href: "/cars/electric-vehicles", label: "All electric data" }}
         title="Electric-only makes"
       />

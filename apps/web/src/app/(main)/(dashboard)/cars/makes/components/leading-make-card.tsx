@@ -55,7 +55,7 @@ export async function LeadingMakeCard({
     <div className="flex min-w-0 flex-col gap-3">
       <SectionHead
         caption={`${leader.make} leads ${fuelWord ? `${fuelWord} registrations` : "the market"} · ${RANGE_LABELS[range]}`}
-        eyebrow="Leading make"
+        eyebrow="Figure 1 · Leading make"
         title={`${leader.make}${fuelWord ? ` ${fuelWord}` : ""} registrations by month`}
       />
       <div>

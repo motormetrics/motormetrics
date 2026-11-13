@@ -80,42 +80,52 @@ export function MakesContentSection({
         <MakesItemList />
       </Suspense>
 
-      {/* Who leads, and how tightly the market is held */}
-      <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-14">
+      {/* Each figure runs the full width of the page; the ids are the
+          targets of the "On this page" links in the page head. */}
+      <section className="scroll-mt-20" id="leading-make">
         <SectionErrorBoundary title="Leading make unavailable">
           <Suspense fallback={<Skeleton className="h-80 w-full" />}>
             <LeadingMakeCard searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>
+      </section>
+
+      <Hairline />
+
+      <section className="scroll-mt-20" id="concentration">
         <SectionErrorBoundary title="Market concentration unavailable">
-          <Suspense fallback={<Skeleton className="h-80 w-full" />}>
+          <Suspense fallback={<Skeleton className="h-60 w-full" />}>
             <ConcentrationCard searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>
-      </div>
+      </section>
 
       <Hairline />
 
-      <SectionErrorBoundary title="Makes table unavailable">
-        <Suspense fallback={<Skeleton className="h-[720px] w-full" />}>
-          <AllMakesCard searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
+      <section className="scroll-mt-20" id="all-makes">
+        <SectionErrorBoundary title="Makes table unavailable">
+          <Suspense fallback={<Skeleton className="h-[720px] w-full" />}>
+            <AllMakesCard searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </section>
 
       <Hairline />
 
-      <OverviewGrid>
-        <SectionErrorBoundary title="Movers unavailable">
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <FastestGrowing searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
-        <SectionErrorBoundary title="Electric-only makes unavailable">
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <ElectricOnlyMakes />
-          </Suspense>
-        </SectionErrorBoundary>
-      </OverviewGrid>
+      <section className="scroll-mt-20" id="movers">
+        <OverviewGrid>
+          <SectionErrorBoundary title="Movers unavailable">
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <FastestGrowing searchParams={searchParams} />
+            </Suspense>
+          </SectionErrorBoundary>
+          <SectionErrorBoundary title="Electric-only makes unavailable">
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <ElectricOnlyMakes />
+            </Suspense>
+          </SectionErrorBoundary>
+        </OverviewGrid>
+      </section>
 
       <Hairline />
 

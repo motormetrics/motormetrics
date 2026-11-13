@@ -49,7 +49,7 @@ export async function FastestGrowing({
     <div className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={`${RANGE_LABELS[range]}${fuelSuffix}, against the same period in ${previousYear}`}
-        eyebrow="Movers · year on year"
+        eyebrow="Figure 4 · Movers, year on year"
         title="Fastest growing"
       />
 
