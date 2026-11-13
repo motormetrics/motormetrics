@@ -244,7 +244,7 @@ export async function FuelTypeContent({
             : []),
         ].map(({ href, label }) => (
           <Link
-            className="whitespace-nowrap font-semibold text-accent-strong text-sm hover:text-accent-deep"
+            className="whitespace-nowrap font-semibold text-link text-sm hover:text-accent-hover"
             href={href}
             key={href}
           >

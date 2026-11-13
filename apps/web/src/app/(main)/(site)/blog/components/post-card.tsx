@@ -53,7 +53,7 @@ export function PostCard({
         </span>
         <ChevronRight
           aria-hidden
-          className="ml-auto size-[1.125rem] text-accent-strong transition-transform group-hover:translate-x-0.5"
+          className="ml-auto size-[1.125rem] text-accent transition-transform group-hover:translate-x-0.5"
         />
       </div>
     </Link>

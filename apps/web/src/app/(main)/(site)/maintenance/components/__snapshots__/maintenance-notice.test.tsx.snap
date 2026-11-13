@@ -19,7 +19,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
         >
           <svg
             aria-hidden="true"
-            class="lucide lucide-settings size-20 text-accent-strong"
+            class="lucide lucide-settings size-20 text-accent"
             fill="none"
             height="24"
             stroke="currentColor"
@@ -86,7 +86,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
               >
                 <svg
                   aria-hidden="true"
-                  class="lucide lucide-clock size-5 text-accent-strong"
+                  class="lucide lucide-clock size-5 text-accent"
                   fill="none"
                   height="24"
                   stroke="currentColor"
@@ -192,7 +192,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="lucide lucide-zap mt-1 size-6 flex-shrink-0 text-accent-strong"
+                class="lucide lucide-zap mt-1 size-6 flex-shrink-0 text-accent"
                 fill="none"
                 height="24"
                 stroke="currentColor"
@@ -239,7 +239,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="lucide lucide-shield mt-1 size-6 flex-shrink-0 text-accent-strong"
+                class="lucide lucide-shield mt-1 size-6 flex-shrink-0 text-accent"
                 fill="none"
                 height="24"
                 stroke="currentColor"
@@ -286,7 +286,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="lucide lucide-trending-up mt-1 size-6 flex-shrink-0 text-accent-strong"
+                class="lucide lucide-trending-up mt-1 size-6 flex-shrink-0 text-accent"
                 fill="none"
                 height="24"
                 stroke="currentColor"
@@ -336,7 +336,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="lucide lucide-wrench mt-1 size-6 flex-shrink-0 text-accent-strong"
+                class="lucide lucide-wrench mt-1 size-6 flex-shrink-0 text-accent"
                 fill="none"
                 height="24"
                 stroke="currentColor"
@@ -404,7 +404,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
         class="flex flex-col items-center justify-center gap-4 sm:flex-row"
       >
         <a
-          class="flex items-center gap-2 font-medium text-accent-strong text-sm"
+          class="flex items-center gap-2 font-medium text-link text-sm"
           href="mailto:support@motormetrics.app"
         >
           <svg
@@ -439,7 +439,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
           |
         </span>
         <a
-          class="flex items-center gap-2 font-medium text-accent-strong text-sm"
+          class="flex items-center gap-2 font-medium text-link text-sm"
           href="https://x.com/motormetricsapp"
           rel="me noreferrer nofollow"
           target="_blank"

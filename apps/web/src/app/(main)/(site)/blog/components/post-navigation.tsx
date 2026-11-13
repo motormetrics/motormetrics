@@ -26,14 +26,14 @@ export function PostNavigation({ previous, next }: PostNavigationProps) {
           className="group flex flex-col gap-2 text-foreground no-underline"
           href={`/blog/${previous.slug}`}
         >
-          <span className="flex items-center gap-2 font-semibold text-muted text-sm transition-colors group-hover:text-accent-strong">
+          <span className="flex items-center gap-2 font-semibold text-muted text-sm transition-colors group-hover:text-accent">
             <ArrowLeft
               aria-hidden
               className="size-4 transition-transform group-hover:-translate-x-0.5"
             />
             Previous
           </span>
-          <span className="line-clamp-2 font-bold text-base leading-snug transition-colors group-hover:text-accent-strong">
+          <span className="line-clamp-2 font-bold text-base leading-snug transition-colors group-hover:text-accent">
             {previous.title}
           </span>
         </Link>
@@ -46,14 +46,14 @@ export function PostNavigation({ previous, next }: PostNavigationProps) {
           className="group flex flex-col gap-2 text-foreground no-underline sm:items-end sm:text-right"
           href={`/blog/${next.slug}`}
         >
-          <span className="flex items-center gap-2 font-semibold text-muted text-sm transition-colors group-hover:text-accent-strong">
+          <span className="flex items-center gap-2 font-semibold text-muted text-sm transition-colors group-hover:text-accent">
             Next
             <ArrowRight
               aria-hidden
               className="size-4 transition-transform group-hover:translate-x-0.5"
             />
           </span>
-          <span className="line-clamp-2 font-bold text-base leading-snug transition-colors group-hover:text-accent-strong">
+          <span className="line-clamp-2 font-bold text-base leading-snug transition-colors group-hover:text-accent">
             {next.title}
           </span>
         </Link>

@@ -67,7 +67,7 @@ export function FollowLinks({ post }: { post: SelectPost }) {
       </span>
       {links.map(({ href, label }) => (
         <Link
-          className="border-separator border-b py-2.5 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+          className="border-separator border-b py-2.5 font-semibold text-link text-sm no-underline transition-colors hover:text-accent-hover"
           href={href}
           key={href}
         >

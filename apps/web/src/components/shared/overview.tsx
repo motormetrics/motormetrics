@@ -135,7 +135,7 @@ export function SectionLink({
     <Link
       rel={rel}
       className={cn(
-        "ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep",
+        "ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-semibold text-link text-sm no-underline transition-colors hover:text-accent-hover",
         className,
       )}
       href={href}

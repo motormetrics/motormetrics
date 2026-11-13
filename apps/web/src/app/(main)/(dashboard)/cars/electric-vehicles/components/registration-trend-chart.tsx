@@ -133,7 +133,7 @@ export function RegistrationTrendChart({
               <g key="last-point">
                 <circle cx={cx} cy={cy} fill="var(--chart-1)" r={4} />
                 <text
-                  className="fill-accent-strong font-semibold text-xs tabular-nums"
+                  className="fill-accent font-semibold text-xs tabular-nums"
                   dominantBaseline="middle"
                   x={cx + 10}
                   y={cy}

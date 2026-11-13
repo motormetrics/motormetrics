@@ -18,7 +18,7 @@ export function GuideCard({ guide }: { guide: Guide }) {
       href={`/learn/${guide.slug}`}
     >
       <Typography.Paragraph
-        className="text-accent-strong uppercase"
+        className="text-accent uppercase"
         size="xs"
         weight="semibold"
       >
@@ -32,7 +32,7 @@ export function GuideCard({ guide }: { guide: Guide }) {
       </Typography.Paragraph>
       <div className="mt-auto flex items-center border-separator border-t pt-2.5 text-muted text-xs">
         {getReadingMinutes(guide.content)} min read
-        <span className="ml-auto font-semibold text-accent-strong">Read →</span>
+        <span className="ml-auto font-semibold text-accent">Read →</span>
       </div>
     </Link>
   );

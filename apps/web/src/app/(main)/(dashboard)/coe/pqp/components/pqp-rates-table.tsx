@@ -99,7 +99,7 @@ export function PQPRatesTable({
                 className={cn(
                   "whitespace-nowrap text-base",
                   isActive
-                    ? "font-bold text-accent-strong"
+                    ? "font-bold text-accent"
                     : "font-semibold text-foreground",
                 )}
               >

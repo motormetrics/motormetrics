@@ -8,7 +8,7 @@ export function PageNotFound() {
       <div className="flex min-h-[60vh] flex-col items-center justify-center gap-12">
         <div className="flex flex-col items-center gap-8">
           <div className="flex flex-col items-center">
-            <Typography.Heading level={1} className="text-accent-strong">
+            <Typography.Heading level={1} className="text-accent">
               404
             </Typography.Heading>
             <Typography.Heading level={2}>Page Not Found</Typography.Heading>
@@ -23,11 +23,11 @@ export function PageNotFound() {
 
         <Typography.Paragraph color="muted" size="sm">
           Need help? Visit our{" "}
-          <Link href="/learn" className="text-accent-strong hover:underline">
+          <Link href="/learn" className="text-link hover:underline">
             learn page
           </Link>{" "}
           or go back to the{" "}
-          <Link href="/" className="text-accent-strong hover:underline">
+          <Link href="/" className="text-link hover:underline">
             homepage
           </Link>
           .

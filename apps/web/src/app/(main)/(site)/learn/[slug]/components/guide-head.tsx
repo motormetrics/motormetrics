@@ -20,7 +20,7 @@ export function GuideHead({ guide }: { guide: Guide }) {
         className="flex flex-wrap items-center gap-2 text-muted text-sm"
       >
         <Link
-          className="text-muted no-underline transition-colors hover:text-accent-strong"
+          className="text-muted no-underline transition-colors hover:text-accent"
           href="/"
         >
           Home
@@ -29,7 +29,7 @@ export function GuideHead({ guide }: { guide: Guide }) {
           /
         </span>
         <Link
-          className="text-muted no-underline transition-colors hover:text-accent-strong"
+          className="text-muted no-underline transition-colors hover:text-accent"
           href="/learn"
         >
           Learn

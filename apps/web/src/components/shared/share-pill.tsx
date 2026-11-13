@@ -96,7 +96,7 @@ export function SharePill({
             <Header>Share this page</Header>
             {TARGETS.map(({ icon: Icon, label }) => (
               <Dropdown.Item id={label} key={label} textValue={label}>
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-accent/15 text-accent-strong">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-accent/15 text-accent">
                   <Icon className="size-4" />
                 </span>
                 <Label>{label}</Label>
@@ -109,14 +109,14 @@ export function SharePill({
               id={COPY_KEY}
               textValue={copied ? "Link copied" : "Copy link"}
             >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-accent/15 text-accent-strong">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-accent/15 text-accent">
                 {copied ? (
                   <Check className="size-4 text-success" />
                 ) : (
                   <Link2 className="size-4" />
                 )}
               </span>
-              <Label className="font-bold text-accent-strong">
+              <Label className="font-bold text-accent">
                 {copied ? "Link copied" : "Copy link"}
               </Label>
             </Dropdown.Item>

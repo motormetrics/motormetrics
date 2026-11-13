@@ -123,14 +123,14 @@ export function BlogList({
             </span>
             <div className="flex min-w-0 flex-1 flex-col gap-1.5">
               <Typography.Paragraph
-                className="text-accent-strong uppercase"
+                className="text-accent uppercase"
                 size="xs"
                 weight="semibold"
               >
                 {getCategoryConfig(post).label}
               </Typography.Paragraph>
               <Typography.Heading
-                className="max-w-3xl text-lg leading-snug transition-colors group-hover:text-accent-strong md:text-xl"
+                className="max-w-3xl text-lg leading-snug transition-colors group-hover:text-accent md:text-xl"
                 level={3}
               >
                 {post.title}

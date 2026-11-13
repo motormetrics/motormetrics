@@ -87,7 +87,7 @@ export function TopMakesTable({
               className={cn(
                 RANK_CELL,
                 "text-sm tabular-nums",
-                index < 3 ? "font-semibold text-accent-strong" : "text-muted",
+                index < 3 ? "font-semibold text-accent" : "text-muted",
               )}
             >
               {index + 1}

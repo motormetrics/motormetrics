@@ -79,16 +79,16 @@ export default function ARFCalculatorPage() {
       <Typography.Paragraph color="muted" size="sm">
         Figures are for illustration only and are before any VES or EEAI rebate
         or surcharge. The ARF you pay is what{" "}
-        <Link className="font-bold text-accent-strong" href="/cars/parf">
+        <Link className="font-bold text-link" href="/cars/parf">
           your PARF rebate
         </Link>{" "}
         is worked out from, and the{" "}
-        <Link className="font-bold text-accent-strong" href="/learn/arf">
+        <Link className="font-bold text-link" href="/learn/arf">
           ARF guide
         </Link>{" "}
         explains how it fits into the price of a car. Source:{" "}
         <Link
-          className="font-bold text-accent-strong"
+          className="font-bold text-link"
           href="https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/upfront-vehicle-costs/tax-structure.html"
           rel="noreferrer nofollow"
           target="_blank"

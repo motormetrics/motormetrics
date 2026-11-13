@@ -42,7 +42,7 @@ export function PlacementsSection() {
             key={title}
           >
             <div className="flex items-center gap-3 md:w-60 md:shrink-0">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent-soft text-accent-strong">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent-soft text-accent">
                 <Icon aria-hidden className="size-4" />
               </span>
               <span className="font-semibold">{title}</span>

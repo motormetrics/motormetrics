@@ -15,7 +15,7 @@ exports[`PageNotFound > should render the 404 error message 1`] = `
           class="flex flex-col items-center"
         >
           <h1
-            class="typography typography--align-start typography--color-default typography--h1 text-accent-strong"
+            class="typography typography--align-start typography--color-default typography--h1 text-accent"
             data-slot="typography"
             data-type="h1"
           >
@@ -106,7 +106,7 @@ exports[`PageNotFound > should render the 404 error message 1`] = `
         Need help? Visit our
          
         <a
-          class="text-accent-strong hover:underline"
+          class="text-link hover:underline"
           href="/learn"
         >
           learn page
@@ -115,7 +115,7 @@ exports[`PageNotFound > should render the 404 error message 1`] = `
         or go back to the
          
         <a
-          class="text-accent-strong hover:underline"
+          class="text-link hover:underline"
           href="/"
         >
           homepage

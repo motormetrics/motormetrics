@@ -45,7 +45,7 @@ export function GlossarySection() {
                   >
                     {guideSlugs.includes(slug) ? (
                       <Link
-                        className="w-24 shrink-0 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+                        className="w-24 shrink-0 font-semibold text-link text-sm no-underline transition-colors hover:text-accent-hover"
                         href={`/learn/${slug}`}
                       >
                         {term} →

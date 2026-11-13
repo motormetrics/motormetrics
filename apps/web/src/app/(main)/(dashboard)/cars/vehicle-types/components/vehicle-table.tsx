@@ -69,7 +69,7 @@ export function VehicleTable({
           className={cn(
             "block w-full cursor-pointer whitespace-nowrap font-semibold text-xs",
             key === "label" ? "text-left" : "text-right",
-            isSorted ? "text-accent-strong" : "text-muted",
+            isSorted ? "text-accent" : "text-muted",
           )}
           onClick={() => sortBy(key)}
           type="button"
@@ -128,7 +128,7 @@ export function VehicleTable({
                   style={{ backgroundColor: row.color }}
                 />
                 <Link
-                  className="truncate text-foreground hover:text-accent-strong"
+                  className="truncate text-foreground hover:text-accent"
                   href={`/cars/vehicle-types/${slugify(row.name)}`}
                 >
                   {row.label}

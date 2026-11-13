@@ -60,7 +60,7 @@ function PremiumBlocks({
                 className={cn(
                   "font-semibold",
                   shownCategory === selected
-                    ? "text-accent-strong"
+                    ? "text-accent"
                     : "text-foreground",
                 )}
               >

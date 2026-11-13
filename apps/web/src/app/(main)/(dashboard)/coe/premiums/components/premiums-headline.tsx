@@ -49,7 +49,7 @@ export function PremiumsHeadline({
       <div className="flex min-w-0 flex-col gap-3">
         <CategoryTabs selected={categoryKey} />
         <Typography.Paragraph className="text-muted-strong">
-          <span className="font-semibold text-accent-strong">{category}</span>
+          <span className="font-semibold text-accent">{category}</span>
           {` · ${CATEGORY_DESCRIPTIONS[category]}`}
         </Typography.Paragraph>
         <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">

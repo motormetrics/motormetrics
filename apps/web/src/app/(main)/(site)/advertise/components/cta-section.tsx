@@ -51,7 +51,7 @@ export function CtaSection() {
               className="flex items-start gap-3 border-separator border-b py-3"
               key={number}
             >
-              <span className="w-8 shrink-0 font-semibold text-accent-strong tabular-nums">
+              <span className="w-8 shrink-0 font-semibold text-accent tabular-nums">
                 {number}
               </span>
               <Typography.Paragraph className="text-muted-strong leading-normal">
@@ -83,7 +83,7 @@ export function CtaSection() {
         </a>
         <SourceNote>
           Or write to {ADVERTISE_EMAIL}, or use the{" "}
-          <Link className="text-accent-strong" href="/contact">
+          <Link className="text-link" href="/contact">
             contact page
           </Link>
           .

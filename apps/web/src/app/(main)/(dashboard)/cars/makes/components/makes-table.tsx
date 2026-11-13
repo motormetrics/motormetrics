@@ -152,7 +152,7 @@ export function MakesTable({
           <Typography.Paragraph
             className={cn(
               "w-6 shrink-0 tabular-nums",
-              row.rank <= 3 && "text-accent-strong",
+              row.rank <= 3 && "text-accent",
             )}
             color="muted"
             size="sm"

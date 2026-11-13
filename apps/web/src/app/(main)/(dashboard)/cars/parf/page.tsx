@@ -173,16 +173,13 @@ export default function PARFCalculatorPage() {
             Your deregistration value is the PARF rebate plus a COE rebate for
             the months left on the COE.{" "}
             <Link
-              className="font-semibold text-accent-strong"
+              className="font-semibold text-link"
               href="/learn/check-parf-rebate"
             >
               How to check your PARF rebate on OneMotoring
             </Link>{" "}
             covers both, and the{" "}
-            <Link
-              className="font-semibold text-accent-strong"
-              href="/learn/parf"
-            >
+            <Link className="font-semibold text-link" href="/learn/parf">
               PARF guide
             </Link>{" "}
             explains when deregistering early pays off.

@@ -52,10 +52,8 @@ export async function ResultsHeadline({ searchParams }: RegionProps) {
     <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
       <div className="flex min-w-0 flex-col gap-3">
         <Typography.Paragraph className="text-muted-strong">
-          <span className="font-semibold text-accent-strong">
-            Bids per quota
-          </span>{" "}
-          · all five categories
+          <span className="font-semibold text-accent">Bids per quota</span> ·
+          all five categories
         </Typography.Paragraph>
         <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
           {bidsPerQuota.toFixed(2)}×

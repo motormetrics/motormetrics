@@ -92,7 +92,7 @@ export default function BrandPage() {
   return (
     <SitePage className="gap-14">
       <section className="flex flex-col gap-3">
-        <span className="self-start rounded-full bg-accent-soft px-4 py-2 font-bold text-accent-strong text-sm">
+        <span className="self-start rounded-full bg-accent-soft px-4 py-2 font-bold text-accent text-sm">
           Brand
         </span>
         <Typography.Heading level={1} className="text-5xl">

@@ -42,7 +42,7 @@ export function PopularPosts({ posts }: { posts: PostWithViews[] }) {
                 {index + 1}
               </span>
               <span className="flex min-w-0 flex-1 flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-4">
-                <span className="min-w-0 flex-1 font-semibold text-sm transition-colors group-hover:text-accent-strong">
+                <span className="min-w-0 flex-1 font-semibold text-sm transition-colors group-hover:text-accent">
                   {post.title}
                 </span>
                 <span className="shrink-0 text-muted text-xs tabular-nums">

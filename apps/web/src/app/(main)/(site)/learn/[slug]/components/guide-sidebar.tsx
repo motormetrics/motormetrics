@@ -52,7 +52,7 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
             {headings.map(({ id, title }) => (
               <li key={id}>
                 <Link
-                  className="block border-transparent border-l-2 py-1.5 pl-2.5 text-muted-strong text-sm no-underline transition-colors hover:border-l-chart-5 hover:text-accent-strong"
+                  className="block border-transparent border-l-2 py-1.5 pl-2.5 text-muted-strong text-sm no-underline transition-colors hover:border-l-chart-5 hover:text-accent"
                   href={`#${id}` as Route}
                 >
                   {title}
@@ -76,7 +76,7 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
               >
                 {guideSlugs.includes(slug) ? (
                   <Link
-                    className="font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+                    className="font-semibold text-link text-sm no-underline transition-colors hover:text-accent-hover"
                     href={`/learn/${slug}`}
                   >
                     {term} →
@@ -101,7 +101,7 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
           <RailLabel>Check the current figures</RailLabel>
           {guide.relatedLinks.map(({ href, label }) => (
             <Link
-              className="border-separator border-b py-2.5 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+              className="border-separator border-b py-2.5 font-semibold text-link text-sm no-underline transition-colors hover:text-accent-hover"
               href={href as Route}
               key={href}
             >

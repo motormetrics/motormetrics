@@ -35,7 +35,7 @@ export function MissionSection() {
           nothing behind a paywall. It is an independent project, built and
           maintained by{" "}
           <Link
-            className="font-medium text-accent-strong"
+            className="font-medium text-link"
             href="https://ruchern.dev"
             rel="noreferrer nofollow"
             target="_blank"

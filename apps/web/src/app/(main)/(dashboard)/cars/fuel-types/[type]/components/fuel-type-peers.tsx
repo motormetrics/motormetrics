@@ -36,7 +36,7 @@ export function FuelTypePeers({
               <span
                 className={cn(
                   "min-w-0 flex-1 truncate text-sm md:w-44 md:flex-none",
-                  isSelected && "font-semibold text-accent-strong",
+                  isSelected && "font-semibold text-accent",
                 )}
               >
                 {peer.name}

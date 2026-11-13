@@ -63,7 +63,7 @@ export function FuelTable({
           className={cn(
             "block w-full cursor-pointer whitespace-nowrap font-semibold text-xs",
             key === "name" ? "text-left" : "text-right",
-            isSorted ? "text-accent-strong" : "text-muted",
+            isSorted ? "text-accent" : "text-muted",
           )}
           onClick={() => sortBy(key)}
           type="button"
@@ -115,7 +115,7 @@ export function FuelTable({
                   style={{ backgroundColor: row.color }}
                 />
                 <Link
-                  className="truncate text-foreground hover:text-accent-strong"
+                  className="truncate text-foreground hover:text-accent"
                   href={`/cars/fuel-types/${slugify(row.name)}`}
                 >
                   {row.name}

@@ -38,7 +38,7 @@ export function DataSection() {
           Every figure on this site comes from Singapore&apos;s Land Transport
           Authority via{" "}
           <Link
-            className="font-medium text-accent-strong"
+            className="font-medium text-link"
             href="https://datamall.lta.gov.sg"
             rel="noreferrer nofollow"
             target="_blank"
@@ -54,9 +54,7 @@ export function DataSection() {
               className="flex flex-col gap-1 border-separator p-4 max-md:not-first:border-t md:not-first:border-l md:p-5"
               key={heading}
             >
-              <span className="font-bold text-accent-strong text-xl">
-                {heading}
-              </span>
+              <span className="font-bold text-accent text-xl">{heading}</span>
               <span className="font-semibold text-sm">{label}</span>
               <Typography.Paragraph
                 className="text-muted-strong leading-normal"

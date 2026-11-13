@@ -101,7 +101,7 @@ export function PricingSection() {
                 >
                   <Check
                     aria-hidden
-                    className="mt-0.5 size-4 shrink-0 text-accent-strong"
+                    className="mt-0.5 size-4 shrink-0 text-accent"
                     strokeWidth={2.5}
                   />
                   {feature}

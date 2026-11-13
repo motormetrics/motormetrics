@@ -54,7 +54,7 @@ export function MaintenanceNotice() {
             animate={{ rotate: 360 }}
             transition={{ duration: 10, ease: "linear", repeat: Infinity }}
           >
-            <Settings className="size-20 text-accent-strong" />
+            <Settings className="size-20 text-accent" />
           </motion.div>
         </motion.div>
         <motion.div variants={staggerItemVariants}>
@@ -78,7 +78,7 @@ export function MaintenanceNotice() {
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Clock className="size-5 text-accent-strong" />
+                  <Clock className="size-5 text-accent" />
                   <Typography.Paragraph>
                     Estimated Completion
                   </Typography.Paragraph>
@@ -129,7 +129,7 @@ export function MaintenanceNotice() {
           <motion.div variants={staggerItemVariants}>
             <Card>
               <Card.Content className="flex flex-row items-start gap-4">
-                <Zap className="mt-1 size-6 flex-shrink-0 text-accent-strong" />
+                <Zap className="mt-1 size-6 flex-shrink-0 text-accent" />
                 <div>
                   <Typography.Heading level={3}>
                     Performance Boost
@@ -145,7 +145,7 @@ export function MaintenanceNotice() {
           <motion.div variants={staggerItemVariants}>
             <Card>
               <Card.Content className="flex flex-row items-start gap-4">
-                <Shield className="mt-1 size-6 flex-shrink-0 text-accent-strong" />
+                <Shield className="mt-1 size-6 flex-shrink-0 text-accent" />
                 <div>
                   <Typography.Heading level={3}>
                     Security Updates
@@ -160,7 +160,7 @@ export function MaintenanceNotice() {
           <motion.div variants={staggerItemVariants}>
             <Card>
               <Card.Content className="flex flex-row items-start gap-4">
-                <TrendingUp className="mt-1 size-6 flex-shrink-0 text-accent-strong" />
+                <TrendingUp className="mt-1 size-6 flex-shrink-0 text-accent" />
                 <div>
                   <Typography.Heading level={3}>
                     New Features
@@ -175,7 +175,7 @@ export function MaintenanceNotice() {
           <motion.div variants={staggerItemVariants}>
             <Card>
               <Card.Content className="flex flex-row items-start gap-4">
-                <Wrench className="mt-1 size-6 flex-shrink-0 text-accent-strong" />
+                <Wrench className="mt-1 size-6 flex-shrink-0 text-accent" />
                 <div>
                   <Typography.Heading level={3}>Bug Fixes</Typography.Heading>
                   <Typography.Paragraph color="muted" size="sm">
@@ -207,7 +207,7 @@ export function MaintenanceNotice() {
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
             href="mailto:support@motormetrics.app"
-            className="flex items-center gap-2 font-medium text-accent-strong text-sm"
+            className="flex items-center gap-2 font-medium text-link text-sm"
           >
             <Mail className="size-4" />
             support@motormetrics.app
@@ -215,7 +215,7 @@ export function MaintenanceNotice() {
           <span className="hidden text-muted sm:inline">|</span>
           <Link
             href={SOCIAL_URLS.twitter}
-            className="flex items-center gap-2 font-medium text-accent-strong text-sm"
+            className="flex items-center gap-2 font-medium text-link text-sm"
             target="_blank"
             rel="me noreferrer nofollow"
           >

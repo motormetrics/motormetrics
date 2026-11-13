@@ -25,7 +25,7 @@ export function FeaturedGuide() {
     <div className="grid grid-cols-1 gap-5 rounded-lg border border-separator bg-surface px-4 py-5 md:p-7 lg:grid-cols-4 lg:gap-10">
       <div className="flex min-w-0 flex-col gap-2.5 lg:col-span-3">
         <Typography.Paragraph
-          className="text-accent-strong uppercase"
+          className="text-accent uppercase"
           size="xs"
           weight="semibold"
         >
@@ -57,7 +57,7 @@ export function FeaturedGuide() {
         </span>
         {guide.relatedLinks.map(({ href, label }) => (
           <Link
-            className="border-separator border-b py-2.5 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+            className="border-separator border-b py-2.5 font-semibold text-link text-sm no-underline transition-colors hover:text-accent-hover"
             href={href as Route}
             key={href}
           >

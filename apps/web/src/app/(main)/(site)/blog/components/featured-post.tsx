@@ -40,7 +40,7 @@ export function FeaturedPost({ post }: { post: SelectPost }) {
         )}
       >
         <Typography.Paragraph
-          className="text-accent-strong uppercase"
+          className="text-accent uppercase"
           size="xs"
           weight="semibold"
         >

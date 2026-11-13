@@ -30,7 +30,7 @@ export function PostHead({
         className="flex flex-wrap items-center gap-2 text-muted text-sm"
       >
         <Link
-          className="text-muted no-underline transition-colors hover:text-accent-strong"
+          className="text-muted no-underline transition-colors hover:text-accent"
           href="/"
         >
           Home
@@ -39,7 +39,7 @@ export function PostHead({
           /
         </span>
         <Link
-          className="text-muted no-underline transition-colors hover:text-accent-strong"
+          className="text-muted no-underline transition-colors hover:text-accent"
           href="/blog"
         >
           Blog
@@ -53,7 +53,7 @@ export function PostHead({
       </nav>
 
       <Typography.Paragraph
-        className="pt-1.5 text-accent-strong uppercase"
+        className="pt-1.5 text-accent uppercase"
         size="xs"
         weight="semibold"
       >

@@ -56,7 +56,7 @@ export function DataSourcesSection() {
         title="Where the data comes from"
         trailing={
           <a
-            className="whitespace-nowrap font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+            className="whitespace-nowrap font-semibold text-link text-sm no-underline transition-colors hover:text-accent-hover"
             href="https://datamall.lta.gov.sg"
             rel="noreferrer nofollow"
             target="_blank"

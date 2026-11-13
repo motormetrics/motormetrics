@@ -88,7 +88,7 @@ export function FuelTypeTable({
                 NAME_CELL,
                 "cursor-pointer text-left text-sm outline-none after:absolute after:inset-0 focus-visible:after:ring-2 focus-visible:after:ring-focus",
                 isActive
-                  ? "font-bold text-accent-strong"
+                  ? "font-bold text-accent"
                   : "font-medium text-foreground",
               )}
               onClick={() => {

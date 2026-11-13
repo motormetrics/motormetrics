@@ -40,8 +40,6 @@
   [data-theme="glass-light"] {
     --muted-strong: #3d474b; /* label text */
     --subtle: #5f6b71; /* faintest meta labels */
-    --accent-strong: #33586f;
-    --accent-deep: #16323f;
     /* Glass ships chart-1..5. These extend it for charts that need a sixth
        series and the warm petrol series. */
     --chart-6: #dce7ec;
@@ -54,7 +52,6 @@
   [data-theme="glass-dark"] {
     --muted-strong: #b7c1c5;
     --subtle: #939da1;
-    --accent-strong: #4e7c9b;
   }
 }
 
@@ -67,9 +64,6 @@
 
   --color-muted-strong: var(--muted-strong);
   --color-subtle: var(--subtle);
-
-  --color-accent-strong: var(--accent-strong);
-  --color-accent-deep: var(--accent-deep);
 
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);

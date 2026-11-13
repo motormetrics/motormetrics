@@ -87,11 +87,11 @@ export function DatasetsSection() {
             href={href}
             key={title}
           >
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent-soft text-accent-strong">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent-soft text-accent">
               <Icon aria-hidden className="size-4" />
             </span>
             <span className="flex min-w-0 flex-col gap-1">
-              <span className="font-semibold text-foreground transition-colors group-hover:text-accent-strong">
+              <span className="font-semibold text-foreground transition-colors group-hover:text-accent">
                 {title} →
               </span>
               <Typography.Paragraph

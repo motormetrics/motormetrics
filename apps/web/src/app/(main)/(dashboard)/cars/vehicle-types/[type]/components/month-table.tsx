@@ -63,7 +63,7 @@ export function MonthTable({
                 ROW,
                 "border-separator border-b py-2.5",
                 isSelected
-                  ? "border-l-2 border-l-accent-strong bg-accent-soft pl-2"
+                  ? "border-l-2 border-l-accent bg-accent-soft pl-2"
                   : "hover:bg-surface-secondary",
               )}
               key={month}
@@ -72,7 +72,7 @@ export function MonthTable({
                 className={cn(
                   CELL.month,
                   "truncate font-medium text-sm",
-                  isSelected && "font-semibold text-accent-strong",
+                  isSelected && "font-semibold text-accent",
                 )}
               >
                 {formatMonthShortLabel(month)}

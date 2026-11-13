@@ -214,7 +214,7 @@ export function PARFCalculator() {
       <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
         <div className="flex min-w-0 flex-col gap-3">
           <Typography.Paragraph className="text-muted-strong">
-            <span className="font-semibold text-accent-strong">
+            <span className="font-semibold text-accent">
               Rebate after Budget 2026
             </span>
             {` · ${bracket.label}`}
@@ -357,7 +357,7 @@ export function PARFCalculator() {
         <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
           <div className="flex min-w-0 flex-col gap-3">
             <Typography.Paragraph className="text-muted-strong">
-              <span className="font-semibold text-accent-strong">
+              <span className="font-semibold text-accent">
                 Deregistration value
               </span>{" "}
               · after Budget 2026
@@ -439,7 +439,7 @@ export function PARFCalculator() {
                   className={cn(
                     "min-w-0 flex-1 text-sm",
                     isActive
-                      ? "font-bold text-accent-strong"
+                      ? "font-bold text-accent"
                       : "font-medium text-foreground",
                   )}
                 >
@@ -492,7 +492,7 @@ export function PARFCalculator() {
                 <span
                   className={cn(
                     REBATE_CELL,
-                    "font-semibold text-accent-strong text-sm tabular-nums",
+                    "font-semibold text-accent text-sm tabular-nums",
                   )}
                 >
                   {formatCurrency(Math.min(arf * newRate, NEW_CAP))}
