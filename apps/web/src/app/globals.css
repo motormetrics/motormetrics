@@ -155,7 +155,12 @@
     --field-background: var(--white);
     --field-foreground: var(--foreground);
     --field-placeholder: var(--muted);
-    --field-border: transparent;
+    /* Fields are white on a white canvas, so they need a drawn edge; HeroUI's
+       default is no border (0px, transparent), which only reads on a tinted
+       ground. 1.59:1 on white: a visible edge, short of WCAG 1.4.11's 3:1,
+       so every field keeps its visible label. */
+    --field-border-width: 1px;
+    --field-border: #c9ced2;
 
     /* Backdrop */
     --backdrop: rgba(22, 32, 37, 0.45);
@@ -269,6 +274,8 @@
 
     /* Form fields */
     --field-background: var(--default);
+    /* The dark field fill already lifts off the canvas, so no drawn edge. */
+    --field-border: transparent;
 
     /* Backdrop */
     --backdrop: rgba(0, 0, 0, 0.6);
