@@ -10,6 +10,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/range-tabs";
 import {
+  FUEL_FILTERS,
   loadSearchParams,
   type MakesSearchParams,
   type Range,
@@ -60,6 +61,35 @@ function indexLabel(range: Range, latestMonth: string): string {
   return "Last 12 months";
 }
 
+/** Tab id for "All", which clears `?fuel=`. */
+const ALL_FUEL = "all";
+
+/**
+ * The powertrain switch D's index left out. Kept because about a fifth of
+ * Makes visitors used it before the redesign, more than used the period.
+ */
+function PowertrainTabs({ params }: { params: MakesSearchParams }) {
+  return (
+    <FilterTabs
+      aria-label="Powertrain"
+      filter="fuel"
+      selectedKey={params.fuel ?? ALL_FUEL}
+      tabs={[
+        {
+          href: serialize("/cars/makes", { ...params, fuel: null }),
+          id: ALL_FUEL,
+          label: "All",
+        },
+        ...FUEL_FILTERS.map((fuel) => ({
+          href: serialize("/cars/makes", { ...params, fuel }),
+          id: fuel,
+          label: fuel,
+        })),
+      ]}
+    />
+  );
+}
+
 function SortTabs({ params }: { params: MakesSearchParams }) {
   return (
     <FilterTabs
@@ -86,7 +116,10 @@ export async function MakesIndex({
   searchParams: Promise<SearchParams>;
 }) {
   const params = await loadSearchParams(searchParams);
-  const { latestMonth, rows, total } = await loadMakeRows(params.range, null);
+  const { latestMonth, rows, total } = await loadMakeRows(
+    params.range,
+    params.fuel,
+  );
 
   if (!latestMonth) {
     return null;
@@ -119,6 +152,10 @@ export async function MakesIndex({
         switches={
           <>
             <div className="flex min-w-0 max-w-full flex-col gap-1">
+              <span className="font-medium text-muted text-sm">Powertrain</span>
+              <PowertrainTabs params={params} />
+            </div>
+            <div className="flex min-w-0 max-w-full flex-col gap-1">
               <span className="font-medium text-muted text-sm">Period</span>
               <RangeTabs latestMonth={latestMonth} params={params} />
             </div>
@@ -131,8 +168,9 @@ export async function MakesIndex({
       />
       <SourceNote>
         Source: LTA via DataMall · {periodLabel(latestMonth, params.range)},
-        share of {total.toLocaleString("en-SG")} new cars. Change is withheld
-        when the year-earlier base was under {MIN_BASE} cars.
+        share of {total.toLocaleString("en-SG")} new
+        {params.fuel ? ` ${params.fuel.toLowerCase()}` : ""} cars. Change is
+        withheld when the year-earlier base was under {MIN_BASE} cars.
       </SourceNote>
     </section>
   );

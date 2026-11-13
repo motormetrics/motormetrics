@@ -1,8 +1,15 @@
 import { Skeleton } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
+import { ConcentrationCard } from "@web/app/(main)/(dashboard)/cars/makes/components/concentration-card";
+import { ElectricOnlyMakes } from "@web/app/(main)/(dashboard)/cars/makes/components/electric-only-makes";
+import { FastestGrowing } from "@web/app/(main)/(dashboard)/cars/makes/components/fastest-growing";
 import { MakesIndex } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-index";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { Hairline, SectionHead } from "@web/components/shared/overview";
+import {
+  Hairline,
+  OverviewGrid,
+  SectionHead,
+} from "@web/components/shared/overview";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import { generateItemListSchema } from "@web/lib/metadata";
@@ -77,6 +84,35 @@ export function MakesContentSection({
           <MakesIndex searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
+
+      <Hairline />
+
+      <SectionErrorBoundary title="Market concentration unavailable">
+        <Suspense fallback={<Skeleton className="h-60 w-full" />}>
+          <ConcentrationCard searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
+
+      <Hairline />
+
+      <section className="flex flex-col gap-6">
+        <SectionHead
+          eyebrow="Movers and electric vehicles"
+          title="Fastest growing, and electric-only makes"
+        />
+        <OverviewGrid>
+          <SectionErrorBoundary title="Movers unavailable">
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <FastestGrowing searchParams={searchParams} />
+            </Suspense>
+          </SectionErrorBoundary>
+          <SectionErrorBoundary title="Electric-only makes unavailable">
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <ElectricOnlyMakes />
+            </Suspense>
+          </SectionErrorBoundary>
+        </OverviewGrid>
+      </section>
 
       <Hairline />
 

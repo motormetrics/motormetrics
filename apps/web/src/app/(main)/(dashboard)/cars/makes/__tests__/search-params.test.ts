@@ -5,6 +5,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 
 const DEFAULTS: MakesSearchParams = {
+  fuel: null,
   q: "",
   range: "ytd",
   sort: "count",
@@ -18,6 +19,11 @@ describe("loadSearchParams", () => {
   it("should fall back to the default for an unknown sort", () => {
     expect(loadSearchParams("?sort=yoyChange").sort).toBe("count");
   });
+
+  it("should read a powertrain it knows and drop one it does not", () => {
+    expect(loadSearchParams("?fuel=Hybrid").fuel).toBe("Hybrid");
+    expect(loadSearchParams("?fuel=Diesel").fuel).toBeNull();
+  });
 });
 
 describe("serialize", () => {
@@ -29,10 +35,17 @@ describe("serialize", () => {
     expect(
       serialize("/cars/makes", {
         ...DEFAULTS,
+        fuel: "Electric",
         q: "audi",
         range: "12m",
         sort: "make",
       }),
-    ).toBe("/cars/makes?range=12m&sort=make&q=audi");
+    ).toBe("/cars/makes?fuel=Electric&range=12m&sort=make&q=audi");
+  });
+
+  it("should clear the powertrain when it is set to null", () => {
+    expect(serialize("/cars/makes", { ...DEFAULTS, fuel: null })).toBe(
+      "/cars/makes",
+    );
   });
 });

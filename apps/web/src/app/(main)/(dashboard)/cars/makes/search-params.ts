@@ -36,6 +36,8 @@ export const SORTS = ["count", "make"] as const;
 export type Sort = (typeof SORTS)[number];
 
 export const makesSearchParams = {
+  /** Powertrain to narrow the page to. `null` is the "All" tab. */
+  fuel: parseAsStringLiteral(FUEL_FILTERS),
   range: parseAsStringLiteral(RANGES).withDefault("ytd"),
   sort: parseAsStringLiteral(SORTS).withDefault("count"),
   /** The "Find a make" filter, applied in the browser as the reader types. */
@@ -47,7 +49,7 @@ export const loadSearchParams = createLoader(makesSearchParams);
 export type MakesSearchParams = Awaited<ReturnType<typeof loadSearchParams>>;
 
 /**
- * Builds the period and sort links on the server. Defaults drop out of the
+ * Builds the powertrain, period and sort links on the server. Defaults drop out of the
  * query string, so the default view is plain /cars/makes.
  */
 export const serialize = createSerializer(makesSearchParams);
