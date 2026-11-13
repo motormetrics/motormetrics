@@ -84,7 +84,7 @@ interface MonthWindow {
 }
 
 /** The months the active range covers, ending at `latestMonth`. */
-function rangeWindow(latestMonth: string, range: Range): MonthWindow {
+export function rangeWindow(latestMonth: string, range: Range): MonthWindow {
   if (range === "month") {
     return { end: latestMonth, start: latestMonth };
   }

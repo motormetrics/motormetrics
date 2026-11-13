@@ -7,6 +7,8 @@ import {
   MIN_BASE,
   matchesFuelFilter,
   periodLabel,
+  priorWindow,
+  rangeWindow,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import {
   type MakesSearchParams,
@@ -102,6 +104,213 @@ export function monthSeries(
   });
 }
 
+/** How many parts a mix bar shows before the rest fold into "Other". */
+const MIX_PARTS = 4;
+
+/** How many fuel and body combinations the table lists. */
+const COMBOS = 5;
+
+/** The bar colours, darkest first, then the lightest for "Other". */
+const MIX_COLOURS = ["bg-chart-1", "bg-chart-3", "bg-chart-4", "bg-chart-sand"];
+const OTHER_COLOUR = "bg-chart-6";
+
+export interface MixPart {
+  count: number;
+  label: string;
+  /** Percentage of the make's registrations in the period. */
+  share: number;
+}
+
+export interface Combination {
+  /** Percentage change on a year earlier, or `null` under `MIN_BASE`. */
+  change: number | null;
+  count: number;
+  fuelType: string;
+  vehicleType: string;
+}
+
+/** Counts by label, largest first, with the tail past `MIX_PARTS` as "Other". */
+function mixParts(counts: Map<string, number>, total: number): MixPart[] {
+  const sorted = [...counts].sort((a, b) => b[1] - a[1]);
+  const shown = sorted.length > MIX_PARTS ? MIX_PARTS - 1 : MIX_PARTS;
+  const parts = sorted
+    .slice(0, shown)
+    .map(([label, count]) => ({ count, label, share: (count / total) * 100 }));
+  const rest = sorted.slice(shown).reduce((sum, [, count]) => sum + count, 0);
+  if (rest > 0) {
+    parts.push({ count: rest, label: "Other", share: (rest / total) * 100 });
+  }
+  return parts;
+}
+
+/**
+ * The make's fuel and body mix over the selected period, and its largest fuel
+ * and body combinations with their change on the same months a year earlier.
+ */
+export function mixBreakdown(
+  rows: {
+    count: number;
+    fuelType: string;
+    month: string;
+    vehicleType: string;
+  }[],
+  latestMonth: string,
+  range: MakesSearchParams["range"],
+  fuel: MakesSearchParams["fuel"],
+): { body: MixPart[]; combos: Combination[]; fuel: MixPart[] } {
+  const current = rangeWindow(latestMonth, range);
+  const prior = priorWindow(latestMonth, range);
+  const byFuel = new Map<string, number>();
+  const byBody = new Map<string, number>();
+  const combos = new Map<string, Combination>();
+  const priorCombos = new Map<string, number>();
+  let total = 0;
+
+  for (const row of rows) {
+    if (fuel && !matchesFuelFilter(fuel, row.fuelType)) {
+      continue;
+    }
+    const key = `${row.fuelType}|${row.vehicleType}`;
+    if (row.month >= prior.start && row.month <= prior.end) {
+      priorCombos.set(key, (priorCombos.get(key) ?? 0) + row.count);
+    }
+    if (row.month < current.start || row.month > current.end) {
+      continue;
+    }
+    total += row.count;
+    byFuel.set(row.fuelType, (byFuel.get(row.fuelType) ?? 0) + row.count);
+    byBody.set(row.vehicleType, (byBody.get(row.vehicleType) ?? 0) + row.count);
+    const combo = combos.get(key) ?? {
+      change: null,
+      count: 0,
+      fuelType: row.fuelType,
+      vehicleType: row.vehicleType,
+    };
+    combo.count += row.count;
+    combos.set(key, combo);
+  }
+
+  if (total === 0) {
+    return { body: [], combos: [], fuel: [] };
+  }
+
+  const top = [...combos]
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, COMBOS)
+    .map(([key, combo]) => {
+      const base = priorCombos.get(key) ?? 0;
+      return {
+        ...combo,
+        change: base < MIN_BASE ? null : ((combo.count - base) / base) * 100,
+      };
+    });
+
+  return {
+    body: mixParts(byBody, total),
+    combos: top,
+    fuel: mixParts(byFuel, total),
+  };
+}
+
+function MixBar({
+  parts,
+  period,
+  title,
+}: {
+  parts: MixPart[];
+  period: string;
+  title: string;
+}) {
+  const colourOf = (part: MixPart, index: number) =>
+    part.label === "Other" ? OTHER_COLOUR : MIX_COLOURS[index];
+
+  return (
+    <section className="flex min-w-0 flex-col gap-3">
+      <div className="flex flex-col gap-0.5">
+        <Typography.Heading level={3}>{title}</Typography.Heading>
+        <span className="text-muted text-sm">{period}</span>
+      </div>
+      <div aria-hidden className="flex h-3 gap-0.5 overflow-hidden rounded-xs">
+        {parts.map((part, index) => (
+          <span
+            className={colourOf(part, index)}
+            key={part.label}
+            style={{ width: `${part.share}%` }}
+          />
+        ))}
+      </div>
+      <ul className="flex flex-col">
+        {parts.map((part, index) => (
+          <li
+            className="flex items-center gap-2.5 border-separator border-b py-2 text-sm"
+            key={part.label}
+          >
+            <span
+              aria-hidden
+              className={`size-3 shrink-0 rounded-xs ${colourOf(part, index)}`}
+            />
+            <span className="min-w-0 flex-1 truncate">{part.label}</span>
+            <span className="tabular-nums">{formatCount(part.count)}</span>
+            <span className="w-14 text-right font-semibold tabular-nums">
+              {formatShare(part.share)}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function CombinationsTable({
+  combos,
+  period,
+}: {
+  combos: Combination[];
+  period: string;
+}) {
+  return (
+    <section className="@md:col-span-2 flex min-w-0 flex-col gap-3">
+      <div className="flex flex-col gap-0.5">
+        <Typography.Heading level={3}>
+          Top fuel and body combinations
+        </Typography.Heading>
+        <span className="text-muted text-sm">
+          {period} · change on a year earlier
+        </span>
+      </div>
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-separator border-b text-muted text-xs">
+            <th className="py-2 text-left font-semibold">Combination</th>
+            <th className="w-24 py-2 text-right font-semibold">Cars</th>
+            <th className="w-24 py-2 text-right font-semibold">Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          {combos.map((combo) => (
+            <tr
+              className="border-separator border-b"
+              key={`${combo.fuelType}|${combo.vehicleType}`}
+            >
+              <td className="py-2">
+                {combo.fuelType} {combo.vehicleType.toLowerCase()}
+              </td>
+              <td className="w-24 py-2 text-right font-semibold tabular-nums">
+                {formatCount(combo.count)}
+              </td>
+              <td className="w-24 py-2 text-right tabular-nums">
+                {combo.change === null
+                  ? "–"
+                  : `${combo.change < 0 ? "−" : "+"}${Math.abs(combo.change).toFixed(1)}%`}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  );
+}
+
 /**
  * Direction D's make detail beside the index list: the make's figures for the
  * selected period and powertrain, and its registrations by month. "All makes"
@@ -128,6 +337,7 @@ export async function MakeDetail({
   ]);
   const month = monthRows.rows.find((entry) => entry.slug === row.slug);
   const series = monthSeries(crossTab, latestMonth, params.fuel);
+  const mix = mixBreakdown(crossTab, latestMonth, params.range, params.fuel);
   const previousMonth = series.at(-2)?.count ?? 0;
   const change = readableChange(row);
   const period = periodLabel(latestMonth, params.range);
@@ -251,6 +461,18 @@ export async function MakeDetail({
           tooltipLabel="Registrations"
         />
       </section>
+
+      {mix.combos.length > 0 ? (
+        <div className="grid @md:grid-cols-2 grid-cols-1 gap-8">
+          {/* With a powertrain selected the fuel mix is that one fuel, so
+              only the body mix is worth a bar. */}
+          {params.fuel ? null : (
+            <MixBar parts={mix.fuel} period={period} title="Fuel mix" />
+          )}
+          <MixBar parts={mix.body} period={period} title="Body type" />
+          <CombinationsTable combos={mix.combos} period={period} />
+        </div>
+      ) : null}
 
       <SourceNote>
         Source: LTA via DataMall · New car registrations
