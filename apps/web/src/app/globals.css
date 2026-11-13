@@ -172,9 +172,12 @@
     --radius: 0.375rem; /* 6px — controls, inner cards, rows */
     --field-radius: 0.375rem;
 
-    /* Elevation — soft, ink-tinted, never black */
+    /* Elevation — soft, ink-tinted, never black. HeroUI's Card has no border
+       and relies on a tinted ground; on white the surface shadow ends in a
+       hairline ring (as the Pro Mouve theme does) so cards keep an edge. */
     --surface-shadow:
-      0 4px 16px 0 rgba(35, 42, 46, 0.07), 0 1px 3px 0 rgba(35, 42, 46, 0.05);
+      0 0 0 1px var(--border), 0 4px 16px 0 rgba(35, 42, 46, 0.07),
+      0 1px 3px 0 rgba(35, 42, 46, 0.05);
     --overlay-shadow: 0 14px 36px 0 rgba(35, 42, 46, 0.16);
     --field-shadow: 0 1px 2px 0 rgba(35, 42, 46, 0.05);
     --hover-shadow: 0 3px 10px 0 rgba(35, 42, 46, 0.08);

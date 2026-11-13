@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { Card, Typography } from "@heroui/react";
 import {
   LogoMark,
   MARK_ACCENT,
@@ -342,7 +342,7 @@ export default function BrandPage() {
       <section className="flex flex-col gap-4">
         <SectionHeading>Wordmark vs. name</SectionHeading>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
-          <div className="flex flex-col gap-3 rounded-2xl bg-surface p-7">
+          <Card className="p-7">
             <Wordmark className="text-3xl" />
             <Typography.Paragraph color="muted">
               The wordmark is a graphic. Always lowercase, always Urbanist 800
@@ -350,8 +350,8 @@ export default function BrandPage() {
               the nav, the footer mark, share cards, docs and decks. Icon slots
               take the mark on its own — never the wordmark.
             </Typography.Paragraph>
-          </div>
-          <div className="flex flex-col gap-3 rounded-2xl bg-surface p-7">
+          </Card>
+          <Card className="p-7">
             <span className="font-bold text-3xl text-accent-deep leading-none tracking-tight dark:text-foreground">
               MotorMetrics
             </span>
@@ -362,7 +362,7 @@ export default function BrandPage() {
               MotorMetrics&rdquo;, &ldquo;MotorMetrics tracks COE results
               daily.&rdquo;
             </Typography.Paragraph>
-          </div>
+          </Card>
         </div>
       </section>
 
