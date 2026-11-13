@@ -265,7 +265,7 @@ export function MakesTable({
             ? `top ${displayedRows.length} of ${visibleRows.length}`
             : `${visibleRows.length} ${visibleRows.length === 1 ? "make" : "makes"}`
         }`}
-        eyebrow="Figure 3 · Registrations"
+        eyebrow={`Figure 3 · Registrations · ${rangeLabel}`}
         title="All makes"
         trailing={fuelTabs}
       />

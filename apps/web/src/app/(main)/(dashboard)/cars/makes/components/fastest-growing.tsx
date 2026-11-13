@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { loadMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import {
@@ -6,7 +7,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { SourceNote } from "@web/components/shared/overview";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
 
@@ -47,11 +48,15 @@ export async function FastestGrowing({
 
   return (
     <div className="flex min-w-0 flex-col gap-4">
-      <SectionHead
-        caption={`${RANGE_LABELS[range]}${fuelSuffix}, against the same period in ${previousYear}`}
-        eyebrow="Figure 4 · Movers, year on year"
-        title="Fastest growing"
-      />
+      <div className="flex flex-col gap-1">
+        <Typography.Heading className="text-lg" level={3} weight="bold">
+          Fastest growing
+        </Typography.Heading>
+        <Typography.Paragraph color="muted" size="sm">
+          {RANGE_LABELS[range]}
+          {fuelSuffix}, against the same period in {previousYear}
+        </Typography.Paragraph>
+      </div>
 
       <div className="flex flex-col">
         <div className="flex items-center gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">

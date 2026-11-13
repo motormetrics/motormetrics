@@ -112,7 +112,11 @@ export function MakesContentSection({
 
       <Hairline />
 
-      <section className="scroll-mt-20" id="movers">
+      <section className="flex scroll-mt-20 flex-col gap-6" id="movers">
+        <SectionHead
+          eyebrow="Figure 4 · Movers and electric vehicles"
+          title="Fastest growing, and electric-only makes"
+        />
         <OverviewGrid>
           <SectionErrorBoundary title="Movers unavailable">
             <Suspense fallback={<Skeleton className="h-96 w-full" />}>
