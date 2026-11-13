@@ -1,4 +1,4 @@
-import { Skeleton } from "@heroui/react";
+import { Skeleton, Typography } from "@heroui/react";
 import { ComparisonLinks } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/comparison-links";
 import { COMPARE_PAIRS } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import { buildMakesFaqs } from "@web/app/(main)/(dashboard)/cars/makes/components/faq-data";
@@ -7,14 +7,17 @@ import {
   periodLabel,
   summariseLeaders,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
-import { MakesAnswer } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-answer";
+import {
+  MakesAnswer,
+  MakesKeyNumbers,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/makes-answer";
 import { MakesContentSection } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-content-section";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/range-tabs";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { PageHead } from "@web/components/shared/page-head";
+import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
@@ -65,26 +68,14 @@ export const metadata: Metadata = {
   },
 };
 
-/** "January to August 2026 · Source: LTA via DataMall", under the title. */
-async function MakesPeriodSub({ searchParams }: PageProps) {
+/** " · January to August 2026", the end of the eyebrow above the title. */
+async function MakesPeriod({ searchParams }: PageProps) {
   const [{ range }, latestMonth] = await Promise.all([
     loadSearchParams(searchParams),
     getCarsLatestMonth(),
   ]);
 
-  return (
-    <>
-      {latestMonth ? (
-        <>
-          <span className="font-semibold text-foreground">
-            {periodLabel(latestMonth, range)}
-          </span>{" "}
-          ·{" "}
-        </>
-      ) : null}
-      Source: LTA via DataMall
-    </>
-  );
+  return latestMonth ? ` · ${periodLabel(latestMonth, range)}` : null;
 }
 
 /**
@@ -111,25 +102,48 @@ async function MakesFaq() {
 export default function CarMakesPage({ searchParams }: PageProps) {
   return (
     <OverviewPage className="gap-10 max-md:gap-7">
-      <PageHead
-        controls={
-          <Suspense fallback={<Skeleton className="h-8 w-72" />}>
-            <RangeTabs searchParams={searchParams} />
-          </Suspense>
-        }
-        eyebrow="Cars · Makes"
-        sub={
-          <Suspense fallback={<Skeleton className="h-5 w-64" />}>
-            <MakesPeriodSub searchParams={searchParams} />
-          </Suspense>
-        }
-        title="Makes"
-      />
-      <SectionErrorBoundary title="Leading make unavailable">
-        <Suspense fallback={<Skeleton className="h-48 w-full" />}>
-          <MakesAnswer searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
+      {/* Direction D's head: one column that reads eyebrow, title, answer,
+          source, then the switches, with the key numbers beside it once the
+          page is wide and under it before then. */}
+      <div className="@container">
+        <div className="grid @7xl:grid-cols-3 @7xl:gap-16 gap-10">
+          <div className="@7xl:col-span-2 flex min-w-0 flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <Typography.Paragraph
+                className="uppercase"
+                color="muted"
+                size="xs"
+                weight="semibold"
+              >
+                Cars · Makes
+                <Suspense fallback={null}>
+                  <MakesPeriod searchParams={searchParams} />
+                </Suspense>
+              </Typography.Paragraph>
+              <Typography.Heading level={1}>Makes</Typography.Heading>
+            </div>
+            <SectionErrorBoundary title="Leading make unavailable">
+              <Suspense fallback={<Skeleton className="h-48 w-full" />}>
+                <MakesAnswer searchParams={searchParams} />
+              </Suspense>
+            </SectionErrorBoundary>
+            <Typography.Paragraph color="muted" size="sm">
+              Source: LTA via DataMall.
+            </Typography.Paragraph>
+            <div className="flex min-w-0 max-w-full flex-wrap items-center gap-3">
+              <Suspense fallback={<Skeleton className="h-8 w-72" />}>
+                <RangeTabs searchParams={searchParams} />
+              </Suspense>
+              <SharePill title="Makes" />
+            </div>
+          </div>
+          <SectionErrorBoundary title="Key numbers unavailable">
+            <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+              <MakesKeyNumbers searchParams={searchParams} />
+            </Suspense>
+          </SectionErrorBoundary>
+        </div>
+      </div>
       <StructuredData data={structuredData} />
       <MakesContentSection searchParams={searchParams} />
 
