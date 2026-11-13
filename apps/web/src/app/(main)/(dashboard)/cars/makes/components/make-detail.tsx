@@ -7,7 +7,6 @@ import {
   MIN_BASE,
   matchesFuelFilter,
   periodLabel,
-  priorWindow,
   rangeWindow,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import {
@@ -107,9 +106,6 @@ export function monthSeries(
 /** How many parts a mix bar shows before the rest fold into "Other". */
 const MIX_PARTS = 4;
 
-/** How many fuel and body combinations the table lists. */
-const COMBOS = 5;
-
 /** The bar colours, darkest first, then the lightest for "Other". */
 const MIX_COLOURS = ["bg-chart-1", "bg-chart-3", "bg-chart-4", "bg-chart-sand"];
 const OTHER_COLOUR = "bg-chart-6";
@@ -119,14 +115,6 @@ export interface MixPart {
   label: string;
   /** Percentage of the make's registrations in the period. */
   share: number;
-}
-
-export interface Combination {
-  /** Percentage change on a year earlier, or `null` under `MIN_BASE`. */
-  change: number | null;
-  count: number;
-  fuelType: string;
-  vehicleType: string;
 }
 
 /** Counts by label, largest first, with the tail past `MIX_PARTS` as "Other". */
@@ -143,10 +131,7 @@ function mixParts(counts: Map<string, number>, total: number): MixPart[] {
   return parts;
 }
 
-/**
- * The make's fuel and body mix over the selected period, and its largest fuel
- * and body combinations with their change on the same months a year earlier.
- */
+/** The make's fuel and body mix over the selected period and powertrain. */
 export function mixBreakdown(
   rows: {
     count: number;
@@ -157,59 +142,29 @@ export function mixBreakdown(
   latestMonth: string,
   range: MakesSearchParams["range"],
   fuel: MakesSearchParams["fuel"],
-): { body: MixPart[]; combos: Combination[]; fuel: MixPart[] } {
-  const current = rangeWindow(latestMonth, range);
-  const prior = priorWindow(latestMonth, range);
+): { body: MixPart[]; fuel: MixPart[] } {
+  const { end, start } = rangeWindow(latestMonth, range);
   const byFuel = new Map<string, number>();
   const byBody = new Map<string, number>();
-  const combos = new Map<string, Combination>();
-  const priorCombos = new Map<string, number>();
   let total = 0;
 
   for (const row of rows) {
     if (fuel && !matchesFuelFilter(fuel, row.fuelType)) {
       continue;
     }
-    const key = `${row.fuelType}|${row.vehicleType}`;
-    if (row.month >= prior.start && row.month <= prior.end) {
-      priorCombos.set(key, (priorCombos.get(key) ?? 0) + row.count);
-    }
-    if (row.month < current.start || row.month > current.end) {
+    if (row.month < start || row.month > end) {
       continue;
     }
     total += row.count;
     byFuel.set(row.fuelType, (byFuel.get(row.fuelType) ?? 0) + row.count);
     byBody.set(row.vehicleType, (byBody.get(row.vehicleType) ?? 0) + row.count);
-    const combo = combos.get(key) ?? {
-      change: null,
-      count: 0,
-      fuelType: row.fuelType,
-      vehicleType: row.vehicleType,
-    };
-    combo.count += row.count;
-    combos.set(key, combo);
   }
 
   if (total === 0) {
-    return { body: [], combos: [], fuel: [] };
+    return { body: [], fuel: [] };
   }
 
-  const top = [...combos]
-    .sort((a, b) => b[1].count - a[1].count)
-    .slice(0, COMBOS)
-    .map(([key, combo]) => {
-      const base = priorCombos.get(key) ?? 0;
-      return {
-        ...combo,
-        change: base < MIN_BASE ? null : ((combo.count - base) / base) * 100,
-      };
-    });
-
-  return {
-    body: mixParts(byBody, total),
-    combos: top,
-    fuel: mixParts(byFuel, total),
-  };
+  return { body: mixParts(byBody, total), fuel: mixParts(byFuel, total) };
 }
 
 function MixBar({
@@ -257,56 +212,6 @@ function MixBar({
           </li>
         ))}
       </ul>
-    </section>
-  );
-}
-
-function CombinationsTable({
-  combos,
-  period,
-}: {
-  combos: Combination[];
-  period: string;
-}) {
-  return (
-    <section className="@md:col-span-2 flex min-w-0 flex-col gap-3">
-      <div className="flex flex-col gap-0.5">
-        <Typography.Heading level={3}>
-          Top fuel and body combinations
-        </Typography.Heading>
-        <span className="text-muted text-sm">
-          {period} · change on a year earlier
-        </span>
-      </div>
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-separator border-b text-muted text-xs">
-            <th className="py-2 text-left font-semibold">Combination</th>
-            <th className="w-24 py-2 text-right font-semibold">Cars</th>
-            <th className="w-24 py-2 text-right font-semibold">Change</th>
-          </tr>
-        </thead>
-        <tbody>
-          {combos.map((combo) => (
-            <tr
-              className="border-separator border-b"
-              key={`${combo.fuelType}|${combo.vehicleType}`}
-            >
-              <td className="py-2">
-                {combo.fuelType} {combo.vehicleType.toLowerCase()}
-              </td>
-              <td className="w-24 py-2 text-right font-semibold tabular-nums">
-                {formatCount(combo.count)}
-              </td>
-              <td className="w-24 py-2 text-right tabular-nums">
-                {combo.change === null
-                  ? "–"
-                  : `${combo.change < 0 ? "−" : "+"}${Math.abs(combo.change).toFixed(1)}%`}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </section>
   );
 }
@@ -462,7 +367,7 @@ export async function MakeDetail({
         />
       </section>
 
-      {mix.combos.length > 0 ? (
+      {mix.body.length > 0 ? (
         <div className="grid @md:grid-cols-2 grid-cols-1 gap-8">
           {/* With a powertrain selected the fuel mix is that one fuel, so
               only the body mix is worth a bar. */}
@@ -470,7 +375,6 @@ export async function MakeDetail({
             <MixBar parts={mix.fuel} period={period} title="Fuel mix" />
           )}
           <MixBar parts={mix.body} period={period} title="Body type" />
-          <CombinationsTable combos={mix.combos} period={period} />
         </div>
       ) : null}
 

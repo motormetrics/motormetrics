@@ -99,11 +99,8 @@ describe("mixBreakdown", () => {
       month: "2026-10",
       vehicleType: "Hatchback",
     },
-    // A year earlier, for the change.
-    { count: 40, fuelType: "Electric", month: "2025-10", vehicleType: "SUV" },
-    { count: 5, fuelType: "Petrol", month: "2025-09", vehicleType: "Sedan" },
-    // Before both windows.
-    { count: 99, fuelType: "Petrol", month: "2024-12", vehicleType: "SUV" },
+    // Before the period.
+    { count: 99, fuelType: "Petrol", month: "2025-12", vehicleType: "SUV" },
   ];
 
   it("should give the fuel mix largest first, folding the tail into Other", () => {
@@ -134,31 +131,15 @@ describe("mixBreakdown", () => {
     expect(fuel.at(-1)?.count).toBe(6);
   });
 
-  it("should give the change on a year earlier, withheld under 20 cars", () => {
-    const { combos } = mixBreakdown(rows, "2026-10", "ytd", null);
-
-    expect(combos[0]).toEqual({
-      change: 50,
-      count: 60,
-      fuelType: "Electric",
-      vehicleType: "SUV",
-    });
-    expect(
-      combos.find((combo) => combo.vehicleType === "Sedan")?.change,
-    ).toBeNull();
-  });
-
   it("should keep only the period and the selected powertrain", () => {
-    const { body, combos } = mixBreakdown(rows, "2026-10", "month", "Petrol");
+    const { body } = mixBreakdown(rows, "2026-10", "month", "Petrol");
 
     expect(body).toEqual([{ count: 10, label: "SUV", share: 100 }]);
-    expect(combos).toHaveLength(1);
   });
 
   it("should be empty when the make registered nothing in the period", () => {
     expect(mixBreakdown(rows, "2027-06", "month", null)).toEqual({
       body: [],
-      combos: [],
       fuel: [],
     });
   });
