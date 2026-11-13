@@ -93,8 +93,8 @@ export default function CarMakesPage({ searchParams }: PageProps) {
           numbers beside it once the page is wide and under it before then.
           It describes the year to date, so it reads no search params. */}
       <div className="@container">
-        <div className="grid @7xl:grid-cols-3 @7xl:gap-16 gap-10">
-          <div className="@7xl:col-span-2 flex min-w-0 flex-col gap-4">
+        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
+          <div className="flex min-w-0 flex-col gap-4">
             <div className="flex flex-col gap-2">
               <Typography.Paragraph
                 className="uppercase"

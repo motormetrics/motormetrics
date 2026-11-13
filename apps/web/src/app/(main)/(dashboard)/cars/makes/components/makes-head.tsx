@@ -119,9 +119,8 @@ export async function MakesKeyNumbers() {
       >
         Key numbers
       </Typography.Paragraph>
-      {/* Four across while it sits under the head, one column once it moves
-          beside it. */}
-      <dl className="grid @3xl:grid-cols-4 @7xl:grid-cols-1 grid-cols-2 gap-x-6">
+      {/* Four across, under the head or in its right half. */}
+      <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
         {keyNumbers.map(({ label, note, value }) => (
           <div
             className="flex flex-col gap-0.5 border-separator border-b py-3"
