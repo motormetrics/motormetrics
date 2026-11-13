@@ -50,21 +50,22 @@
     --eclipse: #232a2e; /* slate-ink */
 
     /* Base */
-    --background: #f7f5ef; /* warm cream canvas */
+    --background: var(--white); /* white canvas */
     --foreground: var(--eclipse);
 
     /* Surfaces */
     /* Pure white with an explicit hue. A hueless white makes HeroUI Pro's
        oklch colour-mix (DataGrid's selected pinned cell) carry chroma with no
-       hue, which the browser draws pink. Hue 90 matches the sand surfaces. */
+       hue, which the browser draws pink. Any hue fixes it; 90 is kept from
+       the earlier warm ramp. */
     --surface: oklch(100% 0 90);
     --surface-foreground: var(--foreground);
-    --surface-secondary: #efece3; /* warm sand — rails, wells */
+    --surface-secondary: #f5f6f7; /* faint neutral grey — rails, wells */
     --surface-secondary-foreground: var(--foreground);
-    /* Third tier. HeroUI component CSS reads this directly, so leaving it out
-       left those parts on HeroUI's cool grey default against the warm ramp.
-       The step matches HeroUI's own secondary -> tertiary delta (-0.0151 L). */
-    --surface-tertiary: #eae7de;
+    /* Third tier. HeroUI component CSS reads this directly, so it is stated
+       here to keep those parts on this ramp, not HeroUI's default grey.
+       The step matches HeroUI's own secondary -> tertiary delta (-0.0150 L). */
+    --surface-tertiary: #f0f1f2;
     --surface-tertiary-foreground: var(--foreground);
     --overlay: var(--white);
     --overlay-foreground: var(--foreground);
@@ -72,21 +73,17 @@
     --ink-surface-foreground: var(--white);
 
     /* Segmented controls (Tabs). Also read directly by HeroUI component CSS.
-       The raised segment is the plain surface on the cream canvas. */
+       The raised segment is the plain surface on the white canvas. */
     --segment: var(--surface);
     --segment-foreground: var(--foreground);
 
-    /* Neutrals. The three text greys were tuned to clear WCAG AA (4.5:1)
-       against --surface-secondary #efece3; ratios below are measured there.
-       Adding --surface-tertiary #eae7de moved the binding constraint one step
-       darker, and --subtle lands at 4.44:1 on that tier — just under AA. It
-       clears --surface-secondary, --background and --surface, and the tier's
-       own pairing (--surface-tertiary-foreground) is 11.78:1, so this only
-       bites if --subtle text is placed on a tertiary surface. Lift --subtle to
-       clear 4.5 there if that combination ever ships. */
-    --muted: #505a5d; /* secondary body text — 6.00:1 */
-    --muted-strong: #3d474b; /* label text — 8.08:1 */
-    --subtle: #5f6b71; /* faintest meta labels — 4.64:1 */
+    /* Neutrals. All three text greys clear WCAG AA (4.5:1) on every light
+       surface. Ratios below are measured against --surface-tertiary #f0f1f2,
+       the darkest tier and so the binding constraint; they are higher on
+       --surface-secondary, --background and --surface. */
+    --muted: #505a5d; /* secondary body text — 6.27:1 */
+    --muted-strong: #3d474b; /* label text — 8.44:1 */
+    --subtle: #5f6b71; /* faintest meta labels — 4.85:1 */
     --default: #f0f3f4; /* neutral fill — chips, icon wells, tracks */
     --default-hover: #dce7ec;
     --default-foreground: var(--foreground);
@@ -94,7 +91,7 @@
 
     /* Accent — a calm slate blue, carrying all emphasis.
        --accent fills; --accent-strong is the text/link tone (#4e7c9b as text
-       is 4.11:1 on the canvas, below AA). */
+       is 4.49:1 on the canvas, just below AA). */
     --accent: #4e7c9b;
     --accent-foreground: var(--white);
     --accent-strong: #33586f;
@@ -149,8 +146,8 @@
     --danger-soft-foreground: #b4453f;
 
     /* Lines */
-    --border: #e5e1d5;
-    --separator: #e5e1d5;
+    --border: #e3e6e8;
+    --separator: #e3e6e8;
     --focus: var(--accent);
     --link: var(--accent-strong);
 
@@ -183,8 +180,8 @@
        should take steps that sit well apart (1 and 4, say) rather than
        neighbours.
 
-       Against --background: --chart-1 6.96:1, --chart-2 4.12:1, --chart-3
-       3.35:1, --chart-4 1.78:1, --chart-5 1.35:1, --chart-6 1.15:1. The last
+       Against --background: --chart-1 7.59:1, --chart-2 4.49:1, --chart-3
+       3.66:1, --chart-4 1.94:1, --chart-5 1.47:1, --chart-6 1.26:1. The last
        three sit below WCAG 1.4.11's 3:1, which covers graphics *required* to
        understand the content; every chart here labels each series in text
        with its value, so colour is associative rather than load-bearing. Keep
@@ -197,7 +194,7 @@
     --chart-6: #dce7ec;
     /* Sand — a warm series colour for petrol and other fossil fuels, set
        against the slate ramp. Not --chart-7: the six-step ramp is unchanged.
-       1.79:1 on --background, the same footing as --chart-4..6, so it relies
+       1.96:1 on --background, the same footing as --chart-4..6, so it relies
        on the same text labels. */
     --chart-sand: #c9b88f;
     --chart-grid: var(--border);
