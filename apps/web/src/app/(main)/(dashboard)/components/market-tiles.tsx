@@ -146,6 +146,23 @@ export async function MarketTiles() {
     <section className="flex flex-col gap-4">
       <Typography.Heading level={2}>Across the market</Typography.Heading>
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 lg:gap-4">
+        {/* PQP leads: /coe/pqp is the site's top page by search impressions. */}
+        {pqpMonth && pqp !== undefined ? (
+          <MarketTile
+            figure={formatCurrency(pqp)}
+            href="/coe/pqp"
+            label={`PQP, Category A · ${formatMonthLabel(pqpMonth)}`}
+            note={
+              previousPqpMonth && previousPqp !== undefined ? (
+                <>
+                  <DeltaChip value={changeRatio(pqp, previousPqp) * 100} /> vs{" "}
+                  {formatMonthShortName(previousPqpMonth)}
+                </>
+              ) : null
+            }
+          />
+        ) : null}
+
         {leader && yearTotal > 0 ? (
           <MarketTile
             figure={leader.make}
@@ -211,22 +228,6 @@ export async function MarketTiles() {
               </div>
             </div>
           </MarketTile>
-        ) : null}
-
-        {pqpMonth && pqp !== undefined ? (
-          <MarketTile
-            figure={formatCurrency(pqp)}
-            href="/coe/pqp"
-            label={`PQP, Category A · ${formatMonthLabel(pqpMonth)}`}
-            note={
-              previousPqpMonth && previousPqp !== undefined ? (
-                <>
-                  <DeltaChip value={changeRatio(pqp, previousPqp) * 100} /> vs{" "}
-                  {formatMonthShortName(previousPqpMonth)}
-                </>
-              ) : null
-            }
-          />
         ) : null}
 
         {deregistration ? (
