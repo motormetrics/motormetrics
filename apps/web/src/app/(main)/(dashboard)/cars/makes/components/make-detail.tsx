@@ -22,7 +22,7 @@ import {
   formatMonthLabel,
 } from "@web/utils/dates/format-month";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
-import { ArrowRight, ChevronLeft } from "lucide-react";
+import { ArrowRight, ChevronLeft, Plus } from "lucide-react";
 import Link from "next/link";
 
 /** How many months the detail chart draws, ending at the latest month. */
@@ -225,6 +225,7 @@ export async function MakeDetail({
   latestMonth,
   makesCount,
   params,
+  peers,
   row,
   total,
 }: {
@@ -232,6 +233,8 @@ export async function MakeDetail({
   /** How many makes registered cars in the period, for "Rank 6 of 63". */
   makesCount: number;
   params: MakesSearchParams;
+  /** The makes ranked either side, linked into a comparison with this one. */
+  peers: { href: string; make: string }[];
   row: MakeRow;
   /** All registrations in the period, for the share note. */
   total: number;
@@ -293,20 +296,67 @@ export async function MakeDetail({
         <div className="ml-auto flex flex-wrap gap-2">
           <Link
             className={buttonVariants({ size: "sm", variant: "tertiary" })}
-            href={serialize("/cars/makes", { ...params, make: null })}
+            href={serialize("/cars/makes", {
+              ...params,
+              compare: null,
+              make: null,
+            })}
           >
             <ChevronLeft className="size-4" />
             All makes
           </Link>
           <Link
-            className={buttonVariants({ size: "sm", variant: "secondary" })}
+            className={buttonVariants({ size: "sm", variant: "tertiary" })}
             href={`/cars/makes/${row.slug}`}
           >
             {row.make} page
             <ArrowRight className="size-4" />
           </Link>
+          <Link
+            aria-expanded={params.compare}
+            className={buttonVariants({ size: "sm", variant: "secondary" })}
+            href={serialize("/cars/makes", {
+              ...params,
+              compare: params.compare ? null : true,
+            })}
+            scroll={false}
+          >
+            <Plus className="size-4" />
+            Add to compare
+          </Link>
         </div>
       </div>
+
+      {params.compare ? (
+        // Picking the second make: the list beside this detail now links
+        // each make into the comparison, and the nearest ranks are offered
+        // here as quick picks.
+        <div
+          className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-separator px-4 py-3 text-sm"
+          role="status"
+        >
+          <span>
+            Compare <span className="font-semibold">{row.make}</span> with
+          </span>
+          {peers.map((peer) => (
+            <Link
+              className={buttonVariants({ size: "sm", variant: "secondary" })}
+              href={peer.href}
+              key={peer.href}
+            >
+              {peer.make}
+            </Link>
+          ))}
+          <span className="text-muted">or any make in the list</span>
+          <Link
+            className={`ml-auto ${buttonVariants({ size: "sm", variant: "tertiary" })}`}
+            href={serialize("/cars/makes", { ...params, compare: null })}
+            scroll={false}
+          >
+            Cancel
+          </Link>
+        </div>
+      ) : null}
 
       <Typography.Paragraph className="tabular-nums">
         {detailCaption({

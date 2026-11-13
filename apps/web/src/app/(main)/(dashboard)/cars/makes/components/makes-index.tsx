@@ -1,3 +1,4 @@
+import { serialize as serializeCompare } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import { FilterTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/filter-tabs";
 import {
   type MakeCard,
@@ -132,12 +133,31 @@ export async function MakesIndex({
 
   // A make with nothing registered in the period has no row, so `?make=` for
   // it falls back to the plain index.
-  const selected = rows.find((row) => row.slug === params.make);
+  const selectedIndex = rows.findIndex((row) => row.slug === params.make);
+  const selected = rows[selectedIndex];
+
+  // While picking a make to compare with, every other make links straight
+  // into the comparison with the selected one.
+  const comparing = Boolean(selected && params.compare);
+  const hrefOf = (row: MakeRow) =>
+    selected && comparing && row.slug !== selected.slug
+      ? serializeCompare("/cars/makes/compare", {
+          make: [selected.slug, row.slug],
+        })
+      : serialize("/cars/makes", { ...params, compare: null, make: row.slug });
+
+  // The makes ranked either side of the selected one, as quick picks.
+  const peers = selected
+    ? [
+        ...rows.slice(Math.max(selectedIndex - 1, 0), selectedIndex),
+        ...rows.slice(selectedIndex + 1, selectedIndex + 3),
+      ].map((row) => ({ href: hrefOf(row), make: row.make }))
+    : [];
 
   const cards: MakeCard[] = ordered.map((row) => ({
     change: changeLabel(row, params.range, latestMonth),
     count: row.count.toLocaleString("en-SG"),
-    href: serialize("/cars/makes", { ...params, make: row.slug }),
+    href: hrefOf(row),
     logoUrl: row.logoUrl,
     make: row.make,
     rank: row.rank,
@@ -154,12 +174,14 @@ export async function MakesIndex({
       />
       <MakeCards
         cards={cards}
+        comparing={comparing}
         detail={
           selected ? (
             <MakeDetail
               latestMonth={latestMonth}
               makesCount={rows.length}
               params={params}
+              peers={peers}
               row={selected}
               total={total}
             />

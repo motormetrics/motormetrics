@@ -35,11 +35,14 @@ export interface MakeCard {
  */
 export function MakeCards({
   cards,
+  comparing,
   detail,
   selectedSlug,
   switches,
 }: {
   cards: readonly MakeCard[];
+  /** Whether the links lead into a comparison rather than select a make. */
+  comparing: boolean;
   /** The selected make's detail, rendered on the server. */
   detail: ReactNode;
   selectedSlug: string | null;
@@ -57,7 +60,11 @@ export function MakeCards({
     : cards;
   // The server built each link with the search as it was on load; carry the
   // one typed since, so selecting a make keeps the list the reader filtered.
-  const hrefOf = (card: MakeCard) => serialize(card.href, { q: query });
+  // A comparison link leaves this page, so it takes no search.
+  const hrefOf = (card: MakeCard) =>
+    comparing && card.slug !== selectedSlug
+      ? card.href
+      : serialize(card.href, { q: query });
 
   return (
     <div className="@container flex flex-col gap-5">

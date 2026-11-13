@@ -1,6 +1,7 @@
 import {
   createLoader,
   createSerializer,
+  parseAsBoolean,
   parseAsString,
   parseAsStringLiteral,
 } from "nuqs/server";
@@ -40,6 +41,11 @@ export const makesSearchParams = {
    * make's detail. `null` is the plain index.
    */
   make: parseAsString,
+  /**
+   * Picking a second make to compare the selected one with: the list beside
+   * the detail then links each make into the comparison.
+   */
+  compare: parseAsBoolean.withDefault(false),
   /** Powertrain to narrow the page to. `null` is the "All" tab. */
   fuel: parseAsStringLiteral(FUEL_FILTERS),
   range: parseAsStringLiteral(RANGES).withDefault("ytd"),
