@@ -19,6 +19,53 @@ exports[`Footer > should render the shell footer with navigation and version inf
             data-slot="typography"
             data-type="body-xs"
           >
+            COE data
+          </p>
+          <ul
+            class="flex flex-col gap-2"
+          >
+            <li>
+              <a
+                class="font-medium text-muted text-sm transition-colors hover:text-accent"
+                href="/coe"
+              >
+                COE overview
+              </a>
+            </li>
+            <li>
+              <a
+                class="font-medium text-muted text-sm transition-colors hover:text-accent"
+                href="/coe/premiums"
+              >
+                Premiums by category
+              </a>
+            </li>
+            <li>
+              <a
+                class="font-medium text-muted text-sm transition-colors hover:text-accent"
+                href="/coe/results"
+              >
+                Price history
+              </a>
+            </li>
+            <li>
+              <a
+                class="font-medium text-muted text-sm transition-colors hover:text-accent"
+                href="/coe/pqp"
+              >
+                PQP rates
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li
+          class="flex flex-col gap-3"
+        >
+          <p
+            class="typography typography--align-start typography--color-muted typography--body-xs typography--weight-semibold uppercase"
+            data-slot="typography"
+            data-type="body-xs"
+          >
             Electric
           </p>
           <ul
@@ -140,53 +187,6 @@ exports[`Footer > should render the shell footer with navigation and version inf
                 href="/cars/arf"
               >
                 ARF calculator
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li
-          class="flex flex-col gap-3"
-        >
-          <p
-            class="typography typography--align-start typography--color-muted typography--body-xs typography--weight-semibold uppercase"
-            data-slot="typography"
-            data-type="body-xs"
-          >
-            COE data
-          </p>
-          <ul
-            class="flex flex-col gap-2"
-          >
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/coe"
-              >
-                COE overview
-              </a>
-            </li>
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/coe/premiums"
-              >
-                Premiums by category
-              </a>
-            </li>
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/coe/results"
-              >
-                Price history
-              </a>
-            </li>
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/coe/pqp"
-              >
-                PQP rates
               </a>
             </li>
           </ul>
