@@ -44,12 +44,12 @@ const CAR_CATEGORIES: { category: COECategory; label: string }[] = [
 ];
 
 /** The muted tone on the dark band; `text-muted` is tuned for light grounds. */
-const ON_DARK_MUTED = "text-ink-surface-foreground/70";
-const CHANGE_CLASS = "font-semibold text-ink-surface-foreground";
+const ON_DARK_MUTED = "text-accent-foreground/70";
+const CHANGE_CLASS = "font-semibold text-accent-foreground";
 
 /** Track and fill for a bar on the dark band. */
-const BAR_TRACK = "bg-ink-surface-foreground/15";
-const BAR_FILL = "bg-accent-on-dark";
+const BAR_TRACK = "bg-accent-foreground/15";
+const BAR_FILL = "bg-accent-foreground";
 
 /**
  * The homepage's opening band: the latest COE result for cars on the left and
@@ -116,7 +116,7 @@ export async function MarketLead() {
     <div className="flex flex-col gap-2.5">
       <section
         aria-label="Latest figures"
-        className="grid gap-8 rounded-4xl bg-ink-surface p-6 text-ink-surface-foreground md:p-10 lg:grid-cols-12 lg:gap-10"
+        className="grid gap-8 rounded-4xl bg-accent p-6 text-accent-foreground md:p-10 lg:grid-cols-12 lg:gap-10"
       >
         {current && premiums.length > 0 ? (
           <LeadLink
@@ -174,7 +174,7 @@ export async function MarketLead() {
 
         {registration ? (
           <LeadLink
-            className="border-ink-surface-foreground/15 max-lg:border-t max-lg:pt-8 lg:col-span-5 lg:border-l lg:pl-10"
+            className="border-accent-foreground/15 max-lg:border-t max-lg:pt-8 lg:col-span-5 lg:border-l lg:pl-10"
             href="/cars/registrations"
             title={`New cars · ${formatMonthLabel(registration.month)}`}
           >
@@ -260,10 +260,10 @@ function LeadLink({
 }) {
   return (
     <Link
-      className={`group flex min-w-0 flex-col gap-6 text-ink-surface-foreground no-underline ${className ?? ""}`}
+      className={`group flex min-w-0 flex-col gap-6 text-accent-foreground no-underline ${className ?? ""}`}
       href={href}
     >
-      <span className="flex items-center justify-between gap-4 font-semibold text-accent-on-dark text-sm">
+      <span className="flex items-center justify-between gap-4 font-semibold text-accent-foreground text-sm">
         {title}
         <ArrowRight
           aria-hidden

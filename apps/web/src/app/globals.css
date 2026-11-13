@@ -38,49 +38,23 @@
   :root,
   .glass-light,
   [data-theme="glass-light"] {
-    --ink-surface: #232a2e; /* dark feature panel */
-    --ink-surface-foreground: var(--white);
     --muted-strong: #3d474b; /* label text */
     --subtle: #5f6b71; /* faintest meta labels */
     --accent-strong: #33586f;
     --accent-deep: #16323f;
-    --accent-soft-2: #e2edf3;
-    --accent-on-dark: #9cc4da;
-    --accent-border: #3c6480;
-    --accent-raise: linear-gradient(
-      180deg,
-      #5f8ba8 0%,
-      #4e7c9b 55%,
-      #3c6480 100%
-    );
-    /* No HeroUI equivalent: Tailwind cannot express this radial stop list. */
-    --accent-gradient: radial-gradient(
-      120% 100% at 15% 0%,
-      #6a97b5 0%,
-      #4e7c9b 42%,
-      #3c6480 100%
-    );
-    /* Brand mark — deliberately distinct from the accent (the TrendingUp
-       glyph + "Metrics" wordmark), held over from the SG Cars Trends identity. */
-    --brand-blue: #2563eb;
-    --hover-shadow: 0 3px 10px 0 rgba(35, 42, 46, 0.08);
     /* Glass ships chart-1..5. These extend it for charts that need a sixth
        series and the warm petrol series. */
     --chart-6: #dce7ec;
     --chart-sand: #c9b88f;
-    --chart-grid: var(--border);
   }
 
   /* Authored so the palette is correct and testable by setting the class by
      hand. No theme provider or toggle ships yet, so glass-light is what renders. */
   .glass-dark,
   [data-theme="glass-dark"] {
-    --ink-surface: #12181b;
     --muted-strong: #b7c1c5;
     --subtle: #939da1;
     --accent-strong: #4e7c9b;
-    --accent-soft-2: rgba(111, 160, 192, 0.14);
-    --hover-shadow: 0 0 0 0 transparent inset;
   }
 }
 
@@ -91,21 +65,11 @@
 @theme inline {
   --font-sans: var(--font-inter);
 
-  --color-ink-surface: var(--ink-surface);
-  --color-ink-surface-foreground: var(--ink-surface-foreground);
-
   --color-muted-strong: var(--muted-strong);
   --color-subtle: var(--subtle);
 
   --color-accent-strong: var(--accent-strong);
   --color-accent-deep: var(--accent-deep);
-  --color-accent-soft-2: var(--accent-soft-2);
-  --color-accent-on-dark: var(--accent-on-dark);
-  --color-accent-border: var(--accent-border);
-
-  --color-brand-blue: var(--brand-blue);
-
-  --shadow-hover: var(--hover-shadow);
 
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -114,7 +78,6 @@
   --color-chart-5: var(--chart-5);
   --color-chart-6: var(--chart-6);
   --color-chart-sand: var(--chart-sand);
-  --color-chart-grid: var(--chart-grid);
 }
 
 /* Reusable keyframe animations */

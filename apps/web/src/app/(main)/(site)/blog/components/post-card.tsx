@@ -26,7 +26,7 @@ export function PostCard({
 
   return (
     <Link
-      className="group flex h-full flex-col gap-3.5 rounded-2xl bg-surface p-7 text-foreground no-underline shadow-surface transition-shadow hover:shadow-hover"
+      className="group flex h-full flex-col gap-3.5 rounded-2xl bg-surface p-7 text-foreground no-underline shadow-surface transition-shadow hover:shadow-overlay"
       href={`/blog/${post.slug}`}
     >
       <span className="self-start rounded-full bg-surface-secondary px-3.5 py-1.5 font-bold text-muted text-sm">

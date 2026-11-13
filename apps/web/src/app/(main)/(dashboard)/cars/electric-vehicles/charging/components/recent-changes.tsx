@@ -27,7 +27,7 @@ export async function RecentChanges() {
       variant="transparent"
     >
       <div className="flex items-center gap-2.5">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-foreground/20 text-accent-foreground">
           <Sparkles className="size-5" />
         </span>
         <Typography.Paragraph className="text-accent-foreground/85">

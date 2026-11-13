@@ -159,7 +159,7 @@ export function RenewalResults({
             role="img"
           >
             <span className="rounded-full bg-accent-foreground/30" />
-            <span className="rounded-full bg-accent-on-dark" />
+            <span className="rounded-full bg-accent-foreground" />
             <span className="rounded-full bg-warning" />
           </div>
           <div className="grid grid-cols-3 gap-1 text-xs">

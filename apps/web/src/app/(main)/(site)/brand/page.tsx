@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 
 const INK_SURFACE = "#232A2E";
 const WHITE = "#FFFFFF";
-/* A near-black host surface, darker than --ink-surface, to show that the
+/* A near-black host surface, darker than the ink panel, to show that the
    mark's own cream ground does not blend into whatever sits behind it. */
 const HOST_DARK = "#16181A";
 
@@ -109,7 +109,7 @@ export default function BrandPage() {
       </section>
 
       <section
-        className="flex flex-wrap items-center justify-center gap-7 rounded-3xl p-12 shadow-hover md:p-18"
+        className="flex flex-wrap items-center justify-center gap-7 rounded-3xl p-12 shadow-surface md:p-18"
         style={{ background: WHITE }}
       >
         <LogoMark size={96} />
@@ -352,7 +352,7 @@ export default function BrandPage() {
             </Typography.Paragraph>
           </div>
           <div className="flex flex-col gap-3 rounded-2xl bg-surface p-7">
-            <span className="font-bold text-3xl text-accent-deep leading-none tracking-tight dark:text-foreground">
+            <span className="font-bold text-3xl text-foreground leading-none tracking-tight">
               MotorMetrics
             </span>
             <Typography.Paragraph color="muted">

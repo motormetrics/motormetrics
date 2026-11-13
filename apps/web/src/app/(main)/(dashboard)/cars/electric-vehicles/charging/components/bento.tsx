@@ -27,10 +27,7 @@ export function Bento({
   );
 }
 
-/**
- * Gradient hero card leading the left column. The gradient is a token rather
- * than a utility because Tailwind cannot express the comp's radial stop list.
- */
+/** Accent hero card leading the left column. */
 export function HeroCard({
   children,
   className,
@@ -41,10 +38,9 @@ export function HeroCard({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 rounded-4xl p-8 text-accent-foreground shadow-surface",
+        "flex flex-col gap-4 rounded-4xl bg-accent p-8 text-accent-foreground shadow-surface",
         className,
       )}
-      style={{ background: "var(--accent-gradient)" }}
     >
       {children}
     </div>

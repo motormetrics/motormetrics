@@ -14,7 +14,7 @@ import Link from "next/link";
 export function GuideCard({ guide }: { guide: Guide }) {
   return (
     <Link
-      className="flex h-full min-w-0 flex-col gap-2.5 rounded-lg border border-separator bg-surface p-5 text-foreground no-underline transition-colors hover:border-accent-border"
+      className="flex h-full min-w-0 flex-col gap-2.5 rounded-lg border border-separator bg-surface p-5 text-foreground no-underline transition-colors hover:border-accent"
       href={`/learn/${guide.slug}`}
     >
       <Typography.Paragraph
