@@ -142,7 +142,6 @@ function MakeRowLink({
         selected && "bg-surface-secondary font-semibold",
       )}
       href={href}
-      prefetch={false}
       scroll={false}
     >
       <span className="w-6 shrink-0 text-right text-muted text-xs tabular-nums">
@@ -159,13 +158,12 @@ function MakeCardLink({ card, href }: { card: MakeCard; href: string }) {
   const peak = Math.max(...card.trend, 1);
 
   return (
-    // Sixty-odd cards in view would prefetch sixty selections, so each one
-    // waits for the click; the index stays in place rather than jumping to
-    // the top of the page.
+    // Every card links to this same route, so they share one prefetched App
+    // Shell (Partial Prefetching). The index stays in place rather than
+    // jumping to the top of the page.
     <Link
       className="flex h-full min-w-0 flex-col gap-2.5 rounded-lg border border-separator bg-surface p-3.5 transition-colors hover:border-border hover:bg-surface-secondary"
       href={href}
-      prefetch={false}
       scroll={false}
     >
       <span className="flex min-w-0 items-center gap-2.5">
