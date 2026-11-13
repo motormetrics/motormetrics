@@ -42,7 +42,7 @@ export function StatsSection({ stats }: { stats: TrafficStats }) {
               {value}
             </span>
             <Typography.Paragraph
-              className="text-muted-strong leading-snug"
+              className="text-foreground leading-snug"
               size="sm"
             >
               {label}

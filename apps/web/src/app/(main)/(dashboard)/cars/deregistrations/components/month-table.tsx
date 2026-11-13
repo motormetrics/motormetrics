@@ -79,7 +79,7 @@ export function MonthTable({
                 <span
                   className={cn(
                     COUNT_CELL,
-                    "text-muted-strong text-sm",
+                    "text-foreground text-sm",
                     COLUMNS[index]?.hidden,
                   )}
                   key={COLUMNS[index]?.label ?? index}

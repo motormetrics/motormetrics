@@ -35,7 +35,7 @@ export function VesBands() {
               key={row.band}
             >
               <span className="w-9 font-semibold text-sm">{row.band}</span>
-              <span className="min-w-0 flex-1 text-muted-strong text-sm">
+              <span className="min-w-0 flex-1 text-foreground text-sm">
                 {row.note}
               </span>
               <span className="w-24 text-right font-semibold tabular-nums">

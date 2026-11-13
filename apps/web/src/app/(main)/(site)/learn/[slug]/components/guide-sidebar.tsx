@@ -52,7 +52,7 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
             {headings.map(({ id, title }) => (
               <li key={id}>
                 <Link
-                  className="block border-transparent border-l-2 py-1.5 pl-2.5 text-muted-strong text-sm no-underline transition-colors hover:border-l-chart-5 hover:text-accent"
+                  className="block border-transparent border-l-2 py-1.5 pl-2.5 text-foreground text-sm no-underline transition-colors hover:border-l-chart-5 hover:text-accent"
                   href={`#${id}` as Route}
                 >
                   {title}
@@ -85,7 +85,7 @@ export function GuideSidebar({ guide }: { guide: Guide }) {
                   <span className="font-semibold text-sm">{term}</span>
                 )}
                 <Typography.Paragraph
-                  className="text-muted-strong leading-normal"
+                  className="text-foreground leading-normal"
                   size="sm"
                 >
                   {definition}

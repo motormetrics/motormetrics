@@ -47,7 +47,7 @@ export async function RecordHighs() {
                   ? formatCurrency(premiumOf(exercise, category) ?? 0)
                   : "—"}
               </span>
-              <span className="w-60 shrink-0 text-right text-muted-strong text-sm max-md:w-full max-md:text-left max-md:text-xs">
+              <span className="w-60 shrink-0 text-right text-foreground text-sm max-md:w-full max-md:text-left max-md:text-xs">
                 {exercise ? formatExercise(exercise) : "—"}
               </span>
             </li>

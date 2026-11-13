@@ -51,7 +51,7 @@ export async function ResultsHeadline({ searchParams }: RegionProps) {
   return (
     <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
       <div className="flex min-w-0 flex-col gap-3">
-        <Typography.Paragraph className="text-muted-strong">
+        <Typography.Paragraph className="text-foreground">
           <span className="font-semibold text-accent">Bids per quota</span> ·
           all five categories
         </Typography.Paragraph>

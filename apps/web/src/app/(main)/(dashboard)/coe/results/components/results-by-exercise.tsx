@@ -81,9 +81,7 @@ export async function ResultsByExercise({ searchParams }: RegionProps) {
             </span>
           );
         })}
-        <span
-          className={cn(BIDS_CELL, "text-muted-strong text-sm tabular-nums")}
-        >
+        <span className={cn(BIDS_CELL, "text-foreground text-sm tabular-nums")}>
           {totalFor(exercise, "bidsReceived").toLocaleString("en-SG")}
         </span>
       </li>

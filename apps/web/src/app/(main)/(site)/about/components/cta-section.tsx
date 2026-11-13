@@ -19,7 +19,7 @@ export function CtaSection() {
         >
           Get the numbers when they land
         </Typography.Heading>
-        <Typography.Paragraph className="max-w-xl text-muted-strong">
+        <Typography.Paragraph className="max-w-xl text-foreground">
           New COE results and registration figures are posted as soon as they
           publish. Nothing else.
         </Typography.Paragraph>

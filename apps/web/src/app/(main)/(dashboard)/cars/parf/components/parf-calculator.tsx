@@ -213,7 +213,7 @@ export function PARFCalculator() {
 
       <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
         <div className="flex min-w-0 flex-col gap-3">
-          <Typography.Paragraph className="text-muted-strong">
+          <Typography.Paragraph className="text-foreground">
             <span className="font-semibold text-accent">
               Rebate after Budget 2026
             </span>
@@ -356,7 +356,7 @@ export function PARFCalculator() {
         />
         <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
           <div className="flex min-w-0 flex-col gap-3">
-            <Typography.Paragraph className="text-muted-strong">
+            <Typography.Paragraph className="text-foreground">
               <span className="font-semibold text-accent">
                 Deregistration value
               </span>{" "}
@@ -461,7 +461,7 @@ export function PARFCalculator() {
                 <span
                   className={cn(
                     CHANGE_CELL,
-                    "text-muted-strong text-sm tabular-nums",
+                    "text-foreground text-sm tabular-nums",
                   )}
                 >
                   {change === 0

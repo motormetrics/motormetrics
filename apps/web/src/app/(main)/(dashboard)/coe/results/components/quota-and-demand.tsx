@@ -67,7 +67,7 @@ export async function QuotaAndDemand({ searchParams }: RegionProps) {
                 <span className="w-14 shrink-0 font-semibold text-sm max-md:w-8">
                   {toCategoryKey(category)}
                 </span>
-                <span className="flex min-w-0 flex-1 flex-col text-muted-strong text-sm">
+                <span className="flex min-w-0 flex-1 flex-col text-foreground text-sm">
                   <span className="truncate max-md:whitespace-normal">
                     {CATEGORY_DESCRIPTIONS[category]}
                   </span>
@@ -86,7 +86,7 @@ export async function QuotaAndDemand({ searchParams }: RegionProps) {
                 <span
                   className={cn(
                     QUOTA_CELL,
-                    "text-muted-strong text-sm tabular-nums",
+                    "text-foreground text-sm tabular-nums",
                   )}
                 >
                   {(figures?.bidsReceived ?? 0).toLocaleString("en-SG")}

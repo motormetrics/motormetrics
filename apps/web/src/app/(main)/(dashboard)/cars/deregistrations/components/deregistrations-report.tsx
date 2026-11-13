@@ -67,7 +67,7 @@ const CATEGORIES = [
     name: "Category D",
   },
   {
-    color: "var(--subtle)",
+    color: "var(--muted)",
     description: "Taxis, which draw on their own quota",
     label: "Taxis",
     name: "Taxis",
@@ -284,14 +284,14 @@ export async function DeregistrationsReport({
             eyebrow="About the data"
             title="What a deregistration is"
           />
-          <Typography.Paragraph className="max-w-prose text-muted-strong">
+          <Typography.Paragraph className="max-w-prose text-foreground">
             A vehicle is deregistered when it is scrapped or exported, which is
             what releases its COE back into the quota. Deregistrations in one
             month therefore set much of the supply bid for in later exercises.
           </Typography.Paragraph>
         </section>
         <div className="flex flex-col gap-4 lg:pt-1">
-          <Typography.Paragraph className="max-w-prose text-muted-strong">
+          <Typography.Paragraph className="max-w-prose text-foreground">
             The categories are the COE ones the vehicle held, so a
             deregistration is counted against the quota it returns to rather
             than the body type of the car.

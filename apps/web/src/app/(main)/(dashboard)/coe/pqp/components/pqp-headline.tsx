@@ -75,7 +75,7 @@ export function PQPHeadline({
           <CategoryTabs categories={PQP_CATEGORY_KEYS} />
           <TermTabs />
         </div>
-        <Typography.Paragraph className="text-muted-strong">
+        <Typography.Paragraph className="text-foreground">
           <span className="font-semibold text-accent">Category {category}</span>
           {` · ${CATEGORY_DESCRIPTIONS[toCategory(category)]}`}
         </Typography.Paragraph>

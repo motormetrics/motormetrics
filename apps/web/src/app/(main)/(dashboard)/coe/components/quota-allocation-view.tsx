@@ -50,7 +50,7 @@ export function QuotaAllocationView({
         title="Bids against quota"
       />
 
-      <div className="flex gap-[18px] text-muted-strong text-xs">
+      <div className="flex gap-[18px] text-foreground text-xs">
         <LegendKey color="var(--chart-1)" label="Quota" />
         <LegendKey color="var(--chart-5)" label="Bids above quota" />
       </div>
@@ -86,7 +86,7 @@ export function QuotaAllocationView({
                     }}
                   />
                 </span>
-                <span className="whitespace-nowrap text-right text-muted-strong text-sm tabular-nums">
+                <span className="whitespace-nowrap text-right text-foreground text-sm tabular-nums">
                   {label}{" "}
                   <b className="font-semibold text-foreground">{row.ratio}×</b>
                 </span>

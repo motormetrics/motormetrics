@@ -263,13 +263,13 @@ export async function PQPReport({
             eyebrow="Reading the numbers"
             title="How the PQP is set"
           />
-          <Typography.Paragraph className="text-muted-strong">
+          <Typography.Paragraph className="text-foreground">
             LTA averages the closing premiums in that category over the last
             three months, across both exercises, and publishes it as the rate
             for the coming month. It therefore lags the market rather than
             leading it.
           </Typography.Paragraph>
-          <Typography.Paragraph className="text-muted-strong">
+          <Typography.Paragraph className="text-foreground">
             A 5-year renewal costs half the PQP, but the car cannot be renewed
             again after that term.
           </Typography.Paragraph>
@@ -369,7 +369,7 @@ export async function PQPReport({
               key={label}
             >
               <dt className="w-44 shrink-0 font-semibold text-sm">{label}</dt>
-              <dd className="text-muted-strong text-sm">{note}</dd>
+              <dd className="text-foreground text-sm">{note}</dd>
             </div>
           ))}
         </dl>

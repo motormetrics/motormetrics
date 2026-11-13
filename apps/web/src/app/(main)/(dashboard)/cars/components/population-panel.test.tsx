@@ -22,7 +22,7 @@ describe("PopulationPanel", () => {
 
     const change = screen.getByText(/on 2024/);
     await expect.element(change).toHaveTextContent("−5% on 2024");
-    await expect.element(change).toHaveClass("text-muted-strong");
+    await expect.element(change).toHaveClass("text-foreground");
     expect(screen.container.querySelector(".chip")).not.toBeInTheDocument();
   });
 

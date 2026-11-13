@@ -190,7 +190,7 @@ export function Headline({
       {label ? (
         // Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>.
         <Typography.Paragraph
-          className="text-muted-strong text-xl"
+          className="text-foreground text-xl"
           weight="semibold"
         >
           {label}

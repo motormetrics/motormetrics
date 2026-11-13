@@ -34,7 +34,7 @@ describe("PremiumDelta", () => {
     for (const ratio of [0.1, -0.1]) {
       const screen = await render(<PremiumDelta ratio={ratio} />);
       const element = screen.container.querySelector("span");
-      expect(element?.className).toContain("text-muted-strong");
+      expect(element?.className).toContain("text-foreground");
       expect(element?.className).not.toMatch(/success|warning|danger/);
       expect(element?.querySelector("svg")).toBeNull();
     }

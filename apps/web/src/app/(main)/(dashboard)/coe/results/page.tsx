@@ -255,12 +255,12 @@ export default function COEResultsPage({ searchParams }: PageProps) {
             eyebrow="Reading the numbers"
             title="How an exercise runs"
           />
-          <Typography.Paragraph className="text-muted-strong">
+          <Typography.Paragraph className="text-foreground">
             Bidding opens at 12pm on the first Monday and third Monday of each
             month and closes at 4pm on the third day. The premium is the lowest
             successful bid, so everyone who wins pays the same price.
           </Typography.Paragraph>
-          <Typography.Paragraph className="text-muted-strong">
+          <Typography.Paragraph className="text-foreground">
             Quotas are set quarterly from deregistrations and the allowed growth
             in the vehicle population.
           </Typography.Paragraph>

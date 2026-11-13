@@ -72,7 +72,7 @@ export function CategoryTable({
                   }}
                 />
               </span>
-              <span className="w-12 shrink-0 text-right text-muted-strong text-xs tabular-nums">
+              <span className="w-12 shrink-0 text-right text-foreground text-xs tabular-nums">
                 {row.share.toFixed(1)}%
               </span>
             </span>

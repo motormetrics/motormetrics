@@ -44,7 +44,7 @@ function ShareCell({
           <ProgressBar.Fill />
         </ProgressBar.Track>
       </ProgressBar>
-      <span className="w-12 shrink-0 text-right text-muted-strong text-sm tabular-nums">
+      <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
         {share.toFixed(1)}%
       </span>
     </span>

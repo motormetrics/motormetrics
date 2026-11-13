@@ -40,7 +40,7 @@ export function RegistrationsHeadline({
         <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
           <NumberValue locale="en-SG" maximumFractionDigits={0} value={value} />
         </span>
-        <Typography.Paragraph className="text-muted-strong tabular-nums">
+        <Typography.Paragraph className="text-foreground tabular-nums">
           <span className="font-semibold text-foreground">
             {previousValue > 0
               ? `${sign}${Math.abs((difference / previousValue) * 100).toFixed(1)}%`

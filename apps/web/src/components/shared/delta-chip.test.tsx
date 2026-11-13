@@ -35,7 +35,7 @@ describe("DeltaChip", () => {
     const screen = await render(<DeltaChip value={-1.5} />);
     const element = screen.container.firstElementChild;
     expect(element?.tagName).toBe("SPAN");
-    expect(element).toHaveClass("text-muted-strong");
+    expect(element).toHaveClass("text-foreground");
     expect(element?.className).not.toMatch(/success|warning|danger|accent/);
     expect(screen.container.querySelector(".chip")).not.toBeInTheDocument();
   });

@@ -46,7 +46,7 @@ export function FAQSection() {
                   </Accordion.Heading>
                   <Accordion.Panel>
                     <Accordion.Body>
-                      <Typography.Paragraph className="max-w-2xl text-muted-strong">
+                      <Typography.Paragraph className="max-w-2xl text-foreground">
                         {answer}
                       </Typography.Paragraph>
                     </Accordion.Body>

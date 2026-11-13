@@ -86,7 +86,7 @@ export async function MoversRail({
                         value={mover.count}
                       />
                     </span>
-                    <span className="w-20 shrink-0 text-right text-muted-strong text-sm tabular-nums">
+                    <span className="w-20 shrink-0 text-right text-foreground text-sm tabular-nums">
                       {mover.yoyChange < 0 ? "−" : "+"}
                       {Math.abs(mover.yoyChange).toFixed(1)}%
                     </span>

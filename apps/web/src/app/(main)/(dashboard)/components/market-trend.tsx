@@ -116,7 +116,7 @@ export async function MarketTrend() {
           caption={`Quota premium at the close of each exercise · ${ticks[0] === 0 ? "Starts at $0" : "Y-axis does not start at zero"}${step ? `; gridlines every ${formatCurrency(step)}` : ""}`}
           link={{ href: "/coe", label: "All COE results" }}
         >
-          <div className="flex gap-4 text-muted-strong text-xs">
+          <div className="flex gap-4 text-foreground text-xs">
             <LegendKey className="bg-chart-1" name="Category A" />
             <LegendKey className="bg-chart-2" name="Category B" />
           </div>

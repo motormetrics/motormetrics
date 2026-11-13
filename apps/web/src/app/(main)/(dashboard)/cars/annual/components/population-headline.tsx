@@ -33,7 +33,7 @@ export function PopulationHeadline({
         <NumberValue locale="en-SG" maximumFractionDigits={0} value={total} />
       </span>
       {previousYear !== null && previous > 0 ? (
-        <Typography.Paragraph className="text-muted-strong tabular-nums">
+        <Typography.Paragraph className="text-foreground tabular-nums">
           <span className="font-semibold text-foreground">
             {`${sign}${Math.abs((difference / previous) * 100).toFixed(1)}%`}
           </span>{" "}

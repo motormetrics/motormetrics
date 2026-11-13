@@ -420,7 +420,7 @@ function SizeSpecimen({
   return (
     <div className="flex flex-col items-center gap-2.5">
       {children}
-      <span className="font-semibold text-subtle text-xs">{label}</span>
+      <span className="font-semibold text-muted text-xs">{label}</span>
     </div>
   );
 }

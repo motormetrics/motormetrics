@@ -155,12 +155,12 @@ export function VehicleTable({
                     }}
                   />
                 </span>
-                <span className="ml-auto w-12 shrink-0 text-right text-muted-strong text-xs tabular-nums">
+                <span className="ml-auto w-12 shrink-0 text-right text-foreground text-xs tabular-nums">
                   {row.share.toFixed(1)}%
                 </span>
               </span>
             </td>
-            <td className="text-right text-muted-strong text-sm tabular-nums">
+            <td className="text-right text-foreground text-sm tabular-nums">
               {row.electric === null ? "—" : `${row.electric.toFixed(1)}%`}
             </td>
             <td className="text-right text-sm">

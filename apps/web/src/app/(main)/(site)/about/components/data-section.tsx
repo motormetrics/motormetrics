@@ -34,7 +34,7 @@ export function DataSection() {
         title="One source, checked at every release"
       />
       <div className="flex min-w-0 flex-col gap-4 lg:col-span-3">
-        <Typography.Paragraph className="max-w-2xl text-muted-strong leading-relaxed md:text-lg">
+        <Typography.Paragraph className="max-w-2xl text-foreground leading-relaxed md:text-lg">
           Every figure on this site comes from Singapore&apos;s Land Transport
           Authority via{" "}
           <Link
@@ -57,7 +57,7 @@ export function DataSection() {
               <span className="font-bold text-accent text-xl">{heading}</span>
               <span className="font-semibold text-sm">{label}</span>
               <Typography.Paragraph
-                className="text-muted-strong leading-normal"
+                className="text-foreground leading-normal"
                 size="sm"
               >
                 {detail}

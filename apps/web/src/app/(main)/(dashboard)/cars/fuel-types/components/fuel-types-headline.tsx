@@ -43,7 +43,7 @@ export function FuelTypesHeadline({
         <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
           {featured.share.toFixed(1)}%
         </span>
-        <span className="text-muted-strong tabular-nums">
+        <span className="text-foreground tabular-nums">
           <DeltaChip
             className="font-semibold text-foreground"
             unit="pp"

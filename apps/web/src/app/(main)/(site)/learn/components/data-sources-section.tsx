@@ -74,7 +74,7 @@ export function DataSourcesSection() {
           >
             <span className="font-semibold text-muted text-xs">{title}</span>
             <Typography.Paragraph
-              className="text-muted-strong leading-relaxed"
+              className="text-foreground leading-relaxed"
               size="sm"
             >
               {detail}

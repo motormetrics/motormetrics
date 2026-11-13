@@ -105,7 +105,7 @@ async function Article({ slug, content }: { slug: string; content: string }) {
   cacheTag(`posts:slug:${slug}`);
 
   return (
-    <div className="prose dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-link prose-headings:text-foreground prose-li:text-muted-strong prose-p:text-muted-strong prose-strong:text-foreground prose-td:text-muted-strong prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
+    <div className="prose dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-link prose-headings:text-foreground prose-li:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-td:text-foreground prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
       <MDXRemote
         source={content}
         components={mdxComponents}

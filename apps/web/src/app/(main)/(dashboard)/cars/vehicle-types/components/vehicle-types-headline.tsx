@@ -48,7 +48,7 @@ export function VehicleTypesHeadline({
         <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
           {featured.share.toFixed(1)}%
         </span>
-        <span className="text-muted-strong tabular-nums">
+        <span className="text-foreground tabular-nums">
           <DeltaChip
             className="font-semibold text-foreground"
             unit="pp"
@@ -112,7 +112,7 @@ export function VehicleTypesHeadline({
             </li>
           ))}
         </ul>
-        <span className="text-subtle text-xs">
+        <span className="text-muted text-xs">
           Share of {formatCount(total)} new cars, {periodSpan}.
         </span>
       </div>

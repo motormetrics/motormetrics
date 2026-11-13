@@ -266,12 +266,12 @@ export async function FuelTypesReport({
 
         <section className="flex min-w-0 flex-col gap-4 lg:col-span-3">
           <SectionHead eyebrow="Method" title="How LTA classifies fuel types" />
-          <Typography.Paragraph className="text-muted-strong" size="sm">
+          <Typography.Paragraph className="text-foreground" size="sm">
             LTA records the fuel type at registration, and reports plug-in
             hybrids separately from the hybrids that only charge themselves.
             Only battery-electric cars count as Electric.
           </Typography.Paragraph>
-          <Typography.Paragraph className="text-muted-strong" size="sm">
+          <Typography.Paragraph className="text-foreground" size="sm">
             Figures here are new registrations, not the fleet on the road. The
             population mix shifts far more slowly.
           </Typography.Paragraph>

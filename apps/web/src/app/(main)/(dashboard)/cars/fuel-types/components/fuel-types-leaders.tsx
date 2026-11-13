@@ -26,7 +26,7 @@ export function FuelTypesLeaders({
             <span className="w-44 shrink-0 font-semibold text-sm max-md:w-auto max-md:flex-1">
               {name}
             </span>
-            <span className="min-w-0 flex-1 text-muted-strong text-sm max-md:order-last max-md:basis-full">
+            <span className="min-w-0 flex-1 text-foreground text-sm max-md:order-last max-md:basis-full">
               {makes.map(({ make }) => make).join(", ") || "—"}
             </span>
             {makes[0] ? (

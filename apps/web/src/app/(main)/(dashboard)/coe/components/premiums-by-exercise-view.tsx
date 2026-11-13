@@ -128,7 +128,7 @@ export function PremiumsByExerciseView({
               value={formatChange(stats.change)}
             />
           </div>
-          <div className="flex gap-4 text-muted-strong text-xs">
+          <div className="flex gap-4 text-foreground text-xs">
             {[
               { color: "var(--chart-1)", name: category },
               ...(paired ? [{ color: "var(--chart-2)", name: paired }] : []),

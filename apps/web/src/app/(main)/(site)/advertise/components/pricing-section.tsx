@@ -88,7 +88,7 @@ export function PricingSection() {
               <span className="text-muted text-sm">per month</span>
             </div>
             <Typography.Paragraph
-              className="text-muted-strong leading-normal"
+              className="text-foreground leading-normal"
               size="sm"
             >
               {note}
@@ -96,7 +96,7 @@ export function PricingSection() {
             <div className="flex flex-col">
               {features.map((feature) => (
                 <div
-                  className="flex items-start gap-2.5 border-separator border-t py-2 text-muted-strong text-sm leading-normal"
+                  className="flex items-start gap-2.5 border-separator border-t py-2 text-foreground text-sm leading-normal"
                   key={feature}
                 >
                   <Check

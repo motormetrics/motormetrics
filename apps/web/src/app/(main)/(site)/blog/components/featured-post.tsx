@@ -53,7 +53,7 @@ export function FeaturedPost({ post }: { post: SelectPost }) {
           {post.title}
         </Typography.Heading>
         {post.excerpt ? (
-          <Typography.Paragraph className="max-w-2xl text-muted-strong">
+          <Typography.Paragraph className="max-w-2xl text-foreground">
             {post.excerpt}
           </Typography.Paragraph>
         ) : null}

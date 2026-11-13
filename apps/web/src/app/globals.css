@@ -38,20 +38,10 @@
   :root,
   .glass-light,
   [data-theme="glass-light"] {
-    --muted-strong: #3d474b; /* label text */
-    --subtle: #5f6b71; /* faintest meta labels */
     /* Glass ships chart-1..5. These extend it for charts that need a sixth
        series and the warm petrol series. */
     --chart-6: #dce7ec;
     --chart-sand: #c9b88f;
-  }
-
-  /* Authored so the palette is correct and testable by setting the class by
-     hand. No theme provider or toggle ships yet, so glass-light is what renders. */
-  .glass-dark,
-  [data-theme="glass-dark"] {
-    --muted-strong: #b7c1c5;
-    --subtle: #939da1;
   }
 }
 
@@ -61,9 +51,6 @@
    themes/shared/theme.css. */
 @theme inline {
   --font-sans: var(--font-inter);
-
-  --color-muted-strong: var(--muted-strong);
-  --color-subtle: var(--subtle);
 
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);

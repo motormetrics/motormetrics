@@ -93,11 +93,11 @@ export async function PremiumsReport({
             eyebrow="Reading the numbers"
             title="How premiums are set"
           />
-          <Typography.Paragraph className="text-muted-strong">
+          <Typography.Paragraph className="text-foreground">
             A premium is the price of the last successful bid in an exercise, so
             it is set by demand rather than announced in advance.
           </Typography.Paragraph>
-          <Typography.Paragraph className="text-muted-strong">
+          <Typography.Paragraph className="text-foreground">
             Renewing an existing COE uses the PQP instead: the three-month
             moving average of premiums in that category.
           </Typography.Paragraph>

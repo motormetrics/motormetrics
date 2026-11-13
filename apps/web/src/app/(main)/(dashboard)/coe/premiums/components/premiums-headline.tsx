@@ -48,7 +48,7 @@ export function PremiumsHeadline({
     <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
       <div className="flex min-w-0 flex-col gap-3">
         <CategoryTabs selected={categoryKey} />
-        <Typography.Paragraph className="text-muted-strong">
+        <Typography.Paragraph className="text-foreground">
           <span className="font-semibold text-accent">{category}</span>
           {` · ${CATEGORY_DESCRIPTIONS[category]}`}
         </Typography.Paragraph>

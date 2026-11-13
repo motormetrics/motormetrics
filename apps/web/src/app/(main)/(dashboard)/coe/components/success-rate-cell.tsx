@@ -16,7 +16,7 @@ export function SuccessRateCell({ rate }: { rate: number }) {
       <Meter.Track className="flex-1">
         <Meter.Fill />
       </Meter.Track>
-      <Meter.Output className="w-10 text-right font-bold text-muted-strong text-sm tabular-nums" />
+      <Meter.Output className="w-10 text-right font-bold text-foreground text-sm tabular-nums" />
     </Meter>
   );
 }

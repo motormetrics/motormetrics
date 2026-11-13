@@ -124,7 +124,7 @@ export function PQPRatesTable({
               <span
                 className={cn(
                   SECONDARY_CELL,
-                  "text-muted-strong text-sm tabular-nums",
+                  "text-foreground text-sm tabular-nums",
                 )}
               >
                 {formatCurrency(row.tenYear / 2)}
@@ -132,7 +132,7 @@ export function PQPRatesTable({
               <span
                 className={cn(
                   SECONDARY_CELL,
-                  "text-muted-strong text-sm tabular-nums",
+                  "text-foreground text-sm tabular-nums",
                 )}
               >
                 {formatCurrency(row.latestPremium)}

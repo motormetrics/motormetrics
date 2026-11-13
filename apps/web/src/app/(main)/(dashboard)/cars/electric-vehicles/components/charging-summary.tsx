@@ -70,7 +70,7 @@ export async function ChargingSummary() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <div className="flex items-baseline justify-between gap-3 text-muted-strong text-sm">
+        <div className="flex items-baseline justify-between gap-3 text-foreground text-sm">
           <span>
             Progress to the national target of{" "}
             <NumberValue

@@ -97,7 +97,7 @@ export function MonthTable({
               >
                 {formatMonthShortLabel(row.month)}
               </span>
-              <span className={cn(TOTAL_CELL, "text-muted-strong text-sm")}>
+              <span className={cn(TOTAL_CELL, "text-foreground text-sm")}>
                 {row.total.toLocaleString("en-SG")}
               </span>
               {row.cells.map(({ count, share }, index) => (
@@ -112,7 +112,7 @@ export function MonthTable({
                   <span className="font-semibold text-sm">
                     {share.toFixed(1)}%
                   </span>
-                  <span className="text-subtle text-xs max-xl:hidden">
+                  <span className="text-muted text-xs max-xl:hidden">
                     {count.toLocaleString("en-SG")}
                   </span>
                 </span>

@@ -48,7 +48,7 @@ export function PlacementsSection() {
               <span className="font-semibold">{title}</span>
             </div>
             <Typography.Paragraph
-              className="min-w-0 flex-1 text-muted-strong leading-normal"
+              className="min-w-0 flex-1 text-foreground leading-normal"
               size="sm"
             >
               {description}

@@ -270,7 +270,7 @@ export function RenewalResults({
             </BarChart>
             <ul
               aria-label="Legend"
-              className="flex flex-wrap gap-4 text-muted-strong text-sm"
+              className="flex flex-wrap gap-4 text-foreground text-sm"
             >
               {PARTS.map(({ key, label, swatch }) => (
                 <li className="inline-flex items-center gap-1.5" key={key}>
@@ -334,7 +334,7 @@ export function RenewalResults({
                 : `PARF rebate, ${Math.round(rebate.rate * 100)}% of ARF${rebate.capped ? `, capped at ${formatCurrency(rebate.cap)}` : ""}`}
             </span>
           </div>
-          <span className="text-muted-strong text-sm">By {expiryLabel}</span>
+          <span className="text-foreground text-sm">By {expiryLabel}</span>
           <SectionLink className="ml-0" href="/cars/arf">
             Compare a new car
           </SectionLink>
@@ -348,7 +348,7 @@ export function RenewalResults({
         <span className="font-semibold text-sm">
           These are renewal costs only.
         </span>
-        <ul className="flex list-disc flex-col gap-1 pl-5 text-muted-strong text-sm">
+        <ul className="flex list-disc flex-col gap-1 pl-5 text-foreground text-sm">
           <li>
             Road tax follows LTA's formula for your fuel type, with the 10% to
             50% surcharge for cars over 10 years old applied to road tax only.

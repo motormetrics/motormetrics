@@ -48,7 +48,7 @@ export function ElectricFleet({
           />
         </span>
         {population > 0 ? (
-          <span className="text-muted-strong text-sm tabular-nums">
+          <span className="text-foreground text-sm tabular-nums">
             {((electric / population) * 100).toFixed(1)}% of {name}
           </span>
         ) : null}

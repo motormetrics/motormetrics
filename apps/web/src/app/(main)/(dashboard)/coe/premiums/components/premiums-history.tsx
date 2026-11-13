@@ -112,7 +112,7 @@ export function PremiumsHistory({
                 <span
                   className={cn(
                     HISTORY_FIGURE,
-                    "text-muted-strong text-sm tabular-nums",
+                    "text-foreground text-sm tabular-nums",
                   )}
                 >
                   {exercise.quota.toLocaleString("en-SG")}
@@ -120,7 +120,7 @@ export function PremiumsHistory({
                 <span
                   className={cn(
                     HISTORY_FIGURE,
-                    "text-muted-strong text-sm tabular-nums",
+                    "text-foreground text-sm tabular-nums",
                   )}
                 >
                   {exercise.bidsReceived.toLocaleString("en-SG")}

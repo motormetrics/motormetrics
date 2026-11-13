@@ -95,7 +95,7 @@ export function DatasetsSection() {
                 {title} →
               </span>
               <Typography.Paragraph
-                className="text-muted-strong leading-normal"
+                className="text-foreground leading-normal"
                 size="sm"
               >
                 {description}

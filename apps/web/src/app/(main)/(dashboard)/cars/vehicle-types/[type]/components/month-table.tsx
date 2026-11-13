@@ -83,17 +83,14 @@ export function MonthTable({
                 {count.toLocaleString("en-SG")}
               </span>
               <span
-                className={cn(
-                  CELL.all,
-                  "text-muted-strong text-sm tabular-nums",
-                )}
+                className={cn(CELL.all, "text-foreground text-sm tabular-nums")}
               >
                 {total.toLocaleString("en-SG")}
               </span>
               <span
                 className={cn(
                   CELL.share,
-                  "text-muted-strong text-sm tabular-nums",
+                  "text-foreground text-sm tabular-nums",
                 )}
               >
                 {share.toFixed(1)}%

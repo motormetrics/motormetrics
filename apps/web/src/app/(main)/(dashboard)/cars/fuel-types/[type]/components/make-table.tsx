@@ -146,7 +146,7 @@ export function MakeTable({
                   }}
                 />
               </span>
-              <span className="w-12 shrink-0 text-right text-muted-strong text-sm tabular-nums">
+              <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
                 {((row.count / (total || 1)) * 100).toFixed(1)}%
               </span>
             </span>

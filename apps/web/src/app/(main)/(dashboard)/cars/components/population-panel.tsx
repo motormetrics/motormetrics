@@ -61,7 +61,7 @@ export async function PopulationPanel() {
       <Headline
         delta={
           changeRatio !== null && previous ? (
-            <span className="text-muted-strong tabular-nums">
+            <span className="text-foreground tabular-nums">
               {changeRatio < 0 ? "−" : "+"}
               <NumberValue
                 maximumFractionDigits={1}

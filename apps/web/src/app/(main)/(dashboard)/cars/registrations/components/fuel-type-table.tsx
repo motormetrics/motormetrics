@@ -124,15 +124,12 @@ export function FuelTypeTable({
                   <ProgressBar.Fill />
                 </ProgressBar.Track>
               </ProgressBar>
-              <span className="w-12 shrink-0 text-right text-muted-strong text-sm tabular-nums">
+              <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
                 {row.share.toFixed(1)}%
               </span>
             </span>
             <span
-              className={cn(
-                YEAR_CELL,
-                "text-muted-strong text-sm tabular-nums",
-              )}
+              className={cn(YEAR_CELL, "text-foreground text-sm tabular-nums")}
             >
               {formatCount(row.yearToDate)}
             </span>

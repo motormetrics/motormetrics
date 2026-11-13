@@ -125,7 +125,7 @@ export function PremiumsCategoryTable({
             <span
               className={cn(
                 FIGURE_CELL,
-                "text-muted-strong text-sm tabular-nums",
+                "text-foreground text-sm tabular-nums",
               )}
             >
               {row.quota.toLocaleString("en-SG")}
@@ -133,7 +133,7 @@ export function PremiumsCategoryTable({
             <span
               className={cn(
                 FIGURE_CELL,
-                "text-muted-strong text-sm tabular-nums",
+                "text-foreground text-sm tabular-nums",
               )}
             >
               {row.bidsReceived.toLocaleString("en-SG")}
@@ -141,7 +141,7 @@ export function PremiumsCategoryTable({
             <span
               className={cn(
                 FIGURE_CELL,
-                "w-24 text-muted-strong text-sm tabular-nums",
+                "w-24 text-foreground text-sm tabular-nums",
               )}
             >
               {bidsPerQuota(row)}

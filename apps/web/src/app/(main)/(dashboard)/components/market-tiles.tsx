@@ -162,7 +162,7 @@ export async function MarketTiles() {
               size="sm"
               value={(leader.value / yearTotal) * 100}
             >
-              <span className="col-span-full text-muted-strong text-xs tabular-nums">
+              <span className="col-span-full text-foreground text-xs tabular-nums">
                 {percent(leader.value, yearTotal)} of new cars
               </span>
               <ProgressBar.Track className="col-span-full">
@@ -185,7 +185,7 @@ export async function MarketTiles() {
               .join(", ")}
           >
             <div className="flex flex-col gap-1.5">
-              <span className="text-muted-strong text-xs tabular-nums">
+              <span className="text-foreground text-xs tabular-nums">
                 {percent(largestPowertrain.value, yearTotal)} of new cars
               </span>
               <div
@@ -273,7 +273,7 @@ export async function MarketTiles() {
               size="sm"
               value={(evLeader.count / evTotal) * 100}
             >
-              <span className="col-span-full text-muted-strong text-xs tabular-nums">
+              <span className="col-span-full text-foreground text-xs tabular-nums">
                 {percent(evLeader.count, evTotal)} of battery-electric cars
               </span>
               <ProgressBar.Track className="col-span-full">

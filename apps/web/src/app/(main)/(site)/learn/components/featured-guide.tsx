@@ -34,7 +34,7 @@ export function FeaturedGuide() {
         <Typography.Heading className="text-2xl leading-tight" level={2}>
           {guide.title}
         </Typography.Heading>
-        <Typography.Paragraph className="max-w-2xl text-muted-strong">
+        <Typography.Paragraph className="max-w-2xl text-foreground">
           {guide.excerpt}
         </Typography.Paragraph>
         <div className="flex flex-wrap items-center gap-3.5 pt-2">

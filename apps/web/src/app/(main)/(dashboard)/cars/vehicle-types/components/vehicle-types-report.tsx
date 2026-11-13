@@ -253,11 +253,11 @@ export async function VehicleTypesReport({
             eyebrow="Method"
             title="How LTA classifies vehicle types"
           />
-          <Typography.Paragraph className="text-muted-strong" size="sm">
+          <Typography.Paragraph className="text-foreground" size="sm">
             LTA records the vehicle type at registration, so every car counts
             once, under the class on its registration record.
           </Typography.Paragraph>
-          <Typography.Paragraph className="text-muted-strong" size="sm">
+          <Typography.Paragraph className="text-foreground" size="sm">
             Vehicle type does not determine COE category. Engine capacity and
             power output do.
           </Typography.Paragraph>

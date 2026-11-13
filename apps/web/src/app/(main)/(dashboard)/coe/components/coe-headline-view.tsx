@@ -55,7 +55,7 @@ function PremiumBlocks({
 
         return (
           <div className="flex min-w-0 flex-col gap-3" key={shownCategory}>
-            <Typography.Paragraph className="text-muted-strong">
+            <Typography.Paragraph className="text-foreground">
               <span
                 className={cn(
                   "font-semibold",

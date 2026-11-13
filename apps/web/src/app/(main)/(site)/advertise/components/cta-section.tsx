@@ -41,7 +41,7 @@ export function CtaSection() {
           eyebrow="What we will not run"
           title="Rules that protect the data"
         />
-        <Typography.Paragraph className="max-w-xl text-muted-strong leading-relaxed">
+        <Typography.Paragraph className="max-w-xl text-foreground leading-relaxed">
           Advertising sits around the charts, never inside them. We decline
           anything that could be mistaken for a figure we publish.
         </Typography.Paragraph>
@@ -54,7 +54,7 @@ export function CtaSection() {
               <span className="w-8 shrink-0 font-semibold text-accent tabular-nums">
                 {number}
               </span>
-              <Typography.Paragraph className="text-muted-strong leading-normal">
+              <Typography.Paragraph className="text-foreground leading-normal">
                 {note}
               </Typography.Paragraph>
             </div>
@@ -68,7 +68,7 @@ export function CtaSection() {
           Book a placement
         </Typography.Heading>
         <Typography.Paragraph
-          className="text-muted-strong leading-normal"
+          className="text-foreground leading-normal"
           size="sm"
         >
           Tell us the pages and the months you have in mind. We reply with

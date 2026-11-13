@@ -83,7 +83,7 @@ export function TableOfContents() {
                   "block border-l-2 py-1.5 pl-2.5 text-sm no-underline transition-colors",
                   active
                     ? "border-l-accent font-semibold text-foreground"
-                    : "border-transparent text-muted-strong hover:border-l-chart-5 hover:text-accent",
+                    : "border-transparent text-foreground hover:border-l-chart-5 hover:text-accent",
                 )}
                 href={`#${heading.id}`}
                 onClick={(event) => {

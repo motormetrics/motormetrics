@@ -55,7 +55,7 @@ export function GuideHead({ guide }: { guide: Guide }) {
         {guide.title}
       </Typography.Heading>
 
-      <Typography.Paragraph className="max-w-2xl text-muted-strong">
+      <Typography.Paragraph className="max-w-2xl text-foreground">
         {guide.excerpt}
       </Typography.Paragraph>
 

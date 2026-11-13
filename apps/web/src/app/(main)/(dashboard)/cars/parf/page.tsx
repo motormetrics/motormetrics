@@ -165,11 +165,11 @@ export default function PARFCalculatorPage() {
                 key={label}
               >
                 <dt className="w-40 shrink-0 font-semibold text-sm">{label}</dt>
-                <dd className="text-muted-strong text-sm">{note}</dd>
+                <dd className="text-foreground text-sm">{note}</dd>
               </div>
             ))}
           </dl>
-          <Typography.Paragraph className="text-muted-strong">
+          <Typography.Paragraph className="text-foreground">
             Your deregistration value is the PARF rebate plus a COE rebate for
             the months left on the COE.{" "}
             <Link
@@ -191,7 +191,7 @@ export default function PARFCalculatorPage() {
             eyebrow="Before you rely on it"
             title="What the figures assume"
           />
-          <Typography.Paragraph className="text-muted-strong">
+          <Typography.Paragraph className="text-foreground">
             Figures are for illustration only. The PARF rebate is subject to the
             vehicle&apos;s actual ARF paid and its age at deregistration. The
             new rates apply to vehicles registered with COEs obtained from the

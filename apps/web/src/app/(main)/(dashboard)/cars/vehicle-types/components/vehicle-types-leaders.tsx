@@ -32,7 +32,7 @@ export function VehicleTypesLeaders({
                 {makes.map(({ make }) => make).join(", ") || "—"}
               </span>
               {makes[0] ? (
-                <span className="text-subtle text-xs tabular-nums">
+                <span className="text-muted text-xs tabular-nums">
                   {makes[0].make}{" "}
                   {percentageOf(makes[0].count, typeTotal).toFixed(1)}% of{" "}
                   {formatVehicleType(name)}

@@ -117,7 +117,7 @@ function MobileMenuLink({
   return (
     <Navbar.MenuItem
       aria-label={ariaLabel}
-      className="flex min-w-0 items-center gap-2 rounded-sm px-3.5 py-2.75 font-medium text-base text-muted-strong data-[current=true]:bg-accent-soft data-[current=true]:font-semibold data-[current=true]:text-accent"
+      className="flex min-w-0 items-center gap-2 rounded-sm px-3.5 py-2.75 font-medium text-base text-foreground data-[current=true]:bg-accent-soft data-[current=true]:font-semibold data-[current=true]:text-accent"
       href={href}
       isCurrent={isCurrent}
     >
