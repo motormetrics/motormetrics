@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Alert,
   Button,
   Card,
   Chip,
@@ -12,7 +13,7 @@ import {
 } from "@heroui/react";
 import { updateMaintenanceConfig } from "@web/app/admin/actions/maintenance";
 import type { MaintenanceConfig } from "@web/lib/maintenance";
-import { AlertCircle, Globe, Save, Wrench } from "lucide-react";
+import { Globe, Save, Wrench } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -88,11 +89,7 @@ export function MaintenanceForm({ initialConfig }: MaintenanceFormProps) {
               <Chip
                 variant="secondary"
                 color={isMaintenanceEnabled ? "warning" : "success"}
-                className={
-                  isMaintenanceEnabled
-                    ? "mt-2 bg-orange-50 text-orange-700"
-                    : "mt-2 bg-green-50 text-green-700"
-                }
+                className="mt-2"
               >
                 {isMaintenanceEnabled
                   ? "Maintenance Mode"
@@ -101,11 +98,13 @@ export function MaintenanceForm({ initialConfig }: MaintenanceFormProps) {
             </div>
           </div>
           {isMaintenanceEnabled && maintenanceMessage && (
-            <div className="mt-4 rounded-md border border-orange-200 bg-orange-50 p-3">
-              <p className="text-orange-800 text-sm">
-                <strong>Active Message:</strong> {maintenanceMessage}
-              </p>
-            </div>
+            <Alert className="mt-4" status="warning">
+              <Alert.Indicator />
+              <Alert.Content>
+                <Alert.Title>Active Message</Alert.Title>
+                <Alert.Description>{maintenanceMessage}</Alert.Description>
+              </Alert.Content>
+            </Alert>
           )}
         </Card.Content>
       </Card>
@@ -179,25 +178,31 @@ export function MaintenanceForm({ initialConfig }: MaintenanceFormProps) {
               {maintenanceMessage.trim() && (
                 <div className="flex flex-col gap-2">
                   <Label>Preview</Label>
-                  <div className="rounded-md border border-orange-200 bg-orange-50 p-4 text-center">
-                    <div className="flex items-center justify-center gap-2 text-orange-800">
+                  <Alert status="warning">
+                    <Alert.Indicator>
                       <Wrench className="size-5" />
-                      <strong>Site Under Maintenance</strong>
-                    </div>
-                    <p className="mt-2 text-orange-700">{maintenanceMessage}</p>
-                  </div>
+                    </Alert.Indicator>
+                    <Alert.Content>
+                      <Alert.Title>Site Under Maintenance</Alert.Title>
+                      <Alert.Description>
+                        {maintenanceMessage}
+                      </Alert.Description>
+                    </Alert.Content>
+                  </Alert>
                 </div>
               )}
 
               {/* Validation Warnings */}
               {isMaintenanceEnabled && !maintenanceMessage.trim() && (
-                <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-red-800">
-                  <AlertCircle className="size-4" />
-                  <span className="text-sm">
-                    Maintenance message is required when maintenance mode is
-                    enabled.
-                  </span>
-                </div>
+                <Alert status="danger">
+                  <Alert.Indicator />
+                  <Alert.Content>
+                    <Alert.Title>
+                      Maintenance message is required when maintenance mode is
+                      enabled.
+                    </Alert.Title>
+                  </Alert.Content>
+                </Alert>
               )}
             </>
           )}

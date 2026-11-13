@@ -45,7 +45,9 @@ const SettingsPage = () => {
               <div className="flex flex-col gap-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted">Status:</span>
-                  <span className="text-green-600">Normal Operation</span>
+                  <Chip color="success" variant="secondary">
+                    Normal Operation
+                  </Chip>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Last Maintenance:</span>
@@ -97,7 +99,9 @@ const SettingsPage = () => {
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted">Connection:</span>
-                <span className="text-green-600">Active</span>
+                <Chip color="success" variant="secondary">
+                  Active
+                </Chip>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">Last Backup:</span>
@@ -123,7 +127,9 @@ const SettingsPage = () => {
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted">2FA Required:</span>
-                <span className="text-green-600">Enabled</span>
+                <Chip color="success" variant="secondary">
+                  Enabled
+                </Chip>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">API Rate Limit:</span>
@@ -173,7 +179,9 @@ const SettingsPage = () => {
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted">Email Alerts:</span>
-                <span className="text-green-600">Enabled</span>
+                <Chip color="success" variant="secondary">
+                  Enabled
+                </Chip>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">Webhooks:</span>
@@ -189,7 +197,7 @@ const SettingsPage = () => {
       <Card>
         <Card.Header>
           <Card.Title className="flex items-center gap-2">
-            <AlertTriangle className="size-5 text-amber-500" />
+            <AlertTriangle className="size-5 text-warning" />
             Important Notes
           </Card.Title>
         </Card.Header>

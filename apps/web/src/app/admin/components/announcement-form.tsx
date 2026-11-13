@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Alert,
   Button,
   Card,
   Chip,
@@ -9,7 +10,7 @@ import {
   Separator,
   TextField,
 } from "@heroui/react";
-import { AlertCircle, Eye, EyeOff, Save } from "lucide-react";
+import { Eye, EyeOff, Save } from "lucide-react";
 import { useState } from "react";
 
 export function AnnouncementForm() {
@@ -134,13 +135,15 @@ export function AnnouncementForm() {
 
           {/* Warning */}
           {isEnabled && !announcementText.trim() && (
-            <div className="flex items-center gap-2 rounded-md border border-orange-200 bg-orange-50 p-3 text-orange-800">
-              <AlertCircle className="size-4" />
-              <span className="text-sm">
-                Announcement is enabled but no text is provided. Please add
-                announcement text or disable it.
-              </span>
-            </div>
+            <Alert status="warning">
+              <Alert.Indicator />
+              <Alert.Content>
+                <Alert.Title>
+                  Announcement is enabled but no text is provided. Please add
+                  announcement text or disable it.
+                </Alert.Title>
+              </Alert.Content>
+            </Alert>
           )}
 
           {/* Save Button */}
