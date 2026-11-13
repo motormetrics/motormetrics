@@ -1,11 +1,7 @@
 name: Publish MCP
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "apps/mcp/**"
+  workflow_dispatch:
 
 env:
   HEROUI_AUTH_TOKEN: ${{ secrets.HEROUI_AUTH_TOKEN }}
