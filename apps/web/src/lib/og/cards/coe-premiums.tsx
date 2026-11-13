@@ -85,7 +85,7 @@ export function CoePremiums({
                     style={{
                       fontSize: 24,
                       fontWeight: 700,
-                      color: OG_COLOURS.subtle,
+                      color: OG_COLOURS.muted,
                     }}
                   >
                     {category.label}
@@ -113,7 +113,7 @@ export function CoePremiums({
               marginTop: 18,
               fontSize: 22,
               fontWeight: 600,
-              color: OG_COLOURS.subtle,
+              color: OG_COLOURS.muted,
             }}
           >
             vs previous exercise
@@ -173,12 +173,12 @@ export function CoePremiums({
             }}
           >
             <span
-              style={{ fontSize: 21, fontWeight: 600, color: OG_COLOURS.faint }}
+              style={{ fontSize: 21, fontWeight: 600, color: OG_COLOURS.muted }}
             >
               {fromLabel}
             </span>
             <span
-              style={{ fontSize: 21, fontWeight: 600, color: OG_COLOURS.faint }}
+              style={{ fontSize: 21, fontWeight: 600, color: OG_COLOURS.muted }}
             >
               {monthLabel}
             </span>

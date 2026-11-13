@@ -24,7 +24,7 @@ export function StatTile({
       style={{
         fontSize: labelFirst ? 21 : 19,
         fontWeight: labelFirst ? 700 : 600,
-        color: OG_COLOURS.subtle,
+        color: OG_COLOURS.muted,
       }}
     >
       {label}

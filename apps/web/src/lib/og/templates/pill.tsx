@@ -15,7 +15,7 @@ export function Pill({ children, tone = "soft" }: PillProps) {
       style={{
         alignSelf: "flex-start",
         backgroundColor: solid ? OG_COLOURS.accent : OG_COLOURS.accentSoft,
-        color: solid ? OG_COLOURS.surface : OG_COLOURS.accentDeep,
+        color: solid ? OG_COLOURS.surface : OG_COLOURS.ink,
         borderRadius: 999,
         padding: "11px 24px",
         fontSize: 24,

@@ -104,7 +104,7 @@ export function Make({
                 style={{
                   fontSize: 24,
                   fontWeight: 600,
-                  color: OG_COLOURS.subtle,
+                  color: OG_COLOURS.muted,
                 }}
               >
                 cars registered
@@ -125,7 +125,7 @@ export function Make({
                 style={{
                   fontSize: 24,
                   fontWeight: 600,
-                  color: OG_COLOURS.subtle,
+                  color: OG_COLOURS.muted,
                 }}
               >
                 of the month

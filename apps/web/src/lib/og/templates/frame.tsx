@@ -11,7 +11,7 @@ interface FrameProps {
 }
 
 /**
- * Cream full-bleed card with the shared MotorMetrics footer.
+ * Grey full-bleed card with the shared MotorMetrics footer.
  *
  * Every share card in the design comp ends with the same row: accent circle
  * with a trending-up mark, the wordmark, and a right-aligned label.
@@ -91,7 +91,7 @@ export function Frame({
             marginLeft: "auto",
             fontSize: 23,
             fontWeight: 600,
-            color: OG_COLOURS.subtle,
+            color: OG_COLOURS.muted,
           }}
         >
           {footerLabel}

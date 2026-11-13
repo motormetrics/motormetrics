@@ -116,7 +116,7 @@ export function FuelMix({
                 marginTop: 4,
                 fontSize: 20,
                 fontWeight: 700,
-                color: OG_COLOURS.subtle,
+                color: OG_COLOURS.muted,
               }}
             >
               electric
@@ -170,7 +170,7 @@ export function FuelMix({
                   style={{
                     fontSize: 25,
                     fontWeight: 600,
-                    color: OG_COLOURS.label,
+                    color: OG_COLOURS.ink,
                   }}
                 >
                   {slice.label}

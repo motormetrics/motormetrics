@@ -77,7 +77,7 @@ export function Registrations({
               style={{
                 fontSize: 24,
                 fontWeight: 600,
-                color: OG_COLOURS.subtle,
+                color: OG_COLOURS.muted,
               }}
             >
               {`vs ${previousMonthLabel}`}
@@ -136,7 +136,7 @@ export function Registrations({
                   style={{
                     fontSize: 20,
                     fontWeight: 600,
-                    color: OG_COLOURS.faint,
+                    color: OG_COLOURS.muted,
                   }}
                 >
                   {column.label}

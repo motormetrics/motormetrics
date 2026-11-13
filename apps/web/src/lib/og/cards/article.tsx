@@ -41,7 +41,7 @@ export function Article({ height, tag, byline, title, excerpt }: ArticleProps) {
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <Pill tone="solid">{tag}</Pill>
           <span
-            style={{ fontSize: 24, fontWeight: 600, color: OG_COLOURS.subtle }}
+            style={{ fontSize: 24, fontWeight: 600, color: OG_COLOURS.muted }}
           >
             {byline}
           </span>

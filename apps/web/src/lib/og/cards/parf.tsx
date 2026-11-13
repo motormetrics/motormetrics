@@ -48,7 +48,7 @@ export function Parf({ height }: ParfProps) {
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <span
-            style={{ fontSize: 20, fontWeight: 600, color: OG_COLOURS.subtle }}
+            style={{ fontSize: 20, fontWeight: 600, color: OG_COLOURS.muted }}
           >
             OMV
           </span>
@@ -65,7 +65,7 @@ export function Parf({ height }: ParfProps) {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <span
-            style={{ fontSize: 20, fontWeight: 600, color: OG_COLOURS.subtle }}
+            style={{ fontSize: 20, fontWeight: 600, color: OG_COLOURS.muted }}
           >
             Age at dereg
           </span>
@@ -87,7 +87,7 @@ export function Parf({ height }: ParfProps) {
           height="38"
           viewBox="0 0 24 24"
           fill="none"
-          stroke={OG_COLOURS.faint}
+          stroke={OG_COLOURS.muted}
           strokeWidth="2.25"
           strokeLinecap="round"
           strokeLinejoin="round"
