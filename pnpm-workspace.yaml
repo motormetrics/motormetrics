@@ -21,8 +21,8 @@ allowBuilds:
 catalog:
   "@ai-sdk/gateway": 4.0.46
   "@better-auth/drizzle-adapter": 1.7.2
-  "@heroui/react": 3.2.4
-  "@heroui/styles": 3.2.4
+  "@heroui/react": 3.2.7
+  "@heroui/styles": 3.2.7
   "@tailwindcss/postcss": 4.3.0
   "@types/node": 24.13.2
   "@types/react": 19.3.0
