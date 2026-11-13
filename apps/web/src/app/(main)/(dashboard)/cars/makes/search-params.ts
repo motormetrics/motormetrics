@@ -1,6 +1,7 @@
 import {
   createLoader,
   createSerializer,
+  parseAsString,
   parseAsStringLiteral,
 } from "nuqs/server";
 
@@ -19,10 +20,9 @@ export const RANGE_LABELS: Record<Range, string> = {
 };
 
 /**
- * The powertrain tabs above the table. `Hybrid` is not a `cars.fuelType` value
- * but the family `HYBRID_REGEX` describes; `make-rows` resolves it into the
- * breakdown queries it needs. Kept here, away from the queries, so the client
- * tabs can import it without dragging the cached loaders into the browser.
+ * Powertrains `make-rows` can narrow its rows to. `Hybrid` is not a
+ * `cars.fuelType` value but the family `HYBRID_REGEX` describes; `make-rows`
+ * resolves it into the breakdown queries it needs.
  */
 export const FUEL_FILTERS = ["Petrol", "Hybrid", "Electric"] as const;
 export type FuelFilter = (typeof FUEL_FILTERS)[number];
@@ -31,73 +31,15 @@ export function isRange(value: string): value is Range {
   return RANGES.includes(value as Range);
 }
 
-/** Columns the "All makes" table can be sorted by. */
-const SORT_KEYS = ["count", "make", "yoyChange"] as const;
-export type SortKey = (typeof SORT_KEYS)[number];
-
-const SORT_DIRECTIONS = ["asc", "desc"] as const;
-export type SortDirection = (typeof SORT_DIRECTIONS)[number];
-
-/**
- * The table sort, shared by the server loader and the client table so both
- * read `?sort=…&dir=…` the same way. The defaults are the table's natural
- * order, and nuqs clears a default from the URL, so the default view stays
- * clean.
- */
-export const sortSearchParams = {
-  sort: parseAsStringLiteral(SORT_KEYS).withDefault("count"),
-  dir: parseAsStringLiteral(SORT_DIRECTIONS).withDefault("desc"),
-};
-
-/** The fields the table sort reads, so the server and the client sort alike. */
-interface SortableMakeRow {
-  count: number;
-  make: string;
-  yoyChange: number | null;
-}
-
-function compareRows(
-  a: SortableMakeRow,
-  b: SortableMakeRow,
-  key: SortKey,
-): number {
-  if (key === "make") {
-    return a.make.localeCompare(b.make);
-  }
-  if (key === "yoyChange") {
-    // A make with no prior year to compare against sorts as the lowest value
-    // rather than pretending to be a 0% change.
-    const left = a.yoyChange ?? Number.NEGATIVE_INFINITY;
-    const right = b.yoyChange ?? Number.NEGATIVE_INFINITY;
-    if (left === right) {
-      return 0;
-    }
-    return left < right ? -1 : 1;
-  }
-  return a.count - b.count;
-}
-
-/**
- * Orders the table rows by `?sort=…&dir=…`. The server applies it to the rows
- * it hands over, so the first render is already in the URL's order, and the
- * client applies it again on every re-sort.
- */
-export function sortMakeRows<Row extends SortableMakeRow>(
-  rows: readonly Row[],
-  sort: SortKey,
-  dir: SortDirection,
-): Row[] {
-  return [...rows].sort((a, b) => {
-    const order = compareRows(a, b, sort);
-    return dir === "desc" ? -order : order;
-  });
-}
+/** The index's sort switch: most cars first, or A to Z. */
+export const SORTS = ["count", "make"] as const;
+export type Sort = (typeof SORTS)[number];
 
 export const makesSearchParams = {
-  /** Powertrain to narrow the page to. `null` is the "All" tab. */
-  fuel: parseAsStringLiteral(FUEL_FILTERS),
   range: parseAsStringLiteral(RANGES).withDefault("ytd"),
-  ...sortSearchParams,
+  sort: parseAsStringLiteral(SORTS).withDefault("count"),
+  /** The "Find a make" filter, applied in the browser as the reader types. */
+  q: parseAsString.withDefault(""),
 };
 
 export const loadSearchParams = createLoader(makesSearchParams);
@@ -105,7 +47,7 @@ export const loadSearchParams = createLoader(makesSearchParams);
 export type MakesSearchParams = Awaited<ReturnType<typeof loadSearchParams>>;
 
 /**
- * Builds the filter links on the server. Defaults drop out of the query
- * string, so "Year to date" with no fuel is plain /cars/makes.
+ * Builds the period and sort links on the server. Defaults drop out of the
+ * query string, so the default view is plain /cars/makes.
  */
 export const serialize = createSerializer(makesSearchParams);

@@ -1,32 +1,43 @@
 import { FilterTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/filter-tabs";
 import {
-  loadSearchParams,
-  RANGE_LABELS,
+  type MakesSearchParams,
   RANGES,
+  type Range,
   serialize,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
-import type { SearchParams } from "nuqs/server";
+import { formatMonthName } from "@web/utils/dates/format-month";
+
+/** Direction D's period labels: "October", "2026 to date", "12 months". */
+export function rangeTabLabel(range: Range, latestMonth: string): string {
+  if (range === "month") {
+    return formatMonthName(latestMonth);
+  }
+  if (range === "ytd") {
+    return `${latestMonth.slice(0, 4)} to date`;
+  }
+  return "12 months";
+}
 
 /**
- * The period switch in the page head. Each range is a link to the page with
- * `?range=` changed and every other filter kept, built on the server.
+ * The index's period switch. Each range is a link to the page with `?range=`
+ * changed and every other param kept, built on the server.
  */
-export async function RangeTabs({
-  searchParams,
+export function RangeTabs({
+  latestMonth,
+  params,
 }: {
-  searchParams: Promise<SearchParams>;
+  latestMonth: string;
+  params: MakesSearchParams;
 }) {
-  const params = await loadSearchParams(searchParams);
-
   return (
     <FilterTabs
-      aria-label="Registration period"
+      aria-label="Period"
       filter="range"
       selectedKey={params.range}
       tabs={RANGES.map((range) => ({
         href: serialize("/cars/makes", { ...params, range }),
         id: range,
-        label: RANGE_LABELS[range],
+        label: rangeTabLabel(range, latestMonth),
       }))}
     />
   );

@@ -11,7 +11,6 @@ import {
   MakesKeyNumbers,
   MakesLead,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-head";
-import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/range-tabs";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
@@ -111,10 +110,7 @@ export default function CarMakesPage({ searchParams }: PageProps) {
                 <MakesLead />
               </Suspense>
             </SectionErrorBoundary>
-            <div className="flex min-w-0 max-w-full flex-wrap items-center gap-3">
-              <Suspense fallback={<Skeleton className="h-8 w-72" />}>
-                <RangeTabs searchParams={searchParams} />
-              </Suspense>
+            <div>
               <SharePill title="Makes" />
             </div>
           </div>

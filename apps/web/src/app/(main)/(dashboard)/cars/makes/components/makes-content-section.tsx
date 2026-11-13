@@ -1,16 +1,8 @@
 import { Skeleton } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
-import { AllMakesCard } from "@web/app/(main)/(dashboard)/cars/makes/components/all-makes-card";
-import { ConcentrationCard } from "@web/app/(main)/(dashboard)/cars/makes/components/concentration-card";
-import { ElectricOnlyMakes } from "@web/app/(main)/(dashboard)/cars/makes/components/electric-only-makes";
-import { FastestGrowing } from "@web/app/(main)/(dashboard)/cars/makes/components/fastest-growing";
-import { LeadingMakeCard } from "@web/app/(main)/(dashboard)/cars/makes/components/leading-make-card";
+import { MakesIndex } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-index";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import {
-  Hairline,
-  OverviewGrid,
-  SectionHead,
-} from "@web/components/shared/overview";
+import { Hairline, SectionHead } from "@web/components/shared/overview";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import { generateItemListSchema } from "@web/lib/metadata";
@@ -39,9 +31,9 @@ async function MakesItemList() {
 }
 
 /**
- * Every make as a plain link. The table above shows its top ten until the
- * reader expands it, and that expansion happens in the browser, so without
- * this list most make pages have nothing linking to them in the HTML.
+ * Every make as a plain link. The index above only shows makes with
+ * registrations in the selected period, so this keeps a link in the HTML to
+ * the pages of makes no longer sold.
  */
 async function MakesDirectory() {
   const makes = await getDistinctMakes();
@@ -80,56 +72,11 @@ export function MakesContentSection({
         <MakesItemList />
       </Suspense>
 
-      {/* Each figure runs the full width of the page; the ids are the
-          targets of the "On this page" links in the page head. */}
-      <section className="scroll-mt-20" id="leading-make">
-        <SectionErrorBoundary title="Leading make unavailable">
-          <Suspense fallback={<Skeleton className="h-80 w-full" />}>
-            <LeadingMakeCard searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
-      </section>
-
-      <Hairline />
-
-      <section className="scroll-mt-20" id="concentration">
-        <SectionErrorBoundary title="Market concentration unavailable">
-          <Suspense fallback={<Skeleton className="h-60 w-full" />}>
-            <ConcentrationCard searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
-      </section>
-
-      <Hairline />
-
-      <section className="scroll-mt-20" id="all-makes">
-        <SectionErrorBoundary title="Makes table unavailable">
-          <Suspense fallback={<Skeleton className="h-[720px] w-full" />}>
-            <AllMakesCard searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
-      </section>
-
-      <Hairline />
-
-      <section className="flex scroll-mt-20 flex-col gap-6" id="movers">
-        <SectionHead
-          eyebrow="Figure 4 · Movers and electric vehicles"
-          title="Fastest growing, and electric-only makes"
-        />
-        <OverviewGrid>
-          <SectionErrorBoundary title="Movers unavailable">
-            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-              <FastestGrowing searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-          <SectionErrorBoundary title="Electric-only makes unavailable">
-            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-              <ElectricOnlyMakes />
-            </Suspense>
-          </SectionErrorBoundary>
-        </OverviewGrid>
-      </section>
+      <SectionErrorBoundary title="Makes index unavailable">
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+          <MakesIndex searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
 
       <Hairline />
 
