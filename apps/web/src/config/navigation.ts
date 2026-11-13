@@ -179,9 +179,17 @@ export type NavItem = {
   sections?: NavSection[];
 };
 
-/** Pills in the shell navigation, in comp order. */
+/**
+ * Pills in the shell navigation, in comp order. COE leads Cars: COE and PQP
+ * pages draw the most search traffic, so they come first.
+ */
 export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
   { href: "/", label: "Overview" },
+  {
+    href: "/coe",
+    label: "COE",
+    sections: [{ label: "COE data", items: navLinks.coe, withOverview: true }],
+  },
   {
     href: "/cars",
     label: "Cars",
@@ -192,11 +200,6 @@ export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
       { label: "Vehicle data", items: navLinks.cars, withOverview: true },
       { label: "Tools", items: navLinks.tools },
     ],
-  },
-  {
-    href: "/coe",
-    label: "COE",
-    sections: [{ label: "COE data", items: navLinks.coe, withOverview: true }],
   },
   { href: "/learn", label: "Learn" },
 ];
