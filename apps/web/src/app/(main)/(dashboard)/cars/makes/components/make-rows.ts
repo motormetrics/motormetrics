@@ -23,6 +23,9 @@ import { cacheLife, cacheTag } from "next/cache";
 /** The `cars.fuelType` value that means battery-electric and nothing else. */
 const BEV_FUEL_TYPE = "Electric";
 
+/** Below this many cars a year earlier, a percentage change says little. */
+export const MIN_BASE = 20;
+
 /**
  * Whether a `cars.fuelType` value belongs to the tab. Tabs are LTA values, so
  * only an exact match counts.

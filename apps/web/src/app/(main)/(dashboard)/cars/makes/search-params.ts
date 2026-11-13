@@ -35,6 +35,11 @@ export const SORTS = ["count", "make"] as const;
 export type Sort = (typeof SORTS)[number];
 
 export const makesSearchParams = {
+  /**
+   * The selected make's slug. Turns the card grid into a list beside that
+   * make's detail. `null` is the plain index.
+   */
+  make: parseAsString,
   /** Powertrain to narrow the page to. `null` is the "All" tab. */
   fuel: parseAsStringLiteral(FUEL_FILTERS),
   range: parseAsStringLiteral(RANGES).withDefault("ytd"),
@@ -48,7 +53,7 @@ export const loadSearchParams = createLoader(makesSearchParams);
 export type MakesSearchParams = Awaited<ReturnType<typeof loadSearchParams>>;
 
 /**
- * Builds the powertrain, period and sort links on the server. Defaults drop out of the
- * query string, so the default view is plain /cars/makes.
+ * Builds the make, powertrain, period and sort links on the server. Defaults
+ * drop out of the query string, so the default view is plain /cars/makes.
  */
 export const serialize = createSerializer(makesSearchParams);

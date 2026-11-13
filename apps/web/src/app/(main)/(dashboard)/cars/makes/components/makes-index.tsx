@@ -3,9 +3,11 @@ import {
   type MakeCard,
   MakeCards,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-cards";
+import { MakeDetail } from "@web/app/(main)/(dashboard)/cars/makes/components/make-detail";
 import {
   loadMakeRows,
   type MakeRow,
+  MIN_BASE,
   periodLabel,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/range-tabs";
@@ -19,9 +21,6 @@ import {
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
-
-/** Below this many cars a year earlier, a percentage change says little. */
-const MIN_BASE = 20;
 
 const SORT_TABS = [
   { id: "count", label: "Most cars" },
@@ -107,8 +106,9 @@ function SortTabs({ params }: { params: MakesSearchParams }) {
 
 /**
  * Direction D's makes index: every make with registrations in the selected
- * period as a card linking to its own page, with the period and sort as
- * server-built links and a search that filters the cards in the browser.
+ * period as a card that selects it (`?make=`), with the powertrain, period and
+ * sort as server-built links and a search that filters the cards in the
+ * browser. A selected make shows as a list beside that make's detail.
  */
 export async function MakesIndex({
   searchParams,
@@ -130,9 +130,14 @@ export async function MakesIndex({
       ? [...rows].sort((a, b) => a.make.localeCompare(b.make))
       : rows;
 
+  // A make with nothing registered in the period has no row, so `?make=` for
+  // it falls back to the plain index.
+  const selected = rows.find((row) => row.slug === params.make);
+
   const cards: MakeCard[] = ordered.map((row) => ({
     change: changeLabel(row, params.range, latestMonth),
     count: row.count.toLocaleString("en-SG"),
+    href: serialize("/cars/makes", { ...params, make: row.slug }),
     logoUrl: row.logoUrl,
     make: row.make,
     rank: row.rank,
@@ -149,6 +154,18 @@ export async function MakesIndex({
       />
       <MakeCards
         cards={cards}
+        detail={
+          selected ? (
+            <MakeDetail
+              latestMonth={latestMonth}
+              makesCount={rows.length}
+              params={params}
+              row={selected}
+              total={total}
+            />
+          ) : null
+        }
+        selectedSlug={selected?.slug ?? null}
         switches={
           <>
             <div className="flex min-w-0 max-w-full flex-col gap-1">
