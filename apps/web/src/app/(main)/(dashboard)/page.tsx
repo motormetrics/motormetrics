@@ -101,9 +101,9 @@ function OrganizationStructuredData() {
 
 /** One placeholder per market tile, named so each has a stable key. */
 const TILE_SKELETONS = [
+  "pqp",
   "make",
   "fuel",
-  "pqp",
   "deregistrations",
   "ev-make",
   "charging",
