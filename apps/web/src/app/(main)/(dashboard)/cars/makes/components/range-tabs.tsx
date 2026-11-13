@@ -1,9 +1,9 @@
 import { FilterTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/filter-tabs";
 import {
   loadSearchParams,
-  makesHref,
   RANGE_LABELS,
   RANGES,
+  serialize,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import type { SearchParams } from "nuqs/server";
 
@@ -24,7 +24,7 @@ export async function RangeTabs({
       filter="range"
       selectedKey={params.range}
       tabs={RANGES.map((range) => ({
-        href: makesHref(params, { range }),
+        href: serialize("/cars/makes", { ...params, range }),
         id: range,
         label: RANGE_LABELS[range],
       }))}

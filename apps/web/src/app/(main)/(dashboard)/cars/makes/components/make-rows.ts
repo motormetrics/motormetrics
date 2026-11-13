@@ -1,8 +1,7 @@
 import { slugify } from "@motormetrics/utils/slugify";
-import {
-  type FuelFilter,
-  isFuelFilter,
-  type Range,
+import type {
+  FuelFilter,
+  Range,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { HYBRID_REGEX } from "@web/config";
 import { LOGOS_CACHE_TAG } from "@web/lib/cache-tags/logos";
@@ -320,12 +319,12 @@ async function loadMonthCounts(
  */
 export async function loadMakeRows(
   range: Range,
-  fuel: string | null,
+  fuel: FuelFilter | null,
 ): Promise<MakeRowsResult> {
   "use cache";
   cacheLife("max");
   cacheTag("cars:months", "cars:makes", LOGOS_CACHE_TAG);
-  if (isFuelFilter(fuel)) {
+  if (fuel) {
     cacheTag(
       ...FUEL_FILTER_QUERIES[fuel].map((fuelType) => `cars:fuel:${fuelType}`),
     );
@@ -344,7 +343,7 @@ export async function loadMakeRows(
   }
 
   let totals: MakeTotals[];
-  if (isFuelFilter(fuel)) {
+  if (fuel) {
     const breakdowns = await Promise.all(
       FUEL_FILTER_QUERIES[fuel].map((fuelType) => getFuelTypeData(fuelType)),
     );

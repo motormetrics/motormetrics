@@ -10,7 +10,6 @@ import {
   rollingMonths,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import {
-  isFuelFilter,
   loadSearchParams,
   RANGE_LABELS,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
@@ -44,7 +43,7 @@ export async function LeadingMakeCard({
     return null;
   }
 
-  const fuelWord = isFuelFilter(fuel) ? fuel.toLowerCase() : null;
+  const fuelWord = fuel?.toLowerCase() ?? null;
   const months = rollingMonths(latestMonth);
   const data: TwoShadeTrendPoint[] = leader.trend.map((count, index) => {
     const month = months[index];
@@ -64,7 +63,7 @@ export async function LeadingMakeCard({
       <span className="flex items-center gap-2.5">
         <MakeAvatar logoUrl={leader.logoUrl} make={leader.make} size="sm" />
         <Typography.Paragraph color="muted" size="xs" weight="semibold">
-          {isFuelFilter(fuel) ? `${fuel} · ` : null}
+          {fuel ? `${fuel} · ` : null}
           {leader.make} leads the market
         </Typography.Paragraph>
       </span>

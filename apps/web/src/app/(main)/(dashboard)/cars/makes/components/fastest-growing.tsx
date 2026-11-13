@@ -1,7 +1,6 @@
 import { NumberValue } from "@heroui-pro/react";
 import { loadMakeRows } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import {
-  isFuelFilter,
   loadSearchParams,
   RANGE_LABELS,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
@@ -44,7 +43,7 @@ export async function FastestGrowing({
   }
 
   const previousYear = Number(latestMonth.slice(0, 4)) - 1;
-  const fuelSuffix = isFuelFilter(fuel) ? ` of ${fuel.toLowerCase()} cars` : "";
+  const fuelSuffix = fuel ? ` of ${fuel.toLowerCase()} cars` : "";
 
   return (
     <div className="flex min-w-0 flex-col gap-4">

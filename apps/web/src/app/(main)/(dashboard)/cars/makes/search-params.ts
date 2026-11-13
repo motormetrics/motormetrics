@@ -1,7 +1,6 @@
 import {
   createLoader,
   createSerializer,
-  parseAsString,
   parseAsStringLiteral,
 } from "nuqs/server";
 
@@ -30,10 +29,6 @@ export type FuelFilter = (typeof FUEL_FILTERS)[number];
 
 export function isRange(value: string): value is Range {
   return RANGES.includes(value as Range);
-}
-
-export function isFuelFilter(value: string | null): value is FuelFilter {
-  return FUEL_FILTERS.includes(value as FuelFilter);
 }
 
 /** Columns the "All makes" table can be sorted by. */
@@ -98,27 +93,19 @@ export function sortMakeRows<Row extends SortableMakeRow>(
   });
 }
 
-export const searchParams = {
-  /** Fuel type to narrow the table to. `null` is the "All" tab. */
-  fuel: parseAsString,
+export const makesSearchParams = {
+  /** Powertrain to narrow the page to. `null` is the "All" tab. */
+  fuel: parseAsStringLiteral(FUEL_FILTERS),
   range: parseAsStringLiteral(RANGES).withDefault("ytd"),
   ...sortSearchParams,
 };
 
-export const loadSearchParams = createLoader(searchParams);
+export const loadSearchParams = createLoader(makesSearchParams);
 
 export type MakesSearchParams = Awaited<ReturnType<typeof loadSearchParams>>;
 
-const serializeSearchParams = createSerializer(searchParams);
-
 /**
- * The page's own URL with some params changed, for filter links rendered on
- * the server. Every other param carries over, and defaults drop out of the
- * query string, so "Year to date" with no fuel is plain /cars/makes.
+ * Builds the filter links on the server. Defaults drop out of the query
+ * string, so "Year to date" with no fuel is plain /cars/makes.
  */
-export function makesHref(
-  current: MakesSearchParams,
-  changes: Partial<MakesSearchParams>,
-): string {
-  return serializeSearchParams("/cars/makes", { ...current, ...changes });
-}
+export const serialize = createSerializer(makesSearchParams);

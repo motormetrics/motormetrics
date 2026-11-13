@@ -3,10 +3,7 @@ import {
   loadMakeRows,
   periodLabel,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
-import {
-  isFuelFilter,
-  loadSearchParams,
-} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { SourceNote } from "@web/components/shared/overview";
 import type { SearchParams } from "nuqs/server";
 
@@ -108,7 +105,7 @@ export async function ConcentrationCard({
       </ul>
       <SourceNote>
         Share of {total.toLocaleString("en-SG")} registrations
-        {isFuelFilter(fuel) ? ` of ${fuel.toLowerCase()} cars` : ""},{" "}
+        {fuel ? ` of ${fuel.toLowerCase()} cars` : ""},{" "}
         {periodLabel(latestMonth, range)}.
       </SourceNote>
     </div>

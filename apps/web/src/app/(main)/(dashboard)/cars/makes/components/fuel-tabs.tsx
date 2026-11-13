@@ -1,9 +1,8 @@
 import { FilterTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/filter-tabs";
 import {
   FUEL_FILTERS,
-  isFuelFilter,
   type MakesSearchParams,
-  makesHref,
+  serialize,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 
 /** Tab id for "All", which clears `?fuel=`. */
@@ -15,17 +14,19 @@ const ALL = "all";
  * param so the default URL stays clean.
  */
 export function FuelTabs({ params }: { params: MakesSearchParams }) {
-  const selected = isFuelFilter(params.fuel) ? params.fuel : ALL;
-
   return (
     <FilterTabs
       aria-label="Powertrain"
       filter="fuel"
-      selectedKey={selected}
+      selectedKey={params.fuel ?? ALL}
       tabs={[
-        { href: makesHref(params, { fuel: null }), id: ALL, label: "All" },
+        {
+          href: serialize("/cars/makes", { ...params, fuel: null }),
+          id: ALL,
+          label: "All",
+        },
         ...FUEL_FILTERS.map((fuel) => ({
-          href: makesHref(params, { fuel }),
+          href: serialize("/cars/makes", { ...params, fuel }),
           id: fuel,
           label: fuel,
         })),

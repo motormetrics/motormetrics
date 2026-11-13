@@ -6,7 +6,6 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { MakesTable } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-table";
 import {
-  isFuelFilter,
   loadSearchParams,
   RANGE_LABELS,
   sortMakeRows,
@@ -21,13 +20,12 @@ export async function AllMakesCard({
   const params = await loadSearchParams(searchParams);
   const { dir, fuel, range, sort } = params;
   const { latestMonth, rows, total } = await loadMakeRows(range, fuel);
-  const fuelFilter = isFuelFilter(fuel) ? fuel : null;
-  const summary = summariseLeaders(rows, latestMonth, range, fuelFilter);
+  const summary = summariseLeaders(rows, latestMonth, range, fuel);
 
   return (
     <div className="flex flex-col gap-3">
       <MakesTable
-        fuel={fuelFilter}
+        fuel={fuel}
         fuelTabs={<FuelTabs params={params} />}
         rangeLabel={RANGE_LABELS[range]}
         total={total}
