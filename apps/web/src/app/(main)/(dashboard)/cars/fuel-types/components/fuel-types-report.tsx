@@ -53,7 +53,7 @@ const FUEL_COLOURS: Record<string, string> = {
   "Petrol-Electric (Plug-In)": "var(--chart-5)",
 };
 
-const FALLBACK_COLOUR = "var(--chart-6)";
+const FALLBACK_COLOUR = "var(--default)";
 
 const fuelColour = (name: string): string =>
   FUEL_COLOURS[name] ?? FALLBACK_COLOUR;

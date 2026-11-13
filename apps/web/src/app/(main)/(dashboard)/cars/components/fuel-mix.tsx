@@ -42,7 +42,7 @@ export async function FuelMix({
 
   if (tailTotal > 0) {
     segments.push({
-      color: `var(--chart-${NAMED_SEGMENTS + 1})`,
+      color: "var(--default)",
       label: "Others",
       value: tailTotal,
     });

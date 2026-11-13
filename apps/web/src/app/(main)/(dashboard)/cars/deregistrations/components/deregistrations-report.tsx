@@ -241,7 +241,7 @@ export async function DeregistrationsReport({
 
             return {
               category,
-              color: details?.color ?? "var(--chart-6)",
+              color: details?.color ?? "var(--default)",
               count,
               description: details?.description ?? "—",
               share: percentageOf(count, total),

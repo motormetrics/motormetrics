@@ -59,7 +59,7 @@ const VEHICLE_COLOURS: Record<string, string> = {
   "Station-wagon": "var(--chart-4)",
 };
 
-const FALLBACK_COLOUR = "var(--chart-6)";
+const FALLBACK_COLOUR = "var(--default)";
 
 const vehicleColour = (name: string): string =>
   VEHICLE_COLOURS[name] ?? FALLBACK_COLOUR;

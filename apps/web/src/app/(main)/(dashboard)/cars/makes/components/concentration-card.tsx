@@ -46,7 +46,7 @@ export async function ConcentrationCard({
   }));
   if (rest > 0) {
     segments.push({
-      color: "var(--chart-6)",
+      color: "var(--default)",
       label: "All other makes",
       value: rest,
     });

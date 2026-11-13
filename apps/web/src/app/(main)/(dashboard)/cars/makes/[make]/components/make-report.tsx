@@ -251,7 +251,7 @@ export async function MakeReport({
       .map(({ name: vehicleType }) => formatVehicleType(vehicleType));
 
     return {
-      color: `var(--chart-${(index % 6) + 1})`,
+      color: `var(--chart-${(index % 5) + 1})`,
       count,
       name,
       note:

@@ -6,8 +6,8 @@ const ELECTRIC = "Electric";
 /** LTA's vehicle type for private cars — the class the page is fixed on. */
 export const CARS = "Cars";
 
-/** Chart colours the skin carries; ranks past this share the last one. */
-const CHART_COLOURS = 6;
+/** Chart colours the theme carries; ranks past this share the last one. */
+const CHART_COLOURS = 5;
 
 /** One fuel type of a class, in the latest year and the one before it. */
 export interface PopulationFuelRow {

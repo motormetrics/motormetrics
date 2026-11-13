@@ -38,9 +38,8 @@
   :root,
   .glass-light,
   [data-theme="glass-light"] {
-    /* Glass ships chart-1..5. These extend it for charts that need a sixth
-       series and the warm petrol series. */
-    --chart-6: #dce7ec;
+    /* Glass ships chart-1..5, all slate. Sand is the one warm series colour,
+       kept so fossil fuels stay distinct from the slate ramp. */
     --chart-sand: #c9b88f;
   }
 }
@@ -57,7 +56,6 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --color-chart-6: var(--chart-6);
   --color-chart-sand: var(--chart-sand);
 }
 

@@ -15,7 +15,7 @@ const FUEL_COLOURS: Record<string, string> = {
   "Petrol-Electric (Plug-In)": "var(--muted)",
 };
 
-const FALLBACK_COLOUR = "var(--chart-6)";
+const FALLBACK_COLOUR = "var(--default)";
 
 /**
  * The fuel split at the latest year end: one stacked share bar, then a ruled

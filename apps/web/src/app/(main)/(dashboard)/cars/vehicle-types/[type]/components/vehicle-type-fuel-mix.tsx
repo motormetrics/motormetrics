@@ -14,7 +14,7 @@ const FUEL_COLOURS: Record<string, string> = {
 };
 
 function fuelColour(fuelType: string): string {
-  return FUEL_COLOURS[fuelType] ?? "var(--chart-6)";
+  return FUEL_COLOURS[fuelType] ?? "var(--default)";
 }
 
 /** The vehicle type's registrations split by fuel type. */
