@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { Card, Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   batteryElectricShares,
@@ -207,7 +207,7 @@ export async function MarketTrend() {
   }
 
   return (
-    <section className="flex min-w-0 flex-col gap-5 rounded-4xl bg-surface p-6 md:p-8">
+    <Card className="min-w-0 gap-5 p-6 md:p-8">
       <MarketTrendTabs
         heading={
           <Typography.Heading
@@ -221,7 +221,7 @@ export async function MarketTrend() {
         tabs={tabs}
       />
       <SourceNote>Source: LTA via DataMall</SourceNote>
-    </section>
+    </Card>
   );
 }
 

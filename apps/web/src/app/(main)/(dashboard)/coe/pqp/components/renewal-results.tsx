@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, cn, Surface, Typography } from "@heroui/react";
+import { Card, Chip, cn, Surface, Typography } from "@heroui/react";
 import { ChartTooltip } from "@heroui-pro/react";
 import { BarChart } from "@heroui-pro/react/bar-chart";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
@@ -318,7 +318,7 @@ export function RenewalResults({
           </figure>
         )}
 
-        <div className="flex flex-col gap-3 self-start rounded-3xl bg-surface p-5">
+        <Card className="self-start p-5">
           <span className="flex items-center gap-2 font-semibold">
             <CircleDollarSign aria-hidden className="size-5 text-accent" />
             If you deregister
@@ -338,7 +338,7 @@ export function RenewalResults({
           <SectionLink className="ml-0" href="/cars/arf">
             Compare a new car
           </SectionLink>
-        </div>
+        </Card>
       </div>
 
       <div
