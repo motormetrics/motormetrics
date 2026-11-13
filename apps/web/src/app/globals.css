@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 @import "@heroui-pro/react/css";
+/* HeroUI design system db020444-5deb-47fd-9397-c4fe63f868bc ("MotorMetrics"),
+   synced from its CSS export. The theme's tokens only apply under
+   html.glass-light / html.glass-dark (or the matching data-theme), which the
+   root layout sets. */
+@import "@heroui-pro/react/themes/glass";
 
 @plugin "@tailwindcss/typography";
 
@@ -13,93 +18,32 @@
 /* ---------------------------------------------------------------------------
    MotorMetrics theme.
 
-   Source of truth: the Claude Design "MotorMetrics Design System" tokens,
-   vendored at _ds/motormetrics-design-system-183fc5f3-.../tokens/*.css in
-   Claude Design project 7b59ec10-a54e-49dd-a94e-64315ef10b4c, and rendered by
-   `Design System Theme.dc.html`.
+   Source of truth: the HeroUI design system "MotorMetrics"
+   (db020444-5deb-47fd-9397-c4fe63f868bc), base theme Glass. The Glass import
+   above carries the palette: background, surfaces, overlay, accent, default,
+   fields, separator, shadows, the chart ramp and the pinned DataGrid surfaces.
 
-   Claude Design is a generic design system and does not know this app is on
-   HeroUI, so a few of its tokens are renamed on the way in. Those renames are
-   this file's job, not Claude Design's — see DESIGN.md for the mapping table:
+   Glass sits in layer(theme); this file's blocks sit in layer(base), which
+   comes later and wins on any token both set. So do not restate a HeroUI or
+   Glass token here: every one of them comes from Glass or HeroUI's defaults,
+   and HeroUI's calculated tier (--color-accent-hover, --color-default-hover,
+   --color-field-focus, ...) derives from them.
 
-     --surface-alt         -> --surface-secondary   (HeroUI ships the bridge)
-     --success-foreground  -> --success-soft-foreground   (see "Status" below)
-     --warning-foreground  -> --warning-soft-foreground
-     --radius-sm/lg/xl     -> the rounded-* ladder        (see the @theme note)
-
-   Everything here sits on :root so that HeroUI's *calculated* tier derives
-   from these values. In 3.0.4 that tier is emitted on :root as
-   --color-accent-hover, --color-accent-soft-foreground, --color-default-hover,
-   --color-danger-hover, --color-border-secondary, --color-field-focus and so
-   on, each a color-mix() over the base tokens, and the component CSS reads
-   those names directly (button.css: --button-bg-hover: var(--color-accent-hover)).
-   Because they are computed on :root, a palette applied further down the tree
-   cannot reach them — which is why the previous [data-skin] block left primary
-   buttons hovering navy despite overriding --color-accent. Keep the palette
-   here and let HeroUI derive the rest; do not hand-copy that tier or it drifts
-   on the next upgrade.
+   The blocks below hold project-only tokens with no HeroUI equivalent, kept
+   from the previous slate theme until each is mapped onto a HeroUI token or
+   dropped.
    --------------------------------------------------------------------------- */
 
 @layer base {
-  :root {
-    color-scheme: light;
-
-    /* Primitives — do not vary by theme */
-    --white: #ffffff;
-    --black: #000000;
-    --eclipse: #232a2e; /* slate-ink */
-
-    /* Base */
-    --background: #f7f5ef; /* warm cream canvas */
-    --foreground: var(--eclipse);
-
-    /* Surfaces */
-    /* Pure white with an explicit hue. A hueless white makes HeroUI Pro's
-       oklch colour-mix (DataGrid's selected pinned cell) carry chroma with no
-       hue, which the browser draws pink. Hue 90 matches the sand surfaces. */
-    --surface: oklch(100% 0 90);
-    --surface-foreground: var(--foreground);
-    --surface-secondary: #efece3; /* warm sand — rails, wells */
-    --surface-secondary-foreground: var(--foreground);
-    /* Third tier. HeroUI component CSS reads this directly, so leaving it out
-       left those parts on HeroUI's cool grey default against the warm ramp.
-       The step matches HeroUI's own secondary -> tertiary delta (-0.0151 L). */
-    --surface-tertiary: #eae7de;
-    --surface-tertiary-foreground: var(--foreground);
-    --overlay: var(--white);
-    --overlay-foreground: var(--foreground);
+  :root,
+  .glass-light,
+  [data-theme="glass-light"] {
     --ink-surface: #232a2e; /* dark feature panel */
     --ink-surface-foreground: var(--white);
-
-    /* Segmented controls (Tabs). Also read directly by HeroUI component CSS.
-       The raised segment is the plain surface on the cream canvas. */
-    --segment: var(--surface);
-    --segment-foreground: var(--foreground);
-
-    /* Neutrals. The three text greys were tuned to clear WCAG AA (4.5:1)
-       against --surface-secondary #efece3; ratios below are measured there.
-       Adding --surface-tertiary #eae7de moved the binding constraint one step
-       darker, and --subtle lands at 4.44:1 on that tier — just under AA. It
-       clears --surface-secondary, --background and --surface, and the tier's
-       own pairing (--surface-tertiary-foreground) is 11.78:1, so this only
-       bites if --subtle text is placed on a tertiary surface. Lift --subtle to
-       clear 4.5 there if that combination ever ships. */
-    --muted: #505a5d; /* secondary body text — 6.00:1 */
-    --muted-strong: #3d474b; /* label text — 8.08:1 */
-    --subtle: #5f6b71; /* faintest meta labels — 4.64:1 */
-    --default: #f0f3f4; /* neutral fill — chips, icon wells, tracks */
-    --default-hover: #dce7ec;
-    --default-foreground: var(--foreground);
-    --scrollbar: #dce7ec;
-
-    /* Accent — a calm slate blue, carrying all emphasis.
-       --accent fills; --accent-strong is the text/link tone (#4e7c9b as text
-       is 4.11:1 on the canvas, below AA). */
-    --accent: #4e7c9b;
-    --accent-foreground: var(--white);
+    --muted-strong: #3d474b; /* label text */
+    --subtle: #5f6b71; /* faintest meta labels */
     --accent-strong: #33586f;
     --accent-deep: #16323f;
-    --accent-soft: #dce7ec;
     --accent-soft-2: #e2edf3;
     --accent-on-dark: #9cc4da;
     --accent-border: #3c6480;
@@ -116,179 +60,27 @@
       #4e7c9b 42%,
       #3c6480 100%
     );
-
     /* Brand mark — deliberately distinct from the accent (the TrendingUp
        glyph + "Metrics" wordmark), held over from the SG Cars Trends identity. */
     --brand-blue: #2563eb;
-
-    /* Status. Reserved for meaning and always paired with a dot or label,
-       never colour alone.
-
-       Note the split: HeroUI's `-foreground` means "text ON that solid fill",
-       so it must contrast with --success et al. Claude Design's status text
-       colours are the tinted-chip tones, which belong in HeroUI's
-       `-soft-foreground` slots (bg-success-soft + text-success-soft-foreground).
-
-       All three fills take the ink, not white. These are light, saturated
-       tones: white measures 2.59 / 2.10 / 3.03:1 on them, the ink 5.62 / 6.92
-       / 4.80:1. Claude Design specifies --danger-foreground: #FFFFFF, which is
-       the 3.03:1 case — raised upstream. */
-    --success: #57b45f;
-    --success-foreground: var(--eclipse);
-    --success-soft: #dff1df;
-    --success-soft-foreground: #2f6b3a;
-
-    --warning: #e9a63c;
-    --warning-foreground: var(--eclipse);
-    --warning-soft: #fbebd3;
-    --warning-soft-foreground: #96601c;
-
-    --danger: #e96e6e;
-    --danger-foreground: var(--eclipse);
-    --danger-soft: #fbe3e3;
-    --danger-soft-foreground: #b4453f;
-
-    /* Lines */
-    --border: #e5e1d5;
-    --separator: #e5e1d5;
-    --focus: var(--accent);
-    --link: var(--accent-strong);
-
-    /* Form fields */
-    --field-background: var(--white);
-    --field-foreground: var(--foreground);
-    --field-placeholder: var(--muted);
-    --field-border: transparent;
-
-    /* Backdrop */
-    --backdrop: rgba(22, 32, 37, 0.45);
-
-    /* Geometry. --radius drives HeroUI's own components (Button, Input, Card).
-       Square, as in the Hybrid page designs: everyday controls at 6px. The
-       rounded-* ladder is restated in @theme below — see the note there for
-       why it has to be. */
-    --radius: 0.375rem; /* 6px — controls, inner cards, rows */
-    --field-radius: 0.375rem;
-
-    /* Elevation — soft, ink-tinted, never black */
-    --surface-shadow:
-      0 4px 16px 0 rgba(35, 42, 46, 0.07), 0 1px 3px 0 rgba(35, 42, 46, 0.05);
-    --overlay-shadow: 0 14px 36px 0 rgba(35, 42, 46, 0.16);
-    --field-shadow: 0 1px 2px 0 rgba(35, 42, 46, 0.05);
     --hover-shadow: 0 3px 10px 0 rgba(35, 42, 46, 0.08);
-
-    /* Chart palette — Claude Design's ramp, six slate blues from the accent
-       down to neutral (rank 1 highest, 6 lowest). Charts cap at six series.
-       Adjacent steps are close, so a chart that has to tell two series apart
-       should take steps that sit well apart (1 and 4, say) rather than
-       neighbours.
-
-       Against --background: --chart-1 6.96:1, --chart-2 4.12:1, --chart-3
-       3.35:1, --chart-4 1.78:1, --chart-5 1.35:1, --chart-6 1.15:1. The last
-       three sit below WCAG 1.4.11's 3:1, which covers graphics *required* to
-       understand the content; every chart here labels each series in text
-       with its value, so colour is associative rather than load-bearing. Keep
-       the text labels — they are what makes this palette defensible. */
-    --chart-1: #33586f;
-    --chart-2: #4e7c9b;
-    --chart-3: #5f8ba8;
-    --chart-4: #9dbfd3;
-    --chart-5: #c3d8e4;
+    /* Glass ships chart-1..5. These extend it for charts that need a sixth
+       series and the warm petrol series. */
     --chart-6: #dce7ec;
-    /* Sand — a warm series colour for petrol and other fossil fuels, set
-       against the slate ramp. Not --chart-7: the six-step ramp is unchanged.
-       1.79:1 on --background, the same footing as --chart-4..6, so it relies
-       on the same text labels. */
     --chart-sand: #c9b88f;
     --chart-grid: var(--border);
   }
 
-  /* Authored so the palette is correct and testable by setting the attribute
-     by hand. No theme provider or toggle ships yet, so :root is what renders. */
-  .dark,
-  [data-theme="dark"] {
-    color-scheme: dark;
-
-    /* Base */
-    --background: #1a2024;
-    --foreground: #f1f0ea;
-
-    /* Surfaces */
-    --surface: #232a2e;
-    --surface-foreground: var(--foreground);
-    --surface-secondary: #2a3237;
-    --surface-secondary-foreground: var(--foreground);
-    --surface-tertiary: #2e363b; /* +0.0151 L, matching HeroUI's dark step */
-    --surface-tertiary-foreground: var(--foreground);
-    --overlay: #2a3237;
-    --overlay-foreground: var(--foreground);
+  /* Authored so the palette is correct and testable by setting the class by
+     hand. No theme provider or toggle ships yet, so glass-light is what renders. */
+  .glass-dark,
+  [data-theme="glass-dark"] {
     --ink-surface: #12181b;
-    --ink-surface-foreground: var(--white);
-
-    /* Segmented controls. The raised segment lifts off the dark canvas rather
-       than sitting flush, so it takes the hover fill. Pair text with
-       --segment-foreground (8.76:1); --muted and --subtle do not clear AA here. */
-    --segment: var(--default-hover);
-    --segment-foreground: var(--foreground);
-
-    /* Neutrals — checked against --surface-secondary #2a3237, the lightest
-       dark surface and so the binding constraint here. */
-    --muted: #9aa6ab; /* 5.23:1 */
-    --muted-strong: #b7c1c5; /* 7.11:1 */
-    --subtle: #939da1; /* 4.71:1 */
-    --default: #2e373c;
-    --default-hover: #3a4448;
-    --default-foreground: var(--foreground);
-    --scrollbar: #3a4448;
-
-    /* Accent — lightened for dark surfaces. --accent-foreground is NOT in the
-       Claude Design dark block; inheriting the light theme's white would put
-       2.81:1 on #6fa0c0, so it takes the ink instead (5.18:1). Raised
-       upstream. */
-    --accent: #6fa0c0;
-    --accent-foreground: var(--eclipse);
+    --muted-strong: #b7c1c5;
+    --subtle: #939da1;
     --accent-strong: #4e7c9b;
-    --accent-soft: rgba(111, 160, 192, 0.18);
     --accent-soft-2: rgba(111, 160, 192, 0.14);
-    --accent-border: color-mix(in oklch, black 10%, var(--accent));
-
-    /* Status — solids carry over; only the tints and their text change. */
-    --success-foreground: var(--eclipse);
-    --success-soft: rgba(87, 180, 95, 0.16);
-    --success-soft-foreground: #8ed396;
-
-    --warning-foreground: var(--eclipse);
-    --warning-soft: rgba(233, 166, 60, 0.16);
-    --warning-soft-foreground: #f0c079;
-
-    --danger: #e96e6e;
-    --danger-foreground: var(--eclipse);
-    --danger-soft: rgba(233, 110, 110, 0.16);
-    --danger-soft-foreground: #f0a0a0;
-
-    /* Lines */
-    --border: #333c41;
-    --separator: #333c41;
-
-    /* Form fields */
-    --field-background: var(--default);
-
-    /* Backdrop */
-    --backdrop: rgba(0, 0, 0, 0.6);
-
-    /* Elevation — the surface tiers flatten; hierarchy comes from tone. */
-    --surface-shadow: 0 0 0 0 transparent inset;
-    --overlay-shadow: 0 6px 24px 0 rgba(0, 0, 0, 0.4);
-    --field-shadow: 0 0 0 0 transparent inset;
     --hover-shadow: 0 0 0 0 transparent inset;
-
-    /* Same ramp on the dark canvas. Only the darkest step needs lifting to
-       clear 3:1 against --surface-secondary; the rest already do. */
-    --chart-1: #5a7e96;
-    /* Restated so it reads as deliberate. 8.41:1 on --background, 7.44:1 on
-       --surface and 6.67:1 on --surface-secondary. */
-    --chart-sand: #c9b88f;
-    --chart-grid: var(--border);
   }
 }
 
@@ -297,7 +89,7 @@
    --color-surface-secondary and the --color-*-soft* family) via
    themes/shared/theme.css. */
 @theme inline {
-  --font-sans: var(--font-geist);
+  --font-sans: var(--font-inter);
 
   --color-ink-surface: var(--ink-surface);
   --color-ink-surface-foreground: var(--ink-surface-foreground);
@@ -323,27 +115,6 @@
   --color-chart-6: var(--chart-6);
   --color-chart-sand: var(--chart-sand);
   --color-chart-grid: var(--chart-grid);
-}
-
-/* Radius ladder.
-   This has to be stated in full rather than inherited. HeroUI overrides only
-   part of Tailwind's radius scale — sm/md/xl/2xl/3xl are redefined as
-   calc(var(--radius) * n) while xs/lg/4xl fall through to Tailwind's own
-   fixed defaults. Those two halves only agree when --radius is Tailwind's 8px,
-   so with --radius at 6px the steps are pinned here to keep them monotonic.
-
-   The ladder is tight to match the square Hybrid page designs: 2px bar ends,
-   6px controls and inner cards (= --radius), 8px panels, 10px bento cards,
-   12px the rail. Pills use rounded-full. */
-@theme {
-  --radius-xs: 0.125rem; /* 2px — bar ends */
-  --radius-sm: 0.25rem; /* 4px — small chips, icon wells */
-  --radius-md: 0.3125rem; /* 5px */
-  --radius-lg: 0.375rem; /* 6px — controls, inner cards, rows (= --radius) */
-  --radius-xl: 0.5rem; /* 8px */
-  --radius-2xl: 0.5rem; /* 8px — panels */
-  --radius-3xl: 0.625rem; /* 10px — bento cards */
-  --radius-4xl: 0.75rem; /* 12px — the rail */
 }
 
 /* Reusable keyframe animations */

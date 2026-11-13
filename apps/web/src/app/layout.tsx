@@ -5,18 +5,19 @@ import { Providers } from "@web/app/providers";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@web/config";
 import { BotIdClient } from "botid/client";
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { ReactNode } from "react";
 import "./globals.css";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 
-// Geist is the single family across the app. The wordmark is outlined Urbanist,
-// so the logo keeps its face without the site loading a second font.
-// Exposed as a CSS variable so globals.css can map --font-sans onto it.
-const geist = Geist({
+// Inter is the single family across the app, per the HeroUI design system.
+// The wordmark is outlined Urbanist, so the logo keeps its face without the
+// site loading a second font. Exposed as a CSS variable so globals.css can map
+// --font-sans onto it.
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-inter",
 });
 
 const title = `${SITE_TITLE} (formerly SG Cars Trends)`;
@@ -75,7 +76,10 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html
       lang="en"
-      className={cn("antialiased motion-safe:scroll-smooth", geist.variable)}
+      className={cn(
+        "glass-light antialiased motion-safe:scroll-smooth",
+        inter.variable,
+      )}
       data-scroll-behavior="smooth"
     >
       <head>

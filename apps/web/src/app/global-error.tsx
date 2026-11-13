@@ -1,15 +1,15 @@
 "use client";
 
 import { AlertTriangle } from "lucide-react";
-import { Geist } from "next/font/google";
+import { Inter } from "next/font/google";
 import posthog from "posthog-js";
 import { useEffect } from "react";
 import "./globals.css";
 
-// global-error replaces the root layout, so it loads Geist itself.
-const geist = Geist({
+// global-error replaces the root layout, so it loads Inter itself.
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-inter",
 });
 
 export default function GlobalError({
@@ -24,7 +24,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html className={geist.variable} data-theme="light" lang="en">
+    <html className={inter.variable} data-theme="glass-light" lang="en">
       <body className="bg-background text-foreground antialiased">
         <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-6 py-16">
           <div className="flex max-w-lg flex-col items-center gap-6 text-center">
