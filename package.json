@@ -1,6 +1,5 @@
 {
   "name": "motormetrics",
-  "version": "5.37.0",
   "description": "Monorepo for MotorMetrics",
   "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
