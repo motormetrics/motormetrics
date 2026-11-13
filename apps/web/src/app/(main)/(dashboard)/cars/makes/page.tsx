@@ -7,9 +7,11 @@ import {
   periodLabel,
   summariseLeaders,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { MakesAnswer } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-answer";
 import { MakesContentSection } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-content-section";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/range-tabs";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
@@ -123,6 +125,11 @@ export default function CarMakesPage({ searchParams }: PageProps) {
         }
         title="Makes"
       />
+      <SectionErrorBoundary title="Leading make unavailable">
+        <Suspense fallback={<Skeleton className="h-48 w-full" />}>
+          <MakesAnswer searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
       <StructuredData data={structuredData} />
       <MakesContentSection searchParams={searchParams} />
 

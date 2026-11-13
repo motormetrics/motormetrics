@@ -1,5 +1,3 @@
-import { Typography } from "@heroui/react";
-import { NumberValue } from "@heroui-pro/react";
 import {
   TwoShadeTrendChart,
   type TwoShadeTrendPoint,
@@ -14,21 +12,16 @@ import {
   RANGE_LABELS,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
-import { MakeAvatar } from "@web/components/shared/make-avatar";
-import { SourceNote } from "@web/components/shared/overview";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import {
   formatChartMonth,
   formatMonthLabel,
 } from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
 
-/** "+39.6%", with a true minus for a fall. */
-const formatSignedPercent = (percent: number): string =>
-  `${percent < 0 ? "−" : "+"}${Math.abs(percent).toFixed(1)}%`;
-
 /**
- * The page headline: the leading make's count, its change on a year earlier,
- * its share, and its last twelve months as columns.
+ * The leading make's last twelve months as columns. Its count, change and
+ * share lead the page head instead (MakesAnswer).
  */
 export async function LeadingMakeCard({
   searchParams,
@@ -60,34 +53,12 @@ export async function LeadingMakeCard({
 
   return (
     <div className="flex min-w-0 flex-col gap-3">
-      <span className="flex items-center gap-2.5">
-        <MakeAvatar logoUrl={leader.logoUrl} make={leader.make} size="sm" />
-        <Typography.Paragraph color="muted" size="xs" weight="semibold">
-          {fuel ? `${fuel} · ` : null}
-          {leader.make} leads the market
-        </Typography.Paragraph>
-      </span>
-      <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
-        <NumberValue
-          locale="en-SG"
-          maximumFractionDigits={0}
-          value={leader.count}
-        />
-      </span>
-      <Typography.Paragraph className="tabular-nums" color="muted">
-        <span className="font-semibold text-foreground">
-          {leader.yoyChange === null
-            ? "—"
-            : formatSignedPercent(leader.yoyChange)}
-        </span>{" "}
-        against the same period a year earlier
-      </Typography.Paragraph>
-      <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
-        {leader.share.toFixed(1)}% of{" "}
-        {fuelWord ? `${fuelWord} registrations` : "registrations"} ·{" "}
-        {RANGE_LABELS[range]}
-      </Typography.Paragraph>
-      <div className="mt-2.5">
+      <SectionHead
+        caption={`${leader.make} leads ${fuelWord ? `${fuelWord} registrations` : "the market"} · ${RANGE_LABELS[range]}`}
+        eyebrow="Leading make"
+        title={`${leader.make}${fuelWord ? ` ${fuelWord}` : ""} registrations by month`}
+      />
+      <div>
         <TwoShadeTrendChart
           data={data}
           height={210}
