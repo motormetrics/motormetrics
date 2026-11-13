@@ -1,11 +1,13 @@
 name: Publish MCP
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "apps/mcp/**"
+  workflow_dispatch:
+  # Disabled while the MCP is unused; restore to publish on push again.
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - "apps/mcp/**"
 
 env:
   HEROUI_AUTH_TOKEN: ${{ secrets.HEROUI_AUTH_TOKEN }}

@@ -8,7 +8,7 @@ Automatically use Context7 for code generation and library documentation.
 
 ## GitHub Operations
 
-Prefer the GitHub MCP tools (`mcp__github__*`) over the `gh` CLI for issues, checks, and releases.
+Prefer the GitHub MCP tools (`mcp__github__*`) over the `gh` CLI for issues and checks.
 
 **Pull requests are the exception**: open and update PRs with the `create-pr` skill, not raw `gh` or MCP calls. It encodes the title and body conventions.
 
@@ -88,10 +88,6 @@ PostgreSQL with Drizzle ORM. **Naming strategy is deliberately mixed**: table na
 column names are `camelCase`. This is intentional — do not "fix" it to match on either side.
 
 *See [packages/database/AGENTS.md](packages/database/AGENTS.md) for detailed schemas and migrations.*
-
-## Release Process
-
-Managed by release-please with unified "v" prefix versioning (v1.0.0, v1.1.0, v2.0.0). Merges to `main` update a Release PR; merging that PR tags and publishes the release. Claude decides when to merge it, per the `release-management` skill. See `release-management` and `changelog` skills for release workflows.
 
 ## Documentation Maintenance
 

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Footer > should render the shell footer with navigation and version information 1`] = `
+exports[`Footer > should render the shell footer with navigation 1`] = `
 <div>
   <footer
     class="mt-auto flex flex-col gap-8 border-separator border-t pt-8"
@@ -403,9 +403,6 @@ exports[`Footer > should render the shell footer with navigation and version inf
         >
           LTA DataMall
         </a>
-         
-        · v
-        0.0.0-test
       </p>
     </div>
   </footer>
