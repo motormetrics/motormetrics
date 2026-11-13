@@ -112,7 +112,7 @@ export default function CarMakesPage({ searchParams }: PageProps) {
       <PageHead
         controls={
           <Suspense fallback={<Skeleton className="h-8 w-72" />}>
-            <RangeTabs />
+            <RangeTabs searchParams={searchParams} />
           </Suspense>
         }
         eyebrow="Cars · Makes"

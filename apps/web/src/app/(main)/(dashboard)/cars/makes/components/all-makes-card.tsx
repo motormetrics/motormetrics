@@ -1,4 +1,5 @@
 import { Typography } from "@heroui/react";
+import { FuelTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/fuel-tabs";
 import {
   loadMakeRows,
   summariseLeaders,
@@ -17,7 +18,8 @@ export async function AllMakesCard({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const { dir, fuel, range, sort } = await loadSearchParams(searchParams);
+  const params = await loadSearchParams(searchParams);
+  const { dir, fuel, range, sort } = params;
   const { latestMonth, rows, total } = await loadMakeRows(range, fuel);
   const fuelFilter = isFuelFilter(fuel) ? fuel : null;
   const summary = summariseLeaders(rows, latestMonth, range, fuelFilter);
@@ -26,6 +28,7 @@ export async function AllMakesCard({
     <div className="flex flex-col gap-3">
       <MakesTable
         fuel={fuelFilter}
+        fuelTabs={<FuelTabs params={params} />}
         rangeLabel={RANGE_LABELS[range]}
         total={total}
         rows={sortMakeRows(

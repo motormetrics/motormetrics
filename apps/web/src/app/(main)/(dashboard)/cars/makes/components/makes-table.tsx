@@ -13,7 +13,6 @@ import {
   type DataGridSortDescriptor,
   NumberValue,
 } from "@heroui-pro/react";
-import { FuelTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/fuel-tabs";
 import type { MakeRow } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import {
   type FuelFilter,
@@ -27,7 +26,7 @@ import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import Link from "next/link";
 import { useQueryStates } from "nuqs";
 import posthog from "posthog-js";
-import { type CSSProperties, useMemo, useState } from "react";
+import { type CSSProperties, type ReactNode, useMemo, useState } from "react";
 
 /** The trend series only feeds the headline sparkline, so it never crosses over. */
 export type MakesTableRow = Omit<MakeRow, "trend">;
@@ -82,11 +81,14 @@ function trackMakeSelected(make: string) {
  */
 export function MakesTable({
   fuel,
+  fuelTabs,
   rangeLabel,
   rows,
   total,
 }: {
   fuel: FuelFilter | null;
+  /** The powertrain switch, built on the server with its links. */
+  fuelTabs?: ReactNode;
   rangeLabel: string;
   rows: MakesTableRow[];
   /** Registrations across every make in the range, which the shares are of. */
@@ -265,7 +267,7 @@ export function MakesTable({
         }`}
         eyebrow="Registrations"
         title="All makes"
-        trailing={<FuelTabs fuel={fuel} />}
+        trailing={fuelTabs}
       />
 
       <div className="flex flex-wrap items-center gap-4">

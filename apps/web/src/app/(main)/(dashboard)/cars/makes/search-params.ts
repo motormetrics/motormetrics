@@ -1,4 +1,9 @@
-import { createLoader, parseAsString, parseAsStringLiteral } from "nuqs/server";
+import {
+  createLoader,
+  createSerializer,
+  parseAsString,
+  parseAsStringLiteral,
+} from "nuqs/server";
 
 /**
  * Periods the Makes page can be read over. `ytd` is the comp's default and the
@@ -101,3 +106,19 @@ export const searchParams = {
 };
 
 export const loadSearchParams = createLoader(searchParams);
+
+export type MakesSearchParams = Awaited<ReturnType<typeof loadSearchParams>>;
+
+const serializeSearchParams = createSerializer(searchParams);
+
+/**
+ * The page's own URL with some params changed, for filter links rendered on
+ * the server. Every other param carries over, and defaults drop out of the
+ * query string, so "Year to date" with no fuel is plain /cars/makes.
+ */
+export function makesHref(
+  current: MakesSearchParams,
+  changes: Partial<MakesSearchParams>,
+): string {
+  return serializeSearchParams("/cars/makes", { ...current, ...changes });
+}

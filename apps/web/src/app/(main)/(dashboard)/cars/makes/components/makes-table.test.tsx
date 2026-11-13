@@ -387,10 +387,11 @@ describe("MakesTable", () => {
       .toBeVisible();
   });
 
-  it("should mark the active powertrain tab and offer the rest", async () => {
+  it("should show the powertrain switch its server parent built", async () => {
     const screen = await render(
       <MakesTable
         fuel="Electric"
+        fuelTabs={<nav aria-label="Powertrain">Powertrain links</nav>}
         rangeLabel="Year to date"
         rows={rows}
         total={1000}
@@ -399,11 +400,8 @@ describe("MakesTable", () => {
     );
 
     await expect
-      .element(screen.getByRole("radio", { name: "Electric" }))
-      .toHaveAttribute("aria-checked", "true");
-    await expect
-      .element(screen.getByRole("radio", { name: "All" }))
-      .toHaveAttribute("aria-checked", "false");
+      .element(screen.getByRole("navigation", { name: "Powertrain" }))
+      .toBeVisible();
   });
 
   it("should not offer to expand a list that already fits", async () => {
