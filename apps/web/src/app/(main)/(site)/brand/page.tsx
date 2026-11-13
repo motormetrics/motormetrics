@@ -34,25 +34,25 @@ export const metadata: Metadata = {
   alternates: { canonical: "/brand" },
 };
 
-const INK_SURFACE = "#232A2E";
+const INK_SURFACE = "#2B2E31";
 const WHITE = "#FFFFFF";
 /* A near-black host surface, darker than the ink panel, to show that the
-   mark's own cream ground does not blend into whatever sits behind it. */
+   mark's own grey ground does not blend into whatever sits behind it. */
 const HOST_DARK = "#16181A";
 
 const MARK_FILE = "/brand/motormetrics-mark.svg";
 
 const SWATCHES = [
-  { colour: MARK_INK, label: `Ink deep ${MARK_INK} — first arch, "motor"` },
+  { colour: MARK_INK, label: `Ink ${MARK_INK} — first arch, "motor"` },
   {
     colour: MARK_ACCENT,
-    label: `Accent ${MARK_ACCENT} — second arch, "metrics"`,
+    label: `Slate ${MARK_ACCENT} — second arch, "metrics"`,
   },
   {
     colour: MARK_ACCENT_ON_DARK,
-    label: `Accent on dark ${MARK_ACCENT_ON_DARK}`,
+    label: `Slate on dark ${MARK_ACCENT_ON_DARK}`,
   },
-  { colour: WHITE, label: "White — dark and accent grounds" },
+  { colour: WHITE, label: "White — dark and slate grounds" },
 ];
 
 const FILES = [
@@ -103,7 +103,7 @@ export default function BrandPage() {
           className="max-w-3xl text-pretty text-lg leading-normal"
         >
           A lowercase m drawn as two arches. One arch per word; the second takes
-          the accent. Wordmark set in Urbanist Extrabold, lowercase, with the
+          the slate. Wordmark set in Urbanist Extrabold, lowercase, with the
           same two-tone split.
         </Typography.Paragraph>
       </section>
@@ -127,7 +127,7 @@ export default function BrandPage() {
           </div>
         </Figure>
         <Figure
-          caption={`On dark: white + accent-on-dark ${MARK_ACCENT_ON_DARK}`}
+          caption={`On dark: white + slate-on-dark ${MARK_ACCENT_ON_DARK}`}
         >
           <div
             className="flex h-50 items-center justify-center gap-3.5 rounded-2xl"
@@ -141,7 +141,7 @@ export default function BrandPage() {
             />
           </div>
         </Figure>
-        <Figure caption="On accent: mono white">
+        <Figure caption="On slate: mono white">
           <div
             className="flex h-50 items-center justify-center gap-3.5 rounded-2xl"
             style={{ background: MARK_ACCENT }}
@@ -194,7 +194,7 @@ export default function BrandPage() {
                   className="size-7 shrink-0 rounded-full"
                   style={{
                     background: colour,
-                    border: colour === WHITE ? "1px solid #E5E1D5" : undefined,
+                    border: colour === WHITE ? "1px solid #DDDEE0" : undefined,
                   }}
                 />
                 <span
@@ -223,7 +223,7 @@ export default function BrandPage() {
           for platforms that reject SVG. Same artwork in both. Favicon at 32px
           and up, PWA icon, app tile, social avatar, partner listing, deck title
           slide — all of them take this file. There is no light version and no
-          dark version, because the mark brings its own cream ground and
+          dark version, because the mark brings its own grey ground and
           therefore does not care what is behind it.
         </Typography.Paragraph>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
@@ -297,8 +297,8 @@ export default function BrandPage() {
           className="max-w-3xl text-pretty leading-relaxed"
         >
           The cost of standardising is two things. The mark always appears in
-          its cream frame, so on a dark surface it reads as a tile rather than
-          as arches floating free. And the 50% inset that keeps every crop safe
+          its grey frame, so on a dark surface it reads as a tile rather than as
+          arches floating free. And the 50% inset that keeps every crop safe
           leaves too little stroke at favicon scale — at a 16px frame the arches
           are 8px wide on a 1.2px stroke, which is a smudge. Below 32px, set the
           free-standing arches in code instead. In the product itself the nav
@@ -385,7 +385,7 @@ export default function BrandPage() {
 
 /**
  * The standard mark, served from its file rather than drawn inline — the
- * point of these specimens is what ships, cream ground and all. `unoptimized`
+ * point of these specimens is what ships, grey ground and all. `unoptimized`
  * because the source is an SVG: the image optimiser rejects it, and there is
  * nothing to optimise.
  */

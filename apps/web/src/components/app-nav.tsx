@@ -11,7 +11,7 @@ import {
   Separator,
 } from "@heroui/react";
 import { Navbar } from "@heroui-pro/react";
-import { LogoMark, Wordmark } from "@web/components/brand-logo";
+import { LogoMark, MARK_ACCENT, Wordmark } from "@web/components/brand-logo";
 import {
   MORE_NAV_ITEMS,
   MORE_NAV_SECTION_LABEL,
@@ -180,12 +180,12 @@ export function AppNav({
             href="/"
           >
             <span className="flex size-7.5 shrink-0 items-center justify-center rounded-lg border border-separator">
-              <LogoMark first="currentColor" second="var(--accent)" size={22} />
+              <LogoMark first="currentColor" second={MARK_ACCENT} size={22} />
             </span>
             <Wordmark
               className="text-lg md:text-xl"
               first="currentColor"
-              second="var(--accent)"
+              second={MARK_ACCENT}
             />
           </Link>
         </Navbar.Brand>

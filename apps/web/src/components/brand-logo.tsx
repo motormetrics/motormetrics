@@ -3,10 +3,12 @@ import type { SVGProps } from "react";
 
 /* The brand mark is drawn in fixed colours rather than theme tokens: the
    sheet documents the mark as it must appear, so it must not shift with the
-   colour scheme the way the page chrome around it does. */
-export const MARK_INK = "#16323F";
-export const MARK_ACCENT = "#4E7C9B";
-export const MARK_ACCENT_ON_DARK = "#9CC4DA";
+   colour scheme the way the page chrome around it does. The values are taken
+   from the HeroUI Glass theme: the ink is its accent, the slates are its
+   chart-2 and chart-5. */
+export const MARK_INK = "#2B2E31";
+export const MARK_ACCENT = "#57768C";
+export const MARK_ACCENT_ON_DARK = "#8CB4D1";
 
 const FIRST_ARCH = "M8 50 V30 a12 12 0 0 1 24 0 V50";
 const SECOND_ARCH = "M32 50 V30 a12 12 0 0 1 24 0 V50";
@@ -20,7 +22,7 @@ type LogoMarkProps = Omit<SVGProps<SVGSVGElement>, "viewBox" | "fill"> & {
 
 /**
  * A lowercase m drawn as two arches. One arch per word; the second takes the
- * accent. `first`/`second` exist for the on-dark, mono and "don't" variants.
+ * slate. `first`/`second` exist for the on-dark, mono and "don't" variants.
  */
 export function LogoMark({
   size,
@@ -69,8 +71,8 @@ const METRICS_PATH =
 
 /**
  * The wordmark is a graphic: always lowercase, Urbanist 800, tracking
- * -0.03em, with "metrics" in the accent. Colours are fixed for the same
- * reason as the mark; `mono` drops the split for accent grounds. Sized in
+ * -0.03em, with "metrics" in the slate. Colours are fixed for the same
+ * reason as the mark; `mono` drops the split for slate grounds. Sized in
  * ems, so a `text-*` class sets its height as it would a line of text.
  */
 export function Wordmark({

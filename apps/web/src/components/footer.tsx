@@ -1,5 +1,5 @@
 import { Typography } from "@heroui/react";
-import { LogoMark } from "@web/components/brand-logo";
+import { LogoMark, MARK_ACCENT } from "@web/components/brand-logo";
 import { SITE_TITLE } from "@web/config";
 import {
   FOOTER_NAV_ITEMS,
@@ -74,7 +74,7 @@ export function Footer({
         >
           <LogoMark
             first="currentColor"
-            second="var(--accent)"
+            second={MARK_ACCENT}
             size={18}
             strokeWidth={8}
           />
