@@ -29,8 +29,10 @@ export function Announcement() {
   }
 
   return (
-    <aside className="bg-accent text-accent-foreground">
-      <div className="mx-auto w-full max-w-page px-4 py-2 text-center sm:px-6 lg:px-9">
+    // No fill of its own: it sits on the shell's accent ground, above the
+    // page card.
+    <aside className="text-accent-foreground">
+      <div className="w-full px-4 py-2 text-center sm:px-6 lg:px-9">
         <p className="text-pretty font-medium text-xs sm:text-sm">
           {activeAnnouncement.content}
         </p>

@@ -35,6 +35,14 @@ exports[`Footer > should render the shell footer with navigation and version inf
             <li>
               <a
                 class="font-medium text-muted text-sm transition-colors hover:text-accent"
+                href="/coe/pqp"
+              >
+                PQP rates
+              </a>
+            </li>
+            <li>
+              <a
+                class="font-medium text-muted text-sm transition-colors hover:text-accent"
                 href="/coe/premiums"
               >
                 Premiums by category
@@ -46,14 +54,6 @@ exports[`Footer > should render the shell footer with navigation and version inf
                 href="/coe/results"
               >
                 Price history
-              </a>
-            </li>
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/coe/pqp"
-              >
-                PQP rates
               </a>
             </li>
           </ul>

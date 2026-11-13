@@ -2,10 +2,10 @@
 
 exports[`Announcement > should prioritise path-specific announcements 1`] = `
 <aside
-  class="bg-accent text-accent-foreground"
+  class="text-accent-foreground"
 >
   <div
-    class="mx-auto w-full max-w-page px-4 py-2 text-center sm:px-6 lg:px-9"
+    class="w-full px-4 py-2 text-center sm:px-6 lg:px-9"
   >
     <p
       class="text-pretty font-medium text-xs sm:text-sm"
