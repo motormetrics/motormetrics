@@ -21,7 +21,10 @@ describe("loadSearchParams", () => {
   });
 
   it("should read a powertrain it knows and drop one it does not", () => {
-    expect(loadSearchParams("?fuel=Hybrid").fuel).toBe("Hybrid");
+    expect(loadSearchParams("?fuel=Petrol-Electric").fuel).toBe(
+      "Petrol-Electric",
+    );
+    expect(loadSearchParams("?fuel=Hybrid").fuel).toBeNull();
     expect(loadSearchParams("?fuel=Diesel").fuel).toBeNull();
   });
 });

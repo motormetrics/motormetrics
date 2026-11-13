@@ -3,7 +3,6 @@ import type {
   FuelFilter,
   Range,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
-import { HYBRID_REGEX } from "@web/config";
 import { LOGOS_CACHE_TAG } from "@web/lib/cache-tags/logos";
 import type { MakeRegistrationStat } from "@web/queries/cars";
 import {
@@ -24,21 +23,14 @@ import { cacheLife, cacheTag } from "next/cache";
 /** The `cars.fuelType` value that means battery-electric and nothing else. */
 const BEV_FUEL_TYPE = "Electric";
 
-/** The breakdown queries each powertrain tab resolves to. */
-const FUEL_FILTER_QUERIES: Record<FuelFilter, string[]> = {
-  Petrol: ["Petrol"],
-  Hybrid: ["Petrol-Electric", "Diesel-Electric"],
-  Electric: [BEV_FUEL_TYPE],
-};
-
-/** Whether a `cars.fuelType` value belongs to the tab. */
+/**
+ * Whether a `cars.fuelType` value belongs to the tab. Tabs are LTA values, so
+ * only an exact match counts.
+ */
 export function matchesFuelFilter(
   filter: FuelFilter,
   fuelType: string,
 ): boolean {
-  if (filter === "Hybrid") {
-    return HYBRID_REGEX.test(fuelType);
-  }
   return fuelType === filter;
 }
 
@@ -236,7 +228,7 @@ export function buildTotalsFromStats(
  *
  * Rows are re-filtered through `isMatch` because `getFuelTypeData` turns
  * hyphens into SQL wildcards, so asking for "Petrol-Electric" also returns the
- * plug-in variant — wanted for the Hybrid tab, not for an exact fuel type.
+ * plug-in variant, which the tab must leave out.
  *
  * The change compares the active range against `priorWindow()`, as the
  * all-fuels path does. Both paths feed the same delta chips and the same
@@ -325,9 +317,7 @@ export async function loadMakeRows(
   cacheLife("max");
   cacheTag("cars:months", "cars:makes", LOGOS_CACHE_TAG);
   if (fuel) {
-    cacheTag(
-      ...FUEL_FILTER_QUERIES[fuel].map((fuelType) => `cars:fuel:${fuelType}`),
-    );
+    cacheTag(`cars:fuel:${fuel}`);
   }
 
   const [latestMonth, fuelTypeRows, logoUrlBySlug] = await Promise.all([
@@ -344,11 +334,9 @@ export async function loadMakeRows(
 
   let totals: MakeTotals[];
   if (fuel) {
-    const breakdowns = await Promise.all(
-      FUEL_FILTER_QUERIES[fuel].map((fuelType) => getFuelTypeData(fuelType)),
-    );
+    const breakdown = await getFuelTypeData(fuel);
     totals = buildTotalsFromFuelRows(
-      breakdowns.flatMap((breakdown) => breakdown.data),
+      breakdown.data,
       (fuelType) => matchesFuelFilter(fuel, fuelType),
       latestMonth,
       range,

@@ -20,11 +20,10 @@ export const RANGE_LABELS: Record<Range, string> = {
 };
 
 /**
- * Powertrains `make-rows` can narrow its rows to. `Hybrid` is not a
- * `cars.fuelType` value but the family `HYBRID_REGEX` describes; `make-rows`
- * resolves it into the breakdown queries it needs.
+ * Powertrains `make-rows` can narrow its rows to, by their LTA DataMall
+ * `cars.fuelType` value.
  */
-export const FUEL_FILTERS = ["Petrol", "Hybrid", "Electric"] as const;
+export const FUEL_FILTERS = ["Petrol", "Petrol-Electric", "Electric"] as const;
 export type FuelFilter = (typeof FUEL_FILTERS)[number];
 
 export function isRange(value: string): value is Range {

@@ -128,17 +128,14 @@ describe("buildTotalsFromStats", () => {
 });
 
 describe("matchesFuelFilter", () => {
-  it("should match an exact fuel type for the petrol and electric tabs", () => {
+  it("should match only the exact LTA fuel type", () => {
     expect(matchesFuelFilter("Petrol", "Petrol")).toBe(true);
     expect(matchesFuelFilter("Petrol", "Petrol-Electric")).toBe(false);
     expect(matchesFuelFilter("Electric", "Electric")).toBe(true);
-  });
-
-  it("should match every hybrid variant for the hybrid tab", () => {
-    expect(matchesFuelFilter("Hybrid", "Petrol-Electric")).toBe(true);
-    expect(matchesFuelFilter("Hybrid", "Petrol-Electric (Plug-In)")).toBe(true);
-    expect(matchesFuelFilter("Hybrid", "Diesel-Electric")).toBe(true);
-    expect(matchesFuelFilter("Hybrid", "Electric")).toBe(false);
+    expect(matchesFuelFilter("Petrol-Electric", "Petrol-Electric")).toBe(true);
+    expect(
+      matchesFuelFilter("Petrol-Electric", "Petrol-Electric (Plug-In)"),
+    ).toBe(false);
   });
 });
 
