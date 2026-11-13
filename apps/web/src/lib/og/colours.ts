@@ -5,8 +5,8 @@
  * values from the "Social Images" design comp are written out directly.
  */
 export const OG_COLOURS = {
-  /** Cream card background */
-  background: "#F7F5EF",
+  /** White card background */
+  background: "#FFFFFF",
 
   /** Primary ink */
   ink: "#232A2E",
@@ -45,7 +45,7 @@ export const OG_COLOURS = {
   accentMuted: "#B9CBD6",
 
   /** Dividers and bar tracks */
-  rule: "#E5E1D5",
+  rule: "#E3E6E8",
 
   /** White tiles */
   surface: "#FFFFFF",

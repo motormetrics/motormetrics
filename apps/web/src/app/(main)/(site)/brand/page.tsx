@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 const INK_SURFACE = "#232A2E";
 const WHITE = "#FFFFFF";
 /* A near-black host surface, darker than --ink-surface, to show that the
-   mark's own cream ground does not blend into whatever sits behind it. */
+   mark's own white ground does not blend into whatever sits behind it. */
 const HOST_DARK = "#16181A";
 
 const MARK_FILE = "/brand/motormetrics-mark.svg";
@@ -194,7 +194,7 @@ export default function BrandPage() {
                   className="size-7 shrink-0 rounded-full"
                   style={{
                     background: colour,
-                    border: colour === WHITE ? "1px solid #E5E1D5" : undefined,
+                    border: colour === WHITE ? "1px solid #E3E6E8" : undefined,
                   }}
                 />
                 <span
@@ -223,7 +223,7 @@ export default function BrandPage() {
           for platforms that reject SVG. Same artwork in both. Favicon at 32px
           and up, PWA icon, app tile, social avatar, partner listing, deck title
           slide — all of them take this file. There is no light version and no
-          dark version, because the mark brings its own cream ground and
+          dark version, because the mark brings its own white ground and
           therefore does not care what is behind it.
         </Typography.Paragraph>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
@@ -297,7 +297,7 @@ export default function BrandPage() {
           className="max-w-3xl text-pretty leading-relaxed"
         >
           The cost of standardising is two things. The mark always appears in
-          its cream frame, so on a dark surface it reads as a tile rather than
+          its white frame, so on a dark surface it reads as a tile rather than
           as arches floating free. And the 50% inset that keeps every crop safe
           leaves too little stroke at favicon scale — at a 16px frame the arches
           are 8px wide on a 1.2px stroke, which is a smudge. Below 32px, set the
@@ -385,7 +385,7 @@ export default function BrandPage() {
 
 /**
  * The standard mark, served from its file rather than drawn inline — the
- * point of these specimens is what ships, cream ground and all. `unoptimized`
+ * point of these specimens is what ships, white ground and all. `unoptimized`
  * because the source is an SVG: the image optimiser rejects it, and there is
  * nothing to optimise.
  */

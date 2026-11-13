@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-/* The standard mark: the two-tone arches on the cream canvas. iOS fills
+/* The standard mark: the two-tone arches on a white ground. iOS fills
    transparency with black and applies its own corner mask, so the ground is
    opaque and square. The arches carry the same 2/3 inset as
    public/brand/motormetrics-mark.svg, which leaves a quarter of the tile
@@ -18,7 +18,7 @@ export default function AppleIcon() {
       viewBox="0 0 64 64"
       width={size.width}
     >
-      <rect fill="#F7F5EF" height="64" width="64" />
+      <rect fill="#FFFFFF" height="64" width="64" />
       <g transform="translate(10.667 9.333) scale(0.66667)">
         <path
           d="M8 50 V30 a12 12 0 0 1 24 0 V50"

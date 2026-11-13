@@ -11,7 +11,7 @@ interface FrameProps {
 }
 
 /**
- * Cream full-bleed card with the shared MotorMetrics footer.
+ * White full-bleed card with the shared MotorMetrics footer.
  *
  * Every share card in the design comp ends with the same row: accent circle
  * with a trending-up mark, the wordmark, and a right-aligned label.
