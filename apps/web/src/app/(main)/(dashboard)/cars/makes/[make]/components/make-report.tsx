@@ -1,6 +1,7 @@
 import { buttonVariants } from "@heroui/styles";
 import { EmptyState } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
+import { slugify } from "@motormetrics/utils/slugify";
 import {
   FuelTypeTabs,
   PeriodTabs,
@@ -73,11 +74,9 @@ export async function MakeReport({
   make: string;
   searchParams: Promise<SearchParams>;
 }) {
-  const {
-    fuelType,
-    month: parsedMonth,
-    range,
-  } = await loadSearchParams(searchParams);
+  const params = await loadSearchParams(searchParams);
+  const { fuelType, month: parsedMonth, range } = params;
+  const path = `/cars/makes/${slugify(make)}`;
   const [{ month }, crossTab, logoUrlBySlug] = await Promise.all([
     getMonthOrLatest(parsedMonth, "cars"),
     getMakeCrossTab(make),
@@ -306,11 +305,15 @@ export async function MakeReport({
       <div className="flex flex-col gap-3.5 border-border border-y py-3.5 md:flex-row md:flex-wrap md:items-end md:gap-6">
         <div className="flex min-w-0 flex-col gap-1.5">
           <span className="font-semibold text-muted text-xs">Period</span>
-          <PeriodTabs />
+          <PeriodTabs params={params} path={path} />
         </div>
         <div className="flex min-w-0 flex-col gap-1.5">
           <span className="font-semibold text-muted text-xs">Fuel type</span>
-          <FuelTypeTabs fuelTypes={fuelTypeOptions} />
+          <FuelTypeTabs
+            fuelTypes={fuelTypeOptions}
+            params={params}
+            path={path}
+          />
         </div>
       </div>
 
