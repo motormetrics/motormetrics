@@ -33,6 +33,39 @@
 * **web:** narrow the collapsed nav bar gap so it fits 360px ([6090e5a](https://github.com/motormetrics/motormetrics/commit/6090e5aaf3f939c666272e513afae36e407b8d52))
 * **web:** span the exercise range switch across phone rows ([2cf018e](https://github.com/motormetrics/motormetrics/commit/2cf018efc793dce8722480c317b86c9af13b9a72))
 
+## [5.38.0](https://github.com/motormetrics/motormetrics/compare/v5.37.0...v5.38.0) (2026-11-13)
+
+
+### Features
+
+* **web:** add real lastmod dates to the sitemap ([e904695](https://github.com/motormetrics/motormetrics/commit/e904695833bcfd8c02a12c898d4ef0023f47e9bb))
+* **web:** describe make pages with their latest figures ([e81bb17](https://github.com/motormetrics/motormetrics/commit/e81bb17808f469b5d007155097aac536a33bc4bc))
+* **web:** draw a border on light theme fields ([15a9adf](https://github.com/motormetrics/motormetrics/commit/15a9adf49451b47f2c36eb1be04a7f4c35eb0d08))
+* **web:** give cards an edge on the white canvas ([a83ed59](https://github.com/motormetrics/motormetrics/commit/a83ed599af5e8a227234aeee9b568b031b3536be))
+* **web:** lead homepage tiles with pqp ([c070f02](https://github.com/motormetrics/motormetrics/commit/c070f02ad566107c646c657a4e8e85e498a7f6f7))
+* **web:** lead the nav with coe ahead of cars ([2c00182](https://github.com/motormetrics/motormetrics/commit/2c0018203aa575706cbdd8f65f8cae85b00b24d4))
+* **web:** link every make and post in the page html ([d83ada1](https://github.com/motormetrics/motormetrics/commit/d83ada1368f6ee038526d88852e405190b3b27de))
+* **web:** link every section from the footer ([51646be](https://github.com/motormetrics/motormetrics/commit/51646be6d108b0ae5610bce0e92b0f5075a3b43b))
+* **web:** quote live figures in cars faq answers ([4ba5f58](https://github.com/motormetrics/motormetrics/commit/4ba5f586f8ee28bc62d39fcdad11b9caa2ac1cfd))
+* **web:** quote live figures in coe faq answers ([cc400d5](https://github.com/motormetrics/motormetrics/commit/cc400d5ff22d71bda8289040f2e978ed4b253424))
+* **web:** quote live figures in ev, population and home faq answers ([171b269](https://github.com/motormetrics/motormetrics/commit/171b2695ac233de0598e8a9574077f5ae2679a96))
+* **web:** quote live figures in fuel and vehicle type faq answers ([0440251](https://github.com/motormetrics/motormetrics/commit/0440251a2b19a3ae0e64fdd723c34c8be4634ee6))
+* **web:** quote live figures in pqp and make faq answers ([c05f089](https://github.com/motormetrics/motormetrics/commit/c05f089b0181b38c29a2dffbac55ea72b9de0c85))
+* **web:** replace top nav with inset sidebar shell ([32b4e6f](https://github.com/motormetrics/motormetrics/commit/32b4e6f1bc65af1a2d7cb9d0e5ff4e89b64fce7b))
+* **web:** retitle parf calculator for search ([2a85f4a](https://github.com/motormetrics/motormetrics/commit/2a85f4ab7b0fd8b2a6df9981b85cb75351ffca48))
+* **web:** set announcement on the shell ground ([c2fa318](https://github.com/motormetrics/motormetrics/commit/c2fa31866b758c2221179e38f77167473e1cf445))
+* **web:** switch light theme to a white canvas ([6c31c37](https://github.com/motormetrics/motormetrics/commit/6c31c370eefd52134d378360f955779a1d2cebbe))
+
+
+### Bug Fixes
+
+* **web:** explain zero rates in charging faq answers ([03c3d00](https://github.com/motormetrics/motormetrics/commit/03c3d00ae4cbdc5b0ed6bb4861508802aa453cc6))
+
+
+### Performance Improvements
+
+* **web:** cache ev charging stats separately ([11736ff](https://github.com/motormetrics/motormetrics/commit/11736ff91342f78307a0074ee7158693ce55a1aa))
+
 ## [5.37.0](https://github.com/motormetrics/motormetrics/compare/v5.36.0...v5.37.0) (2026-10-31)
 
 
