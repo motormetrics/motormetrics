@@ -8,7 +8,7 @@ Automatically use Context7 for code generation and library documentation.
 
 ## GitHub Operations
 
-Prefer the GitHub MCP tools (`mcp__github__*`) over the `gh` CLI for issues, checks, and releases.
+Prefer the GitHub MCP tools (`mcp__github__*`) over the `gh` CLI for issues and checks.
 
 **Pull requests are the exception**: open and update PRs with the `create-pr` skill, not raw `gh` or MCP calls. It encodes the title and body conventions.
 
