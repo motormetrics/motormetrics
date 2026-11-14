@@ -1,5 +1,6 @@
 import {
   ARF_SCHEDULES,
+  bandLabel,
   calculateArf,
 } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-rates";
 import { describe, expect, it } from "vitest";
@@ -36,5 +37,13 @@ describe("calculateArf", () => {
 
   it("should return nothing for a zero OMV", () => {
     expect(calculateArf(0, current.tiers)).toEqual({ total: 0, bands: [] });
+  });
+});
+
+describe("bandLabel", () => {
+  it("should name the first, middle and open top bands", () => {
+    expect(bandLabel(0, 20_000)).toBe("First $20,000");
+    expect(bandLabel(20_000, 40_000)).toBe("$20,001 to $40,000");
+    expect(bandLabel(80_000, null)).toBe("Above $80,000");
   });
 });
