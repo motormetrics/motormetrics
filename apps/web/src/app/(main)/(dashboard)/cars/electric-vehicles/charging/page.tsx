@@ -1,4 +1,4 @@
-import { Chip, Skeleton } from "@heroui/react";
+import { Chip, Skeleton, Typography } from "@heroui/react";
 import { EmptyState } from "@heroui-pro/react";
 // import { AnimatedGrid } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-grid";
 import { AnimatedSection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-section";
@@ -7,6 +7,7 @@ import { AnimatedSection } from "@web/app/(main)/(dashboard)/cars/electric-vehic
 import { ChargingMap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map";
 import {
   // ChargingIntro,
+  ChargingLead,
   ChargingQuestions,
   ChargingSource,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-overview";
@@ -19,7 +20,8 @@ import { PriceSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles
 // import { UtilisationList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-list";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { PageHead } from "@web/components/shared/page-head";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -84,7 +86,7 @@ function CardSkeleton({ className = "" }: { className?: string }) {
 
 export default function ChargingPage({ searchParams }: PageProps) {
   return (
-    <>
+    <OverviewPage className="gap-10 max-md:gap-7">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -98,24 +100,45 @@ export default function ChargingPage({ searchParams }: PageProps) {
         }}
       />
 
-      <PageHead
-        badge={
-          <Chip color="accent" size="lg" variant="soft">
-            Beta
-          </Chip>
-        }
-        controls={
-          <Suspense fallback={<Skeleton className="h-12 w-56" />}>
+      {/* Direction D's head: eyebrow, title, lead, tools and source. There is
+          no charging artboard, so it takes D's head and section rhythm and
+          keeps the map hero below as it was. */}
+      <div className="flex min-w-0 flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Typography.Paragraph
+            className="uppercase"
+            color="muted"
+            size="xs"
+            weight="semibold"
+          >
+            Electric vehicles · Charging
+          </Typography.Paragraph>
+          <div className="flex flex-wrap items-center gap-4">
+            <Typography.Heading level={1}>
+              EV charging prices
+            </Typography.Heading>
+            <Chip color="accent" size="lg" variant="soft">
+              Beta
+            </Chip>
+          </div>
+        </div>
+        <Typography.Paragraph className="max-w-prose tabular-nums">
+          <Suspense fallback={<Skeleton className="h-6 w-full max-w-prose" />}>
+            <ChargingLead />
+          </Suspense>
+        </Typography.Paragraph>
+        <div className="flex flex-wrap items-end gap-3">
+          <Suspense fallback={<Skeleton className="h-10 w-56" />}>
             <DistrictControl searchParams={searchParams} />
           </Suspense>
-        }
-        sub={
-          <Suspense fallback={<Skeleton className="h-4 w-80" />}>
+          <SharePill title="EV charging prices" />
+        </div>
+        <Typography.Paragraph color="muted" size="sm">
+          <Suspense fallback=" ">
             <ChargingSource />
           </Suspense>
-        }
-        title="EV charging prices"
-      />
+        </Typography.Paragraph>
+      </div>
 
       {/* The price tiles below carry these figures now; the as-of line moved
           under the title.
@@ -167,10 +190,12 @@ export default function ChargingPage({ searchParams }: PageProps) {
         <ChargingEmptyState />
       </Suspense>
 
+      <Hairline />
+
       <Suspense fallback={null}>
         <ChargingQuestions />
       </Suspense>
-    </>
+    </OverviewPage>
   );
 }
 

@@ -56,6 +56,24 @@ export async function ChargingIntro() {
   );
 }
 
+/**
+ * The lead in Direction D's head: "11,562 public connectors at 2,776
+ * locations, at a median advertised rate of $0.69/kWh."
+ */
+export async function ChargingLead() {
+  const { stats } = await getChargingStats();
+  if (!stats) {
+    return null;
+  }
+
+  const median =
+    stats.medianPerKwh === null
+      ? ""
+      : `, at a median advertised rate of ${formatPerKwh(stats.medianPerKwh)}`;
+
+  return `Singapore has ${stats.connectors.toLocaleString("en-SG")} public EV charging connectors at ${stats.locations.toLocaleString("en-SG")} locations${median}.`;
+}
+
 /** The as-of line under the page title: when the snapshot was taken, and where from. */
 export async function ChargingSource() {
   const { observedAt } = await getChargingStats();
