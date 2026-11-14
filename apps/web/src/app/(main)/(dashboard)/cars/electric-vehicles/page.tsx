@@ -2,12 +2,17 @@ import { Skeleton, Typography } from "@heroui/react";
 import { EmptyState } from "@heroui-pro/react";
 import { AdoptionByMonth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-by-month";
 import { ChargingSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-summary";
-import { ElectrifiedTotal } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/electrified-total";
+import {
+  ElectrifiedMix,
+  MixCaption,
+  MixTitle,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/electrified-total";
 import {
   EvHero,
   EvKeyNumbers,
   EvLead,
   SelectedMonth,
+  SelectedMonthName,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-head";
 import { EvLeaderboard } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-leaderboard";
 import { loadEvSelection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
@@ -25,6 +30,8 @@ import {
   Hairline,
   OverviewGrid,
   OverviewPage,
+  SectionHead,
+  SourceNote,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { SharePill } from "@web/components/shared/share-pill";
@@ -207,6 +214,52 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
 
       <Hairline />
 
+      <section
+        className="@container flex scroll-mt-4 flex-col gap-4"
+        id="ev-mix"
+      >
+        <SectionHead
+          caption={
+            <Suspense fallback=" ">
+              <MixCaption selection={selection} />
+            </Suspense>
+          }
+          eyebrow={
+            <>
+              Figure 1 · Powertrain mix ·{" "}
+              <Suspense fallback=" ">
+                <SelectedMonthName selection={selection} />
+              </Suspense>
+            </>
+          }
+          title={
+            <>
+              Electrified total{" "}
+              <Suspense fallback=" ">
+                <MixTitle selection={selection} />
+              </Suspense>
+            </>
+          }
+        />
+        <SectionErrorBoundary title="Electrified total unavailable">
+          <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+            <ElectrifiedMix selection={selection} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SourceNote>
+          Source: LTA via DataMall · Electrified is battery-electric, plug-in
+          hybrid and hybrid combined, as a share of the month&apos;s new cars.
+        </SourceNote>
+      </section>
+
+      <Hairline />
+
+      <SectionErrorBoundary title="Registration trend unavailable">
+        <RegistrationTrend selection={selection} />
+      </SectionErrorBoundary>
+
+      <Hairline />
+
       <Suspense fallback={<HeadlineSkeleton />}>
         <EvOverview searchParams={searchParams} />
       </Suspense>
@@ -237,11 +290,7 @@ async function MonthControl({ searchParams }: PageProps) {
 }
 
 async function EvOverview({ searchParams }: PageProps) {
-  const {
-    month: requestedMonth,
-    powertrain,
-    range,
-  } = await loadSearchParams(searchParams);
+  const { month: requestedMonth } = await loadSearchParams(searchParams);
   const [{ month }, marketShare] = await Promise.all([
     getMonthOrLatest(requestedMonth, "cars"),
     getEvMarketShare(),
@@ -266,26 +315,6 @@ async function EvOverview({ searchParams }: PageProps) {
 
   return (
     <>
-      <SectionErrorBoundary title="Electrified total unavailable">
-        <Suspense fallback={<HeadlineSkeleton />}>
-          <ElectrifiedTotal month={month} />
-        </Suspense>
-      </SectionErrorBoundary>
-
-      <Hairline />
-
-      <SectionErrorBoundary title="Registration trend unavailable">
-        <Suspense fallback={<SectionSkeleton className="h-[320px]" />}>
-          <RegistrationTrend
-            month={month}
-            powertrain={powertrain}
-            range={range}
-          />
-        </Suspense>
-      </SectionErrorBoundary>
-
-      <Hairline />
-
       <OverviewGrid>
         <SectionErrorBoundary title="EV leaderboard unavailable">
           <Suspense fallback={<SectionSkeleton className="h-80" />}>
