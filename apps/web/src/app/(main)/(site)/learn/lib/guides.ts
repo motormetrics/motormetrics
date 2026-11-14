@@ -825,6 +825,55 @@ export function getAllGuideSlugs(): string[] {
   return GUIDES.map((guide) => guide.slug);
 }
 
+export interface GuideTopic {
+  id: string;
+  title: string;
+  caption: string;
+  slugs: string[];
+}
+
+/** The topics the index groups the guides under, in the order it lists them. */
+export const GUIDE_TOPICS: GuideTopic[] = [
+  {
+    id: "coe-and-renewal",
+    title: "COE and renewal",
+    caption:
+      "How the quota licence is bid for, and what it costs to keep a car on the road after 10 years.",
+    slugs: ["coe", "pqp"],
+  },
+  {
+    id: "car-taxes-and-rebates",
+    title: "Car taxes and rebates",
+    caption:
+      "What is added to a car's value at registration, and what comes back when it is deregistered early.",
+    slugs: ["parf", "check-parf-rebate", "arf", "omv"],
+  },
+];
+
+/**
+ * The guides under each topic, in the order the guides are listed. A guide
+ * no topic names lands under the last, so a new guide is never left off the
+ * index.
+ */
+export function groupGuidesByTopic(
+  guides: Guide[] = GUIDES,
+  topics: GuideTopic[] = GUIDE_TOPICS,
+): { topic: GuideTopic; guides: Guide[] }[] {
+  const lastIndex = topics.length - 1;
+
+  return topics
+    .map((topic, index) => ({
+      topic,
+      guides: guides.filter((guide) => {
+        const topicIndex = topics.findIndex(({ slugs }) =>
+          slugs.includes(guide.slug),
+        );
+        return topicIndex === -1 ? index === lastIndex : topicIndex === index;
+      }),
+    }))
+    .filter(({ guides: grouped }) => grouped.length > 0);
+}
+
 /** Words a minute, for the reading estimate the guide cards and heads carry. */
 const WORDS_PER_MINUTE = 200;
 
