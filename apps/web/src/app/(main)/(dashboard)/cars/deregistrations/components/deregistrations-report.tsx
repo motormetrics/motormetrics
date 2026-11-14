@@ -6,7 +6,6 @@ import {
   type DeregistrationSeries,
   DeregistrationsChart,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-chart";
-import { DeregistrationsHeadline } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-headline";
 import { MonthTable } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/month-table";
 import { stackedPoints } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/stacked-points";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
@@ -80,9 +79,6 @@ const CATEGORIES = [
   },
 ];
 
-/** The four COE categories the headline sets beside the month's total. */
-const HEADLINE_CATEGORIES = CATEGORIES.slice(0, 4);
-
 function percentageOf(count: number, total: number): number {
   return total > 0 ? (count / total) * 100 : 0;
 }
@@ -126,11 +122,9 @@ export async function DeregistrationsReport({
     getDeregistrations(),
   ]);
   const seriesMonths = trailingMonths(month, SERIES_MONTHS);
-  const priorMonth = shiftMonth(month, -1);
   const yearAgoMonth = shiftMonth(month, -12);
 
   const totals = totalsForMonth(records, month);
-  const priorTotals = totalsForMonth(records, priorMonth);
   const yearAgoTotals = totalsForMonth(records, yearAgoMonth);
 
   const rows = [...totals.entries()]
@@ -149,8 +143,6 @@ export async function DeregistrationsReport({
   }
 
   const total = sumOf(totals);
-  const priorTotal = sumOf(priorTotals);
-  const yearAgoTotal = sumOf(yearAgoTotals);
 
   // The chart and the month-by-month table share the category order and
   // colours, so a colour means the same thing in both.
@@ -177,26 +169,6 @@ export async function DeregistrationsReport({
 
   return (
     <>
-      <DeregistrationsHeadline
-        label={`Vehicles deregistered in ${formatMonthLabel(month)}`}
-        previousMonth={priorMonth}
-        previousValue={priorTotal}
-        stats={HEADLINE_CATEGORIES.map(({ name }) => {
-          const count = totals.get(name) ?? 0;
-          return {
-            label: name,
-            note: `${percentageOf(count, total).toFixed(1)}% of the month`,
-            value: count,
-          };
-        })}
-        sub={
-          yearAgoTotal > 0
-            ? `${rows.length} categories · ${percentageOf(total - yearAgoTotal, yearAgoTotal) >= 0 ? "up" : "down"} ${Math.abs(percentageOf(total - yearAgoTotal, yearAgoTotal)).toFixed(1)}% on ${formatMonthShortLabel(yearAgoMonth)}`
-            : `${rows.length} categories · no figures for ${formatMonthShortLabel(yearAgoMonth)} to compare against`
-        }
-        value={total}
-      />
-
       <section className="flex flex-col gap-4">
         <SectionHead
           caption={`${SERIES_MONTHS} months to ${formatMonthShortLabel(month)} · stacked by category · hover or tap a column`}
