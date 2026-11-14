@@ -1,5 +1,10 @@
 import { RANGES } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
-import { createLoader, parseAsString, parseAsStringLiteral } from "nuqs/server";
+import {
+  createLoader,
+  createSerializer,
+  parseAsString,
+  parseAsStringLiteral,
+} from "nuqs/server";
 
 /**
  * Periods the make page can be read over, anchored on the selected month
@@ -7,13 +12,12 @@ import { createLoader, parseAsString, parseAsStringLiteral } from "nuqs/server";
  * (`cars/makes/search-params.ts`) so the two pages read the same way.
  */
 export {
-  isRange,
   RANGE_LABELS,
   RANGES,
   type Range,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 
-export const searchParams = {
+export const makeSearchParams = {
   /**
    * Fuel type to narrow the page to, as LTA records it — `Petrol`, `Electric`,
    * `Petrol-Electric (Plug-In)` and so on. `null` is the unfiltered view. Not a
@@ -25,4 +29,13 @@ export const searchParams = {
   range: parseAsStringLiteral(RANGES).withDefault("ytd"),
 };
 
-export const loadSearchParams = createLoader(searchParams);
+export const loadSearchParams = createLoader(makeSearchParams);
+
+export type MakeSearchParams = Awaited<ReturnType<typeof loadSearchParams>>;
+
+/**
+ * Builds the period and fuel type links on the server. Defaults drop out of
+ * the query string, so the year to date over every fuel type is the plain
+ * make URL.
+ */
+export const serialize = createSerializer(makeSearchParams);
