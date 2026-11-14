@@ -78,7 +78,7 @@
     "sonner": "catalog:",
     "tailwind-merge": "3.6.0",
     "twitter-api-v2": "1.29.0",
-    "workflow": "5.0.0-beta.46",
+    "workflow": "5.5.0",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -101,7 +101,7 @@
     "@vitejs/plugin-react": "6.0.1",
     "@vitest/browser-playwright": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "@workflow/vitest": "5.0.0-beta.46",
+    "@workflow/vitest": "5.0.9",
     "babel-plugin-react-compiler": "1.0.0",
     "playwright": "1.60.0",
     "postcss": "8.5.23",
