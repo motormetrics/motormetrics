@@ -1,13 +1,17 @@
-import { cn, Typography } from "@heroui/react";
+import { cn, Skeleton, Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   biddingOrdinal,
   CATEGORY_DESCRIPTIONS,
   formatMonth,
-  groupByExercise,
   summarisePQP,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import {
+  type PQPCategoryRate,
+  ratesCaption,
+  trendCaption,
+} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-captions";
 import {
   PQPChart,
   type PQPSeries,
@@ -21,13 +25,20 @@ import {
   type PQPRateRow,
   PQPRatesTable,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-rates-table";
+import {
+  categoryName,
+  loadPqpData,
+  loadPqpView,
+  type PQPPageProps,
+  SelectedLabel,
+} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-view";
 import { RenewalCalculator } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal-calculator";
 import {
-  loadSearchParams,
   PQP_CATEGORY_KEYS,
   type PQPCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
 import {
   Hairline,
@@ -35,17 +46,11 @@ import {
   SectionLink,
   SourceNote,
 } from "@web/components/shared/overview";
-import { getCoeResults, getPQPOverview } from "@web/queries/coe";
-import type { Pqp } from "@web/types/coe";
 import {
   formatChartMonth,
   formatMonthName,
 } from "@web/utils/dates/format-month";
-import type { SearchParams } from "nuqs/server";
-
-/** `A` → `Category A`, the key the query and the types use. */
-const categoryName = (key: PQPCategoryKey) =>
-  toCategory(key) as keyof Pqp.Rates;
+import { Suspense } from "react";
 
 /**
  * What renewing costs against bidding, beyond the price. Authored copy — none
@@ -74,47 +79,78 @@ const RENEWAL_TRADEOFFS: { label: string; note: string }[] = [
 /** The two category columns of the month-by-month list. */
 const MONTH_CELL = "w-36 shrink-0 text-right max-md:w-24";
 
-export async function PQPReport({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const [{ category, term }, overview, coeResults] = await Promise.all([
-    loadSearchParams(searchParams),
-    getPQPOverview(),
-    getCoeResults(),
-  ]);
-  // The overview's latest premium is from the newest exercise, which the
-  // headline names.
-  const latestExercise = groupByExercise(coeResults).at(-1);
-  const { comparison, latestMonth, tableRows, trendData } = overview;
+const SECTION = "flex scroll-mt-4 flex-col gap-4";
 
-  if (!latestMonth || tableRows.length === 0) {
-    return <Typography.Paragraph>No PQP data available.</Typography.Paragraph>;
-  }
+/** Each category's latest published rate beside its latest premium. */
+async function loadCategoryRates(): Promise<
+  (PQPCategoryRate & { key: PQPCategoryKey })[]
+> {
+  const { ascending, latestPremium } = await loadPqpData();
+  return PQP_CATEGORY_KEYS.map((key) => ({
+    key,
+    premium: latestPremium(key),
+    rate: ascending.at(-1)?.[categoryName(key)] ?? 0,
+  }));
+}
 
-  // A ten-year renewal costs the full PQP; a five-year renewal costs half. The
-  // rate itself is what LTA publishes, so the term scales it rather than
-  // selecting a different figure.
-  const termFactor = term === "5" ? 0.5 : 1;
-
-  const formattedMonth = formatMonth(latestMonth);
-  const selected = categoryName(category);
-  const comparisonByCategory = new Map(
-    comparison.map((row) => [row.category, row]),
+/**
+ * The renew-or-deregister calculator, on the cached rates. It reads today's
+ * date as it renders, which is request-time data, hence the boundary.
+ */
+export async function PQPCalculator() {
+  const { trendData } = await loadPqpData();
+  return (
+    <Suspense fallback={<Skeleton className="h-96 w-full rounded-md" />}>
+      <RenewalCalculator rates={trendData} />
+    </Suspense>
   );
+}
 
-  // The query returns the months newest first; the chart reads left to right.
-  const ascending = [...trendData].sort((a, b) =>
-    a.month.localeCompare(b.month),
+/** Figure 1: every category's PQP by month, at the selected term. */
+export function PQPTrend({ searchParams }: PQPPageProps) {
+  return (
+    <section className={SECTION} id="pqp-trend">
+      <SectionHead
+        caption={
+          <Suspense fallback=" ">
+            <TrendCaption searchParams={searchParams} />
+          </Suspense>
+        }
+        eyebrow="Figure 1 · Trend"
+        title={
+          <>
+            PQP by month,{" "}
+            <SelectedLabel part="term" searchParams={searchParams} /> renewal
+          </>
+        }
+      />
+      <SectionErrorBoundary title="PQP trend unavailable">
+        <Suspense fallback={<Skeleton className="h-96 w-full rounded-md" />}>
+          <TrendChart searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
+      <SourceNote>
+        Source: LTA via DataMall · PQP published for each month,{" "}
+        <SelectedLabel part="term" searchParams={searchParams} /> renewal.
+        Y-axis does not start at zero. Hover or tap for values.
+      </SourceNote>
+    </section>
   );
+}
+
+async function TrendCaption({ searchParams }: PQPPageProps) {
+  const { category, rates } = await loadPqpView(searchParams);
+  return trendCaption(`Category ${category}`, rates) ?? null;
+}
+
+async function TrendChart({ searchParams }: PQPPageProps) {
+  const { ascending, category, factor } = await loadPqpView(searchParams);
 
   const series: PQPSeries[] = PQP_CATEGORY_KEYS.map((key) => ({
     key: categoryName(key),
     label: `Category ${key}`,
   }));
-
-  const chartData: PQPTrendPoint[] = ascending.map((point, index) => ({
+  const data: PQPTrendPoint[] = ascending.map((point, index) => ({
     label: formatChartMonth(point.month),
     title: formatMonth(point.month),
     year:
@@ -122,33 +158,85 @@ export async function PQPReport({
     ...Object.fromEntries(
       PQP_CATEGORY_KEYS.map((key) => [
         categoryName(key),
-        point[categoryName(key)] * termFactor,
+        point[categoryName(key)] * factor,
       ]),
     ),
   }));
-  const chartTicks = axisTicks(
-    chartData.flatMap((point) =>
+  const ticks = axisTicks(
+    data.flatMap((point) =>
       PQP_CATEGORY_KEYS.map((key) => Number(point[categoryName(key)])),
     ),
     { zero: false },
   );
-  const chartStep =
-    chartTicks.length > 1 ? chartTicks[1] - chartTicks[0] : undefined;
-  const firstMonth = ascending[0]?.month;
-  const oldestMonth = tableRows.at(-1)?.month;
-  const previousMonth = ascending.at(-2)?.month;
+
+  return (
+    <PQPChart
+      data={data}
+      selected={categoryName(category)}
+      series={series}
+      ticks={ticks}
+    />
+  );
+}
+
+/** Figure 2: the published rate for every category, selectable by row. */
+export function PQPRates({ searchParams }: PQPPageProps) {
+  return (
+    <section className={SECTION} id="pqp-rates">
+      <SectionHead
+        caption={<RatesCaption />}
+        eyebrow="Figure 2 · Rates by category"
+        title={<RatesTitle />}
+      />
+      <SectionErrorBoundary title="PQP rates unavailable">
+        <Suspense fallback={<Skeleton className="h-40 w-full rounded-md" />}>
+          <RatesTable searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
+      <RatesSummary />
+      <SourceNote>
+        Source: LTA via DataMall · 5-year cost is half the PQP. Gap is the
+        latest closing premium minus the PQP, as a share of the premium. PQP is
+        listed for Categories A and B only. Category E has no PQP of its own:
+        per LTA, a Category E COE is renewed at the PQP of the vehicle's own
+        category, A to D. Select a row to switch the headline and chart.
+      </SourceNote>
+    </section>
+  );
+}
+
+async function RatesTitle() {
+  const { latestMonth } = await loadPqpData();
+  return `${latestMonth ? `${formatMonth(latestMonth)} ` : ""}published rates`;
+}
+
+async function RatesCaption() {
+  return ratesCaption(await loadCategoryRates()) ?? null;
+}
+
+/** The 10-year and 5-year cost of each category, quoted from the data. */
+async function RatesSummary() {
+  const { ascending } = await loadPqpData();
   const summary = summarisePQP(ascending);
+  return summary ? (
+    <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
+      {summary}
+    </Typography.Paragraph>
+  ) : null;
+}
 
-  const rateRows: PQPRateRow[] = PQP_CATEGORY_KEYS.map((key) => {
-    const name = categoryName(key);
-    const rate = ascending.at(-1)?.[name] ?? 0;
-    const priorRate = ascending.at(-2)?.[name] ?? 0;
-    const premium = comparisonByCategory.get(name)?.latestPremium ?? 0;
-
+async function RatesTable({ searchParams }: PQPPageProps) {
+  const [{ ascending }, categoryRates] = await Promise.all([
+    loadPqpView(searchParams),
+    loadCategoryRates(),
+  ]);
+  const previousMonth = ascending.at(-2)?.month;
+  const rows: PQPRateRow[] = categoryRates.map(({ key, premium, rate }) => {
+    const priorRate = ascending.at(-2)?.[categoryName(key)] ?? 0;
     return {
       changeRatio: priorRate > 0 ? (rate - priorRate) / priorRate : null,
       description: CATEGORY_DESCRIPTIONS[toCategory(key)],
-      // The comp's definition: how far the market sits above the renewal rate.
+      // How far the market sits above the renewal rate.
       gapRatio: premium > 0 ? (premium - rate) / premium : null,
       key,
       latestPremium: premium,
@@ -156,14 +244,40 @@ export async function PQPReport({
     };
   });
 
-  const premiumBars: PQPPremiumPoint[] = PQP_CATEGORY_KEYS.map((key) => {
-    const name = categoryName(key);
-    return {
+  return (
+    <PQPRatesTable
+      categories={PQP_CATEGORY_KEYS}
+      previousMonthLabel={
+        previousMonth ? formatMonthName(previousMonth) : "last month"
+      }
+      rows={rows}
+    />
+  );
+}
+
+/**
+ * The figures still in the pre-D layout, until they move to their own
+ * sections: renewing or bidding, how the PQP is set, month by month, and the
+ * trade-offs.
+ */
+export async function PQPReport({ searchParams }: PQPPageProps) {
+  const [
+    { category, factor, latestExercise, latestMonth, tableRows, term },
+    categoryRates,
+  ] = await Promise.all([loadPqpView(searchParams), loadCategoryRates()]);
+  if (!latestMonth) {
+    return null;
+  }
+
+  const formattedMonth = formatMonth(latestMonth);
+  const oldestMonth = tableRows.at(-1)?.month;
+  const premiumBars: PQPPremiumPoint[] = categoryRates.map(
+    ({ key, premium, rate }) => ({
       category: `Cat ${key}`,
-      pqp: ascending.at(-1)?.[name] ?? 0,
-      premium: comparisonByCategory.get(name)?.latestPremium ?? 0,
-    };
-  });
+      pqp: rate,
+      premium,
+    }),
+  );
   const premiumTicks = axisTicks(
     premiumBars.flatMap((point) => [point.pqp, point.premium]),
     { zero: true },
@@ -171,60 +285,6 @@ export async function PQPReport({
 
   return (
     <>
-      <RenewalCalculator rates={trendData} />
-      <Hairline />
-
-      <section className="flex flex-col gap-4">
-        <SectionHead
-          caption={`${firstMonth ? `${formatMonth(firstMonth)} to ` : ""}${formattedMonth} · ${term}-year renewal`}
-          eyebrow="Trend"
-          title="PQP by month"
-        />
-        <PQPChart
-          data={chartData}
-          selected={selected}
-          series={series}
-          ticks={chartTicks}
-        />
-        <SourceNote>
-          Source: LTA via DataMall · PQP published for each month, {term}-year
-          renewal · Y-axis does not start at zero
-          {chartStep ? `; gridlines every ${formatCurrency(chartStep)}.` : "."}
-        </SourceNote>
-      </section>
-
-      <Hairline />
-
-      <section className="flex flex-col gap-4">
-        <SectionHead
-          caption="Select a row to switch the headline and chart"
-          eyebrow="Rates by category"
-          title={`${formattedMonth} published rates`}
-        />
-        <PQPRatesTable
-          categories={PQP_CATEGORY_KEYS}
-          previousMonthLabel={
-            previousMonth ? formatMonthName(previousMonth) : "last month"
-          }
-          rows={rateRows}
-        />
-        {summary ? (
-          <Typography.Paragraph
-            className="tabular-nums"
-            color="muted"
-            size="sm"
-          >
-            {summary}
-          </Typography.Paragraph>
-        ) : null}
-        <SourceNote>
-          5-year cost is half the PQP. Gap is the latest closing premium minus
-          the PQP, as a share of the premium. PQP is listed for Categories A and
-          B only. Category E has no PQP of its own: per LTA, a Category E COE is
-          renewed at the PQP of the vehicle's own category, A to D.
-        </SourceNote>
-      </section>
-
       <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
         <section className="flex min-w-0 flex-col gap-4 lg:col-span-7">
           <SectionHead
@@ -315,7 +375,7 @@ export async function PQPReport({
                         key={key}
                       >
                         <span className="font-semibold text-base tabular-nums">
-                          {rate > 0 ? formatCurrency(rate * termFactor) : "—"}
+                          {rate > 0 ? formatCurrency(rate * factor) : "—"}
                         </span>
                         <span className="text-muted text-xs tabular-nums">
                           {earlier && earlierRate > 0 && rate > 0 ? (

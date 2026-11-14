@@ -13,7 +13,12 @@ import {
   PQPLead,
   PQPSource,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-headline";
-import { PQPReport } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-report";
+import {
+  PQPCalculator,
+  PQPRates,
+  PQPReport,
+  PQPTrend,
+} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-report";
 import {
   type PQPPageProps,
   SelectedLabel,
@@ -245,15 +250,16 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
         </div>
       </div>
 
+      <SectionErrorBoundary title="Renewal calculator unavailable">
+        <PQPCalculator />
+      </SectionErrorBoundary>
+      <Hairline />
+      <PQPTrend searchParams={searchParams} />
+      <Hairline />
+      <PQPRates searchParams={searchParams} />
+      <Hairline />
       <SectionErrorBoundary title="PQP rates unavailable">
-        <Suspense
-          fallback={
-            <div className="flex flex-col gap-4">
-              <Skeleton className="h-96 w-full" />
-              <Skeleton className="h-96 w-full" />
-            </div>
-          }
-        >
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
           <PQPReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
