@@ -14,7 +14,7 @@ export const updateMaintenanceConfig = async (
     headers: await headers(),
   });
 
-  if (!session) {
+  if (session?.user.role !== "admin") {
     return {
       success: false,
       error: "Unauthorised",

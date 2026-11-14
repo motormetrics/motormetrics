@@ -171,6 +171,41 @@ describe("proxy", () => {
     });
   });
 
+  describe("admin routes", () => {
+    async function requestAdmin(session: unknown) {
+      const { auth } = await import("@web/lib/auth");
+      vi.mocked(auth.api.getSession).mockResolvedValue(session as never);
+      const { proxy } = await import("@web/proxy");
+
+      return proxy(new NextRequest("http://localhost/admin/content/blog"));
+    }
+
+    it("should redirect to the login page without a session", async () => {
+      const response = await requestAdmin(null);
+
+      expect(response.headers.get("location")).toBe(
+        "http://localhost/admin/login",
+      );
+    });
+
+    it.each([
+      null,
+      "user",
+    ])("should redirect a signed-in user with role %s to the login page", async (role) => {
+      const response = await requestAdmin({ user: { role } });
+
+      expect(response.headers.get("location")).toBe(
+        "http://localhost/admin/login",
+      );
+    });
+
+    it("should let an admin through", async () => {
+      const response = await requestAdmin({ user: { role: "admin" } });
+
+      expect(response.headers.get("location")).toBeNull();
+    });
+  });
+
   describe("matcher", () => {
     async function matches(url: string, headers?: Record<string, string>) {
       const { config } = await import("@web/proxy");

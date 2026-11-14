@@ -20,7 +20,7 @@ export async function regeneratePost(params: {
     headers: await headers(),
   });
 
-  if (!session) {
+  if (session?.user.role !== "admin") {
     return {
       success: false,
       error: "Unauthorised",
@@ -51,7 +51,7 @@ export async function createBlogPost(
     headers: await headers(),
   });
 
-  if (!session) {
+  if (session?.user.role !== "admin") {
     return {
       success: false,
       error: "Unauthorised",
@@ -91,7 +91,7 @@ export async function updateBlogPost(
     headers: await headers(),
   });
 
-  if (!session) {
+  if (session?.user.role !== "admin") {
     return {
       success: false,
       error: "Unauthorised",
@@ -122,7 +122,7 @@ export async function deleteBlogPost(
     headers: await headers(),
   });
 
-  if (!session) {
+  if (session?.user.role !== "admin") {
     return {
       success: false,
       error: "Unauthorised",

@@ -10,7 +10,7 @@ export const getMaintenanceConfig = async (): Promise<MaintenanceConfig> => {
     headers: await headers(),
   });
 
-  if (!session) {
+  if (session?.user.role !== "admin") {
     throw new Error("Unauthorised");
   }
 

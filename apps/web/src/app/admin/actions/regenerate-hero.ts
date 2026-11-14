@@ -9,7 +9,7 @@ export async function regeneratePostHero(
   postId: string,
 ): Promise<{ success: boolean; error?: string; runId?: string }> {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) {
+  if (session?.user.role !== "admin") {
     return { success: false, error: "Unauthorised" };
   }
 

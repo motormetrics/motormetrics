@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
   if (!isBearerAuth) {
     const session = await auth.api.getSession({ headers: headersList });
-    if (!session) {
+    if (session?.user.role !== "admin") {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
