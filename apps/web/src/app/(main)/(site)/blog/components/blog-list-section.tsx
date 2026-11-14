@@ -1,15 +1,21 @@
-import { Skeleton } from "@heroui/react";
 import { BlogList } from "@web/app/(main)/(site)/blog/components/blog-list";
+import { loadSearchParams } from "@web/app/(main)/(site)/blog/search-params";
 import { getAllPosts, searchPosts } from "@web/queries/posts";
-import { Suspense } from "react";
+import type { SearchParams } from "nuqs/server";
 
-interface BlogListSectionProps {
-  query: string;
-}
+/**
+ * The archive's posts, or the results for `?q`. The only part of the index
+ * that reads search params, so the only part behind a boundary.
+ */
+export async function BlogArchive({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { q: query } = await loadSearchParams(searchParams);
 
-async function BlogListContent({ query }: BlogListSectionProps) {
   if (query) {
-    // Search results hide the topic pills, so no categories are needed.
+    // Search results hide the topic tabs, so no categories are needed.
     return (
       <BlogList
         categories={[]}
@@ -21,14 +27,14 @@ async function BlogListContent({ query }: BlogListSectionProps) {
 
   const posts = await getAllPosts();
 
-  // Read from every published post, featured one included, so its topic
-  // still gets a tab.
+  // Read from every published post, the latest included, so its topic still
+  // gets a tab.
   const categories = [
     ...new Set(posts.flatMap((post) => (post.dataType ? [post.dataType] : []))),
   ].sort((a, b) => a.localeCompare(b));
 
-  // The newest post is the featured card above, so "All" starts at the
-  // second; the comp still lists it under its own topic.
+  // The newest post leads the page above, so "All" starts at the second; it
+  // is still listed under its own topic.
   return (
     <BlogList
       categories={categories}
@@ -36,23 +42,5 @@ async function BlogListContent({ query }: BlogListSectionProps) {
       posts={posts}
       query={query}
     />
-  );
-}
-
-export function BlogListSection({ query }: BlogListSectionProps) {
-  return (
-    <Suspense
-      key={query}
-      fallback={
-        <div className="flex flex-col gap-4">
-          {Array.from({ length: 6 }, (_, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: skeleton items are static placeholders
-            <Skeleton key={index} className="h-20 w-full" />
-          ))}
-        </div>
-      }
-    >
-      <BlogListContent query={query} />
-    </Suspense>
   );
 }
