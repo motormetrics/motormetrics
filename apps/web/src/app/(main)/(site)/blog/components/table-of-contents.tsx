@@ -10,7 +10,8 @@ interface TocItem {
 }
 
 /**
- * The rail's "In this post" list, marking the section in view. The headings are read out of the
+ * The "In this post" jump list under the key numbers, marking the section in
+ * view. The headings are read out of the
  * rendered article, so the list cannot fall out of step with it, and the ids
  * are the ones `rehype-slug` gave the headings.
  */
@@ -68,11 +69,9 @@ export function TableOfContents() {
   }
 
   return (
-    <nav aria-label="In this post" className="flex flex-col max-lg:hidden">
-      <span className="border-border border-b pb-2 font-semibold text-muted text-xs">
-        In this post
-      </span>
-      <ol className="flex flex-col pt-1.5">
+    <nav aria-label="In this post" className="flex flex-col gap-2">
+      <span className="font-semibold text-muted text-xs">In this post</span>
+      <ol className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
         {headings.map((heading) => {
           const active = activeId === heading.id;
           return (
@@ -80,10 +79,10 @@ export function TableOfContents() {
               <Link
                 aria-current={active ? "location" : undefined}
                 className={cn(
-                  "block border-l-2 py-1.5 pl-2.5 text-sm no-underline transition-colors",
+                  "font-semibold no-underline transition-colors",
                   active
-                    ? "border-l-accent font-semibold text-foreground"
-                    : "border-transparent text-muted-strong hover:border-l-chart-5 hover:text-accent-strong",
+                    ? "text-foreground"
+                    : "text-accent-strong hover:text-accent-deep",
                 )}
                 href={`#${heading.id}`}
                 onClick={(event) => {

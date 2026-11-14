@@ -1,11 +1,10 @@
 import { Typography } from "@heroui/react";
-import type { SelectPost } from "@motormetrics/database/schema";
 import { getCategoryConfig } from "@web/app/(main)/(site)/blog/components/post/utils";
+import { getPopularPostsWithData } from "@web/queries/posts/popularity";
 import Link from "next/link";
 
-interface PostWithViews extends SelectPost {
-  viewCount: number;
-}
+/** How many posts the list ranks. */
+const LIMIT = 5;
 
 const views = new Intl.NumberFormat("en-SG", {
   maximumFractionDigits: 1,
@@ -13,39 +12,43 @@ const views = new Intl.NumberFormat("en-SG", {
 });
 
 /**
- * The posts readers open most, as a ruled list under the featured card — the
- * one signal the blog owns that the comp has no slot for.
+ * The posts readers open most, ranked beside the head once the page is wide
+ * and under it before then. Reads cached view counts only, so it needs no
+ * Suspense boundary.
  */
-export function PopularPosts({ posts }: { posts: PostWithViews[] }) {
+export async function MostRead() {
+  const posts = await getPopularPostsWithData(LIMIT);
+
   if (posts.length === 0) {
     return null;
   }
 
   return (
-    // Pulled out by the rows' padding, so the hover fill has room while the
-    // text stays on the section's edge.
-    <section className="-mx-3 flex flex-col">
-      <Typography.Heading
-        className="border-border border-b px-3 pb-2 font-semibold text-muted text-xs"
-        level={2}
+    <aside aria-labelledby="most-read" className="flex flex-col gap-3">
+      <Typography.Paragraph
+        className="uppercase"
+        color="muted"
+        id="most-read"
+        size="xs"
+        weight="semibold"
       >
         Most read
-      </Typography.Heading>
-      <ol className="flex flex-col">
+      </Typography.Paragraph>
+      <ol className="flex flex-col border-separator border-t">
         {posts.map((post, index) => (
           <li className="border-separator border-b" key={post.id}>
             <Link
-              className="group flex items-baseline gap-4 px-3 py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
+              className="group flex gap-2.5 py-3 text-foreground no-underline"
               href={`/blog/${post.slug}`}
             >
-              <span className="w-5 shrink-0 text-muted text-sm tabular-nums">
+              <span className="w-5 shrink-0 font-semibold text-muted text-sm tabular-nums">
                 {index + 1}
               </span>
-              <span className="flex min-w-0 flex-1 flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-4">
-                <span className="min-w-0 flex-1 font-semibold text-sm transition-colors group-hover:text-accent-strong">
+              <span className="flex min-w-0 flex-col gap-0.5">
+                <span className="font-semibold text-sm leading-snug group-hover:underline">
                   {post.title}
                 </span>
-                <span className="shrink-0 text-muted text-xs tabular-nums">
+                <span className="text-muted text-xs tabular-nums">
                   {getCategoryConfig(post).label} ·{" "}
                   {views.format(post.viewCount)} views
                 </span>
@@ -54,6 +57,9 @@ export function PopularPosts({ posts }: { posts: PostWithViews[] }) {
           </li>
         ))}
       </ol>
-    </section>
+      <Typography.Paragraph color="muted" size="xs">
+        Page views on motormetrics.app/blog.
+      </Typography.Paragraph>
+    </aside>
   );
 }
