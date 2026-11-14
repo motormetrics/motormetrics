@@ -1,5 +1,4 @@
 import { Skeleton, Typography } from "@heroui/react";
-import { EmptyState } from "@heroui-pro/react";
 import {
   AdoptionByMonth,
   loadShareWindow,
@@ -29,16 +28,22 @@ import {
   summariseLeaderboard,
   yearToDateMakes,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import { makesCaption } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-summary";
+import {
+  chargingCaption,
+  makesCaption,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-summary";
 import { buildElectricVehiclesFaqs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/faq-data";
 import { RegistrationTrend } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/registration-trend";
-import { VesBands } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ves-bands";
+import {
+  VES_BANDS,
+  VesBands,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ves-bands";
+import { CHARGING_POINT_TARGET_2030 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MonthMenu } from "@web/components/shared/month-menu";
 import {
   Hairline,
-  OverviewGrid,
   OverviewPage,
   SectionHead,
   SourceNote,
@@ -52,10 +57,10 @@ import {
   generateFAQPageSchema,
 } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { getEvMarketShare, getFuelTypeData } from "@web/queries/cars";
+import { getFuelTypeData } from "@web/queries/cars";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
+import { getEvChargingNetworkSummary } from "@web/queries/ev-charging";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
-import { Zap } from "lucide-react";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
@@ -101,27 +106,6 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-function HeadlineSkeleton() {
-  return (
-    <div className="flex flex-col gap-4">
-      <Skeleton className="h-5 w-56" />
-      <Skeleton className="h-16 w-48" />
-      <Skeleton className="h-5 w-72" />
-      <Skeleton className="h-[150px] w-full" />
-    </div>
-  );
-}
-
-function SectionSkeleton({ className = "h-64" }: { className?: string }) {
-  return (
-    <div className="flex flex-col gap-4">
-      <Skeleton className="h-4 w-24" />
-      <Skeleton className="h-8 w-48" />
-      <Skeleton className={`w-full ${className}`} />
-    </div>
-  );
-}
-
 /**
  * The questions and their FAQPage schema. Quotes the latest month's year to
  * date whatever month is selected, so it reads no search params.
@@ -153,6 +137,22 @@ async function ElectricVehiclesFaq() {
   );
 }
 
+async function MonthControl({ searchParams }: PageProps) {
+  const { month: requestedMonth } = await loadSearchParams(searchParams);
+  const [months, { month, wasAdjusted }] = await Promise.all([
+    fetchMonthsForCars(),
+    getMonthOrLatest(requestedMonth, "cars"),
+  ]);
+
+  if (months.length === 0) {
+    return null;
+  }
+
+  return (
+    <MonthMenu latestMonth={month} months={months} wasAdjusted={wasAdjusted} />
+  );
+}
+
 async function MakesCaption({ selection }: SelectionProps) {
   const { month } = await selection;
   const [makes, shares] = await Promise.all([
@@ -161,6 +161,17 @@ async function MakesCaption({ selection }: SelectionProps) {
   ]);
 
   return makesCaption(makes, month, shares);
+}
+
+/** Reads only cached network data, so it is part of the static shell. */
+async function ChargingCaption() {
+  const network = await getEvChargingNetworkSummary();
+
+  return chargingCaption(
+    network.connectors,
+    CHARGING_POINT_TARGET_2030,
+    VES_BANDS[0].value,
+  );
 }
 
 export default function ElectricVehiclesPage({ searchParams }: PageProps) {
@@ -305,69 +316,24 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <Suspense fallback={<HeadlineSkeleton />}>
-        <EvOverview searchParams={searchParams} />
-      </Suspense>
+      <section className="flex scroll-mt-4 flex-col gap-6" id="ev-charging">
+        <SectionHead
+          caption={<ChargingCaption />}
+          eyebrow="Figure 4 · Infrastructure and incentives"
+          title="Charging network and VES bands"
+        />
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
+          <SectionErrorBoundary title="Charging network unavailable">
+            <ChargingSummary />
+          </SectionErrorBoundary>
+          <VesBands />
+        </div>
+        <SourceNote>Source: LTA; LTA DataMall EV Charging Points.</SourceNote>
+      </section>
 
       <Hairline />
 
-      <Suspense fallback={null}>
-        <ElectricVehiclesFaq />
-      </Suspense>
+      <ElectricVehiclesFaq />
     </OverviewPage>
-  );
-}
-
-async function MonthControl({ searchParams }: PageProps) {
-  const { month: requestedMonth } = await loadSearchParams(searchParams);
-  const [months, { month, wasAdjusted }] = await Promise.all([
-    fetchMonthsForCars(),
-    getMonthOrLatest(requestedMonth, "cars"),
-  ]);
-
-  if (months.length === 0) {
-    return null;
-  }
-
-  return (
-    <MonthMenu latestMonth={month} months={months} wasAdjusted={wasAdjusted} />
-  );
-}
-
-async function EvOverview({ searchParams }: PageProps) {
-  const { month: requestedMonth } = await loadSearchParams(searchParams);
-  const [{ month }, marketShare] = await Promise.all([
-    getMonthOrLatest(requestedMonth, "cars"),
-    getEvMarketShare(),
-  ]);
-
-  if (marketShare.length === 0) {
-    return (
-      <EmptyState className="rounded-3xl bg-default/50" size="lg">
-        <EmptyState.Header>
-          <EmptyState.Media variant="icon">
-            <Zap />
-          </EmptyState.Media>
-          <EmptyState.Title>No Data Available Yet</EmptyState.Title>
-          <EmptyState.Description className="max-w-sm">
-            Electric vehicle registration data is not available at the moment.
-            Please check back later.
-          </EmptyState.Description>
-        </EmptyState.Header>
-      </EmptyState>
-    );
-  }
-
-  return (
-    <>
-      <OverviewGrid>
-        <SectionErrorBoundary title="Charging network unavailable">
-          <Suspense fallback={<SectionSkeleton className="h-40" />}>
-            <ChargingSummary />
-          </Suspense>
-        </SectionErrorBoundary>
-        <VesBands />
-      </OverviewGrid>
-    </>
   );
 }

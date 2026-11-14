@@ -1,4 +1,5 @@
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { SubHead } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/sub-head";
+import { SourceNote } from "@web/components/shared/overview";
 
 /**
  * Vehicular Emissions Scheme bands, as published by NEA.
@@ -7,7 +8,7 @@ import { SectionHead, SourceNote } from "@web/components/shared/overview";
  * anything the ingestion pipeline tracks, so they change only when the scheme
  * itself does.
  */
-const VES_BANDS = [
+export const VES_BANDS = [
   { band: "A1", note: "Rebate", value: "$25,000" },
   { band: "A2", note: "Rebate", value: "$15,000" },
   { band: "B", note: "Neutral band", value: "$0" },
@@ -15,11 +16,10 @@ const VES_BANDS = [
 
 export function VesBands() {
   return (
-    <section className="flex min-w-0 flex-col gap-4">
-      <SectionHead
-        caption="Vehicular Emissions Scheme bands most EVs qualify for"
-        eyebrow="Incentives"
+    <div className="flex min-w-0 flex-col gap-3.5">
+      <SubHead
         link={{ href: "/learn", label: "EV ownership guide" }}
+        sub="Vehicular Emissions Scheme bands most EVs qualify for"
         title="VES bands"
       />
 
@@ -49,6 +49,6 @@ export function VesBands() {
       <SourceNote>
         Rebate amount for each Vehicular Emissions Scheme band.
       </SourceNote>
-    </section>
+    </div>
   );
 }
