@@ -3,6 +3,7 @@ import {
   COE_CATEGORIES,
   formatMonth,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { chartCaption } from "@web/app/(main)/(dashboard)/coe/results/components/results-captions";
 import {
   ResultsChart,
   type ResultsPoint,
@@ -12,21 +13,36 @@ import {
   premiumOf,
   type RegionProps,
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-shared";
-import { SeriesFilter } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { SourceNote } from "@web/components/shared/overview";
 import { formatMonthShortName } from "@web/utils/dates/format-month";
+
+/** The categories switched on, in LTA's order. */
+const plottedOf = (selected: string[]) =>
+  COE_CATEGORIES.filter((category) => selected.includes(category));
+
+/** " · Last 26 exercises", after Figure 1's eyebrow. */
+export async function ResultsChartCount({ searchParams }: RegionProps) {
+  const { exercises } = await loadExercises(searchParams);
+
+  return ` · Last ${exercises.length} exercises`;
+}
+
+/** Figure 1's caption, for the categories switched on. */
+export async function ResultsChartCaption({ searchParams }: RegionProps) {
+  const { exercises, selected } = await loadExercises(searchParams);
+
+  return chartCaption(exercises, plottedOf(selected)) ?? null;
+}
 
 /**
  * The premium-by-exercise lines for whichever categories are switched on,
- * under a head naming the span and carrying the series toggles.
+ * with the source line, whose gridline step follows the plotted series.
  */
 export async function ResultsChartPanel({ searchParams }: RegionProps) {
   const { exercises, selected } = await loadExercises(searchParams);
 
-  const plotted = COE_CATEGORIES.filter((category) =>
-    selected.includes(category),
-  );
+  const plotted = plottedOf(selected);
 
   const chartData: ResultsPoint[] = exercises.map((exercise) => {
     const [year, month] = exercise.month.split("-").map(Number);
@@ -54,25 +70,18 @@ export async function ResultsChartPanel({ searchParams }: RegionProps) {
   const latest = exercises.at(-1);
 
   return (
-    <section className="flex flex-col gap-4">
-      <SectionHead
-        caption={
-          first && latest
-            ? `${formatMonth(first.month)} to ${formatMonth(latest.month)} · select categories to plot`
-            : undefined
-        }
-        eyebrow={`Last ${exercises.length} exercises`}
-        title="Closing premium by category"
-        trailing={<SeriesFilter />}
-      />
+    <>
       <ResultsChart categories={plotted} data={chartData} ticks={ticks} />
       <SourceNote>
-        Source: LTA via DataMall · Quota premium at the close of each exercise ·
-        Y-axis does not start at zero
+        Source: LTA via DataMall · Quota premium at the close of each exercise
+        {first && latest
+          ? `, ${formatMonth(first.month)} to ${formatMonth(latest.month)}`
+          : ""}
+        . Y-axis does not start at zero
         {step ? `; gridlines every ${formatCurrency(step)}.` : "."} Category D
         premiums sit an order of magnitude below the car categories, so adding
-        it flattens the other lines.
+        it flattens the other lines. Hover or tap for values.
       </SourceNote>
-    </section>
+    </>
   );
 }
