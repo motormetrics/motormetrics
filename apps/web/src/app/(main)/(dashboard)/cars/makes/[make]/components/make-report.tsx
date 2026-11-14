@@ -396,55 +396,15 @@ export async function MakeReport({
 
       <Hairline />
 
-      <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-        <ReportTables make={make} report={report} />
-      </Suspense>
-    </>
-  );
-}
+      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-11 lg:gap-14">
+        <MakeMonthlyTable make={make} report={report} />
 
-/**
- * The monthly table, the peers and the fuel mix, which still take the
- * resolved figures and so wait as one.
- */
-async function ReportTables({ make, report }: MakeSectionProps) {
-  const {
-    fuelMix,
-    fuelType,
-    logoUrlBySlug,
-    makeTotal,
-    month,
-    peers,
-    periodCaption,
-    series,
-    seriesRange,
-  } = await report;
+        <div className="flex min-w-0 flex-col gap-10 lg:col-span-5">
+          <MakePeers make={make} report={report} />
 
-  return (
-    <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-11 lg:gap-14">
-      <MakeMonthlyTable
-        fuelType={fuelType}
-        make={make}
-        month={month}
-        series={series}
-        seriesRange={seriesRange}
-      />
-
-      <div className="flex min-w-0 flex-col gap-10 lg:col-span-5">
-        <MakePeers
-          logoUrlBySlug={logoUrlBySlug}
-          make={make}
-          peers={peers}
-          periodCaption={periodCaption}
-        />
-
-        <MakeFuelMix
-          fuelMix={fuelMix}
-          make={make}
-          makeTotal={makeTotal}
-          periodCaption={periodCaption}
-        />
+          <MakeFuelMix make={make} report={report} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
