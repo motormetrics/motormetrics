@@ -1,17 +1,11 @@
-import { Skeleton, Typography } from "@heroui/react";
-import {
-  type Highlight,
-  KeyHighlights,
-} from "@web/app/(main)/(site)/blog/components/key-highlights";
+import { Skeleton } from "@heroui/react";
 import { mdxComponents } from "@web/app/(main)/(site)/blog/components/mdx-components";
 import { getArticleSection } from "@web/app/(main)/(site)/blog/components/post/utils";
 import { PostHead } from "@web/app/(main)/(site)/blog/components/post-head";
 import { PostNavigation } from "@web/app/(main)/(site)/blog/components/post-navigation";
-import { PostSidebar } from "@web/app/(main)/(site)/blog/components/post-sidebar";
 import { ProgressBar } from "@web/app/(main)/(site)/blog/components/progress-bar";
 import { RelatedPosts } from "@web/app/(main)/(site)/blog/components/related-posts";
-import { Hairline } from "@web/components/shared/overview";
-import { SitePage } from "@web/components/shared/site-page";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -93,8 +87,8 @@ export const generateStaticParams = async () => {
 };
 
 /**
- * The article body, filling the full column beside the rail at the comp's
- * 18px body size — no second cap, so nothing leaves a gutter before the rail.
+ * The article body, held at the comp's 700px reading measure on the page's
+ * left edge.
  *
  * `prose` carries the markdown; the modifiers pull its greys onto the site's
  * own tokens so the copy matches the type around it.
@@ -105,7 +99,7 @@ async function Article({ slug, content }: { slug: string; content: string }) {
   cacheTag(`posts:slug:${slug}`);
 
   return (
-    <div className="prose dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted-strong prose-p:text-muted-strong prose-strong:text-foreground prose-td:text-muted-strong prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
+    <article className="prose dark:prose-invert max-w-prose prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted-strong prose-p:text-muted-strong prose-strong:text-foreground prose-td:text-muted-strong prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
       <MDXRemote
         source={content}
         components={mdxComponents}
@@ -138,7 +132,7 @@ async function Article({ slug, content }: { slug: string; content: string }) {
           },
         }}
       />
-    </div>
+    </article>
   );
 }
 
@@ -151,11 +145,11 @@ export default function BlogPostPage({ params }: PageProps) {
     <>
       <ProgressBar />
 
-      <SitePage className="gap-10 max-md:gap-7">
+      <OverviewPage className="gap-10 max-md:gap-7">
         <Suspense fallback={<PostSkeleton />}>
           <Post params={params} />
         </Suspense>
-      </SitePage>
+      </OverviewPage>
     </>
   );
 }
@@ -169,7 +163,7 @@ function PostSkeleton() {
         <Skeleton className="h-12 w-full" />
         <Skeleton className="h-5 w-64" />
       </div>
-      <Skeleton className="aspect-12/5 w-full rounded-4xl" />
+      <Skeleton className="aspect-12/5 w-full rounded-lg" />
       <div className="flex flex-col gap-4">
         <Skeleton className="h-6 w-full" />
         <Skeleton className="h-6 w-5/6" />
@@ -256,6 +250,7 @@ async function Post({ params }: PageProps) {
       />
       <PostHead
         initialViewCount={initialViewCount}
+        lede={lede}
         post={post}
         publishedAt={publishedDate}
         readingTimeText={readingTime(post.content).text}
@@ -264,7 +259,7 @@ async function Post({ params }: PageProps) {
       <Hairline />
 
       {post.heroImage ? (
-        <div className="relative aspect-12/5 w-full overflow-hidden rounded-4xl bg-surface-secondary shadow-surface">
+        <div className="relative aspect-12/5 w-full overflow-hidden rounded-lg bg-surface-secondary">
           <Image
             alt=""
             className="object-cover"
@@ -276,28 +271,11 @@ async function Post({ params }: PageProps) {
         </div>
       ) : null}
 
-      <div className="grid grid-cols-1 items-start gap-9 lg:grid-cols-12 lg:gap-16">
-        <article className="flex min-w-0 flex-col gap-6 lg:col-span-8">
-          {lede ? (
-            <Typography.Paragraph className="text-foreground text-lg leading-relaxed md:text-xl">
-              {lede}
-            </Typography.Paragraph>
-          ) : null}
+      <Article slug={post.slug} content={post.content} />
 
-          <KeyHighlights
-            highlights={post.highlights as Highlight[] | undefined}
-          />
+      <Hairline />
 
-          <Article slug={post.slug} content={post.content} />
-
-          <PostNavigation previous={previousPost} next={nextPost} />
-        </article>
-
-        {/* Sticky on the grid cell: the aside fills it, so has no room to stick. */}
-        <div className="lg:sticky lg:top-4 lg:col-span-4 xl:col-span-3 xl:col-start-10">
-          <PostSidebar post={post} />
-        </div>
-      </div>
+      <PostNavigation next={nextPost} post={post} previous={previousPost} />
 
       <RelatedPosts currentPostId={post.id} />
     </>

@@ -7,7 +7,7 @@ interface RelatedPostsProps {
   limit?: number;
 }
 
-/** The comp's "Read next" row — the posts nearest this one by embedding. */
+/** "Read next": the posts nearest this one by embedding. */
 export async function RelatedPosts({
   currentPostId,
   limit = 3,
@@ -29,10 +29,12 @@ export async function RelatedPosts({
           link={{ href: "/blog", label: "All posts" }}
           title="Read next"
         />
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {relatedPosts.map((post) => (
-            <PostCard key={post.id} post={post} showExcerpt={false} />
-          ))}
+        <div className="@container">
+          <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-3.5">
+            {relatedPosts.map((post) => (
+              <PostCard key={post.id} post={post} showExcerpt={false} />
+            ))}
+          </div>
         </div>
       </section>
     </>

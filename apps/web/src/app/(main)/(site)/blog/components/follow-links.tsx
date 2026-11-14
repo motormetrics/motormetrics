@@ -55,25 +55,28 @@ const LINKS_BY_CATEGORY: Record<PostCategoryKey, FollowLink[]> = {
   ],
 };
 
-/** The rail's closing list: "Follow the figures". */
+/** "Follow the figures": the live pages behind the post, as a row of links. */
 export function FollowLinks({ post }: { post: SelectPost }) {
   const links =
     LINKS_BY_CATEGORY[post.dataType as PostCategoryKey] ?? DEFAULT_LINKS;
 
   return (
-    <div className="flex flex-col">
-      <span className="border-border border-b pb-2 font-semibold text-muted text-xs">
+    <nav aria-label="Follow the figures" className="flex flex-col gap-2">
+      <span className="font-semibold text-muted text-xs">
         Follow the figures
       </span>
-      {links.map(({ href, label }) => (
-        <Link
-          className="border-separator border-b py-2.5 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
-          href={href}
-          key={href}
-        >
-          {label} →
-        </Link>
-      ))}
-    </div>
+      <ul className="flex flex-wrap gap-x-6 gap-y-1.5 text-sm">
+        {links.map(({ href, label }) => (
+          <li key={href}>
+            <Link
+              className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+              href={href}
+            >
+              {label} →
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
