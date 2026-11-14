@@ -6,6 +6,7 @@ import {
   formatMonth,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { CategoryHeader } from "@web/app/(main)/(dashboard)/coe/results/components/category-header";
+import { exercisesCaption } from "@web/app/(main)/(dashboard)/coe/results/components/results-captions";
 import {
   BIDS_CELL,
   EXERCISE_CELL,
@@ -18,6 +19,13 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-shared";
 import { ShowMoreRows } from "@web/app/(main)/(dashboard)/coe/results/components/show-more-rows";
 import { CostTrendChip } from "@web/components/shared/cost-trend-chip";
+
+/** Figure 2's caption, over the exercises in the period. */
+export async function ResultsByExerciseCaption({ searchParams }: RegionProps) {
+  const { exercises } = await loadExercises(searchParams);
+
+  return exercisesCaption(exercises) ?? null;
+}
 
 /**
  * Every exercise in the period, most recent first, with each category's

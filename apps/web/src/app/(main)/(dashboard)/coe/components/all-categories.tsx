@@ -13,33 +13,39 @@ import {
   summariseExercise,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import {
+  demandCaption,
+  pqpFor,
+} from "@web/app/(main)/(dashboard)/coe/components/overview-figures";
+import { loadCoeOverview } from "@web/app/(main)/(dashboard)/coe/components/overview-loader";
+import {
+  QuotaAllocationSelected,
+  QuotaAllocationView,
+} from "@web/app/(main)/(dashboard)/coe/components/quota-allocation-view";
 import { coeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
-import { SectionLink } from "@web/components/shared/overview";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { getCoeResults } from "@web/queries/coe";
 import { Suspense } from "react";
 
-/** Exercises behind each row's sparkline — a year of twice-monthly bidding. */
-const SERIES_LENGTH = 24;
+const DEFAULT_CATEGORY = coeOverviewSearchParams.category.defaultValue;
 
 /**
- * Every category's latest result side by side. The rows are shaped here, in
- * category order; the client table sorts them and selects a category on click.
- *
- * The table carries no visible title on desktop, where it sits straight under
- * the headline; below 720px an "All categories" eyebrow names the list. A
- * one-line recap of Cat A and B follows the table.
+ * Figure 2 on /coe: every category's latest result in a table beside the bids
+ * against quota. Both read cached data and sit in the static shell; the
+ * fallbacks select the default category, and the client views the category
+ * in the URL.
  */
 export async function AllCategories() {
-  const exercises = groupByExercise(await getCoeResults());
-  const latest = exercises.at(-1);
-  const previous = exercises.at(-2);
-  const recent = exercises.slice(-SERIES_LENGTH);
-  const summary = summariseExercise(exercises);
+  const [data, results] = await Promise.all([
+    loadCoeOverview(),
+    getCoeResults(),
+  ]);
 
-  if (!latest) {
+  if (!data) {
     return null;
   }
 
+  const { history, latest, previous } = data;
   const rows: CategoryRow[] = COE_CATEGORIES.map((category) => {
     const figures = latest.results[category];
     const premium = figures?.premium ?? 0;
@@ -52,9 +58,10 @@ export async function AllCategories() {
         previous?.results[category]?.premium ?? 0,
       ),
       description: CATEGORY_DESCRIPTIONS[category],
+      pqp: pqpFor(data, category)?.rate,
       premium,
       quota: figures?.quota ?? 0,
-      series: recent.flatMap((exercise) => {
+      series: history.flatMap((exercise) => {
         const value = exercise.results[category]?.premium;
         return value === undefined
           ? []
@@ -62,39 +69,44 @@ export async function AllCategories() {
       }),
     };
   });
+  const summary = summariseExercise(groupByExercise(results));
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-end gap-4">
-        {/* A paragraph-scale heading: Typography.Heading has no xs size, and
-            render needs a client-only function. */}
-        <Typography.Paragraph
-          role="heading"
-          aria-level={2}
-          className="uppercase md:sr-only"
-          weight="semibold"
-          color="muted"
-          size="xs"
+    <div className="flex flex-col gap-5">
+      <SectionHead
+        caption={demandCaption(latest)}
+        eyebrow="Figure 2 · This exercise"
+        link={{ href: "/coe/results", label: "All COE results" }}
+        title="All categories, and bids against quota"
+      />
+      <div className="grid items-start gap-x-16 gap-y-9 2xl:grid-cols-2">
+        <Suspense
+          fallback={
+            <AllCategoriesTable rows={rows} selected={DEFAULT_CATEGORY} />
+          }
         >
-          All categories
-        </Typography.Paragraph>
-        <SectionLink href="/coe/results">All COE results</SectionLink>
+          <AllCategoriesTableSelected rows={rows} />
+        </Suspense>
+        <Suspense
+          fallback={
+            <QuotaAllocationView
+              categoryKey={DEFAULT_CATEGORY}
+              latest={latest}
+            />
+          }
+        >
+          <QuotaAllocationSelected latest={latest} />
+        </Suspense>
       </div>
-      <Suspense
-        fallback={
-          <AllCategoriesTable
-            rows={rows}
-            selected={coeOverviewSearchParams.category.defaultValue}
-          />
-        }
-      >
-        <AllCategoriesTableSelected rows={rows} />
-      </Suspense>
       {summary ? (
         <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
           {summary}
         </Typography.Paragraph>
       ) : null}
+      <SourceNote>
+        Source: LTA via DataMall · Change is against the previous exercise;
+        colour does not show direction. Bids and quota share one scale.
+      </SourceNote>
     </div>
   );
 }

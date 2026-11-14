@@ -1,24 +1,23 @@
 "use client";
 
 import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { useCoeOverview } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
-  RangeTabs,
-  useCoeOverview,
-} from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
-import {
-  type CoeExercise,
   changeRatio,
-  type ExercisePremium,
   formatExerciseTick,
-  pairedCategories,
   premiumAxisTicks,
   premiumRangeStats,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import type {
-  CategoryKey,
-  ExerciseRange,
-} from "@web/app/(main)/(dashboard)/coe/components/search-params";
+import {
+  averagePremium,
+  type CoeOverviewData,
+  categoryHistory,
+  exerciseLabel,
+  formatPercentChange,
+  historyCaption,
+} from "@web/app/(main)/(dashboard)/coe/components/overview-figures";
+import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { PremiumTrendChart } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-trend-chart";
 import {
   SectionHead,
@@ -26,150 +25,82 @@ import {
   StatCell,
 } from "@web/components/shared/overview";
 
-/** "Sep 2 2026" — an exercise named with its year, for the stats strip. */
-const exerciseWithYear = (exercise: ExercisePremium): string =>
-  `${formatExerciseTick(exercise)} ${exercise.month.slice(0, 4)}`;
-
-/** "+3.0%", with a true minus for a fall and no colour. */
-const formatChange = (ratio: number): string =>
-  `${ratio < 0 ? "−" : "+"}${Math.abs(ratio * 100).toFixed(1)}%`;
-
 /**
- * The /coe bidding history: the selected category's premium across the chosen
- * range of exercises, with a ruled strip of its latest, high, low and change.
- * The strip goes two-by-two at 720px and below.
- *
- * `exercises` holds only the recent run the longest range needs, for every
- * category, so any tab draws from props without another fetch.
+ * Figure 1 on /coe: the selected category's premium over the last 24
+ * exercises, with a ruled strip of its average, high, low and change.
+ * `data` holds every category, so switching draws from props alone.
  */
 export function PremiumsByExerciseView({
   categoryKey,
-  exercises: recent,
-  onSelectRange,
-  range,
+  data,
 }: {
   categoryKey: CategoryKey;
-  exercises: CoeExercise[];
-  onSelectRange?: (range: ExerciseRange) => void;
-  range: ExerciseRange;
+  data: CoeOverviewData;
 }) {
   const category = toCategory(categoryKey);
-  // A and B share the chart until the merger; the selected one leads.
-  const paired = pairedCategories(category).find(
-    (shownCategory) => shownCategory !== category,
-  );
-  const exercises = recent.flatMap((exercise) => {
-    const premium = exercise.results[category]?.premium;
-    return premium === undefined
-      ? []
-      : [
-          {
-            biddingNo: exercise.biddingNo,
-            month: exercise.month,
-            pairedPremium: paired
-              ? exercise.results[paired]?.premium
-              : undefined,
-            premium,
-          },
-        ];
-  });
-  // One extra exercise so the first visible point still has a previous
-  // exercise to measure its change against.
-  const withBaseline = exercises.slice(-(Number(range) + 1));
-  const view = withBaseline.slice(-Number(range));
-  const offset = withBaseline.length - view.length;
-  const stats = premiumRangeStats(view);
-  const ticks = premiumAxisTicks(
-    view.flatMap((exercise) =>
-      exercise.pairedPremium === undefined
-        ? [exercise.premium]
-        : [exercise.premium, exercise.pairedPremium],
-    ),
-  );
+  const series = categoryHistory(data.history, category);
+  const stats = premiumRangeStats(series);
+  const ticks = premiumAxisTicks(series.map((exercise) => exercise.premium));
   const step = ticks.length > 1 ? ticks[1] - ticks[0] : undefined;
+  const first = series[0];
+  const last = series.at(-1);
 
   return (
     <div className="flex flex-col gap-5">
-      {/* At 720px and below the trailing slot spans the row so the switch can. */}
       <SectionHead
-        // Every tab keeps the same title, caption and legend shape, so
-        // switching category never changes their wrapped height.
-        caption={`Stats for ${category} · change category above or in the table`}
-        className="max-[720px]:[&>:last-child]:w-full"
-        eyebrow="Bidding history"
-        title={
-          paired
-            ? "Cat A and B premiums by exercise"
-            : `${category} premium by exercise`
-        }
-        trailing={<RangeTabs onSelect={onSelectRange} selected={range} />}
+        caption={historyCaption(category, series)}
+        eyebrow="Figure 1 · Bidding history"
+        title={`${category} premium, last ${series.length} exercises`}
       />
-      {stats ? (
+      {stats && first && last ? (
         <>
-          <div className="grid grid-cols-2 border-separator border-t min-[721px]:grid-cols-4 min-[721px]:[&>:nth-child(3)]:border-l min-[721px]:[&>:nth-child(3)]:pl-4">
+          <div className="grid grid-cols-2 border-separator border-t md:grid-cols-4">
             <StatCell
-              label="Latest"
-              note={exerciseWithYear(stats.latest)}
-              value={formatCurrency(stats.latest.premium)}
+              label={`${series.length}-exercise average`}
+              note={`${exerciseLabel(first)} to ${exerciseLabel(last)}`}
+              value={formatCurrency(averagePremium(series))}
             />
             <StatCell
-              label="High"
-              note={exerciseWithYear(stats.high)}
+              label={`${series.length}-exercise high`}
+              note={exerciseLabel(stats.high)}
               value={formatCurrency(stats.high.premium)}
             />
             <StatCell
-              label="Low"
-              note={exerciseWithYear(stats.low)}
+              label={`${series.length}-exercise low`}
+              note={exerciseLabel(stats.low)}
               value={formatCurrency(stats.low.premium)}
             />
             <StatCell
-              label={`Change over ${view.length} exercises`}
-              note={`from ${formatCurrency(stats.first.premium)}`}
-              value={formatChange(stats.change)}
+              label={`Change over ${series.length}`}
+              note={`from ${formatCurrency(first.premium)}`}
+              value={formatPercentChange(stats.change)}
             />
           </div>
-          <div className="flex gap-4 text-muted-strong text-xs">
-            {[
-              { color: "var(--chart-1)", name: category },
-              ...(paired ? [{ color: "var(--chart-2)", name: paired }] : []),
-            ].map((series) => (
-              <span
-                className="inline-flex items-center gap-1.5"
-                key={series.name}
-              >
-                <span
-                  aria-hidden
-                  className="h-2.5 w-3 rounded-xs"
-                  style={{ background: series.color }}
-                />
-                {series.name}
-              </span>
-            ))}
-          </div>
           <PremiumTrendChart
-            data={view.map((exercise, index) => {
-              const previous = withBaseline[index + offset - 1];
+            data={series.map((exercise, index) => {
+              const previous = series[index - 1];
+              const [year, month] = exercise.month.split("-").map(Number);
               return {
+                biddingNo: exercise.biddingNo,
                 change: previous
                   ? changeRatio(exercise.premium, previous.premium)
                   : undefined,
                 label: formatExerciseTick(exercise),
-                pairedPremium: exercise.pairedPremium,
+                monthIndex: year * 12 + month - 1,
                 premium: exercise.premium,
-                title: paired
-                  ? exerciseWithYear(exercise)
-                  : `${exerciseWithYear(exercise)} · ${category}`,
+                title: `${exerciseLabel(exercise)} · ${category}`,
               };
             })}
-            label={paired ? category : undefined}
-            pairedLabel={paired}
+            label={category}
+            tickMonths={2}
             ticks={ticks}
           />
-          {/* Holds three lines on phones, however long the gridline step. */}
-          <SourceNote className="max-md:min-h-16">
-            Source: LTA via DataMall · Quota premium at close of each exercise ·
-            Y-axis does not start at zero
-            {step ? `; gridlines every ${formatCurrency(step)}.` : "."}
+          <SourceNote>
+            Source: LTA via DataMall · Quota premium at the close of each
+            exercise, {exerciseLabel(first)} to {exerciseLabel(last)}. Y-axis
+            does not start at zero
+            {step ? `; gridlines every ${formatCurrency(step)}.` : "."} Hover or
+            tap for values.
           </SourceNote>
         </>
       ) : null}
@@ -177,20 +108,13 @@ export function PremiumsByExerciseView({
   );
 }
 
-/** The history for the category and range in the URL; render inside `<Suspense>`. */
+/** The history for the category in the URL; render inside `<Suspense>`. */
 export function PremiumsByExerciseSelected({
-  exercises,
+  data,
 }: {
-  exercises: CoeExercise[];
+  data: CoeOverviewData;
 }) {
-  const { category, range, selectRange } = useCoeOverview();
+  const { category } = useCoeOverview();
 
-  return (
-    <PremiumsByExerciseView
-      categoryKey={category}
-      exercises={exercises}
-      onSelectRange={selectRange}
-      range={range}
-    />
-  );
+  return <PremiumsByExerciseView categoryKey={category} data={data} />;
 }
