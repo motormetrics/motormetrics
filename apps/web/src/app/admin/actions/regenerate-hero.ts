@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@web/lib/auth";
+import { hasPermission } from "@web/lib/auth";
 import { regenerateHeroWorkflow } from "@web/workflows/regenerate-hero";
 import { headers } from "next/headers";
 import { start } from "workflow/api";
@@ -8,8 +8,7 @@ import { start } from "workflow/api";
 export async function regeneratePostHero(
   postId: string,
 ): Promise<{ success: boolean; error?: string; runId?: string }> {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (session?.user.role !== "admin") {
+  if (!(await hasPermission(await headers(), { post: ["update"] }))) {
     return { success: false, error: "Unauthorised" };
   }
 

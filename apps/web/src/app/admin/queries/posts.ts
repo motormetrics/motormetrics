@@ -1,6 +1,6 @@
 import { db } from "@motormetrics/database/client";
 import type { SelectPost } from "@motormetrics/database/schema";
-import { auth } from "@web/lib/auth";
+import { hasPermission } from "@web/lib/auth";
 import type { LanguageModelUsage } from "ai";
 import { headers } from "next/headers";
 
@@ -19,12 +19,8 @@ export type AdminPost = Pick<
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-const requireAdmin = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (session?.user.role !== "admin") {
+const requirePostRead = async () => {
+  if (!(await hasPermission(await headers(), { post: ["read"] }))) {
     throw new Error("Unauthorised");
   }
 };
@@ -36,7 +32,7 @@ const requireAdmin = async () => {
 export async function getAllPosts(): Promise<
   (AdminPost & Pick<SelectPost, "content">)[]
 > {
-  await requireAdmin();
+  await requirePostRead();
 
   const allPosts = await db.query.posts.findMany({
     columns: {
@@ -61,7 +57,7 @@ export async function getAllPosts(): Promise<
 }
 
 export async function getPostById(id: string): Promise<SelectPost | null> {
-  await requireAdmin();
+  await requirePostRead();
 
   if (!UUID_REGEX.test(id)) {
     return null;

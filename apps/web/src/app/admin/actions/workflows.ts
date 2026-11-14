@@ -1,7 +1,7 @@
 "use server";
 
 import { WORKFLOW_REGION } from "@web/config/workflow";
-import { auth } from "@web/lib/auth";
+import { hasPermission } from "@web/lib/auth";
 import { carPopulationWorkflow } from "@web/workflows/car-population";
 import { carsWorkflow } from "@web/workflows/cars";
 import { coeWorkflow } from "@web/workflows/coe";
@@ -23,8 +23,7 @@ const WORKFLOWS = {
 export async function triggerWorkflow(
   workflowId: string,
 ): Promise<{ success: boolean; error?: string; runId?: string }> {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (session?.user.role !== "admin") {
+  if (!(await hasPermission(await headers(), { workflow: ["trigger"] }))) {
     return { success: false, error: "Unauthorised" };
   }
 

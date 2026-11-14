@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@web/lib/auth";
+import { hasPermission } from "@web/lib/auth";
 import {
   type MaintenanceConfig,
   writeMaintenanceConfig,
@@ -10,11 +10,7 @@ import { headers } from "next/headers";
 export const updateMaintenanceConfig = async (
   maintenanceConfig: MaintenanceConfig,
 ): Promise<{ success: boolean; error?: string }> => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (session?.user.role !== "admin") {
+  if (!(await hasPermission(await headers(), { maintenance: ["update"] }))) {
     return {
       success: false,
       error: "Unauthorised",

@@ -5,7 +5,7 @@ import {
   pairSlug,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import { comparePath } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/copy";
-import { auth } from "@web/lib/auth";
+import { hasPermission } from "@web/lib/auth";
 import { type NextRequest, NextResponse } from "next/server";
 
 // Rate limiter for Developer API (60 requests per minute)
@@ -121,11 +121,7 @@ export async function proxy(request: NextRequest) {
     }
 
     // A session alone is not enough: any Google account can sign in
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
-
-    if (session?.user.role !== "admin") {
+    if (!(await hasPermission(request.headers, { dashboard: ["view"] }))) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
   }

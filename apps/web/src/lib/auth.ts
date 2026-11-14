@@ -9,9 +9,10 @@ import {
   users,
   verifications,
 } from "@motormetrics/database/schema";
+import { ac, admin, type Permissions, user } from "@web/lib/permissions";
 import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
-import { admin } from "better-auth/plugins";
+import { admin as adminPlugin } from "better-auth/plugins";
 
 export const auth = betterAuth({
   baseURL: {
@@ -44,7 +45,7 @@ export const auth = betterAuth({
     trustedProxyHeaders: true,
   },
   plugins: [
-    admin(),
+    adminPlugin({ ac, roles: { admin, user } }),
     nextCookies(), // Make sure this is the last plugin in the array
   ],
   socialProviders: {
@@ -54,3 +55,24 @@ export const auth = betterAuth({
     },
   },
 });
+
+/**
+ * Whether the signed-in user holds the given permissions. A session alone
+ * proves nothing: any Google account can create one.
+ */
+export const hasPermission = async (
+  requestHeaders: Headers,
+  permissions: Permissions,
+): Promise<boolean> => {
+  const session = await auth.api.getSession({ headers: requestHeaders });
+
+  if (!session) {
+    return false;
+  }
+
+  const { success } = await auth.api.userHasPermission({
+    body: { userId: session.user.id, permissions },
+  });
+
+  return success;
+};
