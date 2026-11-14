@@ -2,16 +2,12 @@ import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { formatPercentage } from "@motormetrics/utils/format-percentage";
 import { slugify } from "@motormetrics/utils/slugify";
-import {
-  FuelTypeTabs,
-  RangeTabs,
-} from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
+import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
 import { FuelTypeTable } from "@web/app/(main)/(dashboard)/cars/registrations/components/fuel-type-table";
 import {
   TopMakesTable,
   VehicleTypeTable,
 } from "@web/app/(main)/(dashboard)/cars/registrations/components/makes-and-types";
-import { RegistrationsHeadline } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-headline";
 import { RegistrationsTrendChart } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-trend-chart";
 import { trendPoints } from "@web/app/(main)/(dashboard)/cars/registrations/components/trend-points";
 import {
@@ -28,7 +24,6 @@ import {
   SectionHead,
   SourceNote,
 } from "@web/components/shared/overview";
-import { getDistinctFuelTypes } from "@web/queries/cars";
 import {
   getCarsComparison,
   getCarsData,
@@ -74,9 +69,8 @@ export async function RegistrationsReport({
     month: parsedMonth,
     range,
   } = await loadSearchParams(searchParams);
-  const [{ month }, fuelTypes, yearlyTotals, series] = await Promise.all([
+  const [{ month }, yearlyTotals, series] = await Promise.all([
     getMonthOrLatest(parsedMonth, "cars"),
-    getDistinctFuelTypes(),
     getYearlyRegistrations(),
     fuelType
       ? getMonthlyRegistrationTotalsByFuelType(fuelType, RANGE_MONTHS[range])
@@ -99,26 +93,6 @@ export async function RegistrationsReport({
     { zero: true },
   );
 
-  // The headline follows the filter: the fuel type's own count when one is
-  // selected, the month's full total otherwise.
-  const headlineValue = fuelType
-    ? (registrations.fuelType.find(({ name }) => name === fuelType)?.count ?? 0)
-    : registrations.total;
-  const previousValue = fuelType
-    ? lookup(comparison.previousMonth.fuelType, fuelType)
-    : comparison.previousMonth.total;
-
-  const lastTwelve = series.slice(-12).map(({ total }) => total);
-  const monthlyAverage = lastTwelve.length
-    ? Math.round(
-        lastTwelve.reduce((sum, total) => sum + total, 0) / lastTwelve.length,
-      )
-    : 0;
-  const bestMonth = lastTwelve.length ? Math.max(...lastTwelve) : 0;
-  const yearToDateTotal = series
-    .filter(({ month: seriesMonth }) => seriesMonth.startsWith(`${year}-`))
-    .reduce((sum, { total }) => sum + total, 0);
-
   const yearTotal =
     yearlyTotals.find((entry) => entry.year === year)?.total ?? 0;
 
@@ -134,53 +108,11 @@ export async function RegistrationsReport({
 
   return (
     <>
-      {/* Fuel type narrows the headline and the chart; range sets the chart
-          window. Each label sits over its own control, as in the comp. */}
-      <div className="flex flex-wrap items-end gap-6 border-border border-y py-4 max-md:flex-col max-md:items-stretch max-md:gap-4">
-        <div className="flex min-w-0 max-w-full flex-col gap-2">
-          <span className="font-semibold text-muted text-xs">Fuel type</span>
-          <FuelTypeTabs
-            fuelTypes={fuelTypes.map(({ fuelType: name }) => name)}
-          />
-        </div>
-        <div className="flex flex-col gap-2 md:ml-auto">
-          <span className="font-semibold text-muted text-xs">Range</span>
-          <RangeTabs />
-        </div>
-      </div>
-
-      <RegistrationsHeadline
-        label={
-          fuelType ? `${fuelType} cars registered` : "All new car registrations"
-        }
-        previousMonth={comparison.previousMonth.period}
-        previousValue={previousValue}
-        stats={[
-          {
-            label: "Previous month",
-            note: formatMonthLabel(comparison.previousMonth.period),
-            value: previousValue,
-          },
-          {
-            label: `${year} year to date`,
-            note: `${series.filter(({ month: m }) => m.startsWith(`${year}-`)).length} months`,
-            value: yearToDateTotal,
-          },
-          {
-            label: "Monthly average",
-            note: "last 12 months",
-            value: monthlyAverage,
-          },
-          { label: "Best month", note: "last 12 months", value: bestMonth },
-        ]}
-        sub={`${formatMonthLabel(month)} · ${fuelType ? `${((headlineValue / (registrations.total || 1)) * 100).toFixed(1)}% of the month` : "every fuel type"}`}
-        value={headlineValue}
-      />
-
       <section className="flex flex-col gap-4">
         <SectionHead
           caption={`${RANGE_CAPTIONS[range]} to ${formatDateToMonthYear(latestMonth)} · hover or tap a bar for its value`}
           eyebrow="Trend"
+          trailing={<RangeTabs />}
           title={
             fuelType
               ? `${fuelType} registrations by month`
