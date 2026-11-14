@@ -7,6 +7,8 @@ export interface CategoryRow {
   changeRatio: number;
   description: string;
   premium: number;
+  /** The latest PQP; `undefined` for Category E, which has none. */
+  pqp?: number;
   quota: number;
   /** Premiums over the recent exercises, oldest first, for the sparkline. */
   series: { label: string; value: number }[];
