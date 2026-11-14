@@ -1,9 +1,18 @@
+import { Typography } from "@heroui/react";
+import {
+  Hairline,
+  OverviewPage,
+  SectionHead,
+} from "@web/components/shared/overview";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 
 const title = "Privacy Policy";
 const description = `How ${SITE_TITLE} collects, uses, and protects your data. Learn about our analytics, third-party services, and your privacy rights.`;
+
+/** Typography styles for the lists and sub-headings inside each section. */
+const BODY_CLASS = "prose prose-neutral max-w-prose";
 
 export const metadata: Metadata = {
   title,
@@ -26,117 +35,159 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <article className="prose prose-neutral max-w-none">
-      <header className="mb-8">
-        <h1>Privacy Policy</h1>
-        <p className="text-muted">Last updated: December 2024</p>
-      </header>
+    <OverviewPage className="gap-10 max-md:gap-7">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Typography.Paragraph
+            className="uppercase"
+            color="muted"
+            size="xs"
+            weight="semibold"
+          >
+            Legal
+          </Typography.Paragraph>
+          <Typography.Heading level={1}>Privacy Policy</Typography.Heading>
+        </div>
+        <Typography.Paragraph color="muted" size="sm">
+          Last updated: December 2024
+        </Typography.Paragraph>
+      </div>
 
-      <section>
-        <h2>Privacy? We&apos;ve Got You Covered</h2>
-        <p>
-          We care about your privacy. This policy explains how we collect and
-          use your information when you visit {SITE_TITLE}. We&apos;ll keep it
-          simple and straightforward.
-        </p>
+      <section className="flex flex-col gap-4">
+        <SectionHead title="Privacy? We've Got You Covered" />
+        <div className={BODY_CLASS}>
+          <p>
+            We care about your privacy. This policy explains how we collect and
+            use your information when you visit {SITE_TITLE}. We&apos;ll keep it
+            simple and straightforward.
+          </p>
+        </div>
       </section>
 
-      <section>
-        <h2>What Information We Collect</h2>
+      <Hairline />
 
-        <h3>Stuff We Automatically Collect</h3>
-        <p>
-          When you visit our website, we automatically collect some basic info:
-        </p>
-        <ul>
-          <li>Your IP address and general location</li>
-          <li>What browser you&apos;re using</li>
-          <li>Your operating system</li>
-          <li>Which pages you visit and how long you stay</li>
-          <li>What website sent you to us</li>
-          <li>When you visited</li>
-        </ul>
+      <section className="flex flex-col gap-4">
+        <SectionHead title="What Information We Collect" />
+        <div className={BODY_CLASS}>
+          <h3>Stuff We Automatically Collect</h3>
+          <p>
+            When you visit our website, we automatically collect some basic
+            info:
+          </p>
+          <ul>
+            <li>Your IP address and general location</li>
+            <li>What browser you&apos;re using</li>
+            <li>Your operating system</li>
+            <li>Which pages you visit and how long you stay</li>
+            <li>What website sent you to us</li>
+            <li>When you visited</li>
+          </ul>
 
-        <h3>Analytics Data</h3>
-        <p>
-          We collect anonymous data to understand how people use our website and
-          make it better. This includes page views, user sessions, and where our
-          visitors are from.
-        </p>
+          <h3>Analytics Data</h3>
+          <p>
+            We collect anonymous data to understand how people use our website
+            and make it better. This includes page views, user sessions, and
+            where our visitors are from.
+          </p>
+        </div>
       </section>
 
-      <section>
-        <h2>How We Use Your Information</h2>
-        <p>We use the information we collect to:</p>
-        <ul>
-          <li>Keep our website running smoothly</li>
-          <li>Make your experience better</li>
-          <li>Understand how people use our site</li>
-          <li>Build new features and improvements</li>
-          <li>Spot trends and patterns</li>
-          <li>Keep everything secure</li>
-        </ul>
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead title="How We Use Your Information" />
+        <div className={BODY_CLASS}>
+          <p>We use the information we collect to:</p>
+          <ul>
+            <li>Keep our website running smoothly</li>
+            <li>Make your experience better</li>
+            <li>Understand how people use our site</li>
+            <li>Build new features and improvements</li>
+            <li>Spot trends and patterns</li>
+            <li>Keep everything secure</li>
+          </ul>
+        </div>
       </section>
 
-      <section>
-        <h2>Keeping Your Data Safe</h2>
-        <p>
-          We take security seriously and use appropriate measures to protect
-          your information from unauthorized access, changes, or disclosure.
-          Only authorized people can access our analytics data.
-        </p>
-        <p>
-          We only keep your information as long as we need it for the purposes
-          described here, or as required by law.
-        </p>
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead title="Keeping Your Data Safe" />
+        <div className={BODY_CLASS}>
+          <p>
+            We take security seriously and use appropriate measures to protect
+            your information from unauthorized access, changes, or disclosure.
+            Only authorized people can access our analytics data.
+          </p>
+          <p>
+            We only keep your information as long as we need it for the purposes
+            described here, or as required by law.
+          </p>
+        </div>
       </section>
 
-      <section>
-        <h2>Third-Party Services</h2>
-        <p>
-          Our website might link to other sites, but we&apos;re not responsible
-          for their privacy practices. Make sure to check their privacy policies
-          if you visit them.
-        </p>
-        <p>
-          We use some third-party services for analytics and website features.
-          These services collect information according to their own privacy
-          policies.
-        </p>
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead title="Third-Party Services" />
+        <div className={BODY_CLASS}>
+          <p>
+            Our website might link to other sites, but we&apos;re not
+            responsible for their privacy practices. Make sure to check their
+            privacy policies if you visit them.
+          </p>
+          <p>
+            We use some third-party services for analytics and website features.
+            These services collect information according to their own privacy
+            policies.
+          </p>
+        </div>
       </section>
 
-      <section>
-        <h2>Your Rights</h2>
-        <p>
-          Depending on where you live, you might have certain rights about your
-          personal information:
-        </p>
-        <ul>
-          <li>Access your personal information</li>
-          <li>Correct any mistakes</li>
-          <li>Delete your personal information</li>
-          <li>Object to how we process your information</li>
-          <li>Take your data elsewhere</li>
-        </ul>
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead title="Your Rights" />
+        <div className={BODY_CLASS}>
+          <p>
+            Depending on where you live, you might have certain rights about
+            your personal information:
+          </p>
+          <ul>
+            <li>Access your personal information</li>
+            <li>Correct any mistakes</li>
+            <li>Delete your personal information</li>
+            <li>Object to how we process your information</li>
+            <li>Take your data elsewhere</li>
+          </ul>
+        </div>
       </section>
 
-      <section>
-        <h2>Changes to This Policy</h2>
-        <p>
-          We might update this privacy policy occasionally. When we do,
-          we&apos;ll post the changes here and update the &quot;last
-          updated&quot; date.
-        </p>
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead title="Changes to This Policy" />
+        <div className={BODY_CLASS}>
+          <p>
+            We might update this privacy policy occasionally. When we do,
+            we&apos;ll post the changes here and update the &quot;last
+            updated&quot; date.
+          </p>
+        </div>
       </section>
 
-      <section>
-        <h2>Questions?</h2>
-        <p>
-          If you have any questions about this privacy policy, feel free to
-          reach out to us on social media or through our GitHub repository.
-          We&apos;ll get back to you as soon as we can.
-        </p>
+      <Hairline />
+
+      <section className="flex flex-col gap-4">
+        <SectionHead title="Questions?" />
+        <div className={BODY_CLASS}>
+          <p>
+            If you have any questions about this privacy policy, feel free to
+            reach out to us on social media or through our GitHub repository.
+            We&apos;ll get back to you as soon as we can.
+          </p>
+        </div>
       </section>
-    </article>
+    </OverviewPage>
   );
 }
