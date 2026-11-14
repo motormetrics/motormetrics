@@ -1,32 +1,28 @@
-import { Skeleton } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { AllCategories } from "@web/app/(main)/(dashboard)/coe/components/all-categories";
 import {
-  biddingOrdinal,
   formatExercise,
-  formatMonth,
   groupByExercise,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { CoeHeadline } from "@web/app/(main)/(dashboard)/coe/components/coe-headline";
+import {
+  CoeExerciseName,
+  CoeHero,
+  CoeKeyNumbers,
+} from "@web/app/(main)/(dashboard)/coe/components/coe-head";
 import { COE_FAQS } from "@web/app/(main)/(dashboard)/coe/components/faq-data";
 import { PqpCeiling } from "@web/app/(main)/(dashboard)/coe/components/pqp-ceiling";
 import { PremiumsByExercise } from "@web/app/(main)/(dashboard)/coe/components/premiums-by-exercise";
-import { QuotaAllocation } from "@web/app/(main)/(dashboard)/coe/components/quota-allocation";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import {
-  Hairline,
-  OverviewGrid,
-  OverviewPage,
-} from "@web/components/shared/overview";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { PageHead } from "@web/components/shared/page-head";
+import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getCoeResults } from "@web/queries/coe";
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
   const latest = groupByExercise(await getCoeResults()).at(-1);
@@ -61,80 +57,75 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-/** Names the exercise the whole page is reporting on, and its source. */
-async function LatestExerciseSub() {
-  const latest = groupByExercise(await getCoeResults()).at(-1);
-
-  return latest ? (
-    <>
-      Results of the{" "}
-      <span className="font-semibold text-foreground">
-        {biddingOrdinal(latest.biddingNo)} bidding, {formatMonth(latest.month)}
-      </span>{" "}
-      · Source: LTA via DataMall
-    </>
-  ) : null;
-}
-
-function SectionSkeleton({ className }: { className: string }) {
-  return (
-    <div className="flex flex-col gap-4">
-      <Skeleton className="h-4 w-32" />
-      <Skeleton className="h-12 w-56" />
-      <Skeleton className={`rounded-2xl ${className}`} />
-    </div>
-  );
-}
-
 export default function Page() {
   return (
-    <OverviewPage className="gap-10 max-[720px]:gap-7">
-      <div className="flex flex-col gap-7">
-        <PageHead
-          eyebrow="Certificate of Entitlement"
-          sub={
-            <Suspense fallback={<Skeleton className="h-5 w-72" />}>
-              <LatestExerciseSub />
-            </Suspense>
-          }
-          title="Latest COE results"
-        />
-
-        <SectionErrorBoundary title="COE premium unavailable">
-          <Suspense fallback={<SectionSkeleton className="h-[150px]" />}>
-            <CoeHeadline />
-          </Suspense>
-        </SectionErrorBoundary>
+    <OverviewPage className="gap-10 max-md:gap-7">
+      {/* Direction D's head: eyebrow, title, range hero, lead and source,
+          with the key numbers beside it once the page is wide and under it
+          before then. Every figure is from cached data, so the head is in
+          the static shell; only the category in the URL waits, inside each
+          view's own boundary. */}
+      <div className="@container">
+        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
+          <div className="flex min-w-0 flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <Typography.Paragraph
+                className="uppercase"
+                color="muted"
+                size="xs"
+                weight="semibold"
+              >
+                Certificate of Entitlement
+                <CoeExerciseName />
+              </Typography.Paragraph>
+              <Typography.Heading level={1}>
+                Latest COE results
+              </Typography.Heading>
+            </div>
+            <SectionErrorBoundary title="COE premium unavailable">
+              <CoeHero />
+            </SectionErrorBoundary>
+            <div>
+              <SharePill title="Latest COE results" />
+            </div>
+          </div>
+          <SectionErrorBoundary title="Key numbers unavailable">
+            <CoeKeyNumbers />
+          </SectionErrorBoundary>
+        </div>
       </div>
 
-      <SectionErrorBoundary title="Category breakdown unavailable">
-        <Suspense fallback={<SectionSkeleton className="h-80" />}>
-          <AllCategories />
-        </Suspense>
-      </SectionErrorBoundary>
-
       <Hairline />
 
-      <SectionErrorBoundary title="Premium history unavailable">
-        <Suspense fallback={<SectionSkeleton className="h-[260px]" />}>
+      <section
+        aria-label="Bidding history"
+        className="scroll-mt-4"
+        id="coe-history"
+      >
+        <SectionErrorBoundary title="Premium history unavailable">
           <PremiumsByExercise />
-        </Suspense>
-      </SectionErrorBoundary>
+        </SectionErrorBoundary>
+      </section>
 
       <Hairline />
 
-      <OverviewGrid className="gap-10 max-[720px]:gap-9 lg:grid-cols-[1.2fr_1fr] lg:gap-x-16 min-[901px]:grid-cols-[1.2fr_1fr] min-[901px]:gap-x-16">
-        <SectionErrorBoundary title="Quota allocation unavailable">
-          <Suspense fallback={<SectionSkeleton className="h-64" />}>
-            <QuotaAllocation />
-          </Suspense>
-        </SectionErrorBoundary>
+      <section
+        aria-label="PQP renewal rates"
+        className="scroll-mt-4"
+        id="coe-pqp"
+      >
         <SectionErrorBoundary title="PQP rates unavailable">
-          <Suspense fallback={<SectionSkeleton className="h-64" />}>
-            <PqpCeiling />
-          </Suspense>
+          <PqpCeiling />
         </SectionErrorBoundary>
-      </OverviewGrid>
+      </section>
+
+      <Hairline />
+
+      <section aria-label="All categories" className="scroll-mt-4" id="coe-all">
+        <SectionErrorBoundary title="Category breakdown unavailable">
+          <AllCategories />
+        </SectionErrorBoundary>
+      </section>
 
       <Hairline />
 
