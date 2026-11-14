@@ -5,56 +5,57 @@ import {
   getReadingTime,
 } from "@web/app/(main)/(site)/blog/components/post/utils";
 import { formatDate } from "@web/utils/dates/format-date";
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 /**
- * One post in a grid — the comps use the same card under "All posts" on the
- * index and under "Read next" at the foot of a post, so it lives here rather
- * than in either.
+ * One post in a grid: the index's archive and the rows at the foot of a post.
+ * A hairline box on the white ground, the topic as an eyebrow, and the date
+ * and reading estimate on a ruled footer.
  */
 export function PostCard({
+  hidden,
   post,
   showExcerpt = true,
 }: {
+  /** Kept in the HTML but not shown, for rows past the archive's first page. */
+  hidden?: boolean;
   post: SelectPost;
-  /** The "Read next" row runs without excerpts; the index grid carries them. */
+  /** The rows at the foot of a post run without excerpts. */
   showExcerpt?: boolean;
 }) {
   const publishedDate = post.publishedAt ?? post.createdAt;
-  const excerpt = post.excerpt;
 
   return (
     <Link
-      className="group flex h-full flex-col gap-3.5 rounded-2xl bg-surface p-7 text-foreground no-underline shadow-surface transition-shadow hover:shadow-hover"
+      className="group flex h-full min-w-0 flex-col gap-2 rounded-lg border border-separator px-5 pt-4 pb-4 text-foreground no-underline transition-colors hover:border-border"
+      hidden={hidden}
       href={`/blog/${post.slug}`}
     >
-      <span className="self-start rounded-full bg-surface-secondary px-3.5 py-1.5 font-bold text-muted text-sm">
+      <Typography.Paragraph
+        className="uppercase"
+        color="muted"
+        size="xs"
+        weight="semibold"
+      >
         {getCategoryConfig(post).label}
-      </span>
-      <Typography.Heading level={3} className="text-balance leading-tight">
+      </Typography.Paragraph>
+      <Typography.Heading
+        className="text-balance text-lg leading-snug group-hover:underline"
+        level={3}
+      >
         {post.title}
       </Typography.Heading>
-      {showExcerpt && excerpt ? (
+      {showExcerpt && post.excerpt ? (
         <Typography.Paragraph
-          className="line-clamp-3 leading-normal"
-          color="muted"
+          className="line-clamp-4 text-muted-strong"
+          size="sm"
         >
-          {excerpt}
+          {post.excerpt}
         </Typography.Paragraph>
       ) : null}
-      <div className="mt-auto flex items-center gap-2.5 pt-3.5">
-        <span className="font-semibold text-muted text-sm">
-          {formatDate(publishedDate)}
-        </span>
-        <span aria-hidden className="size-1 rounded-full bg-border" />
-        <span className="font-semibold text-muted text-sm">
-          {getReadingTime(post)} min read
-        </span>
-        <ChevronRight
-          aria-hidden
-          className="ml-auto size-[1.125rem] text-accent-strong transition-transform group-hover:translate-x-0.5"
-        />
+      <div className="mt-auto flex flex-wrap justify-between gap-x-3 gap-y-1 border-separator border-t pt-2.5 text-muted text-xs tabular-nums">
+        <span>{formatDate(publishedDate)}</span>
+        <span>{getReadingTime(post)} min read</span>
       </div>
     </Link>
   );
