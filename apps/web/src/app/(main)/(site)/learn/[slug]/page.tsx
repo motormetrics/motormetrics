@@ -1,14 +1,13 @@
 import { Skeleton } from "@heroui/react";
 import { MdxLink } from "@web/app/(main)/(site)/blog/components/mdx-components";
 import { GuideHead } from "@web/app/(main)/(site)/learn/[slug]/components/guide-head";
-import { GuideSidebar } from "@web/app/(main)/(site)/learn/[slug]/components/guide-sidebar";
+import { KeyTerms } from "@web/app/(main)/(site)/learn/[slug]/components/key-terms";
 import { RelatedGuides } from "@web/app/(main)/(site)/learn/[slug]/components/related-guides";
 import {
   getAllGuideSlugs,
   getGuideBySlug,
 } from "@web/app/(main)/(site)/learn/lib/guides";
-import { Hairline } from "@web/components/shared/overview";
-import { SitePage } from "@web/components/shared/site-page";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -71,7 +70,8 @@ export async function generateStaticParams() {
 }
 
 /**
- * The article body, held at the comp's 700px reading measure.
+ * The article body, held at the comp's 700px reading measure on the page's
+ * left edge.
  *
  * `prose` carries the markdown; the modifiers pull its greys onto the site's
  * own tokens so the copy matches the type around it.
@@ -88,7 +88,7 @@ async function GuideContent({
   cacheTag(`learn:${slug}`);
 
   return (
-    <article className="prose dark:prose-invert max-w-prose prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted-strong prose-p:text-muted-strong prose-strong:text-foreground prose-td:text-muted-strong prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
+    <article className="prose dark:prose-invert max-w-prose prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted-strong prose-p:text-muted-strong prose-strong:text-foreground prose-td:text-muted-strong prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
       <MDXRemote
         components={{ a: MdxLink }}
         source={content}
@@ -121,11 +121,11 @@ async function GuideContent({
  */
 export default function GuidePage({ params }: PageProps) {
   return (
-    <SitePage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-10 max-md:gap-7">
       <Suspense fallback={<GuideSkeleton />}>
         <Guide params={params} />
       </Suspense>
-    </SitePage>
+    </OverviewPage>
   );
 }
 
@@ -213,14 +213,11 @@ async function Guide({ params }: PageProps) {
 
       <Hairline />
 
-      <div className="grid grid-cols-1 items-start gap-9 lg:grid-cols-12 lg:gap-16">
-        <div className="min-w-0 lg:col-span-8">
-          <GuideContent content={guide.content} slug={guide.slug} />
-        </div>
-        <div className="lg:col-span-4 xl:col-span-3 xl:col-start-10">
-          <GuideSidebar guide={guide} />
-        </div>
-      </div>
+      <GuideContent content={guide.content} slug={guide.slug} />
+
+      <Hairline />
+
+      <KeyTerms guide={guide} />
 
       <Hairline />
 
