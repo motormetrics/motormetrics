@@ -1,6 +1,6 @@
 import "@web/queries/test-utils";
 import { connector } from "@web/queries/ev-charging/fixtures";
-import { getEvChargingLocationUtilisation } from "@web/queries/ev-charging/location-utilisation";
+// import { getEvChargingLocationUtilisation } from "@web/queries/ev-charging/location-utilisation";
 import { getEvChargingMapSites } from "@web/queries/ev-charging/map-sites";
 import { getEvChargingSnapshot } from "@web/queries/ev-charging/snapshot";
 
@@ -55,22 +55,23 @@ describe("getEvChargingMapSites", () => {
     ]);
   });
 
-  it("should attach the weekly utilisation where a location has one", async () => {
-    vi.mocked(getEvChargingSnapshot).mockResolvedValue({
-      observedAt: null,
-      records: [connector({ evCpId: "A", latitude: 1.3, longitude: 103.8 })],
-    });
-    vi.mocked(getEvChargingLocationUtilisation).mockResolvedValueOnce([
-      {
-        ...connector({ evCpId: "A" }),
-        utilisationPercent: 42.5,
-        samples: 300,
-      } as never,
-    ]);
-
-    const [site] = await getEvChargingMapSites();
-    expect(site).toMatchObject({ utilisationPercent: 42.5 });
-  });
+  // Paused with the hourly utilisation history the map no longer reads.
+  // it("should attach the weekly utilisation where a location has one", async () => {
+  //   vi.mocked(getEvChargingSnapshot).mockResolvedValue({
+  //     observedAt: null,
+  //     records: [connector({ evCpId: "A", latitude: 1.3, longitude: 103.8 })],
+  //   });
+  //   vi.mocked(getEvChargingLocationUtilisation).mockResolvedValueOnce([
+  //     {
+  //       ...connector({ evCpId: "A" }),
+  //       utilisationPercent: 42.5,
+  //       samples: 300,
+  //     } as never,
+  //   ]);
+  //
+  //   const [site] = await getEvChargingMapSites();
+  //   expect(site).toMatchObject({ utilisationPercent: 42.5 });
+  // });
 
   it("should use the first connector that carries coordinates", async () => {
     vi.mocked(getEvChargingSnapshot).mockResolvedValue({

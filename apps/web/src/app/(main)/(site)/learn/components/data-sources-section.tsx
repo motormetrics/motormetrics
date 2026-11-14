@@ -45,8 +45,8 @@ const FACTS: { detail: ReactNode; title: string }[] = [
 ];
 
 /**
- * Where the figures come from: the four facts as a two-up ruled grid under a
- * section head, with the link out to DataMall hard right.
+ * Where the figures come from: the four facts as ruled tiles, four across
+ * when the column allows, with the link out to DataMall hard right.
  */
 export function DataSourcesSection() {
   return (
@@ -66,21 +66,23 @@ export function DataSourcesSection() {
         }
       />
 
-      <div className="grid grid-cols-1 border-border border-t md:grid-cols-2">
-        {FACTS.map(({ detail, title }) => (
-          <div
-            className="flex flex-col gap-1.5 border-separator border-b py-3.5 md:py-4 md:even:border-l md:even:pl-6 md:odd:pr-6"
-            key={title}
-          >
-            <span className="font-semibold text-muted text-xs">{title}</span>
-            <Typography.Paragraph
-              className="text-muted-strong leading-relaxed"
-              size="sm"
+      <div className="@container">
+        <div className="grid @2xl:grid-cols-2 @6xl:grid-cols-4 grid-cols-1 @2xl:gap-x-6 border-border border-t">
+          {FACTS.map(({ detail, title }) => (
+            <div
+              className="flex flex-col gap-1.5 border-separator border-b py-3.5"
+              key={title}
             >
-              {detail}
-            </Typography.Paragraph>
-          </div>
-        ))}
+              <span className="font-semibold text-muted text-xs">{title}</span>
+              <Typography.Paragraph
+                className="text-muted-strong leading-relaxed"
+                size="sm"
+              >
+                {detail}
+              </Typography.Paragraph>
+            </div>
+          ))}
+        </div>
       </div>
 
       <SourceNote>

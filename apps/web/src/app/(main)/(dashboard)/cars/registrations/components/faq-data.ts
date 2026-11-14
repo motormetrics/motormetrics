@@ -5,11 +5,10 @@ import type { Faq } from "@web/components/shared/page-faq";
  * search them. Shared by the accordion and the FAQPage schema so the two always
  * match. Answers point to the figures on the page rather than quote them.
  */
-export const REGISTRATIONS_FAQS: Faq[] = [
+export const buildRegistrationsFaqs = (summary?: string): Faq[] => [
   {
     question: "How many new cars were registered in Singapore this month?",
-    answer:
-      "The headline figure on this page gives the number of new car registrations for the selected month, broken down by make, fuel type and vehicle type. Use the month picker to see an earlier month.",
+    answer: `${summary ? `${summary} Source: LTA. ` : ""}The headline figure on this page gives the number of new car registrations for the selected month, broken down by make, fuel type and vehicle type. Use the month picker to see an earlier month.`,
   },
   {
     question: "How are new car registrations counted?",

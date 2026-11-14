@@ -1,6 +1,5 @@
 {
   "name": "motormetrics",
-  "version": "5.36.0",
   "description": "Monorepo for MotorMetrics",
   "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
@@ -41,7 +40,7 @@
     "husky": "9.1.7",
     "knip": "6.34.0",
     "lint-staged": "17.0.4",
-    "portless": "0.15.5",
+    "portless": "0.17.0",
     "turbo": "2.11.3",
     "typescript": "catalog:",
     "vitest": "catalog:"

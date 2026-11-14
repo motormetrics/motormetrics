@@ -11,7 +11,11 @@ import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  fuelTypesCardImages,
+} from "@web/lib/metadata/social";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
@@ -43,6 +47,7 @@ export async function generateMetadata({
     description: metaDescription,
     openGraph: {
       ...baseOpenGraph,
+      images: fuelTypesCardImages,
       title: metaTitle,
       description: metaDescription,
       url: `${SITE_URL}${canonical}`,

@@ -9,7 +9,13 @@ export async function regeneratePostHero(
   postId: string,
 ): Promise<{ success: boolean; error?: string; runId?: string }> {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) {
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["update"] } },
+    }));
+
+  if (!permission?.success) {
     return { success: false, error: "Unauthorised" };
   }
 

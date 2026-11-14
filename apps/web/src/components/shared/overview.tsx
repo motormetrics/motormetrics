@@ -75,7 +75,7 @@ export function SectionHead({
   caption?: ReactNode;
   className?: string;
   /** Left out where the heading already names the dataset. */
-  eyebrow?: string;
+  eyebrow?: ReactNode;
   /** "All COE results", "All makes" — the text link to the full dataset. */
   link?: { href: string; label: string };
   title: ReactNode;

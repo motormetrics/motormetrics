@@ -4,7 +4,6 @@ import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-
 import type { CoePremiumsProps } from "@web/lib/og/cards/coe-premiums";
 import type { CoeResultsProps } from "@web/lib/og/cards/coe-results";
 import type { FuelMixProps, FuelSlice } from "@web/lib/og/cards/fuel-mix";
-import type { MakeProps } from "@web/lib/og/cards/make";
 import type { RegistrationsProps } from "@web/lib/og/cards/registrations";
 import type { SiteDefaultProps } from "@web/lib/og/cards/site-default";
 import { OG_COLOURS } from "@web/lib/og/colours";
@@ -12,10 +11,7 @@ import {
   getCarsComparison,
   getCarsData,
   getCarsLatestMonth,
-  getMakeDetails,
-  getMakeFromSlug,
   getMonthlyRegistrationTotals,
-  getTopMakes,
   getYearToDateByFuelType,
 } from "@web/queries/cars";
 import { getCoeCategoryTrends, getExercisePair } from "@web/queries/coe";
@@ -25,7 +21,6 @@ import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 type CardData<Props> = Omit<Props, "height">;
 
 const TREND_POINTS = 8;
-const TOP_MAKES = 5;
 
 const formatCount = (value: number) => value.toLocaleString("en-SG");
 
@@ -214,48 +209,6 @@ export async function loadRegistrations(): Promise<CardData<RegistrationsProps> 
       label: shortMonth(point.month),
       total: point.total,
     })),
-  };
-}
-
-/** 05 · Make page */
-export async function loadMake(
-  slug: string,
-): Promise<CardData<MakeProps> | null> {
-  const [make, month] = await Promise.all([
-    getMakeFromSlug(slug),
-    getCarsLatestMonth(),
-  ]);
-
-  if (!make || !month) {
-    return null;
-  }
-
-  const [topMakes, registrations, details] = await Promise.all([
-    getTopMakes(month),
-    getCarsData(month),
-    getMakeDetails(make, month),
-  ]);
-  const matches = (candidate: string) =>
-    candidate.toLowerCase() === make.toLowerCase();
-  const rankIndex = topMakes.findIndex((entry) => matches(entry.make));
-  const own = { make, total: details.total };
-
-  const bars = topMakes
-    .slice(0, TOP_MAKES)
-    .map((entry) => (matches(entry.make) ? own : entry));
-  if (!bars.some((entry) => entry.make === make)) {
-    bars.splice(TOP_MAKES - 1, 1, own);
-  }
-
-  return {
-    monthLabel: formatDateToMonthYear(month),
-    make,
-    rank: rankIndex === -1 ? null : rankIndex + 1,
-    total: formatCount(details.total),
-    share: formatPercent(
-      registrations.total ? (details.total / registrations.total) * 100 : 0,
-    ),
-    bars,
   };
 }
 

@@ -3,16 +3,12 @@ import { SectionHead } from "@web/components/shared/overview";
 import { SITE_TITLE } from "@web/config";
 import Link from "next/link";
 
-/**
- * The comp runs the prose blocks as a two-column split: the section head in a
- * narrow rail on the left and the paragraphs in the rest. It collapses to a
- * single column below `lg`, where the rail would leave the text too narrow.
- */
+/** The section head over the prose, kept to a readable measure. */
 export function MissionSection() {
   return (
-    <section className="grid grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-14">
+    <section className="flex scroll-mt-24 flex-col gap-4" id="what-we-do">
       <SectionHead eyebrow="The project" title="What we do" />
-      <div className="flex min-w-0 max-w-2xl flex-col gap-4 lg:col-span-3">
+      <div className="flex min-w-0 max-w-prose flex-col gap-4">
         <Typography.Paragraph className="text-muted-strong leading-relaxed md:text-lg">
           Each time LTA publishes, we pull the latest figures from DataMall,
           check them against the previous release, and turn them into charts you
@@ -23,7 +19,7 @@ export function MissionSection() {
         <Typography.Paragraph className="text-muted-strong leading-relaxed md:text-lg">
           The raw data is public, but it arrives as spreadsheets with column
           headers like{" "}
-          <code className="rounded bg-surface-secondary px-1 font-mono text-foreground text-sm">
+          <code className="font-mono text-foreground text-sm">
             MonthOfRegistration
           </code>{" "}
           and no context. We do the joining, the naming and the arithmetic, then

@@ -1,29 +1,22 @@
-import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
+import { SectionHead } from "@web/components/shared/overview";
 import { navLinks } from "@web/config/navigation";
 import Link from "next/link";
 
 /**
- * The closing panel: where each release is posted, on a bordered surface with
- * the social accounts and the way into the dashboard on the right. There is no
+ * The closing row under a hairline: where each release is posted, with the
+ * social accounts and the way into the dashboard on the right. There is no
  * mailing list, so the accounts are the only channels offered.
  */
 export function CtaSection() {
   return (
-    <section className="flex flex-col gap-5 rounded-lg border border-separator bg-surface px-4 py-5 md:px-7 md:py-6 lg:flex-row lg:items-center lg:gap-8">
-      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-        <Typography.Heading
-          className="text-xl md:text-2xl"
-          level={2}
-          weight="bold"
-        >
-          Get the numbers when they land
-        </Typography.Heading>
-        <Typography.Paragraph className="max-w-xl text-muted-strong">
-          New COE results and registration figures are posted as soon as they
-          publish. Nothing else.
-        </Typography.Paragraph>
-      </div>
+    <section className="flex flex-col gap-5 border-border border-t pt-4 lg:flex-row lg:items-end lg:gap-8">
+      <SectionHead
+        caption="New COE results and registration figures are posted as soon as they publish. Nothing else."
+        className="min-w-0 flex-1"
+        eyebrow="Updates"
+        title="Get the numbers when they land"
+      />
       <div className="flex flex-col gap-2">
         <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
           {navLinks.socialMedia.map(({ icon: Icon, title, url }) => (

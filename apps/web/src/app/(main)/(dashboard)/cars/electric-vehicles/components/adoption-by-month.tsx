@@ -1,46 +1,53 @@
+import { Skeleton } from "@heroui/react";
+import { SelectedMonthName } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-head";
 import {
-  batteryElectricShares,
-  resolveMonthIndex,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+  loadEvMonth,
+  type SelectionProps,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
 import {
   type ShareColumn,
   ShareColumns,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/share-columns";
+import { SubHead } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/sub-head";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
+import { SourceNote } from "@web/components/shared/overview";
+import { getEvMonthlyTrend } from "@web/queries/cars";
 import {
   formatChartMonth,
-  formatMonthName,
   formatMonthShortLabel,
 } from "@web/utils/dates/format-month";
+import { Suspense } from "react";
 
 /** Months of history the column chart shows, matching the comp's eight bars. */
 const COLUMN_COUNT = 8;
 
-export async function AdoptionByMonth({ month }: { month: string }) {
-  const [trend, marketShare] = await Promise.all([
+/** The battery-electric shares of the `COLUMN_COUNT` months to `month`. */
+export async function loadShareWindow(month: string) {
+  const data = await loadEvMonth(month);
+  if (!data) {
+    return [];
+  }
+
+  const start = Math.max(0, data.index - COLUMN_COUNT + 1);
+  return data.shares.slice(start, data.index + 1);
+}
+
+async function Columns({ selection }: SelectionProps) {
+  const { month } = await selection;
+  const [data, trend] = await Promise.all([
+    loadEvMonth(month),
     getEvMonthlyTrend(),
-    getEvMarketShare(),
   ]);
-
-  const index = resolveMonthIndex(
-    trend.map((point) => point.month),
-    month,
-  );
-  const selectedMonth = trend[index]?.month;
-
-  if (!selectedMonth) {
+  if (!data) {
     return null;
   }
 
-  const shares = batteryElectricShares(trend, marketShare);
-  const start = Math.max(0, index - COLUMN_COUNT + 1);
+  const start = Math.max(0, data.index - COLUMN_COUNT + 1);
   const columns: ShareColumn[] = trend
-    .slice(start, index + 1)
+    .slice(start, data.index + 1)
     .map((point, offset) => {
-      const share = shares[start + offset] ?? 0;
-      const isSelected = point.month === selectedMonth;
+      const share = data.shares[start + offset] ?? 0;
+      const isSelected = point.month === data.point.month;
       return {
         key: point.month,
         label: formatChartMonth(point.month),
@@ -54,25 +61,40 @@ export async function AdoptionByMonth({ month }: { month: string }) {
             : "",
       };
     });
-  const ticks = axisTicks(
-    columns.map((column) => column.share),
-    { zero: true },
-  );
 
   return (
-    <section className="flex min-w-0 flex-col gap-4">
-      <SectionHead
-        caption={`EV share of all new car registrations · ${columns.length} months to ${formatMonthName(selectedMonth)}`}
-        eyebrow="Adoption"
+    <ShareColumns
+      columns={columns}
+      ticks={axisTicks(
+        columns.map((column) => column.share),
+        { zero: true },
+      )}
+    />
+  );
+}
+
+/** One half of Figure 3: the battery-electric share, month by month. */
+export function AdoptionByMonth({ selection }: SelectionProps) {
+  return (
+    <div className="flex min-w-0 flex-col gap-3">
+      <SubHead
+        sub={
+          <>
+            EV share of all new car registrations · {COLUMN_COUNT} months to{" "}
+            <Suspense fallback=" ">
+              <SelectedMonthName selection={selection} />
+            </Suspense>
+          </>
+        }
         title="Share by month"
       />
-
-      <ShareColumns columns={columns} ticks={ticks} />
-
+      <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+        <Columns selection={selection} />
+      </Suspense>
       <SourceNote>
         Battery-electric share of each month&apos;s new car registrations.
         Y-axis starts at zero.
       </SourceNote>
-    </section>
+    </div>
   );
 }

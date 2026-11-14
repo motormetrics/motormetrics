@@ -1,4 +1,4 @@
-import { cn, Typography } from "@heroui/react";
+import { cn } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   COE_CATEGORIES,
@@ -15,11 +15,12 @@ import {
   YEAR_LABEL,
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-shared";
 import { ShowMoreRows } from "@web/app/(main)/(dashboard)/coe/results/components/show-more-rows";
+import { SectionHead } from "@web/components/shared/overview";
 import { getCoeResults } from "@web/queries/coe";
 
 /**
  * One row per calendar year across the whole dataset, newest first: the mean
- * closing premium and the year's high, with a one-line recap of Cat A and B
+ * closing premium and the year's high, captioned with a recap of Cat A and B
  * against the year before. It reads every result rather than the
  * selected period and takes no search params, so it prerenders into the
  * static shell.
@@ -66,6 +67,11 @@ export async function PremiumsByYear() {
 
   return (
     <>
+      <SectionHead
+        caption={summary}
+        eyebrow="Figure 3 · By year"
+        title="Average closing premium"
+      />
       <ShowMoreRows
         header={<CategoryHeader isYear label="Year" />}
         initial={shown}
@@ -74,14 +80,10 @@ export async function PremiumsByYear() {
         noun="years"
         rows={rows}
       >
-        No exercises were held from April to June 2020, so 2020 averages 18
-        exercises.
+        Mean of each year's exercises, with the year's high; {newest} is year to
+        date. No exercises were held from April to June 2020, so 2020 averages
+        18 exercises.
       </ShowMoreRows>
-      {summary ? (
-        <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
-          {summary}
-        </Typography.Paragraph>
-      ) : null}
     </>
   );
 }

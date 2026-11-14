@@ -1,15 +1,12 @@
 import { Typography } from "@heroui/react";
 import { SectionHead } from "@web/components/shared/overview";
 
-/**
- * The section head in a narrow rail on the left and the prose beside it,
- * collapsing to one column below `lg`.
- */
+/** The section head over the prose, kept to a readable measure. */
 export function AudienceSection() {
   return (
-    <section className="grid grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-14">
+    <section className="flex scroll-mt-24 flex-col gap-4" id="audience">
       <SectionHead eyebrow="Audience" title="Who reads this" />
-      <div className="flex min-w-0 max-w-2xl flex-col gap-4 lg:col-span-3">
+      <div className="flex min-w-0 max-w-prose flex-col gap-4">
         <Typography.Paragraph className="text-muted-strong leading-relaxed md:text-lg">
           Readers arrive mid-decision: buyers comparing COE categories, owners
           weighing a renewal against deregistration, and the dealers, brokers

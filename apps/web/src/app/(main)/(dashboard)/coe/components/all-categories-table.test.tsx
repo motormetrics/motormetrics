@@ -15,6 +15,7 @@ const rows: CategoryRow[] = [
     categoryKey: "A",
     changeRatio: 0.02,
     description: "Cars up to 1,600cc and 130bhp",
+    pqp: 97_500,
     premium: 96_000,
     quota: 1_200,
     series: [
@@ -29,6 +30,7 @@ const rows: CategoryRow[] = [
     categoryKey: "B",
     changeRatio: -0.01,
     description: "Cars above 1,600cc or 130bhp",
+    pqp: 119_000,
     premium: 118_000,
     quota: 900,
     series: [],
@@ -39,6 +41,7 @@ const rows: CategoryRow[] = [
     categoryKey: "C",
     changeRatio: 0.03,
     description: "Goods vehicles and buses",
+    pqp: 73_000,
     premium: 72_000,
     quota: 400,
     series: [],
@@ -49,6 +52,7 @@ const rows: CategoryRow[] = [
     categoryKey: "D",
     changeRatio: 0,
     description: "Motorcycles",
+    pqp: 9_600,
     premium: 9_500,
     quota: 500,
     series: [],
@@ -144,20 +148,24 @@ describe("AllCategoriesTable", () => {
     expect(selectCategory).toHaveBeenCalledWith("B");
   });
 
-  it("should show bids and bids per COE without making them sortable", async () => {
+  it("should show bids and the PQP without making them sortable", async () => {
     const screen = await renderTable();
 
     await expect
       .element(screen.getByRole("columnheader", { name: "Bids", exact: true }))
       .not.toHaveAttribute("aria-sort");
     await expect
-      .element(screen.getByRole("columnheader", { name: "Bids/COE" }))
+      .element(screen.getByRole("columnheader", { name: "PQP" }))
       .not.toHaveAttribute("aria-sort");
     await expect
       .element(screen.getByRole("gridcell", { name: "1,507", exact: true }))
       .toBeInTheDocument();
     await expect
-      .element(screen.getByRole("gridcell", { name: "1.44×", exact: true }))
+      .element(screen.getByRole("gridcell", { name: "$97,500", exact: true }))
+      .toBeInTheDocument();
+    // Category E has no PQP.
+    await expect
+      .element(screen.getByRole("gridcell", { name: "—", exact: true }))
       .toBeInTheDocument();
   });
 

@@ -101,7 +101,7 @@ describe("ingestLiveSnapshot", () => {
     expect(db.insert).not.toHaveBeenCalled();
   });
 
-  it("should write status, events and hourly rows for a new batch", async () => {
+  it("should write only the status rows for a new batch", async () => {
     vi.stubEnv("LTA_DATAMALL_ACCOUNT_KEY", "key");
     vi.mocked(fetchBatch).mockResolvedValueOnce({});
     vi.mocked(parseBatch).mockReturnValueOnce([record("A"), record("B", "L2")]);
@@ -118,7 +118,8 @@ describe("ingestLiveSnapshot", () => {
       locations: 2,
       events: 2,
     });
-    // status upsert, events insert, hourly upsert
-    expect(db.insert).toHaveBeenCalledTimes(3);
+    // Status upsert only: the events insert and hourly upsert are paused.
+    // expect(db.insert).toHaveBeenCalledTimes(3);
+    expect(db.insert).toHaveBeenCalledTimes(1);
   });
 });

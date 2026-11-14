@@ -2,17 +2,20 @@ import { CtaSection } from "@web/app/(main)/(site)/about/components/cta-section"
 import { DataSection } from "@web/app/(main)/(site)/about/components/data-section";
 import { DatasetsSection } from "@web/app/(main)/(site)/about/components/datasets-section";
 import { FAQS } from "@web/app/(main)/(site)/about/components/faq-data";
-import { FaqSection } from "@web/app/(main)/(site)/about/components/faq-section";
 import { HeroSection } from "@web/app/(main)/(site)/about/components/hero-section";
 import { MissionSection } from "@web/app/(main)/(site)/about/components/mission-section";
 import { StatsSection } from "@web/app/(main)/(site)/about/components/stats-section";
-import { Hairline } from "@web/components/shared/overview";
-import { SitePage } from "@web/components/shared/site-page";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { PageFaq } from "@web/components/shared/page-faq";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
 import { generateFAQPageSchema } from "@web/lib/metadata";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  siteCardImages,
+} from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import type { Organization, Person, WebPage, WithContext } from "schema-dts";
 
@@ -24,6 +27,7 @@ export const metadata: Metadata = {
   description,
   openGraph: {
     ...baseOpenGraph,
+    images: siteCardImages,
     title,
     description,
     url: `${SITE_URL}/about`,
@@ -109,18 +113,24 @@ export default function AboutPage() {
         data={{ "@context": "https://schema.org", ...faqSchema }}
       />
 
-      <SitePage className="gap-10 max-md:gap-7">
-        <HeroSection />
-        <StatsSection />
+      <OverviewPage className="gap-10 max-md:gap-7">
+        {/* Direction D's head, with the key numbers beside it once the page
+            is wide and under it before then. All of it is fixed copy. */}
+        <div className="@container">
+          <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
+            <HeroSection />
+            <StatsSection />
+          </div>
+        </div>
         <MissionSection />
         <Hairline />
         <DatasetsSection />
         <Hairline />
         <DataSection />
         <Hairline />
-        <FaqSection />
+        <PageFaq faqs={FAQS} />
         <CtaSection />
-      </SitePage>
+      </OverviewPage>
     </>
   );
 }

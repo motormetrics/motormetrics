@@ -3,6 +3,9 @@ import { createLoader, parseAsString, parseAsStringLiteral } from "nuqs/server";
 /** Which power rating the price rankings list. */
 export const POWER_RATINGS = ["AC", "DC"] as const;
 
+/** Which end of the price ranking the list shows. */
+export const PRICE_ORDERS = ["cheapest", "priciest"] as const;
+
 /** Site a list row picked out for the map; client-only, never read on the server. */
 export const siteParam = parseAsString.withDefault("");
 
@@ -13,6 +16,7 @@ export const chargingSearchParams = {
   /** Postal district slug from `config/postal-districts`; empty means all. */
   district: parseAsString.withDefault(""),
   power: parseAsStringLiteral(POWER_RATINGS).withDefault("DC"),
+  order: parseAsStringLiteral(PRICE_ORDERS).withDefault("cheapest"),
 };
 
 export const loadSearchParams = createLoader(chargingSearchParams);

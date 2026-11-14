@@ -33,18 +33,15 @@ const rules = [
 export function CtaSection() {
   return (
     <section
-      className="grid scroll-mt-24 grid-cols-1 items-start gap-10 lg:grid-cols-3"
+      className="grid scroll-mt-24 grid-cols-1 items-start gap-x-16 gap-y-9 lg:grid-cols-2"
       id="contact"
     >
-      <div className="flex min-w-0 flex-col gap-3.5 lg:col-span-2">
+      <div className="flex min-w-0 flex-col gap-3.5">
         <SectionHead
+          caption="Advertising sits around the charts, never inside them. We decline anything that could be mistaken for a figure we publish."
           eyebrow="What we will not run"
           title="Rules that protect the data"
         />
-        <Typography.Paragraph className="max-w-xl text-muted-strong leading-relaxed">
-          Advertising sits around the charts, never inside them. We decline
-          anything that could be mistaken for a figure we publish.
-        </Typography.Paragraph>
         <div className="flex flex-col border-border border-t">
           {rules.map(({ note, number }) => (
             <div

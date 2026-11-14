@@ -72,6 +72,27 @@ describe("BlogList", () => {
       .toBeInTheDocument();
   });
 
+  it("should point readers of a COE topic to the guides", async () => {
+    const screen = await render(
+      <BlogList
+        categories={["coe", "monthly-update"]}
+        featuredId="post-0"
+        posts={posts}
+        query=""
+      />,
+    );
+
+    expect(
+      screen.getByRole("link", { name: "Open Guides" }).query(),
+    ).toBeNull();
+
+    await screen.getByRole("radio", { name: "COE" }).click();
+
+    await expect
+      .element(screen.getByRole("link", { name: "Open Guides" }))
+      .toHaveAttribute("href", "/learn");
+  });
+
   it("should show twelve posts until Show all is pressed", async () => {
     const screen = await render(
       <BlogList
@@ -85,6 +106,10 @@ describe("BlogList", () => {
     await expect
       .poll(() => screen.getByRole("heading", { level: 3 }).all().length)
       .toBe(12);
+    // The thirteenth row is hidden, not absent, so its link is still in the HTML.
+    expect(screen.container.querySelectorAll('a[href^="/blog/"]')).toHaveLength(
+      13,
+    );
 
     await screen.getByRole("button", { name: "Show all 13 posts" }).click();
 

@@ -1,87 +1,57 @@
-import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
-  buildRegistrationSplit,
-  resolveMonthIndex,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+  loadEvMonth,
+  type SelectionProps,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
 import {
-  COMBUSTION_COLOUR,
-  POWERTRAIN_SEGMENTS,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
-import { DeltaChip } from "@web/components/shared/delta-chip";
-import { SourceNote } from "@web/components/shared/overview";
-import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
+  formatPoints,
+  mixCaption,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-summary";
 import { formatMonthName } from "@web/utils/dates/format-month";
 
-/** Battery-electric, plug-in and conventional hybrids as one combined share. */
-export async function ElectrifiedTotal({ month }: { month: string }) {
-  const [trend, marketShare] = await Promise.all([
-    getEvMonthlyTrend(),
-    getEvMarketShare(),
-  ]);
-
-  const index = resolveMonthIndex(
-    trend.map((point) => point.month),
-    month,
-  );
-  const point = trend[index];
-
-  if (!point) {
+/** "87.4%, +1.2 pts vs July", after "Electrified total" in the title. */
+export async function MixTitle({ selection }: SelectionProps) {
+  const { month } = await selection;
+  const data = await loadEvMonth(month);
+  if (!data) {
     return null;
   }
 
-  const registrationsByMonth = new Map(
-    marketShare.map((row) => [row.month, row.totalCount]),
-  );
-  const electrifiedShareAt = (position: number) => {
-    const entry = trend[position];
-    const total = entry ? registrationsByMonth.get(entry.month) : undefined;
-    return entry && total
-      ? ((entry.BEV + entry.PHEV + entry.Hybrid) / total) * 100
-      : 0;
-  };
+  const { electrifiedShare, previousElectrifiedShare, previousMonth } = data;
 
-  const total = registrationsByMonth.get(point.month) ?? 0;
-  const electrifiedShare = electrifiedShareAt(index);
-  const previousShare =
-    index > 0 ? electrifiedShareAt(index - 1) : electrifiedShare;
+  return previousMonth && previousElectrifiedShare !== undefined
+    ? `${electrifiedShare.toFixed(1)}%, ${formatPoints(electrifiedShare - previousElectrifiedShare)} vs ${formatMonthName(previousMonth)}`
+    : `${electrifiedShare.toFixed(1)}%`;
+}
 
-  const split = buildRegistrationSplit(point, total, POWERTRAIN_SEGMENTS, {
-    colour: COMBUSTION_COLOUR,
-    label: "Petrol and diesel",
-  });
-  const monthName = formatMonthName(point.month);
-  const previousMonth = trend[index - 1]?.month;
+export async function MixCaption({ selection }: SelectionProps) {
+  const { month } = await selection;
+  const data = await loadEvMonth(month);
+
+  return data ? mixCaption(data.split, data.point.month, data.total) : null;
+}
+
+/**
+ * The month's new cars split by powertrain: one bar, then a tile per
+ * powertrain with its share and count.
+ */
+export async function ElectrifiedMix({ selection }: SelectionProps) {
+  const { month } = await selection;
+  const data = await loadEvMonth(month);
+  if (!data) {
+    return null;
+  }
 
   return (
-    <div className="flex flex-col gap-3">
-      <Typography.Paragraph color="muted" size="xs" weight="semibold">
-        Electrified total · {monthName}
-      </Typography.Paragraph>
-      <div className="flex flex-wrap items-baseline gap-3">
-        <span className="font-bold text-3xl tabular-nums tracking-tight">
-          {electrifiedShare.toFixed(1)}%
-        </span>
-        {previousMonth ? (
-          <Typography.Paragraph className="tabular-nums" color="muted">
-            <DeltaChip
-              className="font-semibold text-foreground"
-              unit="pp"
-              value={electrifiedShare - previousShare}
-            />{" "}
-            vs {formatMonthName(previousMonth)}
-          </Typography.Paragraph>
-        ) : null}
-      </div>
-
+    <div className="flex flex-col gap-3.5">
       <div
         aria-label="Share of new car registrations by powertrain"
-        className="flex h-4 gap-0.5"
+        className="flex h-7 gap-0.5"
         role="img"
       >
-        {split.map((segment) => (
+        {data.split.map((segment) => (
           <span
-            className="block h-full"
+            className="block h-full min-w-0.5 rounded-xs"
             key={segment.label}
             style={{
               background: segment.colour,
@@ -90,39 +60,34 @@ export async function ElectrifiedTotal({ month }: { month: string }) {
           />
         ))}
       </div>
-
-      <ul className="flex flex-col">
-        {split.map((segment) => (
-          <li
-            className="flex items-center gap-2.5 border-separator border-b py-2"
+      <dl className="grid @3xl:grid-cols-4 grid-cols-2 border-separator border-t">
+        {data.split.map((segment) => (
+          <div
+            className="flex flex-col gap-1 border-separator border-b py-3.5 pr-4"
             key={segment.label}
           >
-            <span
-              aria-hidden
-              className="size-3 shrink-0 rounded-xs"
-              style={{ background: segment.colour }}
-            />
-            <span className="min-w-0 flex-1 truncate text-sm">
+            <dt className="flex items-center gap-1.5 font-semibold text-muted text-xs">
+              <span
+                aria-hidden
+                className="size-2.5 shrink-0 rounded-xs"
+                style={{ background: segment.colour }}
+              />
               {segment.label}
-            </span>
-            <span className="w-16 text-right font-semibold text-sm tabular-nums">
+            </dt>
+            <dd className="font-semibold text-xl tabular-nums">
+              {segment.share.toFixed(1)}%
+            </dd>
+            <dd className="text-muted text-xs tabular-nums">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
                 value={segment.value}
-              />
-            </span>
-            <span className="w-14 text-right text-muted text-xs tabular-nums">
-              {segment.share.toFixed(1)}%
-            </span>
-          </li>
+              />{" "}
+              cars
+            </dd>
+          </div>
         ))}
-      </ul>
-
-      <SourceNote>
-        Electrified is battery-electric, plug-in hybrid and hybrid combined, as
-        a share of {total.toLocaleString("en-SG")} new cars.
-      </SourceNote>
+      </dl>
     </div>
   );
 }

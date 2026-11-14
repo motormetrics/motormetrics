@@ -1,3 +1,5 @@
+import { formatCurrency } from "@motormetrics/utils/format-currency";
+
 export interface ArfTier {
   /** Upper bound of the OMV band, or `null` for the open top band. */
   upTo: number | null;
@@ -56,6 +58,17 @@ export interface ArfBand {
   to: number;
   rate: number;
   amount: number;
+}
+
+/** "First $20,000", "$20,001 to $40,000", "Above $80,000". */
+export function bandLabel(from: number, upTo: number | null): string {
+  if (from === 0 && upTo !== null) {
+    return `First ${formatCurrency(upTo)}`;
+  }
+  if (upTo === null) {
+    return `Above ${formatCurrency(from)}`;
+  }
+  return `${formatCurrency(from + 1)} to ${formatCurrency(upTo)}`;
 }
 
 /** The ARF on an OMV, band by band. Bands the OMV does not reach are left out. */

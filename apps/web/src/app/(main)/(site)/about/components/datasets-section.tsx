@@ -1,4 +1,4 @@
-import { cn, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import {
   BarChart3,
@@ -64,35 +64,36 @@ const datasets: Dataset[] = [
 ];
 
 /**
- * Six datasets as a ruled grid: three across from lg, two at md, one on
- * phones. The vertical rules depend on the column count, so each cell's
- * position in its row sets them.
+ * Six datasets as linked cards on the white ground: as many 320px-plus
+ * columns as the main column fits, one on phones.
  */
 export function DatasetsSection() {
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex scroll-mt-24 flex-col gap-4" id="what-we-track">
       <SectionHead
         caption="Six datasets, each with its own history and filters."
         eyebrow="Coverage"
         title="What we track"
       />
-      <div className="grid grid-cols-1 border-border border-t md:grid-cols-2 lg:grid-cols-3">
-        {datasets.map(({ description, href, icon: Icon, title }, index) => (
-          <Link
-            className={cn(
-              "group flex min-w-0 gap-3.5 border-separator border-b py-3.5 no-underline md:py-4 md:pr-5",
-              index % 2 === 1 && "md:max-lg:border-l md:max-lg:pl-5",
-              index % 3 !== 0 && "lg:border-l lg:pl-5",
-            )}
-            href={href}
-            key={title}
-          >
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent-soft text-accent-strong">
-              <Icon aria-hidden className="size-4" />
-            </span>
-            <span className="flex min-w-0 flex-col gap-1">
-              <span className="font-semibold text-foreground transition-colors group-hover:text-accent-strong">
-                {title} →
+      <div className="@container">
+        <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-3.5">
+          {datasets.map(({ description, href, icon: Icon, title }) => (
+            <Link
+              className="group flex min-w-0 flex-col gap-2 rounded-lg border border-separator bg-surface px-5 py-4 text-foreground no-underline transition-colors hover:border-accent-border"
+              href={href}
+              key={title}
+            >
+              <span className="flex items-center gap-3">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent-soft text-accent-strong">
+                  <Icon aria-hidden className="size-4" />
+                </span>
+                <Typography.Heading
+                  className="text-lg group-hover:underline"
+                  level={3}
+                  weight="bold"
+                >
+                  {title}
+                </Typography.Heading>
               </span>
               <Typography.Paragraph
                 className="text-muted-strong leading-normal"
@@ -100,9 +101,13 @@ export function DatasetsSection() {
               >
                 {description}
               </Typography.Paragraph>
-            </span>
-          </Link>
-        ))}
+              <span className="mt-auto flex flex-wrap justify-between gap-x-3 gap-y-1 border-separator border-t pt-2.5 text-muted text-xs">
+                <span>LTA via DataMall</span>
+                <span>Open →</span>
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
       <SourceNote>Every dataset is sourced from LTA via DataMall.</SourceNote>
     </section>

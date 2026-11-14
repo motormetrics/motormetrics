@@ -1,37 +1,36 @@
-import { Typography } from "@heroui/react";
+import { Skeleton, Typography } from "@heroui/react";
 import { TwoShadeTrendChart } from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
+import type { MakeSectionProps } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
-import type { Range } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import {
   formatChartMonth,
   formatMonthLabel,
 } from "@web/utils/dates/format-month";
+import { Suspense } from "react";
 
-/** The make's registrations by month, the selected month darker, with the summary line under it. */
-export function MakeTrend({
-  fuelType,
-  make,
-  month,
-  series,
-  seriesRange,
-  summary,
-}: {
-  fuelType: string | null;
-  make: string;
-  month: string;
-  series: { count: number; month: string }[];
-  seriesRange: Range;
-  summary: string | undefined;
-}) {
+type ReportProps = Pick<MakeSectionProps, "report">;
+
+/** " Electric" after the make in the title, when a fuel type is selected. */
+async function TrendFuelType({ report }: ReportProps) {
+  const { fuelType } = await report;
+
+  return fuelType ? ` ${fuelType}` : null;
+}
+
+async function TrendCaption({ report }: ReportProps) {
+  const { month, seriesRange } = await report;
+
+  return `${periodLabel(month, seriesRange)} · hover or tap a bar for its value`;
+}
+
+/** The chart, the selected month darker, with its note and the summary line. */
+async function TrendFigure({ make, report }: MakeSectionProps) {
+  const { fuelType, month, series, summary } = await report;
+
   return (
-    <section className="flex min-w-0 flex-col gap-4">
-      <SectionHead
-        caption={`${periodLabel(month, seriesRange)} · hover or tap a bar for its value`}
-        eyebrow="Trend"
-        title={`${make}${fuelType ? ` ${fuelType}` : ""} registrations by month`}
-      />
+    <>
       <TwoShadeTrendChart
         data={series.map(({ count, month: seriesMonth }, index) => {
           const isSelected = seriesMonth === month;
@@ -65,6 +64,39 @@ export function MakeTrend({
           {summary}
         </Typography.Paragraph>
       ) : null}
+    </>
+  );
+}
+
+/**
+ * The make's registrations by month. The heading is in the static shell; the
+ * caption and the chart follow the period and fuel type, so each waits behind
+ * its own boundary.
+ */
+export function MakeTrend({ make, report }: MakeSectionProps) {
+  return (
+    <section className="flex min-w-0 flex-col gap-4">
+      <SectionHead
+        caption={
+          // A non-breaking space holds the caption's line until it arrives.
+          <Suspense fallback={" "}>
+            <TrendCaption report={report} />
+          </Suspense>
+        }
+        eyebrow="Trend"
+        title={
+          <>
+            {make}
+            <Suspense fallback={null}>
+              <TrendFuelType report={report} />
+            </Suspense>{" "}
+            registrations by month
+          </>
+        }
+      />
+      <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+        <TrendFigure make={make} report={report} />
+      </Suspense>
     </section>
   );
 }

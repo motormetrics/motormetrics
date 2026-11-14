@@ -12,24 +12,21 @@ const termCount = GLOSSARY_CATEGORIES.reduce(
 );
 
 /**
- * The glossary: a heading in a narrow left column against the categories two
- * up, each a ruled list of term and definition under a small label. Terms with
- * a guide of their own link to it.
+ * The glossary: the head above the categories, which flow two or three up as
+ * the column allows, each a ruled list of term and definition under a small
+ * label. Terms with a guide of their own link to it.
  */
 export function GlossarySection() {
   return (
-    <section
-      className="grid scroll-mt-24 grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-14"
-      id="glossary"
-    >
+    <section className="flex scroll-mt-24 flex-col gap-5" id="glossary">
       <SectionHead
         caption="The abbreviations that appear on every invoice, quotation and bidding result, in one place."
         eyebrow="Reference"
         title="Glossary"
       />
 
-      <div className="flex min-w-0 flex-col gap-4 lg:col-span-3">
-        <div className="grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-2">
+      <div className="@container flex min-w-0 flex-col gap-4">
+        <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-x-12 gap-y-7">
           {GLOSSARY_CATEGORIES.map((category) => (
             <div className="flex min-w-0 flex-col" key={category.title}>
               <span className="border-border border-b pb-2 font-semibold text-muted text-xs">

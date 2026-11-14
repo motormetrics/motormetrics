@@ -37,10 +37,12 @@ export function RelatedGuides({ guide }: { guide: Guide }) {
         link={{ href: "/learn", label: "All guides" }}
         title="Next in this series"
       />
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filled.map((entry) => (
-          <GuideCard guide={entry} key={entry.slug} />
-        ))}
+      <div className="@container">
+        <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-3.5">
+          {filled.map((entry) => (
+            <GuideCard guide={entry} key={entry.slug} />
+          ))}
+        </div>
       </div>
     </section>
   );

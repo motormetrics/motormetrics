@@ -1,3 +1,4 @@
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { ElectricOnlyRows } from "@web/app/(main)/(dashboard)/cars/makes/components/electric-only-rows";
 import {
@@ -5,7 +6,7 @@ import {
   periodLabel,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import { SectionHead } from "@web/components/shared/overview";
+import { SectionLink } from "@web/components/shared/overview";
 import { getCarsLatestMonth } from "@web/queries/cars";
 
 export async function ElectricOnlyMakes() {
@@ -22,12 +23,24 @@ export async function ElectricOnlyMakes() {
 
   return (
     <div className="flex min-w-0 flex-col gap-4">
-      <SectionHead
-        caption={`Makes selling only battery-electric cars · ${summary.sharePercent.toFixed(1)}% of registrations`}
-        eyebrow="Electric vehicles"
-        link={{ href: "/cars/electric-vehicles", label: "All electric data" }}
-        title="Electric-only makes"
-      />
+      <div className="flex flex-wrap items-end gap-4">
+        <div className="flex min-w-0 flex-col gap-1">
+          <Typography.Heading className="text-lg" level={3} weight="bold">
+            Electric-only makes
+          </Typography.Heading>
+          <Typography.Paragraph
+            className="tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            Makes selling only battery-electric cars ·{" "}
+            {summary.sharePercent.toFixed(1)}% of registrations
+          </Typography.Paragraph>
+        </div>
+        <SectionLink href="/cars/electric-vehicles">
+          All electric data
+        </SectionLink>
+      </div>
 
       <ElectricOnlyRows
         header={

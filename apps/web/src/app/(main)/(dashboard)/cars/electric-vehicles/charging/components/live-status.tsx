@@ -13,6 +13,45 @@ const formatObservedAt = (iso: string) =>
     minute: "2-digit",
   });
 
+/**
+ * The compact form of `LiveStatus` that sits on the map with its controls:
+ * free connectors now, and what the pin colours mean, since the legend under
+ * the map is covered by the price content.
+ */
+export async function LiveChip({ district }: { district: string }) {
+  const summary = await getEvChargingLiveSummary(district || undefined);
+  if (summary.connectors === 0 || !summary.observedAt) {
+    return null;
+  }
+
+  return (
+    <div className="flex max-w-64 flex-col gap-1 rounded-2xl bg-overlay p-3 shadow-overlay">
+      <span className="font-extrabold text-xl tabular-nums">
+        <NumberValue
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={summary.available}
+        />{" "}
+        free
+      </span>
+      {/* A phone's map is short and shares its top edge with the site
+          search, so the chip keeps only the free count there. */}
+      <Typography.Paragraph className="max-md:hidden" color="muted" size="xs">
+        of{" "}
+        <NumberValue
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={summary.connectors}
+        />{" "}
+        connectors · live {formatObservedAt(summary.observedAt)}
+      </Typography.Paragraph>
+      <Typography.Paragraph className="max-md:hidden" color="muted" size="xs">
+        Green has free connectors · amber is full · grey is out of service
+      </Typography.Paragraph>
+    </div>
+  );
+}
+
 /** Connector state at the latest cached batch, island-wide or per district. */
 export async function LiveStatus({ district }: { district: string }) {
   const summary = await getEvChargingLiveSummary(district || undefined);

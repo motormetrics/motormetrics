@@ -24,3 +24,50 @@ export const AGE_BRACKETS: AgeBracket[] = [
 
 export const OLD_CAP = 60_000;
 export const NEW_CAP = 30_000;
+
+export interface ParfResult {
+  newCapped: boolean;
+  newRebate: number;
+  oldCapped: boolean;
+  oldRebate: number;
+  oldUncapped: number;
+  shortfall: number;
+}
+
+/** The rebate on an ARF under both schedules, each with its own cap. */
+export function calculateParf(arf: number, bracket: AgeBracket): ParfResult {
+  const oldUncapped = arf * bracket.oldRate;
+  const newUncapped = arf * bracket.newRate;
+  const oldRebate = Math.min(oldUncapped, OLD_CAP);
+  const newRebate = Math.min(newUncapped, NEW_CAP);
+
+  return {
+    newCapped: newUncapped > NEW_CAP,
+    newRebate,
+    oldCapped: oldUncapped > OLD_CAP,
+    oldRebate,
+    oldUncapped,
+    shortfall: oldRebate - newRebate,
+  };
+}
+
+/**
+ * The cut in percentage points across the brackets that pay a rebate, as one
+ * figure when every bracket falls by the same amount, otherwise `null`.
+ */
+export function uniformRateCut(brackets: readonly AgeBracket[]): number | null {
+  const cuts = new Set(
+    brackets
+      .filter(({ oldRate }) => oldRate > 0)
+      .map(({ newRate, oldRate }) => Math.round((oldRate - newRate) * 100)),
+  );
+  return cuts.size === 1 ? [...cuts][0] : null;
+}
+
+/** Whole Singapore dollars, as the calculator's money fields show them. */
+export const SGD_FORMAT: Intl.NumberFormatOptions = {
+  currency: "SGD",
+  currencyDisplay: "narrowSymbol",
+  maximumFractionDigits: 0,
+  style: "currency",
+};

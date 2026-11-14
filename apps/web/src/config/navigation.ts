@@ -1,6 +1,7 @@
 import { sortByName } from "@motormetrics/utils/sorting";
 import {
   BarChart3,
+  BookOpen,
   Calculator,
   Calendar,
   Car,
@@ -8,7 +9,11 @@ import {
   FileMinus,
   FilePlus,
   Fuel,
+  Gauge,
+  Gavel,
+  LayoutGrid,
   type LucideIcon,
+  Newspaper,
   PlugZap,
   TrendingUp,
   Zap,
@@ -136,6 +141,12 @@ export const navLinks: NavLinks = {
   ],
   coe: [
     {
+      title: "PQP rates",
+      url: "/coe/pqp",
+      icon: Calculator,
+      description: "Prevailing quota premiums and calculations",
+    },
+    {
       title: "Premiums by category",
       url: "/coe/premiums",
       icon: BarChart3,
@@ -146,12 +157,6 @@ export const navLinks: NavLinks = {
       url: "/coe/results",
       icon: TrendingUp,
       description: "COE prices by year, trends and record highs",
-    },
-    {
-      title: "PQP rates",
-      url: "/coe/pqp",
-      icon: Calculator,
-      description: "Prevailing quota premiums and calculations",
     },
   ],
   socialMedia: sortByName(socialMedia, { sortKey: "title" }),
@@ -179,9 +184,17 @@ export type NavItem = {
   sections?: NavSection[];
 };
 
-/** Pills in the shell navigation, in comp order. */
+/**
+ * Pills in the shell navigation, in comp order. COE leads Cars: COE and PQP
+ * pages draw the most search traffic, so they come first.
+ */
 export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
   { href: "/", label: "Overview" },
+  {
+    href: "/coe",
+    label: "COE",
+    sections: [{ label: "COE data", items: navLinks.coe, withOverview: true }],
+  },
   {
     href: "/cars",
     label: "Cars",
@@ -193,42 +206,55 @@ export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
       { label: "Tools", items: navLinks.tools },
     ],
   },
-  {
-    href: "/coe",
-    label: "COE",
-    sections: [{ label: "COE data", items: navLinks.coe, withOverview: true }],
-  },
   { href: "/learn", label: "Learn" },
 ];
 
-/** Eyebrow above MORE_NAV_ITEMS, matching the pills' section labels. */
-export const MORE_NAV_SECTION_LABEL = "More";
+/** One labelled group of rows in the shell sidebar. */
+export interface SidebarGroup {
+  label: string;
+  items: NavigationItem[];
+}
 
 /**
- * Everything the pills do not surface, behind the shell nav's "More" menu. The
- * Cars and COE sections are not listed here because their own pills open them.
+ * The shell sidebar, in Direction D's order: COE ahead of Cars, then the
+ * calculators and the reading. Every row carries an icon, because the
+ * collapsed sidebar shows icons only.
  */
-export const MORE_NAV_ITEMS: NavigationItem[] = [
-  { title: "About", url: "/about" },
-  { title: "Blog", url: "/blog" },
+export const SIDEBAR_GROUPS: readonly SidebarGroup[] = [
+  {
+    label: "Market",
+    items: [{ title: "Market overview", url: "/", icon: LayoutGrid }],
+  },
+  {
+    label: "COE",
+    items: [
+      { title: "Latest results", url: "/coe", icon: Gavel },
+      ...navLinks.coe,
+    ],
+  },
+  {
+    label: "Cars",
+    items: [
+      { title: "Cars overview", url: "/cars", icon: Gauge },
+      ...navLinks.cars,
+      ...navLinks.electric,
+    ],
+  },
+  { label: "Tools", items: navLinks.tools },
+  {
+    label: "Learn",
+    items: [
+      { title: "Guides", url: "/learn", icon: BookOpen },
+      { title: "Blog", url: "/blog", icon: Newspaper },
+    ],
+  },
 ];
-
-/** Shown in More when the `advertise-nav` flag is on. */
-export const ADVERTISE_MORE_ITEM: NavigationItem = {
-  title: "Advertise",
-  url: "/advertise",
-};
 
 export const FOOTER_NAV_ITEMS = [
   { href: "/about", label: "About" },
   { href: "/learn", label: "Learn" },
+  { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
   { href: "/legal/privacy-policy", label: "Privacy" },
   { href: "/legal/terms-of-service", label: "Terms" },
 ] as const satisfies readonly NavItem[];
-
-/** Inserted after Learn when the `advertise-nav` flag is on. */
-export const ADVERTISE_FOOTER_ITEM = {
-  href: "/advertise",
-  label: "Advertise",
-} as const satisfies NavItem;

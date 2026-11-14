@@ -14,7 +14,7 @@ vi.mock("@upstash/ratelimit", () => ({
 }));
 
 vi.mock("@web/lib/auth", () => ({
-  auth: { api: { getSession: vi.fn() } },
+  auth: { api: { getSession: vi.fn(), userHasPermission: vi.fn() } },
 }));
 
 function makeServerActionRequest() {
@@ -166,6 +166,42 @@ describe("proxy", () => {
       "make=bmw",
     ])("should leave %s to the page", async (query) => {
       const response = await compare(query);
+
+      expect(response.headers.get("location")).toBeNull();
+    });
+  });
+
+  describe("admin routes", () => {
+    async function requestAdmin(session: unknown, permitted = false) {
+      const { auth } = await import("@web/lib/auth");
+      vi.mocked(auth.api.getSession).mockResolvedValue(session as never);
+      vi.mocked(auth.api.userHasPermission).mockResolvedValue({
+        error: null,
+        success: permitted,
+      });
+      const { proxy } = await import("@web/proxy");
+
+      return proxy(new NextRequest("http://localhost/admin/content/blog"));
+    }
+
+    it("should redirect to the login page without a session", async () => {
+      const response = await requestAdmin(null);
+
+      expect(response.headers.get("location")).toBe(
+        "http://localhost/admin/login",
+      );
+    });
+
+    it("should redirect a signed-in user without the dashboard permission", async () => {
+      const response = await requestAdmin({ user: { id: "user" } });
+
+      expect(response.headers.get("location")).toBe(
+        "http://localhost/admin/login",
+      );
+    });
+
+    it("should let a user with the dashboard permission through", async () => {
+      const response = await requestAdmin({ user: { id: "admin" } }, true);
 
       expect(response.headers.get("location")).toBeNull();
     });

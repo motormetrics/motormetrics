@@ -1,10 +1,8 @@
 import { slugify } from "@motormetrics/utils/slugify";
-import {
-  type FuelFilter,
-  isFuelFilter,
-  type Range,
+import type {
+  FuelFilter,
+  Range,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
-import { HYBRID_REGEX } from "@web/config";
 import { LOGOS_CACHE_TAG } from "@web/lib/cache-tags/logos";
 import type { MakeRegistrationStat } from "@web/queries/cars";
 import {
@@ -25,21 +23,17 @@ import { cacheLife, cacheTag } from "next/cache";
 /** The `cars.fuelType` value that means battery-electric and nothing else. */
 const BEV_FUEL_TYPE = "Electric";
 
-/** The breakdown queries each powertrain tab resolves to. */
-const FUEL_FILTER_QUERIES: Record<FuelFilter, string[]> = {
-  Petrol: ["Petrol"],
-  Hybrid: ["Petrol-Electric", "Diesel-Electric"],
-  Electric: [BEV_FUEL_TYPE],
-};
+/** Below this many cars a year earlier, a percentage change says little. */
+export const MIN_BASE = 20;
 
-/** Whether a `cars.fuelType` value belongs to the tab. */
+/**
+ * Whether a `cars.fuelType` value belongs to the tab. Tabs are LTA values, so
+ * only an exact match counts.
+ */
 export function matchesFuelFilter(
   filter: FuelFilter,
   fuelType: string,
 ): boolean {
-  if (filter === "Hybrid") {
-    return HYBRID_REGEX.test(fuelType);
-  }
   return fuelType === filter;
 }
 
@@ -90,7 +84,7 @@ interface MonthWindow {
 }
 
 /** The months the active range covers, ending at `latestMonth`. */
-function rangeWindow(latestMonth: string, range: Range): MonthWindow {
+export function rangeWindow(latestMonth: string, range: Range): MonthWindow {
   if (range === "month") {
     return { end: latestMonth, start: latestMonth };
   }
@@ -237,7 +231,7 @@ export function buildTotalsFromStats(
  *
  * Rows are re-filtered through `isMatch` because `getFuelTypeData` turns
  * hyphens into SQL wildcards, so asking for "Petrol-Electric" also returns the
- * plug-in variant — wanted for the Hybrid tab, not for an exact fuel type.
+ * plug-in variant, which the tab must leave out.
  *
  * The change compares the active range against `priorWindow()`, as the
  * all-fuels path does. Both paths feed the same delta chips and the same
@@ -320,15 +314,13 @@ async function loadMonthCounts(
  */
 export async function loadMakeRows(
   range: Range,
-  fuel: string | null,
+  fuel: FuelFilter | null,
 ): Promise<MakeRowsResult> {
   "use cache";
   cacheLife("max");
   cacheTag("cars:months", "cars:makes", LOGOS_CACHE_TAG);
-  if (isFuelFilter(fuel)) {
-    cacheTag(
-      ...FUEL_FILTER_QUERIES[fuel].map((fuelType) => `cars:fuel:${fuelType}`),
-    );
+  if (fuel) {
+    cacheTag(`cars:fuel:${fuel}`);
   }
 
   const [latestMonth, fuelTypeRows, logoUrlBySlug] = await Promise.all([
@@ -344,12 +336,10 @@ export async function loadMakeRows(
   }
 
   let totals: MakeTotals[];
-  if (isFuelFilter(fuel)) {
-    const breakdowns = await Promise.all(
-      FUEL_FILTER_QUERIES[fuel].map((fuelType) => getFuelTypeData(fuelType)),
-    );
+  if (fuel) {
+    const breakdown = await getFuelTypeData(fuel);
     totals = buildTotalsFromFuelRows(
-      breakdowns.flatMap((breakdown) => breakdown.data),
+      breakdown.data,
       (fuelType) => matchesFuelFilter(fuel, fuelType),
       latestMonth,
       range,

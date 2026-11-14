@@ -16,11 +16,14 @@ export async function regeneratePost(params: {
   month: string;
   dataType: "cars" | "coe";
 }): Promise<{ success: boolean; error?: string; runId?: string }> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["update"] } },
+    }));
 
-  if (!session) {
+  if (!permission?.success) {
     return {
       success: false,
       error: "Unauthorised",
@@ -47,11 +50,14 @@ export async function regeneratePost(params: {
 export async function createBlogPost(
   input: CreatePostInput,
 ): Promise<{ success: boolean; error?: string; postId?: string }> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["create"] } },
+    }));
 
-  if (!session) {
+  if (!permission?.success) {
     return {
       success: false,
       error: "Unauthorised",
@@ -87,11 +93,14 @@ export async function createBlogPost(
 export async function updateBlogPost(
   input: UpdatePostInput,
 ): Promise<{ success: boolean; error?: string; postId?: string }> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["update"] } },
+    }));
 
-  if (!session) {
+  if (!permission?.success) {
     return {
       success: false,
       error: "Unauthorised",
@@ -118,11 +127,14 @@ export async function updateBlogPost(
 export async function deleteBlogPost(
   id: string,
 ): Promise<{ success: boolean; error?: string }> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["delete"] } },
+    }));
 
-  if (!session) {
+  if (!permission?.success) {
     return {
       success: false,
       error: "Unauthorised",

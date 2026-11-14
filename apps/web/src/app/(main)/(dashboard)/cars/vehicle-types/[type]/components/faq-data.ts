@@ -3,14 +3,17 @@ import type { Faq } from "@web/components/shared/page-faq";
 /**
  * Questions people search about one vehicle type, with its name in the wording
  * they search, such as "How many SUV cars are registered in Singapore?". Shared
- * by the accordion and the FAQPage schema so the two always match. Answers
- * point to the figures on the page rather than quote them, so they never go
- * stale.
+ * by the accordion and the FAQPage schema so the two always match. The first
+ * answer leads with `summary`, the period's figures in a sentence built from
+ * the same data as the headline.
  */
-export const buildVehicleTypeFaqs = (vehicleType: string): Faq[] => [
+export const buildVehicleTypeFaqs = (
+  vehicleType: string,
+  summary?: string,
+): Faq[] => [
   {
     question: `How many ${vehicleType} cars are registered in Singapore?`,
-    answer: `The headline on this page counts new ${vehicleType} registrations for the selected period, across all makes and fuel types. It counts new registrations, not the ${vehicleType} cars already on the road.`,
+    answer: `${summary ? `${summary} Source: LTA. ` : ""}The headline on this page counts new ${vehicleType} registrations for the selected period, across all makes and fuel types. It counts new registrations, not the ${vehicleType} cars already on the road.`,
   },
   {
     question: `What share of ${vehicleType} cars in Singapore are electric?`,

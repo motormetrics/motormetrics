@@ -1,61 +1,44 @@
-"use client";
-
-import { cn } from "@heroui/react";
-import { Segment } from "@heroui-pro/react";
+import { FilterTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/filter-tabs";
 import {
-  isRange,
-  RANGE_LABELS,
+  type MakesSearchParams,
   RANGES,
+  type Range,
+  serialize,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
-import { parseAsStringLiteral, useQueryState } from "nuqs";
-import posthog from "posthog-js";
-import { useTransition } from "react";
+import { formatMonthName } from "@web/utils/dates/format-month";
+
+/** Direction D's period labels: "October", "2026 to date", "12 months". */
+export function rangeTabLabel(range: Range, latestMonth: string): string {
+  if (range === "month") {
+    return formatMonthName(latestMonth);
+  }
+  if (range === "ytd") {
+    return `${latestMonth.slice(0, 4)} to date`;
+  }
+  return "12 months";
+}
 
 /**
- * The period switch in the page head: the three ranges as a segmented
- * control, as the comp draws it.
- *
- * Writes the `range` search param with `shallow: false` so every section
- * re-renders on the server against the new period; no registration data
- * crosses into the client bundle.
+ * The index's period switch. Each range is a link to the page with `?range=`
+ * changed and every other param kept, built on the server.
  */
-export function RangeTabs() {
-  const [isPending, startTransition] = useTransition();
-  const [range, setRange] = useQueryState(
-    "range",
-    parseAsStringLiteral(RANGES)
-      .withDefault("ytd")
-      .withOptions({ shallow: false, startTransition }),
-  );
-
+export function RangeTabs({
+  latestMonth,
+  params,
+}: {
+  latestMonth: string;
+  params: MakesSearchParams;
+}) {
   return (
-    <Segment
-      aria-label="Registration period"
-      className={cn("max-md:w-full", isPending && "opacity-70")}
-      onSelectionChange={(key) => {
-        const next = String(key);
-        if (!isRange(next)) {
-          return;
-        }
-        posthog.capture("dashboard_filter_changed", {
-          filter: "range",
-          value: next,
-        });
-        setRange(next);
-      }}
-      selectedKey={range}
-      size="sm"
-      variant="ghost"
-    >
-      {RANGES.map((option) => (
-        <Segment.Item
-          className="max-md:flex-1 max-md:px-2"
-          id={option}
-          key={option}
-        >
-          {RANGE_LABELS[option]}
-        </Segment.Item>
-      ))}
-    </Segment>
+    <FilterTabs
+      aria-label="Period"
+      filter="range"
+      selectedKey={params.range}
+      tabs={RANGES.map((range) => ({
+        href: serialize("/cars/makes", { ...params, range }),
+        id: range,
+        label: rangeTabLabel(range, latestMonth),
+      }))}
+    />
   );
 }

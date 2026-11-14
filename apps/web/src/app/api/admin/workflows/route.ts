@@ -11,7 +11,13 @@ export async function GET(request: Request) {
 
   if (!isBearerAuth) {
     const session = await auth.api.getSession({ headers: headersList });
-    if (!session) {
+    const permission =
+      session &&
+      (await auth.api.userHasPermission({
+        body: { userId: session.user.id, permissions: { workflow: ["read"] } },
+      }));
+
+    if (!permission?.success) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
   }

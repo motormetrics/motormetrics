@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { Card, Typography } from "@heroui/react";
 import {
   LogoMark,
   MARK_ACCENT,
@@ -6,9 +6,17 @@ import {
   MARK_INK,
   Wordmark,
 } from "@web/components/brand-logo";
-import { SitePage } from "@web/components/shared/site-page";
+import {
+  Hairline,
+  OverviewPage,
+  SectionHead,
+} from "@web/components/shared/overview";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  siteCardImages,
+} from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import Image from "next/image";
 import type { ReactNode } from "react";
@@ -22,6 +30,7 @@ export const metadata: Metadata = {
   description,
   openGraph: {
     ...baseOpenGraph,
+    images: siteCardImages,
     title,
     description,
     url: `${SITE_URL}/brand`,
@@ -80,28 +89,22 @@ function Figure({
   );
 }
 
-function SectionHeading({ children }: { children: ReactNode }) {
-  return (
-    <Typography.Heading level={2} className="text-2xl">
-      {children}
-    </Typography.Heading>
-  );
-}
-
 export default function BrandPage() {
   return (
-    <SitePage className="gap-14">
-      <section className="flex flex-col gap-3">
-        <span className="self-start rounded-full bg-accent-soft px-4 py-2 font-bold text-accent-strong text-sm">
-          Brand
-        </span>
-        <Typography.Heading level={1} className="text-5xl">
-          {title}
-        </Typography.Heading>
-        <Typography.Paragraph
-          color="muted"
-          className="max-w-3xl text-pretty text-lg leading-normal"
-        >
+    <OverviewPage className="gap-10 max-md:gap-7">
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <Typography.Paragraph
+            className="uppercase"
+            color="muted"
+            size="xs"
+            weight="semibold"
+          >
+            Brand
+          </Typography.Paragraph>
+          <Typography.Heading level={1}>{title}</Typography.Heading>
+        </div>
+        <Typography.Paragraph className="max-w-prose text-pretty">
           A lowercase m drawn as two arches. One arch per word; the second takes
           the accent. Wordmark set in Urbanist Extrabold, lowercase, with the
           same two-tone split.
@@ -209,8 +212,10 @@ export default function BrandPage() {
         </Figure>
       </section>
 
+      <Hairline />
+
       <section className="flex flex-col gap-4">
-        <SectionHeading>The standard mark</SectionHeading>
+        <SectionHead title="The standard mark" />
         <Typography.Paragraph
           color="muted"
           className="max-w-3xl text-pretty leading-relaxed"
@@ -307,8 +312,10 @@ export default function BrandPage() {
         </Typography.Paragraph>
       </section>
 
+      <Hairline />
+
       <section className="flex flex-col gap-4">
-        <SectionHeading>Don&apos;t</SectionHeading>
+        <SectionHead title="Don't" />
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-5">
           <Dont caption="Swap the colour order">
             <LogoMark first={MARK_ACCENT} second={MARK_INK} size={52} />
@@ -339,10 +346,12 @@ export default function BrandPage() {
         </div>
       </section>
 
+      <Hairline />
+
       <section className="flex flex-col gap-4">
-        <SectionHeading>Wordmark vs. name</SectionHeading>
+        <SectionHead title="Wordmark vs. name" />
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
-          <div className="flex flex-col gap-3 rounded-2xl bg-surface p-7">
+          <Card className="p-7">
             <Wordmark className="text-3xl" />
             <Typography.Paragraph color="muted">
               The wordmark is a graphic. Always lowercase, always Urbanist 800
@@ -350,8 +359,8 @@ export default function BrandPage() {
               the nav, the footer mark, share cards, docs and decks. Icon slots
               take the mark on its own — never the wordmark.
             </Typography.Paragraph>
-          </div>
-          <div className="flex flex-col gap-3 rounded-2xl bg-surface p-7">
+          </Card>
+          <Card className="p-7">
             <span className="font-bold text-3xl text-accent-deep leading-none tracking-tight dark:text-foreground">
               MotorMetrics
             </span>
@@ -362,12 +371,14 @@ export default function BrandPage() {
               MotorMetrics&rdquo;, &ldquo;MotorMetrics tracks COE results
               daily.&rdquo;
             </Typography.Paragraph>
-          </div>
+          </Card>
         </div>
       </section>
 
+      <Hairline />
+
       <section className="flex flex-col gap-2.5">
-        <SectionHeading>Files</SectionHeading>
+        <SectionHead title="Files" />
         <Typography.Paragraph color="muted">
           {FILES.map((file, index) => (
             <span key={file}>
@@ -379,7 +390,7 @@ export default function BrandPage() {
           ))}
         </Typography.Paragraph>
       </section>
-    </SitePage>
+    </OverviewPage>
   );
 }
 

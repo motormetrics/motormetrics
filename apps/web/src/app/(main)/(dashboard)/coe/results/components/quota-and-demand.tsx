@@ -3,15 +3,14 @@ import {
   CATEGORY_DESCRIPTIONS,
   COE_CATEGORIES,
   formatExercise,
+  groupByExercise,
   successRate,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { SuccessRateCell } from "@web/app/(main)/(dashboard)/coe/components/success-rate-cell";
-import {
-  loadExercises,
-  type RegionProps,
-} from "@web/app/(main)/(dashboard)/coe/results/components/results-shared";
+import { quotaCaption } from "@web/app/(main)/(dashboard)/coe/results/components/results-captions";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { getCoeResults } from "@web/queries/coe";
 
 /** Shared by the quota header and rows. */
 const QUOTA_ROW =
@@ -19,14 +18,12 @@ const QUOTA_ROW =
 const QUOTA_CELL = "w-16 shrink-0 text-right";
 
 /**
- * Quota against bids for the latest exercise. The heading names that
- * exercise, so unlike the tables above it the whole section is data-derived
- * and stays behind the boundary.
+ * Quota against bids for the latest exercise. The latest exercise is the
+ * same whatever period the page shows, so this reads the cached history and
+ * is in the static shell.
  */
-export async function QuotaAndDemand({ searchParams }: RegionProps) {
-  const { exercises } = await loadExercises(searchParams);
-
-  const latest = exercises.at(-1);
+export async function QuotaAndDemand() {
+  const latest = groupByExercise(await getCoeResults()).at(-1);
 
   if (!latest) {
     return null;
@@ -35,8 +32,8 @@ export async function QuotaAndDemand({ searchParams }: RegionProps) {
   return (
     <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
-        caption="Bids received against quota, by category"
-        eyebrow="Quota and demand"
+        caption={quotaCaption(latest)}
+        eyebrow="Figure 4 · Quota and demand"
         title={formatExercise(latest)}
       />
       <div className="flex flex-col">
@@ -100,7 +97,8 @@ export async function QuotaAndDemand({ searchParams }: RegionProps) {
         </ol>
       </div>
       <SourceNote>
-        Success rate is successful bids as a share of bids received.
+        Source: LTA via DataMall · Success rate is successful bids as a share of
+        bids received.
       </SourceNote>
     </section>
   );

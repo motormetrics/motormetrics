@@ -2,11 +2,11 @@
 version: "alpha"
 name: MotorMetrics
 description: >-
-  Singapore vehicle data platform. Warm-cream canvas with a slate-blue accent,
+  Singapore vehicle data platform. White canvas with a slate-blue accent,
   built on hex tokens and HeroUI v3 (Tailwind CSS v4). Minimal, high-contrast,
   data-first.
 colors:
-  background: "#f7f5ef"
+  background: "#ffffff"
   foreground: "#232a2e"
   surface: "#ffffff"
   overlay: "#ffffff"
@@ -20,8 +20,8 @@ colors:
   warning-foreground: "#232a2e"
   danger: "#e96e6e"
   danger-foreground: "#232a2e"
-  border: "#e5e1d5"
-  separator: "#e5e1d5"
+  border: "#e3e6e8"
+  separator: "#e3e6e8"
   focus: "#4e7c9b"
   chart-1: "#33586f"
   chart-2: "#4e7c9b"
@@ -152,7 +152,7 @@ components:
 MotorMetrics is minimal, high-contrast and data-first — lineage from Geist
 (Vercel), Linear and Stripe. Hierarchy comes from **size and spacing** on a fixed
 scale, not from decoration or per-page tuning. Restrained colour: a single
-slate-blue accent on a warm cream canvas, and status colours reserved for meaning.
+slate-blue accent on a white canvas, and status colours reserved for meaning.
 
 Light and dark themes share identical token *names* with different *values*
 (`:root` vs `.dark` / `[data-theme="dark"]`). Components consume tokens through
@@ -173,20 +173,20 @@ Design token set.
 
 | Role | Token | Light | Dark |
 |------|-------|-------|------|
-| Background | `--background` | `#f7f5ef` (warm cream) | `#1a2024` |
+| Background | `--background` | `#ffffff` | `#1a2024` |
 | Foreground | `--foreground` | `#232a2e` (`--eclipse`) | `#f1f0ea` |
 | Surface (cards) | `--surface` | `#ffffff` | `#232a2e` |
-| Surface secondary (rails, wells) | `--surface-secondary` | `#efece3` (warm sand) | `#2a3237` |
+| Surface secondary (rails, wells) | `--surface-secondary` | `#f5f6f7` (faint neutral grey) | `#2a3237` |
 | Overlay (popovers/modals) | `--overlay` | `#ffffff` | `#2a3237` |
-| Muted (secondary body text) | `--muted` | `#505a5d` (6.00:1) | `#9aa6ab` (5.23:1) |
-| Subtle (meta labels) | `--subtle` | `#5f6b71` (4.64:1) | `#939da1` (4.71:1) |
+| Muted (secondary body text) | `--muted` | `#505a5d` (6.27:1) | `#9aa6ab` (5.23:1) |
+| Subtle (meta labels) | `--subtle` | `#5f6b71` (4.85:1) | `#939da1` (4.71:1) |
 | Default (neutral fill) | `--default` | `#f0f3f4` | `#2e373c` |
 | Accent | `--accent` | `#4e7c9b` (slate blue) | `#6fa0c0` |
 | Accent strong (text/links) | `--accent-strong` | `#33586f` | `#4e7c9b` |
 | Success | `--success` | `#57b45f` | same |
 | Warning | `--warning` | `#e9a63c` | same |
 | Danger | `--danger` | `#e96e6e` | same |
-| Border / Separator | `--border` / `--separator` | `#e5e1d5` | `#333c41` |
+| Border / Separator | `--border` / `--separator` | `#e3e6e8` | `#333c41` |
 | Focus | `--focus` | = `--accent` | = `--accent` |
 
 **Chart palette** — Claude Design's six-step ramp of slate blues, from the accent

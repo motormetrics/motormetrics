@@ -1,12 +1,25 @@
 import type { Faq } from "@web/components/shared/page-faq";
 
+/** The month's published rates, as the page's headline reports them. */
+export interface PqpFaqRates {
+  /** "November 2026" */
+  month: string;
+  /** Formatted amounts, e.g. "$129,883". */
+  categoryA: string;
+  categoryB: string;
+  categoryA5Year: string;
+  categoryB5Year: string;
+}
+
 /**
  * Questions people search about the PQP and COE renewal, worded the way they
  * search them. Shared by the accordion and the FAQPage schema so the two always
- * match. The rules are LTA's; answers point to the rates on the page rather
- * than quote them. This page reports Categories A and B only.
+ * match. The rules are LTA's. The rates answer quotes the month's figures from
+ * the same data as the headline, so it is a complete answer on its own and
+ * changes with every publication; without rates it points to the page. This
+ * page reports Categories A and B only.
  */
-export const PQP_FAQS: Faq[] = [
+export const buildPqpFaqs = (rates?: PqpFaqRates): Faq[] => [
   {
     question: "What is the PQP?",
     answer:
@@ -19,8 +32,9 @@ export const PQP_FAQS: Faq[] = [
   },
   {
     question: "How much is the PQP for Cat A and Cat B?",
-    answer:
-      "The headline and the published rates table on this page give the current month's PQP for Category A and Category B, with the change on the month before. A 5-year renewal costs half the PQP.",
+    answer: rates
+      ? `For ${rates.month}, LTA's PQP is ${rates.categoryA} for Category A and ${rates.categoryB} for Category B. A 5-year renewal costs half the PQP: ${rates.categoryA5Year} for Category A and ${rates.categoryB5Year} for Category B.`
+      : "The headline and the published rates table on this page give the current month's PQP for Category A and Category B, with the change on the month before. A 5-year renewal costs half the PQP.",
   },
   {
     question: "Is there a PQP for Category E?",

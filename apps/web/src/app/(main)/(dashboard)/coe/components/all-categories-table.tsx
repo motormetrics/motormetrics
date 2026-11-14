@@ -25,10 +25,6 @@ const PREMIUM_FORMAT = new Intl.NumberFormat("en-SG", {
   style: "currency",
 });
 
-/** "1.26×"; a dash when the quota is missing rather than dividing by zero. */
-const bidsPerCoe = (row: CategoryRow): string =>
-  row.quota > 0 ? `${(row.bidsReceived / row.quota).toFixed(2)}×` : "—";
-
 /**
  * The five-category table with sortable headers.
  *
@@ -61,7 +57,7 @@ export function AllCategoriesTable({
   };
 
   /*
-   * Bids and Bids/COE are read across, not ranked, so they do not sort; nor
+   * Bids and PQP are read across, not ranked, so they do not sort; nor
    * does the sparkline, which is a shape rather than a figure.
    */
   const columns: DataGridColumn<CategoryRow>[] = [
@@ -136,10 +132,21 @@ export function AllCategoriesTable({
     },
     {
       align: "end",
-      cell: bidsPerCoe,
-      header: "Bids/COE",
-      id: "ratio",
-      width: 90,
+      cell: (row) =>
+        row.pqp === undefined ? (
+          "—"
+        ) : (
+          <NumberValue
+            currency="SGD"
+            locale="en-SG"
+            maximumFractionDigits={0}
+            style="currency"
+            value={row.pqp}
+          />
+        ),
+      header: "PQP",
+      id: "pqp",
+      width: 120,
     },
     {
       cell: (row) => {

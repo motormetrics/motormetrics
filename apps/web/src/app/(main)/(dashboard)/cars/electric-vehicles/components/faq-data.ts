@@ -3,13 +3,13 @@ import type { Faq } from "@web/components/shared/page-faq";
 /**
  * Questions people search about electric cars in Singapore, worded the way
  * they search them. Shared by the accordion and the FAQPage schema so the two
- * always match. Answers point to the figures on the page rather than quote them.
+ * always match. The first answer leads with `summary`, the year-to-date figures in
+ * a sentence built from the same data as the leaderboard.
  */
-export const ELECTRIC_VEHICLES_FAQS: Faq[] = [
+export const buildElectricVehiclesFaqs = (summary?: string): Faq[] => [
   {
     question: "How many electric cars are there in Singapore?",
-    answer:
-      "The EV share headline at the top of this page gives the number of battery-electric cars registered in the selected month and their share of new car registrations, with the change on the month before. It also gives the number of EVs already on the road.",
+    answer: `${summary ? `${summary} Source: LTA. ` : ""}The EV share headline at the top of this page gives the number of battery-electric cars registered in the selected month and their share of new car registrations, with the change on the month before. It also gives the number of EVs already on the road.`,
   },
   {
     question: "What is the difference between a BEV, a PHEV and a hybrid?",

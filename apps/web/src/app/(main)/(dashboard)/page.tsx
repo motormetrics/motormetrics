@@ -1,20 +1,33 @@
-import { Skeleton } from "@heroui/react";
-import { HOME_FAQS } from "@web/app/(main)/(dashboard)/components/faq-data";
-import { MarketLead } from "@web/app/(main)/(dashboard)/components/market-lead";
+import { Typography } from "@heroui/react";
+import {
+  loadMakeRows,
+  summariseLeaders,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import {
+  FuelMixFigure,
+  RoadFigure,
+  TopMakesFigure,
+} from "@web/app/(main)/(dashboard)/components/car-figures";
+import {
+  CoePremiumsFigure,
+  PqpFigure,
+} from "@web/app/(main)/(dashboard)/components/coe-figures";
+import { buildHomeFaqs } from "@web/app/(main)/(dashboard)/components/faq-data";
+import {
+  MarketHero,
+  MarketKeyNumbers,
+} from "@web/app/(main)/(dashboard)/components/market-head";
 import { MarketLinks } from "@web/app/(main)/(dashboard)/components/market-links";
-import { MarketTiles } from "@web/app/(main)/(dashboard)/components/market-tiles";
-import { MarketTrend } from "@web/app/(main)/(dashboard)/components/market-trend";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { PageHead } from "@web/components/shared/page-head";
+import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
 import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: { absolute: `${SITE_TITLE} (formerly SG Cars Trends)` },
@@ -95,15 +108,23 @@ function OrganizationStructuredData() {
   );
 }
 
-/** One placeholder per market tile, named so each has a stable key. */
-const TILE_SKELETONS = [
-  "make",
-  "fuel",
-  "pqp",
-  "deregistrations",
-  "ev-make",
-  "charging",
-];
+/** The questions and their FAQPage schema, with the leading makes quoted. */
+async function HomeFaq() {
+  const { latestMonth, rows } = await loadMakeRows("ytd", null);
+  const faqs = buildHomeFaqs(summariseLeaders(rows, latestMonth, "ytd"));
+
+  return (
+    <>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          ...generateFAQPageSchema([{ items: faqs }]),
+        }}
+      />
+      <PageFaq faqs={faqs} />
+    </>
+  );
+}
 
 export default function HomePage() {
   return (
@@ -112,58 +133,72 @@ export default function HomePage() {
       <OrganizationStructuredData />
 
       <OverviewPage className="gap-10 max-md:gap-7">
-        <div className="flex flex-col gap-7">
-          {/* The lead band names each half's period, since COE and
-              registrations run on different clocks; the sub only sources it. */}
-          <PageHead
-            eyebrow="Singapore car market"
-            sub="Registrations and COE results · Source: LTA via DataMall"
-            title="Market overview"
-          />
-
-          <SectionErrorBoundary title="Headline figures unavailable">
-            <Suspense
-              fallback={<Skeleton className="h-80 w-full rounded-4xl" />}
-            >
-              <MarketLead />
-            </Suspense>
-          </SectionErrorBoundary>
+        {/* Direction D's head: eyebrow, title, the Category A range hero,
+            lead and source, with the key numbers beside it once the page is
+            wide and under it before then. Everything on this page reads
+            cached data only, so it is all part of the static shell and no
+            section needs a Suspense boundary. */}
+        <div className="@container">
+          <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
+            <div className="flex min-w-0 flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <Typography.Paragraph
+                  className="uppercase"
+                  color="muted"
+                  size="xs"
+                  weight="semibold"
+                >
+                  Singapore car market
+                </Typography.Paragraph>
+                <Typography.Heading level={1}>
+                  Market overview
+                </Typography.Heading>
+              </div>
+              <SectionErrorBoundary title="Headline figures unavailable">
+                <MarketHero />
+              </SectionErrorBoundary>
+              <div>
+                <SharePill title="Market overview" />
+              </div>
+            </div>
+            <SectionErrorBoundary title="Key numbers unavailable">
+              <MarketKeyNumbers />
+            </SectionErrorBoundary>
+          </div>
         </div>
 
-        <SectionErrorBoundary title="Market figures unavailable">
-          <Suspense
-            fallback={
-              <div className="flex flex-col gap-4">
-                <Skeleton className="h-9 w-56" />
-                <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 lg:gap-4">
-                  {TILE_SKELETONS.map((tile) => (
-                    <Skeleton className="h-36 rounded-3xl" key={tile} />
-                  ))}
-                </div>
-              </div>
-            }
-          >
-            <MarketTiles />
-          </Suspense>
+        {/* COE and PQP lead the car figures, as the navigation does. */}
+        <SectionErrorBoundary title="COE premiums unavailable">
+          <CoePremiumsFigure />
         </SectionErrorBoundary>
 
-        <SectionErrorBoundary title="Trends unavailable">
-          <Suspense fallback={<Skeleton className="h-96 w-full rounded-4xl" />}>
-            <MarketTrend />
-          </Suspense>
+        <Hairline />
+
+        <SectionErrorBoundary title="PQP rates unavailable">
+          <PqpFigure />
+        </SectionErrorBoundary>
+
+        <Hairline />
+
+        <SectionErrorBoundary title="Fuel types unavailable">
+          <FuelMixFigure />
+        </SectionErrorBoundary>
+
+        <Hairline />
+
+        <SectionErrorBoundary title="Top makes unavailable">
+          <TopMakesFigure />
+        </SectionErrorBoundary>
+
+        <Hairline />
+
+        <SectionErrorBoundary title="Vehicle figures unavailable">
+          <RoadFigure />
         </SectionErrorBoundary>
 
         <MarketLinks />
 
-        <Hairline />
-
-        <StructuredData
-          data={{
-            "@context": "https://schema.org",
-            ...generateFAQPageSchema([{ items: HOME_FAQS }]),
-          }}
-        />
-        <PageFaq faqs={HOME_FAQS} />
+        <HomeFaq />
       </OverviewPage>
     </>
   );

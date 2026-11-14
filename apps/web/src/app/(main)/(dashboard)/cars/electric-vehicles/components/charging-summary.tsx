@@ -2,8 +2,9 @@ import { ProgressBar, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-network";
+import { SubHead } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/sub-head";
 import { CHARGING_POINT_TARGET_2030 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { SourceNote } from "@web/components/shared/overview";
 import {
   getEvChargingNetworkSummary,
   getEvChargingRegistrationsByMonth,
@@ -35,19 +36,18 @@ export async function ChargingSummary() {
   );
 
   return (
-    <section className="flex min-w-0 flex-col gap-4">
-      <SectionHead
-        caption="Public charging points nationwide"
-        eyebrow="Infrastructure"
+    <div className="flex min-w-0 flex-col gap-3.5">
+      <SubHead
         link={{
           href: "/cars/electric-vehicles/charging",
           label: "All charging data",
         }}
+        sub="Public charging points nationwide"
         title="Charging network"
       />
 
       <div className="flex flex-wrap items-baseline gap-3">
-        <span className="font-bold text-3xl tabular-nums tracking-tight">
+        <span className="font-semibold text-2xl tabular-nums tracking-tight">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
@@ -99,6 +99,6 @@ export async function ChargingSummary() {
         Charging points from LTA, with the 2030 target of{" "}
         {CHARGING_POINT_TARGET_2030.toLocaleString("en-SG")}.
       </SourceNote>
-    </section>
+    </div>
   );
 }

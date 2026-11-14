@@ -1,9 +1,9 @@
 "use client";
 
 import { Typography } from "@heroui/react";
-import { Segment } from "@heroui-pro/react";
+// import { Segment } from "@heroui-pro/react";
 // biome-ignore lint/suspicious/noShadowRestrictedNames: HeroUI Pro Map component
-import { Map, type MapClusterLayerProps } from "@heroui-pro/react/map";
+import { Map, type MapClusterLayerProps, useMap } from "@heroui-pro/react/map";
 import {
   ISLAND_CENTER,
   ISLAND_ZOOM,
@@ -14,14 +14,14 @@ import { DistrictFocus } from "@web/app/(main)/(dashboard)/cars/electric-vehicle
 import { SiteFocus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/site-focus";
 import { SiteLocator } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/site-locator";
 import { SitePopup } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/site-popup";
-import { UtilisationHeatmap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-heatmap";
+// import { UtilisationHeatmap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-heatmap";
 import { siteParam } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
-import { getPostalDistrict } from "@web/config/postal-districts";
+// import { getPostalDistrict } from "@web/config/postal-districts";
 import type { EvChargingMapSite } from "@web/queries/ev-charging/map-sites";
 import type { FeatureCollection, Point } from "geojson";
 import { setWorkerUrl } from "maplibre-gl";
 import { parseAsString, useQueryState } from "nuqs";
-import { useEffect, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 
 setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
 
@@ -30,19 +30,21 @@ const MAP_STYLES = {
   dark: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
 };
 
+// The "Busiest sites" mode is paused with the hourly utilisation history.
 const MAP_MODES = [
   { key: "availability", label: "Live availability" },
-  { key: "utilisation", label: "Busiest sites" },
+  // { key: "utilisation", label: "Busiest sites" },
 ] as const;
 
 type MapMode = (typeof MAP_MODES)[number]["key"];
 
-const MODE_LEGENDS: Record<MapMode, string> = {
-  availability:
-    "Green has free connectors · amber is full · grey is out of service",
-  utilisation:
-    "Warmer areas were occupied more often over the past week · sites under a day old are left out",
-};
+// The legend lives in the live chip on the map now (see `LiveChip`).
+// const MODE_LEGENDS: Record<MapMode, string> = {
+//   availability:
+//     "Green has free connectors · amber is full · grey is out of service",
+//   // utilisation:
+//   //   "Warmer areas were occupied more often over the past week · sites under a day old are left out",
+// };
 
 /** Serves the same array that used to arrive as props. */
 const MAP_SITES_ENDPOINT = "/api/ev-charging/map-sites";
@@ -71,9 +73,14 @@ const toFeatureCollection = (
   })),
 });
 
-export function ChargingMapView() {
+export function ChargingMapView({
+  liveStatus,
+}: {
+  /** Streamed live availability chip, shown above the map controls. */
+  liveStatus?: ReactNode;
+}) {
   const [district] = useQueryState("district", parseAsString.withDefault(""));
-  const scope = getPostalDistrict(district)?.name ?? "Singapore";
+  // const scope = getPostalDistrict(district)?.name ?? "Singapore";
   const [loadedSites, setLoadedSites] = useState<EvChargingMapSite[] | null>(
     null,
   );
@@ -144,13 +151,17 @@ export function ChargingMapView() {
 
   return (
     <>
+      {/* The map runs edge to edge with no card, so its heading went; the
+          live chip on the map names what it shows.
       <div className="flex flex-col gap-1">
         <Typography.Paragraph color="muted">
           Live availability by site
         </Typography.Paragraph>
         <Typography.Heading level={3}>Chargers in {scope}</Typography.Heading>
       </div>
+      */}
 
+      {/* One mode is left, so the switcher is hidden until utilisation returns.
       <Segment
         aria-label="Map view"
         className="w-fit"
@@ -166,20 +177,35 @@ export function ChargingMapView() {
           </Segment.Item>
         ))}
       </Segment>
+      */}
 
-      <div className="relative h-[480px] w-full overflow-hidden rounded-3xl">
+      {/*
+        Heights: 640px on wider screens is off Tailwind's spacing scale (it
+        stops at h-96), and no preset gives a map tall enough to leave its top
+        half clear of the overlapping price cards, so it stays arbitrary.
+
+        The MapLibre credit sits in its bottom-right control corner, which the
+        price cards cover. The arbitrary variants lift that corner by the
+        overlap so the credit stays visible; HeroUI's Map has
+        no prop to place it.
+      */}
+      <div className="relative h-96 w-full overflow-hidden md:h-[640px] [&_.maplibregl-ctrl-bottom-right]:bottom-24 md:[&_.maplibregl-ctrl-bottom-right]:bottom-80">
         <Map
           center={ISLAND_CENTER}
+          // Page scroll passes over the map; zooming takes Ctrl/⌘ + scroll,
+          // and a phone pans with two fingers.
+          cooperativeGestures
           styles={MAP_STYLES}
           theme="light"
           zoom={ISLAND_ZOOM}
         >
+          <MapOverlap />
           <DistrictFocus district={district} sites={sites} />
           <SiteFocus onFocus={focusSite} site={focusedSite} />
 
-          {tokens && mode === "utilisation" ? (
+          {/* {tokens && mode === "utilisation" ? (
             <UtilisationHeatmap collection={collection} tokens={tokens} />
-          ) : null}
+          ) : null} */}
 
           {tokens && mode === "availability" ? (
             <Map.ClusterLayer<EvChargingMapSite>
@@ -216,7 +242,9 @@ export function ChargingMapView() {
             </Map.Popup>
           ) : null}
 
-          <Map.Controls>
+          {/* Top-right: the bottom corners are under the price cards. */}
+          <Map.Controls position="top-right">
+            {liveStatus}
             <Map.LocateControl />
             <Map.ZoomControl />
           </Map.Controls>
@@ -227,8 +255,9 @@ export function ChargingMapView() {
           sites={sites}
         />
 
+        {/* Status messages centre in the uncovered part of the map. */}
         {loadedSites === null ? (
-          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-surface/60 backdrop-blur-xs">
+          <div className="absolute inset-x-0 top-0 bottom-24 z-10 flex items-center justify-center bg-surface/60 backdrop-blur-xs md:bottom-80">
             <Typography.Paragraph color="muted" size="sm">
               Loading chargers…
             </Typography.Paragraph>
@@ -236,7 +265,7 @@ export function ChargingMapView() {
         ) : null}
 
         {loadedSites?.length === 0 ? (
-          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-surface/60 backdrop-blur-xs">
+          <div className="absolute inset-x-0 top-0 bottom-24 z-10 flex items-center justify-center bg-surface/60 backdrop-blur-xs md:bottom-80">
             <Typography.Paragraph color="muted" size="sm">
               No charger locations to show right now.
             </Typography.Paragraph>
@@ -244,9 +273,42 @@ export function ChargingMapView() {
         ) : null}
       </div>
 
+      {/* The legend moved into the live chip on the map; this line would sit
+          under the overlapping price cards.
       <Typography.Paragraph color="muted" size="xs">
         {MODE_LEGENDS[mode]}
       </Typography.Paragraph>
+      */}
     </>
   );
+}
+
+/**
+ * Pads the camera's bottom edge by the overlap, so the island, a fitted
+ * district and a focused site centre in the part of the map the price cards
+ * leave clear. The 96 and 320 px mirror the page's `-mt-24 md:-mt-80`, and
+ * follow the breakpoint as the window resizes.
+ */
+function MapOverlap() {
+  const { isLoaded, map } = useMap();
+
+  useEffect(() => {
+    if (!isLoaded || !map) {
+      return;
+    }
+    const wide = window.matchMedia("(width >= 48rem)");
+    const applyPadding = () => {
+      map.setPadding({
+        top: 0,
+        right: 0,
+        bottom: wide.matches ? 320 : 96,
+        left: 0,
+      });
+    };
+    applyPadding();
+    wide.addEventListener("change", applyPadding);
+    return () => wide.removeEventListener("change", applyPadding);
+  }, [isLoaded, map]);
+
+  return null;
 }

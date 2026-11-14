@@ -150,8 +150,9 @@ export async function ComparisonHead({
 
 /**
  * Everything below the head: lead and summary, trend, fuel and vehicle mix,
- * monthly figures and FAQ, each in its own boundary. A fragment, so the
- * sections sit directly in `OverviewPage`'s gap layout.
+ * monthly figures and FAQ. The trend, mix and monthly sections keep their
+ * headings in the static shell and hold a boundary around the figures only.
+ * A fragment, so the sections sit directly in `OverviewPage`'s gap layout.
  */
 export function ComparisonBody({
   faqSchema,
@@ -178,23 +179,17 @@ export function ComparisonBody({
       <Hairline />
 
       <SectionErrorBoundary title="Monthly trend unavailable">
-        <Suspense fallback={<Skeleton className="h-80 w-full" />}>
-          <CompareTrend names={names} />
-        </Suspense>
+        <CompareTrend names={names} />
       </SectionErrorBoundary>
 
       <Hairline />
 
       <SectionErrorBoundary title="Fuel and vehicle mix unavailable">
-        <Suspense fallback={<Skeleton className="h-80 w-full" />}>
-          <CompareMix names={names} />
-        </Suspense>
+        <CompareMix names={names} />
       </SectionErrorBoundary>
 
       <SectionErrorBoundary title="Monthly figures unavailable">
-        <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-          <CompareMonthly names={names} />
-        </Suspense>
+        <CompareMonthly names={names} />
       </SectionErrorBoundary>
 
       <Hairline />
@@ -247,7 +242,21 @@ async function CompareLead({ names }: ComparisonProps) {
 }
 
 /** Both makes' last 24 months on one zero-based chart. */
-async function CompareTrend({ names }: ComparisonProps) {
+function CompareTrend({ names }: ComparisonProps) {
+  return (
+    <section className="flex min-w-0 flex-col gap-4">
+      <SectionHead
+        caption="New registrations per month, all fuel types. The y-axis starts at zero."
+        title="Monthly registrations, last 24 months"
+      />
+      <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+        <CompareTrendFigure names={names} />
+      </Suspense>
+    </section>
+  );
+}
+
+async function CompareTrendFigure({ names }: ComparisonProps) {
   const { a, b, month, nameA, nameB } = await loadComparison(names);
   const months = trailingMonths(month, SERIES_LENGTH);
 
@@ -261,33 +270,24 @@ async function CompareTrend({ names }: ComparisonProps) {
   }));
 
   return (
-    <section className="flex min-w-0 flex-col gap-4">
-      <SectionHead
-        caption="New registrations per month, all fuel types. The y-axis starts at zero."
-        title="Monthly registrations, last 24 months"
-      />
-      <CompareTrendChart
-        data={data}
-        nameA={nameA}
-        nameB={nameB}
-        summary={trendSummary({
-          months,
-          nameA,
-          nameB,
-          seriesA: a.series,
-          seriesB: b.series,
-        })}
-        ticks={axisTicks([...a.series, ...b.series], { zero: true })}
-      />
-    </section>
+    <CompareTrendChart
+      data={data}
+      nameA={nameA}
+      nameB={nameB}
+      summary={trendSummary({
+        months,
+        nameA,
+        nameB,
+        seriesA: a.series,
+        seriesB: b.series,
+      })}
+      ticks={axisTicks([...a.series, ...b.series], { zero: true })}
+    />
   );
 }
 
 /** Fuel type and vehicle type, each as shares of the make's own total. */
-async function CompareMix({ names }: ComparisonProps) {
-  const { a, b, nameA, nameB } = await loadComparison(names);
-  const vehicles = vehicleShareRows(a, b);
-
+function CompareMix({ names }: ComparisonProps) {
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
       <section className="flex min-w-0 flex-col gap-4">
@@ -295,63 +295,95 @@ async function CompareMix({ names }: ComparisonProps) {
           caption="Share of each make’s registrations"
           title="How each make is powered"
         />
-        <ShareTable
-          ariaLabel={`${nameA} and ${nameB} registrations by fuel type`}
-          firstColumn="Fuel type (LTA)"
-          nameA={nameA}
-          nameB={nameB}
-          rows={fuelShareRows(a, b)}
-        />
+        <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+          <CompareFuelTable names={names} />
+        </Suspense>
       </section>
       <section className="flex min-w-0 flex-col gap-4">
         <SectionHead
           caption="Share of each make’s registrations"
           title="What body styles sell"
         />
-        <ShareTable
-          ariaLabel={`${nameA} and ${nameB} registrations by vehicle type`}
-          firstColumn="Vehicle type"
-          nameA={nameA}
-          nameB={nameB}
-          rows={vehicles.rows}
-        />
-        {vehicles.otherBreakdown.length > 0 ? (
-          <TableDisclosure title="Full breakdown of “Other”">
-            <ShareTable
-              ariaLabel="Full breakdown of other vehicle types"
-              firstColumn="Vehicle type"
-              nameA={nameA}
-              nameB={nameB}
-              rows={vehicles.otherBreakdown}
-            />
-          </TableDisclosure>
-        ) : null}
+        <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+          <CompareVehicleTables names={names} />
+        </Suspense>
       </section>
     </div>
   );
 }
 
-/** The chart's figures as a table, closed by default. */
-async function CompareMonthly({ names }: ComparisonProps) {
-  const { a, b, month, nameA, nameB } = await loadComparison(names);
+async function CompareFuelTable({ names }: ComparisonProps) {
+  const { a, b, nameA, nameB } = await loadComparison(names);
 
   return (
-    <TableDisclosure title="Monthly figures, last 24 months">
-      <MonthlyTable
+    <ShareTable
+      ariaLabel={`${nameA} and ${nameB} registrations by fuel type`}
+      firstColumn="Fuel type (LTA)"
+      nameA={nameA}
+      nameB={nameB}
+      rows={fuelShareRows(a, b)}
+    />
+  );
+}
+
+/** The vehicle types, with the makeup of "Other" behind a disclosure. */
+async function CompareVehicleTables({ names }: ComparisonProps) {
+  const { a, b, nameA, nameB } = await loadComparison(names);
+  const vehicles = vehicleShareRows(a, b);
+
+  return (
+    <>
+      <ShareTable
+        ariaLabel={`${nameA} and ${nameB} registrations by vehicle type`}
+        firstColumn="Vehicle type"
         nameA={nameA}
         nameB={nameB}
-        rows={monthlyRows({
-          months: trailingMonths(month, SERIES_LENGTH),
-          nameA,
-          nameB,
-          seriesA: a.series,
-          seriesB: b.series,
-        })}
+        rows={vehicles.rows}
       />
+      {vehicles.otherBreakdown.length > 0 ? (
+        <TableDisclosure title="Full breakdown of “Other”">
+          <ShareTable
+            ariaLabel="Full breakdown of other vehicle types"
+            firstColumn="Vehicle type"
+            nameA={nameA}
+            nameB={nameB}
+            rows={vehicles.otherBreakdown}
+          />
+        </TableDisclosure>
+      ) : null}
+    </>
+  );
+}
+
+/** The chart's figures as a table, closed by default. */
+function CompareMonthly({ names }: ComparisonProps) {
+  return (
+    <TableDisclosure title="Monthly figures, last 24 months">
+      <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+        <CompareMonthlyTable names={names} />
+      </Suspense>
       <SourceNote>
         The same figures as the chart above, newest first.
       </SourceNote>
     </TableDisclosure>
+  );
+}
+
+async function CompareMonthlyTable({ names }: ComparisonProps) {
+  const { a, b, month, nameA, nameB } = await loadComparison(names);
+
+  return (
+    <MonthlyTable
+      nameA={nameA}
+      nameB={nameB}
+      rows={monthlyRows({
+        months: trailingMonths(month, SERIES_LENGTH),
+        nameA,
+        nameB,
+        seriesA: a.series,
+        seriesB: b.series,
+      })}
+    />
   );
 }
 

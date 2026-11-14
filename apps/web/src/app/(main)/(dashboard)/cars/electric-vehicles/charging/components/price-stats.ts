@@ -1,5 +1,11 @@
+import { EV_CHARGING_LIVE_CACHE_TAG } from "@web/lib/cache-tags";
 import type { ConnectorRecord } from "@web/lib/ev-charging";
-import { groupLocations, PER_KWH } from "@web/queries/ev-charging";
+import {
+  getEvChargingSnapshot,
+  groupLocations,
+  PER_KWH,
+} from "@web/queries/ev-charging";
+import { cacheLife, cacheTag } from "next/cache";
 
 export interface ChargingStats {
   connectors: number;
@@ -58,6 +64,42 @@ export const deriveChargingStats = (
     ),
   };
 };
+
+export interface ChargingStatsSnapshot {
+  /** ISO timestamp the feed reports for itself; `null` when unavailable. */
+  observedAt: string | null;
+  /** `null` while the live feed has no connectors stored. */
+  stats: ChargingStats | null;
+}
+
+/**
+ * The page's headline figures, cached on their own so the page never reads
+ * the snapshot directly.
+ *
+ * A cache entry read while prerendering is stored with the page so the
+ * request-time render can reuse it. Read directly, the ~5 MB snapshot rode
+ * along in every hourly regeneration as ~830 KB of compressed state, which
+ * was most of the project's ISR writes. This entry is a few hundred bytes.
+ */
+export async function getChargingStats(): Promise<ChargingStatsSnapshot> {
+  "use cache";
+  cacheLife("max");
+  cacheTag(EV_CHARGING_LIVE_CACHE_TAG);
+
+  const { observedAt, records } = await getEvChargingSnapshot();
+  return {
+    observedAt,
+    stats: records.length === 0 ? null : deriveChargingStats(records),
+  };
+}
+
+/**
+ * Shown wherever a $0.00/kWh rate appears. The rate is LTA DataMall's, shown
+ * as published: the feed marks free charging separately (`free`), so a zero
+ * per-kWh rate may be free charging or a price the operator has not listed.
+ */
+export const ZERO_RATE_DISCLAIMER =
+  "$0.00/kWh is the rate as published on LTA DataMall. It may mean free charging or a price the operator has not listed, so check with the operator before you charge.";
 
 export const formatPerKwh = (price: number | null): string =>
   price == null ? "not advertised" : `$${price.toFixed(2)}/kWh`;
