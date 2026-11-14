@@ -13,7 +13,6 @@ import {
   type PQPSeries,
   type PQPTrendPoint,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-chart";
-import { PQPHeadline } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-headline";
 import {
   PQPPremiumBars,
   type PQPPremiumPoint,
@@ -104,7 +103,6 @@ export async function PQPReport({
   const comparisonByCategory = new Map(
     comparison.map((row) => [row.category, row]),
   );
-  const headlineComparison = comparisonByCategory.get(selected);
 
   // The query returns the months newest first; the chart reads left to right.
   const ascending = [...trendData].sort((a, b) =>
@@ -173,17 +171,6 @@ export async function PQPReport({
 
   return (
     <>
-      <PQPHeadline
-        category={category}
-        latestExercise={latestExercise}
-        latestPremium={headlineComparison?.latestPremium ?? 0}
-        rates={ascending.map((point) => ({
-          month: point.month,
-          rate: point[selected],
-        }))}
-        term={term}
-      />
-
       <RenewalCalculator rates={trendData} />
       <Hairline />
 
