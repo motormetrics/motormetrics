@@ -152,7 +152,10 @@ export function CoeKeyNumbersView({
             // and focus handling but drops its pill shape for D's ruled cell,
             // with the selected cell tinted and underlined in the accent.
             className={cn(
-              "h-auto min-w-0 flex-col items-start justify-start gap-0.5 whitespace-normal rounded-none border-separator border-b px-2.5 py-3 text-left font-normal",
+              // w-full: Button sizes to its content, so without it each cell
+              // sat at the start of its column and the rule and tint stopped
+              // short. E, the odd one out in two columns, takes the full row.
+              "h-auto w-full min-w-0 flex-col items-start justify-start gap-0.5 whitespace-normal rounded-none border-separator border-b px-2.5 py-3 text-left font-normal @7xl:last:col-span-2 @max-3xl:last:col-span-2",
               isPressed && "border-accent border-b-2 bg-accent-soft",
             )}
             key={category}
