@@ -10,6 +10,9 @@ import {
 import { buildRegistrationsFaqs } from "@web/app/(main)/(dashboard)/cars/registrations/components/faq-data";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
 import {
+  FuelCaption,
+  FuelNote,
+  FuelTable,
   RegistrationsReport,
   TrendCaption,
   TrendChart,
@@ -249,6 +252,35 @@ export default function Page({ searchParams }: PageProps) {
             <TrendNote {...props} />
           </Slot>{" "}
           Zero-based; hover or tap a bar for its value.
+        </SourceNote>
+      </section>
+
+      <Hairline />
+
+      <section className="flex scroll-mt-4 flex-col gap-4" id="reg-fuelt">
+        <FigureHead
+          caption={<FuelCaption {...props} />}
+          eyebrow={
+            <>
+              Figure 2 ·{" "}
+              <Slot>
+                <ReportMonth {...props} />
+              </Slot>{" "}
+              · all makes
+            </>
+          }
+          title="By fuel type"
+        />
+        <SectionErrorBoundary title="Fuel types unavailable">
+          <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+            <FuelTable {...props} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SourceNote>
+          Source: LTA via DataMall ·{" "}
+          <Slot>
+            <FuelNote {...props} />
+          </Slot>
         </SourceNote>
       </section>
 

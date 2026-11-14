@@ -18,17 +18,12 @@ import {
   type Range,
 } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
-import {
-  Hairline,
-  SectionHead,
-  SourceNote,
-} from "@web/components/shared/overview";
+import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import {
   getCarsComparison,
   getCarsData,
   getMonthlyRegistrationTotals,
   getMonthlyRegistrationTotalsByFuelType,
-  getYearToDateByFuelType,
 } from "@web/queries/cars/monthly-registrations";
 import {
   getTopMakesByYear,
@@ -39,6 +34,7 @@ import { percentageChange } from "@web/utils/change-ratio";
 import {
   formatChartMonth,
   formatMonthLabel,
+  formatMonthName,
 } from "@web/utils/dates/format-month";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
@@ -102,6 +98,62 @@ export async function TrendNote({ searchParams }: ReportProps) {
   return `${fuelType ? `New ${fuelType} car registrations, all makes.` : "New car registrations, all makes and fuel types."} The chart always runs to the latest month; ${formatDateToMonthYear(month)} is highlighted.`;
 }
 
+function fuelRows(report: Awaited<ReturnType<typeof loadRegistrationsReport>>) {
+  const { comparison, registrations, yearToDate } = report;
+
+  return registrations.fuelType.map(({ count, name }) => ({
+    change: percentageChange(
+      count,
+      lookup(comparison.previousMonth.fuelType, name),
+    ),
+    count,
+    name,
+    share: (count / (registrations.total || 1)) * 100,
+    yearToDate: yearToDate.find((entry) => entry.name === name)?.count ?? 0,
+  }));
+}
+
+/**
+ * "Electric cars were 63.3% of the 4,549 registered in August 2026;
+ * Petrol-Electric (Plug-In) rose most on July, +87.0%."
+ */
+export async function FuelCaption({ searchParams }: ReportProps) {
+  const report = await loadRegistrationsReport(searchParams);
+  const rows = fuelRows(report);
+  const [top] = rows;
+  const riser = [...rows].sort((a, b) => b.change - a.change)[0];
+  if (!top || !riser) {
+    return null;
+  }
+
+  const sign = riser.change < 0 ? "−" : "+";
+  const movement = `${sign}${Math.abs(riser.change).toFixed(1)}%`;
+  const previous = formatMonthName(report.comparison.previousMonth.period);
+
+  return `${top.name} cars were ${top.share.toFixed(1)}% of the ${formatCount(report.registrations.total)} registered in ${formatMonthLabel(report.month)}; ${riser.name} ${riser.change > 0 ? `rose most on ${previous}, ${movement}` : `fell least, ${movement}`}.`;
+}
+
+export async function FuelTable({ searchParams }: ReportProps) {
+  const report = await loadRegistrationsReport(searchParams);
+
+  return (
+    <FuelTypeTable
+      previousMonthName={formatChartMonth(
+        report.comparison.previousMonth.period,
+      )}
+      rows={fuelRows(report)}
+      year={report.year}
+    />
+  );
+}
+
+export async function FuelNote({ searchParams }: ReportProps) {
+  const { latestMonth, month, registrations, year } =
+    await loadRegistrationsReport(searchParams);
+
+  return `Share is of ${formatCount(registrations.total)} new cars in ${formatMonthLabel(month)}. Change is against the previous month; colour is not used for direction. Year to date covers ${latestMonth.startsWith(`${year}-`) ? `January to ${formatMonthLabel(latestMonth)}` : `the whole of ${year}`}. Select a row to filter the headline and chart.`;
+}
+
 function lookup(
   rows: { count: number; label: string }[],
   name: string,
@@ -128,11 +180,10 @@ export async function RegistrationsReport({
   ]);
   const year = Number(month.slice(0, 4));
 
-  const [registrations, comparison, yearToDate, topMakes, logoUrlBySlug] =
+  const [registrations, comparison, topMakes, logoUrlBySlug] =
     await Promise.all([
       getCarsData(month),
       getCarsComparison(month),
-      getYearToDateByFuelType(year),
       getTopMakesByYear(year, 10),
       getCarLogoMap(),
     ]);
@@ -142,97 +193,60 @@ export async function RegistrationsReport({
     yearlyTotals.find((entry) => entry.year === year)?.total ?? 0;
 
   return (
-    <>
-      <section className="flex flex-col gap-4">
+    <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-14">
+      <section className="flex min-w-0 flex-col gap-4">
         <SectionHead
-          caption={`${formatMonthLabel(month)} · all makes · select a row to filter`}
+          caption={`${year} year to date · all fuel types`}
           eyebrow="Registrations"
-          link={{ href: "/cars/fuel-types", label: "Fuel types in full" }}
-          title="By fuel type"
+          link={{ href: "/cars/makes", label: "All makes" }}
+          title="Top makes"
         />
-        <FuelTypeTable
-          previousMonthName={formatChartMonth(comparison.previousMonth.period)}
-          rows={registrations.fuelType.map(({ count, name }) => ({
-            change: percentageChange(
-              count,
-              lookup(comparison.previousMonth.fuelType, name),
-            ),
-            count,
-            name,
-            share: (count / (registrations.total || 1)) * 100,
-            yearToDate:
-              yearToDate.find((entry) => entry.name === name)?.count ?? 0,
+        <TopMakesTable
+          makes={topMakes.map(({ make, value }) => ({
+            logoUrl: logoUrlBySlug[slugify(make)] ?? null,
+            make,
+            value,
           }))}
-          year={year}
+          total={yearTotal}
         />
         <SourceNote>
-          Share is of {registrations.total.toLocaleString("en-SG")} new cars in{" "}
-          {formatMonthLabel(month)}. Change is against the previous month;
-          colour is not used for direction. Year to date covers{" "}
+          New car registrations by make,{" "}
           {latestMonth.startsWith(`${year}-`)
             ? `January to ${formatMonthLabel(latestMonth)}`
             : `the whole of ${year}`}
-          .
+          . Not affected by the month or fuel filters.
         </SourceNote>
       </section>
 
-      <Hairline />
-
-      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-14">
-        <section className="flex min-w-0 flex-col gap-4">
-          <SectionHead
-            caption={`${year} year to date · all fuel types`}
-            eyebrow="Registrations"
-            link={{ href: "/cars/makes", label: "All makes" }}
-            title="Top makes"
-          />
-          <TopMakesTable
-            makes={topMakes.map(({ make, value }) => ({
-              logoUrl: logoUrlBySlug[slugify(make)] ?? null,
-              make,
-              value,
-            }))}
-            total={yearTotal}
-          />
-          <SourceNote>
-            New car registrations by make,{" "}
-            {latestMonth.startsWith(`${year}-`)
-              ? `January to ${formatMonthLabel(latestMonth)}`
-              : `the whole of ${year}`}
-            . Not affected by the month or fuel filters.
-          </SourceNote>
-        </section>
-
-        <section className="flex min-w-0 flex-col gap-4">
-          <SectionHead
-            caption={`${formatMonthLabel(month)} · against ${formatMonthLabel(comparison.previousYear.period)}`}
-            eyebrow="Registrations"
-            link={{
-              href: "/cars/vehicle-types",
-              label: "Vehicle types in full",
-            }}
-            title="By vehicle type"
-          />
-          <VehicleTypeTable
-            previousYear={year - 1}
-            rows={registrations.vehicleType.map(({ count, name }) => ({
-              change: percentageChange(
-                count,
-                lookup(comparison.previousYear.vehicleType, name),
-              ),
+      <section className="flex min-w-0 flex-col gap-4">
+        <SectionHead
+          caption={`${formatMonthLabel(month)} · against ${formatMonthLabel(comparison.previousYear.period)}`}
+          eyebrow="Registrations"
+          link={{
+            href: "/cars/vehicle-types",
+            label: "Vehicle types in full",
+          }}
+          title="By vehicle type"
+        />
+        <VehicleTypeTable
+          previousYear={year - 1}
+          rows={registrations.vehicleType.map(({ count, name }) => ({
+            change: percentageChange(
               count,
-              name: formatVehicleType(name),
-            }))}
-            total={registrations.total}
-          />
-          <SourceNote>
-            A car counts in the month it is registered, which can lag the
-            bidding exercise that won its COE by several weeks. Figures cover
-            cars only; other vehicle classes are counted separately under their
-            own categories.
-          </SourceNote>
-        </section>
-      </div>
-    </>
+              lookup(comparison.previousYear.vehicleType, name),
+            ),
+            count,
+            name: formatVehicleType(name),
+          }))}
+          total={registrations.total}
+        />
+        <SourceNote>
+          A car counts in the month it is registered, which can lag the bidding
+          exercise that won its COE by several weeks. Figures cover cars only;
+          other vehicle classes are counted separately under their own
+          categories.
+        </SourceNote>
+      </section>
+    </div>
   );
 }
