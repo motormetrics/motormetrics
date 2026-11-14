@@ -1,8 +1,11 @@
+import { Skeleton } from "@heroui/react";
 import { serialize as serializeCompare } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import { FilterTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/filter-tabs";
 import {
   type MakeCard,
   MakeCards,
+  MakeSearch,
+  MakeSearchField,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-cards";
 import { MakeDetail } from "@web/app/(main)/(dashboard)/cars/makes/components/make-detail";
 import {
@@ -15,18 +18,26 @@ import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/ran
 import {
   FUEL_FILTERS,
   loadSearchParams,
-  type MakesSearchParams,
   type Range,
   serialize,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { getCarsLatestMonth } from "@web/queries/cars";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
 import type { SearchParams } from "nuqs/server";
+import { type ReactNode, Suspense } from "react";
 
 const SORT_TABS = [
   { id: "count", label: "Most cars" },
   { id: "make", label: "A–Z" },
 ] as const;
+
+/** Cards the fallback draws while the makes load: two rows on a wide page. */
+const SKELETON_CARDS = 10;
+
+interface IndexProps {
+  searchParams: Promise<SearchParams>;
+}
 
 /** "+12.3% on 2025", or why there is no change to show. */
 export function changeLabel(
@@ -61,6 +72,26 @@ function indexLabel(range: Range, latestMonth: string): string {
   return "Last 12 months";
 }
 
+/** The period after "Index" in the eyebrow, which follows `?range=`. */
+async function IndexPeriod({ searchParams }: IndexProps) {
+  const [{ range }, latestMonth] = await Promise.all([
+    loadSearchParams(searchParams),
+    getCarsLatestMonth(),
+  ]);
+
+  return latestMonth ? ` · ${indexLabel(range, latestMonth)}` : null;
+}
+
+/** What the shares are a share of, in the source line. */
+async function IndexBasis({ searchParams }: IndexProps) {
+  const { fuel, range } = await loadSearchParams(searchParams);
+  const { latestMonth, total } = await loadMakeRows(range, fuel);
+
+  return latestMonth
+    ? ` · ${periodLabel(latestMonth, range)}, share of ${total.toLocaleString("en-SG")} new${fuel ? ` ${fuel.toLowerCase()}` : ""} cars`
+    : null;
+}
+
 /** Tab id for "All", which clears `?fuel=`. */
 const ALL_FUEL = "all";
 
@@ -68,7 +99,9 @@ const ALL_FUEL = "all";
  * The powertrain switch D's index left out. Kept because about a fifth of
  * Makes visitors used it before the redesign, more than used the period.
  */
-function PowertrainTabs({ params }: { params: MakesSearchParams }) {
+async function PowertrainTabs({ searchParams }: IndexProps) {
+  const params = await loadSearchParams(searchParams);
+
   return (
     <FilterTabs
       aria-label="Powertrain"
@@ -90,7 +123,20 @@ function PowertrainTabs({ params }: { params: MakesSearchParams }) {
   );
 }
 
-function SortTabs({ params }: { params: MakesSearchParams }) {
+async function PeriodTabs({ searchParams }: IndexProps) {
+  const [params, latestMonth] = await Promise.all([
+    loadSearchParams(searchParams),
+    getCarsLatestMonth(),
+  ]);
+
+  return latestMonth ? (
+    <RangeTabs latestMonth={latestMonth} params={params} />
+  ) : null;
+}
+
+async function SortTabs({ searchParams }: IndexProps) {
+  const params = await loadSearchParams(searchParams);
+
   return (
     <FilterTabs
       aria-label="Sort"
@@ -106,16 +152,36 @@ function SortTabs({ params }: { params: MakesSearchParams }) {
 }
 
 /**
- * Direction D's makes index: every make with registrations in the selected
- * period as a card that selects it (`?make=`), with the powertrain, period and
- * sort as server-built links and a search that filters the cards in the
- * browser. A selected make shows as a list beside that make's detail.
+ * One labelled switch. The label is in the static shell; the tabs read the
+ * search params for their links and selection, so only they wait.
  */
-export async function MakesIndex({
-  searchParams,
+function Switch({
+  children,
+  label,
+  skeleton,
 }: {
-  searchParams: Promise<SearchParams>;
+  children: ReactNode;
+  label: string;
+  /** The width of the tabs while they load. */
+  skeleton: string;
 }) {
+  return (
+    <div className="flex min-w-0 max-w-full flex-col gap-1">
+      <span className="font-medium text-muted text-sm">{label}</span>
+      <Suspense
+        fallback={<Skeleton className={`h-10 max-w-full ${skeleton}`} />}
+      >
+        {children}
+      </Suspense>
+    </div>
+  );
+}
+
+/**
+ * The makes for the selected period, powertrain and sort, as cards or, once
+ * one is selected, as a list beside that make's detail.
+ */
+async function MakeResults({ searchParams }: IndexProps) {
   const params = await loadSearchParams(searchParams);
   const { latestMonth, rows, total } = await loadMakeRows(
     params.range,
@@ -167,49 +233,86 @@ export async function MakesIndex({
   }));
 
   return (
+    <MakeCards
+      cards={cards}
+      comparing={comparing}
+      detail={
+        selected ? (
+          <MakeDetail
+            latestMonth={latestMonth}
+            makesCount={rows.length}
+            params={params}
+            peers={peers}
+            row={selected}
+            total={total}
+          />
+        ) : null
+      }
+      selectedSlug={selected?.slug ?? null}
+    />
+  );
+}
+
+/**
+ * Direction D's makes index: every make with registrations in the selected
+ * period as a card that selects it (`?make=`), with the powertrain, period and
+ * sort as server-built links and a search that filters the cards in the
+ * browser. A selected make shows as a list beside that make's detail.
+ *
+ * The heading, the labels and the source line are in the static shell. Each
+ * part that reads the search params waits behind its own boundary.
+ */
+export function MakesIndex({ searchParams }: IndexProps) {
+  return (
     <section aria-label="Makes index" className="flex flex-col gap-6">
       <SectionHead
-        eyebrow={`Index · ${indexLabel(params.range, latestMonth)}`}
-        title="All makes by registrations"
-      />
-      <MakeCards
-        cards={cards}
-        comparing={comparing}
-        detail={
-          selected ? (
-            <MakeDetail
-              latestMonth={latestMonth}
-              makesCount={rows.length}
-              params={params}
-              peers={peers}
-              row={selected}
-              total={total}
-            />
-          ) : null
-        }
-        selectedSlug={selected?.slug ?? null}
-        switches={
+        eyebrow={
           <>
-            <div className="flex min-w-0 max-w-full flex-col gap-1">
-              <span className="font-medium text-muted text-sm">Powertrain</span>
-              <PowertrainTabs params={params} />
-            </div>
-            <div className="flex min-w-0 max-w-full flex-col gap-1">
-              <span className="font-medium text-muted text-sm">Period</span>
-              <RangeTabs latestMonth={latestMonth} params={params} />
-            </div>
-            <div className="flex min-w-0 max-w-full flex-col gap-1">
-              <span className="font-medium text-muted text-sm">Sort</span>
-              <SortTabs params={params} />
-            </div>
+            Index
+            <Suspense fallback={null}>
+              <IndexPeriod searchParams={searchParams} />
+            </Suspense>
           </>
         }
+        title="All makes by registrations"
       />
+      <div className="@container flex flex-col gap-5">
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
+          {/* The search reads `?q=` in the browser, so until it does the
+              field shows empty and read-only. */}
+          <Suspense fallback={<MakeSearchField isReadOnly />}>
+            <MakeSearch />
+          </Suspense>
+          <Switch label="Powertrain" skeleton="w-80">
+            <PowertrainTabs searchParams={searchParams} />
+          </Switch>
+          <Switch label="Period" skeleton="w-72">
+            <PeriodTabs searchParams={searchParams} />
+          </Switch>
+          <Switch label="Sort" skeleton="w-40">
+            <SortTabs searchParams={searchParams} />
+          </Switch>
+        </div>
+        <Suspense
+          fallback={
+            <div className="grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-2.5">
+              {Array.from({ length: SKELETON_CARDS }, (_, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: identical placeholders
+                <Skeleton className="h-36 rounded-lg" key={index} />
+              ))}
+            </div>
+          }
+        >
+          <MakeResults searchParams={searchParams} />
+        </Suspense>
+      </div>
       <SourceNote>
-        Source: LTA via DataMall · {periodLabel(latestMonth, params.range)},
-        share of {total.toLocaleString("en-SG")} new
-        {params.fuel ? ` ${params.fuel.toLowerCase()}` : ""} cars. Change is
-        withheld when the year-earlier base was under {MIN_BASE} cars.
+        Source: LTA via DataMall
+        <Suspense fallback={null}>
+          <IndexBasis searchParams={searchParams} />
+        </Suspense>
+        . Change is withheld when the year-earlier base was under {MIN_BASE}{" "}
+        cars.
       </SourceNote>
     </section>
   );

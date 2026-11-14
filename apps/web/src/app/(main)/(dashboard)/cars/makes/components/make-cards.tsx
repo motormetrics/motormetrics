@@ -27,18 +27,60 @@ export interface MakeCard {
 }
 
 /**
- * Direction D's makes index: a search field beside the server-built switches,
- * then one card per make. A card selects its make; once one is selected the
- * cards fold into a list beside that make's detail. The search filters what
- * is already in the page as the reader types, so it stays a shallow `?q=`
- * update with no round trip.
+ * The index's search field. Without `onChange` it is the stand-in the static
+ * shell shows until the browser has read `?q=`.
+ */
+export function MakeSearchField({
+  isReadOnly,
+  onChange,
+  value = "",
+}: {
+  isReadOnly?: boolean;
+  onChange?: (value: string) => void;
+  value?: string;
+}) {
+  return (
+    <SearchField
+      className="w-full max-w-72"
+      isReadOnly={isReadOnly}
+      onChange={onChange}
+      value={value}
+    >
+      <Label>Find a make</Label>
+      <SearchField.Group>
+        <SearchField.SearchIcon />
+        <SearchField.Input placeholder="e.g. Audi" />
+        <SearchField.ClearButton />
+      </SearchField.Group>
+    </SearchField>
+  );
+}
+
+/**
+ * The search over the index. It filters what is already in the page as the
+ * reader types, so it stays a shallow `?q=` update with no round trip.
+ */
+export function MakeSearch() {
+  const [query, setQuery] = useQueryState("q", makesSearchParams.q);
+
+  return (
+    <MakeSearchField
+      onChange={(value) => setQuery(value || null)}
+      value={query}
+    />
+  );
+}
+
+/**
+ * Direction D's makes index: one card per make, filtered by the search. A
+ * card selects its make; once one is selected the cards fold into a list
+ * beside that make's detail.
  */
 export function MakeCards({
   cards,
   comparing,
   detail,
   selectedSlug,
-  switches,
 }: {
   cards: readonly MakeCard[];
   /** Whether the links lead into a comparison rather than select a make. */
@@ -46,10 +88,8 @@ export function MakeCards({
   /** The selected make's detail, rendered on the server. */
   detail: ReactNode;
   selectedSlug: string | null;
-  /** The powertrain, period and sort switches, rendered on the server. */
-  switches: ReactNode;
 }) {
-  const [query, setQuery] = useQueryState("q", makesSearchParams.q);
+  const [query] = useQueryState("q", makesSearchParams.q);
   const needle = query.trim().toLowerCase();
   const shown = needle
     ? cards.filter(
@@ -67,28 +107,10 @@ export function MakeCards({
       : serialize(card.href, { q: query });
 
   return (
-    <div className="@container flex flex-col gap-5">
-      <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
-        <SearchField
-          className="w-full max-w-72"
-          onChange={(value) => setQuery(value || null)}
-          value={query}
-        >
-          <Label>Find a make</Label>
-          <SearchField.Group>
-            <SearchField.SearchIcon />
-            <SearchField.Input placeholder="e.g. Audi" />
-            <SearchField.ClearButton />
-          </SearchField.Group>
-        </SearchField>
-        {switches}
-        <span
-          className="ml-auto self-center text-muted text-sm tabular-nums"
-          role="status"
-        >
-          {shown.length} {shown.length === 1 ? "make" : "makes"}
-        </span>
-      </div>
+    <>
+      <span className="self-end text-muted text-sm tabular-nums" role="status">
+        {shown.length} {shown.length === 1 ? "make" : "makes"}
+      </span>
 
       {selectedSlug ? (
         <div className="grid @3xl:grid-cols-3 grid-cols-1 items-start gap-8">
@@ -127,7 +149,7 @@ export function MakeCards({
           No make matches “{query}”. Try part of the name, such as “Merc”.
         </Typography.Paragraph>
       ) : null}
-    </div>
+    </>
   );
 }
 

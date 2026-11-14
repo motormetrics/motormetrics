@@ -79,10 +79,10 @@ export function MakesContentSection({
         <MakesItemList />
       </Suspense>
 
+      {/* The index keeps its heading and labels in the static shell and holds
+          its own boundaries around the parts that read the search params. */}
       <SectionErrorBoundary title="Makes index unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-          <MakesIndex searchParams={searchParams} />
-        </Suspense>
+        <MakesIndex searchParams={searchParams} />
       </SectionErrorBoundary>
 
       <Hairline />
