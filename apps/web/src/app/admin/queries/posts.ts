@@ -19,12 +19,15 @@ export type AdminPost = Pick<
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-const requireSession = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+const requirePostRead = async () => {
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["read"] } },
+    }));
 
-  if (!session) {
+  if (!permission?.success) {
     throw new Error("Unauthorised");
   }
 };
@@ -36,7 +39,7 @@ const requireSession = async () => {
 export async function getAllPosts(): Promise<
   (AdminPost & Pick<SelectPost, "content">)[]
 > {
-  await requireSession();
+  await requirePostRead();
 
   const allPosts = await db.query.posts.findMany({
     columns: {
@@ -61,7 +64,7 @@ export async function getAllPosts(): Promise<
 }
 
 export async function getPostById(id: string): Promise<SelectPost | null> {
-  await requireSession();
+  await requirePostRead();
 
   if (!UUID_REGEX.test(id)) {
     return null;

@@ -9,9 +9,10 @@ import {
   users,
   verifications,
 } from "@motormetrics/database/schema";
+import { ac, admin, user } from "@web/lib/permissions";
 import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
-import { admin } from "better-auth/plugins";
+import { admin as adminPlugin } from "better-auth/plugins";
 
 export const auth = betterAuth({
   baseURL: {
@@ -44,7 +45,7 @@ export const auth = betterAuth({
     trustedProxyHeaders: true,
   },
   plugins: [
-    admin(),
+    adminPlugin({ ac, roles: { admin, user } }),
     nextCookies(), // Make sure this is the last plugin in the array
   ],
   socialProviders: {

@@ -10,11 +10,17 @@ import { headers } from "next/headers";
 export const updateMaintenanceConfig = async (
   maintenanceConfig: MaintenanceConfig,
 ): Promise<{ success: boolean; error?: string }> => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: {
+        userId: session.user.id,
+        permissions: { maintenance: ["update"] },
+      },
+    }));
 
-  if (!session) {
+  if (!permission?.success) {
     return {
       success: false,
       error: "Unauthorised",

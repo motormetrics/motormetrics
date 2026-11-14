@@ -120,12 +120,15 @@ export async function proxy(request: NextRequest) {
       return NextResponse.next();
     }
 
-    // Check admin session for protected admin routes
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
+    // A session alone is not enough: any Google account can sign in
+    const session = await auth.api.getSession({ headers: request.headers });
+    const permission =
+      session &&
+      (await auth.api.userHasPermission({
+        body: { userId: session.user.id, permissions: { dashboard: ["view"] } },
+      }));
 
-    if (!session) {
+    if (!permission?.success) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
   }
