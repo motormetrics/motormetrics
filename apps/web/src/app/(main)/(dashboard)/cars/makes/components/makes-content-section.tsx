@@ -1,4 +1,3 @@
-import { Skeleton } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import { ConcentrationCard } from "@web/app/(main)/(dashboard)/cars/makes/components/concentration-card";
 import { ElectricOnlyMakes } from "@web/app/(main)/(dashboard)/cars/makes/components/electric-only-makes";
@@ -16,7 +15,6 @@ import { generateItemListSchema } from "@web/lib/metadata";
 import { getDistinctMakes } from "@web/queries/cars/filter-options";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
-import { Suspense } from "react";
 
 async function MakesItemList() {
   const makes = await getDistinctMakes();
@@ -68,6 +66,12 @@ async function MakesDirectory() {
   );
 }
 
+/**
+ * Everything under the page head. No section is wrapped whole in a Suspense
+ * boundary: the ones that read only cached data are part of the static shell,
+ * and the ones that follow the search params keep their headings in the shell
+ * and hold their own boundaries around the parts that wait.
+ */
 export function MakesContentSection({
   searchParams,
 }: {
@@ -75,12 +79,8 @@ export function MakesContentSection({
 }) {
   return (
     <>
-      <Suspense fallback={null}>
-        <MakesItemList />
-      </Suspense>
+      <MakesItemList />
 
-      {/* The index keeps its heading and labels in the static shell and holds
-          its own boundaries around the parts that read the search params. */}
       <SectionErrorBoundary title="Makes index unavailable">
         <MakesIndex searchParams={searchParams} />
       </SectionErrorBoundary>
@@ -88,9 +88,7 @@ export function MakesContentSection({
       <Hairline />
 
       <SectionErrorBoundary title="Market concentration unavailable">
-        <Suspense fallback={<Skeleton className="h-60 w-full" />}>
-          <ConcentrationCard searchParams={searchParams} />
-        </Suspense>
+        <ConcentrationCard searchParams={searchParams} />
       </SectionErrorBoundary>
 
       <Hairline />
@@ -102,14 +100,10 @@ export function MakesContentSection({
         />
         <OverviewGrid>
           <SectionErrorBoundary title="Movers unavailable">
-            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-              <FastestGrowing searchParams={searchParams} />
-            </Suspense>
+            <FastestGrowing searchParams={searchParams} />
           </SectionErrorBoundary>
           <SectionErrorBoundary title="Electric-only makes unavailable">
-            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-              <ElectricOnlyMakes />
-            </Suspense>
+            <ElectricOnlyMakes />
           </SectionErrorBoundary>
         </OverviewGrid>
       </section>
@@ -117,9 +111,7 @@ export function MakesContentSection({
       <Hairline />
 
       <SectionErrorBoundary title="Makes directory unavailable">
-        <Suspense fallback={null}>
-          <MakesDirectory />
-        </Suspense>
+        <MakesDirectory />
       </SectionErrorBoundary>
     </>
   );
