@@ -1,14 +1,20 @@
-import { Skeleton } from "@heroui/react";
+import { Skeleton, Typography } from "@heroui/react";
 import { EmptyState } from "@heroui-pro/react";
 import { AdoptionByMonth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-by-month";
 import { ChargingSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-summary";
 import { ElectrifiedTotal } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/electrified-total";
+import {
+  EvHero,
+  EvKeyNumbers,
+  EvLead,
+  SelectedMonth,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-head";
 import { EvLeaderboard } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-leaderboard";
+import { loadEvSelection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
 import {
   summariseLeaderboard,
   yearToDateMakes,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import { EvShareHero } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-share-hero";
 import { buildElectricVehiclesFaqs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/faq-data";
 import { RegistrationTrend } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/registration-trend";
 import { VesBands } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ves-bands";
@@ -21,7 +27,7 @@ import {
   OverviewPage,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { PageHead } from "@web/components/shared/page-head";
+import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { EV_FUEL_TYPES, SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -31,7 +37,6 @@ import {
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getEvMarketShare, getFuelTypeData } from "@web/queries/cars";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
-import { formatMonthLabel } from "@web/utils/dates/format-month";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import { Zap } from "lucide-react";
 import type { Metadata } from "next";
@@ -132,6 +137,9 @@ async function ElectricVehiclesFaq() {
 }
 
 export default function ElectricVehiclesPage({ searchParams }: PageProps) {
+  // Started once, awaited only by the parts that show figures.
+  const selection = loadEvSelection(searchParams);
+
   return (
     <OverviewPage className="gap-10 max-md:gap-7">
       <StructuredData data={structuredData} />
@@ -146,29 +154,60 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
         }}
       />
 
-      <PageHead
-        controls={
-          <Suspense fallback={<Skeleton className="h-8 w-36" />}>
-            <MonthControl searchParams={searchParams} />
-          </Suspense>
-        }
-        eyebrow="Electric vehicles"
-        sub={
-          <Suspense fallback={<Skeleton className="h-5 w-72" />}>
-            <MonthSub searchParams={searchParams} />
-          </Suspense>
-        }
-        title="Electric vehicles in Singapore"
-      />
+      {/* Direction D's head: eyebrow, title, range hero, lead, tools and
+          source, with the key numbers beside it once the page is wide and
+          under it before then. Only the figures wait on the selected month. */}
+      <div className="@container">
+        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
+          <div className="flex min-w-0 flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <Typography.Paragraph
+                className="uppercase"
+                color="muted"
+                size="xs"
+                weight="semibold"
+              >
+                Electric vehicles ·{" "}
+                <Suspense fallback=" ">
+                  <SelectedMonth selection={selection} />
+                </Suspense>{" "}
+                registrations
+              </Typography.Paragraph>
+              <Typography.Heading level={1}>
+                Electric vehicles in Singapore
+              </Typography.Heading>
+            </div>
+            <SectionErrorBoundary title="EV share unavailable">
+              <EvHero selection={selection} />
+            </SectionErrorBoundary>
+            <Typography.Paragraph className="max-w-prose tabular-nums">
+              <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+                <EvLead selection={selection} />
+              </Suspense>
+            </Typography.Paragraph>
+            <div className="flex flex-wrap items-end gap-3">
+              <div className="flex flex-col gap-1">
+                <span className="font-semibold text-muted text-xs">Month</span>
+                <Suspense fallback={<Skeleton className="h-10 w-36" />}>
+                  <MonthControl searchParams={searchParams} />
+                </Suspense>
+              </div>
+              <SharePill title="Electric vehicles in Singapore" />
+            </div>
+            <Typography.Paragraph color="muted" size="sm">
+              New car registrations. EV means battery-electric. Source: LTA via
+              DataMall.
+            </Typography.Paragraph>
+          </div>
+          <SectionErrorBoundary title="Key numbers unavailable">
+            <EvKeyNumbers selection={selection} />
+          </SectionErrorBoundary>
+        </div>
+      </div>
 
-      <Suspense
-        fallback={
-          <OverviewGrid>
-            <HeadlineSkeleton />
-            <HeadlineSkeleton />
-          </OverviewGrid>
-        }
-      >
+      <Hairline />
+
+      <Suspense fallback={<HeadlineSkeleton />}>
         <EvOverview searchParams={searchParams} />
       </Suspense>
 
@@ -178,21 +217,6 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
         <ElectricVehiclesFaq />
       </Suspense>
     </OverviewPage>
-  );
-}
-
-/** "August 2026 registrations · Source: LTA via DataMall", under the title. */
-async function MonthSub({ searchParams }: PageProps) {
-  const { month: requestedMonth } = await loadSearchParams(searchParams);
-  const { month } = await getMonthOrLatest(requestedMonth, "cars");
-
-  return (
-    <>
-      <span className="font-semibold text-foreground">
-        {formatMonthLabel(month)}
-      </span>{" "}
-      registrations · Source: LTA via DataMall
-    </>
   );
 }
 
@@ -242,18 +266,11 @@ async function EvOverview({ searchParams }: PageProps) {
 
   return (
     <>
-      <OverviewGrid>
-        <SectionErrorBoundary title="EV share unavailable">
-          <Suspense fallback={<HeadlineSkeleton />}>
-            <EvShareHero month={month} />
-          </Suspense>
-        </SectionErrorBoundary>
-        <SectionErrorBoundary title="Electrified total unavailable">
-          <Suspense fallback={<HeadlineSkeleton />}>
-            <ElectrifiedTotal month={month} />
-          </Suspense>
-        </SectionErrorBoundary>
-      </OverviewGrid>
+      <SectionErrorBoundary title="Electrified total unavailable">
+        <Suspense fallback={<HeadlineSkeleton />}>
+          <ElectrifiedTotal month={month} />
+        </Suspense>
+      </SectionErrorBoundary>
 
       <Hairline />
 
