@@ -2,8 +2,22 @@ import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { CarsMonthPicker } from "@web/app/(main)/(dashboard)/cars/components/cars-month-picker";
 import { loadLatestRegistrationsSummary } from "@web/app/(main)/(dashboard)/cars/components/faq-data";
+import {
+  HeadGrid,
+  HeadTitle,
+  KeysAside,
+} from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
 import { buildRegistrationsFaqs } from "@web/app/(main)/(dashboard)/cars/registrations/components/faq-data";
 import { RegistrationsReport } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-report";
+import {
+  ReportFuel,
+  ReportFuelTabs,
+  ReportHero,
+  ReportKeyNumbers,
+  ReportLead,
+  ReportMonth,
+  type ReportProps,
+} from "@web/app/(main)/(dashboard)/cars/registrations/components/report-head";
 import { TrendsCompareButton } from "@web/app/(main)/(dashboard)/cars/registrations/components/trends-compare-button";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
@@ -11,9 +25,10 @@ import {
   Hairline,
   OverviewPage,
   SectionHead,
+  SourceNote,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { PageHead } from "@web/components/shared/page-head";
+import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
@@ -22,7 +37,7 @@ import { getComparisonData } from "@web/queries/cars/compare";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
-import { Suspense } from "react";
+import { type ReactNode, Suspense } from "react";
 
 interface PageProps {
   searchParams: Promise<SearchParams>;
@@ -62,21 +77,6 @@ export async function generateMetadata({
   };
 }
 
-/** Names the month the page reports, how it is counted and its source. */
-async function RegistrationsMonthSub({ searchParams }: PageProps) {
-  const { month: parsedMonth } = await loadSearchParams(searchParams);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
-
-  return (
-    <>
-      <span className="font-semibold text-foreground">
-        {formatDateToMonthYear(month)}
-      </span>{" "}
-      · counted in the month of registration · Source: LTA via DataMall
-    </>
-  );
-}
-
 /** The questions and their FAQPage schema, with the latest figures quoted. */
 async function RegistrationsFaq() {
   const faqs = buildRegistrationsFaqs(await loadLatestRegistrationsSummary());
@@ -94,33 +94,101 @@ async function RegistrationsFaq() {
   );
 }
 
+const JUMP_LINKS = [
+  { href: "#reg-trend", label: "Registrations by month" },
+  { href: "#reg-fuelt", label: "By fuel type" },
+  { href: "#reg-mix", label: "Makes and vehicle types" },
+];
+
+/** A line of text that follows the search params, held open by a space. */
+function Slot({ children }: { children: ReactNode }) {
+  return <Suspense fallback={" "}>{children}</Suspense>;
+}
+
+/** A labelled filter in the head's toolbar; the label is static. */
+function Field({ children, label }: { children: ReactNode; label: string }) {
+  return (
+    <div className="flex min-w-0 max-w-full flex-col gap-1">
+      <span className="font-semibold text-muted text-xs">{label}</span>
+      {children}
+    </div>
+  );
+}
+
 export default function Page({ searchParams }: PageProps) {
+  const props: ReportProps = { searchParams };
+
   return (
     <OverviewPage className="gap-10 max-md:gap-7">
-      <PageHead
-        controls={
-          <Suspense fallback={<Skeleton className="h-8 w-36" />}>
-            <CarsMonthPicker searchParams={searchParams} />
-          </Suspense>
+      {/* Direction D's head. The filters sit in the head because the fuel
+          type narrows the hero, the key numbers and the chart. */}
+      <HeadGrid
+        keys={
+          <KeysAside
+            eyebrow={
+              <>
+                Key numbers ·{" "}
+                <Slot>
+                  <ReportFuel {...props} />
+                </Slot>
+              </>
+            }
+            jump={JUMP_LINKS}
+            label="Key numbers"
+            source="Source: LTA via DataMall."
+          >
+            <SectionErrorBoundary title="Key numbers unavailable">
+              <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+                <ReportKeyNumbers {...props} />
+              </Suspense>
+            </SectionErrorBoundary>
+          </KeysAside>
         }
-        eyebrow="Cars"
-        sub={
-          <Suspense fallback={<Skeleton className="h-5 w-72" />}>
-            <RegistrationsMonthSub searchParams={searchParams} />
-          </Suspense>
-        }
-        title="Car registrations"
-      />
-
-      <SectionErrorBoundary title="Registration data unavailable">
-        <Suspense
-          fallback={
-            <div className="flex flex-col gap-4">
-              <Skeleton className="h-96 w-full" />
-              <Skeleton className="h-96 w-full" />
-            </div>
+      >
+        <HeadTitle
+          eyebrow={
+            <>
+              Cars ·{" "}
+              <Slot>
+                <ReportMonth {...props} />
+              </Slot>
+            </>
           }
-        >
+          title="Car registrations"
+        />
+        <div className="flex flex-wrap items-end gap-4">
+          <Field label="Month">
+            <Suspense fallback={<Skeleton className="h-8 w-36" />}>
+              <CarsMonthPicker searchParams={searchParams} />
+            </Suspense>
+          </Field>
+          <Field label="Fuel type">
+            <Suspense fallback={<Skeleton className="h-8 w-96 max-w-full" />}>
+              <ReportFuelTabs />
+            </Suspense>
+          </Field>
+        </div>
+        <SectionErrorBoundary title="Registration summary unavailable">
+          <Suspense fallback={<Skeleton className="h-36 w-full max-w-xl" />}>
+            <ReportHero {...props} />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-14 w-full max-w-prose" />}>
+            <ReportLead {...props} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SourceNote>
+          Counted in the month of registration. Source: LTA via DataMall.
+        </SourceNote>
+        <div>
+          <SharePill title="Car registrations" />
+        </div>
+      </HeadGrid>
+
+      <Hairline />
+
+      {/* Figures not yet ported, still drawn by the old report. */}
+      <SectionErrorBoundary title="Registration data unavailable">
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
           <RegistrationsReport searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -145,9 +213,7 @@ export default function Page({ searchParams }: PageProps) {
 
       <Hairline />
 
-      <Suspense fallback={null}>
-        <RegistrationsFaq />
-      </Suspense>
+      <RegistrationsFaq />
     </OverviewPage>
   );
 }
