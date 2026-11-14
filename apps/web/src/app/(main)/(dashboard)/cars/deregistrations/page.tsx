@@ -144,16 +144,7 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
       <Hairline />
 
       <SectionErrorBoundary title="Deregistrations unavailable">
-        <Suspense
-          fallback={
-            <div className="flex flex-col gap-4">
-              <Skeleton className="h-96 w-full" />
-              <Skeleton className="h-96 w-full" />
-            </div>
-          }
-        >
-          <DeregistrationsReport searchParams={searchParams} />
-        </Suspense>
+        <DeregistrationsReport report={report} />
       </SectionErrorBoundary>
 
       <Hairline />
