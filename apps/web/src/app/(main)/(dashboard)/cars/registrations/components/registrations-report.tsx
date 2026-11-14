@@ -9,26 +9,12 @@ import { RegistrationsTrendChart } from "@web/app/(main)/(dashboard)/cars/regist
 import {
   formatCount,
   loadRegistrationsReport,
+  lookup,
   type ReportProps,
 } from "@web/app/(main)/(dashboard)/cars/registrations/components/report-head";
 import { trendPoints } from "@web/app/(main)/(dashboard)/cars/registrations/components/trend-points";
-import {
-  loadSearchParams,
-  RANGE_MONTHS,
-  type Range,
-} from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
+import type { Range } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import {
-  getCarsComparison,
-  getCarsData,
-  getMonthlyRegistrationTotals,
-  getMonthlyRegistrationTotalsByFuelType,
-} from "@web/queries/cars/monthly-registrations";
-import {
-  getTopMakesByYear,
-  getYearlyRegistrations,
-} from "@web/queries/cars/yearly-statistics";
 import { getCarLogoMap } from "@web/queries/logos";
 import { percentageChange } from "@web/utils/change-ratio";
 import {
@@ -36,9 +22,13 @@ import {
   formatMonthLabel,
   formatMonthName,
 } from "@web/utils/dates/format-month";
-import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
-import type { SearchParams } from "nuqs/server";
+
+/**
+ * The figures under the head: the trend, the fuel type table and the makes
+ * and vehicle types. Each piece reads the shared report and streams on its
+ * own, so the figure headings stay in the static shell.
+ */
 
 /** What each range covers, for the chart's eyebrow. */
 const RANGE_CAPTIONS: Record<Range, string> = {
@@ -154,99 +144,80 @@ export async function FuelNote({ searchParams }: ReportProps) {
   return `Share is of ${formatCount(registrations.total)} new cars in ${formatMonthLabel(month)}. Change is against the previous month; colour is not used for direction. Year to date covers ${latestMonth.startsWith(`${year}-`) ? `January to ${formatMonthLabel(latestMonth)}` : `the whole of ${year}`}. Select a row to filter the headline and chart.`;
 }
 
-function lookup(
-  rows: { count: number; label: string }[],
-  name: string,
-): number {
-  return rows.find((row) => row.label === name)?.count ?? 0;
+function vehicleTypeRows(
+  report: Awaited<ReturnType<typeof loadRegistrationsReport>>,
+) {
+  return report.registrations.vehicleType.map(({ count, name }) => ({
+    change: percentageChange(
+      count,
+      lookup(report.comparison.previousYear.vehicleType, name),
+    ),
+    count,
+    name: formatVehicleType(name),
+  }));
 }
 
-export async function RegistrationsReport({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const {
-    fuelType,
-    month: parsedMonth,
-    range,
-  } = await loadSearchParams(searchParams);
-  const [{ month }, yearlyTotals, series] = await Promise.all([
-    getMonthOrLatest(parsedMonth, "cars"),
-    getYearlyRegistrations(),
-    fuelType
-      ? getMonthlyRegistrationTotalsByFuelType(fuelType, RANGE_MONTHS[range])
-      : getMonthlyRegistrationTotals(RANGE_MONTHS[range]),
-  ]);
-  const year = Number(month.slice(0, 4));
+/**
+ * "BYD led 2026 to date with 9,028 cars (24.6%); SUVs were 64.9% of cars
+ * registered in August 2026, +13.7% on August 2025."
+ */
+export async function MixCaption({ searchParams }: ReportProps) {
+  const report = await loadRegistrationsReport(searchParams);
+  const [leader] = report.topMakes;
+  const [type] = vehicleTypeRows(report);
+  const parts: string[] = [];
 
-  const [registrations, comparison, topMakes, logoUrlBySlug] =
-    await Promise.all([
-      getCarsData(month),
-      getCarsComparison(month),
-      getTopMakesByYear(year, 10),
-      getCarLogoMap(),
-    ]);
+  if (leader && report.yearTotal > 0) {
+    parts.push(
+      `${leader.make} led ${report.year} to date with ${formatCount(leader.value)} cars (${((leader.value / report.yearTotal) * 100).toFixed(1)}%)`,
+    );
+  }
+  if (type && report.registrations.total > 0) {
+    const sign = type.change < 0 ? "−" : "+";
+    parts.push(
+      `${type.name} was ${((type.count / report.registrations.total) * 100).toFixed(1)}% of cars registered in ${formatMonthLabel(report.month)}, ${sign}${Math.abs(type.change).toFixed(1)}% on ${formatMonthLabel(report.comparison.previousYear.period)}`,
+    );
+  }
 
-  const latestMonth = series.at(-1)?.month ?? month;
-  const yearTotal =
-    yearlyTotals.find((entry) => entry.year === year)?.total ?? 0;
+  return parts.length ? `${parts.join("; ")}.` : null;
+}
+
+/** "2026 year to date". */
+export async function ReportYear({ searchParams }: ReportProps) {
+  const { year } = await loadRegistrationsReport(searchParams);
+  return String(year);
+}
+
+/** "August 2026 · against August 2025". */
+export async function VehicleTypePeriod({ searchParams }: ReportProps) {
+  const { comparison, month } = await loadRegistrationsReport(searchParams);
+  return `${formatMonthLabel(month)} · against ${formatMonthLabel(comparison.previousYear.period)}`;
+}
+
+export async function TopMakes({ searchParams }: ReportProps) {
+  const report = await loadRegistrationsReport(searchParams);
+  const logoUrlBySlug = await getCarLogoMap();
 
   return (
-    <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-14">
-      <section className="flex min-w-0 flex-col gap-4">
-        <SectionHead
-          caption={`${year} year to date · all fuel types`}
-          eyebrow="Registrations"
-          link={{ href: "/cars/makes", label: "All makes" }}
-          title="Top makes"
-        />
-        <TopMakesTable
-          makes={topMakes.map(({ make, value }) => ({
-            logoUrl: logoUrlBySlug[slugify(make)] ?? null,
-            make,
-            value,
-          }))}
-          total={yearTotal}
-        />
-        <SourceNote>
-          New car registrations by make,{" "}
-          {latestMonth.startsWith(`${year}-`)
-            ? `January to ${formatMonthLabel(latestMonth)}`
-            : `the whole of ${year}`}
-          . Not affected by the month or fuel filters.
-        </SourceNote>
-      </section>
+    <TopMakesTable
+      makes={report.topMakes.map(({ make, value }) => ({
+        logoUrl: logoUrlBySlug[slugify(make)] ?? null,
+        make,
+        value,
+      }))}
+      total={report.yearTotal}
+    />
+  );
+}
 
-      <section className="flex min-w-0 flex-col gap-4">
-        <SectionHead
-          caption={`${formatMonthLabel(month)} · against ${formatMonthLabel(comparison.previousYear.period)}`}
-          eyebrow="Registrations"
-          link={{
-            href: "/cars/vehicle-types",
-            label: "Vehicle types in full",
-          }}
-          title="By vehicle type"
-        />
-        <VehicleTypeTable
-          previousYear={year - 1}
-          rows={registrations.vehicleType.map(({ count, name }) => ({
-            change: percentageChange(
-              count,
-              lookup(comparison.previousYear.vehicleType, name),
-            ),
-            count,
-            name: formatVehicleType(name),
-          }))}
-          total={registrations.total}
-        />
-        <SourceNote>
-          A car counts in the month it is registered, which can lag the bidding
-          exercise that won its COE by several weeks. Figures cover cars only;
-          other vehicle classes are counted separately under their own
-          categories.
-        </SourceNote>
-      </section>
-    </div>
+export async function VehicleTypes({ searchParams }: ReportProps) {
+  const report = await loadRegistrationsReport(searchParams);
+
+  return (
+    <VehicleTypeTable
+      previousYear={report.year - 1}
+      rows={vehicleTypeRows(report)}
+      total={report.registrations.total}
+    />
   );
 }
