@@ -13,12 +13,16 @@ import {
   FuelCaption,
   FuelNote,
   FuelTable,
-  RegistrationsReport,
+  MixCaption,
+  ReportYear,
+  TopMakes,
   TrendCaption,
   TrendChart,
   TrendNote,
   TrendPeriod,
   TrendTitle,
+  VehicleTypePeriod,
+  VehicleTypes,
 } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-report";
 import {
   ReportFuel,
@@ -34,6 +38,7 @@ import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import {
   Hairline,
+  OverviewGrid,
   OverviewPage,
   SectionHead,
   SourceNote,
@@ -286,12 +291,66 @@ export default function Page({ searchParams }: PageProps) {
 
       <Hairline />
 
-      {/* Figures not yet ported, still drawn by the old report. */}
-      <SectionErrorBoundary title="Registration data unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-          <RegistrationsReport searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
+      <section className="flex scroll-mt-4 flex-col gap-6" id="reg-mix">
+        <FigureHead
+          caption={<MixCaption {...props} />}
+          eyebrow="Figure 3 · Makes and vehicle types"
+          title="Who registered, and what"
+        />
+        <OverviewGrid>
+          <div className="flex min-w-0 flex-col gap-4">
+            <SectionHead
+              caption={
+                <>
+                  <Slot>
+                    <ReportYear {...props} />
+                  </Slot>{" "}
+                  year to date · all fuel types
+                </>
+              }
+              link={{ href: "/cars/makes", label: "All makes" }}
+              title="Top makes"
+            />
+            <SectionErrorBoundary title="Top makes unavailable">
+              <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+                <TopMakes {...props} />
+              </Suspense>
+            </SectionErrorBoundary>
+            <SourceNote>
+              New car registrations by make, year to date. Not affected by the
+              month or fuel filters.
+            </SourceNote>
+          </div>
+          <div className="flex min-w-0 flex-col gap-4">
+            <SectionHead
+              caption={
+                <Slot>
+                  <VehicleTypePeriod {...props} />
+                </Slot>
+              }
+              link={{
+                href: "/cars/vehicle-types",
+                label: "Vehicle types in full",
+              }}
+              title="By vehicle type"
+            />
+            <SectionErrorBoundary title="Vehicle types unavailable">
+              <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+                <VehicleTypes {...props} />
+              </Suspense>
+            </SectionErrorBoundary>
+            <SourceNote>
+              A car counts in the month it is registered, which can lag the
+              bidding exercise that won its COE by several weeks. Figures cover
+              cars only; other vehicle classes are counted separately under
+              their own categories.
+            </SourceNote>
+          </div>
+        </OverviewGrid>
+        <SourceNote>
+          Source: LTA via DataMall · New car registrations.
+        </SourceNote>
+      </section>
 
       <Hairline />
 
