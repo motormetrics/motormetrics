@@ -1,3 +1,4 @@
+import { Skeleton } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { EmptyState } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
@@ -19,6 +20,7 @@ import { summariseMake } from "@web/app/(main)/(dashboard)/cars/makes/[make]/com
 import {
   loadSearchParams,
   RANGE_LABELS,
+  type Range,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { Hairline } from "@web/components/shared/overview";
 import {
@@ -33,6 +35,7 @@ import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 import { FileQuestion, Home } from "lucide-react";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
+import { Suspense } from "react";
 
 /** How many makes the peer list shows, the current one always among them. */
 const PEER_COUNT = 5;
@@ -67,13 +70,15 @@ function tally<T>(
     .sort((a, b) => b.count - a.count);
 }
 
-export async function MakeReport({
-  make,
-  searchParams,
-}: {
-  make: string;
-  searchParams: Promise<SearchParams>;
-}) {
+/**
+ * Every figure the report draws for the selected period, month and fuel type.
+ * `MakeReport` starts it once and hands the promise to each section, which
+ * awaits it behind its own boundary; the queries are `'use cache'`.
+ */
+async function loadMakeReport(
+  make: string,
+  searchParams: Promise<SearchParams>,
+) {
   const params = await loadSearchParams(searchParams);
   const { fuelType, month: parsedMonth, range } = params;
   const path = `/cars/makes/${slugify(make)}`;
@@ -96,30 +101,6 @@ export async function MakeReport({
     getMakeTotalsInRange(start, end),
     getMarketMonthlyTotals(seriesStart, end),
   ]);
-
-  if (crossTab.length === 0) {
-    return (
-      <EmptyState className="rounded-3xl bg-default/50" size="lg">
-        <EmptyState.Header>
-          <EmptyState.Media variant="icon">
-            <FileQuestion />
-          </EmptyState.Media>
-          <EmptyState.Title>No Data Available</EmptyState.Title>
-          <EmptyState.Description className="max-w-sm">
-            The requested data could not be found. Please try a different
-            selection.
-          </EmptyState.Description>
-        </EmptyState.Header>
-        <EmptyState.Content className="flex-row gap-4">
-          <Link className={buttonVariants({ variant: "outline" })} href="/">
-            <Home className="size-4" />
-            Go Home
-          </Link>
-          <GoBackButton />
-        </EmptyState.Content>
-      </EmptyState>
-    );
-  }
 
   const matchesFuel = (row: { fuelType: string }) =>
     !fuelType || row.fuelType === fuelType;
@@ -296,7 +277,95 @@ export async function MakeReport({
   ];
   // The chart runs over the year to date, or the trailing year when the
   // period is a single month.
-  const seriesRange = range === "ytd" && start !== end ? "ytd" : "12m";
+  const seriesRange: Range = range === "ytd" && start !== end ? "ytd" : "12m";
+
+  return {
+    fuelMix,
+    fuelType,
+    fuelTypeOptions,
+    logoUrlBySlug,
+    makeTotal,
+    marketTotal,
+    mixRows,
+    month,
+    params,
+    path,
+    peers,
+    periodCaption,
+    previousTotal,
+    rangeLabel,
+    series,
+    seriesRange,
+    stats,
+    summary,
+    total,
+  };
+}
+
+export type MakeReportData = Awaited<ReturnType<typeof loadMakeReport>>;
+
+/** What every section of the report takes. */
+export interface MakeSectionProps {
+  make: string;
+  /** Not awaited by the section itself, only by the parts of it that wait. */
+  report: Promise<MakeReportData>;
+}
+
+async function ReportPeriodTabs({ report }: Pick<MakeSectionProps, "report">) {
+  const { params, path } = await report;
+
+  return <PeriodTabs params={params} path={path} />;
+}
+
+async function ReportFuelTypeTabs({
+  report,
+}: Pick<MakeSectionProps, "report">) {
+  const { fuelTypeOptions, params, path } = await report;
+
+  return (
+    <FuelTypeTabs fuelTypes={fuelTypeOptions} params={params} path={path} />
+  );
+}
+
+/**
+ * The make's report. It awaits only what depends on the make, so for a
+ * pre-built make every heading and label is in the static shell; the figures
+ * follow the search params and wait inside each section.
+ */
+export async function MakeReport({
+  make,
+  searchParams,
+}: {
+  make: string;
+  searchParams: Promise<SearchParams>;
+}) {
+  const crossTab = await getMakeCrossTab(make);
+
+  if (crossTab.length === 0) {
+    return (
+      <EmptyState className="rounded-3xl bg-default/50" size="lg">
+        <EmptyState.Header>
+          <EmptyState.Media variant="icon">
+            <FileQuestion />
+          </EmptyState.Media>
+          <EmptyState.Title>No Data Available</EmptyState.Title>
+          <EmptyState.Description className="max-w-sm">
+            The requested data could not be found. Please try a different
+            selection.
+          </EmptyState.Description>
+        </EmptyState.Header>
+        <EmptyState.Content className="flex-row gap-4">
+          <Link className={buttonVariants({ variant: "outline" })} href="/">
+            <Home className="size-4" />
+            Go Home
+          </Link>
+          <GoBackButton />
+        </EmptyState.Content>
+      </EmptyState>
+    );
+  }
+
+  const report = loadMakeReport(make, searchParams);
 
   return (
     <>
@@ -305,75 +374,77 @@ export async function MakeReport({
       <div className="flex flex-col gap-3.5 border-border border-y py-3.5 md:flex-row md:flex-wrap md:items-end md:gap-6">
         <div className="flex min-w-0 flex-col gap-1.5">
           <span className="font-semibold text-muted text-xs">Period</span>
-          <PeriodTabs params={params} path={path} />
+          <Suspense fallback={<Skeleton className="h-10 w-80 max-w-full" />}>
+            <ReportPeriodTabs report={report} />
+          </Suspense>
         </div>
         <div className="flex min-w-0 flex-col gap-1.5">
           <span className="font-semibold text-muted text-xs">Fuel type</span>
-          <FuelTypeTabs
-            fuelTypes={fuelTypeOptions}
-            params={params}
-            path={path}
-          />
+          <Suspense fallback={<Skeleton className="h-10 w-80 max-w-full" />}>
+            <ReportFuelTypeTabs report={report} />
+          </Suspense>
         </div>
       </div>
 
-      <MakeHeadline
-        fuelType={fuelType}
-        make={make}
-        makeTotal={makeTotal}
-        marketTotal={marketTotal}
-        previousTotal={previousTotal}
-        rangeLabel={rangeLabel}
-        stats={stats}
-        total={total}
-      />
+      <MakeHeadline make={make} report={report} />
 
-      <MakeTrend
+      <MakeTrend make={make} report={report} />
+
+      <Hairline />
+
+      <MakeBreakdown make={make} report={report} />
+
+      <Hairline />
+
+      <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+        <ReportTables make={make} report={report} />
+      </Suspense>
+    </>
+  );
+}
+
+/**
+ * The monthly table, the peers and the fuel mix, which still take the
+ * resolved figures and so wait as one.
+ */
+async function ReportTables({ make, report }: MakeSectionProps) {
+  const {
+    fuelMix,
+    fuelType,
+    logoUrlBySlug,
+    makeTotal,
+    month,
+    peers,
+    periodCaption,
+    series,
+    seriesRange,
+  } = await report;
+
+  return (
+    <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-11 lg:gap-14">
+      <MakeMonthlyTable
         fuelType={fuelType}
         make={make}
         month={month}
         series={series}
         seriesRange={seriesRange}
-        summary={summary}
       />
 
-      <Hairline />
-
-      <MakeBreakdown
-        fuelType={fuelType}
-        make={make}
-        mixRows={mixRows}
-        periodCaption={periodCaption}
-        total={total}
-      />
-
-      <Hairline />
-
-      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-11 lg:gap-14">
-        <MakeMonthlyTable
-          fuelType={fuelType}
+      <div className="flex min-w-0 flex-col gap-10 lg:col-span-5">
+        <MakePeers
+          logoUrlBySlug={logoUrlBySlug}
           make={make}
-          month={month}
-          series={series}
-          seriesRange={seriesRange}
+          peers={peers}
+          periodCaption={periodCaption}
         />
 
-        <div className="flex min-w-0 flex-col gap-10 lg:col-span-5">
-          <MakePeers
-            logoUrlBySlug={logoUrlBySlug}
-            make={make}
-            peers={peers}
-            periodCaption={periodCaption}
-          />
-
-          <MakeFuelMix
-            fuelMix={fuelMix}
-            make={make}
-            makeTotal={makeTotal}
-            periodCaption={periodCaption}
-          />
-        </div>
+        <MakeFuelMix
+          fuelMix={fuelMix}
+          make={make}
+          makeTotal={makeTotal}
+          periodCaption={periodCaption}
+        />
       </div>
-    </>
+    </div>
   );
 }
