@@ -2,6 +2,8 @@ import {
   buildPopulationSeries,
   changeRatio,
   compareClasses,
+  describeClasses,
+  describePopulationTrend,
   type PopulationRow,
   rankClasses,
   sortClasses,
@@ -162,5 +164,52 @@ describe("compareClasses", () => {
       0,
     );
     expect(compareClasses(withoutChange, withoutChange, "change")).toBe(0);
+  });
+});
+
+describe("describePopulationTrend", () => {
+  const entity = {
+    electric: [0, 0, 0, 0, 0],
+    fuel: [],
+    name: "Cars",
+    series: [100, 120, 110, 105, 150],
+  };
+  const years = ["2021", "2022", "2023", "2024", "2025"];
+
+  it("should name the rise and the longest run of falls", () => {
+    expect(describePopulationTrend(entity, years)).toBe(
+      "Cars on the road rose 50.0% from 100 in 2021 to 150 in 2025, despite a fall from 120 in 2022 to 105 in 2024.",
+    );
+  });
+
+  it("should leave out the fall when the series never fell", () => {
+    expect(
+      describePopulationTrend({ ...entity, series: [100, 110] }, [
+        "2024",
+        "2025",
+      ]),
+    ).toBe("Cars on the road rose 10.0% from 100 in 2024 to 110 in 2025.");
+  });
+
+  it("should return nothing for a single year", () => {
+    expect(
+      describePopulationTrend({ ...entity, series: [100] }, ["2025"]),
+    ).toBeUndefined();
+  });
+});
+
+describe("describeClasses", () => {
+  it("should give the share, the largest fall and the electric run-up", () => {
+    const data = buildPopulationSeries(rows);
+    const cars = data?.entities.find((entity) => entity.name === "Cars");
+    if (!data || !cars) {
+      throw new Error("fixture should pivot");
+    }
+
+    expect(
+      describeClasses(rankClasses(data.entities), cars, data.years, 4),
+    ).toBe(
+      "Cars made up 82.7% of the 750 vehicles on the road, and motorcycles fell most, 7.1%; electric cars on the road went from 50 in 2024 to 100 in 2025.",
+    );
   });
 });
