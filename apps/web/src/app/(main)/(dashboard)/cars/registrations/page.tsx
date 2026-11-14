@@ -8,7 +8,15 @@ import {
   KeysAside,
 } from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
 import { buildRegistrationsFaqs } from "@web/app/(main)/(dashboard)/cars/registrations/components/faq-data";
-import { RegistrationsReport } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-report";
+import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
+import {
+  RegistrationsReport,
+  TrendCaption,
+  TrendChart,
+  TrendNote,
+  TrendPeriod,
+  TrendTitle,
+} from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-report";
 import {
   ReportFuel,
   ReportFuelTabs,
@@ -115,6 +123,28 @@ function Field({ children, label }: { children: ReactNode; label: string }) {
   );
 }
 
+/** A figure's title block, with its streamed caption under the heading. */
+function FigureHead({
+  caption,
+  eyebrow,
+  title,
+  trailing,
+}: {
+  caption: ReactNode;
+  eyebrow: ReactNode;
+  title: ReactNode;
+  trailing?: ReactNode;
+}) {
+  return (
+    <SectionHead
+      caption={<Slot>{caption}</Slot>}
+      eyebrow={eyebrow}
+      title={title}
+      trailing={trailing}
+    />
+  );
+}
+
 export default function Page({ searchParams }: PageProps) {
   const props: ReportProps = { searchParams };
 
@@ -183,6 +213,44 @@ export default function Page({ searchParams }: PageProps) {
           <SharePill title="Car registrations" />
         </div>
       </HeadGrid>
+
+      <Hairline />
+
+      <section className="flex scroll-mt-4 flex-col gap-4" id="reg-trend">
+        <FigureHead
+          caption={<TrendCaption {...props} />}
+          eyebrow={
+            <>
+              Figure 1 · Trend ·{" "}
+              <Slot>
+                <TrendPeriod {...props} />
+              </Slot>
+            </>
+          }
+          title={
+            <Suspense fallback="Registrations by month">
+              <TrendTitle {...props} />
+            </Suspense>
+          }
+          trailing={
+            <Suspense fallback={<Skeleton className="h-8 w-32" />}>
+              <RangeTabs />
+            </Suspense>
+          }
+        />
+        <SectionErrorBoundary title="Registration trend unavailable">
+          <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+            <TrendChart {...props} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SourceNote>
+          Source: LTA via DataMall ·{" "}
+          <Slot>
+            <TrendNote {...props} />
+          </Slot>{" "}
+          Zero-based; hover or tap a bar for its value.
+        </SourceNote>
+      </section>
 
       <Hairline />
 

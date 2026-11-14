@@ -1,24 +1,23 @@
-import { Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { formatPercentage } from "@motormetrics/utils/format-percentage";
 import { slugify } from "@motormetrics/utils/slugify";
-import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
 import { FuelTypeTable } from "@web/app/(main)/(dashboard)/cars/registrations/components/fuel-type-table";
 import {
   TopMakesTable,
   VehicleTypeTable,
 } from "@web/app/(main)/(dashboard)/cars/registrations/components/makes-and-types";
 import { RegistrationsTrendChart } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-trend-chart";
+import {
+  formatCount,
+  loadRegistrationsReport,
+  type ReportProps,
+} from "@web/app/(main)/(dashboard)/cars/registrations/components/report-head";
 import { trendPoints } from "@web/app/(main)/(dashboard)/cars/registrations/components/trend-points";
 import {
   loadSearchParams,
   RANGE_MONTHS,
   type Range,
 } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
-import {
-  axisTicks,
-  summariseMonth,
-} from "@web/app/(main)/(dashboard)/components/overview-series";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import {
   Hairline,
   SectionHead,
@@ -45,12 +44,63 @@ import { getMonthOrLatest } from "@web/utils/dates/months";
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 import type { SearchParams } from "nuqs/server";
 
-/** What each range covers, for the chart's caption. */
+/** What each range covers, for the chart's eyebrow. */
 const RANGE_CAPTIONS: Record<Range, string> = {
   "1Y": "Last 12 months",
   "3Y": "Last 3 years",
   All: "Every month on record",
 };
+
+/** "Last 12 months to August 2026". */
+export async function TrendPeriod({ searchParams }: ReportProps) {
+  const { latestMonth, range } = await loadRegistrationsReport(searchParams);
+  return `${RANGE_CAPTIONS[range]} to ${formatDateToMonthYear(latestMonth)}`;
+}
+
+export async function TrendTitle({ searchParams }: ReportProps) {
+  const { fuelType } = await loadRegistrationsReport(searchParams);
+  return fuelType
+    ? `${fuelType} registrations by month`
+    : "Registrations by month";
+}
+
+/** "Registrations peaked at 6,390 in December 2025 over this window; …" */
+export async function TrendCaption({ searchParams }: ReportProps) {
+  const { fuelType, month, series, value } =
+    await loadRegistrationsReport(searchParams);
+  const peak = series.reduce<(typeof series)[number] | undefined>(
+    (best, row) => (!best || row.total > best.total ? row : best),
+    undefined,
+  );
+  if (!peak) {
+    return null;
+  }
+
+  return `${fuelType ? `${fuelType} registrations` : "Registrations"} peaked at ${formatCount(peak.total)} in ${formatMonthLabel(peak.month)} over this window; ${formatMonthLabel(month)}, highlighted, had ${formatCount(value)}.`;
+}
+
+export async function TrendChart({ searchParams }: ReportProps) {
+  const { fuelType, month, series } =
+    await loadRegistrationsReport(searchParams);
+
+  return (
+    <RegistrationsTrendChart
+      data={trendPoints(series, month)}
+      seriesName={fuelType ? `${fuelType} cars` : "New cars"}
+      ticks={axisTicks(
+        series.map(({ total }) => total),
+        { zero: true },
+      )}
+    />
+  );
+}
+
+/** "New car registrations, all makes and fuel types. … August 2026 is highlighted." */
+export async function TrendNote({ searchParams }: ReportProps) {
+  const { fuelType, month } = await loadRegistrationsReport(searchParams);
+
+  return `${fuelType ? `New ${fuelType} car registrations, all makes.` : "New car registrations, all makes and fuel types."} The chart always runs to the latest month; ${formatDateToMonthYear(month)} is highlighted.`;
+}
 
 function lookup(
   rows: { count: number; label: string }[],
@@ -88,62 +138,11 @@ export async function RegistrationsReport({
     ]);
 
   const latestMonth = series.at(-1)?.month ?? month;
-  const ticks = axisTicks(
-    series.map(({ total }) => total),
-    { zero: true },
-  );
-
   const yearTotal =
     yearlyTotals.find((entry) => entry.year === year)?.total ?? 0;
 
-  const leadingFuelType = registrations.fuelType[0];
-  const summary = summariseMonth(
-    series,
-    month,
-    fuelType ? `${fuelType} cars registered` : "new cars registered",
-    !fuelType && leadingFuelType && registrations.total > 0
-      ? `${leadingFuelType.name} cars led with ${formatPercentage((leadingFuelType.count / registrations.total) * 100)}`
-      : undefined,
-  );
-
   return (
     <>
-      <section className="flex flex-col gap-4">
-        <SectionHead
-          caption={`${RANGE_CAPTIONS[range]} to ${formatDateToMonthYear(latestMonth)} · hover or tap a bar for its value`}
-          eyebrow="Trend"
-          trailing={<RangeTabs />}
-          title={
-            fuelType
-              ? `${fuelType} registrations by month`
-              : "Registrations by month"
-          }
-        />
-        <RegistrationsTrendChart
-          data={trendPoints(series, month)}
-          seriesName={fuelType ? `${fuelType} cars` : "New cars"}
-          ticks={ticks}
-        />
-        {summary ? (
-          <Typography.Paragraph
-            className="tabular-nums"
-            color="muted"
-            size="sm"
-          >
-            {summary}
-          </Typography.Paragraph>
-        ) : null}
-        <SourceNote>
-          {fuelType
-            ? `New ${fuelType} car registrations, all makes.`
-            : "New car registrations, all makes and fuel types."}{" "}
-          The chart always runs to the latest month;{" "}
-          {formatDateToMonthYear(month)} is highlighted.
-        </SourceNote>
-      </section>
-
-      <Hairline />
-
       <section className="flex flex-col gap-4">
         <SectionHead
           caption={`${formatMonthLabel(month)} · all makes · select a row to filter`}
