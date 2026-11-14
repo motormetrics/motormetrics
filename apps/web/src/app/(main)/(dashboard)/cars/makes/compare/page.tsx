@@ -1,4 +1,4 @@
-import { Skeleton, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import { ComparisonLinks } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/comparison-links";
 import {
   COMPARE_PAIRS,
@@ -6,7 +6,6 @@ import {
   pairSlug,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import {
-  CompareHeadSkeleton,
   ComparisonBody,
   ComparisonHead,
   type ComparisonNames,
@@ -167,12 +166,15 @@ export default function CompareCarMakesPage({ searchParams }: PageProps) {
         <SelectorStructuredData searchParams={searchParams} />
       </Suspense>
 
-      <Suspense fallback={<CompareHeadSkeleton />}>
+      {/* Until the selection is read from the URL, the static shell shows
+          the page with nothing selected, which is what most visits are. A
+          `?make=a&make=b` view swaps in its own head and comparison. */}
+      <Suspense fallback={<EmptyHead slugs={[]} />}>
         <SelectorHead searchParams={searchParams} />
       </Suspense>
 
       <SectionErrorBoundary title="Comparison unavailable">
-        <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+        <Suspense fallback={<PopularComparisons />}>
           <SelectorContent searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -207,23 +209,42 @@ async function SelectorStructuredData({ searchParams }: PageProps) {
   );
 }
 
+/** The head before two makes are chosen, with whatever is valid selected. */
+function EmptyHead({ slugs }: { slugs: readonly string[] }) {
+  return (
+    <PageHead
+      controls={<MakeSelectors selected={Promise.resolve(slugs)} />}
+      description="Choose two makes to compare their new car registrations side by side."
+      eyebrow="Cars · Makes · Compare"
+      title="Compare car makes in Singapore"
+    />
+  );
+}
+
+function PopularComparisons() {
+  return (
+    <ComparisonLinks
+      eyebrow="Compare"
+      pairs={COMPARE_PAIRS}
+      title="Popular comparisons"
+    />
+  );
+}
+
 /** The H1 and the two selectors, preselected with whatever is valid. */
 async function SelectorHead({ searchParams }: PageProps) {
   const { names, slugs } = await resolveSelection(searchParams);
-  const controls = <MakeSelectors selected={Promise.resolve(slugs)} />;
 
   if (!names) {
-    return (
-      <PageHead
-        controls={controls}
-        description="Choose two makes to compare their new car registrations side by side."
-        eyebrow="Cars · Makes · Compare"
-        title="Compare car makes in Singapore"
-      />
-    );
+    return <EmptyHead slugs={slugs} />;
   }
 
-  return <ComparisonHead controls={controls} names={Promise.resolve(names)} />;
+  return (
+    <ComparisonHead
+      controls={<MakeSelectors selected={Promise.resolve(slugs)} />}
+      names={Promise.resolve(names)}
+    />
+  );
 }
 
 /**
@@ -234,13 +255,7 @@ async function SelectorContent({ searchParams }: PageProps) {
   const { names } = await resolveSelection(searchParams);
 
   if (!names) {
-    return (
-      <ComparisonLinks
-        eyebrow="Compare"
-        pairs={COMPARE_PAIRS}
-        title="Popular comparisons"
-      />
-    );
+    return <PopularComparisons />;
   }
 
   const comparisonNames = Promise.resolve(names);
