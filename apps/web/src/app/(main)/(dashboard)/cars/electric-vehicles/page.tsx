@@ -1,6 +1,9 @@
 import { Skeleton, Typography } from "@heroui/react";
 import { EmptyState } from "@heroui-pro/react";
-import { AdoptionByMonth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-by-month";
+import {
+  AdoptionByMonth,
+  loadShareWindow,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-by-month";
 import { ChargingSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-summary";
 import {
   ElectrifiedMix,
@@ -14,12 +17,19 @@ import {
   SelectedMonth,
   SelectedMonthName,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-head";
-import { EvLeaderboard } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-leaderboard";
-import { loadEvSelection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
+import {
+  EvLeaderboard,
+  loadEvMakes,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-leaderboard";
+import {
+  loadEvSelection,
+  type SelectionProps,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
 import {
   summariseLeaderboard,
   yearToDateMakes,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+import { makesCaption } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-summary";
 import { buildElectricVehiclesFaqs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/faq-data";
 import { RegistrationTrend } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/registration-trend";
 import { VesBands } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ves-bands";
@@ -143,6 +153,16 @@ async function ElectricVehiclesFaq() {
   );
 }
 
+async function MakesCaption({ selection }: SelectionProps) {
+  const { month } = await selection;
+  const [makes, shares] = await Promise.all([
+    loadEvMakes(month),
+    loadShareWindow(month),
+  ]);
+
+  return makesCaption(makes, month, shares);
+}
+
 export default function ElectricVehiclesPage({ searchParams }: PageProps) {
   // Started once, awaited only by the parts that show figures.
   const selection = loadEvSelection(searchParams);
@@ -260,6 +280,31 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
 
       <Hairline />
 
+      <section className="flex scroll-mt-4 flex-col gap-6" id="ev-makes">
+        <SectionHead
+          caption={
+            <Suspense fallback=" ">
+              <MakesCaption selection={selection} />
+            </Suspense>
+          }
+          eyebrow="Figure 3 · Makes and adoption"
+          title="Who sells them, and how fast they are catching on"
+        />
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
+          <SectionErrorBoundary title="EV leaderboard unavailable">
+            <EvLeaderboard selection={selection} />
+          </SectionErrorBoundary>
+          <SectionErrorBoundary title="Monthly adoption unavailable">
+            <AdoptionByMonth selection={selection} />
+          </SectionErrorBoundary>
+        </div>
+        <SourceNote>
+          Source: LTA via DataMall · New car registrations.
+        </SourceNote>
+      </section>
+
+      <Hairline />
+
       <Suspense fallback={<HeadlineSkeleton />}>
         <EvOverview searchParams={searchParams} />
       </Suspense>
@@ -315,21 +360,6 @@ async function EvOverview({ searchParams }: PageProps) {
 
   return (
     <>
-      <OverviewGrid>
-        <SectionErrorBoundary title="EV leaderboard unavailable">
-          <Suspense fallback={<SectionSkeleton className="h-80" />}>
-            <EvLeaderboard month={month} />
-          </Suspense>
-        </SectionErrorBoundary>
-        <SectionErrorBoundary title="Monthly adoption unavailable">
-          <Suspense fallback={<SectionSkeleton className="h-56" />}>
-            <AdoptionByMonth month={month} />
-          </Suspense>
-        </SectionErrorBoundary>
-      </OverviewGrid>
-
-      <Hairline />
-
       <OverviewGrid>
         <SectionErrorBoundary title="Charging network unavailable">
           <Suspense fallback={<SectionSkeleton className="h-40" />}>
