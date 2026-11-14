@@ -1,12 +1,17 @@
 import { Typography } from "@heroui/react";
-import { SourceNote } from "@web/components/shared/overview";
 import type { TrafficStats } from "@web/lib/posthog";
 
+const sections = [
+  { href: "#audience", label: "Who reads this" },
+  { href: "#placements", label: "Placements" },
+  { href: "#pricing", label: "Packages" },
+  { href: "#contact", label: "Book a placement" },
+];
+
 /**
- * The comp shows four audience figures under hairline rules. Only three of them
- * exist as measured numbers — the fourth in the comp is invented — so this runs
- * the three PostHog reports and leaves it there, as a ruled strip: three
- * across from md, stacked on phones.
+ * The key numbers beside the page head, with the jump links to each section
+ * under them. The comp's audience figures are placeholders; these are the
+ * three measured PostHog reports, so there are three and not four.
  */
 export function StatsSection({ stats }: { stats: TrafficStats }) {
   const items = [
@@ -31,26 +36,40 @@ export function StatsSection({ stats }: { stats: TrafficStats }) {
   ];
 
   return (
-    <section className="flex scroll-mt-24 flex-col gap-2.5" id="stats">
-      <div className="grid grid-cols-1 border-border border-t border-b border-b-separator md:grid-cols-3">
+    <aside aria-label="Key numbers" className="flex flex-col gap-3">
+      <Typography.Paragraph
+        className="uppercase"
+        color="muted"
+        size="xs"
+        weight="semibold"
+      >
+        Key numbers · audience
+      </Typography.Paragraph>
+      <dl className="grid @3xl:grid-cols-3 grid-cols-2 gap-x-6 border-separator border-t">
         {items.map(({ label, value }) => (
           <div
-            className="flex min-w-0 flex-col gap-1.5 border-separator py-3 max-md:not-first:border-t md:not-first:border-l md:px-5 md:pt-4 md:pb-3.5 md:first:pl-0"
+            className="flex flex-col gap-0.5 border-separator border-b py-3"
             key={label}
           >
-            <span className="font-extrabold text-3xl tabular-nums leading-none tracking-tight md:text-4xl">
-              {value}
-            </span>
-            <Typography.Paragraph
-              className="text-muted-strong leading-snug"
-              size="sm"
-            >
-              {label}
-            </Typography.Paragraph>
+            <dt className="font-semibold text-muted text-xs">{label}</dt>
+            <dd className="font-semibold text-xl tabular-nums">{value}</dd>
           </div>
         ))}
-      </div>
-      <SourceNote>Source: site analytics, last 30 days.</SourceNote>
-    </section>
+      </dl>
+      <nav aria-label="On this page">
+        <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm">
+          {sections.map(({ href, label }) => (
+            <li key={href}>
+              <a className="font-medium text-accent-strong" href={href}>
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <Typography.Paragraph color="muted" size="xs">
+        Source: site analytics, last 30 days.
+      </Typography.Paragraph>
+    </aside>
   );
 }

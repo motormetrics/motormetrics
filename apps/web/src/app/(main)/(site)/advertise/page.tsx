@@ -5,8 +5,7 @@ import { PlacementsSection } from "@web/app/(main)/(site)/advertise/components/p
 import { PricingSection } from "@web/app/(main)/(site)/advertise/components/pricing-section";
 import { StatsSection } from "@web/app/(main)/(site)/advertise/components/stats-section";
 import { TrafficChartSection } from "@web/app/(main)/(site)/advertise/components/traffic-chart-section";
-import { Hairline } from "@web/components/shared/overview";
-import { SitePage } from "@web/components/shared/site-page";
+import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { advertisePage } from "@web/flags";
@@ -75,17 +74,24 @@ export default async function AdvertisePage() {
     <>
       <StructuredData data={webPageSchema} />
 
-      <SitePage className="gap-10 max-md:gap-7">
-        <HeroSection />
-        <StatsSection stats={stats} />
+      <OverviewPage className="gap-10 max-md:gap-7">
+        {/* Direction D's head, with the key numbers beside it once the page
+            is wide and under it before then. */}
+        <div className="@container">
+          <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
+            <HeroSection />
+            <StatsSection stats={stats} />
+          </div>
+        </div>
         <TrafficChartSection data={dailyTraffic} />
+        <Hairline />
         <AudienceSection />
         <Hairline />
         <PlacementsSection />
         <PricingSection />
         <Hairline />
         <CtaSection />
-      </SitePage>
+      </OverviewPage>
     </>
   );
 }
