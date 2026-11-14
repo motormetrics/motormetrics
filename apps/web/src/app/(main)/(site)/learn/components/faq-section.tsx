@@ -10,28 +10,25 @@ const questionCount = FAQ_SECTIONS.reduce(
 );
 
 /**
- * The questions, laid out like the glossary: a heading in a narrow left
- * column, and in the wide one each group under a small ruled label.
+ * The questions, laid out like the glossary: the head above the groups, which
+ * sit two up once the column allows, each under a small ruled label. Every
+ * question starts collapsed.
  *
  * Client-side for the accordion alone; the questions themselves come from
  * `faq-data`, which the page also reads to build the FAQPage schema.
  */
 export function FAQSection() {
   return (
-    <section
-      className="grid scroll-mt-24 grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-14"
-      id="faq"
-    >
+    <section className="@container flex scroll-mt-24 flex-col gap-5" id="faq">
       <SectionHead
         caption="The questions that come up most often about bidding, rebates and where the figures on this site come from."
-        className="lg:sticky lg:top-9"
         eyebrow="FAQ"
         title="Frequently asked"
       />
 
-      <div className="flex min-w-0 flex-col gap-7 lg:col-span-3">
+      <div className="grid @4xl:grid-cols-2 grid-cols-1 items-start gap-x-12 gap-y-7">
         {FAQ_SECTIONS.map((section) => (
-          <div className="flex flex-col" key={section.title}>
+          <div className="flex min-w-0 flex-col" key={section.title}>
             <span className="border-border border-b pb-2 font-semibold text-muted text-xs">
               {section.title}
             </span>
@@ -56,10 +53,10 @@ export function FAQSection() {
             </Accordion>
           </div>
         ))}
-        <SourceNote>
-          {questionCount} questions. Select a question to read the answer.
-        </SourceNote>
       </div>
+      <SourceNote>
+        {questionCount} questions. Select a question to read the answer.
+      </SourceNote>
     </section>
   );
 }
