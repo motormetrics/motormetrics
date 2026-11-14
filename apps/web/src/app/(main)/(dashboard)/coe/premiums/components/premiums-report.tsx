@@ -1,8 +1,6 @@
 import { toCategory } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { PremiumsAllCategories } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-all-categories";
 import { PremiumsHistory } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-history";
 import { PremiumsRange } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-range";
-import { PremiumsTrend } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-trend";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/premiums/search-params";
 import { Hairline } from "@web/components/shared/overview";
 import { getCategoryExercises, getExercisePair } from "@web/queries/coe";
@@ -13,14 +11,11 @@ export async function PremiumsReport({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const {
-    category: categoryKey,
-    month: parsedMonth,
-    range,
-  } = await loadSearchParams(searchParams);
+  const { category: categoryKey, month: parsedMonth } =
+    await loadSearchParams(searchParams);
   const category = toCategory(categoryKey);
 
-  const [{ current, previous }, allExercises] = await Promise.all([
+  const [{ current }, allExercises] = await Promise.all([
     getExercisePair(parsedMonth ?? undefined),
     getCategoryExercises(category),
   ]);
@@ -47,18 +42,6 @@ export async function PremiumsReport({
 
   return (
     <>
-      <PremiumsTrend category={category} history={history} range={range} />
-
-      <Hairline />
-
-      <PremiumsAllCategories
-        categoryKey={categoryKey}
-        current={current}
-        previous={previous}
-      />
-
-      <Hairline />
-
       <PremiumsHistory
         category={category}
         current={current}

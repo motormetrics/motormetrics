@@ -1,6 +1,7 @@
 import { Skeleton, Typography } from "@heroui/react";
 import { groupByExercise } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { buildPremiumsFaqs } from "@web/app/(main)/(dashboard)/coe/premiums/components/faq-data";
+import { PremiumsAllCategories } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-all-categories";
 import {
   ExerciseEyebrow,
   PremiumsAnswer,
@@ -9,6 +10,7 @@ import {
   PremiumsLead,
 } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-headline";
 import { PremiumsReport } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-report";
+import { PremiumsTrend } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-trend";
 import {
   type PremiumsPageProps,
   SelectedCategory,
@@ -156,6 +158,10 @@ export default function COEPremiumsPage({ searchParams }: PremiumsPageProps) {
         </div>
       </div>
 
+      <Hairline />
+      <PremiumsTrend searchParams={searchParams} />
+      <Hairline />
+      <PremiumsAllCategories searchParams={searchParams} />
       <Hairline />
       <SectionErrorBoundary title="COE premiums unavailable">
         <Suspense
