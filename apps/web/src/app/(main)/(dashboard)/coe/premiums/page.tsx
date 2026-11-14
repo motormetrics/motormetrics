@@ -9,7 +9,8 @@ import {
   PremiumsKeyNumbers,
   PremiumsLead,
 } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-headline";
-import { PremiumsReport } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-report";
+import { PremiumsHistory } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-history";
+import { PremiumsRange } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-range";
 import { PremiumsTrend } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-trend";
 import {
   type PremiumsPageProps,
@@ -163,18 +164,9 @@ export default function COEPremiumsPage({ searchParams }: PremiumsPageProps) {
       <Hairline />
       <PremiumsAllCategories searchParams={searchParams} />
       <Hairline />
-      <SectionErrorBoundary title="COE premiums unavailable">
-        <Suspense
-          fallback={
-            <div className="flex flex-col gap-4">
-              <Skeleton className="h-96 w-full" />
-              <Skeleton className="h-96 w-full" />
-            </div>
-          }
-        >
-          <PremiumsReport searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
+      <PremiumsHistory searchParams={searchParams} />
+      <Hairline />
+      <PremiumsRange searchParams={searchParams} />
       <Hairline />
 
       <section className="flex max-w-prose flex-col gap-4">
