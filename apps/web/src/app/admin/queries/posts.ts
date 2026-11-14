@@ -1,6 +1,6 @@
 import { db } from "@motormetrics/database/client";
 import type { SelectPost } from "@motormetrics/database/schema";
-import { hasPermission } from "@web/lib/auth";
+import { auth } from "@web/lib/auth";
 import type { LanguageModelUsage } from "ai";
 import { headers } from "next/headers";
 
@@ -20,7 +20,14 @@ const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const requirePostRead = async () => {
-  if (!(await hasPermission(await headers(), { post: ["read"] }))) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["read"] } },
+    }));
+
+  if (!permission?.success) {
     throw new Error("Unauthorised");
   }
 };

@@ -1,6 +1,6 @@
 "use server";
 
-import { hasPermission } from "@web/lib/auth";
+import { auth } from "@web/lib/auth";
 import {
   type CreatePostInput,
   createPost,
@@ -16,7 +16,14 @@ export async function regeneratePost(params: {
   month: string;
   dataType: "cars" | "coe";
 }): Promise<{ success: boolean; error?: string; runId?: string }> {
-  if (!(await hasPermission(await headers(), { post: ["update"] }))) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["update"] } },
+    }));
+
+  if (!permission?.success) {
     return {
       success: false,
       error: "Unauthorised",
@@ -43,7 +50,14 @@ export async function regeneratePost(params: {
 export async function createBlogPost(
   input: CreatePostInput,
 ): Promise<{ success: boolean; error?: string; postId?: string }> {
-  if (!(await hasPermission(await headers(), { post: ["create"] }))) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["create"] } },
+    }));
+
+  if (!permission?.success) {
     return {
       success: false,
       error: "Unauthorised",
@@ -79,7 +93,14 @@ export async function createBlogPost(
 export async function updateBlogPost(
   input: UpdatePostInput,
 ): Promise<{ success: boolean; error?: string; postId?: string }> {
-  if (!(await hasPermission(await headers(), { post: ["update"] }))) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["update"] } },
+    }));
+
+  if (!permission?.success) {
     return {
       success: false,
       error: "Unauthorised",
@@ -106,7 +127,14 @@ export async function updateBlogPost(
 export async function deleteBlogPost(
   id: string,
 ): Promise<{ success: boolean; error?: string }> {
-  if (!(await hasPermission(await headers(), { post: ["delete"] }))) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  const permission =
+    session &&
+    (await auth.api.userHasPermission({
+      body: { userId: session.user.id, permissions: { post: ["delete"] } },
+    }));
+
+  if (!permission?.success) {
     return {
       success: false,
       error: "Unauthorised",

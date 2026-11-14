@@ -1,4 +1,4 @@
-import { hasPermission } from "@web/lib/auth";
+import { auth } from "@web/lib/auth";
 import { headers } from "next/headers";
 import { getRun } from "workflow/api";
 
@@ -10,7 +10,14 @@ export async function GET(request: Request) {
     authHeader && authHeader === `Bearer ${process.env.CRON_SECRET}`;
 
   if (!isBearerAuth) {
-    if (!(await hasPermission(headersList, { workflow: ["read"] }))) {
+    const session = await auth.api.getSession({ headers: headersList });
+    const permission =
+      session &&
+      (await auth.api.userHasPermission({
+        body: { userId: session.user.id, permissions: { workflow: ["read"] } },
+      }));
+
+    if (!permission?.success) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
   }
