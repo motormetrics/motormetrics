@@ -3,7 +3,8 @@ import { Make } from "@web/lib/og/cards/make";
 import { OG_CACHE_HEADERS, OG_CONTENT_TYPE, OG_SIZE } from "@web/lib/og/config";
 import { loadMake } from "@web/lib/og/data";
 import { getOGFonts } from "@web/lib/og/fonts";
-import { getDistinctMakes } from "@web/queries/cars";
+import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
+import { getMakeTotalsInRange } from "@web/queries/cars/makes/period-totals";
 import { ImageResponse } from "next/og";
 
 interface ImageProps {
@@ -14,9 +15,21 @@ export const alt = "Car make registrations in Singapore - MotorMetrics";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 
+/** How many of the year's largest makes are prerendered at build time. */
+const PRERENDERED_MAKES = 10;
+
+/**
+ * Prerender only the cards of the year's largest makes, the same set as the
+ * page. Every other make's card is rendered on its first request and cached.
+ */
 export async function generateStaticParams() {
-  const makes = await getDistinctMakes();
-  const params = makes.map(({ make }) => ({ make: slugify(make) }));
+  const month = await getCarsLatestMonth();
+  const totals = month
+    ? await getMakeTotalsInRange(`${month.slice(0, 4)}-01`, month)
+    : [];
+  const params = totals
+    .slice(0, PRERENDERED_MAKES)
+    .map(({ make }) => ({ make: slugify(make) }));
 
   return params.length > 0 ? params : [{ make: "__static-validation__" }];
 }
