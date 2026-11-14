@@ -1,146 +1,219 @@
 "use client";
 
-import { Input, Label, ListBox, Select, Table } from "@heroui/react";
+import {
+  Chip,
+  Label,
+  ListBox,
+  NumberField,
+  Select,
+  Typography,
+} from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { ArfBands } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-bands";
 import {
   ARF_SCHEDULES,
   calculateArf,
 } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-rates";
-import { Headline, StatCell } from "@web/components/shared/overview";
+import { ArfSchedules } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-schedules";
+import { SGD_FORMAT } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
+import { Hairline, SourceNote } from "@web/components/shared/overview";
 import posthog from "posthog-js";
-import { useMemo, useState } from "react";
+import { type ReactNode, useState } from "react";
+
+/** The page's sections, for the jump links under the key numbers. */
+const JUMP_LINKS = [
+  { href: "#arf-schedules", label: "ARF under each schedule" },
+  { href: "#arf-bands", label: "ARF band by band" },
+  { href: "#arf-notes", label: "What the figures assume" },
+];
 
 const formatRate = (rate: number) => `${Math.round(rate * 100)}%`;
 
 /**
- * The small caps label above each field. A span rather than
- * `Typography.Paragraph`: inside the `Select` that renders react-aria's `Text`,
- * which demands a slot.
+ * Direction D's head for the calculator, laid out as the PARF calculator's so
+ * the two tools read as a pair: the page's eyebrow, title and source line
+ * (`head`), the two fields, the answer under them, and the key numbers beside
+ * the head once the page is wide. The figures beneath read the same state.
  */
-const FIELD_LABEL = "font-bold text-muted text-xs uppercase tracking-wider";
-
-/**
- * The calculator strip, the headline it drives, and the band-by-band working
- * beneath it — the same report-family layout as the PARF calculator.
- */
-export function ARFCalculator() {
-  const [omvInput, setOmvInput] = useState("40000");
+export function ARFCalculator({ head }: { head: ReactNode }) {
+  const [omv, setOmv] = useState(40_000);
   const [scheduleKey, setScheduleKey] = useState(ARF_SCHEDULES[0].key);
 
-  const omv = Number(omvInput.replace(/[^0-9.]/g, "")) || 0;
   const schedule =
     ARF_SCHEDULES.find(({ key }) => key === scheduleKey) ?? ARF_SCHEDULES[0];
-
-  const { total, bands } = useMemo(
-    () => calculateArf(omv, schedule.tiers),
-    [omv, schedule],
-  );
+  const { total, bands } = calculateArf(omv, schedule.tiers);
   const topBand = bands.at(-1);
+
+  const keyNumbers = [
+    {
+      label: "Effective rate",
+      value: omv > 0 ? formatRate(total / omv) : "—",
+      note: "ARF as a share of OMV",
+    },
+    {
+      label: "Top band",
+      value: topBand ? formatRate(topBand.rate) : "—",
+      note: "rate on the last dollar of OMV",
+    },
+    // The same OMV under the other schedules, so the change reads at once.
+    ...ARF_SCHEDULES.filter(({ key }) => key !== schedule.key).map(
+      ({ label, tiers }) => {
+        const other = calculateArf(omv, tiers).total;
+        const difference = total - other;
+        return {
+          label: `COE obtained ${label}`,
+          value: formatCurrency(other),
+          note:
+            difference === 0
+              ? "same as the selected tiers"
+              : `${formatCurrency(Math.abs(difference))} ${difference > 0 ? "less" : "more"} than the selected tiers`,
+        };
+      },
+    ),
+  ];
 
   return (
     <>
-      <div className="flex flex-wrap items-end gap-6 border-border border-y py-4">
-        <div className="flex flex-col gap-2">
-          <span className={FIELD_LABEL}>OMV</span>
-          <Input
-            aria-label="OMV"
-            inputMode="numeric"
-            onBlur={() =>
-              posthog.capture("arf_calculator_used", {
-                field: "omv",
-                schedule: schedule.key,
-              })
-            }
-            onChange={(event) => setOmvInput(event.target.value)}
-            placeholder="e.g. 40,000"
-            type="text"
-            value={omvInput}
-          />
-        </div>
-        <div className="flex min-w-64 flex-col gap-2">
-          <Select
-            onChange={(key) => {
-              if (!key) return;
-              posthog.capture("arf_calculator_used", {
-                field: "schedule",
-                schedule: key,
-              });
-              setScheduleKey(String(key));
-            }}
-            value={scheduleKey}
-          >
-            <Label>
-              <span className={FIELD_LABEL}>COE obtained</span>
-            </Label>
-            <Select.Trigger>
-              <Select.Value />
-              <Select.Indicator />
-            </Select.Trigger>
-            <Select.Popover>
-              <ListBox>
-                {ARF_SCHEDULES.map(({ key, label }) => (
-                  <ListBox.Item id={key} key={key} textValue={label}>
-                    {label}
-                    <ListBox.ItemIndicator />
-                  </ListBox.Item>
-                ))}
-              </ListBox>
-            </Select.Popover>
-          </Select>
-        </div>
-      </div>
+      <div className="@container">
+        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
+          <div className="flex min-w-0 flex-col gap-4">
+            {head}
 
-      <div className="grid gap-5 lg:grid-cols-2 lg:items-end lg:gap-14">
-        <Headline
-          caption={`${formatCurrency(omv)} OMV · COE obtained: ${schedule.label} · before VES and EEAI rebates`}
-          label="ARF payable"
-          value={formatCurrency(total)}
-        />
-        <div className="grid grid-cols-2 border-separator border-t">
-          <StatCell
-            label="Effective rate"
-            note="ARF as a share of OMV"
-            value={omv > 0 ? formatRate(total / omv) : "—"}
-          />
-          <StatCell
-            label="Top band"
-            note="rate on the last dollar of OMV"
-            value={topBand ? formatRate(topBand.rate) : "—"}
-          />
-        </div>
-      </div>
+            <div className="flex flex-wrap items-end gap-4 border-border border-t border-b border-b-separator py-4">
+              <NumberField
+                className="w-60 max-md:w-full"
+                formatOptions={SGD_FORMAT}
+                maxValue={1_000_000}
+                minValue={0}
+                onBlur={() =>
+                  posthog.capture("arf_calculator_used", {
+                    field: "omv",
+                    schedule: schedule.key,
+                  })
+                }
+                onChange={(value) => setOmv(Number.isFinite(value) ? value : 0)}
+                value={omv}
+              >
+                <Label>OMV</Label>
+                <NumberField.Group>
+                  <NumberField.Input />
+                </NumberField.Group>
+              </NumberField>
+              <Select
+                className="w-72 max-md:w-full"
+                onChange={(key) => {
+                  if (!key) return;
+                  posthog.capture("arf_calculator_used", {
+                    field: "schedule",
+                    schedule: key,
+                  });
+                  setScheduleKey(String(key));
+                }}
+                value={scheduleKey}
+              >
+                <Label>COE obtained</Label>
+                <Select.Trigger>
+                  <Select.Value />
+                  <Select.Indicator />
+                </Select.Trigger>
+                <Select.Popover>
+                  <ListBox>
+                    {ARF_SCHEDULES.map(({ key, label }) => (
+                      <ListBox.Item id={key} key={key} textValue={label}>
+                        {label}
+                        <ListBox.ItemIndicator />
+                      </ListBox.Item>
+                    ))}
+                  </ListBox>
+                </Select.Popover>
+              </Select>
+            </div>
 
-      {bands.length > 0 ? (
-        <Table variant="secondary">
-          <Table.ScrollContainer>
-            <Table.Content
-              aria-label="ARF by OMV band"
-              className="tabular-nums"
+            <div className="flex max-w-xl flex-col gap-2.5">
+              <span className="text-muted-strong text-sm">
+                <span className="font-semibold text-foreground">
+                  Estimated ARF payable
+                </span>
+                {` · COE obtained ${schedule.label}`}
+              </span>
+              <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
+                <span
+                  aria-live="polite"
+                  className="font-extrabold text-4xl tabular-nums leading-none tracking-tight md:text-5xl"
+                >
+                  {formatCurrency(total)}
+                </span>
+                {omv > 0 ? (
+                  <Chip
+                    className="tabular-nums"
+                    color="accent"
+                    size="sm"
+                    variant="soft"
+                  >
+                    {formatRate(total / omv)} of OMV
+                  </Chip>
+                ) : null}
+              </div>
+              {topBand ? (
+                <Typography.Paragraph className="tabular-nums" color="muted">
+                  {`${bands.length} of ${schedule.tiers.length} bands reached; the last dollar of OMV is taxed at ${formatRate(topBand.rate)}.`}
+                </Typography.Paragraph>
+              ) : null}
+              <SourceNote className="tabular-nums">
+                {formatCurrency(omv)} OMV · before VES and EEAI rebates or
+                surcharges. Estimates only, not financial advice.
+              </SourceNote>
+            </div>
+          </div>
+
+          <aside aria-label="Key numbers" className="flex flex-col gap-3">
+            <Typography.Paragraph
+              className="uppercase"
+              color="muted"
+              size="xs"
+              weight="semibold"
             >
-              <Table.Header>
-                <Table.Column isRowHeader>OMV band</Table.Column>
-                <Table.Column className="text-right">Rate</Table.Column>
-                <Table.Column className="text-right">ARF</Table.Column>
-              </Table.Header>
-              <Table.Body>
-                {bands.map(({ amount, from, rate, to }) => (
-                  <Table.Row id={from} key={from}>
-                    <Table.Cell className="font-bold text-base">
-                      {formatCurrency(from)} – {formatCurrency(to)}
-                    </Table.Cell>
-                    <Table.Cell className="text-right font-semibold text-muted">
-                      {formatRate(rate)}
-                    </Table.Cell>
-                    <Table.Cell className="text-right font-extrabold text-base">
-                      {formatCurrency(amount)}
-                    </Table.Cell>
-                  </Table.Row>
+              Key numbers
+            </Typography.Paragraph>
+            <dl className="grid @3xl:grid-cols-4 @7xl:grid-cols-2 grid-cols-2 gap-x-6 border-separator border-t">
+              {keyNumbers.map(({ label, note, value }) => (
+                <div
+                  className="flex flex-col gap-0.5 border-separator border-b py-3"
+                  key={label}
+                >
+                  <dt className="font-semibold text-muted text-xs">{label}</dt>
+                  <dd className="font-semibold text-xl tabular-nums">
+                    {value}
+                  </dd>
+                  <dd className="text-muted text-xs tabular-nums">{note}</dd>
+                </div>
+              ))}
+            </dl>
+            <nav aria-label="On this page">
+              <ul className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
+                {JUMP_LINKS.map(({ href, label }) => (
+                  <li key={href}>
+                    <a
+                      className="font-semibold text-accent-strong hover:text-accent-deep"
+                      href={href}
+                    >
+                      {label}
+                    </a>
+                  </li>
                 ))}
-              </Table.Body>
-            </Table.Content>
-          </Table.ScrollContainer>
-        </Table>
-      ) : null}
+              </ul>
+            </nav>
+            <SourceNote>
+              Source: LTA. Calculated from the OMV and schedule entered.
+            </SourceNote>
+          </aside>
+        </div>
+      </div>
+
+      <Hairline />
+      <ArfSchedules omv={omv} scheduleKey={schedule.key} />
+      <Hairline />
+      <ArfBands bands={bands} schedule={schedule} total={total} />
     </>
   );
 }
