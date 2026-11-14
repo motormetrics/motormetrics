@@ -232,11 +232,27 @@ documents it and the HeroUI token bindings. If the two ever disagree, `globals.c
 
 ### OpenGraph Images
 
-Share images come only from the `opengraph-image.tsx` / `twitter-image.tsx` file conventions; pages
-never set `openGraph.images` or `twitter.images` (a page-level `images` key replaces the file-based
-image, and a page's own `openGraph` block also discards any image inherited from a parent segment, so
-every segment whose page sets `openGraph` carries its own pair). Cards live in `src/lib/og/cards` and
-data in `src/lib/og/data.ts`; see the Next.js `opengraph-image` and `twitter-image` file conventions.
+Only the segments people share get their own card, through the `opengraph-image.tsx` /
+`twitter-image.tsx` file conventions: the home page, the COE pages, the blog, the learn guides and the
+cars overview pages. Those pages never set `openGraph.images` or `twitter.images`, because a
+page-level `images` key replaces the file-based image.
+
+Every other page names a static image in its `openGraph` block, because a page's own `openGraph`
+discards any image inherited from a parent segment; Next.js reuses it for `twitter:image`. The
+constants are in `@web/lib/metadata/social`:
+
+- Makes, make comparisons, fuel types, vehicle types and the learn index use a section card
+  (`makesCardImages`, `learnCardImages`, …): a PNG in `public/og` shared by the section's index and
+  detail pages, so it costs no render. They were drawn once with the `Article` card (pill, title, one
+  line, no date); redraw one the same way if its copy changes.
+- About, advertise, brand, contact and legal use `siteCardImages`, the root `/opengraph-image`.
+
+Social referrals were under 1% of visitors and none landed on make, fuel-type, vehicle-type,
+comparison or learn pages (PostHog, 90 days to 2026-11-14), so per-page cards there were not worth
+prerendering.
+
+Cards live in `src/lib/og/cards` and data in `src/lib/og/data.ts`; see the Next.js `opengraph-image`
+and `twitter-image` file conventions.
 
 **Constraints**:
 

@@ -18,7 +18,11 @@ import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  makesCardImages,
+} from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import type { WebPage, WithContext } from "schema-dts";
@@ -49,6 +53,7 @@ export const metadata: Metadata = {
   description,
   openGraph: {
     ...baseOpenGraph,
+    images: makesCardImages,
     title,
     description,
     url: `${SITE_URL}/cars/makes`,

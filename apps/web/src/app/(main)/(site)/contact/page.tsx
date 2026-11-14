@@ -5,7 +5,7 @@ import {
   SUPPORT_EMAIL,
 } from "@web/config";
 import { advertisePage } from "@web/flags";
-import { baseOpenGraph } from "@web/lib/metadata/social";
+import { baseOpenGraph, siteCardImages } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   description,
   openGraph: {
     ...baseOpenGraph,
+    images: siteCardImages,
     title,
     description,
     url: `${SITE_URL}/contact`,

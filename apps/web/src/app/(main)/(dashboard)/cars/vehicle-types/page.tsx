@@ -16,7 +16,11 @@ import { PageHead } from "@web/components/shared/page-head";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  vehicleTypesCardImages,
+} from "@web/lib/metadata/social";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
@@ -47,6 +51,7 @@ export async function generateMetadata({
     description: metaDescription,
     openGraph: {
       ...baseOpenGraph,
+      images: vehicleTypesCardImages,
       title: metaTitle,
       description: metaDescription,
       url: `${SITE_URL}${canonical}`,

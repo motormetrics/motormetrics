@@ -30,7 +30,11 @@ import {
   generateBreadcrumbSchema,
   generateFAQPageSchema,
 } from "@web/lib/metadata";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  makesCardImages,
+} from "@web/lib/metadata/social";
 import { getDistinctMakes } from "@web/queries/cars";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
 import { getMakeCoeComparison } from "@web/queries/cars/makes/coe-comparison";
@@ -148,6 +152,7 @@ export async function generateMetadata({
     description,
     openGraph: {
       ...baseOpenGraph,
+      images: makesCardImages,
       title,
       description,
       url: `${SITE_URL}/cars/makes/${make}`,

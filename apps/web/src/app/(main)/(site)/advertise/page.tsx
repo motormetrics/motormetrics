@@ -10,7 +10,11 @@ import { SitePage } from "@web/components/shared/site-page";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { advertisePage } from "@web/flags";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  siteCardImages,
+} from "@web/lib/metadata/social";
 import { getDailyTraffic, getTrafficStats } from "@web/lib/posthog";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -24,6 +28,7 @@ export const metadata: Metadata = {
   description,
   openGraph: {
     ...baseOpenGraph,
+    images: siteCardImages,
     title: `${title} - ${SITE_TITLE}`,
     description,
     url: `${SITE_URL}/advertise`,

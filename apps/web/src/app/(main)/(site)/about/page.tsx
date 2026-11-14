@@ -12,7 +12,11 @@ import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
 import { generateFAQPageSchema } from "@web/lib/metadata";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  siteCardImages,
+} from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import type { Organization, Person, WebPage, WithContext } from "schema-dts";
 
@@ -24,6 +28,7 @@ export const metadata: Metadata = {
   description,
   openGraph: {
     ...baseOpenGraph,
+    images: siteCardImages,
     title,
     description,
     url: `${SITE_URL}/about`,

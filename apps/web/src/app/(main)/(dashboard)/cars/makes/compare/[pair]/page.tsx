@@ -28,7 +28,11 @@ import {
   createWebPageStructuredData,
   generateBreadcrumbSchema,
 } from "@web/lib/metadata";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  compareMakesCardImages,
+} from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -69,6 +73,7 @@ export async function generateMetadata({
     description,
     openGraph: {
       ...baseOpenGraph,
+      images: compareMakesCardImages,
       title: socialTitle,
       description,
       url: `${SITE_URL}${comparePath(slug)}`,

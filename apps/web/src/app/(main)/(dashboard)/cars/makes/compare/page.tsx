@@ -32,7 +32,11 @@ import {
   createWebPageStructuredData,
   generateBreadcrumbSchema,
 } from "@web/lib/metadata";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  compareMakesCardImages,
+} from "@web/lib/metadata/social";
 import { getDistinctMakes } from "@web/queries/cars/filter-options";
 import { getMakeFromSlug } from "@web/queries/cars/makes/get-make-from-slug";
 import type { Metadata } from "next";
@@ -116,6 +120,7 @@ export async function generateMetadata({
       description,
       openGraph: {
         ...baseOpenGraph,
+        images: compareMakesCardImages,
         title,
         description,
         url: `${SITE_URL}${PATH}`,
@@ -144,6 +149,7 @@ export async function generateMetadata({
     ...(reversedPair ? {} : { robots: { index: false, follow: true } }),
     openGraph: {
       ...baseOpenGraph,
+      images: compareMakesCardImages,
       title: socialTitle,
       description: pairDescription,
       url: `${SITE_URL}${canonical}`,

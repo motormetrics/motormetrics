@@ -1,5 +1,9 @@
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  siteCardImages,
+} from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 
 const title = "Privacy Policy";
@@ -10,6 +14,7 @@ export const metadata: Metadata = {
   description,
   openGraph: {
     ...baseOpenGraph,
+    images: siteCardImages,
     title,
     description,
     url: `${SITE_URL}/legal/privacy-policy`,

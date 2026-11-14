@@ -2,7 +2,11 @@ import { slugify } from "@motormetrics/utils/slugify";
 import { typeDetailMeta } from "@web/app/(main)/(dashboard)/cars/components/type-meta";
 import { VehicleTypeReport } from "@web/app/(main)/(dashboard)/cars/vehicle-types/[type]/components/vehicle-type-report";
 import { SITE_URL } from "@web/config";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  vehicleTypesCardImages,
+} from "@web/lib/metadata/social";
 import {
   checkVehicleTypeIfExist,
   getDistinctVehicleTypes,
@@ -31,6 +35,7 @@ export async function generateMetadata({
     description,
     openGraph: {
       ...baseOpenGraph,
+      images: vehicleTypesCardImages,
       title,
       description,
       url: `${SITE_URL}${canonical}`,

@@ -8,7 +8,11 @@ import {
 } from "@web/components/brand-logo";
 import { SitePage } from "@web/components/shared/site-page";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  siteCardImages,
+} from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import Image from "next/image";
 import type { ReactNode } from "react";
@@ -22,6 +26,7 @@ export const metadata: Metadata = {
   description,
   openGraph: {
     ...baseOpenGraph,
+    images: siteCardImages,
     title,
     description,
     url: `${SITE_URL}/brand`,

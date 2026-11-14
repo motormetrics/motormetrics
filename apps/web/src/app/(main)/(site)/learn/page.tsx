@@ -17,7 +17,11 @@ import {
   generateDefinedTermSetSchema,
   generateFAQPageSchema,
 } from "@web/lib/metadata";
-import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
+import {
+  baseOpenGraph,
+  baseTwitter,
+  learnCardImages,
+} from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 import type { WebPage, WithContext } from "schema-dts";
 
@@ -30,6 +34,7 @@ export const metadata: Metadata = {
   description,
   openGraph: {
     ...baseOpenGraph,
+    images: learnCardImages,
     title,
     description,
     url: `${SITE_URL}/learn`,
