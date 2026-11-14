@@ -19,7 +19,7 @@ import {
 import { Suspense } from "react";
 
 /** Months of history the column chart shows, matching the comp's eight bars. */
-export const COLUMN_COUNT = 8;
+const COLUMN_COUNT = 8;
 
 /** The battery-electric shares of the `COLUMN_COUNT` months to `month`. */
 export async function loadShareWindow(month: string) {

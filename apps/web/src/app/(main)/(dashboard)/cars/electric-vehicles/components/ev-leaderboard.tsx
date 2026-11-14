@@ -13,7 +13,7 @@ import { getCarLogoMap } from "@web/queries/logos";
 import Link from "next/link";
 import { Suspense } from "react";
 
-export const LEADERBOARD_SIZE = 6;
+const LEADERBOARD_SIZE = 6;
 
 /** Battery-electric registrations by make, year to date at `month`. */
 export async function loadEvMakes(month: string) {
