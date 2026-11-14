@@ -15,8 +15,10 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-headline";
 import {
   PQPCalculator,
+  PQPCompare,
+  PQPMonths,
   PQPRates,
-  PQPReport,
+  PQPTradeoffs,
   PQPTrend,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-report";
 import {
@@ -25,7 +27,12 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-view";
 import { PQP_CATEGORY_KEYS } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import {
+  Hairline,
+  OverviewPage,
+  SectionHead,
+  SectionLink,
+} from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
@@ -258,12 +265,34 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
       <Hairline />
       <PQPRates searchParams={searchParams} />
       <Hairline />
-      <SectionErrorBoundary title="PQP rates unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-          <PQPReport searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
+      <PQPCompare searchParams={searchParams} />
+      <Hairline />
 
+      <section className="flex max-w-prose flex-col gap-4">
+        <SectionHead eyebrow="Reading the numbers" title="How the PQP is set" />
+        <Typography.Paragraph className="text-muted-strong">
+          LTA averages the closing premiums in that category over the last three
+          months, across both exercises, and publishes it as the rate for the
+          coming month. It therefore lags the market rather than leading it.
+        </Typography.Paragraph>
+        <Typography.Paragraph className="text-muted-strong">
+          A 5-year renewal costs half the PQP, but the car cannot be renewed
+          again after that term.
+        </Typography.Paragraph>
+        <div className="flex flex-wrap gap-x-5 gap-y-2">
+          <SectionLink className="ml-0" href="/coe/premiums">
+            Premium trends
+          </SectionLink>
+          <SectionLink className="ml-0" href="/cars/parf">
+            PARF rebate calculator
+          </SectionLink>
+        </div>
+      </section>
+
+      <Hairline />
+      <PQPMonths searchParams={searchParams} />
+      <Hairline />
+      <PQPTradeoffs />
       <Hairline />
 
       <PqpFaq />
