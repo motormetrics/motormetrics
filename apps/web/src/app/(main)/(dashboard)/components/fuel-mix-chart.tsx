@@ -6,15 +6,24 @@ import { BarChart } from "@heroui-pro/react/bar-chart";
 import { formatNumber } from "@motormetrics/utils/format-currency";
 import { compactCount } from "@web/utils/formatting/chart-axis";
 
-export interface VolumePoint {
+export interface FuelMixSeries {
+  /** Chart-colour custom property, shared with the legend. */
+  color: string;
+  /** Sanitised data key: LTA's fuel names carry spaces and brackets. */
+  key: string;
+  label: string;
+}
+
+export type FuelMixPoint = {
   /** "Aug". */
   label: string;
   /** "2026" under the first month and every January; empty elsewhere. */
   year: string;
   /** "August 2026", the tooltip header. */
   title: string;
-  value: number;
-}
+  /** Every fuel type's registrations that month, charted or not. */
+  total: number;
+} & Record<string, number | string>;
 
 interface GridLineProps {
   index?: number;
@@ -32,35 +41,26 @@ interface TickProps {
 }
 
 /**
- * A monthly count as zero-based columns, the newest one darker: new cars by
- * month, vehicles deregistered by month.
- *
- * Pro's chart rather than hand-rolled SVG, since it carries axes, gridlines
- * and a tooltip. Pro does not re-export Recharts' `Cell`, so the newest month
- * is a second series stacked on the first: each row fills exactly one of them.
+ * New cars by month as zero-based columns, each stacked by fuel type, with a
+ * tooltip listing every segment and its share of the month.
  */
-export function VolumeChart({
+export function FuelMixChart({
   data,
+  series,
   ticks,
-  unit,
 }: {
-  data: VolumePoint[];
+  data: FuelMixPoint[];
+  /** Bottom of the stack first. */
+  series: FuelMixSeries[];
   /** Zero-based ticks from `axisTicks`. */
   ticks: number[];
-  /** "new cars", "vehicles" — follows the figure in the tooltip. */
-  unit: string;
 }) {
   const lastIndex = data.length - 1;
-  const rows = data.map((point, index) => ({
-    ...point,
-    earlier: index === lastIndex ? 0 : point.value,
-    latest: index === lastIndex ? point.value : 0,
-  }));
 
   return (
     <BarChart
-      data={rows}
-      height={250}
+      data={data}
+      height={300}
       margin={{ bottom: 0, left: 0, right: 0, top: 8 }}
     >
       <BarChart.Grid
@@ -131,23 +131,21 @@ export function VolumeChart({
         ticks={ticks}
         width={44}
       />
-      <BarChart.Bar
-        dataKey="earlier"
-        fill="var(--chart-4)"
-        maxBarSize={34}
-        radius={[2, 2, 0, 0]}
-        stackId="volume"
-      />
-      <BarChart.Bar
-        dataKey="latest"
-        fill="var(--chart-1)"
-        maxBarSize={34}
-        radius={[2, 2, 0, 0]}
-        stackId="volume"
-      />
+      {series.map(({ color, key, label }) => (
+        <BarChart.Bar
+          dataKey={key}
+          fill={color}
+          key={key}
+          maxBarSize={72}
+          name={label}
+          stackId="fuel"
+          stroke="var(--background)"
+          strokeWidth={1}
+        />
+      ))}
       <BarChart.Tooltip
         content={({ active, payload }) => {
-          const point = payload?.[0]?.payload as VolumePoint | undefined;
+          const point = payload?.[0]?.payload as FuelMixPoint | undefined;
           if (!active || !point) {
             return null;
           }
@@ -156,8 +154,19 @@ export function VolumeChart({
             <ChartTooltip>
               <ChartTooltip.Header>{point.title}</ChartTooltip.Header>
               <span className="font-semibold text-sm tabular-nums">
-                {formatNumber(point.value)} {unit}
+                {formatNumber(point.total)} new cars
               </span>
+              {[...series].reverse().map(({ key, label }) => {
+                const count = Number(point[key]);
+                return (
+                  <span className="text-xs tabular-nums" key={key}>
+                    {label} {formatNumber(count)} ·{" "}
+                    {point.total > 0
+                      ? `${((count / point.total) * 100).toFixed(1)}%`
+                      : "–"}
+                  </span>
+                );
+              })}
             </ChartTooltip>
           );
         }}
