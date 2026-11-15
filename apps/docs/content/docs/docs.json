@@ -1,0 +1,19 @@
+{
+  "$schema": "https://context7.com/schema/docs7.json",
+  "name": "MotorMetrics API",
+  "colors": {
+    "primary": "#4e7c9b"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Getting Started",
+        "pages": ["index", "rate-limiting"]
+      },
+      {
+        "group": "Endpoints",
+        "pages": ["cars", "coe", "deregistrations"]
+      }
+    ]
+  }
+}
