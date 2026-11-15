@@ -16,6 +16,29 @@ Alternative endpoint (same data):
 https://motormetrics.app/api/v1
 ```
 
+## Authentication
+
+The data endpoints documented here — cars, COE, and deregistrations — are public. No API key, token, or sign-up is needed:
+
+```bash
+curl https://motormetrics.app/api/v1/coe/latest
+```
+
+A small number of internal endpoints, used by MotorMetrics' own tooling, require a bearer token:
+
+```bash
+curl https://motormetrics.app/api/v1/posts \
+  -H "Authorization: Bearer <token>"
+```
+
+Tokens for these endpoints are not issued publicly. A request with a missing or invalid token returns `401 Unauthorized`:
+
+```json
+{
+  "error": "Unauthorised"
+}
+```
+
 ## Features
 
 - **Car Registrations** - Monthly registration data by make, fuel type, and vehicle type
