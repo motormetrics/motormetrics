@@ -1,4 +1,5 @@
 import type { PopulationEntity } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
+import { KeyNumberList } from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
 import { SourceNote } from "@web/components/shared/overview";
 
 /** Fuel types listed individually before the tail is folded into "Others". */
@@ -18,8 +19,8 @@ const FUEL_COLOURS: Record<string, string> = {
 const FALLBACK_COLOUR = "var(--chart-6)";
 
 /**
- * The fuel split at the latest year end: one stacked share bar, then a ruled
- * row per fuel type, largest first.
+ * The fuel split at the latest year end, as Direction D's key numbers: one
+ * stacked share bar, then a ruled figure per fuel type, largest first.
  *
  * Labels are LTA's own — "Petrol-Electric" and "Petrol-Electric (Plug-In)"
  * stay apart rather than being folded into a "hybrid" bucket LTA does not
@@ -61,60 +62,47 @@ export function FuelSplit({
     share: total > 0 ? (segment.value / total) * 100 : 0,
   }));
 
+  if (rows.length === 0) {
+    return (
+      <SourceNote>
+        LTA published the {year} count for {entity.name.toLowerCase()} without a
+        fuel split.
+      </SourceNote>
+    );
+  }
+
   return (
-    <div className="flex min-w-0 flex-col gap-3">
-      <span className="font-semibold text-muted text-xs">
-        {entity.name} by fuel type
-      </span>
-
-      {rows.length === 0 ? (
-        <SourceNote>
-          LTA published the {year} count for {entity.name.toLowerCase()} without
-          a fuel split.
-        </SourceNote>
-      ) : (
-        <>
-          <div
-            aria-label={rows
-              .map((row) => `${row.label} ${row.share.toFixed(1)}%`)
-              .join(", ")}
-            className="flex h-4 gap-0.5"
-            role="img"
-          >
-            {rows.map((row) => (
+    <>
+      <div
+        aria-label={rows
+          .map((row) => `${row.label} ${row.share.toFixed(1)}%`)
+          .join(", ")}
+        className="flex h-4 gap-0.5"
+        role="img"
+      >
+        {rows.map((row) => (
+          <span
+            className="block h-full rounded-xs"
+            key={row.label}
+            style={{ background: row.color, width: `${row.share}%` }}
+          />
+        ))}
+      </div>
+      <KeyNumberList
+        items={rows.map((row) => ({
+          label: (
+            <span className="flex items-center gap-1.5">
               <span
-                className="block h-full"
-                key={row.label}
-                style={{ background: row.color, width: `${row.share}%` }}
+                aria-hidden
+                className="size-2.5 shrink-0 rounded-xs"
+                style={{ background: row.color }}
               />
-            ))}
-          </div>
-
-          <ul className="flex flex-col">
-            {rows.map((row) => (
-              <li
-                className="flex items-center gap-2.5 border-separator border-b py-2"
-                key={row.label}
-              >
-                <span
-                  aria-hidden
-                  className="block size-3 shrink-0 rounded-xs"
-                  style={{ background: row.color }}
-                />
-                <span className="min-w-0 flex-1 text-sm">{row.label}</span>
-                <span className="w-16 shrink-0 text-right font-semibold text-sm tabular-nums">
-                  {row.share.toFixed(1)}%
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          <SourceNote>
-            Share of {entity.name.toLowerCase()} on the road at 31 December{" "}
-            {year}, by fuel type as LTA records it.
-          </SourceNote>
-        </>
-      )}
-    </div>
+              {row.label}
+            </span>
+          ),
+          value: `${row.share.toFixed(1)}%`,
+        }))}
+      />
+    </>
   );
 }

@@ -3,7 +3,7 @@ import type { PopulationEntity } from "@web/app/(main)/(dashboard)/cars/annual/p
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 
 /** Years of the electric run-up listed under the headline figure. */
-const FLEET_YEARS = 4;
+export const FLEET_YEARS = 4;
 
 /**
  * How much of the car population is electric at the latest year end, and how
@@ -34,7 +34,6 @@ export function ElectricFleet({
     <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={`Electric ${name} on the road at year end`}
-        eyebrow="Electric vehicles"
         link={{ href: "/cars/electric-vehicles", label: "All electric data" }}
         title="Electric fleet"
       />

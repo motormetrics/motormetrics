@@ -1,15 +1,15 @@
 import { Typography } from "@heroui/react";
-import { NumberValue } from "@heroui-pro/react";
+import {
+  changeLabel,
+  RangeHero,
+  rangeSummary,
+} from "@web/app/(main)/(dashboard)/cars/components/range-hero";
 import {
   TwoShadeTrendChart,
   type TwoShadeTrendPoint,
 } from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
-import {
-  axisTicks,
-  summariseMonth,
-} from "@web/app/(main)/(dashboard)/components/overview-series";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import {
   getDimensionStats,
   getMonthlyRegistrationTotals,
@@ -27,99 +27,123 @@ import type { SearchParams } from "nuqs/server";
  */
 const HISTORY_LIMIT = 360;
 
-/** "+26.0%", with a true minus for a fall. */
-const formatSignedPercent = (ratio: number): string =>
-  `${ratio < 0 ? "−" : "+"}${Math.abs(ratio * 100).toFixed(1)}%`;
+/** Months the hero's range and the trend chart span. */
+const TREND_MONTHS = 12;
 
-/**
- * The page's opening figure: the month's registrations, the change on the
- * month before, the year to date and the leading make.
- */
-export async function RegistrationsHero({
-  searchParams,
-}: {
+interface MonthProps {
   searchParams: Promise<SearchParams>;
-}) {
+}
+
+/** The selected month and the twelve months to it, oldest first. */
+async function loadWindow(searchParams: Promise<SearchParams>) {
   const month = await resolveCarsMonth(searchParams);
-  const [monthlyTotals, makeStats] = await Promise.all([
-    getMonthlyRegistrationTotals(HISTORY_LIMIT),
-    getDimensionStats("make", month),
-  ]);
-
+  const monthlyTotals = await getMonthlyRegistrationTotals(HISTORY_LIMIT);
   const selectedIndex = monthlyTotals.findIndex((row) => row.month === month);
-  if (selectedIndex < 0) {
-    return null;
-  }
-
-  const history = monthlyTotals.slice(0, selectedIndex + 1);
-  const current = history[selectedIndex];
-  const previous = history.at(-2);
-  const previousTotal = previous?.total ?? 0;
-  const difference = current.total - previousTotal;
-
+  const history =
+    selectedIndex < 0 ? [] : monthlyTotals.slice(0, selectedIndex + 1);
+  const window = history.slice(-TREND_MONTHS);
   const year = month.slice(0, 4);
   const yearToDate = history
     .filter((row) => row.month.startsWith(year))
     .reduce((total, row) => total + row.total, 0);
-  const leader = makeStats[0];
 
-  return (
-    <div className="flex min-w-0 flex-col gap-3">
-      <Typography.Paragraph color="muted" size="xs" weight="semibold">
-        New cars registered in {formatMonthLabel(month)}
-      </Typography.Paragraph>
-      <span className="font-extrabold text-5xl tabular-nums leading-none tracking-tight md:text-6xl">
-        <NumberValue
-          locale="en-SG"
-          maximumFractionDigits={0}
-          value={current.total}
-        />
-      </span>
-      {previous && previousTotal > 0 ? (
-        <Typography.Paragraph className="tabular-nums" color="muted">
-          <span className="font-semibold text-foreground">
-            {formatSignedPercent(difference / previousTotal)}
-          </span>{" "}
-          ({difference < 0 ? "−" : "+"}
-          {Math.abs(difference).toLocaleString("en-SG")}) vs{" "}
-          {formatMonthName(previous.month)} at{" "}
-          {previousTotal.toLocaleString("en-SG")}
-        </Typography.Paragraph>
-      ) : null}
-      <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
-        {yearToDate.toLocaleString("en-SG")} so far in {year}
-        {leader
-          ? ` · ${leader.name} leads with ${leader.share.toFixed(1)}%`
-          : null}
-      </Typography.Paragraph>
-    </div>
-  );
+  return { month, window, year, yearToDate };
 }
 
-/** Months drawn in the trend chart. */
-const TREND_MONTHS = 12;
+/** "August 2026", for the eyebrow and the hero. */
+export async function CarsMonthLabel({ searchParams }: MonthProps) {
+  return formatMonthLabel(await resolveCarsMonth(searchParams));
+}
 
 /**
- * The twelve months to the selected one as zero-based columns, under a
- * section head; the selected month is the darker column.
+ * The page's answer: the month's registrations, the change on the month
+ * before and where the month sits in its twelve-month range.
  */
-export async function RegistrationsTrend({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const month = await resolveCarsMonth(searchParams);
-  const monthlyTotals = await getMonthlyRegistrationTotals(HISTORY_LIMIT);
+export async function RegistrationsHero({ searchParams }: MonthProps) {
+  const { month, window } = await loadWindow(searchParams);
+  const current = window.at(-1);
+  const previous = window.at(-2);
+  const range = current
+    ? rangeSummary(
+        window.map((row) => row.total),
+        current.total,
+        `${TREND_MONTHS} months`,
+      )
+    : null;
 
-  const selectedIndex = monthlyTotals.findIndex((row) => row.month === month);
-  if (selectedIndex < 0) {
+  if (!current || !range) {
     return null;
   }
 
-  const window = monthlyTotals.slice(
-    Math.max(0, selectedIndex + 1 - TREND_MONTHS),
-    selectedIndex + 1,
+  return (
+    <RangeHero
+      change={
+        previous
+          ? changeLabel(
+              current.total,
+              previous.total,
+              formatMonthName(previous.month),
+            )
+          : undefined
+      }
+      label="New cars registered"
+      period={formatMonthLabel(month)}
+      range={range}
+      span={`${TREND_MONTHS}-month`}
+    />
   );
+}
+
+/** "36,646 new cars were registered in 2026 to August, and BYD leads with 24.6% of them." */
+export async function RegistrationsLead({ searchParams }: MonthProps) {
+  const { month, year, yearToDate } = await loadWindow(searchParams);
+  const [leader] = await getDimensionStats("make", month);
+
+  return (
+    <Typography.Paragraph className="max-w-prose tabular-nums">
+      {yearToDate.toLocaleString("en-SG")} new cars were registered in {year} to{" "}
+      {formatMonthName(month)}
+      {leader
+        ? `, and ${leader.name} leads with ${leader.share.toFixed(1)}% of them`
+        : ""}
+      .
+    </Typography.Paragraph>
+  );
+}
+
+/**
+ * "Registrations peaked at 6,390 in December 2025; August's 4,549 was 8.2%
+ * below July's 4,953."
+ */
+export async function RegistrationsTrendCaption({ searchParams }: MonthProps) {
+  const { window } = await loadWindow(searchParams);
+  const current = window.at(-1);
+  const previous = window.at(-2);
+  const peak = window.reduce<(typeof window)[number] | undefined>(
+    (best, row) => (!best || row.total > best.total ? row : best),
+    undefined,
+  );
+
+  if (!current || !peak) {
+    return null;
+  }
+
+  const comparison =
+    previous && previous.total > 0
+      ? `; ${formatMonthName(current.month)}'s ${current.total.toLocaleString("en-SG")} was ${Math.abs(((current.total - previous.total) / previous.total) * 100).toFixed(1)}% ${current.total < previous.total ? "below" : "above"} ${formatMonthName(previous.month)}'s ${previous.total.toLocaleString("en-SG")}`
+      : "";
+
+  return `Registrations peaked at ${peak.total.toLocaleString("en-SG")} in ${formatMonthLabel(peak.month)}${comparison}.`;
+}
+
+/** The twelve months to the selected one; the selected month is darker. */
+export async function RegistrationsTrend({ searchParams }: MonthProps) {
+  const { month, window } = await loadWindow(searchParams);
+
+  if (window.length === 0) {
+    return null;
+  }
+
   const data: TwoShadeTrendPoint[] = window.map((row, index) => ({
     count: row.total,
     earlier: row.month === month ? 0 : row.total,
@@ -132,39 +156,14 @@ export async function RegistrationsTrend({
     window.map((row) => row.total),
     { zero: true },
   );
-  // The full history, so "the most since" can reach past the chart window.
-  const history = monthlyTotals.slice(0, selectedIndex + 1);
-  const year = month.slice(0, 4);
-  const yearToDate = history
-    .filter((row) => row.month.startsWith(year))
-    .reduce((total, row) => total + row.total, 0);
-  const summary = summariseMonth(
-    history,
-    month,
-    "new cars registered",
-    `${yearToDate.toLocaleString("en-SG")} so far in ${year}`,
-  );
 
   return (
-    <section className="flex flex-col gap-4">
-      <SectionHead
-        caption={`${window.length} months to ${formatMonthLabel(month)} · hover or tap a bar for its value`}
-        eyebrow="Trend"
-        title="Registrations by month"
-      />
-      <TwoShadeTrendChart
-        data={data}
-        height={260}
-        maxBarSize={48}
-        ticks={ticks}
-        tooltipLabel="New cars"
-      />
-      {summary ? (
-        <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
-          {summary}
-        </Typography.Paragraph>
-      ) : null}
-      <SourceNote>New car registrations, all makes and fuel types.</SourceNote>
-    </section>
+    <TwoShadeTrendChart
+      data={data}
+      height={260}
+      maxBarSize={48}
+      ticks={ticks}
+      tooltipLabel="New cars"
+    />
   );
 }

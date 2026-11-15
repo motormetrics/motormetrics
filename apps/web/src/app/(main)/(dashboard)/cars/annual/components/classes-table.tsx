@@ -86,7 +86,6 @@ export function ClassesTable({
     <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={`${rows.length} ${rows.length === 1 ? "class" : "classes"} · ${total.toLocaleString("en-SG")} vehicles · select a heading to sort`}
-        eyebrow={year}
         title="All vehicle classes"
       />
 

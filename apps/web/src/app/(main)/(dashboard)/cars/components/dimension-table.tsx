@@ -255,7 +255,7 @@ export function DimensionTable({
               : `${visible.length} ${visible.length === 1 ? "row" : "rows"}`}
           </>
         }
-        eyebrow="Registrations"
+        eyebrow="Figure 2 · Breakdown"
         title={labels.title}
         trailing={
           // Segment is a non-wrapping inline-flex, so a row wider than a phone

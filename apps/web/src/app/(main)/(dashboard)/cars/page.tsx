@@ -1,4 +1,4 @@
-import { Skeleton } from "@heroui/react";
+import { Skeleton, Typography } from "@heroui/react";
 import { CarsMonthPicker } from "@web/app/(main)/(dashboard)/cars/components/cars-month-picker";
 import { DimensionPanel } from "@web/app/(main)/(dashboard)/cars/components/dimension-panel";
 import {
@@ -6,26 +6,34 @@ import {
   loadLatestRegistrationsSummary,
 } from "@web/app/(main)/(dashboard)/cars/components/faq-data";
 import { FuelMix } from "@web/app/(main)/(dashboard)/cars/components/fuel-mix";
+import {
+  HeadGrid,
+  HeadTitle,
+  KeysAside,
+} from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
 import { MoversRail } from "@web/app/(main)/(dashboard)/cars/components/movers-rail";
 import { PopulationPanel } from "@web/app/(main)/(dashboard)/cars/components/population-panel";
 import {
+  CarsMonthLabel,
   RegistrationsHero,
+  RegistrationsLead,
   RegistrationsTrend,
+  RegistrationsTrendCaption,
 } from "@web/app/(main)/(dashboard)/cars/components/registrations-hero";
-import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import {
   Hairline,
   OverviewGrid,
   OverviewPage,
+  SectionHead,
+  SourceNote,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { PageHead } from "@web/components/shared/page-head";
+import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { formatMonthLabel } from "@web/utils/dates/format-month";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
@@ -57,20 +65,6 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-/** Names the month the page reports, and its source. */
-async function CarsMonthSub({ searchParams }: PageProps) {
-  const month = await resolveCarsMonth(searchParams);
-
-  return (
-    <>
-      <span className="font-semibold text-foreground">
-        {formatMonthLabel(month)}
-      </span>{" "}
-      · Source: LTA via DataMall
-    </>
-  );
-}
-
 /** The questions and their FAQPage schema, with the latest figures quoted. */
 async function CarsFaq() {
   const faqs = buildCarsFaqs(await loadLatestRegistrationsSummary());
@@ -88,72 +82,155 @@ async function CarsFaq() {
   );
 }
 
+const JUMP_LINKS = [
+  { href: "#cars-trend", label: "Registrations by month" },
+  { href: "#cars-break", label: "Breakdown" },
+  { href: "#cars-move", label: "Movers and the fleet" },
+];
+
+/** The selected month, streamed into a line of fixed copy. */
+function MonthSlot({ searchParams }: PageProps) {
+  return (
+    // A non-breaking space holds the line until the month arrives.
+    <Suspense fallback={" "}>
+      <CarsMonthLabel searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
 export default function CarsPage({ searchParams }: PageProps) {
   return (
-    <OverviewPage>
-      <PageHead
-        controls={
+    <OverviewPage className="gap-10 max-md:gap-7">
+      {/* Direction D's head. The labels, title and source are fixed copy in
+          the static shell; each figure that follows `?month=` streams in
+          behind its own boundary. */}
+      <HeadGrid
+        keys={
+          <KeysAside
+            eyebrow={
+              <>
+                Key numbers · <MonthSlot searchParams={searchParams} /> by
+                powertrain
+              </>
+            }
+            jump={JUMP_LINKS}
+            label="New cars by powertrain"
+            source="Source: LTA via DataMall."
+          >
+            <SectionErrorBoundary title="Fuel mix unavailable">
+              <Suspense fallback={<Skeleton className="h-36 w-full" />}>
+                <FuelMix searchParams={searchParams} />
+              </Suspense>
+            </SectionErrorBoundary>
+          </KeysAside>
+        }
+      >
+        <HeadTitle
+          eyebrow={
+            <>
+              Cars · <MonthSlot searchParams={searchParams} />
+            </>
+          }
+          title="New car registrations"
+        />
+        <SectionErrorBoundary title="Registration summary unavailable">
+          <Suspense fallback={<Skeleton className="h-36 w-full max-w-xl" />}>
+            <RegistrationsHero searchParams={searchParams} />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-14 w-full max-w-prose" />}>
+            <RegistrationsLead searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SourceNote>Source: LTA via DataMall.</SourceNote>
+        <div className="flex flex-wrap gap-2">
           <Suspense fallback={<Skeleton className="h-8 w-36" />}>
             <CarsMonthPicker searchParams={searchParams} />
           </Suspense>
-        }
-        eyebrow="Cars"
-        sub={
-          <Suspense fallback={<Skeleton className="h-5 w-56" />}>
-            <CarsMonthSub searchParams={searchParams} />
-          </Suspense>
-        }
-        title="New car registrations"
-      />
-
-      <div className="grid gap-10 lg:grid-cols-2 lg:items-end lg:gap-14">
-        <SectionErrorBoundary title="Registration summary unavailable">
-          <Suspense fallback={<Skeleton className="h-48 w-full" />}>
-            <RegistrationsHero searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
-        <SectionErrorBoundary title="Fuel mix unavailable">
-          <Suspense fallback={<Skeleton className="h-72 w-full" />}>
-            <FuelMix searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
-      </div>
-
-      <SectionErrorBoundary title="Registration trend unavailable">
-        <Suspense fallback={<Skeleton className="h-80 w-full" />}>
-          <RegistrationsTrend searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
+          <SharePill title="New car registrations" />
+        </div>
+      </HeadGrid>
 
       <Hairline />
 
-      {/* The searchable, sortable dimension table */}
-      <SectionErrorBoundary title="Registration breakdown unavailable">
-        <Suspense fallback={<Skeleton className="h-[640px] w-full" />}>
-          <DimensionPanel searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
+      <section
+        aria-labelledby="cars-trend-h"
+        className="flex scroll-mt-4 flex-col gap-4"
+        id="cars-trend"
+      >
+        <div className="flex min-w-0 flex-col gap-1">
+          <Typography.Paragraph
+            className="uppercase"
+            color="muted"
+            size="xs"
+            weight="semibold"
+          >
+            Figure 1 · Trend
+          </Typography.Paragraph>
+          <Typography.Heading
+            className="text-xl md:text-2xl"
+            id="cars-trend-h"
+            level={2}
+            weight="bold"
+          >
+            Registrations by month, last 12 months
+          </Typography.Heading>
+          <Typography.Paragraph
+            className="max-w-prose tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            <Suspense fallback={" "}>
+              <RegistrationsTrendCaption searchParams={searchParams} />
+            </Suspense>
+          </Typography.Paragraph>
+        </div>
+        <SectionErrorBoundary title="Registration trend unavailable">
+          <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+            <RegistrationsTrend searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <SourceNote>
+          Source: LTA via DataMall · New car registrations, all makes and fuel
+          types, zero-based. Hover or tap a bar for its value.
+        </SourceNote>
+      </section>
 
       <Hairline />
 
-      <OverviewGrid>
-        <SectionErrorBoundary title="Movers unavailable">
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+      {/* The searchable, sortable dimension table. Its heading lives inside
+          the client table, beside the dimension tabs that read the URL. */}
+      <section className="scroll-mt-4" id="cars-break">
+        <SectionErrorBoundary title="Registration breakdown unavailable">
+          <Suspense fallback={<Skeleton className="h-160 w-full" />}>
+            <DimensionPanel searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </section>
+
+      <Hairline />
+
+      <section className="flex scroll-mt-4 flex-col gap-6" id="cars-move">
+        <SectionHead
+          eyebrow="Figure 3 · Movers and vehicle population"
+          title="Fastest growing makes, and the fleet on the road"
+        />
+        <OverviewGrid>
+          <SectionErrorBoundary title="Movers unavailable">
             <MoversRail searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
-        <SectionErrorBoundary title="Vehicle population unavailable">
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+          </SectionErrorBoundary>
+          <SectionErrorBoundary title="Vehicle population unavailable">
             <PopulationPanel />
-          </Suspense>
-        </SectionErrorBoundary>
-      </OverviewGrid>
+          </SectionErrorBoundary>
+        </OverviewGrid>
+        <SourceNote>
+          Source: LTA via DataMall (registrations); LTA annual vehicle
+          population.
+        </SourceNote>
+      </section>
 
       <Hairline />
 
-      <Suspense fallback={null}>
-        <CarsFaq />
-      </Suspense>
+      <CarsFaq />
     </OverviewPage>
   );
 }

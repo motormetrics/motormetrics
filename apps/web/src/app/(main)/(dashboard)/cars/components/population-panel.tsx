@@ -1,17 +1,18 @@
-import { cn } from "@heroui/react";
+import { cn, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { Headline, SectionHead } from "@web/components/shared/overview";
+import { SourceNote } from "@web/components/shared/overview";
 import {
   getVehiclePopulationByYearAndFuelType,
   getVehiclePopulationYearlyTotals,
 } from "@web/queries/vehicle-population";
+import Link from "next/link";
 
 /** Fuel types listed individually before the tail is folded into "Others". */
 const NAMED_ROWS = 5;
 
 /**
  * How many vehicles are actually on the road, against the registrations the
- * rest of the page counts.
+ * rest of the page counts. Reads only cached data, so it needs no boundary.
  */
 export async function PopulationPanel() {
   const [yearlyTotals, byFuelType] = await Promise.all([
@@ -50,37 +51,34 @@ export async function PopulationPanel() {
   const largestTotal = rows[0]?.total ?? 1;
 
   return (
-    <div className="flex flex-col gap-4">
-      <SectionHead
-        caption={`All vehicles registered in Singapore · ${latest.year}`}
-        eyebrow="Vehicle population"
-        link={{ href: "/cars/annual", label: "Population data" }}
-        title="Cars on the road"
-      />
-
-      <Headline
-        delta={
-          changeRatio !== null && previous ? (
-            <span className="text-muted-strong tabular-nums">
-              {changeRatio < 0 ? "−" : "+"}
-              <NumberValue
-                maximumFractionDigits={1}
-                style="percent"
-                value={Math.abs(changeRatio)}
-              />{" "}
-              on {previous.year}
-            </span>
-          ) : undefined
-        }
-        size="md"
-        value={
+    <div className="flex min-w-0 flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <Typography.Heading className="text-lg" level={3} weight="bold">
+          Cars on the road, {latest.year}
+        </Typography.Heading>
+        <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
             value={latest.total}
-          />
-        }
-      />
+          />{" "}
+          vehicles registered in Singapore
+          {changeRatio !== null && previous ? (
+            <>
+              {" · "}
+              <span className="text-muted-strong tabular-nums">
+                {changeRatio < 0 ? "−" : "+"}
+                <NumberValue
+                  maximumFractionDigits={1}
+                  style="percent"
+                  value={Math.abs(changeRatio)}
+                />{" "}
+                on {previous.year}
+              </span>
+            </>
+          ) : null}
+        </Typography.Paragraph>
+      </div>
 
       <div className="flex flex-col">
         <div className="flex items-end gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
@@ -117,6 +115,12 @@ export async function PopulationPanel() {
           ))}
         </ul>
       </div>
+      <SourceNote>
+        Share of all vehicles by fuel type.{" "}
+        <Link className="text-accent-strong" href="/cars/annual">
+          Population data →
+        </Link>
+      </SourceNote>
     </div>
   );
 }
