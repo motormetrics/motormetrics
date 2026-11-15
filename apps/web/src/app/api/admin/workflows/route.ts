@@ -14,6 +14,7 @@ export async function GET(request: Request) {
     const permission =
       session &&
       (await auth.api.userHasPermission({
+        headers: headersList,
         body: { userId: session.user.id, permissions: { workflow: ["read"] } },
       }));
 

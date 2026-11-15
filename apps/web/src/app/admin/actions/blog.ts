@@ -20,6 +20,7 @@ export async function regeneratePost(params: {
   const permission =
     session &&
     (await auth.api.userHasPermission({
+      headers: await headers(),
       body: { userId: session.user.id, permissions: { post: ["update"] } },
     }));
 
@@ -54,6 +55,7 @@ export async function createBlogPost(
   const permission =
     session &&
     (await auth.api.userHasPermission({
+      headers: await headers(),
       body: { userId: session.user.id, permissions: { post: ["create"] } },
     }));
 
@@ -97,6 +99,7 @@ export async function updateBlogPost(
   const permission =
     session &&
     (await auth.api.userHasPermission({
+      headers: await headers(),
       body: { userId: session.user.id, permissions: { post: ["update"] } },
     }));
 
@@ -131,6 +134,7 @@ export async function deleteBlogPost(
   const permission =
     session &&
     (await auth.api.userHasPermission({
+      headers: await headers(),
       body: { userId: session.user.id, permissions: { post: ["delete"] } },
     }));
 

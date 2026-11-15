@@ -12,6 +12,7 @@ export async function regeneratePostHero(
   const permission =
     session &&
     (await auth.api.userHasPermission({
+      headers: await headers(),
       body: { userId: session.user.id, permissions: { post: ["update"] } },
     }));
 

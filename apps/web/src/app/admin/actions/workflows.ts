@@ -27,6 +27,7 @@ export async function triggerWorkflow(
   const permission =
     session &&
     (await auth.api.userHasPermission({
+      headers: await headers(),
       body: { userId: session.user.id, permissions: { workflow: ["trigger"] } },
     }));
 
