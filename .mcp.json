@@ -1,5 +1,12 @@
 {
   "mcpServers": {
+    "context7-admin": {
+      "type": "http",
+      "url": "https://admin.mcp.context7.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${CONTEXT7_API_KEY}"
+      }
+    },
     "gsc-motormetrics": {
       "type": "http",
       "url": "https://google-search-console-mcp-pi.vercel.app/mcp"
