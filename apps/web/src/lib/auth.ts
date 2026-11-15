@@ -12,7 +12,7 @@ import {
 import { ac, admin, user } from "@web/lib/permissions";
 import { betterAuth } from "better-auth/minimal";
 import { nextCookies } from "better-auth/next-js";
-import { admin as adminPlugin } from "better-auth/plugins";
+import { admin as adminPlugin, oAuthProxy } from "better-auth/plugins";
 
 export const auth = betterAuth({
   baseURL: {
@@ -46,6 +46,19 @@ export const auth = betterAuth({
   },
   plugins: [
     adminPlugin({ ac, roles: { admin, user } }),
+    // Previews sign in through production's Google callback, since Google
+    // accepts no wildcard redirect URIs. The literal comes first because Vercel
+    // picks the shortest production domain and sgcarstrends.com ties with
+    // motormetrics.app.
+    // TODO: on 1 Dec 2026, along with PR #1511, remove the literal so only
+    // VERCEL_PROJECT_PRODUCTION_URL is left.
+    oAuthProxy({
+      productionURL:
+        // @ts-expect-error TS2872: the literal is always truthy until the TODO above is done.
+        "https://motormetrics.app" ||
+        `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`,
+      secret: process.env.OAUTH_PROXY_SECRET,
+    }),
     nextCookies(), // Make sure this is the last plugin in the array
   ],
   socialProviders: {
