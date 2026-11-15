@@ -84,7 +84,6 @@ See the [web README](apps/web/README.md#testing) for browser installation and E2
 ```text
 motormetrics/
 ├── apps/
-│   ├── docs/                 # API reference content, built by Docs7
 │   ├── mcp/                  # @motormetrics/mcp blog-management server
 │   └── web/                  # Dashboards, admin, REST routes and workflows
 ├── packages/
@@ -94,6 +93,7 @@ motormetrics/
 │   ├── types/              # Shared TypeScript types
 │   └── utils/              # Shared utilities and Redis configuration
 └── docs/
+    ├── api/                # API reference, built and hosted by Docs7
     ├── architecture/       # Architecture documentation
     ├── diagrams/           # Mermaid diagram sources
     └── product/            # Product proposals
@@ -129,7 +129,7 @@ The web application's `vercel-build` applies pending database migrations before 
 - [AI package](packages/ai/README.md): Blog generation and embeddings.
 - [Database guidance](packages/database/AGENTS.md): Schema changes and migration workflow.
 - [Logos package](packages/logos/README.md): Logo storage and management.
-- [Documentation site](apps/docs/README.md): API reference content for Docs7.
+- [API reference](docs/api/): MDX pages built and hosted by Docs7; list new pages in `docs.json`. Preview with `pnpm dlx @upstash/docs7 dev` from that folder.
 - [Architecture](docs/architecture/): System, database, infrastructure and workflows.
 - [Product proposals](docs/product/): Opportunity assessments and design proposals.
 
