@@ -8,7 +8,7 @@
     "groups": [
       {
         "group": "Getting Started",
-        "pages": ["api/index", "api/rate-limiting"]
+        "pages": ["api/index", "api/rate-limiting", "api/feature-requests"]
       },
       {
         "group": "Endpoints",
