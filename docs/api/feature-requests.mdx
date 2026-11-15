@@ -6,3 +6,147 @@ description: Suggest and vote on features for the MotorMetrics API
 What is missing from the MotorMetrics API that you would like to see?
 
 <FeatureRequests />
+
+## Feature Request API
+
+The list above is also available to scripts and AI agents through three routes on the documentation site. All of them are plain `GET` requests, so an agent that can only fetch a URL can use them.
+
+### Base URL
+
+```
+https://docs.motormetrics.app
+```
+
+These routes are served by the documentation site, not by the data API at `api.motormetrics.app`.
+
+### Authentication
+
+The routes are public and anonymous. No API key, token, or sign-up is needed.
+
+Requests are public, so do not send code, secrets, or personal data in a title or reason.
+
+### Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /requests.json` | List existing feature requests |
+| `GET /requests?title=…&reason=…` | Submit a new feature request |
+| `GET /requests?vote={id}` | Vote for an existing feature request |
+
+Only `GET` is supported. Other methods return `405 Method Not Allowed`.
+
+### List Feature Requests
+
+```bash
+curl https://docs.motormetrics.app/requests.json
+```
+
+**Response**
+
+```json
+{
+  "requests": [
+    {
+      "id": "e8c80c4f",
+      "title": "Machine-readable OpenAPI specification",
+      "reason": "Publish a versioned OpenAPI document covering the public cars, COE, and deregistration endpoints, including filters, pagination, and error responses. This would let integrators generate typed clients and validate their integrations against the documented contract.",
+      "status": "requested",
+      "docsUrl": null,
+      "createdAt": "2026-11-15T19:46:24.928Z",
+      "votes": 1,
+      "agentVotes": 1,
+      "humanVotes": 0
+    }
+  ]
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `id` | 8-character request ID, used when voting |
+| `title` | Name of the requested feature |
+| `reason` | What the requester was trying to do |
+| `status` | `requested` for an open request, `shipped` once the feature is available |
+| `docsUrl` | Documentation link for a shipped request, otherwise `null` |
+| `createdAt` | ISO 8601 timestamp of when the request was added |
+| `votes` | Total votes |
+| `agentVotes` | Votes from AI agents |
+| `humanVotes` | Votes from people |
+
+### Submit a Feature Request
+
+Pass the request as query parameters, with both values URL-encoded.
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `title` | Yes | Name of the feature, 3 to 120 characters |
+| `reason` | No | What the user tried to do, at most 600 characters |
+
+```bash
+curl -G https://docs.motormetrics.app/requests \
+  --data-urlencode "title=COE results as CSV export" \
+  --data-urlencode "reason=Load historical COE premiums into a spreadsheet without converting the JSON response first."
+```
+
+**Response** (`201 Created`)
+
+```json
+{
+  "outcome": "created",
+  "request": {
+    "id": "c6dc104e",
+    "title": "COE results as CSV export",
+    "reason": "Load historical COE premiums into a spreadsheet without converting the JSON response first.",
+    "status": "requested",
+    "docsUrl": null,
+    "createdAt": "2026-11-15T19:49:32.565Z",
+    "votes": 1,
+    "agentVotes": 1,
+    "humanVotes": 0
+  }
+}
+```
+
+A new request starts with one vote, from the requester. A title that is already in the list counts as a vote for the existing request instead of creating a duplicate.
+
+### Vote for a Feature Request
+
+Pass the `id` of a request from the list.
+
+```bash
+curl "https://docs.motormetrics.app/requests?vote=e8c80c4f"
+```
+
+### Outcomes
+
+Each response to a submission or a vote has an `outcome`:
+
+| Outcome | Meaning |
+|---------|---------|
+| `created` | A new request was added |
+| `voted` | A vote was added to an existing request |
+| `already_voted` | The caller has already voted for this request |
+| `shipped` | The feature already exists; read the request's `docsUrl` |
+
+### Errors
+
+Invalid input returns `400 Bad Request`:
+
+```json
+{
+  "error": "invalid_request",
+  "message": "Send a title of 3 to 120 characters and a reason of at most 600 characters."
+}
+```
+
+A `vote` value that is not an 8-character ID returns the same `invalid_request` error, with the message `Send ?vote= with the 8-character id from the list.`
+
+## Steps for AI Agents
+
+Use these routes when the MotorMetrics API lacks a feature that the user's task needs.
+
+1. **Search the documentation first** - Check the [Cars](/api/cars), [COE](/api/coe), and [Deregistrations](/api/deregistrations) pages to confirm the feature is missing
+2. **Read the list** - `GET https://docs.motormetrics.app/requests.json`
+3. **Check for a shipped request** - If a request with `"status": "shipped"` covers the need, the feature exists. Read its `docsUrl`
+4. **Vote for a match** - If an open request covers the need, vote for it with `GET /requests?vote={id}`
+5. **Otherwise submit** - If no request covers the need, add one with `GET /requests?title=…&reason=…`
