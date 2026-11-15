@@ -12,7 +12,7 @@ MotorMetrics tracks Singapore's car market through registration statistics, Cert
 - **Ownership tools**: Additional Registration Fee (ARF) and Preferential Additional Registration Fee (PARF) calculators, alongside educational guides.
 - **Monthly market updates**: AI-generated posts combining registrations, COE, PQP and deregistrations once all datasets have a complete month.
 - **Content administration**: An integrated `/admin` interface with Google OAuth, blog editing, announcements and workflow controls.
-- **Developer access**: REST routes in the web application, a blog-management MCP server and a Fumadocs documentation site.
+- **Developer access**: REST routes in the web application, a blog-management MCP server and an API reference hosted on Docs7.
 
 ## Getting Started
 
@@ -84,7 +84,6 @@ See the [web README](apps/web/README.md#testing) for browser installation and E2
 ```text
 motormetrics/
 ├── apps/
-│   ├── docs/                 # Fumadocs documentation site
 │   ├── mcp/                  # @motormetrics/mcp blog-management server
 │   └── web/                  # Dashboards, admin, REST routes and workflows
 ├── packages/
@@ -94,9 +93,10 @@ motormetrics/
 │   ├── types/              # Shared TypeScript types
 │   └── utils/              # Shared utilities and Redis configuration
 └── docs/
+    ├── docs.json           # Docs7 site config and navigation
+    ├── api/                # API reference, built and hosted by Docs7
     ├── architecture/       # Architecture documentation
-    ├── diagrams/           # Mermaid diagram sources
-    └── product/            # Product proposals
+    └── diagrams/           # Mermaid diagram sources
 ```
 
 ## Technology
@@ -129,9 +129,8 @@ The web application's `vercel-build` applies pending database migrations before 
 - [AI package](packages/ai/README.md): Blog generation and embeddings.
 - [Database guidance](packages/database/AGENTS.md): Schema changes and migration workflow.
 - [Logos package](packages/logos/README.md): Logo storage and management.
-- [Documentation site](apps/docs/README.md): Fumadocs application.
+- [API reference](docs/api/): MDX pages built and hosted by Docs7; list new pages in [docs.json](docs/docs.json). Preview with `pnpm dlx @upstash/docs7 dev docs`.
 - [Architecture](docs/architecture/): System, database, infrastructure and workflows.
-- [Product proposals](docs/product/): Opportunity assessments and design proposals.
 
 ## License
 

@@ -8,11 +8,11 @@
     "groups": [
       {
         "group": "Getting Started",
-        "pages": ["index", "rate-limiting"]
+        "pages": ["api/index", "api/rate-limiting"]
       },
       {
         "group": "Endpoints",
-        "pages": ["cars", "coe", "deregistrations"]
+        "pages": ["api/cars", "api/coe", "api/deregistrations"]
       }
     ]
   }
