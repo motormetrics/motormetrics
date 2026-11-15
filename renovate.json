@@ -32,11 +32,6 @@
       "groupName": "HeroUI"
     },
     {
-      "description": "Group Fumadocs packages",
-      "matchPackageNames": ["fumadocs-*"],
-      "groupName": "Fumadocs"
-    },
-    {
       "description": "Group testing packages",
       "matchPackageNames": [
         "vitest",
