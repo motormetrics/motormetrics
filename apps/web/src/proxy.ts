@@ -125,6 +125,7 @@ export async function proxy(request: NextRequest) {
     const permission =
       session &&
       (await auth.api.userHasPermission({
+        headers: request.headers,
         body: { userId: session.user.id, permissions: { dashboard: ["view"] } },
       }));
 

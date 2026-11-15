@@ -10,6 +10,7 @@ export const getMaintenanceConfig = async (): Promise<MaintenanceConfig> => {
   const permission =
     session &&
     (await auth.api.userHasPermission({
+      headers: await headers(),
       body: { userId: session.user.id, permissions: { maintenance: ["read"] } },
     }));
 

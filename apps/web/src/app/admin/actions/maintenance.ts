@@ -14,6 +14,7 @@ export const updateMaintenanceConfig = async (
   const permission =
     session &&
     (await auth.api.userHasPermission({
+      headers: await headers(),
       body: {
         userId: session.user.id,
         permissions: { maintenance: ["update"] },
