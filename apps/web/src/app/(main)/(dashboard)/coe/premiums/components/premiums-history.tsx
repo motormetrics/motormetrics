@@ -77,7 +77,7 @@ export function PremiumsHistory({ searchParams }: PremiumsPageProps) {
         }
       />
       <SectionErrorBoundary title="Bidding history unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
           <HistoryRows searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -171,7 +171,7 @@ async function HistoryRows({ searchParams }: PremiumsPageProps) {
               <span
                 className={cn(
                   HISTORY_FIGURE,
-                  "text-muted-strong text-sm tabular-nums",
+                  "text-foreground text-sm tabular-nums",
                 )}
               >
                 {exercise.quota.toLocaleString("en-SG")}
@@ -179,7 +179,7 @@ async function HistoryRows({ searchParams }: PremiumsPageProps) {
               <span
                 className={cn(
                   HISTORY_FIGURE,
-                  "text-muted-strong text-sm tabular-nums",
+                  "text-foreground text-sm tabular-nums",
                 )}
               >
                 {exercise.bidsReceived.toLocaleString("en-SG")}

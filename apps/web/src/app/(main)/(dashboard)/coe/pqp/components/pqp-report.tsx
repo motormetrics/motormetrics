@@ -97,7 +97,7 @@ async function loadCategoryRates(): Promise<
 export async function PQPCalculator() {
   const { trendData } = await loadPqpData();
   return (
-    <Suspense fallback={<Skeleton className="h-96 w-full rounded-md" />}>
+    <Suspense fallback={<Skeleton className="h-96 w-full" />}>
       <RenewalCalculator rates={trendData} />
     </Suspense>
   );
@@ -122,7 +122,7 @@ export function PQPTrend({ searchParams }: PQPPageProps) {
         }
       />
       <SectionErrorBoundary title="PQP trend unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
           <TrendChart searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -186,7 +186,7 @@ export function PQPRates({ searchParams }: PQPPageProps) {
         title={<RatesTitle />}
       />
       <SectionErrorBoundary title="PQP rates unavailable">
-        <Suspense fallback={<Skeleton className="h-40 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-40 w-full" />}>
           <RatesTable searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -262,7 +262,7 @@ export function PQPCompare({ searchParams }: PQPPageProps) {
         title="PQP against the closing premium"
       />
       <SectionErrorBoundary title="Comparison unavailable">
-        <Suspense fallback={<Skeleton className="h-56 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-56 w-full" />}>
           <CompareBars searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -325,7 +325,7 @@ export function PQPMonths({ searchParams }: PQPPageProps) {
         title="Published PQP per category"
       />
       <SectionErrorBoundary title="Monthly rates unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
           <MonthRows searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -426,7 +426,7 @@ export function PQPTradeoffs() {
             key={label}
           >
             <dt className="w-44 shrink-0 font-semibold text-sm">{label}</dt>
-            <dd className="text-muted-strong text-sm">{note}</dd>
+            <dd className="text-foreground text-sm">{note}</dd>
           </div>
         ))}
       </dl>

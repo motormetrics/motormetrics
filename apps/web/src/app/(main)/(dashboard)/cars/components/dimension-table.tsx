@@ -21,13 +21,10 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
-import { type CSSProperties, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 
 type SortKey = "name" | "count" | "yoyChange";
 type SortDirection = "asc" | "desc";
-
-/** Ranks past this share the last chart colour rather than wrapping around. */
-const CHART_COLOURS = 6;
 
 /**
  * Rows shown before the reader asks for the rest. The full list runs to every
@@ -200,11 +197,6 @@ export function DimensionTable({
             aria-label={`${row.name} share of the largest`}
             className="min-w-0 flex-1"
             size="lg"
-            style={
-              {
-                "--progress-bar-fill": `var(--chart-${Math.min(CHART_COLOURS, row.rank)})`,
-              } as CSSProperties
-            }
             value={(row.count / largestCount) * 100}
           >
             <ProgressBar.Track>

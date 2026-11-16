@@ -47,7 +47,7 @@ export function PostHead({
         <ol className="flex flex-wrap items-center gap-2 text-muted text-sm">
           <li>
             <Link
-              className="text-muted no-underline transition-colors hover:text-accent-strong"
+              className="text-muted no-underline transition-colors hover:text-accent"
               href="/"
             >
               Home
@@ -58,7 +58,7 @@ export function PostHead({
           </li>
           <li>
             <Link
-              className="text-muted no-underline transition-colors hover:text-accent-strong"
+              className="text-muted no-underline transition-colors hover:text-accent"
               href="/blog"
             >
               Blog

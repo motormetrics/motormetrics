@@ -96,7 +96,7 @@ export function DeregistrationValue({
       </div>
       <div className="grid gap-6 lg:grid-cols-2 lg:items-end lg:gap-14">
         <div className="flex min-w-0 flex-col gap-2">
-          <span className="text-muted-strong text-sm">
+          <span className="text-foreground text-sm">
             <span className="font-semibold text-foreground">
               Estimated deregistration value
             </span>{" "}

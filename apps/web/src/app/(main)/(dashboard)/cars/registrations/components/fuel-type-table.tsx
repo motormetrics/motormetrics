@@ -4,7 +4,7 @@ import { cn, ProgressBar } from "@heroui/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { parseAsString, useQueryState } from "nuqs";
 import posthog from "posthog-js";
-import { type CSSProperties, useTransition } from "react";
+import { useTransition } from "react";
 
 export interface FuelTypeRow {
   /** Signed percentage change on the previous month. */
@@ -68,7 +68,7 @@ export function FuelTypeTable({
         <span className={YEAR_CELL}>{year} to date</span>
         <span className={CHANGE_CELL}>vs {previousMonthName}</span>
       </div>
-      {rows.map((row, index) => {
+      {rows.map((row) => {
         const isActive = row.name === selected;
         return (
           // A div row rather than a button: the share bar is a block-level
@@ -88,7 +88,7 @@ export function FuelTypeTable({
                 NAME_CELL,
                 "cursor-pointer text-left text-sm outline-none after:absolute after:inset-0 focus-visible:after:ring-2 focus-visible:after:ring-focus",
                 isActive
-                  ? "font-bold text-accent-strong"
+                  ? "font-bold text-accent"
                   : "font-medium text-foreground",
               )}
               onClick={() => {
@@ -112,27 +112,18 @@ export function FuelTypeTable({
               <ProgressBar
                 aria-label={`${row.name} against the largest fuel type`}
                 className="min-w-0 flex-1 max-md:hidden"
-                style={
-                  {
-                    "--progress-bar-fill":
-                      index === 0 ? "var(--chart-1)" : "var(--chart-3)",
-                  } as CSSProperties
-                }
                 value={(row.count / leadCount) * 100}
               >
                 <ProgressBar.Track>
                   <ProgressBar.Fill />
                 </ProgressBar.Track>
               </ProgressBar>
-              <span className="w-12 shrink-0 text-right text-muted-strong text-sm tabular-nums">
+              <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
                 {row.share.toFixed(1)}%
               </span>
             </span>
             <span
-              className={cn(
-                YEAR_CELL,
-                "text-muted-strong text-sm tabular-nums",
-              )}
+              className={cn(YEAR_CELL, "text-foreground text-sm tabular-nums")}
             >
               {formatCount(row.yearToDate)}
             </span>

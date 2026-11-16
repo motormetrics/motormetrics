@@ -1,5 +1,4 @@
-import { AppShell } from "@web/components/app-shell";
-import { SOCIAL_URLS } from "@web/config/socials";
+import { InsetVariant } from "@web/components/inset-variant";
 import { vi } from "vitest";
 import { page } from "vitest/browser";
 import { render } from "vitest-browser-react";
@@ -11,7 +10,7 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn() }),
 }));
 
-describe("AppShell", () => {
+describe("InsetVariant", () => {
   beforeEach(async () => {
     await page.viewport(1280, 800);
   });
@@ -23,7 +22,7 @@ describe("AppShell", () => {
   it("should mark the matching sidebar row as the current page", async () => {
     navigation.pathname = "/coe/pqp";
 
-    const screen = await render(<AppShell>Page</AppShell>);
+    const screen = await render(<InsetVariant>Page</InsetVariant>);
 
     await expect
       .element(screen.getByRole("row", { name: "PQP rates" }))
@@ -36,7 +35,7 @@ describe("AppShell", () => {
   it("should mark the deepest match, not its section overview", async () => {
     navigation.pathname = "/cars/makes/bmw";
 
-    const screen = await render(<AppShell>Page</AppShell>);
+    const screen = await render(<InsetVariant>Page</InsetVariant>);
 
     await expect
       .element(screen.getByRole("row", { name: "Makes" }))
@@ -44,13 +43,5 @@ describe("AppShell", () => {
     await expect
       .element(screen.getByRole("row", { name: "Cars overview" }))
       .not.toHaveAttribute("data-current", "true");
-  });
-
-  it("should link Get updates to Telegram", async () => {
-    const screen = await render(<AppShell>Page</AppShell>);
-
-    await expect
-      .element(screen.getByRole("link", { name: "Get updates" }))
-      .toHaveAttribute("href", SOCIAL_URLS.telegram);
   });
 });

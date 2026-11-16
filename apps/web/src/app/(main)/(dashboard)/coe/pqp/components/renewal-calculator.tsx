@@ -236,7 +236,7 @@ export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
                 >
                   {derived.map((fact) => (
                     <li
-                      className="flex items-start gap-2 text-muted-strong text-sm"
+                      className="flex items-start gap-2 text-foreground text-sm"
                       key={fact}
                     >
                       <Check

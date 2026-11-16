@@ -6,9 +6,8 @@ import { LineChart } from "@heroui-pro/react/line-chart";
 import { PieChart } from "@heroui-pro/react/pie-chart";
 
 /**
- * The chart palette caps at six series (see the note in `globals.css`), and the
- * same note is why every chart here also labels its series in text: colour is
- * associative, never load-bearing.
+ * HeroUI Pro's five chart tokens, cycled. Every chart here also labels its
+ * series in text: colour is associative, never load-bearing.
  */
 const CHART_COLORS = [
   "var(--chart-1)",
@@ -16,7 +15,6 @@ const CHART_COLORS = [
   "var(--chart-3)",
   "var(--chart-4)",
   "var(--chart-5)",
-  "var(--chart-6)",
 ];
 
 export type PostChartType = "area" | "bar" | "donut" | "hbar" | "line";

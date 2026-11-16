@@ -18,8 +18,8 @@ export const SERIES_MONTHS = 12;
  * shorter label the legend uses. Authored copy keyed by the value exactly as
  * the deregistration feed records it.
  *
- * Taxis and exempt vehicles take neutral tones rather than more slate steps,
- * as in the comp, so the four COE categories read as the main series.
+ * HeroUI has five chart steps, so the sixth series, exempt vehicles, takes a
+ * neutral tone.
  */
 export const CATEGORIES = [
   {
@@ -41,13 +41,13 @@ export const CATEGORIES = [
     name: "Category C",
   },
   {
-    color: "var(--chart-sand)",
+    color: "var(--chart-2)",
     description: "Motorcycles",
     label: "Category D",
     name: "Category D",
   },
   {
-    color: "var(--subtle)",
+    color: "var(--chart-4)",
     description: "Taxis, which draw on their own quota",
     label: "Taxis",
     name: "Taxis",
@@ -123,7 +123,7 @@ export async function loadDeregistrationsReport(
 
       return {
         category,
-        color: details?.color ?? "var(--chart-6)",
+        color: details?.color ?? "var(--muted)",
         count,
         description: details?.description ?? "—",
         label: details?.label ?? category,

@@ -36,7 +36,7 @@ export function GuideHead({ guide }: { guide: Guide }) {
               {headings.map(({ id, title }) => (
                 <li key={id}>
                   <Link
-                    className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+                    className="font-semibold text-accent no-underline transition-colors hover:text-accent"
                     href={`#${id}` as Route}
                   >
                     {title}
@@ -52,7 +52,7 @@ export function GuideHead({ guide }: { guide: Guide }) {
         <ol className="flex flex-wrap items-center gap-2 text-muted text-sm">
           <li>
             <Link
-              className="text-muted no-underline transition-colors hover:text-accent-strong"
+              className="text-muted no-underline transition-colors hover:text-accent"
               href="/"
             >
               Home
@@ -63,7 +63,7 @@ export function GuideHead({ guide }: { guide: Guide }) {
           </li>
           <li>
             <Link
-              className="text-muted no-underline transition-colors hover:text-accent-strong"
+              className="text-muted no-underline transition-colors hover:text-accent"
               href="/learn"
             >
               Learn

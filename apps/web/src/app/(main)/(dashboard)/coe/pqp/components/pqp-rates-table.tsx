@@ -99,7 +99,7 @@ export function PQPRatesTable({
                 className={cn(
                   "whitespace-nowrap text-base",
                   isActive
-                    ? "font-bold text-accent-strong"
+                    ? "font-bold text-accent"
                     : "font-semibold text-foreground",
                 )}
               >
@@ -124,7 +124,7 @@ export function PQPRatesTable({
               <span
                 className={cn(
                   SECONDARY_CELL,
-                  "text-muted-strong text-sm tabular-nums",
+                  "text-foreground text-sm tabular-nums",
                 )}
               >
                 {formatCurrency(row.tenYear / 2)}
@@ -132,7 +132,7 @@ export function PQPRatesTable({
               <span
                 className={cn(
                   SECONDARY_CELL,
-                  "text-muted-strong text-sm tabular-nums",
+                  "text-foreground text-sm tabular-nums",
                 )}
               >
                 {formatCurrency(row.latestPremium)}

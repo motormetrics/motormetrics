@@ -129,17 +129,14 @@ export function RenewalResults({
 
   return (
     <div aria-live="polite" className="flex flex-col gap-6">
-      <Surface
-        className="flex flex-col gap-5 rounded-3xl bg-foreground p-6"
-        variant="transparent"
-      >
+      <Surface className="flex flex-col gap-5 p-6" variant="transparent">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div className="flex flex-col gap-1">
-            <span className="text-accent-foreground/85 text-sm">
+            <span className="text-muted text-sm">
               Your PQP · {category.replace("Category", "Cat")} ·{" "}
               {monthName(pqp.month, "MMMM yyyy")}
             </span>
-            <span className="font-extrabold text-4xl text-accent-foreground tabular-nums tracking-tight">
+            <span className="font-extrabold text-4xl tabular-nums tracking-tight">
               {formatCurrency(pqp.rate)}
             </span>
           </div>
@@ -150,7 +147,7 @@ export function RenewalResults({
           </Chip>
         </div>
         <figure className="flex flex-col gap-2">
-          <figcaption className="text-accent-foreground/85 text-sm">
+          <figcaption className="text-muted text-sm">
             Which PQP you pay depends on when you renew
           </figcaption>
           <div
@@ -158,8 +155,8 @@ export function RenewalResults({
             className="grid h-2 grid-cols-3 gap-1"
             role="img"
           >
-            <span className="rounded-full bg-accent-foreground/30" />
-            <span className="rounded-full bg-accent-on-dark" />
+            <span className="rounded-full bg-default" />
+            <span className="rounded-full bg-accent" />
             <span className="rounded-full bg-warning" />
           </div>
           <div className="grid grid-cols-3 gap-1 text-xs">
@@ -172,10 +169,8 @@ export function RenewalResults({
               [`Late, to ${lateLabel}`, "+ $50–$250 fee"],
             ].map(([when, what]) => (
               <span className="flex flex-col" key={when}>
-                <span className="font-semibold text-accent-foreground">
-                  {when}
-                </span>
-                <span className="text-accent-foreground/70">{what}</span>
+                <span className="font-semibold">{when}</span>
+                <span className="text-muted">{what}</span>
               </span>
             ))}
           </div>
@@ -270,7 +265,7 @@ export function RenewalResults({
             </BarChart>
             <ul
               aria-label="Legend"
-              className="flex flex-wrap gap-4 text-muted-strong text-sm"
+              className="flex flex-wrap gap-4 text-foreground text-sm"
             >
               {PARTS.map(({ key, label, swatch }) => (
                 <li className="inline-flex items-center gap-1.5" key={key}>
@@ -334,7 +329,7 @@ export function RenewalResults({
                 : `PARF rebate, ${Math.round(rebate.rate * 100)}% of ARF${rebate.capped ? `, capped at ${formatCurrency(rebate.cap)}` : ""}`}
             </span>
           </div>
-          <span className="text-muted-strong text-sm">By {expiryLabel}</span>
+          <span className="text-foreground text-sm">By {expiryLabel}</span>
           <SectionLink className="ml-0" href="/cars/arf">
             Compare a new car
           </SectionLink>
@@ -348,7 +343,7 @@ export function RenewalResults({
         <span className="font-semibold text-sm">
           These are renewal costs only.
         </span>
-        <ul className="flex list-disc flex-col gap-1 pl-5 text-muted-strong text-sm">
+        <ul className="flex list-disc flex-col gap-1 pl-5 text-foreground text-sm">
           <li>
             Road tax follows LTA's formula for your fuel type, with the 10% to
             50% surcharge for cars over 10 years old applied to road tax only.

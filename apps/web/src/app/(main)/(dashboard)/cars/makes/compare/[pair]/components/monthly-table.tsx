@@ -48,9 +48,7 @@ export function MonthlyTable({
                 >
                   {row.b}
                 </Table.Cell>
-                <Table.Cell className="text-right text-muted">
-                  {row.aheadBy}
-                </Table.Cell>
+                <Table.Cell className="text-right">{row.aheadBy}</Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>

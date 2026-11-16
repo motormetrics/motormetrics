@@ -110,6 +110,6 @@ describe("ClassesTable", () => {
 
     const fall = screen.getByText("−7.0%");
     await expect.element(fall).toBeInTheDocument();
-    await expect.element(fall).toHaveClass("text-muted-strong");
+    await expect.element(fall).toHaveClass("text-foreground");
   });
 });

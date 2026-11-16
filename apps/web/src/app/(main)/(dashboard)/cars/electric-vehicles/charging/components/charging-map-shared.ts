@@ -10,10 +10,10 @@ export const readTokens = () => {
   return {
     available: read("--success", "#57b45f"),
     full: read("--warning", "#e9a63c"),
-    offline: read("--subtle", "#5f6b71"),
+    offline: read("--muted", "#5f6b71"),
     cluster: read("--accent", "#4e7c9b"),
-    clusterStrong: read("--accent-strong", "#33586f"),
-    clusterDeep: read("--accent-deep", "#16323f"),
+    clusterStrong: read("--chart-2", "#33586f"),
+    clusterDeep: read("--chart-1", "#16323f"),
     busy: read("--danger", "#e96e6e"),
   };
 };

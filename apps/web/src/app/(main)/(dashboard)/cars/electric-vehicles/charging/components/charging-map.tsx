@@ -37,10 +37,10 @@ export function ChargingMap({
     // (`px-4 sm:px-6 lg:px-9`). Remove these margins when the site moves to
     // the planned full-width layout.
     <div className="-mx-4 scroll-mt-6 sm:-mx-6 lg:-mx-9" id={MAP_ANCHOR_ID}>
-      {/* <Card className="gap-4 rounded-4xl p-7"> */}
+      {/* <Card className="gap-4 p-7"> */}
       <ChargingMapView
         liveStatus={
-          <Suspense fallback={<Skeleton className="h-16 w-56 rounded-2xl" />}>
+          <Suspense fallback={<Skeleton className="h-16 w-56" />}>
             <MapLiveChip searchParams={searchParams} />
           </Suspense>
         }

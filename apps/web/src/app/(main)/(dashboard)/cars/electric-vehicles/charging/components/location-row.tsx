@@ -47,7 +47,7 @@ export function LocationRow({
         }}
         type="button"
       >
-        <span className="flex size-[26px] shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent-strong text-xs tabular-nums">
+        <span className="flex size-[26px] shrink-0 items-center justify-center rounded-full bg-accent/15 font-extrabold text-accent text-xs tabular-nums">
           {index + 1}
         </span>
         <div className="flex min-w-0 flex-col">
@@ -69,7 +69,7 @@ export function LocationRow({
         </span>
         {/* The row's click opens the site on the map; say so, since a hover
             tint alone does not show it on touch screens. */}
-        <span className="flex shrink-0 items-center gap-0.5 font-semibold text-accent-strong text-xs">
+        <span className="flex shrink-0 items-center gap-0.5 font-semibold text-accent text-xs">
           Map
           <ChevronRight aria-hidden className="size-4" />
         </span>

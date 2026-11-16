@@ -193,7 +193,7 @@ async function PopulationFigures() {
 
   if (!population) {
     return (
-      <EmptyState className="rounded-3xl bg-default/50" size="lg">
+      <EmptyState size="lg">
         <EmptyState.Header>
           <EmptyState.Media variant="icon">
             <BarChart3 />

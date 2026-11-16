@@ -3,18 +3,17 @@ import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import type { TypeCount } from "@web/queries/cars/type-detail";
 
 /**
- * The comp's fuel colours: slate for electric and hybrid, sand for petrol.
- * Any other LTA fuel type takes the palest slate step.
+ * One HeroUI chart step per fuel type; any other LTA fuel type is muted.
  */
 const FUEL_COLOURS: Record<string, string> = {
   Electric: "var(--chart-1)",
-  Petrol: "var(--chart-sand)",
+  Petrol: "var(--chart-2)",
   "Petrol-Electric": "var(--chart-3)",
   "Petrol-Electric (Plug-In)": "var(--chart-4)",
 };
 
 function fuelColour(fuelType: string): string {
-  return FUEL_COLOURS[fuelType] ?? "var(--chart-6)";
+  return FUEL_COLOURS[fuelType] ?? "var(--muted)";
 }
 
 /** The vehicle type's registrations split by fuel type. */

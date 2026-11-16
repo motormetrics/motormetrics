@@ -46,20 +46,20 @@ export const loadVehicleTypesSearchParams = createLoader({
 });
 
 /**
- * The comp's colour for each LTA vehicle type, shared by the mix bar, the
- * trend and the tables; anything else takes the lightest ramp step.
+ * A HeroUI chart step for each LTA vehicle type, shared by the mix bar, the
+ * trend and the tables. There are five steps, so hatchbacks and anything else
+ * take the neutral muted tone.
  */
 const VEHICLE_COLOURS: Record<string, string> = {
   "Coupe/Convertible": "var(--chart-5)",
   Hatchback: "var(--muted)",
   "Multi-purpose Vehicle": "var(--chart-3)",
-  Sedan: "var(--chart-sand)",
+  Sedan: "var(--chart-2)",
   "Sports Utility Vehicle": "var(--chart-1)",
-  // The comp's dark sand has no token; the mid slate step stands in.
   "Station-wagon": "var(--chart-4)",
 };
 
-const FALLBACK_COLOUR = "var(--chart-6)";
+const FALLBACK_COLOUR = "var(--muted)";
 
 const vehicleColour = (name: string): string =>
   VEHICLE_COLOURS[name] ?? FALLBACK_COLOUR;
@@ -253,11 +253,11 @@ export async function VehicleTypesReport({
             eyebrow="Method"
             title="How LTA classifies vehicle types"
           />
-          <Typography.Paragraph className="text-muted-strong" size="sm">
+          <Typography.Paragraph size="sm">
             LTA records the vehicle type at registration, so every car counts
             once, under the class on its registration record.
           </Typography.Paragraph>
-          <Typography.Paragraph className="text-muted-strong" size="sm">
+          <Typography.Paragraph size="sm">
             Vehicle type does not determine COE category. Engine capacity and
             power output do.
           </Typography.Paragraph>

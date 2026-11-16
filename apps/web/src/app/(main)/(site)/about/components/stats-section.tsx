@@ -46,7 +46,7 @@ export function StatsSection() {
         <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm">
           {sections.map(({ href, label }) => (
             <li key={href}>
-              <a className="font-medium text-accent-strong" href={href}>
+              <a className="font-medium text-accent" href={href}>
                 {label}
               </a>
             </li>

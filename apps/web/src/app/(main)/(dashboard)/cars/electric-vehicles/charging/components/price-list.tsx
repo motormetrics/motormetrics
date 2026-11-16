@@ -35,7 +35,7 @@ interface PriceListProps {
  */
 export function PriceList({ searchParams }: PriceListProps) {
   return (
-    <Card className="gap-4 rounded-4xl p-7">
+    <Card className="gap-4 p-7">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Suspense fallback={<Skeleton className="h-8 w-72" />}>
           <PriceHeading searchParams={searchParams} />

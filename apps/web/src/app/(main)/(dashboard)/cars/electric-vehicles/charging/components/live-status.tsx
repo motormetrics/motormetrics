@@ -65,7 +65,7 @@ export async function LiveStatus({ district }: { district: string }) {
 
   return (
     <HeroCard>
-      <span className="w-fit rounded-full bg-accent-foreground/20 px-4 py-2 font-bold text-sm">
+      <span className="w-fit rounded-full bg-default px-4 py-2 font-bold text-sm">
         Live · {formatObservedAt(summary.observedAt)} SGT
       </span>
 
@@ -73,7 +73,7 @@ export async function LiveStatus({ district }: { district: string }) {
         <span className="font-extrabold text-6xl tabular-nums tracking-tight">
           {inUsePercent.toFixed(0)}%
         </span>
-        <span className="rounded-full bg-accent-foreground/20 px-4 py-2 font-bold text-sm tabular-nums">
+        <span className="rounded-full bg-default px-4 py-2 font-bold text-sm tabular-nums">
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
@@ -83,11 +83,11 @@ export async function LiveStatus({ district }: { district: string }) {
         </span>
       </div>
 
-      <Typography.Paragraph className="text-accent-foreground/85">
+      <Typography.Paragraph>
         of public connectors in {scope} in use right now
       </Typography.Paragraph>
 
-      <Typography.Paragraph size="sm" className="text-accent-foreground/70">
+      <Typography.Paragraph size="sm">
         <NumberValue
           locale="en-SG"
           maximumFractionDigits={0}

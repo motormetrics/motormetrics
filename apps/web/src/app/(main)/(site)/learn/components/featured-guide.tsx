@@ -71,7 +71,7 @@ export function FeaturedGuide() {
           </span>
           {guide.relatedLinks.map(({ href, label }) => (
             <Link
-              className="border-separator border-t py-2.5 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+              className="border-separator border-t py-2.5 font-semibold text-accent text-sm no-underline transition-colors hover:text-accent"
               href={href as Route}
               key={href}
             >

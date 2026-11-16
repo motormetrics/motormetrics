@@ -75,7 +75,7 @@ export function PremiumsAllCategories({ searchParams }: PremiumsPageProps) {
         }
       />
       <SectionErrorBoundary title="Category results unavailable">
-        <Suspense fallback={<Skeleton className="h-72 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-72 w-full" />}>
           <AllCategoriesTable searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>

@@ -58,7 +58,7 @@ export function MonthTable({
                 ROW,
                 "border-separator border-b py-2.5",
                 isSelected
-                  ? "border-l-2 border-l-accent-strong bg-accent-soft"
+                  ? "border-l-2 border-l-accent bg-accent-soft"
                   : "hover:bg-surface-secondary",
               )}
               key={month}
@@ -67,7 +67,7 @@ export function MonthTable({
                 className={cn(
                   CELL.month,
                   "whitespace-nowrap font-semibold text-sm",
-                  isSelected && "text-accent-strong",
+                  isSelected && "text-accent",
                 )}
               >
                 {formatMonthShortLabel(month)}
@@ -78,10 +78,7 @@ export function MonthTable({
                 {count.toLocaleString("en-SG")}
               </span>
               <span
-                className={cn(
-                  CELL.all,
-                  "text-muted-strong text-sm tabular-nums",
-                )}
+                className={cn(CELL.all, "text-foreground text-sm tabular-nums")}
               >
                 {total.toLocaleString("en-SG")}
               </span>
@@ -97,7 +94,7 @@ export function MonthTable({
                     }}
                   />
                 </span>
-                <span className="w-12 shrink-0 text-right text-muted-strong text-sm tabular-nums">
+                <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
                   {share.toFixed(1)}%
                 </span>
               </span>

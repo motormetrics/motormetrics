@@ -88,7 +88,7 @@ export function PqpTilesView({
               <span className="font-semibold text-xl tabular-nums">
                 {formatCurrency(pqp.rate)}
               </span>
-              <span className="text-muted-strong text-xs tabular-nums">
+              <span className="text-foreground text-xs tabular-nums">
                 {pqp.change !== undefined && previousMonth
                   ? `${formatPercentChange(pqp.change)} vs ${formatMonthName(previousMonth)} · `
                   : ""}

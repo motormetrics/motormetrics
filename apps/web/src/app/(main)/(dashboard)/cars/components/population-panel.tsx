@@ -66,7 +66,7 @@ export async function PopulationPanel() {
           {changeRatio !== null && previous ? (
             <>
               {" · "}
-              <span className="text-muted-strong tabular-nums">
+              <span className="text-foreground tabular-nums">
                 {changeRatio < 0 ? "−" : "+"}
                 <NumberValue
                   maximumFractionDigits={1}
@@ -117,7 +117,7 @@ export async function PopulationPanel() {
       </div>
       <SourceNote>
         Share of all vehicles by fuel type.{" "}
-        <Link className="text-accent-strong" href="/cars/annual">
+        <Link className="text-accent" href="/cars/annual">
           Population data →
         </Link>
       </SourceNote>

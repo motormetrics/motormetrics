@@ -70,7 +70,7 @@ const FUEL_SERIES: (FuelMixSeries & { name: string })[] = [
     name: "Petrol-Electric (Plug-In)",
   },
   {
-    color: "var(--chart-sand)",
+    color: "var(--chart-2)",
     key: "petrol",
     label: "Petrol",
     name: "Petrol",
@@ -152,7 +152,7 @@ export async function FuelMixFigure() {
           </span>
         }
       />
-      <ul className="flex flex-wrap gap-x-5 gap-y-2 text-muted-strong text-xs">
+      <ul className="flex flex-wrap gap-x-5 gap-y-2 text-foreground text-xs">
         {FUEL_SERIES.map(({ color, key, label }) => (
           <li className="inline-flex items-center gap-1.5" key={key}>
             <span
@@ -363,7 +363,7 @@ export async function RoadFigure() {
                     style={{ width: `${(row.count / peak) * 100}%` }}
                   />
                 </span>
-                <span className="text-right text-muted-strong tabular-nums">
+                <span className="text-right text-foreground tabular-nums">
                   <span className="font-semibold text-foreground">
                     {formatCount(row.count)}
                   </span>

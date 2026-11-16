@@ -48,7 +48,7 @@ export function KeyTerms({ guide }: { guide: Guide }) {
                   <dt className="font-semibold text-sm">
                     {guideSlugs.includes(slug) ? (
                       <Link
-                        className="text-accent-strong no-underline transition-colors hover:text-accent-deep"
+                        className="text-accent no-underline transition-colors hover:text-accent"
                         href={`/learn/${slug}`}
                       >
                         {term} →
@@ -58,10 +58,7 @@ export function KeyTerms({ guide }: { guide: Guide }) {
                     )}
                   </dt>
                   <dd>
-                    <Typography.Paragraph
-                      className="text-muted-strong leading-normal"
-                      size="sm"
-                    >
+                    <Typography.Paragraph className="leading-normal" size="sm">
                       {definition}
                     </Typography.Paragraph>
                   </dd>
@@ -84,7 +81,7 @@ export function KeyTerms({ guide }: { guide: Guide }) {
             {guide.relatedLinks.map(({ href, label }) => (
               <li key={href}>
                 <Link
-                  className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+                  className="font-semibold text-accent no-underline transition-colors hover:text-accent"
                   href={href as Route}
                 >
                   {label} →

@@ -90,7 +90,7 @@ export function MaintenanceForm({ initialConfig }: MaintenanceFormProps) {
                 color={isMaintenanceEnabled ? "warning" : "success"}
                 className={
                   isMaintenanceEnabled
-                    ? "mt-2 bg-orange-50 text-orange-700"
+                    ? "mt-2"
                     : "mt-2 bg-green-50 text-green-700"
                 }
               >

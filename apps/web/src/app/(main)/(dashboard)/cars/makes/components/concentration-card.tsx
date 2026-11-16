@@ -44,7 +44,7 @@ async function loadConcentration(searchParams: Promise<SearchParams>) {
   }));
   if (rest > 0) {
     segments.push({
-      color: "var(--chart-6)",
+      color: "var(--muted)",
       label: "All other makes",
       value: rest,
     });

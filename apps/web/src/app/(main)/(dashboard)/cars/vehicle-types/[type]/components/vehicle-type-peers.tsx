@@ -43,7 +43,7 @@ export function VehicleTypePeers({
               <span
                 className={cn(
                   "min-w-0 flex-1 truncate text-sm md:w-36 md:flex-none",
-                  isSelected && "font-semibold text-accent-strong",
+                  isSelected && "font-semibold text-accent",
                 )}
               >
                 {formatVehicleType(peer.name)}

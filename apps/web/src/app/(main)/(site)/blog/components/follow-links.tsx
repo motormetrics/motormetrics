@@ -69,7 +69,7 @@ export function FollowLinks({ post }: { post: SelectPost }) {
         {links.map(({ href, label }) => (
           <li key={href}>
             <Link
-              className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+              className="font-semibold text-accent no-underline transition-colors hover:text-accent"
               href={href}
             >
               {label} →

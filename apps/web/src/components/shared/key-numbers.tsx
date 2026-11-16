@@ -102,7 +102,7 @@ export function KeysAside({
           {jump.map((item) => (
             <li key={item.label}>
               <a
-                className="font-medium text-accent-strong no-underline transition-colors hover:text-accent-deep"
+                className="font-medium text-accent no-underline transition-colors hover:text-accent"
                 href={item.href}
               >
                 {item.label}

@@ -106,16 +106,16 @@ export default function ARFCalculatorPage() {
           eyebrow="Before you rely on it"
           title="What the figures assume"
         />
-        <Typography.Paragraph className="max-w-prose text-muted-strong">
+        <Typography.Paragraph className="max-w-prose">
           Figures are for illustration only and are before any VES or EEAI
           rebate or surcharge. LTA charges the ARF on the car&apos;s OMV, band
           by band, at the rates in force when its COE was obtained. The ARF you
           pay is what{" "}
-          <Link className="font-semibold text-accent-strong" href="/cars/parf">
+          <Link className="font-semibold text-accent" href="/cars/parf">
             your PARF rebate
           </Link>{" "}
           is worked out from, and the{" "}
-          <Link className="font-semibold text-accent-strong" href="/learn/arf">
+          <Link className="font-semibold text-accent" href="/learn/arf">
             ARF guide
           </Link>{" "}
           explains how it fits into the price of a car.

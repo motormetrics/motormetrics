@@ -22,43 +22,31 @@ export async function RecentChanges() {
   const { newLocations, priceChanges } = await getEvChargingRecentChanges();
 
   return (
-    <Surface
-      className="flex flex-col gap-3 rounded-4xl bg-foreground p-7"
-      variant="transparent"
-    >
+    <Surface className="flex flex-col gap-3 p-7" variant="transparent">
       <div className="flex items-center gap-2.5">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent-on-dark/20 text-accent-on-dark">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-default">
           <Sparkles className="size-5" />
         </span>
-        <Typography.Paragraph className="text-accent-foreground/85">
-          This week
-        </Typography.Paragraph>
+        <Typography.Paragraph>This week</Typography.Paragraph>
       </div>
 
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-3">
-          <Typography.Paragraph
-            size="sm"
-            className="text-accent-foreground"
-            weight="bold"
-          >
+          <Typography.Paragraph size="sm" weight="bold">
             New chargers
           </Typography.Paragraph>
           {newLocations.length === 0 ? (
-            <Typography.Paragraph
-              size="sm"
-              className="text-accent-foreground/60"
-            >
+            <Typography.Paragraph size="sm">
               No new chargers spotted this week.
             </Typography.Paragraph>
           ) : (
             <ul className="flex flex-col gap-2.5">
               {newLocations.slice(0, LIMIT).map((location) => (
                 <li className="flex flex-col" key={location.locationId}>
-                  <span className="truncate font-bold text-accent-foreground text-sm">
+                  <span className="truncate font-bold text-sm">
                     {siteTitle(location)}
                   </span>
-                  <span className="text-accent-foreground/60 text-xs">
+                  <span className="text-muted text-xs">
                     {[
                       describeConnectors(location),
                       districtForPostalCode(location.postalCode)?.name,
@@ -73,18 +61,11 @@ export async function RecentChanges() {
           )}
         </div>
         <div className="flex flex-col gap-3">
-          <Typography.Paragraph
-            size="sm"
-            className="text-accent-foreground"
-            weight="bold"
-          >
+          <Typography.Paragraph size="sm" weight="bold">
             Price changes
           </Typography.Paragraph>
           {priceChanges.length === 0 ? (
-            <Typography.Paragraph
-              size="sm"
-              className="text-accent-foreground/60"
-            >
+            <Typography.Paragraph size="sm">
               No price changes spotted this week.
             </Typography.Paragraph>
           ) : (
@@ -94,10 +75,10 @@ export async function RecentChanges() {
                   className="flex flex-col"
                   key={`${change.locationId}-${change.previousValue}-${change.value}`}
                 >
-                  <span className="truncate font-bold text-accent-foreground text-sm">
+                  <span className="truncate font-bold text-sm">
                     {siteTitle(change)}
                   </span>
-                  <span className="text-accent-foreground/60 text-xs tabular-nums">
+                  <span className="text-muted text-xs tabular-nums">
                     {change.previousValue ?? "—"} → {change.value} ·{" "}
                     {formatDay(change.observedAt)}
                   </span>

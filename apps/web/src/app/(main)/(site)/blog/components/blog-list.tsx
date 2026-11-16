@@ -110,7 +110,7 @@ export function BlogList({
         <Typography.Paragraph color="muted" size="sm">
           {hint}{" "}
           <Link
-            className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+            className="font-semibold text-accent no-underline transition-colors hover:text-accent"
             href="/learn"
           >
             Open Guides
@@ -119,10 +119,7 @@ export function BlogList({
       ) : null}
 
       {count === 0 ? (
-        <Typography.Paragraph
-          className="border-border border-t border-b border-b-separator py-4"
-          color="muted"
-        >
+        <Typography.Paragraph className="py-4" color="muted">
           {query
             ? `No posts match “${query}”.`
             : "No posts under this topic yet."}

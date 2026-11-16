@@ -36,8 +36,8 @@ async function PeerRows({ make, report }: MakeSectionProps) {
             className={cn(
               "truncate text-sm no-underline",
               isCurrent
-                ? "font-semibold text-accent-strong"
-                : "font-medium text-foreground hover:text-accent-strong",
+                ? "font-semibold text-accent"
+                : "font-medium text-foreground hover:text-accent",
             )}
             href={`/cars/makes/${slug}`}
           >

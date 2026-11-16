@@ -67,7 +67,7 @@ export function MakeTable({
       <button
         className={cn(
           "max-w-full cursor-pointer truncate font-semibold",
-          isActive && "text-accent-strong",
+          isActive && "text-accent",
         )}
         onClick={() => sortBy(key)}
         type="button"
@@ -116,9 +116,7 @@ export function MakeTable({
               className={cn(
                 CELL.rank,
                 "text-sm tabular-nums",
-                row.rank <= 3
-                  ? "font-semibold text-accent-strong"
-                  : "text-muted",
+                row.rank <= 3 ? "font-semibold text-accent" : "text-muted",
               )}
             >
               {String(row.rank).padStart(2, "0")}
@@ -126,7 +124,7 @@ export function MakeTable({
             <span className={cn(CELL.make, "flex items-center gap-2.5")}>
               <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="sm" />
               <Link
-                className="truncate font-medium text-foreground text-sm hover:text-accent-strong"
+                className="truncate font-medium text-foreground text-sm hover:text-accent"
                 href={`/cars/makes/${slugify(row.make)}`}
               >
                 {row.make}
@@ -148,7 +146,7 @@ export function MakeTable({
                   }}
                 />
               </span>
-              <span className="w-12 shrink-0 text-right text-muted-strong text-sm tabular-nums">
+              <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
                 {((row.count / (total || 1)) * 100).toFixed(1)}%
               </span>
             </span>

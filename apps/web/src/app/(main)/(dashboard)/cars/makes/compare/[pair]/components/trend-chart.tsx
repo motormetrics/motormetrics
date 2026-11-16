@@ -23,7 +23,7 @@ const DASH = "6 4";
 /** Make A solid, make B dashed, so the two never rest on colour alone. */
 const SERIES_STYLE = {
   a: { color: "var(--chart-1)", dash: undefined },
-  b: { color: "var(--chart-sand)", dash: DASH },
+  b: { color: "var(--chart-2)", dash: DASH },
 } as const;
 
 /**

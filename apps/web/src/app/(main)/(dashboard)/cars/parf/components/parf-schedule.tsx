@@ -96,7 +96,7 @@ export function ParfSchedule({
                 className={cn(
                   "min-w-0 flex-1 text-sm",
                   isActive
-                    ? "font-bold text-accent-strong"
+                    ? "font-bold text-accent"
                     : "font-medium text-foreground",
                 )}
               >
@@ -118,7 +118,7 @@ export function ParfSchedule({
               <span
                 className={cn(
                   CHANGE_CELL,
-                  "text-muted-strong text-sm tabular-nums",
+                  "text-foreground text-sm tabular-nums",
                 )}
               >
                 {change === 0
@@ -149,7 +149,7 @@ export function ParfSchedule({
               <span
                 className={cn(
                   REBATE_CELL,
-                  "font-semibold text-accent-strong text-sm tabular-nums",
+                  "font-semibold text-accent text-sm tabular-nums",
                 )}
               >
                 {formatCurrency(Math.min(arf * newRate, NEW_CAP))}

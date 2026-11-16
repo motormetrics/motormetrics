@@ -45,7 +45,7 @@ async function Leaderboard({ selection }: SelectionProps) {
               {index + 1}
             </span>
             <Link
-              className="flex min-w-0 flex-1 items-center gap-2.5 text-inherit no-underline transition-colors hover:text-accent-strong md:w-36 md:flex-none"
+              className="flex min-w-0 flex-1 items-center gap-2.5 text-inherit no-underline transition-colors hover:text-accent md:w-36 md:flex-none"
               href={`/cars/makes/${slug}`}
             >
               <MakeAvatar

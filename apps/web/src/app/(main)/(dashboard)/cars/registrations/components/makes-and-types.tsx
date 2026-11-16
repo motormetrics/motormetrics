@@ -1,7 +1,6 @@
 import { cn, ProgressBar } from "@heroui/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import type { CSSProperties } from "react";
 
 const HEADER = "border-border border-b pb-2 font-semibold text-muted text-xs";
 const formatCount = (value: number): string => value.toLocaleString("en-SG");
@@ -13,14 +12,12 @@ const formatCount = (value: number): string => value.toLocaleString("en-SG");
 function ShareCell({
   barLabel,
   className,
-  isLeader,
   scaled,
   share,
 }: {
   /** Accessible name for the bar. */
   barLabel: string;
   className: string;
-  isLeader: boolean;
   /** Percentage of the largest row, which fills the track. */
   scaled: number;
   /** Percentage of the whole, printed beside the bar. */
@@ -31,20 +28,13 @@ function ShareCell({
       <ProgressBar
         aria-label={barLabel}
         className="min-w-0 flex-1 max-md:hidden"
-        style={
-          {
-            "--progress-bar-fill": isLeader
-              ? "var(--chart-1)"
-              : "var(--chart-3)",
-          } as CSSProperties
-        }
         value={scaled}
       >
         <ProgressBar.Track>
           <ProgressBar.Fill />
         </ProgressBar.Track>
       </ProgressBar>
-      <span className="w-12 shrink-0 text-right text-muted-strong text-sm tabular-nums">
+      <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
         {share.toFixed(1)}%
       </span>
     </span>
@@ -87,7 +77,7 @@ export function TopMakesTable({
               className={cn(
                 RANK_CELL,
                 "text-sm tabular-nums",
-                index < 3 ? "font-semibold text-accent-strong" : "text-muted",
+                index < 3 ? "font-semibold text-accent" : "text-muted",
               )}
             >
               {index + 1}
@@ -107,7 +97,6 @@ export function TopMakesTable({
             <ShareCell
               barLabel={`${item.make} against the leader`}
               className={MAKE_SHARE_CELL}
-              isLeader={index === 0}
               scaled={(item.value / leader) * 100}
               share={(item.value / (total || 1)) * 100}
             />
@@ -145,7 +134,7 @@ export function VehicleTypeTable({
         <span className={cn(TYPE_SHARE_CELL, "text-right")}>Share</span>
         <span className={TYPE_CHANGE_CELL}>vs {previousYear}</span>
       </div>
-      {rows.map((row, index) => (
+      {rows.map((row) => (
         <div
           className={cn(TYPE_ROW, "border-separator border-b py-2.5")}
           key={row.name}
@@ -159,7 +148,6 @@ export function VehicleTypeTable({
           <ShareCell
             barLabel={`${row.name} against the largest type`}
             className={TYPE_SHARE_CELL}
-            isLeader={index === 0}
             scaled={(row.count / largest) * 100}
             share={(row.count / (total || 1)) * 100}
           />

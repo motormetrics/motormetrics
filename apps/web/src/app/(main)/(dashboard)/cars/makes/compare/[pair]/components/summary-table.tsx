@@ -87,9 +87,7 @@ export function SummaryTable({
                 >
                   {row.b}
                 </Table.Cell>
-                <Table.Cell className="text-right text-muted">
-                  {row.gap}
-                </Table.Cell>
+                <Table.Cell className="text-right">{row.gap}</Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>

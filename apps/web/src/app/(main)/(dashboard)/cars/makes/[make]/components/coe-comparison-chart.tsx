@@ -20,7 +20,7 @@ export type PremiumPoint = {
 
 const SERIES = [
   { color: "var(--chart-1)", key: "categoryA", label: "Category A premium" },
-  { color: "var(--chart-sand)", key: "categoryB", label: "Category B premium" },
+  { color: "var(--chart-2)", key: "categoryB", label: "Category B premium" },
 ] as const;
 
 interface TickProps {

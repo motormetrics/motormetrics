@@ -72,7 +72,7 @@ export function MixTable({ rows, total }: { rows: MixRow[]; total: number }) {
       <button
         className={cn(
           "cursor-pointer truncate font-semibold",
-          isActive && "text-accent-strong",
+          isActive && "text-accent",
         )}
         onClick={() => sortBy(key)}
         type="button"
@@ -107,7 +107,7 @@ export function MixTable({ rows, total }: { rows: MixRow[]; total: number }) {
             className={cn(
               CELL.rank,
               "text-sm tabular-nums",
-              row.rank <= 3 ? "font-semibold text-accent-strong" : "text-muted",
+              row.rank <= 3 ? "font-semibold text-accent" : "text-muted",
             )}
           >
             {String(row.rank).padStart(2, "0")}

@@ -23,7 +23,7 @@ interface UtilisationListProps {
  */
 export function UtilisationList({ order, searchParams }: UtilisationListProps) {
   return (
-    <Card className="gap-4 rounded-4xl p-7">
+    <Card className="gap-4 p-7">
       <div className="flex flex-col gap-1">
         <Typography.Paragraph color="muted">
           {order === "busiest" ? "Highest" : "Lowest"} average use

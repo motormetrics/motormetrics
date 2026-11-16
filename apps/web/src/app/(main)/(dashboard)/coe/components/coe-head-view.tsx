@@ -88,10 +88,7 @@ export function CoeHeroView({ categoryKey, data }: ViewProps) {
             where={range.where}
           />
         ) : null}
-        <Typography.Paragraph
-          className="text-muted-strong tabular-nums"
-          size="sm"
-        >
+        <Typography.Paragraph className="tabular-nums" size="sm">
           {pqp && pqpMonth
             ? `PQP to renew a ${category} COE in ${pqpMonth}: ${formatCurrency(pqp.rate)}${pqp.change !== undefined && previousPqpMonth ? `, ${formatPercentChange(pqp.change)} on ${previousPqpMonth}` : ""}`
             : "LTA publishes no PQP for Category E"}
@@ -147,7 +144,7 @@ export function CoeKeyNumbersView({
               // w-full: Button sizes to its content, so without it each cell
               // sat at the start of its column and the rule and tint stopped
               // short. E, the odd one out in two columns, takes the full row.
-              "h-auto w-full min-w-0 flex-col items-start justify-start gap-0.5 whitespace-normal rounded-none border-separator border-b px-2.5 py-3 text-left font-normal @7xl:last:col-span-2 @max-3xl:last:col-span-2",
+              "h-auto w-full min-w-0 flex-col items-start justify-start gap-0.5 whitespace-normal px-2.5 py-3 text-left @7xl:last:col-span-2 @max-3xl:last:col-span-2",
               isPressed && "border-accent border-b-2 bg-accent-soft",
             )}
             key={category}
@@ -157,7 +154,7 @@ export function CoeKeyNumbersView({
             <span
               className={cn(
                 "font-semibold text-xs",
-                isPressed ? "text-accent-strong" : "text-muted",
+                isPressed ? "text-accent" : "text-muted",
               )}
             >
               {category} · {SHORT_NAMES[key]}
@@ -165,13 +162,13 @@ export function CoeKeyNumbersView({
             <span className="font-semibold text-foreground text-xl tabular-nums">
               {formatCurrency(premium)}
             </span>
-            <span className="text-muted-strong text-xs tabular-nums">
+            <span className="text-foreground text-xs tabular-nums">
               {previousPremium
                 ? `${formatPercentChange(changeRatio(premium, previousPremium))} · `
                 : ""}
               {bidsPerCoe(figures)} bids per COE
             </span>
-            <span className="text-muted-strong text-xs tabular-nums">
+            <span className="text-foreground text-xs tabular-nums">
               {pqp
                 ? `PQP ${formatCurrency(pqp.rate)}${pqp.change !== undefined ? ` · ${formatPercentChange(pqp.change)}` : ""}`
                 : "No PQP for Category E"}

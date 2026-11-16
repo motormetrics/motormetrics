@@ -84,7 +84,7 @@ export async function ResultsHero() {
   return (
     <>
       <div className="flex max-w-xl flex-col gap-2.5 border-separator border-t pt-4">
-        <Typography.Paragraph className="text-muted-strong">
+        <Typography.Paragraph>
           <span className="font-semibold text-foreground">Bids per quota</span>{" "}
           · all five categories, latest exercise
         </Typography.Paragraph>

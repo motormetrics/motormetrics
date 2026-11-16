@@ -37,7 +37,7 @@ export function PremiumRangeBar({
           style={{ left: `${left.toFixed(1)}%`, width: `${width.toFixed(1)}%` }}
         />
       </div>
-      <div className="flex flex-wrap gap-3 text-muted-strong text-sm tabular-nums">
+      <div className="flex flex-wrap gap-3 text-foreground text-sm tabular-nums">
         <span>
           Low{" "}
           <span className="font-semibold text-foreground">

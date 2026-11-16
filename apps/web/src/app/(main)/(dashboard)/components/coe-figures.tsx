@@ -135,7 +135,7 @@ export async function CoePremiumsFigure() {
             >
               <span className="flex items-baseline justify-between gap-2">
                 <span className="font-semibold">Category {tile.key}</span>
-                <span className="text-muted-strong text-sm tabular-nums">
+                <span className="text-foreground text-sm tabular-nums">
                   {signed(tile.change)}
                 </span>
               </span>

@@ -231,7 +231,7 @@ async function loadMakeReport(
       .map(({ name: vehicleType }) => formatVehicleType(vehicleType));
 
     return {
-      color: `var(--chart-${(index % 6) + 1})`,
+      color: `var(--chart-${(index % 5) + 1})`,
       count,
       name,
       note:
@@ -343,7 +343,7 @@ export async function MakeReport({
 
   if (crossTab.length === 0) {
     return (
-      <EmptyState className="rounded-3xl bg-default/50" size="lg">
+      <EmptyState size="lg">
         <EmptyState.Header>
           <EmptyState.Media variant="icon">
             <FileQuestion />

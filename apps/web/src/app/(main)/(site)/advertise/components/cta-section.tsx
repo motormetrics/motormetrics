@@ -48,10 +48,10 @@ export function CtaSection() {
               className="flex items-start gap-3 border-separator border-b py-3"
               key={number}
             >
-              <span className="w-8 shrink-0 font-semibold text-accent-strong tabular-nums">
+              <span className="w-8 shrink-0 font-semibold text-accent tabular-nums">
                 {number}
               </span>
-              <Typography.Paragraph className="text-muted-strong leading-normal">
+              <Typography.Paragraph className="leading-normal">
                 {note}
               </Typography.Paragraph>
             </div>
@@ -64,10 +64,7 @@ export function CtaSection() {
         <Typography.Heading className="text-xl" level={3} weight="bold">
           Book a placement
         </Typography.Heading>
-        <Typography.Paragraph
-          className="text-muted-strong leading-normal"
-          size="sm"
-        >
+        <Typography.Paragraph className="leading-normal" size="sm">
           Tell us the pages and the months you have in mind. We reply with
           availability, the rate and the creative spec.
         </Typography.Paragraph>
@@ -80,7 +77,7 @@ export function CtaSection() {
         </a>
         <SourceNote>
           Or write to {ADVERTISE_EMAIL}, or use the{" "}
-          <Link className="text-accent-strong" href="/contact">
+          <Link className="text-accent" href="/contact">
             contact page
           </Link>
           .

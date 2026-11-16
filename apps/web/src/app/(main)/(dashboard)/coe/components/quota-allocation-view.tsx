@@ -43,7 +43,7 @@ export function QuotaAllocationView({
 
   return (
     <div className="flex flex-col gap-4.5">
-      <div className="flex gap-4.5 text-muted-strong text-xs">
+      <div className="flex gap-4.5 text-foreground text-xs">
         <LegendKey color="var(--chart-1)" label="Quota" />
         <LegendKey color="var(--chart-5)" label="Bids received" />
       </div>
@@ -55,7 +55,7 @@ export function QuotaAllocationView({
             <Tooltip closeDelay={0} delay={0} key={row.category}>
               <Tooltip.Trigger
                 aria-label={`${row.category}: ${label}, ${row.ratio}× bids per COE`}
-                className="col-span-3 grid grid-cols-subgrid items-center rounded-xs outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                className="col-span-3 grid grid-cols-subgrid items-center outline-none"
               >
                 <span className="font-semibold text-sm">
                   {toCategoryKey(row.category)}
@@ -79,7 +79,7 @@ export function QuotaAllocationView({
                     }}
                   />
                 </span>
-                <span className="whitespace-nowrap text-right text-muted-strong text-sm tabular-nums">
+                <span className="whitespace-nowrap text-right text-foreground text-sm tabular-nums">
                   {label}{" "}
                   <b className="font-semibold text-foreground">{row.ratio}×</b>
                 </span>

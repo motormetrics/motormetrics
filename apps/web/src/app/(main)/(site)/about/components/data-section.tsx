@@ -32,11 +32,11 @@ export function DataSection() {
         eyebrow="Where the data comes from"
         title="One source, checked at every release"
       />
-      <Typography.Paragraph className="max-w-prose text-muted-strong leading-relaxed">
+      <Typography.Paragraph className="max-w-prose leading-relaxed">
         Every figure on this site comes from Singapore&apos;s Land Transport
         Authority via{" "}
         <Link
-          className="font-medium text-accent-strong"
+          className="font-medium text-accent"
           href="https://datamall.lta.gov.sg"
           rel="noreferrer nofollow"
           target="_blank"
@@ -53,13 +53,8 @@ export function DataSection() {
             key={heading}
           >
             <span className="font-semibold text-muted text-xs">{label}</span>
-            <span className="font-bold text-accent-strong text-xl">
-              {heading}
-            </span>
-            <Typography.Paragraph
-              className="text-muted-strong leading-normal"
-              size="xs"
-            >
+            <span className="font-bold text-accent text-xl">{heading}</span>
+            <Typography.Paragraph className="leading-normal" size="xs">
               {detail}
             </Typography.Paragraph>
           </div>

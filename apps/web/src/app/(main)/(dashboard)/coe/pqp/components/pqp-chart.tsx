@@ -108,7 +108,7 @@ export function PQPChart({
       <div className="flex flex-wrap items-center gap-4">
         {[...ordered].reverse().map(({ key, label }) => (
           <span
-            className="inline-flex items-center gap-1.5 text-muted-strong text-sm"
+            className="inline-flex items-center gap-1.5 text-foreground text-sm"
             key={key}
           >
             <span

@@ -19,8 +19,8 @@ import { Suspense } from "react";
 const title = `Contact ${SITE_TITLE}`;
 const description = `How to reach ${SITE_TITLE} about Singapore car registration data, COE results, corrections, partnerships and press enquiries.`;
 
-const LINK_CLASS = "font-medium text-accent-strong";
-const BODY_CLASS = "max-w-prose text-muted-strong leading-relaxed";
+const LINK_CLASS = "font-medium text-accent";
+const BODY_CLASS = "max-w-prose text-foreground leading-relaxed";
 
 export const metadata: Metadata = {
   title: { absolute: title },

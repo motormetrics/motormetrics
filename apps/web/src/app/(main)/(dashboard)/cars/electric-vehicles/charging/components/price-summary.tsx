@@ -27,7 +27,7 @@ function PriceTile({
   caption: string;
 }) {
   return (
-    <Card className="gap-1 rounded-3xl p-6">
+    <Card className="gap-1 p-6">
       <Typography.Paragraph color="muted" size="sm" weight="semibold">
         {label}
       </Typography.Paragraph>
@@ -50,7 +50,7 @@ function PriceTile({
 
 function TileSkeleton() {
   return (
-    <Card className="gap-3 rounded-3xl p-6">
+    <Card className="gap-3 p-6">
       <Skeleton className="h-4 w-40" />
       <Skeleton className="h-10 w-32" />
       <Skeleton className="h-4 w-36" />

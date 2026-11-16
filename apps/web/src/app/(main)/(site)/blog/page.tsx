@@ -110,11 +110,11 @@ async function LatestPost() {
 function ArchiveSkeleton() {
   return (
     <div className="flex flex-col gap-4">
-      <Skeleton className="h-8 w-full max-w-xl rounded-lg" />
+      <Skeleton className="h-8 w-full max-w-xl" />
       <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: 6 }, (_, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: skeleton items are static placeholders
-          <Skeleton className="h-48 w-full rounded-lg" key={index} />
+          <Skeleton className="h-48 w-full" key={index} />
         ))}
       </div>
     </div>
@@ -153,7 +153,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
           <Typography.Paragraph color="muted" size="sm">
             Looking for explainers on COE, PQP or PARF?{" "}
             <Link
-              className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+              className="font-semibold text-accent no-underline transition-colors hover:text-accent"
               href="/learn"
             >
               See Guides
@@ -174,11 +174,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
             eyebrow="Archive"
             title="All posts"
             trailing={
-              <Suspense
-                fallback={
-                  <Skeleton className="h-9 w-72 max-w-full rounded-lg" />
-                }
-              >
+              <Suspense fallback={<Skeleton className="h-9 w-72 max-w-full" />}>
                 <BlogSearchInput />
               </Suspense>
             }

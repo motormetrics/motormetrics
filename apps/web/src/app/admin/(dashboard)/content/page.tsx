@@ -13,10 +13,10 @@ const Page = () => (
 
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <Link href="/content/announcements" className="group">
-        <Card className="h-full transition-colors hover:bg-surface/50">
+        <Card className="h-full transition-colors">
           <Card.Header>
             <div className="flex items-center gap-2">
-              <MessageSquare className="size-5 text-accent-strong" />
+              <MessageSquare className="size-5 text-accent" />
               <Card.Title className="text-lg">Announcements</Card.Title>
             </div>
             <Card.Description>
@@ -33,10 +33,10 @@ const Page = () => (
       </Link>
 
       <Link href="/admin/content/blog" className="group">
-        <Card className="h-full transition-colors hover:bg-surface/50">
+        <Card className="h-full transition-colors">
           <Card.Header>
             <div className="flex items-center gap-2">
-              <FileText className="size-5 text-accent-strong" />
+              <FileText className="size-5 text-accent" />
               <Card.Title className="text-lg">Blog Posts</Card.Title>
             </div>
             <Card.Description>

@@ -159,7 +159,7 @@ export default function ChargingPage({ searchParams }: PageProps) {
             <Suspense
               fallback={
                 // Same bleed and heights as ChargingMap; see its comments.
-                <Skeleton className="-mx-4 h-96 rounded-none sm:-mx-6 md:h-[640px] lg:-mx-9" />
+                <Skeleton className="-mx-4 h-96 sm:-mx-6 md:h-[640px] lg:-mx-9" />
               }
             >
               <ChargingMap searchParams={searchParams} />
@@ -216,7 +216,7 @@ async function ChargingEmptyState() {
   }
 
   return (
-    <EmptyState className="rounded-3xl bg-default/50" size="lg">
+    <EmptyState size="lg">
       <EmptyState.Header>
         <EmptyState.Media variant="icon">
           <PlugZap />

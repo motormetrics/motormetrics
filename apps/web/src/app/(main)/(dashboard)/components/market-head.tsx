@@ -103,7 +103,7 @@ export async function MarketHero() {
               {formatCurrency(range.latest.premium)}
             </span>
             {previous ? (
-              <span className="text-muted-strong text-sm tabular-nums">
+              <span className="text-foreground text-sm tabular-nums">
                 {signed(
                   changeRatio(range.latest.premium, previous.premium) * 100,
                 )}{" "}

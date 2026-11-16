@@ -151,7 +151,7 @@ export function PARFCalculator({ head }: { head: ReactNode }) {
         </div>
 
         <div className="flex max-w-xl flex-col gap-2.5">
-          <span className="text-muted-strong text-sm">
+          <span className="text-foreground text-sm">
             <span className="font-semibold text-foreground">
               Estimated rebate after Budget 2026
             </span>

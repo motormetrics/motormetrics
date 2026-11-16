@@ -109,10 +109,10 @@ export default function COEPremiumsPage({ searchParams }: PremiumsPageProps) {
           title="COE premiums by category"
         />
         <div className="flex flex-wrap items-end gap-x-3.5 gap-y-2.5">
-          <Suspense fallback={<Skeleton className="h-10 w-40 rounded-md" />}>
+          <Suspense fallback={<Skeleton className="h-10 w-40" />}>
             <PremiumsMonthMenu />
           </Suspense>
-          <Suspense fallback={<Skeleton className="h-10 w-80 rounded-md" />}>
+          <Suspense fallback={<Skeleton className="h-10 w-80" />}>
             <PremiumsCategoryTabs searchParams={searchParams} />
           </Suspense>
           <SharePill title="COE premiums by category" />
@@ -145,11 +145,11 @@ export default function COEPremiumsPage({ searchParams }: PremiumsPageProps) {
           eyebrow="Reading the numbers"
           title="How premiums are set"
         />
-        <Typography.Paragraph className="text-muted-strong">
+        <Typography.Paragraph>
           A premium is the price of the last successful bid in an exercise, so
           it is set by demand rather than announced in advance.
         </Typography.Paragraph>
-        <Typography.Paragraph className="text-muted-strong">
+        <Typography.Paragraph>
           Renewing an existing COE uses the PQP instead: the three-month moving
           average of premiums in that category.
         </Typography.Paragraph>

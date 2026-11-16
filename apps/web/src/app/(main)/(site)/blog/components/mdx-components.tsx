@@ -35,7 +35,7 @@ export function MdxLink({
 }: MdxLinkProps) {
   const isInternalLink = href.startsWith("/") || href.startsWith("#");
   const linkClassName = [
-    "font-medium text-accent-strong underline underline-offset-4",
+    "font-medium text-accent underline underline-offset-4",
     className,
   ]
     .filter(Boolean)
@@ -253,11 +253,7 @@ export const mdxComponents = {
     <Typography.Heading level={2} className="mt-12 mb-6" {...props} />
   ),
   h3: (props: MdxProps<"h3">) => (
-    <Typography.Heading
-      level={3}
-      className="mt-8 mb-4 border-accent border-l-4 pl-4"
-      {...props}
-    />
+    <Typography.Heading level={3} className="mt-8 mb-4 pl-4" {...props} />
   ),
   h4: (props: MdxProps<"h4">) => (
     <Typography.Heading level={4} className="mt-6 mb-3" {...props} />
@@ -311,7 +307,7 @@ export const mdxComponents = {
   ),
   td: (props: ComponentPropsWithoutRef<"td">) => (
     <td
-      className="px-4 py-3 text-sm tabular-nums [&:last-child]:font-semibold [&:last-child]:text-accent-strong [&:not(:first-child)]:text-right [&[align=center]]:text-center [&[align=right]]:text-right"
+      className="px-4 py-3 text-sm tabular-nums [&:last-child]:font-semibold [&:last-child]:text-accent [&:not(:first-child)]:text-right [&[align=center]]:text-center [&[align=right]]:text-right"
       {...props}
     />
   ),

@@ -80,9 +80,7 @@ export function TableOfContents() {
                 aria-current={active ? "location" : undefined}
                 className={cn(
                   "font-semibold no-underline transition-colors",
-                  active
-                    ? "text-foreground"
-                    : "text-accent-strong hover:text-accent-deep",
+                  active ? "text-foreground" : "text-accent hover:text-accent",
                 )}
                 href={`#${heading.id}`}
                 onClick={(event) => {

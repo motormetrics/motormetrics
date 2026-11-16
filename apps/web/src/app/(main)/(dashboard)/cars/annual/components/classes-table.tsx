@@ -68,7 +68,7 @@ export function ClassesTable({
           className={cn(
             "block w-full cursor-pointer whitespace-nowrap font-semibold text-xs",
             key === "name" ? "text-left" : "text-right",
-            isSorted ? "text-accent-strong" : "text-muted",
+            isSorted ? "text-accent" : "text-muted",
           )}
           onClick={() => sortBy(key)}
           type="button"
@@ -125,7 +125,7 @@ export function ClassesTable({
                   className={cn(
                     "truncate text-left text-sm",
                     isCars
-                      ? "border-l-2 border-l-accent font-bold text-accent-strong"
+                      ? "border-l-2 border-l-accent font-bold text-accent"
                       : "font-medium",
                   )}
                   scope="row"
@@ -148,7 +148,7 @@ export function ClassesTable({
                         }}
                       />
                     </span>
-                    <span className="ml-auto w-12 shrink-0 text-right text-muted-strong text-xs tabular-nums">
+                    <span className="ml-auto w-12 shrink-0 text-right text-foreground text-xs tabular-nums">
                       {row.share.toFixed(1)}%
                     </span>
                   </span>

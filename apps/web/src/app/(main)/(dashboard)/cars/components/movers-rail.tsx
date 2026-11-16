@@ -137,7 +137,7 @@ export function MoversRail({ searchParams }: MoversProps) {
       </div>
       <SourceNote>
         Large percentages often sit on small bases a year earlier.{" "}
-        <Link className="text-accent-strong" href="/cars/makes">
+        <Link className="text-accent" href="/cars/makes">
           All makes →
         </Link>
       </SourceNote>

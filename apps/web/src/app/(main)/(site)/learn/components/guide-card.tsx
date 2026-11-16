@@ -28,9 +28,7 @@ export function GuideCard({ guide }: { guide: Guide }) {
       >
         {guide.title}
       </Typography.Heading>
-      <Typography.Paragraph className="text-muted-strong" size="sm">
-        {guide.excerpt}
-      </Typography.Paragraph>
+      <Typography.Paragraph size="sm">{guide.excerpt}</Typography.Paragraph>
       <div className="mt-auto flex flex-wrap justify-between gap-x-3 gap-y-1 border-separator border-t pt-2.5 text-muted text-xs tabular-nums">
         <span>{getReadingMinutes(guide.content)} min read</span>
         <span>Read →</span>

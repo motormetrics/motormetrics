@@ -46,10 +46,7 @@ export function PostCard({
         {post.title}
       </Typography.Heading>
       {showExcerpt && post.excerpt ? (
-        <Typography.Paragraph
-          className="line-clamp-4 text-muted-strong"
-          size="sm"
-        >
+        <Typography.Paragraph className="line-clamp-4" size="sm">
           {post.excerpt}
         </Typography.Paragraph>
       ) : null}

@@ -42,7 +42,7 @@ export function GlossarySection() {
                   >
                     {guideSlugs.includes(slug) ? (
                       <Link
-                        className="w-24 shrink-0 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+                        className="w-24 shrink-0 font-semibold text-accent text-sm no-underline transition-colors hover:text-accent"
                         href={`/learn/${slug}`}
                       >
                         {term} →
@@ -53,7 +53,7 @@ export function GlossarySection() {
                       </span>
                     )}
                     <Typography.Paragraph
-                      className="min-w-0 flex-1 text-muted-strong leading-normal"
+                      className="min-w-0 flex-1 leading-normal"
                       size="sm"
                     >
                       {definition}

@@ -307,7 +307,7 @@ export function MakesIndex({ searchParams }: IndexProps) {
             <div className="grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-2.5">
               {Array.from({ length: SKELETON_CARDS }, (_, index) => (
                 // biome-ignore lint/suspicious/noArrayIndexKey: identical placeholders
-                <Skeleton className="h-36 rounded-lg" key={index} />
+                <Skeleton className="h-36" key={index} />
               ))}
             </div>
           }

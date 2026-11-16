@@ -106,19 +106,6 @@ describe("DimensionTable", () => {
     await expect.element(cells.nth(2)).toHaveTextContent("+12.5%");
   });
 
-  it("should colour each share bar through HeroUI's fill variable", async () => {
-    const screen = await renderTable();
-
-    const bar = screen.getByRole("progressbar", {
-      name: "TOYOTA share of the largest",
-    });
-    expect(
-      (bar.element() as HTMLElement).style.getPropertyValue(
-        "--progress-bar-fill",
-      ),
-    ).toBe("var(--chart-1)");
-  });
-
   it("should use HeroUI's large share bar with no track overrides", async () => {
     const screen = await renderTable();
 

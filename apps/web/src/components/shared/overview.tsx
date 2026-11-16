@@ -135,7 +135,7 @@ export function SectionLink({
     <Link
       rel={rel}
       className={cn(
-        "ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep",
+        "ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-semibold text-accent text-sm no-underline transition-colors hover:text-accent",
         className,
       )}
       href={href}
@@ -189,10 +189,7 @@ export function Headline({
     <div className={cn("flex flex-col gap-2.5", className)}>
       {label ? (
         // Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>.
-        <Typography.Paragraph
-          className="text-muted-strong text-xl"
-          weight="semibold"
-        >
+        <Typography.Paragraph className="text-xl" weight="semibold">
           {label}
         </Typography.Paragraph>
       ) : null}

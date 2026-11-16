@@ -107,8 +107,8 @@ export function monthSeries(
 const MIX_PARTS = 4;
 
 /** The bar colours, darkest first, then the lightest for "Other". */
-const MIX_COLOURS = ["bg-chart-1", "bg-chart-3", "bg-chart-4", "bg-chart-sand"];
-const OTHER_COLOUR = "bg-chart-6";
+const MIX_COLOURS = ["bg-chart-1", "bg-chart-3", "bg-chart-4", "bg-chart-2"];
+const OTHER_COLOUR = "bg-muted";
 
 export interface MixPart {
   count: number;

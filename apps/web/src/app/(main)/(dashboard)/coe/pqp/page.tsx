@@ -211,10 +211,10 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
           title="PQP rates"
         />
         <div className="flex flex-wrap items-end gap-x-3.5 gap-y-2.5">
-          <Suspense fallback={<Skeleton className="h-10 w-36 rounded-md" />}>
+          <Suspense fallback={<Skeleton className="h-10 w-36" />}>
             <CategoryTabs categories={PQP_CATEGORY_KEYS} />
           </Suspense>
-          <Suspense fallback={<Skeleton className="h-10 w-72 rounded-md" />}>
+          <Suspense fallback={<Skeleton className="h-10 w-72" />}>
             <TermTabs />
           </Suspense>
           <SharePill title="PQP rates" />
@@ -243,12 +243,12 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
 
       <section className="flex max-w-prose flex-col gap-4">
         <SectionHead eyebrow="Reading the numbers" title="How the PQP is set" />
-        <Typography.Paragraph className="text-muted-strong">
+        <Typography.Paragraph>
           LTA averages the closing premiums in that category over the last three
           months, across both exercises, and publishes it as the rate for the
           coming month. It therefore lags the market rather than leading it.
         </Typography.Paragraph>
-        <Typography.Paragraph className="text-muted-strong">
+        <Typography.Paragraph>
           A 5-year renewal costs half the PQP, but the car cannot be renewed
           again after that term.
         </Typography.Paragraph>
