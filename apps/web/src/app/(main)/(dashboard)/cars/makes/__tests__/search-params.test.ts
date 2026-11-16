@@ -1,4 +1,3 @@
-import { serialize as serializeCompare } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import {
   loadSearchParams,
   type MakesSearchParams,
@@ -6,9 +5,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 
 const DEFAULTS: MakesSearchParams = {
-  compare: false,
   fuel: null,
-  make: null,
   q: "",
   range: "ytd",
   sort: "count",
@@ -30,24 +27,6 @@ describe("loadSearchParams", () => {
     expect(loadSearchParams("?fuel=Hybrid").fuel).toBeNull();
     expect(loadSearchParams("?fuel=Diesel").fuel).toBeNull();
   });
-
-  it("should read the selected make, or none", () => {
-    expect(loadSearchParams("?make=bmw").make).toBe("bmw");
-    expect(loadSearchParams("").make).toBeNull();
-  });
-
-  it("should read whether a comparison is being picked", () => {
-    expect(loadSearchParams("?make=bmw&compare=true").compare).toBe(true);
-    expect(loadSearchParams("?make=bmw").compare).toBe(false);
-  });
-});
-
-describe("compare serialize", () => {
-  it("should repeat the make key for the two makes", () => {
-    expect(
-      serializeCompare("/cars/makes/compare", { make: ["bmw", "audi"] }),
-    ).toBe("/cars/makes/compare?make=bmw&make=audi");
-  });
 });
 
 describe("serialize", () => {
@@ -65,18 +44,6 @@ describe("serialize", () => {
         sort: "make",
       }),
     ).toBe("/cars/makes?fuel=Electric&range=12m&sort=make&q=audi");
-  });
-
-  it("should drop the comparison flag once it is cleared", () => {
-    expect(
-      serialize("/cars/makes?make=bmw&compare=true", { compare: null }),
-    ).toBe("/cars/makes?make=bmw");
-  });
-
-  it("should put the selected make first and keep the period", () => {
-    expect(
-      serialize("/cars/makes", { ...DEFAULTS, make: "bmw", range: "12m" }),
-    ).toBe("/cars/makes?make=bmw&range=12m");
   });
 
   it("should clear the powertrain when it is set to null", () => {

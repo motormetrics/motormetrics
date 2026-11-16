@@ -1,5 +1,4 @@
 import { Skeleton } from "@heroui/react";
-import { serialize as serializeCompare } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import { FilterTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/filter-tabs";
 import {
   type MakeCard,
@@ -7,7 +6,6 @@ import {
   MakeSearch,
   MakeSearchField,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-cards";
-import { MakeDetail } from "@web/app/(main)/(dashboard)/cars/makes/components/make-detail";
 import {
   loadMakeRows,
   type MakeRow,
@@ -177,16 +175,10 @@ function Switch({
   );
 }
 
-/**
- * The makes for the selected period, powertrain and sort, as cards or, once
- * one is selected, as a list beside that make's detail.
- */
+/** The makes for the selected period, powertrain and sort, as cards. */
 async function MakeResults({ searchParams }: IndexProps) {
   const params = await loadSearchParams(searchParams);
-  const { latestMonth, rows, total } = await loadMakeRows(
-    params.range,
-    params.fuel,
-  );
+  const { latestMonth, rows } = await loadMakeRows(params.range, params.fuel);
 
   if (!latestMonth) {
     return null;
@@ -197,33 +189,12 @@ async function MakeResults({ searchParams }: IndexProps) {
       ? [...rows].sort((a, b) => a.make.localeCompare(b.make))
       : rows;
 
-  // A make with nothing registered in the period has no row, so `?make=` for
-  // it falls back to the plain index.
-  const selectedIndex = rows.findIndex((row) => row.slug === params.make);
-  const selected = rows[selectedIndex];
-
-  // While picking a make to compare with, every other make links straight
-  // into the comparison with the selected one.
-  const comparing = Boolean(selected && params.compare);
-  const hrefOf = (row: MakeRow) =>
-    selected && comparing && row.slug !== selected.slug
-      ? serializeCompare("/cars/makes/compare", {
-          make: [selected.slug, row.slug],
-        })
-      : serialize("/cars/makes", { ...params, compare: null, make: row.slug });
-
-  // The makes ranked either side of the selected one, as quick picks.
-  const peers = selected
-    ? [
-        ...rows.slice(Math.max(selectedIndex - 1, 0), selectedIndex),
-        ...rows.slice(selectedIndex + 1, selectedIndex + 3),
-      ].map((row) => ({ href: hrefOf(row), make: row.make }))
-    : [];
-
   const cards: MakeCard[] = ordered.map((row) => ({
     change: changeLabel(row, params.range, latestMonth),
     count: row.count.toLocaleString("en-SG"),
-    href: hrefOf(row),
+    // The make's own page, with no search params: one cached page per make
+    // rather than a variant of this one for every filter combination.
+    href: `/cars/makes/${row.slug}`,
     logoUrl: row.logoUrl,
     make: row.make,
     rank: row.rank,
@@ -232,32 +203,13 @@ async function MakeResults({ searchParams }: IndexProps) {
     trend: row.trend,
   }));
 
-  return (
-    <MakeCards
-      cards={cards}
-      comparing={comparing}
-      detail={
-        selected ? (
-          <MakeDetail
-            latestMonth={latestMonth}
-            makesCount={rows.length}
-            params={params}
-            peers={peers}
-            row={selected}
-            total={total}
-          />
-        ) : null
-      }
-      selectedSlug={selected?.slug ?? null}
-    />
-  );
+  return <MakeCards cards={cards} />;
 }
 
 /**
  * Direction D's makes index: every make with registrations in the selected
- * period as a card that selects it (`?make=`), with the powertrain, period and
- * sort as server-built links and a search that filters the cards in the
- * browser. A selected make shows as a list beside that make's detail.
+ * period as a card linking to its page, with the powertrain, period and sort
+ * as server-built links and a search that filters the cards in the browser.
  *
  * The heading, the labels and the source line are in the static shell. Each
  * part that reads the search params waits behind its own boundary.
