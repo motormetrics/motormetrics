@@ -91,7 +91,7 @@ export async function MarketHero() {
   return (
     <>
       {range ? (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <Typography.Paragraph color="muted" size="sm">
             <span className="font-semibold text-foreground">
               COE Category A

@@ -105,7 +105,7 @@ export async function CoePremiumsFigure() {
           </span>
         }
       />
-      <ul className="grid @3xl:grid-cols-3 @5xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-2.5">
+      <ul className="grid @3xl:grid-cols-3 @5xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-4">
         {tiles.map((tile) => (
           <li key={tile.key}>
             <Link
@@ -220,7 +220,7 @@ export async function PqpFigure() {
       />
       <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
         {tiles.map((tile) => (
-          <div className="flex min-w-0 flex-col gap-0.5 py-3" key={tile.key}>
+          <div className="flex min-w-0 flex-col gap-1 py-4" key={tile.key}>
             <dt className="font-semibold text-muted text-xs">
               Category {tile.key} · {CATEGORY_DESCRIPTIONS[tile.category]}
             </dt>

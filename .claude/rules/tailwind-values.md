@@ -28,5 +28,26 @@ This applies to new and changed code. Do not refactor existing arbitrary values 
 - ⚠️ Exception: only when no combination of presets can express the layout may a value stay arbitrary, with a
   comment saying why
 
+## 8px Spacing Grid
+
+Gaps, padding and margins sit on an 8px grid: even steps only (`2`, `4`, `6`, `8`, `12`, `16` = 8, 16, 24, 32,
+48, 64px). `1` (4px) is the one half step, for spacing inside a single element (icon to label, value to its
+change). Sizing (`w-*`, `h-*`, `size-*`) is not bound by this.
+
+| Level | Use | Classes |
+|---|---|---|
+| Inside an element | icon to label, value to its change | `gap-1` / `gap-2` |
+| Inside a card or group | title, value, chart, footer | `gap-2` / `gap-4`; card padding `p-4` |
+| Between cards in a row | tiles, key-number cells | `gap-4` (matches the card padding) |
+| Between sections | one figure to the next | `gap-12` |
+| Page edge | the inset main area | `p-4`, `md:p-6` |
+
+- Most spacing needs three values: `2` (0.5rem) to tie closely related items, `4` (1rem) for padding and items in
+  one group, `6` or `8` (1.5–2rem) to separate groups. Start a step too generous and tighten, never the reverse
+- ✅ `gap-4`, `p-4`, `mt-6`, `gap-x-8`, `gap-12`
+- ❌ Odd and half steps: `gap-3`, `p-5`, `gap-1.5`, `py-2.5`, `gap-14`
+- Space between groups is at least 1.5× the space inside them; a container's padding is never smaller than the
+  gap between its children
+
 **Rationale**: preset values keep spacing and type consistent across pages and follow theme changes. The Claude
 Design comps follow the same rule, so a port should not need arbitrary values.

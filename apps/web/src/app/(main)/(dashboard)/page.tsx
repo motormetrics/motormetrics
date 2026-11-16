@@ -132,7 +132,7 @@ export default function HomePage() {
       <StructuredData data={webSiteSchema} />
       <OrganizationStructuredData />
 
-      <OverviewPage className="gap-10 max-md:gap-7">
+      <OverviewPage className="gap-8 max-md:gap-6">
         {/* Direction D's head: eyebrow, title, the Category A range hero,
             lead and source, with the key numbers beside it once the page is
             wide and under it before then. Everything on this page reads
@@ -153,6 +153,8 @@ export default function HomePage() {
             <SharePill title="Market overview" />
           </div>
         </HeadGrid>
+
+        <Hairline />
 
         {/* COE and PQP lead the car figures, as the navigation does. */}
         <SectionErrorBoundary title="COE premiums unavailable">
