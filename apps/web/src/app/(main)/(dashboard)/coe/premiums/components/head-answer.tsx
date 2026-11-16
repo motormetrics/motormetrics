@@ -79,30 +79,3 @@ export function HeadAnswer({
     </RangeHero>
   );
 }
-
-export interface KeyNumber {
-  label: string;
-  note: string;
-  value: string;
-}
-
-/**
- * The key numbers beside the head: four across under it, or two across in its
- * right half, as on the Makes page.
- */
-export function KeyNumberList({ items }: { items: KeyNumber[] }) {
-  return (
-    <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
-      {items.map(({ label, note, value }) => (
-        <div
-          className="flex flex-col gap-0.5 border-separator border-b py-3"
-          key={label}
-        >
-          <dt className="font-semibold text-muted text-xs">{label}</dt>
-          <dd className="font-semibold text-xl tabular-nums">{value}</dd>
-          <dd className="text-muted text-xs tabular-nums">{note}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}

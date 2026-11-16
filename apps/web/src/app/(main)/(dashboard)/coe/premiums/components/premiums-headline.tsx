@@ -7,10 +7,7 @@ import {
   formatExercise,
   formatMonth,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import {
-  HeadAnswer,
-  KeyNumberList,
-} from "@web/app/(main)/(dashboard)/coe/premiums/components/head-answer";
+import { HeadAnswer } from "@web/app/(main)/(dashboard)/coe/premiums/components/head-answer";
 import {
   exerciseStamp,
   premiumsLead,
@@ -20,6 +17,7 @@ import {
   type PremiumsPageProps,
 } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-view";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/coe/premiums/search-params";
+import { KeyNumberList } from "@web/components/shared/key-numbers";
 
 /** The window the range hero places the latest premium in: a year of exercises. */
 const RANGE_EXERCISES = 24;
@@ -132,5 +130,5 @@ export async function PremiumsKeyNumbers({ searchParams }: PremiumsPageProps) {
     },
   ];
 
-  return <KeyNumberList items={keyNumbers} />;
+  return <KeyNumberList besideHead={4} items={keyNumbers} />;
 }

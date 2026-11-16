@@ -1,5 +1,5 @@
 import type { PopulationEntity } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
-import { KeyNumberList } from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
+import { KeyNumberList } from "@web/components/shared/key-numbers";
 import { SourceNote } from "@web/components/shared/overview";
 
 /** Fuel types listed individually before the tail is folded into "Others". */

@@ -12,11 +12,11 @@ import {
   loadPqpView,
   type PQPPageProps,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-view";
+import { HeadAnswer } from "@web/app/(main)/(dashboard)/coe/premiums/components/head-answer";
 import {
-  HeadAnswer,
   type KeyNumber,
   KeyNumberList,
-} from "@web/app/(main)/(dashboard)/coe/premiums/components/head-answer";
+} from "@web/components/shared/key-numbers";
 import { formatMonthName } from "@web/utils/dates/format-month";
 
 /** " · October 2026", the eyebrow's suffix: the month the rates are for. */
@@ -126,5 +126,5 @@ export async function PQPKeyNumbers({ searchParams }: PQPPageProps) {
     },
   ];
 
-  return <KeyNumberList items={items} />;
+  return <KeyNumberList besideHead={4} items={items} />;
 }

@@ -6,11 +6,6 @@ import {
   loadLatestRegistrationsSummary,
 } from "@web/app/(main)/(dashboard)/cars/components/faq-data";
 import { FuelMix } from "@web/app/(main)/(dashboard)/cars/components/fuel-mix";
-import {
-  HeadGrid,
-  HeadTitle,
-  KeysAside,
-} from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
 import { MoversRail } from "@web/app/(main)/(dashboard)/cars/components/movers-rail";
 import { PopulationPanel } from "@web/app/(main)/(dashboard)/cars/components/population-panel";
 import {
@@ -21,6 +16,8 @@ import {
   RegistrationsTrendCaption,
 } from "@web/app/(main)/(dashboard)/cars/components/registrations-hero";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
+import { KeysAside } from "@web/components/shared/key-numbers";
 import {
   Hairline,
   OverviewGrid,

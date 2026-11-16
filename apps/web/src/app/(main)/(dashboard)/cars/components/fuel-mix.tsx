@@ -1,6 +1,6 @@
 import { Typography } from "@heroui/react";
-import { KeyNumberList } from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
 import { resolveCarsMonth } from "@web/app/(main)/(dashboard)/cars/search-params";
+import { KeyNumberList } from "@web/components/shared/key-numbers";
 import { getCarsData } from "@web/queries/cars";
 import {
   formatMonthLabel,

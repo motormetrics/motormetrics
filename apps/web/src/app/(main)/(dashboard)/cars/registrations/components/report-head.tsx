@@ -1,5 +1,4 @@
 import { Typography } from "@heroui/react";
-import { KeyNumberList } from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
 import {
   CountRangeHero,
   changeLabel,
@@ -10,6 +9,7 @@ import {
   loadSearchParams,
   RANGE_MONTHS,
 } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
+import { KeyNumberList } from "@web/components/shared/key-numbers";
 import { getDistinctFuelTypes } from "@web/queries/cars";
 import {
   getCarsComparison,
