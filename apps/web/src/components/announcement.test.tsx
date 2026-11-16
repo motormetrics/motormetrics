@@ -29,8 +29,8 @@ describe("Announcement", () => {
 
   it("should prioritise path-specific announcements", async () => {
     state.announcements.push(
-      { content: "Cars update", paths: ["/cars"] },
-      { content: "Global update" },
+      { title: "Cars", description: "Cars update", paths: ["/cars"] },
+      { title: "Global", description: "Global update" },
     );
     state.pathname = "/cars/makes";
 
@@ -41,12 +41,23 @@ describe("Announcement", () => {
   });
 
   it("should fall back to global announcements", async () => {
-    state.announcements.push({ content: "Global notice" });
+    state.announcements.push({ title: "Global", description: "Global notice" });
     state.pathname = "/unknown";
 
     const screen = await render(createElement(Announcement));
 
     await expect.element(screen.getByText("Global notice")).toBeInTheDocument();
+  });
+
+  it("should render a title without a description", async () => {
+    state.announcements.push({ title: "Title only" });
+
+    const screen = await render(createElement(Announcement));
+
+    await expect.element(screen.getByText("Title only")).toBeInTheDocument();
+    expect(
+      screen.container.querySelector(".alert__description"),
+    ).toBeEmptyDOMElement();
   });
 
   it("should render nothing when configured list is empty", async () => {
@@ -55,7 +66,11 @@ describe("Announcement", () => {
   });
 
   it("should render nothing when no path matches and no global fallback exists", async () => {
-    state.announcements.push({ content: "Cars update", paths: ["/cars"] });
+    state.announcements.push({
+      title: "Cars",
+      description: "Cars update",
+      paths: ["/cars"],
+    });
     state.pathname = "/coe";
 
     const screen = await render(createElement(Announcement));

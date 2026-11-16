@@ -26,7 +26,8 @@ export interface LinkItem {
 }
 
 export interface Announcement {
-  content: string;
+  title: string;
+  description?: string;
   paths?: string[];
 }
 

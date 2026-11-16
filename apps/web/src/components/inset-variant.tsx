@@ -28,7 +28,7 @@ const SidebarStoryHeader = ({
     label: string;
   }>;
 }) => (
-  <div className="flex items-center gap-3 p-4">
+  <div className="flex items-center gap-4 p-4 md:px-6">
     <Sidebar.Trigger />
     <Breadcrumbs className="min-w-0">
       {items.map((item, index) => {
@@ -59,7 +59,7 @@ export function InsetVariant({
   announcement,
   children,
 }: {
-  /** Site-wide notice, at the top of the content area. */
+  /** Site-wide notice, at the top of the content area under the breadcrumbs. */
   announcement?: ReactNode;
   children: ReactNode;
 }) {
@@ -161,7 +161,6 @@ export function InsetVariant({
         </Sidebar.Content>
       </Sidebar.Mobile>
       <Sidebar.Main>
-        {/*{announcement}*/}
         <SidebarStoryHeader
           items={
             currentItem && currentGroup
@@ -169,7 +168,10 @@ export function InsetVariant({
               : []
           }
         />
-        <div className="grid gap-4 p-4 pt-0">{children}</div>
+        <div className="grid gap-4 p-4 pt-0 md:px-6 md:pb-6">
+          {announcement}
+          {children}
+        </div>
       </Sidebar.Main>
     </Sidebar.Provider>
   );

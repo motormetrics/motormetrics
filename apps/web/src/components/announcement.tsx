@@ -1,6 +1,8 @@
 "use client";
 
+import { Alert } from "@heroui/react";
 import { announcements } from "@web/config";
+import { Megaphone } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export function Announcement() {
@@ -28,13 +30,17 @@ export function Announcement() {
     return null;
   }
 
+  // A banner at the top of the content area, under the breadcrumbs: seen on
+  // every page without pushing the sidebar down. It cannot be dismissed.
   return (
-    <aside className="text-muted">
-      <div className="w-full px-4 py-2 text-center sm:px-6 lg:px-9">
-        <p className="text-pretty font-medium text-xs sm:text-sm">
-          {activeAnnouncement.content}
-        </p>
-      </div>
-    </aside>
+    <Alert status="accent">
+      <Alert.Indicator>
+        <Megaphone className="size-4" />
+      </Alert.Indicator>
+      <Alert.Content>
+        <Alert.Title>{activeAnnouncement.title}</Alert.Title>
+        <Alert.Description>{activeAnnouncement.description}</Alert.Description>
+      </Alert.Content>
+    </Alert>
   );
 }
