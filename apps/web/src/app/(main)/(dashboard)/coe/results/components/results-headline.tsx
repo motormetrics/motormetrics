@@ -11,6 +11,7 @@ import {
   premiumOf,
   totalFor,
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-shared";
+import { KeyNumberList, KeysAside } from "@web/components/shared/key-numbers";
 import { getCoeResults } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
 
@@ -132,44 +133,13 @@ export async function ResultsKeyNumbers() {
   ];
 
   return (
-    <aside aria-label="Key numbers" className="flex flex-col gap-3">
-      <Typography.Paragraph
-        className="uppercase"
-        color="muted"
-        size="xs"
-        weight="semibold"
-      >
-        Key numbers · latest exercise
-      </Typography.Paragraph>
-      <dl className="grid @3xl:grid-cols-4 @7xl:grid-cols-2 grid-cols-2 gap-x-6 border-separator border-t">
-        {keyNumbers.map(({ label, note, value }) => (
-          <div
-            className="flex flex-col gap-0.5 border-separator border-b py-3"
-            key={label}
-          >
-            <dt className="font-semibold text-muted text-xs">{label}</dt>
-            <dd className="font-semibold text-xl tabular-nums">{value}</dd>
-            <dd className="text-muted text-xs tabular-nums">{note}</dd>
-          </div>
-        ))}
-      </dl>
-      <nav aria-label="On this page">
-        <ul className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
-          {JUMP_LINKS.map(({ href, label }) => (
-            <li key={href}>
-              <a
-                className="text-accent-strong hover:text-accent-deep"
-                href={href}
-              >
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <Typography.Paragraph color="muted" size="xs">
-        Source: LTA via DataMall.
-      </Typography.Paragraph>
-    </aside>
+    <KeysAside
+      eyebrow="Key numbers · latest exercise"
+      jump={JUMP_LINKS}
+      label="Key numbers"
+      source="Source: LTA via DataMall."
+    >
+      <KeyNumberList items={keyNumbers} />
+    </KeysAside>
   );
 }

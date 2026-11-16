@@ -11,6 +11,7 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/components/coe-head-view";
 import { loadCoeOverview } from "@web/app/(main)/(dashboard)/coe/components/overview-loader";
 import { coeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
+import { KeysAside } from "@web/components/shared/key-numbers";
 import { Suspense } from "react";
 
 const DEFAULT_CATEGORY = coeOverviewSearchParams.category.defaultValue;
@@ -65,15 +66,12 @@ export async function CoeKeyNumbers() {
   }
 
   return (
-    <aside aria-label="Key numbers" className="flex flex-col gap-3">
-      <Typography.Paragraph
-        className="uppercase"
-        color="muted"
-        size="xs"
-        weight="semibold"
-      >
-        Key numbers · choose a category
-      </Typography.Paragraph>
+    <KeysAside
+      eyebrow="Key numbers · choose a category"
+      jump={JUMP_LINKS}
+      label="Key numbers"
+      source="Source: LTA via DataMall."
+    >
       <Suspense
         fallback={
           <CoeKeyNumbersView categoryKey={DEFAULT_CATEGORY} data={data} />
@@ -81,23 +79,6 @@ export async function CoeKeyNumbers() {
       >
         <CoeKeyNumbersSelected data={data} />
       </Suspense>
-      <nav aria-label="On this page">
-        <ul className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
-          {JUMP_LINKS.map(({ href, label }) => (
-            <li key={href}>
-              <a
-                className="text-accent-strong hover:text-accent-deep"
-                href={href}
-              >
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <Typography.Paragraph color="muted" size="xs">
-        Source: LTA via DataMall.
-      </Typography.Paragraph>
-    </aside>
+    </KeysAside>
   );
 }
