@@ -1,25 +1,21 @@
+import { Typography } from "@heroui/react";
 import {
   loadMakeRows,
   summariseLeaders,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import {
-  FuelMixFigure,
-  RoadFigure,
-  TopMakesFigure,
+  FuelMixCard,
+  TopMakesCard,
 } from "@web/app/(main)/(dashboard)/components/car-figures";
-import {
-  CoePremiumsFigure,
-  PqpFigure,
-} from "@web/app/(main)/(dashboard)/components/coe-figures";
+import { CoePremiumsCard } from "@web/app/(main)/(dashboard)/components/coe-figures";
 import { buildHomeFaqs } from "@web/app/(main)/(dashboard)/components/faq-data";
 import {
-  MarketHero,
-  MarketKeyNumbers,
+  MarketAsOf,
+  MarketKpis,
 } from "@web/app/(main)/(dashboard)/components/market-head";
 import { MarketLinks } from "@web/app/(main)/(dashboard)/components/market-links";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
-import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
@@ -132,57 +128,36 @@ export default function HomePage() {
       <StructuredData data={webSiteSchema} />
       <OrganizationStructuredData />
 
+      {/* The dashboard template's shape: a toolbar, four KPI tiles, a chart
+          pair and one table. Everything reads cached data only, so it is all
+          part of the static shell and no section needs a Suspense boundary. */}
       <OverviewPage className="gap-8 max-md:gap-6">
-        {/* Direction D's head: eyebrow, title, the Category A range hero,
-            lead and source, with the key numbers beside it once the page is
-            wide and under it before then. Everything on this page reads
-            cached data only, so it is all part of the static shell and no
-            section needs a Suspense boundary. */}
-        <HeadGrid
-          keys={
-            <SectionErrorBoundary title="Key numbers unavailable">
-              <MarketKeyNumbers />
-            </SectionErrorBoundary>
-          }
-        >
-          <HeadTitle eyebrow="Singapore car market" title="Market overview" />
-          <SectionErrorBoundary title="Headline figures unavailable">
-            <MarketHero />
-          </SectionErrorBoundary>
-          <div>
-            <SharePill title="Market overview" />
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex min-w-0 flex-col gap-2">
+            <Typography.Heading level={1}>Market overview</Typography.Heading>
+            <Typography.Paragraph color="muted" size="sm">
+              <MarketAsOf />
+            </Typography.Paragraph>
           </div>
-        </HeadGrid>
+          <SharePill title="Market overview" />
+        </div>
 
-        <Hairline />
-
-        {/* COE and PQP lead the car figures, as the navigation does. */}
-        <SectionErrorBoundary title="COE premiums unavailable">
-          <CoePremiumsFigure />
+        <SectionErrorBoundary title="Key numbers unavailable">
+          <MarketKpis />
         </SectionErrorBoundary>
 
-        <Hairline />
-
-        <SectionErrorBoundary title="PQP rates unavailable">
-          <PqpFigure />
-        </SectionErrorBoundary>
-
-        <Hairline />
-
-        <SectionErrorBoundary title="Fuel types unavailable">
-          <FuelMixFigure />
-        </SectionErrorBoundary>
-
-        <Hairline />
+        {/* COE leads the car figures, as the navigation does. */}
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+          <SectionErrorBoundary title="COE premiums unavailable">
+            <CoePremiumsCard />
+          </SectionErrorBoundary>
+          <SectionErrorBoundary title="Fuel types unavailable">
+            <FuelMixCard />
+          </SectionErrorBoundary>
+        </div>
 
         <SectionErrorBoundary title="Top makes unavailable">
-          <TopMakesFigure />
-        </SectionErrorBoundary>
-
-        <Hairline />
-
-        <SectionErrorBoundary title="Vehicle figures unavailable">
-          <RoadFigure />
+          <TopMakesCard />
         </SectionErrorBoundary>
 
         <MarketLinks />
