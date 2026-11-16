@@ -65,11 +65,11 @@ export function FollowLinks({ post }: { post: SelectPost }) {
       <span className="font-semibold text-muted text-xs">
         Follow the figures
       </span>
-      <ul className="flex flex-wrap gap-x-6 gap-y-1.5 text-sm">
+      <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
         {links.map(({ href, label }) => (
           <li key={href}>
             <Link
-              className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+              className="font-semibold text-accent no-underline transition-colors hover:text-accent"
               href={href}
             >
               {label} →

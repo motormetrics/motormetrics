@@ -61,12 +61,12 @@ export function PricingSection() {
         {plans.map(({ cta, features, featured, name, note, price }) => (
           <div
             className={cn(
-              "flex min-w-0 flex-col gap-3 rounded-lg border bg-surface p-5",
+              "flex min-w-0 flex-col gap-4 rounded-lg border bg-surface p-6",
               featured ? "border-accent" : "border-separator",
             )}
             key={name}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <Typography.Heading className="text-xl" level={3} weight="bold">
                 {name}
               </Typography.Heading>
@@ -87,21 +87,18 @@ export function PricingSection() {
               </span>
               <span className="text-muted text-sm">per month</span>
             </div>
-            <Typography.Paragraph
-              className="text-muted-strong leading-normal"
-              size="sm"
-            >
+            <Typography.Paragraph className="leading-normal" size="sm">
               {note}
             </Typography.Paragraph>
             <div className="flex flex-col">
               {features.map((feature) => (
                 <div
-                  className="flex items-start gap-2.5 border-separator border-t py-2 text-muted-strong text-sm leading-normal"
+                  className="flex items-start gap-2 border-separator border-t py-2 text-foreground text-sm leading-normal"
                   key={feature}
                 >
                   <Check
                     aria-hidden
-                    className="mt-0.5 size-4 shrink-0 text-accent-strong"
+                    className="mt-0.5 size-4 shrink-0 text-accent"
                     strokeWidth={2.5}
                   />
                   {feature}

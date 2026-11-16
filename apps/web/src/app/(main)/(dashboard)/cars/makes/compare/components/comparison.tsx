@@ -134,7 +134,7 @@ export async function ComparisonHead({
       controls={controls}
       eyebrow="Cars · Makes · Compare"
       sub={
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <Chip size="lg" variant="soft">
             <Chip.Label>{periodLabel(month, "ytd")}</Chip.Label>
           </Chip>
@@ -227,7 +227,7 @@ async function CompareLead({ names }: ComparisonProps) {
       >
         {leadSentence({ a, b, month, nameA, nameB })}
       </Typography.Paragraph>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
         <SummaryTable
           logoUrlA={logoUrlBySlug[slugify(nameA)] ?? null}
           logoUrlB={logoUrlBySlug[slugify(nameB)] ?? null}
@@ -289,7 +289,7 @@ async function CompareTrendFigure({ names }: ComparisonProps) {
 /** Fuel type and vehicle type, each as shares of the make's own total. */
 function CompareMix({ names }: ComparisonProps) {
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
       <section className="flex min-w-0 flex-col gap-4">
         <SectionHead
           caption="Share of each make’s registrations"

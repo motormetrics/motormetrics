@@ -70,7 +70,7 @@ const FUEL_SERIES: (FuelMixSeries & { name: string })[] = [
     name: "Petrol-Electric (Plug-In)",
   },
   {
-    color: "var(--chart-sand)",
+    color: "var(--chart-2)",
     key: "petrol",
     label: "Petrol",
     name: "Petrol",
@@ -152,9 +152,9 @@ export async function FuelMixFigure() {
           </span>
         }
       />
-      <ul className="flex flex-wrap gap-x-5 gap-y-2 text-muted-strong text-xs">
+      <ul className="flex flex-wrap gap-x-4 gap-y-2 text-foreground text-xs">
         {FUEL_SERIES.map(({ color, key, label }) => (
-          <li className="inline-flex items-center gap-1.5" key={key}>
+          <li className="inline-flex items-center gap-2" key={key}>
             <span
               aria-hidden
               className="block size-2.5 rounded-xs"
@@ -199,23 +199,23 @@ export async function TopMakesFigure() {
           </span>
         }
       />
-      <ul className="grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-2.5">
+      <ul className="grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-4">
         {rows.slice(0, TOP_MAKES).map((row) => {
           const peak = Math.max(...row.trend, 1);
           return (
             <li key={row.slug}>
               <Link
-                className="flex h-full min-w-0 flex-col gap-2.5 rounded-lg border border-separator bg-surface p-3.5 text-foreground no-underline transition-colors hover:border-border hover:bg-surface-secondary"
+                className="flex h-full min-w-0 flex-col gap-2 rounded-lg border border-separator bg-surface p-4 text-foreground no-underline transition-colors hover:border-border hover:bg-surface-secondary"
                 href={`/cars/makes/${row.slug}`}
               >
-                <span className="flex min-w-0 items-center gap-2.5">
+                <span className="flex min-w-0 items-center gap-2">
                   <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="sm" />
                   <span className="truncate font-semibold">{row.make}</span>
                   <span className="ml-auto text-muted text-xs tabular-nums">
                     #{row.rank}
                   </span>
                 </span>
-                <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
+                <span className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                   <span className="font-semibold text-xl tabular-nums">
                     {formatCount(row.count)}
                   </span>
@@ -335,9 +335,9 @@ export async function RoadFigure() {
         eyebrow="Figure 4 · Deregistrations and vehicle population"
         title={<span id="on-the-road-heading">Off the road and on it</span>}
       />
-      <div className="grid @3xl:grid-cols-2 grid-cols-1 items-start gap-10 @3xl:gap-x-16">
-        <div className="flex min-w-0 flex-col gap-3">
-          <div className="flex flex-col gap-0.5">
+      <div className="grid @3xl:grid-cols-2 grid-cols-1 items-start gap-8 @3xl:gap-x-16">
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="flex flex-col gap-1">
             <Typography.Heading className="text-base" level={3}>
               Deregistered, {formatMonthLabel(month)}
             </Typography.Heading>
@@ -353,7 +353,7 @@ export async function RoadFigure() {
           <ul className="flex flex-col">
             {rows.map((row, index) => (
               <li
-                className="grid grid-cols-3 items-center gap-3 border-separator border-b py-2 text-sm"
+                className="grid grid-cols-3 items-center gap-4 py-2 text-sm"
                 key={row.label}
               >
                 <span className="truncate">{row.label}</span>
@@ -363,7 +363,7 @@ export async function RoadFigure() {
                     style={{ width: `${(row.count / peak) * 100}%` }}
                   />
                 </span>
-                <span className="text-right text-muted-strong tabular-nums">
+                <span className="text-right text-foreground tabular-nums">
                   <span className="font-semibold text-foreground">
                     {formatCount(row.count)}
                   </span>
@@ -377,8 +377,8 @@ export async function RoadFigure() {
           </SectionLink>
         </div>
         {year && fuel.length > 0 ? (
-          <div className="flex min-w-0 flex-col gap-3">
-            <div className="flex flex-col gap-0.5">
+          <div className="flex min-w-0 flex-col gap-4">
+            <div className="flex flex-col gap-1">
               <Typography.Heading className="text-base" level={3}>
                 On the road, end of {year}
               </Typography.Heading>

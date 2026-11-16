@@ -70,10 +70,7 @@ export function HeadAnswer({
         value={value}
         where={position}
       />
-      <Typography.Paragraph
-        className="text-muted-strong tabular-nums"
-        size="sm"
-      >
+      <Typography.Paragraph className="tabular-nums" size="sm">
         {context}
       </Typography.Paragraph>
     </RangeHero>

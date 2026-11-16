@@ -41,7 +41,7 @@ export function RangeBar({
       <ProgressBar.Track className="col-span-full">
         <ProgressBar.Fill />
       </ProgressBar.Track>
-      <span className="col-span-full flex justify-between gap-3 text-muted text-xs tabular-nums">
+      <span className="col-span-full flex justify-between gap-4 text-muted text-xs tabular-nums">
         <span>{lowLabel}</span>
         <span className="font-semibold text-foreground">{where}</span>
         <span>{highLabel}</span>

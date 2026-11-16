@@ -41,13 +41,13 @@ export function PQPPremiumBars({
   }));
 
   return (
-    <div className="flex flex-col gap-3.5">
-      <div className="flex flex-wrap items-center gap-4 text-muted-strong text-sm">
-        <span className="inline-flex items-center gap-1.5">
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-center gap-4 text-foreground text-sm">
+        <span className="inline-flex items-center gap-2">
           <span aria-hidden className="block h-2.5 w-3 rounded-xs bg-chart-1" />
           PQP
         </span>
-        <span className="inline-flex items-center gap-1.5">
+        <span className="inline-flex items-center gap-2">
           <span aria-hidden className="block h-2.5 w-3 rounded-xs bg-chart-5" />
           Latest premium
         </span>

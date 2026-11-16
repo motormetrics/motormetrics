@@ -24,7 +24,7 @@ export function PageFaq({ faqs, expandFirst = false }: PageFaqProps) {
 
   return (
     <section
-      className="grid scroll-mt-24 grid-cols-1 items-start gap-8 lg:grid-cols-4 lg:gap-14"
+      className="grid scroll-mt-24 grid-cols-1 items-start gap-8 lg:grid-cols-4 lg:gap-16"
       id="faq"
     >
       <Typography.Heading level={2}>Common questions</Typography.Heading>

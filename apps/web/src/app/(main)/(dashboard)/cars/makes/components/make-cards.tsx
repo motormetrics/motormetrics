@@ -146,7 +146,7 @@ export function MakeCards({
               room for both; on a phone it sits above the detail. */}
           <ul
             aria-label="Makes"
-            className="flex @3xl:max-h-screen max-h-96 flex-col @3xl:overflow-y-auto overflow-y-auto border-separator border-y"
+            className="flex @3xl:max-h-screen max-h-96 flex-col @3xl:overflow-y-auto overflow-y-auto border-separator border-t"
           >
             {shown.map((card) => (
               <li key={card.slug}>
@@ -166,7 +166,7 @@ export function MakeCards({
         <ul
           aria-busy={isPending}
           className={cn(
-            "grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-2.5 transition-opacity",
+            "grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-4 transition-opacity",
             isPending && "opacity-60",
           )}
         >
@@ -201,7 +201,7 @@ function MakeRowLink({
     <Link
       aria-current={selected ? "true" : undefined}
       className={cn(
-        "flex min-w-0 items-center gap-2.5 border-separator border-b px-2 py-2 text-sm transition-colors hover:bg-surface-secondary",
+        "flex min-w-0 items-center gap-2 px-2 py-2 text-sm transition-colors hover:bg-surface-secondary",
         selected && "bg-surface-secondary font-semibold",
       )}
       href={card.href}
@@ -231,19 +231,19 @@ function MakeCardLink({
     // A click selects the make in place, so the make's page is rarely where
     // this leads and is not worth prefetching for every card.
     <Link
-      className="flex h-full min-w-0 flex-col gap-2.5 rounded-lg border border-separator bg-surface p-3.5 transition-colors hover:border-border hover:bg-surface-secondary"
+      className="flex h-full min-w-0 flex-col gap-2 rounded-lg border border-separator bg-surface p-4 transition-colors hover:border-border hover:bg-surface-secondary"
       href={card.href}
       onClick={onClick}
       prefetch={false}
     >
-      <span className="flex min-w-0 items-center gap-2.5">
+      <span className="flex min-w-0 items-center gap-2">
         <MakeAvatar logoUrl={card.logoUrl} make={card.make} size="sm" />
         <span className="truncate font-semibold">{card.make}</span>
         <span className="ml-auto text-muted text-xs tabular-nums">
           #{card.rank}
         </span>
       </span>
-      <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
+      <span className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <span className="font-semibold text-xl tabular-nums">{card.count}</span>
         <span className="text-muted text-sm tabular-nums">
           {card.share} · {card.change}
@@ -253,13 +253,18 @@ function MakeCardLink({
       <span aria-hidden className="flex h-8 items-end gap-0.5">
         {card.trend.map((value, index) => (
           <span
-            className={cn(
-              "flex-1 rounded-t-xs",
-              index === card.trend.length - 1 ? "bg-chart-1" : "bg-chart-5",
-            )}
+            className="flex-1 rounded-t-xs"
             // biome-ignore lint/suspicious/noArrayIndexKey: a month's position is its identity
             key={index}
-            style={{ height: `${Math.max((value / peak) * 100, 2)}%` }}
+            // HeroUI Pro sets --chart-N but no Tailwind colour for it, so
+            // there is no bg-chart-N utility to use here.
+            style={{
+              backgroundColor:
+                index === card.trend.length - 1
+                  ? "var(--chart-1)"
+                  : "var(--chart-5)",
+              height: `${Math.max((value / peak) * 100, 2)}%`,
+            }}
           />
         ))}
       </span>

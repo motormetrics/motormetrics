@@ -88,7 +88,7 @@ async function GuideContent({
   cacheTag(`learn:${slug}`);
 
   return (
-    <article className="prose dark:prose-invert max-w-prose prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:text-accent-strong prose-headings:text-foreground prose-li:text-muted-strong prose-p:text-muted-strong prose-strong:text-foreground prose-td:text-muted-strong prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
+    <article className="prose dark:prose-invert max-w-prose prose-headings:scroll-mt-24 prose-headings:font-bold prose-a:text-accent prose-headings:text-foreground prose-li:text-foreground prose-p:text-foreground prose-strong:text-foreground prose-td:text-foreground prose-th:text-muted prose-th:text-xs prose-p:leading-relaxed prose-headings:tracking-tight">
       <MDXRemote
         components={{ a: MdxLink }}
         source={content}
@@ -121,7 +121,7 @@ async function GuideContent({
  */
 export default function GuidePage({ params }: PageProps) {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <Suspense fallback={<GuideSkeleton />}>
         <Guide params={params} />
       </Suspense>

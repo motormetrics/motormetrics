@@ -3,18 +3,17 @@ import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import type { TypeCount } from "@web/queries/cars/type-detail";
 
 /**
- * The comp's fuel colours: slate for electric and hybrid, sand for petrol.
- * Any other LTA fuel type takes the palest slate step.
+ * One HeroUI chart step per fuel type; any other LTA fuel type is muted.
  */
 const FUEL_COLOURS: Record<string, string> = {
   Electric: "var(--chart-1)",
-  Petrol: "var(--chart-sand)",
+  Petrol: "var(--chart-2)",
   "Petrol-Electric": "var(--chart-3)",
   "Petrol-Electric (Plug-In)": "var(--chart-4)",
 };
 
 function fuelColour(fuelType: string): string {
-  return FUEL_COLOURS[fuelType] ?? "var(--chart-6)";
+  return FUEL_COLOURS[fuelType] ?? "var(--muted)";
 }
 
 /** The vehicle type's registrations split by fuel type. */
@@ -50,7 +49,7 @@ export function VehicleTypeFuelMix({
         ))}
       </div>
       <div className="flex flex-col">
-        <div className="flex items-end gap-2.5 border-border border-b pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-end gap-2.5 pb-2 font-semibold text-muted text-xs">
           <span className="w-3 shrink-0" />
           <span className="min-w-0 flex-1">Fuel type</span>
           <span className="w-16 shrink-0 text-right">Cars</span>
@@ -58,10 +57,7 @@ export function VehicleTypeFuelMix({
         </div>
         <ul className="flex flex-col">
           {crossMix.map(({ count, name }) => (
-            <li
-              className="flex items-center gap-2.5 border-separator border-b py-2.5"
-              key={name}
-            >
+            <li className="flex items-center gap-2.5 py-2.5" key={name}>
               <span
                 className="block size-3 shrink-0 rounded-xs"
                 style={{ background: fuelColour(name) }}

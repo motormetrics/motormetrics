@@ -16,7 +16,7 @@ export const VES_BANDS = [
 
 export function VesBands() {
   return (
-    <div className="flex min-w-0 flex-col gap-3.5">
+    <div className="flex min-w-0 flex-col gap-4">
       <SubHead
         link={{ href: "/learn", label: "EV ownership guide" }}
         sub="Vehicular Emissions Scheme bands most EVs qualify for"
@@ -24,18 +24,15 @@ export function VesBands() {
       />
 
       <div className="flex flex-col">
-        <div className="flex items-center gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-center gap-4 pb-2 font-semibold text-muted text-xs">
           <span className="min-w-0 flex-1">Band</span>
           <span className="w-24 text-right">Amount</span>
         </div>
         <ul className="flex flex-col">
           {VES_BANDS.map((row) => (
-            <li
-              className="flex items-center gap-3 border-separator border-b py-2.5"
-              key={row.band}
-            >
+            <li className="flex items-center gap-4 py-2" key={row.band}>
               <span className="w-9 font-semibold text-sm">{row.band}</span>
-              <span className="min-w-0 flex-1 text-muted-strong text-sm">
+              <span className="min-w-0 flex-1 text-foreground text-sm">
                 {row.note}
               </span>
               <span className="w-24 text-right font-semibold tabular-nums">

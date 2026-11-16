@@ -22,14 +22,14 @@ export function OverviewPage({
   className?: string;
 }) {
   return (
-    <div className={cn("flex w-full flex-col gap-14", className)}>
+    <div className={cn("flex w-full flex-col gap-12", className)}>
       {children}
     </div>
   );
 }
 
 /**
- * The two-up grid the comps use for paired sections. The 72px gutter is what
+ * The two-up grid the comps use for paired sections. The 64px gutter is what
  * lets two 520-wide sparklines sit side by side without reading as one chart.
  */
 export function OverviewGrid({
@@ -42,7 +42,7 @@ export function OverviewGrid({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 items-start gap-14 lg:grid-cols-2 lg:gap-x-[72px]",
+        "grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-x-16",
         className,
       )}
     >
@@ -84,7 +84,7 @@ export function SectionHead({
 }) {
   return (
     <div className={cn("flex flex-wrap items-end gap-4", className)}>
-      <div className="flex min-w-0 flex-col gap-1">
+      <div className="flex min-w-0 flex-col gap-2">
         {eyebrow ? (
           <Typography.Paragraph
             className="uppercase"
@@ -135,7 +135,7 @@ export function SectionLink({
     <Link
       rel={rel}
       className={cn(
-        "ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep",
+        "ml-auto inline-flex shrink-0 items-center gap-1 whitespace-nowrap font-semibold text-accent text-sm no-underline transition-colors hover:text-accent",
         className,
       )}
       href={href}
@@ -186,13 +186,10 @@ export function Headline({
   value: ReactNode;
 }) {
   return (
-    <div className={cn("flex flex-col gap-2.5", className)}>
+    <div className={cn("flex flex-col gap-2", className)}>
       {label ? (
         // Paragraph has no xl size, and type="h4" needs a client-only render prop to stay a <p>.
-        <Typography.Paragraph
-          className="text-muted-strong text-xl"
-          weight="semibold"
-        >
+        <Typography.Paragraph className="text-xl" weight="semibold">
           {label}
         </Typography.Paragraph>
       ) : null}
@@ -234,7 +231,7 @@ export function StatCell({
   value: ReactNode;
 }) {
   return (
-    <div className="flex min-w-0 flex-col gap-[3px] border-separator border-b py-3.5 pr-4 even:border-l even:pl-4">
+    <div className="flex min-w-0 flex-col gap-1 py-4 pr-4 even:border-l even:pl-4">
       <Typography.Paragraph weight="semibold" color="muted" size="xs">
         {label}
       </Typography.Paragraph>

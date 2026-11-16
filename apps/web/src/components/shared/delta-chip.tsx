@@ -21,7 +21,7 @@ export function DeltaChip({
   const sign = value >= 0 ? "+" : "−";
 
   return (
-    <span className={cn("text-muted-strong tabular-nums", className)}>
+    <span className={cn("text-foreground tabular-nums", className)}>
       {`${sign}${Math.abs(value).toFixed(1)}${unit}`}
     </span>
   );

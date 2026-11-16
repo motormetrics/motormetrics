@@ -167,7 +167,7 @@ export async function generateMetadata({
 
 export default function CompareCarMakesPage({ searchParams }: PageProps) {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <Suspense fallback={null}>
         <SelectorStructuredData searchParams={searchParams} />
       </Suspense>

@@ -111,7 +111,7 @@ export async function MakesKeyNumbers() {
   ];
 
   return (
-    <aside aria-label="Key numbers" className="flex flex-col gap-3">
+    <aside aria-label="Key numbers" className="flex flex-col gap-4">
       <Typography.Paragraph
         className="uppercase"
         color="muted"

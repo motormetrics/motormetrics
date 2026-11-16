@@ -41,10 +41,10 @@ export function DeregistrationsChart({
 }) {
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap gap-x-4 gap-y-2 text-muted-strong text-xs">
+      <div className="flex flex-wrap gap-x-4 gap-y-2 text-foreground text-xs">
         {series.map(({ color, label }) => (
           <span
-            className="inline-flex items-center gap-1.5 whitespace-nowrap"
+            className="inline-flex items-center gap-2 whitespace-nowrap"
             key={label}
           >
             <span

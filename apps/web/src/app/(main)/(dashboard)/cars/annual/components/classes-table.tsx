@@ -68,7 +68,7 @@ export function ClassesTable({
           className={cn(
             "block w-full cursor-pointer whitespace-nowrap font-semibold text-xs",
             key === "name" ? "text-left" : "text-right",
-            isSorted ? "text-accent-strong" : "text-muted",
+            isSorted ? "text-accent" : "text-muted",
           )}
           onClick={() => sortBy(key)}
           type="button"
@@ -91,7 +91,7 @@ export function ClassesTable({
 
       <table aria-label="Vehicle classes" className="w-full table-fixed">
         <thead>
-          <tr className="border-border border-b *:align-bottom">
+          <tr className="*:align-bottom">
             {header("name", "Vehicle class")}
             {header("population", "Vehicles", CELL.population)}
             <th
@@ -116,7 +116,7 @@ export function ClassesTable({
             return (
               <tr
                 className={cn(
-                  "border-separator border-b *:px-2 *:py-2.5 max-md:*:px-1",
+                  "*:px-2 *:py-2 max-md:*:px-1",
                   isCars ? "bg-accent-soft" : "hover:bg-surface-secondary",
                 )}
                 key={row.name}
@@ -125,7 +125,7 @@ export function ClassesTable({
                   className={cn(
                     "truncate text-left text-sm",
                     isCars
-                      ? "border-l-2 border-l-accent font-bold text-accent-strong"
+                      ? "border-l-2 border-l-accent font-bold text-accent"
                       : "font-medium",
                   )}
                   scope="row"
@@ -136,7 +136,7 @@ export function ClassesTable({
                   {row.population.toLocaleString("en-SG")}
                 </td>
                 <td>
-                  <span className="flex items-center gap-2.5">
+                  <span className="flex items-center gap-2">
                     <span className="h-2.5 min-w-0 flex-1 rounded-r-sm bg-surface-secondary max-md:hidden">
                       <span
                         className="block h-full rounded-r-sm"
@@ -148,7 +148,7 @@ export function ClassesTable({
                         }}
                       />
                     </span>
-                    <span className="ml-auto w-12 shrink-0 text-right text-muted-strong text-xs tabular-nums">
+                    <span className="ml-auto w-12 shrink-0 text-right text-foreground text-xs tabular-nums">
                       {row.share.toFixed(1)}%
                     </span>
                   </span>

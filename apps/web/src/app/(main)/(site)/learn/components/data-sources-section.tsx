@@ -56,7 +56,7 @@ export function DataSourcesSection() {
         title="Where the data comes from"
         trailing={
           <a
-            className="whitespace-nowrap font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+            className="whitespace-nowrap font-semibold text-accent text-sm no-underline transition-colors hover:text-accent"
             href="https://datamall.lta.gov.sg"
             rel="noreferrer nofollow"
             target="_blank"
@@ -69,15 +69,9 @@ export function DataSourcesSection() {
       <div className="@container">
         <div className="grid @2xl:grid-cols-2 @6xl:grid-cols-4 grid-cols-1 @2xl:gap-x-6 border-border border-t">
           {FACTS.map(({ detail, title }) => (
-            <div
-              className="flex flex-col gap-1.5 border-separator border-b py-3.5"
-              key={title}
-            >
+            <div className="flex flex-col gap-2 py-4" key={title}>
               <span className="font-semibold text-muted text-xs">{title}</span>
-              <Typography.Paragraph
-                className="text-muted-strong leading-relaxed"
-                size="sm"
-              >
+              <Typography.Paragraph className="leading-relaxed" size="sm">
                 {detail}
               </Typography.Paragraph>
             </div>

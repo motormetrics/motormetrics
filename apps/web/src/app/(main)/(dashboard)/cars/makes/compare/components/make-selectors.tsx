@@ -17,7 +17,7 @@ async function MakeSelectorsContent({
 /** Stands in for `MakePicker`: two labelled selects and the Compare button. */
 export function MakePickerSkeleton() {
   return (
-    <div className="flex flex-wrap items-end gap-3">
+    <div className="flex flex-wrap items-end gap-4">
       {["first", "second"].map((position) => (
         <div className="flex w-full flex-col gap-1 sm:w-56" key={position}>
           <Skeleton className="h-5 w-24" />

@@ -60,7 +60,7 @@ const structuredData: WithContext<WebPage> = {
 
 export default function ARFCalculatorPage() {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -106,16 +106,16 @@ export default function ARFCalculatorPage() {
           eyebrow="Before you rely on it"
           title="What the figures assume"
         />
-        <Typography.Paragraph className="max-w-prose text-muted-strong">
+        <Typography.Paragraph className="max-w-prose">
           Figures are for illustration only and are before any VES or EEAI
           rebate or surcharge. LTA charges the ARF on the car&apos;s OMV, band
           by band, at the rates in force when its COE was obtained. The ARF you
           pay is what{" "}
-          <Link className="font-semibold text-accent-strong" href="/cars/parf">
+          <Link className="font-semibold text-accent" href="/cars/parf">
             your PARF rebate
           </Link>{" "}
           is worked out from, and the{" "}
-          <Link className="font-semibold text-accent-strong" href="/learn/arf">
+          <Link className="font-semibold text-accent" href="/learn/arf">
             ARF guide
           </Link>{" "}
           explains how it fits into the price of a car.
@@ -124,7 +124,7 @@ export default function ARFCalculatorPage() {
           Estimates only, not financial advice or a recommendation. MotorMetrics
           is not affiliated with LTA; check your figures on OneMotoring.
         </SourceNote>
-        <div className="flex flex-wrap gap-x-5 gap-y-2">
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
           <SectionLink
             className="ml-0"
             href="https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/upfront-vehicle-costs/tax-structure.html"

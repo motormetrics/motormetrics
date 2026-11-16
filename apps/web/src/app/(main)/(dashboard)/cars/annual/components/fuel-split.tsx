@@ -9,14 +9,14 @@ const OTHERS = "Others";
 
 /** The comp's colour for each LTA fuel label; anything else takes the last. */
 const FUEL_COLOURS: Record<string, string> = {
-  Diesel: "var(--chart-sand)",
+  Diesel: "var(--chart-2)",
   Electric: "var(--chart-5)",
   Petrol: "var(--chart-1)",
   "Petrol-Electric": "var(--chart-3)",
-  "Petrol-Electric (Plug-In)": "var(--muted)",
+  "Petrol-Electric (Plug-In)": "var(--chart-4)",
 };
 
-const FALLBACK_COLOUR = "var(--chart-6)";
+const FALLBACK_COLOUR = "var(--muted)";
 
 /**
  * The fuel split at the latest year end, as Direction D's key numbers: one
@@ -91,7 +91,7 @@ export function FuelSplit({
       <KeyNumberList
         items={rows.map((row) => ({
           label: (
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center gap-2">
               <span
                 aria-hidden
                 className="size-2.5 shrink-0 rounded-xs"

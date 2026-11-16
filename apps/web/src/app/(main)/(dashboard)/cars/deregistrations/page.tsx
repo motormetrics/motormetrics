@@ -79,7 +79,7 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
   const report = loadDeregistrationsReport(searchParams);
 
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -121,7 +121,7 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
             <DeregistrationsLead report={report} />
           </Suspense>
         </Typography.Paragraph>
-        <div className="flex flex-wrap items-end gap-3">
+        <div className="flex flex-wrap items-end gap-4">
           <div className="flex flex-col gap-1">
             <span className="font-semibold text-muted text-xs">Month</span>
             <Suspense fallback={<Skeleton className="h-10 w-36" />}>

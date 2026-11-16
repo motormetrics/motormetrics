@@ -83,12 +83,12 @@ export async function ResultsHero() {
 
   return (
     <>
-      <div className="flex max-w-xl flex-col gap-2.5 border-separator border-t pt-4">
-        <Typography.Paragraph className="text-muted-strong">
+      <div className="flex max-w-xl flex-col gap-2 border-separator border-t pt-4">
+        <Typography.Paragraph>
           <span className="font-semibold text-foreground">Bids per quota</span>{" "}
           · all five categories, latest exercise
         </Typography.Paragraph>
-        <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
           <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight lg:text-5xl">
             {(totalQuota > 0 ? totalBids / totalQuota : 0).toFixed(2)}×
           </span>

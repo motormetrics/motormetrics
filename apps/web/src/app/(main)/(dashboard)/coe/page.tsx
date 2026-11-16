@@ -59,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Page() {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       {/* Direction D's head: eyebrow, title, range hero, lead and source,
           with the key numbers beside it once the page is wide and under it
           before then. Every figure is from cached data, so the head is in

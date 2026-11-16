@@ -7,7 +7,7 @@ export function SuccessRateCell({ rate }: { rate: number }) {
     // bar fits a table row.
     <Meter
       aria-label="Success rate"
-      className="flex items-center gap-3"
+      className="flex items-center gap-2"
       formatOptions={{ maximumFractionDigits: 0, style: "percent" }}
       maxValue={1}
       size="sm"
@@ -16,7 +16,7 @@ export function SuccessRateCell({ rate }: { rate: number }) {
       <Meter.Track className="flex-1">
         <Meter.Fill />
       </Meter.Track>
-      <Meter.Output className="w-10 text-right font-bold text-muted-strong text-sm tabular-nums" />
+      <Meter.Output className="w-10 text-right text-sm tabular-nums" />
     </Meter>
   );
 }

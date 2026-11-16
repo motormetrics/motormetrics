@@ -24,7 +24,7 @@ describe("CostTrendChip", () => {
   it("should render as plain grey text without sentiment colour", async () => {
     const screen = await render(<CostTrendChip changeRatio={-0.1} />);
     const element = screen.getByText("−10.0%").element();
-    expect(element.className).toContain("text-muted-strong");
+    expect(element.className).toContain("text-foreground");
     expect(element.className).not.toMatch(/success|warning|danger/);
     expect(element.querySelector("svg")).toBeNull();
   });

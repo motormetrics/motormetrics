@@ -49,7 +49,7 @@ export function PremiumsRange({ searchParams }: PremiumsPageProps) {
         }
       />
       <SectionErrorBoundary title="Premium range unavailable">
-        <Suspense fallback={<Skeleton className="h-40 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-40 w-full" />}>
           <RangeBars searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>

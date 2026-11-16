@@ -80,7 +80,7 @@ export function NotificationPrompt() {
     const timer = window.setTimeout(() => {
       promptToastId.current = toast(NOTIFICATION_PROMPT.title, {
         description: (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <span>{NOTIFICATION_PROMPT.description}</span>
             <div className="flex gap-2">
               <Button onPress={handleEnable} size="sm" variant="primary">

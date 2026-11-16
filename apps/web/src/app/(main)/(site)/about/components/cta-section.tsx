@@ -10,7 +10,7 @@ import Link from "next/link";
  */
 export function CtaSection() {
   return (
-    <section className="flex flex-col gap-5 border-border border-t pt-4 lg:flex-row lg:items-end lg:gap-8">
+    <section className="flex flex-col gap-6 border-border border-t pt-4 lg:flex-row lg:items-end lg:gap-8">
       <SectionHead
         caption="New COE results and registration figures are posted as soon as they publish. Nothing else."
         className="min-w-0 flex-1"

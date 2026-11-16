@@ -4,7 +4,7 @@ import { cn, ProgressBar } from "@heroui/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { parseAsString, useQueryState } from "nuqs";
 import posthog from "posthog-js";
-import { type CSSProperties, useTransition } from "react";
+import { useTransition } from "react";
 
 export interface FuelTypeRow {
   /** Signed percentage change on the previous month. */
@@ -16,11 +16,11 @@ export interface FuelTypeRow {
   yearToDate: number;
 }
 
-const ROW = "flex items-center gap-4 px-2 max-md:gap-2 max-md:px-0.5";
+const ROW = "flex items-center gap-4 px-2 max-md:gap-2 max-md:px-1";
 const NAME_CELL = "min-w-0 flex-1 truncate";
 const CARS_CELL = "w-24 shrink-0 text-right max-md:w-16";
 const SHARE_CELL =
-  "flex w-40 shrink-0 items-center justify-end gap-2.5 max-md:w-14 xl:w-56";
+  "flex w-40 shrink-0 items-center justify-end gap-2 max-md:w-14 xl:w-56";
 const YEAR_CELL = "w-24 shrink-0 text-right max-md:hidden";
 const CHANGE_CELL = "w-24 shrink-0 text-right max-md:w-16";
 
@@ -56,19 +56,14 @@ export function FuelTypeTable({
 
   return (
     <div className={cn("flex flex-col", isPending && "opacity-70")}>
-      <div
-        className={cn(
-          ROW,
-          "border-border border-b pb-2 font-semibold text-muted text-xs",
-        )}
-      >
+      <div className={cn(ROW, "pb-2 font-semibold text-muted text-xs")}>
         <span className={NAME_CELL}>Fuel type</span>
         <span className={CARS_CELL}>Cars</span>
         <span className={cn(SHARE_CELL, "block text-right")}>Share</span>
         <span className={YEAR_CELL}>{year} to date</span>
         <span className={CHANGE_CELL}>vs {previousMonthName}</span>
       </div>
-      {rows.map((row, index) => {
+      {rows.map((row) => {
         const isActive = row.name === selected;
         return (
           // A div row rather than a button: the share bar is a block-level
@@ -77,7 +72,7 @@ export function FuelTypeTable({
           <div
             className={cn(
               ROW,
-              "relative border-separator border-b py-2.5 transition-colors hover:bg-surface-secondary",
+              "relative py-2 transition-colors hover:bg-surface-secondary",
               isActive && "bg-accent-soft",
             )}
             key={row.name}
@@ -88,7 +83,7 @@ export function FuelTypeTable({
                 NAME_CELL,
                 "cursor-pointer text-left text-sm outline-none after:absolute after:inset-0 focus-visible:after:ring-2 focus-visible:after:ring-focus",
                 isActive
-                  ? "font-bold text-accent-strong"
+                  ? "font-bold text-accent"
                   : "font-medium text-foreground",
               )}
               onClick={() => {
@@ -112,27 +107,18 @@ export function FuelTypeTable({
               <ProgressBar
                 aria-label={`${row.name} against the largest fuel type`}
                 className="min-w-0 flex-1 max-md:hidden"
-                style={
-                  {
-                    "--progress-bar-fill":
-                      index === 0 ? "var(--chart-1)" : "var(--chart-3)",
-                  } as CSSProperties
-                }
                 value={(row.count / leadCount) * 100}
               >
                 <ProgressBar.Track>
                   <ProgressBar.Fill />
                 </ProgressBar.Track>
               </ProgressBar>
-              <span className="w-12 shrink-0 text-right text-muted-strong text-sm tabular-nums">
+              <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
                 {row.share.toFixed(1)}%
               </span>
             </span>
             <span
-              className={cn(
-                YEAR_CELL,
-                "text-muted-strong text-sm tabular-nums",
-              )}
+              className={cn(YEAR_CELL, "text-foreground text-sm tabular-nums")}
             >
               {formatCount(row.yearToDate)}
             </span>

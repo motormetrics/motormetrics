@@ -13,8 +13,7 @@ import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { getCoeResults } from "@web/queries/coe";
 
 /** Shared by the quota header and rows. */
-const QUOTA_ROW =
-  "flex items-center gap-3.5 border-separator border-b py-3 max-md:gap-2.5";
+const QUOTA_ROW = "flex items-center gap-4 py-2 max-md:gap-2";
 const QUOTA_CELL = "w-16 shrink-0 text-right";
 
 /**
@@ -40,7 +39,7 @@ export async function QuotaAndDemand() {
         <div
           className={cn(
             QUOTA_ROW,
-            "border-border pt-0 pb-2 font-semibold text-muted text-xs",
+            "pt-0 pb-2 font-semibold text-muted text-xs",
           )}
         >
           <span className="w-14 shrink-0 max-md:w-8">Cat</span>
@@ -64,7 +63,7 @@ export async function QuotaAndDemand() {
                 <span className="w-14 shrink-0 font-semibold text-sm max-md:w-8">
                   {toCategoryKey(category)}
                 </span>
-                <span className="flex min-w-0 flex-1 flex-col text-muted-strong text-sm">
+                <span className="flex min-w-0 flex-1 flex-col text-foreground text-sm">
                   <span className="truncate max-md:whitespace-normal">
                     {CATEGORY_DESCRIPTIONS[category]}
                   </span>
@@ -83,7 +82,7 @@ export async function QuotaAndDemand() {
                 <span
                   className={cn(
                     QUOTA_CELL,
-                    "text-muted-strong text-sm tabular-nums",
+                    "text-foreground text-sm tabular-nums",
                   )}
                 >
                   {(figures?.bidsReceived ?? 0).toLocaleString("en-SG")}

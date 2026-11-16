@@ -22,11 +22,8 @@ async function PeerRows({ make, report }: MakeSectionProps) {
     const isCurrent = peerMake === make;
     const slug = slugify(peerMake);
     return (
-      <div
-        className="flex items-center gap-3 border-separator border-b py-2"
-        key={peerMake}
-      >
-        <span className="flex min-w-0 flex-1 items-center gap-2.5 md:w-36 md:flex-none">
+      <div className="flex items-center gap-4 py-2" key={peerMake}>
+        <span className="flex min-w-0 flex-1 items-center gap-2 md:w-36 md:flex-none">
           <MakeAvatar
             logoUrl={logoUrlBySlug[slug] ?? null}
             make={peerMake}
@@ -36,8 +33,8 @@ async function PeerRows({ make, report }: MakeSectionProps) {
             className={cn(
               "truncate text-sm no-underline",
               isCurrent
-                ? "font-semibold text-accent-strong"
-                : "font-medium text-foreground hover:text-accent-strong",
+                ? "font-semibold text-accent"
+                : "font-medium text-foreground hover:text-accent",
             )}
             href={`/cars/makes/${slug}`}
           >

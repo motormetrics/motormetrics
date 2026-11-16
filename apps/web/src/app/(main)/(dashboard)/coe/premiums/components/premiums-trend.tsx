@@ -67,13 +67,13 @@ export function PremiumsTrend({ searchParams }: PremiumsPageProps) {
           </>
         }
         trailing={
-          <Suspense fallback={<Skeleton className="h-8 w-64 rounded-md" />}>
+          <Suspense fallback={<Skeleton className="h-8 w-64" />}>
             <RangeTabs />
           </Suspense>
         }
       />
       <SectionErrorBoundary title="Premium history unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
           <TrendChart searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>

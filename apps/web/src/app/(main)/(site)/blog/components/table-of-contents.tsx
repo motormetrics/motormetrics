@@ -71,7 +71,7 @@ export function TableOfContents() {
   return (
     <nav aria-label="In this post" className="flex flex-col gap-2">
       <span className="font-semibold text-muted text-xs">In this post</span>
-      <ol className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
+      <ol className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
         {headings.map((heading) => {
           const active = activeId === heading.id;
           return (
@@ -80,9 +80,7 @@ export function TableOfContents() {
                 aria-current={active ? "location" : undefined}
                 className={cn(
                   "font-semibold no-underline transition-colors",
-                  active
-                    ? "text-foreground"
-                    : "text-accent-strong hover:text-accent-deep",
+                  active ? "text-foreground" : "text-accent hover:text-accent",
                 )}
                 href={`#${heading.id}`}
                 onClick={(event) => {

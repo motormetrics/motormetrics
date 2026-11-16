@@ -58,15 +58,10 @@ export function ArfBands({
                 const isTop = band !== undefined && band === topBand;
                 return (
                   <Table.Row id={from} key={from}>
-                    <Table.Cell
-                      className={cn(
-                        "font-semibold",
-                        isTop && "text-accent-strong",
-                      )}
-                    >
+                    <Table.Cell className={cn(isTop && "text-accent")}>
                       {bandLabel(from, upTo)}
                     </Table.Cell>
-                    <Table.Cell className="text-right text-muted">
+                    <Table.Cell className="text-right">
                       {formatRate(rate)}
                     </Table.Cell>
                     <Table.Cell className="max-lg:hidden">
@@ -79,7 +74,7 @@ export function ArfBands({
                         />
                       </span>
                     </Table.Cell>
-                    <Table.Cell className="text-right font-semibold">
+                    <Table.Cell className="text-right">
                       {band ? formatCurrency(band.amount) : "Not reached"}
                     </Table.Cell>
                   </Table.Row>

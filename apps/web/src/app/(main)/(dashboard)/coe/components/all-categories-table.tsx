@@ -200,7 +200,7 @@ export function AllCategoriesTable({
   ];
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-2">
       {/* min-w-4xl holds the columns' widths so narrow screens scroll sideways. */}
       <DataGrid
         aria-label="COE categories"

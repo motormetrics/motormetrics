@@ -39,10 +39,7 @@ export async function RecordHighs() {
         {COE_CATEGORIES.map((category) => {
           const exercise = highs[category];
           return (
-            <li
-              className="flex flex-col gap-1 border-separator border-b py-3.5 pr-4"
-              key={category}
-            >
+            <li className="flex flex-col gap-1 py-4 pr-4" key={category}>
               <span className="font-semibold text-muted text-xs">
                 {category} · {CATEGORY_DESCRIPTIONS[category]}
               </span>
@@ -51,7 +48,7 @@ export async function RecordHighs() {
                   ? formatCurrency(premiumOf(exercise, category) ?? 0)
                   : "—"}
               </span>
-              <span className="text-muted-strong text-xs">
+              <span className="text-foreground text-xs">
                 {exercise ? formatExercise(exercise) : "—"}
               </span>
             </li>

@@ -8,7 +8,7 @@ import { ChevronDown } from "lucide-react";
 export function ChargingFaq({ faqs }: { faqs: Faq[] }) {
   return (
     <section
-      className="grid scroll-mt-24 items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-14"
+      className="grid scroll-mt-24 items-start gap-8 lg:grid-cols-[300px_1fr] lg:gap-16"
       id="faq"
     >
       <Typography.Heading level={2}>Common questions</Typography.Heading>

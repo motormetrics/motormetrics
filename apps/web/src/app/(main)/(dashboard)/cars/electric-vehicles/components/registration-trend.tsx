@@ -144,7 +144,7 @@ async function TrendBody({ selection }: SelectionProps) {
 
   return (
     <>
-      <div className="flex flex-wrap items-baseline gap-3">
+      <div className="flex flex-wrap items-baseline gap-2">
         <span className="font-semibold text-2xl tabular-nums tracking-tight">
           <NumberValue locale="en-SG" maximumFractionDigits={0} value={value} />
         </span>

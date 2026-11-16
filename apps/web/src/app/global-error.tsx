@@ -9,7 +9,6 @@ import "./globals.css";
 // global-error replaces the root layout, so it loads Geist itself.
 const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-geist",
 });
 
 export default function GlobalError({
@@ -24,7 +23,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html className={geist.variable} data-theme="light" lang="en">
+    <html className={geist.className} data-theme="light" lang="en">
       <body className="bg-background text-foreground antialiased">
         <div className="container mx-auto flex min-h-screen flex-col items-center justify-center px-6 py-16">
           <div className="flex max-w-lg flex-col items-center gap-6 text-center">
@@ -43,7 +42,7 @@ export default function GlobalError({
               </p>
             ) : null}
             <button
-              className="cursor-pointer rounded-full bg-accent px-6 py-3 font-medium text-accent-foreground"
+              className="cursor-pointer rounded-full bg-accent px-6 py-2 font-medium text-accent-foreground"
               onClick={() => retry()}
               type="button"
             >

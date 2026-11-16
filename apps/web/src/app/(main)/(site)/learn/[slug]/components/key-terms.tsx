@@ -41,14 +41,11 @@ export function KeyTerms({ guide }: { guide: Guide }) {
               const slug = term.toLowerCase();
 
               return (
-                <div
-                  className="flex flex-col gap-1 border-separator border-b py-3"
-                  key={term}
-                >
+                <div className="flex flex-col gap-1 py-4" key={term}>
                   <dt className="font-semibold text-sm">
                     {guideSlugs.includes(slug) ? (
                       <Link
-                        className="text-accent-strong no-underline transition-colors hover:text-accent-deep"
+                        className="text-accent no-underline transition-colors hover:text-accent"
                         href={`/learn/${slug}`}
                       >
                         {term} →
@@ -58,10 +55,7 @@ export function KeyTerms({ guide }: { guide: Guide }) {
                     )}
                   </dt>
                   <dd>
-                    <Typography.Paragraph
-                      className="text-muted-strong leading-normal"
-                      size="sm"
-                    >
+                    <Typography.Paragraph className="leading-normal" size="sm">
                       {definition}
                     </Typography.Paragraph>
                   </dd>
@@ -80,11 +74,11 @@ export function KeyTerms({ guide }: { guide: Guide }) {
           <span className="font-semibold text-muted text-xs">
             Check the current figures
           </span>
-          <ul className="flex flex-wrap gap-x-6 gap-y-1.5 text-sm">
+          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             {guide.relatedLinks.map(({ href, label }) => (
               <li key={href}>
                 <Link
-                  className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+                  className="font-semibold text-accent no-underline transition-colors hover:text-accent"
                   href={href as Route}
                 >
                   {label} →

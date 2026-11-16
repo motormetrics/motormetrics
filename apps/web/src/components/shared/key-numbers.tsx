@@ -14,7 +14,7 @@ export interface KeyNumber {
  */
 export function KeyNumberItem({ label, note, value }: KeyNumber) {
   return (
-    <div className="flex min-w-0 flex-col gap-0.5 border-separator border-b py-3">
+    <div className="flex min-w-0 flex-col gap-1 py-4">
       <dt className="font-semibold text-muted text-xs">{label}</dt>
       <dd className="font-semibold text-xl tabular-nums">{value}</dd>
       {note ? (
@@ -87,7 +87,7 @@ export function KeysAside({
   source: ReactNode;
 }) {
   return (
-    <aside aria-label={label} className="flex min-w-0 flex-col gap-3.5">
+    <aside aria-label={label} className="flex min-w-0 flex-col gap-4">
       <Typography.Paragraph
         className="uppercase"
         color="muted"
@@ -98,11 +98,11 @@ export function KeysAside({
       </Typography.Paragraph>
       {children}
       <nav aria-label="On this page">
-        <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm">
+        <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
           {jump.map((item) => (
             <li key={item.label}>
               <a
-                className="font-medium text-accent-strong no-underline transition-colors hover:text-accent-deep"
+                className="font-medium text-accent no-underline transition-colors hover:text-accent"
                 href={item.href}
               >
                 {item.label}

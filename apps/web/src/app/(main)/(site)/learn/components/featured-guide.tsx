@@ -25,7 +25,7 @@ export function FeaturedGuide() {
   return (
     <section aria-labelledby="featured-guide" className="@container">
       <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-6">
-        <div className="flex min-w-0 flex-col gap-3">
+        <div className="flex min-w-0 flex-col gap-4">
           <Typography.Paragraph
             className="uppercase"
             color="muted"
@@ -44,7 +44,7 @@ export function FeaturedGuide() {
           <Typography.Paragraph className="max-w-prose">
             {guide.excerpt}
           </Typography.Paragraph>
-          <div className="flex flex-wrap items-center gap-4 pt-1.5">
+          <div className="flex flex-wrap items-center gap-4 pt-2">
             <Link
               className={buttonVariants({ variant: "primary" })}
               href={`/learn/${guide.slug}`}
@@ -66,12 +66,12 @@ export function FeaturedGuide() {
           aria-label="The figures behind it"
           className="flex flex-col self-start border-separator border-t"
         >
-          <span className="py-2.5 font-semibold text-muted text-xs">
+          <span className="py-2 font-semibold text-muted text-xs">
             The figures behind it
           </span>
           {guide.relatedLinks.map(({ href, label }) => (
             <Link
-              className="border-separator border-t py-2.5 font-semibold text-accent-strong text-sm no-underline transition-colors hover:text-accent-deep"
+              className="border-separator border-t py-2 font-semibold text-accent text-sm no-underline transition-colors hover:text-accent"
               href={href as Route}
               key={href}
             >
@@ -80,7 +80,7 @@ export function FeaturedGuide() {
           ))}
         </nav>
       </div>
-      <SourceNote className="pt-5">
+      <SourceNote className="pt-6">
         COE is the topic most readers arrive for, so its guide leads.
       </SourceNote>
     </section>

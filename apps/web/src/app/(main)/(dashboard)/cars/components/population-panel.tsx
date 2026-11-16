@@ -51,7 +51,7 @@ export async function PopulationPanel() {
   const largestTotal = rows[0]?.total ?? 1;
 
   return (
-    <div className="flex min-w-0 flex-col gap-3">
+    <div className="flex min-w-0 flex-col gap-4">
       <div className="flex flex-col gap-1">
         <Typography.Heading className="text-lg" level={3} weight="bold">
           Cars on the road, {latest.year}
@@ -66,7 +66,7 @@ export async function PopulationPanel() {
           {changeRatio !== null && previous ? (
             <>
               {" · "}
-              <span className="text-muted-strong tabular-nums">
+              <span className="text-foreground tabular-nums">
                 {changeRatio < 0 ? "−" : "+"}
                 <NumberValue
                   maximumFractionDigits={1}
@@ -81,7 +81,7 @@ export async function PopulationPanel() {
       </div>
 
       <div className="flex flex-col">
-        <div className="flex items-end gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-end gap-4 pb-2 font-semibold text-muted text-xs">
           <span className="w-44 shrink-0 max-md:w-auto max-md:flex-1">
             Fuel type
           </span>
@@ -90,10 +90,7 @@ export async function PopulationPanel() {
         </div>
         <ul className="flex flex-col">
           {rows.map((row, index) => (
-            <li
-              className="flex items-center gap-3 border-separator border-b py-2"
-              key={row.label}
-            >
+            <li className="flex items-center gap-4 py-2" key={row.label}>
               <span className="w-44 shrink-0 truncate text-sm max-md:w-auto max-md:min-w-0 max-md:flex-1">
                 {row.label}
               </span>
@@ -117,7 +114,7 @@ export async function PopulationPanel() {
       </div>
       <SourceNote>
         Share of all vehicles by fuel type.{" "}
-        <Link className="text-accent-strong" href="/cars/annual">
+        <Link className="text-accent" href="/cars/annual">
           Population data →
         </Link>
       </SourceNote>

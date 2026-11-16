@@ -107,8 +107,8 @@ export function monthSeries(
 const MIX_PARTS = 4;
 
 /** The bar colours, darkest first, then the lightest for "Other". */
-const MIX_COLOURS = ["bg-chart-1", "bg-chart-3", "bg-chart-4", "bg-chart-sand"];
-const OTHER_COLOUR = "bg-chart-6";
+const MIX_COLOURS = ["bg-chart-1", "bg-chart-3", "bg-chart-4", "bg-chart-2"];
+const OTHER_COLOUR = "bg-muted";
 
 export interface MixPart {
   count: number;
@@ -180,8 +180,8 @@ function MixBar({
     part.label === "Other" ? OTHER_COLOUR : MIX_COLOURS[index];
 
   return (
-    <section className="flex min-w-0 flex-col gap-3">
-      <div className="flex flex-col gap-0.5">
+    <section className="flex min-w-0 flex-col gap-4">
+      <div className="flex flex-col gap-1">
         <Typography.Heading level={3}>{title}</Typography.Heading>
         <span className="text-muted text-sm">{period}</span>
       </div>
@@ -196,10 +196,7 @@ function MixBar({
       </div>
       <ul className="flex flex-col">
         {parts.map((part, index) => (
-          <li
-            className="flex items-center gap-2.5 border-separator border-b py-2 text-sm"
-            key={part.label}
-          >
+          <li className="flex items-center gap-2 py-2 text-sm" key={part.label}>
             <span
               aria-hidden
               className={`size-3 shrink-0 rounded-xs ${colourOf(part, index)}`}
@@ -285,9 +282,9 @@ export async function MakeDetail({
       aria-label={`${row.make} detail`}
       className="flex min-w-0 flex-col gap-6"
     >
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-4">
         <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="lg" />
-        <div className="flex min-w-0 flex-col gap-0.5">
+        <div className="flex min-w-0 flex-col gap-1">
           <Typography.Heading level={2}>{row.make}</Typography.Heading>
           <span className="text-muted text-sm tabular-nums">
             Rank {row.rank} of {makesCount} · {period}
@@ -332,7 +329,7 @@ export async function MakeDetail({
         // each make into the comparison, and the nearest ranks are offered
         // here as quick picks.
         <div
-          className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-separator px-4 py-3 text-sm"
+          className="flex flex-wrap items-center gap-x-2 gap-y-2 rounded-lg border border-separator px-4 py-2 text-sm"
           role="status"
         >
           <span>
@@ -370,10 +367,7 @@ export async function MakeDetail({
 
       <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6">
         {stats.map(({ label, note, value }) => (
-          <div
-            className="flex flex-col gap-0.5 border-separator border-b py-3"
-            key={label}
-          >
+          <div className="flex flex-col gap-1 py-4" key={label}>
             <dt className="font-semibold text-muted text-xs">{label}</dt>
             <dd className="font-semibold text-xl tabular-nums">{value}</dd>
             <dd className="text-muted text-xs tabular-nums">{note}</dd>
@@ -381,8 +375,8 @@ export async function MakeDetail({
         ))}
       </dl>
 
-      <section className="flex min-w-0 flex-col gap-3">
-        <div className="flex flex-col gap-0.5">
+      <section className="flex min-w-0 flex-col gap-4">
+        <div className="flex flex-col gap-1">
           <Typography.Heading level={3}>
             Registrations by month
           </Typography.Heading>

@@ -38,7 +38,7 @@ export function ElectricFleet({
         title="Electric fleet"
       />
 
-      <div className="flex items-baseline gap-3">
+      <div className="flex items-baseline gap-2">
         <span className="font-semibold text-3xl tabular-nums tracking-tight">
           <NumberValue
             locale="en-SG"
@@ -47,24 +47,21 @@ export function ElectricFleet({
           />
         </span>
         {population > 0 ? (
-          <span className="text-muted-strong text-sm tabular-nums">
+          <span className="text-foreground text-sm tabular-nums">
             {((electric / population) * 100).toFixed(1)}% of {name}
           </span>
         ) : null}
       </div>
 
       <div className="flex flex-col">
-        <div className="flex items-end gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-end gap-4 pb-2 font-semibold text-muted text-xs">
           <span className="w-12">Year</span>
           <span className="min-w-0 flex-1" />
           <span className="w-16 text-right">{entity.name}</span>
         </div>
         <ul className="flex flex-col">
           {rows.map((row, index) => (
-            <li
-              className="flex items-center gap-3 border-separator border-b py-2.5"
-              key={row.year}
-            >
+            <li className="flex items-center gap-4 py-2" key={row.year}>
               <span
                 className={
                   index === lastIndex

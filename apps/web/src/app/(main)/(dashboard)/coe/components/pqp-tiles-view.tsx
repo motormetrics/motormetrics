@@ -77,8 +77,8 @@ export function PqpTilesView({
           return [
             <li
               className={cn(
-                "flex flex-col gap-1 border-separator border-b px-3 py-3.5",
-                isSelected && "border-accent border-b-2 bg-accent-soft",
+                "flex flex-col gap-1 p-4",
+                isSelected && "bg-accent-soft",
               )}
               key={category}
             >
@@ -88,7 +88,7 @@ export function PqpTilesView({
               <span className="font-semibold text-xl tabular-nums">
                 {formatCurrency(pqp.rate)}
               </span>
-              <span className="text-muted-strong text-xs tabular-nums">
+              <span className="text-foreground text-xs tabular-nums">
                 {pqp.change !== undefined && previousMonth
                   ? `${formatPercentChange(pqp.change)} vs ${formatMonthName(previousMonth)} · `
                   : ""}

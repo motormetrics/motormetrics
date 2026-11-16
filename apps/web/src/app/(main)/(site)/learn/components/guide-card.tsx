@@ -11,7 +11,7 @@ import Link from "next/link";
 export function GuideCard({ guide }: { guide: Guide }) {
   return (
     <Link
-      className="group flex h-full min-w-0 flex-col gap-2 rounded-lg border border-separator px-5 pt-4 pb-4 text-foreground no-underline transition-colors hover:border-border"
+      className="group flex h-full min-w-0 flex-col gap-2 rounded-lg border border-separator px-4 pt-4 pb-4 text-foreground no-underline transition-colors hover:border-border"
       href={`/learn/${guide.slug}`}
     >
       <Typography.Paragraph
@@ -28,10 +28,8 @@ export function GuideCard({ guide }: { guide: Guide }) {
       >
         {guide.title}
       </Typography.Heading>
-      <Typography.Paragraph className="text-muted-strong" size="sm">
-        {guide.excerpt}
-      </Typography.Paragraph>
-      <div className="mt-auto flex flex-wrap justify-between gap-x-3 gap-y-1 border-separator border-t pt-2.5 text-muted text-xs tabular-nums">
+      <Typography.Paragraph size="sm">{guide.excerpt}</Typography.Paragraph>
+      <div className="mt-auto flex flex-wrap justify-between gap-x-4 gap-y-1 border-separator border-t pt-2 text-muted text-xs tabular-nums">
         <span>{getReadingMinutes(guide.content)} min read</span>
         <span>Read →</span>
       </div>

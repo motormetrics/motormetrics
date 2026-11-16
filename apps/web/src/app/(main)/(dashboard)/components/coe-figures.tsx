@@ -1,4 +1,5 @@
 import { Typography } from "@heroui/react";
+import { KPI } from "@heroui-pro/react/kpi";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   CATEGORY_DESCRIPTIONS,
@@ -26,10 +27,6 @@ import { createSerializer } from "nuqs/server";
 /** A year of exercises: two a month. */
 const EXERCISES = 24;
 
-/** Plot box of the sparklines, stretched to the tile's width. */
-const SPARK_HEIGHT = 40;
-const SPARK_PAD = 4;
-
 /** LTA publishes PQP for these; Category E has none. */
 const PQP_CATEGORIES = [
   "Category A",
@@ -42,26 +39,6 @@ const PQP_CATEGORIES = [
 const FIVE_YEAR_CATEGORIES = new Set(["Category A", "Category B"]);
 
 const serializeCoe = createSerializer(coeOverviewSearchParams);
-
-/**
- * A sparkline path on a 100 × 40 box, each series on its own scale. Drawn on
- * the server: the tile's figure and low/high carry the values, so there is no
- * tooltip to hydrate.
- */
-export function sparkPath(values: number[]): string {
-  const low = Math.min(...values);
-  const spread = Math.max(...values) - low || 1;
-  const last = values.length - 1 || 1;
-  return values
-    .map((value, index) => {
-      const x = (index / last) * 100;
-      const y =
-        SPARK_PAD +
-        (1 - (value - low) / spread) * (SPARK_HEIGHT - SPARK_PAD * 2);
-      return `${index ? "L" : "M"}${x.toFixed(2)} ${y.toFixed(2)}`;
-    })
-    .join(" ");
-}
 
 /**
  * Figure 1: every category's latest premium with its last 24 exercises as a
@@ -88,7 +65,10 @@ export async function CoePremiumsFigure() {
         high,
         key: toCategoryKey(category),
         low,
-        path: sparkPath(premiums),
+        // KPI.Chart's Y axis starts at zero, which flattens a premium moving
+        // within a narrow band. Plotting the rise above the window's low gives
+        // each tile its own scale; the figure and low/high carry the values.
+        trend: premiums.map((premium) => ({ value: premium - low })),
         premium: latest.premium,
         start: window[0],
         latest,
@@ -125,46 +105,55 @@ export async function CoePremiumsFigure() {
           </span>
         }
       />
-      <ul className="grid @3xl:grid-cols-3 @5xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-2.5">
+      <ul className="grid @3xl:grid-cols-3 @5xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-4">
         {tiles.map((tile) => (
           <li key={tile.key}>
             <Link
               aria-label={`Category ${tile.key}, ${formatCurrency(tile.premium)}, open COE results`}
-              className="flex h-full min-w-0 flex-col gap-1.5 rounded-lg border border-separator bg-surface p-3.5 text-foreground no-underline transition-colors hover:border-border hover:bg-surface-secondary"
+              className="block h-full no-underline"
               href={serializeCoe("/coe", { category: tile.key })}
             >
-              <span className="flex items-baseline justify-between gap-2">
-                <span className="font-semibold">Category {tile.key}</span>
-                <span className="text-muted-strong text-sm tabular-nums">
-                  {signed(tile.change)}
-                </span>
-              </span>
-              <span className="text-muted text-xs">
-                {CATEGORY_DESCRIPTIONS[tile.category]}
-              </span>
-              <span className="font-semibold text-2xl tabular-nums">
-                {formatCurrency(tile.premium)}
-              </span>
-              <svg
-                aria-label={`Category ${tile.key} premium over the last ${EXERCISES} exercises`}
-                className="h-10 w-full overflow-visible"
-                preserveAspectRatio="none"
-                role="img"
-                viewBox={`0 0 100 ${SPARK_HEIGHT}`}
-              >
-                <path
-                  d={tile.path}
-                  fill="none"
-                  stroke="var(--chart-1)"
-                  strokeLinejoin="round"
+              <KPI className="h-full">
+                <KPI.Header>
+                  <KPI.Title>Category {tile.key}</KPI.Title>
+                  <KPI.Trend
+                    className="ml-auto"
+                    trend={
+                      tile.change > 0
+                        ? "up"
+                        : tile.change < 0
+                          ? "down"
+                          : "neutral"
+                    }
+                  >
+                    {signed(tile.change)}
+                  </KPI.Trend>
+                </KPI.Header>
+                <KPI.Content>
+                  <KPI.Value
+                    currency="SGD"
+                    locale="en-SG"
+                    maximumFractionDigits={0}
+                    style="currency"
+                    value={tile.premium}
+                  />
+                </KPI.Content>
+                <KPI.Chart
+                  aria-label={`Category ${tile.key} premium over the last ${EXERCISES} exercises`}
+                  color="var(--chart-1)"
+                  data={tile.trend}
+                  height={40}
+                  role="img"
                   strokeWidth={1.75}
-                  vectorEffect="non-scaling-stroke"
                 />
-              </svg>
-              <span className="flex justify-between gap-2 text-muted text-xs tabular-nums">
-                <span>Low {formatCurrency(tile.low)}</span>
-                <span>High {formatCurrency(tile.high)}</span>
-              </span>
+                <KPI.Footer className="flex-col items-stretch gap-1 text-muted text-xs tabular-nums">
+                  <span>{CATEGORY_DESCRIPTIONS[tile.category]}</span>
+                  <span className="flex justify-between gap-2">
+                    <span>Low {formatCurrency(tile.low)}</span>
+                    <span>High {formatCurrency(tile.high)}</span>
+                  </span>
+                </KPI.Footer>
+              </KPI>
             </Link>
           </li>
         ))}
@@ -231,10 +220,7 @@ export async function PqpFigure() {
       />
       <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
         {tiles.map((tile) => (
-          <div
-            className="flex min-w-0 flex-col gap-0.5 border-separator border-b py-3"
-            key={tile.key}
-          >
+          <div className="flex min-w-0 flex-col gap-1 py-4" key={tile.key}>
             <dt className="font-semibold text-muted text-xs">
               Category {tile.key} · {CATEGORY_DESCRIPTIONS[tile.category]}
             </dt>

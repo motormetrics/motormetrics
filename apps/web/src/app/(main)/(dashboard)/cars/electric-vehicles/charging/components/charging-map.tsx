@@ -33,14 +33,13 @@ export function ChargingMap({
   searchParams: Promise<SearchParams>;
 }) {
   return (
-    // Bleeds to the edge of MainLayout's column by cancelling its padding
-    // (`px-4 sm:px-6 lg:px-9`). Remove these margins when the site moves to
-    // the planned full-width layout.
-    <div className="-mx-4 scroll-mt-6 sm:-mx-6 lg:-mx-9" id={MAP_ANCHOR_ID}>
-      {/* <Card className="gap-4 rounded-4xl p-7"> */}
+    // Bleeds to the edge of the inset content area by cancelling its padding
+    // (`px-4 md:px-6` in InsetVariant). Keep the two in step.
+    <div className="-mx-4 scroll-mt-6 md:-mx-6" id={MAP_ANCHOR_ID}>
+      {/* <Card className="gap-4 p-6"> */}
       <ChargingMapView
         liveStatus={
-          <Suspense fallback={<Skeleton className="h-16 w-56 rounded-2xl" />}>
+          <Suspense fallback={<Skeleton className="h-16 w-56" />}>
             <MapLiveChip searchParams={searchParams} />
           </Suspense>
         }

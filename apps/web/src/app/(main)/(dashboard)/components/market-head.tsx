@@ -91,7 +91,7 @@ export async function MarketHero() {
   return (
     <>
       {range ? (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <Typography.Paragraph color="muted" size="sm">
             <span className="font-semibold text-foreground">
               COE Category A
@@ -103,7 +103,7 @@ export async function MarketHero() {
               {formatCurrency(range.latest.premium)}
             </span>
             {previous ? (
-              <span className="text-muted-strong text-sm tabular-nums">
+              <span className="text-foreground text-sm tabular-nums">
                 {signed(
                   changeRatio(range.latest.premium, previous.premium) * 100,
                 )}{" "}

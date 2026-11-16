@@ -17,7 +17,7 @@ const CELL = {
   count: "w-12 shrink-0 text-right md:w-24",
   fuelType: "min-w-0 flex-1",
   rank: "w-5 shrink-0 md:w-7",
-  share: "flex w-44 shrink-0 items-center gap-2.5 max-md:hidden",
+  share: "flex w-44 shrink-0 items-center gap-2 max-md:hidden",
   vehicleType: "min-w-0 flex-1",
 } as const;
 
@@ -72,7 +72,7 @@ export function MixTable({ rows, total }: { rows: MixRow[]; total: number }) {
       <button
         className={cn(
           "cursor-pointer truncate font-semibold",
-          isActive && "text-accent-strong",
+          isActive && "text-accent",
         )}
         onClick={() => sortBy(key)}
         type="button"
@@ -86,7 +86,7 @@ export function MixTable({ rows, total }: { rows: MixRow[]; total: number }) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center gap-2 border-border border-b px-0.5 pb-2 text-muted text-xs md:gap-3.5 md:px-2">
+      <div className="flex items-center gap-2 px-1 pb-2 text-muted text-xs md:gap-4 md:px-2">
         <span className={cn(CELL.rank, "font-semibold")}>#</span>
         {SORTABLE.map(({ className, key, label, short }) => (
           <span className={className} key={key}>
@@ -100,14 +100,14 @@ export function MixTable({ rows, total }: { rows: MixRow[]; total: number }) {
       </div>
       {sortMixRows(rows, sortKey, direction).map((row) => (
         <div
-          className="flex items-center gap-2 border-separator border-b px-0.5 py-2.5 transition-colors hover:bg-surface-secondary md:gap-3.5 md:px-2"
+          className="flex items-center gap-2 px-1 py-2 transition-colors hover:bg-surface-secondary md:gap-4 md:px-2"
           key={`${row.fuelType}|${row.vehicleType}`}
         >
           <span
             className={cn(
               CELL.rank,
               "text-sm tabular-nums",
-              row.rank <= 3 ? "font-semibold text-accent-strong" : "text-muted",
+              row.rank <= 3 ? "font-semibold text-accent" : "text-muted",
             )}
           >
             {String(row.rank).padStart(2, "0")}

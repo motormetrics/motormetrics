@@ -25,7 +25,7 @@ export function PremiumRangeBar({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-baseline gap-3">
+      <div className="flex items-baseline gap-2">
         <span className="font-semibold text-sm">{label}</span>
         <SourceNote className="ml-auto whitespace-nowrap tabular-nums">
           spread {formatCurrency(high.premium - low.premium)}
@@ -37,7 +37,7 @@ export function PremiumRangeBar({
           style={{ left: `${left.toFixed(1)}%`, width: `${width.toFixed(1)}%` }}
         />
       </div>
-      <div className="flex flex-wrap gap-3 text-muted-strong text-sm tabular-nums">
+      <div className="flex flex-wrap gap-4 text-foreground text-sm tabular-nums">
         <span>
           Low{" "}
           <span className="font-semibold text-foreground">

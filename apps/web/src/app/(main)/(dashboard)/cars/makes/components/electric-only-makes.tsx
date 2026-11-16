@@ -44,7 +44,7 @@ export async function ElectricOnlyMakes() {
 
       <ElectricOnlyRows
         header={
-          <div className="flex items-center gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+          <div className="flex items-center gap-4 pb-2 font-semibold text-muted text-xs">
             <span className="min-w-0 flex-1 md:w-36 md:flex-none">Make</span>
             <span className="min-w-0 flex-1 max-md:hidden" />
             <span className="w-16 text-right">Cars</span>
@@ -52,11 +52,8 @@ export async function ElectricOnlyMakes() {
         }
         note={`Year to date, ${periodLabel(latestMonth, "ytd")}, all fuel types. This list does not follow the period or fuel switches.`}
         rows={summary.makes.map((make, index) => (
-          <div
-            className="flex items-center gap-3 border-separator border-b py-2"
-            key={make.make}
-          >
-            <span className="flex min-w-0 flex-1 items-center gap-2.5 md:w-36 md:flex-none">
+          <div className="flex items-center gap-4 py-2" key={make.make}>
+            <span className="flex min-w-0 flex-1 items-center gap-2 md:w-36 md:flex-none">
               <MakeAvatar logoUrl={make.logoUrl} make={make.make} size="sm" />
               <span className="truncate font-medium text-sm">{make.make}</span>
             </span>

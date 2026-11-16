@@ -67,7 +67,7 @@ export function MakeTable({
       <button
         className={cn(
           "max-w-full cursor-pointer truncate font-semibold",
-          isActive && "text-accent-strong",
+          isActive && "text-accent",
         )}
         onClick={() => sortBy(key)}
         type="button"
@@ -87,12 +87,7 @@ export function MakeTable({
         heading to sort
       </span>
       <div className="flex flex-col">
-        <div
-          className={cn(
-            ROW,
-            "items-end border-border border-b pb-2 text-muted text-xs",
-          )}
-        >
+        <div className={cn(ROW, "items-end pb-2 text-muted text-xs")}>
           <span className={cn(CELL.rank, "font-semibold")}>#</span>
           <span className={CELL.make}>{header("make", "Make")}</span>
           <span className={CELL.count}>{header("count", "Cars")}</span>
@@ -108,7 +103,7 @@ export function MakeTable({
           <div
             className={cn(
               ROW,
-              "border-separator border-b py-2.5 transition-colors hover:bg-surface-secondary",
+              "py-2.5 transition-colors hover:bg-surface-secondary",
             )}
             key={row.make}
           >
@@ -116,9 +111,7 @@ export function MakeTable({
               className={cn(
                 CELL.rank,
                 "text-sm tabular-nums",
-                row.rank <= 3
-                  ? "font-semibold text-accent-strong"
-                  : "text-muted",
+                row.rank <= 3 ? "font-semibold text-accent" : "text-muted",
               )}
             >
               {String(row.rank).padStart(2, "0")}
@@ -126,7 +119,7 @@ export function MakeTable({
             <span className={cn(CELL.make, "flex items-center gap-2.5")}>
               <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="sm" />
               <Link
-                className="truncate font-medium text-foreground text-sm hover:text-accent-strong"
+                className="truncate font-medium text-foreground text-sm hover:text-accent"
                 href={`/cars/makes/${slugify(row.make)}`}
               >
                 {row.make}
@@ -148,7 +141,7 @@ export function MakeTable({
                   }}
                 />
               </span>
-              <span className="w-12 shrink-0 text-right text-muted-strong text-sm tabular-nums">
+              <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
                 {((row.count / (total || 1)) * 100).toFixed(1)}%
               </span>
             </span>

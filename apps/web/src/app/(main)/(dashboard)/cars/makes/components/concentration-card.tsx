@@ -44,7 +44,7 @@ async function loadConcentration(searchParams: Promise<SearchParams>) {
   }));
   if (rest > 0) {
     segments.push({
-      color: "var(--chart-6)",
+      color: "var(--muted)",
       label: "All other makes",
       value: rest,
     });
@@ -107,7 +107,7 @@ async function ConcentrationFigure({ searchParams }: ConcentrationProps) {
       <ul className="grid @3xl:grid-cols-3 @6xl:grid-cols-6 grid-cols-2 gap-x-6">
         {segments.map((segment) => (
           <li
-            className="flex flex-col gap-0.5 border-separator border-t py-3"
+            className="flex flex-col gap-1 border-separator border-t py-4"
             key={segment.label}
           >
             <span className="flex items-center gap-2 text-muted text-xs">

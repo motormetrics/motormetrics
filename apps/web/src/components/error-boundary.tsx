@@ -22,7 +22,7 @@ export function SectionErrorFallback(
       className="flex flex-col items-start gap-4 rounded-2xl border border-danger/20 bg-danger/5 p-6"
       role="alert"
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         <AlertTriangle aria-hidden className="size-5 text-danger" />
         <Typography.Heading level={4}>{title}</Typography.Heading>
       </div>

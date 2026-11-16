@@ -116,7 +116,7 @@ const structuredData: WithContext<WebPage> = {
 
 export default function COEResultsPage({ searchParams }: PageProps) {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -239,12 +239,12 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           eyebrow="Reading the numbers"
           title="How an exercise runs"
         />
-        <Typography.Paragraph className="max-w-prose text-muted-strong">
+        <Typography.Paragraph className="max-w-prose">
           Bidding opens at 12pm on the first Monday and third Monday of each
           month and closes at 4pm on the third day. The premium is the lowest
           successful bid, so everyone who wins pays the same price.
         </Typography.Paragraph>
-        <Typography.Paragraph className="max-w-prose text-muted-strong">
+        <Typography.Paragraph className="max-w-prose">
           Quotas are set quarterly from deregistrations and the allowed growth
           in the vehicle population.
         </Typography.Paragraph>

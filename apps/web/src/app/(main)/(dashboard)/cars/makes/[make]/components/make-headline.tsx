@@ -46,7 +46,7 @@ async function HeadlineStats({ report }: ReportProps) {
 
   return stats.map((stat) => (
     <div
-      className="flex min-w-0 flex-col gap-1 border-separator border-b py-3.5 pr-4 even:border-l even:pl-4"
+      className="flex min-w-0 flex-col gap-1 border-separator py-4 pr-4 even:border-l even:pl-4"
       key={stat.label}
     >
       <span className="truncate font-semibold text-muted text-xs">
@@ -67,8 +67,8 @@ async function HeadlineStats({ report }: ReportProps) {
  */
 export function MakeHeadline({ make, report }: MakeSectionProps) {
   return (
-    <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-2 lg:gap-14">
-      <div className="flex min-w-0 flex-col gap-3">
+    <div className="grid grid-cols-1 items-end gap-8 lg:grid-cols-2 lg:gap-16">
+      <div className="flex min-w-0 flex-col gap-4">
         <span className="font-semibold text-muted text-xs">
           <Suspense fallback={null}>
             <HeadlineFuelType report={report} />

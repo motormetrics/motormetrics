@@ -50,10 +50,7 @@ export function MonthTable({
   return (
     <div className="flex flex-col">
       <div
-        className={cn(
-          ROW,
-          "items-end border-border border-b pb-2 font-semibold text-muted text-xs",
-        )}
+        className={cn(ROW, "items-end pb-2 font-semibold text-muted text-xs")}
       >
         <span className={MONTH_CELL}>Month</span>
         <span className={TOTAL_CELL}>Total</span>
@@ -81,9 +78,9 @@ export function MonthTable({
               aria-current={isSelected ? "date" : undefined}
               className={cn(
                 ROW,
-                "border-separator border-b py-2.5",
+                "py-2.5",
                 isSelected
-                  ? "border-l-2 border-l-accent-strong bg-accent-soft"
+                  ? "border-l-2 border-l-accent bg-accent-soft"
                   : "hover:bg-surface-secondary",
               )}
               key={row.month}
@@ -92,12 +89,12 @@ export function MonthTable({
                 className={cn(
                   MONTH_CELL,
                   "whitespace-nowrap text-sm",
-                  isSelected ? "font-bold text-accent-strong" : "font-semibold",
+                  isSelected ? "font-bold text-accent" : "font-semibold",
                 )}
               >
                 {formatMonthShortLabel(row.month)}
               </span>
-              <span className={cn(TOTAL_CELL, "text-muted-strong text-sm")}>
+              <span className={cn(TOTAL_CELL, "text-foreground text-sm")}>
                 {row.total.toLocaleString("en-SG")}
               </span>
               {row.cells.map(({ count, share }, index) => (
@@ -112,7 +109,7 @@ export function MonthTable({
                   <span className="font-semibold text-sm">
                     {share.toFixed(1)}%
                   </span>
-                  <span className="text-subtle text-xs max-xl:hidden">
+                  <span className="text-muted text-xs max-xl:hidden">
                     {count.toLocaleString("en-SG")}
                   </span>
                 </span>

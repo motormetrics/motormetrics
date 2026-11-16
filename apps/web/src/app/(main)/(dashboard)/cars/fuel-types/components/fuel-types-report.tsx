@@ -46,14 +46,14 @@ const loadFuelTypesSearchParams = createLoader({
  * and the tables; anything else takes the lightest ramp step.
  */
 const FUEL_COLOURS: Record<string, string> = {
-  Diesel: "var(--muted)",
+  Diesel: "var(--chart-4)",
   Electric: "var(--chart-1)",
-  Petrol: "var(--chart-sand)",
+  Petrol: "var(--chart-2)",
   "Petrol-Electric": "var(--chart-3)",
   "Petrol-Electric (Plug-In)": "var(--chart-5)",
 };
 
-const FALLBACK_COLOUR = "var(--chart-6)";
+const FALLBACK_COLOUR = "var(--muted)";
 
 const fuelColour = (name: string): string =>
   FUEL_COLOURS[name] ?? FALLBACK_COLOUR;
@@ -266,12 +266,12 @@ export async function FuelTypesReport({
 
         <section className="flex min-w-0 flex-col gap-4 lg:col-span-3">
           <SectionHead eyebrow="Method" title="How LTA classifies fuel types" />
-          <Typography.Paragraph className="text-muted-strong" size="sm">
+          <Typography.Paragraph size="sm">
             LTA records the fuel type at registration, and reports plug-in
             hybrids separately from the hybrids that only charge themselves.
             Only battery-electric cars count as Electric.
           </Typography.Paragraph>
-          <Typography.Paragraph className="text-muted-strong" size="sm">
+          <Typography.Paragraph size="sm">
             Figures here are new registrations, not the fleet on the road. The
             population mix shifts far more slowly.
           </Typography.Paragraph>

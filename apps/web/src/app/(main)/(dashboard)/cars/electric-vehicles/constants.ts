@@ -45,7 +45,7 @@ export const POWERTRAIN_TABS: { key: Powertrain; label: string }[] = [
 ];
 
 /** Colour of everything that is neither battery-electric nor hybrid. */
-export const COMBUSTION_COLOUR = "var(--chart-sand)";
+export const COMBUSTION_COLOUR = "var(--chart-2)";
 
 /** Period captions for the fixed ranges; "All" names its first month instead. */
 export const RANGE_NOTES: Record<Exclude<Range, "All">, string> = {

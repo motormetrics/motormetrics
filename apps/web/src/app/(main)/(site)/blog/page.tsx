@@ -95,7 +95,7 @@ async function LatestPost() {
     (latest.highlights as Highlight[]).length > 0;
 
   return (
-    <section className="flex flex-col gap-5">
+    <section className="flex flex-col gap-6">
       <FeaturedPost post={latest} />
       {hasFigures ? (
         <SourceNote>
@@ -110,11 +110,11 @@ async function LatestPost() {
 function ArchiveSkeleton() {
   return (
     <div className="flex flex-col gap-4">
-      <Skeleton className="h-8 w-full max-w-xl rounded-lg" />
-      <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2 xl:grid-cols-3">
+      <Skeleton className="h-8 w-full max-w-xl" />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: 6 }, (_, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: skeleton items are static placeholders
-          <Skeleton className="h-48 w-full rounded-lg" key={index} />
+          <Skeleton className="h-48 w-full" key={index} />
         ))}
       </div>
     </div>
@@ -125,7 +125,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <>
       <StructuredData data={structuredData} />
-      <OverviewPage className="gap-10 max-md:gap-7">
+      <OverviewPage className="gap-8 max-md:gap-6">
         {/* Direction D's head, with the most-read list beside it once the
             page is wide and under it before then. Both read cached posts
             only, so they are part of the static shell. */}
@@ -144,7 +144,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
             Short reads on registrations, COE bidding and the electric shift.
             Published after each release, never before.
           </Typography.Paragraph>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <LatestPostLine />
             <div className="sm:ml-auto">
               <SharePill contentType="blog" title={title} />
@@ -153,7 +153,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
           <Typography.Paragraph color="muted" size="sm">
             Looking for explainers on COE, PQP or PARF?{" "}
             <Link
-              className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+              className="font-semibold text-accent no-underline transition-colors hover:text-accent"
               href="/learn"
             >
               See Guides
@@ -174,11 +174,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
             eyebrow="Archive"
             title="All posts"
             trailing={
-              <Suspense
-                fallback={
-                  <Skeleton className="h-9 w-72 max-w-full rounded-lg" />
-                }
-              >
+              <Suspense fallback={<Skeleton className="h-9 w-72 max-w-full" />}>
                 <BlogSearchInput />
               </Suspense>
             }

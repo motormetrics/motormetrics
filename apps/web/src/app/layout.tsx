@@ -13,10 +13,8 @@ import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 
 // Geist is the single family across the app. The wordmark is outlined Urbanist,
 // so the logo keeps its face without the site loading a second font.
-// Exposed as a CSS variable so globals.css can map --font-sans onto it.
 const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-geist",
 });
 
 const title = `${SITE_TITLE} (formerly SG Cars Trends)`;
@@ -75,13 +73,13 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html
       lang="en"
-      className={cn("antialiased motion-safe:scroll-smooth", geist.variable)}
+      className={cn("antialiased motion-safe:scroll-smooth", geist.className)}
       data-scroll-behavior="smooth"
     >
       <head>
         <BotIdClient protect={protectedRoutes} />
       </head>
-      <body className="bg-background text-foreground">
+      <body>
         <Providers>
           <NuqsAdapter>{children}</NuqsAdapter>
         </Providers>

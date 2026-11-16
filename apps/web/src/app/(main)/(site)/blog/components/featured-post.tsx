@@ -31,7 +31,7 @@ export function FeaturedPost({ post }: { post: SelectPost }) {
   return (
     <div className="@container">
       <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-6">
-        <div className="flex min-w-0 flex-col gap-3">
+        <div className="flex min-w-0 flex-col gap-4">
           <Typography.Paragraph
             className="uppercase"
             color="muted"
@@ -51,7 +51,7 @@ export function FeaturedPost({ post }: { post: SelectPost }) {
               {post.excerpt}
             </Typography.Paragraph>
           ) : null}
-          <div className="flex flex-wrap items-center gap-4 pt-1.5">
+          <div className="flex flex-wrap items-center gap-4 pt-2">
             <Link
               className={buttonVariants({ variant: "primary" })}
               href={`/blog/${post.slug}`}
@@ -72,14 +72,14 @@ export function FeaturedPost({ post }: { post: SelectPost }) {
 
         {figures.length > 0 ? (
           <div className="flex flex-col self-start border-separator border-t">
-            <span className="py-2.5 font-semibold text-muted text-xs">
+            <span className="py-2 font-semibold text-muted text-xs">
               From this post
               {post.month ? ` · ${formatMonthLabel(post.month)}` : null}
             </span>
             <dl className="flex flex-col">
               {figures.map((figure) => (
                 <div
-                  className="flex flex-col gap-1 border-separator border-t py-3.5"
+                  className="flex flex-col gap-1 border-separator border-t py-4"
                   key={`${figure.label}-${figure.value}`}
                 >
                   <dd className="font-extrabold text-3xl tabular-nums leading-none tracking-tight">

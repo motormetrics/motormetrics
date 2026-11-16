@@ -19,8 +19,8 @@ import { Suspense } from "react";
 const title = `Contact ${SITE_TITLE}`;
 const description = `How to reach ${SITE_TITLE} about Singapore car registration data, COE results, corrections, partnerships and press enquiries.`;
 
-const LINK_CLASS = "font-medium text-accent-strong";
-const BODY_CLASS = "max-w-prose text-muted-strong leading-relaxed";
+const LINK_CLASS = "font-medium text-accent";
+const BODY_CLASS = "max-w-prose text-foreground leading-relaxed";
 
 export const metadata: Metadata = {
   title: { absolute: title },
@@ -63,7 +63,7 @@ async function AdvertisingSection() {
 
 export default function ContactPage() {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Typography.Paragraph

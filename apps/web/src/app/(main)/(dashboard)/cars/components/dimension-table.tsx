@@ -21,13 +21,10 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
-import { type CSSProperties, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 
 type SortKey = "name" | "count" | "yoyChange";
 type SortDirection = "asc" | "desc";
-
-/** Ranks past this share the last chart colour rather than wrapping around. */
-const CHART_COLOURS = 6;
 
 /**
  * Rows shown before the reader asks for the rest. The full list runs to every
@@ -149,7 +146,7 @@ export function DimensionTable({
     {
       allowsSorting: true,
       cell: (row) => (
-        <span className="flex min-w-0 items-center gap-3">
+        <span className="flex min-w-0 items-center gap-2">
           {/* Typography has no numeral prop; tabular-nums keeps the ranks aligned. */}
           <Typography.Paragraph
             className="w-6 shrink-0 tabular-nums"
@@ -200,11 +197,6 @@ export function DimensionTable({
             aria-label={`${row.name} share of the largest`}
             className="min-w-0 flex-1"
             size="lg"
-            style={
-              {
-                "--progress-bar-fill": `var(--chart-${Math.min(CHART_COLOURS, row.rank)})`,
-              } as CSSProperties
-            }
             value={(row.count / largestCount) * 100}
           >
             <ProgressBar.Track>
@@ -332,7 +324,7 @@ export function DimensionTable({
 
       {isTruncated ? (
         <Link
-          className="flex items-center justify-center gap-2 self-center rounded-full bg-default px-6 py-3 font-bold text-muted text-sm transition-colors hover:text-foreground"
+          className="flex items-center justify-center gap-2 self-center rounded-full bg-default px-6 py-2 font-bold text-muted text-sm transition-colors hover:text-foreground"
           href={labels.href}
         >
           Show all {visible.length} {labels.tab.toLowerCase()}

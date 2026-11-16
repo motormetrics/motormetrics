@@ -19,7 +19,7 @@ export function RangeHero({
   label: ReactNode;
 }) {
   return (
-    <div className="flex max-w-xl flex-col gap-2.5 border-separator border-t pt-4">
+    <div className="flex max-w-xl flex-col gap-2 border-separator border-t pt-4">
       <Typography.Paragraph color="muted" size="sm">
         {label}
       </Typography.Paragraph>
@@ -41,7 +41,7 @@ export function RangeFigure({
   value: ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
       <span
         className={cn(
           "font-extrabold text-4xl tabular-nums leading-none tracking-tight",

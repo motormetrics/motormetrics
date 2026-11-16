@@ -147,7 +147,7 @@ async function CategoryKeyNumbers({ report }: ReportProps) {
       <KeyNumberItem
         key={name}
         label={
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-2">
             <span
               aria-hidden
               className="size-2.5 shrink-0 rounded-xs"
@@ -186,7 +186,7 @@ export function DeregistrationsKeyNumbers({ report }: ReportProps) {
       {/* Four across, under the head or in its right half. */}
       <KeyNumberGrid besideHead={4}>
         <Suspense
-          fallback={<Skeleton className="col-span-full my-3 h-16 w-full" />}
+          fallback={<Skeleton className="col-span-full my-4 h-16 w-full" />}
         >
           <CategoryKeyNumbers report={report} />
         </Suspense>

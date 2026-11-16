@@ -27,7 +27,7 @@ const SettingsPage = () => {
       <div className="grid gap-6 md:grid-cols-2">
         {/* Maintenance Settings */}
         <Link href="/settings/maintenance">
-          <Card className="cursor-pointer transition-colors hover:bg-surface/50">
+          <Card className="cursor-pointer transition-colors">
             <Card.Header>
               <Card.Title className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -193,7 +193,7 @@ const SettingsPage = () => {
             Important Notes
           </Card.Title>
         </Card.Header>
-        <Card.Content className="gap-4 text-muted text-sm">
+        <Card.Content className="gap-4 text-sm">
           <div className="flex items-start gap-2">
             <span className="font-medium text-foreground">⚠️</span>
             <span>

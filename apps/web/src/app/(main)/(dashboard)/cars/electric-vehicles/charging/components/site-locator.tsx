@@ -32,7 +32,7 @@ export function SiteLocator({
   }, [needle, sites]);
 
   return (
-    <div className="absolute top-3 left-3 z-10 flex w-64 max-w-[calc(100%-1.5rem)] flex-col gap-2 rounded-2xl bg-overlay p-3 shadow-overlay">
+    <div className="absolute top-3 left-3 z-10 flex w-64 max-w-[calc(100%-1.5rem)] flex-col gap-2 rounded-2xl bg-overlay p-4 shadow-overlay">
       <SearchField
         aria-label="Find a charging site"
         fullWidth
@@ -57,7 +57,7 @@ export function SiteLocator({
             {matches.map((site) => (
               <li key={site.locationId}>
                 <button
-                  className="flex w-full cursor-pointer flex-col rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-surface-tertiary"
+                  className="flex w-full cursor-pointer flex-col rounded-lg px-2 py-2 text-left transition-colors hover:bg-surface-tertiary"
                   onClick={() => {
                     onPick(site);
                     setQuery("");

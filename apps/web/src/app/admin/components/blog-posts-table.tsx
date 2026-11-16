@@ -476,7 +476,7 @@ export function BlogPostsTable({ posts, previews }: BlogPostsTableProps) {
                     ))
                   ) : (
                     <Table.Row>
-                      <Table.Cell className="h-24 text-center text-muted">
+                      <Table.Cell className="h-24 text-center">
                         No blog posts found.
                       </Table.Cell>
                     </Table.Row>

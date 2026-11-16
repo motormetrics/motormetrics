@@ -30,13 +30,13 @@ export function FuelTypePeers({
           return (
             <li
               aria-current={isSelected ? "page" : undefined}
-              className="flex items-center gap-3 border-separator border-b py-2.5"
+              className="flex items-center gap-3 py-2.5"
               key={peer.name}
             >
               <span
                 className={cn(
                   "min-w-0 flex-1 truncate text-sm md:w-44 md:flex-none",
-                  isSelected && "font-semibold text-accent-strong",
+                  isSelected && "font-semibold text-accent",
                 )}
               >
                 {peer.name}

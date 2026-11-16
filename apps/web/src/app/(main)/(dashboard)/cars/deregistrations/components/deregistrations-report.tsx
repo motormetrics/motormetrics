@@ -180,13 +180,13 @@ export function DeregistrationsReport({ report }: ReportProps) {
             what releases its COE back into the quota. Deregistrations in one
             month therefore set much of the supply bid for in later exercises.
           </Typography.Paragraph>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <Typography.Paragraph className="max-w-prose">
               The categories are the COE ones the vehicle held, so a
               deregistration is counted against the quota it returns to rather
               than the body type of the car.
             </Typography.Paragraph>
-            <div className="flex flex-wrap gap-5">
+            <div className="flex flex-wrap gap-4">
               <SectionLink className="ml-0" href="/coe/results">
                 COE bidding results
               </SectionLink>

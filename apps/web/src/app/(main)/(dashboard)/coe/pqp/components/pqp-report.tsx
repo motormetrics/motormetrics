@@ -97,7 +97,7 @@ async function loadCategoryRates(): Promise<
 export async function PQPCalculator() {
   const { trendData } = await loadPqpData();
   return (
-    <Suspense fallback={<Skeleton className="h-96 w-full rounded-md" />}>
+    <Suspense fallback={<Skeleton className="h-96 w-full" />}>
       <RenewalCalculator rates={trendData} />
     </Suspense>
   );
@@ -122,7 +122,7 @@ export function PQPTrend({ searchParams }: PQPPageProps) {
         }
       />
       <SectionErrorBoundary title="PQP trend unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
           <TrendChart searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -186,7 +186,7 @@ export function PQPRates({ searchParams }: PQPPageProps) {
         title={<RatesTitle />}
       />
       <SectionErrorBoundary title="PQP rates unavailable">
-        <Suspense fallback={<Skeleton className="h-40 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-40 w-full" />}>
           <RatesTable searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -262,7 +262,7 @@ export function PQPCompare({ searchParams }: PQPPageProps) {
         title="PQP against the closing premium"
       />
       <SectionErrorBoundary title="Comparison unavailable">
-        <Suspense fallback={<Skeleton className="h-56 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-56 w-full" />}>
           <CompareBars searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -325,7 +325,7 @@ export function PQPMonths({ searchParams }: PQPPageProps) {
         title="Published PQP per category"
       />
       <SectionErrorBoundary title="Monthly rates unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full rounded-md" />}>
+        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
           <MonthRows searchParams={searchParams} />
         </Suspense>
       </SectionErrorBoundary>
@@ -357,7 +357,7 @@ async function MonthRows({ searchParams }: PQPPageProps) {
 
   return (
     <div className="flex max-w-3xl flex-col">
-      <div className="flex items-end gap-3.5 border-border border-b px-3 pb-2.5 font-semibold text-muted text-xs max-md:px-1.5">
+      <div className="flex items-end gap-4 px-4 pb-2 font-semibold text-muted text-xs max-md:px-2">
         <span className="min-w-0 flex-1">Month</span>
         {PQP_CATEGORY_KEYS.map((key) => (
           <span className={MONTH_CELL} key={key}>
@@ -371,7 +371,7 @@ async function MonthRows({ searchParams }: PQPPageProps) {
           return (
             <li
               className={cn(
-                "flex items-center gap-3.5 border-separator border-b px-3 py-2.5 max-md:px-1.5",
+                "flex items-center gap-4 px-4 py-2 max-md:px-2",
                 row.month === latestMonth && "bg-surface-secondary",
               )}
               key={row.key}
@@ -422,11 +422,11 @@ export function PQPTradeoffs() {
       <dl className="flex flex-col border-border border-t">
         {RENEWAL_TRADEOFFS.map(({ label, note }) => (
           <div
-            className="flex items-baseline gap-5 border-separator border-b py-3 max-md:flex-col max-md:gap-1"
+            className="flex items-baseline gap-4 py-4 max-md:flex-col max-md:gap-1"
             key={label}
           >
             <dt className="w-44 shrink-0 font-semibold text-sm">{label}</dt>
-            <dd className="text-muted-strong text-sm">{note}</dd>
+            <dd className="text-foreground text-sm">{note}</dd>
           </div>
         ))}
       </dl>

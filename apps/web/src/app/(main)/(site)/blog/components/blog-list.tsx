@@ -73,7 +73,7 @@ export function BlogList({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         {query ? (
           <Typography.Paragraph weight="semibold">
             Results for “{query}”
@@ -110,7 +110,7 @@ export function BlogList({
         <Typography.Paragraph color="muted" size="sm">
           {hint}{" "}
           <Link
-            className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+            className="font-semibold text-accent no-underline transition-colors hover:text-accent"
             href="/learn"
           >
             Open Guides
@@ -119,10 +119,7 @@ export function BlogList({
       ) : null}
 
       {count === 0 ? (
-        <Typography.Paragraph
-          className="border-border border-t border-b border-b-separator py-4"
-          color="muted"
-        >
+        <Typography.Paragraph className="py-4" color="muted">
           {query
             ? `No posts match “${query}”.`
             : "No posts under this topic yet."}
@@ -131,7 +128,7 @@ export function BlogList({
         <div className="@container">
           {/* Cards past the first page stay in the HTML, hidden, so every
               post is linked from here before "Show all" is pressed. */}
-          <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-3.5">
+          <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-4">
             {filtered.map((post, index) => (
               <PostCard
                 hidden={!showAll && index >= PAGE_SIZE}

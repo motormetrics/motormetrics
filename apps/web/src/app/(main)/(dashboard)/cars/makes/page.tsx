@@ -91,7 +91,7 @@ async function MakesFaq() {
 
 export default function CarMakesPage({ searchParams }: PageProps) {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       {/* Direction D's head: eyebrow, title, lead and source, with the key
           numbers beside it once the page is wide and under it before then.
           It describes the year to date from cached data and reads no search

@@ -38,7 +38,7 @@ export function PremiumDelta({
   return (
     <span
       className={cn(
-        "font-bold text-base text-muted-strong tabular-nums",
+        "font-bold text-base text-foreground tabular-nums",
         className,
       )}
     >

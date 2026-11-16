@@ -16,7 +16,7 @@ export function HeadGrid({
 }) {
   return (
     <div className="@container">
-      <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
+      <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-8">
         <div className="flex min-w-0 flex-col gap-4">{children}</div>
         {keys}
       </div>

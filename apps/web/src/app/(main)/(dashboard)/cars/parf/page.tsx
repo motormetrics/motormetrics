@@ -58,7 +58,7 @@ const structuredData: WithContext<WebPage> = {
 
 export default function PARFCalculatorPage() {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -106,19 +106,19 @@ export default function PARFCalculatorPage() {
           eyebrow="Before you rely on it"
           title="What the figures assume"
         />
-        <Typography.Paragraph className="max-w-prose text-muted-strong">
+        <Typography.Paragraph className="max-w-prose">
           Figures are for illustration only. The PARF rebate is subject to the
           vehicle&apos;s actual ARF paid and its age at deregistration. The new
           rates apply to vehicles registered with COEs obtained from the 2nd
           bidding exercise in February 2026 onwards, as set out by LTA.{" "}
           <Link
-            className="font-semibold text-accent-strong"
+            className="font-semibold text-accent"
             href="/learn/check-parf-rebate"
           >
             How to check your PARF rebate on OneMotoring
           </Link>{" "}
           covers LTA&apos;s exact figure, and the{" "}
-          <Link className="font-semibold text-accent-strong" href="/learn/parf">
+          <Link className="font-semibold text-accent" href="/learn/parf">
             PARF guide
           </Link>{" "}
           explains who qualifies.
@@ -127,7 +127,7 @@ export default function PARFCalculatorPage() {
           Estimates only, not financial advice or a recommendation. MotorMetrics
           is not affiliated with LTA; check your figures on OneMotoring.
         </SourceNote>
-        <div className="flex flex-wrap gap-x-5 gap-y-2">
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
           <SectionLink
             className="ml-0"
             href="https://www.lta.gov.sg/content/ltagov/en/newsroom/2026/2/news-releases/revision-parf-rebate-schedule-cap.html"

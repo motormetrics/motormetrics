@@ -21,7 +21,7 @@ export function CostTrendChip({
   const percentage = Math.abs(changeRatio * 100).toFixed(1);
 
   return (
-    <span className={cn("text-muted-strong tabular-nums", className)}>
+    <span className={cn("text-foreground tabular-nums", className)}>
       {`${sign}${percentage}%`}
     </span>
   );

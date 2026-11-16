@@ -43,7 +43,7 @@ export async function ElectrifiedMix({ selection }: SelectionProps) {
   }
 
   return (
-    <div className="flex flex-col gap-3.5">
+    <div className="flex flex-col gap-4">
       <div
         aria-label="Share of new car registrations by powertrain"
         className="flex h-7 gap-0.5"
@@ -62,11 +62,8 @@ export async function ElectrifiedMix({ selection }: SelectionProps) {
       </div>
       <dl className="grid @3xl:grid-cols-4 grid-cols-2 border-separator border-t">
         {data.split.map((segment) => (
-          <div
-            className="flex flex-col gap-1 border-separator border-b py-3.5 pr-4"
-            key={segment.label}
-          >
-            <dt className="flex items-center gap-1.5 font-semibold text-muted text-xs">
+          <div className="flex flex-col gap-1 py-4 pr-4" key={segment.label}>
+            <dt className="flex items-center gap-2 font-semibold text-muted text-xs">
               <span
                 aria-hidden
                 className="size-2.5 shrink-0 rounded-xs"

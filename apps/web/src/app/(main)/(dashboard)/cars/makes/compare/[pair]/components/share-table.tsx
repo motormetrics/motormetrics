@@ -38,7 +38,7 @@ export function ShareTable({
             {rows.map((row) => (
               <Table.Row id={row.key} key={row.key}>
                 <Table.Cell>
-                  <div className="flex flex-col gap-0.5">
+                  <div className="flex flex-col gap-1">
                     <span className="font-semibold">{row.label}</span>
                     {row.gloss ? (
                       <Typography.Paragraph color="muted" size="xs">

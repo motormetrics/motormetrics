@@ -63,7 +63,7 @@ export function FuelTable({
           className={cn(
             "block w-full cursor-pointer whitespace-nowrap font-semibold text-xs",
             key === "name" ? "text-left" : "text-right",
-            isSorted ? "text-accent-strong" : "text-muted",
+            isSorted ? "text-accent" : "text-muted",
           )}
           onClick={() => sortBy(key)}
           type="button"
@@ -80,7 +80,7 @@ export function FuelTable({
   return (
     <table aria-label="Fuel types" className="w-full table-fixed">
       <thead>
-        <tr className="border-border border-b *:align-bottom">
+        <tr className="*:align-bottom">
           {header("name", "Fuel type")}
           <th
             className="px-2 pb-2 text-left font-semibold text-muted text-xs max-lg:hidden"
@@ -104,7 +104,7 @@ export function FuelTable({
       <tbody>
         {sortFuelRows(rows, sortKey, direction).map((row) => (
           <tr
-            className="border-separator border-b *:px-2 *:py-2.5 hover:bg-surface-secondary max-md:*:px-0.5"
+            className="*:px-2 *:py-2.5 hover:bg-surface-secondary max-md:*:px-0.5"
             key={row.name}
           >
             <th className="text-left font-medium text-sm" scope="row">
@@ -115,7 +115,7 @@ export function FuelTable({
                   style={{ backgroundColor: row.color }}
                 />
                 <Link
-                  className="truncate text-foreground hover:text-accent-strong"
+                  className="truncate text-foreground hover:text-accent"
                   href={`/cars/fuel-types/${slugify(row.name)}`}
                 >
                   {row.name}
@@ -142,7 +142,7 @@ export function FuelTable({
                     }}
                   />
                 </span>
-                <span className="ml-auto w-12 shrink-0 text-right text-muted-strong text-xs tabular-nums">
+                <span className="ml-auto w-12 shrink-0 text-right text-foreground text-xs tabular-nums">
                   {row.share.toFixed(1)}%
                 </span>
               </span>

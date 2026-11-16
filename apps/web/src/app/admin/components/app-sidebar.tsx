@@ -131,7 +131,7 @@ export const AppSidebar = () => {
 
   return (
     <aside className="sticky top-0 hidden h-screen w-72 shrink-0 flex-col border-r bg-background lg:flex">
-      <div className="flex items-center gap-2 border-b px-5 py-4">
+      <div className="flex items-center gap-2 px-5 py-4">
         <div className="flex size-9 items-center justify-center rounded-xl bg-accent">
           <LayoutDashboard className="size-4 text-accent-foreground" />
         </div>

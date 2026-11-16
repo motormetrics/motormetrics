@@ -241,7 +241,7 @@ export async function VehicleTypeContent({
             },
           ].map(({ href, label }) => (
             <Link
-              className="whitespace-nowrap font-semibold text-accent-strong text-sm hover:text-accent-deep"
+              className="whitespace-nowrap font-semibold text-accent text-sm hover:text-accent"
               href={href}
               key={href}
             >

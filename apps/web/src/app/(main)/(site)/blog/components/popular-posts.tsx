@@ -24,7 +24,7 @@ export async function MostRead() {
   }
 
   return (
-    <aside aria-labelledby="most-read" className="flex flex-col gap-3">
+    <aside aria-labelledby="most-read" className="flex flex-col gap-4">
       <Typography.Paragraph
         className="uppercase"
         color="muted"
@@ -36,15 +36,15 @@ export async function MostRead() {
       </Typography.Paragraph>
       <ol className="flex flex-col border-separator border-t">
         {posts.map((post, index) => (
-          <li className="border-separator border-b" key={post.id}>
+          <li key={post.id}>
             <Link
-              className="group flex gap-2.5 py-3 text-foreground no-underline"
+              className="group flex gap-2 py-4 text-foreground no-underline"
               href={`/blog/${post.slug}`}
             >
               <span className="w-5 shrink-0 font-semibold text-muted text-sm tabular-nums">
                 {index + 1}
               </span>
-              <span className="flex min-w-0 flex-col gap-0.5">
+              <span className="flex min-w-0 flex-col gap-1">
                 <span className="font-semibold text-sm leading-snug group-hover:underline">
                   {post.title}
                 </span>

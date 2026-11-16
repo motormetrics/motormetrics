@@ -60,7 +60,7 @@ export function VehicleTypesChart({
 
   return (
     <div className="flex flex-col gap-4">
-      <ul className="flex flex-wrap gap-x-5 gap-y-2 text-muted-strong text-xs">
+      <ul className="flex flex-wrap gap-x-5 gap-y-2 text-foreground text-xs">
         {series.map(({ color, key, label }) => (
           <li className="inline-flex items-center gap-1.5" key={key}>
             <span
@@ -112,7 +112,7 @@ export function VehicleTypesChart({
               >
                 <tspan x={x}>{point.label}</tspan>
                 {point.year ? (
-                  <tspan className="fill-subtle font-semibold" dy="1.2em" x={x}>
+                  <tspan className="fill-muted font-semibold" dy="1.2em" x={x}>
                     {point.year}
                   </tspan>
                 ) : null}

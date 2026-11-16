@@ -113,7 +113,7 @@ export default function AboutPage() {
         data={{ "@context": "https://schema.org", ...faqSchema }}
       />
 
-      <OverviewPage className="gap-10 max-md:gap-7">
+      <OverviewPage className="gap-8 max-md:gap-6">
         {/* Direction D's head, with the key numbers beside it once the page
             is wide and under it before then. All of it is fixed copy. */}
         <div className="@container">
