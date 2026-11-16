@@ -36,6 +36,12 @@ const LEGACY_PATH_REDIRECTS = [
   ],
   // Added 2026-10-29, review 2027-10-29: the page moved into the blog.
   ["/coe/category-merger", "/blog/lta-coe-category-merger-proposal"],
+  // Added 2026-11-17, review 2027-11-17: the fuel-type and vehicle-type pages
+  // were merged into the Cars overview table. Electric goes first so it wins
+  // over the catch-all fuel-type rule.
+  ["/cars/fuel-types/electric", "/cars/electric-vehicles"],
+  ["/cars/fuel-types/:type*", "/cars?dimension=fuelType"],
+  ["/cars/vehicle-types/:type*", "/cars?dimension=vehicleType"],
 ] as const;
 
 // Static CSP, not nonce-based: a nonce needs a per-request render, which

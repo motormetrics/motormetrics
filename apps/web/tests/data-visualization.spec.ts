@@ -109,9 +109,9 @@ test.describe("Data Visualization Interactions", () => {
     });
   });
 
-  test.describe("Fuel Types Charts", () => {
+  test.describe("Electric Vehicles Charts", () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto("/cars/fuel-types/electric");
+      await page.goto("/cars/electric-vehicles");
     });
 
     test("should display overview trends chart", async ({ page }) => {

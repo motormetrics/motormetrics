@@ -168,8 +168,7 @@ the Next.js metadata template in `src/app/layout.tsx`:
     - Homepage `/` and `/about` — via `title.absolute` (bypasses the template).
     - All `openGraph.title` / `twitter.title` (social cards have no length penalty).
 - **Evergreen titles for "latest data" pages**: pages backed by a stable URL that renders
-  the latest month (`/cars/registrations`, `/cars/fuel-types`, `/cars/vehicle-types`,
-  `/cars/deregistrations`) use a fixed, keyword-focused `<title>` with **no month prefix**.
+  the latest month (`/cars/registrations`, `/cars/deregistrations`) use a fixed, keyword-focused `<title>` with **no month prefix**.
   The month lives in the H1 and meta description instead. Their `alternates.canonical` and
   `openGraph.url` must point to the **clean path** (no `?month=`) so all query-param
   variants consolidate to one indexed page.

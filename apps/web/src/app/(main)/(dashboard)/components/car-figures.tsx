@@ -145,7 +145,7 @@ export async function FuelMixFigure() {
           total: latest.total,
         })}
         eyebrow="Figure 2 · Registrations"
-        link={{ href: "/cars/fuel-types", label: "All fuel types" }}
+        link={{ href: "/cars?dimension=fuelType", label: "All fuel types" }}
         title={
           <span id="fuel-types-heading">
             New cars by fuel type, last {CHART_MONTHS} months
