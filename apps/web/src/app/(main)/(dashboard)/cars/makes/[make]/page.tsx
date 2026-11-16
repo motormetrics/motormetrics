@@ -62,23 +62,16 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-/** How many of the year's largest makes are prerendered at build time. */
-const PRERENDERED_MAKES = 10;
-
 /**
- * Prerender only the year's largest makes. Every other make is served the
- * route's App Shell on its first visit, then rendered in the background with
- * its slug and cached for the visitors after it (ISR with Cache Components).
- * `dynamicParams` stays at its default so those makes are not 404s.
+ * Prerender every make. A longer build is the cheaper side of the trade: a
+ * make left out is rendered by a function on its first visit after every
+ * deploy, which counts against Fluid Active CPU where build time does not.
+ * `dynamicParams` stays at its default, so a make added between deploys is
+ * still rendered on demand rather than a 404.
  */
 export async function generateStaticParams() {
-  const month = await getCarsLatestMonth();
-  const totals = month
-    ? await getMakeTotalsInRange(`${month.slice(0, 4)}-01`, month)
-    : [];
-  const params = totals
-    .slice(0, PRERENDERED_MAKES)
-    .map(({ make }) => ({ make: slugify(make) }));
+  const makes = await getDistinctMakes();
+  const params = makes.map(({ make }) => ({ make: slugify(make) }));
 
   return params.length > 0 ? params : [{ make: "__static-validation__" }];
 }
