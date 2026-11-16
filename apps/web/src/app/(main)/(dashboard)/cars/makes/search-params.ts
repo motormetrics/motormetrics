@@ -63,3 +63,23 @@ export type MakesSearchParams = Awaited<ReturnType<typeof loadSearchParams>>;
  * drop out of the query string, so the default view is plain /cars/makes.
  */
 export const serialize = createSerializer(makesSearchParams);
+
+/**
+ * A filter link as it goes in the HTML and as a click follows it. The link
+ * never carries the selected make or the comparison flag, so no view of a
+ * selected make is a URL for a crawler; a click keeps both.
+ */
+export function filterLink(
+  params: MakesSearchParams,
+  change: Partial<MakesSearchParams>,
+): { href: string; navigateTo?: string } {
+  const next = { ...params, ...change };
+  const href = serialize("/cars/makes", {
+    ...next,
+    compare: null,
+    make: null,
+  });
+  const navigateTo = serialize("/cars/makes", next);
+
+  return navigateTo === href ? { href } : { href, navigateTo };
+}

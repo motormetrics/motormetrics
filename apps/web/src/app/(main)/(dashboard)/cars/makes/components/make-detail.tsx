@@ -2,6 +2,10 @@ import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { TwoShadeTrendChart } from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
 import {
+  ComparePick,
+  CompareToggle,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/make-detail-controls";
+import {
   loadMakeRows,
   type MakeRow,
   MIN_BASE,
@@ -312,25 +316,17 @@ export async function MakeDetail({
             {row.make} page
             <ArrowRight className="size-4" />
           </Link>
-          <Link
-            aria-expanded={params.compare}
-            className={buttonVariants({ size: "sm", variant: "secondary" })}
-            href={serialize("/cars/makes", {
-              ...params,
-              compare: params.compare ? null : true,
-            })}
-            scroll={false}
-          >
+          <CompareToggle comparing={params.compare} variant="secondary">
             <Plus className="size-4" />
             Add to compare
-          </Link>
+          </CompareToggle>
         </div>
       </div>
 
       {params.compare ? (
-        // Picking the second make: the list beside this detail now links
-        // each make into the comparison, and the nearest ranks are offered
-        // here as quick picks.
+        // Picking the second make: a click in the list beside this detail now
+        // leads into the comparison, and the nearest ranks are offered here
+        // as quick picks.
         <div
           className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-separator px-4 py-3 text-sm"
           role="status"
@@ -339,22 +335,14 @@ export async function MakeDetail({
             Compare <span className="font-semibold">{row.make}</span> with
           </span>
           {peers.map((peer) => (
-            <Link
-              className={buttonVariants({ size: "sm", variant: "secondary" })}
-              href={peer.href}
-              key={peer.href}
-            >
+            <ComparePick href={peer.href} key={peer.href}>
               {peer.make}
-            </Link>
+            </ComparePick>
           ))}
           <span className="text-muted">or any make in the list</span>
-          <Link
-            className={`ml-auto ${buttonVariants({ size: "sm", variant: "tertiary" })}`}
-            href={serialize("/cars/makes", { ...params, compare: null })}
-            scroll={false}
-          >
+          <CompareToggle className="ml-auto" comparing variant="tertiary">
             Cancel
-          </Link>
+          </CompareToggle>
         </div>
       ) : null}
 

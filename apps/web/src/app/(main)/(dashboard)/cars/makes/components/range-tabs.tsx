@@ -1,9 +1,9 @@
 import { FilterTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/filter-tabs";
 import {
+  filterLink,
   type MakesSearchParams,
   RANGES,
   type Range,
-  serialize,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { formatMonthName } from "@web/utils/dates/format-month";
 
@@ -20,7 +20,7 @@ export function rangeTabLabel(range: Range, latestMonth: string): string {
 
 /**
  * The index's period switch. Each range is a link to the page with `?range=`
- * changed and every other param kept, built on the server.
+ * changed and the other filters kept, built on the server.
  */
 export function RangeTabs({
   latestMonth,
@@ -35,7 +35,7 @@ export function RangeTabs({
       filter="range"
       selectedKey={params.range}
       tabs={RANGES.map((range) => ({
-        href: serialize("/cars/makes", { ...params, range }),
+        ...filterLink(params, { range }),
         id: range,
         label: rangeTabLabel(range, latestMonth),
       }))}

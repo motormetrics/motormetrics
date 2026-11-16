@@ -17,9 +17,9 @@ import {
 import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/range-tabs";
 import {
   FUEL_FILTERS,
+  filterLink,
   loadSearchParams,
   type Range,
-  serialize,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { getCarsLatestMonth } from "@web/queries/cars";
@@ -109,12 +109,12 @@ async function PowertrainTabs({ searchParams }: IndexProps) {
       selectedKey={params.fuel ?? ALL_FUEL}
       tabs={[
         {
-          href: serialize("/cars/makes", { ...params, fuel: null }),
+          ...filterLink(params, { fuel: null }),
           id: ALL_FUEL,
           label: "All",
         },
         ...FUEL_FILTERS.map((fuel) => ({
-          href: serialize("/cars/makes", { ...params, fuel }),
+          ...filterLink(params, { fuel }),
           id: fuel,
           label: fuel,
         })),
@@ -143,7 +143,7 @@ async function SortTabs({ searchParams }: IndexProps) {
       filter="sort"
       selectedKey={params.sort}
       tabs={SORT_TABS.map(({ id, label }) => ({
-        href: serialize("/cars/makes", { ...params, sort: id }),
+        ...filterLink(params, { sort: id }),
         id,
         label,
       }))}
@@ -217,12 +217,10 @@ async function MakeResults({ searchParams }: IndexProps) {
     ? [
         ...rows.slice(Math.max(selectedIndex - 1, 0), selectedIndex),
         ...rows.slice(selectedIndex + 1, selectedIndex + 3),
-      ].map((row) => ({
-        href:
-          compareHrefOf(row) ??
-          serialize("/cars/makes", { ...params, make: row.slug }),
-        make: row.make,
-      }))
+      ].flatMap((row) => {
+        const href = compareHrefOf(row);
+        return href ? [{ href, make: row.make }] : [];
+      })
     : [];
 
   const cards: MakeCard[] = ordered.map((row) => ({
