@@ -21,7 +21,10 @@ export async function FuelTypeHead({
     <PageHead
       controls={
         <Suspense fallback={<Skeleton className="h-8 w-36" />}>
-          <FuelTypeMonthPicker searchParams={searchParams} />
+          <FuelTypeMonthPicker
+            pathname={`/cars/fuel-types/${type}`}
+            searchParams={searchParams}
+          />
         </Suspense>
       }
       eyebrow="Fuel types"

@@ -194,7 +194,10 @@ export default function Page({ searchParams }: PageProps) {
         <div className="flex flex-wrap items-end gap-4">
           <Field label="Month">
             <Suspense fallback={<Skeleton className="h-8 w-36" />}>
-              <CarsMonthPicker searchParams={searchParams} />
+              <CarsMonthPicker
+                pathname="/cars/registrations"
+                searchParams={searchParams}
+              />
             </Suspense>
           </Field>
           <Field label="Fuel type">

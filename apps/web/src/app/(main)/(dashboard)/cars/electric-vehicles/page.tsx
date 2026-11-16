@@ -139,7 +139,10 @@ async function ElectricVehiclesFaq() {
 }
 
 async function MonthControl({ searchParams }: PageProps) {
-  const { month: requestedMonth } = await loadSearchParams(searchParams);
+  const [{ month: requestedMonth }, query] = await Promise.all([
+    loadSearchParams(searchParams),
+    searchParams,
+  ]);
   const [months, { month, wasAdjusted }] = await Promise.all([
     fetchMonthsForCars(),
     getMonthOrLatest(requestedMonth, "cars"),
@@ -150,7 +153,14 @@ async function MonthControl({ searchParams }: PageProps) {
   }
 
   return (
-    <MonthMenu latestMonth={month} months={months} wasAdjusted={wasAdjusted} />
+    <MonthMenu
+      latestMonth={months[0]}
+      month={month}
+      months={months}
+      pathname="/cars/electric-vehicles"
+      query={query}
+      wasAdjusted={wasAdjusted}
+    />
   );
 }
 

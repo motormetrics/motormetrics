@@ -141,7 +141,7 @@ export default function CarsPage({ searchParams }: PageProps) {
         <SourceNote>Source: LTA via DataMall.</SourceNote>
         <div className="flex flex-wrap gap-2">
           <Suspense fallback={<Skeleton className="h-8 w-36" />}>
-            <CarsMonthPicker searchParams={searchParams} />
+            <CarsMonthPicker pathname="/cars" searchParams={searchParams} />
           </Suspense>
           <SharePill title="New car registrations" />
         </div>

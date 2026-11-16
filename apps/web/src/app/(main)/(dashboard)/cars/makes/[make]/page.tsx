@@ -356,7 +356,10 @@ async function MakeHead({ params, searchParams }: PageProps) {
         // own, so the H1 lands as soon as the slug resolves instead of
         // waiting on them.
         <Suspense fallback={<Skeleton className="h-10 w-80" />}>
-          <CarMakeHeaderMeta searchParams={searchParams} />
+          <CarMakeHeaderMeta
+            pathname={`/cars/makes/${slugify(exactMake)}`}
+            searchParams={searchParams}
+          />
         </Suspense>
       }
       eyebrow="Cars · Makes"
@@ -400,12 +403,17 @@ async function MakeReportSection({ params, searchParams }: PageProps) {
 }
 
 async function CarMakeHeaderMeta({
+  pathname,
   searchParams: searchParamsPromise,
 }: {
+  pathname: string;
   searchParams: Promise<SearchParams>;
 }) {
-  const { month: parsedMonth } = await loadSearchParams(searchParamsPromise);
-  const [months, makes, { wasAdjusted }] = await Promise.all([
+  const [{ month: parsedMonth }, query] = await Promise.all([
+    loadSearchParams(searchParamsPromise),
+    searchParamsPromise,
+  ]);
+  const [months, makes, { month, wasAdjusted }] = await Promise.all([
     fetchMonthsForCars(),
     getDistinctMakes(),
     getMonthOrLatest(parsedMonth, "cars"),
@@ -419,7 +427,10 @@ async function CarMakeHeaderMeta({
       <MakeSearch makes={makes.map(({ make }) => make)} />
       <MonthMenu
         latestMonth={months[0]}
+        month={month}
         months={months}
+        pathname={pathname}
+        query={query}
         wasAdjusted={wasAdjusted}
       />
     </>

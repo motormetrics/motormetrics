@@ -5,14 +5,18 @@ import type { SearchParams } from "nuqs/server";
 
 /** The header's month menu, flagging a month that had to fall back. */
 export async function VehicleTypeMonthPicker({
+  pathname,
   searchParams,
 }: {
+  pathname: string;
   searchParams: Promise<SearchParams>;
 }) {
-  const { month: parsedMonth } =
-    await loadVehicleTypeSearchParams(searchParams);
+  const [{ month: parsedMonth }, query] = await Promise.all([
+    loadVehicleTypeSearchParams(searchParams),
+    searchParams,
+  ]);
 
-  const [months, { wasAdjusted }] = await Promise.all([
+  const [months, { month, wasAdjusted }] = await Promise.all([
     fetchMonthsForCars(),
     getMonthOrLatest(parsedMonth, "cars"),
   ]);
@@ -20,7 +24,10 @@ export async function VehicleTypeMonthPicker({
   return (
     <MonthMenu
       latestMonth={months[0]}
+      month={month}
       months={months}
+      pathname={pathname}
+      query={query}
       wasAdjusted={wasAdjusted}
     />
   );

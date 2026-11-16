@@ -13,6 +13,7 @@ import { PremiumsHistory } from "@web/app/(main)/(dashboard)/coe/premiums/compon
 import { PremiumsRange } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-range";
 import { PremiumsTrend } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-trend";
 import {
+  loadPremiumsView,
   type PremiumsPageProps,
   SelectedCategory,
 } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-view";
@@ -110,7 +111,7 @@ export default function COEPremiumsPage({ searchParams }: PremiumsPageProps) {
         />
         <div className="flex flex-wrap items-end gap-x-3.5 gap-y-2.5">
           <Suspense fallback={<Skeleton className="h-10 w-40 rounded-md" />}>
-            <PremiumsMonthMenu />
+            <PremiumsMonthMenu searchParams={searchParams} />
           </Suspense>
           <Suspense fallback={<Skeleton className="h-10 w-80 rounded-md" />}>
             <PremiumsCategoryTabs searchParams={searchParams} />
@@ -191,9 +192,22 @@ async function PremiumsFaq() {
   );
 }
 
-/** The month picker. Its data is cached, but it reads the URL on the client. */
-async function PremiumsMonthMenu() {
-  const months = (await getCoeMonths()).map(({ month }) => month);
+/** The month picker, checked on the exercise the page resolved. */
+async function PremiumsMonthMenu({ searchParams }: PremiumsPageProps) {
+  const [rows, view, query] = await Promise.all([
+    getCoeMonths(),
+    loadPremiumsView(searchParams),
+    searchParams,
+  ]);
+  const months = rows.map(({ month }) => month);
 
-  return <MonthMenu latestMonth={months[0]} months={months} />;
+  return (
+    <MonthMenu
+      latestMonth={months[0]}
+      month={view?.current.month ?? months[0]}
+      months={months}
+      pathname="/coe/premiums"
+      query={query}
+    />
+  );
 }

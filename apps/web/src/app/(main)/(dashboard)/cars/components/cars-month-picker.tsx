@@ -5,16 +5,19 @@ import { getMonthOrLatest } from "@web/utils/dates/months";
 import type { SearchParams } from "nuqs/server";
 
 /**
- * The month menu in the page eyebrow. Writes to `?month=`, which every block
+ * The month menu in the page eyebrow. Links to `?month=`, which every block
  * on the page reads back.
  */
 export async function CarsMonthPicker({
+  pathname,
   searchParams,
 }: {
+  pathname: string;
   searchParams: Promise<SearchParams>;
 }) {
-  const [{ month: requestedMonth }, monthRows] = await Promise.all([
+  const [{ month: requestedMonth }, query, monthRows] = await Promise.all([
     loadSearchParams(searchParams),
+    searchParams,
     getCarsMonths(),
   ]);
 
@@ -23,12 +26,15 @@ export async function CarsMonthPicker({
   }
 
   const months = monthRows.map((row) => row.month);
-  const { wasAdjusted } = await getMonthOrLatest(requestedMonth, "cars");
+  const { month, wasAdjusted } = await getMonthOrLatest(requestedMonth, "cars");
 
   return (
     <MonthMenu
       latestMonth={months[0]}
+      month={month}
       months={months}
+      pathname={pathname}
+      query={query}
       wasAdjusted={wasAdjusted}
     />
   );

@@ -160,9 +160,12 @@ async function DeregistrationsMonthPicker({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const { month: parsedMonth } = await loadSearchParams(searchParams);
+  const [{ month: parsedMonth }, query] = await Promise.all([
+    loadSearchParams(searchParams),
+    searchParams,
+  ]);
 
-  const [months, { wasAdjusted }] = await Promise.all([
+  const [months, { month, wasAdjusted }] = await Promise.all([
     fetchMonthsForDeregistrations(),
     getMonthOrLatest(parsedMonth, "deregistrations"),
   ]);
@@ -170,7 +173,10 @@ async function DeregistrationsMonthPicker({
   return (
     <MonthMenu
       latestMonth={months[0]}
+      month={month}
       months={months}
+      pathname="/cars/deregistrations"
+      query={query}
       wasAdjusted={wasAdjusted}
     />
   );

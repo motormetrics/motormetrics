@@ -41,7 +41,10 @@ export async function VehicleTypeHead({
             />
           </Suspense>
           <Suspense fallback={<Skeleton className="h-8 w-36" />}>
-            <VehicleTypeMonthPicker searchParams={searchParams} />
+            <VehicleTypeMonthPicker
+              pathname={`/cars/vehicle-types/${type}`}
+              searchParams={searchParams}
+            />
           </Suspense>
         </>
       }

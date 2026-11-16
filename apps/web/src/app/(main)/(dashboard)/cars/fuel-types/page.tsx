@@ -133,9 +133,12 @@ async function FuelTypesMonthPicker({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  const { month: parsedMonth } = await loadSearchParams(searchParams);
+  const [{ month: parsedMonth }, query] = await Promise.all([
+    loadSearchParams(searchParams),
+    searchParams,
+  ]);
 
-  const [months, { wasAdjusted }] = await Promise.all([
+  const [months, { month, wasAdjusted }] = await Promise.all([
     fetchMonthsForCars(),
     getMonthOrLatest(parsedMonth, "cars"),
   ]);
@@ -143,7 +146,10 @@ async function FuelTypesMonthPicker({
   return (
     <MonthMenu
       latestMonth={months[0]}
+      month={month}
       months={months}
+      pathname="/cars/fuel-types"
+      query={query}
       wasAdjusted={wasAdjusted}
     />
   );
