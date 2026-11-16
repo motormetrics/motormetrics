@@ -163,7 +163,7 @@ async function PqpFaq() {
 
 export default function PQPRatesPage({ searchParams }: PQPPageProps) {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -210,7 +210,7 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
           }
           title="PQP rates"
         />
-        <div className="flex flex-wrap items-end gap-x-3.5 gap-y-2.5">
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
           <Suspense fallback={<Skeleton className="h-10 w-36" />}>
             <CategoryTabs categories={PQP_CATEGORY_KEYS} />
           </Suspense>
@@ -252,7 +252,7 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
           A 5-year renewal costs half the PQP, but the car cannot be renewed
           again after that term.
         </Typography.Paragraph>
-        <div className="flex flex-wrap gap-x-5 gap-y-2">
+        <div className="flex flex-wrap gap-x-4 gap-y-2">
           <SectionLink className="ml-0" href="/coe/premiums">
             Premium trends
           </SectionLink>

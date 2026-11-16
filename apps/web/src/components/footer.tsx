@@ -39,7 +39,7 @@ export function Footer({
       <nav aria-label="Site sections">
         <ul className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4">
           {SECTION_COLUMNS.map(({ label, links }) => (
-            <li className="flex flex-col gap-3" key={label}>
+            <li className="flex flex-col gap-4" key={label}>
               <Typography.Paragraph
                 className="uppercase"
                 color="muted"
@@ -65,7 +65,7 @@ export function Footer({
         </ul>
       </nav>
 
-      <div className="flex flex-col items-start gap-3 border-separator border-t pt-[18px] min-[721px]:flex-row min-[721px]:items-center min-[721px]:gap-4 min-[721px]:pt-5">
+      <div className="flex flex-col items-start gap-4 border-separator border-t pt-4 min-[721px]:flex-row min-[721px]:items-center min-[721px]:pt-6">
         <Link
           aria-label={`${SITE_TITLE} home`}
           className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-separator text-foreground"
@@ -80,7 +80,7 @@ export function Footer({
         </Link>
 
         <nav aria-label="Footer navigation">
-          <ul className="flex flex-wrap items-center gap-x-5 gap-y-1.5 min-[721px]:ml-2">
+          <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 min-[721px]:ml-2">
             {navItems.map(({ href, label }) => (
               <li key={href}>
                 <Link

@@ -357,7 +357,7 @@ async function MonthRows({ searchParams }: PQPPageProps) {
 
   return (
     <div className="flex max-w-3xl flex-col">
-      <div className="flex items-end gap-3.5 px-3 pb-2.5 font-semibold text-muted text-xs max-md:px-1.5">
+      <div className="flex items-end gap-4 px-4 pb-2 font-semibold text-muted text-xs max-md:px-2">
         <span className="min-w-0 flex-1">Month</span>
         {PQP_CATEGORY_KEYS.map((key) => (
           <span className={MONTH_CELL} key={key}>
@@ -371,7 +371,7 @@ async function MonthRows({ searchParams }: PQPPageProps) {
           return (
             <li
               className={cn(
-                "flex items-center gap-3.5 px-3 py-2.5 max-md:px-1.5",
+                "flex items-center gap-4 px-4 py-2 max-md:px-2",
                 row.month === latestMonth && "bg-surface-secondary",
               )}
               key={row.key}
@@ -422,7 +422,7 @@ export function PQPTradeoffs() {
       <dl className="flex flex-col border-border border-t">
         {RENEWAL_TRADEOFFS.map(({ label, note }) => (
           <div
-            className="flex items-baseline gap-5 py-3 max-md:flex-col max-md:gap-1"
+            className="flex items-baseline gap-4 py-4 max-md:flex-col max-md:gap-1"
             key={label}
           >
             <dt className="w-44 shrink-0 font-semibold text-sm">{label}</dt>

@@ -72,14 +72,14 @@ export async function AllCategories() {
   const summary = summariseExercise(groupByExercise(results));
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-4">
       <SectionHead
         caption={demandCaption(latest)}
         eyebrow="Figure 2 · This exercise"
         link={{ href: "/coe/results", label: "All COE results" }}
         title="All categories, and bids against quota"
       />
-      <div className="grid items-start gap-x-16 gap-y-9 2xl:grid-cols-2">
+      <div className="grid items-start gap-x-16 gap-y-8 2xl:grid-cols-2">
         <Suspense
           fallback={
             <AllCategoriesTable rows={rows} selected={DEFAULT_CATEGORY} />

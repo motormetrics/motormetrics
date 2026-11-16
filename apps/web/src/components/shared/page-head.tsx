@@ -80,7 +80,7 @@ export function PageHead({
       {/* `min-w-0` so a control wider than the phone — the COE range tabs run
           to 452px — clips into its own scroll area instead of stretching the
           page. */}
-      <div className="flex min-w-0 max-w-full flex-wrap items-center gap-3 sm:ml-auto">
+      <div className="flex min-w-0 max-w-full flex-wrap items-center gap-x-4 gap-y-2 sm:ml-auto">
         {controls}
         <SharePill contentType={contentType} title={title} />
       </div>

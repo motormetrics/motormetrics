@@ -15,7 +15,7 @@ const count = new Intl.NumberFormat("en-SG", { maximumFractionDigits: 0 });
 
 function LegendKey({ color, label }: { color: string; label: string }) {
   return (
-    <span className="inline-flex items-center gap-1.5">
+    <span className="inline-flex items-center gap-2">
       <span
         aria-hidden
         className="h-2.5 w-3 rounded-xs"
@@ -42,13 +42,13 @@ export function QuotaAllocationView({
   const rows = bidsAgainstQuota(latest);
 
   return (
-    <div className="flex flex-col gap-4.5">
-      <div className="flex gap-4.5 text-foreground text-xs">
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-4 text-foreground text-xs">
         <LegendKey color="var(--chart-1)" label="Quota" />
         <LegendKey color="var(--chart-5)" label="Bids received" />
       </div>
 
-      <div className="grid grid-cols-[auto_1fr_auto] gap-x-2.5 gap-y-3.5 md:gap-x-3">
+      <div className="grid grid-cols-[auto_1fr_auto] gap-x-2 gap-y-4 md:gap-x-4">
         {rows.map((row) => {
           const label = `${count.format(row.bids)} / ${count.format(row.quota)}`;
           return (
@@ -85,7 +85,7 @@ export function QuotaAllocationView({
                 </span>
               </Tooltip.Trigger>
               <Tooltip.Content>
-                <div className="flex flex-col gap-0.5 py-0.5 text-xs tabular-nums">
+                <div className="flex flex-col gap-1 text-xs tabular-nums">
                   <span className="font-semibold">{row.category}</span>
                   <span>Bids received: {count.format(row.bids)}</span>
                   <span>Quota: {count.format(row.quota)}</span>

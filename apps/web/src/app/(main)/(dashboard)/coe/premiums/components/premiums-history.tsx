@@ -25,7 +25,7 @@ const HISTORY_ROWS = 12;
 
 /** Shared by the history header and rows, so the columns line up. */
 const HISTORY_ROW =
-  "flex items-center gap-4 px-3 py-2.5 max-md:flex-wrap max-md:gap-y-1 max-md:px-2.5";
+  "flex items-center gap-4 px-4 py-2 max-md:flex-wrap max-md:gap-y-1 max-md:px-2";
 const HISTORY_PREMIUM = "w-32 shrink-0 text-right max-lg:w-28";
 const HISTORY_CHANGE = "w-24 shrink-0 text-right max-lg:w-20";
 const HISTORY_FIGURE = "w-20 shrink-0 text-right max-md:hidden";
@@ -121,7 +121,7 @@ async function HistoryRows({ searchParams }: PremiumsPageProps) {
       <div
         className={cn(
           HISTORY_ROW,
-          "items-end pt-0 pb-2.5 font-semibold text-muted text-xs max-md:hidden",
+          "items-end pt-0 pb-2 font-semibold text-muted text-xs max-md:hidden",
         )}
       >
         <span className="min-w-0 flex-1">Exercise</span>
@@ -146,7 +146,7 @@ async function HistoryRows({ searchParams }: PremiumsPageProps) {
               <span className="min-w-0 flex-1 font-medium text-sm">
                 {exerciseStamp(exercise)}
               </span>
-              <span className="flex shrink-0 flex-col items-end gap-0.5 md:contents">
+              <span className="flex shrink-0 flex-col items-end gap-1 md:contents">
                 <span
                   className={cn(
                     HISTORY_PREMIUM,

@@ -10,7 +10,7 @@ export function LegendItem({
   label: string;
 }) {
   return (
-    <span className="flex items-center gap-1.5 text-muted text-xs">
+    <span className="flex items-center gap-2 text-muted text-xs">
       <span aria-hidden className={`size-2.5 rounded-xs ${className}`} />
       {label}
     </span>

@@ -129,8 +129,8 @@ export function RenewalResults({
 
   return (
     <div aria-live="polite" className="flex flex-col gap-6">
-      <Surface className="flex flex-col gap-5 p-6" variant="transparent">
-        <div className="flex flex-wrap items-end justify-between gap-3">
+      <Surface className="flex flex-col gap-4 p-6" variant="transparent">
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="flex flex-col gap-1">
             <span className="text-muted text-sm">
               Your PQP · {category.replace("Category", "Cat")} ·{" "}
@@ -179,18 +179,18 @@ export function RenewalResults({
 
       {history.mustDeregister ? (
         <div
-          className="flex items-start gap-3 rounded-2xl bg-warning-soft p-4 text-sm text-warning-soft-foreground"
+          className="flex items-start gap-2 rounded-2xl bg-warning-soft p-4 text-sm text-warning-soft-foreground"
           role="status"
         >
-          <TriangleAlert aria-hidden className="mt-0.5 size-5 shrink-0" />A
-          5-year renewal is final. LTA requires this car to be deregistered by{" "}
+          <TriangleAlert aria-hidden className="size-5 shrink-0" />A 5-year
+          renewal is final. LTA requires this car to be deregistered by{" "}
           {expiryLabel}.
         </div>
       ) : null}
 
       <div className="grid gap-6 xl:grid-cols-3">
         {history.mustDeregister ? null : (
-          <figure className="flex min-w-0 flex-col gap-3 xl:col-span-2">
+          <figure className="flex min-w-0 flex-col gap-4 xl:col-span-2">
             <figcaption className="flex flex-col gap-1">
               <span className="font-semibold">
                 Estimated renewal cost a year
@@ -200,7 +200,7 @@ export function RenewalResults({
                 term
               </span>
             </figcaption>
-            <dl className="grid grid-cols-2 gap-3">
+            <dl className="grid grid-cols-2 gap-4">
               {costs.map((cost) => (
                 <div className="flex flex-col" key={cost.term}>
                   <dt className="text-muted text-xs">
@@ -268,7 +268,7 @@ export function RenewalResults({
               className="flex flex-wrap gap-4 text-foreground text-sm"
             >
               {PARTS.map(({ key, label, swatch }) => (
-                <li className="inline-flex items-center gap-1.5" key={key}>
+                <li className="inline-flex items-center gap-2" key={key}>
                   <span
                     aria-hidden
                     className={cn("block h-2.5 w-3 rounded-xs", swatch)}
@@ -310,7 +310,7 @@ export function RenewalResults({
           </figure>
         )}
 
-        <Card className="self-start p-5">
+        <Card className="self-start p-4">
           <span className="flex items-center gap-2 font-semibold">
             <CircleDollarSign aria-hidden className="size-5 text-accent" />
             If you deregister
@@ -340,7 +340,7 @@ export function RenewalResults({
         <span className="font-semibold text-sm">
           These are renewal costs only.
         </span>
-        <ul className="flex list-disc flex-col gap-1 pl-5 text-foreground text-sm">
+        <ul className="flex list-disc flex-col gap-1 pl-6 text-foreground text-sm">
           <li>
             Road tax follows LTA's formula for your fuel type, with the 10% to
             50% surcharge for cars over 10 years old applied to road tax only.

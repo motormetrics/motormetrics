@@ -19,7 +19,7 @@ export interface PQPRateRow {
 }
 
 /** Shared by the header and every row, so the columns line up. */
-const ROW = "flex items-center gap-3.5 px-3";
+const ROW = "flex items-center gap-4 px-4";
 const CATEGORY_CELL = "w-28 shrink-0 max-md:min-w-0 max-md:flex-1";
 const DESCRIPTION_CELL = "min-w-0 flex-1 truncate max-md:hidden";
 const MONEY_CELL = "w-28 shrink-0 text-right";
@@ -62,7 +62,7 @@ export function PQPRatesTable({
       <div
         className={cn(
           ROW,
-          "items-end pb-2.5 font-semibold text-muted text-xs max-md:hidden",
+          "items-end pb-2 font-semibold text-muted text-xs max-md:hidden",
         )}
       >
         <span className={CATEGORY_CELL}>Category</span>
@@ -85,7 +85,7 @@ export function PQPRatesTable({
             aria-pressed={isActive}
             className={cn(
               ROW,
-              "w-full cursor-pointer border-separator border-l-2 py-3 text-left transition-colors hover:bg-surface-secondary max-md:flex-wrap max-md:gap-y-1",
+              "w-full cursor-pointer border-separator border-l-2 py-4 text-left transition-colors hover:bg-surface-secondary max-md:flex-wrap max-md:gap-y-1",
               isActive
                 ? "border-l-accent bg-accent-soft"
                 : "border-l-transparent",
@@ -94,7 +94,7 @@ export function PQPRatesTable({
             onClick={() => selectCategory(row.key)}
             type="button"
           >
-            <span className={cn(CATEGORY_CELL, "flex flex-col gap-0.5")}>
+            <span className={cn(CATEGORY_CELL, "flex flex-col gap-1")}>
               <span
                 className={cn(
                   "whitespace-nowrap text-base",
@@ -112,7 +112,7 @@ export function PQPRatesTable({
             <span className={cn(DESCRIPTION_CELL, "text-muted text-sm")}>
               {row.description}
             </span>
-            <span className="flex shrink-0 flex-col items-end gap-0.5 md:contents">
+            <span className="flex shrink-0 flex-col items-end gap-1 md:contents">
               <span
                 className={cn(
                   MONEY_CELL,

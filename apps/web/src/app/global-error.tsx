@@ -42,7 +42,7 @@ export default function GlobalError({
               </p>
             ) : null}
             <button
-              className="cursor-pointer rounded-full bg-accent px-6 py-3 font-medium text-accent-foreground"
+              className="cursor-pointer rounded-full bg-accent px-6 py-2 font-medium text-accent-foreground"
               onClick={() => retry()}
               type="button"
             >

@@ -45,7 +45,7 @@ export async function loadExercises(searchParams: Promise<SearchParams>) {
 }
 
 /** Shared by the column header and every row, so the columns line up. */
-export const EXERCISE_ROW = "flex items-center gap-3 px-3 py-2.5 max-md:px-1.5";
+export const EXERCISE_ROW = "flex items-center gap-4 px-4 py-2 max-md:px-2";
 export const EXERCISE_CELL =
   "flex w-28 shrink-0 flex-col items-end gap-px max-lg:w-24 max-md:w-16";
 export const BIDS_CELL = "w-24 shrink-0 text-right max-xl:hidden";

@@ -116,7 +116,7 @@ const structuredData: WithContext<WebPage> = {
 
 export default function COEResultsPage({ searchParams }: PageProps) {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{

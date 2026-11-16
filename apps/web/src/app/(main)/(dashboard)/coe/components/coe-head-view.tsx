@@ -144,7 +144,7 @@ export function CoeKeyNumbersView({
               // w-full: Button sizes to its content, so without it each cell
               // sat at the start of its column and the rule and tint stopped
               // short. E, the odd one out in two columns, takes the full row.
-              "h-auto w-full min-w-0 flex-col items-start justify-start gap-0.5 whitespace-normal px-2.5 py-3 text-left @7xl:last:col-span-2 @max-3xl:last:col-span-2",
+              "h-auto w-full min-w-0 flex-col items-start justify-start gap-1 whitespace-normal px-2 py-4 text-left @7xl:last:col-span-2 @max-3xl:last:col-span-2",
               isPressed && "bg-accent-soft",
             )}
             key={category}

@@ -17,8 +17,8 @@ export interface PremiumsCategoryRow {
 }
 
 /** Shared by the header and every row, so the columns line up. */
-const ROW = "flex items-center gap-4 px-3";
-const CATEGORY_CELL = "flex min-w-0 flex-1 items-baseline gap-3";
+const ROW = "flex items-center gap-4 px-4";
+const CATEGORY_CELL = "flex min-w-0 flex-1 items-baseline gap-2";
 const PREMIUM_CELL = "w-32 shrink-0 text-right";
 const CHANGE_CELL = "w-28 shrink-0 text-right max-lg:w-24";
 const FIGURE_CELL = "w-20 shrink-0 text-right max-md:hidden";
@@ -49,7 +49,7 @@ export function PremiumsCategoryTable({
       <div
         className={cn(
           ROW,
-          "items-end pb-2.5 font-semibold text-muted text-xs max-md:hidden",
+          "items-end pb-2 font-semibold text-muted text-xs max-md:hidden",
         )}
       >
         <span className={CATEGORY_CELL}>Category</span>
@@ -71,7 +71,7 @@ export function PremiumsCategoryTable({
             aria-pressed={isActive}
             className={cn(
               ROW,
-              "w-full cursor-pointer border-separator border-l-2 py-3 text-left transition-colors hover:bg-surface-secondary max-md:flex-wrap max-md:gap-y-1",
+              "w-full cursor-pointer border-separator border-l-2 py-4 text-left transition-colors hover:bg-surface-secondary max-md:flex-wrap max-md:gap-y-1",
               isActive
                 ? "border-l-accent bg-accent-soft"
                 : "border-l-transparent",
@@ -83,7 +83,7 @@ export function PremiumsCategoryTable({
             <span
               className={cn(
                 CATEGORY_CELL,
-                "max-md:flex-col max-md:items-start max-md:gap-0.5",
+                "max-md:flex-col max-md:items-start max-md:gap-1",
               )}
             >
               <span
@@ -100,7 +100,7 @@ export function PremiumsCategoryTable({
                 {row.description}
               </span>
             </span>
-            <span className="flex shrink-0 flex-col items-end gap-0.5 md:contents">
+            <span className="flex shrink-0 flex-col items-end gap-1 md:contents">
               <span
                 className={cn(
                   PREMIUM_CELL,

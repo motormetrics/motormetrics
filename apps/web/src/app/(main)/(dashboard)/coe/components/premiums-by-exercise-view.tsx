@@ -46,7 +46,7 @@ export function PremiumsByExerciseView({
   const last = series.at(-1);
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-4">
       <SectionHead
         caption={historyCaption(category, series)}
         eyebrow="Figure 1 · Bidding history"

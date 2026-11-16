@@ -12,7 +12,7 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
         class="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4"
       >
         <li
-          class="flex flex-col gap-3"
+          class="flex flex-col gap-4"
         >
           <p
             class="typography typography--align-start typography--color-muted typography--body-xs typography--weight-semibold uppercase"
@@ -59,7 +59,7 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
           </ul>
         </li>
         <li
-          class="flex flex-col gap-3"
+          class="flex flex-col gap-4"
         >
           <p
             class="typography typography--align-start typography--color-muted typography--body-xs typography--weight-semibold uppercase"
@@ -90,7 +90,7 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
           </ul>
         </li>
         <li
-          class="flex flex-col gap-3"
+          class="flex flex-col gap-4"
         >
           <p
             class="typography typography--align-start typography--color-muted typography--body-xs typography--weight-semibold uppercase"
@@ -161,7 +161,7 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
           </ul>
         </li>
         <li
-          class="flex flex-col gap-3"
+          class="flex flex-col gap-4"
         >
           <p
             class="typography typography--align-start typography--color-muted typography--body-xs typography--weight-semibold uppercase"
@@ -194,7 +194,7 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
       </ul>
     </nav>
     <div
-      class="flex flex-col items-start gap-3 border-separator border-t pt-[18px] min-[721px]:flex-row min-[721px]:items-center min-[721px]:gap-4 min-[721px]:pt-5"
+      class="flex flex-col items-start gap-4 border-separator border-t pt-4 min-[721px]:flex-row min-[721px]:items-center min-[721px]:pt-6"
     >
       <a
         aria-label="MotorMetrics home"
@@ -228,7 +228,7 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
         aria-label="Footer navigation"
       >
         <ul
-          class="flex flex-wrap items-center gap-x-5 gap-y-1.5 min-[721px]:ml-2"
+          class="flex flex-wrap items-center gap-x-4 gap-y-2 min-[721px]:ml-2"
         >
           <li>
             <a

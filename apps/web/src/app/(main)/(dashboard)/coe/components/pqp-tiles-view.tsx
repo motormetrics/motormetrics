@@ -77,7 +77,7 @@ export function PqpTilesView({
           return [
             <li
               className={cn(
-                "flex flex-col gap-1 px-3 py-3.5",
+                "flex flex-col gap-1 p-4",
                 isSelected && "bg-accent-soft",
               )}
               key={category}

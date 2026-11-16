@@ -13,7 +13,7 @@ import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { getCoeResults } from "@web/queries/coe";
 
 /** Shared by the quota header and rows. */
-const QUOTA_ROW = "flex items-center gap-3.5 py-3 max-md:gap-2.5";
+const QUOTA_ROW = "flex items-center gap-4 py-2 max-md:gap-2";
 const QUOTA_CELL = "w-16 shrink-0 text-right";
 
 /**

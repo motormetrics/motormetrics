@@ -7,7 +7,7 @@ export function SuccessRateCell({ rate }: { rate: number }) {
     // bar fits a table row.
     <Meter
       aria-label="Success rate"
-      className="flex items-center gap-3"
+      className="flex items-center gap-2"
       formatOptions={{ maximumFractionDigits: 0, style: "percent" }}
       maxValue={1}
       size="sm"

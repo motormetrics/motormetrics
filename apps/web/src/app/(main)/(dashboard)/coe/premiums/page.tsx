@@ -72,7 +72,7 @@ const JUMP_LINKS = [
 
 export default function COEPremiumsPage({ searchParams }: PremiumsPageProps) {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       {/* Direction D's head: eyebrow, title, controls, the range hero, lead
           and source, with the key numbers beside it once the page is wide and
           under it before then. The copy is static; only the parts that read
@@ -108,7 +108,7 @@ export default function COEPremiumsPage({ searchParams }: PremiumsPageProps) {
           }
           title="COE premiums by category"
         />
-        <div className="flex flex-wrap items-end gap-x-3.5 gap-y-2.5">
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
           <Suspense fallback={<Skeleton className="h-10 w-40" />}>
             <PremiumsMonthMenu />
           </Suspense>
@@ -153,7 +153,7 @@ export default function COEPremiumsPage({ searchParams }: PremiumsPageProps) {
           Renewing an existing COE uses the PQP instead: the three-month moving
           average of premiums in that category.
         </Typography.Paragraph>
-        <div className="flex flex-wrap gap-x-5 gap-y-2">
+        <div className="flex flex-wrap gap-x-4 gap-y-2">
           <SectionLink className="ml-0" href="/coe/pqp">
             PQP rates
           </SectionLink>

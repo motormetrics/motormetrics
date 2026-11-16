@@ -155,17 +155,17 @@ export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
   return (
     <section
       aria-labelledby="renewal-calculator"
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-6"
     >
       <SectionHead
         caption="Estimates to compare, not a recommendation or financial advice"
         eyebrow="Renewal calculator"
         title={<span id="renewal-calculator">Renew or deregister?</span>}
       />
-      <div className="grid gap-8 lg:grid-cols-12 lg:gap-14">
+      <div className="grid gap-8 lg:grid-cols-12 lg:gap-16">
         <form
           aria-label="Your car"
-          className="flex flex-col gap-5 lg:col-span-5"
+          className="flex flex-col gap-6 lg:col-span-5"
           onSubmit={(event) => event.preventDefault()}
         >
           <span className="text-muted text-sm">
@@ -191,7 +191,7 @@ export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
           </Segment>
 
           <div className="flex flex-col gap-2">
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <Field htmlFor="renewal-registration" label="Registration date">
                 <Input
                   aria-describedby="renewal-dates"
@@ -231,7 +231,7 @@ export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
                 </span>
                 <ul
                   aria-label="Worked out from your dates"
-                  className="flex flex-col gap-1.5"
+                  className="flex flex-col gap-2"
                   id="renewal-dates"
                 >
                   {derived.map((fact) => (
@@ -274,7 +274,7 @@ export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
             </Field>
           )}
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <Segment
               aria-describedby="renewal-tax-help"
               aria-label="Fuel type"
@@ -293,7 +293,7 @@ export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
                 </Segment.Item>
               ))}
             </Segment>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               {fuel === "electric" ? null : (
                 <Field htmlFor="renewal-cc" label="Engine capacity (cc)">
                   <Input
