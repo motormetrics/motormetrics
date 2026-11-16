@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Chip, cn, ProgressBar, Typography } from "@heroui/react";
+import { Button, Chip, cn, Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { useCoeOverview } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
@@ -20,6 +20,7 @@ import {
   rangePosition,
 } from "@web/app/(main)/(dashboard)/coe/components/overview-figures";
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
+import { RangeBar } from "@web/components/shared/range-bar";
 import { formatMonthName } from "@web/utils/dates/format-month";
 
 /** The short names on the key-number buttons. */
@@ -73,28 +74,16 @@ export function CoeHeroView({ categoryKey, data }: ViewProps) {
           ) : null}
         </div>
         {range ? (
-          <ProgressBar
-            aria-label={`Against the last ${data.history.length} exercises: low ${formatCurrency(range.low.premium)}, high ${formatCurrency(range.high.premium)}, now ${formatCurrency(range.latest.premium)}. ${range.where}.`}
-            className="gap-2 pt-1"
-            maxValue={range.high.premium}
-            minValue={range.low.premium}
-            size="sm"
+          <RangeBar
+            ariaLabel={`Against the last ${data.history.length} exercises: low ${formatCurrency(range.low.premium)}, high ${formatCurrency(range.high.premium)}, now ${formatCurrency(range.latest.premium)}. ${range.where}.`}
+            className="pt-1"
+            high={range.high.premium}
+            highLabel={`High ${formatCurrency(range.high.premium)}`}
+            low={range.low.premium}
+            lowLabel={`${data.history.length}-exercise low ${formatCurrency(range.low.premium)}`}
             value={range.latest.premium}
-          >
-            <ProgressBar.Track className="col-span-full">
-              <ProgressBar.Fill />
-            </ProgressBar.Track>
-            <span className="col-span-full flex justify-between gap-3 text-muted text-xs tabular-nums">
-              <span>
-                {data.history.length}-exercise low{" "}
-                {formatCurrency(range.low.premium)}
-              </span>
-              <span className="font-semibold text-foreground">
-                {range.where}
-              </span>
-              <span>High {formatCurrency(range.high.premium)}</span>
-            </span>
-          </ProgressBar>
+            where={range.where}
+          />
         ) : null}
         <Typography.Paragraph
           className="text-muted-strong tabular-nums"

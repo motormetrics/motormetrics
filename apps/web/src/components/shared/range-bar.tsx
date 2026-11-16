@@ -1,15 +1,17 @@
-import { ProgressBar } from "@heroui/react";
+import { cn, ProgressBar } from "@heroui/react";
+import type { ReactNode } from "react";
 
 /**
  * Direction D's "range" hero bar: where the latest figure sits between the
  * low and the high of a window, with the three labelled underneath. Drawn
- * with HeroUI's ProgressBar, as the homepage's MarketLead does; the comp's
- * dot on the fill's end has no ProgressBar part, so the fill's edge marks it.
+ * with HeroUI's ProgressBar; the comp's dot on the fill's end has no
+ * ProgressBar part, so the fill's edge marks it.
  *
- * The electric vehicles page uses it too.
+ * Holds no state, so it renders from server and client components alike.
  */
 export function RangeBar({
   ariaLabel,
+  className,
   high,
   highLabel,
   low,
@@ -18,18 +20,19 @@ export function RangeBar({
   where,
 }: {
   ariaLabel: string;
+  className?: string;
   high: number;
   highLabel: string;
   low: number;
   lowLabel: string;
   value: number;
   /** "Highest in 12 months", "3.2% below the high". */
-  where: string;
+  where: ReactNode;
 }) {
   return (
     <ProgressBar
       aria-label={ariaLabel}
-      className="max-w-xl gap-2"
+      className={cn("max-w-xl gap-2", className)}
       maxValue={high > low ? high : low + 1}
       minValue={low}
       size="sm"

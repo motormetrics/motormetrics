@@ -1,6 +1,5 @@
 import { Chip, Skeleton, Typography } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { RangeBar } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/range-bar";
 import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-network";
 import {
   loadEvMonth,
@@ -15,6 +14,7 @@ import {
   CHARGING_POINT_TARGET_2030,
   ELECTRIC_POPULATION_FUEL_TYPE,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
+import { RangeBar } from "@web/components/shared/range-bar";
 import {
   getEvChargingNetworkSummary,
   getEvChargingRegistrationsByMonth,

@@ -1,6 +1,5 @@
 import { Chip, Skeleton, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { RangeBar } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/range-bar";
 import {
   CATEGORIES,
   type ReportProps,
@@ -9,6 +8,7 @@ import {
   leadSentence,
   rangeStats,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/summary";
+import { RangeBar } from "@web/components/shared/range-bar";
 import {
   formatMonthLabel,
   formatMonthShortLabel,

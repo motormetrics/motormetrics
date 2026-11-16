@@ -1,4 +1,4 @@
-import { ProgressBar, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   batteryElectricShares,
@@ -17,6 +17,7 @@ import {
   sumByMonth,
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { RangeBar } from "@web/components/shared/range-bar";
 import {
   getEvMarketShare,
   getEvMonthlyTrend,
@@ -109,21 +110,14 @@ export async function MarketHero() {
               </span>
             ) : null}
           </div>
-          <ProgressBar
-            aria-label={`Against the last ${window.length} exercises: low ${formatCurrency(range.low.premium)}, high ${formatCurrency(range.high.premium)}`}
-            className="max-w-xl gap-2"
-            maxValue={range.high.premium}
-            minValue={range.low.premium}
-            size="sm"
+          <RangeBar
+            ariaLabel={`Against the last ${window.length} exercises: low ${formatCurrency(range.low.premium)}, high ${formatCurrency(range.high.premium)}`}
+            high={range.high.premium}
+            highLabel={`High ${formatCurrency(range.high.premium)}`}
+            low={range.low.premium}
+            lowLabel={`${window.length}-exercise low ${formatCurrency(range.low.premium)}`}
             value={range.latest.premium}
-          >
-            <ProgressBar.Track className="col-span-full">
-              <ProgressBar.Fill />
-            </ProgressBar.Track>
-            <span className="col-span-full flex justify-between gap-4 text-muted text-xs tabular-nums">
-              <span>
-                {window.length}-exercise low {formatCurrency(range.low.premium)}
-              </span>
+            where={
               <span className="max-sm:hidden">
                 {rangeWhere(
                   range.latest.premium,
@@ -132,9 +126,8 @@ export async function MarketHero() {
                   window.length,
                 )}
               </span>
-              <span>High {formatCurrency(range.high.premium)}</span>
-            </span>
-          </ProgressBar>
+            }
+          />
         </div>
       ) : null}
       {lead ? (

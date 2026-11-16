@@ -1,4 +1,4 @@
-import { Chip, ProgressBar, Typography } from "@heroui/react";
+import { Chip, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
@@ -6,6 +6,7 @@ import {
   formatSignedPercent,
   rangePosition,
 } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-shared";
+import { RangeBar } from "@web/components/shared/range-bar";
 import type { ReactNode } from "react";
 
 /**
@@ -63,25 +64,15 @@ export function HeadAnswer({
           </Chip>
         ) : null}
       </div>
-      <ProgressBar
-        aria-label={`Against the last ${span}: low ${formatCurrency(low)}, high ${formatCurrency(high)}, now ${formatCurrency(value)}. ${position}.`}
-        className="gap-2"
-        maxValue={Math.max(high, low + 1)}
-        minValue={low}
-        size="sm"
+      <RangeBar
+        ariaLabel={`Against the last ${span}: low ${formatCurrency(low)}, high ${formatCurrency(high)}, now ${formatCurrency(value)}. ${position}.`}
+        high={high}
+        highLabel={`High ${formatCurrency(high)}`}
+        low={low}
+        lowLabel={`${count}-${unit} low ${formatCurrency(low)}`}
         value={value}
-      >
-        <ProgressBar.Track className="col-span-full">
-          <ProgressBar.Fill />
-        </ProgressBar.Track>
-        <span className="col-span-full flex justify-between gap-3 text-muted text-xs tabular-nums">
-          <span>
-            {count}-{unit} low {formatCurrency(low)}
-          </span>
-          <span className="font-semibold text-foreground">{position}</span>
-          <span>High {formatCurrency(high)}</span>
-        </span>
-      </ProgressBar>
+        where={position}
+      />
       <Typography.Paragraph
         className="text-muted-strong tabular-nums"
         size="sm"

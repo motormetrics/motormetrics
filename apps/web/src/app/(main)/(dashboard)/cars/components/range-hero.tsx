@@ -1,5 +1,6 @@
-import { Chip, ProgressBar, Typography } from "@heroui/react";
+import { Chip, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
+import { RangeBar } from "@web/components/shared/range-bar";
 import type { ReactNode } from "react";
 
 /** Where a figure sits in the range of the window it closes. */
@@ -97,25 +98,15 @@ export function RangeHero({
           </Chip>
         ) : null}
       </div>
-      <ProgressBar
-        aria-label={`Against the ${span} range: low ${formatCount(range.low)}, high ${formatCount(range.high)}, now ${formatCount(range.current)}. ${range.where}.`}
-        className="gap-2"
-        maxValue={range.high}
-        minValue={range.low}
-        size="sm"
+      <RangeBar
+        ariaLabel={`Against the ${span} range: low ${formatCount(range.low)}, high ${formatCount(range.high)}, now ${formatCount(range.current)}. ${range.where}.`}
+        high={range.high}
+        highLabel={`High ${formatCount(range.high)}`}
+        low={range.low}
+        lowLabel={`${span} low ${formatCount(range.low)}`}
         value={range.current}
-      >
-        <ProgressBar.Track className="col-span-full">
-          <ProgressBar.Fill />
-        </ProgressBar.Track>
-        <span className="col-span-full flex justify-between gap-3 text-muted text-xs tabular-nums">
-          <span>
-            {span} low {formatCount(range.low)}
-          </span>
-          <span className="font-semibold text-foreground">{range.where}</span>
-          <span>High {formatCount(range.high)}</span>
-        </span>
-      </ProgressBar>
+        where={range.where}
+      />
       {context ? (
         <Typography.Paragraph className="tabular-nums" color="muted" size="sm">
           {context}
