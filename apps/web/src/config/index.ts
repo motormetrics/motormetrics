@@ -97,12 +97,7 @@ export const FUEL_TYPE_LINKS: LinkItem[] = [
 // =============================================================================
 // UI Constants
 // =============================================================================
-export const announcements: Announcement[] = [
-  {
-    content:
-      "SG Cars Trends is now MotorMetrics. sgcarstrends.com links stop working on 1 December 2026, so please update your bookmarks to motormetrics.app.",
-  },
-];
+export const announcements: Announcement[] = [];
 
 // =============================================================================
 // Cache Keys
