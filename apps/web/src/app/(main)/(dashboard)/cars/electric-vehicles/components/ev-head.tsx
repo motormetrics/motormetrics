@@ -1,4 +1,4 @@
-import { Skeleton, Typography } from "@heroui/react";
+import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-network";
 import {
@@ -14,6 +14,11 @@ import {
   CHARGING_POINT_TARGET_2030,
   ELECTRIC_POPULATION_FUEL_TYPE,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
+import {
+  KeyNumberGrid,
+  KeyNumberItem,
+  KeysAside,
+} from "@web/components/shared/key-numbers";
 import { RangeBar } from "@web/components/shared/range-bar";
 import { RangeFigure, RangeHero } from "@web/components/shared/range-hero";
 import {
@@ -153,7 +158,7 @@ async function loadElectricFleet() {
     .reduce((sum, row) => sum + row.total, 0);
 }
 
-async function KeyNumberList({ selection }: SelectionProps) {
+async function EvKeyNumberItems({ selection }: SelectionProps) {
   const { month } = await selection;
   const [data, fleet, network, monthly] = await Promise.all([
     loadEvMonth(month),
@@ -209,15 +214,8 @@ async function KeyNumberList({ selection }: SelectionProps) {
       : []),
   ];
 
-  return keyNumbers.map(({ label, note, value }) => (
-    <div
-      className="flex flex-col gap-0.5 border-separator border-b py-3"
-      key={label}
-    >
-      <dt className="font-semibold text-muted text-xs">{label}</dt>
-      <dd className="font-semibold text-xl tabular-nums">{value}</dd>
-      <dd className="text-muted text-xs tabular-nums">{note}</dd>
-    </div>
+  return keyNumbers.map((keyNumber) => (
+    <KeyNumberItem key={keyNumber.label} {...keyNumber} />
   ));
 }
 
@@ -228,37 +226,20 @@ async function KeyNumberList({ selection }: SelectionProps) {
  */
 export function EvKeyNumbers({ selection }: SelectionProps) {
   return (
-    <aside aria-label="Key numbers" className="flex flex-col gap-3">
-      <Typography.Paragraph
-        className="uppercase"
-        color="muted"
-        size="xs"
-        weight="semibold"
-      >
-        Key numbers
-      </Typography.Paragraph>
+    <KeysAside
+      eyebrow="Key numbers"
+      jump={JUMP_LINKS}
+      label="Key numbers"
+      source="Source: LTA via DataMall; charging points from LTA."
+    >
       {/* Four across, under the head or in its right half. */}
-      <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
+      <KeyNumberGrid besideHead={4}>
         <Suspense
           fallback={<Skeleton className="col-span-full my-3 h-16 w-full" />}
         >
-          <KeyNumberList selection={selection} />
+          <EvKeyNumberItems selection={selection} />
         </Suspense>
-      </dl>
-      <nav aria-label="On this page">
-        <ul className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
-          {JUMP_LINKS.map(({ href, label }) => (
-            <li key={href}>
-              <a className="text-accent-strong no-underline" href={href}>
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <Typography.Paragraph color="muted" size="xs">
-        Source: LTA via DataMall; charging points from LTA.
-      </Typography.Paragraph>
-    </aside>
+      </KeyNumberGrid>
+    </KeysAside>
   );
 }

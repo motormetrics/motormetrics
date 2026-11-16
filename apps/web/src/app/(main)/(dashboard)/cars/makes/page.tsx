@@ -1,4 +1,3 @@
-import { Typography } from "@heroui/react";
 import { ComparisonLinks } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/comparison-links";
 import { COMPARE_PAIRS } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import { buildMakesFaqs } from "@web/app/(main)/(dashboard)/cars/makes/components/faq-data";
@@ -12,6 +11,7 @@ import {
   MakesLead,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-head";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { SharePill } from "@web/components/shared/share-pill";
@@ -96,32 +96,21 @@ export default function CarMakesPage({ searchParams }: PageProps) {
           numbers beside it once the page is wide and under it before then.
           It describes the year to date from cached data and reads no search
           params, so it is part of the static shell and needs no boundary. */}
-      <div className="@container">
-        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
-          <div className="flex min-w-0 flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Typography.Paragraph
-                className="uppercase"
-                color="muted"
-                size="xs"
-                weight="semibold"
-              >
-                Car makes · new registrations
-              </Typography.Paragraph>
-              <Typography.Heading level={1}>Makes</Typography.Heading>
-            </div>
-            <SectionErrorBoundary title="Makes summary unavailable">
-              <MakesLead />
-            </SectionErrorBoundary>
-            <div>
-              <SharePill title="Makes" />
-            </div>
-          </div>
+      <HeadGrid
+        keys={
           <SectionErrorBoundary title="Key numbers unavailable">
             <MakesKeyNumbers />
           </SectionErrorBoundary>
+        }
+      >
+        <HeadTitle eyebrow="Car makes · new registrations" title="Makes" />
+        <SectionErrorBoundary title="Makes summary unavailable">
+          <MakesLead />
+        </SectionErrorBoundary>
+        <div>
+          <SharePill title="Makes" />
         </div>
-      </div>
+      </HeadGrid>
       <StructuredData data={structuredData} />
       <MakesContentSection searchParams={searchParams} />
 

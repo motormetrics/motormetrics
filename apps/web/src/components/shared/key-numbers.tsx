@@ -12,7 +12,7 @@ export interface KeyNumber {
  * One cell of the key-number grid. `KeyNumberList` draws a whole list; a page
  * whose figures stream renders the cells itself inside its own `<dl>`.
  */
-function KeyNumberItem({ label, note, value }: KeyNumber) {
+export function KeyNumberItem({ label, note, value }: KeyNumber) {
   return (
     <div className="flex min-w-0 flex-col gap-0.5 border-separator border-b py-3">
       <dt className="font-semibold text-muted text-xs">{label}</dt>
@@ -30,7 +30,7 @@ function KeyNumberItem({ label, note, value }: KeyNumber) {
  * Makes, COE premiums, PQP, deregistrations and EV pages stay four across;
  * the other pages drop to two.
  */
-function KeyNumberGrid({
+export function KeyNumberGrid({
   besideHead = 2,
   children,
 }: {
