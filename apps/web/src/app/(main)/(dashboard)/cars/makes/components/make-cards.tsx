@@ -4,13 +4,17 @@ import { cn, Label, SearchField, Typography } from "@heroui/react";
 import { makesSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import Link from "next/link";
-import { useQueryState } from "nuqs";
+import { useRouter } from "next/navigation";
+import { useQueryState, useQueryStates } from "nuqs";
+import { type MouseEvent, type ReactNode, useTransition } from "react";
 
 export interface MakeCard {
   /** "+12.3% on 2025", or why the change is withheld. */
   change: string;
+  /** The comparison with the selected make, while one is being picked. */
+  compareHref?: string;
   count: string;
-  /** The make's own page. */
+  /** The make's own page: where the link leads without JavaScript. */
   href: string;
   logoUrl: string | null;
   make: string;
@@ -69,9 +73,19 @@ export function MakeSearch() {
 
 /**
  * Direction D's makes index: one card per make, filtered by the search. A
- * card links to its make's page.
+ * card selects its make; once one is selected the cards fold into a list
+ * beside that make's detail.
  */
-export function MakeCards({ cards }: { cards: readonly MakeCard[] }) {
+export function MakeCards({
+  cards,
+  detail,
+  selectedSlug,
+}: {
+  cards: readonly MakeCard[];
+  /** The selected make's detail, rendered on the server. */
+  detail: ReactNode;
+  selectedSlug: string | null;
+}) {
   const [query] = useQueryState("q", makesSearchParams.q);
   const needle = query.trim().toLowerCase();
   const shown = needle
@@ -81,17 +95,84 @@ export function MakeCards({ cards }: { cards: readonly MakeCard[] }) {
           card.slug.includes(needle),
       )
     : cards;
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  // `shallow: false` has the server render the detail for the new `?make=`.
+  // The other filters stay in the URL as they are.
+  const [, setSelection] = useQueryStates(
+    { compare: makesSearchParams.compare, make: makesSearchParams.make },
+    { history: "push", scroll: false, shallow: false, startTransition },
+  );
+
+  /**
+   * Selects the make in place rather than following the link to its page. A
+   * modified click (new tab, new window) is left to the browser, and so is
+   * every crawler, which only ever sees the link to the make's page.
+   */
+  const select = (card: MakeCard) => (event: MouseEvent) => {
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+    event.preventDefault();
+
+    if (card.compareHref) {
+      router.push(card.compareHref);
+      return;
+    }
+    setSelection({ compare: null, make: card.slug });
+  };
+
   return (
     <>
       <span className="self-end text-muted text-sm tabular-nums" role="status">
         {shown.length} {shown.length === 1 ? "make" : "makes"}
       </span>
 
-      {shown.length > 0 ? (
-        <ul className="grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-2.5">
+      {selectedSlug ? (
+        <div
+          aria-busy={isPending}
+          className={cn(
+            "grid @3xl:grid-cols-3 grid-cols-1 items-start gap-8 transition-opacity",
+            isPending && "opacity-60",
+          )}
+        >
+          {/* The list scrolls on its own beside the detail once there is
+              room for both; on a phone it sits above the detail. */}
+          <ul
+            aria-label="Makes"
+            className="flex @3xl:max-h-screen max-h-96 flex-col @3xl:overflow-y-auto overflow-y-auto border-separator border-y"
+          >
+            {shown.map((card) => (
+              <li key={card.slug}>
+                <MakeRowLink
+                  card={card}
+                  onClick={select(card)}
+                  selected={card.slug === selectedSlug}
+                />
+              </li>
+            ))}
+          </ul>
+          <div className="@3xl:col-span-2 min-w-0" aria-live="polite">
+            {detail}
+          </div>
+        </div>
+      ) : shown.length > 0 ? (
+        <ul
+          aria-busy={isPending}
+          className={cn(
+            "grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-2.5 transition-opacity",
+            isPending && "opacity-60",
+          )}
+        >
           {shown.map((card) => (
             <li key={card.slug}>
-              <MakeCardLink card={card} />
+              <MakeCardLink card={card} onClick={select(card)} />
             </li>
           ))}
         </ul>
@@ -106,13 +187,54 @@ export function MakeCards({ cards }: { cards: readonly MakeCard[] }) {
   );
 }
 
-function MakeCardLink({ card }: { card: MakeCard }) {
+/** One line of the list beside the detail: rank, logo, name and count. */
+function MakeRowLink({
+  card,
+  onClick,
+  selected,
+}: {
+  card: MakeCard;
+  onClick: (event: MouseEvent) => void;
+  selected: boolean;
+}) {
+  return (
+    <Link
+      aria-current={selected ? "true" : undefined}
+      className={cn(
+        "flex min-w-0 items-center gap-2.5 border-separator border-b px-2 py-2 text-sm transition-colors hover:bg-surface-secondary",
+        selected && "bg-surface-secondary font-semibold",
+      )}
+      href={card.href}
+      onClick={onClick}
+      prefetch={false}
+    >
+      <span className="w-6 shrink-0 text-right text-muted text-xs tabular-nums">
+        {card.rank}
+      </span>
+      <MakeAvatar logoUrl={card.logoUrl} make={card.make} size="sm" />
+      <span className="min-w-0 flex-1 truncate">{card.make}</span>
+      <span className="font-semibold tabular-nums">{card.count}</span>
+    </Link>
+  );
+}
+
+function MakeCardLink({
+  card,
+  onClick,
+}: {
+  card: MakeCard;
+  onClick: (event: MouseEvent) => void;
+}) {
   const peak = Math.max(...card.trend, 1);
 
   return (
+    // A click selects the make in place, so the make's page is rarely where
+    // this leads and is not worth prefetching for every card.
     <Link
       className="flex h-full min-w-0 flex-col gap-2.5 rounded-lg border border-separator bg-surface p-3.5 transition-colors hover:border-border hover:bg-surface-secondary"
       href={card.href}
+      onClick={onClick}
+      prefetch={false}
     >
       <span className="flex min-w-0 items-center gap-2.5">
         <MakeAvatar logoUrl={card.logoUrl} make={card.make} size="sm" />
