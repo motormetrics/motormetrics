@@ -5,7 +5,7 @@
   "author": "Ru Chern Chong <ruchern.chong@motormetrics.app>",
   "license": "MIT",
   "scripts": {
-    "dev": "portless motormetrics next dev",
+    "dev": "portless run --name motormetrics next dev",
     "build": "next build",
     "lint": "biome check",
     "format": "biome format --write src",

@@ -41,7 +41,7 @@ pnpm db:push
 pnpm dev:web
 ```
 
-The web development script uses Portless with the hostname `motormetrics.localhost`; use the URL printed when it starts. Set `NEXT_PUBLIC_SITE_URL` and your OAuth configuration to match it.
+The web development script uses Portless with the hostname `motormetrics.localhost`; a git worktree gets its branch as a subdomain (`<branch>.motormetrics.localhost`). Use the URL printed when it starts. Set `NEXT_PUBLIC_SITE_URL` and your OAuth configuration to match it.
 
 Development databases use `db:push`. Staging and production use committed migrations; see [packages/database/AGENTS.md](packages/database/AGENTS.md) before making schema changes.
 

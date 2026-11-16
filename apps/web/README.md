@@ -6,7 +6,7 @@ The Next.js application for MotorMetrics hosts Singapore car market dashboards, 
 
 Follow the [root setup instructions](../../README.md#getting-started) to install dependencies, configure the [environment template](.env.example) and apply the development database schema.
 
-The development script runs `portless motormetrics next dev`. Open the URL it prints for `motormetrics.localhost`; set `NEXT_PUBLIC_SITE_URL` and your OAuth configuration to match. The `predev` and `prebuild` hooks copy MapLibre's worker assets into `public/maplibre` automatically.
+The development script runs `portless run --name motormetrics next dev`. Open the URL it prints: `motormetrics.localhost`, or `<branch>.motormetrics.localhost` in a git worktree; set `NEXT_PUBLIC_SITE_URL` and your OAuth configuration to match. The `predev` and `prebuild` hooks copy MapLibre's worker assets into `public/maplibre` automatically.
 
 See [AGENTS.md](AGENTS.md) for Blob, Flags, QStash and other integration settings.
 
