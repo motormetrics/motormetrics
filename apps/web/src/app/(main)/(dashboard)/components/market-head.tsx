@@ -17,6 +17,7 @@ import {
   sumByMonth,
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { KeyNumberItem, KeysAside } from "@web/components/shared/key-numbers";
 import { RangeBar } from "@web/components/shared/range-bar";
 import {
   getEvMarketShare,
@@ -262,45 +263,17 @@ export async function MarketKeyNumbers() {
   }
 
   return (
-    <aside aria-label="Key numbers" className="flex flex-col gap-3">
-      <Typography.Paragraph
-        className="uppercase"
-        color="muted"
-        size="xs"
-        weight="semibold"
-      >
-        Key numbers
-      </Typography.Paragraph>
+    <KeysAside
+      eyebrow="Key numbers"
+      jump={SECTION_LINKS}
+      label="Key numbers"
+      source="Source: LTA via DataMall. Changes are against the previous month or exercise."
+    >
       <dl className="grid @3xl:grid-cols-3 grid-cols-2 gap-x-6 border-separator border-t">
-        {keyNumbers.map(({ label, note, value }) => (
-          <div
-            className="flex min-w-0 flex-col gap-0.5 border-separator border-b py-3"
-            key={label}
-          >
-            <dt className="font-semibold text-muted text-xs">{label}</dt>
-            <dd className="font-semibold text-xl tabular-nums">{value}</dd>
-            <dd className="text-muted text-xs tabular-nums">{note}</dd>
-          </div>
+        {keyNumbers.map((keyNumber) => (
+          <KeyNumberItem key={keyNumber.label} {...keyNumber} />
         ))}
       </dl>
-      <nav aria-label="On this page">
-        <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm">
-          {SECTION_LINKS.map((link) => (
-            <li key={link.href}>
-              <a
-                className="font-medium text-accent-strong no-underline hover:text-accent-deep"
-                href={link.href}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <Typography.Paragraph color="muted" size="xs">
-        Source: LTA via DataMall. Changes are against the previous month or
-        exercise.
-      </Typography.Paragraph>
-    </aside>
+    </KeysAside>
   );
 }
