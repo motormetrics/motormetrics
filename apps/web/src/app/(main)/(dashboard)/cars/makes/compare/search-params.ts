@@ -1,9 +1,4 @@
-import {
-  createLoader,
-  createSerializer,
-  parseAsNativeArrayOf,
-  parseAsString,
-} from "nuqs/server";
+import { createLoader, parseAsNativeArrayOf, parseAsString } from "nuqs/server";
 
 /**
  * The makes to compare, as a repeated key: `?make=bmw&make=mercedes-benz`.
@@ -15,6 +10,3 @@ const compareSearchParams = {
 };
 
 export const loadSearchParams = createLoader(compareSearchParams);
-
-/** Builds links into the comparison, e.g. from the makes index. */
-export const serialize = createSerializer(compareSearchParams);

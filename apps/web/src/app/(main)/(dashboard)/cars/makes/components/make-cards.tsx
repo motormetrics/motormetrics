@@ -1,20 +1,16 @@
 "use client";
 
 import { cn, Label, SearchField, Typography } from "@heroui/react";
-import {
-  makesSearchParams,
-  serialize,
-} from "@web/app/(main)/(dashboard)/cars/makes/search-params";
+import { makesSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import Link from "next/link";
 import { useQueryState } from "nuqs";
-import type { ReactNode } from "react";
 
 export interface MakeCard {
   /** "+12.3% on 2025", or why the change is withheld. */
   change: string;
   count: string;
-  /** This page with the make selected, built on the server. */
+  /** The make's own page. */
   href: string;
   logoUrl: string | null;
   make: string;
@@ -73,22 +69,9 @@ export function MakeSearch() {
 
 /**
  * Direction D's makes index: one card per make, filtered by the search. A
- * card selects its make; once one is selected the cards fold into a list
- * beside that make's detail.
+ * card links to its make's page.
  */
-export function MakeCards({
-  cards,
-  comparing,
-  detail,
-  selectedSlug,
-}: {
-  cards: readonly MakeCard[];
-  /** Whether the links lead into a comparison rather than select a make. */
-  comparing: boolean;
-  /** The selected make's detail, rendered on the server. */
-  detail: ReactNode;
-  selectedSlug: string | null;
-}) {
+export function MakeCards({ cards }: { cards: readonly MakeCard[] }) {
   const [query] = useQueryState("q", makesSearchParams.q);
   const needle = query.trim().toLowerCase();
   const shown = needle
@@ -98,47 +81,17 @@ export function MakeCards({
           card.slug.includes(needle),
       )
     : cards;
-  // The server built each link with the search as it was on load; carry the
-  // one typed since, so selecting a make keeps the list the reader filtered.
-  // A comparison link leaves this page, so it takes no search.
-  const hrefOf = (card: MakeCard) =>
-    comparing && card.slug !== selectedSlug
-      ? card.href
-      : serialize(card.href, { q: query });
-
   return (
     <>
       <span className="self-end text-muted text-sm tabular-nums" role="status">
         {shown.length} {shown.length === 1 ? "make" : "makes"}
       </span>
 
-      {selectedSlug ? (
-        <div className="grid @3xl:grid-cols-3 grid-cols-1 items-start gap-8">
-          {/* The list scrolls on its own beside the detail once there is
-              room for both; on a phone it sits above the detail. */}
-          <ul
-            aria-label="Makes"
-            className="flex @3xl:max-h-screen max-h-96 flex-col @3xl:overflow-y-auto overflow-y-auto border-separator border-y"
-          >
-            {shown.map((card) => (
-              <li key={card.slug}>
-                <MakeRowLink
-                  card={card}
-                  href={hrefOf(card)}
-                  selected={card.slug === selectedSlug}
-                />
-              </li>
-            ))}
-          </ul>
-          <div className="@3xl:col-span-2 min-w-0" aria-live="polite">
-            {detail}
-          </div>
-        </div>
-      ) : shown.length > 0 ? (
+      {shown.length > 0 ? (
         <ul className="grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-2.5">
           {shown.map((card) => (
             <li key={card.slug}>
-              <MakeCardLink card={card} href={hrefOf(card)} />
+              <MakeCardLink card={card} />
             </li>
           ))}
         </ul>
@@ -153,47 +106,13 @@ export function MakeCards({
   );
 }
 
-/** One line of the list beside the detail: rank, logo, name and count. */
-function MakeRowLink({
-  card,
-  href,
-  selected,
-}: {
-  card: MakeCard;
-  href: string;
-  selected: boolean;
-}) {
-  return (
-    <Link
-      aria-current={selected ? "true" : undefined}
-      className={cn(
-        "flex min-w-0 items-center gap-2.5 border-separator border-b px-2 py-2 text-sm transition-colors hover:bg-surface-secondary",
-        selected && "bg-surface-secondary font-semibold",
-      )}
-      href={href}
-      scroll={false}
-    >
-      <span className="w-6 shrink-0 text-right text-muted text-xs tabular-nums">
-        {card.rank}
-      </span>
-      <MakeAvatar logoUrl={card.logoUrl} make={card.make} size="sm" />
-      <span className="min-w-0 flex-1 truncate">{card.make}</span>
-      <span className="font-semibold tabular-nums">{card.count}</span>
-    </Link>
-  );
-}
-
-function MakeCardLink({ card, href }: { card: MakeCard; href: string }) {
+function MakeCardLink({ card }: { card: MakeCard }) {
   const peak = Math.max(...card.trend, 1);
 
   return (
-    // Every card links to this same route, so they share one prefetched App
-    // Shell (Partial Prefetching). The index stays in place rather than
-    // jumping to the top of the page.
     <Link
       className="flex h-full min-w-0 flex-col gap-2.5 rounded-lg border border-separator bg-surface p-3.5 transition-colors hover:border-border hover:bg-surface-secondary"
-      href={href}
-      scroll={false}
+      href={card.href}
     >
       <span className="flex min-w-0 items-center gap-2.5">
         <MakeAvatar logoUrl={card.logoUrl} make={card.make} size="sm" />
