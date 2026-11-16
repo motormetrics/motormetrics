@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Chip, cn, Typography } from "@heroui/react";
+import { Button, cn, Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { useCoeOverview } from "@web/app/(main)/(dashboard)/coe/components/coe-controls";
 import {
@@ -21,6 +21,7 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/components/overview-figures";
 import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { RangeBar } from "@web/components/shared/range-bar";
+import { RangeFigure, RangeHero } from "@web/components/shared/range-hero";
 import { formatMonthName } from "@web/utils/dates/format-month";
 
 /** The short names on the key-number buttons. */
@@ -58,21 +59,23 @@ export function CoeHeroView({ categoryKey, data }: ViewProps) {
 
   return (
     <>
-      <div className="flex max-w-xl flex-col gap-2.5 border-separator border-t pt-4">
-        <Typography.Paragraph className="text-muted-strong">
-          <span className="font-semibold text-foreground">{category}</span>
-          {` · ${CATEGORY_DESCRIPTIONS[category]}`}
-        </Typography.Paragraph>
-        <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
-          <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight lg:text-5xl">
-            {formatCurrency(premium)}
-          </span>
-          {previousPremium ? (
-            <Chip className="tabular-nums" color="accent" variant="soft">
-              {`${formatPercentChange(changeRatio(premium, previousPremium))} · ${formatAmountChange(premium - previousPremium)}`}
-            </Chip>
-          ) : null}
-        </div>
+      <RangeHero
+        label={
+          <>
+            <span className="font-semibold text-foreground">{category}</span>
+            {` · ${CATEGORY_DESCRIPTIONS[category]}`}
+          </>
+        }
+      >
+        <RangeFigure
+          change={
+            previousPremium
+              ? `${formatPercentChange(changeRatio(premium, previousPremium))} · ${formatAmountChange(premium - previousPremium)}`
+              : undefined
+          }
+          size="lg"
+          value={formatCurrency(premium)}
+        />
         {range ? (
           <RangeBar
             ariaLabel={`Against the last ${data.history.length} exercises: low ${formatCurrency(range.low.premium)}, high ${formatCurrency(range.high.premium)}, now ${formatCurrency(range.latest.premium)}. ${range.where}.`}
@@ -93,7 +96,7 @@ export function CoeHeroView({ categoryKey, data }: ViewProps) {
             ? `PQP to renew a ${category} COE in ${pqpMonth}: ${formatCurrency(pqp.rate)}${pqp.change !== undefined && previousPqpMonth ? `, ${formatPercentChange(pqp.change)} on ${previousPqpMonth}` : ""}`
             : "LTA publishes no PQP for Category E"}
         </Typography.Paragraph>
-      </div>
+      </RangeHero>
       <Typography.Paragraph className="max-w-prose text-lg tabular-nums">
         {figures
           ? `${count(figures.bidsReceived)} bids were made for ${count(figures.quota)} ${category} certificates, ${bidsPerCoe(figures)} per COE.`

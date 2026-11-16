@@ -1,6 +1,7 @@
-import { Chip, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { RangeBar } from "@web/components/shared/range-bar";
+import { RangeFigure, RangeHero } from "@web/components/shared/range-hero";
 import type { ReactNode } from "react";
 
 /** Where a figure sits in the range of the window it closes. */
@@ -57,11 +58,11 @@ export function changeLabel(
 }
 
 /**
- * Direction D's "range" hero: the figure the page answers with, its change as
- * a neutral pill, and a bar placing it between the low and high of the window
- * it closes. Sized as a KPI rather than a giant headline number.
+ * Direction D's "range" hero for a count: the figure the page answers with,
+ * its change as a neutral pill, and a bar placing it between the low and high
+ * of the window it closes.
  */
-export function RangeHero({
+export function CountRangeHero({
   change,
   context,
   label,
@@ -79,25 +80,24 @@ export function RangeHero({
   span: string;
 }) {
   return (
-    <div className="flex max-w-xl flex-col gap-2.5 border-border border-t pt-4">
-      <Typography.Paragraph color="muted" size="sm">
-        <span className="font-semibold text-foreground">{label}</span> ·{" "}
-        {period}
-      </Typography.Paragraph>
-      <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
-        <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight">
+    <RangeHero
+      label={
+        <>
+          <span className="font-semibold text-foreground">{label}</span> ·{" "}
+          {period}
+        </>
+      }
+    >
+      <RangeFigure
+        change={change}
+        value={
           <NumberValue
             locale="en-SG"
             maximumFractionDigits={0}
             value={range.current}
           />
-        </span>
-        {change ? (
-          <Chip className="tabular-nums" color="accent" variant="soft">
-            {change}
-          </Chip>
-        ) : null}
-      </div>
+        }
+      />
       <RangeBar
         ariaLabel={`Against the ${span} range: low ${formatCount(range.low)}, high ${formatCount(range.high)}, now ${formatCount(range.current)}. ${range.where}.`}
         high={range.high}
@@ -112,6 +112,6 @@ export function RangeHero({
           {context}
         </Typography.Paragraph>
       ) : null}
-    </div>
+    </RangeHero>
   );
 }

@@ -1,7 +1,7 @@
 import { Typography } from "@heroui/react";
 import {
+  CountRangeHero,
   changeLabel,
-  RangeHero,
   rangeSummary,
 } from "@web/app/(main)/(dashboard)/cars/components/range-hero";
 import {
@@ -76,7 +76,7 @@ export async function RegistrationsHero({ searchParams }: MonthProps) {
   }
 
   return (
-    <RangeHero
+    <CountRangeHero
       change={
         previous
           ? changeLabel(

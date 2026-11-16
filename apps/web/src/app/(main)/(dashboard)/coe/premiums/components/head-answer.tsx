@@ -1,4 +1,4 @@
-import { Chip, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
@@ -7,6 +7,7 @@ import {
   rangePosition,
 } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-shared";
 import { RangeBar } from "@web/components/shared/range-bar";
+import { RangeFigure, RangeHero } from "@web/components/shared/range-hero";
 import type { ReactNode } from "react";
 
 /**
@@ -43,12 +44,14 @@ export function HeadAnswer({
   const position = rangePosition(low, high, value, span);
 
   return (
-    <div className="flex max-w-xl flex-col gap-2.5 border-separator border-t pt-4">
-      <Typography.Paragraph className="text-muted-strong" size="sm">
-        {label}
-      </Typography.Paragraph>
-      <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
-        <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight">
+    <RangeHero label={label}>
+      <RangeFigure
+        change={
+          previous
+            ? `${formatSignedPercent((value - previous) / previous)} · ${formatSignedCurrency(value - previous)}`
+            : undefined
+        }
+        value={
           <NumberValue
             currency="SGD"
             locale="en-SG"
@@ -56,14 +59,8 @@ export function HeadAnswer({
             style="currency"
             value={value}
           />
-        </span>
-        {previous ? (
-          // Colour does not carry the direction; the sign does.
-          <Chip className="tabular-nums" color="accent" variant="soft">
-            {`${formatSignedPercent((value - previous) / previous)} · ${formatSignedCurrency(value - previous)}`}
-          </Chip>
-        ) : null}
-      </div>
+        }
+      />
       <RangeBar
         ariaLabel={`Against the last ${span}: low ${formatCurrency(low)}, high ${formatCurrency(high)}, now ${formatCurrency(value)}. ${position}.`}
         high={high}
@@ -79,7 +76,7 @@ export function HeadAnswer({
       >
         {context}
       </Typography.Paragraph>
-    </div>
+    </RangeHero>
   );
 }
 

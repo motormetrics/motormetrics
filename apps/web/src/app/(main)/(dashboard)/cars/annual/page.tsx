@@ -21,8 +21,8 @@ import {
   KeysAside,
 } from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
 import {
+  CountRangeHero,
   changeLabel,
-  RangeHero,
   rangeSummary,
 } from "@web/app/(main)/(dashboard)/cars/components/range-hero";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
@@ -139,7 +139,7 @@ async function PopulationHero() {
   }
 
   return (
-    <RangeHero
+    <CountRangeHero
       change={
         previous !== undefined && data.previousYear
           ? changeLabel(current, previous, data.previousYear)

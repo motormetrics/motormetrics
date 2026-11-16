@@ -1,4 +1,4 @@
-import { Chip, Skeleton, Typography } from "@heroui/react";
+import { Skeleton, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import {
   CATEGORIES,
@@ -9,6 +9,7 @@ import {
   rangeStats,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/summary";
 import { RangeBar } from "@web/components/shared/range-bar";
+import { RangeFigure, RangeHero } from "@web/components/shared/range-hero";
 import {
   formatMonthLabel,
   formatMonthShortLabel,
@@ -62,16 +63,16 @@ async function HeroFigures({ report }: ReportProps) {
 
   return (
     <>
-      <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
-        <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight">
+      <RangeFigure
+        change={
+          priorTotal > 0
+            ? `${sign}${Math.abs((difference / priorTotal) * 100).toFixed(1)}% · ${sign}${formatCount(Math.abs(difference))}`
+            : undefined
+        }
+        value={
           <NumberValue locale="en-SG" maximumFractionDigits={0} value={total} />
-        </span>
-        {priorTotal > 0 ? (
-          <Chip className="tabular-nums" color="accent" variant="soft">
-            {`${sign}${Math.abs((difference / priorTotal) * 100).toFixed(1)}% · ${sign}${formatCount(Math.abs(difference))}`}
-          </Chip>
-        ) : null}
-      </div>
+        }
+      />
       {range ? (
         <RangeBar
           ariaLabel={`Against the ${range.count} months to ${formatMonthLabel(month)}: low ${formatCount(range.low)}, high ${formatCount(range.high)}, now ${formatCount(range.latest)}. ${range.where}.`}
@@ -101,20 +102,23 @@ async function HeroFigures({ report }: ReportProps) {
  */
 export function DeregistrationsHero({ report }: ReportProps) {
   return (
-    <div className="flex max-w-xl flex-col gap-2.5 border-separator border-t pt-4">
-      <Typography.Paragraph color="muted" size="sm">
-        <span className="font-semibold text-foreground">
-          Vehicles deregistered
-        </span>{" "}
-        · {/* A non-breaking space holds the line until the month arrives. */}
-        <Suspense fallback=" ">
-          <ReportMonth report={report} />
-        </Suspense>
-      </Typography.Paragraph>
+    <RangeHero
+      label={
+        <>
+          <span className="font-semibold text-foreground">
+            Vehicles deregistered
+          </span>{" "}
+          · {/* A non-breaking space holds the line until the month arrives. */}
+          <Suspense fallback=" ">
+            <ReportMonth report={report} />
+          </Suspense>
+        </>
+      }
+    >
       <Suspense fallback={<Skeleton className="h-24 w-full" />}>
         <HeroFigures report={report} />
       </Suspense>
-    </div>
+    </RangeHero>
   );
 }
 
