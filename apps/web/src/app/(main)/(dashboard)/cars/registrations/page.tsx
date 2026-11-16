@@ -326,8 +326,8 @@ export default function Page({ searchParams }: PageProps) {
                 </Slot>
               }
               link={{
-                href: "/cars/vehicle-types",
-                label: "Vehicle types in full",
+                href: "/cars?dimension=vehicleType",
+                label: "All vehicle types",
               }}
               title="By vehicle type"
             />

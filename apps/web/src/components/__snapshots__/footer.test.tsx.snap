@@ -137,22 +137,6 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
             <li>
               <a
                 class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/cars/fuel-types"
-              >
-                Fuel types
-              </a>
-            </li>
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/cars/vehicle-types"
-              >
-                Vehicle types
-              </a>
-            </li>
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
                 href="/cars/annual"
               >
                 Vehicle population

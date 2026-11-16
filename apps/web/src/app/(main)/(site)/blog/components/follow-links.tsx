@@ -21,7 +21,7 @@ const LINKS_BY_CATEGORY: Record<PostCategoryKey, FollowLink[]> = {
   cars: [
     { href: "/cars/registrations", label: "Car registrations" },
     { href: "/cars/makes", label: "Makes" },
-    { href: "/cars/fuel-types", label: "Fuel types" },
+    { href: "/cars/deregistrations", label: "Deregistrations" },
   ],
   coe: [
     { href: "/coe/premiums", label: "COE premiums" },
@@ -35,7 +35,7 @@ const LINKS_BY_CATEGORY: Record<PostCategoryKey, FollowLink[]> = {
   ],
   "electric-vehicles": [
     { href: "/cars/electric-vehicles", label: "Electric vehicles" },
-    { href: "/cars/fuel-types", label: "Fuel types" },
+    { href: "/cars/electric-vehicles/charging", label: "EV charging" },
     { href: "/cars/makes", label: "Makes" },
   ],
   "monthly-update": [

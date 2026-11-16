@@ -113,15 +113,6 @@ ${popularMakes.map(({ make }) => make).join(", ")}
 - [All Makes Directory](${SITE_URL}/cars/makes): Complete list of car manufacturers
 - [Electric Vehicles](${SITE_URL}/cars/electric-vehicles): BEV, PHEV and hybrid adoption trends and market share
 - [EV Charging](${SITE_URL}/cars/electric-vehicles/charging): Live public charger availability, cheapest and most expensive per-kWh rates, filterable by postal district
-- [Electric Vehicles by Fuel Type](${SITE_URL}/cars/fuel-types/electric): BEV registration data
-- [Hybrid Vehicles](${SITE_URL}/cars/fuel-types/petrol-electric): Petrol-electric hybrid data
-- [Plug-in Hybrids](${SITE_URL}/cars/fuel-types/petrol-electric-plug-in): PHEV statistics
-- [Diesel Vehicles](${SITE_URL}/cars/fuel-types/diesel): Diesel registration data
-- [Petrol Vehicles](${SITE_URL}/cars/fuel-types/petrol): Petrol registration statistics
-- [SUVs](${SITE_URL}/cars/vehicle-types/sports-utility-vehicle): Sport utility vehicle data
-- [Sedans](${SITE_URL}/cars/vehicle-types/sedan): Sedan registration statistics
-- [Hatchbacks](${SITE_URL}/cars/vehicle-types/hatchback): Hatchback vehicle data
-- [MPVs](${SITE_URL}/cars/vehicle-types/multi-purpose-vehicle): Multi-purpose vehicle statistics
 
 ## EV Charging (Live)
 

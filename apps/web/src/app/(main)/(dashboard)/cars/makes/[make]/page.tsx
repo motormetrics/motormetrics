@@ -267,7 +267,7 @@ export default function CarMakePage({
           <SectionLink className="ml-0" href="/cars/makes">
             All makes
           </SectionLink>
-          <SectionLink className="ml-0" href="/cars/fuel-types">
+          <SectionLink className="ml-0" href="/cars?dimension=fuelType">
             Fuel types
           </SectionLink>
         </div>
