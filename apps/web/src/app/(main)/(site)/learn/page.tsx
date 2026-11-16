@@ -84,7 +84,7 @@ export default function LearnPage() {
         data={{ "@context": "https://schema.org", ...breadcrumbSchema }}
       />
 
-      <OverviewPage className="gap-10 max-md:gap-7">
+      <OverviewPage className="gap-8 max-md:gap-6">
         {/* Direction D's head, with the key numbers beside it once the page
             is wide and under it before then. Everything on this page is
             fixed content, so all of it is in the static shell. */}
@@ -97,7 +97,7 @@ export default function LearnPage() {
             COE, ARF, OMV, PARF and PQP, in plain language: the rules that set
             the price of a car in Singapore, with worked examples.
           </Typography.Paragraph>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <Typography.Paragraph
               className="max-w-prose tabular-nums"
               color="muted"

@@ -33,10 +33,10 @@ const rules = [
 export function CtaSection() {
   return (
     <section
-      className="grid scroll-mt-24 grid-cols-1 items-start gap-x-16 gap-y-9 lg:grid-cols-2"
+      className="grid scroll-mt-24 grid-cols-1 items-start gap-x-16 gap-y-8 lg:grid-cols-2"
       id="contact"
     >
-      <div className="flex min-w-0 flex-col gap-3.5">
+      <div className="flex min-w-0 flex-col gap-4">
         <SectionHead
           caption="Advertising sits around the charts, never inside them. We decline anything that could be mistaken for a figure we publish."
           eyebrow="What we will not run"
@@ -44,7 +44,7 @@ export function CtaSection() {
         />
         <div className="flex flex-col border-border border-t">
           {rules.map(({ note, number }) => (
-            <div className="flex items-start gap-3 py-3" key={number}>
+            <div className="flex items-start gap-2 py-4" key={number}>
               <span className="w-8 shrink-0 font-semibold text-accent tabular-nums">
                 {number}
               </span>
@@ -57,7 +57,7 @@ export function CtaSection() {
         <SourceNote>House rules for every placement.</SourceNote>
       </div>
 
-      <div className="flex flex-col gap-3 rounded-lg border border-separator bg-surface px-4 py-5 md:p-5">
+      <div className="flex flex-col gap-4 rounded-lg border border-separator bg-surface p-4 md:p-6">
         <Typography.Heading className="text-xl" level={3} weight="bold">
           Book a placement
         </Typography.Heading>

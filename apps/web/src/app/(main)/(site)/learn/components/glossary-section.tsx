@@ -18,7 +18,7 @@ const termCount = GLOSSARY_CATEGORIES.reduce(
  */
 export function GlossarySection() {
   return (
-    <section className="flex scroll-mt-24 flex-col gap-5" id="glossary">
+    <section className="flex scroll-mt-24 flex-col gap-6" id="glossary">
       <SectionHead
         caption="The abbreviations that appear on every invoice, quotation and bidding result, in one place."
         eyebrow="Reference"
@@ -26,7 +26,7 @@ export function GlossarySection() {
       />
 
       <div className="@container flex min-w-0 flex-col gap-4">
-        <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-x-12 gap-y-7">
+        <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-x-12 gap-y-8">
           {GLOSSARY_CATEGORIES.map((category) => (
             <div className="flex min-w-0 flex-col" key={category.title}>
               <span className="pb-2 font-semibold text-muted text-xs">
@@ -37,7 +37,7 @@ export function GlossarySection() {
 
                 return (
                   <div
-                    className="flex items-baseline gap-3.5 py-2.5 max-md:flex-col max-md:gap-0.5"
+                    className="flex items-baseline gap-4 py-2 max-md:flex-col max-md:gap-1"
                     key={term}
                   >
                     {guideSlugs.includes(slug) ? (

@@ -38,7 +38,7 @@ export function RelatedGuides({ guide }: { guide: Guide }) {
         title="Next in this series"
       />
       <div className="@container">
-        <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-3.5">
+        <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-4">
           {filled.map((entry) => (
             <GuideCard guide={entry} key={entry.slug} />
           ))}

@@ -23,7 +23,7 @@ export function KeyHighlights({
   const hasFigures = Boolean(highlights && highlights.length > 0);
 
   return (
-    <aside aria-label="Key numbers" className="flex flex-col gap-3">
+    <aside aria-label="Key numbers" className="flex flex-col gap-4">
       {hasFigures ? (
         <>
           <Typography.Paragraph
@@ -37,7 +37,7 @@ export function KeyHighlights({
           <dl className="grid @3xl:grid-cols-3 grid-cols-2 gap-x-6 border-separator border-t">
             {highlights?.map((item) => (
               <div
-                className="flex flex-col gap-0.5 py-3"
+                className="flex flex-col gap-1 py-4"
                 key={`${item.label}-${item.value}`}
               >
                 <dt className="font-semibold text-muted text-xs">

@@ -19,14 +19,14 @@ const questionCount = FAQ_SECTIONS.reduce(
  */
 export function FAQSection() {
   return (
-    <section className="@container flex scroll-mt-24 flex-col gap-5" id="faq">
+    <section className="@container flex scroll-mt-24 flex-col gap-6" id="faq">
       <SectionHead
         caption="The questions that come up most often about bidding, rebates and where the figures on this site come from."
         eyebrow="FAQ"
         title="Frequently asked"
       />
 
-      <div className="grid @4xl:grid-cols-2 grid-cols-1 items-start gap-x-12 gap-y-7">
+      <div className="grid @4xl:grid-cols-2 grid-cols-1 items-start gap-x-12 gap-y-8">
         {FAQ_SECTIONS.map((section) => (
           <div className="flex min-w-0 flex-col" key={section.title}>
             <span className="pb-2 font-semibold text-muted text-xs">

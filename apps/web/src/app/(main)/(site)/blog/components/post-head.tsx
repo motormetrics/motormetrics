@@ -94,7 +94,7 @@ export function PostHead({
         </Typography.Paragraph>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2 text-muted text-sm">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-muted text-sm">
         <span className="font-semibold text-foreground">
           {publishedAt.toLocaleDateString("en-SG", {
             day: "numeric",

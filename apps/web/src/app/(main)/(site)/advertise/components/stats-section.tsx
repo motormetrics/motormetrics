@@ -36,7 +36,7 @@ export function StatsSection({ stats }: { stats: TrafficStats }) {
   ];
 
   return (
-    <aside aria-label="Key numbers" className="flex flex-col gap-3">
+    <aside aria-label="Key numbers" className="flex flex-col gap-4">
       <Typography.Paragraph
         className="uppercase"
         color="muted"
@@ -47,14 +47,14 @@ export function StatsSection({ stats }: { stats: TrafficStats }) {
       </Typography.Paragraph>
       <dl className="grid @3xl:grid-cols-3 grid-cols-2 gap-x-6 border-separator border-t">
         {items.map(({ label, value }) => (
-          <div className="flex flex-col gap-0.5 py-3" key={label}>
+          <div className="flex flex-col gap-1 py-4" key={label}>
             <dt className="font-semibold text-muted text-xs">{label}</dt>
             <dd className="font-semibold text-xl tabular-nums">{value}</dd>
           </div>
         ))}
       </dl>
       <nav aria-label="On this page">
-        <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm">
+        <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
           {sections.map(({ href, label }) => (
             <li key={href}>
               <a className="font-medium text-accent" href={href}>

@@ -48,7 +48,7 @@ export function DataSection() {
       </Typography.Paragraph>
       <div className="grid grid-cols-1 border-border border-t md:grid-cols-3">
         {provenance.map(({ detail, heading, label }) => (
-          <div className="flex flex-col gap-1 py-3.5 pr-4" key={heading}>
+          <div className="flex flex-col gap-1 py-4 pr-4" key={heading}>
             <span className="font-semibold text-muted text-xs">{label}</span>
             <span className="font-bold text-accent text-xl">{heading}</span>
             <Typography.Paragraph className="leading-normal" size="xs">

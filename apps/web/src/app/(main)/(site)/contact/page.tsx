@@ -63,7 +63,7 @@ async function AdvertisingSection() {
 
 export default function ContactPage() {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Typography.Paragraph

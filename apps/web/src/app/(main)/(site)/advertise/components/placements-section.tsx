@@ -38,10 +38,10 @@ export function PlacementsSection() {
       <div className="flex flex-col border-border border-t">
         {placements.map(({ description, icon: Icon, title, where }) => (
           <div
-            className="flex flex-col gap-2 py-3.5 md:flex-row md:items-center md:gap-6"
+            className="flex flex-col gap-2 py-4 md:flex-row md:items-center md:gap-6"
             key={title}
           >
-            <div className="flex items-center gap-3 md:w-60 md:shrink-0">
+            <div className="flex items-center gap-2 md:w-60 md:shrink-0">
               <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-accent-soft text-accent">
                 <Icon aria-hidden className="size-4" />
               </span>

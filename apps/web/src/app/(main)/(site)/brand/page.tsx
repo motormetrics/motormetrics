@@ -80,7 +80,7 @@ function Figure({
   className?: string;
 }) {
   return (
-    <figure className={`m-0 flex flex-col gap-3 ${className ?? ""}`}>
+    <figure className={`m-0 flex flex-col gap-2 ${className ?? ""}`}>
       {children}
       <figcaption className="font-semibold text-muted text-sm">
         {caption}
@@ -91,7 +91,7 @@ function Figure({
 
 export default function BrandPage() {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Typography.Paragraph
@@ -172,7 +172,7 @@ export default function BrandPage() {
         </Figure>
         <Figure caption="Stroke legibility. The free-standing arches hold down to 24px — use them for the 24–31px range, below the contained file's 32px floor">
           <div
-            className="flex h-55 items-end justify-center gap-7 rounded-2xl p-7"
+            className="flex h-55 items-end justify-center gap-8 rounded-2xl p-8"
             style={{ background: WHITE }}
           >
             <SizeSpecimen label="24 min">
@@ -188,11 +188,11 @@ export default function BrandPage() {
         </Figure>
         <Figure caption="Colour. Type: Urbanist 800, tracking -0.03em.">
           <ul
-            className="m-0 flex h-55 list-none flex-col justify-center gap-3 rounded-2xl p-7"
+            className="m-0 flex h-55 list-none flex-col justify-center gap-4 rounded-2xl p-8"
             style={{ background: WHITE }}
           >
             {SWATCHES.map(({ colour, label }) => (
-              <li className="flex items-center gap-3" key={colour}>
+              <li className="flex items-center gap-2" key={colour}>
                 <span
                   className="size-7 shrink-0 rounded-full"
                   style={{
@@ -270,7 +270,7 @@ export default function BrandPage() {
           </Figure>
           <Figure caption="Holds from 32px up. One file at every size above that">
             <div
-              className="flex h-55 items-end justify-center gap-5 rounded-2xl p-7"
+              className="flex h-55 items-end justify-center gap-6 rounded-2xl p-8"
               style={{ background: WHITE }}
             >
               <SizeSpecimen label="32">
@@ -316,7 +316,7 @@ export default function BrandPage() {
 
       <section className="flex flex-col gap-4">
         <SectionHead title="Don't" />
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-5">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
           <Dont caption="Swap the colour order">
             <LogoMark first={MARK_ACCENT} second={MARK_INK} size={52} />
           </Dont>
@@ -351,7 +351,7 @@ export default function BrandPage() {
       <section className="flex flex-col gap-4">
         <SectionHead title="Wordmark vs. name" />
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
-          <Card className="p-7">
+          <Card className="p-6">
             <Wordmark className="text-3xl" />
             <Typography.Paragraph color="muted">
               The wordmark is a graphic. Always lowercase, always Urbanist 800
@@ -360,7 +360,7 @@ export default function BrandPage() {
               take the mark on its own — never the wordmark.
             </Typography.Paragraph>
           </Card>
-          <Card className="p-7">
+          <Card className="p-6">
             <span className="font-bold text-3xl text-accent leading-none tracking-tight dark:text-foreground">
               MotorMetrics
             </span>
@@ -377,7 +377,7 @@ export default function BrandPage() {
 
       <Hairline />
 
-      <section className="flex flex-col gap-2.5">
+      <section className="flex flex-col gap-4">
         <SectionHead title="Files" />
         <Typography.Paragraph color="muted">
           {FILES.map((file, index) => (
@@ -429,7 +429,7 @@ function SizeSpecimen({
   label: string;
 }) {
   return (
-    <div className="flex flex-col items-center gap-2.5">
+    <div className="flex flex-col items-center gap-2">
       {children}
       <span className="font-semibold text-muted text-xs">{label}</span>
     </div>
@@ -438,7 +438,7 @@ function SizeSpecimen({
 
 function Dont({ caption, children }: { caption: string; children: ReactNode }) {
   return (
-    <Figure caption={caption} className="gap-2.5">
+    <Figure caption={caption} className="gap-2">
       <div
         className="grid h-32.5 place-items-center rounded-lg"
         style={{ background: WHITE }}

@@ -30,7 +30,7 @@ export async function RelatedPosts({
           title="Read next"
         />
         <div className="@container">
-          <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-3.5">
+          <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-4">
             {relatedPosts.map((post) => (
               <PostCard key={post.id} post={post} showExcerpt={false} />
             ))}

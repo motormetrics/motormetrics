@@ -41,7 +41,7 @@ export function KeyTerms({ guide }: { guide: Guide }) {
               const slug = term.toLowerCase();
 
               return (
-                <div className="flex flex-col gap-1 py-3" key={term}>
+                <div className="flex flex-col gap-1 py-4" key={term}>
                   <dt className="font-semibold text-sm">
                     {guideSlugs.includes(slug) ? (
                       <Link
@@ -74,7 +74,7 @@ export function KeyTerms({ guide }: { guide: Guide }) {
           <span className="font-semibold text-muted text-xs">
             Check the current figures
           </span>
-          <ul className="flex flex-wrap gap-x-6 gap-y-1.5 text-sm">
+          <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
             {guide.relatedLinks.map(({ href, label }) => (
               <li key={href}>
                 <Link

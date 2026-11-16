@@ -90,9 +90,9 @@ function ChartLegend({
   entries: { color: string; label: string; value?: string }[];
 }) {
   return (
-    <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5">
+    <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
       {entries.map((entry) => (
-        <div className="flex items-center gap-1.5" key={entry.label}>
+        <div className="flex items-center gap-2" key={entry.label}>
           <span
             className="size-2.5 shrink-0 rounded-full"
             style={{ backgroundColor: entry.color }}
@@ -285,9 +285,9 @@ export function PostChart({ spec }: { spec: PostChartSpec }) {
   const multiSeries = spec.series.length > 1;
 
   return (
-    <figure className="not-prose my-10 w-full min-w-0 border-border border-t pt-5">
+    <figure className="not-prose my-10 w-full min-w-0 border-border border-t pt-4">
       {spec.title || spec.subtitle ? (
-        <figcaption className="mb-4 flex flex-col gap-0.5">
+        <figcaption className="mb-4 flex flex-col gap-1">
           {spec.title ? (
             <span className="font-semibold text-foreground text-sm tracking-tight">
               {spec.title}
@@ -312,7 +312,7 @@ export function PostChart({ spec }: { spec: PostChartSpec }) {
         ) : null}
       </div>
       {spec.caption ? (
-        <p className="mt-3 text-muted text-xs">{spec.caption}</p>
+        <p className="mt-4 text-muted text-xs">{spec.caption}</p>
       ) : null}
     </figure>
   );

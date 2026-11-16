@@ -95,7 +95,7 @@ async function LatestPost() {
     (latest.highlights as Highlight[]).length > 0;
 
   return (
-    <section className="flex flex-col gap-5">
+    <section className="flex flex-col gap-6">
       <FeaturedPost post={latest} />
       {hasFigures ? (
         <SourceNote>
@@ -111,7 +111,7 @@ function ArchiveSkeleton() {
   return (
     <div className="flex flex-col gap-4">
       <Skeleton className="h-8 w-full max-w-xl" />
-      <div className="grid grid-cols-1 gap-3.5 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: 6 }, (_, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: skeleton items are static placeholders
           <Skeleton className="h-48 w-full" key={index} />
@@ -125,7 +125,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <>
       <StructuredData data={structuredData} />
-      <OverviewPage className="gap-10 max-md:gap-7">
+      <OverviewPage className="gap-8 max-md:gap-6">
         {/* Direction D's head, with the most-read list beside it once the
             page is wide and under it before then. Both read cached posts
             only, so they are part of the static shell. */}
@@ -144,7 +144,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
             Short reads on registrations, COE bidding and the electric shift.
             Published after each release, never before.
           </Typography.Paragraph>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <LatestPostLine />
             <div className="sm:ml-auto">
               <SharePill contentType="blog" title={title} />

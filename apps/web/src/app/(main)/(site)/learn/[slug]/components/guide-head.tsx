@@ -23,7 +23,7 @@ export function GuideHead({ guide }: { guide: Guide }) {
     <HeadGrid
       keys={
         headings.length > 0 ? (
-          <nav aria-label="In this guide" className="flex flex-col gap-3">
+          <nav aria-label="In this guide" className="flex flex-col gap-4">
             <Typography.Paragraph
               className="uppercase"
               color="muted"
@@ -32,7 +32,7 @@ export function GuideHead({ guide }: { guide: Guide }) {
             >
               In this guide
             </Typography.Paragraph>
-            <ol className="flex flex-wrap gap-x-4 gap-y-1.5 border-separator border-t pt-3 text-sm">
+            <ol className="flex flex-wrap gap-x-4 gap-y-2 border-separator border-t pt-2 text-sm">
               {headings.map(({ id, title }) => (
                 <li key={id}>
                   <Link
@@ -96,7 +96,7 @@ export function GuideHead({ guide }: { guide: Guide }) {
         {guide.excerpt}
       </Typography.Paragraph>
 
-      <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2 text-muted text-sm">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-muted text-sm">
         <span>{getReadingMinutes(guide.content)} min read</span>
         <span aria-hidden>·</span>
         <span>
