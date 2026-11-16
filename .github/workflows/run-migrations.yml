@@ -28,7 +28,21 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           persist-credentials: false
+
+      - name: Cache node_modules
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            node_modules
+            apps/*/node_modules
+            packages/*/node_modules
+          key: node-modules-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-${{ runner.arch }}-
+
       - uses: pnpm/setup@703c52620218391530e48b9e8870d5c0082e1b9b # v2.1.0
+        with:
+          cache: true
 
       - name: Run migrations
         working-directory: ./packages/database
