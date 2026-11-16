@@ -191,7 +191,7 @@ function MakeHeadSkeleton() {
         <Skeleton className="h-12 w-64" />
         <Skeleton className="h-5 w-80" />
       </div>
-      <div className="flex min-w-0 max-w-full flex-wrap items-center gap-3 sm:ml-auto">
+      <div className="flex min-w-0 max-w-full flex-wrap items-center gap-4 sm:ml-auto">
         <Skeleton className="h-10 w-80" />
         <Skeleton className="h-10 w-24" />
       </div>
@@ -204,7 +204,7 @@ export default function CarMakePage({
   searchParams: searchParamsPromise,
 }: PageProps) {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <Suspense fallback={null}>
         <MakeStructuredData params={params} />
       </Suspense>
@@ -243,8 +243,8 @@ export default function CarMakePage({
 
       <Hairline />
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-14">
-        <div className="flex flex-col gap-2.5">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
+        <div className="flex flex-col gap-2">
           <Typography.Paragraph
             className="uppercase"
             weight="semibold"

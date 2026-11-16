@@ -235,7 +235,7 @@ export function EvKeyNumbers({ selection }: SelectionProps) {
       {/* Four across, under the head or in its right half. */}
       <KeyNumberGrid besideHead={4}>
         <Suspense
-          fallback={<Skeleton className="col-span-full my-3 h-16 w-full" />}
+          fallback={<Skeleton className="col-span-full my-4 h-16 w-full" />}
         >
           <EvKeyNumberItems selection={selection} />
         </Suspense>

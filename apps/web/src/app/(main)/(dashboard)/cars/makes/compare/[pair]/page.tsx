@@ -120,7 +120,7 @@ export default function CompareMakesPage({ params }: PageProps) {
   const names = resolvePair(params);
 
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <Suspense fallback={null}>
         <CompareStructuredData params={params} />
       </Suspense>

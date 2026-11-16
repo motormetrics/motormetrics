@@ -52,7 +52,7 @@ async function MoverRows({ searchParams }: MoversProps) {
 
   if (movers.length === 0) {
     return (
-      <Typography.Paragraph className="py-2.5" color="muted" size="sm">
+      <Typography.Paragraph className="py-2" color="muted" size="sm">
         No make has a comparable period a year earlier to measure against.
       </Typography.Paragraph>
     );
@@ -66,10 +66,10 @@ async function MoverRows({ searchParams }: MoversProps) {
         return (
           <li key={mover.name}>
             <Link
-              className="flex items-center gap-3 py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
+              className="flex items-center gap-4 py-2 text-foreground no-underline transition-colors hover:bg-surface-secondary"
               href={`/cars/makes/${slug}`}
             >
-              <span className="flex min-w-0 flex-1 items-center gap-2.5">
+              <span className="flex min-w-0 flex-1 items-center gap-2">
                 <MakeAvatar
                   logoUrl={logoUrlBySlug[slug] ?? null}
                   make={mover.name}
@@ -104,7 +104,7 @@ async function MoverRows({ searchParams }: MoversProps) {
  */
 export function MoversRail({ searchParams }: MoversProps) {
   return (
-    <div className="flex min-w-0 flex-col gap-3">
+    <div className="flex min-w-0 flex-col gap-4">
       <div className="flex flex-col gap-1">
         <Typography.Heading className="text-lg" level={3} weight="bold">
           Fastest growing makes
@@ -116,7 +116,7 @@ export function MoversRail({ searchParams }: MoversProps) {
         </Typography.Paragraph>
       </div>
       <div className="flex flex-col">
-        <div className="flex items-end gap-3 pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-end gap-4 pb-2 font-semibold text-muted text-xs">
           <span className="min-w-0 flex-1">Make</span>
           <span className="w-24 shrink-0 text-right">Cars</span>
           <span className="w-20 shrink-0 text-right">Change</span>
@@ -124,7 +124,7 @@ export function MoversRail({ searchParams }: MoversProps) {
         <Suspense
           fallback={Array.from({ length: MOVERS_SHOWN }, (_, index) => (
             <div
-              className="py-2.5"
+              className="py-2"
               // biome-ignore lint/suspicious/noArrayIndexKey: identical placeholders
               key={index}
             >

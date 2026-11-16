@@ -146,7 +146,7 @@ export function DimensionTable({
     {
       allowsSorting: true,
       cell: (row) => (
-        <span className="flex min-w-0 items-center gap-3">
+        <span className="flex min-w-0 items-center gap-2">
           {/* Typography has no numeral prop; tabular-nums keeps the ranks aligned. */}
           <Typography.Paragraph
             className="w-6 shrink-0 tabular-nums"
@@ -324,7 +324,7 @@ export function DimensionTable({
 
       {isTruncated ? (
         <Link
-          className="flex items-center justify-center gap-2 self-center rounded-full bg-default px-6 py-3 font-bold text-muted text-sm transition-colors hover:text-foreground"
+          className="flex items-center justify-center gap-2 self-center rounded-full bg-default px-6 py-2 font-bold text-muted text-sm transition-colors hover:text-foreground"
           href={labels.href}
         >
           Show all {visible.length} {labels.tab.toLowerCase()}

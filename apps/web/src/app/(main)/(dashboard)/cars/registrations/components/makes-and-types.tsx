@@ -24,7 +24,7 @@ function ShareCell({
   share: number;
 }) {
   return (
-    <span className={cn("flex items-center justify-end gap-2.5", className)}>
+    <span className={cn("flex items-center justify-end gap-2", className)}>
       <ProgressBar
         aria-label={barLabel}
         className="min-w-0 flex-1 max-md:hidden"
@@ -41,9 +41,9 @@ function ShareCell({
   );
 }
 
-const MAKE_ROW = "flex items-center gap-3 max-md:gap-2.5";
+const MAKE_ROW = "flex items-center gap-4 max-md:gap-2";
 const RANK_CELL = "w-5 shrink-0";
-const MAKE_CELL = "flex min-w-0 flex-1 items-center gap-2.5";
+const MAKE_CELL = "flex min-w-0 flex-1 items-center gap-2";
 const MAKE_CARS_CELL = "w-16 shrink-0 text-right max-md:w-14";
 const MAKE_SHARE_CELL = "w-36 shrink-0 max-md:w-12";
 
@@ -104,7 +104,7 @@ export function TopMakesTable({
   );
 }
 
-const TYPE_ROW = "flex items-center gap-3 max-md:gap-2.5";
+const TYPE_ROW = "flex items-center gap-4 max-md:gap-2";
 const TYPE_CELL = "min-w-0 flex-1 truncate";
 const TYPE_CARS_CELL = "w-16 shrink-0 text-right max-md:w-14";
 const TYPE_SHARE_CELL = "w-32 shrink-0 max-md:w-12";
@@ -132,7 +132,7 @@ export function VehicleTypeTable({
         <span className={TYPE_CHANGE_CELL}>vs {previousYear}</span>
       </div>
       {rows.map((row) => (
-        <div className={cn(TYPE_ROW, "py-2.5")} key={row.name}>
+        <div className={cn(TYPE_ROW, "py-2")} key={row.name}>
           <span className={cn(TYPE_CELL, "text-sm")}>{row.name}</span>
           <span
             className={cn(TYPE_CARS_CELL, "font-semibold text-sm tabular-nums")}

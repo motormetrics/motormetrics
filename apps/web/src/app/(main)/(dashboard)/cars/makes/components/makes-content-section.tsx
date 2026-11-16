@@ -50,7 +50,7 @@ async function MakesDirectory() {
         eyebrow="Directory"
         title="Every make, A to Z"
       />
-      <ul className="flex flex-wrap gap-x-5 gap-y-2">
+      <ul className="flex flex-wrap gap-x-4 gap-y-2">
         {makes.map(({ make }) => (
           <li key={make}>
             <Link

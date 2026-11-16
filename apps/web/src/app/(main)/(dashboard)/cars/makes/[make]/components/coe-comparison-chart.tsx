@@ -44,8 +44,8 @@ export function CoeComparisonChart({
   ticks: number[];
 }) {
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         {SERIES.map(({ color, key, label }) => (
           <span
             className="inline-flex items-center gap-2 text-muted text-sm"

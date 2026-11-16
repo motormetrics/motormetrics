@@ -154,7 +154,7 @@ export default function Page({ searchParams }: PageProps) {
   const props: ReportProps = { searchParams };
 
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       {/* Direction D's head. The filters sit in the head because the fuel
           type narrows the hero, the key numbers and the chart. */}
       <HeadGrid

@@ -276,7 +276,7 @@ export default function AnnualPage() {
         }}
       />
 
-      <OverviewPage className="gap-10 max-md:gap-7">
+      <OverviewPage className="gap-8 max-md:gap-6">
         {/* Direction D's head. Everything reads one cached query and no
             search params, so the whole page is part of the static shell. */}
         <HeadGrid

@@ -23,7 +23,7 @@ interface UtilisationListProps {
  */
 export function UtilisationList({ order, searchParams }: UtilisationListProps) {
   return (
-    <Card className="gap-4 p-7">
+    <Card className="gap-4 p-6">
       <div className="flex flex-col gap-1">
         <Typography.Paragraph color="muted">
           {order === "busiest" ? "Highest" : "Lowest"} average use
@@ -65,7 +65,7 @@ async function UtilisationRows({ order, searchParams }: UtilisationListProps) {
           readings.
         </Typography.Paragraph>
       ) : (
-        <ul className="flex flex-col gap-3.5">
+        <ul className="flex flex-col gap-4">
           {locations.map((location, index) => (
             <LocationRow
               index={index}

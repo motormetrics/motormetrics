@@ -31,7 +31,7 @@ export async function ChargingIntro() {
   }
 
   return (
-    <div className="flex max-w-prose flex-col gap-3">
+    <div className="flex max-w-prose flex-col gap-4">
       <Typography.Paragraph className="leading-relaxed">
         Singapore has {stats.connectors.toLocaleString("en-SG")} public EV
         charging connectors across {stats.locations.toLocaleString("en-SG")}{" "}

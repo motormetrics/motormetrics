@@ -60,7 +60,7 @@ const structuredData: WithContext<WebPage> = {
 
 export default function ARFCalculatorPage() {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -124,7 +124,7 @@ export default function ARFCalculatorPage() {
           Estimates only, not financial advice or a recommendation. MotorMetrics
           is not affiliated with LTA; check your figures on OneMotoring.
         </SourceNote>
-        <div className="flex flex-wrap gap-x-5 gap-y-2">
+        <div className="flex flex-wrap gap-x-6 gap-y-2">
           <SectionLink
             className="ml-0"
             href="https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/upfront-vehicle-costs/tax-structure.html"

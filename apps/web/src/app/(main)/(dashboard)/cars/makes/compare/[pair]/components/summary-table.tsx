@@ -62,7 +62,7 @@ export function SummaryTable({
             {rows.map((row) => (
               <Table.Row id={row.id} key={row.id}>
                 <Table.Cell>
-                  <div className="flex flex-col gap-0.5">
+                  <div className="flex flex-col gap-1">
                     <span className="font-semibold">{row.label}</span>
                     {row.note ? (
                       <Typography.Paragraph color="muted" size="xs">

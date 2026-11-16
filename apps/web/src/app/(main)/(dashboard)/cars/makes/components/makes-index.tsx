@@ -285,8 +285,8 @@ export function MakesIndex({ searchParams }: IndexProps) {
         }
         title="All makes by registrations"
       />
-      <div className="@container flex flex-col gap-5">
-        <div className="flex flex-wrap items-end gap-x-4 gap-y-3">
+      <div className="@container flex flex-col gap-6">
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-4">
           {/* The search reads `?q=` in the browser, so until it does the
               field shows empty and read-only. */}
           <Suspense fallback={<MakeSearchField isReadOnly />}>
@@ -304,7 +304,7 @@ export function MakesIndex({ searchParams }: IndexProps) {
         </div>
         <Suspense
           fallback={
-            <div className="grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-2.5">
+            <div className="grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-4">
               {Array.from({ length: SKELETON_CARDS }, (_, index) => (
                 // biome-ignore lint/suspicious/noArrayIndexKey: identical placeholders
                 <Skeleton className="h-36" key={index} />

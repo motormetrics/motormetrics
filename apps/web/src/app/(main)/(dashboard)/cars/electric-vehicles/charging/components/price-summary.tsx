@@ -50,7 +50,7 @@ function PriceTile({
 
 function TileSkeleton() {
   return (
-    <Card className="gap-3 p-6">
+    <Card className="gap-2 p-6">
       <Skeleton className="h-4 w-40" />
       <Skeleton className="h-10 w-32" />
       <Skeleton className="h-4 w-36" />

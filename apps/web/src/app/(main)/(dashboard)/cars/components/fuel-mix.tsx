@@ -73,7 +73,7 @@ export async function FuelMix({
       <KeyNumberList
         items={segments.map((segment) => ({
           label: (
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center gap-2">
               <span
                 aria-hidden
                 className="size-2.5 shrink-0 rounded-xs"

@@ -43,7 +43,7 @@ export function MakePicker({
   return (
     <form
       action="/cars/makes/compare"
-      className="flex flex-wrap items-end gap-3"
+      className="flex flex-wrap items-end gap-4"
       method="get"
       onSubmit={handleSubmit}
     >

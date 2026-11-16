@@ -38,14 +38,14 @@ async function Leaderboard({ selection }: SelectionProps) {
 
         return (
           <li
-            className="flex items-center gap-3 py-2 hover:bg-surface-secondary"
+            className="flex items-center gap-4 py-2 hover:bg-surface-secondary"
             key={item.make}
           >
             <span className="w-5 text-muted text-sm tabular-nums">
               {index + 1}
             </span>
             <Link
-              className="flex min-w-0 flex-1 items-center gap-2.5 text-inherit no-underline transition-colors hover:text-accent md:w-36 md:flex-none"
+              className="flex min-w-0 flex-1 items-center gap-2 text-inherit no-underline transition-colors hover:text-accent md:w-36 md:flex-none"
               href={`/cars/makes/${slug}`}
             >
               <MakeAvatar
@@ -84,7 +84,7 @@ async function Leaderboard({ selection }: SelectionProps) {
 /** One half of Figure 3: the year's leading battery-electric makes. */
 export function EvLeaderboard({ selection }: SelectionProps) {
   return (
-    <div className="flex min-w-0 flex-col gap-3">
+    <div className="flex min-w-0 flex-col gap-4">
       <SubHead
         link={{ href: "/cars/makes", label: "All makes" }}
         sub={
@@ -98,7 +98,7 @@ export function EvLeaderboard({ selection }: SelectionProps) {
         title="EV makes"
       />
       <div className="flex flex-col">
-        <div className="flex items-center gap-3 pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-center gap-4 pb-2 font-semibold text-muted text-xs">
           <span className="w-5">#</span>
           <span className="min-w-0 flex-1 md:w-36 md:flex-none">Make</span>
           <span className="min-w-0 flex-1 max-md:hidden" />

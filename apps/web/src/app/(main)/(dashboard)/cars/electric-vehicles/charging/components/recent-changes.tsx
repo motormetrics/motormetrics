@@ -22,16 +22,16 @@ export async function RecentChanges() {
   const { newLocations, priceChanges } = await getEvChargingRecentChanges();
 
   return (
-    <Surface className="flex flex-col gap-3 p-7" variant="transparent">
-      <div className="flex items-center gap-2.5">
+    <Surface className="flex flex-col gap-4 p-6" variant="transparent">
+      <div className="flex items-center gap-2">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-default">
           <Sparkles className="size-5" />
         </span>
         <Typography.Paragraph>This week</Typography.Paragraph>
       </div>
 
-      <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
           <Typography.Paragraph size="sm" weight="bold">
             New chargers
           </Typography.Paragraph>
@@ -40,7 +40,7 @@ export async function RecentChanges() {
               No new chargers spotted this week.
             </Typography.Paragraph>
           ) : (
-            <ul className="flex flex-col gap-2.5">
+            <ul className="flex flex-col gap-2">
               {newLocations.slice(0, LIMIT).map((location) => (
                 <li className="flex flex-col" key={location.locationId}>
                   <span className="truncate font-bold text-sm">
@@ -60,7 +60,7 @@ export async function RecentChanges() {
             </ul>
           )}
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4">
           <Typography.Paragraph size="sm" weight="bold">
             Price changes
           </Typography.Paragraph>
@@ -69,7 +69,7 @@ export async function RecentChanges() {
               No price changes spotted this week.
             </Typography.Paragraph>
           ) : (
-            <ul className="flex flex-col gap-2.5">
+            <ul className="flex flex-col gap-2">
               {priceChanges.slice(0, LIMIT).map((change) => (
                 <li
                   className="flex flex-col"

@@ -371,14 +371,14 @@ export async function MakeReport({
     <>
       {/* The comp rules the switches off from the head, each under its own
           label; on phones they stack. */}
-      <div className="flex flex-col gap-3.5 border-border border-t py-3.5 md:flex-row md:flex-wrap md:items-end md:gap-6">
-        <div className="flex min-w-0 flex-col gap-1.5">
+      <div className="flex flex-col gap-4 border-border border-t py-4 md:flex-row md:flex-wrap md:items-end md:gap-6">
+        <div className="flex min-w-0 flex-col gap-2">
           <span className="font-semibold text-muted text-xs">Period</span>
           <Suspense fallback={<Skeleton className="h-10 w-80 max-w-full" />}>
             <ReportPeriodTabs report={report} />
           </Suspense>
         </div>
-        <div className="flex min-w-0 flex-col gap-1.5">
+        <div className="flex min-w-0 flex-col gap-2">
           <span className="font-semibold text-muted text-xs">Fuel type</span>
           <Suspense fallback={<Skeleton className="h-10 w-80 max-w-full" />}>
             <ReportFuelTypeTabs report={report} />
@@ -396,7 +396,7 @@ export async function MakeReport({
 
       <Hairline />
 
-      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-11 lg:gap-14">
+      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-11 lg:gap-16">
         <MakeMonthlyTable make={make} report={report} />
 
         <div className="flex min-w-0 flex-col gap-10 lg:col-span-5">

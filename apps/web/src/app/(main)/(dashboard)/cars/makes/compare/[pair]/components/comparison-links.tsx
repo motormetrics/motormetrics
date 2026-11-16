@@ -47,7 +47,7 @@ export async function ComparisonLinks({
   return (
     <section className="flex flex-col gap-4">
       <SectionHead eyebrow={eyebrow} link={link} title={title} />
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
         {links.map(({ names, slug }) =>
           names ? (
             <SectionLink

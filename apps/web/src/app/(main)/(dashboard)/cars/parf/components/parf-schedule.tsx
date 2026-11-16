@@ -12,7 +12,7 @@ import { LegendItem } from "@web/components/shared/legend-item";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 
 /** Shared by the schedule header and rows, so the columns line up. */
-const SCHEDULE_ROW = "flex items-center gap-4 px-3 max-md:gap-2 max-md:px-1.5";
+const SCHEDULE_ROW = "flex items-center gap-4 px-4 max-md:gap-2 max-md:px-2";
 const RATE_CELL = "w-20 shrink-0 text-right max-md:w-14";
 const CHANGE_CELL = "w-24 shrink-0 text-right max-md:hidden";
 const BARS_CELL = "w-48 shrink-0 max-lg:hidden";
@@ -62,7 +62,7 @@ export function ParfSchedule({
         <div
           className={cn(
             SCHEDULE_ROW,
-            "items-end pb-2.5 font-semibold text-muted text-xs",
+            "items-end pb-2 font-semibold text-muted text-xs",
           )}
         >
           <span className="min-w-0 flex-1">Vehicle age</span>
@@ -83,7 +83,7 @@ export function ParfSchedule({
               aria-pressed={isActive}
               className={cn(
                 SCHEDULE_ROW,
-                "w-full cursor-pointer border-separator border-l-2 py-3 text-left transition-colors hover:bg-surface-secondary",
+                "w-full cursor-pointer border-separator border-l-2 py-2 text-left transition-colors hover:bg-surface-secondary",
                 isActive
                   ? "border-l-accent bg-accent-soft"
                   : "border-l-transparent",

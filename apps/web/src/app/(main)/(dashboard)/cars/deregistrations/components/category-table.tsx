@@ -30,7 +30,7 @@ export function CategoryTable({
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-end gap-4 px-2 pb-2 font-semibold text-muted text-xs max-md:gap-2 max-md:px-0.5">
+      <div className="flex items-end gap-4 px-2 pb-2 font-semibold text-muted text-xs max-md:gap-2 max-md:px-1">
         <span className="min-w-0 flex-1">Category</span>
         <span className="min-w-0 flex-1 max-lg:hidden">Description</span>
         <span className="w-24 text-right max-md:w-14">Vehicles</span>
@@ -40,10 +40,10 @@ export function CategoryTable({
       <ul className="flex flex-col">
         {rows.map((row) => (
           <li
-            className="flex items-center gap-4 px-2 py-2.5 hover:bg-surface-secondary max-md:gap-2 max-md:px-0.5"
+            className="flex items-center gap-4 px-2 py-2 hover:bg-surface-secondary max-md:gap-2 max-md:px-1"
             key={row.category}
           >
-            <span className="flex min-w-0 flex-1 items-center gap-2.5">
+            <span className="flex min-w-0 flex-1 items-center gap-2">
               <span
                 aria-hidden
                 className="size-3 shrink-0 rounded-sm"
@@ -59,7 +59,7 @@ export function CategoryTable({
             <span className="w-24 text-right font-semibold text-sm tabular-nums max-md:w-14">
               {row.count.toLocaleString("en-SG")}
             </span>
-            <span className="flex w-48 items-center gap-2.5 max-md:w-12 max-lg:w-32">
+            <span className="flex w-48 items-center gap-2 max-md:w-12 max-lg:w-32">
               <span className="h-2.5 min-w-0 flex-1 rounded-r-sm bg-surface-secondary max-md:hidden">
                 <span
                   className="block h-full rounded-r-sm"

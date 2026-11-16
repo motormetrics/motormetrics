@@ -74,7 +74,7 @@ interface PageProps {
 
 function CardSkeleton({ className = "" }: { className?: string }) {
   return (
-    <div className={`rounded-4xl bg-surface p-7 shadow-surface ${className}`}>
+    <div className={`rounded-4xl bg-surface p-6 shadow-surface ${className}`}>
       <div className="flex flex-col gap-4">
         <Skeleton className="h-4 w-32" />
         <Skeleton className="h-12 w-40" />
@@ -86,7 +86,7 @@ function CardSkeleton({ className = "" }: { className?: string }) {
 
 export default function ChargingPage({ searchParams }: PageProps) {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -127,7 +127,7 @@ export default function ChargingPage({ searchParams }: PageProps) {
             <ChargingLead />
           </Suspense>
         </Typography.Paragraph>
-        <div className="flex flex-wrap items-end gap-3">
+        <div className="flex flex-wrap items-end gap-4">
           <Suspense fallback={<Skeleton className="h-10 w-56" />}>
             <DistrictControl searchParams={searchParams} />
           </Suspense>
@@ -159,7 +159,7 @@ export default function ChargingPage({ searchParams }: PageProps) {
             <Suspense
               fallback={
                 // Same bleed and heights as ChargingMap; see its comments.
-                <Skeleton className="-mx-4 h-96 sm:-mx-6 md:h-[640px] lg:-mx-9" />
+                <Skeleton className="-mx-4 h-96 md:-mx-6 md:h-[640px]" />
               }
             >
               <ChargingMap searchParams={searchParams} />

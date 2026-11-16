@@ -38,7 +38,7 @@ export function LocationRow({
   return (
     <li>
       <button
-        className="flex w-full cursor-pointer items-center gap-3 rounded-xl text-left transition-colors hover:bg-default/60"
+        className="flex w-full cursor-pointer items-center gap-4 rounded-xl text-left transition-colors hover:bg-default/60"
         onClick={() => {
           setSite(location.locationId);
           document
@@ -69,7 +69,7 @@ export function LocationRow({
         </span>
         {/* The row's click opens the site on the map; say so, since a hover
             tint alone does not show it on touch screens. */}
-        <span className="flex shrink-0 items-center gap-0.5 font-semibold text-accent text-xs">
+        <span className="flex shrink-0 items-center gap-1 font-semibold text-accent text-xs">
           Map
           <ChevronRight aria-hidden className="size-4" />
         </span>

@@ -94,7 +94,7 @@ export function DeregistrationValue({
           </NumberField.Group>
         </NumberField>
       </div>
-      <div className="grid gap-6 lg:grid-cols-2 lg:items-end lg:gap-14">
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-end lg:gap-16">
         <div className="flex min-w-0 flex-col gap-2">
           <span className="text-foreground text-sm">
             <span className="font-semibold text-foreground">
@@ -115,7 +115,7 @@ export function DeregistrationValue({
         </div>
         <dl className="grid grid-cols-2 gap-x-6 border-separator border-t">
           {stats.map(({ label, note, value }) => (
-            <div className="flex flex-col gap-0.5 py-3" key={label}>
+            <div className="flex flex-col gap-1 py-4" key={label}>
               <dt className="font-semibold text-muted text-xs">{label}</dt>
               <dd className="font-semibold text-xl tabular-nums">{value}</dd>
               <dd className="text-muted text-xs tabular-nums">{note}</dd>

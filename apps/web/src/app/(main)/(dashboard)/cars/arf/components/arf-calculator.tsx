@@ -140,14 +140,14 @@ export function ARFCalculator({ head }: { head: ReactNode }) {
           </Select>
         </div>
 
-        <div className="flex max-w-xl flex-col gap-2.5">
+        <div className="flex max-w-xl flex-col gap-2">
           <span className="text-foreground text-sm">
             <span className="font-semibold text-foreground">
               Estimated ARF payable
             </span>
             {` · COE obtained ${schedule.label}`}
           </span>
-          <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <span
               aria-live="polite"
               className="font-extrabold text-4xl tabular-nums leading-none tracking-tight md:text-5xl"

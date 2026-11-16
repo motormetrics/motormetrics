@@ -116,7 +116,7 @@ export function ClassesTable({
             return (
               <tr
                 className={cn(
-                  "*:px-2 *:py-2.5 max-md:*:px-1",
+                  "*:px-2 *:py-2 max-md:*:px-1",
                   isCars ? "bg-accent-soft" : "hover:bg-surface-secondary",
                 )}
                 key={row.name}
@@ -136,7 +136,7 @@ export function ClassesTable({
                   {row.population.toLocaleString("en-SG")}
                 </td>
                 <td>
-                  <span className="flex items-center gap-2.5">
+                  <span className="flex items-center gap-2">
                     <span className="h-2.5 min-w-0 flex-1 rounded-r-sm bg-surface-secondary max-md:hidden">
                       <span
                         className="block h-full rounded-r-sm"

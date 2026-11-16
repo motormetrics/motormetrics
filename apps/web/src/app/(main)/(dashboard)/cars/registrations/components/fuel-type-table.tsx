@@ -16,11 +16,11 @@ export interface FuelTypeRow {
   yearToDate: number;
 }
 
-const ROW = "flex items-center gap-4 px-2 max-md:gap-2 max-md:px-0.5";
+const ROW = "flex items-center gap-4 px-2 max-md:gap-2 max-md:px-1";
 const NAME_CELL = "min-w-0 flex-1 truncate";
 const CARS_CELL = "w-24 shrink-0 text-right max-md:w-16";
 const SHARE_CELL =
-  "flex w-40 shrink-0 items-center justify-end gap-2.5 max-md:w-14 xl:w-56";
+  "flex w-40 shrink-0 items-center justify-end gap-2 max-md:w-14 xl:w-56";
 const YEAR_CELL = "w-24 shrink-0 text-right max-md:hidden";
 const CHANGE_CELL = "w-24 shrink-0 text-right max-md:w-16";
 
@@ -72,7 +72,7 @@ export function FuelTypeTable({
           <div
             className={cn(
               ROW,
-              "relative py-2.5 transition-colors hover:bg-surface-secondary",
+              "relative py-2 transition-colors hover:bg-surface-secondary",
               isActive && "bg-accent-soft",
             )}
             key={row.name}

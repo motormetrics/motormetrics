@@ -97,7 +97,7 @@ function MonthSlot({ searchParams }: PageProps) {
 
 export default function CarsPage({ searchParams }: PageProps) {
   return (
-    <OverviewPage className="gap-10 max-md:gap-7">
+    <OverviewPage className="gap-8 max-md:gap-6">
       {/* Direction D's head. The labels, title and source are fixed copy in
           the static shell; each figure that follows `?month=` streams in
           behind its own boundary. */}

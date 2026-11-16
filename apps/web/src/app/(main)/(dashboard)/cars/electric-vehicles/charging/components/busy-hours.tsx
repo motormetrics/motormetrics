@@ -21,7 +21,7 @@ export async function BusyHours() {
   const sampledHours = hours.filter((item) => item.samples > 0).length;
   if (sampledHours < hours.length) {
     return (
-      <Card className="gap-4 p-7">
+      <Card className="gap-4 p-6">
         <div className="flex flex-col gap-1">
           <Typography.Paragraph color="muted">Busy hours</Typography.Paragraph>
           <Typography.Heading level={3}>Busiest hour</Typography.Heading>
@@ -38,7 +38,7 @@ export async function BusyHours() {
   }
 
   return (
-    <Card className="gap-4 p-7">
+    <Card className="gap-4 p-6">
       <div className="flex flex-col gap-1">
         <Typography.Paragraph color="muted">Busy hours</Typography.Paragraph>
         <Typography.Heading level={3}>

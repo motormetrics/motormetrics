@@ -25,7 +25,7 @@ export async function LiveChip({ district }: { district: string }) {
   }
 
   return (
-    <div className="flex max-w-64 flex-col gap-1 rounded-2xl bg-overlay p-3 shadow-overlay">
+    <div className="flex max-w-64 flex-col gap-1 rounded-2xl bg-overlay p-4 shadow-overlay">
       <span className="font-extrabold text-xl tabular-nums">
         <NumberValue
           locale="en-SG"

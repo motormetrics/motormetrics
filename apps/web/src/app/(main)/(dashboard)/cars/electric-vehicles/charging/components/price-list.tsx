@@ -35,8 +35,8 @@ interface PriceListProps {
  */
 export function PriceList({ searchParams }: PriceListProps) {
   return (
-    <Card className="gap-4 p-7">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <Card className="gap-4 p-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <Suspense fallback={<Skeleton className="h-8 w-72" />}>
           <PriceHeading searchParams={searchParams} />
         </Suspense>
@@ -112,7 +112,7 @@ async function PriceRows({ searchParams }: PriceListProps) {
           No {power} chargers with a per-kWh price in {scope} yet.
         </Typography.Paragraph>
       ) : (
-        <ol className="flex flex-col gap-3.5">
+        <ol className="flex flex-col gap-4">
           {locations.map((location, index) => (
             <LocationRow
               index={index}

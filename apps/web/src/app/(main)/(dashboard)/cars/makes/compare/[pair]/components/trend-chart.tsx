@@ -86,9 +86,9 @@ export function CompareTrendChart({
   ] as const;
 
   return (
-    <figure className="flex flex-col gap-3">
+    <figure className="flex flex-col gap-4">
       <figcaption className="sr-only">{summary}</figcaption>
-      <div aria-hidden className="flex flex-wrap items-center gap-x-5 gap-y-2">
+      <div aria-hidden className="flex flex-wrap items-center gap-x-4 gap-y-2">
         {series.map(({ key, label }) => (
           <span
             className="inline-flex items-center gap-2 text-muted text-sm"

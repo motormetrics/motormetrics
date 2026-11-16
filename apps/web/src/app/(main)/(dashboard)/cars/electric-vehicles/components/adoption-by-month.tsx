@@ -76,7 +76,7 @@ async function Columns({ selection }: SelectionProps) {
 /** One half of Figure 3: the battery-electric share, month by month. */
 export function AdoptionByMonth({ selection }: SelectionProps) {
   return (
-    <div className="flex min-w-0 flex-col gap-3">
+    <div className="flex min-w-0 flex-col gap-4">
       <SubHead
         sub={
           <>

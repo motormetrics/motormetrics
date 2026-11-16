@@ -56,7 +56,7 @@ async function MoverRows({ searchParams }: MoversProps) {
 
   if (movers.length === 0) {
     return (
-      <Typography.Paragraph className="py-2.5" color="muted" size="sm">
+      <Typography.Paragraph className="py-2" color="muted" size="sm">
         No make has a year-earlier figure to compare for this selection.
       </Typography.Paragraph>
     );
@@ -64,11 +64,11 @@ async function MoverRows({ searchParams }: MoversProps) {
 
   return movers.map((row) => (
     <Link
-      className="flex items-center gap-3 py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
+      className="flex items-center gap-4 py-2 text-foreground no-underline transition-colors hover:bg-surface-secondary"
       href={`/cars/makes/${row.slug}`}
       key={row.make}
     >
-      <span className="flex min-w-0 flex-1 items-center gap-2.5">
+      <span className="flex min-w-0 flex-1 items-center gap-2">
         <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="sm" />
         <span className="truncate font-medium text-sm">{row.make}</span>
       </span>
@@ -108,7 +108,7 @@ export function FastestGrowing({ searchParams }: MoversProps) {
       </div>
 
       <div className="flex flex-col">
-        <div className="flex items-center gap-3 pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-center gap-4 pb-2 font-semibold text-muted text-xs">
           <span className="min-w-0 flex-1">Make</span>
           <span className="w-20 text-right md:w-24">Registered</span>
           <span className="w-20 text-right md:w-24">Change</span>
@@ -116,7 +116,7 @@ export function FastestGrowing({ searchParams }: MoversProps) {
         <Suspense
           fallback={Array.from({ length: MOVERS }, (_, index) => (
             <div
-              className="py-2.5"
+              className="py-2"
               // biome-ignore lint/suspicious/noArrayIndexKey: identical placeholders
               key={index}
             >

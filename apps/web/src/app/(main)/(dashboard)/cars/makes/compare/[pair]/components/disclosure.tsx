@@ -33,7 +33,7 @@ export function TableDisclosure({
         </Button>
       </Disclosure.Heading>
       <Disclosure.Content>
-        <Disclosure.Body className="flex flex-col gap-3 pt-2">
+        <Disclosure.Body className="flex flex-col gap-4 pt-2">
           {children}
         </Disclosure.Body>
       </Disclosure.Content>

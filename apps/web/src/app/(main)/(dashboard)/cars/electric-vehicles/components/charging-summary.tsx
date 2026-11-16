@@ -36,7 +36,7 @@ export async function ChargingSummary() {
   );
 
   return (
-    <div className="flex min-w-0 flex-col gap-3.5">
+    <div className="flex min-w-0 flex-col gap-4">
       <SubHead
         link={{
           href: "/cars/electric-vehicles/charging",
@@ -46,7 +46,7 @@ export async function ChargingSummary() {
         title="Charging network"
       />
 
-      <div className="flex flex-wrap items-baseline gap-3">
+      <div className="flex flex-wrap items-baseline gap-2">
         <span className="font-semibold text-2xl tabular-nums tracking-tight">
           <NumberValue
             locale="en-SG"
@@ -70,7 +70,7 @@ export async function ChargingSummary() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <div className="flex items-baseline justify-between gap-3 text-foreground text-sm">
+        <div className="flex items-baseline justify-between gap-4 text-foreground text-sm">
           <span>
             Progress to the national target of{" "}
             <NumberValue

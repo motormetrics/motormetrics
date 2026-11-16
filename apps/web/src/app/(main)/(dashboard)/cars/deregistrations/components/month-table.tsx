@@ -15,7 +15,7 @@ const COLUMNS = [
   { hidden: "max-lg:hidden", label: "Exempt" },
 ];
 
-const ROW = "flex items-center gap-3 px-2 max-md:gap-2 max-md:px-0.5";
+const ROW = "flex items-center gap-4 px-2 max-md:gap-2 max-md:px-1";
 const MONTH_CELL = "w-28 shrink-0 max-md:w-20";
 const COUNT_CELL = "min-w-0 flex-1 text-right tabular-nums";
 
@@ -51,7 +51,7 @@ export function MonthTable({
               aria-current={isSelected ? "date" : undefined}
               className={cn(
                 ROW,
-                "py-2.5",
+                "py-2",
                 isSelected
                   ? "border-l-2 border-l-accent bg-accent-soft"
                   : "hover:bg-surface-secondary",
