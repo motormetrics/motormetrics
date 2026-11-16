@@ -36,7 +36,7 @@ async function MonthlyRows({ report }: ReportProps) {
     .map(({ count, market, month: seriesMonth, previous, share }) => (
       <div
         className={cn(
-          "flex items-center gap-2 border-separator border-b py-2 text-sm tabular-nums md:gap-3",
+          "flex items-center gap-2 py-2 text-sm tabular-nums md:gap-3",
           seriesMonth === month && "bg-surface-secondary",
         )}
         key={seriesMonth}
@@ -88,7 +88,7 @@ export function MakeMonthlyTable({ make, report }: MakeSectionProps) {
         title={`${make} against the whole market`}
       />
       <div className="flex flex-col">
-        <div className="flex items-center gap-2 border-border border-b pb-2 font-semibold text-muted text-xs md:gap-3">
+        <div className="flex items-center gap-2 pb-2 font-semibold text-muted text-xs md:gap-3">
           <span className="min-w-0 flex-1">Month</span>
           <span className="w-12 truncate text-right md:w-16">{make}</span>
           <span className="w-12 text-right md:w-16">

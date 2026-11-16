@@ -2,8 +2,9 @@
 
 import { Breadcrumbs } from "@heroui/react";
 import { Sidebar } from "@heroui-pro/react";
-import { LogoMark } from "@web/components/brand-logo";
+import { LogoMark, Wordmark } from "@web/components/brand-logo";
 import { SIDEBAR_GROUPS } from "@web/config/navigation";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Fragment, type ReactNode } from "react";
 
@@ -70,25 +71,25 @@ export function InsetVariant({
   );
   const currentItem = currentGroup?.items.find(({ url }) => url === currentUrl);
 
+  // As on motormetrics.app: the mark in a bordered tile, then the wordmark.
   const header = (
-    <div className="flex items-center gap-3 px-1 py-2">
-      <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-foreground">
-        <LogoMark
-          className="text-background"
+    <Link
+      aria-label="MotorMetrics home"
+      className="flex shrink-0 items-center gap-2 px-1 py-2 text-foreground no-underline"
+      href="/"
+    >
+      <span className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-separator">
+        <LogoMark first="currentColor" second="var(--accent)" size={20} />
+      </span>
+      {/* data-sidebar="label" hides the wordmark when the sidebar collapses. */}
+      <span data-sidebar="label">
+        <Wordmark
+          className="text-lg"
           first="currentColor"
-          second="currentColor"
-          size={16}
+          second="var(--accent)"
         />
-      </div>
-      <div className="flex flex-col">
-        <span className="font-semibold text-foreground text-sm leading-tight">
-          MotorMetrics
-        </span>
-        <span className="text-muted text-xs leading-tight">
-          Singapore car market
-        </span>
-      </div>
-    </div>
+      </span>
+    </Link>
   );
 
   return (
@@ -160,7 +161,7 @@ export function InsetVariant({
         </Sidebar.Content>
       </Sidebar.Mobile>
       <Sidebar.Main>
-        {announcement}
+        {/*{announcement}*/}
         <SidebarStoryHeader
           items={
             currentItem && currentGroup

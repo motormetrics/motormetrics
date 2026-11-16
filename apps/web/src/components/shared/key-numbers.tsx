@@ -14,7 +14,7 @@ export interface KeyNumber {
  */
 export function KeyNumberItem({ label, note, value }: KeyNumber) {
   return (
-    <div className="flex min-w-0 flex-col gap-0.5 border-separator border-b py-3">
+    <div className="flex min-w-0 flex-col gap-0.5 py-3">
       <dt className="font-semibold text-muted text-xs">{label}</dt>
       <dd className="font-semibold text-xl tabular-nums">{value}</dd>
       {note ? (

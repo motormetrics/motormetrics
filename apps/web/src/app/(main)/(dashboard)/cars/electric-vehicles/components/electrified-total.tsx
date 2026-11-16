@@ -62,10 +62,7 @@ export async function ElectrifiedMix({ selection }: SelectionProps) {
       </div>
       <dl className="grid @3xl:grid-cols-4 grid-cols-2 border-separator border-t">
         {data.split.map((segment) => (
-          <div
-            className="flex flex-col gap-1 border-separator border-b py-3.5 pr-4"
-            key={segment.label}
-          >
+          <div className="flex flex-col gap-1 py-3.5 pr-4" key={segment.label}>
             <dt className="flex items-center gap-1.5 font-semibold text-muted text-xs">
               <span
                 aria-hidden

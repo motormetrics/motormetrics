@@ -280,7 +280,7 @@ export function RenewalResults({
             <TableDisclosure title="Breakdown in dollars">
               <table className="w-full text-sm tabular-nums">
                 <thead>
-                  <tr className="border-border border-b text-muted text-xs">
+                  <tr className="text-muted text-xs">
                     <th scope="col" />
                     <th className="py-2 text-right" scope="col">
                       10 years
@@ -292,10 +292,7 @@ export function RenewalResults({
                 </thead>
                 <tbody>
                   {breakdown.map((row) => (
-                    <tr
-                      className="border-separator border-b last:font-bold"
-                      key={row.label}
-                    >
+                    <tr className="last:font-bold" key={row.label}>
                       <th className="py-2 text-left font-medium" scope="row">
                         {row.label}
                       </th>

@@ -56,12 +56,7 @@ export function FuelTypeTable({
 
   return (
     <div className={cn("flex flex-col", isPending && "opacity-70")}>
-      <div
-        className={cn(
-          ROW,
-          "border-border border-b pb-2 font-semibold text-muted text-xs",
-        )}
-      >
+      <div className={cn(ROW, "pb-2 font-semibold text-muted text-xs")}>
         <span className={NAME_CELL}>Fuel type</span>
         <span className={CARS_CELL}>Cars</span>
         <span className={cn(SHARE_CELL, "block text-right")}>Share</span>
@@ -77,7 +72,7 @@ export function FuelTypeTable({
           <div
             className={cn(
               ROW,
-              "relative border-separator border-b py-2.5 transition-colors hover:bg-surface-secondary",
+              "relative py-2.5 transition-colors hover:bg-surface-secondary",
               isActive && "bg-accent-soft",
             )}
             key={row.name}

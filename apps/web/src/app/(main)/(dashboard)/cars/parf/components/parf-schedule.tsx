@@ -62,7 +62,7 @@ export function ParfSchedule({
         <div
           className={cn(
             SCHEDULE_ROW,
-            "items-end border-border border-b pb-2.5 font-semibold text-muted text-xs",
+            "items-end pb-2.5 font-semibold text-muted text-xs",
           )}
         >
           <span className="min-w-0 flex-1">Vehicle age</span>
@@ -83,7 +83,7 @@ export function ParfSchedule({
               aria-pressed={isActive}
               className={cn(
                 SCHEDULE_ROW,
-                "w-full cursor-pointer border-separator border-b border-l-2 py-3 text-left transition-colors hover:bg-surface-secondary",
+                "w-full cursor-pointer border-separator border-l-2 py-3 text-left transition-colors hover:bg-surface-secondary",
                 isActive
                   ? "border-l-accent bg-accent-soft"
                   : "border-l-transparent",

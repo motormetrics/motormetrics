@@ -90,7 +90,7 @@ export function ARFCalculator({ head }: { head: ReactNode }) {
       >
         {head}
 
-        <div className="flex flex-wrap items-end gap-4 border-border border-t border-b border-b-separator py-4">
+        <div className="flex flex-wrap items-end gap-4 border-border border-t py-4">
           <NumberField
             className="w-60 max-md:w-full"
             formatOptions={SGD_FORMAT}

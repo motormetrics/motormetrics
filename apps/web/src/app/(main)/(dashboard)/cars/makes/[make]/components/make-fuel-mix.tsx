@@ -34,10 +34,7 @@ async function FuelMixFigure({ make, report }: MakeSectionProps) {
       </div>
       <ul className="flex flex-col">
         {fuelMix.map(({ color, count, name, note }) => (
-          <li
-            className="flex items-center gap-2.5 border-separator border-b py-2"
-            key={name}
-          >
+          <li className="flex items-center gap-2.5 py-2" key={name}>
             <span
               aria-hidden
               className="size-3 shrink-0 rounded-xs"

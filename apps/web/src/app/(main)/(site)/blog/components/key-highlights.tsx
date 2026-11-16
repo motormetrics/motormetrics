@@ -37,7 +37,7 @@ export function KeyHighlights({
           <dl className="grid @3xl:grid-cols-3 grid-cols-2 gap-x-6 border-separator border-t">
             {highlights?.map((item) => (
               <div
-                className="flex flex-col gap-0.5 border-separator border-b py-3"
+                className="flex flex-col gap-0.5 py-3"
                 key={`${item.label}-${item.value}`}
               >
                 <dt className="font-semibold text-muted text-xs">

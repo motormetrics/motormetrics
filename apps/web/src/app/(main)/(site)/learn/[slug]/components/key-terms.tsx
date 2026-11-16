@@ -41,10 +41,7 @@ export function KeyTerms({ guide }: { guide: Guide }) {
               const slug = term.toLowerCase();
 
               return (
-                <div
-                  className="flex flex-col gap-1 border-separator border-b py-3"
-                  key={term}
-                >
+                <div className="flex flex-col gap-1 py-3" key={term}>
                   <dt className="font-semibold text-sm">
                     {guideSlugs.includes(slug) ? (
                       <Link

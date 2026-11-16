@@ -44,10 +44,7 @@ export function CtaSection() {
         />
         <div className="flex flex-col border-border border-t">
           {rules.map(({ note, number }) => (
-            <div
-              className="flex items-start gap-3 border-separator border-b py-3"
-              key={number}
-            >
+            <div className="flex items-start gap-3 py-3" key={number}>
               <span className="w-8 shrink-0 font-semibold text-accent tabular-nums">
                 {number}
               </span>

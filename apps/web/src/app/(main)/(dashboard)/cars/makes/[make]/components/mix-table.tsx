@@ -86,7 +86,7 @@ export function MixTable({ rows, total }: { rows: MixRow[]; total: number }) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center gap-2 border-border border-b px-0.5 pb-2 text-muted text-xs md:gap-3.5 md:px-2">
+      <div className="flex items-center gap-2 px-0.5 pb-2 text-muted text-xs md:gap-3.5 md:px-2">
         <span className={cn(CELL.rank, "font-semibold")}>#</span>
         {SORTABLE.map(({ className, key, label, short }) => (
           <span className={className} key={key}>
@@ -100,7 +100,7 @@ export function MixTable({ rows, total }: { rows: MixRow[]; total: number }) {
       </div>
       {sortMixRows(rows, sortKey, direction).map((row) => (
         <div
-          className="flex items-center gap-2 border-separator border-b px-0.5 py-2.5 transition-colors hover:bg-surface-secondary md:gap-3.5 md:px-2"
+          className="flex items-center gap-2 px-0.5 py-2.5 transition-colors hover:bg-surface-secondary md:gap-3.5 md:px-2"
           key={`${row.fuelType}|${row.vehicleType}`}
         >
           <span

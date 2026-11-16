@@ -30,7 +30,7 @@ export function CategoryTable({
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-end gap-4 border-border border-b px-2 pb-2 font-semibold text-muted text-xs max-md:gap-2 max-md:px-0.5">
+      <div className="flex items-end gap-4 px-2 pb-2 font-semibold text-muted text-xs max-md:gap-2 max-md:px-0.5">
         <span className="min-w-0 flex-1">Category</span>
         <span className="min-w-0 flex-1 max-lg:hidden">Description</span>
         <span className="w-24 text-right max-md:w-14">Vehicles</span>
@@ -40,7 +40,7 @@ export function CategoryTable({
       <ul className="flex flex-col">
         {rows.map((row) => (
           <li
-            className="flex items-center gap-4 border-separator border-b px-2 py-2.5 hover:bg-surface-secondary max-md:gap-2 max-md:px-0.5"
+            className="flex items-center gap-4 px-2 py-2.5 hover:bg-surface-secondary max-md:gap-2 max-md:px-0.5"
             key={row.category}
           >
             <span className="flex min-w-0 flex-1 items-center gap-2.5">

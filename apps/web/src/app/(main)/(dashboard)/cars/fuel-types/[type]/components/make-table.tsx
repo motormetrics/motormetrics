@@ -87,12 +87,7 @@ export function MakeTable({
         heading to sort
       </span>
       <div className="flex flex-col">
-        <div
-          className={cn(
-            ROW,
-            "items-end border-border border-b pb-2 text-muted text-xs",
-          )}
-        >
+        <div className={cn(ROW, "items-end pb-2 text-muted text-xs")}>
           <span className={cn(CELL.rank, "font-semibold")}>#</span>
           <span className={CELL.make}>{header("make", "Make")}</span>
           <span className={CELL.count}>{header("count", "Cars")}</span>
@@ -108,7 +103,7 @@ export function MakeTable({
           <div
             className={cn(
               ROW,
-              "border-separator border-b py-2.5 transition-colors hover:bg-surface-secondary",
+              "py-2.5 transition-colors hover:bg-surface-secondary",
             )}
             key={row.make}
           >

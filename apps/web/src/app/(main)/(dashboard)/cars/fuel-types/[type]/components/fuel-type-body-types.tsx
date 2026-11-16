@@ -23,17 +23,14 @@ export function FuelTypeBodyTypes({
         title="By vehicle type"
       />
       <div className="flex flex-col">
-        <div className="flex items-end gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-end gap-3 pb-2 font-semibold text-muted text-xs">
           <span className="min-w-0 flex-1">Vehicle type</span>
           <span className="w-16 shrink-0 text-right md:w-20">Cars</span>
           <span className="w-14 shrink-0 text-right md:w-36">Share</span>
         </div>
         <ul className="flex flex-col">
           {crossMix.map(({ count, name }, index) => (
-            <li
-              className="flex items-center gap-3 border-separator border-b py-2.5"
-              key={name}
-            >
+            <li className="flex items-center gap-3 py-2.5" key={name}>
               <span className="min-w-0 flex-1 truncate text-sm">
                 {formatVehicleType(name)}
               </span>

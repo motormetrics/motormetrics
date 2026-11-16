@@ -32,7 +32,7 @@ export function MarketLinks() {
     <nav aria-label="More from MotorMetrics">
       <ul className="grid border-separator border-t md:grid-cols-3 md:gap-x-6">
         {MARKET_LINKS.map((item) => (
-          <li className="flex border-separator border-b" key={item.href}>
+          <li className="flex" key={item.href}>
             <Link
               className="group flex w-full flex-col gap-1 py-4 text-foreground no-underline"
               href={item.href}

@@ -84,7 +84,7 @@ export function VehicleTypesHeadline({
         <ul className="flex flex-col">
           <li
             aria-hidden
-            className="flex items-center gap-2.5 border-border border-b pb-2 font-semibold text-muted text-xs"
+            className="flex items-center gap-2.5 pb-2 font-semibold text-muted text-xs"
           >
             <span className="w-3 shrink-0" />
             <span className="min-w-0 flex-1">Vehicle type</span>
@@ -93,7 +93,7 @@ export function VehicleTypesHeadline({
           </li>
           {mix.map(({ color, count, label, share }) => (
             <li
-              className="flex items-center gap-2.5 border-separator border-b py-2 text-sm tabular-nums"
+              className="flex items-center gap-2.5 py-2 text-sm tabular-nums"
               key={label}
             >
               <span

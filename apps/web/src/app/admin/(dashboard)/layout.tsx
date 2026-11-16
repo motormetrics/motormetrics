@@ -10,7 +10,7 @@ export default function DashboardLayout({
         <AppSidebar />
       </Suspense>
       <div className="min-w-0 flex-1">
-        <header className="sticky top-0 z-10 border-b bg-background px-6 py-4 lg:hidden">
+        <header className="sticky top-0 z-10 bg-background px-6 py-4 lg:hidden">
           <span className="font-semibold">MotorMetrics Admin</span>
         </header>
         <main className="container mx-auto p-6">

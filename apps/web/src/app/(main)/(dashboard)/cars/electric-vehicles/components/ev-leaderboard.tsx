@@ -38,7 +38,7 @@ async function Leaderboard({ selection }: SelectionProps) {
 
         return (
           <li
-            className="flex items-center gap-3 border-separator border-b py-2 hover:bg-surface-secondary"
+            className="flex items-center gap-3 py-2 hover:bg-surface-secondary"
             key={item.make}
           >
             <span className="w-5 text-muted text-sm tabular-nums">
@@ -98,7 +98,7 @@ export function EvLeaderboard({ selection }: SelectionProps) {
         title="EV makes"
       />
       <div className="flex flex-col">
-        <div className="flex items-center gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-center gap-3 pb-2 font-semibold text-muted text-xs">
           <span className="w-5">#</span>
           <span className="min-w-0 flex-1 md:w-36 md:flex-none">Make</span>
           <span className="min-w-0 flex-1 max-md:hidden" />

@@ -49,7 +49,7 @@ export function VehicleTypeFuelMix({
         ))}
       </div>
       <div className="flex flex-col">
-        <div className="flex items-end gap-2.5 border-border border-b pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-end gap-2.5 pb-2 font-semibold text-muted text-xs">
           <span className="w-3 shrink-0" />
           <span className="min-w-0 flex-1">Fuel type</span>
           <span className="w-16 shrink-0 text-right">Cars</span>
@@ -57,10 +57,7 @@ export function VehicleTypeFuelMix({
         </div>
         <ul className="flex flex-col">
           {crossMix.map(({ count, name }) => (
-            <li
-              className="flex items-center gap-2.5 border-separator border-b py-2.5"
-              key={name}
-            >
+            <li className="flex items-center gap-2.5 py-2.5" key={name}>
               <span
                 className="block size-3 shrink-0 rounded-xs"
                 style={{ background: fuelColour(name) }}

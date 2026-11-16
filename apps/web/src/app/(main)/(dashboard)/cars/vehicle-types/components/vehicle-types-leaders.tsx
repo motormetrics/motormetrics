@@ -21,7 +21,7 @@ export function VehicleTypesLeaders({
       <ul className="flex flex-col">
         {leaders.map(({ makes, name, total: typeTotal }) => (
           <li
-            className="flex items-baseline gap-4 border-separator border-b py-3 max-md:flex-col max-md:gap-0.5"
+            className="flex items-baseline gap-4 py-3 max-md:flex-col max-md:gap-0.5"
             key={name}
           >
             <span className="w-40 shrink-0 font-semibold text-sm">

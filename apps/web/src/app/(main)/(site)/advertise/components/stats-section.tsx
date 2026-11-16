@@ -47,10 +47,7 @@ export function StatsSection({ stats }: { stats: TrafficStats }) {
       </Typography.Paragraph>
       <dl className="grid @3xl:grid-cols-3 grid-cols-2 gap-x-6 border-separator border-t">
         {items.map(({ label, value }) => (
-          <div
-            className="flex flex-col gap-0.5 border-separator border-b py-3"
-            key={label}
-          >
+          <div className="flex flex-col gap-0.5 py-3" key={label}>
             <dt className="font-semibold text-muted text-xs">{label}</dt>
             <dd className="font-semibold text-xl tabular-nums">{value}</dd>
           </div>

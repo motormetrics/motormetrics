@@ -2,7 +2,7 @@ import { cn, ProgressBar } from "@heroui/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 
-const HEADER = "border-border border-b pb-2 font-semibold text-muted text-xs";
+const HEADER = "pb-2 font-semibold text-muted text-xs";
 const formatCount = (value: number): string => value.toLocaleString("en-SG");
 
 /**
@@ -68,10 +68,7 @@ export function TopMakesTable({
       </div>
       <ol className="flex flex-col">
         {makes.map((item, index) => (
-          <li
-            className={cn(MAKE_ROW, "border-separator border-b py-2")}
-            key={item.make}
-          >
+          <li className={cn(MAKE_ROW, "py-2")} key={item.make}>
             {/* The comp picks out the podium: the top three ranks in accent. */}
             <span
               className={cn(
@@ -135,10 +132,7 @@ export function VehicleTypeTable({
         <span className={TYPE_CHANGE_CELL}>vs {previousYear}</span>
       </div>
       {rows.map((row) => (
-        <div
-          className={cn(TYPE_ROW, "border-separator border-b py-2.5")}
-          key={row.name}
-        >
+        <div className={cn(TYPE_ROW, "py-2.5")} key={row.name}>
           <span className={cn(TYPE_CELL, "text-sm")}>{row.name}</span>
           <span
             className={cn(TYPE_CARS_CELL, "font-semibold text-sm tabular-nums")}

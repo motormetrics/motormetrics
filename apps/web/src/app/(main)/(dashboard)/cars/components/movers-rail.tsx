@@ -66,7 +66,7 @@ async function MoverRows({ searchParams }: MoversProps) {
         return (
           <li key={mover.name}>
             <Link
-              className="flex items-center gap-3 border-separator border-b py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
+              className="flex items-center gap-3 py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
               href={`/cars/makes/${slug}`}
             >
               <span className="flex min-w-0 flex-1 items-center gap-2.5">
@@ -116,7 +116,7 @@ export function MoversRail({ searchParams }: MoversProps) {
         </Typography.Paragraph>
       </div>
       <div className="flex flex-col">
-        <div className="flex items-end gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-end gap-3 pb-2 font-semibold text-muted text-xs">
           <span className="min-w-0 flex-1">Make</span>
           <span className="w-24 shrink-0 text-right">Cars</span>
           <span className="w-20 shrink-0 text-right">Change</span>
@@ -124,7 +124,7 @@ export function MoversRail({ searchParams }: MoversProps) {
         <Suspense
           fallback={Array.from({ length: MOVERS_SHOWN }, (_, index) => (
             <div
-              className="border-separator border-b py-2.5"
+              className="py-2.5"
               // biome-ignore lint/suspicious/noArrayIndexKey: identical placeholders
               key={index}
             >

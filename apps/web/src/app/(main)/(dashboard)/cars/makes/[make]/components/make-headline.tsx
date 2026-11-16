@@ -46,7 +46,7 @@ async function HeadlineStats({ report }: ReportProps) {
 
   return stats.map((stat) => (
     <div
-      className="flex min-w-0 flex-col gap-1 border-separator border-b py-3.5 pr-4 even:border-l even:pl-4"
+      className="flex min-w-0 flex-col gap-1 border-separator py-3.5 pr-4 even:border-l even:pl-4"
       key={stat.label}
     >
       <span className="truncate font-semibold text-muted text-xs">

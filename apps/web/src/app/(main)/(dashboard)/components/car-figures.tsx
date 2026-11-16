@@ -353,7 +353,7 @@ export async function RoadFigure() {
           <ul className="flex flex-col">
             {rows.map((row, index) => (
               <li
-                className="grid grid-cols-3 items-center gap-3 border-separator border-b py-2 text-sm"
+                className="grid grid-cols-3 items-center gap-3 py-2 text-sm"
                 key={row.label}
               >
                 <span className="truncate">{row.label}</span>

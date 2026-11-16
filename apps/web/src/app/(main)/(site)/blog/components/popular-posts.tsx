@@ -36,7 +36,7 @@ export async function MostRead() {
       </Typography.Paragraph>
       <ol className="flex flex-col border-separator border-t">
         {posts.map((post, index) => (
-          <li className="border-separator border-b" key={post.id}>
+          <li key={post.id}>
             <Link
               className="group flex gap-2.5 py-3 text-foreground no-underline"
               href={`/blog/${post.slug}`}

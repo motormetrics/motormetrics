@@ -231,7 +231,7 @@ export function StatCell({
   value: ReactNode;
 }) {
   return (
-    <div className="flex min-w-0 flex-col gap-[3px] border-separator border-b py-3.5 pr-4 even:border-l even:pl-4">
+    <div className="flex min-w-0 flex-col gap-[3px] py-3.5 pr-4 even:border-l even:pl-4">
       <Typography.Paragraph weight="semibold" color="muted" size="xs">
         {label}
       </Typography.Paragraph>

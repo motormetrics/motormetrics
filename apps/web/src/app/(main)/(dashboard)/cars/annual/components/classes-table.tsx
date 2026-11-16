@@ -91,7 +91,7 @@ export function ClassesTable({
 
       <table aria-label="Vehicle classes" className="w-full table-fixed">
         <thead>
-          <tr className="border-border border-b *:align-bottom">
+          <tr className="*:align-bottom">
             {header("name", "Vehicle class")}
             {header("population", "Vehicles", CELL.population)}
             <th
@@ -116,7 +116,7 @@ export function ClassesTable({
             return (
               <tr
                 className={cn(
-                  "border-separator border-b *:px-2 *:py-2.5 max-md:*:px-1",
+                  "*:px-2 *:py-2.5 max-md:*:px-1",
                   isCars ? "bg-accent-soft" : "hover:bg-surface-secondary",
                 )}
                 key={row.name}

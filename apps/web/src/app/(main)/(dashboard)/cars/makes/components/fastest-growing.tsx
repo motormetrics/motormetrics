@@ -64,7 +64,7 @@ async function MoverRows({ searchParams }: MoversProps) {
 
   return movers.map((row) => (
     <Link
-      className="flex items-center gap-3 border-separator border-b py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
+      className="flex items-center gap-3 py-2.5 text-foreground no-underline transition-colors hover:bg-surface-secondary"
       href={`/cars/makes/${row.slug}`}
       key={row.make}
     >
@@ -108,7 +108,7 @@ export function FastestGrowing({ searchParams }: MoversProps) {
       </div>
 
       <div className="flex flex-col">
-        <div className="flex items-center gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-center gap-3 pb-2 font-semibold text-muted text-xs">
           <span className="min-w-0 flex-1">Make</span>
           <span className="w-20 text-right md:w-24">Registered</span>
           <span className="w-20 text-right md:w-24">Change</span>
@@ -116,7 +116,7 @@ export function FastestGrowing({ searchParams }: MoversProps) {
         <Suspense
           fallback={Array.from({ length: MOVERS }, (_, index) => (
             <div
-              className="border-separator border-b py-2.5"
+              className="py-2.5"
               // biome-ignore lint/suspicious/noArrayIndexKey: identical placeholders
               key={index}
             >

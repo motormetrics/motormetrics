@@ -29,7 +29,7 @@ export function GlossarySection() {
         <div className="grid @3xl:grid-cols-2 @6xl:grid-cols-3 grid-cols-1 gap-x-12 gap-y-7">
           {GLOSSARY_CATEGORIES.map((category) => (
             <div className="flex min-w-0 flex-col" key={category.title}>
-              <span className="border-border border-b pb-2 font-semibold text-muted text-xs">
+              <span className="pb-2 font-semibold text-muted text-xs">
                 {category.title}
               </span>
               {category.terms.map(({ definition, term }) => {
@@ -37,7 +37,7 @@ export function GlossarySection() {
 
                 return (
                   <div
-                    className="flex items-baseline gap-3.5 border-separator border-b py-2.5 max-md:flex-col max-md:gap-0.5"
+                    className="flex items-baseline gap-3.5 py-2.5 max-md:flex-col max-md:gap-0.5"
                     key={term}
                   >
                     {guideSlugs.includes(slug) ? (

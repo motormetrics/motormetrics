@@ -69,10 +69,7 @@ export function DataSourcesSection() {
       <div className="@container">
         <div className="grid @2xl:grid-cols-2 @6xl:grid-cols-4 grid-cols-1 @2xl:gap-x-6 border-border border-t">
           {FACTS.map(({ detail, title }) => (
-            <div
-              className="flex flex-col gap-1.5 border-separator border-b py-3.5"
-              key={title}
-            >
+            <div className="flex flex-col gap-1.5 py-3.5" key={title}>
               <span className="font-semibold text-muted text-xs">{title}</span>
               <Typography.Paragraph className="leading-relaxed" size="sm">
                 {detail}

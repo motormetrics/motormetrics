@@ -146,7 +146,7 @@ export function MakeCards({
               room for both; on a phone it sits above the detail. */}
           <ul
             aria-label="Makes"
-            className="flex @3xl:max-h-screen max-h-96 flex-col @3xl:overflow-y-auto overflow-y-auto border-separator border-y"
+            className="flex @3xl:max-h-screen max-h-96 flex-col @3xl:overflow-y-auto overflow-y-auto border-separator border-t"
           >
             {shown.map((card) => (
               <li key={card.slug}>
@@ -201,7 +201,7 @@ function MakeRowLink({
     <Link
       aria-current={selected ? "true" : undefined}
       className={cn(
-        "flex min-w-0 items-center gap-2.5 border-separator border-b px-2 py-2 text-sm transition-colors hover:bg-surface-secondary",
+        "flex min-w-0 items-center gap-2.5 px-2 py-2 text-sm transition-colors hover:bg-surface-secondary",
         selected && "bg-surface-secondary font-semibold",
       )}
       href={card.href}
@@ -253,13 +253,18 @@ function MakeCardLink({
       <span aria-hidden className="flex h-8 items-end gap-0.5">
         {card.trend.map((value, index) => (
           <span
-            className={cn(
-              "flex-1 rounded-t-xs",
-              index === card.trend.length - 1 ? "bg-chart-1" : "bg-chart-5",
-            )}
+            className="flex-1 rounded-t-xs"
             // biome-ignore lint/suspicious/noArrayIndexKey: a month's position is its identity
             key={index}
-            style={{ height: `${Math.max((value / peak) * 100, 2)}%` }}
+            // HeroUI Pro sets --chart-N but no Tailwind colour for it, so
+            // there is no bg-chart-N utility to use here.
+            style={{
+              backgroundColor:
+                index === card.trend.length - 1
+                  ? "var(--chart-1)"
+                  : "var(--chart-5)",
+              height: `${Math.max((value / peak) * 100, 2)}%`,
+            }}
           />
         ))}
       </span>

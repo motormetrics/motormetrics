@@ -38,7 +38,7 @@ export function PlacementsSection() {
       <div className="flex flex-col border-border border-t">
         {placements.map(({ description, icon: Icon, title, where }) => (
           <div
-            className="flex flex-col gap-2 border-separator border-b py-3.5 md:flex-row md:items-center md:gap-6"
+            className="flex flex-col gap-2 py-3.5 md:flex-row md:items-center md:gap-6"
             key={title}
           >
             <div className="flex items-center gap-3 md:w-60 md:shrink-0">

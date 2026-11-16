@@ -197,7 +197,7 @@ function MixBar({
       <ul className="flex flex-col">
         {parts.map((part, index) => (
           <li
-            className="flex items-center gap-2.5 border-separator border-b py-2 text-sm"
+            className="flex items-center gap-2.5 py-2 text-sm"
             key={part.label}
           >
             <span
@@ -370,10 +370,7 @@ export async function MakeDetail({
 
       <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6">
         {stats.map(({ label, note, value }) => (
-          <div
-            className="flex flex-col gap-0.5 border-separator border-b py-3"
-            key={label}
-          >
+          <div className="flex flex-col gap-0.5 py-3" key={label}>
             <dt className="font-semibold text-muted text-xs">{label}</dt>
             <dd className="font-semibold text-xl tabular-nums">{value}</dd>
             <dd className="text-muted text-xs tabular-nums">{note}</dd>

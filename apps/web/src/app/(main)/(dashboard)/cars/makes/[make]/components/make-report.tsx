@@ -371,7 +371,7 @@ export async function MakeReport({
     <>
       {/* The comp rules the switches off from the head, each under its own
           label; on phones they stack. */}
-      <div className="flex flex-col gap-3.5 border-border border-y py-3.5 md:flex-row md:flex-wrap md:items-end md:gap-6">
+      <div className="flex flex-col gap-3.5 border-border border-t py-3.5 md:flex-row md:flex-wrap md:items-end md:gap-6">
         <div className="flex min-w-0 flex-col gap-1.5">
           <span className="font-semibold text-muted text-xs">Period</span>
           <Suspense fallback={<Skeleton className="h-10 w-80 max-w-full" />}>

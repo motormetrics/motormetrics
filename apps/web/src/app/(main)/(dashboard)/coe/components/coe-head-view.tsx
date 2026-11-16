@@ -145,7 +145,7 @@ export function CoeKeyNumbersView({
               // sat at the start of its column and the rule and tint stopped
               // short. E, the odd one out in two columns, takes the full row.
               "h-auto w-full min-w-0 flex-col items-start justify-start gap-0.5 whitespace-normal px-2.5 py-3 text-left @7xl:last:col-span-2 @max-3xl:last:col-span-2",
-              isPressed && "border-accent border-b-2 bg-accent-soft",
+              isPressed && "bg-accent-soft",
             )}
             key={category}
             onPress={() => onSelect?.(key)}

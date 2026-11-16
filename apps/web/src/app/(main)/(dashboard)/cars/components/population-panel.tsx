@@ -81,7 +81,7 @@ export async function PopulationPanel() {
       </div>
 
       <div className="flex flex-col">
-        <div className="flex items-end gap-3 border-border border-b pb-2 font-semibold text-muted text-xs">
+        <div className="flex items-end gap-3 pb-2 font-semibold text-muted text-xs">
           <span className="w-44 shrink-0 max-md:w-auto max-md:flex-1">
             Fuel type
           </span>
@@ -90,10 +90,7 @@ export async function PopulationPanel() {
         </div>
         <ul className="flex flex-col">
           {rows.map((row, index) => (
-            <li
-              className="flex items-center gap-3 border-separator border-b py-2"
-              key={row.label}
-            >
+            <li className="flex items-center gap-3 py-2" key={row.label}>
               <span className="w-44 shrink-0 truncate text-sm max-md:w-auto max-md:min-w-0 max-md:flex-1">
                 {row.label}
               </span>

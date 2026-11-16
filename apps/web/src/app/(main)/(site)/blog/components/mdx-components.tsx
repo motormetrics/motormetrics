@@ -301,7 +301,7 @@ export const mdxComponents = {
   th: (props: ComponentPropsWithoutRef<"th">) => (
     <th
       scope="col"
-      className="border-foreground border-b-2 px-4 py-3 text-left font-bold text-muted text-xs uppercase tracking-wider [&:not(:first-child)]:text-right [&[align=center]]:text-center [&[align=right]]:text-right"
+      className="px-4 py-3 text-left font-bold text-muted text-xs uppercase tracking-wider [&:not(:first-child)]:text-right [&[align=center]]:text-center [&[align=right]]:text-right"
       {...props}
     />
   ),
@@ -313,7 +313,7 @@ export const mdxComponents = {
   ),
   tr: (props: ComponentPropsWithoutRef<"tr">) => (
     <tr
-      className="border-border border-b transition-colors last:border-none hover:bg-default"
+      className="transition-colors last:border-none hover:bg-default"
       {...props}
     />
   ),

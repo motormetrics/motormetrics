@@ -29,7 +29,7 @@ export function FAQSection() {
       <div className="grid @4xl:grid-cols-2 grid-cols-1 items-start gap-x-12 gap-y-7">
         {FAQ_SECTIONS.map((section) => (
           <div className="flex min-w-0 flex-col" key={section.title}>
-            <span className="border-border border-b pb-2 font-semibold text-muted text-xs">
+            <span className="pb-2 font-semibold text-muted text-xs">
               {section.title}
             </span>
             <Accordion>

@@ -87,7 +87,7 @@ export function VehicleTable({
   return (
     <table aria-label="Vehicle types" className="w-full table-fixed">
       <thead>
-        <tr className="border-border border-b *:align-bottom">
+        <tr className="*:align-bottom">
           {header("label", "Vehicle type", "Type")}
           <th
             className="px-2 pb-2 text-left font-semibold text-muted text-xs max-lg:hidden"
@@ -117,7 +117,7 @@ export function VehicleTable({
       <tbody>
         {sortVehicleRows(rows, sortKey, direction).map((row) => (
           <tr
-            className="border-separator border-b *:px-2 *:py-2.5 hover:bg-surface-secondary max-md:*:px-0.5"
+            className="*:px-2 *:py-2.5 hover:bg-surface-secondary max-md:*:px-0.5"
             key={row.name}
           >
             <th className="text-left font-medium text-sm" scope="row">

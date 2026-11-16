@@ -33,12 +33,7 @@ export function MonthTable({
 }) {
   return (
     <div className="flex flex-col">
-      <div
-        className={cn(
-          ROW,
-          "border-border border-b pb-2 font-semibold text-muted text-xs",
-        )}
-      >
+      <div className={cn(ROW, "pb-2 font-semibold text-muted text-xs")}>
         <span className={MONTH_CELL}>Month</span>
         <span className={COUNT_CELL}>Total</span>
         {COLUMNS.map(({ hidden, label }) => (
@@ -56,7 +51,7 @@ export function MonthTable({
               aria-current={isSelected ? "date" : undefined}
               className={cn(
                 ROW,
-                "border-separator border-b py-2.5",
+                "py-2.5",
                 isSelected
                   ? "border-l-2 border-l-accent bg-accent-soft"
                   : "hover:bg-surface-secondary",

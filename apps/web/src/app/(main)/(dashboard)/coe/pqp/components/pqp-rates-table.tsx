@@ -62,7 +62,7 @@ export function PQPRatesTable({
       <div
         className={cn(
           ROW,
-          "items-end border-border border-b pb-2.5 font-semibold text-muted text-xs max-md:hidden",
+          "items-end pb-2.5 font-semibold text-muted text-xs max-md:hidden",
         )}
       >
         <span className={CATEGORY_CELL}>Category</span>
@@ -73,7 +73,7 @@ export function PQPRatesTable({
         <span className={GAP_CELL}>Gap to premium</span>
         <span className={MONEY_CELL}>vs {previousMonthLabel}</span>
       </div>
-      <span className="border-border border-b pb-2 font-semibold text-muted text-xs uppercase tracking-wide md:hidden">
+      <span className="pb-2 font-semibold text-muted text-xs uppercase tracking-wide md:hidden">
         Category · 10-year cost
       </span>
 
@@ -85,7 +85,7 @@ export function PQPRatesTable({
             aria-pressed={isActive}
             className={cn(
               ROW,
-              "w-full cursor-pointer border-separator border-b border-l-2 py-3 text-left transition-colors hover:bg-surface-secondary max-md:flex-wrap max-md:gap-y-1",
+              "w-full cursor-pointer border-separator border-l-2 py-3 text-left transition-colors hover:bg-surface-secondary max-md:flex-wrap max-md:gap-y-1",
               isActive
                 ? "border-l-accent bg-accent-soft"
                 : "border-l-transparent",

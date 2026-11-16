@@ -65,7 +65,7 @@ export function DeregistrationValue({
         eyebrow="Figure 3 · When you deregister"
         title="Deregistration value"
       />
-      <div className="flex flex-wrap items-end gap-4 border-border border-t border-b border-b-separator py-4">
+      <div className="flex flex-wrap items-end gap-4 border-border border-t py-4">
         <NumberField
           className="w-60 max-md:w-full"
           formatOptions={SGD_FORMAT}
@@ -115,10 +115,7 @@ export function DeregistrationValue({
         </div>
         <dl className="grid grid-cols-2 gap-x-6 border-separator border-t">
           {stats.map(({ label, note, value }) => (
-            <div
-              className="flex flex-col gap-0.5 border-separator border-b py-3"
-              key={label}
-            >
+            <div className="flex flex-col gap-0.5 py-3" key={label}>
               <dt className="font-semibold text-muted text-xs">{label}</dt>
               <dd className="font-semibold text-xl tabular-nums">{value}</dd>
               <dd className="text-muted text-xs tabular-nums">{note}</dd>

@@ -56,7 +56,7 @@
     --default: oklch(94% 0.001 286.375);
     --default-foreground: var(--eclipse);
 
-    --accent: oklch(0.55 0 0);
+    --accent: oklch(0.47 0.1 295);
     --accent-foreground: var(--snow);
 
     /* Form Field Defaults - Colors */
@@ -131,6 +131,9 @@
     --default: oklch(27.4% 0.006 286.033);
     --default-foreground: var(--snow);
 
+    --accent: oklch(0.74 0.08 295);
+    --accent-foreground: var(--eclipse);
+
     /* Form Field Defaults - Colors (only the ones that are different from light theme) */
     --field-background: var(--default);
     --field-foreground: var(--foreground);
@@ -160,6 +163,16 @@
     --overlay-shadow: 0 0 0 0 transparent inset; /* No shadow on dark mode */
     --field-shadow: 0 0 0 0 transparent inset; /* Transparent shadow to allow ring utilities to work */
   }
+}
+
+/* HeroUI Pro sets --chart-1…5 from the accent but no Tailwind colours for
+   them, so bg-chart-N and friends need this mapping to exist. */
+@theme inline {
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
 }
 
 /* Reusable keyframe animations */
