@@ -1,9 +1,7 @@
-import { Typography } from "@heroui/react";
 import { FAQ_SECTIONS } from "@web/app/(main)/(site)/learn/components/faq-data";
 import { GLOSSARY_CATEGORIES } from "@web/app/(main)/(site)/learn/components/glossary-data";
 import { GUIDE_TOPICS, GUIDES } from "@web/app/(main)/(site)/learn/lib/guides";
-import type { Route } from "next";
-import Link from "next/link";
+import { KeyNumberList, KeysAside } from "@web/components/shared/key-numbers";
 
 /**
  * Every figure but the COE term is counted from the page's own content, so
@@ -53,44 +51,13 @@ const JUMP_LINKS = [
  */
 export function LearnKeyNumbers() {
   return (
-    <aside aria-label="Key numbers" className="flex flex-col gap-3">
-      <Typography.Paragraph
-        className="uppercase"
-        color="muted"
-        size="xs"
-        weight="semibold"
-      >
-        Key numbers
-      </Typography.Paragraph>
-      <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
-        {KEY_NUMBERS.map(({ label, note, value }) => (
-          <div
-            className="flex flex-col gap-0.5 border-separator border-b py-3"
-            key={label}
-          >
-            <dt className="font-semibold text-muted text-xs">{label}</dt>
-            <dd className="font-semibold text-xl tabular-nums">{value}</dd>
-            <dd className="text-muted text-xs">{note}</dd>
-          </div>
-        ))}
-      </dl>
-      <nav aria-label="On this page">
-        <ul className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
-          {JUMP_LINKS.map(({ href, label }) => (
-            <li key={href}>
-              <Link
-                className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
-                href={href as Route}
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <Typography.Paragraph color="muted" size="xs">
-        Counts of the guides, glossary terms and FAQ answers on this page.
-      </Typography.Paragraph>
-    </aside>
+    <KeysAside
+      eyebrow="Key numbers"
+      jump={JUMP_LINKS}
+      label="Key numbers"
+      source="Counts of the guides, glossary terms and FAQ answers on this page."
+    >
+      <KeyNumberList besideHead={4} items={KEY_NUMBERS} />
+    </KeysAside>
   );
 }

@@ -5,6 +5,7 @@ import { FeaturedPost } from "@web/app/(main)/(site)/blog/components/featured-po
 import type { Highlight } from "@web/app/(main)/(site)/blog/components/key-highlights";
 import { MostRead } from "@web/app/(main)/(site)/blog/components/popular-posts";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import {
   Hairline,
   OverviewPage,
@@ -128,47 +129,37 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
         {/* Direction D's head, with the most-read list beside it once the
             page is wide and under it before then. Both read cached posts
             only, so they are part of the static shell. */}
-        <div className="@container">
-          <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
-            <div className="flex min-w-0 flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <Typography.Paragraph
-                  className="uppercase"
-                  color="muted"
-                  size="xs"
-                  weight="semibold"
-                >
-                  Market commentary
-                </Typography.Paragraph>
-                <Typography.Heading level={1}>
-                  What the numbers did this month
-                </Typography.Heading>
-              </div>
-              <Typography.Paragraph className="max-w-prose">
-                Short reads on registrations, COE bidding and the electric
-                shift. Published after each release, never before.
-              </Typography.Paragraph>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5">
-                <LatestPostLine />
-                <div className="sm:ml-auto">
-                  <SharePill contentType="blog" title={title} />
-                </div>
-              </div>
-              <Typography.Paragraph color="muted" size="sm">
-                Looking for explainers on COE, PQP or PARF?{" "}
-                <Link
-                  className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
-                  href="/learn"
-                >
-                  See Guides
-                </Link>
-              </Typography.Paragraph>
-            </div>
+        <HeadGrid
+          keys={
             <SectionErrorBoundary title="Most read unavailable">
               <MostRead />
             </SectionErrorBoundary>
+          }
+        >
+          <HeadTitle
+            eyebrow="Market commentary"
+            title="What the numbers did this month"
+          />
+          <Typography.Paragraph className="max-w-prose">
+            Short reads on registrations, COE bidding and the electric shift.
+            Published after each release, never before.
+          </Typography.Paragraph>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5">
+            <LatestPostLine />
+            <div className="sm:ml-auto">
+              <SharePill contentType="blog" title={title} />
+            </div>
           </div>
-        </div>
+          <Typography.Paragraph color="muted" size="sm">
+            Looking for explainers on COE, PQP or PARF?{" "}
+            <Link
+              className="font-semibold text-accent-strong no-underline transition-colors hover:text-accent-deep"
+              href="/learn"
+            >
+              See Guides
+            </Link>
+          </Typography.Paragraph>
+        </HeadGrid>
 
         <Hairline />
 
