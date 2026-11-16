@@ -1,4 +1,3 @@
-import { Typography } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { AllCategories } from "@web/app/(main)/(dashboard)/coe/components/all-categories";
 import {
@@ -14,6 +13,7 @@ import { COE_FAQS } from "@web/app/(main)/(dashboard)/coe/components/faq-data";
 import { PqpCeiling } from "@web/app/(main)/(dashboard)/coe/components/pqp-ceiling";
 import { PremiumsByExercise } from "@web/app/(main)/(dashboard)/coe/components/premiums-by-exercise";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { SharePill } from "@web/components/shared/share-pill";
@@ -65,35 +65,29 @@ export default function Page() {
           before then. Every figure is from cached data, so the head is in
           the static shell; only the category in the URL waits, inside each
           view's own boundary. */}
-      <div className="@container">
-        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
-          <div className="flex min-w-0 flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Typography.Paragraph
-                className="uppercase"
-                color="muted"
-                size="xs"
-                weight="semibold"
-              >
-                Certificate of Entitlement
-                <CoeExerciseName />
-              </Typography.Paragraph>
-              <Typography.Heading level={1}>
-                Latest COE results
-              </Typography.Heading>
-            </div>
-            <SectionErrorBoundary title="COE premium unavailable">
-              <CoeHero />
-            </SectionErrorBoundary>
-            <div>
-              <SharePill title="Latest COE results" />
-            </div>
-          </div>
+      <HeadGrid
+        keys={
           <SectionErrorBoundary title="Key numbers unavailable">
             <CoeKeyNumbers />
           </SectionErrorBoundary>
+        }
+      >
+        <HeadTitle
+          eyebrow={
+            <>
+              Certificate of Entitlement
+              <CoeExerciseName />
+            </>
+          }
+          title="Latest COE results"
+        />
+        <SectionErrorBoundary title="COE premium unavailable">
+          <CoeHero />
+        </SectionErrorBoundary>
+        <div>
+          <SharePill title="Latest COE results" />
         </div>
-      </div>
+      </HeadGrid>
 
       <Hairline />
 

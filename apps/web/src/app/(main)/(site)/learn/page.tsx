@@ -8,6 +8,7 @@ import { GlossarySection } from "@web/app/(main)/(site)/learn/components/glossar
 import { GuidesSection } from "@web/app/(main)/(site)/learn/components/guides-section";
 import { LearnKeyNumbers } from "@web/app/(main)/(site)/learn/components/learn-key-numbers";
 import { GUIDES } from "@web/app/(main)/(site)/learn/lib/guides";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
@@ -87,44 +88,29 @@ export default function LearnPage() {
         {/* Direction D's head, with the key numbers beside it once the page
             is wide and under it before then. Everything on this page is
             fixed content, so all of it is in the static shell. */}
-        <div className="@container">
-          <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
-            <div className="flex min-w-0 flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <Typography.Paragraph
-                  className="uppercase"
-                  color="muted"
-                  size="xs"
-                  weight="semibold"
-                >
-                  Guides
-                </Typography.Paragraph>
-                <Typography.Heading level={1}>
-                  Learn how car ownership costs actually work
-                </Typography.Heading>
-              </div>
-              <Typography.Paragraph className="max-w-prose">
-                COE, ARF, OMV, PARF and PQP, in plain language: the rules that
-                set the price of a car in Singapore, with worked examples.
-              </Typography.Paragraph>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5">
-                <Typography.Paragraph
-                  className="max-w-prose tabular-nums"
-                  color="muted"
-                  size="sm"
-                >
-                  {GUIDES.length} guides, grouped by topic. Figures in each
-                  guide link back to the live data pages. Source: LTA via
-                  DataMall.
-                </Typography.Paragraph>
-                <div className="sm:ml-auto">
-                  <SharePill contentType="guide" title={title} />
-                </div>
-              </div>
+        <HeadGrid keys={<LearnKeyNumbers />}>
+          <HeadTitle
+            eyebrow="Guides"
+            title="Learn how car ownership costs actually work"
+          />
+          <Typography.Paragraph className="max-w-prose">
+            COE, ARF, OMV, PARF and PQP, in plain language: the rules that set
+            the price of a car in Singapore, with worked examples.
+          </Typography.Paragraph>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5">
+            <Typography.Paragraph
+              className="max-w-prose tabular-nums"
+              color="muted"
+              size="sm"
+            >
+              {GUIDES.length} guides, grouped by topic. Figures in each guide
+              link back to the live data pages. Source: LTA via DataMall.
+            </Typography.Paragraph>
+            <div className="sm:ml-auto">
+              <SharePill contentType="guide" title={title} />
             </div>
-            <LearnKeyNumbers />
           </div>
-        </div>
+        </HeadGrid>
         <Hairline />
         <FeaturedGuide />
         <Hairline />

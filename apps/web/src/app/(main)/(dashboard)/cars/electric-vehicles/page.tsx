@@ -41,6 +41,7 @@ import {
 import { CHARGING_POINT_TARGET_2030 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import { MonthMenu } from "@web/components/shared/month-menu";
 import {
   Hairline,
@@ -195,53 +196,47 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
       {/* Direction D's head: eyebrow, title, range hero, lead, tools and
           source, with the key numbers beside it once the page is wide and
           under it before then. Only the figures wait on the selected month. */}
-      <div className="@container">
-        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
-          <div className="flex min-w-0 flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Typography.Paragraph
-                className="uppercase"
-                color="muted"
-                size="xs"
-                weight="semibold"
-              >
-                Electric vehicles ·{" "}
-                <Suspense fallback=" ">
-                  <SelectedMonth selection={selection} />
-                </Suspense>{" "}
-                registrations
-              </Typography.Paragraph>
-              <Typography.Heading level={1}>
-                Electric vehicles in Singapore
-              </Typography.Heading>
-            </div>
-            <SectionErrorBoundary title="EV share unavailable">
-              <EvHero selection={selection} />
-            </SectionErrorBoundary>
-            <Typography.Paragraph className="max-w-prose tabular-nums">
-              <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-                <EvLead selection={selection} />
-              </Suspense>
-            </Typography.Paragraph>
-            <div className="flex flex-wrap items-end gap-3">
-              <div className="flex flex-col gap-1">
-                <span className="font-semibold text-muted text-xs">Month</span>
-                <Suspense fallback={<Skeleton className="h-10 w-36" />}>
-                  <MonthControl searchParams={searchParams} />
-                </Suspense>
-              </div>
-              <SharePill title="Electric vehicles in Singapore" />
-            </div>
-            <Typography.Paragraph color="muted" size="sm">
-              New car registrations. EV means battery-electric. Source: LTA via
-              DataMall.
-            </Typography.Paragraph>
-          </div>
+      <HeadGrid
+        keys={
           <SectionErrorBoundary title="Key numbers unavailable">
             <EvKeyNumbers selection={selection} />
           </SectionErrorBoundary>
+        }
+      >
+        <HeadTitle
+          eyebrow={
+            <>
+              Electric vehicles ·{" "}
+              <Suspense fallback=" ">
+                <SelectedMonth selection={selection} />
+              </Suspense>{" "}
+              registrations
+            </>
+          }
+          title="Electric vehicles in Singapore"
+        />
+        <SectionErrorBoundary title="EV share unavailable">
+          <EvHero selection={selection} />
+        </SectionErrorBoundary>
+        <Typography.Paragraph className="max-w-prose tabular-nums">
+          <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+            <EvLead selection={selection} />
+          </Suspense>
+        </Typography.Paragraph>
+        <div className="flex flex-wrap items-end gap-3">
+          <div className="flex flex-col gap-1">
+            <span className="font-semibold text-muted text-xs">Month</span>
+            <Suspense fallback={<Skeleton className="h-10 w-36" />}>
+              <MonthControl searchParams={searchParams} />
+            </Suspense>
+          </div>
+          <SharePill title="Electric vehicles in Singapore" />
         </div>
-      </div>
+        <Typography.Paragraph color="muted" size="sm">
+          New car registrations. EV means battery-electric. Source: LTA via
+          DataMall.
+        </Typography.Paragraph>
+      </HeadGrid>
 
       <Hairline />
 

@@ -27,6 +27,8 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-view";
 import { PQP_CATEGORY_KEYS } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
+import { KeysAside } from "@web/components/shared/key-numbers";
 import {
   Hairline,
   OverviewPage,
@@ -178,84 +180,55 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
           the range hero, lead and source, with the key numbers beside it once
           the page is wide. The month and source are cached and stay in the
           static shell; only the parts that read the selection wait. */}
-      <div className="@container">
-        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
-          <div className="flex min-w-0 flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Typography.Paragraph
-                className="uppercase"
-                color="muted"
-                size="xs"
-                weight="semibold"
-              >
-                Certificate of Entitlement
-                <LatestMonthEyebrow />
-              </Typography.Paragraph>
-              <Typography.Heading level={1}>PQP rates</Typography.Heading>
-            </div>
-            <div className="flex flex-wrap items-end gap-x-3.5 gap-y-2.5">
-              <Suspense
-                fallback={<Skeleton className="h-10 w-36 rounded-md" />}
-              >
-                <CategoryTabs categories={PQP_CATEGORY_KEYS} />
-              </Suspense>
-              <Suspense
-                fallback={<Skeleton className="h-10 w-72 rounded-md" />}
-              >
-                <TermTabs />
-              </Suspense>
-              <SharePill title="PQP rates" />
-            </div>
-            <SectionErrorBoundary title="PQP unavailable">
-              <Suspense
-                fallback={<Skeleton className="h-44 w-full max-w-xl" />}
-              >
-                <PQPAnswer searchParams={searchParams} />
-              </Suspense>
-            </SectionErrorBoundary>
-            <Suspense
-              fallback={<Skeleton className="h-14 w-full max-w-prose" />}
-            >
-              <PQPLead searchParams={searchParams} />
-            </Suspense>
-            <PQPSource />
-          </div>
-
-          <aside aria-label="Key numbers" className="flex flex-col gap-3">
-            <Typography.Paragraph
-              className="uppercase"
-              color="muted"
-              size="xs"
-              weight="semibold"
-            >
-              Key numbers ·{" "}
-              <SelectedLabel part="both" searchParams={searchParams} />
-            </Typography.Paragraph>
+      <HeadGrid
+        keys={
+          <KeysAside
+            eyebrow={
+              <>
+                Key numbers ·{" "}
+                <SelectedLabel part="both" searchParams={searchParams} />
+              </>
+            }
+            jump={JUMP_LINKS}
+            label="Key numbers"
+            source="Source: LTA via DataMall."
+          >
             <SectionErrorBoundary title="Key numbers unavailable">
               <Suspense fallback={<Skeleton className="h-40 w-full" />}>
                 <PQPKeyNumbers searchParams={searchParams} />
               </Suspense>
             </SectionErrorBoundary>
-            <nav aria-label="On this page">
-              <ul className="flex flex-wrap gap-x-5 gap-y-1.5">
-                {JUMP_LINKS.map(({ href, label }) => (
-                  <li key={href}>
-                    <a
-                      className="font-semibold text-accent-strong text-sm no-underline hover:text-accent-deep"
-                      href={href}
-                    >
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <Typography.Paragraph color="muted" size="xs">
-              Source: LTA via DataMall.
-            </Typography.Paragraph>
-          </aside>
+          </KeysAside>
+        }
+      >
+        <HeadTitle
+          eyebrow={
+            <>
+              Certificate of Entitlement
+              <LatestMonthEyebrow />
+            </>
+          }
+          title="PQP rates"
+        />
+        <div className="flex flex-wrap items-end gap-x-3.5 gap-y-2.5">
+          <Suspense fallback={<Skeleton className="h-10 w-36 rounded-md" />}>
+            <CategoryTabs categories={PQP_CATEGORY_KEYS} />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-10 w-72 rounded-md" />}>
+            <TermTabs />
+          </Suspense>
+          <SharePill title="PQP rates" />
         </div>
-      </div>
+        <SectionErrorBoundary title="PQP unavailable">
+          <Suspense fallback={<Skeleton className="h-44 w-full max-w-xl" />}>
+            <PQPAnswer searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <Suspense fallback={<Skeleton className="h-14 w-full max-w-prose" />}>
+          <PQPLead searchParams={searchParams} />
+        </Suspense>
+        <PQPSource />
+      </HeadGrid>
 
       <SectionErrorBoundary title="Renewal calculator unavailable">
         <PQPCalculator />

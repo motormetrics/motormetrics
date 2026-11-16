@@ -5,6 +5,7 @@ import {
   type MakeRow,
   periodLabel,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { KeyNumberList } from "@web/components/shared/key-numbers";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
 
 /** How many makes "the largest makes" counts. */
@@ -120,18 +121,7 @@ export async function MakesKeyNumbers() {
         Key numbers
       </Typography.Paragraph>
       {/* Four across, under the head or in its right half. */}
-      <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
-        {keyNumbers.map(({ label, note, value }) => (
-          <div
-            className="flex flex-col gap-0.5 border-separator border-b py-3"
-            key={label}
-          >
-            <dt className="font-semibold text-muted text-xs">{label}</dt>
-            <dd className="font-semibold text-xl tabular-nums">{value}</dd>
-            <dd className="text-muted text-xs tabular-nums">{note}</dd>
-          </div>
-        ))}
-      </dl>
+      <KeyNumberList besideHead={4} items={keyNumbers} />
       <Typography.Paragraph color="muted" size="xs">
         Source: LTA via DataMall.
       </Typography.Paragraph>

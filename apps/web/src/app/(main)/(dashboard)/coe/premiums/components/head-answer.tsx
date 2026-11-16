@@ -1,4 +1,4 @@
-import { Chip, ProgressBar, Typography } from "@heroui/react";
+import { Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
@@ -6,6 +6,8 @@ import {
   formatSignedPercent,
   rangePosition,
 } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-shared";
+import { RangeBar } from "@web/components/shared/range-bar";
+import { RangeFigure, RangeHero } from "@web/components/shared/range-hero";
 import type { ReactNode } from "react";
 
 /**
@@ -42,12 +44,14 @@ export function HeadAnswer({
   const position = rangePosition(low, high, value, span);
 
   return (
-    <div className="flex max-w-xl flex-col gap-2.5 border-separator border-t pt-4">
-      <Typography.Paragraph className="text-muted-strong" size="sm">
-        {label}
-      </Typography.Paragraph>
-      <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
-        <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight">
+    <RangeHero label={label}>
+      <RangeFigure
+        change={
+          previous
+            ? `${formatSignedPercent((value - previous) / previous)} · ${formatSignedCurrency(value - previous)}`
+            : undefined
+        }
+        value={
           <NumberValue
             currency="SGD"
             locale="en-SG"
@@ -55,66 +59,23 @@ export function HeadAnswer({
             style="currency"
             value={value}
           />
-        </span>
-        {previous ? (
-          // Colour does not carry the direction; the sign does.
-          <Chip className="tabular-nums" color="accent" variant="soft">
-            {`${formatSignedPercent((value - previous) / previous)} · ${formatSignedCurrency(value - previous)}`}
-          </Chip>
-        ) : null}
-      </div>
-      <ProgressBar
-        aria-label={`Against the last ${span}: low ${formatCurrency(low)}, high ${formatCurrency(high)}, now ${formatCurrency(value)}. ${position}.`}
-        className="gap-2"
-        maxValue={Math.max(high, low + 1)}
-        minValue={low}
-        size="sm"
+        }
+      />
+      <RangeBar
+        ariaLabel={`Against the last ${span}: low ${formatCurrency(low)}, high ${formatCurrency(high)}, now ${formatCurrency(value)}. ${position}.`}
+        high={high}
+        highLabel={`High ${formatCurrency(high)}`}
+        low={low}
+        lowLabel={`${count}-${unit} low ${formatCurrency(low)}`}
         value={value}
-      >
-        <ProgressBar.Track className="col-span-full">
-          <ProgressBar.Fill />
-        </ProgressBar.Track>
-        <span className="col-span-full flex justify-between gap-3 text-muted text-xs tabular-nums">
-          <span>
-            {count}-{unit} low {formatCurrency(low)}
-          </span>
-          <span className="font-semibold text-foreground">{position}</span>
-          <span>High {formatCurrency(high)}</span>
-        </span>
-      </ProgressBar>
+        where={position}
+      />
       <Typography.Paragraph
         className="text-muted-strong tabular-nums"
         size="sm"
       >
         {context}
       </Typography.Paragraph>
-    </div>
-  );
-}
-
-export interface KeyNumber {
-  label: string;
-  note: string;
-  value: string;
-}
-
-/**
- * The key numbers beside the head: four across under it, or two across in its
- * right half, as on the Makes page.
- */
-export function KeyNumberList({ items }: { items: KeyNumber[] }) {
-  return (
-    <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
-      {items.map(({ label, note, value }) => (
-        <div
-          className="flex flex-col gap-0.5 border-separator border-b py-3"
-          key={label}
-        >
-          <dt className="font-semibold text-muted text-xs">{label}</dt>
-          <dd className="font-semibold text-xl tabular-nums">{value}</dd>
-          <dd className="text-muted text-xs tabular-nums">{note}</dd>
-        </div>
-      ))}
-    </dl>
+    </RangeHero>
   );
 }

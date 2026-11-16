@@ -1,6 +1,5 @@
-import { Chip, Skeleton, Typography } from "@heroui/react";
+import { Skeleton, Typography } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
-import { RangeBar } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/range-bar";
 import {
   CATEGORIES,
   type ReportProps,
@@ -9,6 +8,13 @@ import {
   leadSentence,
   rangeStats,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/summary";
+import {
+  KeyNumberGrid,
+  KeyNumberItem,
+  KeysAside,
+} from "@web/components/shared/key-numbers";
+import { RangeBar } from "@web/components/shared/range-bar";
+import { RangeFigure, RangeHero } from "@web/components/shared/range-hero";
 import {
   formatMonthLabel,
   formatMonthShortLabel,
@@ -62,16 +68,16 @@ async function HeroFigures({ report }: ReportProps) {
 
   return (
     <>
-      <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
-        <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight">
+      <RangeFigure
+        change={
+          priorTotal > 0
+            ? `${sign}${Math.abs((difference / priorTotal) * 100).toFixed(1)}% · ${sign}${formatCount(Math.abs(difference))}`
+            : undefined
+        }
+        value={
           <NumberValue locale="en-SG" maximumFractionDigits={0} value={total} />
-        </span>
-        {priorTotal > 0 ? (
-          <Chip className="tabular-nums" color="accent" variant="soft">
-            {`${sign}${Math.abs((difference / priorTotal) * 100).toFixed(1)}% · ${sign}${formatCount(Math.abs(difference))}`}
-          </Chip>
-        ) : null}
-      </div>
+        }
+      />
       {range ? (
         <RangeBar
           ariaLabel={`Against the ${range.count} months to ${formatMonthLabel(month)}: low ${formatCount(range.low)}, high ${formatCount(range.high)}, now ${formatCount(range.latest)}. ${range.where}.`}
@@ -101,20 +107,23 @@ async function HeroFigures({ report }: ReportProps) {
  */
 export function DeregistrationsHero({ report }: ReportProps) {
   return (
-    <div className="flex max-w-xl flex-col gap-2.5 border-separator border-t pt-4">
-      <Typography.Paragraph color="muted" size="sm">
-        <span className="font-semibold text-foreground">
-          Vehicles deregistered
-        </span>{" "}
-        · {/* A non-breaking space holds the line until the month arrives. */}
-        <Suspense fallback=" ">
-          <ReportMonth report={report} />
-        </Suspense>
-      </Typography.Paragraph>
+    <RangeHero
+      label={
+        <>
+          <span className="font-semibold text-foreground">
+            Vehicles deregistered
+          </span>{" "}
+          · {/* A non-breaking space holds the line until the month arrives. */}
+          <Suspense fallback=" ">
+            <ReportMonth report={report} />
+          </Suspense>
+        </>
+      }
+    >
       <Suspense fallback={<Skeleton className="h-24 w-full" />}>
         <HeroFigures report={report} />
       </Suspense>
-    </div>
+    </RangeHero>
   );
 }
 
@@ -128,32 +137,28 @@ export async function DeregistrationsLead({ report }: ReportProps) {
   );
 }
 
-async function KeyNumberList({ report }: ReportProps) {
+async function CategoryKeyNumbers({ report }: ReportProps) {
   const { total, totals } = await report;
 
   return KEY_CATEGORIES.map(({ color, name }) => {
     const count = totals.get(name) ?? 0;
 
     return (
-      <div
-        className="flex flex-col gap-0.5 border-separator border-b py-3"
+      <KeyNumberItem
         key={name}
-      >
-        <dt className="flex items-center gap-1.5 font-semibold text-muted text-xs">
-          <span
-            aria-hidden
-            className="size-2.5 shrink-0 rounded-xs"
-            style={{ backgroundColor: color }}
-          />
-          {name}
-        </dt>
-        <dd className="font-semibold text-xl tabular-nums">
-          {formatCount(count)}
-        </dd>
-        <dd className="text-muted text-xs tabular-nums">
-          {total > 0 ? ((count / total) * 100).toFixed(1) : "0.0"}% of the month
-        </dd>
-      </div>
+        label={
+          <span className="flex items-center gap-1.5">
+            <span
+              aria-hidden
+              className="size-2.5 shrink-0 rounded-xs"
+              style={{ backgroundColor: color }}
+            />
+            {name}
+          </span>
+        }
+        note={`${total > 0 ? ((count / total) * 100).toFixed(1) : "0.0"}% of the month`}
+        value={formatCount(count)}
+      />
     );
   });
 }
@@ -165,40 +170,27 @@ async function KeyNumberList({ report }: ReportProps) {
  */
 export function DeregistrationsKeyNumbers({ report }: ReportProps) {
   return (
-    <aside aria-label="Key numbers" className="flex flex-col gap-3">
-      <Typography.Paragraph
-        className="uppercase"
-        color="muted"
-        size="xs"
-        weight="semibold"
-      >
-        Key numbers ·{" "}
-        <Suspense fallback=" ">
-          <ReportMonth report={report} />
-        </Suspense>
-      </Typography.Paragraph>
+    <KeysAside
+      eyebrow={
+        <>
+          Key numbers ·{" "}
+          <Suspense fallback=" ">
+            <ReportMonth report={report} />
+          </Suspense>
+        </>
+      }
+      jump={JUMP_LINKS}
+      label="Key numbers"
+      source="Source: LTA via DataMall."
+    >
       {/* Four across, under the head or in its right half. */}
-      <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
+      <KeyNumberGrid besideHead={4}>
         <Suspense
           fallback={<Skeleton className="col-span-full my-3 h-16 w-full" />}
         >
-          <KeyNumberList report={report} />
+          <CategoryKeyNumbers report={report} />
         </Suspense>
-      </dl>
-      <nav aria-label="On this page">
-        <ul className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
-          {JUMP_LINKS.map(({ href, label }) => (
-            <li key={href}>
-              <a className="text-accent-strong no-underline" href={href}>
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <Typography.Paragraph color="muted" size="xs">
-        Source: LTA via DataMall.
-      </Typography.Paragraph>
-    </aside>
+      </KeyNumberGrid>
+    </KeysAside>
   );
 }

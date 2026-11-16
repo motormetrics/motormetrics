@@ -10,6 +10,7 @@ import { DEREGISTRATIONS_FAQS } from "@web/app/(main)/(dashboard)/cars/deregistr
 import { loadDeregistrationsReport } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/report-data";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import { MonthMenu } from "@web/components/shared/month-menu";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
@@ -94,52 +95,46 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
       {/* Direction D's head: eyebrow, title, range hero, lead, tools and
           source, with the key numbers beside it once the page is wide and
           under it before then. Only the figures wait on the selected month. */}
-      <div className="@container">
-        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
-          <div className="flex min-w-0 flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Typography.Paragraph
-                className="uppercase"
-                color="muted"
-                size="xs"
-                weight="semibold"
-              >
-                Deregistrations ·{" "}
-                <Suspense fallback=" ">
-                  <ReportMonth report={report} />
-                </Suspense>
-              </Typography.Paragraph>
-              <Typography.Heading level={1}>
-                Vehicle deregistrations
-              </Typography.Heading>
-            </div>
-            <SectionErrorBoundary title="Deregistrations summary unavailable">
-              <DeregistrationsHero report={report} />
-            </SectionErrorBoundary>
-            <Typography.Paragraph className="max-w-prose tabular-nums">
-              <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-                <DeregistrationsLead report={report} />
-              </Suspense>
-            </Typography.Paragraph>
-            <div className="flex flex-wrap items-end gap-3">
-              <div className="flex flex-col gap-1">
-                <span className="font-semibold text-muted text-xs">Month</span>
-                <Suspense fallback={<Skeleton className="h-10 w-36" />}>
-                  <DeregistrationsMonthPicker searchParams={searchParams} />
-                </Suspense>
-              </div>
-              <SharePill title="Vehicle deregistrations" />
-            </div>
-            <Typography.Paragraph color="muted" size="sm">
-              Source: LTA via DataMall. Scrapped or exported, by the COE
-              category the quota returns to.
-            </Typography.Paragraph>
-          </div>
+      <HeadGrid
+        keys={
           <SectionErrorBoundary title="Key numbers unavailable">
             <DeregistrationsKeyNumbers report={report} />
           </SectionErrorBoundary>
+        }
+      >
+        <HeadTitle
+          eyebrow={
+            <>
+              Deregistrations ·{" "}
+              <Suspense fallback=" ">
+                <ReportMonth report={report} />
+              </Suspense>
+            </>
+          }
+          title="Vehicle deregistrations"
+        />
+        <SectionErrorBoundary title="Deregistrations summary unavailable">
+          <DeregistrationsHero report={report} />
+        </SectionErrorBoundary>
+        <Typography.Paragraph className="max-w-prose tabular-nums">
+          <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+            <DeregistrationsLead report={report} />
+          </Suspense>
+        </Typography.Paragraph>
+        <div className="flex flex-wrap items-end gap-3">
+          <div className="flex flex-col gap-1">
+            <span className="font-semibold text-muted text-xs">Month</span>
+            <Suspense fallback={<Skeleton className="h-10 w-36" />}>
+              <DeregistrationsMonthPicker searchParams={searchParams} />
+            </Suspense>
+          </div>
+          <SharePill title="Vehicle deregistrations" />
         </div>
-      </div>
+        <Typography.Paragraph color="muted" size="sm">
+          Source: LTA via DataMall. Scrapped or exported, by the COE category
+          the quota returns to.
+        </Typography.Paragraph>
+      </HeadGrid>
 
       <Hairline />
 

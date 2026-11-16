@@ -1,4 +1,3 @@
-import { Typography } from "@heroui/react";
 import {
   loadMakeRows,
   summariseLeaders,
@@ -19,6 +18,7 @@ import {
 } from "@web/app/(main)/(dashboard)/components/market-head";
 import { MarketLinks } from "@web/app/(main)/(dashboard)/components/market-links";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { SharePill } from "@web/components/shared/share-pill";
@@ -138,34 +138,21 @@ export default function HomePage() {
             wide and under it before then. Everything on this page reads
             cached data only, so it is all part of the static shell and no
             section needs a Suspense boundary. */}
-        <div className="@container">
-          <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
-            <div className="flex min-w-0 flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <Typography.Paragraph
-                  className="uppercase"
-                  color="muted"
-                  size="xs"
-                  weight="semibold"
-                >
-                  Singapore car market
-                </Typography.Paragraph>
-                <Typography.Heading level={1}>
-                  Market overview
-                </Typography.Heading>
-              </div>
-              <SectionErrorBoundary title="Headline figures unavailable">
-                <MarketHero />
-              </SectionErrorBoundary>
-              <div>
-                <SharePill title="Market overview" />
-              </div>
-            </div>
+        <HeadGrid
+          keys={
             <SectionErrorBoundary title="Key numbers unavailable">
               <MarketKeyNumbers />
             </SectionErrorBoundary>
+          }
+        >
+          <HeadTitle eyebrow="Singapore car market" title="Market overview" />
+          <SectionErrorBoundary title="Headline figures unavailable">
+            <MarketHero />
+          </SectionErrorBoundary>
+          <div>
+            <SharePill title="Market overview" />
           </div>
-        </div>
+        </HeadGrid>
 
         {/* COE and PQP lead the car figures, as the navigation does. */}
         <SectionErrorBoundary title="COE premiums unavailable">

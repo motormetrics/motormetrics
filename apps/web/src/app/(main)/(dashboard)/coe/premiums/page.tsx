@@ -17,6 +17,8 @@ import {
   SelectedCategory,
 } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-view";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
+import { KeysAside } from "@web/components/shared/key-numbers";
 import { MonthMenu } from "@web/components/shared/month-menu";
 import {
   Hairline,
@@ -75,89 +77,58 @@ export default function COEPremiumsPage({ searchParams }: PremiumsPageProps) {
           and source, with the key numbers beside it once the page is wide and
           under it before then. The copy is static; only the parts that read
           the selection in the URL wait behind a boundary. */}
-      <div className="@container">
-        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
-          <div className="flex min-w-0 flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Typography.Paragraph
-                className="uppercase"
-                color="muted"
-                size="xs"
-                weight="semibold"
-              >
-                Certificate of Entitlement
-                <Suspense fallback={null}>
-                  <ExerciseEyebrow searchParams={searchParams} />
-                </Suspense>
-              </Typography.Paragraph>
-              <Typography.Heading level={1}>
-                COE premiums by category
-              </Typography.Heading>
-            </div>
-            <div className="flex flex-wrap items-end gap-x-3.5 gap-y-2.5">
-              <Suspense
-                fallback={<Skeleton className="h-10 w-40 rounded-md" />}
-              >
-                <PremiumsMonthMenu />
-              </Suspense>
-              <Suspense
-                fallback={<Skeleton className="h-10 w-80 rounded-md" />}
-              >
-                <PremiumsCategoryTabs searchParams={searchParams} />
-              </Suspense>
-              <SharePill title="COE premiums by category" />
-            </div>
-            <SectionErrorBoundary title="Premium unavailable">
-              <Suspense
-                fallback={<Skeleton className="h-44 w-full max-w-xl" />}
-              >
-                <PremiumsAnswer searchParams={searchParams} />
-              </Suspense>
-            </SectionErrorBoundary>
-            <Suspense
-              fallback={<Skeleton className="h-14 w-full max-w-prose" />}
-            >
-              <PremiumsLead searchParams={searchParams} />
-            </Suspense>
-            <Typography.Paragraph color="muted" size="sm">
-              Source: LTA via DataMall. Closing premium per bidding exercise.
-            </Typography.Paragraph>
-          </div>
-
-          <aside aria-label="Key numbers" className="flex flex-col gap-3">
-            <Typography.Paragraph
-              className="uppercase"
-              color="muted"
-              size="xs"
-              weight="semibold"
-            >
-              Key numbers · <SelectedCategory searchParams={searchParams} />
-            </Typography.Paragraph>
+      <HeadGrid
+        keys={
+          <KeysAside
+            eyebrow={
+              <>
+                Key numbers · <SelectedCategory searchParams={searchParams} />
+              </>
+            }
+            jump={JUMP_LINKS}
+            label="Key numbers"
+            source="Source: LTA via DataMall."
+          >
             <SectionErrorBoundary title="Key numbers unavailable">
               <Suspense fallback={<Skeleton className="h-40 w-full" />}>
                 <PremiumsKeyNumbers searchParams={searchParams} />
               </Suspense>
             </SectionErrorBoundary>
-            <nav aria-label="On this page">
-              <ul className="flex flex-wrap gap-x-5 gap-y-1.5">
-                {JUMP_LINKS.map(({ href, label }) => (
-                  <li key={href}>
-                    <a
-                      className="font-semibold text-accent-strong text-sm no-underline hover:text-accent-deep"
-                      href={href}
-                    >
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <Typography.Paragraph color="muted" size="xs">
-              Source: LTA via DataMall.
-            </Typography.Paragraph>
-          </aside>
+          </KeysAside>
+        }
+      >
+        <HeadTitle
+          eyebrow={
+            <>
+              Certificate of Entitlement
+              <Suspense fallback={null}>
+                <ExerciseEyebrow searchParams={searchParams} />
+              </Suspense>
+            </>
+          }
+          title="COE premiums by category"
+        />
+        <div className="flex flex-wrap items-end gap-x-3.5 gap-y-2.5">
+          <Suspense fallback={<Skeleton className="h-10 w-40 rounded-md" />}>
+            <PremiumsMonthMenu />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-10 w-80 rounded-md" />}>
+            <PremiumsCategoryTabs searchParams={searchParams} />
+          </Suspense>
+          <SharePill title="COE premiums by category" />
         </div>
-      </div>
+        <SectionErrorBoundary title="Premium unavailable">
+          <Suspense fallback={<Skeleton className="h-44 w-full max-w-xl" />}>
+            <PremiumsAnswer searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+        <Suspense fallback={<Skeleton className="h-14 w-full max-w-prose" />}>
+          <PremiumsLead searchParams={searchParams} />
+        </Suspense>
+        <Typography.Paragraph color="muted" size="sm">
+          Source: LTA via DataMall. Closing premium per bidding exercise.
+        </Typography.Paragraph>
+      </HeadGrid>
 
       <Hairline />
       <PremiumsTrend searchParams={searchParams} />

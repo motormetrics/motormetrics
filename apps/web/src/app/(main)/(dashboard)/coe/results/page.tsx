@@ -23,6 +23,7 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-headline";
 import { SeriesFilter } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import {
   Hairline,
   OverviewPage,
@@ -131,35 +132,29 @@ export default function COEResultsPage({ searchParams }: PageProps) {
       {/* Direction D's head, with the key numbers beside it once the page is
           wide. It describes the latest exercise from cached data, whatever
           period the page shows, so it is in the static shell. */}
-      <div className="@container">
-        <div className="grid @7xl:grid-cols-2 @7xl:gap-16 gap-10">
-          <div className="flex min-w-0 flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Typography.Paragraph
-                className="uppercase"
-                color="muted"
-                size="xs"
-                weight="semibold"
-              >
-                Certificate of Entitlement
-                <ResultsExerciseName />
-              </Typography.Paragraph>
-              <Typography.Heading level={1}>
-                COE bidding results history
-              </Typography.Heading>
-            </div>
-            <SectionErrorBoundary title="Latest exercise unavailable">
-              <ResultsHero />
-            </SectionErrorBoundary>
-            <div>
-              <SharePill title="COE bidding results history" />
-            </div>
-          </div>
+      <HeadGrid
+        keys={
           <SectionErrorBoundary title="Key numbers unavailable">
             <ResultsKeyNumbers />
           </SectionErrorBoundary>
+        }
+      >
+        <HeadTitle
+          eyebrow={
+            <>
+              Certificate of Entitlement
+              <ResultsExerciseName />
+            </>
+          }
+          title="COE bidding results history"
+        />
+        <SectionErrorBoundary title="Latest exercise unavailable">
+          <ResultsHero />
+        </SectionErrorBoundary>
+        <div>
+          <SharePill title="COE bidding results history" />
         </div>
-      </div>
+      </HeadGrid>
 
       <Hairline />
 

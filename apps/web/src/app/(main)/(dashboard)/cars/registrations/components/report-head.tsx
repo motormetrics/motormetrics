@@ -1,8 +1,7 @@
 import { Typography } from "@heroui/react";
-import { KeyNumberList } from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
 import {
+  CountRangeHero,
   changeLabel,
-  RangeHero,
   rangeSummary,
 } from "@web/app/(main)/(dashboard)/cars/components/range-hero";
 import { FuelTypeTabs } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
@@ -10,6 +9,7 @@ import {
   loadSearchParams,
   RANGE_MONTHS,
 } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
+import { KeyNumberList } from "@web/components/shared/key-numbers";
 import { getDistinctFuelTypes } from "@web/queries/cars";
 import {
   getCarsComparison,
@@ -156,7 +156,7 @@ export async function ReportHero({ searchParams }: ReportProps) {
   }
 
   return (
-    <RangeHero
+    <CountRangeHero
       change={changeLabel(
         value,
         previousValue,

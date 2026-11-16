@@ -2,11 +2,6 @@ import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import { CarsMonthPicker } from "@web/app/(main)/(dashboard)/cars/components/cars-month-picker";
 import { loadLatestRegistrationsSummary } from "@web/app/(main)/(dashboard)/cars/components/faq-data";
-import {
-  HeadGrid,
-  HeadTitle,
-  KeysAside,
-} from "@web/app/(main)/(dashboard)/cars/components/keys-aside";
 import { buildRegistrationsFaqs } from "@web/app/(main)/(dashboard)/cars/registrations/components/faq-data";
 import { RangeTabs } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
 import {
@@ -36,6 +31,8 @@ import {
 import { TrendsCompareButton } from "@web/app/(main)/(dashboard)/cars/registrations/components/trends-compare-button";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
+import { KeysAside } from "@web/components/shared/key-numbers";
 import {
   Hairline,
   OverviewGrid,

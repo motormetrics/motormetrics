@@ -1,6 +1,5 @@
-import { Chip, Skeleton, Typography } from "@heroui/react";
+import { Skeleton } from "@heroui/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { RangeBar } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/range-bar";
 import { deriveChargingNetworkGrowth } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-network";
 import {
   loadEvMonth,
@@ -15,6 +14,13 @@ import {
   CHARGING_POINT_TARGET_2030,
   ELECTRIC_POPULATION_FUEL_TYPE,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
+import {
+  KeyNumberGrid,
+  KeyNumberItem,
+  KeysAside,
+} from "@web/components/shared/key-numbers";
+import { RangeBar } from "@web/components/shared/range-bar";
+import { RangeFigure, RangeHero } from "@web/components/shared/range-hero";
 import {
   getEvChargingNetworkSummary,
   getEvChargingRegistrationsByMonth,
@@ -69,16 +75,14 @@ async function HeroFigures({ selection }: SelectionProps) {
 
   return (
     <>
-      <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1.5">
-        <span className="font-extrabold text-4xl tabular-nums leading-none tracking-tight">
-          {share.toFixed(1)}%
-        </span>
-        {previousMonth && previousShare !== undefined ? (
-          <Chip className="tabular-nums" color="accent" variant="soft">
-            {`${formatPoints(share - previousShare)} vs ${formatMonthName(previousMonth)}`}
-          </Chip>
-        ) : null}
-      </div>
+      <RangeFigure
+        change={
+          previousMonth && previousShare !== undefined
+            ? `${formatPoints(share - previousShare)} vs ${formatMonthName(previousMonth)}`
+            : undefined
+        }
+        value={`${share.toFixed(1)}%`}
+      />
       {range ? (
         <RangeBar
           ariaLabel={`EV share over the ${range.count} months to ${formatMonthLabel(month)}: low ${range.low.toFixed(1)}%, high ${range.high.toFixed(1)}%, now ${range.latest.toFixed(1)}%. ${range.where}.`}
@@ -101,20 +105,23 @@ async function HeroFigures({ selection }: SelectionProps) {
  */
 export function EvHero({ selection }: SelectionProps) {
   return (
-    <div className="flex max-w-xl flex-col gap-2.5 border-separator border-t pt-4">
-      <Typography.Paragraph color="muted" size="sm">
-        <span className="font-semibold text-foreground">
-          EV share of new registrations
-        </span>{" "}
-        ·{" "}
-        <Suspense fallback=" ">
-          <SelectedMonthName selection={selection} />
-        </Suspense>
-      </Typography.Paragraph>
+    <RangeHero
+      label={
+        <>
+          <span className="font-semibold text-foreground">
+            EV share of new registrations
+          </span>{" "}
+          ·{" "}
+          <Suspense fallback=" ">
+            <SelectedMonthName selection={selection} />
+          </Suspense>
+        </>
+      }
+    >
       <Suspense fallback={<Skeleton className="h-20 w-full" />}>
         <HeroFigures selection={selection} />
       </Suspense>
-    </div>
+    </RangeHero>
   );
 }
 
@@ -151,7 +158,7 @@ async function loadElectricFleet() {
     .reduce((sum, row) => sum + row.total, 0);
 }
 
-async function KeyNumberList({ selection }: SelectionProps) {
+async function EvKeyNumberItems({ selection }: SelectionProps) {
   const { month } = await selection;
   const [data, fleet, network, monthly] = await Promise.all([
     loadEvMonth(month),
@@ -207,15 +214,8 @@ async function KeyNumberList({ selection }: SelectionProps) {
       : []),
   ];
 
-  return keyNumbers.map(({ label, note, value }) => (
-    <div
-      className="flex flex-col gap-0.5 border-separator border-b py-3"
-      key={label}
-    >
-      <dt className="font-semibold text-muted text-xs">{label}</dt>
-      <dd className="font-semibold text-xl tabular-nums">{value}</dd>
-      <dd className="text-muted text-xs tabular-nums">{note}</dd>
-    </div>
+  return keyNumbers.map((keyNumber) => (
+    <KeyNumberItem key={keyNumber.label} {...keyNumber} />
   ));
 }
 
@@ -226,37 +226,20 @@ async function KeyNumberList({ selection }: SelectionProps) {
  */
 export function EvKeyNumbers({ selection }: SelectionProps) {
   return (
-    <aside aria-label="Key numbers" className="flex flex-col gap-3">
-      <Typography.Paragraph
-        className="uppercase"
-        color="muted"
-        size="xs"
-        weight="semibold"
-      >
-        Key numbers
-      </Typography.Paragraph>
+    <KeysAside
+      eyebrow="Key numbers"
+      jump={JUMP_LINKS}
+      label="Key numbers"
+      source="Source: LTA via DataMall; charging points from LTA."
+    >
       {/* Four across, under the head or in its right half. */}
-      <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
+      <KeyNumberGrid besideHead={4}>
         <Suspense
           fallback={<Skeleton className="col-span-full my-3 h-16 w-full" />}
         >
-          <KeyNumberList selection={selection} />
+          <EvKeyNumberItems selection={selection} />
         </Suspense>
-      </dl>
-      <nav aria-label="On this page">
-        <ul className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
-          {JUMP_LINKS.map(({ href, label }) => (
-            <li key={href}>
-              <a className="text-accent-strong no-underline" href={href}>
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <Typography.Paragraph color="muted" size="xs">
-        Source: LTA via DataMall; charging points from LTA.
-      </Typography.Paragraph>
-    </aside>
+      </KeyNumberGrid>
+    </KeysAside>
   );
 }
