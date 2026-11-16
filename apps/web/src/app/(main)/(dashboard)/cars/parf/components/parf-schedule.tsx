@@ -2,13 +2,13 @@
 
 import { cn } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
-import { LegendItem } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-comparison";
 import {
   AGE_BRACKETS,
   NEW_CAP,
   OLD_CAP,
   uniformRateCut,
 } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
+import { LegendItem } from "@web/components/shared/legend-item";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 
 /** Shared by the schedule header and rows, so the columns line up. */

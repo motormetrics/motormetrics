@@ -8,6 +8,7 @@ import type {
   ParfResult,
 } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { LegendItem } from "@web/components/shared/legend-item";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { compactCurrency } from "@web/utils/formatting/chart-axis";
 
@@ -19,22 +20,6 @@ interface CompareRow {
   color: string;
   label: string;
   value: number;
-}
-
-/** A legend swatch and its label, for the figure heads. */
-export function LegendItem({
-  className,
-  label,
-}: {
-  className: string;
-  label: string;
-}) {
-  return (
-    <span className="flex items-center gap-1.5 text-muted text-xs">
-      <span aria-hidden className={`size-2.5 rounded-xs ${className}`} />
-      {label}
-    </span>
-  );
 }
 
 /**

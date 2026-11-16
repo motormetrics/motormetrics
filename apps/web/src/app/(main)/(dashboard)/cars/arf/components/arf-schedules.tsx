@@ -7,8 +7,8 @@ import {
   ARF_SCHEDULES,
   calculateArf,
 } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-rates";
-import { LegendItem } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-comparison";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { LegendItem } from "@web/components/shared/legend-item";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { compactCurrency } from "@web/utils/formatting/chart-axis";
 
