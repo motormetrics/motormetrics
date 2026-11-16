@@ -56,7 +56,7 @@
     --default: oklch(94% 0.001 286.375);
     --default-foreground: var(--eclipse);
 
-    --accent: oklch(0.6204 0.195 253.83);
+    --accent: oklch(0.55 0 0);
     --accent-foreground: var(--snow);
 
     /* Form Field Defaults - Colors */
