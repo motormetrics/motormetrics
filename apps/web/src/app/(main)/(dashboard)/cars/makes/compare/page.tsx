@@ -22,7 +22,10 @@ import {
   makeOptions,
   selectMakes,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/selection";
-import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
+import {
+  loadSearchParams,
+  serialize,
+} from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { OverviewPage } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
@@ -112,7 +115,7 @@ export async function generateMetadata({
   // after the 200 is sent. `proxy.ts` answers canonical-order curated pairs
   // with a real 307 first; this is the fallback (e.g. an unknown slug ahead
   // of the pair).
-  const { names, reversedPair } = await resolveSelection(searchParams);
+  const { names, reversedPair, slugs } = await resolveSelection(searchParams);
 
   if (!names) {
     return {
@@ -139,14 +142,22 @@ export async function generateMetadata({
   const { nameA, nameB } = names;
   const pairDescription = compareDescription(nameA, nameB);
   const socialTitle = compareSocialTitle(nameA, nameB);
-  // A curated pair in reverse consolidates into its curated page; any other
-  // combination is a filter view, followed but not indexed.
-  const canonical = reversedPair ? comparePath(pairSlug(reversedPair)) : PATH;
+  // A curated pair in reverse consolidates into its curated page. Any other
+  // pair is indexed under one URL whichever way round it was picked: the
+  // query string defines the content, so the canonical keeps it, with the
+  // makes in slug order.
+  const canonical = reversedPair
+    ? comparePath(pairSlug(reversedPair))
+    : serialize(PATH, { make: [...slugs].sort() });
+  // A pair where either make has nothing registered this year renders a
+  // one-line notice, which is not worth indexing.
+  const { a, b } = await loadComparison(Promise.resolve(names));
+  const isEmpty = a.ytd === 0 || b.ytd === 0;
 
   return {
     title: compareTitle(nameA, nameB),
     description: pairDescription,
-    ...(reversedPair ? {} : { robots: { index: false, follow: true } }),
+    ...(isEmpty ? { robots: { index: false, follow: true } } : {}),
     openGraph: {
       ...baseOpenGraph,
       images: compareMakesCardImages,
