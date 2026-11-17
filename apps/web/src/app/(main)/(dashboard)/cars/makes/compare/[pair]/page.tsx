@@ -10,9 +10,9 @@ import {
   pairSlug,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import {
-  CompareHeadSkeleton,
+  CompareToolbarSkeleton,
   ComparisonBody,
-  ComparisonHead,
+  ComparisonToolbar,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/comparison";
 import {
   compareDescription,
@@ -21,7 +21,7 @@ import {
   compareTitle,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/copy";
 import { MakeSelectors } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/make-selectors";
-import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { OverviewPage } from "@web/components/shared/overview";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import {
@@ -125,8 +125,8 @@ export default function CompareMakesPage({ params }: PageProps) {
         <CompareStructuredData params={params} />
       </Suspense>
 
-      <Suspense fallback={<CompareHeadSkeleton />}>
-        <ComparisonHead
+      <Suspense fallback={<CompareToolbarSkeleton />}>
+        <ComparisonToolbar
           controls={
             <MakeSelectors
               selected={params.then(({ pair }) => findPair(pair) ?? [])}
@@ -136,9 +136,7 @@ export default function CompareMakesPage({ params }: PageProps) {
         />
       </Suspense>
 
-      <ComparisonBody faqSchema names={names} />
-
-      <Hairline />
+      <ComparisonBody names={names} />
 
       <Suspense fallback={<Skeleton className="h-16 w-full" />}>
         <OtherComparisons params={params} />

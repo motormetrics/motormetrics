@@ -1,73 +1,81 @@
-import { cn, Table, Typography } from "@heroui/react";
+"use client";
+
+import { Typography } from "@heroui/react";
+import { DataGrid, type DataGridColumn } from "@heroui-pro/react";
 import type { ShareRow } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/mix-rows";
 
+/** One make's share, set bold when it is the higher of the two. */
+function ShareCell({ isLeader, value }: { isLeader: boolean; value: string }) {
+  return (
+    <Typography.Paragraph
+      align="end"
+      className="tabular-nums"
+      size="sm"
+      weight={isLeader ? "bold" : "normal"}
+    >
+      {value}
+    </Typography.Paragraph>
+  );
+}
+
 /**
- * A mix as a table of shares, each make's own year to date as the base, so a
- * small make and a large one read on the same scale. Shared by the fuel type,
- * vehicle type and "Other" breakdown tables, which all have this shape. Rows
- * rather than stacked bars: the reader wants the figure, and two bars of five
- * segments cannot be read to the decimal.
+ * Each make's fuel and body type mix as shares of its own year to date, so a
+ * small make and a large one read on the same scale. The higher share in each
+ * row is bold rather than coloured.
  */
 export function ShareTable({
-  ariaLabel,
-  firstColumn,
+  label,
   nameA,
   nameB,
   rows,
 }: {
-  ariaLabel: string;
-  /** "Fuel type (LTA)", "Vehicle type". */
-  firstColumn: string;
+  label: string;
   nameA: string;
   nameB: string;
   rows: ShareRow[];
 }) {
+  const columns: DataGridColumn<ShareRow>[] = [
+    {
+      cell: (row) => (
+        <span className="flex min-w-0 flex-col">
+          <Typography.Paragraph size="sm" weight="medium">
+            {row.label}
+          </Typography.Paragraph>
+          {row.gloss ? (
+            <Typography.Paragraph color="muted" size="xs">
+              {row.gloss}
+            </Typography.Paragraph>
+          ) : null}
+        </span>
+      ),
+      header: "Type",
+      id: "label",
+      isRowHeader: true,
+      minWidth: 120,
+    },
+    {
+      align: "end",
+      cell: (row) => <ShareCell isLeader={row.leader === "a"} value={row.a} />,
+      header: nameA,
+      id: "a",
+      minWidth: 72,
+    },
+    {
+      align: "end",
+      cell: (row) => <ShareCell isLeader={row.leader === "b"} value={row.b} />,
+      header: nameB,
+      id: "b",
+      minWidth: 72,
+    },
+  ];
+
   return (
-    <Table variant="secondary">
-      <Table.ScrollContainer>
-        <Table.Content
-          aria-label={ariaLabel}
-          className="min-w-max tabular-nums"
-        >
-          <Table.Header>
-            <Table.Column isRowHeader>{firstColumn}</Table.Column>
-            <Table.Column className="text-right">{nameA}</Table.Column>
-            <Table.Column className="text-right">{nameB}</Table.Column>
-          </Table.Header>
-          <Table.Body>
-            {rows.map((row) => (
-              <Table.Row id={row.key} key={row.key}>
-                <Table.Cell>
-                  <div className="flex flex-col gap-1">
-                    <span className="font-semibold">{row.label}</span>
-                    {row.gloss ? (
-                      <Typography.Paragraph color="muted" size="xs">
-                        {row.gloss}
-                      </Typography.Paragraph>
-                    ) : null}
-                  </div>
-                </Table.Cell>
-                <Table.Cell
-                  className={cn(
-                    "text-right",
-                    row.leader === "a" ? "font-bold" : "font-normal",
-                  )}
-                >
-                  {row.a}
-                </Table.Cell>
-                <Table.Cell
-                  className={cn(
-                    "text-right",
-                    row.leader === "b" ? "font-bold" : "font-normal",
-                  )}
-                >
-                  {row.b}
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Content>
-      </Table.ScrollContainer>
-    </Table>
+    <DataGrid
+      aria-label={label}
+      columns={columns}
+      data={rows}
+      getRowId={(row) => row.key}
+      variant="secondary"
+    />
   );
 }
