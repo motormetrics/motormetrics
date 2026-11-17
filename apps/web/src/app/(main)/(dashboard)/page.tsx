@@ -1,14 +1,9 @@
 import { Typography } from "@heroui/react";
 import {
-  loadMakeRows,
-  summariseLeaders,
-} from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
-import {
   FuelMixCard,
   TopMakesCard,
 } from "@web/app/(main)/(dashboard)/components/car-figures";
 import { CoePremiumsCard } from "@web/app/(main)/(dashboard)/components/coe-figures";
-import { buildHomeFaqs } from "@web/app/(main)/(dashboard)/components/faq-data";
 import {
   MarketAsOf,
   MarketKpis,
@@ -16,12 +11,10 @@ import {
 import { MarketLinks } from "@web/app/(main)/(dashboard)/components/market-links";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { OverviewPage } from "@web/components/shared/overview";
-import { PageFaq } from "@web/components/shared/page-faq";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
-import { generateFAQPageSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
 
@@ -104,24 +97,6 @@ function OrganizationStructuredData() {
   );
 }
 
-/** The questions and their FAQPage schema, with the leading makes quoted. */
-async function HomeFaq() {
-  const { latestMonth, rows } = await loadMakeRows("ytd", null);
-  const faqs = buildHomeFaqs(summariseLeaders(rows, latestMonth, "ytd"));
-
-  return (
-    <>
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: faqs }]),
-        }}
-      />
-      <PageFaq faqs={faqs} />
-    </>
-  );
-}
-
 export default function HomePage() {
   return (
     <>
@@ -161,8 +136,6 @@ export default function HomePage() {
         </SectionErrorBoundary>
 
         <MarketLinks />
-
-        <HomeFaq />
       </OverviewPage>
     </>
   );
