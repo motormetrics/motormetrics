@@ -1,7 +1,4 @@
-import {
-  deriveChargingStats,
-  formatPerKwh,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
+import { deriveChargingStats } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
 import type { ConnectorRecord } from "@web/lib/ev-charging";
 
 const connector = (
@@ -71,12 +68,5 @@ describe("deriveChargingStats", () => {
     ]);
 
     expect(stats.medianPerKwh).toBeCloseTo(0.6);
-  });
-});
-
-describe("formatPerKwh", () => {
-  it("should format to two decimals and handle missing prices", () => {
-    expect(formatPerKwh(0.4)).toBe("$0.40/kWh");
-    expect(formatPerKwh(null)).toBe("not advertised");
   });
 });

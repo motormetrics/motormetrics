@@ -1,7 +1,6 @@
 import {
   AGE_BRACKETS,
   calculateParf,
-  uniformRateCut,
 } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
 import { describe, expect, it } from "vitest";
 
@@ -36,20 +35,5 @@ describe("calculateParf", () => {
     expect(result.oldRebate).toBe(0);
     expect(result.newRebate).toBe(0);
     expect(result.shortfall).toBe(0);
-  });
-});
-
-describe("uniformRateCut", () => {
-  it("should return the cut when every paying bracket falls by the same amount", () => {
-    expect(uniformRateCut(AGE_BRACKETS)).toBe(45);
-  });
-
-  it("should return null when the cuts differ", () => {
-    expect(
-      uniformRateCut([
-        { key: "a", label: "A", newRate: 0.3, oldRate: 0.75 },
-        { key: "b", label: "B", newRate: 0.3, oldRate: 0.7 },
-      ]),
-    ).toBeNull();
   });
 });

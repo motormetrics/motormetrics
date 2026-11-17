@@ -1,12 +1,7 @@
 import {
   batteryElectricShares,
-  buildRegistrationSplit,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import {
-  COMBUSTION_COLOUR,
-  POWERTRAIN_SEGMENTS,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
 import { getEvMarketShare, getEvMonthlyTrend } from "@web/queries/cars";
 import { getMonthOrLatest } from "@web/utils/dates/months";
@@ -36,8 +31,7 @@ export interface SelectionProps {
 }
 
 /**
- * The selected month's shares and powertrain split, for the head and the mix
- * figure. Null when the month has no registrations. The queries are
+ * The selected month's shares, for the KPI tiles and the share chart. Null when the month has no registrations. The queries are
  * `'use cache'`, so each part calling it reads the same entries.
  */
 export async function loadEvMonth(month: string) {
@@ -76,10 +70,6 @@ export async function loadEvMonth(month: string) {
     previousShare: index > 0 ? shares[index - 1] : undefined,
     share: shares[index] ?? 0,
     shares,
-    split: buildRegistrationSplit(point, total, POWERTRAIN_SEGMENTS, {
-      colour: COMBUSTION_COLOUR,
-      label: "Petrol and diesel",
-    }),
     total,
   };
 }

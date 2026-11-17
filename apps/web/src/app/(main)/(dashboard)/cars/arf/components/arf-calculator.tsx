@@ -1,43 +1,30 @@
 "use client";
 
 import {
-  Chip,
+  Description,
   Label,
   ListBox,
   NumberField,
   Select,
   Typography,
 } from "@heroui/react";
-import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { ArfBands } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-bands";
 import {
   ARF_SCHEDULES,
   calculateArf,
 } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-rates";
-import { ArfSchedules } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-schedules";
 import { SGD_FORMAT } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
-import { HeadGrid } from "@web/components/shared/head-grid";
-import { KeyNumberList, KeysAside } from "@web/components/shared/key-numbers";
-import { Hairline, SourceNote } from "@web/components/shared/overview";
+import { FigureCard } from "@web/components/shared/figure-card";
+import { type KpiTile, KpiTiles } from "@web/components/shared/kpi-tiles";
 import posthog from "posthog-js";
-import { type ReactNode, useState } from "react";
-
-/** The page's sections, for the jump links under the key numbers. */
-const JUMP_LINKS = [
-  { href: "#arf-schedules", label: "ARF under each schedule" },
-  { href: "#arf-bands", label: "ARF band by band" },
-  { href: "#arf-notes", label: "What the figures assume" },
-];
-
-const formatRate = (rate: number) => `${Math.round(rate * 100)}%`;
+import { useState } from "react";
 
 /**
- * Direction D's head for the calculator, laid out as the PARF calculator's so
- * the two tools read as a pair: the page's eyebrow, title and source line
- * (`head`), the two fields, the answer under them, and the key numbers beside
- * the head once the page is wide. The figures beneath read the same state.
+ * The ARF calculator, laid out as the PARF calculator so the two tools read
+ * as a pair: the inputs in one card, the estimate as KPI tiles under it, then
+ * the selected schedule band by band.
  */
-export function ARFCalculator({ head }: { head: ReactNode }) {
+export function ARFCalculator() {
   const [omv, setOmv] = useState(40_000);
   const [scheduleKey, setScheduleKey] = useState(ARF_SCHEDULES[0].key);
 
@@ -46,54 +33,40 @@ export function ARFCalculator({ head }: { head: ReactNode }) {
   const { total, bands } = calculateArf(omv, schedule.tiers);
   const topBand = bands.at(-1);
 
-  const keyNumbers = [
+  const tiles: KpiTile[] = [
     {
-      label: "Effective rate",
-      value: omv > 0 ? formatRate(total / omv) : "—",
+      format: "currency",
+      note: `Schedule: ${schedule.label}`,
+      title: "Estimated ARF",
+      value: total,
+    },
+    {
+      format: "percent",
       note: "ARF as a share of OMV",
+      title: "Effective rate",
+      value: omv > 0 ? (total / omv) * 100 : 0,
     },
     {
-      label: "Top band",
-      value: topBand ? formatRate(topBand.rate) : "—",
-      note: "rate on the last dollar of OMV",
+      format: "percent",
+      note: "Rate on the last dollar of OMV",
+      title: "Top band",
+      value: topBand ? topBand.rate * 100 : 0,
     },
-    // The same OMV under the other schedules, so the change reads at once.
-    ...ARF_SCHEDULES.filter(({ key }) => key !== schedule.key).map(
-      ({ label, tiers }) => {
-        const other = calculateArf(omv, tiers).total;
-        const difference = total - other;
-        return {
-          label: `COE obtained ${label}`,
-          value: formatCurrency(other),
-          note:
-            difference === 0
-              ? "same as the selected tiers"
-              : `${formatCurrency(Math.abs(difference))} ${difference > 0 ? "less" : "more"} than the selected tiers`,
-        };
-      },
-    ),
+    {
+      format: "count",
+      note: `of ${schedule.tiers.length} in this schedule`,
+      title: "Bands reached",
+      value: bands.length,
+    },
   ];
 
   return (
     <>
-      <HeadGrid
-        keys={
-          <KeysAside
-            eyebrow="Key numbers"
-            jump={JUMP_LINKS}
-            label="Key numbers"
-            source="Source: LTA. Calculated from the OMV and schedule entered."
-          >
-            <KeyNumberList items={keyNumbers} />
-          </KeysAside>
-        }
-      >
-        {head}
-
-        <div className="flex flex-wrap items-end gap-4 border-border border-t py-4">
+      <FigureCard title="Your car">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <NumberField
-            className="w-60 max-md:w-full"
             formatOptions={SGD_FORMAT}
+            fullWidth
             maxValue={1_000_000}
             minValue={0}
             onBlur={() =>
@@ -109,9 +82,10 @@ export function ARFCalculator({ head }: { head: ReactNode }) {
             <NumberField.Group>
               <NumberField.Input />
             </NumberField.Group>
+            <Description>Find it on your vehicle log card</Description>
           </NumberField>
           <Select
-            className="w-72 max-md:w-full"
+            fullWidth
             onChange={(key) => {
               if (!key) return;
               posthog.capture("arf_calculator_used", {
@@ -139,48 +113,22 @@ export function ARFCalculator({ head }: { head: ReactNode }) {
             </Select.Popover>
           </Select>
         </div>
+      </FigureCard>
 
-        <div className="flex max-w-xl flex-col gap-2">
-          <span className="text-foreground text-sm">
-            <span className="font-semibold text-foreground">
-              Estimated ARF payable
-            </span>
-            {` · COE obtained ${schedule.label}`}
-          </span>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span
-              aria-live="polite"
-              className="font-extrabold text-4xl tabular-nums leading-none tracking-tight md:text-5xl"
-            >
-              {formatCurrency(total)}
-            </span>
-            {omv > 0 ? (
-              <Chip
-                className="tabular-nums"
-                color="accent"
-                size="sm"
-                variant="soft"
-              >
-                {formatRate(total / omv)} of OMV
-              </Chip>
-            ) : null}
-          </div>
-          {topBand ? (
-            <Typography.Paragraph className="tabular-nums" color="muted">
-              {`${bands.length} of ${schedule.tiers.length} bands reached; the last dollar of OMV is taxed at ${formatRate(topBand.rate)}.`}
-            </Typography.Paragraph>
-          ) : null}
-          <SourceNote className="tabular-nums">
-            {formatCurrency(omv)} OMV · before VES and EEAI rebates or
-            surcharges. Estimates only, not financial advice.
-          </SourceNote>
+      <div className="flex flex-col gap-4">
+        <div aria-live="polite">
+          <KpiTiles tiles={tiles} />
         </div>
-      </HeadGrid>
+        <Typography.Paragraph className="max-w-prose" color="muted" size="sm">
+          How this is calculated: LTA charges the ARF on the car&apos;s OMV,
+          band by band, each rate only on the part of the OMV inside its band,
+          at the rates in force when the COE was obtained. Figures are before
+          any VES or EEAI rebate or surcharge. Estimates only, not financial
+          advice; check your figures on OneMotoring.
+        </Typography.Paragraph>
+      </div>
 
-      <Hairline />
-      <ArfSchedules omv={omv} scheduleKey={schedule.key} />
-      <Hairline />
-      <ArfBands bands={bands} schedule={schedule} total={total} />
+      <ArfBands bands={bands} schedule={schedule} />
     </>
   );
 }

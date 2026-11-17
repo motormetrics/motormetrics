@@ -43,7 +43,7 @@ const median = (values: number[]): number | null => {
     : sorted[middle];
 };
 
-/** The figures the intro and FAQ quote, derived from one snapshot. */
+/** The page's headline figures, derived from one snapshot. */
 export const deriveChargingStats = (
   records: ConnectorRecord[],
 ): ChargingStats => {
@@ -100,6 +100,3 @@ export async function getChargingStats(): Promise<ChargingStatsSnapshot> {
  */
 export const ZERO_RATE_DISCLAIMER =
   "$0.00/kWh is the rate as published on LTA DataMall. It may mean free charging or a price the operator has not listed, so check with the operator before you charge.";
-
-export const formatPerKwh = (price: number | null): string =>
-  price == null ? "not advertised" : `$${price.toFixed(2)}/kWh`;

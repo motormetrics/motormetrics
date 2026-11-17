@@ -1,26 +1,17 @@
-import { Chip, Skeleton, Typography } from "@heroui/react";
+import { Skeleton } from "@heroui/react";
 import { EmptyState } from "@heroui-pro/react";
-// import { AnimatedGrid } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-grid";
-import { AnimatedSection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/animated-section";
-// import { Bento } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/bento";
-// import { BusyHours } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/busy-hours";
-import { ChargingMap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map";
 import {
-  // ChargingIntro,
-  ChargingLead,
-  ChargingQuestions,
-  ChargingSource,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-overview";
+  ChargingAsOf,
+  ChargingKpis,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-kpis";
+import { ChargingMap } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map";
 import { DistrictSelect } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/district-select";
 import { PriceList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-list";
-// import { LiveStatus } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/live-status";
 import { getChargingStats } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
-import { PriceSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-summary";
-// import { RecentChanges } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/recent-changes";
-// import { UtilisationList } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/utilisation-list";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { OverviewPage } from "@web/components/shared/overview";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
@@ -72,18 +63,6 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-function CardSkeleton({ className = "" }: { className?: string }) {
-  return (
-    <div className={`rounded-4xl bg-surface p-6 shadow-surface ${className}`}>
-      <div className="flex flex-col gap-4">
-        <Skeleton className="h-4 w-32" />
-        <Skeleton className="h-12 w-40" />
-        <Skeleton className="h-6 w-44" />
-      </div>
-    </div>
-  );
-}
-
 export default function ChargingPage({ searchParams }: PageProps) {
   return (
     <OverviewPage className="gap-8 max-md:gap-6">
@@ -100,101 +79,42 @@ export default function ChargingPage({ searchParams }: PageProps) {
         }}
       />
 
-      {/* Direction D's head: eyebrow, title, lead, tools and source. There is
-          no charging artboard, so it takes D's head and section rhythm and
-          keeps the map hero below as it was. */}
-      <div className="flex min-w-0 flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Typography.Paragraph
-            className="uppercase"
-            color="muted"
-            size="xs"
-            weight="semibold"
-          >
-            Electric vehicles · Charging
-          </Typography.Paragraph>
-          <div className="flex flex-wrap items-center gap-4">
-            <Typography.Heading level={1}>
-              EV charging prices
-            </Typography.Heading>
-            <Chip color="accent" size="lg" variant="soft">
-              Beta
-            </Chip>
-          </div>
-        </div>
-        <Typography.Paragraph className="max-w-prose tabular-nums">
-          <Suspense fallback={<Skeleton className="h-6 w-full max-w-prose" />}>
-            <ChargingLead />
-          </Suspense>
-        </Typography.Paragraph>
-        <div className="flex flex-wrap items-end gap-4">
-          <Suspense fallback={<Skeleton className="h-10 w-56" />}>
-            <DistrictControl searchParams={searchParams} />
-          </Suspense>
-          <SharePill title="EV charging prices" />
-        </div>
-        <Typography.Paragraph color="muted" size="sm">
-          <Suspense fallback=" ">
-            <ChargingSource />
-          </Suspense>
-        </Typography.Paragraph>
-      </div>
-
-      {/* The price tiles below carry these figures now; the as-of line moved
-          under the title.
-      <Suspense fallback={<Skeleton className="h-16 max-w-prose" />}>
-        <ChargingIntro />
-      </Suspense>
-      */}
-
-      {/*
-        The map runs edge to edge under the title, and the price content is
-        pulled up over its lower half. `-mt-24 md:-mt-80` must match
-        `MapOverlap` in charging-map-view.tsx, which pads the map's camera by
-        the same amount. One wrapper with no gap, so the overlap is exact.
-      */}
-      <div className="flex flex-col">
-        <AnimatedSection order={0}>
-          <SectionErrorBoundary title="Charger map unavailable">
-            <Suspense
-              fallback={
-                // Same bleed and heights as ChargingMap; see its comments.
-                <Skeleton className="-mx-4 h-96 md:-mx-6 md:h-[640px]" />
-              }
-            >
-              <ChargingMap searchParams={searchParams} />
+      {/* The dashboard template: a toolbar, four KPI tiles, the map and one
+          table. The feed is hourly, so the toolbar gives the snapshot's age
+          rather than calling it live. */}
+      <PageToolbar
+        actions={
+          <>
+            <Suspense fallback={<Skeleton className="h-10 w-56" />}>
+              <DistrictControl searchParams={searchParams} />
             </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-
-        <div className="relative z-10 -mt-24 flex flex-col gap-6 md:-mt-80">
-          <PriceSummary searchParams={searchParams} />
-
-          <Suspense fallback={<CardSkeleton className="h-96" />}>
-            <ChargingBento searchParams={searchParams} />
-          </Suspense>
-        </div>
-      </div>
-
-      {/* Moved above, as the full-bleed map the price content overlaps.
-      <AnimatedSection order={0}>
-        <SectionErrorBoundary title="Charger map unavailable">
-          <Suspense fallback={<CardSkeleton className="h-[600px]" />}>
-            <ChargingMap />
-          </Suspense>
-        </SectionErrorBoundary>
-      </AnimatedSection>
-      */}
+            <SharePill title="EV charging prices" />
+          </>
+        }
+        asOf={<ChargingAsOf />}
+        title="EV charging prices"
+      />
 
       <Suspense fallback={null}>
         <ChargingEmptyState />
       </Suspense>
 
-      <Hairline />
+      <SectionErrorBoundary title="Key numbers unavailable">
+        <Suspense fallback={<Skeleton className="h-36 w-full" />}>
+          <ChargingKpis searchParams={searchParams} />
+        </Suspense>
+      </SectionErrorBoundary>
 
-      <Suspense fallback={null}>
-        <ChargingQuestions />
-      </Suspense>
+      <SectionErrorBoundary title="Charger map unavailable">
+        {/* The view reads the district and site with nuqs hooks. */}
+        <Suspense fallback={<Skeleton className="aspect-video w-full" />}>
+          <ChargingMap />
+        </Suspense>
+      </SectionErrorBoundary>
+
+      <SectionErrorBoundary title="Charger prices unavailable">
+        <PriceList searchParams={searchParams} />
+      </SectionErrorBoundary>
     </OverviewPage>
   );
 }
@@ -206,8 +126,7 @@ async function DistrictControl({ searchParams }: PageProps) {
 
 /**
  * Explains an empty live feed. It has its own boundary so the snapshot it
- * awaits never holds back the cards: each one streams as soon as its own data
- * is ready.
+ * awaits never holds back the rest of the page.
  */
 async function ChargingEmptyState() {
   const { stats } = await getChargingStats();
@@ -228,88 +147,5 @@ async function ChargingEmptyState() {
         </EmptyState.Description>
       </EmptyState.Header>
     </EmptyState>
-  );
-}
-
-// Replaced by the live chip on the map (`LiveChip` in live-status.tsx).
-// async function LiveStatusCard({ searchParams }: PageProps) {
-//   const { district } = await loadSearchParams(searchParams);
-//   return <LiveStatus district={district} />;
-// }
-
-/**
- * The card grid. It awaits nothing itself: aggregating the cards' data here
- * would make the slowest read gate every card, so each card resolves search
- * params and its own query inside its own Suspense boundary.
- */
-function ChargingBento({ searchParams }: PageProps) {
-  // Prices lead: they are what search visitors come for. One ranked list with
-  // shared AC/DC and sort switches replaces the separate cheapest and
-  // most-expensive cards. Live status moved onto the map as a chip.
-  return (
-    <div className="flex flex-col gap-6">
-      <AnimatedSection order={0}>
-        <SectionErrorBoundary title="Charger prices unavailable">
-          <PriceList searchParams={searchParams} />
-        </SectionErrorBoundary>
-      </AnimatedSection>
-      {/* Replaced by the single list above.
-      <AnimatedGrid className="flex flex-col gap-6">
-        <AnimatedSection>
-          <SectionErrorBoundary title="Cheapest chargers unavailable">
-            <PriceList order="cheapest" searchParams={searchParams} />
-          </SectionErrorBoundary>
-        </AnimatedSection>
-        <AnimatedSection>
-          <SectionErrorBoundary title="Most expensive chargers unavailable">
-            <PriceList order="priciest" searchParams={searchParams} />
-          </SectionErrorBoundary>
-        </AnimatedSection>
-      </AnimatedGrid>
-      */}
-
-      {/* The live status card became the chip on the map (LiveChip).
-      <AnimatedGrid className="flex flex-col gap-6">
-        <AnimatedSection>
-          <SectionErrorBoundary title="Live status unavailable">
-            <Suspense fallback={<CardSkeleton className="h-80" />}>
-              <LiveStatusCard searchParams={searchParams} />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-      */}
-      {/* Paused with the charging history tables (events and hourly).
-        <AnimatedSection>
-          <SectionErrorBoundary title="Busy hours unavailable">
-            <Suspense fallback={<CardSkeleton className="h-72" />}>
-              <BusyHours />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-        <AnimatedSection>
-          <SectionErrorBoundary title="Recent changes unavailable">
-            <Suspense fallback={<CardSkeleton className="h-72" />}>
-              <RecentChanges />
-            </Suspense>
-          </SectionErrorBoundary>
-        </AnimatedSection>
-        */}
-      {/* </AnimatedGrid> */}
-
-      {/* Paused with the hourly utilisation history.
-      <AnimatedGrid className="flex flex-col gap-6">
-        <AnimatedSection>
-          <SectionErrorBoundary title="Busiest locations unavailable">
-            <UtilisationList order="busiest" searchParams={searchParams} />
-          </SectionErrorBoundary>
-        </AnimatedSection>
-        <AnimatedSection>
-          <SectionErrorBoundary title="Quietest locations unavailable">
-            <UtilisationList order="quietest" searchParams={searchParams} />
-          </SectionErrorBoundary>
-        </AnimatedSection>
-      </AnimatedGrid>
-      */}
-    </div>
   );
 }

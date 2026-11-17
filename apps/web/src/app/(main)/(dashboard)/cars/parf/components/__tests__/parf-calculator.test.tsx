@@ -7,11 +7,15 @@ vi.mock("posthog-js", () => ({
 
 describe("PARFCalculator", () => {
   it("should show the estimated rebate for the default ARF and age", async () => {
-    const screen = await render(<PARFCalculator head={<h1>PARF</h1>} />);
+    const screen = await render(<PARFCalculator />);
 
     // $80,000 at 30%, under the $30,000 cap.
     await expect
       .element(screen.getByText("$24,000", { exact: true }).first())
+      .toBeVisible();
+    // $100,000 COE premium × 60 ÷ 120 months, plus the PARF rebate.
+    await expect
+      .element(screen.getByText("$74,000", { exact: true }).first())
       .toBeVisible();
     await expect
       .element(screen.getByText(/Estimates only, not financial advice/))
@@ -19,19 +23,12 @@ describe("PARFCalculator", () => {
   });
 
   it("should use the age of a schedule row once it is selected", async () => {
-    const screen = await render(<PARFCalculator head={<h1>PARF</h1>} />);
+    const screen = await render(<PARFCalculator />);
 
-    await screen.getByRole("button", { name: "Use Over 10 years" }).click();
+    await screen.getByRole("rowheader", { name: "Over 10 years" }).click();
 
     await expect
-      .element(screen.getByRole("button", { name: "Use Over 10 years" }))
-      .toHaveAttribute("aria-pressed", "true");
-    await expect
-      .element(
-        screen.getByText(
-          "No PARF rebate is given for vehicles over 10 years old, under either schedule.",
-        ),
-      )
-      .toBeVisible();
+      .element(screen.getByRole("row", { name: /Over 10 years/ }))
+      .toHaveAttribute("aria-selected", "true");
   });
 });

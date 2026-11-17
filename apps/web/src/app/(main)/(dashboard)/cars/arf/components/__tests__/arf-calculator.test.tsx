@@ -7,17 +7,20 @@ vi.mock("posthog-js", () => ({
 
 describe("ARFCalculator", () => {
   it("should show the estimated ARF for the default OMV", async () => {
-    const screen = await render(<ARFCalculator head={<h1>ARF</h1>} />);
+    const screen = await render(<ARFCalculator />);
 
     // $40,000 OMV: $20,000 at 100% plus $20,000 at 140%.
     await expect
       .element(screen.getByText("$48,000", { exact: true }).first())
       .toBeVisible();
-    await expect.element(screen.getByText("120% of OMV")).toBeVisible();
+    await expect.element(screen.getByText("120%").first()).toBeVisible();
+    await expect
+      .element(screen.getByText("Find it on your vehicle log card"))
+      .toBeVisible();
   });
 
   it("should list every band of the schedule, reached or not", async () => {
-    const screen = await render(<ARFCalculator head={<h1>ARF</h1>} />);
+    const screen = await render(<ARFCalculator />);
 
     await expect
       .element(screen.getByRole("rowheader", { name: "Above $80,000" }))
