@@ -1,4 +1,3 @@
-import { Typography } from "@heroui/react";
 import {
   FuelMixCard,
   TopMakesCard,
@@ -11,6 +10,7 @@ import {
 import { MarketLinks } from "@web/app/(main)/(dashboard)/components/market-links";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { OverviewPage } from "@web/components/shared/overview";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
@@ -107,15 +107,11 @@ export default function HomePage() {
           pair and one table. Everything reads cached data only, so it is all
           part of the static shell and no section needs a Suspense boundary. */}
       <OverviewPage className="gap-8 max-md:gap-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="flex min-w-0 flex-col gap-2">
-            <Typography.Heading level={1}>Market overview</Typography.Heading>
-            <Typography.Paragraph color="muted" size="sm">
-              <MarketAsOf />
-            </Typography.Paragraph>
-          </div>
-          <SharePill title="Market overview" />
-        </div>
+        <PageToolbar
+          actions={<SharePill title="Market overview" />}
+          asOf={<MarketAsOf />}
+          title="Market overview"
+        />
 
         <SectionErrorBoundary title="Key numbers unavailable">
           <MarketKpis />

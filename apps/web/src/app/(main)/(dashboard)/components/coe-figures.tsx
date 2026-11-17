@@ -1,4 +1,3 @@
-import { Card } from "@heroui/react";
 import {
   changeRatio,
   premiumAxisTicks,
@@ -8,7 +7,7 @@ import {
   PremiumTrendChart,
 } from "@web/app/(main)/(dashboard)/coe/components/premium-trend-chart";
 import { exerciseStamp } from "@web/app/(main)/(dashboard)/coe/components/premiums-shared";
-import { SectionLink } from "@web/components/shared/overview";
+import { FigureCard } from "@web/components/shared/figure-card";
 import { getCategoryExercises } from "@web/queries/coe";
 import { formatMonthShortName } from "@web/utils/dates/format-month";
 
@@ -62,25 +61,18 @@ export async function CoePremiumsCard() {
   );
 
   return (
-    <Card className="min-w-0">
-      <Card.Header className="flex-row items-start gap-4">
-        <div className="flex min-w-0 flex-col gap-1">
-          <Card.Title>COE premiums</Card.Title>
-          <Card.Description>
-            Category A and B, last {series.length} exercises
-          </Card.Description>
-        </div>
-        <SectionLink href="/coe/results">All COE results</SectionLink>
-      </Card.Header>
-      <Card.Content>
-        <PremiumTrendChart
-          data={data}
-          label="Category A"
-          pairedLabel="Category B"
-          tickMonths={2}
-          ticks={ticks}
-        />
-      </Card.Content>
-    </Card>
+    <FigureCard
+      description={<>Category A and B, last {series.length} exercises</>}
+      link={{ href: "/coe/results", label: "All COE results" }}
+      title="COE premiums"
+    >
+      <PremiumTrendChart
+        data={data}
+        label="Category A"
+        pairedLabel="Category B"
+        tickMonths={2}
+        ticks={ticks}
+      />
+    </FigureCard>
   );
 }
