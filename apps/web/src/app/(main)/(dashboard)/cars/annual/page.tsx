@@ -103,8 +103,8 @@ const yearChange = (series: number[], previousYear: string | null) => {
 };
 
 /**
- * Cars on the road, every vehicle class together, the electric cars among
- * them and their share, each at the latest year end.
+ * Cars on the road, every vehicle class together and the electric share of
+ * cars, each at the latest year end.
  */
 async function PopulationKpis() {
   const population = await loadPopulation();
@@ -140,15 +140,6 @@ async function PopulationKpis() {
       value: allVehicles.at(-1) ?? 0,
     },
     {
-      change: yearChange(cars.electric, data.previousYear),
-      format: "count",
-      href: "/cars/electric-vehicles",
-      note,
-      title: "Electric cars",
-      trend: cars.electric.slice(-TREND_YEARS),
-      value: cars.electric.at(-1) ?? 0,
-    },
-    {
       change:
         shareBefore !== undefined && data.previousYear
           ? {
@@ -157,6 +148,7 @@ async function PopulationKpis() {
             }
           : undefined,
       format: "percent",
+      href: "/cars/electric-vehicles",
       note: `of cars, ${note}`,
       title: "Electric share",
       trend: electricShare.slice(-TREND_YEARS),

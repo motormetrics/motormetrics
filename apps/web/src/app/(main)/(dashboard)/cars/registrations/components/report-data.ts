@@ -14,7 +14,7 @@ import type { SearchParams } from "nuqs/server";
 import { cache } from "react";
 
 /** Months the KPI sparkline, average and best month look back over. */
-export const KPI_MONTHS = 12;
+const KPI_MONTHS = 12;
 
 /** A named count from one of the comparison's breakdowns, or zero. */
 export function lookup(

@@ -213,7 +213,6 @@ async function loadMakeReport(
     rank,
     series,
     seriesRange,
-    topFuel: fuelTotals[0],
     total,
   };
 }
@@ -290,17 +289,15 @@ export function MakeControls({
   );
 }
 
-async function MakeKpis({ make, report }: SectionProps) {
+async function MakeKpis({ report }: SectionProps) {
   const {
     fuelType,
     makeCount,
-    makeTotal,
     marketTotal,
     periodCaption,
     previousTotal,
     rank,
     series,
-    topFuel,
     total,
   } = await report;
 
@@ -335,14 +332,6 @@ async function MakeKpis({ make, report }: SectionProps) {
       note: `of ${makeCount} makes${fuelType ? ", all fuel types" : ""}`,
       title: "Rank",
       value: rank,
-    });
-  }
-  if (topFuel) {
-    tiles.push({
-      format: "percent",
-      note: `of ${make} registrations`,
-      title: `${topFuel.name} share`,
-      value: (topFuel.count / (makeTotal || 1)) * 100,
     });
   }
 

@@ -87,35 +87,37 @@ function KpiCard({ tile }: { tile: KpiTile }) {
 }
 
 /**
- * Grid classes per row size. Five tiles follow the row's own width, not the
+ * Grid classes by the number of tiles, so a short row fills its width instead
+ * of leaving empty columns. Columns follow the row's own width, not the
  * viewport's, because the sidebar takes a varying share of it and a tile
  * under about 200px pushes its change chip past the edge.
  */
-const GRIDS = {
-  4: "grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4",
+const GRIDS: Record<number, string> = {
+  1: "grid grid-cols-1 gap-4",
+  2: "grid grid-cols-1 gap-4 @md:grid-cols-2",
+  3: "grid grid-cols-1 gap-4 @2xl:grid-cols-3",
+  4: "grid grid-cols-1 gap-4 @md:grid-cols-2 @5xl:grid-cols-4",
   5: "grid grid-cols-1 gap-4 @md:grid-cols-2 @2xl:grid-cols-3 @5xl:grid-cols-5",
-} as const;
+};
+
+/** One figure across a full set (the five COE categories) is the most a row holds. */
+const MAX_TILES = 5;
 
 /**
- * The row of headline numbers under a dashboard page's title: up to four,
- * one column on phones, two from `sm`, four from `xl`. `columns={5}` is for
- * one figure across a set of five, such as the COE categories.
+ * The row of headline numbers under a dashboard page's title. A page shows
+ * only the figures that answer its question, so the row holds one to five
+ * tiles and spreads them across the full width.
  */
-export function KpiTiles({
-  columns = 4,
-  tiles,
-}: {
-  columns?: keyof typeof GRIDS;
-  tiles: KpiTile[];
-}): ReactNode {
-  if (tiles.length === 0) {
+export function KpiTiles({ tiles }: { tiles: KpiTile[] }): ReactNode {
+  const shown = tiles.slice(0, MAX_TILES);
+  if (shown.length === 0) {
     return null;
   }
 
   return (
     <div className="@container">
-      <ul className={GRIDS[columns]}>
-        {tiles.slice(0, columns).map((tile) => (
+      <ul className={GRIDS[shown.length]}>
+        {shown.map((tile) => (
           <li key={tile.title}>
             {tile.href ? (
               <Link

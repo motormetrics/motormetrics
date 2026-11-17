@@ -1,3 +1,4 @@
+import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { changeRatio } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
   categoryName,
@@ -10,16 +11,11 @@ import {
   formatMonthName,
 } from "@web/utils/dates/format-month";
 
-/** Ten years costs the full PQP, five years half of it. */
-const TERMS = [
-  { factor: 1, label: "10-year" },
-  { factor: 0.5, label: "5-year" },
-] as const;
-
 /**
- * This month's renewal cost for each category at both terms, with the change
- * on last month and the published months behind it. Reads only cached data,
- * so it is part of the static shell.
+ * This month's 10-year renewal cost for each category, with the change on
+ * last month and the published months behind it. A 5-year renewal is always
+ * half, so it is a line on the same tile rather than a tile of its own.
+ * Reads only cached data, so it is part of the static shell.
  */
 export async function PQPKpis() {
   const { ascending } = await loadPqpData();
@@ -35,22 +31,24 @@ export async function PQPKpis() {
       return [];
     }
     const earlier = previous?.[name];
-    return TERMS.map(({ factor, label }) => ({
-      change:
-        previous && earlier && earlier > 0
-          ? {
-              label: `vs ${formatMonthName(previous.month)}`,
-              value: changeRatio(rate, earlier) * 100,
-            }
-          : undefined,
-      format: "currency" as const,
-      note: formatMonthLabel(latest.month),
-      title: `Cat ${key}, ${label} renewal`,
-      trend: ascending
-        .map((point) => point[name] * factor)
-        .filter((value) => value > 0),
-      value: rate * factor,
-    }));
+    return [
+      {
+        change:
+          previous && earlier && earlier > 0
+            ? {
+                label: `vs ${formatMonthName(previous.month)}`,
+                value: changeRatio(rate, earlier) * 100,
+              }
+            : undefined,
+        format: "currency" as const,
+        note: `5-year renewal ${formatCurrency(rate / 2)}`,
+        title: `Cat ${key}, 10-year renewal`,
+        trend: ascending
+          .map((point) => point[name])
+          .filter((value) => value > 0),
+        value: rate,
+      },
+    ];
   });
 
   return <KpiTiles tiles={tiles} />;

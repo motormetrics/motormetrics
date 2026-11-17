@@ -4,10 +4,8 @@ import {
   loadEvMonth,
   type SelectionProps,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
-import { changeRatio } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { CHARGING_POINT_TARGET_2030 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
 import { type KpiTile, KpiTiles } from "@web/components/shared/kpi-tiles";
-import { getEvMonthlyTrend } from "@web/queries/cars";
 import {
   getEvChargingNetworkSummary,
   getEvChargingRegistrationsByMonth,
@@ -23,15 +21,14 @@ import { getLatestMonth } from "@web/utils/dates/months";
 const TREND_MONTHS = 12;
 
 /**
- * The four numbers the EV page leads with, for the selected month: the
- * battery-electric share and count, the electrified share, and the public
- * charging network, which links to the charging page.
+ * The numbers the EV page leads with, for the selected month: the
+ * battery-electric share, the electrified share, and the public charging
+ * network, which links to the charging page.
  */
 export async function EvKpis({ selection }: SelectionProps) {
   const { month } = await selection;
-  const [data, trend, network, monthly] = await Promise.all([
+  const [data, network, monthly] = await Promise.all([
     loadEvMonth(month),
-    getEvMonthlyTrend(),
     getEvChargingNetworkSummary(),
     getEvChargingRegistrationsByMonth(),
   ]);
@@ -43,7 +40,6 @@ export async function EvKpis({ selection }: SelectionProps) {
     const label = data.previousMonth
       ? `vs ${formatMonthName(data.previousMonth)}`
       : undefined;
-    const previous = trend[data.index - 1];
 
     tiles.push(
       {
@@ -56,19 +52,6 @@ export async function EvKpis({ selection }: SelectionProps) {
         title: "Battery-electric share",
         trend: data.shares.slice(start, data.index + 1),
         value: data.share,
-      },
-      {
-        change: previous
-          ? {
-              label,
-              value: changeRatio(data.point.BEV, previous.BEV) * 100,
-            }
-          : undefined,
-        format: "count",
-        note: formatMonthLabel(data.point.month),
-        title: "Battery-electric cars",
-        trend: trend.slice(start, data.index + 1).map((point) => point.BEV),
-        value: data.point.BEV,
       },
       {
         change:

@@ -52,12 +52,6 @@ export function ARFCalculator() {
       title: "Top band",
       value: topBand ? topBand.rate * 100 : 0,
     },
-    {
-      format: "count",
-      note: `of ${schedule.tiers.length} in this schedule`,
-      title: "Bands reached",
-      value: bands.length,
-    },
   ];
 
   return (

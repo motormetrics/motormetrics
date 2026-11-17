@@ -3,7 +3,6 @@ import { FuelTypeMenu } from "@web/app/(main)/(dashboard)/cars/registrations/com
 import { FuelTypeTable } from "@web/app/(main)/(dashboard)/cars/registrations/components/fuel-type-table";
 import { RegistrationsTrendChart } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-trend-chart";
 import {
-  KPI_MONTHS,
   loadRegistrationsReport,
   lookup,
   type ReportProps,
@@ -58,10 +57,6 @@ export async function RegistrationsKpis({ searchParams }: ReportProps) {
   } = await loadRegistrationsReport(searchParams);
   const noun = fuelType ? `${fuelType} cars` : "New cars";
   const totals = kpiWindow.map((row) => row.total);
-  const best = kpiWindow.reduce<(typeof kpiWindow)[number] | undefined>(
-    (top, row) => (!top || row.total > top.total ? row : top),
-    undefined,
-  );
 
   const tiles: KpiTile[] = [
     {
@@ -92,25 +87,6 @@ export async function RegistrationsKpis({ searchParams }: ReportProps) {
       value: yearToDateTotal,
     },
   ];
-
-  if (totals.length > 0) {
-    tiles.push({
-      format: "count",
-      note: `${totals.length} months to ${formatMonthLabel(month)}`,
-      title: "Monthly average",
-      value: Math.round(
-        totals.reduce((sum, total) => sum + total, 0) / totals.length,
-      ),
-    });
-  }
-  if (best) {
-    tiles.push({
-      format: "count",
-      note: `${formatMonthLabel(best.month)}, last ${KPI_MONTHS} months`,
-      title: "Best month",
-      value: best.total,
-    });
-  }
 
   return <KpiTiles tiles={tiles} />;
 }

@@ -59,7 +59,7 @@ export async function ResultsKpis() {
     ];
   });
 
-  return <KpiTiles columns={5} tiles={tiles} />;
+  return <KpiTiles tiles={tiles} />;
 }
 
 /** "LTA data to the first bidding, November 2026". */
