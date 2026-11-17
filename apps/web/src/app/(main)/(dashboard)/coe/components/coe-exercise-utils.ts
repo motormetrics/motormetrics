@@ -1,5 +1,4 @@
 import { formatCurrency } from "@motormetrics/utils/format-currency";
-import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import type { COECategory, COEResult } from "@web/types";
 import type { Pqp } from "@web/types/coe";
 import {
@@ -8,6 +7,9 @@ import {
   formatMonthShortLabel,
   formatMonthShortName,
 } from "@web/utils/dates/format-month";
+
+/** A COE category as a bare letter, e.g. `"B"` for Category B. */
+export type CategoryKey = "A" | "B" | "C" | "D" | "E";
 
 export const COE_CATEGORIES: COECategory[] = [
   "Category A",
@@ -31,12 +33,6 @@ export const CATEGORY_DESCRIPTIONS: Record<COECategory, string> = {
  * in force, so selecting either on the overview shows both. Remove once the
  * merger takes effect.
  */
-const PAIRED_CATEGORIES: COECategory[] = ["Category A", "Category B"];
-
-/** The categories shown for a selection: A and B together, any other alone. */
-export const pairedCategories = (category: COECategory): COECategory[] =>
-  PAIRED_CATEGORIES.includes(category) ? PAIRED_CATEGORIES : [category];
-
 export const toCategory = (key: CategoryKey): COECategory =>
   `Category ${key}` as COECategory;
 
@@ -277,29 +273,6 @@ export function summariseExercise(
   return latest && moves.length > 0
     ? `${formatExercise(latest)}: ${moves.join("; ")}.`
     : undefined;
-}
-
-/**
- * The summary line under the premium chart on `/coe/premiums`, e.g. "Second
- * bidding, September 2026: Cat B rose …." The history is one category's
- * exercises, oldest first, up to the exercise the page shows.
- */
-export function summariseCategoryExercise(
-  history: (CategoryFigures & { biddingNo: number; month: string })[],
-  category: COECategory,
-): string | undefined {
-  const latest = history.at(-1);
-  const move = describePremiumMove(
-    history.map(({ biddingNo, month, ...figures }) => ({
-      biddingNo,
-      key: `${month}:${biddingNo}`,
-      month,
-      results: { [category]: figures },
-    })),
-    category,
-  );
-
-  return latest && move ? `${formatExercise(latest)}: ${move}.` : undefined;
 }
 
 /** "up $4,200 on September", "down $900 on September" or "level with September". */

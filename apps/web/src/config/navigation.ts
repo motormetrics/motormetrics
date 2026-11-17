@@ -1,6 +1,5 @@
 import { sortByName } from "@motormetrics/utils/sorting";
 import {
-  BarChart3,
   BookOpen,
   Calculator,
   Calendar,
@@ -13,7 +12,6 @@ import {
   type LucideIcon,
   Newspaper,
   PlugZap,
-  TrendingUp,
   Zap,
 } from "lucide-react";
 import type { Route } from "next";
@@ -127,22 +125,16 @@ export const navLinks: NavLinks = {
   ],
   coe: [
     {
+      title: "COE results",
+      url: "/coe/results",
+      icon: Gavel,
+      description: "Every exercise's premiums, trends and record highs",
+    },
+    {
       title: "PQP rates",
       url: "/coe/pqp",
       icon: Calculator,
       description: "Prevailing quota premiums and calculations",
-    },
-    {
-      title: "Premiums by category",
-      url: "/coe/premiums",
-      icon: BarChart3,
-      description: "Every exercise's premium for each category, Cat A to E",
-    },
-    {
-      title: "Price history",
-      url: "/coe/results",
-      icon: TrendingUp,
-      description: "COE prices by year, trends and record highs",
     },
   ],
   socialMedia: sortByName(socialMedia, { sortKey: "title" }),
@@ -177,9 +169,9 @@ export type NavItem = {
 export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
   { href: "/", label: "Overview" },
   {
-    href: "/coe",
+    href: "/coe/results",
     label: "COE",
-    sections: [{ label: "COE data", items: navLinks.coe, withOverview: true }],
+    sections: [{ label: "COE data", items: navLinks.coe }],
   },
   {
     href: "/cars",
@@ -213,10 +205,7 @@ export const SIDEBAR_GROUPS: readonly SidebarGroup[] = [
   },
   {
     label: "COE",
-    items: [
-      { title: "Latest results", url: "/coe", icon: Gavel },
-      ...navLinks.coe,
-    ],
+    items: [...navLinks.coe],
   },
   {
     label: "Cars",

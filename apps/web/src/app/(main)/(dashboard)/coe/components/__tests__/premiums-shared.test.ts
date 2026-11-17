@@ -8,7 +8,7 @@ import {
   rangeCaption,
   rangePosition,
   successRateCaption,
-} from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-shared";
+} from "@web/app/(main)/(dashboard)/coe/components/premiums-shared";
 import type { CategoryExercise } from "@web/queries/coe";
 import { describe, expect, it } from "vitest";
 

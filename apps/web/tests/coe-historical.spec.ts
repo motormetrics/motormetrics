@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("COE Historical Results", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/coe");
+    await page.goto("/coe/results");
   });
 
   test("should display chart tooltips on hover", async ({ page }) => {
@@ -39,7 +39,7 @@ test.describe("COE Historical Results", () => {
   });
 
   test("should display loading states properly", async ({ page }) => {
-    await page.goto("/coe", { waitUntil: "networkidle" });
+    await page.goto("/coe/results", { waitUntil: "networkidle" });
 
     const chartContainer = page
       .locator('.chart-container, [aria-label*="chart"], canvas, svg')

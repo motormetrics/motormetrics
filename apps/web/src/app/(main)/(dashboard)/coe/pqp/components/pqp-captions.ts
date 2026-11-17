@@ -1,6 +1,6 @@
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { formatSignedPercent } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-shared";
+import { formatSignedPercent } from "@web/app/(main)/(dashboard)/coe/components/premiums-shared";
 import { formatMonthName } from "@web/utils/dates/format-month";
 
 /** A category's published rate in one month, at the selected term. */

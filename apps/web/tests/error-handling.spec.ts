@@ -47,7 +47,7 @@ test.describe("Error Handling and Edge Cases", () => {
         }, 5000);
       });
 
-      await page.goto("/coe");
+      await page.goto("/coe/results");
 
       const loadingState = page.locator(
         '.loading, .spinner, [aria-label*="loading"]',
@@ -64,14 +64,14 @@ test.describe("Error Handling and Edge Cases", () => {
 
   test.describe("Invalid Query Parameters", () => {
     test("should handle invalid year parameters", async ({ page }) => {
-      await page.goto("/coe?year=invalid-year");
+      await page.goto("/coe/results?year=invalid-year");
 
       await expect(page.locator("h1")).toBeVisible();
       await page.waitForLoadState("networkidle");
     });
 
     test("should handle invalid category parameters", async ({ page }) => {
-      await page.goto("/coe?category=invalid-category");
+      await page.goto("/coe/results?category=invalid-category");
 
       await expect(page.locator("h1")).toBeVisible();
       await page.waitForLoadState("networkidle");
@@ -132,7 +132,7 @@ test.describe("Error Handling and Edge Cases", () => {
         });
       });
 
-      await page.goto("/coe");
+      await page.goto("/coe/results");
 
       await page.waitForTimeout(3000);
 
@@ -147,7 +147,7 @@ test.describe("Error Handling and Edge Cases", () => {
 
   test.describe("Memory and Performance", () => {
     test("should handle large datasets without crashes", async ({ page }) => {
-      await page.goto("/coe");
+      await page.goto("/coe/results");
 
       for (let i = 0; i < 10; i++) {
         await page.reload();
@@ -160,7 +160,7 @@ test.describe("Error Handling and Edge Cases", () => {
     test.skip("should handle rapid navigation without errors", async ({
       page,
     }) => {
-      const routes = ["/cars", "/coe", "/", "/cars/electric-vehicles"];
+      const routes = ["/cars", "/coe/results", "/", "/cars/electric-vehicles"];
 
       for (let i = 0; i < 3; i++) {
         for (const route of routes) {

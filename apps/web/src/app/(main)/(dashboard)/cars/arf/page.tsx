@@ -135,7 +135,7 @@ export default function ARFCalculatorPage() {
           <SectionLink className="ml-0" href="/cars/parf">
             PARF calculator
           </SectionLink>
-          <SectionLink className="ml-0" href="/coe/premiums">
+          <SectionLink className="ml-0" href="/coe/results">
             COE premiums
           </SectionLink>
         </div>

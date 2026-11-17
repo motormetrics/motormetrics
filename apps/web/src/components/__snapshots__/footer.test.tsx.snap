@@ -27,9 +27,9 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
             <li>
               <a
                 class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/coe"
+                href="/coe/results"
               >
-                COE overview
+                COE results
               </a>
             </li>
             <li>
@@ -38,22 +38,6 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
                 href="/coe/pqp"
               >
                 PQP rates
-              </a>
-            </li>
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/coe/premiums"
-              >
-                Premiums by category
-              </a>
-            </li>
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/coe/results"
-              >
-                Price history
               </a>
             </li>
           </ul>

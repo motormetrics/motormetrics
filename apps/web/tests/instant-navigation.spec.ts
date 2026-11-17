@@ -47,7 +47,7 @@ test.describe("Instant Navigations", () => {
       page.getByRole("heading", { level: 1, name: "Overview" }),
     ).toBeVisible({ timeout: 60_000 });
 
-    await page.goto("/coe", { waitUntil: "domcontentloaded" });
+    await page.goto("/coe/results", { waitUntil: "domcontentloaded" });
     await expect(page.locator('a[href="/coe/results"]').first()).toBeVisible({
       timeout: 60_000,
     });

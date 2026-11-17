@@ -74,7 +74,7 @@ COE premiums fluctuate based on supply and demand. Key factors affecting prices:
 - **New model launches**: Popular models can spike demand in specific categories
 - **Speculation**: Some buyers time purchases based on expected price movements
 
-Check our [COE Premiums](/coe/premiums) page for the latest prices and trends.
+Check our [COE Premiums](/coe/results) page for the latest prices and trends.
 
 ## COE Renewal (PQP)
 
@@ -116,7 +116,7 @@ Your deposit is returned, and you can bid again in the next exercise.
 - [PQP](/learn/pqp): Prevailing Quota Premium`,
     relatedTerms: ["ARF", "PARF", "OMV", "PQP"],
     relatedLinks: [
-      { label: "Current COE Premiums", href: "/coe/premiums" },
+      { label: "Current COE Premiums", href: "/coe/results" },
       { label: "COE Price History", href: "/coe/results" },
       { label: "PQP Rates", href: "/coe/pqp" },
     ],

@@ -6,13 +6,13 @@ import {
   formatMonth,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { HeadAnswer } from "@web/app/(main)/(dashboard)/coe/components/head-answer";
 import { pqpLead } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-captions";
 import {
   loadPqpData,
   loadPqpView,
   type PQPPageProps,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-view";
-import { HeadAnswer } from "@web/app/(main)/(dashboard)/coe/premiums/components/head-answer";
 import {
   type KeyNumber,
   KeyNumberList,

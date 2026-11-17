@@ -30,7 +30,7 @@ const datasets: Dataset[] = [
   {
     description:
       "Every bidding exercise across Categories A to E, with quota and bids received.",
-    href: "/coe/premiums",
+    href: "/coe/results",
     icon: DollarSign,
     title: "COE premiums",
   },

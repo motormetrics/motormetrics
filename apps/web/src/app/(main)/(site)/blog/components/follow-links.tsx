@@ -10,7 +10,7 @@ interface FollowLink {
 
 const DEFAULT_LINKS: FollowLink[] = [
   { href: "/cars", label: "Car registrations" },
-  { href: "/coe", label: "COE premiums" },
+  { href: "/coe/results", label: "COE premiums" },
 ];
 
 /**
@@ -24,7 +24,7 @@ const LINKS_BY_CATEGORY: Record<PostCategoryKey, FollowLink[]> = {
     { href: "/cars/deregistrations", label: "Deregistrations" },
   ],
   coe: [
-    { href: "/coe/premiums", label: "COE premiums" },
+    { href: "/coe/results", label: "COE premiums" },
     { href: "/coe/results", label: "Bidding results" },
     { href: "/coe/pqp", label: "PQP rates" },
   ],
@@ -40,17 +40,17 @@ const LINKS_BY_CATEGORY: Record<PostCategoryKey, FollowLink[]> = {
   ],
   "monthly-update": [
     { href: "/cars/registrations", label: "Car registrations" },
-    { href: "/coe/premiums", label: "COE premiums" },
+    { href: "/coe/results", label: "COE premiums" },
     { href: "/cars/electric-vehicles", label: "Electric vehicles" },
   ],
   policy: [
     { href: "/cars/parf", label: "PARF rebate calculator" },
-    { href: "/coe/premiums", label: "COE premiums" },
+    { href: "/coe/results", label: "COE premiums" },
     { href: "/cars/deregistrations", label: "Deregistrations" },
   ],
   pqp: [
     { href: "/coe/pqp", label: "PQP rates" },
-    { href: "/coe/premiums", label: "COE premiums" },
+    { href: "/coe/results", label: "COE premiums" },
     { href: "/cars/deregistrations", label: "Deregistrations" },
   ],
 };

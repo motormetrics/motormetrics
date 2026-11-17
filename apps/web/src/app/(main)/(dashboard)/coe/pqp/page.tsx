@@ -170,7 +170,7 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
           "@context": "https://schema.org",
           ...generateBreadcrumbSchema([
             { name: "Home", path: "/" },
-            { name: "COE", path: "/coe" },
+            { name: "COE", path: "/coe/results" },
             { name: "PQP", path: "/coe/pqp" },
           ]),
         }}
@@ -253,7 +253,7 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
           again after that term.
         </Typography.Paragraph>
         <div className="flex flex-wrap gap-x-4 gap-y-2">
-          <SectionLink className="ml-0" href="/coe/premiums">
+          <SectionLink className="ml-0" href="/coe/results">
             Premium trends
           </SectionLink>
           <SectionLink className="ml-0" href="/cars/parf">

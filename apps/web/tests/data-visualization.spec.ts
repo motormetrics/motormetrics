@@ -48,7 +48,7 @@ test.describe("Data Visualization Interactions", () => {
 
   test.describe("COE Charts", () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto("/coe");
+      await page.goto("/coe/results");
     });
 
     test("should display COE chart with interactive elements", async ({
@@ -180,7 +180,7 @@ test.describe("Data Visualization Interactions", () => {
     test("should load charts within reasonable time", async ({ page }) => {
       const startTime = Date.now();
 
-      await page.goto("/coe");
+      await page.goto("/coe/results");
 
       const chartContainer = page
         .locator('.chart-container, [aria-label*="chart"], canvas, svg')
@@ -194,7 +194,7 @@ test.describe("Data Visualization Interactions", () => {
     test("should handle large datasets without performance issues", async ({
       page,
     }) => {
-      await page.goto("/coe?year=2025");
+      await page.goto("/coe/results?year=2025");
 
       const chartContainer = page
         .locator('.chart-container, [aria-label*="chart"], canvas, svg')

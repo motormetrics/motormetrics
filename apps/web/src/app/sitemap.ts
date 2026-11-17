@@ -113,16 +113,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly" as const,
     },
     {
-      url: `${SITE_URL}/coe`,
-      lastModified: coeLastModified,
-      changeFrequency: "monthly" as const,
-    },
-    {
-      url: `${SITE_URL}/coe/premiums`,
-      lastModified: coeLastModified,
-      changeFrequency: "monthly" as const,
-    },
-    {
       url: `${SITE_URL}/coe/results`,
       lastModified: coeLastModified,
       changeFrequency: "monthly" as const,

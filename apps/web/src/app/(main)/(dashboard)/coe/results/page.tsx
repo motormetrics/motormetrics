@@ -123,7 +123,7 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           "@context": "https://schema.org",
           ...generateBreadcrumbSchema([
             { name: "Home", path: "/" },
-            { name: "COE", path: "/coe" },
+            { name: "COE", path: "/coe/results" },
             { name: "Results", path: "/coe/results" },
           ]),
         }}
@@ -249,7 +249,7 @@ export default function COEResultsPage({ searchParams }: PageProps) {
           in the vehicle population.
         </Typography.Paragraph>
         <div className="flex flex-col items-start gap-2">
-          <SectionLink className="ml-0" href="/coe/premiums">
+          <SectionLink className="ml-0" href="/coe/results">
             Premium trends by category
           </SectionLink>
           <SectionLink className="ml-0" href="/coe/pqp">
