@@ -160,7 +160,7 @@ export function InsetVariant({
           ))}
         </Sidebar.Content>
       </Sidebar.Mobile>
-      <Sidebar.Main>
+      <Sidebar.Main className="bg-background">
         <SidebarStoryHeader
           items={
             currentItem && currentGroup
