@@ -29,11 +29,15 @@ const rows: ClassRank[] = [
 ];
 
 const renderTable = () =>
-  render(<ClassesTable previousYear="2024" rows={rows} year="2025" />);
+  render(<ClassesTable previousYear="2024" rows={rows} />);
 
+/**
+ * Row order as the reader sees it. A sortable DataGrid is an ARIA grid, so
+ * the class column is each row's `rowheader`.
+ */
 const rowNames = (screen: Awaited<ReturnType<typeof renderTable>>) =>
   screen
-    .getByText(/^(Buses|Cars|Taxis)$/)
+    .getByRole("rowheader")
     .elements()
     .map((element) => element.textContent);
 
@@ -60,9 +64,6 @@ describe("ClassesTable", () => {
 
     await expect.element(header).toHaveAttribute("aria-sort", "ascending");
     expect(rowNames(screen)).toEqual(["Buses", "Cars", "Taxis"]);
-    await expect
-      .element(screen.getByText(/Sorted by name, ascending\./))
-      .toBeVisible();
   });
 
   it("should flip vehicles to ascending on a second click", async () => {
@@ -73,9 +74,6 @@ describe("ClassesTable", () => {
 
     await expect.element(header).toHaveAttribute("aria-sort", "ascending");
     expect(rowNames(screen)).toEqual(["Buses", "Taxis", "Cars"]);
-    await expect
-      .element(screen.getByText(/Sorted by vehicles, ascending\./))
-      .toBeVisible();
   });
 
   it("should sort change descending on its first click", async () => {
@@ -86,17 +84,6 @@ describe("ClassesTable", () => {
 
     await expect.element(header).toHaveAttribute("aria-sort", "descending");
     expect(rowNames(screen)).toEqual(["Cars", "Taxis", "Buses"]);
-    await expect
-      .element(screen.getByText(/Sorted by change, descending\./))
-      .toBeVisible();
-  });
-
-  it("should state the default sort in the caption", async () => {
-    const screen = await renderTable();
-
-    await expect
-      .element(screen.getByText(/Sorted by vehicles, descending\./))
-      .toBeVisible();
   });
 
   it("should show a dash for a class with no prior year", async () => {

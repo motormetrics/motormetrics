@@ -2,12 +2,9 @@ import {
   buildPopulationSeries,
   changeRatio,
   compareClasses,
-  describeClasses,
-  describePopulationTrend,
   type PopulationRow,
   rankClasses,
   sortClasses,
-  summarisePopulation,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { describe, expect, it } from "vitest";
 
@@ -68,37 +65,6 @@ describe("changeRatio", () => {
   it("should return null without a prior year", () => {
     expect(changeRatio([100])).toBeNull();
     expect(changeRatio([0, 100])).toBeNull();
-  });
-});
-
-describe("summarisePopulation", () => {
-  it("should give the year end, the change on the year before and the electric share", () => {
-    const series = buildPopulationSeries(rows);
-    const cars = series?.entities.find((entity) => entity.name === "Cars");
-
-    expect(cars && summarisePopulation(cars, series?.years ?? [])).toBe(
-      "At 31 December 2025, 620 cars were on the road in Singapore, up 12.7% on 2024; 16.1% of them electric.",
-    );
-  });
-
-  it("should leave out what a single year without electric vehicles lacks", () => {
-    expect(
-      summarisePopulation(
-        { electric: [0], fuel: [], name: "Motorcycles", series: [140] },
-        ["2024"],
-      ),
-    ).toBe(
-      "At 31 December 2024, 140 motorcycles were on the road in Singapore.",
-    );
-  });
-
-  it("should return nothing for an empty series", () => {
-    expect(
-      summarisePopulation(
-        { electric: [], fuel: [], name: "Cars", series: [] },
-        [],
-      ),
-    ).toBeUndefined();
   });
 });
 
@@ -164,52 +130,5 @@ describe("compareClasses", () => {
       0,
     );
     expect(compareClasses(withoutChange, withoutChange, "change")).toBe(0);
-  });
-});
-
-describe("describePopulationTrend", () => {
-  const entity = {
-    electric: [0, 0, 0, 0, 0],
-    fuel: [],
-    name: "Cars",
-    series: [100, 120, 110, 105, 150],
-  };
-  const years = ["2021", "2022", "2023", "2024", "2025"];
-
-  it("should name the rise and the longest run of falls", () => {
-    expect(describePopulationTrend(entity, years)).toBe(
-      "Cars on the road rose 50.0% from 100 in 2021 to 150 in 2025, despite a fall from 120 in 2022 to 105 in 2024.",
-    );
-  });
-
-  it("should leave out the fall when the series never fell", () => {
-    expect(
-      describePopulationTrend({ ...entity, series: [100, 110] }, [
-        "2024",
-        "2025",
-      ]),
-    ).toBe("Cars on the road rose 10.0% from 100 in 2024 to 110 in 2025.");
-  });
-
-  it("should return nothing for a single year", () => {
-    expect(
-      describePopulationTrend({ ...entity, series: [100] }, ["2025"]),
-    ).toBeUndefined();
-  });
-});
-
-describe("describeClasses", () => {
-  it("should give the share, the largest fall and the electric run-up", () => {
-    const data = buildPopulationSeries(rows);
-    const cars = data?.entities.find((entity) => entity.name === "Cars");
-    if (!data || !cars) {
-      throw new Error("fixture should pivot");
-    }
-
-    expect(
-      describeClasses(rankClasses(data.entities), cars, data.years, 4),
-    ).toBe(
-      "Cars made up 82.7% of the 750 vehicles on the road, and motorcycles fell most, 7.1%; electric cars on the road went from 50 in 2024 to 100 in 2025.",
-    );
   });
 });

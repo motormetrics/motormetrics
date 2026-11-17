@@ -14,8 +14,8 @@ import {
   DIMENSION_LABELS,
 } from "@web/app/(main)/(dashboard)/cars/components/dimensions";
 import { DeltaChip } from "@web/components/shared/delta-chip";
+import { FigureCard } from "@web/components/shared/figure-card";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import { SectionHead } from "@web/components/shared/overview";
 import type { CarDimension, DimensionStat } from "@web/queries/cars";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -175,7 +175,7 @@ export function DimensionTable({
       header: labels.column,
       id: "name",
       isRowHeader: true,
-      minWidth: 180,
+      width: 224,
       pinned: "start",
     },
     {
@@ -190,6 +190,7 @@ export function DimensionTable({
       ),
       header: "Registrations",
       id: "count",
+      headerClassName: "w-28",
       width: 130,
     },
     {
@@ -220,6 +221,7 @@ export function DimensionTable({
       ),
       header: "Share",
       id: "share",
+      headerClassName: "w-40",
       minWidth: 180,
     },
     {
@@ -236,56 +238,54 @@ export function DimensionTable({
         ),
       header: "Change",
       id: "yoyChange",
+      headerClassName: "w-24",
       width: 100,
     },
   ];
 
   return (
-    <div className="flex flex-col gap-6">
-      <SectionHead
-        caption={
-          <>
-            Year to date through {monthLabel} ·{" "}
-            {isTruncated
-              ? `top ${displayed.length} of ${visible.length}`
-              : `${visible.length} ${visible.length === 1 ? "row" : "rows"}`}
-          </>
-        }
-        eyebrow="Figure 2 · Breakdown"
-        title={labels.title}
-        trailing={
-          // Segment is a non-wrapping inline-flex, so a row wider than a phone
-          // (the three dimension tabs, about 296px) scrolls sideways inside
-          // this wrapper instead of pushing the page wider.
-          <div className="max-w-full overflow-x-auto">
-            <Segment
-              aria-label="Dimension"
-              onSelectionChange={(option) => {
-                posthog.capture("dashboard_filter_changed", {
-                  filter: "dimension",
-                  value: option,
-                });
-                setQuery("");
-                setSortDescriptor({
-                  column: "count",
-                  direction: "descending",
-                });
-                setDimension(option as CarDimension);
-              }}
-              selectedKey={dimension}
-              size="md"
-              variant="ghost"
-            >
-              {CAR_DIMENSIONS.map((option) => (
-                <Segment.Item id={option} key={option}>
-                  {DIMENSION_LABELS[option].tab}
-                </Segment.Item>
-              ))}
-            </Segment>
-          </div>
-        }
-      />
-
+    <FigureCard
+      description={
+        <>
+          Year to date through {monthLabel} ·{" "}
+          {isTruncated
+            ? `top ${displayed.length} of ${visible.length}`
+            : `${visible.length} ${visible.length === 1 ? "row" : "rows"}`}
+        </>
+      }
+      title={labels.title}
+      trailing={
+        // Segment is a non-wrapping inline-flex, so a row wider than a phone
+        // (the three dimension tabs, about 296px) scrolls sideways inside
+        // this wrapper instead of pushing the page wider.
+        <div className="max-w-full overflow-x-auto">
+          <Segment
+            aria-label="Dimension"
+            onSelectionChange={(option) => {
+              posthog.capture("dashboard_filter_changed", {
+                filter: "dimension",
+                value: option,
+              });
+              setQuery("");
+              setSortDescriptor({
+                column: "count",
+                direction: "descending",
+              });
+              setDimension(option as CarDimension);
+            }}
+            selectedKey={dimension}
+            size="sm"
+            variant="ghost"
+          >
+            {CAR_DIMENSIONS.map((option) => (
+              <Segment.Item id={option} key={option}>
+                {DIMENSION_LABELS[option].tab}
+              </Segment.Item>
+            ))}
+          </Segment>
+        </div>
+      }
+    >
       <div className="flex flex-wrap items-center gap-4">
         <SearchField
           aria-label={labels.searchLabel}
@@ -317,7 +317,7 @@ export function DimensionTable({
         // Dims the stale rows while the next dimension loads.
         className={cn("transition-opacity", isPending && "opacity-60")}
         columns={columns}
-        contentClassName="min-w-140"
+        contentClassName="min-w-xl table-fixed"
         data={displayed}
         getRowId={(row) => row.name}
         onSortChange={setSortDescriptor}
@@ -335,6 +335,6 @@ export function DimensionTable({
           <ArrowRight aria-hidden className="size-4 shrink-0" />
         </Link>
       ) : null}
-    </div>
+    </FigureCard>
   );
 }

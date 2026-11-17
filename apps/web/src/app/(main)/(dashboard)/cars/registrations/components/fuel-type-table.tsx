@@ -1,6 +1,7 @@
 "use client";
 
-import { cn, ProgressBar } from "@heroui/react";
+import { cn, ProgressBar, Typography } from "@heroui/react";
+import { DataGrid, type DataGridColumn, NumberValue } from "@heroui-pro/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { parseAsString, useQueryState } from "nuqs";
 import posthog from "posthog-js";
@@ -16,24 +17,14 @@ export interface FuelTypeRow {
   yearToDate: number;
 }
 
-const ROW = "flex items-center gap-4 px-2 max-md:gap-2 max-md:px-1";
-const NAME_CELL = "min-w-0 flex-1 truncate";
-const CARS_CELL = "w-24 shrink-0 text-right max-md:w-16";
-const SHARE_CELL =
-  "flex w-40 shrink-0 items-center justify-end gap-2 max-md:w-14 xl:w-56";
-const YEAR_CELL = "w-24 shrink-0 text-right max-md:hidden";
-const CHANGE_CELL = "w-24 shrink-0 text-right max-md:w-16";
-
-const formatCount = (value: number): string => value.toLocaleString("en-SG");
-
 /**
- * The month's registrations by fuel type as a ruled table. Each row is a
- * toggle for the page's fuel filter, as the comp has it: selecting a row
- * narrows the headline and chart to that fuel type, and selecting it again
- * clears the filter.
+ * The month's registrations by fuel type. Each name is a toggle for the
+ * page's fuel filter: selecting it narrows the KPIs and chart to that fuel
+ * type, and selecting it again clears the filter.
  *
- * Writes the same `fuelType` param as the tabs, with `shallow: false` so the
- * server re-renders the page against it.
+ * Writes the same `fuelType` param as the toolbar menu, with `shallow: false`
+ * so the server re-renders the page against it. The name column is pinned,
+ * so a phone scrolls the figures sideways rather than losing a column.
  */
 export function FuelTypeTable({
   previousMonthName,
@@ -54,81 +45,112 @@ export function FuelTypeTable({
   // Bars are scaled to the largest fuel type, so the leader fills its track.
   const leadCount = Math.max(1, ...rows.map((row) => row.count));
 
-  return (
-    <div className={cn("flex flex-col", isPending && "opacity-70")}>
-      <div className={cn(ROW, "pb-2 font-semibold text-muted text-xs")}>
-        <span className={NAME_CELL}>Fuel type</span>
-        <span className={CARS_CELL}>Cars</span>
-        <span className={cn(SHARE_CELL, "block text-right")}>Share</span>
-        <span className={YEAR_CELL}>{year} to date</span>
-        <span className={CHANGE_CELL}>vs {previousMonthName}</span>
-      </div>
-      {rows.map((row) => {
+  const columns: DataGridColumn<FuelTypeRow>[] = [
+    {
+      cell: (row) => {
         const isActive = row.name === selected;
         return (
-          // A div row rather than a button: the share bar is a block-level
-          // progress bar, which a button cannot contain. The name is the
-          // button, stretched over the row so the whole row stays clickable.
-          <div
+          <button
+            aria-pressed={isActive}
             className={cn(
-              ROW,
-              "relative py-2 transition-colors hover:bg-surface-secondary",
-              isActive && "bg-accent-soft",
+              "block max-w-full cursor-pointer truncate text-left text-sm hover:underline",
+              isActive ? "font-bold text-accent" : "font-medium",
             )}
-            key={row.name}
+            onClick={() => {
+              const next = isActive ? null : row.name;
+              posthog.capture("dashboard_filter_changed", {
+                filter: "fuel_type",
+                value: next,
+              });
+              setSelected(next);
+            }}
+            type="button"
           >
-            <button
-              aria-pressed={isActive}
-              className={cn(
-                NAME_CELL,
-                "cursor-pointer text-left text-sm outline-none after:absolute after:inset-0 focus-visible:after:ring-2 focus-visible:after:ring-focus",
-                isActive
-                  ? "font-bold text-accent"
-                  : "font-medium text-foreground",
-              )}
-              onClick={() => {
-                const next = isActive ? null : row.name;
-                posthog.capture("dashboard_filter_changed", {
-                  filter: "fuel_type",
-                  value: next,
-                });
-                setSelected(next);
-              }}
-              type="button"
-            >
-              {row.name}
-            </button>
-            <span
-              className={cn(CARS_CELL, "font-semibold text-sm tabular-nums")}
-            >
-              {formatCount(row.count)}
-            </span>
-            <span className={SHARE_CELL}>
-              <ProgressBar
-                aria-label={`${row.name} against the largest fuel type`}
-                className="min-w-0 flex-1 max-md:hidden"
-                value={(row.count / leadCount) * 100}
-              >
-                <ProgressBar.Track>
-                  <ProgressBar.Fill />
-                </ProgressBar.Track>
-              </ProgressBar>
-              <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
-                {row.share.toFixed(1)}%
-              </span>
-            </span>
-            <span
-              className={cn(YEAR_CELL, "text-foreground text-sm tabular-nums")}
-            >
-              {formatCount(row.yearToDate)}
-            </span>
-            <DeltaChip
-              className={cn(CHANGE_CELL, "text-sm")}
-              value={row.change}
-            />
-          </div>
+            {row.name}
+          </button>
         );
-      })}
-    </div>
+      },
+      header: "Fuel type",
+      id: "name",
+      isRowHeader: true,
+      width: 192,
+      pinned: "start",
+    },
+    {
+      align: "end",
+      cell: (row) => (
+        <NumberValue
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={row.count}
+        />
+      ),
+      header: "Cars",
+      id: "count",
+      headerClassName: "w-24",
+      width: 100,
+    },
+    {
+      cell: (row) => (
+        <span className="flex items-center gap-2">
+          <ProgressBar
+            aria-label={`${row.name} against the largest fuel type`}
+            className="min-w-0 flex-1"
+            value={(row.count / leadCount) * 100}
+          >
+            <ProgressBar.Track>
+              <ProgressBar.Fill />
+            </ProgressBar.Track>
+          </ProgressBar>
+          {/* Typography has no numeral prop; tabular-nums keeps the shares aligned. */}
+          <Typography.Paragraph
+            align="end"
+            className="w-12 shrink-0 tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {row.share.toFixed(1)}%
+          </Typography.Paragraph>
+        </span>
+      ),
+      header: "Share",
+      id: "share",
+      headerClassName: "w-48",
+      minWidth: 180,
+    },
+    {
+      align: "end",
+      cell: (row) => (
+        <NumberValue
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={row.yearToDate}
+        />
+      ),
+      header: `${year} to date`,
+      id: "yearToDate",
+      headerClassName: "w-28",
+      width: 120,
+    },
+    {
+      align: "end",
+      cell: (row) => <DeltaChip value={row.change} />,
+      header: `vs ${previousMonthName}`,
+      id: "change",
+      headerClassName: "w-24",
+      width: 100,
+    },
+  ];
+
+  return (
+    <DataGrid
+      aria-label="Registrations by fuel type"
+      className={cn("transition-opacity", isPending && "opacity-60")}
+      columns={columns}
+      contentClassName="min-w-2xl table-fixed"
+      data={rows}
+      getRowId={(row) => row.name}
+      variant="secondary"
+    />
   );
 }

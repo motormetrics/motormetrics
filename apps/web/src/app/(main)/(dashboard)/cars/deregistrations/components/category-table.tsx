@@ -1,3 +1,7 @@
+"use client";
+
+import { ProgressBar, Typography } from "@heroui/react";
+import { DataGrid, type DataGridColumn, NumberValue } from "@heroui-pro/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 
 export interface CategoryRow {
@@ -13,10 +17,9 @@ export interface CategoryRow {
 }
 
 /**
- * The month's categories as a ruled list, largest first, with the share drawn
- * as a bar scaled to the largest category. Flex rows of preset-width cells
- * rather than a table, so columns can drop out on narrower screens as the
- * comp does: the description below `lg`, the bar below `md`.
+ * The month's categories, largest first, each with the swatch the chart
+ * above uses and what the category covers under its name. The category
+ * column is pinned, so a phone scrolls the figures sideways.
  */
 export function CategoryTable({
   rows,
@@ -26,66 +29,101 @@ export function CategoryTable({
   /** "2025", heading the change column. */
   yearAgoLabel: string;
 }) {
-  const largest = Math.max(...rows.map(({ count }) => count));
+  const largest = Math.max(1, ...rows.map(({ count }) => count));
+
+  const columns: DataGridColumn<CategoryRow>[] = [
+    {
+      cell: (row) => (
+        <span className="flex min-w-0 items-center gap-2">
+          <span
+            aria-hidden
+            className="size-2.5 shrink-0 rounded-xs"
+            style={{ backgroundColor: row.color }}
+          />
+          <span className="flex min-w-0 flex-col">
+            <Typography.Paragraph size="sm" truncate weight="medium">
+              {row.category}
+            </Typography.Paragraph>
+            <Typography.Paragraph color="muted" size="xs" truncate>
+              {row.description}
+            </Typography.Paragraph>
+          </span>
+        </span>
+      ),
+      header: "Category",
+      id: "category",
+      isRowHeader: true,
+      width: 192,
+      pinned: "start",
+    },
+    {
+      align: "end",
+      cell: (row) => (
+        <NumberValue
+          locale="en-SG"
+          maximumFractionDigits={0}
+          value={row.count}
+        />
+      ),
+      header: "Vehicles",
+      id: "count",
+      headerClassName: "w-28",
+      width: 110,
+    },
+    {
+      cell: (row) => (
+        <span className="flex items-center gap-2">
+          <ProgressBar
+            aria-label={`${row.category} against the largest category`}
+            className="min-w-0 flex-1"
+            value={(row.count / largest) * 100}
+          >
+            <ProgressBar.Track>
+              <ProgressBar.Fill />
+            </ProgressBar.Track>
+          </ProgressBar>
+          {/* Typography has no numeral prop; tabular-nums keeps the shares aligned. */}
+          <Typography.Paragraph
+            align="end"
+            className="w-12 shrink-0 tabular-nums"
+            color="muted"
+            size="sm"
+          >
+            {row.share.toFixed(1)}%
+          </Typography.Paragraph>
+        </span>
+      ),
+      header: "Share",
+      id: "share",
+      headerClassName: "w-48",
+      minWidth: 180,
+    },
+    {
+      align: "end",
+      cell: (row) =>
+        row.yearAgoChange === null ? (
+          <Typography.Paragraph color="muted" size="sm">
+            <span aria-hidden>—</span>
+            <span className="sr-only">No comparable month</span>
+          </Typography.Paragraph>
+        ) : (
+          <DeltaChip value={row.yearAgoChange} />
+        ),
+      header: `vs ${yearAgoLabel}`,
+      id: "yearAgoChange",
+      headerClassName: "w-28",
+      width: 110,
+    },
+  ];
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-end gap-4 px-2 pb-2 font-semibold text-muted text-xs max-md:gap-2 max-md:px-1">
-        <span className="min-w-0 flex-1">Category</span>
-        <span className="min-w-0 flex-1 max-lg:hidden">Description</span>
-        <span className="w-24 text-right max-md:w-14">Vehicles</span>
-        <span className="w-48 text-right max-md:w-12 max-lg:w-32">Share</span>
-        <span className="w-28 text-right max-md:w-16">vs {yearAgoLabel}</span>
-      </div>
-      <ul className="flex flex-col">
-        {rows.map((row) => (
-          <li
-            className="flex items-center gap-4 px-2 py-2 hover:bg-surface-secondary max-md:gap-2 max-md:px-1"
-            key={row.category}
-          >
-            <span className="flex min-w-0 flex-1 items-center gap-2">
-              <span
-                aria-hidden
-                className="size-3 shrink-0 rounded-sm"
-                style={{ backgroundColor: row.color }}
-              />
-              <span className="truncate font-semibold text-sm">
-                {row.category}
-              </span>
-            </span>
-            <span className="min-w-0 flex-1 truncate text-muted text-sm max-lg:hidden">
-              {row.description}
-            </span>
-            <span className="w-24 text-right font-semibold text-sm tabular-nums max-md:w-14">
-              {row.count.toLocaleString("en-SG")}
-            </span>
-            <span className="flex w-48 items-center gap-2 max-md:w-12 max-lg:w-32">
-              <span className="h-2.5 min-w-0 flex-1 rounded-r-sm bg-surface-secondary max-md:hidden">
-                <span
-                  className="block h-full rounded-r-sm"
-                  style={{
-                    backgroundColor:
-                      row.count === largest
-                        ? "var(--chart-1)"
-                        : "var(--chart-3)",
-                    width: `${largest > 0 ? (row.count / largest) * 100 : 0}%`,
-                  }}
-                />
-              </span>
-              <span className="w-12 shrink-0 text-right text-foreground text-xs tabular-nums">
-                {row.share.toFixed(1)}%
-              </span>
-            </span>
-            <span className="w-28 text-right text-sm max-md:w-16">
-              {row.yearAgoChange === null ? (
-                <span className="text-muted">—</span>
-              ) : (
-                <DeltaChip value={row.yearAgoChange} />
-              )}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <DataGrid
+      aria-label="Deregistrations by category"
+      columns={columns}
+      contentClassName="min-w-xl table-fixed"
+      data={rows}
+      getRowId={(row) => row.category}
+      variant="secondary"
+    />
   );
 }
