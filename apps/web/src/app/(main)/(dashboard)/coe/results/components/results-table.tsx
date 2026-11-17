@@ -76,7 +76,6 @@ export function ResultsTable({ rows }: { rows: ResultsRow[] }) {
       data={rows}
       getRowId={(row) => row.key}
       scrollContainerClassName="max-h-96 overflow-y-auto"
-      variant="secondary"
     />
   );
 }

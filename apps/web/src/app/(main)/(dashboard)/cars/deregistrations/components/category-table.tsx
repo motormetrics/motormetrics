@@ -123,7 +123,6 @@ export function CategoryTable({
       contentClassName="min-w-xl table-fixed"
       data={rows}
       getRowId={(row) => row.category}
-      variant="secondary"
     />
   );
 }

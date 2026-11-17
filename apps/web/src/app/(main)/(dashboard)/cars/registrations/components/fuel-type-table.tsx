@@ -150,7 +150,6 @@ export function FuelTypeTable({
       contentClassName="min-w-2xl table-fixed"
       data={rows}
       getRowId={(row) => row.name}
-      variant="secondary"
     />
   );
 }

@@ -143,7 +143,6 @@ export function ClassesTable({
         )
       }
       sortDescriptor={sortDescriptor}
-      variant="secondary"
     />
   );
 }

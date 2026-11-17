@@ -100,7 +100,6 @@ export function PQPMonthsTable({
       data={rows}
       getRowId={(row) => row.key}
       scrollContainerClassName="max-h-96 overflow-y-auto"
-      variant="secondary"
     />
   );
 }

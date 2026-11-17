@@ -323,7 +323,6 @@ export function DimensionTable({
         onSortChange={setSortDescriptor}
         renderEmptyState={() => `Nothing matches “${query}”.`}
         sortDescriptor={sortDescriptor}
-        variant="secondary"
       />
 
       {isTruncated && labels.href ? (
