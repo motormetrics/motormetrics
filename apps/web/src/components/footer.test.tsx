@@ -17,10 +17,10 @@ describe("Footer", () => {
 
     for (const [name, href] of [
       ["Cars overview", "/cars"],
-      ["COE overview", "/coe"],
+      ["COE results", "/coe/results"],
+      ["PQP rates", "/coe/pqp"],
       ["PARF calculator", "/cars/parf"],
       ["EV charging", "/cars/electric-vehicles/charging"],
-      ["Premiums by category", "/coe/premiums"],
     ]) {
       await expect
         .element(sections.getByRole("link", { name }))

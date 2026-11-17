@@ -141,7 +141,7 @@ export default function PARFCalculatorPage() {
           <SectionLink className="ml-0" href="/coe/pqp">
             PQP renewal rates
           </SectionLink>
-          <SectionLink className="ml-0" href="/coe/premiums">
+          <SectionLink className="ml-0" href="/coe/results">
             COE premiums
           </SectionLink>
         </div>

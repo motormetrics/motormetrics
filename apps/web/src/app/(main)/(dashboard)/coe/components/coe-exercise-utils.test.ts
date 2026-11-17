@@ -12,7 +12,6 @@ import {
   premiumRangeStats,
   recordHighs,
   summariseByYear,
-  summariseCategoryExercise,
   summariseExercise,
   summarisePQP,
   summariseYears,
@@ -262,28 +261,6 @@ describe("summariseExercise", () => {
 
   it("should return nothing without results", () => {
     expect(summariseExercise([])).toBeUndefined();
-  });
-});
-
-describe("summariseCategoryExercise", () => {
-  const figures = { bidsReceived: 2140, bidsSuccess: 1284, quota: 1284 };
-
-  it("should name the exercise and describe the category's move", () => {
-    expect(
-      summariseCategoryExercise(
-        [
-          { ...figures, biddingNo: 2, month: "2026-09", premium: 131_000 },
-          { ...figures, biddingNo: 1, month: "2026-10", premium: 128_500 },
-        ],
-        "Category B",
-      ),
-    ).toBe(
-      "First bidding, October 2026: Cat B fell $2,500 to $128,500, a record low.",
-    );
-  });
-
-  it("should return nothing without exercises", () => {
-    expect(summariseCategoryExercise([], "Category A")).toBeUndefined();
   });
 });
 

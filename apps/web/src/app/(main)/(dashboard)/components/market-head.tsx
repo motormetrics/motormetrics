@@ -3,11 +3,7 @@ import {
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import {
-  biddingOrdinal,
-  toCategoryKey,
-} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { coeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
+import { biddingOrdinal } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { signed } from "@web/app/(main)/(dashboard)/components/market-copy";
 import { windowEndingAt } from "@web/app/(main)/(dashboard)/components/overview-series";
 import {
@@ -24,15 +20,12 @@ import {
 import { getLatestMonth } from "@web/utils/dates/months";
 import type { Route } from "next";
 import Link from "next/link";
-import { createSerializer } from "nuqs/server";
 
 /** A year of exercises: two a month. */
 const EXERCISES = 24;
 const MONTHS = 12;
 /** Matches the fuel-mix card's query, so both read one cache entry. */
 const HISTORY_LIMIT = 24;
-
-const serializeCoe = createSerializer(coeOverviewSearchParams);
 
 /** "1st bidding, November 2026". */
 const exerciseName = (exercise: { biddingNo: number; month: string }) =>
@@ -96,9 +89,7 @@ export async function MarketKpis() {
           }
         : undefined,
       format: "currency",
-      href: serializeCoe("/coe", {
-        category: toCategoryKey(category),
-      }) as Route,
+      href: "/coe/results",
       note: exerciseName(latest),
       title: `COE ${category}`,
       trend: window.map((exercise) => exercise.premium),

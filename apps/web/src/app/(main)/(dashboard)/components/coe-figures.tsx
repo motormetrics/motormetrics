@@ -6,8 +6,8 @@ import {
 import {
   type PremiumPoint,
   PremiumTrendChart,
-} from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-trend-chart";
-import { exerciseStamp } from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-shared";
+} from "@web/app/(main)/(dashboard)/coe/components/premium-trend-chart";
+import { exerciseStamp } from "@web/app/(main)/(dashboard)/coe/components/premiums-shared";
 import { SectionLink } from "@web/components/shared/overview";
 import { getCategoryExercises } from "@web/queries/coe";
 import { formatMonthShortName } from "@web/utils/dates/format-month";
@@ -70,7 +70,7 @@ export async function CoePremiumsCard() {
             Category A and B, last {series.length} exercises
           </Card.Description>
         </div>
-        <SectionLink href="/coe/premiums">Premium history</SectionLink>
+        <SectionLink href="/coe/results">All COE results</SectionLink>
       </Card.Header>
       <Card.Content>
         <PremiumTrendChart

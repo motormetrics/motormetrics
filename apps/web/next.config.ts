@@ -15,7 +15,7 @@ const LEGACY_DOMAIN_REDIRECTS = [
 // the closest page that replaced it.
 const LEGACY_PATH_REDIRECTS = [
   ["/coe/trends", "/coe/results"],
-  ["/coe/bidding", "/coe"],
+  ["/coe/bidding", "/coe/results"],
   ["/cars/costs", "/cars/arf"],
   ["/blog/understanding-coe-system-singapore", "/learn/coe"],
   [
@@ -42,6 +42,10 @@ const LEGACY_PATH_REDIRECTS = [
   ["/cars/fuel-types/electric", "/cars/electric-vehicles"],
   ["/cars/fuel-types/:type*", "/cars?dimension=fuelType"],
   ["/cars/vehicle-types/:type*", "/cars?dimension=vehicleType"],
+  // Added 2026-11-17, review 2027-11-17: the COE overview and premiums pages
+  // were merged into the results page.
+  ["/coe", "/coe/results"],
+  ["/coe/premiums", "/coe/results"],
 ] as const;
 
 // Static CSP, not nonce-based: a nonce needs a per-request render, which

@@ -5,7 +5,7 @@ import {
   formatSignedCurrency,
   formatSignedPercent,
   rangePosition,
-} from "@web/app/(main)/(dashboard)/coe/premiums/components/premiums-shared";
+} from "@web/app/(main)/(dashboard)/coe/components/premiums-shared";
 import { RangeBar } from "@web/components/shared/range-bar";
 import { RangeFigure, RangeHero } from "@web/components/shared/range-hero";
 import type { ReactNode } from "react";

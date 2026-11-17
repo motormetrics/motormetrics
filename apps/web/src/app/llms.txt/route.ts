@@ -123,7 +123,6 @@ Singapore's public EV charger network, from LTA DataMall's EV Charging Points fe
 
 ## COE Bidding Results
 
-- [COE Premiums](${SITE_URL}/coe/premiums): Current COE landscape and premium trends
 - [Historical Results](${SITE_URL}/coe/results): Complete bidding history
 - [PQP Rates](${SITE_URL}/coe/pqp): Prevailing Quota Premium rates
 
