@@ -1,4 +1,3 @@
-import { Card } from "@heroui/react";
 import {
   loadMakeRows,
   periodLabel,
@@ -13,7 +12,7 @@ import {
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { TopMakesTable } from "@web/app/(main)/(dashboard)/components/top-makes-table";
-import { SectionLink } from "@web/components/shared/overview";
+import { FigureCard } from "@web/components/shared/figure-card";
 import {
   getMonthlyRegistrationTotals,
   getMonthlyRegistrationTotalsByFuelType,
@@ -97,32 +96,25 @@ export async function FuelMixCard() {
   );
 
   return (
-    <Card className="min-w-0">
-      <Card.Header className="flex-row items-start gap-4">
-        <div className="flex min-w-0 flex-col gap-1">
-          <Card.Title>New cars by fuel type</Card.Title>
-          <Card.Description>Last {CHART_MONTHS} months</Card.Description>
-        </div>
-        <SectionLink href="/cars?dimension=fuelType">
-          All fuel types
-        </SectionLink>
-      </Card.Header>
-      <Card.Content className="flex flex-col gap-4">
-        <ul className="flex flex-wrap gap-x-4 gap-y-2 text-foreground text-xs">
-          {FUEL_SERIES.map(({ color, key, label }) => (
-            <li className="inline-flex items-center gap-2" key={key}>
-              <span
-                aria-hidden
-                className="block size-2.5 rounded-xs"
-                style={{ backgroundColor: color }}
-              />
-              {label}
-            </li>
-          ))}
-        </ul>
-        <FuelMixChart data={data} series={FUEL_SERIES} ticks={ticks} />
-      </Card.Content>
-    </Card>
+    <FigureCard
+      description={<>Last {CHART_MONTHS} months</>}
+      link={{ href: "/cars?dimension=fuelType", label: "All fuel types" }}
+      title="New cars by fuel type"
+    >
+      <ul className="flex flex-wrap gap-x-4 gap-y-2 text-foreground text-xs">
+        {FUEL_SERIES.map(({ color, key, label }) => (
+          <li className="inline-flex items-center gap-2" key={key}>
+            <span
+              aria-hidden
+              className="block size-2.5 rounded-xs"
+              style={{ backgroundColor: color }}
+            />
+            {label}
+          </li>
+        ))}
+      </ul>
+      <FuelMixChart data={data} series={FUEL_SERIES} ticks={ticks} />
+    </FigureCard>
   );
 }
 
@@ -136,32 +128,27 @@ export async function TopMakesCard() {
   const period = periodLabel(latestMonth, "ytd");
 
   return (
-    <Card className="min-w-0">
-      <Card.Header className="flex-row items-start gap-4">
-        <div className="flex min-w-0 flex-col gap-1">
-          <Card.Title>Top {TOP_MAKES} makes</Card.Title>
-          <Card.Description>
-            New cars, {period}; change on the same months a year earlier
-          </Card.Description>
-        </div>
-        <SectionLink href="/cars/makes">All {rows.length} makes</SectionLink>
-      </Card.Header>
-      <Card.Content>
-        <TopMakesTable
-          label={`Top ${TOP_MAKES} makes, ${period}`}
-          rows={rows
-            .slice(0, TOP_MAKES)
-            .map(({ count, logoUrl, make, rank, share, slug, yoyChange }) => ({
-              count,
-              logoUrl,
-              make,
-              rank,
-              share,
-              slug,
-              yoyChange,
-            }))}
-        />
-      </Card.Content>
-    </Card>
+    <FigureCard
+      description={
+        <>New cars, {period}; change on the same months a year earlier</>
+      }
+      link={{ href: "/cars/makes", label: `All ${rows.length} makes` }}
+      title={<>Top {TOP_MAKES} makes</>}
+    >
+      <TopMakesTable
+        label={`Top ${TOP_MAKES} makes, ${period}`}
+        rows={rows
+          .slice(0, TOP_MAKES)
+          .map(({ count, logoUrl, make, rank, share, slug, yoyChange }) => ({
+            count,
+            logoUrl,
+            make,
+            rank,
+            share,
+            slug,
+            yoyChange,
+          }))}
+      />
+    </FigureCard>
   );
 }
