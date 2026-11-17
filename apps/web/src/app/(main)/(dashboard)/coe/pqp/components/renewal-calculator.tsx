@@ -14,7 +14,6 @@ import {
   type FuelType,
   getRoadTax,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/road-tax";
-import { SectionHead } from "@web/components/shared/overview";
 import type { Pqp } from "@web/types/coe";
 import { format, isAfter, isValid, parseISO, startOfToday } from "date-fns";
 import { Check } from "lucide-react";
@@ -153,16 +152,8 @@ export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
   }${fuel === "hybrid" ? ". Hybrids pay the higher of the engine and motor figures." : "."}`;
 
   return (
-    <section
-      aria-labelledby="renewal-calculator"
-      className="flex flex-col gap-6"
-    >
-      <SectionHead
-        caption="Estimates to compare, not a recommendation or financial advice"
-        eyebrow="Renewal calculator"
-        title={<span id="renewal-calculator">Renew or deregister?</span>}
-      />
-      <div className="grid gap-8 lg:grid-cols-12 lg:gap-16">
+    <section aria-labelledby="renewal-calculator">
+      <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
         <form
           aria-label="Your car"
           className="flex flex-col gap-6 lg:col-span-5"

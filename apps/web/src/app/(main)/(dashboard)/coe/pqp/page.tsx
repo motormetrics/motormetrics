@@ -1,48 +1,28 @@
-import { Skeleton, Typography } from "@heroui/react";
+import { Skeleton } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { buildPqpFaqs } from "@web/app/(main)/(dashboard)/coe/pqp/components/faq-data";
 import {
   CategoryTabs,
   TermTabs,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-filters";
 import {
-  LatestMonthEyebrow,
-  PQPAnswer,
-  PQPKeyNumbers,
-  PQPLead,
-  PQPSource,
-} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-headline";
+  PQPAsOf,
+  PQPKpis,
+} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-kpis";
 import {
   PQPCalculator,
-  PQPCompare,
   PQPMonths,
-  PQPRates,
-  PQPTradeoffs,
   PQPTrend,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-report";
-import {
-  type PQPPageProps,
-  SelectedLabel,
-} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-view";
+import type { PQPPageProps } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-view";
 import { PQP_CATEGORY_KEYS } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
-import { KeysAside } from "@web/components/shared/key-numbers";
-import {
-  Hairline,
-  OverviewPage,
-  SectionHead,
-  SectionLink,
-} from "@web/components/shared/overview";
-import { PageFaq } from "@web/components/shared/page-faq";
+import { OverviewPage, SectionLink } from "@web/components/shared/overview";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import {
-  generateBreadcrumbSchema,
-  generateFAQPageSchema,
-} from "@web/lib/metadata";
+import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getPQPOverview } from "@web/queries/coe";
 import type { Metadata } from "next";
@@ -110,57 +90,6 @@ const structuredData: WithContext<WebPage> = {
   },
 };
 
-/** The sections below the head, for the key numbers' "On this page" links. */
-const JUMP_LINKS = [
-  { href: "#renewal-calculator", label: "Renewal calculator" },
-  { href: "#pqp-trend", label: "PQP by month" },
-  { href: "#pqp-rates", label: "Rates by category" },
-  { href: "#pqp-cmp", label: "PQP against the premium" },
-  { href: "#pqp-months", label: "Month by month" },
-  { href: "#pqp-notes", label: "Renewing versus bidding" },
-];
-
-/**
- * The questions and their FAQPage schema, with the month's rates quoted. It
- * reads only cached data, so it sits in the static shell without a boundary.
- */
-async function PqpFaq() {
-  const { latestMonth, categorySummaries } = await getPQPOverview();
-  const categoryA = categorySummaries.find(
-    (summary) => summary.category === "Category A",
-  );
-  const categoryB = categorySummaries.find(
-    (summary) => summary.category === "Category B",
-  );
-  const faqs = buildPqpFaqs(
-    latestMonth !== null &&
-      categoryA !== undefined &&
-      categoryB !== undefined &&
-      categoryA.pqpRate > 0 &&
-      categoryB.pqpRate > 0
-      ? {
-          month: formatMonth(latestMonth),
-          categoryA: formatCurrency(categoryA.pqpRate),
-          categoryB: formatCurrency(categoryB.pqpRate),
-          categoryA5Year: formatCurrency(categoryA.pqpCost5Year),
-          categoryB5Year: formatCurrency(categoryB.pqpCost5Year),
-        }
-      : undefined,
-  );
-
-  return (
-    <>
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: faqs }]),
-        }}
-      />
-      <PageFaq faqs={faqs} />
-    </>
-  );
-}
-
 export default function PQPRatesPage({ searchParams }: PQPPageProps) {
   return (
     <OverviewPage className="gap-8 max-md:gap-6">
@@ -176,99 +105,46 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
         }}
       />
 
-      {/* Direction D's head: eyebrow, title, the category and term switches,
-          the range hero, lead and source, with the key numbers beside it once
-          the page is wide. The month and source are cached and stay in the
-          static shell; only the parts that read the selection wait. */}
-      <HeadGrid
-        keys={
-          <KeysAside
-            eyebrow={
-              <>
-                Key numbers ·{" "}
-                <SelectedLabel part="both" searchParams={searchParams} />
-              </>
-            }
-            jump={JUMP_LINKS}
-            label="Key numbers"
-            source="Source: LTA via DataMall."
-          >
-            <SectionErrorBoundary title="Key numbers unavailable">
-              <Suspense fallback={<Skeleton className="h-40 w-full" />}>
-                <PQPKeyNumbers searchParams={searchParams} />
-              </Suspense>
-            </SectionErrorBoundary>
-          </KeysAside>
+      {/* The toolbar's month and the KPIs read only cached data, so they are
+          in the static shell; the switches read the URL, so they wait. */}
+      <PageToolbar
+        actions={
+          <>
+            <Suspense fallback={<Skeleton className="h-10 w-36" />}>
+              <CategoryTabs categories={PQP_CATEGORY_KEYS} />
+            </Suspense>
+            <Suspense fallback={<Skeleton className="h-10 w-72" />}>
+              <TermTabs />
+            </Suspense>
+            <SharePill title="PQP rates" />
+          </>
         }
-      >
-        <HeadTitle
-          eyebrow={
-            <>
-              Certificate of Entitlement
-              <LatestMonthEyebrow />
-            </>
-          }
-          title="PQP rates"
-        />
-        <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
-          <Suspense fallback={<Skeleton className="h-10 w-36" />}>
-            <CategoryTabs categories={PQP_CATEGORY_KEYS} />
-          </Suspense>
-          <Suspense fallback={<Skeleton className="h-10 w-72" />}>
-            <TermTabs />
-          </Suspense>
-          <SharePill title="PQP rates" />
-        </div>
-        <SectionErrorBoundary title="PQP unavailable">
-          <Suspense fallback={<Skeleton className="h-44 w-full max-w-xl" />}>
-            <PQPAnswer searchParams={searchParams} />
-          </Suspense>
-        </SectionErrorBoundary>
-        <Suspense fallback={<Skeleton className="h-14 w-full max-w-prose" />}>
-          <PQPLead searchParams={searchParams} />
-        </Suspense>
-        <PQPSource />
-      </HeadGrid>
+        asOf={<PQPAsOf />}
+        title="PQP rates"
+      />
 
+      <SectionErrorBoundary title="Key numbers unavailable">
+        <PQPKpis />
+      </SectionErrorBoundary>
+
+      {/* The page's main tool. */}
       <SectionErrorBoundary title="Renewal calculator unavailable">
         <PQPCalculator />
       </SectionErrorBoundary>
-      <Hairline />
-      <PQPTrend searchParams={searchParams} />
-      <Hairline />
-      <PQPRates searchParams={searchParams} />
-      <Hairline />
-      <PQPCompare searchParams={searchParams} />
-      <Hairline />
 
-      <section className="flex max-w-prose flex-col gap-4">
-        <SectionHead eyebrow="Reading the numbers" title="How the PQP is set" />
-        <Typography.Paragraph>
-          LTA averages the closing premiums in that category over the last three
-          months, across both exercises, and publishes it as the rate for the
-          coming month. It therefore lags the market rather than leading it.
-        </Typography.Paragraph>
-        <Typography.Paragraph>
-          A 5-year renewal costs half the PQP, but the car cannot be renewed
-          again after that term.
-        </Typography.Paragraph>
-        <div className="flex flex-wrap gap-x-4 gap-y-2">
-          <SectionLink className="ml-0" href="/coe/results">
-            Premium trends
-          </SectionLink>
-          <SectionLink className="ml-0" href="/cars/parf">
-            PARF rebate calculator
-          </SectionLink>
-        </div>
-      </section>
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <PQPTrend searchParams={searchParams} />
+        <PQPMonths searchParams={searchParams} />
+      </div>
 
-      <Hairline />
-      <PQPMonths searchParams={searchParams} />
-      <Hairline />
-      <PQPTradeoffs />
-      <Hairline />
-
-      <PqpFaq />
+      <nav aria-label="Related" className="flex flex-wrap gap-x-4 gap-y-2">
+        <SectionLink className="ml-0" href="/coe/results">
+          Premium trends
+        </SectionLink>
+        <SectionLink className="ml-0" href="/cars/parf">
+          PARF rebate calculator
+        </SectionLink>
+      </nav>
     </OverviewPage>
   );
 }

@@ -1,13 +1,9 @@
-import {
-  groupByExercise,
-  toCategory,
-} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import type { PQPMonthRate } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-captions";
+import { toCategory } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
   loadSearchParams,
   type PQPCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
-import { getCoeResults, getPQPOverview } from "@web/queries/coe";
+import { getPQPOverview } from "@web/queries/coe";
 import type { Pqp } from "@web/types/coe";
 import type { SearchParams } from "nuqs/server";
 import { cache, Suspense } from "react";
@@ -21,30 +17,17 @@ export const categoryName = (key: PQPCategoryKey) =>
   toCategory(key) as keyof Pqp.Rates;
 
 /**
- * The published rates and the latest exercise, which read no search params.
- * Everything here is cached, so parts built only on it need no boundary.
+ * The published rates, which read no search params. Everything here is
+ * cached, so parts built only on it need no boundary.
  */
 export const loadPqpData = cache(async () => {
-  const [overview, coeResults] = await Promise.all([
-    getPQPOverview(),
-    getCoeResults(),
-  ]);
+  const overview = await getPQPOverview();
   // The query returns the months newest first; the page reads oldest first.
   const ascending = [...overview.trendData].sort((a, b) =>
     a.month.localeCompare(b.month),
   );
-  const premiums = new Map(
-    overview.comparison.map((row) => [row.category, row.latestPremium]),
-  );
 
-  return {
-    ...overview,
-    ascending,
-    // The overview's latest premium is from the newest exercise.
-    latestExercise: groupByExercise(coeResults).at(-1),
-    latestPremium: (key: PQPCategoryKey) =>
-      premiums.get(categoryName(key)) ?? 0,
-  };
+  return { ...overview, ascending };
 });
 
 /**
@@ -59,12 +42,8 @@ export const loadPqpView = cache(
       loadPqpData(),
     ]);
     const factor = term === "5" ? 0.5 : 1;
-    const rates: PQPMonthRate[] = data.ascending.map((point) => ({
-      month: point.month,
-      rate: point[categoryName(category)] * factor,
-    }));
 
-    return { ...data, category, factor, rates, term };
+    return { ...data, category, factor, term };
   },
 );
 

@@ -1,43 +1,26 @@
-import { Skeleton, Typography } from "@heroui/react";
+import { Skeleton } from "@heroui/react";
 import {
   formatExercise,
   groupByExercise,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { buildResultsFaqs } from "@web/app/(main)/(dashboard)/coe/results/components/faq-data";
-import { PremiumsByYear } from "@web/app/(main)/(dashboard)/coe/results/components/premiums-by-year";
-import { QuotaAndDemand } from "@web/app/(main)/(dashboard)/coe/results/components/quota-and-demand";
-import { RecordHighs } from "@web/app/(main)/(dashboard)/coe/results/components/record-highs";
+import { ResultsByExercise } from "@web/app/(main)/(dashboard)/coe/results/components/results-by-exercise";
 import {
-  ResultsByExercise,
-  ResultsByExerciseCaption,
-} from "@web/app/(main)/(dashboard)/coe/results/components/results-by-exercise";
-import {
-  ResultsChartCaption,
   ResultsChartCount,
   ResultsChartPanel,
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-chart-panel";
 import {
-  ResultsExerciseName,
-  ResultsHero,
-  ResultsKeyNumbers,
-} from "@web/app/(main)/(dashboard)/coe/results/components/results-headline";
+  ResultsAsOf,
+  ResultsKpis,
+} from "@web/app/(main)/(dashboard)/coe/results/components/results-kpis";
 import { SeriesFilter } from "@web/app/(main)/(dashboard)/coe/results/components/series-filter";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
-import {
-  Hairline,
-  OverviewPage,
-  SectionHead,
-  SectionLink,
-} from "@web/components/shared/overview";
-import { PageFaq } from "@web/components/shared/page-faq";
+import { FigureCard } from "@web/components/shared/figure-card";
+import { OverviewPage, SectionLink } from "@web/components/shared/overview";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import {
-  generateBreadcrumbSchema,
-  generateFAQPageSchema,
-} from "@web/lib/metadata";
+import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getCoeResults } from "@web/queries/coe";
 import type { Metadata } from "next";
@@ -51,31 +34,14 @@ interface PageProps {
 
 const title = "COE Bidding Results History and Price Charts";
 const description =
-  "Singapore COE bidding results history for Cat A to E: every exercise, yearly averages and record highs, with 12-month, 5-year, 10-year and all-time charts.";
-
-/** The questions and their FAQPage schema, with the records and averages quoted. */
-async function ResultsFaq() {
-  const faqs = buildResultsFaqs(groupByExercise(await getCoeResults()));
-
-  return (
-    <>
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: faqs }]),
-        }}
-      />
-      <PageFaq faqs={faqs} />
-    </>
-  );
-}
+  "Singapore COE bidding results history for Cat A to E: the latest premiums, every exercise and price charts over 12 months, 5 years, 10 years and all time.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const latest = groupByExercise(await getCoeResults()).at(-1);
 
   // Naming the latest exercise keeps the snippet current with every result.
   const pageDescription = latest
-    ? `Latest: ${formatExercise(latest)}. COE bidding results history for Cat A to E, with yearly averages, record highs and price charts.`
+    ? `Latest: ${formatExercise(latest)}. COE bidding results history for Cat A to E, with every exercise and price charts.`
     : description;
 
   return {
@@ -129,138 +95,56 @@ export default function COEResultsPage({ searchParams }: PageProps) {
         }}
       />
 
-      {/* Direction D's head, with the key numbers beside it once the page is
-          wide. It describes the latest exercise from cached data, whatever
-          period the page shows, so it is in the static shell. */}
-      <HeadGrid
-        keys={
-          <SectionErrorBoundary title="Key numbers unavailable">
-            <ResultsKeyNumbers />
-          </SectionErrorBoundary>
-        }
-      >
-        <HeadTitle
-          eyebrow={
-            <>
-              Certificate of Entitlement
-              <ResultsExerciseName />
-            </>
-          }
-          title="COE bidding results history"
-        />
-        <SectionErrorBoundary title="Latest exercise unavailable">
-          <ResultsHero />
-        </SectionErrorBoundary>
-        <div>
-          <SharePill title="COE bidding results history" />
-        </div>
-      </HeadGrid>
+      {/* The toolbar and KPIs describe the latest exercise from cached data,
+          whatever the URL selects, so they are in the static shell. */}
+      <PageToolbar
+        actions={<SharePill title="COE bidding results history" />}
+        asOf={<ResultsAsOf />}
+        title="COE bidding results history"
+      />
 
-      <Hairline />
+      <SectionErrorBoundary title="Key numbers unavailable">
+        <ResultsKpis />
+      </SectionErrorBoundary>
 
       {/* The plotted series and the period follow the URL, so only the
-          caption, the toggles and the chart wait; the title is in the shell. */}
-      <section className="flex scroll-mt-4 flex-col gap-4" id="res-chart">
-        <SectionHead
-          caption={
-            <Suspense fallback=" ">
-              <ResultsChartCaption searchParams={searchParams} />
+          description, the toggles and the chart wait. */}
+      <SectionErrorBoundary title="Premium chart unavailable">
+        <FigureCard
+          description={
+            <Suspense fallback="Closing premium per exercise">
+              <ResultsChartCount searchParams={searchParams} />
             </Suspense>
-          }
-          eyebrow={
-            <>
-              Figure 1
-              <Suspense fallback={null}>
-                <ResultsChartCount searchParams={searchParams} />
-              </Suspense>
-            </>
           }
           title="Closing premium by category"
           trailing={
-            <Suspense fallback={<Skeleton className="h-8 w-80" />}>
+            <Suspense fallback={<Skeleton className="h-8 w-80 max-w-full" />}>
               <SeriesFilter />
             </Suspense>
           }
-        />
-        <SectionErrorBoundary title="Premium chart unavailable">
+        >
           <Suspense fallback={<Skeleton className="h-80 w-full" />}>
             <ResultsChartPanel searchParams={searchParams} />
           </Suspense>
-        </SectionErrorBoundary>
-      </section>
+        </FigureCard>
+      </SectionErrorBoundary>
 
-      <Hairline />
-
-      <section className="flex scroll-mt-4 flex-col gap-4" id="res-exercises">
-        <SectionHead
-          caption={
-            <Suspense fallback=" ">
-              <ResultsByExerciseCaption searchParams={searchParams} />
-            </Suspense>
-          }
-          eyebrow="Figure 2 · Results by exercise"
-          title="Closing premium per category"
-        />
-        <SectionErrorBoundary title="COE results unavailable">
+      <SectionErrorBoundary title="COE results unavailable">
+        <FigureCard
+          description="Closing premium per category, latest first"
+          title="Results by exercise"
+        >
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
             <ResultsByExercise searchParams={searchParams} />
           </Suspense>
-        </SectionErrorBoundary>
-      </section>
+        </FigureCard>
+      </SectionErrorBoundary>
 
-      <Hairline />
-
-      <section className="flex scroll-mt-4 flex-col gap-4" id="res-years">
-        <SectionErrorBoundary title="Yearly COE prices unavailable">
-          <PremiumsByYear />
-        </SectionErrorBoundary>
-      </section>
-
-      <Hairline />
-
-      <section className="scroll-mt-4" id="res-records">
-        <SectionErrorBoundary title="Record COE prices unavailable">
-          <RecordHighs />
-        </SectionErrorBoundary>
-      </section>
-
-      <Hairline />
-
-      <div className="scroll-mt-4" id="res-quota">
-        <SectionErrorBoundary title="Quota and demand unavailable">
-          <QuotaAndDemand />
-        </SectionErrorBoundary>
-      </div>
-
-      <Hairline />
-
-      <section className="flex flex-col gap-4">
-        <SectionHead
-          eyebrow="Reading the numbers"
-          title="How an exercise runs"
-        />
-        <Typography.Paragraph className="max-w-prose">
-          Bidding opens at 12pm on the first Monday and third Monday of each
-          month and closes at 4pm on the third day. The premium is the lowest
-          successful bid, so everyone who wins pays the same price.
-        </Typography.Paragraph>
-        <Typography.Paragraph className="max-w-prose">
-          Quotas are set quarterly from deregistrations and the allowed growth
-          in the vehicle population.
-        </Typography.Paragraph>
-        <div className="flex flex-col items-start gap-2">
-          <SectionLink className="ml-0" href="/coe/results">
-            Premium trends by category
-          </SectionLink>
-          <SectionLink className="ml-0" href="/coe/pqp">
-            PQP renewal rates
-          </SectionLink>
-        </div>
-      </section>
-
-      <Hairline />
-
-      <ResultsFaq />
+      <nav aria-label="Related">
+        <SectionLink className="ml-0" href="/coe/pqp">
+          PQP renewal rates
+        </SectionLink>
+      </nav>
     </OverviewPage>
   );
 }
