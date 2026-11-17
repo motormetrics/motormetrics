@@ -3,49 +3,16 @@ import type {
   Range,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
 
-/** Fuel type recorded against battery-electric vehicles in `vehicle_population`. */
-export const ELECTRIC_POPULATION_FUEL_TYPE = "Electric";
-
 /** LTA's Singapore Green Plan 2030 target for public charging points. */
 export const CHARGING_POINT_TARGET_2030 = 60_000;
 
-interface PowertrainSegment {
-  /** Colour for the split bar and the trend chart. */
-  colour: string;
-  key: Powertrain;
-  /** Used in legends, captions and on the tab pills. */
-  label: string;
-}
-
-/**
- * The three powertrains `getEvMonthlyTrend()` returns, plus the combined view.
- * Ordered cleanest-to-dirtiest so the split bar reads left to right.
- */
-export const POWERTRAIN_SEGMENTS: PowertrainSegment[] = [
-  {
-    colour: "var(--chart-1)",
-    key: "bev",
-    label: "Battery-electric",
-  },
-  {
-    colour: "var(--chart-3)",
-    key: "phev",
-    label: "Plug-in hybrid",
-  },
-  {
-    colour: "var(--chart-5)",
-    key: "hybrid",
-    label: "Hybrid",
-  },
-];
-
+/** The powertrain switch on the registration trend card. */
 export const POWERTRAIN_TABS: { key: Powertrain; label: string }[] = [
   { key: "all", label: "All electrified" },
-  ...POWERTRAIN_SEGMENTS.map(({ key, label }) => ({ key, label })),
+  { key: "bev", label: "Battery-electric" },
+  { key: "phev", label: "Plug-in hybrid" },
+  { key: "hybrid", label: "Hybrid" },
 ];
-
-/** Colour of everything that is neither battery-electric nor hybrid. */
-export const COMBUSTION_COLOUR = "var(--chart-2)";
 
 /** Period captions for the fixed ranges; "All" names its first month instead. */
 export const RANGE_NOTES: Record<Exclude<Range, "All">, string> = {

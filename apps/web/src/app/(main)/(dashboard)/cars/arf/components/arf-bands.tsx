@@ -1,93 +1,100 @@
 "use client";
 
-import { cn, Table } from "@heroui/react";
+import { Typography } from "@heroui/react";
+import { DataGrid, type DataGridColumn } from "@heroui-pro/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   type ArfBand,
   type ArfSchedule,
   bandLabel,
 } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-rates";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
+import { FigureCard } from "@web/components/shared/figure-card";
 
 const formatRate = (rate: number) => `${Math.round(rate * 100)}%`;
 
+interface BandRow {
+  /** What the entered OMV adds in this band; `undefined` when not reached. */
+  amount: number | undefined;
+  from: number;
+  label: string;
+  rate: number;
+}
+
+const columns: DataGridColumn<BandRow>[] = [
+  {
+    accessorKey: "label",
+    header: "OMV band",
+    id: "label",
+    isRowHeader: true,
+    minWidth: 160,
+  },
+  {
+    align: "end",
+    cell: (row) => (
+      <Typography.Paragraph className="text-end tabular-nums" size="sm">
+        {formatRate(row.rate)}
+      </Typography.Paragraph>
+    ),
+    header: "Rate",
+    id: "rate",
+    width: 72,
+  },
+  {
+    align: "end",
+    cell: (row) =>
+      row.amount === undefined ? (
+        <Typography.Paragraph className="text-end" color="muted" size="sm">
+          Not reached
+        </Typography.Paragraph>
+      ) : (
+        <Typography.Paragraph
+          className="text-end tabular-nums"
+          size="sm"
+          weight="semibold"
+        >
+          {formatCurrency(row.amount)}
+        </Typography.Paragraph>
+      ),
+    header: "Your ARF",
+    id: "amount",
+    width: 120,
+  },
+];
+
 /**
- * Figure 2: every band of the selected schedule, with what the entered OMV
- * adds in each and a bar for its share of the total. Bands the OMV does not
- * reach stay in the table, so the whole schedule reads at a glance.
+ * Every band of the selected schedule, with what the entered OMV adds in
+ * each. Bands the OMV does not reach stay in the table, so the whole schedule
+ * reads at a glance.
  */
 export function ArfBands({
   bands,
   schedule,
-  total,
 }: {
   bands: ArfBand[];
   schedule: ArfSchedule;
-  total: number;
 }) {
-  const topBand = bands.at(-1);
-  const caption = topBand
-    ? `The OMV reaches ${bands.length} of the ${schedule.tiers.length} bands. The top band it reaches, at ${formatRate(topBand.rate)}, adds ${formatCurrency(topBand.amount)}, ${((topBand.amount / total) * 100).toFixed(1)}% of the ARF.`
-    : "Enter an OMV to see what each band adds.";
+  const rows: BandRow[] = schedule.tiers.map(({ rate, upTo }, index) => {
+    const from = schedule.tiers[index - 1]?.upTo ?? 0;
+    return {
+      amount: bands[index]?.amount,
+      from,
+      label: bandLabel(from, upTo),
+      rate,
+    };
+  });
 
   return (
-    <section className="flex scroll-mt-20 flex-col gap-4" id="arf-bands">
-      <SectionHead
-        caption={caption}
-        eyebrow={`Figure 2 · COE obtained: ${schedule.label}`}
-        title="ARF band by band"
+    <FigureCard
+      description={`Schedule: ${schedule.label}`}
+      title="ARF band by band"
+    >
+      <DataGrid
+        aria-label={`ARF by OMV band, COE obtained ${schedule.label}`}
+        columns={columns}
+        data={rows}
+        getRowId={(row) => row.from}
+        variant="secondary"
       />
-      <Table variant="secondary">
-        <Table.ScrollContainer>
-          <Table.Content
-            aria-label={`ARF by OMV band, COE obtained ${schedule.label}`}
-            className="tabular-nums"
-          >
-            <Table.Header>
-              <Table.Column isRowHeader>OMV band</Table.Column>
-              <Table.Column className="text-right">Rate</Table.Column>
-              <Table.Column className="max-lg:hidden">
-                Share of your ARF
-              </Table.Column>
-              <Table.Column className="text-right">Your ARF</Table.Column>
-            </Table.Header>
-            <Table.Body>
-              {schedule.tiers.map(({ rate, upTo }, index) => {
-                const from = schedule.tiers[index - 1]?.upTo ?? 0;
-                const band = bands[index];
-                const isTop = band !== undefined && band === topBand;
-                return (
-                  <Table.Row id={from} key={from}>
-                    <Table.Cell className={cn(isTop && "text-accent")}>
-                      {bandLabel(from, upTo)}
-                    </Table.Cell>
-                    <Table.Cell className="text-right">
-                      {formatRate(rate)}
-                    </Table.Cell>
-                    <Table.Cell className="max-lg:hidden">
-                      <span className="block h-1.5 w-48 bg-surface-secondary">
-                        <span
-                          className="block h-full bg-chart-1"
-                          style={{
-                            width: `${band && total > 0 ? ((band.amount / total) * 100).toFixed(1) : 0}%`,
-                          }}
-                        />
-                      </span>
-                    </Table.Cell>
-                    <Table.Cell className="text-right">
-                      {band ? formatCurrency(band.amount) : "Not reached"}
-                    </Table.Cell>
-                  </Table.Row>
-                );
-              })}
-            </Table.Body>
-          </Table.Content>
-        </Table.ScrollContainer>
-      </Table>
-      <SourceNote>
-        Source: LTA · Each rate is charged only on the part of the OMV inside
-        its band. Figures are before any VES or EEAI rebate or surcharge.
-      </SourceNote>
-    </section>
+    </FigureCard>
   );
 }

@@ -1,24 +1,12 @@
-import { Typography } from "@heroui/react";
 import { ARFCalculator } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-calculator";
-import { ARF_FAQS } from "@web/app/(main)/(dashboard)/cars/arf/components/faq-data";
-import {
-  Hairline,
-  OverviewPage,
-  SectionHead,
-  SectionLink,
-  SourceNote,
-} from "@web/components/shared/overview";
-import { PageFaq } from "@web/components/shared/page-faq";
+import { OverviewPage, SectionLink } from "@web/components/shared/overview";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import {
-  generateBreadcrumbSchema,
-  generateFAQPageSchema,
-} from "@web/lib/metadata";
+import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import type { Metadata } from "next";
-import Link from "next/link";
 import type { WebPage, WithContext } from "schema-dts";
 
 const title = "ARF Calculator Singapore";
@@ -73,83 +61,32 @@ export default function ARFCalculatorPage() {
         }}
       />
 
-      <ARFCalculator
-        head={
-          <>
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <Typography.Paragraph
-                className="uppercase"
-                color="muted"
-                size="xs"
-                weight="semibold"
-              >
-                Calculator · LTA car ARF tiers
-              </Typography.Paragraph>
-              <SharePill title="ARF calculator" />
-            </div>
-            <Typography.Heading level={1}>ARF calculator</Typography.Heading>
-            <Typography.Paragraph color="muted" size="sm">
-              Current tiers apply to COEs from the{" "}
-              <span className="font-semibold text-foreground">
-                2nd bidding exercise, February 2023
-              </span>{" "}
-              · Source: LTA
-            </Typography.Paragraph>
-          </>
-        }
+      <PageToolbar
+        actions={<SharePill title="ARF calculator" />}
+        asOf="Current tiers apply to COEs from the 2nd bidding exercise, February 2023 · Source: LTA"
+        title="ARF calculator"
       />
 
-      <Hairline />
+      <ARFCalculator />
 
-      <section className="flex scroll-mt-20 flex-col gap-4" id="arf-notes">
-        <SectionHead
-          eyebrow="Before you rely on it"
-          title="What the figures assume"
-        />
-        <Typography.Paragraph className="max-w-prose">
-          Figures are for illustration only and are before any VES or EEAI
-          rebate or surcharge. LTA charges the ARF on the car&apos;s OMV, band
-          by band, at the rates in force when its COE was obtained. The ARF you
-          pay is what{" "}
-          <Link className="font-semibold text-accent" href="/cars/parf">
-            your PARF rebate
-          </Link>{" "}
-          is worked out from, and the{" "}
-          <Link className="font-semibold text-accent" href="/learn/arf">
-            ARF guide
-          </Link>{" "}
-          explains how it fits into the price of a car.
-        </Typography.Paragraph>
-        <SourceNote>
-          Estimates only, not financial advice or a recommendation. MotorMetrics
-          is not affiliated with LTA; check your figures on OneMotoring.
-        </SourceNote>
-        <div className="flex flex-wrap gap-x-6 gap-y-2">
-          <SectionLink
-            className="ml-0"
-            href="https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/upfront-vehicle-costs/tax-structure.html"
-            rel="noopener noreferrer nofollow"
-          >
-            LTA tax structure
-          </SectionLink>
-          <SectionLink className="ml-0" href="/cars/parf">
-            PARF calculator
-          </SectionLink>
-          <SectionLink className="ml-0" href="/coe/results">
-            COE premiums
-          </SectionLink>
-        </div>
-      </section>
-
-      <Hairline />
-
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: ARF_FAQS }]),
-        }}
-      />
-      <PageFaq faqs={ARF_FAQS} />
+      <nav aria-label="Related" className="flex flex-wrap gap-x-6 gap-y-2">
+        <SectionLink className="ml-0" href="/learn/arf">
+          ARF guide
+        </SectionLink>
+        <SectionLink
+          className="ml-0"
+          href="https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/upfront-vehicle-costs/tax-structure.html"
+          rel="noopener noreferrer nofollow"
+        >
+          LTA tax structure
+        </SectionLink>
+        <SectionLink className="ml-0" href="/cars/parf">
+          PARF calculator
+        </SectionLink>
+        <SectionLink className="ml-0" href="/coe/results">
+          COE premiums
+        </SectionLink>
+      </nav>
     </OverviewPage>
   );
 }

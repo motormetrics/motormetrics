@@ -1,66 +1,22 @@
-import { Skeleton, Typography } from "@heroui/react";
+import { Skeleton } from "@heroui/react";
+import { ShareByMonthCard } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-by-month";
 import {
-  AdoptionByMonth,
-  loadShareWindow,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/adoption-by-month";
-import { ChargingSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/charging-summary";
-import {
-  ElectrifiedMix,
-  MixCaption,
-  MixTitle,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/electrified-total";
-import {
-  EvHero,
-  EvKeyNumbers,
-  EvLead,
-  SelectedMonth,
-  SelectedMonthName,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-head";
-import {
-  EvLeaderboard,
-  loadEvMakes,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-leaderboard";
-import {
-  loadEvSelection,
-  type SelectionProps,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
-import {
-  summariseLeaderboard,
-  yearToDateMakes,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import {
-  chargingCaption,
-  makesCaption,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-summary";
-import { buildElectricVehiclesFaqs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/faq-data";
-import { RegistrationTrend } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/registration-trend";
-import {
-  VES_BANDS,
-  VesBands,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ves-bands";
-import { CHARGING_POINT_TARGET_2030 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
+  EvAsOf,
+  EvKpis,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-kpis";
+import { EvMakesCard } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-leaderboard";
+import { loadEvSelection } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
+import { RegistrationTrendCard } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/registration-trend";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import { MonthMenu } from "@web/components/shared/month-menu";
-import {
-  Hairline,
-  OverviewPage,
-  SectionHead,
-  SourceNote,
-} from "@web/components/shared/overview";
-import { PageFaq } from "@web/components/shared/page-faq";
+import { OverviewPage } from "@web/components/shared/overview";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
-import { EV_FUEL_TYPES, SITE_TITLE, SITE_URL } from "@web/config";
-import {
-  generateBreadcrumbSchema,
-  generateFAQPageSchema,
-} from "@web/lib/metadata";
+import { SITE_TITLE, SITE_URL } from "@web/config";
+import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
-import { getFuelTypeData } from "@web/queries/cars";
-import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
-import { getEvChargingNetworkSummary } from "@web/queries/ev-charging";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import type { SearchParams } from "nuqs/server";
@@ -107,37 +63,6 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
-/**
- * The questions and their FAQPage schema. Quotes the latest month's year to
- * date whatever month is selected, so it reads no search params.
- */
-async function ElectricVehiclesFaq() {
-  const [month, electric] = await Promise.all([
-    getCarsLatestMonth(),
-    getFuelTypeData(EV_FUEL_TYPES.BEV[0]),
-  ]);
-  const faqs = buildElectricVehiclesFaqs(
-    month
-      ? summariseLeaderboard(
-          yearToDateMakes(electric.data, EV_FUEL_TYPES.BEV, month),
-          month,
-        )
-      : undefined,
-  );
-
-  return (
-    <>
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: faqs }]),
-        }}
-      />
-      <PageFaq faqs={faqs} />
-    </>
-  );
-}
-
 async function MonthControl({ searchParams }: PageProps) {
   const { month: requestedMonth } = await loadSearchParams(searchParams);
   const [months, { month, wasAdjusted }] = await Promise.all([
@@ -151,27 +76,6 @@ async function MonthControl({ searchParams }: PageProps) {
 
   return (
     <MonthMenu latestMonth={month} months={months} wasAdjusted={wasAdjusted} />
-  );
-}
-
-async function MakesCaption({ selection }: SelectionProps) {
-  const { month } = await selection;
-  const [makes, shares] = await Promise.all([
-    loadEvMakes(month),
-    loadShareWindow(month),
-  ]);
-
-  return makesCaption(makes, month, shares);
-}
-
-/** Reads only cached network data, so it is part of the static shell. */
-async function ChargingCaption() {
-  const network = await getEvChargingNetworkSummary();
-
-  return chargingCaption(
-    network.connectors,
-    CHARGING_POINT_TARGET_2030,
-    VES_BANDS[0].value,
   );
 }
 
@@ -193,142 +97,40 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
         }}
       />
 
-      {/* Direction D's head: eyebrow, title, range hero, lead, tools and
-          source, with the key numbers beside it once the page is wide and
-          under it before then. Only the figures wait on the selected month. */}
-      <HeadGrid
-        keys={
-          <SectionErrorBoundary title="Key numbers unavailable">
-            <EvKeyNumbers selection={selection} />
-          </SectionErrorBoundary>
-        }
-      >
-        <HeadTitle
-          eyebrow={
-            <>
-              Electric vehicles ·{" "}
-              <Suspense fallback=" ">
-                <SelectedMonth selection={selection} />
-              </Suspense>{" "}
-              registrations
-            </>
-          }
-          title="Electric vehicles in Singapore"
-        />
-        <SectionErrorBoundary title="EV share unavailable">
-          <EvHero selection={selection} />
-        </SectionErrorBoundary>
-        <Typography.Paragraph className="max-w-prose tabular-nums">
-          <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-            <EvLead selection={selection} />
-          </Suspense>
-        </Typography.Paragraph>
-        <div className="flex flex-wrap items-end gap-4">
-          <div className="flex flex-col gap-1">
-            <span className="font-semibold text-muted text-xs">Month</span>
+      {/* The dashboard template: a toolbar, four KPI tiles, a chart pair and
+          one table. The cards are in the static shell; only the parts that
+          read the month, powertrain or range wait behind a boundary. */}
+      <PageToolbar
+        actions={
+          <>
             <Suspense fallback={<Skeleton className="h-10 w-36" />}>
               <MonthControl searchParams={searchParams} />
             </Suspense>
-          </div>
-          <SharePill title="Electric vehicles in Singapore" />
-        </div>
-        <Typography.Paragraph color="muted" size="sm">
-          New car registrations. EV means battery-electric. Source: LTA via
-          DataMall.
-        </Typography.Paragraph>
-      </HeadGrid>
+            <SharePill title="Electric vehicles in Singapore" />
+          </>
+        }
+        asOf={<EvAsOf />}
+        title="Electric vehicles in Singapore"
+      />
 
-      <Hairline />
-
-      <section
-        className="@container flex scroll-mt-4 flex-col gap-4"
-        id="ev-mix"
-      >
-        <SectionHead
-          caption={
-            <Suspense fallback=" ">
-              <MixCaption selection={selection} />
-            </Suspense>
-          }
-          eyebrow={
-            <>
-              Figure 1 · Powertrain mix ·{" "}
-              <Suspense fallback=" ">
-                <SelectedMonthName selection={selection} />
-              </Suspense>
-            </>
-          }
-          title={
-            <>
-              Electrified total{" "}
-              <Suspense fallback=" ">
-                <MixTitle selection={selection} />
-              </Suspense>
-            </>
-          }
-        />
-        <SectionErrorBoundary title="Electrified total unavailable">
-          <Suspense fallback={<Skeleton className="h-40 w-full" />}>
-            <ElectrifiedMix selection={selection} />
-          </Suspense>
-        </SectionErrorBoundary>
-        <SourceNote>
-          Source: LTA via DataMall · Electrified is battery-electric, plug-in
-          hybrid and hybrid combined, as a share of the month&apos;s new cars.
-        </SourceNote>
-      </section>
-
-      <Hairline />
-
-      <SectionErrorBoundary title="Registration trend unavailable">
-        <RegistrationTrend selection={selection} />
+      <SectionErrorBoundary title="Key numbers unavailable">
+        <Suspense fallback={<Skeleton className="h-36 w-full" />}>
+          <EvKpis selection={selection} />
+        </Suspense>
       </SectionErrorBoundary>
 
-      <Hairline />
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <SectionErrorBoundary title="Registration trend unavailable">
+          <RegistrationTrendCard selection={selection} />
+        </SectionErrorBoundary>
+        <SectionErrorBoundary title="Battery-electric share unavailable">
+          <ShareByMonthCard selection={selection} />
+        </SectionErrorBoundary>
+      </div>
 
-      <section className="flex scroll-mt-4 flex-col gap-6" id="ev-makes">
-        <SectionHead
-          caption={
-            <Suspense fallback=" ">
-              <MakesCaption selection={selection} />
-            </Suspense>
-          }
-          eyebrow="Figure 3 · Makes and adoption"
-          title="Who sells them, and how fast they are catching on"
-        />
-        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
-          <SectionErrorBoundary title="EV leaderboard unavailable">
-            <EvLeaderboard selection={selection} />
-          </SectionErrorBoundary>
-          <SectionErrorBoundary title="Monthly adoption unavailable">
-            <AdoptionByMonth selection={selection} />
-          </SectionErrorBoundary>
-        </div>
-        <SourceNote>
-          Source: LTA via DataMall · New car registrations.
-        </SourceNote>
-      </section>
-
-      <Hairline />
-
-      <section className="flex scroll-mt-4 flex-col gap-6" id="ev-charging">
-        <SectionHead
-          caption={<ChargingCaption />}
-          eyebrow="Figure 4 · Infrastructure and incentives"
-          title="Charging network and VES bands"
-        />
-        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
-          <SectionErrorBoundary title="Charging network unavailable">
-            <ChargingSummary />
-          </SectionErrorBoundary>
-          <VesBands />
-        </div>
-        <SourceNote>Source: LTA; LTA DataMall EV Charging Points.</SourceNote>
-      </section>
-
-      <Hairline />
-
-      <ElectricVehiclesFaq />
+      <SectionErrorBoundary title="EV makes unavailable">
+        <EvMakesCard selection={selection} />
+      </SectionErrorBoundary>
     </OverviewPage>
   );
 }

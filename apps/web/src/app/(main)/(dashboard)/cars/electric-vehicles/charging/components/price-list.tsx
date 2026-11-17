@@ -1,9 +1,17 @@
-import { Card, Skeleton, Typography } from "@heroui/react";
-import { LocationRow } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/location-row";
+import { Skeleton, Typography } from "@heroui/react";
 import { ZERO_RATE_DISCLAIMER } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-stats";
+import { PriceTable } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/price-table";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
+import {
+  describeConnectors,
+  siteTitle,
+} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/utils/describe-connectors";
 import { QueryTabs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/query-tabs";
-import { getPostalDistrict } from "@web/config/postal-districts";
+import { FigureCard } from "@web/components/shared/figure-card";
+import {
+  districtForPostalCode,
+  getPostalDistrict,
+} from "@web/config/postal-districts";
 import { getEvChargingPriceRankings } from "@web/queries/ev-charging";
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
@@ -23,61 +31,48 @@ interface PriceListProps {
 }
 
 /**
- * One ranked list of advertised per-kWh rates. Power rating and sort order
- * are both URL params, set by the two switches beside the heading, so a
- * change re-renders the list on the server.
- *
- * It replaces the separate cheapest and most-expensive cards, whose toggles
- * wrote the same `power` param and so changed each other out of sight.
- *
- * The card prerenders into the static shell; the heading, switches and rows
- * read the URL, so each streams in behind its own boundary.
+ * One ranked table of advertised per-kWh rates. Power rating and sort order
+ * are URL params, set by the two switches in the card head, so a change
+ * re-renders the table on the server. The card is in the static shell; the
+ * parts that read the URL stream behind their own boundaries.
  */
 export function PriceList({ searchParams }: PriceListProps) {
   return (
-    <Card className="gap-4 p-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <Suspense fallback={<Skeleton className="h-8 w-72" />}>
-          <PriceHeading searchParams={searchParams} />
+    <FigureCard
+      description={
+        <Suspense fallback=" ">
+          <PriceScope searchParams={searchParams} />
         </Suspense>
-        <Suspense fallback={<Skeleton className="h-11 w-80" />}>
+      }
+      title="Charging rates"
+      trailing={
+        <Suspense fallback={<Skeleton className="h-10 w-72" />}>
           <PriceSwitches searchParams={searchParams} />
         </Suspense>
-      </div>
-
-      <Suspense
-        fallback={
-          <div className="flex flex-col gap-4">
-            {Array.from({ length: 10 }, (_, index) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: skeleton items are static placeholders
-              <Skeleton key={index} className="h-10 w-full" />
-            ))}
-          </div>
-        }
-      >
+      }
+    >
+      <Suspense fallback={<Skeleton className="h-96 w-full" />}>
         <PriceRows searchParams={searchParams} />
       </Suspense>
-    </Card>
+    </FigureCard>
   );
 }
 
-async function PriceHeading({ searchParams }: PriceListProps) {
+/** "Cheapest DC fast chargers in Tampines, per kWh". */
+async function PriceScope({ searchParams }: PriceListProps) {
   const { district, order, power } = await loadSearchParams(searchParams);
   const scope = getPostalDistrict(district)?.name ?? "Singapore";
   const rank = order === "cheapest" ? "Cheapest" : "Most expensive";
   const rating = power === "DC" ? "DC fast" : "AC";
 
-  return (
-    <Typography.Heading level={2}>
-      {`${rank} ${rating} chargers in ${scope}`}
-    </Typography.Heading>
-  );
+  return `${rank} ${rating} chargers in ${scope}, per kWh`;
 }
 
 async function PriceSwitches({ searchParams }: PriceListProps) {
   const { order, power } = await loadSearchParams(searchParams);
+
   return (
-    <div className="flex flex-wrap gap-2">
+    <>
       <QueryTabs
         ariaLabel="Charger type"
         options={POWER_OPTIONS}
@@ -92,41 +87,36 @@ async function PriceSwitches({ searchParams }: PriceListProps) {
         value={order}
         variant="segmented"
       />
-    </div>
+    </>
   );
 }
 
 async function PriceRows({ searchParams }: PriceListProps) {
   const { district, order, power } = await loadSearchParams(searchParams);
   const locations = await getEvChargingPriceRankings({
-    powerRating: power,
-    order,
     district: district || undefined,
+    order,
+    powerRating: power,
   });
   const scope = getPostalDistrict(district)?.name ?? "Singapore";
 
   return (
     <>
-      {locations.length === 0 ? (
-        <Typography.Paragraph color="muted" size="sm">
-          No {power} chargers with a per-kWh price in {scope} yet.
-        </Typography.Paragraph>
-      ) : (
-        <ol className="flex flex-col gap-4">
-          {locations.map((location, index) => (
-            <LocationRow
-              index={index}
-              key={location.locationId}
-              location={location}
-              trailing={`$${location.pricePerKwh.toFixed(2)}/kWh`}
-            />
-          ))}
-        </ol>
-      )}
-
-      <Typography.Paragraph color="muted" size="xs">
-        Per-kWh rates from LTA DataMall · {scope}
-      </Typography.Paragraph>
+      <PriceTable
+        label={`${order === "cheapest" ? "Cheapest" : "Most expensive"} ${power} chargers in ${scope}`}
+        rows={locations.map((location, index) => ({
+          detail: [
+            districtForPostalCode(location.postalCode)?.name,
+            describeConnectors(location),
+          ]
+            .filter(Boolean)
+            .join(" · "),
+          locationId: location.locationId,
+          pricePerKwh: location.pricePerKwh,
+          rank: index + 1,
+          title: siteTitle(location),
+        }))}
+      />
       {locations.some((location) => location.pricePerKwh === 0) ? (
         <Typography.Paragraph color="muted" size="xs">
           {ZERO_RATE_DISCLAIMER}

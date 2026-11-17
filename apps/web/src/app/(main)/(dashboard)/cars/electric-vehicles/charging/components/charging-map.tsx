@@ -1,59 +1,26 @@
-// import { Card } from "@heroui/react";
-import { Skeleton } from "@heroui/react";
 import { ChargingMapView } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/charging-map-view";
-import { LiveChip } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/components/live-status";
-import {
-  loadSearchParams,
-  MAP_ANCHOR_ID,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
-import type { SearchParams } from "nuqs/server";
-import { Suspense } from "react";
+import { MAP_ANCHOR_ID } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
+import { FigureCard } from "@web/components/shared/figure-card";
 
 /**
- * Every public charging site on a map, coloured by live availability, run
- * edge to edge across the page with the price content overlapping its lower
- * half.
+ * Every public charging site on a map, coloured by availability at the
+ * latest hourly snapshot.
  *
- * It awaits nothing on the server. `ChargingMapView` reads the district and
- * selected site from the URL with nuqs, so this boundary renders at request
- * time rather than in the static shell; awaiting the site list here made the
- * whole card wait for the snapshot behind it, which on a cold instance is a
- * ~5 MB download before a single pixel of the card could stream.
- *
- * The site list is fetched on the client from `/api/ev-charging/map-sites`,
- * which also keeps 2,755 sites out of the RSC payload. An empty or failed
- * fetch is handled in the view, which shows a message in the map area.
- *
- * The live availability chip streams in its own boundary and is handed to the
- * view to sit with the map controls.
+ * It awaits nothing on the server, so the card is part of the static shell.
+ * `ChargingMapView` reads the district and selected site from the URL with
+ * nuqs and fetches the site list on the client from
+ * `/api/ev-charging/map-sites`, which keeps 2,755 sites out of the RSC
+ * payload. The page wraps it in Suspense for the nuqs hooks.
  */
-export function ChargingMap({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
+export function ChargingMap() {
   return (
-    // Bleeds to the edge of the inset content area by cancelling its padding
-    // (`px-4 md:px-6` in InsetVariant). Keep the two in step.
-    <div className="-mx-4 scroll-mt-6 md:-mx-6" id={MAP_ANCHOR_ID}>
-      {/* <Card className="gap-4 p-6"> */}
-      <ChargingMapView
-        liveStatus={
-          <Suspense fallback={<Skeleton className="h-16 w-56" />}>
-            <MapLiveChip searchParams={searchParams} />
-          </Suspense>
-        }
-      />
-      {/* </Card> */}
+    <div className="scroll-mt-6" id={MAP_ANCHOR_ID}>
+      <FigureCard
+        description="Green has free connectors · amber is full · grey is out of service"
+        title="Chargers by availability"
+      >
+        <ChargingMapView />
+      </FigureCard>
     </div>
   );
-}
-
-async function MapLiveChip({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const { district } = await loadSearchParams(searchParams);
-  return <LiveChip district={district} />;
 }

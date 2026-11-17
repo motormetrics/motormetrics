@@ -1,12 +1,10 @@
 import {
   batteryElectricMakes,
   batteryElectricShares,
-  buildRegistrationSplit,
   changeRatio,
   powertrainTotal,
   resolveMonthIndex,
   sliceRange,
-  summariseLeaderboard,
   yearToDateMakes,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import type { EvMarketShare, EvMonthlyTrend } from "@web/queries/cars";
@@ -19,13 +17,6 @@ const point: EvMonthlyTrend = {
   PHEV: 120,
   Hybrid: 1450,
 };
-
-const segments = [
-  { colour: "bev", key: "bev" as const, label: "Battery-electric" },
-  { colour: "phev", key: "phev" as const, label: "Plug-in hybrid" },
-  { colour: "hybrid", key: "hybrid" as const, label: "Hybrid" },
-];
-const combustion = { colour: "other", label: "Petrol & diesel" };
 
 const electricRows = [
   { month: "2025-01", make: "Tesla", fuelType: "Electric", count: 300 },
@@ -127,40 +118,6 @@ describe("batteryElectricShares", () => {
   });
 });
 
-describe("buildRegistrationSplit", () => {
-  it("should add a combustion remainder that closes the split to the month total", () => {
-    const split = buildRegistrationSplit(point, 6000, segments, combustion);
-
-    expect(split.map(({ label }) => label)).toEqual([
-      "Battery-electric",
-      "Plug-in hybrid",
-      "Hybrid",
-      "Petrol & diesel",
-    ]);
-    expect(split.at(-1)?.value).toBe(2576);
-    expect(split.reduce((sum, segment) => sum + segment.share, 0)).toBeCloseTo(
-      100,
-    );
-  });
-
-  it("should floor the remainder at zero when electrified rows exceed the total", () => {
-    const split = buildRegistrationSplit(point, 100, segments, combustion);
-
-    expect(split.at(-1)?.value).toBe(0);
-  });
-
-  it("should not divide by zero for a month with no registrations", () => {
-    const split = buildRegistrationSplit(
-      { month: "2025-10", BEV: 0, PHEV: 0, Hybrid: 0 },
-      0,
-      segments,
-      combustion,
-    );
-
-    expect(split.every(({ share }) => share === 0)).toBe(true);
-  });
-});
-
 describe("yearToDateMakes", () => {
   it("should sum each make from January to the selected month", () => {
     expect(yearToDateMakes(electricRows, ["Electric"], "2025-02")).toEqual([
@@ -225,36 +182,5 @@ describe("batteryElectricMakes", () => {
       { fuelType: "Electric", total: 0, makes: [{ make: "Ghost", count: 0 }] },
     ];
     expect(batteryElectricMakes(withZero)).toEqual([]);
-  });
-});
-
-describe("summariseLeaderboard", () => {
-  const makes = [
-    { make: "BMW", count: 1204 },
-    { make: "Mercedes-Benz", count: 980 },
-    { make: "Audi", count: 615 },
-    { make: "Porsche", count: 121 },
-  ];
-
-  it("should name the period, the total and the top three makes", () => {
-    expect(summariseLeaderboard(makes, "2026-09")).toBe(
-      "From January to September 2026, 2,920 battery-electric cars were registered; BMW led with 1,204, ahead of Mercedes-Benz and Audi.",
-    );
-  });
-
-  it("should name the single month in January", () => {
-    expect(summariseLeaderboard(makes.slice(0, 2), "2026-01")).toBe(
-      "In January 2026, 2,184 battery-electric cars were registered; BMW led with 1,204, ahead of Mercedes-Benz.",
-    );
-  });
-
-  it("should drop the runners-up when only one make registered", () => {
-    expect(summariseLeaderboard(makes.slice(0, 1), "2026-03")).toBe(
-      "From January to March 2026, 1,204 battery-electric cars were registered; BMW led with 1,204.",
-    );
-  });
-
-  it("should return undefined when there are no makes", () => {
-    expect(summariseLeaderboard([], "2026-09")).toBeUndefined();
   });
 });

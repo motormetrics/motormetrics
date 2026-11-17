@@ -8,8 +8,8 @@ export interface AgeBracket {
 /**
  * The rebate schedule either side of Budget 2026.
  *
- * A plain module rather than a constant inside the calculator: the comparison
- * table is a server component, and every export of a `"use client"` module
+ * A plain module rather than a constant inside the calculator: the PQP
+ * renewal page reads it on the server, and every export of a `"use client"` module
  * crosses the boundary as a client reference rather than as its value.
  */
 export const AGE_BRACKETS: AgeBracket[] = [
@@ -49,19 +49,6 @@ export function calculateParf(arf: number, bracket: AgeBracket): ParfResult {
     oldUncapped,
     shortfall: oldRebate - newRebate,
   };
-}
-
-/**
- * The cut in percentage points across the brackets that pay a rebate, as one
- * figure when every bracket falls by the same amount, otherwise `null`.
- */
-export function uniformRateCut(brackets: readonly AgeBracket[]): number | null {
-  const cuts = new Set(
-    brackets
-      .filter(({ oldRate }) => oldRate > 0)
-      .map(({ newRate, oldRate }) => Math.round((oldRate - newRate) * 100)),
-  );
-  return cuts.size === 1 ? [...cuts][0] : null;
 }
 
 /** Whole Singapore dollars, as the calculator's money fields show them. */
