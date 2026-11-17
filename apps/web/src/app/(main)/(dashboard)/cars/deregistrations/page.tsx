@@ -3,7 +3,6 @@ import {
   Categories,
   CategoriesPeriod,
   DeregistrationsAsOf,
-  DeregistrationsKpis,
   ReportMonth,
   TrendChart,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-report";
@@ -107,12 +106,6 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
         asOf={<DeregistrationsAsOf />}
         title="Vehicle deregistrations"
       />
-
-      <SectionErrorBoundary title="Key numbers unavailable">
-        <Suspense fallback={<Skeleton className="h-40 w-full rounded-3xl" />}>
-          <DeregistrationsKpis report={report} />
-        </Suspense>
-      </SectionErrorBoundary>
 
       <FigureCard
         description={

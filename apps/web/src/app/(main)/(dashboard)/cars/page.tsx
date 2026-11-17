@@ -3,7 +3,6 @@ import { CarsMonthPicker } from "@web/app/(main)/(dashboard)/cars/components/car
 import { DimensionPanel } from "@web/app/(main)/(dashboard)/cars/components/dimension-panel";
 import {
   CarsAsOf,
-  CarsKpis,
   CarsYearOnYearCard,
 } from "@web/app/(main)/(dashboard)/cars/components/overview-figures";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
@@ -62,12 +61,6 @@ export default function CarsPage({ searchParams }: PageProps) {
         asOf={<CarsAsOf />}
         title="New car registrations"
       />
-
-      <SectionErrorBoundary title="Key numbers unavailable">
-        <Suspense fallback={<Skeleton className="h-40 w-full rounded-3xl" />}>
-          <CarsKpis searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
 
       <SectionErrorBoundary title="Registration trend unavailable">
         <Suspense fallback={<Skeleton className="h-96 w-full rounded-3xl" />}>

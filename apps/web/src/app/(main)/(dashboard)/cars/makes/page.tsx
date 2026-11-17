@@ -3,10 +3,7 @@ import { ComparisonLinks } from "@web/app/(main)/(dashboard)/cars/makes/compare/
 import { COMPARE_PAIRS } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import { ConcentrationCard } from "@web/app/(main)/(dashboard)/cars/makes/components/concentration-card";
 import { FastestGrowing } from "@web/app/(main)/(dashboard)/cars/makes/components/fastest-growing";
-import {
-  MakesAsOf,
-  MakesKpis,
-} from "@web/app/(main)/(dashboard)/cars/makes/components/makes-head";
+import { MakesAsOf } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-head";
 import {
   MakesControls,
   MakesTableCard,
@@ -110,10 +107,6 @@ export default function CarMakesPage({ searchParams }: PageProps) {
           asOf={<MakesAsOf />}
           title="Makes"
         />
-
-        <SectionErrorBoundary title="Key numbers unavailable">
-          <MakesKpis />
-        </SectionErrorBoundary>
 
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
           <SectionErrorBoundary title="Market concentration unavailable">

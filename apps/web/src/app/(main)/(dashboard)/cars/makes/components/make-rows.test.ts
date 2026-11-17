@@ -6,7 +6,6 @@ import {
   periodLabel,
   priorWindow,
   rollingMonths,
-  selectElectricOnlyMakes,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
 import { describe, expect, it } from "vitest";
 
@@ -232,32 +231,5 @@ describe("finaliseRows", () => {
 
     expect(rows[0].logoUrl).toBe("https://x/toyota.png");
     expect(rows[1].logoUrl).toBeNull();
-  });
-});
-
-describe("selectElectricOnlyMakes", () => {
-  it("should keep only makes whose whole year is battery-electric", () => {
-    const summary = selectElectricOnlyMakes(
-      stats,
-      new Map([
-        ["TOYOTA", 400],
-        ["BYD", 600],
-      ]),
-    );
-
-    expect(summary.makes.map((make) => make.make)).toEqual(["BYD"]);
-  });
-
-  it("should report their combined share of all registrations", () => {
-    const summary = selectElectricOnlyMakes(stats, new Map([["BYD", 600]]));
-
-    expect(summary.sharePercent).toBeCloseTo(37.5);
-  });
-
-  it("should report a zero share when no make is electric-only", () => {
-    const summary = selectElectricOnlyMakes(stats, new Map());
-
-    expect(summary.makes).toEqual([]);
-    expect(summary.sharePercent).toBe(0);
   });
 });

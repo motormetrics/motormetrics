@@ -20,9 +20,6 @@ import {
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { cacheLife, cacheTag } from "next/cache";
 
-/** The `cars.fuelType` value that means battery-electric and nothing else. */
-const BEV_FUEL_TYPE = "Electric";
-
 /** Below this many cars a year earlier, a percentage change says little. */
 export const MIN_BASE = 20;
 
@@ -339,92 +336,4 @@ export async function loadMakeRows(
     rows,
     total: rows.reduce((sum, row) => sum + row.count, 0),
   };
-}
-
-export interface ElectricOnlyMake {
-  count: number;
-  logoUrl: string | null;
-  make: string;
-  slug: string;
-}
-
-export interface ElectricOnlySummary {
-  makes: ElectricOnlyMake[];
-  sharePercent: number;
-}
-
-/**
- * Decide which makes sell nothing but battery-electric cars by comparing each
- * make's Electric registrations for the latest year against its total for the
- * same year — a make whose two figures agree has no petrol, diesel or hybrid
- * line at all.
- */
-export function selectElectricOnlyMakes(
-  stats: MakeRegistrationStat[],
-  electricByMake: Map<string, number>,
-  logoUrlBySlug: Record<string, string> = {},
-): ElectricOnlySummary {
-  const grandTotal = stats.reduce((sum, stat) => sum + stat.count, 0);
-  const electricOnly = stats
-    .filter(
-      (stat) => stat.count > 0 && electricByMake.get(stat.make) === stat.count,
-    )
-    .sort((a, b) => b.count - a.count);
-
-  const electricOnlyTotal = electricOnly.reduce(
-    (sum, stat) => sum + stat.count,
-    0,
-  );
-
-  return {
-    makes: electricOnly.map((stat) => {
-      const slug = slugify(stat.make);
-      return {
-        count: stat.count,
-        logoUrl: logoUrlBySlug[slug] ?? null,
-        make: stat.make,
-        slug,
-      };
-    }),
-    sharePercent: grandTotal > 0 ? (electricOnlyTotal / grandTotal) * 100 : 0,
-  };
-}
-
-export async function loadElectricOnlyMakes(): Promise<ElectricOnlySummary | null> {
-  "use cache";
-  cacheLife("max");
-  cacheTag(
-    "cars:months",
-    "cars:makes",
-    `cars:fuel:${BEV_FUEL_TYPE}`,
-    LOGOS_CACHE_TAG,
-  );
-
-  const [latestMonth, stats, electric, logoUrlBySlug] = await Promise.all([
-    getCarsLatestMonth(),
-    getMakeRegistrationStats(),
-    getFuelTypeData(BEV_FUEL_TYPE),
-    getCarLogoMap(),
-  ]);
-
-  if (!latestMonth) {
-    return null;
-  }
-
-  const latestYear = latestMonth.slice(0, 4);
-  const electricByMake = new Map<string, number>();
-  for (const row of electric.data) {
-    if (
-      row.fuelType !== BEV_FUEL_TYPE ||
-      !row.month.startsWith(`${latestYear}-`)
-    ) {
-      continue;
-    }
-    electricByMake.set(
-      row.make,
-      (electricByMake.get(row.make) ?? 0) + row.count,
-    );
-  }
-
-  return selectElectricOnlyMakes(stats, electricByMake, logoUrlBySlug);
 }
