@@ -75,7 +75,10 @@ function KpiCard({ tile }: { tile: KpiTile }) {
           role="img"
           strokeWidth={1.75}
         />
-      ) : null}
+      ) : (
+        // Holds the sparkline's height, so values line up across the row.
+        <div aria-hidden className="h-10" />
+      )}
       <KPI.Footer className="text-muted text-xs tabular-nums">
         {tile.change?.label ? `${tile.note} · ${tile.change.label}` : tile.note}
       </KPI.Footer>
