@@ -27,22 +27,6 @@ export const getDateRangeForYear = (
 };
 
 /**
- * Get date range for the last 24 months from current date
- */
-export const getDateRange24Months = (): {
-  startMonth: string;
-  endMonth: string;
-} => {
-  const currentDate = new Date();
-  const startDate = subMonths(currentDate, 24);
-
-  return {
-    startMonth: startDate.toISOString().slice(0, 7),
-    endMonth: currentDate.toISOString().slice(0, 7),
-  };
-};
-
-/**
  * Convert a period string to a date range
  */
 export const getDateRangeFromPeriod = (
