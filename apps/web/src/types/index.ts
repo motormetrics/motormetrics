@@ -1,5 +1,4 @@
 import type { COECategory, VehicleType } from "@motormetrics/types";
-import type { LucideIcon } from "lucide-react";
 
 export type { COECategory, VehicleType };
 
@@ -16,14 +15,6 @@ export interface COEResult {
 export type Make = string;
 
 export type Month = string;
-
-export interface LinkItem {
-  label: string;
-  href: string;
-  description?: string;
-  icon?: LucideIcon;
-  comingSoon?: boolean;
-}
 
 export interface Announcement {
   title: string;
