@@ -1,5 +1,3 @@
-import { formatPercentage } from "@motormetrics/utils/format-percentage";
-
 /** LTA's label for a battery-electric vehicle, used verbatim. */
 const ELECTRIC = "Electric";
 
@@ -150,38 +148,6 @@ export function changeRatio(series: number[]): number | null {
   return (current - previous) / previous;
 }
 
-/**
- * The summary line under the population chart, e.g. "At 31 December 2025,
- * 620 cars were on the road in Singapore, up 12.7% on 2024; 16.1% of them
- * electric." Plain text gives search engines the figure as a sentence.
- */
-export function summarisePopulation(
-  entity: PopulationEntity,
-  years: string[],
-): string | undefined {
-  const year = years.at(-1);
-  const total = entity.series.at(-1);
-  if (!year || !total) {
-    return undefined;
-  }
-
-  const parts = [
-    `At 31 December ${year}, ${total.toLocaleString("en-SG")} ${entity.name.toLowerCase()} were on the road in Singapore`,
-  ];
-  const ratio = changeRatio(entity.series);
-  const previousYear = years.at(-2);
-  if (ratio !== null && previousYear) {
-    parts.push(
-      ratio === 0
-        ? `unchanged on ${previousYear}`
-        : `${ratio > 0 ? "up" : "down"} ${formatPercentage(Math.abs(ratio * 100))} on ${previousYear}`,
-    );
-  }
-
-  const electric = entity.electric.at(-1) ?? 0;
-  return `${parts.join(", ")}${electric > 0 ? `; ${formatPercentage((electric / total) * 100)} of them electric` : ""}.`;
-}
-
 /** One vehicle class as the table ranks it at the latest year end. */
 export interface ClassRank {
   /** Change on the previous year as a ratio; null without a prior year. */
@@ -252,79 +218,4 @@ export function sortClasses(
   return [...rows].sort(
     (first, second) => sign * compareClasses(first, second, key),
   );
-}
-
-/**
- * The caption over the trend chart, e.g. "Cars on the road rose 39.7% from
- * 472,308 in 2006 to 659,889 in 2025, despite a fall from 621,345 in 2013 to
- * 601,257 in 2016." The fall named is the longest run of yearly falls.
- */
-export function describePopulationTrend(
-  entity: PopulationEntity,
-  years: string[],
-): string | undefined {
-  const { series } = entity;
-  const first = series[0];
-  const last = series.at(-1);
-  if (series.length < 2 || !first || last === undefined) {
-    return undefined;
-  }
-
-  let run = { from: 0, to: 0 };
-  let start = 0;
-  for (let index = 1; index < series.length; index++) {
-    if (series[index] >= series[index - 1]) {
-      start = index;
-    } else if (index - start > run.to - run.from) {
-      run = { from: start, to: index };
-    }
-  }
-
-  const ratio = (last - first) / first;
-  const fall =
-    run.to > run.from
-      ? `, despite a fall from ${series[run.from].toLocaleString("en-SG")} in ${years[run.from]} to ${series[run.to].toLocaleString("en-SG")} in ${years[run.to]}`
-      : "";
-
-  return `${entity.name} on the road ${ratio < 0 ? "fell" : "rose"} ${formatPercentage(Math.abs(ratio * 100))} from ${first.toLocaleString("en-SG")} in ${years[0]} to ${last.toLocaleString("en-SG")} in ${years.at(-1)}${fall}.`;
-}
-
-/**
- * The caption over the classes and the electric fleet, e.g. "Cars made up
- * 66.6% of the 984,763 vehicles on the road, and taxis fell most, 7.3%;
- * electric cars on the road went from 6,531 in 2022 to 49,110 in 2025."
- */
-export function describeClasses(
-  classes: ClassRank[],
-  entity: PopulationEntity,
-  years: string[],
-  fleetYears: number,
-): string | undefined {
-  const own = classes.find((row) => row.name === entity.name);
-  if (!own) {
-    return undefined;
-  }
-
-  const total = classes.reduce((sum, row) => sum + row.population, 0);
-  let lead = `${entity.name} made up ${formatPercentage(own.share)} of the ${total.toLocaleString("en-SG")} vehicles on the road`;
-
-  const faller = classes
-    .filter((row) => row.change !== null && row.change < 0)
-    .sort((first, second) => (first.change ?? 0) - (second.change ?? 0))[0];
-  if (faller && faller.change !== null) {
-    lead += `, and ${faller.name.toLowerCase()} fell most, ${formatPercentage(Math.abs(faller.change * 100))}`;
-  }
-
-  const electric = entity.electric
-    .map((value, index) => ({ value, year: years[index] }))
-    .slice(-fleetYears)
-    .filter((row) => row.value > 0);
-  const earliest = electric[0];
-  const latest = electric.at(-1);
-  const fleet =
-    earliest && latest && earliest !== latest
-      ? `; electric ${entity.name.toLowerCase()} on the road went from ${earliest.value.toLocaleString("en-SG")} in ${earliest.year} to ${latest.value.toLocaleString("en-SG")} in ${latest.year}`
-      : "";
-
-  return `${lead}${fleet}.`;
 }

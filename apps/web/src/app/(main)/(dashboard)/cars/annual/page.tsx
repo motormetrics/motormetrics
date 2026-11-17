@@ -1,45 +1,27 @@
-import { Typography } from "@heroui/react";
 import { EmptyState } from "@heroui-pro/react";
 import { ClassesTable } from "@web/app/(main)/(dashboard)/cars/annual/components/classes-table";
 import {
   ElectricFleet,
   FLEET_YEARS,
 } from "@web/app/(main)/(dashboard)/cars/annual/components/electric-fleet";
-import { buildAnnualFaqs } from "@web/app/(main)/(dashboard)/cars/annual/components/faq-data";
-import { FuelSplit } from "@web/app/(main)/(dashboard)/cars/annual/components/fuel-split";
 import { PopulationByYear } from "@web/app/(main)/(dashboard)/cars/annual/components/population-by-year";
 import {
   buildPopulationSeries,
   CARS,
-  describeClasses,
   rankClasses,
-  summarisePopulation,
 } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
-import {
-  CountRangeHero,
-  changeLabel,
-  rangeSummary,
-} from "@web/app/(main)/(dashboard)/cars/components/range-hero";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
-import { KeysAside } from "@web/components/shared/key-numbers";
-import {
-  Hairline,
-  OverviewGrid,
-  OverviewPage,
-  SectionHead,
-  SourceNote,
-} from "@web/components/shared/overview";
-import { PageFaq } from "@web/components/shared/page-faq";
+import { FigureCard } from "@web/components/shared/figure-card";
+import { type KpiTile, KpiTiles } from "@web/components/shared/kpi-tiles";
+import { OverviewPage } from "@web/components/shared/overview";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import {
-  generateBreadcrumbSchema,
-  generateFAQPageSchema,
-} from "@web/lib/metadata";
+import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { baseOpenGraph } from "@web/lib/metadata/social";
 import { getVehiclePopulationByCategoryAndFuelType } from "@web/queries/vehicle-population";
+import { changeRatio } from "@web/utils/change-ratio";
 import { BarChart3 } from "lucide-react";
 import type { Metadata } from "next";
 import { cache } from "react";
@@ -75,13 +57,8 @@ const structuredData: WithContext<WebPage> = {
   },
 };
 
-const JUMP_LINKS = [
-  { href: "#vp-trend", label: "Cars by year" },
-  { href: "#vp-classes", label: "All vehicle classes" },
-  { href: "#vp-classes", label: "Electric fleet" },
-];
-
-const formatCount = (value: number) => value.toLocaleString("en-SG");
+/** Years the KPI sparklines span. */
+const TREND_YEARS = 10;
 
 /**
  * One query feeds every block: the grid of year × class × fuel is small
@@ -106,88 +83,91 @@ const loadPopulation = cache(async () => {
     : null;
 });
 
-/** "31 December 2025". */
-async function YearEnd() {
-  const population = await loadPopulation();
-  return population ? `31 December ${population.data.year}` : null;
-}
-
-/**
- * Cars on the road at the latest year end, the change on the year before,
- * and where the count sits between the lowest and highest year on record.
- */
-async function PopulationHero() {
-  const population = await loadPopulation();
-  if (!population) {
-    return null;
-  }
-
-  const { cars, classes, data } = population;
-  const current = cars.series.at(-1) ?? 0;
-  const previous = cars.series.at(-2);
-  const allVehicles = classes.reduce((sum, row) => sum + row.population, 0);
-  const range = rangeSummary(
-    cars.series,
-    current,
-    `${data.years.length} years`,
-  );
-  if (!range) {
-    return null;
-  }
-
-  return (
-    <CountRangeHero
-      change={
-        previous !== undefined && data.previousYear
-          ? changeLabel(current, previous, data.previousYear)
-          : undefined
-      }
-      context={`${allVehicles > 0 ? `${((current / allVehicles) * 100).toFixed(1)}% of ${formatCount(allVehicles)} vehicles · ` : ""}growth rate capped at 0% since February 2018`}
-      label="Cars on the road"
-      period={`31 December ${data.year}`}
-      range={range}
-      span={`${data.years.length}-year`}
-    />
-  );
-}
-
-/**
- * "Cars were 67.0% of the 984,763 vehicles on Singapore's roads at the end of
- * 2025, and their number grew 0.3% on 2024."
- */
-async function PopulationLead() {
-  const population = await loadPopulation();
-  if (!population) {
-    return null;
-  }
-
-  const { cars, classes, data } = population;
-  const current = cars.series.at(-1) ?? 0;
-  const previous = cars.series.at(-2);
-  const allVehicles = classes.reduce((sum, row) => sum + row.population, 0);
-  const change =
-    previous && data.previousYear
-      ? `, and their number ${current < previous ? "fell" : "grew"} ${Math.abs(((current - previous) / previous) * 100).toFixed(1)}% on ${data.previousYear}`
-      : "";
-
-  return (
-    <Typography.Paragraph className="max-w-prose tabular-nums">
-      Cars were {((current / (allVehicles || 1)) * 100).toFixed(1)}% of the{" "}
-      {formatCount(allVehicles)} vehicles on Singapore's roads at the end of{" "}
-      {data.year}
-      {change}.
-    </Typography.Paragraph>
-  );
-}
-
-async function PopulationFuel() {
+/** "LTA data to 31 December 2025". */
+async function PopulationAsOf() {
   const population = await loadPopulation();
   return population ? (
-    <FuelSplit entity={population.cars} year={population.data.year} />
+    <>LTA data to 31 December {population.data.year}</>
   ) : null;
 }
 
-/** Both figures, or the empty state while LTA has published nothing. */
+/** A year-on-year change, in percent, when the year before is on record. */
+const yearChange = (series: number[], previousYear: string | null) => {
+  const [current, previous] = [series.at(-1), series.at(-2)];
+  return current !== undefined && previous && previousYear
+    ? {
+        label: `vs ${previousYear}`,
+        value: changeRatio(current, previous) * 100,
+      }
+    : undefined;
+};
+
+/**
+ * Cars on the road, every vehicle class together, the electric cars among
+ * them and their share, each at the latest year end.
+ */
+async function PopulationKpis() {
+  const population = await loadPopulation();
+  if (!population) {
+    return null;
+  }
+
+  const { cars, data } = population;
+  const allVehicles = data.years.map((_, index) =>
+    data.entities.reduce((sum, entity) => sum + (entity.series[index] ?? 0), 0),
+  );
+  const electricShare = cars.series.map((total, index) =>
+    total > 0 ? ((cars.electric[index] ?? 0) / total) * 100 : 0,
+  );
+  const note = `31 December ${data.year}`;
+  const [share, shareBefore] = [electricShare.at(-1), electricShare.at(-2)];
+
+  const tiles: KpiTile[] = [
+    {
+      change: yearChange(cars.series, data.previousYear),
+      format: "count",
+      note,
+      title: "Cars on the road",
+      trend: cars.series.slice(-TREND_YEARS),
+      value: cars.series.at(-1) ?? 0,
+    },
+    {
+      change: yearChange(allVehicles, data.previousYear),
+      format: "count",
+      note,
+      title: "All vehicles",
+      trend: allVehicles.slice(-TREND_YEARS),
+      value: allVehicles.at(-1) ?? 0,
+    },
+    {
+      change: yearChange(cars.electric, data.previousYear),
+      format: "count",
+      href: "/cars/electric-vehicles",
+      note,
+      title: "Electric cars",
+      trend: cars.electric.slice(-TREND_YEARS),
+      value: cars.electric.at(-1) ?? 0,
+    },
+    {
+      change:
+        shareBefore !== undefined && data.previousYear
+          ? {
+              label: `vs ${data.previousYear}`,
+              value: (share ?? 0) - shareBefore,
+            }
+          : undefined,
+      format: "percent",
+      note: `of cars, ${note}`,
+      title: "Electric share",
+      trend: electricShare.slice(-TREND_YEARS),
+      value: share ?? 0,
+    },
+  ];
+
+  return <KpiTiles tiles={tiles} />;
+}
+
+/** The two charts and the classes table, or the empty state. */
 async function PopulationFigures() {
   const population = await loadPopulation();
 
@@ -209,54 +189,32 @@ async function PopulationFigures() {
   }
 
   const { cars, classes, data } = population;
+  const fleetFrom = data.years.slice(-FLEET_YEARS)[0];
 
   return (
     <>
-      <PopulationByYear entity={cars} years={data.years} />
-
-      <Hairline />
-
-      <section className="flex scroll-mt-4 flex-col gap-6" id="vp-classes">
-        <SectionHead
-          caption={describeClasses(classes, cars, data.years, FLEET_YEARS)}
-          eyebrow={`Figure 2 · ${data.year}`}
-          title="All vehicle classes, and the electric fleet"
-        />
-        <OverviewGrid>
-          <ClassesTable
-            previousYear={data.previousYear}
-            rows={classes}
-            year={data.year}
-          />
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <FigureCard
+          description={`At 31 December, ${data.years[0]} to ${data.year}`}
+          title="Cars on the road by year"
+        >
+          <PopulationByYear entity={cars} years={data.years} />
+        </FigureCard>
+        <FigureCard
+          description={`At 31 December, ${fleetFrom} to ${data.year}`}
+          link={{ href: "/cars/electric-vehicles", label: "Electric cars" }}
+          title="Electric cars on the road"
+        >
           <ElectricFleet entity={cars} years={data.years} />
-        </OverviewGrid>
-        <SourceNote>
-          Source: LTA via DataMall · Annual vehicle population by class and
-          electric cars on the road.
-        </SourceNote>
-      </section>
-    </>
-  );
-}
+        </FigureCard>
+      </div>
 
-/** The questions and their FAQPage schema, with the latest year end quoted. */
-async function AnnualFaq() {
-  const population = await loadPopulation();
-  const faqs = buildAnnualFaqs(
-    population
-      ? summarisePopulation(population.cars, population.data.years)
-      : undefined,
-  );
-
-  return (
-    <>
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: faqs }]),
-        }}
-      />
-      <PageFaq faqs={faqs} />
+      <FigureCard
+        description={`At 31 December ${data.year}${data.previousYear ? `; change on ${data.previousYear}` : ""}`}
+        title="All vehicle classes"
+      >
+        <ClassesTable previousYear={data.previousYear} rows={classes} />
+      </FigureCard>
     </>
   );
 }
@@ -276,58 +234,22 @@ export default function AnnualPage() {
         }}
       />
 
+      {/* The dashboard template. Everything reads one cached query and no
+          search params, so the whole page is part of the static shell. */}
       <OverviewPage className="gap-8 max-md:gap-6">
-        {/* Direction D's head. Everything reads one cached query and no
-            search params, so the whole page is part of the static shell. */}
-        <HeadGrid
-          keys={
-            <KeysAside
-              eyebrow="Cars by fuel type"
-              jump={JUMP_LINKS}
-              label="Cars by fuel type"
-              source={
-                <>
-                  Share of cars on the road at <YearEnd />, by fuel type as LTA
-                  records it.
-                </>
-              }
-            >
-              <SectionErrorBoundary title="Fuel split unavailable">
-                <PopulationFuel />
-              </SectionErrorBoundary>
-            </KeysAside>
-          }
-        >
-          <HeadTitle
-            eyebrow={
-              <>
-                Vehicle population · <YearEnd />
-              </>
-            }
-            title="Vehicle population"
-          />
-          <SectionErrorBoundary title="Vehicle population unavailable">
-            <PopulationHero />
-            <PopulationLead />
-          </SectionErrorBoundary>
-          <div>
-            <SharePill title="Vehicle population" />
-          </div>
-          <SourceNote>
-            Source: LTA via DataMall. Registered at <YearEnd />, counted once a
-            year.
-          </SourceNote>
-        </HeadGrid>
+        <PageToolbar
+          actions={<SharePill title="Vehicle population" />}
+          asOf={<PopulationAsOf />}
+          title="Vehicle population"
+        />
 
-        <Hairline />
+        <SectionErrorBoundary title="Key numbers unavailable">
+          <PopulationKpis />
+        </SectionErrorBoundary>
 
         <SectionErrorBoundary title="Vehicle population unavailable">
           <PopulationFigures />
         </SectionErrorBoundary>
-
-        <Hairline />
-
-        <AnnualFaq />
       </OverviewPage>
     </>
   );

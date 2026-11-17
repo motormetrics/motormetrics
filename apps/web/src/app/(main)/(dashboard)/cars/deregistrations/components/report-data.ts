@@ -1,16 +1,20 @@
 import type { SelectDeregistration } from "@motormetrics/database/schema";
-import {
-  type MonthlyRow,
-  yearOnYear,
-} from "@web/app/(main)/(dashboard)/cars/deregistrations/components/summary";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
 import { getDeregistrations } from "@web/queries/deregistrations";
 import { shiftMonth, trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import type { SearchParams } from "nuqs/server";
 
-/** How far back the trend chart and the month-by-month table reach. */
+/** How far back the trend chart and the KPI sparklines reach. */
 export const SERIES_MONTHS = 12;
+
+/** One month of the series, every category's count beside the total. */
+export interface MonthlyRow {
+  /** One count per category, in `CATEGORIES` order. */
+  counts: number[];
+  month: string;
+  total: number;
+}
 
 /**
  * LTA's categories in the comp's order, with what each name means for the
@@ -111,7 +115,6 @@ export async function loadDeregistrationsReport(
   const totals = totalsForMonth(records, month);
   const yearAgoTotals = totalsForMonth(records, yearAgoMonth);
   const total = sumOf(totals);
-  const yearAgoTotal = sumOf(yearAgoTotals);
 
   // Largest first, each with the comp's label, colour and description.
   const categories = [...totals.entries()]
@@ -135,7 +138,7 @@ export async function loadDeregistrationsReport(
       };
     });
 
-  // Oldest first; the chart, the range bar and the table share it.
+  // Oldest first; the chart and the KPI sparklines share it.
   const monthlyRows: MonthlyRow[] = trailingMonths(month, SERIES_MONTHS).map(
     (seriesMonth) => {
       const monthTotals = totalsForMonth(records, seriesMonth);
@@ -150,7 +153,6 @@ export async function loadDeregistrationsReport(
 
   return {
     categories,
-    change: yearOnYear(total, yearAgoTotal),
     month,
     monthlyRows,
     priorMonth,

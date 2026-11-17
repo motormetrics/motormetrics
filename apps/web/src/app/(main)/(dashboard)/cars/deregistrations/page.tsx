@@ -1,26 +1,26 @@
-import { Skeleton, Typography } from "@heroui/react";
+import { Skeleton } from "@heroui/react";
 import {
-  DeregistrationsHero,
-  DeregistrationsKeyNumbers,
-  DeregistrationsLead,
+  Categories,
+  CategoriesPeriod,
+  DeregistrationsAsOf,
+  DeregistrationsKpis,
   ReportMonth,
-} from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-head";
-import { DeregistrationsReport } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-report";
-import { DEREGISTRATIONS_FAQS } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/faq-data";
-import { loadDeregistrationsReport } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/report-data";
+  TrendChart,
+} from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-report";
+import {
+  loadDeregistrationsReport,
+  SERIES_MONTHS,
+} from "@web/app/(main)/(dashboard)/cars/deregistrations/components/report-data";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
+import { FigureCard } from "@web/components/shared/figure-card";
 import { MonthMenu } from "@web/components/shared/month-menu";
-import { Hairline, OverviewPage } from "@web/components/shared/overview";
-import { PageFaq } from "@web/components/shared/page-faq";
+import { OverviewPage, SectionLink } from "@web/components/shared/overview";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
 import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
-import {
-  generateBreadcrumbSchema,
-  generateFAQPageSchema,
-} from "@web/lib/metadata";
+import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import {
   fetchMonthsForDeregistrations,
@@ -92,65 +92,73 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
         }}
       />
 
-      {/* Direction D's head: eyebrow, title, range hero, lead, tools and
-          source, with the key numbers beside it once the page is wide and
-          under it before then. Only the figures wait on the selected month. */}
-      <HeadGrid
-        keys={
-          <SectionErrorBoundary title="Key numbers unavailable">
-            <DeregistrationsKeyNumbers report={report} />
-          </SectionErrorBoundary>
-        }
-      >
-        <HeadTitle
-          eyebrow={
-            <>
-              Deregistrations ·{" "}
-              <Suspense fallback=" ">
-                <ReportMonth report={report} />
-              </Suspense>
-            </>
-          }
-          title="Vehicle deregistrations"
-        />
-        <SectionErrorBoundary title="Deregistrations summary unavailable">
-          <DeregistrationsHero report={report} />
-        </SectionErrorBoundary>
-        <Typography.Paragraph className="max-w-prose tabular-nums">
-          <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-            <DeregistrationsLead report={report} />
-          </Suspense>
-        </Typography.Paragraph>
-        <div className="flex flex-wrap items-end gap-4">
-          <div className="flex flex-col gap-1">
-            <span className="font-semibold text-muted text-xs">Month</span>
+      {/* The dashboard template: a toolbar, four KPI tiles, the stacked
+          chart and the category table. Titles and labels are in the static
+          shell; only the figures wait on the selected month. */}
+      <PageToolbar
+        actions={
+          <>
             <Suspense fallback={<Skeleton className="h-10 w-36" />}>
               <DeregistrationsMonthPicker searchParams={searchParams} />
             </Suspense>
-          </div>
-          <SharePill title="Vehicle deregistrations" />
-        </div>
-        <Typography.Paragraph color="muted" size="sm">
-          Source: LTA via DataMall. Scrapped or exported, by the COE category
-          the quota returns to.
-        </Typography.Paragraph>
-      </HeadGrid>
+            <SharePill title="Vehicle deregistrations" />
+          </>
+        }
+        asOf={<DeregistrationsAsOf />}
+        title="Vehicle deregistrations"
+      />
 
-      <Hairline />
-
-      <SectionErrorBoundary title="Deregistrations unavailable">
-        <DeregistrationsReport report={report} />
+      <SectionErrorBoundary title="Key numbers unavailable">
+        <Suspense fallback={<Skeleton className="h-40 w-full rounded-3xl" />}>
+          <DeregistrationsKpis report={report} />
+        </Suspense>
       </SectionErrorBoundary>
 
-      <Hairline />
+      <FigureCard
+        description={
+          <>
+            {SERIES_MONTHS} months to{" "}
+            <Suspense fallback=" ">
+              <ReportMonth report={report} />
+            </Suspense>
+            , by the COE category each vehicle held
+          </>
+        }
+        title="Deregistrations by month"
+      >
+        <SectionErrorBoundary title="Deregistration trend unavailable">
+          <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+            <TrendChart report={report} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </FigureCard>
 
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: DEREGISTRATIONS_FAQS }]),
-        }}
-      />
-      <PageFaq faqs={DEREGISTRATIONS_FAQS} />
+      <FigureCard
+        description={
+          <Suspense fallback=" ">
+            <CategoriesPeriod report={report} />
+          </Suspense>
+        }
+        title="By category"
+      >
+        <SectionErrorBoundary title="Categories unavailable">
+          <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+            <Categories report={report} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </FigureCard>
+
+      <nav
+        aria-label="Related figures"
+        className="flex flex-wrap items-center gap-x-6 gap-y-2"
+      >
+        <SectionLink className="ml-0" href="/coe/results">
+          COE bidding results
+        </SectionLink>
+        <SectionLink className="ml-0" href="/cars/registrations">
+          New registrations
+        </SectionLink>
+      </nav>
     </OverviewPage>
   );
 }

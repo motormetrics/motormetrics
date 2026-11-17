@@ -1,8 +1,9 @@
 "use client";
 
-import { cn } from "@heroui/react";
+import { Button, cn, Dropdown, Label } from "@heroui/react";
 import { Segment } from "@heroui-pro/react";
 import { RANGES } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
+import { ChevronDown } from "lucide-react";
 import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
 import { useTransition } from "react";
@@ -14,14 +15,15 @@ import { useTransition } from "react";
  * `cars/makes/components/range-menu.tsx`.
  */
 
-/** Segment keys cannot be null, so the unfiltered view takes its own key. */
+/** Menu keys cannot be null, so the unfiltered view takes its own key. */
 const ALL_FUEL_TYPES = "all";
 
 /**
- * Fuel types as LTA records them, passed in from the server rather than listed
- * here — a new value in a DataMall drop should appear on its own.
+ * The fuel type filter in the toolbar, styled as the month menu beside it.
+ * Fuel types are LTA's, passed in from the server rather than listed here, so
+ * a new value in a DataMall drop appears on its own.
  */
-export function FuelTypeTabs({ fuelTypes }: { fuelTypes: string[] }) {
+export function FuelTypeMenu({ fuelTypes }: { fuelTypes: string[] }) {
   const [isPending, startTransition] = useTransition();
   const [selected, setSelected] = useQueryState(
     "fuelType",
@@ -29,32 +31,37 @@ export function FuelTypeTabs({ fuelTypes }: { fuelTypes: string[] }) {
   );
 
   return (
-    // The comp scrolls the fuel types sideways on a phone rather than letting
-    // six labels squeeze into one row.
-    <div className="max-w-full overflow-x-auto">
-      <Segment
-        aria-label="Fuel type"
-        className={cn(isPending && "opacity-70")}
-        onSelectionChange={(key) => {
-          const next = key === ALL_FUEL_TYPES ? null : String(key);
-          posthog.capture("dashboard_filter_changed", {
-            filter: "fuel_type",
-            value: next,
-          });
-          setSelected(next);
-        }}
-        selectedKey={selected ?? ALL_FUEL_TYPES}
-        size="sm"
-        variant="ghost"
-      >
-        <Segment.Item id={ALL_FUEL_TYPES}>All fuel types</Segment.Item>
-        {fuelTypes.map((fuelType) => (
-          <Segment.Item id={fuelType} key={fuelType}>
-            {fuelType}
-          </Segment.Item>
-        ))}
-      </Segment>
-    </div>
+    <Dropdown>
+      <Button aria-label="Fuel type" isPending={isPending} variant="ghost">
+        {selected ?? "All fuel types"}
+        <ChevronDown aria-hidden className="size-4" strokeWidth={2.25} />
+      </Button>
+      <Dropdown.Popover className="max-h-96">
+        <Dropdown.Menu
+          onAction={(key) => {
+            const next = key === ALL_FUEL_TYPES ? null : String(key);
+            posthog.capture("dashboard_filter_changed", {
+              filter: "fuel_type",
+              value: next,
+            });
+            setSelected(next);
+          }}
+          selectedKeys={[selected ?? ALL_FUEL_TYPES]}
+          selectionMode="single"
+        >
+          {[ALL_FUEL_TYPES, ...fuelTypes].map((fuelType) => {
+            const label =
+              fuelType === ALL_FUEL_TYPES ? "All fuel types" : fuelType;
+            return (
+              <Dropdown.Item id={fuelType} key={fuelType} textValue={label}>
+                <Dropdown.ItemIndicator />
+                <Label>{label}</Label>
+              </Dropdown.Item>
+            );
+          })}
+        </Dropdown.Menu>
+      </Dropdown.Popover>
+    </Dropdown>
   );
 }
 
@@ -71,7 +78,7 @@ export function RangeTabs() {
   return (
     <Segment
       aria-label="Chart range"
-      className={cn("max-md:w-full", isPending && "opacity-70")}
+      className={cn(isPending && "opacity-70")}
       onSelectionChange={(key) => {
         const next = RANGES.find((option) => option === key);
         if (!next) {
@@ -88,11 +95,7 @@ export function RangeTabs() {
       variant="ghost"
     >
       {RANGES.map((option) => (
-        <Segment.Item
-          className="max-md:flex-1 max-md:px-2"
-          id={option}
-          key={option}
-        >
+        <Segment.Item id={option} key={option}>
           {option}
         </Segment.Item>
       ))}

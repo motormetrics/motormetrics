@@ -1,10 +1,6 @@
 import { PopulationChart } from "@web/app/(main)/(dashboard)/cars/annual/components/population-chart";
-import {
-  describePopulationTrend,
-  type PopulationEntity,
-} from "@web/app/(main)/(dashboard)/cars/annual/population-series";
+import type { PopulationEntity } from "@web/app/(main)/(dashboard)/cars/annual/population-series";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
-import { SectionHead, SourceNote } from "@web/components/shared/overview";
 
 /**
  * Every year end on record as a line. The series is computed on the server
@@ -29,26 +25,11 @@ export function PopulationByYear({
       year,
     };
   });
-  const ticks = axisTicks(entity.series, { zero: false });
-  const step = (ticks[1] ?? 0) - (ticks[0] ?? 0);
-  const name = entity.name.toLowerCase();
 
   return (
-    <section className="flex min-w-0 scroll-mt-4 flex-col gap-4" id="vp-trend">
-      <SectionHead
-        caption={describePopulationTrend(entity, years)}
-        eyebrow="Figure 1 · Trend"
-        title={`${entity.name} on the road by year, ${years[0]} to ${years.at(-1)}`}
-      />
-      <PopulationChart data={data} ticks={ticks} />
-      <SourceNote>
-        Source: LTA via DataMall · {entity.name} registered at 31 December each
-        year. Y-axis does not start at zero
-        {step > 0
-          ? `; gridlines every ${step.toLocaleString("en-SG")} ${name}`
-          : ""}
-        . Hover or tap for values.
-      </SourceNote>
-    </section>
+    <PopulationChart
+      data={data}
+      ticks={axisTicks(entity.series, { zero: false })}
+    />
   );
 }

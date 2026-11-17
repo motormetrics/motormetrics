@@ -51,12 +51,10 @@ export function TrendsCompareButton({
 
   return (
     <>
-      <div className="flex justify-end">
-        <Button variant="primary" onPress={openComparison}>
-          <TrendingUp className="size-4" />
-          Compare Trends
-        </Button>
-      </div>
+      <Button onPress={openComparison} size="sm" variant="outline">
+        <TrendingUp aria-hidden className="size-4" />
+        Compare months
+      </Button>
 
       <TrendsComparison
         isOpen={isOpen}
