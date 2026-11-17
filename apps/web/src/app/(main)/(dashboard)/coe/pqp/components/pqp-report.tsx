@@ -1,10 +1,15 @@
 import { Skeleton } from "@heroui/react";
+import { TableDisclosure } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/disclosure";
 import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
   PQPChart,
   type PQPSeries,
   type PQPTrendPoint,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-chart";
+import {
+  CategoryTabs,
+  TermTabs,
+} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-filters";
 import {
   type PQPMonthRow,
   PQPMonthsTable,
@@ -43,7 +48,11 @@ export async function PQPCalculator() {
   );
 }
 
-/** Every category's PQP by month, at the selected term. */
+/**
+ * Every category's PQP by month, then every published month as a table, at
+ * the selected term. One card, because the switches in its header change
+ * both; the table is closed by default and stays in the markup.
+ */
 export function PQPTrend({ searchParams }: PQPPageProps) {
   return (
     <SectionErrorBoundary title="PQP trend unavailable">
@@ -55,10 +64,25 @@ export function PQPTrend({ searchParams }: PQPPageProps) {
           </>
         }
         title="PQP by month"
+        trailing={
+          <>
+            <Suspense fallback={<Skeleton className="h-10 w-36" />}>
+              <CategoryTabs categories={PQP_CATEGORY_KEYS} />
+            </Suspense>
+            <Suspense fallback={<Skeleton className="h-10 w-72" />}>
+              <TermTabs />
+            </Suspense>
+          </>
+        }
       >
         <Suspense fallback={<Skeleton className="h-80 w-full" />}>
           <TrendChart searchParams={searchParams} />
         </Suspense>
+        <TableDisclosure title="Every published month">
+          <Suspense fallback={<Skeleton className="h-80 w-full" />}>
+            <MonthRows searchParams={searchParams} />
+          </Suspense>
+        </TableDisclosure>
       </FigureCard>
     </SectionErrorBoundary>
   );
@@ -100,27 +124,7 @@ async function TrendChart({ searchParams }: PQPPageProps) {
   );
 }
 
-/** Every published month, most recent first, at the selected term. */
-export function PQPMonths({ searchParams }: PQPPageProps) {
-  return (
-    <SectionErrorBoundary title="Monthly rates unavailable">
-      <FigureCard
-        description={
-          <>
-            <SelectedLabel part="term" searchParams={searchParams} /> renewal,
-            change on the month before
-          </>
-        }
-        title="Published PQP"
-      >
-        <Suspense fallback={<Skeleton className="h-80 w-full" />}>
-          <MonthRows searchParams={searchParams} />
-        </Suspense>
-      </FigureCard>
-    </SectionErrorBoundary>
-  );
-}
-
+/** Every published month, most recent first, with its change on the month before. */
 async function MonthRows({ searchParams }: PQPPageProps) {
   const { factor, tableRows } = await loadPqpView(searchParams);
 

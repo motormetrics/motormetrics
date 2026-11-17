@@ -1,21 +1,14 @@
-import { Skeleton } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { formatMonth } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import {
-  CategoryTabs,
-  TermTabs,
-} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-filters";
 import {
   PQPAsOf,
   PQPKpis,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-kpis";
 import {
   PQPCalculator,
-  PQPMonths,
   PQPTrend,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-report";
 import type { PQPPageProps } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-view";
-import { PQP_CATEGORY_KEYS } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { OverviewPage, SectionLink } from "@web/components/shared/overview";
 import { PageToolbar } from "@web/components/shared/page-toolbar";
@@ -26,7 +19,6 @@ import { generateBreadcrumbSchema } from "@web/lib/metadata";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 import { getPQPOverview } from "@web/queries/coe";
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import type { WebPage, WithContext } from "schema-dts";
 
 const title = "Latest PQP Rates for COE Renewal";
@@ -105,20 +97,10 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
         }}
       />
 
-      {/* The toolbar's month and the KPIs read only cached data, so they are
-          in the static shell; the switches read the URL, so they wait. */}
+      {/* The toolbar and the KPIs read only cached data, so they are in the
+          static shell. */}
       <PageToolbar
-        actions={
-          <>
-            <Suspense fallback={<Skeleton className="h-10 w-36" />}>
-              <CategoryTabs categories={PQP_CATEGORY_KEYS} />
-            </Suspense>
-            <Suspense fallback={<Skeleton className="h-10 w-72" />}>
-              <TermTabs />
-            </Suspense>
-            <SharePill title="PQP rates" />
-          </>
-        }
+        actions={<SharePill title="PQP rates" />}
         asOf={<PQPAsOf />}
         title="PQP rates"
       />
@@ -127,15 +109,12 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
         <PQPKpis />
       </SectionErrorBoundary>
 
-      {/* The page's main tool. */}
+      <PQPTrend searchParams={searchParams} />
+
+      {/* Most visitors come for the rate, so the calculator follows it. */}
       <SectionErrorBoundary title="Renewal calculator unavailable">
         <PQPCalculator />
       </SectionErrorBoundary>
-
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <PQPTrend searchParams={searchParams} />
-        <PQPMonths searchParams={searchParams} />
-      </div>
 
       <nav aria-label="Related" className="flex flex-wrap gap-x-4 gap-y-2">
         <SectionLink className="ml-0" href="/coe/results">
