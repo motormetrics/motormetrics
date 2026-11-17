@@ -87,31 +87,50 @@ function KpiCard({ tile }: { tile: KpiTile }) {
 }
 
 /**
- * The row of up to four headline numbers under a dashboard page's title: one
- * column on phones, two from `sm`, four from `xl`.
+ * Grid classes per row size. Five tiles follow the row's own width, not the
+ * viewport's, because the sidebar takes a varying share of it and a tile
+ * under about 200px pushes its change chip past the edge.
  */
-export function KpiTiles({ tiles }: { tiles: KpiTile[] }): ReactNode {
+const GRIDS = {
+  4: "grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4",
+  5: "grid grid-cols-1 gap-4 @md:grid-cols-2 @2xl:grid-cols-3 @5xl:grid-cols-5",
+} as const;
+
+/**
+ * The row of headline numbers under a dashboard page's title: up to four,
+ * one column on phones, two from `sm`, four from `xl`. `columns={5}` is for
+ * one figure across a set of five, such as the COE categories.
+ */
+export function KpiTiles({
+  columns = 4,
+  tiles,
+}: {
+  columns?: keyof typeof GRIDS;
+  tiles: KpiTile[];
+}): ReactNode {
   if (tiles.length === 0) {
     return null;
   }
 
   return (
-    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      {tiles.slice(0, 4).map((tile) => (
-        <li key={tile.title}>
-          {tile.href ? (
-            <Link
-              aria-label={`${tile.title}, open the full figures`}
-              className="block h-full no-underline"
-              href={tile.href}
-            >
+    <div className="@container">
+      <ul className={GRIDS[columns]}>
+        {tiles.slice(0, columns).map((tile) => (
+          <li key={tile.title}>
+            {tile.href ? (
+              <Link
+                aria-label={`${tile.title}, open the full figures`}
+                className="block h-full no-underline"
+                href={tile.href}
+              >
+                <KpiCard tile={tile} />
+              </Link>
+            ) : (
               <KpiCard tile={tile} />
-            </Link>
-          ) : (
-            <KpiCard tile={tile} />
-          )}
-        </li>
-      ))}
-    </ul>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

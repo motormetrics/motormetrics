@@ -10,10 +10,11 @@ import { getCoeResults } from "@web/queries/coe";
 import type { COECategory } from "@web/types";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
 
-/** The four categories most visitors bid in; C is on the chart and table. */
+/** All five, as LTA publishes them; leaving one out reads as missing data. */
 const KPI_CATEGORIES: COECategory[] = [
   "Category A",
   "Category B",
+  "Category C",
   "Category D",
   "Category E",
 ];
@@ -25,7 +26,7 @@ const EXERCISES = 24;
 const loadHistory = async () => groupByExercise(await getCoeResults());
 
 /**
- * The latest closing premium in four categories, each with its change on the
+ * The latest closing premium in every category, each with its change on the
  * exercise before and a year of exercises behind it.
  */
 export async function ResultsKpis() {
@@ -58,7 +59,7 @@ export async function ResultsKpis() {
     ];
   });
 
-  return <KpiTiles tiles={tiles} />;
+  return <KpiTiles columns={5} tiles={tiles} />;
 }
 
 /** "LTA data to the first bidding, November 2026". */
