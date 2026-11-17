@@ -176,6 +176,9 @@ catalogs:
     '@heroui/styles':
       specifier: 3.2.7
       version: 3.2.7
+    '@internationalized/date':
+      specifier: 3.12.4
+      version: 3.12.4
     '@tailwindcss/postcss':
       specifier: 4.3.0
       version: 4.3.0
@@ -332,6 +335,9 @@ importers:
       '@heroui/styles':
         specifier: 'catalog:'
         version: 3.2.7(tailwind-merge@3.6.0)(tailwindcss@4.3.0)
+      '@internationalized/date':
+        specifier: 'catalog:'
+        version: 3.12.4
       '@motormetrics/ai':
         specifier: workspace:*
         version: link:../../packages/ai

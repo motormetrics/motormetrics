@@ -23,6 +23,7 @@ catalog:
   "@better-auth/drizzle-adapter": 1.7.7
   "@heroui/react": 3.2.7
   "@heroui/styles": 3.2.7
+  "@internationalized/date": 3.12.4
   "@tailwindcss/postcss": 4.3.0
   "@types/node": 24.13.2
   "@types/react": 19.3.0

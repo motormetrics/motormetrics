@@ -24,7 +24,7 @@ export function TableDisclosure({
       <Disclosure.Heading>
         <Button
           className="w-full justify-between"
-          size="lg"
+          size="md"
           slot="trigger"
           variant="ghost"
         >

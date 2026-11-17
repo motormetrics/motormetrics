@@ -1,8 +1,23 @@
 "use client";
 
-import { cn, Input } from "@heroui/react";
-import { Segment } from "@heroui-pro/react";
-import { formatCurrency } from "@motormetrics/utils/format-currency";
+import {
+  Button,
+  Calendar,
+  cn,
+  DateField,
+  DatePicker,
+  Description,
+  Input,
+  Label,
+  Typography,
+} from "@heroui/react";
+import { RadioButtonGroup, Stepper } from "@heroui-pro/react";
+import {
+  type CalendarDate,
+  getLocalTimeZone,
+  parseDate,
+  today,
+} from "@internationalized/date";
 import {
   getFirstCoeExpiry,
   getParfRebate,
@@ -10,19 +25,30 @@ import {
   type RenewalCategory,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal";
 import { RenewalResults } from "@web/app/(main)/(dashboard)/coe/pqp/components/renewal-results";
-import {
-  type FuelType,
-  getRoadTax,
-} from "@web/app/(main)/(dashboard)/coe/pqp/components/road-tax";
+import type { FuelType } from "@web/app/(main)/(dashboard)/coe/pqp/components/road-tax";
 import type { Pqp } from "@web/types/coe";
 import { format, isAfter, isValid, parseISO, startOfToday } from "date-fns";
-import { Check } from "lucide-react";
 import posthog from "posthog-js";
 import { type ReactNode, useState } from "react";
+import { I18nProvider } from "react-aria-components";
 
-const CATEGORIES: { id: RenewalCategory; label: string }[] = [
-  { id: "Category A", label: "Cat A" },
-  { id: "Category B", label: "Cat B" },
+const STEPS = ["Your COE", "Your car", "Your options"];
+
+const CATEGORIES: {
+  description: string;
+  id: RenewalCategory;
+  label: string;
+}[] = [
+  {
+    description: "Up to 1,600cc and 130bhp, or electric up to 110kW",
+    id: "Category A",
+    label: "Category A",
+  },
+  {
+    description: "Above 1,600cc or 130bhp, or electric above 110kW",
+    id: "Category B",
+    label: "Category B",
+  },
 ];
 
 const FUELS: { id: FuelType; label: string }[] = [
@@ -41,7 +67,79 @@ const toDate = (value: string) => {
 /** "30,000" or "S$30,000" typed into a number field, as 30000. */
 const toNumber = (value: string) => Number(value.replace(/[^0-9]/g, "")) || 0;
 
-/** The small label above each field, matching the PARF calculator. */
+/**
+ * A date field with a calendar, holding its value as "yyyy-MM-dd" so the
+ * calculator's date maths stays on date-fns.
+ */
+function DateInput({
+  isInvalid,
+  label,
+  maxValue,
+  onBlur,
+  onChange,
+  value,
+}: {
+  isInvalid?: boolean;
+  label: string;
+  maxValue?: CalendarDate;
+  onBlur: () => void;
+  onChange: (value: string) => void;
+  value: string;
+}) {
+  const parsed = toDate(value) ? parseDate(value) : null;
+  // Day first, as Singapore writes dates, whatever the browser's locale.
+  return (
+    <I18nProvider locale="en-SG">
+      <DatePicker
+        className="min-w-0"
+        isInvalid={isInvalid}
+        maxValue={maxValue}
+        onBlur={onBlur}
+        onChange={(date) => onChange(date ? date.toString() : "")}
+        value={parsed}
+      >
+        <Label>{label}</Label>
+        <DateField.Group fullWidth>
+          <DateField.Input>
+            {(segment) => <DateField.Segment segment={segment} />}
+          </DateField.Input>
+          <DateField.Suffix>
+            <DatePicker.Trigger>
+              <DatePicker.TriggerIndicator />
+            </DatePicker.Trigger>
+          </DateField.Suffix>
+        </DateField.Group>
+        <DatePicker.Popover>
+          <Calendar aria-label={label}>
+            <Calendar.Header>
+              <Calendar.YearPickerTrigger>
+                <Calendar.YearPickerTriggerHeading />
+                <Calendar.YearPickerTriggerIndicator />
+              </Calendar.YearPickerTrigger>
+              <Calendar.NavButton slot="previous" />
+              <Calendar.NavButton slot="next" />
+            </Calendar.Header>
+            <Calendar.Grid>
+              <Calendar.GridHeader>
+                {(day) => <Calendar.HeaderCell>{day}</Calendar.HeaderCell>}
+              </Calendar.GridHeader>
+              <Calendar.GridBody>
+                {(date) => <Calendar.Cell date={date} />}
+              </Calendar.GridBody>
+            </Calendar.Grid>
+            <Calendar.YearPickerGrid>
+              <Calendar.YearPickerGridBody>
+                {({ year }) => <Calendar.YearPickerCell year={year} />}
+              </Calendar.YearPickerGridBody>
+            </Calendar.YearPickerGrid>
+          </Calendar>
+        </DatePicker.Popover>
+      </DatePicker>
+    </I18nProvider>
+  );
+}
+
+/** A text field with the same label as the date fields. */
 function Field({
   children,
   className,
@@ -55,18 +153,17 @@ function Field({
 }) {
   return (
     <div className={cn("flex min-w-0 flex-col gap-2", className)}>
-      <label className="font-semibold text-muted text-xs" htmlFor={htmlFor}>
-        {label}
-      </label>
+      <Label htmlFor={htmlFor}>{label}</Label>
       {children}
     </div>
   );
 }
 
 /**
- * The renew-or-deregister calculator. Everything the owner would otherwise be
- * asked — whether the COE was renewed, which PARF schedule applies — is worked
- * out from the two dates on the log card.
+ * The renew-or-deregister calculator, in three steps: the COE, the car, then
+ * the options. Every field is pre-filled, so the steps can be skipped to see
+ * an answer first. Whether the COE was renewed and which PARF schedule
+ * applies are worked out from the two dates on the log card.
  */
 export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
   const [category, setCategory] = useState<RenewalCategory>("Category A");
@@ -78,6 +175,7 @@ export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
   const [fuel, setFuel] = useState<FuelType>("petrol");
   const [ccInput, setCcInput] = useState("1,598");
   const [kwInput, setKwInput] = useState("100");
+  const [step, setStep] = useState(0);
 
   const registration = toDate(registrationInput);
   const expiry = toDate(expiryInput);
@@ -97,7 +195,6 @@ export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
     fuel,
     powerRating: toNumber(kwInput),
   };
-  const roadTax = getRoadTax(roadTaxInput);
 
   // One event per field the owner changes, as the PARF calculator does.
   const track = (field: string) =>
@@ -125,213 +222,197 @@ export function RenewalCalculator({ rates }: { rates: Pqp.TrendPoint[] }) {
       ? "Expiry from your log card."
       : "Pre-filled as the day before 10 years from registration. Change it if your COE was renewed.";
 
-  const derived =
-    history && rebate
-      ? [
-          `${history.ageAtExpiry} years old at expiry · ${
-            history.mustDeregister
-              ? "renewed for 5 years before"
-              : history.renewedBefore
-                ? "COE renewed before"
-                : "first COE"
-          }`,
-          history.renewedBefore
-            ? "PARF rebate already given up at the last renewal"
-            : `PARF schedule ${rebate.newSchedule ? "after" : "before"} Budget 2026: ${Math.round(rebate.rate * 100)}% of ARF, ${
-                Number.isFinite(rebate.cap)
-                  ? `capped at ${formatCurrency(rebate.cap)}`
-                  : "no cap"
-              }`,
-        ]
-      : [];
+  const results =
+    history && rebate && expiry ? (
+      <RenewalResults
+        category={category}
+        expiry={expiry}
+        history={history}
+        rates={rates}
+        rebate={rebate}
+        roadTax={roadTaxInput}
+      />
+    ) : (
+      <Typography.Paragraph color="muted">
+        Check the dates in the first step to see your options.
+      </Typography.Paragraph>
+    );
 
-  const taxHelp = `Road tax ${formatCurrency(roadTax.base)} a year today, before the age surcharge${
-    roadTax.extra > 0
-      ? `, plus ${formatCurrency(roadTax.extra)} ${fuel === "electric" ? "Additional Flat Component" : "diesel special tax"}`
-      : ""
-  }${fuel === "hybrid" ? ". Hybrids pay the higher of the engine and motor figures." : "."}`;
+  const goTo = (next: number) => {
+    setStep(next);
+    track(`step_${next + 1}`);
+  };
 
   return (
-    <section aria-labelledby="renewal-calculator">
-      <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
-        <form
-          aria-label="Your car"
-          className="flex flex-col gap-6 lg:col-span-5"
-          onSubmit={(event) => event.preventDefault()}
-        >
-          <span className="text-muted text-sm">
-            All on your vehicle log card
-          </span>
+    <section
+      aria-labelledby="renewal-calculator"
+      className="flex max-w-3xl flex-col gap-8"
+    >
+      <Stepper currentStep={step} onStepChange={goTo}>
+        {STEPS.map((title) => (
+          <Stepper.Step key={title}>
+            <Stepper.Indicator />
+            <Stepper.Content>
+              <Stepper.Title>{title}</Stepper.Title>
+            </Stepper.Content>
+            <Stepper.Separator />
+          </Stepper.Step>
+        ))}
+      </Stepper>
 
-          <Segment
-            aria-label="COE category"
-            className="max-md:w-full"
-            onSelectionChange={(key) => {
-              setCategory(key as RenewalCategory);
+      {step === 0 ? (
+        <div className="flex flex-col gap-6">
+          <RadioButtonGroup
+            layout="grid"
+            className="grid-cols-1 sm:grid-cols-2"
+            name="renewal-category"
+            onChange={(value) => {
+              setCategory(value as RenewalCategory);
               track("category");
             }}
-            selectedKey={category}
-            size="md"
-            variant="ghost"
+            value={category}
           >
-            {CATEGORIES.map(({ id, label }) => (
-              <Segment.Item className="max-md:flex-1" id={id} key={id}>
-                {label}
-              </Segment.Item>
+            <Label className="col-span-full">COE category</Label>
+            {CATEGORIES.map(({ description, id, label }) => (
+              <RadioButtonGroup.Item key={id} value={id}>
+                <RadioButtonGroup.Indicator />
+                <RadioButtonGroup.ItemContent>
+                  <Label>{label}</Label>
+                  <Description>{description}</Description>
+                </RadioButtonGroup.ItemContent>
+              </RadioButtonGroup.Item>
             ))}
-          </Segment>
+          </RadioButtonGroup>
 
           <div className="flex flex-col gap-2">
-            <div className="grid grid-cols-2 gap-4">
-              <Field htmlFor="renewal-registration" label="Registration date">
-                <Input
-                  aria-describedby="renewal-dates"
-                  id="renewal-registration"
-                  onBlur={() => track("registration")}
-                  max={format(startOfToday(), "yyyy-MM-dd")}
-                  onChange={(event) => changeRegistration(event.target.value)}
-                  type="date"
-                  value={registrationInput}
-                />
-              </Field>
-              <Field htmlFor="renewal-expiry" label="COE expiry date">
-                <Input
-                  aria-describedby="renewal-expiry-help renewal-dates"
-                  aria-invalid={!datesValid}
-                  id="renewal-expiry"
-                  onBlur={() => track("expiry")}
-                  onChange={(event) => {
-                    setExpiryInput(event.target.value);
-                    setExpiryEdited(true);
-                  }}
-                  type="date"
-                  value={expiryInput}
-                />
-              </Field>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <DateInput
+                label="Registration date"
+                maxValue={today(getLocalTimeZone())}
+                onBlur={() => track("registration")}
+                onChange={changeRegistration}
+                value={registrationInput}
+              />
+              <DateInput
+                isInvalid={!datesValid}
+                label="COE expiry date"
+                onBlur={() => track("expiry")}
+                onChange={(value) => {
+                  setExpiryInput(value);
+                  setExpiryEdited(true);
+                }}
+                value={expiryInput}
+              />
             </div>
             {datesValid ? (
-              <>
-                <span
-                  className={cn(
-                    "text-xs",
-                    filledInPast ? "text-warning" : "text-muted",
-                  )}
-                  id="renewal-expiry-help"
-                >
-                  {expiryHelp}
-                </span>
-                <ul
-                  aria-label="Worked out from your dates"
-                  className="flex flex-col gap-2"
-                  id="renewal-dates"
-                >
-                  {derived.map((fact) => (
-                    <li
-                      className="flex items-start gap-2 text-foreground text-sm"
-                      key={fact}
-                    >
-                      <Check
-                        aria-hidden
-                        className="mt-1 size-3.5 shrink-0 text-accent"
-                        strokeWidth={2.5}
-                      />
-                      {fact}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            ) : (
-              <p
-                className="text-danger text-sm"
-                id="renewal-dates"
-                role="alert"
+              <span
+                className={cn(
+                  "text-xs",
+                  filledInPast ? "text-warning" : "text-muted",
+                )}
               >
+                {expiryHelp}
+              </span>
+            ) : (
+              <p className="text-danger text-sm" role="alert">
                 The expiry date must be after the registration date.
               </p>
             )}
           </div>
-
-          {history?.renewedBefore ? null : (
-            <Field htmlFor="renewal-arf" label="ARF paid">
-              <Input
-                id="renewal-arf"
-                onBlur={() => track("arf")}
-                inputMode="numeric"
-                onChange={(event) => setArfInput(event.target.value)}
-                placeholder="e.g. 30,000"
-                type="text"
-                value={arfInput}
-              />
-            </Field>
-          )}
-
-          <div className="flex flex-col gap-4">
-            <Segment
-              aria-describedby="renewal-tax-help"
-              aria-label="Fuel type"
-              className="w-full"
-              onSelectionChange={(key) => {
-                setFuel(key as FuelType);
-                track("fuel");
-              }}
-              selectedKey={fuel}
-              size="md"
-              variant="ghost"
-            >
-              {FUELS.map(({ id, label }) => (
-                <Segment.Item className="flex-1 px-2" id={id} key={id}>
-                  {label}
-                </Segment.Item>
-              ))}
-            </Segment>
-            <div className="grid grid-cols-2 gap-4">
-              {fuel === "electric" ? null : (
-                <Field htmlFor="renewal-cc" label="Engine capacity (cc)">
-                  <Input
-                    id="renewal-cc"
-                    onBlur={() => track("engine_capacity")}
-                    inputMode="numeric"
-                    onChange={(event) => setCcInput(event.target.value)}
-                    type="text"
-                    value={ccInput}
-                  />
-                </Field>
-              )}
-              {fuel === "electric" || fuel === "hybrid" ? (
-                <Field
-                  htmlFor="renewal-kw"
-                  label={
-                    fuel === "hybrid" ? "Motor power (kW)" : "Power rating (kW)"
-                  }
-                >
-                  <Input
-                    id="renewal-kw"
-                    onBlur={() => track("power_rating")}
-                    inputMode="numeric"
-                    onChange={(event) => setKwInput(event.target.value)}
-                    type="text"
-                    value={kwInput}
-                  />
-                </Field>
-              ) : null}
-            </div>
-            <span className="text-muted text-xs" id="renewal-tax-help">
-              {taxHelp}
-            </span>
-          </div>
-        </form>
-        <div className="min-w-0 lg:col-span-7">
-          {history && rebate && expiry ? (
-            <RenewalResults
-              category={category}
-              expiry={expiry}
-              history={history}
-              rates={rates}
-              rebate={rebate}
-              roadTax={roadTaxInput}
-            />
-          ) : null}
         </div>
+      ) : null}
+
+      {step === 1 ? (
+        <div className="flex flex-col gap-6">
+          <RadioButtonGroup
+            layout="grid"
+            className="grid-cols-2 sm:grid-cols-4"
+            name="renewal-fuel"
+            onChange={(value) => {
+              setFuel(value as FuelType);
+              track("fuel");
+            }}
+            value={fuel}
+          >
+            <Label className="col-span-full">Fuel type</Label>
+            {FUELS.map(({ id, label }) => (
+              <RadioButtonGroup.Item key={id} value={id}>
+                <RadioButtonGroup.Indicator />
+                <RadioButtonGroup.ItemContent>
+                  <Label>{label}</Label>
+                </RadioButtonGroup.ItemContent>
+              </RadioButtonGroup.Item>
+            ))}
+          </RadioButtonGroup>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {history?.renewedBefore ? null : (
+              <Field htmlFor="renewal-arf" label="ARF paid">
+                <Input
+                  id="renewal-arf"
+                  inputMode="numeric"
+                  onBlur={() => track("arf")}
+                  onChange={(event) => setArfInput(event.target.value)}
+                  placeholder="e.g. 30,000"
+                  type="text"
+                  value={arfInput}
+                />
+              </Field>
+            )}
+            {fuel === "electric" ? null : (
+              <Field htmlFor="renewal-cc" label="Engine capacity (cc)">
+                <Input
+                  id="renewal-cc"
+                  inputMode="numeric"
+                  onBlur={() => track("engine_capacity")}
+                  onChange={(event) => setCcInput(event.target.value)}
+                  type="text"
+                  value={ccInput}
+                />
+              </Field>
+            )}
+            {fuel === "electric" || fuel === "hybrid" ? (
+              <Field
+                htmlFor="renewal-kw"
+                label={
+                  fuel === "hybrid" ? "Motor power (kW)" : "Power rating (kW)"
+                }
+              >
+                <Input
+                  id="renewal-kw"
+                  inputMode="numeric"
+                  onBlur={() => track("power_rating")}
+                  onChange={(event) => setKwInput(event.target.value)}
+                  type="text"
+                  value={kwInput}
+                />
+              </Field>
+            ) : null}
+          </div>
+          <span className="text-muted text-xs">
+            All on your vehicle log card.
+          </span>
+        </div>
+      ) : null}
+
+      {step === 2 ? <div aria-live="polite">{results}</div> : null}
+
+      <div className="flex items-center justify-between gap-4">
+        {step > 0 ? (
+          <Button onPress={() => goTo(step - 1)} variant="tertiary">
+            Back
+          </Button>
+        ) : (
+          <span />
+        )}
+        {step < STEPS.length - 1 ? (
+          <Button
+            isDisabled={step === 0 && !datesValid}
+            onPress={() => goTo(step + 1)}
+          >
+            {step === STEPS.length - 2 ? "See your options" : "Next"}
+          </Button>
+        ) : null}
       </div>
     </section>
   );
