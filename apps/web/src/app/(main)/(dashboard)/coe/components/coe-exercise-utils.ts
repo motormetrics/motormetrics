@@ -27,7 +27,7 @@ export const toCategory = (key: CategoryKey): COECategory =>
 export const toCategoryKey = (category: COECategory): CategoryKey =>
   category.replace("Category ", "") as CategoryKey;
 
-export interface CategoryFigures {
+interface CategoryFigures {
   bidsReceived: number;
   bidsSuccess: number;
   premium: number;

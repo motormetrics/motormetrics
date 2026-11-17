@@ -3,8 +3,7 @@ import { formatMonthLabel } from "@web/utils/dates/format-month";
 /** Which of the two makes has the higher figure; `null` when level. */
 export type Leader = "a" | "b" | null;
 
-export const formatCount = (value: number): string =>
-  value.toLocaleString("en-SG");
+const formatCount = (value: number): string => value.toLocaleString("en-SG");
 
 /** `part` as a percentage of `whole`, 0 when there is no whole. */
 export const shareOf = (part: number, whole: number): number =>

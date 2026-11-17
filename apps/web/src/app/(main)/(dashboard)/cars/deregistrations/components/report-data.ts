@@ -9,7 +9,7 @@ import type { SearchParams } from "nuqs/server";
 export const SERIES_MONTHS = 12;
 
 /** One month of the series, every category's count beside the total. */
-export interface MonthlyRow {
+interface MonthlyRow {
   /** One count per category, in `CATEGORIES` order. */
   counts: number[];
   month: string;

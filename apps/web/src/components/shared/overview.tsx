@@ -28,29 +28,6 @@ export function OverviewPage({
   );
 }
 
-/**
- * The two-up grid the comps use for paired sections. The 64px gutter is what
- * lets two 520-wide sparklines sit side by side without reading as one chart.
- */
-export function OverviewGrid({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return (
-    <div
-      className={cn(
-        "grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-x-16",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
-}
-
 /** The hairline that separates one section from the next. */
 export function Hairline({ className }: { className?: string }) {
   return <Separator className={className} />;

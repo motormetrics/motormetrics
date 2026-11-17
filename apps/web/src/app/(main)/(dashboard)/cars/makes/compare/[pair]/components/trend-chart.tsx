@@ -30,11 +30,7 @@ const SERIES_STYLE = {
  * A short stroke in a make's line style. The legend and the summary table's
  * column headers both use it, so a reader can match a column to its line.
  */
-export function SeriesSwatch({
-  series,
-}: {
-  series: keyof typeof SERIES_STYLE;
-}) {
+function SeriesSwatch({ series }: { series: keyof typeof SERIES_STYLE }) {
   const { color, dash } = SERIES_STYLE[series];
 
   return (
