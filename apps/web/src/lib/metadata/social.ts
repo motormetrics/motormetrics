@@ -44,14 +44,6 @@ export const compareMakesCardImages = cardImages(
   "/og/compare-makes.png",
   "Compare car makes side by side - MotorMetrics",
 );
-export const fuelTypesCardImages = cardImages(
-  "/og/fuel-types.png",
-  "Petrol, hybrid and electric, by the numbers - MotorMetrics",
-);
-export const vehicleTypesCardImages = cardImages(
-  "/og/vehicle-types.png",
-  "SUVs, sedans, hatchbacks and more - MotorMetrics",
-);
 export const learnCardImages = cardImages(
   "/og/learn.png",
   "Guides to buying and owning a car in Singapore - MotorMetrics",
