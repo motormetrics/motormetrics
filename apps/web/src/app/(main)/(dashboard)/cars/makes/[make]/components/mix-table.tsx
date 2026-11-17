@@ -1,156 +1,108 @@
 "use client";
 
-import { cn } from "@heroui/react";
-import {
-  defaultMixDirection,
-  type MixRow,
-  type MixSortDirection,
-  type MixSortKey,
-  sortMixRows,
-} from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/mix-rows";
+import { Typography } from "@heroui/react";
+import { DataGrid, type DataGridColumn, NumberValue } from "@heroui-pro/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import { useState } from "react";
 
-/** Cell widths shared by the header and every row, so the columns line up. */
-const CELL = {
-  change: "w-16 shrink-0 text-right md:w-24",
-  count: "w-12 shrink-0 text-right md:w-24",
-  fuelType: "min-w-0 flex-1",
-  rank: "w-5 shrink-0 md:w-7",
-  share: "flex w-44 shrink-0 items-center gap-2 max-md:hidden",
-  vehicleType: "min-w-0 flex-1",
-} as const;
+/** One fuel type × vehicle type cell of the make's registrations. */
+export interface MixRow {
+  /** Percentage change against the same months a year earlier. */
+  change: number | null;
+  count: number;
+  fuelType: string;
+  /** Share of the make's registrations in the period, in percent. */
+  share: number;
+  /** Already formatted for display, e.g. "Hatchback". */
+  vehicleType: string;
+}
 
-const SORTABLE: {
-  className: string;
-  key: MixSortKey;
-  label: string;
-  short: string;
-}[] = [
+const columns: DataGridColumn<MixRow>[] = [
   {
-    className: CELL.fuelType,
-    key: "fuelType",
-    label: "Fuel type",
-    short: "Fuel",
+    allowsSorting: true,
+    // One cell for both, the vehicle type over its fuel type, so the table
+    // fits a phone.
+    cell: (row) => (
+      <span className="flex min-w-0 flex-col">
+        <Typography.Paragraph size="sm" weight="medium">
+          {row.vehicleType}
+        </Typography.Paragraph>
+        <Typography.Paragraph color="muted" size="xs">
+          {row.fuelType}
+        </Typography.Paragraph>
+      </span>
+    ),
+    header: "Vehicle and fuel type",
+    id: "type",
+    isRowHeader: true,
+    minWidth: 128,
+    sortFn: (first, second) =>
+      first.vehicleType.localeCompare(second.vehicleType, "en-SG") ||
+      first.fuelType.localeCompare(second.fuelType, "en-SG"),
   },
   {
-    className: CELL.vehicleType,
-    key: "vehicleType",
-    label: "Vehicle type",
-    short: "Type",
+    align: "end",
+    allowsSorting: true,
+    cell: (row) => (
+      <NumberValue locale="en-SG" maximumFractionDigits={0} value={row.count} />
+    ),
+    header: (
+      <>
+        <span className="max-sm:hidden">Registrations</span>
+        <span className="sm:hidden">Cars</span>
+      </>
+    ),
+    id: "count",
+    sortFn: (first, second) => first.count - second.count,
+    width: 128,
   },
   {
-    className: CELL.count,
-    key: "count",
-    label: "Registrations",
-    short: "Regs",
+    align: "end",
+    cell: (row) => (
+      <Typography.Paragraph align="end" className="tabular-nums" size="sm">
+        {row.share < 0.1 ? "<0.1" : row.share.toFixed(1)}%
+      </Typography.Paragraph>
+    ),
+    // A phone drops the share, which restates the registrations.
+    cellClassName: "max-sm:hidden",
+    header: "Share",
+    headerClassName: "max-sm:hidden",
+    id: "share",
+    width: 88,
+  },
+  {
+    align: "end",
+    allowsSorting: true,
+    cell: (row) =>
+      row.change === null ? (
+        <Typography.Paragraph align="end" color="muted" size="sm">
+          <span aria-hidden>—</span>
+          <span className="sr-only">None a year earlier</span>
+        </Typography.Paragraph>
+      ) : (
+        <DeltaChip value={row.change} />
+      ),
+    header: "Change",
+    id: "change",
+    sortFn: (first, second) =>
+      (first.change ?? Number.NEGATIVE_INFINITY) -
+      (second.change ?? Number.NEGATIVE_INFINITY),
+    width: 104,
   },
 ];
 
-/**
- * The fuel type × vehicle type table as a ruled list. The rows render from
- * server data; only the sort is client state, as in the comp, so it stays out
- * of the URL.
- */
-export function MixTable({ rows, total }: { rows: MixRow[]; total: number }) {
-  const [sortKey, setSortKey] = useState<MixSortKey>("count");
-  const [direction, setDirection] = useState<MixSortDirection>("desc");
-  const leader = rows[0]?.count || 1;
-
-  const sortBy = (key: MixSortKey) => {
-    if (key === sortKey) {
-      setDirection((current) => (current === "asc" ? "desc" : "asc"));
-      return;
-    }
-    setSortKey(key);
-    setDirection(defaultMixDirection(key));
-  };
-
-  const header = (key: MixSortKey, label: string, short: string) => {
-    const isActive = key === sortKey;
-    return (
-      <button
-        className={cn(
-          "cursor-pointer truncate font-semibold",
-          isActive && "text-accent",
-        )}
-        onClick={() => sortBy(key)}
-        type="button"
-      >
-        <span className="max-md:hidden">{label}</span>
-        <span className="md:hidden">{short}</span>
-        {isActive ? (direction === "asc" ? " ↑" : " ↓") : null}
-      </button>
-    );
-  };
-
+/** The make's registrations by fuel type and vehicle type, largest first. */
+export function MixTable({ label, rows }: { label: string; rows: MixRow[] }) {
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center gap-2 px-1 pb-2 text-muted text-xs md:gap-4 md:px-2">
-        <span className={cn(CELL.rank, "font-semibold")}>#</span>
-        {SORTABLE.map(({ className, key, label, short }) => (
-          <span className={className} key={key}>
-            {header(key, label, short)}
-          </span>
-        ))}
-        <span className={cn(CELL.share, "font-semibold")}>Share</span>
-        <span className={CELL.change}>
-          {header("change", "vs year earlier", "Change")}
-        </span>
-      </div>
-      {sortMixRows(rows, sortKey, direction).map((row) => (
-        <div
-          className="flex items-center gap-2 px-1 py-2 transition-colors hover:bg-surface-secondary md:gap-4 md:px-2"
-          key={`${row.fuelType}|${row.vehicleType}`}
-        >
-          <span
-            className={cn(
-              CELL.rank,
-              "text-sm tabular-nums",
-              row.rank <= 3 ? "font-semibold text-accent" : "text-muted",
-            )}
-          >
-            {String(row.rank).padStart(2, "0")}
-          </span>
-          <span className={cn(CELL.fuelType, "truncate text-sm")}>
-            {row.fuelType}
-          </span>
-          <span
-            className={cn(CELL.vehicleType, "truncate font-medium text-sm")}
-          >
-            {row.vehicleType}
-          </span>
-          <span
-            className={cn(CELL.count, "font-semibold text-sm tabular-nums")}
-          >
-            {row.count.toLocaleString("en-SG")}
-          </span>
-          <span className={CELL.share}>
-            <span className="block h-2.5 min-w-0 flex-1 bg-surface-secondary">
-              <span
-                className="block h-full rounded-r-xs"
-                style={{
-                  background:
-                    row.rank === 1 ? "var(--chart-1)" : "var(--chart-3)",
-                  width: `${((row.count / leader) * 100).toFixed(1)}%`,
-                }}
-              />
-            </span>
-            <span className="w-12 text-right text-muted text-sm tabular-nums">
-              {((row.count / (total || 1)) * 100).toFixed(1)}%
-            </span>
-          </span>
-          <DeltaChip
-            className={cn(CELL.change, "text-sm")}
-            value={row.change}
-          />
-        </div>
-      ))}
-      {rows.length === 0 ? (
-        <span className="px-2 py-6 text-muted text-sm">
-          No registrations for this fuel type in the period.
-        </span>
-      ) : null}
-    </div>
+    <DataGrid
+      aria-label={label}
+      columns={columns}
+      data={rows}
+      defaultSortDescriptor={{ column: "count", direction: "descending" }}
+      getRowId={(row) => `${row.fuelType}|${row.vehicleType}`}
+      renderEmptyState={() =>
+        "No registrations for this fuel type in the period."
+      }
+      variant="secondary"
+    />
   );
 }

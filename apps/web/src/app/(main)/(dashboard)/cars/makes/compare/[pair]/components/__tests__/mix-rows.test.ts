@@ -40,14 +40,14 @@ describe("fuelShareRows", () => {
     expect(rows.at(-1)).toMatchObject({
       a: "15.0%",
       b: "0.0%",
-      label: "Other",
+      label: "Other fuel types",
     });
   });
 });
 
 describe("vehicleShareRows", () => {
-  it("should split SUV, Sedan and Other, and break Other down largest first", () => {
-    const { otherBreakdown, rows } = vehicleShareRows(
+  it("should split SUV, Sedan and the other body types", () => {
+    const rows = vehicleShareRows(
       make(
         100,
         {},
@@ -69,16 +69,12 @@ describe("vehicleShareRows", () => {
     expect(rows.map((row) => [row.label, row.a, row.b])).toEqual([
       ["SUV", "50.0%", "40.0%"],
       ["Sedan", "25.0%", "60.0%"],
-      ["Other", "25.0%", "0.0%"],
-    ]);
-    expect(otherBreakdown.map((row) => [row.label, row.a])).toEqual([
-      ["MPV", "15.0%"],
-      ["Hatchback", "10.0%"],
+      ["Other body types", "25.0%", "0.0%"],
     ]);
   });
 
   it("should give no leader on a tie", () => {
-    const { rows } = vehicleShareRows(
+    const rows = vehicleShareRows(
       make(10, {}, { Sedan: 5 }),
       make(20, {}, { Sedan: 10 }),
     );

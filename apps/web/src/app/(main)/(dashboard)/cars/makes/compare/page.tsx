@@ -7,8 +7,8 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
 import {
   ComparisonBody,
-  ComparisonHead,
   type ComparisonNames,
+  ComparisonToolbar,
   loadComparison,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/comparison";
 import {
@@ -25,7 +25,8 @@ import {
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { OverviewPage } from "@web/components/shared/overview";
-import { PageHead } from "@web/components/shared/page-head";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
+import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import {
@@ -174,9 +175,9 @@ export default function CompareCarMakesPage({ searchParams }: PageProps) {
 
       {/* Until the selection is read from the URL, the static shell shows
           the page with nothing selected, which is what most visits are. A
-          `?make=a&make=b` view swaps in its own head and comparison. */}
-      <Suspense fallback={<EmptyHead slugs={[]} />}>
-        <SelectorHead searchParams={searchParams} />
+          `?make=a&make=b` view swaps in its own toolbar and comparison. */}
+      <Suspense fallback={<EmptyToolbar slugs={[]} />}>
+        <SelectorToolbar searchParams={searchParams} />
       </Suspense>
 
       <SectionErrorBoundary title="Comparison unavailable">
@@ -215,13 +216,17 @@ async function SelectorStructuredData({ searchParams }: PageProps) {
   );
 }
 
-/** The head before two makes are chosen, with whatever is valid selected. */
-function EmptyHead({ slugs }: { slugs: readonly string[] }) {
+/** The toolbar before two makes are chosen, with whatever is valid selected. */
+function EmptyToolbar({ slugs }: { slugs: readonly string[] }) {
   return (
-    <PageHead
-      controls={<MakeSelectors selected={Promise.resolve(slugs)} />}
-      description="Choose two makes to compare their new car registrations side by side."
-      eyebrow="Cars · Makes · Compare"
+    <PageToolbar
+      actions={
+        <>
+          <MakeSelectors selected={Promise.resolve(slugs)} />
+          <SharePill title="Compare car makes" />
+        </>
+      }
+      asOf="Choose two makes to compare their new car registrations side by side."
       title="Compare car makes in Singapore"
     />
   );
@@ -238,15 +243,15 @@ function PopularComparisons() {
 }
 
 /** The H1 and the two selectors, preselected with whatever is valid. */
-async function SelectorHead({ searchParams }: PageProps) {
+async function SelectorToolbar({ searchParams }: PageProps) {
   const { names, slugs } = await resolveSelection(searchParams);
 
   if (!names) {
-    return <EmptyHead slugs={slugs} />;
+    return <EmptyToolbar slugs={slugs} />;
   }
 
   return (
-    <ComparisonHead
+    <ComparisonToolbar
       controls={<MakeSelectors selected={Promise.resolve(slugs)} />}
       names={Promise.resolve(names)}
     />
@@ -276,5 +281,5 @@ async function SelectorContent({ searchParams }: PageProps) {
     );
   }
 
-  return <ComparisonBody faqSchema={false} names={comparisonNames} />;
+  return <ComparisonBody names={comparisonNames} />;
 }

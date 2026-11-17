@@ -1,34 +1,22 @@
-import { Skeleton, Typography } from "@heroui/react";
+import { Skeleton } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
-import { TwoShadeTrendChart } from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
-import { CoeComparisonChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/coe-comparison-chart";
-import { buildMakeFaqs } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/faq-data";
-import { MakeReport } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
-import { MakeSearch } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-search";
-import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
+import {
+  MakeControls,
+  MakeReport,
+} from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
 import { summariseMake } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/summary";
-import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { ComparisonLinks } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/comparison-links";
 import { pairsWithMake } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
-import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import { MonthMenu } from "@web/components/shared/month-menu";
-import {
-  Hairline,
-  OverviewPage,
-  SectionHead,
-  SectionLink,
-  SourceNote,
-} from "@web/components/shared/overview";
-import { PageFaq } from "@web/components/shared/page-faq";
-import { PageHead } from "@web/components/shared/page-head";
+import { OverviewPage } from "@web/components/shared/overview";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
+import { SharePill } from "@web/components/shared/share-pill";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import {
   createWebPageStructuredData,
   generateBreadcrumbSchema,
-  generateFAQPageSchema,
 } from "@web/lib/metadata";
 import {
   baseOpenGraph,
@@ -37,7 +25,6 @@ import {
 } from "@web/lib/metadata/social";
 import { getDistinctMakes } from "@web/queries/cars";
 import { getCarsLatestMonth } from "@web/queries/cars/latest-month";
-import { getMakeCoeComparison } from "@web/queries/cars/makes/coe-comparison";
 import { getMakeFromSlug } from "@web/queries/cars/makes/get-make-from-slug";
 import {
   getMakeCrossTab,
@@ -46,12 +33,8 @@ import {
 } from "@web/queries/cars/makes/period-totals";
 import { getCarLogoMap } from "@web/queries/logos";
 import type { Make } from "@web/types";
-import {
-  formatChartMonth,
-  formatMonthLabel,
-} from "@web/utils/dates/format-month";
+import { formatMonthLabel } from "@web/utils/dates/format-month";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
-import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { SearchParams } from "nuqs/server";
@@ -94,7 +77,7 @@ async function loadMakeDescription(make: string): Promise<string> {
   return summary ? `${summary} Source: LTA.` : makeDescription(make);
 }
 
-/** The latest month's summary sentence, shared by the snippet and the FAQ. */
+/** The latest month's summary sentence, for the search snippet. */
 async function loadMakeSummary(make: string): Promise<string | undefined> {
   const month = await getCarsLatestMonth();
   if (!month) {
@@ -182,120 +165,51 @@ async function resolveMake(params: PageProps["params"]) {
   return { exactMake, make };
 }
 
-/** Stands in for `PageHead` while the make name resolves. */
-function MakeHeadSkeleton() {
+/** Stands in for the toolbar while the make name resolves. */
+function MakeToolbarSkeleton() {
   return (
-    <div className="flex flex-wrap items-end gap-6">
+    <div className="flex flex-wrap items-end justify-between gap-4">
       <div className="flex flex-col gap-2">
-        <Skeleton className="h-4 w-24" />
-        <Skeleton className="h-12 w-64" />
-        <Skeleton className="h-5 w-80" />
+        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-5 w-80 max-w-full" />
       </div>
-      <div className="flex min-w-0 max-w-full flex-wrap items-center gap-4 sm:ml-auto">
-        <Skeleton className="h-10 w-80" />
-        <Skeleton className="h-10 w-24" />
-      </div>
+      <Skeleton className="h-10 w-96 max-w-full" />
     </div>
   );
 }
 
-export default function CarMakePage({
-  params,
-  searchParams: searchParamsPromise,
-}: PageProps) {
+export default function CarMakePage({ params, searchParams }: PageProps) {
   return (
-    <OverviewPage className="gap-8 max-md:gap-6">
+    <>
       <Suspense fallback={null}>
         <MakeStructuredData params={params} />
       </Suspense>
 
-      <Suspense fallback={<MakeHeadSkeleton />}>
-        <MakeHead params={params} searchParams={searchParamsPromise} />
-      </Suspense>
-
-      <SectionErrorBoundary title="Make data unavailable">
-        <Suspense
-          fallback={
-            <div className="flex flex-col gap-4">
-              <Skeleton className="h-96 w-full" />
-              <Skeleton className="h-96 w-full" />
-            </div>
-          }
-        >
-          <MakeReportSection
-            params={params}
-            searchParams={searchParamsPromise}
-          />
+      {/* The dashboard template: toolbar, KPI tiles, a chart pair and one
+          table. The make resolves from the URL and the figures follow the
+          search params, so each region waits behind its own boundary. */}
+      <OverviewPage className="gap-8 max-md:gap-6">
+        <Suspense fallback={<MakeToolbarSkeleton />}>
+          <MakeToolbar params={params} searchParams={searchParams} />
         </Suspense>
-      </SectionErrorBoundary>
 
-      <Suspense fallback={null}>
-        <MakeComparisons params={params} />
-      </Suspense>
-
-      <Hairline />
-
-      <SectionErrorBoundary title="COE comparison unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-          <CarMakeCoeSection params={params} />
-        </Suspense>
-      </SectionErrorBoundary>
-
-      <Hairline />
-
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
-        <div className="flex flex-col gap-2">
-          <Typography.Paragraph
-            className="uppercase"
-            weight="semibold"
-            color="muted"
-            size="xs"
+        <SectionErrorBoundary title="Make data unavailable">
+          <Suspense
+            fallback={
+              <div className="flex flex-col gap-4">
+                <Skeleton className="h-36 w-full" />
+                <Skeleton className="h-96 w-full" />
+              </div>
+            }
           >
-            Reading a make page
-          </Typography.Paragraph>
-          <Typography.Paragraph size="sm">
-            Registrations are counted by make as recorded at registration, so
-            rebadged and parallel-imported cars appear under the same name as
-            authorised-dealer stock.
-          </Typography.Paragraph>
-          <Typography.Paragraph size="sm">
-            LTA reports registrations by make, fuel type and vehicle type — not
-            by model, so there are no model-level figures anywhere on the site.
-          </Typography.Paragraph>
-        </div>
-        <div className="flex flex-wrap items-end gap-6 lg:justify-end">
-          <SectionLink className="ml-0" href="/cars/makes">
-            All makes
-          </SectionLink>
-          <SectionLink className="ml-0" href="/cars?dimension=fuelType">
-            Fuel types
-          </SectionLink>
-        </div>
-      </div>
+            <MakeReportSection params={params} searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
 
-      <Hairline />
-
-      <Suspense fallback={null}>
-        <MakeFaq params={params} />
-      </Suspense>
-    </OverviewPage>
-  );
-}
-
-/** The questions, templated with the make name, and their FAQPage schema. */
-async function MakeFaq({ params }: Pick<PageProps, "params">) {
-  const { exactMake } = await resolveMake(params);
-  const faqs = buildMakeFaqs(exactMake, await loadMakeSummary(exactMake));
-
-  return (
-    <>
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: faqs }]),
-        }}
-      />
-      <PageFaq faqs={faqs} />
+        <Suspense fallback={null}>
+          <MakeComparisons params={params} />
+        </Suspense>
+      </OverviewPage>
     </>
   );
 }
@@ -330,66 +244,49 @@ async function MakeStructuredData({ params }: Pick<PageProps, "params">) {
   );
 }
 
-/**
- * The make-name H1. `PageHead` derives the share pill from its title, so the
- * whole head resolves together rather than splitting the string out.
- */
-async function MakeHead({ params, searchParams }: PageProps) {
+/** "LTA data to October 2026", and why there are no model figures. */
+async function MakeAsOf() {
+  const month = await getCarsLatestMonth();
+
+  return (
+    <>
+      {month ? `LTA data to ${formatMonthLabel(month)}` : "LTA data"}, reported
+      by make, fuel type and vehicle type, not by model
+    </>
+  );
+}
+
+/** The make's logo and name as the H1, with its switches and Share. */
+async function MakeToolbar({ params, searchParams }: PageProps) {
   const [{ exactMake }, logoUrlBySlug] = await Promise.all([
     resolveMake(params),
     getCarLogoMap(),
   ]);
 
   return (
-    <PageHead
-      // `PageHead` has no slot before the title, so the comp's logo sits in
-      // the badge slot after it.
-      badge={
-        <MakeAvatar
-          logoUrl={logoUrlBySlug[slugify(exactMake)] ?? null}
-          make={exactMake}
-          size="lg"
-        />
+    <PageToolbar
+      actions={
+        <>
+          <MakeControls make={exactMake} searchParams={searchParams} />
+          <SharePill title={exactMake} />
+        </>
       }
-      controls={
-        // Nested on purpose: the month and make pickers fetch data of their
-        // own, so the H1 lands as soon as the slug resolves instead of
-        // waiting on them.
-        <Suspense fallback={<Skeleton className="h-10 w-80" />}>
-          <CarMakeHeaderMeta searchParams={searchParams} />
-        </Suspense>
+      asOf={<MakeAsOf />}
+      title={
+        <span className="flex items-center gap-4">
+          {/* The logo repeats the name, so it stays out of the heading's
+              accessible name. */}
+          <span aria-hidden className="flex">
+            <MakeAvatar
+              logoUrl={logoUrlBySlug[slugify(exactMake)] ?? null}
+              make={exactMake}
+              size="lg"
+            />
+          </span>
+          {exactMake}
+        </span>
       }
-      eyebrow="Cars · Makes"
-      sub={
-        <Suspense fallback={<Skeleton className="h-5 w-80" />}>
-          <MakePeriodSub searchParams={searchParams} />
-        </Suspense>
-      }
-      title={exactMake}
     />
-  );
-}
-
-/**
- * "January to August 2026 · registrations by fuel type and vehicle type ·
- * Source: LTA via DataMall", under the title.
- */
-async function MakePeriodSub({
-  searchParams: searchParamsPromise,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const { month: parsedMonth, range } =
-    await loadSearchParams(searchParamsPromise);
-  const { month } = await getMonthOrLatest(parsedMonth, "cars");
-
-  return (
-    <>
-      <span className="font-semibold text-foreground">
-        {periodLabel(month, range)}
-      </span>{" "}
-      · registrations by fuel type and vehicle type · Source: LTA via DataMall
-    </>
   );
 }
 
@@ -399,36 +296,9 @@ async function MakeReportSection({ params, searchParams }: PageProps) {
   return <MakeReport make={exactMake} searchParams={searchParams} />;
 }
 
-async function CarMakeHeaderMeta({
-  searchParams: searchParamsPromise,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const { month: parsedMonth } = await loadSearchParams(searchParamsPromise);
-  const [months, makes, { wasAdjusted }] = await Promise.all([
-    fetchMonthsForCars(),
-    getDistinctMakes(),
-    getMonthOrLatest(parsedMonth, "cars"),
-  ]);
-
-  return (
-    <>
-      {/* The comp hangs a make picker off the H1 itself. `PageHead` takes a
-          plain string title, so it sits in the controls slot beside the month
-          picker instead. */}
-      <MakeSearch makes={makes.map(({ make }) => make)} />
-      <MonthMenu
-        latestMonth={months[0]}
-        months={months}
-        wasAdjusted={wasAdjusted}
-      />
-    </>
-  );
-}
-
 /**
  * "Compare BMW with" links to the curated comparison pages this make appears
- * in, with its own hairline above. Nothing for a make outside the list.
+ * in. Nothing for a make outside the list.
  */
 async function MakeComparisons({ params }: Pick<PageProps, "params">) {
   const { exactMake, make } = await resolveMake(params);
@@ -439,83 +309,10 @@ async function MakeComparisons({ params }: Pick<PageProps, "params">) {
   }
 
   return (
-    <>
-      <Hairline />
-      <ComparisonLinks
-        eyebrow="Compare"
-        pairs={pairs}
-        title={`Compare ${exactMake} with`}
-      />
-    </>
-  );
-}
-
-async function CarMakeCoeSection({ params }: Pick<PageProps, "params">) {
-  const { exactMake } = await resolveMake(params);
-  const coeComparison = await getMakeCoeComparison(exactMake);
-
-  const first = coeComparison[0];
-  const last = coeComparison.at(-1);
-  if (!first || !last) {
-    return null;
-  }
-
-  // Each month carries its label, and its year under the first month and
-  // every January, for both charts' axes.
-  const months = coeComparison.map(({ month }, index) => ({
-    label: formatChartMonth(month),
-    title: formatMonthLabel(month),
-    year: index === 0 || month.endsWith("-01") ? month.slice(0, 4) : "",
-  }));
-  const premiums = coeComparison.flatMap(
-    ({ categoryAPremium, categoryBPremium }) => [
-      categoryAPremium,
-      categoryBPremium,
-    ],
-  );
-
-  return (
-    <section className="flex min-w-0 flex-col gap-4">
-      <SectionHead
-        caption={`${formatMonthLabel(first.month)} to ${formatMonthLabel(last.month)} · ${exactMake} registrations, then Category A and B premiums on the same months`}
-        eyebrow="Context"
-        title="Registrations against COE premiums"
-      />
-      <TwoShadeTrendChart
-        data={coeComparison.map(({ registrations }, index) => {
-          const isLatest = index === coeComparison.length - 1;
-          return {
-            ...months[index],
-            count: registrations,
-            earlier: isLatest ? 0 : registrations,
-            latest: isLatest ? registrations : 0,
-          };
-        })}
-        height={220}
-        maxBarSize={40}
-        thinTicks
-        ticks={axisTicks(
-          coeComparison.map(({ registrations }) => registrations),
-          { zero: true },
-        )}
-        tooltipLabel="Registrations"
-      />
-      <SourceNote>
-        {exactMake} registrations by month, all fuel types.
-      </SourceNote>
-      <CoeComparisonChart
-        data={coeComparison.map(
-          ({ categoryAPremium, categoryBPremium }, index) => ({
-            ...months[index],
-            categoryA: categoryAPremium,
-            categoryB: categoryBPremium,
-          }),
-        )}
-        ticks={axisTicks(premiums, { zero: false })}
-      />
-      <SourceNote>
-        COE premium in S$ by month. The axis does not start at zero.
-      </SourceNote>
-    </section>
+    <ComparisonLinks
+      eyebrow="Compare"
+      pairs={pairs}
+      title={`Compare ${exactMake} with`}
+    />
   );
 }

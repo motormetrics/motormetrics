@@ -1,39 +1,29 @@
-import { Chip, Skeleton, Typography } from "@heroui/react";
+import { Skeleton } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
-import { TableDisclosure } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/disclosure";
-import { buildCompareFaqs } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/faq-data";
 import {
   buildMakeFigures,
+  type MakeFigures,
   SERIES_LENGTH,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/figures";
 import {
   fuelShareRows,
   vehicleShareRows,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/mix-rows";
-import { MonthlyTable } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/monthly-table";
 import { ShareTable } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/share-table";
 import {
-  buildSummaryRows,
-  leadSentence,
-  monthlyRows,
+  shareOf,
   trendSummary,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/summary";
-import { SummaryTable } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/summary-table";
 import { CompareTrendChart } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/trend-chart";
 import { MakePickerSkeleton } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/make-selectors";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { FigureCard } from "@web/components/shared/figure-card";
+import { type KpiTile, KpiTiles } from "@web/components/shared/kpi-tiles";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import {
-  Hairline,
-  SectionHead,
-  SourceNote,
-} from "@web/components/shared/overview";
-import { PageFaq } from "@web/components/shared/page-faq";
-import { PageHead } from "@web/components/shared/page-head";
-import { StructuredData } from "@web/components/structured-data";
-import { generateFAQPageSchema } from "@web/lib/metadata";
+import { PageToolbar } from "@web/components/shared/page-toolbar";
+import { SharePill } from "@web/components/shared/share-pill";
 import {
   getMakeCrossTab,
   getMarketMonthlyTotals,
@@ -45,7 +35,11 @@ import {
 } from "@web/utils/dates/format-month";
 import { trailingMonths } from "@web/utils/dates/month-arithmetic";
 import { getMonthOrLatest } from "@web/utils/dates/months";
+import type { Route } from "next";
 import { type ReactNode, Suspense } from "react";
+
+/** Months of history the KPI sparklines draw. */
+const SPARKLINE_MONTHS = 12;
 
 /** Both makes' DB names, in column order. */
 export interface ComparisonNames {
@@ -65,13 +59,10 @@ interface ComparisonProps {
  * Both makes' figures for the latest month with car data. Each region calls
  * it for itself; the reads are `'use cache'`, so only the first one queries.
  */
-export async function loadComparison(
-  names: Promise<ComparisonNames>,
-  latest: Promise<{ month: string }> = getMonthOrLatest(null, "cars"),
-) {
+export async function loadComparison(names: Promise<ComparisonNames>) {
   const { nameA, nameB } = await names;
   const [{ month }, rowsA, rowsB] = await Promise.all([
-    latest,
+    getMonthOrLatest(null, "cars"),
     getMakeCrossTab(nameA),
     getMakeCrossTab(nameB),
   ]);
@@ -85,27 +76,24 @@ export async function loadComparison(
   };
 }
 
-/** Stands in for `PageHead` while the makes resolve. */
-export function CompareHeadSkeleton() {
+/** Stands in for the toolbar while the makes resolve. */
+export function CompareToolbarSkeleton() {
   return (
-    <div className="flex flex-wrap items-end gap-6">
+    <div className="flex flex-wrap items-end justify-between gap-4">
       <div className="flex flex-col gap-2">
-        <Skeleton className="h-4 w-40" />
-        <Skeleton className="h-12 w-96 max-w-full" />
-        <Skeleton className="h-8 w-80 max-w-full" />
+        <Skeleton className="h-10 w-80 max-w-full" />
+        <Skeleton className="h-5 w-64 max-w-full" />
       </div>
-      <div className="min-w-0 max-w-full sm:ml-auto">
-        <MakePickerSkeleton />
-      </div>
+      <MakePickerSkeleton />
     </div>
   );
 }
 
 /**
- * The H1, both makes' logos, the period chip and the controls. The period is
- * stated here once, so no caption or table below repeats it.
+ * The H1 with both makes' logos, how current the data is, and the make
+ * pickers beside Share.
  */
-export async function ComparisonHead({
+export async function ComparisonToolbar({
   controls,
   names,
 }: ComparisonProps & { controls: ReactNode }) {
@@ -114,145 +102,84 @@ export async function ComparisonHead({
     getCarLogoMap(),
     getMonthOrLatest(null, "cars"),
   ]);
+  const title = `${nameA} vs ${nameB}`;
 
   return (
-    <PageHead
-      // `PageHead` has no slot before the title, so the logos sit in the
-      // badge slot after it, as on the make page.
-      badge={
-        <span className="flex items-center gap-2">
-          {[nameA, nameB].map((name) => (
-            <MakeAvatar
-              key={name}
-              logoUrl={logoUrlBySlug[slugify(name)] ?? null}
-              make={name}
-              size="lg"
-            />
-          ))}
+    <PageToolbar
+      actions={
+        <>
+          {controls}
+          <SharePill title={title} />
+        </>
+      }
+      asOf={<>LTA data to {formatMonthLabel(month)} · figures year to date</>}
+      title={
+        <span className="flex flex-wrap items-center gap-4">
+          {/* The logos repeat the names, so they stay out of the heading's
+              accessible name. */}
+          <span aria-hidden className="flex items-center gap-2">
+            {[nameA, nameB].map((name) => (
+              <MakeAvatar
+                key={name}
+                logoUrl={logoUrlBySlug[slugify(name)] ?? null}
+                make={name}
+                size="lg"
+              />
+            ))}
+          </span>
+          {title}
         </span>
       }
-      controls={controls}
-      eyebrow="Cars · Makes · Compare"
-      sub={
-        <div className="flex flex-wrap items-center gap-2">
-          <Chip size="lg" variant="soft">
-            <Chip.Label>{periodLabel(month, "ytd")}</Chip.Label>
-          </Chip>
-          <span>
-            New car registrations · Source: LTA via DataMall · updated monthly
-          </span>
-        </div>
-      }
-      title={`${nameA} vs ${nameB} in Singapore`}
     />
   );
 }
 
-/**
- * Everything below the head: lead and summary, trend, fuel and vehicle mix,
- * monthly figures and FAQ. The trend, mix and monthly sections keep their
- * headings in the static shell and hold a boundary around the figures only.
- * A fragment, so the sections sit directly in `OverviewPage`'s gap layout.
- */
-export function ComparisonBody({
-  faqSchema,
-  names,
-}: ComparisonProps & {
-  /** Emit FAQPage schema; off on pages that are not indexed. */
-  faqSchema: boolean;
-}) {
-  return (
-    <>
-      <SectionErrorBoundary title="Comparison unavailable">
-        <Suspense
-          fallback={
-            <div className="flex flex-col gap-4">
-              <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-64 w-full" />
-            </div>
-          }
-        >
-          <CompareLead names={names} />
-        </Suspense>
-      </SectionErrorBoundary>
-
-      <Hairline />
-
-      <SectionErrorBoundary title="Monthly trend unavailable">
-        <CompareTrend names={names} />
-      </SectionErrorBoundary>
-
-      <Hairline />
-
-      <SectionErrorBoundary title="Fuel and vehicle mix unavailable">
-        <CompareMix names={names} />
-      </SectionErrorBoundary>
-
-      <SectionErrorBoundary title="Monthly figures unavailable">
-        <CompareMonthly names={names} />
-      </SectionErrorBoundary>
-
-      <Hairline />
-
-      <Suspense fallback={null}>
-        <CompareFaq faqSchema={faqSchema} names={names} />
-      </Suspense>
-    </>
-  );
+/** A make's registrations tile, linking to the make's own page. */
+function registrationsTile(
+  name: string,
+  figures: MakeFigures,
+  period: string,
+): KpiTile {
+  return {
+    change:
+      figures.change === null
+        ? undefined
+        : { label: "vs a year earlier", value: figures.change },
+    format: "count",
+    href: `/cars/makes/${slugify(name)}` as Route,
+    note: period,
+    title: `${name} registrations`,
+    trend: figures.series.slice(-SPARKLINE_MONTHS),
+    value: figures.ytd,
+  };
 }
 
-/**
- * The answer first: one data-built sentence, then the four measures side by
- * side with the gap between them.
- */
-async function CompareLead({ names }: ComparisonProps) {
-  // The market total needs only the month, so it runs alongside the two
-  // makes' reads rather than after them.
-  const latest = getMonthOrLatest(null, "cars");
-  const [{ a, b, month, nameA, nameB }, marketTotals, logoUrlBySlug] =
-    await Promise.all([
-      loadComparison(names, latest),
-      latest.then(({ month: latestMonth }) =>
-        getMarketMonthlyTotals(`${latestMonth.slice(0, 4)}-01`, latestMonth),
-      ),
-      getCarLogoMap(),
-    ]);
+/** Each make's registrations and its share of all new cars, year to date. */
+async function CompareKpis({ names }: ComparisonProps) {
+  const { a, b, month, nameA, nameB } = await loadComparison(names);
+  const marketTotals = await getMarketMonthlyTotals(
+    `${month.slice(0, 4)}-01`,
+    month,
+  );
   const marketTotal = marketTotals.reduce((sum, { total }) => sum + total, 0);
+  const period = periodLabel(month, "ytd");
+
+  const shareTile = (name: string, figures: MakeFigures): KpiTile => ({
+    format: "percent",
+    note: period,
+    title: `${name} share of new cars`,
+    value: shareOf(figures.ytd, marketTotal),
+  });
 
   return (
-    <section className="flex flex-col gap-6">
-      <Typography.Paragraph
-        className="max-w-prose text-pretty text-xl"
-        weight="semibold"
-      >
-        {leadSentence({ a, b, month, nameA, nameB })}
-      </Typography.Paragraph>
-      <div className="flex flex-col gap-4">
-        <SummaryTable
-          logoUrlA={logoUrlBySlug[slugify(nameA)] ?? null}
-          logoUrlB={logoUrlBySlug[slugify(nameB)] ?? null}
-          nameA={nameA}
-          nameB={nameB}
-          rows={buildSummaryRows({ a, b, marketTotal, month })}
-        />
-        <SourceNote>Bold marks the higher figure in each row.</SourceNote>
-      </div>
-    </section>
-  );
-}
-
-/** Both makes' last 24 months on one zero-based chart. */
-function CompareTrend({ names }: ComparisonProps) {
-  return (
-    <section className="flex min-w-0 flex-col gap-4">
-      <SectionHead
-        caption="New registrations per month, all fuel types. The y-axis starts at zero."
-        title="Monthly registrations, last 24 months"
-      />
-      <Suspense fallback={<Skeleton className="h-72 w-full" />}>
-        <CompareTrendFigure names={names} />
-      </Suspense>
-    </section>
+    <KpiTiles
+      tiles={[
+        registrationsTile(nameA, a, period),
+        registrationsTile(nameB, b, period),
+        shareTile(nameA, a),
+        shareTile(nameB, b),
+      ]}
+    />
   );
 }
 
@@ -286,129 +213,54 @@ async function CompareTrendFigure({ names }: ComparisonProps) {
   );
 }
 
-/** Fuel type and vehicle type, each as shares of the make's own total. */
-function CompareMix({ names }: ComparisonProps) {
-  return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
-      <section className="flex min-w-0 flex-col gap-4">
-        <SectionHead
-          caption="Share of each make’s registrations"
-          title="How each make is powered"
-        />
-        <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-          <CompareFuelTable names={names} />
-        </Suspense>
-      </section>
-      <section className="flex min-w-0 flex-col gap-4">
-        <SectionHead
-          caption="Share of each make’s registrations"
-          title="What body styles sell"
-        />
-        <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-          <CompareVehicleTables names={names} />
-        </Suspense>
-      </section>
-    </div>
-  );
-}
-
-async function CompareFuelTable({ names }: ComparisonProps) {
+async function CompareShareTable({ names }: ComparisonProps) {
   const { a, b, nameA, nameB } = await loadComparison(names);
 
   return (
     <ShareTable
-      ariaLabel={`${nameA} and ${nameB} registrations by fuel type`}
-      firstColumn="Fuel type (LTA)"
+      label={`${nameA} and ${nameB} registrations by fuel type and body type`}
       nameA={nameA}
       nameB={nameB}
-      rows={fuelShareRows(a, b)}
-    />
-  );
-}
-
-/** The vehicle types, with the makeup of "Other" behind a disclosure. */
-async function CompareVehicleTables({ names }: ComparisonProps) {
-  const { a, b, nameA, nameB } = await loadComparison(names);
-  const vehicles = vehicleShareRows(a, b);
-
-  return (
-    <>
-      <ShareTable
-        ariaLabel={`${nameA} and ${nameB} registrations by vehicle type`}
-        firstColumn="Vehicle type"
-        nameA={nameA}
-        nameB={nameB}
-        rows={vehicles.rows}
-      />
-      {vehicles.otherBreakdown.length > 0 ? (
-        <TableDisclosure title="Full breakdown of “Other”">
-          <ShareTable
-            ariaLabel="Full breakdown of other vehicle types"
-            firstColumn="Vehicle type"
-            nameA={nameA}
-            nameB={nameB}
-            rows={vehicles.otherBreakdown}
-          />
-        </TableDisclosure>
-      ) : null}
-    </>
-  );
-}
-
-/** The chart's figures as a table, closed by default. */
-function CompareMonthly({ names }: ComparisonProps) {
-  return (
-    <TableDisclosure title="Monthly figures, last 24 months">
-      <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-        <CompareMonthlyTable names={names} />
-      </Suspense>
-      <SourceNote>
-        The same figures as the chart above, newest first.
-      </SourceNote>
-    </TableDisclosure>
-  );
-}
-
-async function CompareMonthlyTable({ names }: ComparisonProps) {
-  const { a, b, month, nameA, nameB } = await loadComparison(names);
-
-  return (
-    <MonthlyTable
-      nameA={nameA}
-      nameB={nameB}
-      rows={monthlyRows({
-        months: trailingMonths(month, SERIES_LENGTH),
-        nameA,
-        nameB,
-        seriesA: a.series,
-        seriesB: b.series,
-      })}
+      rows={[...fuelShareRows(a, b), ...vehicleShareRows(a, b)]}
     />
   );
 }
 
 /**
- * The questions, answered from the page's figures, and — when `faqSchema` is
- * set — their FAQPage schema.
+ * Everything under the toolbar: the KPI tiles, the monthly trend and the mix
+ * table. Each waits on the makes behind its own boundary; the card titles are
+ * in the shell. A fragment, so the sections sit in `OverviewPage`'s gap.
  */
-async function CompareFaq({
-  faqSchema,
-  names,
-}: ComparisonProps & { faqSchema: boolean }) {
-  const { a, b, month, nameA, nameB } = await loadComparison(names);
-  const faqs = buildCompareFaqs({ a, b, month, nameA, nameB });
-
+export function ComparisonBody({ names }: ComparisonProps) {
   return (
     <>
-      {faqSchema ? (
-        <StructuredData
-          data={{
-            "@context": "https://schema.org",
-            ...generateFAQPageSchema([{ items: faqs }]),
-          }}
-        />
-      ) : null}
-      <PageFaq faqs={faqs} />
+      <SectionErrorBoundary title="Key numbers unavailable">
+        <Suspense fallback={<Skeleton className="h-36 w-full" />}>
+          <CompareKpis names={names} />
+        </Suspense>
+      </SectionErrorBoundary>
+
+      <SectionErrorBoundary title="Monthly trend unavailable">
+        <FigureCard
+          description={`Last ${SERIES_LENGTH} months, all fuel types`}
+          title="Monthly registrations"
+        >
+          <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+            <CompareTrendFigure names={names} />
+          </Suspense>
+        </FigureCard>
+      </SectionErrorBoundary>
+
+      <SectionErrorBoundary title="Fuel and body type mix unavailable">
+        <FigureCard
+          description="Share of each make’s registrations, year to date"
+          title="Fuel and body type"
+        >
+          <Suspense fallback={<Skeleton className="h-80 w-full" />}>
+            <CompareShareTable names={names} />
+          </Suspense>
+        </FigureCard>
+      </SectionErrorBoundary>
     </>
   );
 }
