@@ -34,8 +34,9 @@ export function ChargingMap({
 }) {
   return (
     // Bleeds to the edge of the inset content area by cancelling its padding
-    // (`px-4 md:px-6` in InsetVariant). Keep the two in step.
-    <div className="-mx-4 scroll-mt-6 md:-mx-6" id={MAP_ANCHOR_ID}>
+    // (`p-4 md:px-10` on `Sidebar.Main`'s content in InsetVariant). Keep the two
+    // in step.
+    <div className="-mx-4 scroll-mt-6 md:-mx-10" id={MAP_ANCHOR_ID}>
       {/* <Card className="gap-4 p-6"> */}
       <ChargingMapView
         liveStatus={
