@@ -11,8 +11,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 import { baseOpenGraph, baseTwitter } from "@web/lib/metadata/social";
 
-// Geist is the single family across the app. The wordmark is outlined Urbanist,
-// so the logo keeps its face without the site loading a second font.
+// Geist is the single family across the app, the wordmark included.
 const geist = Geist({
   subsets: ["latin"],
 });

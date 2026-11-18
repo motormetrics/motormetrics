@@ -79,15 +79,11 @@ export function InsetVariant({
       href="/"
     >
       <span className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-separator">
-        <LogoMark first="currentColor" second="var(--accent)" size={20} />
+        <LogoMark inner="var(--accent)" outer="currentColor" size={20} />
       </span>
       {/* data-sidebar="label" hides the wordmark when the sidebar collapses. */}
       <span data-sidebar="label">
-        <Wordmark
-          className="text-lg"
-          first="currentColor"
-          second="var(--accent)"
-        />
+        <Wordmark className="text-lg" colour="currentColor" />
       </span>
     </Link>
   );

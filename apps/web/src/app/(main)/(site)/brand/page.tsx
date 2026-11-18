@@ -43,31 +43,38 @@ export const metadata: Metadata = {
   alternates: { canonical: "/brand" },
 };
 
-const INK_SURFACE = "#232A2E";
+const INK_SURFACE = "#18181B";
 const WHITE = "#FFFFFF";
-/* A near-black host surface, darker than --ink-surface, to show that the
-   mark's own cream ground does not blend into whatever sits behind it. */
-const HOST_DARK = "#16181A";
+/* A near-black host surface, to show that the mark's own white ground does
+   not blend into whatever sits behind it. */
+const HOST_DARK = "#0F1115";
 
 const MARK_FILE = "/brand/motormetrics-mark.svg";
 
 const SWATCHES = [
-  { colour: MARK_INK, label: `Ink deep ${MARK_INK} — first arch, "motor"` },
-  {
-    colour: MARK_ACCENT,
-    label: `Accent ${MARK_ACCENT} — second arch, "metrics"`,
-  },
+  { colour: MARK_INK, label: `Deep ${MARK_INK}, outer bars and wordmark` },
+  { colour: MARK_ACCENT, label: `Accent ${MARK_ACCENT}, inner bars` },
   {
     colour: MARK_ACCENT_ON_DARK,
     label: `Accent on dark ${MARK_ACCENT_ON_DARK}`,
   },
-  { colour: WHITE, label: "White — dark and accent grounds" },
+  { colour: WHITE, label: `Ground white ${WHITE}` },
+];
+
+const ICONS = [
+  { src: "/icons/favicon-16.png", size: 16, label: "Tab, 16px" },
+  { src: "/icons/favicon-32.png", size: 32, label: "Tab, 32px" },
+  { src: "/icons/favicon-48.png", size: 48, label: "Bookmark bar" },
+  { src: "/icons/icon-192.png", size: 96, label: "Android, PWA" },
+  { src: "/icons/icon-maskable-512.png", size: 96, label: "Android adaptive" },
+  { src: "/brand/motormetrics-mark.png", size: 96, label: "Master raster" },
 ];
 
 const FILES = [
   "motormetrics-mark.svg",
   "motormetrics-mark.png",
-  "wordmark-lockup.png",
+  "wordmark-primary.png",
+  "wordmark-white.png",
 ];
 
 function Figure({
@@ -105,9 +112,10 @@ export default function BrandPage() {
           <Typography.Heading level={1}>{title}</Typography.Heading>
         </div>
         <Typography.Paragraph className="max-w-prose text-pretty">
-          A lowercase m drawn as two arches. One arch per word; the second takes
-          the accent. Wordmark set in Urbanist Extrabold, lowercase, with the
-          same two-tone split.
+          An M drawn as five bars, the way the site draws its charts. The two
+          outer bars are deep blue and the three inner bars take the accent. The
+          wordmark is set in Geist Bold, in one colour, with a capital on each
+          word.
         </Typography.Paragraph>
       </section>
 
@@ -130,63 +138,51 @@ export default function BrandPage() {
           </div>
         </Figure>
         <Figure
-          caption={`On dark: white + accent-on-dark ${MARK_ACCENT_ON_DARK}`}
+          caption={`On deep blue: white outer bars, ${MARK_ACCENT_ON_DARK} inner`}
         >
           <div
             className="flex h-50 items-center justify-center gap-3.5 rounded-2xl"
-            style={{ background: INK_SURFACE }}
+            style={{ background: MARK_INK }}
           >
-            <LogoMark first={WHITE} second={MARK_ACCENT_ON_DARK} size={44} />
-            <Wordmark
-              className="text-3xl"
-              first={WHITE}
-              second={MARK_ACCENT_ON_DARK}
-            />
+            <LogoMark inner={MARK_ACCENT_ON_DARK} outer={WHITE} size={44} />
+            <Wordmark className="text-3xl" colour={WHITE} />
           </div>
         </Figure>
-        <Figure caption="On accent: mono white">
+        <Figure caption="On the accent: all white">
           <div
             className="flex h-50 items-center justify-center gap-3.5 rounded-2xl"
             style={{ background: MARK_ACCENT }}
           >
-            <LogoMark first={WHITE} second={WHITE} size={44} />
-            <Wordmark className="text-3xl" first={WHITE} mono />
+            <LogoMark inner={WHITE} outer={WHITE} size={44} />
+            <Wordmark className="text-3xl" colour={WHITE} />
           </div>
         </Figure>
       </section>
 
       <section className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
-        <Figure caption="Clear space: one arch width (x) on all sides">
+        <Figure caption="Clear space: two bar widths on every side">
           <div
             className="grid h-55 place-items-center rounded-2xl"
             style={{ background: WHITE }}
           >
             <div className="relative size-40">
-              <div className="absolute inset-0 rounded-xs border-[1.5px] border-chart-4 border-dashed" />
+              <div className="absolute inset-0 rounded-xl border-2 border-chart-4 border-dashed" />
               <LogoMark className="absolute top-8 left-8" size={96} />
-              <span className="absolute top-1.5 right-0 left-0 text-center font-bold text-chart-4 text-xs">
-                x
-              </span>
             </div>
           </div>
         </Figure>
-        <Figure caption="Stroke legibility. The free-standing arches hold down to 24px — use them for the 24–31px range, below the contained file's 32px floor">
+        <Figure caption="96, 48, 32 and 16px. Below 32px use the bars with no ground">
           <div
-            className="flex h-55 items-end justify-center gap-8 rounded-2xl p-8"
+            className="flex h-55 items-end justify-center gap-7 rounded-2xl p-8"
             style={{ background: WHITE }}
           >
-            <SizeSpecimen label="24 min">
-              <LogoMark size={24} />
-            </SizeSpecimen>
-            <SizeSpecimen label="32">
-              <LogoMark size={32} />
-            </SizeSpecimen>
-            <SizeSpecimen label="64">
-              <LogoMark size={64} />
-            </SizeSpecimen>
+            <LogoMark size={96} />
+            <LogoMark size={48} />
+            <LogoMark size={32} />
+            <LogoMark size={16} />
           </div>
         </Figure>
-        <Figure caption="Colour. Type: Urbanist 800, tracking -0.03em.">
+        <Figure caption="Colour. Type: Geist Bold.">
           <ul
             className="m-0 flex h-55 list-none flex-col justify-center gap-4 rounded-2xl p-8"
             style={{ background: WHITE }}
@@ -194,10 +190,10 @@ export default function BrandPage() {
             {SWATCHES.map(({ colour, label }) => (
               <li className="flex items-center gap-2" key={colour}>
                 <span
-                  className="size-7 shrink-0 rounded-full"
+                  className="size-7 shrink-0 rounded-md"
                   style={{
                     background: colour,
-                    border: colour === WHITE ? "1px solid #E5E1D5" : undefined,
+                    border: colour === WHITE ? "1px solid #D4D4D8" : undefined,
                   }}
                 />
                 <span
@@ -220,27 +216,24 @@ export default function BrandPage() {
           color="muted"
           className="max-w-3xl text-pretty leading-relaxed"
         >
-          One design, in two formats because no single file is accepted
-          everywhere:{" "}
-          <strong className="font-bold">motormetrics-mark.svg</strong> for
-          anything that scales,{" "}
+          One artwork at every size: the mark on a white ground, full-bleed and
+          square. <strong className="font-bold">motormetrics-mark.svg</strong>{" "}
+          for anything that scales,{" "}
           <strong className="font-bold">motormetrics-mark.png</strong> at 1024
-          for platforms that reject SVG. Same artwork in both. Favicon at 32px
-          and up, PWA icon, app tile, social avatar, partner listing, deck title
-          slide — all of them take this file. There is no light version and no
-          dark version, because the mark brings its own cream ground and
-          therefore does not care what is behind it.
+          for platforms that reject SVG. Each platform applies its own corner
+          mask, so no file is pre-rounded. There is no light version and no dark
+          version, because the mark brings its own ground.
         </Typography.Paragraph>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
           <Figure caption="Unchanged on a light or a dark host surface">
             <div className="grid h-55 grid-cols-2 overflow-hidden rounded-2xl">
               <div
                 className="grid place-items-center"
-                style={{ background: WHITE }}
+                style={{ background: "#F4F4F5" }}
               >
                 <MarkFile
                   alt="The mark on a light surface"
-                  className="rounded-[22px]"
+                  className="rounded-[23%]"
                   size={96}
                 />
               </div>
@@ -250,50 +243,32 @@ export default function BrandPage() {
               >
                 <MarkFile
                   alt="The mark on a dark surface"
-                  className="rounded-[22px]"
+                  className="rounded-[23%]"
                   size={96}
                 />
               </div>
             </div>
           </Figure>
-          <Figure caption="Squircle, 22px radius at 96px — the house shape. The file itself is a full-bleed square; platforms round it themselves">
+          <Figure
+            caption="Icon kit, each file at the size its platform asks for"
+            className="col-span-full"
+          >
             <div
-              className="flex h-55 items-center justify-center rounded-2xl"
+              className="flex flex-wrap items-end gap-7 rounded-2xl p-8"
               style={{ background: WHITE }}
             >
-              <MarkFile
-                alt="The mark in its squircle frame"
-                className="rounded-[28px]"
-                size={120}
-              />
-            </div>
-          </Figure>
-          <Figure caption="Holds from 32px up. One file at every size above that">
-            <div
-              className="flex h-55 items-end justify-center gap-6 rounded-2xl p-8"
-              style={{ background: WHITE }}
-            >
-              <SizeSpecimen label="32">
-                <MarkFile
-                  alt="The mark at 32px"
-                  className="rounded-[23%]"
-                  size={32}
-                />
-              </SizeSpecimen>
-              <SizeSpecimen label="64">
-                <MarkFile
-                  alt="The mark at 64px"
-                  className="rounded-[23%]"
-                  size={64}
-                />
-              </SizeSpecimen>
-              <SizeSpecimen label="96">
-                <MarkFile
-                  alt="The mark at 96px"
-                  className="rounded-[23%]"
-                  size={96}
-                />
-              </SizeSpecimen>
+              {ICONS.map(({ src, size, label }) => (
+                <SizeSpecimen key={src} label={label}>
+                  <Image
+                    alt=""
+                    className="rounded-[23%] border border-zinc-200"
+                    height={size}
+                    src={src}
+                    unoptimized
+                    width={size}
+                  />
+                </SizeSpecimen>
+              ))}
             </div>
           </Figure>
         </div>
@@ -301,14 +276,10 @@ export default function BrandPage() {
           color="muted"
           className="max-w-3xl text-pretty leading-relaxed"
         >
-          The cost of standardising is two things. The mark always appears in
-          its cream frame, so on a dark surface it reads as a tile rather than
-          as arches floating free. And the 50% inset that keeps every crop safe
-          leaves too little stroke at favicon scale — at a 16px frame the arches
-          are 8px wide on a 1.2px stroke, which is a smudge. Below 32px, set the
-          free-standing arches in code instead. In the product itself the nav
-          and footer keep drawing the arches inline, where the code can pick ink
-          or white — code can branch on theme, a file cannot.
+          The contained mark holds from 32px up. Below that, draw the
+          free-standing bars in code instead. In the product itself the sidebar
+          and footer draw the bars inline, where the code can pick deep blue or
+          white for the surface behind them.
         </Typography.Paragraph>
       </section>
 
@@ -317,31 +288,43 @@ export default function BrandPage() {
       <section className="flex flex-col gap-4">
         <SectionHead title="Don't" />
         <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6">
-          <Dont caption="Swap the colour order">
-            <LogoMark first={MARK_ACCENT} second={MARK_INK} size={52} />
+          <Dont caption="Swap the two blues">
+            <LogoMark inner={MARK_INK} outer={MARK_ACCENT} size={52} />
           </Dont>
-          <Dont caption="Change the stroke weight">
-            <LogoMark size={52} strokeWidth={3} />
+          <Dont caption="Change the bar heights">
+            <svg aria-hidden="true" height={52} viewBox="0 0 64 64" width={52}>
+              {[4, 16, 28, 40, 52].map((x) => (
+                <rect
+                  fill={x === 4 || x === 52 ? MARK_INK : MARK_ACCENT}
+                  height={44}
+                  key={x}
+                  rx={4}
+                  width={8}
+                  x={x}
+                  y={10}
+                />
+              ))}
+            </svg>
           </Dont>
           <Dont caption="Stretch or squash">
             <LogoMark
               height={52}
               preserveAspectRatio="none"
               size={52}
-              width={80}
+              width={84}
             />
           </Dont>
-          <Dont caption="Capitalise the wordmark">
+          <Dont caption="Set the wordmark lowercase or in two colours">
             {/* Specimen: set at the size of the wordmarks around it. */}
             <span
-              className="font-extrabold text-3xl tracking-[-0.03em]"
+              className="font-extrabold text-3xl tracking-tight"
               style={{ color: MARK_INK }}
             >
-              Motor<span style={{ color: MARK_ACCENT }}>Metrics</span>
+              motor<span style={{ color: MARK_ACCENT }}>metrics</span>
             </span>
           </Dont>
           <Dont caption="Use status or other colours">
-            <LogoMark first="#3C9A5F" second="#D9822B" size={52} />
+            <LogoMark inner="#D9822B" outer="#3C9A5F" size={52} />
           </Dont>
         </div>
       </section>
@@ -349,30 +332,16 @@ export default function BrandPage() {
       <Hairline />
 
       <section className="flex flex-col gap-4">
-        <SectionHead title="Wordmark vs. name" />
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
-          <Card className="p-6">
-            <Wordmark className="text-3xl" />
-            <Typography.Paragraph color="muted">
-              The wordmark is a graphic. Always lowercase, always Urbanist 800
-              with the two-tone split. Use it wherever type can actually be set:
-              the nav, the footer mark, share cards, docs and decks. Icon slots
-              take the mark on its own — never the wordmark.
-            </Typography.Paragraph>
-          </Card>
-          <Card className="p-6">
-            <span className="font-bold text-3xl text-accent leading-none tracking-tight dark:text-foreground">
-              MotorMetrics
-            </span>
-            <Typography.Paragraph color="muted">
-              The name is a proper noun. In running copy, page titles, meta
-              descriptions and legal text, write MotorMetrics with two capitals:
-              &ldquo;&copy; 2026 MotorMetrics&rdquo;, &ldquo;About
-              MotorMetrics&rdquo;, &ldquo;MotorMetrics tracks COE results
-              daily.&rdquo;
-            </Typography.Paragraph>
-          </Card>
-        </div>
+        <SectionHead title="Wordmark and name" />
+        <Card className="p-6">
+          <Wordmark className="text-3xl" colour="currentColor" />
+          <Typography.Paragraph color="muted">
+            The wordmark and the name are written the same way: MotorMetrics,
+            one word, two capitals, one colour. The wordmark is Geist Bold; in
+            running copy the name takes the weight of the text around it. Icon
+            slots take the mark on its own, never the wordmark.
+          </Typography.Paragraph>
+        </Card>
       </section>
 
       <Hairline />
@@ -396,7 +365,7 @@ export default function BrandPage() {
 
 /**
  * The standard mark, served from its file rather than drawn inline — the
- * point of these specimens is what ships, cream ground and all. `unoptimized`
+ * point of these specimens is what ships, white ground and all. `unoptimized`
  * because the source is an SVG: the image optimiser rejects it, and there is
  * nothing to optimise.
  */

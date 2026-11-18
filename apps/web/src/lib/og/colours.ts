@@ -23,7 +23,7 @@ export const OG_COLOURS = {
   /** Fuel mix legend labels */
   label: "#3F3F46",
 
-  /** Wordmark ink — the first arch and "motor" */
+  /** Wordmark ink and the outer bars of the mark */
   inkDeep: "#062F5C",
 
   /** Deep Blue accent */
