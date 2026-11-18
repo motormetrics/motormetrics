@@ -4,9 +4,9 @@ import type { SVGProps } from "react";
 /* The brand mark is drawn in fixed colours rather than theme tokens: the
    sheet documents the mark as it must appear, so it must not shift with the
    colour scheme the way the page chrome around it does. */
-export const MARK_INK = "#16323F";
-export const MARK_ACCENT = "#4E7C9B";
-export const MARK_ACCENT_ON_DARK = "#9CC4DA";
+export const MARK_INK = "#062F5C";
+export const MARK_ACCENT = "#0961BB";
+export const MARK_ACCENT_ON_DARK = "#8DBBF0";
 
 const FIRST_ARCH = "M8 50 V30 a12 12 0 0 1 24 0 V50";
 const SECOND_ARCH = "M32 50 V30 a12 12 0 0 1 24 0 V50";

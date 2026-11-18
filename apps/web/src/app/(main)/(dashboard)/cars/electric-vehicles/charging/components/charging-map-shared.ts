@@ -11,9 +11,9 @@ export const readTokens = () => {
     available: read("--success", "#57b45f"),
     full: read("--warning", "#e9a63c"),
     offline: read("--muted", "#5f6b71"),
-    cluster: read("--accent", "#4e7c9b"),
-    clusterStrong: read("--chart-2", "#33586f"),
-    clusterDeep: read("--chart-1", "#16323f"),
+    cluster: read("--accent", "#0961bb"),
+    clusterStrong: read("--chart-2", "#0a4c92"),
+    clusterDeep: read("--chart-1", "#062f5c"),
     busy: read("--danger", "#e96e6e"),
   };
 };

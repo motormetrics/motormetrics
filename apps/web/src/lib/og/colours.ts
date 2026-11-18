@@ -5,53 +5,53 @@
  * values from the "Social Images" design comp are written out directly.
  */
 export const OG_COLOURS = {
-  /** Cream card background */
-  background: "#F7F5EF",
+  /** Card background */
+  background: "#F5F5F5",
 
   /** Primary ink */
-  ink: "#232A2E",
+  ink: "#18181B",
 
   /** Body copy */
-  muted: "#5A6A70",
+  muted: "#52525B",
 
   /** Labels and captions */
-  subtle: "#7B888D",
+  subtle: "#71717A",
 
   /** Axis labels and hairline text */
-  faint: "#96A2A7",
+  faint: "#A1A1AA",
 
   /** Fuel mix legend labels */
-  label: "#3A4448",
+  label: "#3F3F46",
 
   /** Wordmark ink — the first arch and "motor" */
-  inkDeep: "#16323F",
+  inkDeep: "#062F5C",
 
-  /** Slate-blue accent */
-  accent: "#4E7C9B",
+  /** Deep Blue accent */
+  accent: "#0961BB",
 
   /** Ink on an accent fill */
   onAccent: "#FFFFFF",
 
   /** Accent at 9%, for decorative washes */
-  accentWash: "rgba(78,124,155,0.09)",
+  accentWash: "rgba(9,97,187,0.09)",
 
   /** Soft accent pill background */
-  accentSoft: "#DCE7EC",
+  accentSoft: "#E3EEFA",
 
   /** Soft accent pill text */
-  accentDeep: "#2C5670",
+  accentDeep: "#074A8F",
 
   /** Secondary bar fill */
-  accentMuted: "#B9CBD6",
+  accentMuted: "#B5D2F1",
 
   /** Dividers and bar tracks */
-  rule: "#E5E1D5",
+  rule: "#E4E4E7",
 
   /** White tiles */
   surface: "#FFFFFF",
 
   /** Tile shadow */
-  tileShadow: "0 3px 12px rgba(35,42,46,0.06)",
+  tileShadow: "0 3px 12px rgba(0,0,0,0.06)",
 
   /** Delta chip, value went up */
   upBackground: "#FBEBD3",
@@ -63,9 +63,9 @@ export const OG_COLOURS = {
 
   /** Fuel mix series: petrol, electric, hybrid, diesel */
   fuel: {
-    petrol: "#C3CFD5",
-    electric: "#4E7C9B",
-    hybrid: "#7FAAC4",
-    diesel: "#16323F",
+    petrol: "#D4D4D8",
+    electric: "#0961BB",
+    hybrid: "#5E9BDC",
+    diesel: "#062F5C",
   },
 } as const;

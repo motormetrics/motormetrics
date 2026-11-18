@@ -22,14 +22,14 @@ export default function AppleIcon() {
       <g transform="translate(10.667 9.333) scale(0.66667)">
         <path
           d="M8 50 V30 a12 12 0 0 1 24 0 V50"
-          stroke="#16323F"
+          stroke="#062F5C"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="7"
         />
         <path
           d="M32 50 V30 a12 12 0 0 1 24 0 V50"
-          stroke="#4E7C9B"
+          stroke="#0961BB"
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="7"
