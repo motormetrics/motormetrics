@@ -44,8 +44,9 @@ export function shareRange(
 }
 
 /**
- * "2,880 battery-electric cars were registered in August, 63.3% of 4,549 new
- * cars; with hybrids and plug-in hybrids, electrified cars were 94.6%."
+ * "2,880 electric cars were registered in August 2026, 63.3% of 4,549 new
+ * cars; electric, petrol-electric and diesel-electric cars together were
+ * 94.6%."
  */
 export function evLeadSentence({
   batteryElectric,
@@ -60,13 +61,14 @@ export function evLeadSentence({
   share: number;
   total: number;
 }) {
-  return `${formatCount(batteryElectric)} battery-electric cars were registered in ${formatMonthLabel(month)}, ${share.toFixed(1)}% of ${formatCount(total)} new cars; with hybrids and plug-in hybrids, electrified cars were ${electrifiedShare.toFixed(1)}%.`;
+  return `${formatCount(batteryElectric)} electric cars were registered in ${formatMonthLabel(month)}, ${share.toFixed(1)}% of ${formatCount(total)} new cars; electric, petrol-electric and diesel-electric cars together were ${electrifiedShare.toFixed(1)}%.`;
 }
 
 /**
- * "Battery-electric cars were 63.3% of August's 4,549 new cars, hybrids 24.9%
- * and plug-in hybrids 6.3%; petrol and diesel cars made up the other 5.5%."
- * `split` is battery-electric, plug-in hybrid, hybrid, then combustion.
+ * "Electric cars were 63.3% of August's 4,549 new cars, petrol-electric and
+ * diesel-electric cars 24.9% and their plug-in versions 6.3%; petrol and
+ * diesel cars made up the other 5.5%." `split` is electric, the plug-in
+ * group, the petrol-electric and diesel-electric group, then combustion.
  */
 export function mixCaption(
   split: readonly RegistrationSegment[],
@@ -78,11 +80,11 @@ export function mixCaption(
     return null;
   }
 
-  return `Battery-electric cars were ${electric.share.toFixed(1)}% of ${formatMonthName(month)}'s ${formatCount(total)} new cars, hybrids ${hybrid.share.toFixed(1)}% and plug-in hybrids ${plugIn.share.toFixed(1)}%; petrol and diesel cars made up the other ${combustion.share.toFixed(1)}%.`;
+  return `Electric cars were ${electric.share.toFixed(1)}% of ${formatMonthName(month)}'s ${formatCount(total)} new cars, petrol-electric and diesel-electric cars ${hybrid.share.toFixed(1)}% and their plug-in versions ${plugIn.share.toFixed(1)}%; petrol and diesel cars made up the other ${combustion.share.toFixed(1)}%.`;
 }
 
 /**
- * "Electrified registrations went from 3,927 in September 2025 to 4,302 in
+ * "Electric car registrations went from 3,927 in September 2025 to 4,302 in
  * August 2026, with a high of 5,556 in March 2026."
  */
 export function trendCaption(
@@ -107,9 +109,9 @@ export function trendCaption(
 }
 
 /**
- * "BYD registered 8,318 battery-electric cars in 2026 to August, 2.2 times
- * Tesla's 3,723; EV share ranged from 55.2% to 70.1% in the 8 months to
- * August."
+ * "BYD registered 8,318 electric cars in 2026 to August, 2.2 times Tesla's
+ * 3,723; the electric share ranged from 55.2% to 70.1% in the 8 months to
+ * August." Either half stands alone when the other has no data.
  */
 export function makesCaption(
   makes: readonly { count: number; make: string }[],
@@ -125,21 +127,26 @@ export function makesCaption(
         ? `, ${(leader.count / runnerUp.count).toFixed(1)} times ${runnerUp.make}'s ${formatCount(runnerUp.count)}`
         : "";
     parts.push(
-      `${leader.make} registered ${formatCount(leader.count)} battery-electric cars in ${month.slice(0, 4)} to ${formatMonthName(month)}${versus}`,
+      `${leader.make} registered ${formatCount(leader.count)} electric cars in ${month.slice(0, 4)} to ${formatMonthName(month)}${versus}`,
     );
   }
   if (shares.length > 1) {
     parts.push(
-      `EV share ranged from ${Math.min(...shares).toFixed(1)}% to ${Math.max(...shares).toFixed(1)}% in the ${shares.length} months to ${formatMonthName(month)}`,
+      `the electric share ranged from ${Math.min(...shares).toFixed(1)}% to ${Math.max(...shares).toFixed(1)}% in the ${shares.length} months to ${formatMonthName(month)}`,
     );
   }
 
-  return parts.length > 0 ? `${parts.join("; ")}.` : null;
+  if (parts.length === 0) {
+    return null;
+  }
+
+  const sentence = `${parts.join("; ")}.`;
+  return `${sentence.charAt(0).toUpperCase()}${sentence.slice(1)}`;
 }
 
 /**
  * "There were 11,353 public charging points, 18.9% of the 60,000 targeted for
- * 2030; the VES bands most EVs qualify for carry rebates of up to $25,000."
+ * 2030; the VES bands most electric cars qualify for carry rebates of up to $25,000."
  */
 export function chargingCaption(
   connectors: number,
@@ -151,5 +158,5 @@ export function chargingCaption(
       ? `There were ${formatCount(connectors)} public charging points, ${((connectors / target) * 100).toFixed(1)}% of the ${formatCount(target)} targeted for 2030; the`
       : "The";
 
-  return `${network} VES bands most EVs qualify for carry rebates of up to ${topRebate}.`;
+  return `${network} VES bands most electric cars qualify for carry rebates of up to ${topRebate}.`;
 }

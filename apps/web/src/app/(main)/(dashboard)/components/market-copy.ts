@@ -1,4 +1,5 @@
 import { formatCurrency } from "@motormetrics/utils/format-currency";
+import { biddingOrdinal } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import type { MonthTotal } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { changeRatio } from "@web/utils/change-ratio";
 import {
@@ -19,6 +20,10 @@ export function signed(value: number, unit = "%", digits = 1): string {
   const sign = value < 0 ? "−" : "+";
   return `${sign}${Math.abs(value).toFixed(digits)}${unit}`;
 }
+
+/** "first bidding, November 2026". */
+export const exerciseName = (exercise: { biddingNo: number; month: string }) =>
+  `${biddingOrdinal(exercise.biddingNo)} bidding, ${formatMonthLabel(exercise.month)}`;
 
 /** Where the latest value sits in its window, for the range bar's middle label. */
 export function rangeWhere(
@@ -98,7 +103,7 @@ export interface CategoryMove {
 const SMALL_MOVE = 1;
 
 /**
- * Figure 1's caption, e.g. "Category A rose 5.3% to $139,001, the highest of
+ * The COE premiums caption, e.g. "Category A rose 5.3% to $139,001, the highest of
  * the 24 exercises shown; Categories B to E each moved by less than 1%."
  */
 export function coeCaption(
@@ -175,7 +180,7 @@ export function pqpCaption(
 }
 
 /**
- * Figure 2's caption, e.g. "Electric cars were 59.6% of October's 4,202
+ * The fuel type caption, e.g. "Electric cars were 59.6% of October's 4,202
  * registrations, down from 65.1% in September; petrol-only cars were 5.3%."
  */
 export function fuelCaption({
@@ -201,7 +206,7 @@ export function fuelCaption({
 }
 
 /**
- * Figure 3's caption, e.g. "BYD registered 11,247 cars from January to
+ * The leading makes caption, e.g. "BYD registered 11,247 cars from January to
  * October 2026, 24.9% of the market and more than twice Toyota's 5,278."
  */
 export function makesCaption(
@@ -223,7 +228,7 @@ export function makesCaption(
 }
 
 /**
- * Figure 4's caption, e.g. "Category A cars made up 44.5% of the 7,155
+ * The deregistrations and population caption, e.g. "Category A cars made up 44.5% of the 7,155
  * vehicles deregistered in October 2026 and Category B a further 35.6%.
  * Petrol-only vehicles were 65.0% of those on the road at the end of 2025."
  */

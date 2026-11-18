@@ -14,12 +14,12 @@ export const buildAnnualFaqs = (summary?: string): Faq[] => [
   {
     question: "How many vehicles are on the road in Singapore?",
     answer:
-      "The All vehicle classes table lists every class of vehicle registered at 31 December, such as cars and motorcycles, with the total across all of them in its caption.",
+      "The All vehicles by type table lists every type of vehicle registered at 31 December, such as cars and motorcycles, with the total across all of them in its caption.",
   },
   {
     question: "How many electric cars are on the road in Singapore?",
     answer:
-      "The Electric fleet section counts the electric cars on the road at 31 December of each of the last few years. For new electric car registrations each month, see the electric vehicles page.",
+      "The Electric cars on the road section counts the electric cars on the road at 31 December of each of the last few years. For new electric car registrations each month, see the electric vehicles page.",
   },
   {
     question: "How is the vehicle population different from new registrations?",

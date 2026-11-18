@@ -1,4 +1,5 @@
 import { Typography } from "@heroui/react";
+import { CalculatorTabs } from "@web/app/(main)/(dashboard)/cars/parf/components/calculator-panel";
 import { PARF_FAQS } from "@web/app/(main)/(dashboard)/cars/parf/components/faq-data";
 import { PARFCalculator } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-calculator";
 import {
@@ -9,7 +10,8 @@ import {
   SourceNote,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { SharePill } from "@web/components/shared/share-pill";
+import { PageHead } from "@web/components/shared/page-head";
+import { RelatedLinks } from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -71,33 +73,16 @@ export default function PARFCalculatorPage() {
         }}
       />
 
-      <PARFCalculator
-        head={
-          <>
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <Typography.Paragraph
-                className="uppercase"
-                color="muted"
-                size="xs"
-                weight="semibold"
-              >
-                Calculator · Budget 2026 rebate schedule
-              </Typography.Paragraph>
-              <SharePill title="PARF and COE rebate calculator" />
-            </div>
-            <Typography.Heading level={1}>
-              PARF and COE rebate calculator
-            </Typography.Heading>
-            <Typography.Paragraph color="muted" size="sm">
-              Budget 2026 rebate schedule, effective from the{" "}
-              <span className="font-semibold text-foreground">
-                2nd bidding exercise, February 2026
-              </span>{" "}
-              · Source: LTA
-            </Typography.Paragraph>
-          </>
-        }
+      <PageHead
+        sub="Estimates only, not financial advice"
+        title="PARF and COE rebate calculator"
       />
+
+      <Hairline />
+
+      <CalculatorTabs current="parf" />
+
+      <PARFCalculator />
 
       <Hairline />
 
@@ -106,6 +91,13 @@ export default function PARFCalculatorPage() {
           eyebrow="Before you rely on it"
           title="What the figures assume"
         />
+        <Typography.Paragraph color="muted" size="sm">
+          Budget 2026 rebate schedule, effective from the{" "}
+          <span className="font-semibold text-foreground">
+            2nd bidding exercise, February 2026
+          </span>{" "}
+          · Source: LTA
+        </Typography.Paragraph>
         <Typography.Paragraph className="max-w-prose">
           Figures are for illustration only. The PARF rebate is subject to the
           vehicle&apos;s actual ARF paid and its age at deregistration. The new
@@ -141,7 +133,7 @@ export default function PARFCalculatorPage() {
           <SectionLink className="ml-0" href="/coe/pqp">
             PQP renewal rates
           </SectionLink>
-          <SectionLink className="ml-0" href="/coe/premiums">
+          <SectionLink className="ml-0" href="/coe/results">
             COE premiums
           </SectionLink>
         </div>
@@ -156,6 +148,14 @@ export default function PARFCalculatorPage() {
         }}
       />
       <PageFaq faqs={PARF_FAQS} />
+
+      <RelatedLinks
+        links={[
+          { href: "/cars/arf", label: "ARF calculator" },
+          { href: "/cars/deregistrations", label: "Deregistrations" },
+          { href: "/learn", label: "Guides" },
+        ]}
+      />
     </OverviewPage>
   );
 }

@@ -21,8 +21,6 @@ import {
   rangeSummary,
 } from "@web/app/(main)/(dashboard)/cars/components/range-hero";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
-import { KeysAside } from "@web/components/shared/key-numbers";
 import {
   Hairline,
   OverviewGrid,
@@ -31,7 +29,8 @@ import {
   SourceNote,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { SharePill } from "@web/components/shared/share-pill";
+import { PageHead } from "@web/components/shared/page-head";
+import { PageBody, RelatedLinks } from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -74,12 +73,6 @@ const structuredData: WithContext<WebPage> = {
     url: SITE_URL,
   },
 };
-
-const JUMP_LINKS = [
-  { href: "#vp-trend", label: "Cars by year" },
-  { href: "#vp-classes", label: "All vehicle classes" },
-  { href: "#vp-classes", label: "Electric fleet" },
-];
 
 const formatCount = (value: number) => value.toLocaleString("en-SG");
 
@@ -180,13 +173,6 @@ async function PopulationLead() {
   );
 }
 
-async function PopulationFuel() {
-  const population = await loadPopulation();
-  return population ? (
-    <FuelSplit entity={population.cars} year={population.data.year} />
-  ) : null;
-}
-
 /** Both figures, or the empty state while LTA has published nothing. */
 async function PopulationFigures() {
   const population = await loadPopulation();
@@ -220,7 +206,7 @@ async function PopulationFigures() {
         <SectionHead
           caption={describeClasses(classes, cars, data.years, FLEET_YEARS)}
           eyebrow={`Figure 2 · ${data.year}`}
-          title="All vehicle classes, and the electric fleet"
+          title="All vehicles by type, and cars by fuel type"
         />
         <OverviewGrid>
           <ClassesTable
@@ -228,13 +214,25 @@ async function PopulationFigures() {
             rows={classes}
             year={data.year}
           />
-          <ElectricFleet entity={cars} years={data.years} />
+          <section className="flex min-w-0 flex-col gap-4">
+            <SectionHead
+              caption={`Share of cars on the road at 31 December ${data.year}, by fuel type as LTA records it`}
+              title="Cars by fuel type"
+            />
+            <FuelSplit entity={cars} year={data.year} />
+          </section>
         </OverviewGrid>
         <SourceNote>
-          Source: LTA via DataMall · Annual vehicle population by class and
-          electric cars on the road.
+          Source: LTA via DataMall · Annual vehicle population by type and by
+          fuel type.
         </SourceNote>
       </section>
+
+      <Hairline />
+
+      <div className="scroll-mt-4" id="vp-electric">
+        <ElectricFleet entity={cars} years={data.years} />
+      </div>
     </>
   );
 }
@@ -277,57 +275,41 @@ export default function AnnualPage() {
       />
 
       <OverviewPage className="gap-8 max-md:gap-6">
-        {/* Direction D's head. Everything reads one cached query and no
-            search params, so the whole page is part of the static shell. */}
-        <HeadGrid
-          keys={
-            <KeysAside
-              eyebrow="Cars by fuel type"
-              jump={JUMP_LINKS}
-              label="Cars by fuel type"
-              source={
-                <>
-                  Share of cars on the road at <YearEnd />, by fuel type as LTA
-                  records it.
-                </>
-              }
-            >
-              <SectionErrorBoundary title="Fuel split unavailable">
-                <PopulationFuel />
-              </SectionErrorBoundary>
-            </KeysAside>
-          }
-        >
-          <HeadTitle
-            eyebrow={
-              <>
-                Vehicle population · <YearEnd />
-              </>
-            }
-            title="Vehicle population"
-          />
+        {/* Everything reads one cached query and no search params, so the
+            whole page is part of the static shell. There is nothing to
+            filter, so the page has no right sidebar. */}
+        <PageHead sub={<YearEnd />} title="Vehicle population" />
+
+        <PageBody>
+          <section className="flex flex-col gap-4">
+            <SectionErrorBoundary title="Vehicle population unavailable">
+              <PopulationHero />
+              <PopulationLead />
+            </SectionErrorBoundary>
+            <SourceNote>
+              Source: LTA via DataMall. Registered at <YearEnd />, counted once
+              a year.
+            </SourceNote>
+          </section>
+
+          <Hairline />
+
           <SectionErrorBoundary title="Vehicle population unavailable">
-            <PopulationHero />
-            <PopulationLead />
+            <PopulationFigures />
           </SectionErrorBoundary>
-          <div>
-            <SharePill title="Vehicle population" />
-          </div>
-          <SourceNote>
-            Source: LTA via DataMall. Registered at <YearEnd />, counted once a
-            year.
-          </SourceNote>
-        </HeadGrid>
 
-        <Hairline />
+          <Hairline />
 
-        <SectionErrorBoundary title="Vehicle population unavailable">
-          <PopulationFigures />
-        </SectionErrorBoundary>
+          <AnnualFaq />
+        </PageBody>
 
-        <Hairline />
-
-        <AnnualFaq />
+        <RelatedLinks
+          links={[
+            { href: "/cars", label: "New registrations" },
+            { href: "/cars/deregistrations", label: "Deregistrations" },
+            { href: "/cars/makes", label: "Makes" },
+          ]}
+        />
       </OverviewPage>
     </>
   );

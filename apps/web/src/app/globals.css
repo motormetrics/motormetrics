@@ -5,9 +5,9 @@
 @plugin "@tailwindcss/typography";
 
 /*
- * HeroUI theme, exported from the Theme Builder, with our dusk violet accent
- * in place of the default blue. Only the variables worth customising are set;
- * everything else (shadows, link, backdrop, …) comes from @heroui/styles.
+ * HeroUI theme, exported from the Theme Builder, with our Deep Blue accent
+ * (#0961BB; #4F9BF0 in dark) in place of the default blue. Only the variables
+ * worth customising are set; everything else (shadows, link, backdrop, …) comes from @heroui/styles.
  * @see https://heroui.com/docs/react/getting-started/theming
  */
 :root,
@@ -16,7 +16,7 @@
 [data-theme="light"],
 [data-theme="default"] {
   /* Theme Colors (Light Mode) */
-  --accent: oklch(0.47 0.1 295);
+  --accent: oklch(49.92% 0.1601 255.11);
   --accent-foreground: oklch(99.11% 0 0);
   --background: oklch(97.02% 0.0015 253.83);
   --border: oklch(90% 0.0015 253.83);
@@ -57,8 +57,8 @@
 [data-theme="dark"] {
   color-scheme: dark;
   /* Theme Colors (Dark Mode) */
-  --accent: oklch(0.74 0.08 295);
-  --accent-foreground: oklch(21.03% 0.0059 285.89);
+  --accent: oklch(67.98% 0.1472 253);
+  --accent-foreground: oklch(18.31% 0.0309 263.38);
   --background: oklch(12% 0.0015 253.83);
   --border: oklch(28% 0.0015 253.83);
   --danger: oklch(59.4% 0.1973 24.63);
@@ -90,8 +90,87 @@
   --warning-foreground: oklch(21.03% 0.0059 76.34);
 }
 
-/* HeroUI Pro sets --chart-1…5 from the accent but no Tailwind colours for
-   them, so bg-chart-N and friends need this mapping to exist. */
+/* Chart series, darkest to lightest in light mode and the reverse in dark, so
+   the first series is always the strongest against the page. --chart-3 stays
+   the accent, as in HeroUI Pro's own accent-derived defaults. */
+:root,
+.light,
+.default,
+[data-theme="light"],
+[data-theme="default"] {
+  --chart-1: oklch(30.67% 0.0915 254.64);
+  --chart-2: oklch(42.05% 0.1306 254.93);
+  --chart-3: var(--accent);
+  --chart-4: oklch(67.57% 0.116 251.29);
+  --chart-5: oklch(85.26% 0.0534 250.19);
+}
+
+.dark,
+[data-theme="dark"] {
+  --chart-1: oklch(85.26% 0.0534 250.19);
+  --chart-2: oklch(77.9% 0.0907 252.47);
+  --chart-3: var(--accent);
+  --chart-4: oklch(61.29% 0.1411 253.39);
+  --chart-5: oklch(51.27% 0.1324 253.03);
+}
+
+/* The shell's Deep Blue band: the inset sidebar and the phone strip. HeroUI
+   Pro's sidebar has no colour tokens of its own, so the band is set on its
+   classes here. It is the same in both themes, including the active row,
+   which keeps the light theme's accent. */
+:root {
+  --band: oklch(30.67% 0.0915 254.64);
+  --band-foreground: oklch(94.86% 0.0177 253.34);
+  --band-muted: oklch(82.22% 0.0609 252.37);
+  --band-accent: oklch(49.92% 0.1601 255.11);
+  --band-hover: oklch(100% 0 0 / 8%);
+  --band-rule: oklch(100% 0 0 / 12%);
+}
+
+.sidebar__provider:has(.sidebar--inset),
+.sidebar__mobile {
+  background: var(--band);
+}
+
+.sidebar--inset,
+.sidebar__mobile,
+.shell-band {
+  --foreground: var(--band-foreground);
+  --muted: var(--band-muted);
+  --default: var(--band-hover);
+  --separator: var(--band-rule);
+  color: var(--band-foreground);
+}
+
+:is(.sidebar--inset, .sidebar__mobile) .sidebar__menu-label {
+  color: var(--band-foreground);
+}
+
+:is(.sidebar--inset, .sidebar__mobile)
+  :is(.sidebar__group-label, .sidebar__menu-icon) {
+  color: var(--band-muted);
+}
+
+:is(.sidebar--inset, .sidebar__mobile)
+  .sidebar__menu-item:hover
+  .sidebar__menu-item-content {
+  background: var(--band-hover);
+}
+
+:is(.sidebar--inset, .sidebar__mobile)
+  .sidebar__menu-item[data-current="true"]
+  .sidebar__menu-item-content {
+  background: var(--band-accent);
+}
+
+:is(.sidebar--inset, .sidebar__mobile)
+  .sidebar__menu-item[data-current="true"]
+  :is(.sidebar__menu-label, .sidebar__menu-icon) {
+  color: oklch(100% 0 0);
+}
+
+/* HeroUI Pro sets no Tailwind colours for --chart-1…5, so bg-chart-N and
+   friends need this mapping to exist. */
 @theme inline {
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);

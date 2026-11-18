@@ -236,7 +236,7 @@ export async function VehicleTypeContent({
           {[
             { href: "/cars/vehicle-types", label: "All vehicle types" },
             {
-              href: "/cars/registrations",
+              href: "/cars",
               label: "Every registration this month",
             },
           ].map(({ href, label }) => (

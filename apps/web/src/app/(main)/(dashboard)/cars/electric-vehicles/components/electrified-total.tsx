@@ -3,26 +3,7 @@ import {
   loadEvMonth,
   type SelectionProps,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
-import {
-  formatPoints,
-  mixCaption,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-summary";
-import { formatMonthName } from "@web/utils/dates/format-month";
-
-/** "87.4%, +1.2 pts vs July", after "Electrified total" in the title. */
-export async function MixTitle({ selection }: SelectionProps) {
-  const { month } = await selection;
-  const data = await loadEvMonth(month);
-  if (!data) {
-    return null;
-  }
-
-  const { electrifiedShare, previousElectrifiedShare, previousMonth } = data;
-
-  return previousMonth && previousElectrifiedShare !== undefined
-    ? `${electrifiedShare.toFixed(1)}%, ${formatPoints(electrifiedShare - previousElectrifiedShare)} vs ${formatMonthName(previousMonth)}`
-    : `${electrifiedShare.toFixed(1)}%`;
-}
+import { mixCaption } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-summary";
 
 export async function MixCaption({ selection }: SelectionProps) {
   const { month } = await selection;
@@ -32,8 +13,8 @@ export async function MixCaption({ selection }: SelectionProps) {
 }
 
 /**
- * The month's new cars split by powertrain: one bar, then a tile per
- * powertrain with its share and count.
+ * The month's new cars by fuel type as a ruled list, each with its count and
+ * share, the bars on one scale set by the largest group.
  */
 export async function ElectrifiedMix({ selection }: SelectionProps) {
   const { month } = await selection;
@@ -42,49 +23,50 @@ export async function ElectrifiedMix({ selection }: SelectionProps) {
     return null;
   }
 
+  const largest = Math.max(...data.split.map((segment) => segment.value), 1);
+
   return (
-    <div className="flex flex-col gap-4">
-      <div
-        aria-label="Share of new car registrations by powertrain"
-        className="flex h-7 gap-0.5"
-        role="img"
-      >
-        {data.split.map((segment) => (
-          <span
-            className="block h-full min-w-0.5 rounded-xs"
-            key={segment.label}
-            style={{
-              background: segment.colour,
-              width: `${segment.share.toFixed(2)}%`,
-            }}
-          />
-        ))}
+    <div className="flex flex-col">
+      <div className="flex items-end gap-4 pb-2 font-semibold text-muted text-xs">
+        <span className="w-32 md:w-40">Fuel type</span>
+        <span className="min-w-0 flex-1" />
+        <span className="w-16 text-right">Cars</span>
+        <span className="w-14 text-right">Share</span>
       </div>
-      <dl className="grid @3xl:grid-cols-4 grid-cols-2 border-separator border-t">
+      <ul className="flex flex-col">
         {data.split.map((segment) => (
-          <div className="flex flex-col gap-1 py-4 pr-4" key={segment.label}>
-            <dt className="flex items-center gap-2 font-semibold text-muted text-xs">
-              <span
-                aria-hidden
-                className="size-2.5 shrink-0 rounded-xs"
-                style={{ background: segment.colour }}
-              />
+          <li
+            className="flex items-center gap-4 border-separator border-t py-2"
+            key={segment.label}
+          >
+            <span className="w-32 font-semibold text-sm md:w-40">
               {segment.label}
-            </dt>
-            <dd className="font-semibold text-xl tabular-nums">
-              {segment.share.toFixed(1)}%
-            </dd>
-            <dd className="text-muted text-xs tabular-nums">
+            </span>
+            <span
+              aria-hidden
+              className="block h-2.5 min-w-0 flex-1 rounded-r-sm bg-surface-secondary"
+            >
+              <span
+                className="block h-full rounded-r-sm"
+                style={{
+                  background: segment.colour,
+                  width: `${((segment.value / largest) * 100).toFixed(1)}%`,
+                }}
+              />
+            </span>
+            <span className="w-16 text-right font-semibold text-sm tabular-nums">
               <NumberValue
                 locale="en-SG"
                 maximumFractionDigits={0}
                 value={segment.value}
-              />{" "}
-              cars
-            </dd>
-          </div>
+              />
+            </span>
+            <span className="w-14 text-right text-sm tabular-nums">
+              {segment.share.toFixed(1)}%
+            </span>
+          </li>
         ))}
-      </dl>
+      </ul>
     </div>
   );
 }

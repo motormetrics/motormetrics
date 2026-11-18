@@ -1,19 +1,27 @@
 import { Skeleton, Typography } from "@heroui/react";
+import { formatOrdinal } from "@motormetrics/utils/format-ordinal";
 import { slugify } from "@motormetrics/utils/slugify";
 import { TwoShadeTrendChart } from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
 import { CoeComparisonChart } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/coe-comparison-chart";
 import { buildMakeFaqs } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/faq-data";
-import { MakeReport } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
+import { FuelTypeSelect } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/filters";
+import {
+  loadMakeReport,
+  MakeReport,
+} from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
 import { MakeSearch } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-search";
+import { percentage } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/percentage";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
 import { summariseMake } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/summary";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { ComparisonLinks } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/comparison-links";
 import { pairsWithMake } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/pairs";
+import { PeriodSwitch } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-filters";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
+import { KeyNumberList, KeysAside } from "@web/components/shared/key-numbers";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import { MonthMenu } from "@web/components/shared/month-menu";
+import { MonthSelect } from "@web/components/shared/month-select";
 import {
   Hairline,
   OverviewPage,
@@ -22,7 +30,13 @@ import {
   SourceNote,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
+import { FilterGroup, FiltersPanel } from "@web/components/shared/page-filters";
 import { PageHead } from "@web/components/shared/page-head";
+import {
+  PageBody,
+  RelatedLinks,
+  ScopeControl,
+} from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import {
@@ -46,16 +60,18 @@ import {
 } from "@web/queries/cars/makes/period-totals";
 import { getCarLogoMap } from "@web/queries/logos";
 import type { Make } from "@web/types";
+import { percentageChange } from "@web/utils/change-ratio";
 import {
   formatChartMonth,
   formatMonthLabel,
+  formatMonthName,
 } from "@web/utils/dates/format-month";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 import { fetchMonthsForCars, getMonthOrLatest } from "@web/utils/dates/months";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { SearchParams } from "nuqs/server";
-import { Suspense } from "react";
+import { type ReactNode, Suspense } from "react";
 
 interface PageProps {
   params: Promise<{ make: Make }>;
@@ -199,10 +215,39 @@ function MakeHeadSkeleton() {
   );
 }
 
+/** The sections of the report, for the key numbers' "On this page" links. */
+const JUMP_LINKS = [
+  { href: "#make-trend", label: "By month" },
+  { href: "#make-fuel-types", label: "By fuel type" },
+  { href: "#make-vehicle-types", label: "By vehicle type" },
+  { href: "#make-peers", label: "Against other makes" },
+];
+
 export default function CarMakePage({
   params,
   searchParams: searchParamsPromise,
 }: PageProps) {
+  // The month and the fuel type narrow the page, so they sit in the right
+  // sidebar, with a "Filters" button in the head where the sidebar does not
+  // fit. Built once and handed to both.
+  const filters = (
+    <>
+      <FilterGroup label="Month">
+        <Suspense fallback={<Skeleton className="h-10 w-full" />}>
+          <MakeMonthSelect searchParams={searchParamsPromise} />
+        </Suspense>
+      </FilterGroup>
+      <FilterGroup label="Fuel type">
+        <Suspense fallback={<Skeleton className="h-10 w-full" />}>
+          <MakeFuelTypeSelect
+            params={params}
+            searchParams={searchParamsPromise}
+          />
+        </Suspense>
+      </FilterGroup>
+    </>
+  );
+
   return (
     <OverviewPage className="gap-8 max-md:gap-6">
       <Suspense fallback={null}>
@@ -210,74 +255,104 @@ export default function CarMakePage({
       </Suspense>
 
       <Suspense fallback={<MakeHeadSkeleton />}>
-        <MakeHead params={params} searchParams={searchParamsPromise} />
+        <MakeHead
+          filters={filters}
+          params={params}
+          searchParams={searchParamsPromise}
+        />
       </Suspense>
 
-      <SectionErrorBoundary title="Make data unavailable">
-        <Suspense
-          fallback={
-            <div className="flex flex-col gap-4">
-              <Skeleton className="h-96 w-full" />
-              <Skeleton className="h-96 w-full" />
-            </div>
-          }
-        >
-          <MakeReportSection
-            params={params}
-            searchParams={searchParamsPromise}
-          />
-        </Suspense>
-      </SectionErrorBoundary>
-
-      <Suspense fallback={null}>
-        <MakeComparisons params={params} />
-      </Suspense>
-
-      <Hairline />
-
-      <SectionErrorBoundary title="COE comparison unavailable">
-        <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-          <CarMakeCoeSection params={params} />
-        </Suspense>
-      </SectionErrorBoundary>
-
-      <Hairline />
-
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
-        <div className="flex flex-col gap-2">
-          <Typography.Paragraph
-            className="uppercase"
-            weight="semibold"
-            color="muted"
-            size="xs"
+      <PageBody
+        rail={
+          <>
+            <FiltersPanel>{filters}</FiltersPanel>
+            <SectionErrorBoundary title="Key numbers unavailable">
+              <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+                <MakeRail params={params} searchParams={searchParamsPromise} />
+              </Suspense>
+            </SectionErrorBoundary>
+          </>
+        }
+      >
+        <SectionErrorBoundary title="Make data unavailable">
+          <Suspense
+            fallback={
+              <div className="flex flex-col gap-4">
+                <Skeleton className="h-96 w-full" />
+                <Skeleton className="h-96 w-full" />
+              </div>
+            }
           >
-            Reading a make page
-          </Typography.Paragraph>
-          <Typography.Paragraph size="sm">
-            Registrations are counted by make as recorded at registration, so
-            rebadged and parallel-imported cars appear under the same name as
-            authorised-dealer stock.
-          </Typography.Paragraph>
-          <Typography.Paragraph size="sm">
-            LTA reports registrations by make, fuel type and vehicle type — not
-            by model, so there are no model-level figures anywhere on the site.
-          </Typography.Paragraph>
-        </div>
-        <div className="flex flex-wrap items-end gap-6 lg:justify-end">
-          <SectionLink className="ml-0" href="/cars/makes">
-            All makes
-          </SectionLink>
-          <SectionLink className="ml-0" href="/cars/fuel-types">
-            Fuel types
-          </SectionLink>
-        </div>
-      </div>
+            <MakeReportSection
+              params={params}
+              searchParams={searchParamsPromise}
+            />
+          </Suspense>
+        </SectionErrorBoundary>
+      </PageBody>
 
-      <Hairline />
+      {/* Sections the artboard does not draw sit below the two columns, so
+          that on a narrow screen the key figures come before them. */}
+      <PageBody>
+        <Suspense fallback={null}>
+          <MakeComparisons params={params} />
+        </Suspense>
 
-      <Suspense fallback={null}>
-        <MakeFaq params={params} />
-      </Suspense>
+        <Hairline />
+
+        <SectionErrorBoundary title="COE comparison unavailable">
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <CarMakeCoeSection params={params} />
+          </Suspense>
+        </SectionErrorBoundary>
+
+        <Hairline />
+
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
+          <div className="flex flex-col gap-2">
+            <Typography.Paragraph
+              className="uppercase"
+              weight="semibold"
+              color="muted"
+              size="xs"
+            >
+              Reading a make page
+            </Typography.Paragraph>
+            <Typography.Paragraph size="sm">
+              Registrations are counted by make as recorded at registration, so
+              rebadged and parallel-imported cars appear under the same name as
+              authorised-dealer stock.
+            </Typography.Paragraph>
+            <Typography.Paragraph size="sm">
+              LTA reports registrations by make, fuel type and vehicle type —
+              not by model, so there are no model-level figures anywhere on the
+              site.
+            </Typography.Paragraph>
+          </div>
+          <div className="flex flex-wrap items-end gap-6 lg:justify-end">
+            <SectionLink className="ml-0" href="/cars/makes">
+              All makes
+            </SectionLink>
+            <SectionLink className="ml-0" href="/cars/fuel-types">
+              Fuel types
+            </SectionLink>
+          </div>
+        </div>
+
+        <Hairline />
+
+        <Suspense fallback={null}>
+          <MakeFaq params={params} />
+        </Suspense>
+      </PageBody>
+
+      <RelatedLinks
+        links={[
+          { href: "/cars/makes", label: "All makes" },
+          { href: "/cars", label: "New registrations" },
+          { href: "/cars/electric-vehicles", label: "Electric vehicles" },
+        ]}
+      />
     </OverviewPage>
   );
 }
@@ -334,7 +409,11 @@ async function MakeStructuredData({ params }: Pick<PageProps, "params">) {
  * The make-name H1. `PageHead` derives the share pill from its title, so the
  * whole head resolves together rather than splitting the string out.
  */
-async function MakeHead({ params, searchParams }: PageProps) {
+async function MakeHead({
+  filters,
+  params,
+  searchParams,
+}: PageProps & { filters: ReactNode }) {
   const [{ exactMake }, logoUrlBySlug] = await Promise.all([
     resolveMake(params),
     getCarLogoMap(),
@@ -342,8 +421,8 @@ async function MakeHead({ params, searchParams }: PageProps) {
 
   return (
     <PageHead
-      // `PageHead` has no slot before the title, so the comp's logo sits in
-      // the badge slot after it.
+      // `PageHead` has no slot before the title, so the logo sits in the
+      // badge slot after it.
       badge={
         <MakeAvatar
           logoUrl={logoUrlBySlug[slugify(exactMake)] ?? null}
@@ -352,16 +431,17 @@ async function MakeHead({ params, searchParams }: PageProps) {
         />
       }
       controls={
-        // Nested on purpose: the month and make pickers fetch data of their
-        // own, so the H1 lands as soon as the slug resolves instead of
-        // waiting on them.
-        <Suspense fallback={<Skeleton className="h-10 w-80" />}>
-          <CarMakeHeaderMeta searchParams={searchParams} />
-        </Suspense>
+        // The period sets what the whole page reports on, so it is the one
+        // control in the head.
+        <ScopeControl label="Period">
+          <Suspense fallback={<Skeleton className="h-10 w-80 max-w-full" />}>
+            <PeriodSwitch />
+          </Suspense>
+        </ScopeControl>
       }
-      eyebrow="Cars · Makes"
+      filters={filters}
       sub={
-        <Suspense fallback={<Skeleton className="h-5 w-80" />}>
+        <Suspense fallback={<Skeleton className="h-5 w-48" />}>
           <MakePeriodSub searchParams={searchParams} />
         </Suspense>
       }
@@ -370,10 +450,7 @@ async function MakeHead({ params, searchParams }: PageProps) {
   );
 }
 
-/**
- * "January to August 2026 · registrations by fuel type and vehicle type ·
- * Source: LTA via DataMall", under the title.
- */
+/** "January to August 2026", under the title. */
 async function MakePeriodSub({
   searchParams: searchParamsPromise,
 }: {
@@ -383,14 +460,7 @@ async function MakePeriodSub({
     await loadSearchParams(searchParamsPromise);
   const { month } = await getMonthOrLatest(parsedMonth, "cars");
 
-  return (
-    <>
-      <span className="font-semibold text-foreground">
-        {periodLabel(month, range)}
-      </span>{" "}
-      · registrations by fuel type and vehicle type · Source: LTA via DataMall
-    </>
-  );
+  return periodLabel(month, range);
 }
 
 async function MakeReportSection({ params, searchParams }: PageProps) {
@@ -399,30 +469,133 @@ async function MakeReportSection({ params, searchParams }: PageProps) {
   return <MakeReport make={exactMake} searchParams={searchParams} />;
 }
 
-async function CarMakeHeaderMeta({
+/** The month the period ends on, in the filters. */
+async function MakeMonthSelect({
   searchParams: searchParamsPromise,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
   const { month: parsedMonth } = await loadSearchParams(searchParamsPromise);
-  const [months, makes, { wasAdjusted }] = await Promise.all([
+  const [months, { wasAdjusted }] = await Promise.all([
     fetchMonthsForCars(),
-    getDistinctMakes(),
     getMonthOrLatest(parsedMonth, "cars"),
   ]);
 
   return (
+    <MonthSelect
+      fullWidth
+      latestMonth={months[0]}
+      months={months}
+      wasAdjusted={wasAdjusted}
+    />
+  );
+}
+
+/** The fuel types this make registers in the period, in the filters. */
+async function MakeFuelTypeSelect({ params, searchParams }: PageProps) {
+  const { exactMake } = await resolveMake(params);
+  const { fuelTypeOptions } = await loadMakeReport(exactMake, searchParams);
+
+  return <FuelTypeSelect fuelTypes={fuelTypeOptions} />;
+}
+
+/**
+ * The right sidebar under the filters: the make's key numbers for the
+ * selected period, the way back to every make, and the picker that jumps to
+ * another make's page.
+ */
+async function MakeRail({ params, searchParams }: PageProps) {
+  const [{ exactMake }, makes] = await Promise.all([
+    resolveMake(params),
+    getDistinctMakes(),
+  ]);
+
+  return (
     <>
-      {/* The comp hangs a make picker off the H1 itself. `PageHead` takes a
-          plain string title, so it sits in the controls slot beside the month
-          picker instead. */}
-      <MakeSearch makes={makes.map(({ make }) => make)} />
-      <MonthMenu
-        latestMonth={months[0]}
-        months={months}
-        wasAdjusted={wasAdjusted}
-      />
+      <KeysAside
+        eyebrow={`Key numbers · ${exactMake}`}
+        jump={JUMP_LINKS}
+        label="Key numbers"
+        source="Source: LTA via DataMall."
+      >
+        <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+          <MakeKeyNumbers make={exactMake} searchParams={searchParams} />
+        </Suspense>
+      </KeysAside>
+      <div className="flex flex-col gap-2">
+        <Typography.Paragraph color="muted" size="xs" weight="semibold">
+          Go to another make
+        </Typography.Paragraph>
+        <MakeSearch makes={makes.map(({ make }) => make)} />
+        <SectionLink className="ml-0 self-start" href="/cars/makes">
+          All makes
+        </SectionLink>
+      </div>
     </>
+  );
+}
+
+/**
+ * The make's figures for the selected period, month and fuel type: the ones
+ * the page used to open on, now beside the report.
+ */
+async function MakeKeyNumbers({
+  make,
+  searchParams,
+}: {
+  make: string;
+  searchParams: Promise<SearchParams>;
+}) {
+  const {
+    fuelType,
+    makesCount,
+    marketTotal,
+    month,
+    monthCount,
+    periodCaption,
+    previousMonthCount,
+    previousTotal,
+    rank,
+    total,
+  } = await loadMakeReport(make, searchParams);
+  const formatCount = (value: number) => value.toLocaleString("en-SG");
+  const changeOn = (current: number, previous: number) =>
+    previous > 0
+      ? `${current < previous ? "−" : "+"}${Math.abs(percentageChange(current, previous)).toFixed(1)}%`
+      : null;
+  const yearChange = changeOn(total, previousTotal);
+  const monthChange = changeOn(monthCount, previousMonthCount);
+
+  return (
+    <KeyNumberList
+      besideHead={4}
+      items={[
+        {
+          label: fuelType ? `New ${fuelType} cars` : "New cars",
+          note: `${periodCaption}${yearChange ? ` · ${yearChange} on a year earlier` : ""}`,
+          value: formatCount(total),
+        },
+        {
+          label: "Rank",
+          note: fuelType
+            ? `of ${makesCount} makes, all fuel types`
+            : `of ${makesCount} makes`,
+          value: rank > 0 ? formatOrdinal(rank) : "–",
+        },
+        {
+          label: "Share of new cars",
+          note: `of ${formatCount(marketTotal)} new cars`,
+          value: percentage(total, marketTotal),
+        },
+        {
+          label: formatMonthLabel(month),
+          note: monthChange
+            ? `${monthChange} on ${formatMonthName(shiftMonth(month, -1))}`
+            : "none the month before",
+          value: formatCount(monthCount),
+        },
+      ]}
+    />
   );
 }
 

@@ -1,6 +1,7 @@
 import { Typography } from "@heroui/react";
 import { ARFCalculator } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-calculator";
 import { ARF_FAQS } from "@web/app/(main)/(dashboard)/cars/arf/components/faq-data";
+import { CalculatorTabs } from "@web/app/(main)/(dashboard)/cars/parf/components/calculator-panel";
 import {
   Hairline,
   OverviewPage,
@@ -9,7 +10,8 @@ import {
   SourceNote,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { SharePill } from "@web/components/shared/share-pill";
+import { PageHead } from "@web/components/shared/page-head";
+import { RelatedLinks } from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -73,31 +75,16 @@ export default function ARFCalculatorPage() {
         }}
       />
 
-      <ARFCalculator
-        head={
-          <>
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <Typography.Paragraph
-                className="uppercase"
-                color="muted"
-                size="xs"
-                weight="semibold"
-              >
-                Calculator · LTA car ARF tiers
-              </Typography.Paragraph>
-              <SharePill title="ARF calculator" />
-            </div>
-            <Typography.Heading level={1}>ARF calculator</Typography.Heading>
-            <Typography.Paragraph color="muted" size="sm">
-              Current tiers apply to COEs from the{" "}
-              <span className="font-semibold text-foreground">
-                2nd bidding exercise, February 2023
-              </span>{" "}
-              · Source: LTA
-            </Typography.Paragraph>
-          </>
-        }
+      <PageHead
+        sub="Estimates only, not financial advice"
+        title="ARF calculator"
       />
+
+      <Hairline />
+
+      <CalculatorTabs current="arf" />
+
+      <ARFCalculator />
 
       <Hairline />
 
@@ -106,6 +93,13 @@ export default function ARFCalculatorPage() {
           eyebrow="Before you rely on it"
           title="What the figures assume"
         />
+        <Typography.Paragraph color="muted" size="sm">
+          Current tiers apply to COEs from the{" "}
+          <span className="font-semibold text-foreground">
+            2nd bidding exercise, February 2023
+          </span>{" "}
+          · Source: LTA
+        </Typography.Paragraph>
         <Typography.Paragraph className="max-w-prose">
           Figures are for illustration only and are before any VES or EEAI
           rebate or surcharge. LTA charges the ARF on the car&apos;s OMV, band
@@ -135,7 +129,7 @@ export default function ARFCalculatorPage() {
           <SectionLink className="ml-0" href="/cars/parf">
             PARF calculator
           </SectionLink>
-          <SectionLink className="ml-0" href="/coe/premiums">
+          <SectionLink className="ml-0" href="/coe/results">
             COE premiums
           </SectionLink>
         </div>
@@ -150,6 +144,14 @@ export default function ARFCalculatorPage() {
         }}
       />
       <PageFaq faqs={ARF_FAQS} />
+
+      <RelatedLinks
+        links={[
+          { href: "/cars/parf", label: "PARF calculator" },
+          { href: "/cars", label: "New registrations" },
+          { href: "/learn", label: "Guides" },
+        ]}
+      />
     </OverviewPage>
   );
 }

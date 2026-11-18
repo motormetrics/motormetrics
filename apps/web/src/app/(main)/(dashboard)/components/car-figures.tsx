@@ -1,4 +1,4 @@
-import { Typography } from "@heroui/react";
+import { Table, Typography } from "@heroui/react";
 import { FuelSplit } from "@web/app/(main)/(dashboard)/cars/annual/components/fuel-split";
 import {
   loadMakeRows,
@@ -20,6 +20,7 @@ import {
   axisTicks,
   windowEndingAt,
 } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { LegendItem } from "@web/components/shared/legend-item";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import {
   SectionHead,
@@ -47,31 +48,35 @@ const HISTORY_LIMIT = 24;
 const TOP_MAKES = 10;
 
 /**
- * The fuel types Figure 2 stacks, bottom first, keyed by LTA's own names.
+ * The fuel types the monthly chart stacks, bottom first, keyed by LTA's own names.
  * Diesel and the rarer fuels are a handful of cars a month and are left out.
  */
-const FUEL_SERIES: (FuelMixSeries & { name: string })[] = [
+const FUEL_SERIES: (FuelMixSeries & { name: string; swatch: string })[] = [
   {
     color: "var(--chart-1)",
     key: "electric",
+    swatch: "bg-chart-1",
     label: "Electric",
     name: "Electric",
   },
   {
     color: "var(--chart-3)",
     key: "hybrid",
-    label: "Petrol-electric hybrid",
+    swatch: "bg-chart-3",
+    label: "Petrol-Electric",
     name: "Petrol-Electric",
   },
   {
     color: "var(--chart-4)",
     key: "plugIn",
-    label: "Plug-in hybrid",
+    swatch: "bg-chart-4",
+    label: "Petrol-Electric (Plug-In)",
     name: "Petrol-Electric (Plug-In)",
   },
   {
     color: "var(--chart-2)",
     key: "petrol",
+    swatch: "bg-chart-2",
     label: "Petrol",
     name: "Petrol",
   },
@@ -82,9 +87,12 @@ const DEREGISTRATION_LABELS: Record<string, string> = {
   "Vehicles Exempted From VQS": "Exempt from VQS",
 };
 
+/** The muted period that follows a section title. */
+const PERIOD = "font-normal text-muted";
+
 const formatCount = (value: number) => value.toLocaleString("en-SG");
 
-/** Figure 2: new cars by month over the last year, stacked by fuel type. */
+/** New cars by month over the last year, stacked by fuel type. */
 export async function FuelMixFigure() {
   const month = await getLatestMonth("cars");
   const [totals, ...byFuel] = await Promise.all([
@@ -144,23 +152,21 @@ export async function FuelMixFigure() {
             : undefined,
           total: latest.total,
         })}
-        eyebrow="Figure 2 · Registrations"
-        link={{ href: "/cars/fuel-types", label: "All fuel types" }}
+        link={{ href: "/cars", label: "New registrations" }}
         title={
           <span id="fuel-types-heading">
-            New cars by fuel type, last {CHART_MONTHS} months
+            New cars by month{" "}
+            <span className={PERIOD}>
+              {formatMonthLabel(months[0].month)} to{" "}
+              {formatMonthLabel(months[months.length - 1].month)}, by fuel type
+            </span>
           </span>
         }
       />
-      <ul className="flex flex-wrap gap-x-4 gap-y-2 text-foreground text-xs">
-        {FUEL_SERIES.map(({ color, key, label }) => (
-          <li className="inline-flex items-center gap-2" key={key}>
-            <span
-              aria-hidden
-              className="block size-2.5 rounded-xs"
-              style={{ backgroundColor: color }}
-            />
-            {label}
+      <ul className="flex flex-wrap gap-x-4 gap-y-2">
+        {FUEL_SERIES.map(({ key, label, swatch }) => (
+          <li key={key}>
+            <LegendItem className={swatch} label={label} />
           </li>
         ))}
       </ul>
@@ -174,7 +180,10 @@ export async function FuelMixFigure() {
   );
 }
 
-/** Figure 3: the ten largest makes this year, each card opening its page. */
+/**
+ * The ten largest makes this year as ranked rows: registrations, a bar
+ * against the leader and the change on last year. Each make opens its page.
+ */
 export async function TopMakesFigure() {
   const { latestMonth, rows } = await loadMakeRows("ytd", null);
   if (!latestMonth || rows.length === 0) {
@@ -182,81 +191,89 @@ export async function TopMakesFigure() {
   }
 
   const period = periodLabel(latestMonth, "ytd");
+  const lastYear = Number(latestMonth.slice(0, 4)) - 1;
+  const leaders = rows.slice(0, TOP_MAKES);
+  const peak = Math.max(...leaders.map((row) => row.count), 1);
 
   return (
     <section
       aria-labelledby="top-makes-heading"
-      className="@container flex scroll-mt-24 flex-col gap-6"
+      className="flex scroll-mt-24 flex-col gap-6"
       id="top-makes"
     >
       <SectionHead
         caption={makesCaption(rows, period)}
-        eyebrow="Figure 3 · Makes"
         link={{ href: "/cars/makes", label: `All ${rows.length} makes` }}
         title={
           <span id="top-makes-heading">
-            Top {TOP_MAKES} makes, {latestMonth.slice(0, 4)} to date
+            Leading makes <span className={PERIOD}>{period}</span>
           </span>
         }
       />
-      <ul className="grid @3xl:grid-cols-3 @5xl:grid-cols-4 @7xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-4">
-        {rows.slice(0, TOP_MAKES).map((row) => {
-          const peak = Math.max(...row.trend, 1);
-          return (
-            <li key={row.slug}>
-              <Link
-                className="flex h-full min-w-0 flex-col gap-2 rounded-lg border border-separator bg-surface p-4 text-foreground no-underline transition-colors hover:border-border hover:bg-surface-secondary"
-                href={`/cars/makes/${row.slug}`}
-              >
-                <span className="flex min-w-0 items-center gap-2">
-                  <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="sm" />
-                  <span className="truncate font-semibold">{row.make}</span>
-                  <span className="ml-auto text-muted text-xs tabular-nums">
-                    #{row.rank}
-                  </span>
-                </span>
-                <span className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                  <span className="font-semibold text-xl tabular-nums">
+      <Table variant="secondary">
+        <Table.ScrollContainer>
+          <Table.Content
+            aria-label={`Leading makes, ${period}`}
+            className="tabular-nums"
+          >
+            <Table.Header>
+              <Table.Column isRowHeader>Make</Table.Column>
+              <Table.Column className="w-1/2 max-md:hidden">
+                <span className="sr-only">Against the leading make</span>
+              </Table.Column>
+              <Table.Column className="text-right">Cars</Table.Column>
+              <Table.Column className="text-right">On {lastYear}</Table.Column>
+            </Table.Header>
+            <Table.Body>
+              {leaders.map((row) => (
+                <Table.Row id={row.slug} key={row.slug}>
+                  <Table.Cell>
+                    <Link
+                      className="flex min-w-0 items-center gap-2 font-semibold text-foreground no-underline hover:underline"
+                      href={`/cars/makes/${row.slug}`}
+                    >
+                      <MakeAvatar
+                        logoUrl={row.logoUrl}
+                        make={row.make}
+                        size="sm"
+                      />
+                      {row.make}
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell className="w-1/2 max-md:hidden">
+                    <span aria-hidden className="block h-2">
+                      <span
+                        className="block h-full rounded-r-xs bg-chart-1"
+                        style={{ width: `${(row.count / peak) * 100}%` }}
+                      />
+                    </span>
+                  </Table.Cell>
+                  <Table.Cell className="text-right font-semibold">
                     {formatCount(row.count)}
-                  </span>
-                  <span className="text-muted text-sm tabular-nums">
-                    {row.share.toFixed(1)}% ·{" "}
-                    {changeLabel(row, "ytd", latestMonth)}
-                  </span>
-                </span>
-                {/* The last twelve months, the latest in the darker shade. */}
-                <span aria-hidden className="flex h-8 items-end gap-0.5">
-                  {row.trend.map((value, index) => (
-                    <span
-                      className={
-                        index === row.trend.length - 1
-                          ? "flex-1 rounded-t-xs bg-chart-1"
-                          : "flex-1 rounded-t-xs bg-chart-5"
-                      }
-                      // biome-ignore lint/suspicious/noArrayIndexKey: a month's position is its identity
-                      key={index}
-                      style={{
-                        height: `${Math.max((value / peak) * 100, 2)}%`,
-                      }}
-                    />
-                  ))}
-                </span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
+                  </Table.Cell>
+                  <Table.Cell className="text-right">
+                    {changeLabel(row, "ytd", latestMonth).replace(
+                      ` on ${lastYear}`,
+                      "",
+                    )}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+      </Table>
       <SourceNote>
         Source: LTA via DataMall · New car registrations, {period}; change
-        against the same months of {Number(latestMonth.slice(0, 4)) - 1}. Bars
-        show the last 12 months, each make on its own scale.
+        against the same months of {lastYear}. Bars are drawn against the
+        leading make.
       </SourceNote>
     </section>
   );
 }
 
 /**
- * Figure 4: what left the road last month, by category, beside the fuel
+ * What left the road last month, by category, beside the fuel
  * split of everything still on it at the last year end.
  */
 export async function RoadFigure() {
@@ -332,7 +349,6 @@ export async function RoadFigure() {
                 }
               : undefined,
         })}
-        eyebrow="Figure 4 · Deregistrations and vehicle population"
         title={<span id="on-the-road-heading">Off the road and on it</span>}
       />
       <div className="grid @3xl:grid-cols-2 grid-cols-1 items-start gap-8 @3xl:gap-x-16">

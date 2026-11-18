@@ -71,12 +71,7 @@ export function Footer({
           className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-separator text-foreground"
           href="/"
         >
-          <LogoMark
-            first="currentColor"
-            second="var(--accent)"
-            size={18}
-            strokeWidth={8}
-          />
+          <LogoMark inner="var(--accent)" outer="currentColor" size={18} />
         </Link>
 
         <nav aria-label="Footer navigation">

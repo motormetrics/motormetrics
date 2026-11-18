@@ -1,10 +1,7 @@
 "use client";
 
-import { cn, type Key, ToggleButton, ToggleButtonGroup } from "@heroui/react";
-import {
-  COE_CATEGORIES,
-  toCategoryKey,
-} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
+import { Checkbox, CheckboxGroup, cn } from "@heroui/react";
+import { COE_CATEGORIES } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { coeSearchParams } from "@web/app/(main)/(dashboard)/coe/search-params";
 import type { COECategory } from "@web/types";
 import { useQueryState } from "nuqs";
@@ -23,8 +20,8 @@ export const CATEGORY_COLOURS: Record<COECategory, string> = Object.fromEntries(
 ) as Record<COECategory, string>;
 
 /**
- * The category toggles that add and remove series from the chart. At least
- * one stays on.
+ * The Categories checklist in the sidebar, which adds and removes series from
+ * the premium trend. At least one stays on.
  *
  * Writes to the URL with `shallow: false` so the chart stays server-rendered —
  * the premiums never reach the client bundle, only the series that are on.
@@ -36,8 +33,12 @@ export function SeriesFilter() {
     coeSearchParams.categories.withOptions({ shallow: false, startTransition }),
   );
 
-  const onSelectionChange = (keys: Set<Key>) => {
-    const next = COE_CATEGORIES.filter((category) => keys.has(category));
+  const onChange = (values: string[]) => {
+    const next = COE_CATEGORIES.filter((category) => values.includes(category));
+    // The chart needs a series, so unticking the last one is ignored.
+    if (next.length === 0) {
+      return;
+    }
     const toggled = COE_CATEGORIES.find(
       (category) => selected.includes(category) !== next.includes(category),
     );
@@ -49,34 +50,23 @@ export function SeriesFilter() {
   };
 
   return (
-    <ToggleButtonGroup
+    <CheckboxGroup
       aria-label="Categories plotted"
-      className={cn("max-md:w-full", isPending && "opacity-70")}
-      disallowEmptySelection
-      onSelectionChange={onSelectionChange}
-      selectedKeys={selected}
-      selectionMode="multiple"
-      size="sm"
+      className={cn(isPending && "opacity-70")}
+      onChange={onChange}
+      value={selected}
+      variant="secondary"
     >
-      {COE_CATEGORIES.map((category, index) => (
-        <ToggleButton
-          className="max-md:flex-1 max-md:px-1"
-          id={category}
-          key={category}
-        >
-          {index > 0 ? <ToggleButtonGroup.Separator /> : null}
-          <span
-            aria-hidden
-            className="size-2.5 shrink-0 rounded-xs"
-            style={{
-              background: selected.includes(category)
-                ? CATEGORY_COLOURS[category]
-                : "var(--border)",
-            }}
-          />
-          Cat {toCategoryKey(category)}
-        </ToggleButton>
+      {COE_CATEGORIES.map((category) => (
+        <Checkbox key={category} value={category}>
+          <Checkbox.Content>
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+            {category}
+          </Checkbox.Content>
+        </Checkbox>
       ))}
-    </ToggleButtonGroup>
+    </CheckboxGroup>
   );
 }

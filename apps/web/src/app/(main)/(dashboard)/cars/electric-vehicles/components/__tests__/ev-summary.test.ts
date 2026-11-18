@@ -44,7 +44,7 @@ describe("shareRange", () => {
 });
 
 describe("evLeadSentence", () => {
-  it("should give the battery-electric count, share and electrified share", () => {
+  it("should give the electric count, its share and the combined share", () => {
     expect(
       evLeadSentence({
         batteryElectric: 2880,
@@ -54,7 +54,7 @@ describe("evLeadSentence", () => {
         total: 4549,
       }),
     ).toBe(
-      "2,880 battery-electric cars were registered in August 2026, 63.3% of 4,549 new cars; with hybrids and plug-in hybrids, electrified cars were 94.6%.",
+      "2,880 electric cars were registered in August 2026, 63.3% of 4,549 new cars; electric, petrol-electric and diesel-electric cars together were 94.6%.",
     );
   });
 });
@@ -71,7 +71,7 @@ describe("mixCaption", () => {
     expect(
       mixCaption(
         [
-          segment("Battery-electric", 63.3),
+          segment("Electric", 63.3),
           segment("Plug-in hybrid", 6.3),
           segment("Hybrid", 24.9),
           segment("Petrol and diesel", 5.5),
@@ -80,7 +80,7 @@ describe("mixCaption", () => {
         4549,
       ),
     ).toBe(
-      "Battery-electric cars were 63.3% of August's 4,549 new cars, hybrids 24.9% and plug-in hybrids 6.3%; petrol and diesel cars made up the other 5.5%.",
+      "Electric cars were 63.3% of August's 4,549 new cars, petrol-electric and diesel-electric cars 24.9% and their plug-in versions 6.3%; petrol and diesel cars made up the other 5.5%.",
     );
   });
 
@@ -112,9 +112,11 @@ describe("trendCaption", () => {
           { month: "2026-07", value: 100 },
           { month: "2026-08", value: 200 },
         ],
-        "Electrified",
+        "Electric car",
       ),
-    ).toMatch(/the highest in the range\.$/);
+    ).toMatch(
+      /^Electric car registrations went from .* the highest in the range\.$/,
+    );
   });
 });
 
@@ -130,7 +132,13 @@ describe("makesCaption", () => {
         [55.2, 70.1, 63.3],
       ),
     ).toBe(
-      "BMW registered 8,000 battery-electric cars in 2026 to August, 2.0 times Audi's 4,000; EV share ranged from 55.2% to 70.1% in the 3 months to August.",
+      "BMW registered 8,000 electric cars in 2026 to August, 2.0 times Audi's 4,000; the electric share ranged from 55.2% to 70.1% in the 3 months to August.",
+    );
+  });
+
+  it("should capitalise the share range when it stands alone", () => {
+    expect(makesCaption([], "2026-08", [55.2, 70.1, 63.3])).toBe(
+      "The electric share ranged from 55.2% to 70.1% in the 3 months to August.",
     );
   });
 
@@ -142,13 +150,13 @@ describe("makesCaption", () => {
 describe("chargingCaption", () => {
   it("should set the network against the 2030 target", () => {
     expect(chargingCaption(12000, 60000, "$25,000")).toBe(
-      "There were 12,000 public charging points, 20.0% of the 60,000 targeted for 2030; the VES bands most EVs qualify for carry rebates of up to $25,000.",
+      "There were 12,000 public charging points, 20.0% of the 60,000 targeted for 2030; the VES bands most electric cars qualify for carry rebates of up to $25,000.",
     );
   });
 
   it("should leave out the network before it is ingested", () => {
     expect(chargingCaption(0, 60000, "$25,000")).toBe(
-      "The VES bands most EVs qualify for carry rebates of up to $25,000.",
+      "The VES bands most electric cars qualify for carry rebates of up to $25,000.",
     );
   });
 });

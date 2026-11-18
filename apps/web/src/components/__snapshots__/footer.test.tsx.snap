@@ -43,17 +43,9 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
             <li>
               <a
                 class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/coe/premiums"
-              >
-                Premiums by category
-              </a>
-            </li>
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
                 href="/coe/results"
               >
-                Price history
+                Premium history
               </a>
             </li>
           </ul>
@@ -76,7 +68,7 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
                 class="font-medium text-muted text-sm transition-colors hover:text-accent"
                 href="/cars/electric-vehicles"
               >
-                EV adoption
+                Electric vehicles
               </a>
             </li>
             <li>
@@ -106,14 +98,6 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
               <a
                 class="font-medium text-muted text-sm transition-colors hover:text-accent"
                 href="/cars"
-              >
-                Cars overview
-              </a>
-            </li>
-            <li>
-              <a
-                class="font-medium text-muted text-sm transition-colors hover:text-accent"
-                href="/cars/registrations"
               >
                 New registrations
               </a>
@@ -203,24 +187,49 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
       >
         <svg
           aria-hidden="true"
-          fill="none"
           height="18"
           viewBox="0 0 64 64"
           width="18"
         >
-          <path
-            d="M8 50 V30 a12 12 0 0 1 24 0 V50"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="8"
+          <rect
+            fill="currentColor"
+            height="44"
+            rx="4"
+            width="8"
+            x="4"
+            y="10"
           />
-          <path
-            d="M32 50 V30 a12 12 0 0 1 24 0 V50"
-            stroke="var(--accent)"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="8"
+          <rect
+            fill="var(--accent)"
+            height="30"
+            rx="4"
+            width="8"
+            x="16"
+            y="24"
+          />
+          <rect
+            fill="var(--accent)"
+            height="18"
+            rx="4"
+            width="8"
+            x="28"
+            y="36"
+          />
+          <rect
+            fill="var(--accent)"
+            height="30"
+            rx="4"
+            width="8"
+            x="40"
+            y="24"
+          />
+          <rect
+            fill="currentColor"
+            height="44"
+            rx="4"
+            width="8"
+            x="52"
+            y="10"
           />
         </svg>
       </a>

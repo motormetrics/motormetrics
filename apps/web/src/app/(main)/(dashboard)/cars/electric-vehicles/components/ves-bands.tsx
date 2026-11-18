@@ -19,7 +19,7 @@ export function VesBands() {
     <div className="flex min-w-0 flex-col gap-4">
       <SubHead
         link={{ href: "/learn", label: "EV ownership guide" }}
-        sub="Vehicular Emissions Scheme bands most EVs qualify for"
+        sub="Vehicular Emissions Scheme bands most electric cars qualify for"
         title="VES bands"
       />
 

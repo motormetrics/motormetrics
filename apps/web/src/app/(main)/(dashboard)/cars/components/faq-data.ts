@@ -41,7 +41,7 @@ export async function loadLatestRegistrationsSummary(): Promise<
 export const buildCarsFaqs = (summary?: string): Faq[] => [
   {
     question: "How many new cars are registered in Singapore each month?",
-    answer: `${summary ? `${summary} Source: LTA. ` : ""}The headline at the top of this page gives the number of new car registrations for the selected month, and the trend chart beneath it shows the months before. A car counts in the month it is registered.`,
+    answer: `${summary ? `${summary} Source: LTA. ` : ""}The figures beside the trend chart give the number of new car registrations for the selected month, broken down below by fuel type, vehicle type and make, and the trend chart shows the months before. A car counts in the month it is registered.`,
   },
   {
     question:
@@ -50,9 +50,24 @@ export const buildCarsFaqs = (summary?: string): Faq[] => [
       "New registrations count the cars registered in a month. The vehicle population counts every vehicle on the road at 31 December, once a year, so its mix shifts far more slowly. The Cars on the road panel on this page gives the population.",
   },
   {
+    question: "How are new car registrations counted?",
+    answer:
+      "A car counts in the month it is registered, under the fuel type and vehicle type LTA records against it. The figures are new registrations, not the vehicle population already on the road.",
+  },
+  {
+    question: "Why do some months show higher car registrations?",
+    answer:
+      "Car registration patterns vary with COE price movements, new model launches, promotional periods by dealers, economic conditions and seasonal buying. Lower COE prices or attractive financing options typically lead to higher registrations.",
+  },
+  {
     question: "Can I see car registrations for an earlier month?",
     answer:
-      "Yes. Use the month picker at the top of the page to switch to an earlier month, and the registration figures on the page follow it.",
+      "Yes. Use the Month select at the top of the page to switch to an earlier month, and the registration figures on the page follow it.",
+  },
+  {
+    question: "Can I compare car registrations between two months?",
+    answer:
+      "Yes. The Compare two months section on this page lets you pick two months and see how registrations moved between them, by fuel type and by vehicle type.",
   },
   {
     question: "Where does this car registration data come from?",

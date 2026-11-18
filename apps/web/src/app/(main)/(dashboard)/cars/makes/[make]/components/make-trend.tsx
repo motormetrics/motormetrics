@@ -75,7 +75,7 @@ async function TrendFigure({ make, report }: MakeSectionProps) {
  */
 export function MakeTrend({ make, report }: MakeSectionProps) {
   return (
-    <section className="flex min-w-0 flex-col gap-4">
+    <section className="flex min-w-0 flex-col gap-4" id="make-trend">
       <SectionHead
         caption={
           // A non-breaking space holds the caption's line until it arrives.
@@ -83,7 +83,6 @@ export function MakeTrend({ make, report }: MakeSectionProps) {
             <TrendCaption report={report} />
           </Suspense>
         }
-        eyebrow="Trend"
         title={
           <>
             {make}

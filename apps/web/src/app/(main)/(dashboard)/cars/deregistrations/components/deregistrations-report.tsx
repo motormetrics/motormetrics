@@ -96,7 +96,7 @@ export function DeregistrationsReport({ report }: ReportProps) {
             </Caption>
           }
           eyebrow="Figure 1 · Trend"
-          title="Deregistrations by month, stacked by category"
+          title="Vehicles deregistered by month"
         />
         <Suspense fallback={<Skeleton className="h-80 w-full" />}>
           <TrendChart report={report} />
@@ -190,7 +190,7 @@ export function DeregistrationsReport({ report }: ReportProps) {
               <SectionLink className="ml-0" href="/coe/results">
                 COE bidding results
               </SectionLink>
-              <SectionLink className="ml-0" href="/cars/registrations">
+              <SectionLink className="ml-0" href="/cars">
                 New registrations
               </SectionLink>
             </div>

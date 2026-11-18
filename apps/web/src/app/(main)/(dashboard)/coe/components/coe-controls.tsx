@@ -183,3 +183,89 @@ export function RangeTabs({
     </Segment>
   );
 }
+
+/** In the filters panel each switch spans the row and its items share the width. */
+const PANEL_SEGMENT_CLASS = "w-full";
+const PANEL_ITEM_CLASS = "flex-1 px-2";
+
+/** "Last 12", the short labels the "Exercises shown" filter fits in the sidebar. */
+const RANGE_FILTER_LABELS: Record<ExerciseRange, string> = {
+  "6": "Last 6",
+  "12": "Last 12",
+  "24": "Last 24",
+};
+
+/**
+ * The Category filter in the Bidding results sidebar: the five letters in one
+ * row. The selection comes in as a prop, so the prerendered fallback can draw
+ * the default without reading the URL.
+ */
+export function CategoryFilterView({
+  onSelect,
+  selected,
+}: {
+  onSelect?: (category: CategoryKey) => void;
+  selected: CategoryKey;
+}) {
+  return (
+    <Segment
+      aria-label="COE category"
+      className={PANEL_SEGMENT_CLASS}
+      onSelectionChange={(key) => onSelect?.(key as CategoryKey)}
+      selectedKey={selected}
+      size="md"
+      variant="ghost"
+    >
+      {CATEGORY_KEYS.map((key) => (
+        <Segment.Item
+          aria-label={`Category ${key}`}
+          className={PANEL_ITEM_CLASS}
+          id={key}
+          key={key}
+        >
+          {key}
+        </Segment.Item>
+      ))}
+    </Segment>
+  );
+}
+
+/** The Category filter on the category in the URL; render inside `<Suspense>`. */
+export function CategoryFilter() {
+  const { category, selectCategory } = useCoeOverview();
+
+  return <CategoryFilterView onSelect={selectCategory} selected={category} />;
+}
+
+/** The "Exercises shown" filter in the Bidding results sidebar. */
+export function RangeFilterView({
+  onSelect,
+  selected,
+}: {
+  onSelect?: (range: ExerciseRange) => void;
+  selected: ExerciseRange;
+}) {
+  return (
+    <Segment
+      aria-label="Exercises shown"
+      className={PANEL_SEGMENT_CLASS}
+      onSelectionChange={(option) => onSelect?.(option as ExerciseRange)}
+      selectedKey={selected}
+      size="md"
+      variant="ghost"
+    >
+      {EXERCISE_RANGES.map((option) => (
+        <Segment.Item className={PANEL_ITEM_CLASS} id={option} key={option}>
+          {RANGE_FILTER_LABELS[option]}
+        </Segment.Item>
+      ))}
+    </Segment>
+  );
+}
+
+/** The "Exercises shown" filter on the range in the URL; render inside `<Suspense>`. */
+export function RangeFilter() {
+  const { range, selectRange } = useCoeOverview();
+
+  return <RangeFilterView onSelect={selectRange} selected={range} />;
+}

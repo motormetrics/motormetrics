@@ -67,11 +67,7 @@ export async function PremiumsByYear() {
 
   return (
     <>
-      <SectionHead
-        caption={summary}
-        eyebrow="Figure 3 · By year"
-        title="Average closing premium"
-      />
+      <SectionHead caption={summary} title="Average premium by year" />
       <ShowMoreRows
         header={<CategoryHeader isYear label="Year" />}
         initial={shown}

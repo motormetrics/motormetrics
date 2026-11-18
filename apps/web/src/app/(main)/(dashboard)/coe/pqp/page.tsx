@@ -7,7 +7,6 @@ import {
   TermTabs,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-filters";
 import {
-  LatestMonthEyebrow,
   PQPAnswer,
   PQPKeyNumbers,
   PQPLead,
@@ -27,16 +26,16 @@ import {
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-view";
 import { PQP_CATEGORY_KEYS } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import { KeysAside } from "@web/components/shared/key-numbers";
 import {
   Hairline,
   OverviewPage,
   SectionHead,
-  SectionLink,
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { SharePill } from "@web/components/shared/share-pill";
+import { FilterGroup, FiltersPanel } from "@web/components/shared/page-filters";
+import { PageHead } from "@web/components/shared/page-head";
+import { PageBody, RelatedLinks } from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -161,7 +160,28 @@ async function PqpFaq() {
   );
 }
 
+/** The month the rates were published for, under the title. */
+async function LatestMonth() {
+  const { latestMonth } = await getPQPOverview();
+  return latestMonth ? formatMonth(latestMonth) : null;
+}
+
 export default function PQPRatesPage({ searchParams }: PQPPageProps) {
+  const filters = (
+    <>
+      <FilterGroup label="Category">
+        <Suspense fallback={<Skeleton className="h-10 w-36" />}>
+          <CategoryTabs categories={PQP_CATEGORY_KEYS} />
+        </Suspense>
+      </FilterGroup>
+      <FilterGroup label="Renewal term">
+        <Suspense fallback={<Skeleton className="h-10 w-72" />}>
+          <TermTabs />
+        </Suspense>
+      </FilterGroup>
+    </>
+  );
+
   return (
     <OverviewPage className="gap-8 max-md:gap-6">
       <StructuredData data={structuredData} />
@@ -176,99 +196,105 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
         }}
       />
 
-      {/* Direction D's head: eyebrow, title, the category and term switches,
-          the range hero, lead and source, with the key numbers beside it once
-          the page is wide. The month and source are cached and stay in the
-          static shell; only the parts that read the selection wait. */}
-      <HeadGrid
-        keys={
-          <KeysAside
-            eyebrow={
-              <>
-                Key numbers ·{" "}
-                <SelectedLabel part="both" searchParams={searchParams} />
-              </>
-            }
-            jump={JUMP_LINKS}
-            label="Key numbers"
-            source="Source: LTA via DataMall."
-          >
-            <SectionErrorBoundary title="Key numbers unavailable">
-              <Suspense fallback={<Skeleton className="h-40 w-full" />}>
-                <PQPKeyNumbers searchParams={searchParams} />
-              </Suspense>
-            </SectionErrorBoundary>
-          </KeysAside>
+      {/* The head carries the title, the month and Share. The category and
+          term narrow the page, so they sit in the right sidebar, with a
+          "Filters" button in the head where the sidebar does not fit. */}
+      <PageHead
+        filters={filters}
+        sub={
+          <Suspense fallback={<Skeleton className="h-5 w-32" />}>
+            <LatestMonth />
+          </Suspense>
+        }
+        title="PQP rates"
+      />
+
+      <PageBody
+        rail={
+          <>
+            <FiltersPanel>{filters}</FiltersPanel>
+            <KeysAside
+              eyebrow={
+                <>
+                  Key numbers ·{" "}
+                  <SelectedLabel part="both" searchParams={searchParams} />
+                </>
+              }
+              jump={JUMP_LINKS}
+              label="Key numbers"
+              source="Source: LTA via DataMall."
+            >
+              <SectionErrorBoundary title="Key numbers unavailable">
+                <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+                  <PQPKeyNumbers searchParams={searchParams} />
+                </Suspense>
+              </SectionErrorBoundary>
+            </KeysAside>
+          </>
         }
       >
-        <HeadTitle
-          eyebrow={
-            <>
-              Certificate of Entitlement
-              <LatestMonthEyebrow />
-            </>
-          }
-          title="PQP rates"
-        />
-        <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
-          <Suspense fallback={<Skeleton className="h-10 w-36" />}>
-            <CategoryTabs categories={PQP_CATEGORY_KEYS} />
+        <section className="flex flex-col gap-4">
+          <SectionErrorBoundary title="PQP unavailable">
+            <Suspense fallback={<Skeleton className="h-44 w-full max-w-xl" />}>
+              <PQPAnswer searchParams={searchParams} />
+            </Suspense>
+          </SectionErrorBoundary>
+          <Suspense fallback={<Skeleton className="h-14 w-full max-w-prose" />}>
+            <PQPLead searchParams={searchParams} />
           </Suspense>
-          <Suspense fallback={<Skeleton className="h-10 w-72" />}>
-            <TermTabs />
-          </Suspense>
-          <SharePill title="PQP rates" />
-        </div>
-        <SectionErrorBoundary title="PQP unavailable">
-          <Suspense fallback={<Skeleton className="h-44 w-full max-w-xl" />}>
-            <PQPAnswer searchParams={searchParams} />
-          </Suspense>
+          <PQPSource />
+        </section>
+        <Hairline />
+        <PQPTrend searchParams={searchParams} />
+        <Hairline />
+        <PQPMonths searchParams={searchParams} />
+      </PageBody>
+
+      {/* Sections the artboard does not draw sit below the two columns, so
+          that on a narrow screen the key figures come before them. */}
+      <PageBody>
+        <Hairline />
+        <PQPRates searchParams={searchParams} />
+        <Hairline />
+        <PQPCompare searchParams={searchParams} />
+        <Hairline />
+        <SectionErrorBoundary title="Renewal calculator unavailable">
+          <PQPCalculator />
         </SectionErrorBoundary>
-        <Suspense fallback={<Skeleton className="h-14 w-full max-w-prose" />}>
-          <PQPLead searchParams={searchParams} />
-        </Suspense>
-        <PQPSource />
-      </HeadGrid>
+        <Hairline />
 
-      <SectionErrorBoundary title="Renewal calculator unavailable">
-        <PQPCalculator />
-      </SectionErrorBoundary>
-      <Hairline />
-      <PQPTrend searchParams={searchParams} />
-      <Hairline />
-      <PQPRates searchParams={searchParams} />
-      <Hairline />
-      <PQPCompare searchParams={searchParams} />
-      <Hairline />
+        <section className="flex max-w-prose flex-col gap-4">
+          <SectionHead
+            eyebrow="Reading the numbers"
+            title="How the PQP is set"
+          />
+          <Typography.Paragraph>
+            LTA averages the closing premiums in that category over the last
+            three months, across both exercises, and publishes it as the rate
+            for the coming month. It therefore lags the market rather than
+            leading it.
+          </Typography.Paragraph>
+          <Typography.Paragraph>
+            A 5-year renewal costs half the PQP, but the car cannot be renewed
+            again after that term.
+          </Typography.Paragraph>
+        </section>
 
-      <section className="flex max-w-prose flex-col gap-4">
-        <SectionHead eyebrow="Reading the numbers" title="How the PQP is set" />
-        <Typography.Paragraph>
-          LTA averages the closing premiums in that category over the last three
-          months, across both exercises, and publishes it as the rate for the
-          coming month. It therefore lags the market rather than leading it.
-        </Typography.Paragraph>
-        <Typography.Paragraph>
-          A 5-year renewal costs half the PQP, but the car cannot be renewed
-          again after that term.
-        </Typography.Paragraph>
-        <div className="flex flex-wrap gap-x-4 gap-y-2">
-          <SectionLink className="ml-0" href="/coe/premiums">
-            Premium trends
-          </SectionLink>
-          <SectionLink className="ml-0" href="/cars/parf">
-            PARF rebate calculator
-          </SectionLink>
-        </div>
-      </section>
+        <Hairline />
+        <PQPTradeoffs />
+        <Hairline />
 
-      <Hairline />
-      <PQPMonths searchParams={searchParams} />
-      <Hairline />
-      <PQPTradeoffs />
-      <Hairline />
+        <PqpFaq />
+      </PageBody>
 
-      <PqpFaq />
+      <RelatedLinks
+        links={[
+          { href: "/coe", label: "Bidding results" },
+          { href: "/coe/results", label: "Premium history" },
+          { href: "/cars/parf", label: "PARF calculator" },
+          { href: "/learn/pqp", label: "Guide: what is PQP?" },
+        ]}
+      />
     </OverviewPage>
   );
 }

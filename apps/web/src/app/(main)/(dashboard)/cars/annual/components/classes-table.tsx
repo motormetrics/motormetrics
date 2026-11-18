@@ -86,7 +86,7 @@ export function ClassesTable({
     <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={`${rows.length} ${rows.length === 1 ? "class" : "classes"} · ${total.toLocaleString("en-SG")} vehicles · select a heading to sort`}
-        title="All vehicle classes"
+        title="All vehicles by type"
       />
 
       <table aria-label="Vehicle classes" className="w-full table-fixed">

@@ -8,19 +8,12 @@ import {
   sliceRange,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
 import { trendCaption } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-summary";
-import { QueryTabs } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/query-tabs";
 import {
   RegistrationTrendChart,
   type RegistrationTrendPoint,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/registration-trend-chart";
-import {
-  POWERTRAIN_TABS,
-  RANGE_NOTES,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
-import {
-  type Powertrain,
-  RANGES,
-} from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
+import { RANGE_NOTES } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/constants";
+import type { Powertrain } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/search-params";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
 import { DeltaChip } from "@web/components/shared/delta-chip";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
@@ -31,19 +24,26 @@ import {
 } from "@web/utils/dates/format-month";
 import { Suspense } from "react";
 
+/**
+ * How each fuel type reads in the caption ("Electric car registrations went
+ * from…") and beside the month's figure ("electric cars registered in…").
+ */
 const HEADINGS: Record<Powertrain, { caption: string; subject: string }> = {
   all: {
-    caption: "Electrified",
-    subject: "electrified cars",
+    caption: "Electric, petrol-electric and diesel-electric car",
+    subject: "electric, petrol-electric and diesel-electric cars",
   },
   bev: {
-    caption: "Battery-electric",
-    subject: "battery-electric cars",
+    caption: "Electric car",
+    subject: "electric cars",
   },
-  hybrid: { caption: "Hybrid", subject: "hybrids" },
+  hybrid: {
+    caption: "Petrol-electric and diesel-electric car",
+    subject: "petrol-electric and diesel-electric cars",
+  },
   phev: {
-    caption: "Plug-in hybrid",
-    subject: "plug-in hybrids",
+    caption: "Plug-in petrol-electric and diesel-electric car",
+    subject: "plug-in petrol-electric and diesel-electric cars",
   },
 };
 
@@ -99,27 +99,6 @@ async function TrendCaption({ selection }: SelectionProps) {
   const data = await loadTrend({ selection });
 
   return data ? trendCaption(data.points, data.heading.caption) : null;
-}
-
-async function TrendControls({ selection }: SelectionProps) {
-  const { powertrain, range } = await selection;
-
-  return (
-    <>
-      <QueryTabs
-        ariaLabel="Powertrain"
-        options={POWERTRAIN_TABS}
-        param="powertrain"
-        value={powertrain}
-      />
-      <QueryTabs
-        ariaLabel="Chart range"
-        options={RANGES.map((key) => ({ key, label: key }))}
-        param="range"
-        value={range}
-      />
-    </>
-  );
 }
 
 async function TrendBody({ selection }: SelectionProps) {
@@ -179,12 +158,9 @@ async function TrendBody({ selection }: SelectionProps) {
 }
 
 /**
- * Figure 2: registrations over time for one powertrain, with powertrain and
- * range switches. The eyebrow and source are in the static shell; everything
- * that follows the search params waits behind its own boundary.
- *
- * The repo has no per-make monthly EV series, so the tabs segment by
- * powertrain, which `getEvMonthlyTrend()` does carry.
+ * Figure 1: registrations over time for the fuel type and range chosen in the
+ * page's filters. The eyebrow, title and source are in the static shell;
+ * everything that follows the search params waits behind its own boundary.
  */
 export function RegistrationTrend({ selection }: SelectionProps) {
   return (
@@ -197,25 +173,21 @@ export function RegistrationTrend({ selection }: SelectionProps) {
         }
         eyebrow={
           <>
-            Figure 2 · Registrations ·{" "}
+            Figure 1 · Registrations ·{" "}
             <Suspense fallback=" ">
               <TrendPeriod selection={selection} />
             </Suspense>
           </>
         }
-        title="Electrified registrations by month"
-        trailing={
-          <Suspense fallback={<Skeleton className="h-8 w-96 max-w-full" />}>
-            <TrendControls selection={selection} />
-          </Suspense>
-        }
+        title="New registrations by month"
       />
       <Suspense fallback={<Skeleton className="h-96 w-full" />}>
         <TrendBody selection={selection} />
       </Suspense>
       <SourceNote>
-        Source: LTA via DataMall · New car registrations each month. Y-axis
-        starts at zero. Hover or tap for values.
+        Source: LTA via DataMall · New car registrations each month, for the
+        fuel type and trend range set in the filters. Y-axis starts at zero.
+        Hover or tap for values.
       </SourceNote>
     </section>
   );

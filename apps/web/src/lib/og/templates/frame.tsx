@@ -13,8 +13,8 @@ interface FrameProps {
 /**
  * Cream full-bleed card with the shared MotorMetrics footer.
  *
- * Every share card in the design comp ends with the same row: accent circle
- * with a trending-up mark, the wordmark, and a right-aligned label.
+ * Every share card in the design comp ends with the same row: the bars mark,
+ * the wordmark, and a right-aligned label.
  */
 export function Frame({
   height,
@@ -56,36 +56,70 @@ export function Frame({
             justifyContent: "center",
             width: 46,
             height: 46,
-            borderRadius: "50%",
-            backgroundColor: OG_COLOURS.accent,
+            borderRadius: 11,
+            border: `2px solid ${OG_COLOURS.rule}`,
+            backgroundColor: OG_COLOURS.surface,
           }}
         >
           <svg
             role="img"
             aria-label="MotorMetrics"
-            width="23"
-            height="23"
+            width="30"
+            height="30"
             viewBox="0 0 64 64"
-            fill="none"
-            stroke={OG_COLOURS.onAccent}
-            strokeWidth="7"
-            strokeLinecap="round"
-            strokeLinejoin="round"
           >
-            <path d="M8 50 V30 a12 12 0 0 1 24 0 V50 M32 50 V30 a12 12 0 0 1 24 0 V50" />
+            <rect
+              x="4"
+              y="10"
+              width="8"
+              height="44"
+              rx="4"
+              fill={OG_COLOURS.inkDeep}
+            />
+            <rect
+              x="16"
+              y="24"
+              width="8"
+              height="30"
+              rx="4"
+              fill={OG_COLOURS.accent}
+            />
+            <rect
+              x="28"
+              y="36"
+              width="8"
+              height="18"
+              rx="4"
+              fill={OG_COLOURS.accent}
+            />
+            <rect
+              x="40"
+              y="24"
+              width="8"
+              height="30"
+              rx="4"
+              fill={OG_COLOURS.accent}
+            />
+            <rect
+              x="52"
+              y="10"
+              width="8"
+              height="44"
+              rx="4"
+              fill={OG_COLOURS.inkDeep}
+            />
           </svg>
         </div>
-        <div
+        <span
           style={{
-            display: "flex",
             fontSize: 29,
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+            color: OG_COLOURS.inkDeep,
           }}
         >
-          <span style={{ color: OG_COLOURS.inkDeep }}>motor</span>
-          <span style={{ color: OG_COLOURS.accent }}>metrics</span>
-        </div>
+          MotorMetrics
+        </span>
         <span
           style={{
             marginLeft: "auto",

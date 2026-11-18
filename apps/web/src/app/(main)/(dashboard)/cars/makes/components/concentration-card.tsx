@@ -22,7 +22,7 @@ interface ConcentrationProps {
 }
 
 /**
- * The slices for the selected period and powertrain. Both the caption and the
+ * The slices for the selected period and fuel type. Both the caption and the
  * figure call it; `loadMakeRows` is `'use cache'`, so the rows are read once.
  */
 async function loadConcentration(searchParams: Promise<SearchParams>) {
@@ -45,7 +45,7 @@ async function loadConcentration(searchParams: Promise<SearchParams>) {
   if (rest > 0) {
     segments.push({
       color: "var(--muted)",
-      label: "All other makes",
+      label: `${rows.length - LEADERS} other makes`,
       value: rest,
     });
   }
@@ -64,16 +64,16 @@ async function loadConcentration(searchParams: Promise<SearchParams>) {
   };
 }
 
-async function ConcentrationCaption({ searchParams }: ConcentrationProps) {
+/** The period, and the fuel type when one is selected, after the title. */
+async function ConcentrationPeriod({ searchParams }: ConcentrationProps) {
   const concentration = await loadConcentration(searchParams);
   if (!concentration) {
     return "No registrations for this selection.";
   }
 
-  const { barTotal, leader, rest, total } = concentration;
-  const leadersShare = ((total - rest) / barTotal) * 100;
+  const { fuel, latestMonth, range } = concentration;
 
-  return `The five largest makes held ${leadersShare.toFixed(0)}% of registrations; ${leader.make} alone held ${((leader.count / barTotal) * 100).toFixed(1)}%.`;
+  return `${periodLabel(latestMonth, range)}${fuel ? `, ${fuel} cars` : ""}`;
 }
 
 async function ConcentrationFigure({ searchParams }: ConcentrationProps) {
@@ -82,13 +82,14 @@ async function ConcentrationFigure({ searchParams }: ConcentrationProps) {
     return null;
   }
 
-  const { barTotal, fuel, latestMonth, range, segments, total } = concentration;
+  const { barTotal, fuel, leader, rest, segments, total } = concentration;
+  const leadersShare = ((total - rest) / barTotal) * 100;
 
   return (
     <>
       <div
-        aria-label="Share of registrations held by the five largest makes"
-        className="flex h-4 gap-0.5"
+        aria-label="Share of new cars held by the five largest makes"
+        className="flex h-6 gap-0.5"
         role="img"
       >
         {segments.map((segment) => (
@@ -102,63 +103,58 @@ async function ConcentrationFigure({ searchParams }: ConcentrationProps) {
           />
         ))}
       </div>
-      {/* One tile per slice: two across on a phone, all six in a row once
-          the page is wide enough. */}
-      <ul className="grid @3xl:grid-cols-3 @6xl:grid-cols-6 grid-cols-2 gap-x-6">
+      {/* One legend entry per slice: two across on a phone, four once there
+          is room. */}
+      <ul className="grid grid-cols-2 gap-x-6 gap-y-2 md:grid-cols-4">
         {segments.map((segment) => (
           <li
-            className="flex flex-col gap-1 border-separator border-t py-4"
+            className="flex min-w-0 items-center gap-2 text-sm"
             key={segment.label}
           >
-            <span className="flex items-center gap-2 text-muted text-xs">
-              <span
-                aria-hidden
-                className="size-2.5 shrink-0 rounded-xs"
-                style={{ background: segment.color }}
-              />
-              <span className="truncate">{segment.label}</span>
-            </span>
-            <span className="font-bold text-xl tabular-nums">
+            <span
+              aria-hidden
+              className="size-2.5 shrink-0 rounded-xs"
+              style={{ background: segment.color }}
+            />
+            <span className="min-w-0 flex-1 truncate">{segment.label}</span>
+            <span className="font-semibold tabular-nums">
               {((segment.value / barTotal) * 100).toFixed(1)}%
-            </span>
-            <span className="text-muted text-xs tabular-nums">
-              {segment.value.toLocaleString("en-SG")} cars
             </span>
           </li>
         ))}
       </ul>
       <SourceNote>
-        Share of {total.toLocaleString("en-SG")} registrations
-        {fuel ? ` of ${fuel.toLowerCase()} cars` : ""},{" "}
-        {periodLabel(latestMonth, range)}.
+        The five largest makes held {leadersShare.toFixed(0)}% of{" "}
+        {total.toLocaleString("en-SG")} new{fuel ? ` ${fuel}` : ""} cars;{" "}
+        {leader.make} alone held {((leader.count / barTotal) * 100).toFixed(1)}
+        %.
       </SourceNote>
     </>
   );
 }
 
 /**
- * Figure 2: the top five makes against the rest, as one stacked bar of shares
- * with a tile per slice beneath, as Direction D draws it.
+ * The five largest makes against the rest, as one stacked bar of shares with
+ * a legend entry per slice.
  *
- * The heading is in the static shell. The caption and the figure follow the
- * period and powertrain, so each waits behind its own boundary.
+ * The heading is in the static shell. The period and the figure follow the
+ * period and fuel type, so each waits behind its own boundary.
  */
 export function ConcentrationCard({ searchParams }: ConcentrationProps) {
   return (
-    <div className="@container flex min-w-0 flex-col gap-4">
+    <section className="flex min-w-0 flex-col gap-4" id="makes-share">
       <SectionHead
         caption={
           // A non-breaking space holds the caption's line until it arrives.
-          <Suspense fallback={" "}>
-            <ConcentrationCaption searchParams={searchParams} />
+          <Suspense fallback={"\u00a0"}>
+            <ConcentrationPeriod searchParams={searchParams} />
           </Suspense>
         }
-        eyebrow="Concentration"
-        title="Top five makes against the rest"
+        title="Share of new cars"
       />
       <Suspense fallback={<Skeleton className="h-28 w-full" />}>
         <ConcentrationFigure searchParams={searchParams} />
       </Suspense>
-    </div>
+    </section>
   );
 }

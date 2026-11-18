@@ -17,8 +17,12 @@ import {
   formatPercentChange,
   historyCaption,
 } from "@web/app/(main)/(dashboard)/coe/components/overview-figures";
-import type { CategoryKey } from "@web/app/(main)/(dashboard)/coe/components/search-params";
+import type {
+  CategoryKey,
+  ExerciseRange,
+} from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import { PremiumTrendChart } from "@web/app/(main)/(dashboard)/coe/premiums/components/premium-trend-chart";
+import { LegendItem } from "@web/components/shared/legend-item";
 import {
   SectionHead,
   SourceNote,
@@ -26,19 +30,21 @@ import {
 } from "@web/components/shared/overview";
 
 /**
- * Figure 1 on /coe: the selected category's premium over the last 24
- * exercises, with a ruled strip of its average, high, low and change.
- * `data` holds every category, so switching draws from props alone.
+ * The selected category's premium over the exercises shown, with a ruled
+ * strip of its average, high, low and change under the chart. `data` holds
+ * every category and the full history, so switching draws from props alone.
  */
 export function PremiumsByExerciseView({
   categoryKey,
   data,
+  range,
 }: {
   categoryKey: CategoryKey;
   data: CoeOverviewData;
+  range: ExerciseRange;
 }) {
   const category = toCategory(categoryKey);
-  const series = categoryHistory(data.history, category);
+  const series = categoryHistory(data.history.slice(-Number(range)), category);
   const stats = premiumRangeStats(series);
   const ticks = premiumAxisTicks(series.map((exercise) => exercise.premium));
   const step = ticks.length > 1 ? ticks[1] - ticks[0] : undefined;
@@ -49,11 +55,30 @@ export function PremiumsByExerciseView({
     <div className="flex flex-col gap-4">
       <SectionHead
         caption={historyCaption(category, series)}
-        eyebrow="Figure 1 · Bidding history"
-        title={`${category} premium, last ${series.length} exercises`}
+        title={`${category}, last ${series.length} exercises`}
       />
       {stats && first && last ? (
         <>
+          <LegendItem className="bg-chart-1" label={`${category} premium`} />
+          <PremiumTrendChart
+            data={series.map((exercise, index) => {
+              const previous = series[index - 1];
+              const [year, month] = exercise.month.split("-").map(Number);
+              return {
+                biddingNo: exercise.biddingNo,
+                change: previous
+                  ? changeRatio(exercise.premium, previous.premium)
+                  : undefined,
+                label: formatExerciseTick(exercise),
+                monthIndex: year * 12 + month - 1,
+                premium: exercise.premium,
+                title: `${exerciseLabel(exercise)} · ${category}`,
+              };
+            })}
+            label={category}
+            tickMonths={series.length > 12 ? 2 : 1}
+            ticks={ticks}
+          />
           <div className="grid grid-cols-2 border-separator border-t md:grid-cols-4">
             <StatCell
               label={`${series.length}-exercise average`}
@@ -76,25 +101,6 @@ export function PremiumsByExerciseView({
               value={formatPercentChange(stats.change)}
             />
           </div>
-          <PremiumTrendChart
-            data={series.map((exercise, index) => {
-              const previous = series[index - 1];
-              const [year, month] = exercise.month.split("-").map(Number);
-              return {
-                biddingNo: exercise.biddingNo,
-                change: previous
-                  ? changeRatio(exercise.premium, previous.premium)
-                  : undefined,
-                label: formatExerciseTick(exercise),
-                monthIndex: year * 12 + month - 1,
-                premium: exercise.premium,
-                title: `${exerciseLabel(exercise)} · ${category}`,
-              };
-            })}
-            label={category}
-            tickMonths={2}
-            ticks={ticks}
-          />
           <SourceNote>
             Source: LTA via DataMall · Quota premium at the close of each
             exercise, {exerciseLabel(first)} to {exerciseLabel(last)}. Y-axis
@@ -114,7 +120,9 @@ export function PremiumsByExerciseSelected({
 }: {
   data: CoeOverviewData;
 }) {
-  const { category } = useCoeOverview();
+  const { category, range } = useCoeOverview();
 
-  return <PremiumsByExerciseView categoryKey={category} data={data} />;
+  return (
+    <PremiumsByExerciseView categoryKey={category} data={data} range={range} />
+  );
 }

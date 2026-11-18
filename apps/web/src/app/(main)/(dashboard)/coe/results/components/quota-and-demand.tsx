@@ -32,7 +32,7 @@ export async function QuotaAndDemand() {
     <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={quotaCaption(latest)}
-        eyebrow="Figure 4 · Quota and demand"
+        eyebrow="Quota and demand"
         title={formatExercise(latest)}
       />
       <div className="flex flex-col">

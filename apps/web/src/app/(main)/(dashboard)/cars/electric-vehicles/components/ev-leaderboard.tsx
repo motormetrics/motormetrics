@@ -1,12 +1,9 @@
 import { Skeleton } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
-import { SelectedMonthName } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-head";
 import type { SelectionProps } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-report";
 import { yearToDateMakes } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
-import { SubHead } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/sub-head";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
-import { SourceNote } from "@web/components/shared/overview";
 import { EV_FUEL_TYPES } from "@web/config";
 import { getFuelTypeData } from "@web/queries/cars";
 import { getCarLogoMap } from "@web/queries/logos";
@@ -15,7 +12,7 @@ import { Suspense } from "react";
 
 const LEADERBOARD_SIZE = 6;
 
-/** Battery-electric registrations by make, year to date at `month`. */
+/** Electric car registrations by make, year to date at `month`. */
 export async function loadEvMakes(month: string) {
   const electric = await getFuelTypeData(EV_FUEL_TYPES.BEV[0]);
 
@@ -81,37 +78,19 @@ async function Leaderboard({ selection }: SelectionProps) {
   );
 }
 
-/** One half of Figure 3: the year's leading battery-electric makes. */
+/** Figure 3's body: the year's leading electric makes. */
 export function EvLeaderboard({ selection }: SelectionProps) {
   return (
-    <div className="flex min-w-0 flex-col gap-4">
-      <SubHead
-        link={{ href: "/cars/makes", label: "All makes" }}
-        sub={
-          <>
-            Battery-electric registrations · year to{" "}
-            <Suspense fallback=" ">
-              <SelectedMonthName selection={selection} />
-            </Suspense>
-          </>
-        }
-        title="EV makes"
-      />
-      <div className="flex flex-col">
-        <div className="flex items-center gap-4 pb-2 font-semibold text-muted text-xs">
-          <span className="w-5">#</span>
-          <span className="min-w-0 flex-1 md:w-36 md:flex-none">Make</span>
-          <span className="min-w-0 flex-1 max-md:hidden" />
-          <span className="w-16 text-right">Cars</span>
-        </div>
-        <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-          <Leaderboard selection={selection} />
-        </Suspense>
+    <div className="flex flex-col">
+      <div className="flex items-center gap-4 pb-2 font-semibold text-muted text-xs">
+        <span className="w-5">#</span>
+        <span className="min-w-0 flex-1 md:w-36 md:flex-none">Make</span>
+        <span className="min-w-0 flex-1 max-md:hidden" />
+        <span className="w-16 text-right">Cars</span>
       </div>
-      <SourceNote>
-        Year to date, from January to the selected month. Top six makes by
-        battery-electric registrations.
-      </SourceNote>
+      <Suspense fallback={<Skeleton className="h-64 w-full" />}>
+        <Leaderboard selection={selection} />
+      </Suspense>
     </div>
   );
 }

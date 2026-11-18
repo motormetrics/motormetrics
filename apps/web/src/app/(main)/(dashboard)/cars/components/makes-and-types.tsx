@@ -1,0 +1,92 @@
+import { cn, ProgressBar } from "@heroui/react";
+import { DeltaChip } from "@web/components/shared/delta-chip";
+
+const HEADER = "pb-2 font-semibold text-muted text-xs";
+const formatCount = (value: number): string => value.toLocaleString("en-SG");
+
+/**
+ * The bar against the largest row, then the share as a percentage. The bar
+ * drops out on phones and the percentage keeps the cell.
+ */
+function ShareCell({
+  barLabel,
+  className,
+  scaled,
+  share,
+}: {
+  /** Accessible name for the bar. */
+  barLabel: string;
+  className: string;
+  /** Percentage of the largest row, which fills the track. */
+  scaled: number;
+  /** Percentage of the whole, printed beside the bar. */
+  share: number;
+}) {
+  return (
+    <span className={cn("flex items-center justify-end gap-2", className)}>
+      <ProgressBar
+        aria-label={barLabel}
+        className="min-w-0 flex-1 max-md:hidden"
+        value={scaled}
+      >
+        <ProgressBar.Track>
+          <ProgressBar.Fill />
+        </ProgressBar.Track>
+      </ProgressBar>
+      <span className="w-12 shrink-0 text-right text-foreground text-sm tabular-nums">
+        {share.toFixed(1)}%
+      </span>
+    </span>
+  );
+}
+
+const TYPE_ROW = "flex items-center gap-4 max-md:gap-2";
+const TYPE_CELL = "min-w-0 flex-1 truncate";
+const TYPE_CARS_CELL = "w-16 shrink-0 text-right max-md:w-14";
+const TYPE_SHARE_CELL = "w-32 shrink-0 max-md:w-12";
+const TYPE_CHANGE_CELL = "w-20 shrink-0 text-right max-md:w-16";
+
+/** The month's registrations by body type, against the same month a year on. */
+export function VehicleTypeTable({
+  previousYear,
+  rows,
+  total,
+}: {
+  previousYear: number;
+  rows: { change: number; count: number; name: string }[];
+  /** The month's registrations, which the shares are of. */
+  total: number;
+}) {
+  const largest = Math.max(1, ...rows.map((row) => row.count));
+
+  return (
+    <div className="flex flex-col">
+      <div className={cn(TYPE_ROW, HEADER)}>
+        <span className={TYPE_CELL}>Type</span>
+        <span className={TYPE_CARS_CELL}>Cars</span>
+        <span className={cn(TYPE_SHARE_CELL, "text-right")}>Share</span>
+        <span className={TYPE_CHANGE_CELL}>vs {previousYear}</span>
+      </div>
+      {rows.map((row) => (
+        <div className={cn(TYPE_ROW, "py-2")} key={row.name}>
+          <span className={cn(TYPE_CELL, "text-sm")}>{row.name}</span>
+          <span
+            className={cn(TYPE_CARS_CELL, "font-semibold text-sm tabular-nums")}
+          >
+            {formatCount(row.count)}
+          </span>
+          <ShareCell
+            barLabel={`${row.name} against the largest type`}
+            className={TYPE_SHARE_CELL}
+            scaled={(row.count / largest) * 100}
+            share={(row.count / (total || 1)) * 100}
+          />
+          <DeltaChip
+            className={cn(TYPE_CHANGE_CELL, "text-sm")}
+            value={row.change}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}

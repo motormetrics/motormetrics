@@ -8,7 +8,7 @@ import posthog from "posthog-js";
 import { useTransition } from "react";
 
 /**
- * The two switches at the head of the page: which category it reports on, and
+ * The two switches in the page's filters: which category it reports on, and
  * which renewal term its figures are quoted for.
  *
  * `shallow: false` throughout, so the server re-renders the report against the
@@ -20,9 +20,9 @@ import { useTransition } from "react";
  */
 const TERMS = ["5", "10"] as const;
 
-/** On phones each switch spans the row and its items share the width. */
-const SEGMENT_CLASS = "max-md:w-full";
-const SEGMENT_ITEM_CLASS = "max-md:flex-1 max-md:px-2";
+/** In the filters panel each switch spans the row and its items share the width. */
+const SEGMENT_CLASS = "w-full";
+const SEGMENT_ITEM_CLASS = "flex-1 px-2";
 
 /** The category switch and every selectable row read and write one value. */
 export function usePQPCategory(categories: readonly PQPCategoryKey[]) {
@@ -109,7 +109,7 @@ export function TermTabs() {
     >
       {TERMS.map((option) => (
         <Segment.Item className={SEGMENT_ITEM_CLASS} id={option} key={option}>
-          {option}-year renewal
+          {option}-year
         </Segment.Item>
       ))}
     </Segment>

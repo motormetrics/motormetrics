@@ -9,7 +9,7 @@ import type { Faq } from "@web/components/shared/page-faq";
 export const buildElectricVehiclesFaqs = (summary?: string): Faq[] => [
   {
     question: "How many electric cars are there in Singapore?",
-    answer: `${summary ? `${summary} Source: LTA. ` : ""}The EV share headline at the top of this page gives the number of battery-electric cars registered in the selected month and their share of new car registrations, with the change on the month before. It also gives the number of EVs already on the road.`,
+    answer: `${summary ? `${summary} Source: LTA. ` : ""}The electric share headline at the top of this page gives the number of electric cars registered in the selected month and their share of new car registrations, with the change on the month before. The key numbers also give the number of electric vehicles already on the road.`,
   },
   {
     question: "What is the difference between a BEV, a PHEV and a hybrid?",
@@ -17,9 +17,10 @@ export const buildElectricVehiclesFaqs = (summary?: string): Faq[] => [
       "A battery electric vehicle (BEV) runs entirely on an electric motor and battery. A plug-in hybrid (PHEV) has an electric motor and a combustion engine, with a battery that can be charged externally. A hybrid (HEV) has both but cannot be plugged in.",
   },
   {
-    question: "What does electrified mean?",
+    question:
+      "How many new cars are electric, petrol-electric or diesel-electric?",
     answer:
-      "Electrified is battery-electric, plug-in hybrid and hybrid cars combined. The electrified total on this page gives them as a share of new car registrations in the month.",
+      "The New cars by fuel type section gives electric cars, petrol-electric and diesel-electric cars, their plug-in versions, and petrol and diesel cars as shares of the month's new car registrations. The key numbers give electric, petrol-electric and diesel-electric cars combined.",
   },
   {
     question: "Which COE category is an electric car in?",
@@ -29,7 +30,7 @@ export const buildElectricVehiclesFaqs = (summary?: string): Faq[] => [
   {
     question: "What incentives are there for electric cars in Singapore?",
     answer:
-      "Incentives include rebates under the EV Early Adoption Incentive (EEAI) and the Vehicular Emissions Scheme (VES), which gives a rebate or surcharge based on a vehicle's emissions. The VES bands section lists the bands most EVs qualify for.",
+      "Incentives include rebates under the EV Early Adoption Incentive (EEAI) and the Vehicular Emissions Scheme (VES), which gives a rebate or surcharge based on a vehicle's emissions. The VES bands section lists the bands most electric cars qualify for.",
   },
   {
     question: "How many public EV chargers are there in Singapore?",
