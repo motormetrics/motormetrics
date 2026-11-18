@@ -30,8 +30,8 @@ import { Suspense } from "react";
  */
 const HEADINGS: Record<Powertrain, { caption: string; subject: string }> = {
   all: {
-    caption: "Electric and petrol-electric car",
-    subject: "electric and petrol-electric cars",
+    caption: "Electric, petrol-electric and diesel-electric car",
+    subject: "electric, petrol-electric and diesel-electric cars",
   },
   bev: {
     caption: "Electric car",

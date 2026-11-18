@@ -45,7 +45,8 @@ export function shareRange(
 
 /**
  * "2,880 electric cars were registered in August 2026, 63.3% of 4,549 new
- * cars; electric and petrol-electric cars together were 94.6%."
+ * cars; electric, petrol-electric and diesel-electric cars together were
+ * 94.6%."
  */
 export function evLeadSentence({
   batteryElectric,
@@ -60,7 +61,7 @@ export function evLeadSentence({
   share: number;
   total: number;
 }) {
-  return `${formatCount(batteryElectric)} electric cars were registered in ${formatMonthLabel(month)}, ${share.toFixed(1)}% of ${formatCount(total)} new cars; electric and petrol-electric cars together were ${electrifiedShare.toFixed(1)}%.`;
+  return `${formatCount(batteryElectric)} electric cars were registered in ${formatMonthLabel(month)}, ${share.toFixed(1)}% of ${formatCount(total)} new cars; electric, petrol-electric and diesel-electric cars together were ${electrifiedShare.toFixed(1)}%.`;
 }
 
 /**

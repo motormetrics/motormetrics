@@ -190,7 +190,7 @@ async function EvKeyNumberItems({ selection }: SelectionProps) {
             value: formatCount(data.point.BEV),
           },
           {
-            label: `Electric and petrol-electric share, ${monthLabel}`,
+            label: `Electric, petrol-electric and diesel-electric share, ${monthLabel}`,
             note:
               data.previousMonth && data.previousElectrifiedShare !== undefined
                 ? `${formatPoints(data.electrifiedShare - data.previousElectrifiedShare)} on ${formatMonthName(data.previousMonth)}`

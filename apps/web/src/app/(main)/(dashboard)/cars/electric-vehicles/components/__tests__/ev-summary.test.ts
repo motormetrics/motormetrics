@@ -54,7 +54,7 @@ describe("evLeadSentence", () => {
         total: 4549,
       }),
     ).toBe(
-      "2,880 electric cars were registered in August 2026, 63.3% of 4,549 new cars; electric and petrol-electric cars together were 94.6%.",
+      "2,880 electric cars were registered in August 2026, 63.3% of 4,549 new cars; electric, petrol-electric and diesel-electric cars together were 94.6%.",
     );
   });
 });
