@@ -163,7 +163,11 @@ export default function Page() {
             <ClosingPremiums />
           </SectionErrorBoundary>
         </section>
+      </PageBody>
 
+      {/* Sections the artboard does not draw sit below the two columns, so
+          that on a narrow screen the key figures come before them. */}
+      <PageBody>
         <Hairline />
 
         <section

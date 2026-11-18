@@ -289,7 +289,11 @@ export default function CarMakePage({
             />
           </Suspense>
         </SectionErrorBoundary>
+      </PageBody>
 
+      {/* Sections the artboard does not draw sit below the two columns, so
+          that on a narrow screen the key figures come before them. */}
+      <PageBody>
         <Suspense fallback={null}>
           <MakeComparisons params={params} />
         </Suspense>

@@ -248,6 +248,11 @@ export default function PQPRatesPage({ searchParams }: PQPPageProps) {
         <PQPTrend searchParams={searchParams} />
         <Hairline />
         <PQPMonths searchParams={searchParams} />
+      </PageBody>
+
+      {/* Sections the artboard does not draw sit below the two columns, so
+          that on a narrow screen the key figures come before them. */}
+      <PageBody>
         <Hairline />
         <PQPRates searchParams={searchParams} />
         <Hairline />
