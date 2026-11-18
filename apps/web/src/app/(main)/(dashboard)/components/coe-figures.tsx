@@ -1,48 +1,41 @@
-import { Typography } from "@heroui/react";
-import { KPI } from "@heroui-pro/react/kpi";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import {
   CATEGORY_DESCRIPTIONS,
   COE_CATEGORIES,
   changeRatio,
+  formatExercise,
+  formatExerciseTick,
+  premiumAxisTicks,
   toCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import { coeOverviewSearchParams } from "@web/app/(main)/(dashboard)/coe/components/search-params";
 import {
   type CategoryMove,
   coeCaption,
-  type PqpMove,
-  pqpCaption,
+  exerciseName,
   signed,
 } from "@web/app/(main)/(dashboard)/components/market-copy";
+import { PremiumTrendChart } from "@web/app/(main)/(dashboard)/components/premium-trend-chart";
+import { LegendItem } from "@web/components/shared/legend-item";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
-import { getCategoryExercises, getPqpRates } from "@web/queries/coe";
-import {
-  formatMonthLabel,
-  formatMonthName,
-} from "@web/utils/dates/format-month";
+import { RangeBar } from "@web/components/shared/range-bar";
+import { getCategoryExercises } from "@web/queries/coe";
+import { formatMonthLabel } from "@web/utils/dates/format-month";
 import Link from "next/link";
 import { createSerializer } from "nuqs/server";
 
 /** A year of exercises: two a month. */
 const EXERCISES = 24;
 
-/** LTA publishes PQP for these; Category E has none. */
-const PQP_CATEGORIES = [
-  "Category A",
-  "Category B",
-  "Category C",
-  "Category D",
-] as const;
-
-/** The 5-year renewal is half the PQP, and only cars (A and B) may take it. */
-const FIVE_YEAR_CATEGORIES = new Set(["Category A", "Category B"]);
-
 const serializeCoe = createSerializer(coeOverviewSearchParams);
 
+/** The muted period that follows a section title. */
+const PERIOD = "font-normal text-muted";
+
 /**
- * Figure 1: every category's latest premium with its last 24 exercises as a
- * sparkline. Each tile opens that category on the COE page.
+ * Every category's latest premium, its change on the last exercise and where
+ * it sits between the low and the high of the last 24 exercises. Each cell
+ * opens that category on the COE page.
  */
 export async function CoePremiumsFigure() {
   const series = await Promise.all(
@@ -56,19 +49,14 @@ export async function CoePremiumsFigure() {
       return [];
     }
     const premiums = window.map((exercise) => exercise.premium);
-    const high = Math.max(...premiums);
-    const low = Math.min(...premiums);
     return [
       {
         category,
         change: changeRatio(latest.premium, window.at(-2)?.premium) * 100,
-        high,
+        count: window.length,
+        high: Math.max(...premiums),
         key: toCategoryKey(category),
-        low,
-        // KPI.Chart's Y axis starts at zero, which flattens a premium moving
-        // within a narrow band. Plotting the rise above the window's low gives
-        // each tile its own scale; the figure and low/high carry the values.
-        trend: premiums.map((premium) => ({ value: premium - low })),
+        low: Math.min(...premiums),
         premium: latest.premium,
         start: window[0],
         latest,
@@ -97,155 +85,104 @@ export async function CoePremiumsFigure() {
     >
       <SectionHead
         caption={coeCaption(moves, EXERCISES)}
-        eyebrow="Figure 1 · Certificate of Entitlement"
-        link={{ href: "/coe", label: "All COE results" }}
+        link={{ href: "/coe", label: "COE bidding results" }}
         title={
           <span id="coe-premiums-heading">
-            COE premiums, all five categories
+            COE premiums{" "}
+            <span className={PERIOD}>{exerciseName(first.latest)}</span>
           </span>
         }
       />
-      <ul className="grid @3xl:grid-cols-3 @5xl:grid-cols-5 @md:grid-cols-2 grid-cols-1 gap-4">
+      <ul className="grid @3xl:grid-cols-4 @md:grid-cols-2 grid-cols-1 @md:gap-x-6 @md:gap-y-8 @max-md:divide-y @max-md:divide-separator">
         {tiles.map((tile) => (
           <li key={tile.key}>
             <Link
-              aria-label={`Category ${tile.key}, ${formatCurrency(tile.premium)}, open COE results`}
-              className="block h-full no-underline"
+              aria-label={`Category ${tile.key}, ${formatCurrency(tile.premium)}, open COE bidding results`}
+              className="flex h-full @md:flex-col @md:justify-start justify-between gap-4 @max-md:py-4 text-foreground no-underline"
               href={serializeCoe("/coe", { category: tile.key })}
             >
-              <KPI className="h-full">
-                <KPI.Header>
-                  <KPI.Title>Category {tile.key}</KPI.Title>
-                  <KPI.Trend
-                    className="ml-auto"
-                    trend={
-                      tile.change > 0
-                        ? "up"
-                        : tile.change < 0
-                          ? "down"
-                          : "neutral"
-                    }
-                  >
-                    {signed(tile.change)}
-                  </KPI.Trend>
-                </KPI.Header>
-                <KPI.Content>
-                  <KPI.Value
-                    currency="SGD"
-                    locale="en-SG"
-                    maximumFractionDigits={0}
-                    style="currency"
-                    value={tile.premium}
-                  />
-                </KPI.Content>
-                <KPI.Chart
-                  aria-label={`Category ${tile.key} premium over the last ${EXERCISES} exercises`}
-                  color="var(--chart-1)"
-                  data={tile.trend}
-                  height={40}
-                  role="img"
-                  strokeWidth={1.75}
+              <span className="flex min-w-0 flex-col gap-1">
+                <span className="font-semibold text-sm">
+                  Category {tile.key}
+                </span>
+                <span className="text-muted text-xs">
+                  {CATEGORY_DESCRIPTIONS[tile.category]}
+                </span>
+              </span>
+              <span className="@md:mt-auto flex shrink-0 flex-col gap-1 @max-md:text-right">
+                <span className="font-bold text-2xl tabular-nums tracking-tight">
+                  {formatCurrency(tile.premium)}
+                </span>
+                <span className="text-sm tabular-nums">
+                  {signed(tile.change)}
+                  <span className="@max-md:hidden"> on the last exercise</span>
+                </span>
+                <RangeBar
+                  ariaLabel={`Against the last ${tile.count} exercises: low ${formatCurrency(tile.low)}, high ${formatCurrency(tile.high)}`}
+                  className="@max-md:hidden"
+                  high={tile.high}
+                  highLabel={formatCurrency(tile.high)}
+                  low={tile.low}
+                  lowLabel={formatCurrency(tile.low)}
+                  value={tile.premium}
+                  where={null}
                 />
-                <KPI.Footer className="flex-col items-stretch gap-1 text-muted text-xs tabular-nums">
-                  <span>{CATEGORY_DESCRIPTIONS[tile.category]}</span>
-                  <span className="flex justify-between gap-2">
-                    <span>Low {formatCurrency(tile.low)}</span>
-                    <span>High {formatCurrency(tile.high)}</span>
-                  </span>
-                </KPI.Footer>
-              </KPI>
+              </span>
             </Link>
           </li>
         ))}
       </ul>
       <SourceNote>
-        Source: LTA via DataMall · Quota premium at the close of each of the
-        last {EXERCISES} exercises, {formatMonthLabel(first.start.month)} to{" "}
-        {formatMonthLabel(first.latest.month)}. Each category has its own scale.
-        Select a category to open its results.
+        Source: LTA via DataMall · Quota premium at the close of the latest
+        exercise. Each bar runs from the low to the high of the last {EXERCISES}{" "}
+        exercises, {formatMonthLabel(first.start.month)} to{" "}
+        {formatMonthLabel(first.latest.month)}. Select a category to open its
+        results.
       </SourceNote>
     </section>
   );
 }
 
-/**
- * The prevailing quota premium for Categories A to D, with the 5-year
- * renewal for the two car categories. Leads the car figures because
- * /coe/pqp is the site's top page by search impressions.
- */
-export async function PqpFigure() {
-  const rates = await getPqpRates();
-  const [month, previousMonth] = Object.keys(rates).sort().reverse();
-  if (!month) {
+/** Category A's closing premium over the last 24 exercises, as a line. */
+export async function CategoryATrendFigure() {
+  const window = (await getCategoryExercises("Category A")).slice(-EXERCISES);
+  if (window.length < 2) {
     return null;
   }
 
-  const tiles = PQP_CATEGORIES.flatMap((category) => {
-    const rate = rates[month]?.[category];
-    if (rate === undefined) {
-      return [];
-    }
-    const before = previousMonth ? rates[previousMonth]?.[category] : undefined;
-    return [
-      {
-        category,
-        change: before === undefined ? null : changeRatio(rate, before) * 100,
-        key: toCategoryKey(category),
-        rate,
-      },
-    ];
-  });
-
-  const moves: PqpMove[] = tiles.map(({ change, key, rate }) => ({
-    change,
-    key,
-    rate,
+  const data = window.map((exercise) => ({
+    label: formatExerciseTick(exercise),
+    premium: exercise.premium,
+    title: formatExercise(exercise),
   }));
+  const first = window[0];
+  const latest = window[window.length - 1];
 
   return (
     <section
-      aria-labelledby="pqp-heading"
-      className="@container flex scroll-mt-24 flex-col gap-6"
-      id="pqp"
+      aria-labelledby="category-a-trend-heading"
+      className="flex scroll-mt-24 flex-col gap-6"
+      id="category-a-trend"
     >
       <SectionHead
-        caption={pqpCaption(moves, month, previousMonth ?? null)}
-        eyebrow="COE renewal"
-        link={{ href: "/coe/pqp", label: "PQP rates" }}
         title={
-          <span id="pqp-heading">
-            Prevailing quota premium, {formatMonthLabel(month)}
+          <span id="category-a-trend-heading">
+            Category A{" "}
+            <span className={PERIOD}>last {window.length} exercises</span>
           </span>
         }
       />
-      <dl className="grid @3xl:grid-cols-4 grid-cols-2 gap-x-6 border-separator border-t">
-        {tiles.map((tile) => (
-          <div className="flex min-w-0 flex-col gap-1 py-4" key={tile.key}>
-            <dt className="font-semibold text-muted text-xs">
-              Category {tile.key} · {CATEGORY_DESCRIPTIONS[tile.category]}
-            </dt>
-            <dd className="font-semibold text-xl tabular-nums">
-              {formatCurrency(tile.rate)}
-            </dd>
-            <dd className="text-muted text-xs tabular-nums">
-              {[
-                tile.change !== null && previousMonth
-                  ? `${signed(tile.change)} vs ${formatMonthName(previousMonth)}`
-                  : null,
-                FIVE_YEAR_CATEGORIES.has(tile.category)
-                  ? `5-year ${formatCurrency(tile.rate / 2)}`
-                  : null,
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-            </dd>
-          </div>
-        ))}
-      </dl>
-      <Typography.Paragraph color="muted" size="xs">
-        Source: LTA · Three-month moving average of quota premiums, set by LTA.
-        The 5-year renewal is half the PQP and applies to Categories A and B.
-      </Typography.Paragraph>
+      <LegendItem className="bg-chart-1" label="Category A premium" />
+      <PremiumTrendChart
+        ariaLabel={`Category A premium, ${exerciseName(first)} to ${exerciseName(latest)}`}
+        data={data}
+        ticks={premiumAxisTicks(window.map((exercise) => exercise.premium))}
+      />
+      <SourceNote>
+        Source: LTA via DataMall · Quota premium at the close of each exercise,{" "}
+        {exerciseName(first)} to {exerciseName(latest)}. The axis spans the
+        data, not zero.
+      </SourceNote>
     </section>
   );
 }

@@ -99,13 +99,12 @@ ${popularMakes.map(({ make }) => make).join(", ")}
 ## Main Sections
 
 - [Overview](${SITE_URL}): Latest COE results, market trends, and key statistics
-- [Cars Hub](${SITE_URL}/cars): Vehicle registration data and analytics
 - [COE Hub](${SITE_URL}/coe): Certificate of Entitlement bidding results
 - [Blog](${SITE_URL}/blog): AI-generated market insights and automotive analysis
 
 ## Car Registration Data
 
-- [New Registrations](${SITE_URL}/cars/registrations): Monthly vehicle registration statistics
+- [New Registrations](${SITE_URL}/cars): Monthly car registrations by make, fuel type and vehicle type
 - [Vehicle Population](${SITE_URL}/cars/annual): Annual vehicle population statistics
 - [Deregistrations](${SITE_URL}/cars/deregistrations): Monthly vehicle deregistration data
 - [PARF Calculator](${SITE_URL}/cars/parf): Calculate PARF rebate values
@@ -132,7 +131,6 @@ Singapore's public EV charger network, from LTA DataMall's EV Charging Points fe
 
 ## COE Bidding Results
 
-- [COE Premiums](${SITE_URL}/coe/premiums): Current COE landscape and premium trends
 - [Historical Results](${SITE_URL}/coe/results): Complete bidding history
 - [PQP Rates](${SITE_URL}/coe/pqp): Prevailing Quota Premium rates
 

@@ -4,21 +4,17 @@ import {
   batteryElectricShares,
   resolveMonthIndex,
 } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/components/ev-series";
+import { toCategoryKey } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
 import {
-  biddingOrdinal,
-  premiumRangeStats,
-} from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import {
-  leadSentence,
-  rangeWhere,
+  exerciseName,
   signed,
 } from "@web/app/(main)/(dashboard)/components/market-copy";
+import { windowEndingAt } from "@web/app/(main)/(dashboard)/components/overview-series";
 import {
-  sumByMonth,
-  windowEndingAt,
-} from "@web/app/(main)/(dashboard)/components/overview-series";
-import { KeyNumberItem, KeysAside } from "@web/components/shared/key-numbers";
-import { RangeBar } from "@web/components/shared/range-bar";
+  type KeyNumber,
+  KeyNumberItem,
+} from "@web/components/shared/key-numbers";
+import { SourceNote } from "@web/components/shared/overview";
 import {
   getEvMarketShare,
   getEvMonthlyTrend,
@@ -26,201 +22,174 @@ import {
   getYearToDateByFuelType,
 } from "@web/queries/cars";
 import { getCategoryExercises, getPqpRates } from "@web/queries/coe";
-import { getDeregistrations } from "@web/queries/deregistrations";
 import { changeRatio } from "@web/utils/change-ratio";
 import {
   formatMonthLabel,
   formatMonthName,
 } from "@web/utils/dates/format-month";
 import { getLatestMonth } from "@web/utils/dates/months";
+import Link from "next/link";
+import type { ReactNode } from "react";
 
-/** The window the Category A range bar spans: a year of exercises. */
-const RANGE_EXERCISES = 24;
-/** Deep enough for the lead's "the fewest since" look-back. */
+/** Matches the fuel type figure's query, so both read one cache entry. */
 const HISTORY_LIMIT = 24;
 
-/** The sections below, for the "On this page" list. */
-export const SECTION_LINKS = [
-  { href: "#coe-premiums", label: "COE premiums" },
-  { href: "#pqp", label: "PQP renewal rates" },
-  { href: "#fuel-types", label: "New cars by fuel type" },
-  { href: "#top-makes", label: "Top makes" },
-  { href: "#on-the-road", label: "Off the road and on it" },
-];
+/** LTA publishes PQP for these; Category E has none. */
+const PQP_CATEGORIES = [
+  "Category A",
+  "Category B",
+  "Category C",
+  "Category D",
+] as const;
 
-/** "first bidding, November 2026". */
-const exerciseName = (exercise: { biddingNo: number; month: string }) =>
-  `${biddingOrdinal(exercise.biddingNo)} bidding, ${formatMonthLabel(exercise.month)}`;
-
-/** "+$6,997", with a true minus for a fall. */
-const signedCurrency = (value: number) =>
-  `${value < 0 ? "−" : "+"}${formatCurrency(Math.abs(value))}`;
+/** The 5-year renewal is half the PQP, and only cars (A and B) may take it. */
+const FIVE_YEAR_CATEGORIES = new Set<string>(["Category A", "Category B"]);
 
 /**
- * Direction D's "range" hero: the latest Category A premium at heading size
- * with its change, a bar placing it in the last 24 exercises, then the lead
- * and the source line. Reads only cached data, so it is part of the static
- * shell.
+ * The line under the title: how far each dataset runs, e.g. "COE to the first
+ * bidding, November 2026 · Registrations to October 2026".
  */
-export async function MarketHero() {
-  const month = await getLatestMonth("cars");
-  const [categoryA, monthlyTotals, evTrend, evMarketShare] = await Promise.all([
+export async function MarketAsOf() {
+  const [month, categoryA] = await Promise.all([
+    getLatestMonth("cars"),
     getCategoryExercises("Category A"),
-    getMonthlyRegistrationTotals(HISTORY_LIMIT),
-    getEvMonthlyTrend(),
-    getEvMarketShare(),
   ]);
-
-  const window = categoryA.slice(-RANGE_EXERCISES);
-  const range = premiumRangeStats(window);
-  const previous = categoryA.at(-2);
-
-  const evIndex = resolveMonthIndex(
-    evTrend.map((point) => point.month),
-    month,
-  );
-  const evShare =
-    evIndex >= 0
-      ? batteryElectricShares(evTrend, evMarketShare)[evIndex]
-      : undefined;
-  const lead = leadSentence(
-    windowEndingAt(monthlyTotals, month, HISTORY_LIMIT),
-    evShare,
-  );
+  const latest = categoryA.at(-1);
 
   return (
     <>
-      {range ? (
-        <div className="flex flex-col gap-2">
-          <Typography.Paragraph color="muted" size="sm">
-            <span className="font-semibold text-foreground">
-              COE Category A
-            </span>{" "}
-            · {exerciseName(range.latest)}
-          </Typography.Paragraph>
-          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-            <span className="font-bold text-4xl tabular-nums tracking-tight md:text-5xl">
-              {formatCurrency(range.latest.premium)}
-            </span>
-            {previous ? (
-              <span className="text-foreground text-sm tabular-nums">
-                {signed(
-                  changeRatio(range.latest.premium, previous.premium) * 100,
-                )}{" "}
-                · {signedCurrency(range.latest.premium - previous.premium)}
-              </span>
-            ) : null}
-          </div>
-          <RangeBar
-            ariaLabel={`Against the last ${window.length} exercises: low ${formatCurrency(range.low.premium)}, high ${formatCurrency(range.high.premium)}`}
-            high={range.high.premium}
-            highLabel={`High ${formatCurrency(range.high.premium)}`}
-            low={range.low.premium}
-            lowLabel={`${window.length}-exercise low ${formatCurrency(range.low.premium)}`}
-            value={range.latest.premium}
-            where={
-              <span className="max-sm:hidden">
-                {rangeWhere(
-                  range.latest.premium,
-                  range.low.premium,
-                  range.high.premium,
-                  window.length,
-                )}
-              </span>
-            }
-          />
-        </div>
-      ) : null}
-      {lead ? (
-        <Typography.Paragraph className="max-w-prose tabular-nums">
-          {lead}
-        </Typography.Paragraph>
-      ) : null}
-      <Typography.Paragraph color="muted" size="sm">
-        Source: LTA via DataMall. Registrations to {formatMonthLabel(month)}
-        {range ? `; COE to the ${exerciseName(range.latest)}` : ""}.
-      </Typography.Paragraph>
+      {latest ? `COE to the ${exerciseName(latest)} · ` : ""}
+      Registrations to {formatMonthLabel(month)}
     </>
   );
 }
 
-interface KeyNumber {
-  label: string;
-  note: string;
-  value: string;
+/**
+ * One block of the right sidebar's key figures: a heading with its period,
+ * the ruled figures and the links to the pages that carry the full data.
+ */
+function RailBlock({
+  id,
+  items,
+  links,
+  note,
+  period,
+  title,
+}: {
+  id: string;
+  items: (KeyNumber & { key: string })[];
+  links: { href: string; label: string }[];
+  note?: ReactNode;
+  period: string;
+  title: string;
+}) {
+  return (
+    <section aria-labelledby={id} className="flex flex-col gap-2">
+      <Typography.Heading className="text-base" id={id} level={2}>
+        {title} <span className="font-normal text-muted">{period}</span>
+      </Typography.Heading>
+      <dl className="flex flex-col divide-y divide-separator border-separator border-y">
+        {items.map(({ key, ...item }) => (
+          <KeyNumberItem key={key} {...item} />
+        ))}
+      </dl>
+      {note ? <SourceNote>{note}</SourceNote> : null}
+      <ul className="flex flex-wrap gap-x-6 gap-y-2 pt-2">
+        {links.map(({ href, label }) => (
+          <li key={href}>
+            <Link
+              className="font-semibold text-accent text-sm no-underline hover:underline"
+              href={href}
+            >
+              {label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 /**
- * The key numbers beside the head on a wide page and under it before then,
- * with the "On this page" links. COE and PQP lead, as the page order does.
+ * The prevailing quota premium for Categories A to D, with the 5-year
+ * renewal for the two car categories. First in the sidebar because /coe/pqp
+ * is the site's top page by search impressions.
  */
-export async function MarketKeyNumbers() {
-  const month = await getLatestMonth("cars");
-  const [
-    categoryB,
-    pqpRates,
-    monthlyTotals,
-    yearToDate,
-    evTrend,
-    evMarketShare,
-    deregistrations,
-  ] = await Promise.all([
-    getCategoryExercises("Category B"),
-    getPqpRates(),
-    getMonthlyRegistrationTotals(HISTORY_LIMIT),
-    getYearToDateByFuelType(Number(month.slice(0, 4))),
-    getEvMonthlyTrend(),
-    getEvMarketShare(),
-    getDeregistrations(),
-  ]);
-
-  const keyNumbers: KeyNumber[] = [];
-
-  const [latestB, previousB] = [categoryB.at(-1), categoryB.at(-2)];
-  if (latestB) {
-    keyNumbers.push({
-      label: "COE Category B",
-      note: `${previousB ? `${signed(changeRatio(latestB.premium, previousB.premium) * 100)} · ` : ""}${biddingOrdinal(latestB.biddingNo)} bidding, ${formatMonthName(latestB.month)}`,
-      value: formatCurrency(latestB.premium),
-    });
+export async function PqpKeyNumbers() {
+  const rates = await getPqpRates();
+  const [month, previousMonth] = Object.keys(rates).sort().reverse();
+  if (!month) {
+    return null;
   }
 
-  const [pqpMonth, previousPqpMonth] = Object.keys(pqpRates).sort().reverse();
-  for (const category of ["Category A", "Category B"] as const) {
-    const rate = pqpMonth ? pqpRates[pqpMonth]?.[category] : undefined;
-    if (!pqpMonth || rate === undefined) {
-      continue;
+  const items = PQP_CATEGORIES.flatMap((category) => {
+    const rate = rates[month]?.[category];
+    if (rate === undefined) {
+      return [];
     }
-    const before = previousPqpMonth
-      ? pqpRates[previousPqpMonth]?.[category]
-      : undefined;
-    keyNumbers.push({
-      label: `PQP ${category}, ${formatMonthName(pqpMonth)}`,
-      note:
-        previousPqpMonth && before !== undefined
-          ? `${signed(changeRatio(rate, before) * 100)} vs ${formatMonthName(previousPqpMonth)}`
-          : "Three-month moving average",
-      value: formatCurrency(rate),
-    });
+    const before = previousMonth ? rates[previousMonth]?.[category] : undefined;
+    return [
+      {
+        key: category,
+        label: `Category ${toCategoryKey(category)}, 10-year`,
+        note: [
+          FIVE_YEAR_CATEGORIES.has(category)
+            ? `5-year: ${formatCurrency(rate / 2)}`
+            : null,
+          before !== undefined && previousMonth
+            ? `${signed(changeRatio(rate, before) * 100)} on ${formatMonthName(previousMonth)}`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(" · "),
+        value: formatCurrency(rate),
+      },
+    ];
+  });
+
+  if (items.length === 0) {
+    return null;
   }
+
+  return (
+    <RailBlock
+      id="pqp-heading"
+      items={items}
+      links={[{ href: "/coe/pqp", label: "PQP rates" }]}
+      note="Source: LTA. The 5-year renewal is half the PQP and applies to Categories A and B. LTA publishes no PQP for Category E."
+      period={`PQP, ${formatMonthLabel(month)}`}
+      title="Renewing a COE"
+    />
+  );
+}
+
+/**
+ * The latest month's new cars, the electric share of them and the year so
+ * far, with the links to the registration and electric vehicle pages.
+ */
+export async function NewCarsKeyNumbers() {
+  const month = await getLatestMonth("cars");
+  const [monthlyTotals, yearToDate, evTrend, evMarketShare] = await Promise.all(
+    [
+      getMonthlyRegistrationTotals(HISTORY_LIMIT),
+      getYearToDateByFuelType(Number(month.slice(0, 4))),
+      getEvMonthlyTrend(),
+      getEvMarketShare(),
+    ],
+  );
+
+  const items: (KeyNumber & { key: string })[] = [];
 
   const registrations = windowEndingAt(monthlyTotals, month, 2);
   const [previousCars, latestCars] =
     registrations.length === 2 ? registrations : [undefined, registrations[0]];
   if (latestCars) {
-    const yearTotal = yearToDate.reduce((sum, row) => sum + row.count, 0);
-    keyNumbers.push({
-      label: `New cars, ${formatMonthName(latestCars.month)}`,
-      note: [
-        previousCars
-          ? `${signed(changeRatio(latestCars.total, previousCars.total) * 100)} vs ${formatMonthName(previousCars.month)}`
-          : null,
-        yearTotal > 0
-          ? `${yearTotal.toLocaleString("en-SG")} in ${month.slice(0, 4)}`
-          : null,
-      ]
-        .filter(Boolean)
-        .join(" · "),
+    items.push({
+      key: "registered",
+      label: "Registered",
+      note: previousCars
+        ? `${signed(changeRatio(latestCars.total, previousCars.total) * 100)} on ${formatMonthName(previousCars.month)}`
+        : undefined,
       value: latestCars.total.toLocaleString("en-SG"),
     });
   }
@@ -233,47 +202,44 @@ export async function MarketKeyNumbers() {
   const evShare = evIndex >= 0 ? shares[evIndex] : undefined;
   if (evShare !== undefined) {
     const before = evIndex > 0 ? shares[evIndex - 1] : undefined;
-    keyNumbers.push({
-      label: "Battery-electric share",
+    items.push({
+      key: "electric",
+      label: "Electric",
       note:
         before !== undefined
-          ? `${signed(evShare - before, " pts")} vs ${formatMonthName(evTrend[evIndex - 1].month)}`
-          : `of new cars, ${formatMonthName(evTrend[evIndex].month)}`,
+          ? `${signed(evShare - before, " pts")} on ${formatMonthName(evTrend[evIndex - 1].month)}`
+          : "of new cars",
       value: `${evShare.toFixed(1)}%`,
     });
   }
 
-  const deregistrationTotals = sumByMonth(deregistrations);
-  const [latestDereg, previousDereg] = [
-    deregistrationTotals.at(-1),
-    deregistrationTotals.at(-2),
-  ];
-  if (latestDereg) {
-    keyNumbers.push({
-      label: `Deregistrations, ${formatMonthName(latestDereg.month)}`,
-      note: previousDereg
-        ? `${signed(changeRatio(latestDereg.total, previousDereg.total) * 100)} vs ${formatMonthName(previousDereg.month)}`
-        : "All vehicle types",
-      value: latestDereg.total.toLocaleString("en-SG"),
+  const yearTotal = yearToDate.reduce((sum, row) => sum + row.count, 0);
+  if (yearTotal > 0) {
+    items.push({
+      key: "year-to-date",
+      label: `${month.slice(0, 4)} to date`,
+      note:
+        month.slice(5) === "01"
+          ? "January"
+          : `January to ${formatMonthName(month)}`,
+      value: yearTotal.toLocaleString("en-SG"),
     });
   }
 
-  if (keyNumbers.length === 0) {
+  if (items.length === 0) {
     return null;
   }
 
   return (
-    <KeysAside
-      eyebrow="Key numbers"
-      jump={SECTION_LINKS}
-      label="Key numbers"
-      source="Source: LTA via DataMall. Changes are against the previous month or exercise."
-    >
-      <dl className="grid @3xl:grid-cols-3 grid-cols-2 gap-x-6 border-separator border-t">
-        {keyNumbers.map((keyNumber) => (
-          <KeyNumberItem key={keyNumber.label} {...keyNumber} />
-        ))}
-      </dl>
-    </KeysAside>
+    <RailBlock
+      id="new-cars-heading"
+      items={items}
+      links={[
+        { href: "/cars", label: "New registrations" },
+        { href: "/cars/electric-vehicles", label: "Electric vehicles" },
+      ]}
+      period={formatMonthLabel(latestCars?.month ?? month)}
+      title="New cars"
+    />
   );
 }

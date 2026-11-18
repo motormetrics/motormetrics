@@ -80,11 +80,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly" as const,
     },
     {
-      url: `${SITE_URL}/cars/registrations`,
-      lastModified: carsLastModified,
-      changeFrequency: "monthly" as const,
-    },
-    {
       url: `${SITE_URL}/cars/fuel-types`,
       lastModified: carsLastModified,
       changeFrequency: "monthly" as const,
@@ -137,11 +132,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${SITE_URL}/coe`,
-      lastModified: coeLastModified,
-      changeFrequency: "monthly" as const,
-    },
-    {
-      url: `${SITE_URL}/coe/premiums`,
       lastModified: coeLastModified,
       changeFrequency: "monthly" as const,
     },

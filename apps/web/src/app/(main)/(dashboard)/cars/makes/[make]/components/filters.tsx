@@ -1,75 +1,55 @@
-import {
-  type MakeSearchParams,
-  RANGE_LABELS,
-  RANGES,
-  serialize,
-} from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
-import { FilterTabs } from "@web/app/(main)/(dashboard)/cars/makes/components/filter-tabs";
+"use client";
 
-/** Tab id for the unfiltered view, which clears `?fuelType=`. */
+import { NativeSelect } from "@heroui-pro/react";
+import { parseAsString, useQueryState } from "nuqs";
+import posthog from "posthog-js";
+import { useTransition } from "react";
+
+/** Option value for the unfiltered view, which clears `?fuelType=`. */
 const ALL_FUEL_TYPES = "all";
 
-/*
- * Both switches are plain links built on the server with the page's nuqs
- * serializer, so each period and fuel type is a crawlable URL and switching is
- * an ordinary navigation that re-renders the report. Every other param, the
- * selected month included, carries over.
- */
-
-/** How much of the make's history the page is read over. */
-export function PeriodTabs({
-  params,
-  path,
-}: {
-  params: MakeSearchParams;
-  /** The make page's own path, e.g. `/cars/makes/bmw`. */
-  path: string;
-}) {
-  return (
-    <FilterTabs
-      aria-label="Period"
-      filter="range"
-      selectedKey={params.range}
-      tabs={RANGES.map((range) => ({
-        href: serialize(path, { ...params, range }),
-        id: range,
-        label: RANGE_LABELS[range],
-      }))}
-    />
-  );
-}
-
 /**
- * Fuel types as LTA records them, passed in from the server rather than listed
- * here — only the ones this make actually registers are offered, so a make with
- * no diesel never shows a tab that would empty the page.
+ * The fuel type the make page is narrowed to, as a native select in the
+ * filters panel. It writes `?fuelType=` from the browser with `shallow: false`
+ * so the server re-renders the report; no option is a link.
+ *
+ * The fuel types are LTA's, passed in from the server rather than listed
+ * here: only the ones this make registers in the period are offered, so a
+ * make with no diesel never shows an option that would empty the page.
  */
-export function FuelTypeTabs({
-  fuelTypes,
-  params,
-  path,
-}: {
-  fuelTypes: string[];
-  params: MakeSearchParams;
-  path: string;
-}) {
+export function FuelTypeSelect({ fuelTypes }: { fuelTypes: string[] }) {
+  const [isPending, startTransition] = useTransition();
+  const [fuelType, setFuelType] = useQueryState(
+    "fuelType",
+    parseAsString.withOptions({ shallow: false, startTransition }),
+  );
+
   return (
-    <FilterTabs
-      aria-label="Fuel type"
-      filter="fuel_type"
-      selectedKey={params.fuelType ?? ALL_FUEL_TYPES}
-      tabs={[
-        {
-          href: serialize(path, { ...params, fuelType: null }),
-          id: ALL_FUEL_TYPES,
-          label: "All",
-        },
-        ...fuelTypes.map((fuelType) => ({
-          href: serialize(path, { ...params, fuelType }),
-          id: fuelType,
-          label: fuelType,
-        })),
-      ]}
-    />
+    <NativeSelect className="w-full">
+      <NativeSelect.Trigger
+        aria-busy={isPending}
+        aria-label="Fuel type"
+        onChange={(event) => {
+          const { value } = event.target;
+          posthog.capture("dashboard_filter_changed", {
+            filter: "fuel_type",
+            value,
+          });
+          setFuelType(value === ALL_FUEL_TYPES ? null : value);
+        }}
+        value={fuelType ?? ALL_FUEL_TYPES}
+        wrapperClassName="w-full"
+      >
+        <NativeSelect.Option value={ALL_FUEL_TYPES}>
+          All fuel types
+        </NativeSelect.Option>
+        {fuelTypes.map((option) => (
+          <NativeSelect.Option key={option} value={option}>
+            {option}
+          </NativeSelect.Option>
+        ))}
+        <NativeSelect.Indicator />
+      </NativeSelect.Trigger>
+    </NativeSelect>
   );
 }

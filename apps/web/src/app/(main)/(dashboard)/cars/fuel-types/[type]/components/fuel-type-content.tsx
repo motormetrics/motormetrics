@@ -231,7 +231,7 @@ export async function FuelTypeContent({
         {[
           { href: "/cars/fuel-types", label: "All fuel types" },
           {
-            href: "/cars/registrations",
+            href: "/cars",
             label: "Every registration this month",
           },
           ...(isElectric

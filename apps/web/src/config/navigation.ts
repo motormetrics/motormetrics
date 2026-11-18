@@ -1,6 +1,5 @@
 import { sortByName } from "@motormetrics/utils/sorting";
 import {
-  BarChart3,
   BookOpen,
   Calculator,
   Calendar,
@@ -69,7 +68,7 @@ export const navLinks: NavLinks = {
   cars: [
     {
       title: "New registrations",
-      url: "/cars/registrations",
+      url: "/cars",
       icon: FilePlus,
       description: "Monthly car registration statistics and trends",
     },
@@ -145,13 +144,7 @@ export const navLinks: NavLinks = {
       description: "Prevailing quota premiums and calculations",
     },
     {
-      title: "Premiums by category",
-      url: "/coe/premiums",
-      icon: BarChart3,
-      description: "Every exercise's premium for each category, Cat A to E",
-    },
-    {
-      title: "Price history",
+      title: "Premium history",
       url: "/coe/results",
       icon: TrendingUp,
       description: "COE prices by year, trends and record highs",
@@ -200,7 +193,7 @@ export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
     // menu rather than a pill of their own.
     sections: [
       { label: "Electric", items: navLinks.electric },
-      { label: "Vehicle data", items: navLinks.cars, withOverview: true },
+      { label: "Vehicle data", items: navLinks.cars },
       { label: "Tools", items: navLinks.tools },
     ],
   },

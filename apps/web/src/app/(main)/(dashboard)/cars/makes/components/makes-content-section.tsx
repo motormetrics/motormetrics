@@ -2,6 +2,7 @@ import { slugify } from "@motormetrics/utils/slugify";
 import { ConcentrationCard } from "@web/app/(main)/(dashboard)/cars/makes/components/concentration-card";
 import { ElectricOnlyMakes } from "@web/app/(main)/(dashboard)/cars/makes/components/electric-only-makes";
 import { FastestGrowing } from "@web/app/(main)/(dashboard)/cars/makes/components/fastest-growing";
+import { MakesLead } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-head";
 import { MakesIndex } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-index";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import {
@@ -67,7 +68,7 @@ async function MakesDirectory() {
 }
 
 /**
- * Everything under the page head. No section is wrapped whole in a Suspense
+ * The page's sections, in the artboard's order and then the rest. No section is wrapped whole in a Suspense
  * boundary: the ones that read only cached data are part of the static shell,
  * and the ones that follow the search params keep their headings in the shell
  * and hold their own boundaries around the parts that wait.
@@ -81,15 +82,25 @@ export function MakesContentSection({
     <>
       <MakesItemList />
 
-      <SectionErrorBoundary title="Makes index unavailable">
+      <SectionErrorBoundary title="Share of new cars unavailable">
+        <ConcentrationCard searchParams={searchParams} />
+      </SectionErrorBoundary>
+
+      <Hairline />
+
+      <SectionErrorBoundary title="Makes list unavailable">
         <MakesIndex searchParams={searchParams} />
       </SectionErrorBoundary>
 
       <Hairline />
 
-      <SectionErrorBoundary title="Market concentration unavailable">
-        <ConcentrationCard searchParams={searchParams} />
-      </SectionErrorBoundary>
+      {/* The artboard ends at the list. What follows is what the page had
+          before and the artboard leaves out. */}
+      <section className="flex flex-col gap-2">
+        <SectionErrorBoundary title="Makes summary unavailable">
+          <MakesLead />
+        </SectionErrorBoundary>
+      </section>
 
       <Hairline />
 

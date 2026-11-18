@@ -16,11 +16,11 @@ describe("Footer", () => {
     const sections = screen.getByRole("navigation", { name: "Site sections" });
 
     for (const [name, href] of [
-      ["Cars overview", "/cars"],
+      ["New registrations", "/cars"],
       ["COE overview", "/coe"],
       ["PARF calculator", "/cars/parf"],
       ["EV charging", "/cars/electric-vehicles/charging"],
-      ["Premiums by category", "/coe/premiums"],
+      ["Premium history", "/coe/results"],
     ]) {
       await expect
         .element(sections.getByRole("link", { name }))

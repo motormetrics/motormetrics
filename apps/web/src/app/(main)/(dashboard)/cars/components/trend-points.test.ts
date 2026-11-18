@@ -1,4 +1,4 @@
-import { trendPoints } from "@web/app/(main)/(dashboard)/cars/registrations/components/trend-points";
+import { trendPoints } from "@web/app/(main)/(dashboard)/cars/components/trend-points";
 import { shiftMonth } from "@web/utils/dates/month-arithmetic";
 
 const seriesOf = (start: string, length: number) =>

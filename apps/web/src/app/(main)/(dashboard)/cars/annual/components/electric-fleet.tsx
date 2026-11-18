@@ -12,9 +12,12 @@ export const FLEET_YEARS = 4;
  */
 export function ElectricFleet({
   entity,
+  linked = true,
   years,
 }: {
   entity: PopulationEntity;
+  /** The link out to the electric vehicles page; that page itself omits it. */
+  linked?: boolean;
   years: string[];
 }) {
   const electric = entity.electric.at(-1) ?? 0;
@@ -33,9 +36,13 @@ export function ElectricFleet({
   return (
     <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
-        caption={`Electric ${name} on the road at year end`}
-        link={{ href: "/cars/electric-vehicles", label: "All electric data" }}
-        title="Electric fleet"
+        caption="31 December each year"
+        link={
+          linked
+            ? { href: "/cars/electric-vehicles", label: "All electric data" }
+            : undefined
+        }
+        title={`Electric ${name} on the road`}
       />
 
       <div className="flex items-baseline gap-2">

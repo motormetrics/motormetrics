@@ -1,11 +1,11 @@
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/search-params";
-import { MonthMenu } from "@web/components/shared/month-menu";
+import { MonthSelect } from "@web/components/shared/month-select";
 import { getCarsMonths } from "@web/queries/cars";
 import { getMonthOrLatest } from "@web/utils/dates/months";
 import type { SearchParams } from "nuqs/server";
 
 /**
- * The month menu in the page eyebrow. Writes to `?month=`, which every block
+ * The month select in the page head. Writes to `?month=`, which every block
  * on the page reads back.
  */
 export async function CarsMonthPicker({
@@ -26,7 +26,7 @@ export async function CarsMonthPicker({
   const { wasAdjusted } = await getMonthOrLatest(requestedMonth, "cars");
 
   return (
-    <MonthMenu
+    <MonthSelect
       latestMonth={months[0]}
       months={months}
       wasAdjusted={wasAdjusted}

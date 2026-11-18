@@ -1,4 +1,8 @@
-import { changeLabel } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-index";
+import {
+  changeFigure,
+  changeHeading,
+  changeLabel,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/makes-index";
 import { rangeTabLabel } from "@web/app/(main)/(dashboard)/cars/makes/components/range-tabs";
 
 describe("changeLabel", () => {
@@ -24,6 +28,29 @@ describe("changeLabel", () => {
     expect(changeLabel({ count: 30, yoyChange: null }, "ytd", "2026-10")).toBe(
       "no 2025 base",
     );
+  });
+});
+
+describe("changeHeading", () => {
+  it("should name the previous year for the year to date", () => {
+    expect(changeHeading("ytd", "2026-10")).toBe("On 2025");
+  });
+
+  it("should say a year earlier for the other periods", () => {
+    expect(changeHeading("month", "2026-10")).toBe("On a year earlier");
+    expect(changeHeading("12m", "2026-10")).toBe("On a year earlier");
+  });
+});
+
+describe("changeFigure", () => {
+  it("should give the signed change with a true minus", () => {
+    expect(changeFigure({ count: 1200, yoyChange: 20 })).toBe("+20.0%");
+    expect(changeFigure({ count: 800, yoyChange: -20 })).toBe("−20.0%");
+  });
+
+  it("should give a dash when the change is withheld", () => {
+    expect(changeFigure({ count: 30, yoyChange: 200 })).toBe("–");
+    expect(changeFigure({ count: 30, yoyChange: null })).toBe("–");
   });
 });
 

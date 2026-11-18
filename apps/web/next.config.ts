@@ -36,6 +36,10 @@ const LEGACY_PATH_REDIRECTS = [
   ],
   // Added 2026-10-29, review 2027-10-29: the page moved into the blog.
   ["/coe/category-merger", "/blog/lta-coe-category-merger-proposal"],
+  // Added 2026-11-18: folded into the pages they overlapped. Query strings
+  // carry over, and both destinations read the old pages' parameters.
+  ["/coe/premiums", "/coe/results"],
+  ["/cars/registrations", "/cars"],
 ] as const;
 
 // Static CSP, not nonce-based: a nonce needs a per-request render, which

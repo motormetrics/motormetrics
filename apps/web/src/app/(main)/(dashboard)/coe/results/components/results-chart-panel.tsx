@@ -14,21 +14,42 @@ import {
   type RegionProps,
 } from "@web/app/(main)/(dashboard)/coe/results/components/results-shared";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
+import { LegendItem } from "@web/components/shared/legend-item";
 import { SourceNote } from "@web/components/shared/overview";
+import type { COECategory } from "@web/types";
 import { formatMonthShortName } from "@web/utils/dates/format-month";
 
 /** The categories switched on, in LTA's order. */
 const plottedOf = (selected: string[]) =>
   COE_CATEGORIES.filter((category) => selected.includes(category));
 
-/** " · Last 26 exercises", after Figure 1's eyebrow. */
-export async function ResultsChartCount({ searchParams }: RegionProps) {
-  const { exercises } = await loadExercises(searchParams);
+/** One swatch class per category, in the order of `CATEGORY_COLOURS`. */
+const LEGEND_CLASSES: Record<COECategory, string> = {
+  "Category A": "bg-chart-1",
+  "Category B": "bg-chart-2",
+  "Category C": "bg-chart-3",
+  "Category D": "bg-chart-4",
+  "Category E": "bg-chart-5",
+};
 
-  return ` · Last ${exercises.length} exercises`;
+/** The legend for the categories switched on. */
+export async function ResultsChartLegend({ searchParams }: RegionProps) {
+  const { selected } = await loadExercises(searchParams);
+
+  return (
+    <div className="flex flex-wrap gap-x-4 gap-y-2">
+      {plottedOf(selected).map((category) => (
+        <LegendItem
+          className={LEGEND_CLASSES[category]}
+          key={category}
+          label={category}
+        />
+      ))}
+    </div>
+  );
 }
 
-/** Figure 1's caption, for the categories switched on. */
+/** The premium trend's caption, for the categories switched on. */
 export async function ResultsChartCaption({ searchParams }: RegionProps) {
   const { exercises, selected } = await loadExercises(searchParams);
 

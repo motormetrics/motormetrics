@@ -1,8 +1,11 @@
 "use client";
 
 import { cn } from "@heroui/react";
-import { Segment } from "@heroui-pro/react";
-import { RANGES } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
+import { NativeSelect, Segment } from "@heroui-pro/react";
+import {
+  RANGE_LABELS,
+  RANGES,
+} from "@web/app/(main)/(dashboard)/cars/components/ranges";
 import { parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
 import posthog from "posthog-js";
 import { useTransition } from "react";
@@ -10,18 +13,18 @@ import { useTransition } from "react";
 /*
  * URL state with `shallow: false` throughout, so the server re-renders every
  * block against the new selection — the sections stay server components and no
- * registration data crosses into the client bundle. Same approach as
- * `cars/makes/components/range-menu.tsx`.
+ * registration data crosses into the client bundle.
  */
 
-/** Segment keys cannot be null, so the unfiltered view takes its own key. */
-const ALL_FUEL_TYPES = "all";
+/** An option cannot carry null, so the unfiltered view takes the empty value. */
+const ALL_FUEL_TYPES = "";
 
 /**
- * Fuel types as LTA records them, passed in from the server rather than listed
- * here — a new value in a DataMall drop should appear on its own.
+ * The fuel type the page is narrowed to. Fuel types are as LTA records them,
+ * passed in from the server rather than listed here — a new value in a
+ * DataMall drop should appear on its own.
  */
-export function FuelTypeTabs({ fuelTypes }: { fuelTypes: string[] }) {
+export function FuelTypeSelect({ fuelTypes }: { fuelTypes: string[] }) {
   const [isPending, startTransition] = useTransition();
   const [selected, setSelected] = useQueryState(
     "fuelType",
@@ -29,32 +32,32 @@ export function FuelTypeTabs({ fuelTypes }: { fuelTypes: string[] }) {
   );
 
   return (
-    // The comp scrolls the fuel types sideways on a phone rather than letting
-    // six labels squeeze into one row.
-    <div className="max-w-full overflow-x-auto">
-      <Segment
+    <NativeSelect fullWidth>
+      <NativeSelect.Trigger
+        aria-busy={isPending}
         aria-label="Fuel type"
-        className={cn(isPending && "opacity-70")}
-        onSelectionChange={(key) => {
-          const next = key === ALL_FUEL_TYPES ? null : String(key);
+        onChange={(event) => {
+          const next =
+            event.target.value === ALL_FUEL_TYPES ? null : event.target.value;
           posthog.capture("dashboard_filter_changed", {
             filter: "fuel_type",
             value: next,
           });
           setSelected(next);
         }}
-        selectedKey={selected ?? ALL_FUEL_TYPES}
-        size="sm"
-        variant="ghost"
+        value={selected ?? ALL_FUEL_TYPES}
       >
-        <Segment.Item id={ALL_FUEL_TYPES}>All fuel types</Segment.Item>
+        <NativeSelect.Option value={ALL_FUEL_TYPES}>
+          All fuel types
+        </NativeSelect.Option>
         {fuelTypes.map((fuelType) => (
-          <Segment.Item id={fuelType} key={fuelType}>
+          <NativeSelect.Option key={fuelType} value={fuelType}>
             {fuelType}
-          </Segment.Item>
+          </NativeSelect.Option>
         ))}
-      </Segment>
-    </div>
+        <NativeSelect.Indicator />
+      </NativeSelect.Trigger>
+    </NativeSelect>
   );
 }
 
@@ -70,8 +73,8 @@ export function RangeTabs() {
 
   return (
     <Segment
-      aria-label="Chart range"
-      className={cn("max-md:w-full", isPending && "opacity-70")}
+      aria-label="Trend range"
+      className={cn("w-full", isPending && "opacity-70")}
       onSelectionChange={(key) => {
         const next = RANGES.find((option) => option === key);
         if (!next) {
@@ -84,16 +87,12 @@ export function RangeTabs() {
         setRange(next);
       }}
       selectedKey={range}
-      size="sm"
+      size="md"
       variant="ghost"
     >
       {RANGES.map((option) => (
-        <Segment.Item
-          className="max-md:flex-1 max-md:px-2"
-          id={option}
-          key={option}
-        >
-          {option}
+        <Segment.Item className="flex-1 px-2" id={option} key={option}>
+          {RANGE_LABELS[option]}
         </Segment.Item>
       ))}
     </Segment>

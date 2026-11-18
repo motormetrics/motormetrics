@@ -1,6 +1,5 @@
 import { cn, ProgressBar } from "@heroui/react";
 import { DeltaChip } from "@web/components/shared/delta-chip";
-import { MakeAvatar } from "@web/components/shared/make-avatar";
 
 const HEADER = "pb-2 font-semibold text-muted text-xs";
 const formatCount = (value: number): string => value.toLocaleString("en-SG");
@@ -38,69 +37,6 @@ function ShareCell({
         {share.toFixed(1)}%
       </span>
     </span>
-  );
-}
-
-const MAKE_ROW = "flex items-center gap-4 max-md:gap-2";
-const RANK_CELL = "w-5 shrink-0";
-const MAKE_CELL = "flex min-w-0 flex-1 items-center gap-2";
-const MAKE_CARS_CELL = "w-16 shrink-0 text-right max-md:w-14";
-const MAKE_SHARE_CELL = "w-36 shrink-0 max-md:w-12";
-
-/** The year's leading makes, ranked, with logos and their share of the year. */
-export function TopMakesTable({
-  makes,
-  total,
-}: {
-  makes: { logoUrl: string | null; make: string; value: number }[];
-  /** Every new car registered in the year, which the shares are of. */
-  total: number;
-}) {
-  const leader = Math.max(1, ...makes.map((item) => item.value));
-
-  return (
-    <div className="flex flex-col">
-      <div className={cn(MAKE_ROW, HEADER)}>
-        <span className={RANK_CELL}>#</span>
-        <span className={MAKE_CELL}>Make</span>
-        <span className={MAKE_CARS_CELL}>Cars</span>
-        <span className={cn(MAKE_SHARE_CELL, "text-right")}>Share</span>
-      </div>
-      <ol className="flex flex-col">
-        {makes.map((item, index) => (
-          <li className={cn(MAKE_ROW, "py-2")} key={item.make}>
-            {/* The comp picks out the podium: the top three ranks in accent. */}
-            <span
-              className={cn(
-                RANK_CELL,
-                "text-sm tabular-nums",
-                index < 3 ? "font-semibold text-accent" : "text-muted",
-              )}
-            >
-              {index + 1}
-            </span>
-            <span className={MAKE_CELL}>
-              <MakeAvatar logoUrl={item.logoUrl} make={item.make} size="sm" />
-              <span className="truncate font-medium text-sm">{item.make}</span>
-            </span>
-            <span
-              className={cn(
-                MAKE_CARS_CELL,
-                "font-semibold text-sm tabular-nums",
-              )}
-            >
-              {formatCount(item.value)}
-            </span>
-            <ShareCell
-              barLabel={`${item.make} against the leader`}
-              className={MAKE_SHARE_CELL}
-              scaled={(item.value / leader) * 100}
-              share={(item.value / (total || 1)) * 100}
-            />
-          </li>
-        ))}
-      </ol>
-    </div>
   );
 }
 

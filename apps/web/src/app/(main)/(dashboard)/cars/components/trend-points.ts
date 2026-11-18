@@ -1,5 +1,5 @@
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import type { TrendPoint } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-trend-chart";
+import type { TrendPoint } from "@web/app/(main)/(dashboard)/cars/components/registrations-trend-chart";
 import { formatChartMonth } from "@web/utils/dates/format-month";
 
 /**

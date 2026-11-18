@@ -43,9 +43,11 @@ const formatCount = (value: number) => value.toLocaleString("en-SG");
 
 /** The links the comp lists under the key numbers, to each figure below. */
 const JUMP_LINKS = [
-  { href: "#ev-mix", label: "Electrified mix" },
-  { href: "#ev-trend", label: "Registrations trend" },
-  { href: "#ev-makes", label: "Makes and adoption" },
+  { href: "#ev-trend", label: "Registrations by month" },
+  { href: "#ev-mix", label: "New cars by fuel type" },
+  { href: "#ev-makes", label: "Leading electric makes" },
+  { href: "#ev-road", label: "On the road" },
+  { href: "#ev-share", label: "Electric share by month" },
   { href: "#ev-charging", label: "Charging and incentives" },
 ];
 
@@ -85,7 +87,7 @@ async function HeroFigures({ selection }: SelectionProps) {
       />
       {range ? (
         <RangeBar
-          ariaLabel={`EV share over the ${range.count} months to ${formatMonthLabel(month)}: low ${range.low.toFixed(1)}%, high ${range.high.toFixed(1)}%, now ${range.latest.toFixed(1)}%. ${range.where}.`}
+          ariaLabel={`Electric share over the ${range.count} months to ${formatMonthLabel(month)}: low ${range.low.toFixed(1)}%, high ${range.high.toFixed(1)}%, now ${range.latest.toFixed(1)}%. ${range.where}.`}
           high={range.high}
           highLabel={`High ${range.high.toFixed(1)}%`}
           low={range.low}
@@ -99,7 +101,7 @@ async function HeroFigures({ selection }: SelectionProps) {
 }
 
 /**
- * Direction D's range hero: the battery-electric share of the month's new
+ * The range hero: the electric share of the month's new
  * cars, its change on the month before, and where it sits in the trailing
  * year. The label is in the static shell; the figures wait on the month.
  */
@@ -109,7 +111,7 @@ export function EvHero({ selection }: SelectionProps) {
       label={
         <>
           <span className="font-semibold text-foreground">
-            EV share of new registrations
+            Electric share of new cars
           </span>{" "}
           ·{" "}
           <Suspense fallback=" ">
@@ -141,8 +143,8 @@ export async function EvLead({ selection }: SelectionProps) {
   });
 }
 
-/** Battery-electric vehicles of every class on the road, latest year. */
-async function loadElectricFleet() {
+/** Electric vehicles of every type on the road at the latest year end. */
+async function loadElectricOnTheRoad() {
   const [byFuelType, totals] = await Promise.all([
     getVehiclePopulationByYearAndFuelType(),
     getVehiclePopulationYearlyTotals(),
@@ -150,49 +152,59 @@ async function loadElectricFleet() {
   // Yearly totals come back newest year first.
   const year = totals.at(0)?.year;
 
-  return byFuelType
+  const total = byFuelType
     .filter(
       (row) =>
         row.year === year && row.fuelType === ELECTRIC_POPULATION_FUEL_TYPE,
     )
     .reduce((sum, row) => sum + row.total, 0);
+
+  return { total, year };
 }
 
 async function EvKeyNumberItems({ selection }: SelectionProps) {
   const { month } = await selection;
-  const [data, fleet, network, monthly] = await Promise.all([
+  const [data, onTheRoad, network, monthly] = await Promise.all([
     loadEvMonth(month),
-    loadElectricFleet(),
+    loadElectricOnTheRoad(),
     getEvChargingNetworkSummary(),
     getEvChargingRegistrationsByMonth(),
   ]);
   const growth = deriveChargingNetworkGrowth(monthly);
-  const monthName = data ? formatMonthName(data.point.month) : "";
+  const monthLabel = data ? formatMonthLabel(data.point.month) : "";
 
   const keyNumbers = [
     ...(data
       ? [
           {
-            label: `Battery-electric cars, ${monthName}`,
+            label: `Share of new cars, ${monthLabel}`,
+            note:
+              data.previousMonth && data.previousShare !== undefined
+                ? `${formatPoints(data.share - data.previousShare)} on ${formatMonthName(data.previousMonth)}`
+                : undefined,
+            value: `${data.share.toFixed(1)}%`,
+          },
+          {
+            label: `New electric cars, ${monthLabel}`,
             note: `of ${formatCount(data.total)} new cars`,
             value: formatCount(data.point.BEV),
           },
           {
-            label: `Electrified share, ${monthName}`,
+            label: `Electric and petrol-electric share, ${monthLabel}`,
             note:
               data.previousMonth && data.previousElectrifiedShare !== undefined
-                ? `${formatPoints(data.electrifiedShare - data.previousElectrifiedShare)} vs ${formatMonthName(data.previousMonth)}`
-                : "Battery-electric and hybrids",
+                ? `${formatPoints(data.electrifiedShare - data.previousElectrifiedShare)} on ${formatMonthName(data.previousMonth)}`
+                : undefined,
             value: `${data.electrifiedShare.toFixed(1)}%`,
           },
         ]
       : []),
-    ...(fleet > 0
+    ...(onTheRoad.total > 0
       ? [
           {
-            label: "EVs on the road",
-            note: "The fleet, not new registrations",
-            value: formatCount(fleet),
+            label: "Electric vehicles on the road",
+            note: `All vehicle types, 31 December ${onTheRoad.year}`,
+            value: formatCount(onTheRoad.total),
           },
         ]
       : []),
@@ -220,19 +232,17 @@ async function EvKeyNumberItems({ selection }: SelectionProps) {
 }
 
 /**
- * The key numbers beside the page head, then links to each figure. They sit
- * in their own column of the head grid, so on a wide page they start level
- * with the title.
+ * The key numbers in the right sidebar, under the filters, then links to
+ * each figure.
  */
 export function EvKeyNumbers({ selection }: SelectionProps) {
   return (
     <KeysAside
-      eyebrow="Key numbers"
+      eyebrow="Electric cars"
       jump={JUMP_LINKS}
       label="Key numbers"
       source="Source: LTA via DataMall; charging points from LTA."
     >
-      {/* Four across, under the head or in its right half. */}
       <KeyNumberGrid besideHead={4}>
         <Suspense
           fallback={<Skeleton className="col-span-full my-4 h-16 w-full" />}

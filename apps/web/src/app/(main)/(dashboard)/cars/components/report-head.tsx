@@ -1,14 +1,12 @@
 import { Typography } from "@heroui/react";
+import { FuelTypeSelect } from "@web/app/(main)/(dashboard)/cars/components/filters";
 import {
   CountRangeHero,
   changeLabel,
   rangeSummary,
 } from "@web/app/(main)/(dashboard)/cars/components/range-hero";
-import { FuelTypeTabs } from "@web/app/(main)/(dashboard)/cars/registrations/components/filters";
-import {
-  loadSearchParams,
-  RANGE_MONTHS,
-} from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
+import { RANGE_MONTHS } from "@web/app/(main)/(dashboard)/cars/components/ranges";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/search-params";
 import { KeyNumberList } from "@web/components/shared/key-numbers";
 import { getDistinctFuelTypes } from "@web/queries/cars";
 import {
@@ -142,9 +140,11 @@ export async function ReportFuel({ searchParams }: ReportProps) {
 }
 
 /** The fuel type filter, with the values LTA records passed in. */
-export async function ReportFuelTabs() {
+export async function ReportFuelSelect() {
   const fuelTypes = await getDistinctFuelTypes();
-  return <FuelTypeTabs fuelTypes={fuelTypes.map(({ fuelType }) => fuelType)} />;
+  return (
+    <FuelTypeSelect fuelTypes={fuelTypes.map(({ fuelType }) => fuelType)} />
+  );
 }
 
 export async function ReportHero({ searchParams }: ReportProps) {
@@ -205,39 +205,52 @@ export async function ReportLead({ searchParams }: ReportProps) {
   );
 }
 
+/**
+ * The rail's figures: the selected month against the one before, the year so
+ * far, and the average and best of the latest twelve months.
+ */
 export async function ReportKeyNumbers({ searchParams }: ReportProps) {
   const {
     bestMonth,
     comparison,
+    history,
+    month,
     monthlyAverage,
     previousValue,
+    value,
     year,
     yearMonths,
   } = await loadRegistrationsReport(searchParams);
+  const best = history.slice(-12).find((row) => row.total === bestMonth);
+  const firstMonth = yearMonths.at(0);
+  const lastMonth = yearMonths.at(-1);
 
   return (
     <KeyNumberList
       items={[
         {
-          label: "Previous month",
-          note: formatMonthLabel(comparison.previousMonth.period),
-          value: formatCount(previousValue),
+          label: formatMonthLabel(month),
+          note: `${previousValue > 0 ? `${value < previousValue ? "−" : "+"}${Math.abs(((value - previousValue) / previousValue) * 100).toFixed(1)}% on` : "Against"} ${formatMonthName(comparison.previousMonth.period)}'s ${formatCount(previousValue)}`,
+          value: formatCount(value),
         },
         {
-          label: `${year} year to date`,
-          note: `${yearMonths.length} months`,
+          label: `${year} to date`,
+          note:
+            firstMonth && lastMonth
+              ? `${formatMonthName(firstMonth.month)} to ${formatMonthName(lastMonth.month)}`
+              : undefined,
           value: formatCount(
             yearMonths.reduce((sum, row) => sum + row.total, 0),
           ),
         },
         {
-          label: "Monthly average",
-          note: "Last 12 months",
+          label: "12-month average",
+          note: "a month",
           value: formatCount(monthlyAverage),
         },
         {
           label: "Best month",
-          note: "Last 12 months",
+          note: best ? formatMonthLabel(best.month) : "Last 12 months",
           value: formatCount(bestMonth),
         },
       ]}

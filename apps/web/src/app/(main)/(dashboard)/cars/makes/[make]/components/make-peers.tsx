@@ -2,6 +2,10 @@ import { cn, Skeleton } from "@heroui/react";
 import { NumberValue } from "@heroui-pro/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import type { MakeSectionProps } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
+import {
+  BarHeader,
+  BarRow,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/bar-row";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import Link from "next/link";
@@ -18,44 +22,49 @@ async function PeerRows({ make, report }: MakeSectionProps) {
   const { logoUrlBySlug, peers } = await report;
   const peerLeader = peers[0]?.count ?? 0;
 
-  return peers.map(({ count, make: peerMake }) => {
-    const isCurrent = peerMake === make;
-    const slug = slugify(peerMake);
-    return (
-      <div className="flex items-center gap-4 py-2" key={peerMake}>
-        <span className="flex min-w-0 flex-1 items-center gap-2 md:w-36 md:flex-none">
-          <MakeAvatar
-            logoUrl={logoUrlBySlug[slug] ?? null}
-            make={peerMake}
-            size="sm"
+  return (
+    <>
+      <BarHeader label="Make" value="Cars" />
+      {peers.map(({ count, make: peerMake }) => {
+        const isCurrent = peerMake === make;
+        const slug = slugify(peerMake);
+        return (
+          <BarRow
+            key={peerMake}
+            label={
+              <>
+                <MakeAvatar
+                  logoUrl={logoUrlBySlug[slug] ?? null}
+                  make={peerMake}
+                  size="sm"
+                />
+                <Link
+                  aria-current={isCurrent ? "page" : undefined}
+                  className={cn(
+                    "truncate font-semibold no-underline hover:underline",
+                    isCurrent
+                      ? "text-accent"
+                      : "text-foreground hover:text-accent",
+                  )}
+                  href={`/cars/makes/${slug}`}
+                >
+                  {peerMake}
+                </Link>
+              </>
+            }
+            percent={(count / (peerLeader || 1)) * 100}
+            value={
+              <NumberValue
+                locale="en-SG"
+                maximumFractionDigits={0}
+                value={count}
+              />
+            }
           />
-          <Link
-            className={cn(
-              "truncate text-sm no-underline",
-              isCurrent
-                ? "font-semibold text-accent"
-                : "font-medium text-foreground hover:text-accent",
-            )}
-            href={`/cars/makes/${slug}`}
-          >
-            {peerMake}
-          </Link>
-        </span>
-        <span className="block h-2.5 min-w-0 flex-1 bg-surface-secondary max-md:hidden">
-          <span
-            className="block h-full rounded-r-xs"
-            style={{
-              background: isCurrent ? "var(--chart-1)" : "var(--chart-5)",
-              width: `${((count / (peerLeader || 1)) * 100).toFixed(1)}%`,
-            }}
-          />
-        </span>
-        <span className="w-16 text-right font-semibold text-sm tabular-nums">
-          <NumberValue locale="en-SG" maximumFractionDigits={0} value={count} />
-        </span>
-      </div>
-    );
-  });
+        );
+      })}
+    </>
+  );
 }
 
 /**
@@ -65,7 +74,7 @@ async function PeerRows({ make, report }: MakeSectionProps) {
  */
 export function MakePeers({ make, report }: MakeSectionProps) {
   return (
-    <section className="flex min-w-0 flex-col gap-4">
+    <section className="flex min-w-0 flex-col gap-4" id="make-peers">
       <SectionHead
         caption={
           // A non-breaking space holds the caption's line until it arrives.
@@ -73,7 +82,6 @@ export function MakePeers({ make, report }: MakeSectionProps) {
             <PeersCaption report={report} />
           </Suspense>
         }
-        eyebrow="Peers"
         link={{ href: "/cars/makes", label: "All makes" }}
         title="Against other makes"
       />

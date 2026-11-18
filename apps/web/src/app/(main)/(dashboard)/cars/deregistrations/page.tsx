@@ -10,11 +10,15 @@ import { DEREGISTRATIONS_FAQS } from "@web/app/(main)/(dashboard)/cars/deregistr
 import { loadDeregistrationsReport } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/report-data";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
-import { MonthMenu } from "@web/components/shared/month-menu";
+import { MonthSelect } from "@web/components/shared/month-select";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { SharePill } from "@web/components/shared/share-pill";
+import { PageHead } from "@web/components/shared/page-head";
+import {
+  PageBody,
+  RelatedLinks,
+  ScopeControl,
+} from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import {
@@ -92,65 +96,71 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
         }}
       />
 
-      {/* Direction D's head: eyebrow, title, range hero, lead, tools and
-          source, with the key numbers beside it once the page is wide and
-          under it before then. Only the figures wait on the selected month. */}
-      <HeadGrid
-        keys={
+      {/* The head carries the title, the month and Share. The month sets
+          what the whole page reports on, so its select sits in the head. */}
+      <PageHead
+        controls={
+          <ScopeControl label="Month">
+            <Suspense fallback={<Skeleton className="h-10 w-40" />}>
+              <DeregistrationsMonthPicker searchParams={searchParams} />
+            </Suspense>
+          </ScopeControl>
+        }
+        sub={
+          <Suspense fallback={<Skeleton className="h-5 w-32" />}>
+            <ReportMonth report={report} />
+          </Suspense>
+        }
+        title="Deregistrations"
+      />
+
+      {/* No filters on this page: the right sidebar holds key figures only. */}
+      <PageBody
+        rail={
           <SectionErrorBoundary title="Key numbers unavailable">
             <DeregistrationsKeyNumbers report={report} />
           </SectionErrorBoundary>
         }
       >
-        <HeadTitle
-          eyebrow={
-            <>
-              Deregistrations ·{" "}
-              <Suspense fallback=" ">
-                <ReportMonth report={report} />
-              </Suspense>
-            </>
-          }
-          title="Vehicle deregistrations"
-        />
-        <SectionErrorBoundary title="Deregistrations summary unavailable">
-          <DeregistrationsHero report={report} />
-        </SectionErrorBoundary>
-        <Typography.Paragraph className="max-w-prose tabular-nums">
-          <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-            <DeregistrationsLead report={report} />
-          </Suspense>
-        </Typography.Paragraph>
-        <div className="flex flex-wrap items-end gap-4">
-          <div className="flex flex-col gap-1">
-            <span className="font-semibold text-muted text-xs">Month</span>
-            <Suspense fallback={<Skeleton className="h-10 w-36" />}>
-              <DeregistrationsMonthPicker searchParams={searchParams} />
+        <section className="flex flex-col gap-4">
+          <SectionErrorBoundary title="Deregistrations summary unavailable">
+            <DeregistrationsHero report={report} />
+          </SectionErrorBoundary>
+          <Typography.Paragraph className="max-w-prose tabular-nums">
+            <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+              <DeregistrationsLead report={report} />
             </Suspense>
-          </div>
-          <SharePill title="Vehicle deregistrations" />
-        </div>
-        <Typography.Paragraph color="muted" size="sm">
-          Source: LTA via DataMall. Scrapped or exported, by the COE category
-          the quota returns to.
-        </Typography.Paragraph>
-      </HeadGrid>
+          </Typography.Paragraph>
+          <Typography.Paragraph color="muted" size="sm">
+            Source: LTA via DataMall. Scrapped or exported, by the COE category
+            the quota returns to.
+          </Typography.Paragraph>
+        </section>
 
-      <Hairline />
+        <Hairline />
 
-      <SectionErrorBoundary title="Deregistrations unavailable">
-        <DeregistrationsReport report={report} />
-      </SectionErrorBoundary>
+        <SectionErrorBoundary title="Deregistrations unavailable">
+          <DeregistrationsReport report={report} />
+        </SectionErrorBoundary>
 
-      <Hairline />
+        <Hairline />
 
-      <StructuredData
-        data={{
-          "@context": "https://schema.org",
-          ...generateFAQPageSchema([{ items: DEREGISTRATIONS_FAQS }]),
-        }}
+        <StructuredData
+          data={{
+            "@context": "https://schema.org",
+            ...generateFAQPageSchema([{ items: DEREGISTRATIONS_FAQS }]),
+          }}
+        />
+        <PageFaq faqs={DEREGISTRATIONS_FAQS} />
+      </PageBody>
+
+      <RelatedLinks
+        links={[
+          { href: "/cars", label: "New registrations" },
+          { href: "/cars/annual", label: "Vehicle population" },
+          { href: "/cars/parf", label: "PARF calculator" },
+        ]}
       />
-      <PageFaq faqs={DEREGISTRATIONS_FAQS} />
     </OverviewPage>
   );
 }
@@ -168,7 +178,7 @@ async function DeregistrationsMonthPicker({
   ]);
 
   return (
-    <MonthMenu
+    <MonthSelect
       latestMonth={months[0]}
       months={months}
       wasAdjusted={wasAdjusted}

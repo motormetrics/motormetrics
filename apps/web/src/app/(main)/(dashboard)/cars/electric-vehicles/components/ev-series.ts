@@ -179,7 +179,7 @@ export function yearToDateMakes(
 
 /**
  * The summary line under the EV makes leaderboard, e.g. "From January to
- * September 2026, 2,920 battery-electric cars were registered; BMW led with
+ * September 2026, 2,920 electric cars were registered; BMW led with
  * 1,204, ahead of Mercedes-Benz and Audi." Plain text gives search engines
  * the year's figures as a sentence, not only as table cells.
  *
@@ -204,7 +204,7 @@ export function summariseLeaderboard(
     .map(({ make }) => make)
     .join(" and ");
 
-  return `${period}, ${total.toLocaleString("en-SG")} battery-electric cars were registered; ${leader.make} led with ${leader.count.toLocaleString("en-SG")}${ahead ? `, ahead of ${ahead}` : ""}.`;
+  return `${period}, ${total.toLocaleString("en-SG")} electric cars were registered; ${leader.make} led with ${leader.count.toLocaleString("en-SG")}${ahead ? `, ahead of ${ahead}` : ""}.`;
 }
 
 /**

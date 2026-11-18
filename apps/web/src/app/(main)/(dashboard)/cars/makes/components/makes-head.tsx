@@ -5,8 +5,11 @@ import {
   type MakeRow,
   periodLabel,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { KeyNumberList } from "@web/components/shared/key-numbers";
+import { getCarsLatestMonth } from "@web/queries/cars";
 import { formatMonthLabel } from "@web/utils/dates/format-month";
+import type { SearchParams } from "nuqs/server";
 
 /** How many makes "the largest makes" counts. */
 const LEADERS = 5;
@@ -37,10 +40,24 @@ export function leadSentence(rows: readonly MakeRow[], period: string) {
   return `${second.make} (${second.share.toFixed(1)}%) and ${third.make} (${third.share.toFixed(1)}%) followed ${first.make} from ${period}, and ${tail}.`;
 }
 
+/** The period the page reports on, under the title. It follows `?range=`. */
+export async function MakesPeriod({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const [{ range }, latestMonth] = await Promise.all([
+    loadSearchParams(searchParams),
+    getCarsLatestMonth(),
+  ]);
+
+  return latestMonth ? periodLabel(latestMonth, range) : null;
+}
+
 /**
- * The lead and source line under the title, in Direction D's wording. Both
- * describe the year to date whatever period the index shows, so the head
- * reads no search params and stays in the static shell.
+ * The year's summary sentence and its source line. Both describe the year to
+ * date whatever period the list shows, so they read no search params and stay
+ * in the static shell.
  */
 export async function MakesLead() {
   const { latestMonth, rows } = await loadMakeRows("ytd", null);
@@ -62,9 +79,8 @@ export async function MakesLead() {
 }
 
 /**
- * The key numbers beside the page head, for the year to date. They sit in
- * their own column of the head grid, so on a wide page they start level with
- * the title.
+ * The key numbers in the right sidebar, under the filters. They describe the
+ * year to date whatever the period and fuel type are set to.
  */
 export async function MakesKeyNumbers() {
   const [ytd, month, electricOnly] = await Promise.all([
@@ -118,9 +134,8 @@ export async function MakesKeyNumbers() {
         size="xs"
         weight="semibold"
       >
-        Key numbers
+        Key numbers · {latestMonth.slice(0, 4)} to date
       </Typography.Paragraph>
-      {/* Four across, under the head or in its right half. */}
       <KeyNumberList besideHead={4} items={keyNumbers} />
       <Typography.Paragraph color="muted" size="xs">
         Source: LTA via DataMall.

@@ -21,7 +21,7 @@ const point: EvMonthlyTrend = {
 };
 
 const segments = [
-  { colour: "bev", key: "bev" as const, label: "Battery-electric" },
+  { colour: "bev", key: "bev" as const, label: "Electric" },
   { colour: "phev", key: "phev" as const, label: "Plug-in hybrid" },
   { colour: "hybrid", key: "hybrid" as const, label: "Hybrid" },
 ];
@@ -132,7 +132,7 @@ describe("buildRegistrationSplit", () => {
     const split = buildRegistrationSplit(point, 6000, segments, combustion);
 
     expect(split.map(({ label }) => label)).toEqual([
-      "Battery-electric",
+      "Electric",
       "Plug-in hybrid",
       "Hybrid",
       "Petrol & diesel",
@@ -213,7 +213,7 @@ describe("batteryElectricMakes", () => {
     },
   ];
 
-  it("should rank battery-electric makes by count", () => {
+  it("should rank electric makes by count", () => {
     expect(batteryElectricMakes(fuelTypes)).toEqual([
       { make: "Tesla", count: 300 },
       { make: "BYD", count: 200 },
@@ -238,19 +238,19 @@ describe("summariseLeaderboard", () => {
 
   it("should name the period, the total and the top three makes", () => {
     expect(summariseLeaderboard(makes, "2026-09")).toBe(
-      "From January to September 2026, 2,920 battery-electric cars were registered; BMW led with 1,204, ahead of Mercedes-Benz and Audi.",
+      "From January to September 2026, 2,920 electric cars were registered; BMW led with 1,204, ahead of Mercedes-Benz and Audi.",
     );
   });
 
   it("should name the single month in January", () => {
     expect(summariseLeaderboard(makes.slice(0, 2), "2026-01")).toBe(
-      "In January 2026, 2,184 battery-electric cars were registered; BMW led with 1,204, ahead of Mercedes-Benz.",
+      "In January 2026, 2,184 electric cars were registered; BMW led with 1,204, ahead of Mercedes-Benz.",
     );
   });
 
   it("should drop the runners-up when only one make registered", () => {
     expect(summariseLeaderboard(makes.slice(0, 1), "2026-03")).toBe(
-      "From January to March 2026, 1,204 battery-electric cars were registered; BMW led with 1,204.",
+      "From January to March 2026, 1,204 electric cars were registered; BMW led with 1,204.",
     );
   });
 

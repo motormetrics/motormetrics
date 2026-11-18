@@ -1,21 +1,16 @@
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { slugify } from "@motormetrics/utils/slugify";
-import { FuelTypeTable } from "@web/app/(main)/(dashboard)/cars/registrations/components/fuel-type-table";
-import {
-  TopMakesTable,
-  VehicleTypeTable,
-} from "@web/app/(main)/(dashboard)/cars/registrations/components/makes-and-types";
-import { RegistrationsTrendChart } from "@web/app/(main)/(dashboard)/cars/registrations/components/registrations-trend-chart";
+import { FuelTypeTable } from "@web/app/(main)/(dashboard)/cars/components/fuel-type-table";
+import { VehicleTypeTable } from "@web/app/(main)/(dashboard)/cars/components/makes-and-types";
+import type { Range } from "@web/app/(main)/(dashboard)/cars/components/ranges";
+import { RegistrationsTrendChart } from "@web/app/(main)/(dashboard)/cars/components/registrations-trend-chart";
 import {
   formatCount,
   loadRegistrationsReport,
   lookup,
   type ReportProps,
-} from "@web/app/(main)/(dashboard)/cars/registrations/components/report-head";
-import { trendPoints } from "@web/app/(main)/(dashboard)/cars/registrations/components/trend-points";
-import type { Range } from "@web/app/(main)/(dashboard)/cars/registrations/search-params";
+} from "@web/app/(main)/(dashboard)/cars/components/report-head";
+import { trendPoints } from "@web/app/(main)/(dashboard)/cars/components/trend-points";
 import { axisTicks } from "@web/app/(main)/(dashboard)/components/overview-series";
-import { getCarLogoMap } from "@web/queries/logos";
 import { percentageChange } from "@web/utils/change-ratio";
 import {
   formatChartMonth,
@@ -25,8 +20,8 @@ import {
 import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 
 /**
- * The figures under the head: the trend, the fuel type table and the makes
- * and vehicle types. Each piece reads the shared report and streams on its
+ * The figures under the head: the trend, the fuel type table and the vehicle
+ * types. Each piece reads the shared report and streams on its
  * own, so the figure headings stay in the static shell.
  */
 
@@ -45,9 +40,7 @@ export async function TrendPeriod({ searchParams }: ReportProps) {
 
 export async function TrendTitle({ searchParams }: ReportProps) {
   const { fuelType } = await loadRegistrationsReport(searchParams);
-  return fuelType
-    ? `${fuelType} registrations by month`
-    : "Registrations by month";
+  return fuelType ? `${fuelType} cars by month` : "New cars by month";
 }
 
 /** "Registrations peaked at 6,390 in December 2025 over this window; …" */
@@ -157,57 +150,10 @@ function vehicleTypeRows(
   }));
 }
 
-/**
- * "BYD led 2026 to date with 9,028 cars (24.6%); SUVs were 64.9% of cars
- * registered in August 2026, +13.7% on August 2025."
- */
-export async function MixCaption({ searchParams }: ReportProps) {
-  const report = await loadRegistrationsReport(searchParams);
-  const [leader] = report.topMakes;
-  const [type] = vehicleTypeRows(report);
-  const parts: string[] = [];
-
-  if (leader && report.yearTotal > 0) {
-    parts.push(
-      `${leader.make} led ${report.year} to date with ${formatCount(leader.value)} cars (${((leader.value / report.yearTotal) * 100).toFixed(1)}%)`,
-    );
-  }
-  if (type && report.registrations.total > 0) {
-    const sign = type.change < 0 ? "−" : "+";
-    parts.push(
-      `${type.name} was ${((type.count / report.registrations.total) * 100).toFixed(1)}% of cars registered in ${formatMonthLabel(report.month)}, ${sign}${Math.abs(type.change).toFixed(1)}% on ${formatMonthLabel(report.comparison.previousYear.period)}`,
-    );
-  }
-
-  return parts.length ? `${parts.join("; ")}.` : null;
-}
-
-/** "2026 year to date". */
-export async function ReportYear({ searchParams }: ReportProps) {
-  const { year } = await loadRegistrationsReport(searchParams);
-  return String(year);
-}
-
 /** "August 2026 · against August 2025". */
 export async function VehicleTypePeriod({ searchParams }: ReportProps) {
   const { comparison, month } = await loadRegistrationsReport(searchParams);
   return `${formatMonthLabel(month)} · against ${formatMonthLabel(comparison.previousYear.period)}`;
-}
-
-export async function TopMakes({ searchParams }: ReportProps) {
-  const report = await loadRegistrationsReport(searchParams);
-  const logoUrlBySlug = await getCarLogoMap();
-
-  return (
-    <TopMakesTable
-      makes={report.topMakes.map(({ make, value }) => ({
-        logoUrl: logoUrlBySlug[slugify(make)] ?? null,
-        make,
-        value,
-      }))}
-      total={report.yearTotal}
-    />
-  );
 }
 
 export async function VehicleTypes({ searchParams }: ReportProps) {

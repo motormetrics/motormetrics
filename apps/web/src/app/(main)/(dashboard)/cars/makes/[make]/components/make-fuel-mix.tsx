@@ -1,82 +1,104 @@
 import { Skeleton } from "@heroui/react";
-import type { MakeSectionProps } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
+import type {
+  MakeReportData,
+  MakeSectionProps,
+} from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-report";
 import { percentage } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/percentage";
+import {
+  BarHeader,
+  BarRow,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/bar-row";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { Suspense } from "react";
 
-async function FuelMixCaption({ make, report }: MakeSectionProps) {
+async function MixCaption({ report }: Pick<MakeSectionProps, "report">) {
   const { periodCaption } = await report;
 
-  return `Share of every ${make} registered · ${periodCaption}`;
+  return periodCaption;
 }
 
-/** One stacked bar of every fuel type, and a legend row for each. */
-async function FuelMixFigure({ make, report }: MakeSectionProps) {
-  const { fuelMix, makeTotal } = await report;
+/** One bar per fuel type or vehicle type, against the largest. */
+async function MixRows({
+  heading,
+  mix,
+  report,
+}: Pick<MakeSectionProps, "report"> & {
+  heading: string;
+  mix: "fuelMix" | "vehicleMix";
+}) {
+  const data: MakeReportData = await report;
+  const rows = data[mix];
+  const leader = rows[0]?.count || 1;
 
   return (
-    <>
-      <div
-        aria-label={`Share of ${make} registrations by fuel type`}
-        className="flex h-4 gap-0.5"
-        role="img"
-      >
-        {fuelMix.map(({ color, count, name }) => (
-          <span
-            className="block h-full"
-            key={name}
-            style={{
-              background: color,
-              width: `${((count / (makeTotal || 1)) * 100).toFixed(2)}%`,
-            }}
-          />
-        ))}
-      </div>
-      <ul className="flex flex-col">
-        {fuelMix.map(({ color, count, name, note }) => (
-          <li className="flex items-center gap-2 py-2" key={name}>
-            <span
-              aria-hidden
-              className="size-3 shrink-0 rounded-xs"
-              style={{ background: color }}
-            />
-            <span className="flex min-w-0 flex-1 flex-col">
-              <span className="truncate text-sm">{name}</span>
-              <span className="truncate text-muted text-xs">{note}</span>
+    <div className="flex flex-col">
+      <BarHeader label={heading} trailing="Share" value="Cars" />
+      {rows.map((row) => (
+        <BarRow
+          key={row.name}
+          label={
+            <span className="flex min-w-0 flex-col">
+              <span className="truncate font-semibold">{row.name}</span>
+              {"note" in row ? (
+                <span className="truncate text-muted text-xs">{row.note}</span>
+              ) : null}
             </span>
-            <span className="font-semibold text-sm tabular-nums">
-              {percentage(count, makeTotal)}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </>
+          }
+          percent={(row.count / leader) * 100}
+          trailing={percentage(row.count, data.makeTotal)}
+          value={row.count.toLocaleString("en-SG")}
+        />
+      ))}
+    </div>
   );
 }
 
 /**
  * Every fuel type the make registered in the period. The heading and the note
- * are in the static shell; the caption and the figure wait behind their own
+ * are in the static shell; the caption and the rows wait behind their own
  * boundaries.
  */
 export function MakeFuelMix({ make, report }: MakeSectionProps) {
   return (
-    <section className="flex min-w-0 flex-col gap-4">
+    <section className="flex min-w-0 flex-col gap-4" id="make-fuel-types">
       <SectionHead
         caption={
           // A non-breaking space holds the caption's line until it arrives.
-          <Suspense fallback={"\u00a0"}>
-            <FuelMixCaption make={make} report={report} />
+          <Suspense fallback={" "}>
+            <MixCaption report={report} />
           </Suspense>
         }
-        eyebrow="Mix"
-        title="Fuel type mix"
+        title="By fuel type"
       />
-      <Suspense fallback={<Skeleton className="h-48 w-full" />}>
-        <FuelMixFigure make={make} report={report} />
+      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+        <MixRows heading="Fuel type" mix="fuelMix" report={report} />
       </Suspense>
       <SourceNote>
-        All fuel types, whatever the fuel type switch is set to.
+        Share of every {make} registered in the period: all fuel types, whatever
+        the fuel type filter is set to.
+      </SourceNote>
+    </section>
+  );
+}
+
+/** Every vehicle type the make registered in the period, as `MakeFuelMix`. */
+export function MakeVehicleMix({ make, report }: MakeSectionProps) {
+  return (
+    <section className="flex min-w-0 flex-col gap-4" id="make-vehicle-types">
+      <SectionHead
+        caption={
+          <Suspense fallback={" "}>
+            <MixCaption report={report} />
+          </Suspense>
+        }
+        title="By vehicle type"
+      />
+      <Suspense fallback={<Skeleton className="h-40 w-full" />}>
+        <MixRows heading="Vehicle type" mix="vehicleMix" report={report} />
+      </Suspense>
+      <SourceNote>
+        Share of every {make} registered in the period: all fuel types, whatever
+        the fuel type filter is set to.
       </SourceNote>
     </section>
   );

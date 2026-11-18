@@ -8,20 +8,21 @@ import {
   TopMakesFigure,
 } from "@web/app/(main)/(dashboard)/components/car-figures";
 import {
+  CategoryATrendFigure,
   CoePremiumsFigure,
-  PqpFigure,
 } from "@web/app/(main)/(dashboard)/components/coe-figures";
 import { buildHomeFaqs } from "@web/app/(main)/(dashboard)/components/faq-data";
 import {
-  MarketHero,
-  MarketKeyNumbers,
+  MarketAsOf,
+  NewCarsKeyNumbers,
+  PqpKeyNumbers,
 } from "@web/app/(main)/(dashboard)/components/market-head";
 import { MarketLinks } from "@web/app/(main)/(dashboard)/components/market-links";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
-import { HeadGrid, HeadTitle } from "@web/components/shared/head-grid";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
-import { SharePill } from "@web/components/shared/share-pill";
+import { PageHead } from "@web/components/shared/page-head";
+import { PageBody, RelatedLinks } from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { LOGO_URL, SITE_TITLE, SITE_URL, SUPPORT_EMAIL } from "@web/config";
 import { BRAND_SOCIAL_PROFILE_URLS } from "@web/config/socials";
@@ -128,59 +129,46 @@ async function HomeFaq() {
 
 export default function HomePage() {
   return (
-    <>
+    <OverviewPage className="gap-8 max-md:gap-6">
       <StructuredData data={webSiteSchema} />
       <OrganizationStructuredData />
 
-      <OverviewPage className="gap-8 max-md:gap-6">
-        {/* Direction D's head: eyebrow, title, the Category A range hero,
-            lead and source, with the key numbers beside it once the page is
-            wide and under it before then. Everything on this page reads
-            cached data only, so it is all part of the static shell and no
-            section needs a Suspense boundary. */}
-        <HeadGrid
-          keys={
-            <SectionErrorBoundary title="Key numbers unavailable">
-              <MarketKeyNumbers />
+      {/* The home page always reports the latest month and exercise: it has
+          no month parameter, so the head carries no scope control and the
+          sidebar no filters. Everything here reads cached data only, so it is
+          all part of the static shell and no section needs a Suspense
+          boundary. */}
+      <PageHead sub={<MarketAsOf />} title="Singapore car market" />
+
+      <PageBody
+        rail={
+          <>
+            <SectionErrorBoundary title="PQP rates unavailable">
+              <PqpKeyNumbers />
             </SectionErrorBoundary>
-          }
-        >
-          <HeadTitle eyebrow="Singapore car market" title="Market overview" />
-          <SectionErrorBoundary title="Headline figures unavailable">
-            <MarketHero />
-          </SectionErrorBoundary>
-          <div>
-            <SharePill title="Market overview" />
-          </div>
-        </HeadGrid>
-
-        <Hairline />
-
-        {/* COE and PQP lead the car figures, as the navigation does. */}
+            <SectionErrorBoundary title="Key numbers unavailable">
+              <NewCarsKeyNumbers />
+            </SectionErrorBoundary>
+          </>
+        }
+      >
+        {/* COE leads the car figures, as the navigation does. */}
         <SectionErrorBoundary title="COE premiums unavailable">
           <CoePremiumsFigure />
         </SectionErrorBoundary>
-
         <Hairline />
-
-        <SectionErrorBoundary title="PQP rates unavailable">
-          <PqpFigure />
+        <SectionErrorBoundary title="Category A premiums unavailable">
+          <CategoryATrendFigure />
         </SectionErrorBoundary>
-
         <Hairline />
-
         <SectionErrorBoundary title="Fuel types unavailable">
           <FuelMixFigure />
         </SectionErrorBoundary>
-
         <Hairline />
-
-        <SectionErrorBoundary title="Top makes unavailable">
+        <SectionErrorBoundary title="Leading makes unavailable">
           <TopMakesFigure />
         </SectionErrorBoundary>
-
         <Hairline />
-
         <SectionErrorBoundary title="Vehicle figures unavailable">
           <RoadFigure />
         </SectionErrorBoundary>
@@ -188,7 +176,17 @@ export default function HomePage() {
         <MarketLinks />
 
         <HomeFaq />
-      </OverviewPage>
-    </>
+      </PageBody>
+
+      <RelatedLinks
+        links={[
+          { href: "/coe", label: "COE bidding results" },
+          { href: "/coe/pqp", label: "PQP rates" },
+          { href: "/cars", label: "New registrations" },
+          { href: "/cars/makes", label: "Makes" },
+          { href: "/learn", label: "Guides" },
+        ]}
+      />
+    </OverviewPage>
   );
 }

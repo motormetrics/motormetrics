@@ -17,10 +17,13 @@ import { useEffect, useMemo, useRef, useTransition } from "react";
  * re-renders the page for the new month.
  */
 export function MonthSelect({
+  fullWidth = false,
   latestMonth,
   months,
   wasAdjusted,
 }: {
+  /** Fill the row at every width, as in the filters panel. */
+  fullWidth?: boolean;
   latestMonth: Month;
   months: Month[];
   wasAdjusted?: boolean;
@@ -47,7 +50,7 @@ export function MonthSelect({
   );
 
   return (
-    <NativeSelect className="max-md:w-full">
+    <NativeSelect className="max-md:w-full" fullWidth={fullWidth}>
       <NativeSelect.Trigger
         aria-busy={isPending}
         aria-label="Month"

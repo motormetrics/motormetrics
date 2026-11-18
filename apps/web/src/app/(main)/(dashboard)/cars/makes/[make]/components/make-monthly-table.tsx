@@ -76,7 +76,7 @@ async function MonthlyRows({ report }: ReportProps) {
  */
 export function MakeMonthlyTable({ make, report }: MakeSectionProps) {
   return (
-    <section className="flex min-w-0 flex-col gap-4 lg:col-span-6">
+    <section className="flex min-w-0 flex-col gap-4">
       <SectionHead
         caption={
           // A non-breaking space holds the caption's line until it arrives.

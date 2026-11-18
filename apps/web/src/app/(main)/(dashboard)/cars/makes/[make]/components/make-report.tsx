@@ -1,25 +1,19 @@
-import { Skeleton } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { EmptyState } from "@heroui-pro/react";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
-import { slugify } from "@motormetrics/utils/slugify";
-import {
-  FuelTypeTabs,
-  PeriodTabs,
-} from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/filters";
 import { GoBackButton } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/go-back-button";
 import { MakeBreakdown } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-breakdown";
-import { MakeFuelMix } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-fuel-mix";
-import { MakeHeadline } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-headline";
+import {
+  MakeFuelMix,
+  MakeVehicleMix,
+} from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-fuel-mix";
 import { MakeMonthlyTable } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-monthly-table";
 import { MakePeers } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-peers";
 import { MakeTrend } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/make-trend";
-import { percentage } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/percentage";
 import { periodWindow } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
 import { summariseMake } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/summary";
 import {
   loadSearchParams,
-  RANGE_LABELS,
   type Range,
 } from "@web/app/(main)/(dashboard)/cars/makes/[make]/search-params";
 import { Hairline } from "@web/components/shared/overview";
@@ -35,10 +29,10 @@ import { formatVehicleType } from "@web/utils/formatting/format-vehicle-type";
 import { FileQuestion, Home } from "lucide-react";
 import Link from "next/link";
 import type { SearchParams } from "nuqs/server";
-import { Suspense } from "react";
+import { cache } from "react";
 
 /** How many makes the peer list shows, the current one always among them. */
-const PEER_COUNT = 5;
+const PEER_COUNT = 8;
 
 function monthsBetween(start: string, end: string): string[] {
   const months: string[] = [];
@@ -72,16 +66,20 @@ function tally<T>(
 
 /**
  * Every figure the report draws for the selected period, month and fuel type.
- * `MakeReport` starts it once and hands the promise to each section, which
- * awaits it behind its own boundary; the queries are `'use cache'`.
+ * `MakeReport` hands the promise to each section, which awaits it behind its
+ * own boundary; the queries are `'use cache'`. Wrapped in React's `cache` so
+ * the filters and the key numbers, which sit outside the report, share the one
+ * computation per request.
  */
-async function loadMakeReport(
+export const loadMakeReport = cache(async function loadMakeReport(
   make: string,
   searchParams: Promise<SearchParams>,
 ) {
-  const params = await loadSearchParams(searchParams);
-  const { fuelType, month: parsedMonth, range } = params;
-  const path = `/cars/makes/${slugify(make)}`;
+  const {
+    fuelType,
+    month: parsedMonth,
+    range,
+  } = await loadSearchParams(searchParams);
   const [{ month }, crossTab, logoUrlBySlug] = await Promise.all([
     getMonthOrLatest(parsedMonth, "cars"),
     getMakeCrossTab(make),
@@ -131,8 +129,6 @@ async function loadMakeReport(
     (row) => row.vehicleType,
     (row) => row.count,
   );
-  const topFuel = fuelTotals[0];
-  const topVehicle = vehicleTotals[0];
 
   // Only the fuel types this make actually registers in the period are offered,
   // plus whichever one is selected, so a filter can always be undone.
@@ -213,7 +209,6 @@ async function loadMakeReport(
     ),
   });
 
-  const rangeLabel = RANGE_LABELS[range];
   const periodCaption =
     range === "month"
       ? formatDateToMonthYear(month)
@@ -221,7 +216,7 @@ async function loadMakeReport(
 
   // Every fuel type the make registered in the period, whatever the switch
   // is set to, each with the two vehicle types that carry its volume.
-  const fuelMix = fuelTotals.map(({ count, name }, index) => {
+  const fuelMix = fuelTotals.map(({ count, name }) => {
     const leading = tally(
       windowRows.filter((row) => row.fuelType === name),
       (row) => row.vehicleType,
@@ -231,7 +226,6 @@ async function loadMakeReport(
       .map(({ name: vehicleType }) => formatVehicleType(vehicleType));
 
     return {
-      color: `var(--chart-${(index % 5) + 1})`,
       count,
       name,
       note:
@@ -241,40 +235,13 @@ async function loadMakeReport(
     };
   });
 
-  // The comp's two-by-two grid beside the headline; the mix cells drop out
-  // when the make registered nothing in the period.
-  const stats = [
-    {
-      label: "Share of market",
-      note: periodCaption,
-      value: percentage(total, marketTotal),
-    },
-    {
-      label: "Rank",
-      note: fuelType
-        ? "overall, all fuel types"
-        : `of ${makeTotals.length} makes`,
-      value: rank > 0 ? `#${rank}` : "—",
-    },
-    ...(topFuel
-      ? [
-          {
-            label: `${topFuel.name} share`,
-            note: `of ${make} registrations`,
-            value: percentage(topFuel.count, makeTotal),
-          },
-        ]
-      : []),
-    ...(topVehicle
-      ? [
-          {
-            label: `${formatVehicleType(topVehicle.name)} share`,
-            note: "most common vehicle type",
-            value: percentage(topVehicle.count, makeTotal),
-          },
-        ]
-      : []),
-  ];
+  // Every vehicle type the make registered in the period, as the fuel types
+  // above: whatever the fuel type filter is set to.
+  const vehicleMix = vehicleTotals.map(({ count, name }) => ({
+    count,
+    name: formatVehicleType(name),
+  }));
+
   // The chart runs over the year to date, or the trailing year when the
   // period is a single month.
   const seriesRange: Range = range === "ytd" && start !== end ? "ytd" : "12m";
@@ -284,23 +251,25 @@ async function loadMakeReport(
     fuelType,
     fuelTypeOptions,
     logoUrlBySlug,
+    makesCount: makeTotals.length,
     makeTotal,
     marketTotal,
     mixRows,
     month,
-    params,
-    path,
+    monthCount: makeByMonth.get(month) ?? 0,
     peers,
     periodCaption,
+    previousMonthCount: makeByMonth.get(shiftMonth(month, -1)) ?? 0,
     previousTotal,
-    rangeLabel,
+    range,
+    rank,
     series,
     seriesRange,
-    stats,
     summary,
     total,
+    vehicleMix,
   };
-}
+});
 
 export type MakeReportData = Awaited<ReturnType<typeof loadMakeReport>>;
 
@@ -309,22 +278,6 @@ export interface MakeSectionProps {
   make: string;
   /** Not awaited by the section itself, only by the parts of it that wait. */
   report: Promise<MakeReportData>;
-}
-
-async function ReportPeriodTabs({ report }: Pick<MakeSectionProps, "report">) {
-  const { params, path } = await report;
-
-  return <PeriodTabs params={params} path={path} />;
-}
-
-async function ReportFuelTypeTabs({
-  report,
-}: Pick<MakeSectionProps, "report">) {
-  const { fuelTypeOptions, params, path } = await report;
-
-  return (
-    <FuelTypeTabs fuelTypes={fuelTypeOptions} params={params} path={path} />
-  );
 }
 
 /**
@@ -369,42 +322,29 @@ export async function MakeReport({
 
   return (
     <>
-      {/* The comp rules the switches off from the head, each under its own
-          label; on phones they stack. */}
-      <div className="flex flex-col gap-4 border-border border-t py-4 md:flex-row md:flex-wrap md:items-end md:gap-6">
-        <div className="flex min-w-0 flex-col gap-2">
-          <span className="font-semibold text-muted text-xs">Period</span>
-          <Suspense fallback={<Skeleton className="h-10 w-80 max-w-full" />}>
-            <ReportPeriodTabs report={report} />
-          </Suspense>
-        </div>
-        <div className="flex min-w-0 flex-col gap-2">
-          <span className="font-semibold text-muted text-xs">Fuel type</span>
-          <Suspense fallback={<Skeleton className="h-10 w-80 max-w-full" />}>
-            <ReportFuelTypeTabs report={report} />
-          </Suspense>
-        </div>
-      </div>
-
-      <MakeHeadline make={make} report={report} />
-
       <MakeTrend make={make} report={report} />
 
       <Hairline />
 
+      <MakeFuelMix make={make} report={report} />
+
+      <Hairline />
+
+      <MakeVehicleMix make={make} report={report} />
+
+      <Hairline />
+
+      <MakePeers make={make} report={report} />
+
+      <Hairline />
+
+      {/* The artboard ends at the peers. What follows is what the page had
+          before and the artboard leaves out. */}
       <MakeBreakdown make={make} report={report} />
 
       <Hairline />
 
-      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-11 lg:gap-16">
-        <MakeMonthlyTable make={make} report={report} />
-
-        <div className="flex min-w-0 flex-col gap-10 lg:col-span-5">
-          <MakePeers make={make} report={report} />
-
-          <MakeFuelMix make={make} report={report} />
-        </div>
-      </div>
+      <MakeMonthlyTable make={make} report={report} />
     </>
   );
 }

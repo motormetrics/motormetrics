@@ -165,7 +165,16 @@ export function DimensionTable({
             make={row.name}
             size="sm"
           />
-          <Typography.Paragraph truncate>{row.name}</Typography.Paragraph>
+          {dimension === "make" ? (
+            <Link
+              className="truncate text-foreground no-underline hover:underline"
+              href={`/cars/makes/${slugify(row.name)}`}
+            >
+              {row.name}
+            </Link>
+          ) : (
+            <Typography.Paragraph truncate>{row.name}</Typography.Paragraph>
+          )}
         </span>
       ),
       header: labels.column,
@@ -247,7 +256,6 @@ export function DimensionTable({
               : `${visible.length} ${visible.length === 1 ? "row" : "rows"}`}
           </>
         }
-        eyebrow="Figure 2 · Breakdown"
         title={labels.title}
         trailing={
           // Segment is a non-wrapping inline-flex, so a row wider than a phone

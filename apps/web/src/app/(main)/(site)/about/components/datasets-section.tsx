@@ -23,14 +23,14 @@ const datasets: Dataset[] = [
   {
     description:
       "Monthly car registrations by make, vehicle type and fuel type.",
-    href: "/cars/registrations",
+    href: "/cars",
     icon: BarChart3,
     title: "New registrations",
   },
   {
     description:
       "Every bidding exercise across Categories A to E, with quota and bids received.",
-    href: "/coe/premiums",
+    href: "/coe/results",
     icon: DollarSign,
     title: "COE premiums",
   },

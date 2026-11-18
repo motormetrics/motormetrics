@@ -7,7 +7,7 @@ vi.mock("posthog-js", () => ({
 
 describe("PARFCalculator", () => {
   it("should show the estimated rebate for the default ARF and age", async () => {
-    const screen = await render(<PARFCalculator head={<h1>PARF</h1>} />);
+    const screen = await render(<PARFCalculator />);
 
     // $80,000 at 30%, under the $30,000 cap.
     await expect
@@ -19,7 +19,7 @@ describe("PARFCalculator", () => {
   });
 
   it("should use the age of a schedule row once it is selected", async () => {
-    const screen = await render(<PARFCalculator head={<h1>PARF</h1>} />);
+    const screen = await render(<PARFCalculator />);
 
     await screen.getByRole("button", { name: "Use Over 10 years" }).click();
 

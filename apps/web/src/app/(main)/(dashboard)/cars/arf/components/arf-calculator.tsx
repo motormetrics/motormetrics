@@ -1,43 +1,28 @@
 "use client";
 
-import {
-  Chip,
-  Label,
-  ListBox,
-  NumberField,
-  Select,
-  Typography,
-} from "@heroui/react";
+import { Label, ListBox, NumberField, Select } from "@heroui/react";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
-import { ArfBands } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-bands";
 import {
   ARF_SCHEDULES,
+  bandLabel,
   calculateArf,
 } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-rates";
 import { ArfSchedules } from "@web/app/(main)/(dashboard)/cars/arf/components/arf-schedules";
+import { CalculatorPanel } from "@web/app/(main)/(dashboard)/cars/parf/components/calculator-panel";
 import { SGD_FORMAT } from "@web/app/(main)/(dashboard)/cars/parf/components/parf-rates";
-import { HeadGrid } from "@web/components/shared/head-grid";
-import { KeyNumberList, KeysAside } from "@web/components/shared/key-numbers";
-import { Hairline, SourceNote } from "@web/components/shared/overview";
+import { Hairline } from "@web/components/shared/overview";
 import posthog from "posthog-js";
-import { type ReactNode, useState } from "react";
-
-/** The page's sections, for the jump links under the key numbers. */
-const JUMP_LINKS = [
-  { href: "#arf-schedules", label: "ARF under each schedule" },
-  { href: "#arf-bands", label: "ARF band by band" },
-  { href: "#arf-notes", label: "What the figures assume" },
-];
+import { useState } from "react";
 
 const formatRate = (rate: number) => `${Math.round(rate * 100)}%`;
 
 /**
- * Direction D's head for the calculator, laid out as the PARF calculator's so
- * the two tools read as a pair: the page's eyebrow, title and source line
- * (`head`), the two fields, the answer under them, and the key numbers beside
- * the head once the page is wide. The figures beneath read the same state.
+ * The ARF calculator, laid out as the PARF calculator's so the two tools read
+ * as a pair: the two fields under "Your car", and beside them the estimate,
+ * every band of the selected schedule with what the OMV adds in each, and the
+ * note. The figure beneath reads the same state.
  */
-export function ARFCalculator({ head }: { head: ReactNode }) {
+export function ARFCalculator() {
   const [omv, setOmv] = useState(40_000);
   const [scheduleKey, setScheduleKey] = useState(ARF_SCHEDULES[0].key);
 
@@ -45,142 +30,100 @@ export function ARFCalculator({ head }: { head: ReactNode }) {
     ARF_SCHEDULES.find(({ key }) => key === scheduleKey) ?? ARF_SCHEDULES[0];
   const { total, bands } = calculateArf(omv, schedule.tiers);
   const topBand = bands.at(-1);
+  const largestAmount = Math.max(...bands.map(({ amount }) => amount), 1);
 
-  const keyNumbers = [
+  const figures = [
+    {
+      label: "Estimated ARF",
+      value: formatCurrency(total),
+      note: `Schedule: ${schedule.label}`,
+    },
     {
       label: "Effective rate",
-      value: omv > 0 ? formatRate(total / omv) : "—",
+      value: omv > 0 ? `${((total / omv) * 100).toFixed(1)}%` : "—",
       note: "ARF as a share of OMV",
     },
     {
       label: "Top band",
       value: topBand ? formatRate(topBand.rate) : "—",
-      note: "rate on the last dollar of OMV",
+      note: "Rate on the last dollar of OMV",
     },
-    // The same OMV under the other schedules, so the change reads at once.
-    ...ARF_SCHEDULES.filter(({ key }) => key !== schedule.key).map(
-      ({ label, tiers }) => {
-        const other = calculateArf(omv, tiers).total;
-        const difference = total - other;
-        return {
-          label: `COE obtained ${label}`,
-          value: formatCurrency(other),
-          note:
-            difference === 0
-              ? "same as the selected tiers"
-              : `${formatCurrency(Math.abs(difference))} ${difference > 0 ? "less" : "more"} than the selected tiers`,
-        };
-      },
-    ),
   ];
+
+  // Bands the OMV does not reach stay in the list, so the whole schedule
+  // reads at a glance.
+  const rows = schedule.tiers.map(({ rate, upTo }, index) => {
+    const from = schedule.tiers[index - 1]?.upTo ?? 0;
+    const amount = bands[index]?.amount ?? 0;
+    return {
+      amount: formatCurrency(amount),
+      fraction: amount / largestAmount,
+      isActive: amount > 0,
+      label: bandLabel(from, upTo),
+      rate: formatRate(rate),
+    };
+  });
 
   return (
     <>
-      <HeadGrid
-        keys={
-          <KeysAside
-            eyebrow="Key numbers"
-            jump={JUMP_LINKS}
-            label="Key numbers"
-            source="Source: LTA. Calculated from the OMV and schedule entered."
-          >
-            <KeyNumberList items={keyNumbers} />
-          </KeysAside>
-        }
+      <CalculatorPanel
+        amountHeading="ARF"
+        figures={figures}
+        labelHeading="OMV band"
+        note="How this is calculated: each band of the OMV is charged at its own rate, and the bands are added up, before any VES or EEAI rebate or surcharge. Estimates only, not financial advice."
+        rows={rows}
       >
-        {head}
-
-        <div className="flex flex-wrap items-end gap-4 border-border border-t py-4">
-          <NumberField
-            className="w-60 max-md:w-full"
-            formatOptions={SGD_FORMAT}
-            maxValue={1_000_000}
-            minValue={0}
-            onBlur={() =>
-              posthog.capture("arf_calculator_used", {
-                field: "omv",
-                schedule: schedule.key,
-              })
-            }
-            onChange={(value) => setOmv(Number.isFinite(value) ? value : 0)}
-            value={omv}
-          >
-            <Label>OMV</Label>
-            <NumberField.Group>
-              <NumberField.Input />
-            </NumberField.Group>
-          </NumberField>
-          <Select
-            className="w-72 max-md:w-full"
-            onChange={(key) => {
-              if (!key) return;
-              posthog.capture("arf_calculator_used", {
-                field: "schedule",
-                schedule: key,
-              });
-              setScheduleKey(String(key));
-            }}
-            value={scheduleKey}
-          >
-            <Label>COE obtained</Label>
-            <Select.Trigger>
-              <Select.Value />
-              <Select.Indicator />
-            </Select.Trigger>
-            <Select.Popover>
-              <ListBox>
-                {ARF_SCHEDULES.map(({ key, label }) => (
-                  <ListBox.Item id={key} key={key} textValue={label}>
-                    {label}
-                    <ListBox.ItemIndicator />
-                  </ListBox.Item>
-                ))}
-              </ListBox>
-            </Select.Popover>
-          </Select>
-        </div>
-
-        <div className="flex max-w-xl flex-col gap-2">
-          <span className="text-foreground text-sm">
-            <span className="font-semibold text-foreground">
-              Estimated ARF payable
-            </span>
-            {` · COE obtained ${schedule.label}`}
-          </span>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span
-              aria-live="polite"
-              className="font-extrabold text-4xl tabular-nums leading-none tracking-tight md:text-5xl"
-            >
-              {formatCurrency(total)}
-            </span>
-            {omv > 0 ? (
-              <Chip
-                className="tabular-nums"
-                color="accent"
-                size="sm"
-                variant="soft"
-              >
-                {formatRate(total / omv)} of OMV
-              </Chip>
-            ) : null}
-          </div>
-          {topBand ? (
-            <Typography.Paragraph className="tabular-nums" color="muted">
-              {`${bands.length} of ${schedule.tiers.length} bands reached; the last dollar of OMV is taxed at ${formatRate(topBand.rate)}.`}
-            </Typography.Paragraph>
-          ) : null}
-          <SourceNote className="tabular-nums">
-            {formatCurrency(omv)} OMV · before VES and EEAI rebates or
-            surcharges. Estimates only, not financial advice.
-          </SourceNote>
-        </div>
-      </HeadGrid>
+        <NumberField
+          formatOptions={SGD_FORMAT}
+          fullWidth
+          maxValue={1_000_000}
+          minValue={0}
+          onBlur={() =>
+            posthog.capture("arf_calculator_used", {
+              field: "omv",
+              schedule: schedule.key,
+            })
+          }
+          onChange={(value) => setOmv(Number.isFinite(value) ? value : 0)}
+          value={omv}
+        >
+          <Label>OMV</Label>
+          <NumberField.Group>
+            <NumberField.Input />
+          </NumberField.Group>
+        </NumberField>
+        <Select
+          fullWidth
+          onChange={(key) => {
+            if (!key) return;
+            posthog.capture("arf_calculator_used", {
+              field: "schedule",
+              schedule: key,
+            });
+            setScheduleKey(String(key));
+          }}
+          value={scheduleKey}
+        >
+          <Label>COE obtained</Label>
+          <Select.Trigger>
+            <Select.Value />
+            <Select.Indicator />
+          </Select.Trigger>
+          <Select.Popover>
+            <ListBox>
+              {ARF_SCHEDULES.map(({ key, label }) => (
+                <ListBox.Item id={key} key={key} textValue={label}>
+                  {label}
+                  <ListBox.ItemIndicator />
+                </ListBox.Item>
+              ))}
+            </ListBox>
+          </Select.Popover>
+        </Select>
+      </CalculatorPanel>
 
       <Hairline />
       <ArfSchedules omv={omv} scheduleKey={schedule.key} />
-      <Hairline />
-      <ArfBands bands={bands} schedule={schedule} total={total} />
     </>
   );
 }

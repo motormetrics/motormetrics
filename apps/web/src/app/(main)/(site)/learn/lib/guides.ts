@@ -74,7 +74,7 @@ COE premiums fluctuate based on supply and demand. Key factors affecting prices:
 - **New model launches**: Popular models can spike demand in specific categories
 - **Speculation**: Some buyers time purchases based on expected price movements
 
-Check our [COE Premiums](/coe/premiums) page for the latest prices and trends.
+Check our [COE premium history](/coe/results) page for the latest prices and trends.
 
 ## COE Renewal (PQP)
 
@@ -116,7 +116,7 @@ Your deposit is returned, and you can bid again in the next exercise.
 - [PQP](/learn/pqp): Prevailing Quota Premium`,
     relatedTerms: ["ARF", "PARF", "OMV", "PQP"],
     relatedLinks: [
-      { label: "Current COE Premiums", href: "/coe/premiums" },
+      { label: "COE bidding results", href: "/coe" },
       { label: "COE Price History", href: "/coe/results" },
       { label: "PQP Rates", href: "/coe/pqp" },
     ],
@@ -515,7 +515,7 @@ No, ARF is mandatory for all new vehicle registrations in Singapore. There are n
     relatedLinks: [
       { label: "ARF Calculator", href: "/cars/arf" },
       { label: "PARF Rebate Calculator", href: "/cars/parf" },
-      { label: "Car Registrations", href: "/cars/registrations" },
+      { label: "New registrations", href: "/cars" },
     ],
     lastUpdated: "2026-10-21",
   },
@@ -682,7 +682,7 @@ Not exactly. Paper value for loans/insurance may differ from OMV as it includes 
     relatedTerms: ["ARF", "PARF", "COE"],
     relatedLinks: [
       { label: "PARF Rebate Calculator", href: "/cars/parf" },
-      { label: "Car Registrations", href: "/cars/registrations" },
+      { label: "New registrations", href: "/cars" },
     ],
     lastUpdated: "2026-04-11",
   },

@@ -30,7 +30,7 @@ import { Suspense } from "react";
 const DEFAULT_CATEGORY = coeOverviewSearchParams.category.defaultValue;
 
 /**
- * Figure 2 on /coe: every category's latest result in a table beside the bids
+ * On /coe: every category's latest result in a table beside the bids
  * against quota. Both read cached data and sit in the static shell; the
  * fallbacks select the default category, and the client views the category
  * in the URL.
@@ -75,7 +75,7 @@ export async function AllCategories() {
     <div className="flex flex-col gap-4">
       <SectionHead
         caption={demandCaption(latest)}
-        eyebrow="Figure 2 · This exercise"
+        eyebrow="This exercise"
         link={{ href: "/coe/results", label: "All COE results" }}
         title="All categories, and bids against quota"
       />
