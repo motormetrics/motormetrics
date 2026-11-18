@@ -2,11 +2,26 @@
 export const ISLAND_CENTER: [number, number] = [103.82, 1.36];
 export const ISLAND_ZOOM = 10.5;
 
-/** MapLibre paints cannot read CSS variables, so tokens are resolved once. */
+/**
+ * MapLibre paints cannot read CSS variables, so tokens are resolved once. The
+ * theme's colours are oklch, which the browser reports as lab() and MapLibre
+ * cannot parse, so each one is painted to a pixel and read back as rgb().
+ */
 export const readTokens = () => {
   const style = getComputedStyle(document.documentElement);
-  const read = (name: string, fallback: string) =>
-    style.getPropertyValue(name).trim() || fallback;
+  const context = document
+    .createElement("canvas")
+    .getContext("2d", { willReadFrequently: true });
+  const read = (name: string, fallback: string) => {
+    const colour = style.getPropertyValue(name).trim() || fallback;
+    if (!context) {
+      return fallback;
+    }
+    context.fillStyle = colour;
+    context.fillRect(0, 0, 1, 1);
+    const [red, green, blue] = context.getImageData(0, 0, 1, 1).data;
+    return `rgb(${red}, ${green}, ${blue})`;
+  };
   return {
     available: read("--success", "#57b45f"),
     full: read("--warning", "#e9a63c"),
