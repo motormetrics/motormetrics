@@ -1,6 +1,4 @@
-import { slugify } from "@motormetrics/utils/slugify";
-import type { Announcement, LinkItem } from "@web/types";
-import { Battery, Droplet, Fuel, Zap } from "lucide-react";
+import type { Announcement } from "@web/types";
 
 // =============================================================================
 // Brand Configuration
@@ -50,49 +48,6 @@ export const ALL_EV_FUEL_TYPES: string[] = [
   ...EV_FUEL_TYPES.PHEV,
   ...EV_FUEL_TYPES.Hybrid,
 ];
-
-export const FUEL_TYPE_LINKS: LinkItem[] = [
-  {
-    label: "Petrol",
-    description: "Internal Combustion Engine (ICE) vehicles",
-    icon: Fuel,
-  },
-  {
-    label: "Petrol-Electric",
-    description: "Petrol hybrid vehicles",
-    icon: Zap,
-  },
-  {
-    label: "Petrol-Electric (Plug-In)",
-    description: "Plug-in petrol hybrid vehicles",
-    icon: Zap,
-  },
-  {
-    label: "Electric",
-    description: "Battery Electric Vehicles (BEV)",
-    icon: Battery,
-  },
-  {
-    label: "Diesel",
-    description: "Compression-ignition engine vehicles",
-    icon: Droplet,
-  },
-  {
-    label: "Diesel-Electric",
-    description: "Diesel hybrid vehicles",
-    icon: Zap,
-  },
-  {
-    label: "Diesel-Electric (Plug-In)",
-    description: "Plug-in diesel hybrid vehicles",
-    icon: Zap,
-  },
-]
-  .map((link) => ({
-    ...link,
-    href: `/cars/fuel-types/${slugify(link.label)}`,
-  }))
-  .sort((a, b) => a.label.localeCompare(b.label));
 
 // =============================================================================
 // UI Constants

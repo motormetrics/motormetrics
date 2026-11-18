@@ -10,11 +10,7 @@ import {
   LAST_UPDATED_COE_KEY,
   SITE_URL,
 } from "@web/config";
-import {
-  getDistinctFuelTypes,
-  getDistinctMakes,
-  getDistinctVehicleTypes,
-} from "@web/queries/cars";
+import { getDistinctMakes } from "@web/queries/cars";
 import { getCOELatestMonth } from "@web/queries/coe/latest-month";
 import { getAllPosts } from "@web/queries/posts";
 import type { MetadataRoute } from "next";
@@ -25,23 +21,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   cacheLife("max");
   cacheTag("sitemap", "posts:list", "cars:makes", "coe:months");
 
-  const [
-    posts,
-    makes,
-    fuelTypes,
-    vehicleTypes,
-    coeLatestMonth,
-    carsUpdatedAt,
-    coeUpdatedAt,
-  ] = await Promise.all([
-    getAllPosts(),
-    getDistinctMakes(),
-    getDistinctFuelTypes(),
-    getDistinctVehicleTypes(),
-    getCOELatestMonth(),
-    redis.get<number>(LAST_UPDATED_CARS_KEY),
-    redis.get<number>(LAST_UPDATED_COE_KEY),
-  ]);
+  const [posts, makes, coeLatestMonth, carsUpdatedAt, coeUpdatedAt] =
+    await Promise.all([
+      getAllPosts(),
+      getDistinctMakes(),
+      getCOELatestMonth(),
+      redis.get<number>(LAST_UPDATED_CARS_KEY),
+      redis.get<number>(LAST_UPDATED_COE_KEY),
+    ]);
   // The workflows stamp these keys only when an update brought new records,
   // so they are the day the pages last changed, not the day of the last run.
   // The tags above are revalidated by the same workflows, which keeps the
@@ -76,16 +63,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     {
       url: `${SITE_URL}/cars`,
-      lastModified: carsLastModified,
-      changeFrequency: "monthly" as const,
-    },
-    {
-      url: `${SITE_URL}/cars/fuel-types`,
-      lastModified: carsLastModified,
-      changeFrequency: "monthly" as const,
-    },
-    {
-      url: `${SITE_URL}/cars/vehicle-types`,
       lastModified: carsLastModified,
       changeFrequency: "monthly" as const,
     },
@@ -164,16 +141,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...GUIDES.map(({ lastUpdated, slug }) => ({
       url: `${SITE_URL}/learn/${slug}`,
       lastModified: lastUpdated,
-      changeFrequency: "monthly" as const,
-    })),
-    ...fuelTypes.map(({ fuelType }) => ({
-      url: `${SITE_URL}/cars/fuel-types/${slugify(fuelType)}`,
-      lastModified: carsLastModified,
-      changeFrequency: "monthly" as const,
-    })),
-    ...vehicleTypes.map(({ vehicleType }) => ({
-      url: `${SITE_URL}/cars/vehicle-types/${slugify(vehicleType)}`,
-      lastModified: carsLastModified,
       changeFrequency: "monthly" as const,
     })),
     {

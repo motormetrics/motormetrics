@@ -18,38 +18,6 @@ test.describe("Error Handling and Edge Cases", () => {
         await expect(page.locator("h1")).toBeVisible();
       }
     });
-
-    test("should display 404 for invalid fuel type slugs", async ({ page }) => {
-      await page.goto("/cars/fuel-types/invalid-fuel-type");
-
-      const notFoundText = page.locator(
-        "text=404, text=Not Found, text=not found",
-      );
-      const textCount = await notFoundText.count();
-
-      if (textCount > 0) {
-        await expect(notFoundText.first()).toBeVisible();
-      } else {
-        await expect(page.locator("h1")).toBeVisible();
-      }
-    });
-
-    test("should display 404 for invalid vehicle type slugs", async ({
-      page,
-    }) => {
-      await page.goto("/cars/vehicle-types/invalid-vehicle-type");
-
-      const notFoundText = page.locator(
-        "text=404, text=Not Found, text=not found",
-      );
-      const textCount = await notFoundText.count();
-
-      if (textCount > 0) {
-        await expect(notFoundText.first()).toBeVisible();
-      } else {
-        await expect(page.locator("h1")).toBeVisible();
-      }
-    });
   });
 
   test.describe("API Error Handling", () => {
@@ -192,7 +160,7 @@ test.describe("Error Handling and Edge Cases", () => {
     test.skip("should handle rapid navigation without errors", async ({
       page,
     }) => {
-      const routes = ["/cars", "/coe", "/", "/cars/fuel-types/electric"];
+      const routes = ["/cars", "/coe", "/", "/cars/electric-vehicles"];
 
       for (let i = 0; i < 3; i++) {
         for (const route of routes) {

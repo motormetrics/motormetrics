@@ -134,7 +134,11 @@ export function DimensionTable({
   // A search is already a narrowing, so matches are never truncated on top of
   // it — collapsing only applies to the unfiltered list.
   const isSearching = query.trim().length > 0;
-  const isTruncated = !isSearching && visible.length > COLLAPSED_ROWS;
+  // Only a dimension with its own page collapses; the rest list every row.
+  const isTruncated =
+    !isSearching &&
+    labels.href !== undefined &&
+    visible.length > COLLAPSED_ROWS;
   const displayed = isTruncated ? visible.slice(0, COLLAPSED_ROWS) : visible;
 
   const searchHint =
@@ -330,7 +334,7 @@ export function DimensionTable({
         variant="secondary"
       />
 
-      {isTruncated ? (
+      {isTruncated && labels.href ? (
         <Link
           className="flex items-center justify-center gap-2 self-center rounded-full bg-default px-6 py-2 font-bold text-muted text-sm transition-colors hover:text-foreground"
           href={labels.href}
