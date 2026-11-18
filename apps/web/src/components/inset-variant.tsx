@@ -1,5 +1,6 @@
 "use client";
 
+import { Typography } from "@heroui/react";
 import { Sidebar } from "@heroui-pro/react";
 import {
   LogoMark,
@@ -87,9 +88,13 @@ function Groups({
 
 function Source() {
   return (
-    <p className="border-separator border-t px-2 pt-4 text-muted text-xs">
+    <Typography.Paragraph
+      className="border-separator border-t px-2 pt-4"
+      color="muted"
+      size="xs"
+    >
       Data from LTA via DataMall.
-    </p>
+    </Typography.Paragraph>
   );
 }
 
