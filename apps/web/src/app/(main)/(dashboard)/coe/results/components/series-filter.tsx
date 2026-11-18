@@ -55,7 +55,6 @@ export function SeriesFilter() {
       className={cn(isPending && "opacity-70")}
       onChange={onChange}
       value={selected}
-      variant="secondary"
     >
       {COE_CATEGORIES.map((category) => (
         <Checkbox key={category} value={category}>

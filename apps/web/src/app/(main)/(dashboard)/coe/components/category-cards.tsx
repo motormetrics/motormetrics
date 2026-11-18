@@ -47,7 +47,7 @@ export function CategoryCardsView({
   return (
     <RadioButtonGroup
       aria-label="COE category"
-      className="grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+      className="grid-cols-1 gap-x-8 max-md:gap-y-0 md:grid-cols-2 lg:grid-cols-4"
       layout="grid"
       onChange={(value) => onSelect?.(value as CategoryKey)}
       value={categoryKey}
@@ -59,7 +59,13 @@ export function CategoryCardsView({
         const stats = premiumRangeStats(series);
 
         return (
-          <RadioButtonGroup.Item key={category} value={toCategoryKey(category)}>
+          <RadioButtonGroup.Item
+            // Flat cells, as on the artboard: no card, and an accent rule
+            // above the selected category in place of HeroUI's ring.
+            className="rounded-none border-0 border-t-2 border-t-transparent bg-transparent px-0 data-[selected=true]:border-t-accent data-[selected=true]:ring-0 max-md:border-b max-md:border-b-separator"
+            key={category}
+            value={toCategoryKey(category)}
+          >
             <RadioButtonGroup.ItemContent className="flex w-full flex-row items-start justify-between gap-4 md:flex-col md:justify-start md:gap-2">
               <div className="flex min-w-0 flex-col gap-1">
                 <Label>{category}</Label>

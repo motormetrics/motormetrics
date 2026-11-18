@@ -154,7 +154,9 @@ export function InsetVariant({
           <div className="px-4 pt-4 max-md:hidden md:px-10">
             <Sidebar.Trigger />
           </div>
-          <div className="grid gap-4 p-4 md:px-10 md:pb-10">
+          {/* grid-cols-1 lets the column shrink below its content's width,
+              so a long unbroken row cannot widen the page on phones. */}
+          <div className="grid grid-cols-1 gap-4 p-4 md:px-10 md:pb-10">
             {announcement}
             {children}
           </div>
