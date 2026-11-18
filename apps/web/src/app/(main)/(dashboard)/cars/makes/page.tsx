@@ -6,7 +6,10 @@ import {
   loadMakeRows,
   summariseLeaders,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
-import { MakesContentSection } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-content-section";
+import {
+  MakesContentSection,
+  MakesSecondarySection,
+} from "@web/app/(main)/(dashboard)/cars/makes/components/makes-content-section";
 import {
   FuelTypeRadios,
   PeriodSwitch,
@@ -150,6 +153,10 @@ export default function CarMakesPage({ searchParams }: PageProps) {
       {/* Sections the artboard does not draw sit below the two columns, so
           that on a narrow screen the key figures come before them. */}
       <PageBody>
+        <Hairline />
+
+        <MakesSecondarySection searchParams={searchParams} />
+
         <Hairline />
 
         <ComparisonLinks

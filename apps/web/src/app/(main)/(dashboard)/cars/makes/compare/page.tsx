@@ -9,6 +9,7 @@ import {
   ComparisonBody,
   ComparisonHead,
   type ComparisonNames,
+  ComparisonRelated,
   loadComparison,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/comparison";
 import {
@@ -26,6 +27,7 @@ import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/compare
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { OverviewPage } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
+import { PageBody } from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import {
@@ -179,11 +181,17 @@ export default function CompareCarMakesPage({ searchParams }: PageProps) {
         <SelectorHead searchParams={searchParams} />
       </Suspense>
 
-      <SectionErrorBoundary title="Comparison unavailable">
-        <Suspense fallback={<PopularComparisons />}>
-          <SelectorContent searchParams={searchParams} />
-        </Suspense>
-      </SectionErrorBoundary>
+      <PageBody>
+        <SectionErrorBoundary title="Comparison unavailable">
+          <Suspense fallback={<PopularComparisons />}>
+            <SelectorContent searchParams={searchParams} />
+          </Suspense>
+        </SectionErrorBoundary>
+      </PageBody>
+
+      <Suspense fallback={<ComparisonRelated />}>
+        <SelectorRelated searchParams={searchParams} />
+      </Suspense>
     </OverviewPage>
   );
 }
@@ -220,8 +228,7 @@ function EmptyHead({ slugs }: { slugs: readonly string[] }) {
   return (
     <PageHead
       controls={<MakeSelectors selected={Promise.resolve(slugs)} />}
-      description="Choose two makes to compare their new car registrations side by side."
-      eyebrow="Cars · Makes · Compare"
+      sub="Choose two makes to compare their new car registrations side by side."
       title="Compare car makes in Singapore"
     />
   );
@@ -277,4 +284,11 @@ async function SelectorContent({ searchParams }: PageProps) {
   }
 
   return <ComparisonBody faqSchema={false} names={comparisonNames} />;
+}
+
+/** The Related row, with each compared make's page once two are chosen. */
+async function SelectorRelated({ searchParams }: PageProps) {
+  const { names } = await resolveSelection(searchParams);
+
+  return <ComparisonRelated names={names && Promise.resolve(names)} />;
 }
