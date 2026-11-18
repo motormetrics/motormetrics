@@ -328,9 +328,8 @@ export default function ElectricVehiclesPage({ searchParams }: PageProps) {
           </SectionErrorBoundary>
           <SourceNote>
             Source: LTA via DataMall · Shares are of the month&apos;s new cars.
-            Plug-in hybrid is LTA&apos;s Petrol-Electric (Plug-In) and
-            Diesel-Electric (Plug-In) fuel types; hybrid is Petrol-Electric and
-            Diesel-Electric.
+            Fuel types are LTA&apos;s, with each diesel version grouped with its
+            petrol one.
           </SourceNote>
         </section>
 

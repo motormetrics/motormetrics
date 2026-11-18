@@ -24,8 +24,7 @@ interface PowertrainSegment {
  * other two are wider than one LTA fuel type (`EV_FUEL_TYPES` in the config):
  * `phev` is "Petrol-Electric (Plug-In)" plus "Diesel-Electric (Plug-In)" and
  * `hybrid` is "Petrol-Electric" plus "Diesel-Electric". Naming either after
- * the petrol fuel type alone would mislabel it, so both keep their labels
- * until the grouping is decided.
+ * the petrol fuel type alone would mislabel it, so each label names both.
  */
 export const POWERTRAIN_SEGMENTS: PowertrainSegment[] = [
   {
@@ -36,12 +35,12 @@ export const POWERTRAIN_SEGMENTS: PowertrainSegment[] = [
   {
     colour: "var(--chart-3)",
     key: "phev",
-    label: "Plug-in hybrid",
+    label: "Petrol-Electric and Diesel-Electric (Plug-In)",
   },
   {
     colour: "var(--chart-5)",
     key: "hybrid",
-    label: "Hybrid",
+    label: "Petrol-Electric and Diesel-Electric",
   },
 ];
 
@@ -50,7 +49,7 @@ export const POWERTRAIN_TABS: { key: Powertrain; label: string }[] = [
   ...POWERTRAIN_SEGMENTS.map(({ key, label }) => ({ key, label })),
 ];
 
-/** Colour of everything that is neither electric nor a hybrid. */
+/** Colour of everything that is neither electric nor part-electric. */
 export const COMBUSTION_COLOUR = "var(--chart-2)";
 
 /** The trend range filter's options, as the reader sees them. */

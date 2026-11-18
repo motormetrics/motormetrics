@@ -37,10 +37,13 @@ const HEADINGS: Record<Powertrain, { caption: string; subject: string }> = {
     caption: "Electric car",
     subject: "electric cars",
   },
-  hybrid: { caption: "Hybrid", subject: "hybrids" },
+  hybrid: {
+    caption: "Petrol-electric and diesel-electric car",
+    subject: "petrol-electric and diesel-electric cars",
+  },
   phev: {
-    caption: "Plug-in hybrid",
-    subject: "plug-in hybrids",
+    caption: "Plug-in petrol-electric and diesel-electric car",
+    subject: "plug-in petrol-electric and diesel-electric cars",
   },
 };
 

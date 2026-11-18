@@ -80,7 +80,7 @@ describe("mixCaption", () => {
         4549,
       ),
     ).toBe(
-      "Electric cars were 63.3% of August's 4,549 new cars, hybrids 24.9% and plug-in hybrids 6.3%; petrol and diesel cars made up the other 5.5%.",
+      "Electric cars were 63.3% of August's 4,549 new cars, petrol-electric and diesel-electric cars 24.9% and their plug-in versions 6.3%; petrol and diesel cars made up the other 5.5%.",
     );
   });
 

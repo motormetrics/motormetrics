@@ -65,9 +65,10 @@ export function evLeadSentence({
 }
 
 /**
- * "Electric cars were 63.3% of August's 4,549 new cars, hybrids 24.9% and
- * plug-in hybrids 6.3%; petrol and diesel cars made up the other 5.5%."
- * `split` is electric, plug-in hybrid, hybrid, then combustion.
+ * "Electric cars were 63.3% of August's 4,549 new cars, petrol-electric and
+ * diesel-electric cars 24.9% and their plug-in versions 6.3%; petrol and
+ * diesel cars made up the other 5.5%." `split` is electric, the plug-in
+ * group, the petrol-electric and diesel-electric group, then combustion.
  */
 export function mixCaption(
   split: readonly RegistrationSegment[],
@@ -79,7 +80,7 @@ export function mixCaption(
     return null;
   }
 
-  return `Electric cars were ${electric.share.toFixed(1)}% of ${formatMonthName(month)}'s ${formatCount(total)} new cars, hybrids ${hybrid.share.toFixed(1)}% and plug-in hybrids ${plugIn.share.toFixed(1)}%; petrol and diesel cars made up the other ${combustion.share.toFixed(1)}%.`;
+  return `Electric cars were ${electric.share.toFixed(1)}% of ${formatMonthName(month)}'s ${formatCount(total)} new cars, petrol-electric and diesel-electric cars ${hybrid.share.toFixed(1)}% and their plug-in versions ${plugIn.share.toFixed(1)}%; petrol and diesel cars made up the other ${combustion.share.toFixed(1)}%.`;
 }
 
 /**

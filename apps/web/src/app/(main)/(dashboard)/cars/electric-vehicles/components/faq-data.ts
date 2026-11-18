@@ -20,7 +20,7 @@ export const buildElectricVehiclesFaqs = (summary?: string): Faq[] => [
     question:
       "How many new cars are electric, petrol-electric or diesel-electric?",
     answer:
-      "The New cars by fuel type section gives electric cars, plug-in hybrids, hybrids, and petrol and diesel cars as shares of the month's new car registrations. The key numbers give electric, petrol-electric and diesel-electric cars combined.",
+      "The New cars by fuel type section gives electric cars, petrol-electric and diesel-electric cars, their plug-in versions, and petrol and diesel cars as shares of the month's new car registrations. The key numbers give electric, petrol-electric and diesel-electric cars combined.",
   },
   {
     question: "Which COE category is an electric car in?",
