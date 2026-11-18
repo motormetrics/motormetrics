@@ -28,7 +28,7 @@ describe("InsetVariant", () => {
       .element(screen.getByRole("row", { name: "PQP rates" }))
       .toHaveAttribute("data-current", "true");
     await expect
-      .element(screen.getByRole("row", { name: "Latest results" }))
+      .element(screen.getByRole("row", { name: "Bidding results" }))
       .not.toHaveAttribute("data-current", "true");
   });
 
@@ -41,7 +41,7 @@ describe("InsetVariant", () => {
       .element(screen.getByRole("row", { name: "Makes" }))
       .toHaveAttribute("data-current", "true");
     await expect
-      .element(screen.getByRole("row", { name: "Cars overview" }))
+      .element(screen.getByRole("row", { name: "New registrations" }))
       .not.toHaveAttribute("data-current", "true");
   });
 });

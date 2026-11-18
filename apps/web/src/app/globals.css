@@ -114,6 +114,61 @@
   --chart-5: oklch(51.27% 0.1324 253.03);
 }
 
+/* The shell's Deep Blue band: the inset sidebar and the phone strip. HeroUI
+   Pro's sidebar has no colour tokens of its own, so the band is set on its
+   classes here. It is the same in both themes, including the active row,
+   which keeps the light theme's accent. */
+:root {
+  --band: oklch(30.67% 0.0915 254.64);
+  --band-foreground: oklch(94.86% 0.0177 253.34);
+  --band-muted: oklch(82.22% 0.0609 252.37);
+  --band-accent: oklch(49.92% 0.1601 255.11);
+  --band-hover: oklch(100% 0 0 / 8%);
+  --band-rule: oklch(100% 0 0 / 12%);
+}
+
+.sidebar__provider:has(.sidebar--inset),
+.sidebar__mobile {
+  background: var(--band);
+}
+
+.sidebar--inset,
+.sidebar__mobile,
+.shell-band {
+  --foreground: var(--band-foreground);
+  --muted: var(--band-muted);
+  --default: var(--band-hover);
+  --separator: var(--band-rule);
+  color: var(--band-foreground);
+}
+
+:is(.sidebar--inset, .sidebar__mobile) .sidebar__menu-label {
+  color: var(--band-foreground);
+}
+
+:is(.sidebar--inset, .sidebar__mobile)
+  :is(.sidebar__group-label, .sidebar__menu-icon) {
+  color: var(--band-muted);
+}
+
+:is(.sidebar--inset, .sidebar__mobile)
+  .sidebar__menu-item:hover
+  .sidebar__menu-item-content {
+  background: var(--band-hover);
+}
+
+:is(.sidebar--inset, .sidebar__mobile)
+  .sidebar__menu-item[data-current="true"]
+  .sidebar__menu-item-content {
+  background: var(--band-accent);
+}
+
+:is(.sidebar--inset, .sidebar__mobile)
+  .sidebar__menu-item[data-current="true"]
+  :is(.sidebar__menu-label, .sidebar__menu-icon) {
+  color: oklch(100% 0 0);
+}
+
 /* HeroUI Pro sets no Tailwind colours for --chart-1…5, so bg-chart-N and
    friends need this mapping to exist. */
 @theme inline {

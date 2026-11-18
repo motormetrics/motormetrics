@@ -1,5 +1,6 @@
 import { cn, Typography } from "@heroui/react";
 import { typographyVariants } from "@heroui/styles";
+import { FiltersSheet } from "@web/components/shared/page-filters";
 import { SharePill } from "@web/components/shared/share-pill";
 import type { ComponentProps, ReactNode } from "react";
 
@@ -26,6 +27,7 @@ export function PageHead({
   controls,
   description,
   eyebrow,
+  filters,
   sub,
   title,
 }: {
@@ -38,6 +40,12 @@ export function PageHead({
   description?: string;
   /** Uppercase label above the title, e.g. "Certificate of Entitlement". */
   eyebrow?: string;
+  /**
+   * The page's narrowing filters. They live in the right sidebar; passing the
+   * same controls here adds the "Filters" button that opens them in a sheet
+   * on screens too narrow for the sidebar.
+   */
+  filters?: ReactNode;
   /** Muted line under the title, usually the period and the source. */
   sub?: ReactNode;
   title: string;
@@ -80,8 +88,9 @@ export function PageHead({
       {/* `min-w-0` so a control wider than the phone — the COE range tabs run
           to 452px — clips into its own scroll area instead of stretching the
           page. */}
-      <div className="flex min-w-0 max-w-full flex-wrap items-center gap-x-4 gap-y-2 sm:ml-auto">
+      <div className="flex min-w-0 max-w-full flex-wrap items-end gap-x-4 gap-y-2 sm:ml-auto">
         {controls}
+        {filters ? <FiltersSheet>{filters}</FiltersSheet> : null}
         <SharePill contentType={contentType} title={title} />
       </div>
     </div>

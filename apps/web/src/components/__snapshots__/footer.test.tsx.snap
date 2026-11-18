@@ -76,7 +76,7 @@ exports[`Footer > should render the shell footer with navigation 1`] = `
                 class="font-medium text-muted text-sm transition-colors hover:text-accent"
                 href="/cars/electric-vehicles"
               >
-                EV adoption
+                Electric vehicles
               </a>
             </li>
             <li>

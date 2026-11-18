@@ -9,11 +9,9 @@ import {
   FileMinus,
   FilePlus,
   Fuel,
-  Gauge,
   Gavel,
   LayoutGrid,
   type LucideIcon,
-  Newspaper,
   PlugZap,
   TrendingUp,
   Zap,
@@ -109,7 +107,7 @@ export const navLinks: NavLinks = {
   ],
   electric: [
     {
-      title: "EV adoption",
+      title: "Electric vehicles",
       url: "/cars/electric-vehicles",
       icon: Zap,
       description: "BEV, PHEV and hybrid adoption trends and market share",
@@ -212,40 +210,57 @@ export const PRIMARY_NAV_ITEMS: readonly NavItem[] = [
 /** One labelled group of rows in the shell sidebar. */
 export interface SidebarGroup {
   label: string;
-  items: NavigationItem[];
+  /** Drawn beside the group label, or on the row itself in a one-row group. */
+  icon: LucideIcon;
+  items: { title: string; url: string }[];
 }
 
 /**
- * The shell sidebar, in Direction D's order: COE ahead of Cars, then the
- * calculators and the reading. Every row carries an icon, because the
- * collapsed sidebar shows icons only.
+ * The shell sidebar: COE ahead of Cars, then the calculators and the reading.
+ * Labels are LTA's own terms. A group with one row drops its label and the
+ * row carries the group's icon instead.
  */
 export const SIDEBAR_GROUPS: readonly SidebarGroup[] = [
   {
     label: "Market",
-    items: [{ title: "Market overview", url: "/", icon: LayoutGrid }],
+    icon: LayoutGrid,
+    items: [{ title: "Market overview", url: "/" }],
   },
   {
     label: "COE",
+    icon: Gavel,
     items: [
-      { title: "Latest results", url: "/coe", icon: Gavel },
-      ...navLinks.coe,
+      { title: "Bidding results", url: "/coe" },
+      { title: "Premium history", url: "/coe/results" },
+      { title: "PQP rates", url: "/coe/pqp" },
     ],
   },
   {
     label: "Cars",
+    icon: CarFront,
     items: [
-      { title: "Cars overview", url: "/cars", icon: Gauge },
-      ...navLinks.cars,
-      ...navLinks.electric,
+      { title: "New registrations", url: "/cars" },
+      { title: "Deregistrations", url: "/cars/deregistrations" },
+      { title: "Makes", url: "/cars/makes" },
+      { title: "Electric vehicles", url: "/cars/electric-vehicles" },
+      { title: "EV charging", url: "/cars/electric-vehicles/charging" },
+      { title: "Vehicle population", url: "/cars/annual" },
     ],
   },
-  { label: "Tools", items: navLinks.tools },
+  {
+    label: "Tools",
+    icon: Calculator,
+    items: [
+      { title: "PARF calculator", url: "/cars/parf" },
+      { title: "ARF calculator", url: "/cars/arf" },
+    ],
+  },
   {
     label: "Learn",
+    icon: BookOpen,
     items: [
-      { title: "Guides", url: "/learn", icon: BookOpen },
-      { title: "Blog", url: "/blog", icon: Newspaper },
+      { title: "Guides", url: "/learn" },
+      { title: "Blog", url: "/blog" },
     ],
   },
 ];

@@ -59,7 +59,7 @@ const datasets: Dataset[] = [
       "Battery-electric and hybrid share of new registrations, by make and month.",
     href: "/cars/electric-vehicles",
     icon: Zap,
-    title: "EV adoption",
+    title: "Electric vehicles",
   },
 ];
 
