@@ -4,24 +4,29 @@ import {
   getCategoryConfig,
   getReadingTime,
 } from "@web/app/(main)/(site)/blog/components/post/utils";
+import { PostTrend } from "@web/app/(main)/(site)/blog/components/post-trend";
+import type { PostTrend as Trend } from "@web/queries/posts/trends";
 import { formatDate } from "@web/utils/dates/format-date";
 import Link from "next/link";
 
 /**
  * One post in a grid: the index's archive and the rows at the foot of a post.
- * A hairline box on the white ground, the topic as an eyebrow, and the date
- * and reading estimate on a ruled footer.
+ * A hairline box on the white ground, the post's chart when it has one, the
+ * topic as an eyebrow, and the date and reading estimate on a ruled footer.
  */
 export function PostCard({
   hidden,
   post,
   showExcerpt = true,
+  trend,
 }: {
   /** Kept in the HTML but not shown, for rows past the archive's first page. */
   hidden?: boolean;
   post: SelectPost;
   /** The rows at the foot of a post run without excerpts. */
   showExcerpt?: boolean;
+  /** The series the post is about, over the months up to its own. */
+  trend?: Trend;
 }) {
   const publishedDate = post.publishedAt ?? post.createdAt;
 
@@ -31,6 +36,7 @@ export function PostCard({
       hidden={hidden}
       href={`/blog/${post.slug}`}
     >
+      {trend ? <PostTrend trend={trend} /> : null}
       <Typography.Paragraph
         className="uppercase"
         color="muted"

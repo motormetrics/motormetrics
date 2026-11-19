@@ -5,6 +5,7 @@ import { Segment } from "@heroui-pro/react";
 import type { SelectPost } from "@motormetrics/database/schema";
 import { POST_CATEGORIES } from "@web/app/(main)/(site)/blog/components/post/utils";
 import { PostCard } from "@web/app/(main)/(site)/blog/components/post-card";
+import type { PostTrend } from "@web/queries/posts/trends";
 import Link from "next/link";
 import posthog from "posthog-js";
 import { useState } from "react";
@@ -12,10 +13,10 @@ import { useState } from "react";
 interface BlogListProps {
   /** Every dataType with at least one published post, alphabetical. */
   categories: string[];
-  /** The post leading the page, left out of "All" but kept under its topic. */
-  featuredId?: string;
   posts: SelectPost[];
   query: string;
+  /** The chart for each post's card, keyed by post id. */
+  trends: Record<string, PostTrend>;
 }
 
 const ALL = "all";
@@ -47,19 +48,12 @@ const GUIDE_HINTS: Record<string, string> = {
  * there are dozens of posts, not thousands, and a tab that responds on the
  * next frame reads better than one that suspends.
  */
-export function BlogList({
-  categories,
-  featuredId,
-  posts,
-  query,
-}: BlogListProps) {
+export function BlogList({ categories, posts, query, trends }: BlogListProps) {
   const [topic, setTopic] = useState(ALL);
   const [showAll, setShowAll] = useState(false);
 
   const filtered =
-    topic === ALL
-      ? posts.filter((post) => post.id !== featuredId)
-      : posts.filter((post) => post.dataType === topic);
+    topic === ALL ? posts : posts.filter((post) => post.dataType === topic);
 
   const count = filtered.length;
   const countLabel = `${topic === ALL ? "" : `${labels[topic] ?? topic} · `}${count} ${count === 1 ? "post" : "posts"}`;
@@ -134,6 +128,7 @@ export function BlogList({
                 hidden={!showAll && index >= PAGE_SIZE}
                 key={post.id}
                 post={post}
+                trend={trends[post.id]}
               />
             ))}
           </div>
