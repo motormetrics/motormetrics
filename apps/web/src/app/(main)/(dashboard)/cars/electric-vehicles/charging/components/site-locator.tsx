@@ -32,7 +32,7 @@ export function SiteLocator({
   }, [needle, sites]);
 
   return (
-    <div className="absolute top-3 left-3 z-10 flex w-64 max-w-[calc(100%-1.5rem)] flex-col gap-2 rounded-2xl bg-overlay p-4 shadow-overlay">
+    <div className="absolute top-3 left-3 z-10 flex w-56 max-w-[calc(100%-1.5rem)] flex-col gap-2 rounded-2xl bg-overlay p-4 shadow-overlay sm:w-64">
       <SearchField
         aria-label="Find a charging site"
         fullWidth
