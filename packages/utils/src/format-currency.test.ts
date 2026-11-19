@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatCurrency, formatNumber } from "../format-currency";
+import { formatCurrency, formatNumber } from "./format-currency";
 
 describe("formatNumber", () => {
   it("should format numbers with thousand separators", () => {

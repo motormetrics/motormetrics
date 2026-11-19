@@ -51,8 +51,9 @@ packages reference them with `"package": "catalog:"` rather than a literal versi
 
 ## Testing
 
-- Location: beside the file under test (`trends.ts` → `trends.test.ts`), file suffix `.test.ts` or `.test.tsx`. Older tests
-  still sit in `__tests__` directories; leave those, and do not add new ones there
+- Location: beside the file under test (`trends.ts` → `trends.test.ts`), file suffix `.test.ts` or `.test.tsx`. Do not
+  add `__tests__` directories. Two remain (`packages/ai/src`, `packages/logos/src/services`), each holding a second
+  suite whose name clashes with the one beside the source; merge the pair before removing the directory
 - Component tests: Focus on functionality over implementation
 
 ## Environment Variables

@@ -134,51 +134,6 @@ export function coeCaption(
   return `${sentence}.`;
 }
 
-export interface PqpMove {
-  key: string;
-  /** Percentage change on the previous month, if LTA published one. */
-  change: number | null;
-  rate: number;
-}
-
-/**
- * The PQP caption, e.g. "Renewing a Category A COE for 10 years costs
- * $129,883 in November, 0.9% more than in October; Category D moved most,
- * +4.5%. LTA publishes no PQP for Category E."
- */
-export function pqpCaption(
-  moves: PqpMove[],
-  month: string,
-  previousMonth: string | null,
-): string | null {
-  const lead = moves[0];
-  if (!lead) {
-    return null;
-  }
-
-  let sentence = `Renewing a Category ${lead.key} COE for 10 years costs ${formatCurrency(lead.rate)} in ${formatMonthName(month)}`;
-  if (lead.change !== null && previousMonth) {
-    sentence +=
-      lead.change === 0
-        ? `, unchanged from ${formatMonthName(previousMonth)}`
-        : `, ${Math.abs(lead.change).toFixed(1)}% ${lead.change > 0 ? "more" : "less"} than in ${formatMonthName(previousMonth)}`;
-  }
-
-  const changed = moves.filter(
-    (move): move is PqpMove & { change: number } => move.change !== null,
-  );
-  const mover = changed.reduce<(PqpMove & { change: number }) | null>(
-    (top, move) =>
-      !top || Math.abs(move.change) > Math.abs(top.change) ? move : top,
-    null,
-  );
-  if (mover && mover.key !== lead.key && mover.change !== 0) {
-    sentence += `; Category ${mover.key} moved most, ${signed(mover.change)}`;
-  }
-
-  return `${sentence}. LTA publishes no PQP for Category E.`;
-}
-
 /**
  * The fuel type caption, e.g. "Electric cars were 59.6% of October's 4,202
  * registrations, down from 65.1% in September; petrol-only cars were 5.3%."

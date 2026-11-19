@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatCount } from "../format-count";
+import { formatCount } from "./format-count";
 
 describe("formatCount", () => {
   it("should return the number as string when below 1000", () => {

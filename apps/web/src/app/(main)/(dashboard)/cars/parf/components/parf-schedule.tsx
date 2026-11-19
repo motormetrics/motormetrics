@@ -126,7 +126,7 @@ export function ParfSchedule({
                   : `${change < 0 ? "−" : "+"}${Math.abs(change).toFixed(1)}pp`}
               </span>
               <span className={cn(BARS_CELL, "flex flex-col gap-1")}>
-                <span className="block h-1.5 bg-surface-secondary">
+                <span className="block h-1.5 bg-default">
                   <span
                     className="block h-full bg-chart-4"
                     style={{
@@ -134,7 +134,7 @@ export function ParfSchedule({
                     }}
                   />
                 </span>
-                <span className="block h-1.5 bg-surface-secondary">
+                <span className="block h-1.5 bg-default">
                   <span
                     className={cn(
                       "block h-full",

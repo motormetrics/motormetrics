@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { tokeniser } from "../tokeniser";
+import { tokeniser } from "./tokeniser";
 
 describe("tokeniser", () => {
   it("should return empty string for empty array", () => {

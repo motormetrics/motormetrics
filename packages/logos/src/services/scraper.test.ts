@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { BASE_URL } from "../../config";
-import { downloadLogo } from "../scraper";
+import { BASE_URL } from "../config";
+import { downloadLogo } from "./scraper";
 
 const { uploadLogo } = vi.hoisted(() => ({ uploadLogo: vi.fn() }));
-vi.mock("../blob", () => ({ uploadLogo }));
+vi.mock("./blob", () => ({ uploadLogo }));
 
 const fetchMock = vi.fn<typeof fetch>();
 const sourceUrl = `${BASE_URL}/mercedes-benz-logo.png`;

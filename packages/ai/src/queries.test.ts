@@ -13,7 +13,7 @@ import {
   getPriorMonthsDeregistrationsSummary,
   getPriorMonthsPqpSummary,
   getTotalRegistrationsForMonth,
-} from "../queries";
+} from "./queries";
 
 // Use Drizzle's real query builder and row mapping. Only SQL execution is
 // mocked, so filters, grouping and parameterisation remain observable.

@@ -94,7 +94,7 @@ export async function PopulationPanel() {
               <span className="w-44 shrink-0 truncate text-sm max-md:w-auto max-md:min-w-0 max-md:flex-1">
                 {row.label}
               </span>
-              <span className="block h-2.5 flex-1 bg-surface-secondary max-md:w-24 max-md:flex-none">
+              <span className="block h-2.5 flex-1 bg-default max-md:w-24 max-md:flex-none">
                 <span
                   className={cn(
                     "block h-full",

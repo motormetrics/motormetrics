@@ -60,7 +60,7 @@ export function CategoryTable({
               {row.count.toLocaleString("en-SG")}
             </span>
             <span className="flex w-48 items-center gap-2 max-md:w-12 max-lg:w-32">
-              <span className="h-2.5 min-w-0 flex-1 rounded-r-sm bg-surface-secondary max-md:hidden">
+              <span className="h-2.5 min-w-0 flex-1 rounded-r-sm bg-default max-md:hidden">
                 <span
                   className="block h-full rounded-r-sm"
                   style={{
