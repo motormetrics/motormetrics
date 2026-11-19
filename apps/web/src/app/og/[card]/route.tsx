@@ -39,11 +39,14 @@ export async function GET(
   { params }: { params: Promise<{ card: string }> },
 ) {
   const { card } = await params;
-  const copy = CARDS[card];
 
-  if (!copy) {
+  // An own key only: a name such as "constructor" would otherwise read an
+  // inherited property and pass as a card.
+  if (!Object.hasOwn(CARDS, card)) {
     return new Response("Not found", { status: 404 });
   }
+
+  const copy = CARDS[card];
 
   return new ImageResponse(
     <Article byline="" height={OG_SIZE.height} {...copy} />,
