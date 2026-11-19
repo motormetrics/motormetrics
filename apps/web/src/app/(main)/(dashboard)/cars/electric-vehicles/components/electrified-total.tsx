@@ -44,7 +44,7 @@ export async function ElectrifiedMix({ selection }: SelectionProps) {
             </span>
             <span
               aria-hidden
-              className="block h-2.5 min-w-0 flex-1 rounded-r-sm bg-surface-secondary"
+              className="block h-2.5 min-w-0 flex-1 rounded-r-sm bg-default"
             >
               <span
                 className="block h-full rounded-r-sm"

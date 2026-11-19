@@ -31,7 +31,7 @@ export function PremiumRangeBar({
           spread {formatCurrency(high.premium - low.premium)}
         </SourceNote>
       </div>
-      <div className="relative h-3 border-border border-l bg-surface-secondary">
+      <div className="relative h-3 border-border border-l bg-default">
         <span
           className="absolute inset-y-0 bg-chart-1"
           style={{ left: `${left.toFixed(1)}%`, width: `${width.toFixed(1)}%` }}

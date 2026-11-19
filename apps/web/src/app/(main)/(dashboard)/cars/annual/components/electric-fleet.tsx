@@ -78,7 +78,7 @@ export function ElectricFleet({
               >
                 {row.year}
               </span>
-              <span className="h-2.5 min-w-0 flex-1 rounded-r-sm bg-surface-secondary">
+              <span className="h-2.5 min-w-0 flex-1 rounded-r-sm bg-default">
                 <span
                   className="block h-full rounded-r-sm"
                   style={{

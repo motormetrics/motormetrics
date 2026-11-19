@@ -57,7 +57,7 @@ export async function ElectricOnlyMakes() {
               <MakeAvatar logoUrl={make.logoUrl} make={make.make} size="sm" />
               <span className="truncate font-medium text-sm">{make.make}</span>
             </span>
-            <span className="h-2.5 min-w-0 flex-1 rounded-r-xs bg-surface-secondary max-md:hidden">
+            <span className="h-2.5 min-w-0 flex-1 rounded-r-xs bg-default max-md:hidden">
               <span
                 className="block h-full rounded-r-xs"
                 style={{

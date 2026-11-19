@@ -126,7 +126,7 @@ export function MixTable({ rows, total }: { rows: MixRow[]; total: number }) {
             {row.count.toLocaleString("en-SG")}
           </span>
           <span className={CELL.share}>
-            <span className="block h-2.5 min-w-0 flex-1 bg-surface-secondary">
+            <span className="block h-2.5 min-w-0 flex-1 bg-default">
               <span
                 className="block h-full rounded-r-xs"
                 style={{

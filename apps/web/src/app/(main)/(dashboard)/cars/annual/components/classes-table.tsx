@@ -137,7 +137,7 @@ export function ClassesTable({
                 </td>
                 <td>
                   <span className="flex items-center gap-2">
-                    <span className="h-2.5 min-w-0 flex-1 rounded-r-sm bg-surface-secondary max-md:hidden">
+                    <span className="h-2.5 min-w-0 flex-1 rounded-r-sm bg-default max-md:hidden">
                       <span
                         className="block h-full rounded-r-sm"
                         style={{
