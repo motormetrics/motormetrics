@@ -68,7 +68,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
       style="opacity: 0; transform: translateY(16px);"
     >
       <div
-        class="card card--default"
+        class="card card--default border border-separator"
         data-slot="card"
       >
         <div
@@ -183,7 +183,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
           style="opacity: 0; transform: translateY(16px);"
         >
           <div
-            class="card card--default"
+            class="card card--default border border-separator"
             data-slot="card"
           >
             <div
@@ -230,7 +230,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
           style="opacity: 0; transform: translateY(16px);"
         >
           <div
-            class="card card--default"
+            class="card card--default border border-separator"
             data-slot="card"
           >
             <div
@@ -277,7 +277,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
           style="opacity: 0; transform: translateY(16px);"
         >
           <div
-            class="card card--default"
+            class="card card--default border border-separator"
             data-slot="card"
           >
             <div
@@ -327,7 +327,7 @@ exports[`MaintenanceNotice > should render the maintenance copy 1`] = `
           style="opacity: 0; transform: translateY(16px);"
         >
           <div
-            class="card card--default"
+            class="card card--default border border-separator"
             data-slot="card"
           >
             <div
