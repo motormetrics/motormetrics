@@ -1,12 +1,12 @@
 import { Typography } from "@heroui/react";
+import { GuideDiagram } from "@web/app/(main)/(site)/learn/components/guide-diagram";
 import type { Guide } from "@web/app/(main)/(site)/learn/lib/guides";
 import { getReadingMinutes } from "@web/app/(main)/(site)/learn/lib/guides";
 import Link from "next/link";
 
 /**
- * One guide in a grid: the index's topic groups and "Next in this series" at
- * the foot of a guide. A hairline box on the white ground, the term as an
- * eyebrow, and the reading estimate on a ruled footer.
+ * One guide in the index's topic groups. A hairline box on the white ground,
+ * the guide's drawing, the term as an eyebrow, and the reading estimate on a ruled footer.
  */
 export function GuideCard({ guide }: { guide: Guide }) {
   return (
@@ -14,6 +14,7 @@ export function GuideCard({ guide }: { guide: Guide }) {
       className="group flex h-full min-w-0 flex-col gap-2 rounded-lg border border-separator px-4 pt-4 pb-4 text-foreground no-underline transition-colors hover:border-border"
       href={`/learn/${guide.slug}`}
     >
+      <GuideDiagram slug={guide.slug} />
       <Typography.Paragraph
         className="uppercase"
         color="muted"
