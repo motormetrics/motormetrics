@@ -287,14 +287,26 @@ export interface MakeSectionProps {
  */
 export async function MakeReport({
   make,
+  part,
   searchParams,
 }: {
   make: string;
+  /**
+   * `lead` is the sections the artboard draws, beside the right sidebar;
+   * `more` is the rest, below the two columns so that on a narrow screen the
+   * key figures come before them. Both read the one `loadMakeReport` result.
+   */
+  part: "lead" | "more";
   searchParams: Promise<SearchParams>;
 }) {
   const crossTab = await getMakeCrossTab(make);
 
   if (crossTab.length === 0) {
+    // The lead part says there is nothing; the rest has nothing to add.
+    if (part === "more") {
+      return null;
+    }
+
     return (
       <EmptyState size="lg">
         <EmptyState.Header>
@@ -320,6 +332,20 @@ export async function MakeReport({
 
   const report = loadMakeReport(make, searchParams);
 
+  if (part === "more") {
+    return (
+      <>
+        <Hairline />
+
+        <MakeBreakdown make={make} report={report} />
+
+        <Hairline />
+
+        <MakeMonthlyTable make={make} report={report} />
+      </>
+    );
+  }
+
   return (
     <>
       <MakeTrend make={make} report={report} />
@@ -335,16 +361,6 @@ export async function MakeReport({
       <Hairline />
 
       <MakePeers make={make} report={report} />
-
-      <Hairline />
-
-      {/* The artboard ends at the peers. What follows is what the page had
-          before and the artboard leaves out. */}
-      <MakeBreakdown make={make} report={report} />
-
-      <Hairline />
-
-      <MakeMonthlyTable make={make} report={report} />
     </>
   );
 }

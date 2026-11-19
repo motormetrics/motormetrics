@@ -41,6 +41,13 @@ const LEGACY_PATH_REDIRECTS = [
   // pages' parameters.
   ["/coe/premiums", "/coe/results"],
   ["/cars/registrations", "/cars"],
+  // Added 2026-11-19, review 2027-11-19: the fuel type and vehicle type pages
+  // were folded into New registrations, which breaks the same figures down by
+  // either. Electric goes first so it wins over the fuel type catch-all;
+  // `:type*` covers the index and every detail page.
+  ["/cars/fuel-types/electric", "/cars/electric-vehicles"],
+  ["/cars/fuel-types/:type*", "/cars?dimension=fuelType"],
+  ["/cars/vehicle-types/:type*", "/cars?dimension=vehicleType"],
 ] as const;
 
 // Static CSP, not nonce-based: a nonce needs a per-request render, which

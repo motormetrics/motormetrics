@@ -21,7 +21,8 @@ import { PriceSummary } from "@web/app/(main)/(dashboard)/cars/electric-vehicles
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/electric-vehicles/charging/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
-import { SharePill } from "@web/components/shared/share-pill";
+import { PageHead } from "@web/components/shared/page-head";
+import { RelatedLinks, ScopeControl } from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -86,7 +87,10 @@ function CardSkeleton({ className = "" }: { className?: string }) {
 
 export default function ChargingPage({ searchParams }: PageProps) {
   return (
-    <OverviewPage className="gap-8 max-md:gap-6">
+    // `min-w-0`: the shell lays pages out in a grid, and the price list's
+    // truncating rows would otherwise set the column's minimum width and push
+    // the page wider than a phone.
+    <OverviewPage className="min-w-0 gap-8 max-md:gap-6">
       <StructuredData data={structuredData} />
       <StructuredData
         data={{
@@ -100,42 +104,34 @@ export default function ChargingPage({ searchParams }: PageProps) {
         }}
       />
 
-      {/* Direction D's head: eyebrow, title, lead, tools and source. There is
-          no charging artboard, so it takes D's head and section rhythm and
-          keeps the map hero below as it was. */}
+      {/* The head the other data pages use: title, the as-of line, and the
+          district beside Share. The district sets what the whole page reports
+          on, so it is the page's scope control. There is no charging
+          artboard, so the map hero below stays as it was. */}
       <div className="flex min-w-0 flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Typography.Paragraph
-            className="uppercase"
-            color="muted"
-            size="xs"
-            weight="semibold"
-          >
-            Electric vehicles · Charging
-          </Typography.Paragraph>
-          <div className="flex flex-wrap items-center gap-4">
-            <Typography.Heading level={1}>
-              EV charging prices
-            </Typography.Heading>
+        <PageHead
+          badge={
             <Chip color="accent" size="lg" variant="soft">
               Beta
             </Chip>
-          </div>
-        </div>
+          }
+          controls={
+            <ScopeControl label="District">
+              <Suspense fallback={<Skeleton className="h-10 w-56" />}>
+                <DistrictControl searchParams={searchParams} />
+              </Suspense>
+            </ScopeControl>
+          }
+          sub={
+            <Suspense fallback=" ">
+              <ChargingSource />
+            </Suspense>
+          }
+          title="EV charging prices"
+        />
         <Typography.Paragraph className="max-w-prose tabular-nums">
           <Suspense fallback={<Skeleton className="h-6 w-full max-w-prose" />}>
             <ChargingLead />
-          </Suspense>
-        </Typography.Paragraph>
-        <div className="flex flex-wrap items-end gap-4">
-          <Suspense fallback={<Skeleton className="h-10 w-56" />}>
-            <DistrictControl searchParams={searchParams} />
-          </Suspense>
-          <SharePill title="EV charging prices" />
-        </div>
-        <Typography.Paragraph color="muted" size="sm">
-          <Suspense fallback=" ">
-            <ChargingSource />
           </Suspense>
         </Typography.Paragraph>
       </div>
@@ -148,10 +144,12 @@ export default function ChargingPage({ searchParams }: PageProps) {
       */}
 
       {/*
-        The map runs edge to edge under the title, and the price content is
-        pulled up over its lower half. `-mt-24 md:-mt-80` must match
+        The map runs edge to edge under the title, and the price tiles are
+        pulled up over its lower edge. `-mt-24 md:-mt-40` must match
         `MapOverlap` in charging-map-view.tsx, which pads the map's camera by
-        the same amount. One wrapper with no gap, so the overlap is exact.
+        the same amount. The overlap is shorter than a row of tiles, so the
+        list under them starts clear of the map. One wrapper with no gap, so
+        the overlap is exact.
       */}
       <div className="flex flex-col">
         <AnimatedSection order={0}>
@@ -159,7 +157,7 @@ export default function ChargingPage({ searchParams }: PageProps) {
             <Suspense
               fallback={
                 // Same bleed and heights as ChargingMap; see its comments.
-                <Skeleton className="-mx-4 h-96 md:-mx-6 md:h-[640px]" />
+                <Skeleton className="-mx-4 h-96 md:-mx-10 md:h-[480px]" />
               }
             >
               <ChargingMap searchParams={searchParams} />
@@ -167,7 +165,7 @@ export default function ChargingPage({ searchParams }: PageProps) {
           </SectionErrorBoundary>
         </AnimatedSection>
 
-        <div className="relative z-10 -mt-24 flex flex-col gap-6 md:-mt-80">
+        <div className="relative z-10 -mt-24 flex flex-col gap-6 md:-mt-40">
           <PriceSummary searchParams={searchParams} />
 
           <Suspense fallback={<CardSkeleton className="h-96" />}>
@@ -195,6 +193,13 @@ export default function ChargingPage({ searchParams }: PageProps) {
       <Suspense fallback={null}>
         <ChargingQuestions />
       </Suspense>
+
+      <RelatedLinks
+        links={[
+          { href: "/cars/electric-vehicles", label: "Electric vehicles" },
+          { href: "/cars", label: "New registrations" },
+        ]}
+      />
     </OverviewPage>
   );
 }

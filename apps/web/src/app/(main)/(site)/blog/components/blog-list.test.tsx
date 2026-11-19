@@ -49,18 +49,20 @@ const posts = [
 ];
 
 describe("BlogList", () => {
-  it("should leave the featured post out of All but list it under its topic", async () => {
+  it("should list the newest post under All and under its topic", async () => {
     const screen = await render(
       <BlogList
         categories={["coe", "monthly-update"]}
-        featuredId="post-0"
         posts={posts}
         query=""
+        trends={{}}
       />,
     );
 
-    await expect.element(screen.getByText("13 posts")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Post 0" }).query()).toBeNull();
+    await expect.element(screen.getByText("14 posts")).toBeInTheDocument();
+    await expect
+      .element(screen.getByRole("heading", { name: "Post 0" }))
+      .toBeInTheDocument();
 
     await screen.getByRole("radio", { name: "Monthly Update" }).click();
 
@@ -76,9 +78,9 @@ describe("BlogList", () => {
     const screen = await render(
       <BlogList
         categories={["coe", "monthly-update"]}
-        featuredId="post-0"
         posts={posts}
         query=""
+        trends={{}}
       />,
     );
 
@@ -97,24 +99,24 @@ describe("BlogList", () => {
     const screen = await render(
       <BlogList
         categories={["coe", "monthly-update"]}
-        featuredId="post-0"
         posts={posts}
         query=""
+        trends={{}}
       />,
     );
 
     await expect
       .poll(() => screen.getByRole("heading", { level: 3 }).all().length)
       .toBe(12);
-    // The thirteenth row is hidden, not absent, so its link is still in the HTML.
+    // Rows past the twelfth are hidden, not absent, so each link is still in the HTML.
     expect(screen.container.querySelectorAll('a[href^="/blog/"]')).toHaveLength(
-      13,
+      14,
     );
 
-    await screen.getByRole("button", { name: "Show all 13 posts" }).click();
+    await screen.getByRole("button", { name: "Show all 14 posts" }).click();
 
     await expect
       .poll(() => screen.getByRole("heading", { level: 3 }).all().length)
-      .toBe(13);
+      .toBe(14);
   });
 });

@@ -18,8 +18,8 @@ export const DIMENSION_LABELS: Record<
   CarDimension,
   {
     column: string;
-    /** Dedicated page for this dimension, where the full list lives. */
-    href: Route;
+    /** Dedicated page for the full list, when the dimension has one. */
+    href?: Route;
     searchLabel: string;
     tab: string;
     title: string;
@@ -34,14 +34,12 @@ export const DIMENSION_LABELS: Record<
   },
   vehicleType: {
     column: "Vehicle type",
-    href: "/cars/vehicle-types",
     searchLabel: "Search vehicle types",
     tab: "Vehicle types",
     title: "Vehicle types",
   },
   fuelType: {
     column: "Fuel type",
-    href: "/cars/fuel-types",
     searchLabel: "Search fuel types",
     tab: "Fuel types",
     title: "Fuel types",

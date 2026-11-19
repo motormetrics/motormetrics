@@ -68,10 +68,10 @@ async function MakesDirectory() {
 }
 
 /**
- * The page's sections, in the artboard's order and then the rest. No section is wrapped whole in a Suspense
- * boundary: the ones that read only cached data are part of the static shell,
- * and the ones that follow the search params keep their headings in the shell
- * and hold their own boundaries around the parts that wait.
+ * The sections the artboard draws, beside the right sidebar. Neither is
+ * wrapped whole in a Suspense boundary: they keep their headings in the static
+ * shell and hold their own boundaries around the parts that wait on the search
+ * params.
  */
 export function MakesContentSection({
   searchParams,
@@ -91,11 +91,22 @@ export function MakesContentSection({
       <SectionErrorBoundary title="Makes list unavailable">
         <MakesIndex searchParams={searchParams} />
       </SectionErrorBoundary>
+    </>
+  );
+}
 
-      <Hairline />
-
-      {/* The artboard ends at the list. What follows is what the page had
-          before and the artboard leaves out. */}
+/**
+ * What the page had before and the artboard leaves out: the summary, the
+ * movers, the electric-only makes and the directory. Rendered below the two
+ * columns, so that on a narrow screen the key figures come before them.
+ */
+export function MakesSecondarySection({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  return (
+    <>
       <section className="flex flex-col gap-2">
         <SectionErrorBoundary title="Makes summary unavailable">
           <MakesLead />

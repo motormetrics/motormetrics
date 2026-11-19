@@ -62,7 +62,13 @@ export function FiltersSheet({ children }: { children: ReactNode }) {
             <Sheet.Header>
               <Sheet.Heading>Filters</Sheet.Heading>
             </Sheet.Header>
-            <Sheet.Body className="flex flex-col gap-5">{children}</Sheet.Body>
+            <Sheet.Body>
+              {/* The same tint as the sidebar panel: the controls are white,
+                  so they need it to show against the sheet. */}
+              <div className="flex flex-col gap-4 rounded-2xl bg-surface-secondary p-4">
+                {children}
+              </div>
+            </Sheet.Body>
             <Sheet.Footer>
               <Sheet.Close>
                 <Button variant="primary">Done</Button>

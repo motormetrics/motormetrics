@@ -166,37 +166,40 @@ export function DeregistrationsReport({ report }: ReportProps) {
           columns; the total always includes every category.
         </SourceNote>
       </section>
+    </>
+  );
+}
 
-      <Hairline />
-
-      <section className="flex scroll-mt-4 flex-col gap-4" id="dr-about">
-        <SectionHead
-          eyebrow="About the data"
-          title="What a deregistration is"
-        />
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-12">
+/**
+ * The note on what the figures count. Static copy, rendered below the two
+ * columns so that on a narrow screen the key figures come before it.
+ */
+export function DeregistrationsAbout() {
+  return (
+    <section className="flex scroll-mt-4 flex-col gap-4" id="dr-about">
+      <SectionHead eyebrow="About the data" title="What a deregistration is" />
+      <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-12">
+        <Typography.Paragraph className="max-w-prose">
+          A vehicle is deregistered when it is scrapped or exported, which is
+          what releases its COE back into the quota. Deregistrations in one
+          month therefore set much of the supply bid for in later exercises.
+        </Typography.Paragraph>
+        <div className="flex flex-col gap-4">
           <Typography.Paragraph className="max-w-prose">
-            A vehicle is deregistered when it is scrapped or exported, which is
-            what releases its COE back into the quota. Deregistrations in one
-            month therefore set much of the supply bid for in later exercises.
+            The categories are the COE ones the vehicle held, so a
+            deregistration is counted against the quota it returns to rather
+            than the body type of the car.
           </Typography.Paragraph>
-          <div className="flex flex-col gap-4">
-            <Typography.Paragraph className="max-w-prose">
-              The categories are the COE ones the vehicle held, so a
-              deregistration is counted against the quota it returns to rather
-              than the body type of the car.
-            </Typography.Paragraph>
-            <div className="flex flex-wrap gap-4">
-              <SectionLink className="ml-0" href="/coe/results">
-                COE bidding results
-              </SectionLink>
-              <SectionLink className="ml-0" href="/cars">
-                New registrations
-              </SectionLink>
-            </div>
+          <div className="flex flex-wrap gap-4">
+            <SectionLink className="ml-0" href="/coe/results">
+              COE bidding results
+            </SectionLink>
+            <SectionLink className="ml-0" href="/cars">
+              New registrations
+            </SectionLink>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

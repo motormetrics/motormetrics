@@ -5,7 +5,10 @@ import {
   DeregistrationsLead,
   ReportMonth,
 } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-head";
-import { DeregistrationsReport } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-report";
+import {
+  DeregistrationsAbout,
+  DeregistrationsReport,
+} from "@web/app/(main)/(dashboard)/cars/deregistrations/components/deregistrations-report";
 import { DEREGISTRATIONS_FAQS } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/faq-data";
 import { loadDeregistrationsReport } from "@web/app/(main)/(dashboard)/cars/deregistrations/components/report-data";
 import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/deregistrations/search-params";
@@ -147,6 +150,10 @@ export default function DeregistrationsPage({ searchParams }: PageProps) {
       {/* Sections the artboard does not draw sit below the two columns, so
           that on a narrow screen the key figures come before them. */}
       <PageBody>
+        <Hairline />
+
+        <DeregistrationsAbout />
+
         <Hairline />
 
         <StructuredData

@@ -1,4 +1,4 @@
-import { Chip, Skeleton, Typography } from "@heroui/react";
+import { Skeleton, Typography } from "@heroui/react";
 import { slugify } from "@motormetrics/utils/slugify";
 import { periodLabel } from "@web/app/(main)/(dashboard)/cars/makes/[make]/components/period";
 import { TableDisclosure } from "@web/app/(main)/(dashboard)/cars/makes/compare/[pair]/components/disclosure";
@@ -32,6 +32,7 @@ import {
 } from "@web/components/shared/overview";
 import { PageFaq } from "@web/components/shared/page-faq";
 import { PageHead } from "@web/components/shared/page-head";
+import { RelatedLinks } from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { generateFAQPageSchema } from "@web/lib/metadata";
 import {
@@ -90,7 +91,6 @@ export function CompareHeadSkeleton() {
   return (
     <div className="flex flex-wrap items-end gap-6">
       <div className="flex flex-col gap-2">
-        <Skeleton className="h-4 w-40" />
         <Skeleton className="h-12 w-96 max-w-full" />
         <Skeleton className="h-8 w-80 max-w-full" />
       </div>
@@ -102,7 +102,7 @@ export function CompareHeadSkeleton() {
 }
 
 /**
- * The H1, both makes' logos, the period chip and the controls. The period is
+ * The H1, both makes' logos, the period and the controls. The period is
  * stated here once, so no caption or table below repeats it.
  */
 export async function ComparisonHead({
@@ -132,18 +132,35 @@ export async function ComparisonHead({
         </span>
       }
       controls={controls}
-      eyebrow="Cars · Makes · Compare"
-      sub={
-        <div className="flex flex-wrap items-center gap-2">
-          <Chip size="lg" variant="soft">
-            <Chip.Label>{periodLabel(month, "ytd")}</Chip.Label>
-          </Chip>
-          <span>
-            New car registrations · Source: LTA via DataMall · updated monthly
-          </span>
-        </div>
-      }
+      sub={`${periodLabel(month, "ytd")} · New car registrations · Source: LTA via DataMall, updated monthly`}
       title={`${nameA} vs ${nameB} in Singapore`}
+    />
+  );
+}
+
+/**
+ * The row the comparison pages end on: every make, each compared make's own
+ * page once the two are known, and new registrations.
+ */
+export async function ComparisonRelated({
+  names,
+}: {
+  names?: Promise<ComparisonNames>;
+}) {
+  // Named, not `Object.values`: the pair page's promise carries its slug too.
+  const { nameA, nameB } = (await names) ?? {};
+  const compared = nameA && nameB ? [nameA, nameB] : [];
+
+  return (
+    <RelatedLinks
+      links={[
+        { href: "/cars/makes", label: "Makes" },
+        ...compared.map((name) => ({
+          href: `/cars/makes/${slugify(name)}`,
+          label: name,
+        })),
+        { href: "/cars", label: "New registrations" },
+      ]}
     />
   );
 }
@@ -152,7 +169,7 @@ export async function ComparisonHead({
  * Everything below the head: lead and summary, trend, fuel and vehicle mix,
  * monthly figures and FAQ. The trend, mix and monthly sections keep their
  * headings in the static shell and hold a boundary around the figures only.
- * A fragment, so the sections sit directly in `OverviewPage`'s gap layout.
+ * A fragment, so the sections sit directly in the page's `PageBody`.
  */
 export function ComparisonBody({
   faqSchema,

@@ -17,3 +17,30 @@ export const staggerItemVariants: Variants = {
   hidden: { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE_OUT } },
 };
+
+// --- Small chart marks ---
+// Each mark takes its place in the row as `custom`, so the row draws in order.
+
+const markTransition = (index: number) => ({
+  delay: index * 0.04,
+  duration: 0.4,
+  ease: EASE_OUT,
+});
+
+/** A bar growing up from its baseline. */
+export const growUpVariants: Variants = {
+  hidden: { scaleY: 0 },
+  visible: (index = 0) => ({ scaleY: 1, transition: markTransition(index) }),
+};
+
+/** A segment or line growing from its left end. */
+export const growAcrossVariants: Variants = {
+  hidden: { scaleX: 0 },
+  visible: (index = 0) => ({ scaleX: 1, transition: markTransition(index) }),
+};
+
+/** A point fading in. */
+export const fadeInVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: (index = 0) => ({ opacity: 1, transition: markTransition(index) }),
+};

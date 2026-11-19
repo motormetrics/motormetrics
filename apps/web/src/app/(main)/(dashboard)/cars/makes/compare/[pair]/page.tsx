@@ -13,6 +13,7 @@ import {
   CompareHeadSkeleton,
   ComparisonBody,
   ComparisonHead,
+  ComparisonRelated,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/comparison";
 import {
   compareDescription,
@@ -22,6 +23,7 @@ import {
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/copy";
 import { MakeSelectors } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/make-selectors";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { PageBody } from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_URL } from "@web/config";
 import {
@@ -136,12 +138,18 @@ export default function CompareMakesPage({ params }: PageProps) {
         />
       </Suspense>
 
-      <ComparisonBody faqSchema names={names} />
+      <PageBody>
+        <ComparisonBody faqSchema names={names} />
 
-      <Hairline />
+        <Hairline />
 
-      <Suspense fallback={<Skeleton className="h-16 w-full" />}>
-        <OtherComparisons params={params} />
+        <Suspense fallback={<Skeleton className="h-16 w-full" />}>
+          <OtherComparisons params={params} />
+        </Suspense>
+      </PageBody>
+
+      <Suspense fallback={<ComparisonRelated />}>
+        <ComparisonRelated names={names} />
       </Suspense>
     </OverviewPage>
   );

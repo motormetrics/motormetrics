@@ -1,6 +1,7 @@
 import { BlogList } from "@web/app/(main)/(site)/blog/components/blog-list";
 import { loadSearchParams } from "@web/app/(main)/(site)/blog/search-params";
 import { getAllPosts, searchPosts } from "@web/queries/posts";
+import { getPostTrends } from "@web/queries/posts/trends";
 import type { SearchParams } from "nuqs/server";
 
 /**
@@ -15,32 +16,31 @@ export async function BlogArchive({
   const { q: query } = await loadSearchParams(searchParams);
 
   if (query) {
+    const results = await searchPosts(query);
+
     // Search results hide the topic tabs, so no categories are needed.
     return (
       <BlogList
         categories={[]}
-        posts={await searchPosts(query)}
+        posts={results}
         query={query}
+        trends={await getPostTrends(results)}
       />
     );
   }
 
   const posts = await getAllPosts();
 
-  // Read from every published post, the latest included, so its topic still
-  // gets a tab.
   const categories = [
     ...new Set(posts.flatMap((post) => (post.dataType ? [post.dataType] : []))),
   ].sort((a, b) => a.localeCompare(b));
 
-  // The newest post leads the page above, so "All" starts at the second; it
-  // is still listed under its own topic.
   return (
     <BlogList
       categories={categories}
-      featuredId={posts[0]?.id}
       posts={posts}
       query={query}
+      trends={await getPostTrends(posts)}
     />
   );
 }

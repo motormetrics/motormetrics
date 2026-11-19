@@ -6,7 +6,6 @@ export * from "@web/queries/cars/filter-options";
 export * from "@web/queries/cars/latest-month";
 export * from "@web/queries/cars/makes/current-year-popular-makes";
 export * from "@web/queries/cars/makes/entity-breakdowns";
-export * from "@web/queries/cars/makes/entity-checks";
 export * from "@web/queries/cars/makes/get-make-from-slug";
 export * from "@web/queries/cars/makes/registration-stats";
 export * from "@web/queries/cars/market-insights";

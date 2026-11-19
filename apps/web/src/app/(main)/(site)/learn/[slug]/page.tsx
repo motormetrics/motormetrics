@@ -1,13 +1,13 @@
 import { Skeleton } from "@heroui/react";
 import { MdxLink } from "@web/app/(main)/(site)/blog/components/mdx-components";
 import { GuideHead } from "@web/app/(main)/(site)/learn/[slug]/components/guide-head";
-import { KeyTerms } from "@web/app/(main)/(site)/learn/[slug]/components/key-terms";
-import { RelatedGuides } from "@web/app/(main)/(site)/learn/[slug]/components/related-guides";
 import {
+  GUIDES,
   getAllGuideSlugs,
   getGuideBySlug,
 } from "@web/app/(main)/(site)/learn/lib/guides";
 import { Hairline, OverviewPage } from "@web/components/shared/overview";
+import { RelatedLinks } from "@web/components/shared/page-layout";
 import { StructuredData } from "@web/components/structured-data";
 import { SITE_TITLE, SITE_URL } from "@web/config";
 import { generateBreadcrumbSchema } from "@web/lib/metadata";
@@ -215,13 +215,21 @@ async function Guide({ params }: PageProps) {
 
       <GuideContent content={guide.content} slug={guide.slug} />
 
-      <Hairline />
-
-      <KeyTerms guide={guide} />
-
-      <Hairline />
-
-      <RelatedGuides guide={guide} />
+      {/* The guide ends as the data pages do: the pages carrying its live
+          figures, then the guides it leans on, as one row of links. */}
+      <RelatedLinks
+        links={[
+          ...guide.relatedLinks,
+          ...GUIDES.filter(
+            ({ slug, term }) =>
+              slug !== guide.slug && guide.relatedTerms.includes(term),
+          ).map(({ slug, term }) => ({
+            href: `/learn/${slug}`,
+            label: `Guide: ${term}`,
+          })),
+          { href: "/learn", label: "All guides" },
+        ]}
+      />
     </>
   );
 }

@@ -285,6 +285,7 @@ export default function CarMakePage({
           >
             <MakeReportSection
               params={params}
+              part="lead"
               searchParams={searchParamsPromise}
             />
           </Suspense>
@@ -294,6 +295,16 @@ export default function CarMakePage({
       {/* Sections the artboard does not draw sit below the two columns, so
           that on a narrow screen the key figures come before them. */}
       <PageBody>
+        <SectionErrorBoundary title="Make breakdown unavailable">
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <MakeReportSection
+              params={params}
+              part="more"
+              searchParams={searchParamsPromise}
+            />
+          </Suspense>
+        </SectionErrorBoundary>
+
         <Suspense fallback={null}>
           <MakeComparisons params={params} />
         </Suspense>
@@ -333,7 +344,7 @@ export default function CarMakePage({
             <SectionLink className="ml-0" href="/cars/makes">
               All makes
             </SectionLink>
-            <SectionLink className="ml-0" href="/cars/fuel-types">
+            <SectionLink className="ml-0" href="/cars?dimension=fuelType">
               Fuel types
             </SectionLink>
           </div>
@@ -463,10 +474,16 @@ async function MakePeriodSub({
   return periodLabel(month, range);
 }
 
-async function MakeReportSection({ params, searchParams }: PageProps) {
+async function MakeReportSection({
+  params,
+  part,
+  searchParams,
+}: PageProps & { part: "lead" | "more" }) {
   const { exactMake } = await resolveMake(params);
 
-  return <MakeReport make={exactMake} searchParams={searchParams} />;
+  return (
+    <MakeReport make={exactMake} part={part} searchParams={searchParams} />
+  );
 }
 
 /** The month the period ends on, in the filters. */

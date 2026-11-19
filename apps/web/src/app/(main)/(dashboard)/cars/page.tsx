@@ -245,10 +245,6 @@ export default function CarsPage({ searchParams }: ReportProps) {
                 <VehicleTypePeriod {...props} />
               </Slot>
             }
-            link={{
-              href: "/cars/vehicle-types",
-              label: "Vehicle types in full",
-            }}
             title="By vehicle type"
           />
           <SectionErrorBoundary title="Vehicle types unavailable">
