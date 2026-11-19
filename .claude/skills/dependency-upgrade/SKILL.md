@@ -111,11 +111,7 @@ pnpm why package-name      # Check dependency chain
 pnpm dedupe                # Deduplicate
 ```
 
-Use overrides as last resort:
-
-```json
-{ "pnpm": { "overrides": { "react": "^19.0.0" } } }
-```
+Never use pnpm overrides. Fix direct dependencies through the catalog and leave transitive ones to upstream.
 
 ## Rollback
 
