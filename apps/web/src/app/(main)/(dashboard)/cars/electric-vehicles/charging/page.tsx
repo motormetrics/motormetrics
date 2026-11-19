@@ -75,7 +75,9 @@ interface PageProps {
 
 function CardSkeleton({ className = "" }: { className?: string }) {
   return (
-    <div className={`rounded-4xl bg-surface p-6 shadow-surface ${className}`}>
+    <div
+      className={`rounded-4xl border border-separator bg-surface p-6 shadow-surface ${className}`}
+    >
       <div className="flex flex-col gap-4">
         <Skeleton className="h-4 w-32" />
         <Skeleton className="h-12 w-40" />

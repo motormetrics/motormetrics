@@ -33,7 +33,7 @@ export function Announcement() {
   // A banner at the top of the content area, under the breadcrumbs: seen on
   // every page without pushing the sidebar down. It cannot be dismissed.
   return (
-    <Alert status="accent">
+    <Alert className="border border-separator" status="accent">
       <Alert.Indicator>
         <Megaphone className="size-4" />
       </Alert.Indicator>
