@@ -9,7 +9,7 @@ export const OG_CONFIG = {
   height: 630,
 
   /** Font family (must match fonts.ts) */
-  fontFamily: "Urbanist",
+  fontFamily: "Geist",
 
   /** Site name for branding */
   siteName: SITE_TITLE,

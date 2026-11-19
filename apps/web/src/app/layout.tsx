@@ -4,7 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "@web/app/providers";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@web/config";
 import { BotIdClient } from "botid/client";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { ReactNode } from "react";
@@ -29,6 +29,12 @@ const protectedRoutes = [
     },
   },
 ];
+
+// The browser's own chrome takes the shell's Deep Blue band, the same in both
+// themes, as the web manifest does.
+export const viewport: Viewport = {
+  themeColor: "#062F5C",
+};
 
 export const metadata: Metadata = {
   metadataBase: url,
