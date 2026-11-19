@@ -5,10 +5,10 @@ import { OG_CONFIG } from "@web/lib/og/config";
 const FONT_DIR = join(process.cwd(), "assets/fonts");
 
 const WEIGHTS = [
-  { weight: 500, file: "Urbanist-Medium.ttf" },
-  { weight: 600, file: "Urbanist-SemiBold.ttf" },
-  { weight: 700, file: "Urbanist-Bold.ttf" },
-  { weight: 800, file: "Urbanist-ExtraBold.ttf" },
+  { weight: 500, file: "Geist-Medium.ttf" },
+  { weight: 600, file: "Geist-SemiBold.ttf" },
+  { weight: 700, file: "Geist-Bold.ttf" },
+  { weight: 800, file: "Geist-ExtraBold.ttf" },
 ] as const;
 
 const fontFiles = Promise.all(
@@ -21,7 +21,7 @@ const fontFiles = Promise.all(
 );
 
 /**
- * Urbanist weights used by the share cards. The files are read once per
+ * Geist weights used by the share cards. The files are read once per
  * module instance and shared by every image route.
  */
 export function getOGFonts() {

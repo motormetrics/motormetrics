@@ -145,7 +145,7 @@ export default function ChargingPage({ searchParams }: PageProps) {
 
       {/*
         The map runs edge to edge under the title, and the price tiles are
-        pulled up over its lower edge. `-mt-24 md:-mt-40` must match
+        pulled up over its lower edge. `-mt-24 md:-mt-80` must match
         `MapOverlap` in charging-map-view.tsx, which pads the map's camera by
         the same amount. The overlap is shorter than a row of tiles, so the
         list under them starts clear of the map. One wrapper with no gap, so
@@ -157,7 +157,7 @@ export default function ChargingPage({ searchParams }: PageProps) {
             <Suspense
               fallback={
                 // Same bleed and heights as ChargingMap; see its comments.
-                <Skeleton className="-mx-4 h-96 md:-mx-10 md:h-[480px]" />
+                <Skeleton className="-mx-4 h-96 md:-mx-10 md:h-[640px]" />
               }
             >
               <ChargingMap searchParams={searchParams} />
@@ -165,7 +165,7 @@ export default function ChargingPage({ searchParams }: PageProps) {
           </SectionErrorBoundary>
         </AnimatedSection>
 
-        <div className="relative z-10 -mt-24 flex flex-col gap-6 md:-mt-40">
+        <div className="relative z-10 -mt-24 flex flex-col gap-6 md:-mt-80">
           <PriceSummary searchParams={searchParams} />
 
           <Suspense fallback={<CardSkeleton className="h-96" />}>

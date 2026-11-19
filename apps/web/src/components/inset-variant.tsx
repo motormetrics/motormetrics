@@ -1,13 +1,13 @@
 "use client";
 
-import { Typography } from "@heroui/react";
+import { Breadcrumbs, Typography } from "@heroui/react";
 import { Sidebar } from "@heroui-pro/react";
 import {
   LogoMark,
   MARK_ACCENT_ON_DARK,
   Wordmark,
 } from "@web/components/brand-logo";
-import { SIDEBAR_GROUPS } from "@web/config/navigation";
+import { FOOTER_NAV_ITEMS, SIDEBAR_GROUPS } from "@web/config/navigation";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
@@ -23,6 +23,26 @@ const getCurrentUrl = (pathname: string) =>
   SIDEBAR_GROUPS.flatMap(({ items }) => items)
     .filter(({ url }) => matchesPath(pathname, url))
     .sort((a, b) => b.url.length - a.url.length)[0]?.url;
+
+/**
+ * Where the page sits in the sidebar: its group, then its section. Pages
+ * under a section (a make, a guide, a post) show the section, as the sidebar
+ * does. A group of one has no label of its own, and a page outside the
+ * sidebar (About, Contact) is named from the footer links.
+ */
+const getCrumbs = (pathname: string, currentUrl?: string) => {
+  const group = SIDEBAR_GROUPS.find(({ items }) =>
+    items.some(({ url }) => url === currentUrl),
+  );
+  const item = group?.items.find(({ url }) => url === currentUrl);
+
+  if (!group || !item) {
+    const page = FOOTER_NAV_ITEMS.find(({ href }) => href === pathname);
+    return page ? [page.label] : [];
+  }
+
+  return [...(group.items.length > 1 ? [group.label] : []), item.title];
+};
 
 /** The bars and the wordmark in white, as the brand sheet sets them on deep blue. */
 function Brand() {
@@ -115,6 +135,7 @@ export function InsetVariant({
   const router = useRouter();
   const pathname = usePathname();
   const currentUrl = getCurrentUrl(pathname);
+  const crumbs = getCrumbs(pathname, currentUrl);
 
   return (
     <Sidebar.Provider
@@ -150,9 +171,21 @@ export function InsetVariant({
           <Brand />
           <Sidebar.Trigger />
         </div>
-        <Sidebar.Main>
-          <div className="px-4 pt-4 max-md:hidden md:px-10">
+        <Sidebar.Main className="bg-background">
+          <div className="flex items-center gap-2 px-4 pt-4 max-md:hidden md:px-10">
             <Sidebar.Trigger />
+            <Breadcrumbs className="min-w-0">
+              {crumbs.map((label, index) => (
+                <Breadcrumbs.Item
+                  className={
+                    index === crumbs.length - 1 ? "font-semibold" : "text-muted"
+                  }
+                  key={label}
+                >
+                  {label}
+                </Breadcrumbs.Item>
+              ))}
+            </Breadcrumbs>
           </div>
           {/* grid-cols-1 lets the column shrink below its content's width,
               so a long unbroken row cannot widen the page on phones. */}

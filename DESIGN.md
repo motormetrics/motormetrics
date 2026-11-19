@@ -213,9 +213,9 @@ use `--chart-1` for the emphasised element and `bg-default` for the rest.
 
 One family: **Geist** (`--font-geist`, mapped onto `--font-sans`), loaded in
 `apps/web/src/app/layout.tsx` and used for UI, prose and tabular data alike. The
-wordmark is outlined Urbanist ExtraBold drawn as an SVG (`brand-logo.tsx`), and
-the share images set Urbanist from the TTFs in `apps/web/assets/fonts`; neither
-needs Urbanist loaded on the site.
+wordmark is set in Geist Bold (`brand-logo.tsx`), and the share images set
+Geist from the TTFs in `apps/web/assets/fonts`, as image routes cannot use the
+font the site loads.
 Hierarchy is driven by size and weight restraint:
 
 - **Bold (700)** — headings (`H1`, `H2`, `H3`) and data emphasis (metric numbers)

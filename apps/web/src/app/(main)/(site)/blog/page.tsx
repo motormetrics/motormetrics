@@ -88,7 +88,6 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
 
         <section className="flex flex-col gap-4">
           <SectionHead
-            eyebrow="Archive"
             title="All posts"
             trailing={
               <Suspense fallback={<Skeleton className="h-9 w-72 max-w-full" />}>

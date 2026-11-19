@@ -145,7 +145,7 @@ export default function BlogPostPage({ params }: PageProps) {
     <>
       <ProgressBar />
 
-      <OverviewPage className="gap-8 max-md:gap-6">
+      <OverviewPage className="mx-auto max-w-5xl gap-8 max-md:gap-6">
         <Suspense fallback={<PostSkeleton />}>
           <Post params={params} />
         </Suspense>

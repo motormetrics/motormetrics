@@ -32,7 +32,7 @@ export function PostCard({
 
   return (
     <Link
-      className="group flex h-full min-w-0 flex-col gap-2 rounded-lg border border-separator px-4 pt-4 pb-4 text-foreground no-underline transition-colors hover:border-border"
+      className="group flex h-full min-w-0 flex-col gap-2 rounded-lg border border-separator bg-surface px-4 pt-4 pb-4 text-foreground no-underline transition-colors hover:border-border"
       hidden={hidden}
       href={`/blog/${post.slug}`}
     >

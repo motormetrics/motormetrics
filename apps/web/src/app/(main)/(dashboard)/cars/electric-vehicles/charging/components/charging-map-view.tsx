@@ -180,16 +180,16 @@ export function ChargingMapView({
       */}
 
       {/*
-        Heights: 480px on wider screens is off Tailwind's spacing scale (it
-        stops at h-96), and no preset gives a map tall enough to leave 320px
-        clear above the overlapping price cards, so it stays arbitrary.
+        Heights: 640px on wider screens is off Tailwind's spacing scale (it
+        stops at h-96), and no preset gives a map tall enough to leave its top
+        half clear of the overlapping price cards, so it stays arbitrary.
 
         The MapLibre credit sits in its bottom-right control corner, which the
         price cards cover. The arbitrary variants lift that corner by the
         overlap so the credit stays visible; HeroUI's Map has
         no prop to place it.
       */}
-      <div className="relative h-96 w-full overflow-hidden md:h-[480px] [&_.maplibregl-ctrl-bottom-right]:bottom-24 md:[&_.maplibregl-ctrl-bottom-right]:bottom-40">
+      <div className="relative h-96 w-full overflow-hidden md:h-[640px] [&_.maplibregl-ctrl-bottom-right]:bottom-24 md:[&_.maplibregl-ctrl-bottom-right]:bottom-80">
         <Map
           center={ISLAND_CENTER}
           // Page scroll passes over the map; zooming takes Ctrl/⌘ + scroll,
@@ -257,7 +257,7 @@ export function ChargingMapView({
 
         {/* Status messages centre in the uncovered part of the map. */}
         {loadedSites === null ? (
-          <div className="absolute inset-x-0 top-0 bottom-24 z-10 flex items-center justify-center bg-surface/60 backdrop-blur-xs md:bottom-40">
+          <div className="absolute inset-x-0 top-0 bottom-24 z-10 flex items-center justify-center bg-surface/60 backdrop-blur-xs md:bottom-80">
             <Typography.Paragraph color="muted" size="sm">
               Loading chargers…
             </Typography.Paragraph>
@@ -265,7 +265,7 @@ export function ChargingMapView({
         ) : null}
 
         {loadedSites?.length === 0 ? (
-          <div className="absolute inset-x-0 top-0 bottom-24 z-10 flex items-center justify-center bg-surface/60 backdrop-blur-xs md:bottom-40">
+          <div className="absolute inset-x-0 top-0 bottom-24 z-10 flex items-center justify-center bg-surface/60 backdrop-blur-xs md:bottom-80">
             <Typography.Paragraph color="muted" size="sm">
               No charger locations to show right now.
             </Typography.Paragraph>
@@ -286,7 +286,7 @@ export function ChargingMapView({
 /**
  * Pads the camera's bottom edge by the overlap, so the island, a fitted
  * district and a focused site centre in the part of the map the price cards
- * leave clear. The 96 and 160 px mirror the page's `-mt-24 md:-mt-40`, and
+ * leave clear. The 96 and 320 px mirror the page's `-mt-24 md:-mt-80`, and
  * follow the breakpoint as the window resizes.
  */
 function MapOverlap() {
@@ -301,7 +301,7 @@ function MapOverlap() {
       map.setPadding({
         top: 0,
         right: 0,
-        bottom: wide.matches ? 160 : 96,
+        bottom: wide.matches ? 320 : 96,
         left: 0,
       });
     };
