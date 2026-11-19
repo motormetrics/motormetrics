@@ -310,7 +310,7 @@ export function RenewalResults({
           </figure>
         )}
 
-        <Card className="self-start border border-separator p-4">
+        <Card className="self-start p-4">
           <span className="flex items-center gap-2 font-semibold">
             <CircleDollarSign aria-hidden className="size-5 text-accent" />
             If you deregister

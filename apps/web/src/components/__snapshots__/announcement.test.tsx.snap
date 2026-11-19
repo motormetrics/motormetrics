@@ -2,7 +2,7 @@
 
 exports[`Announcement > should prioritise path-specific announcements 1`] = `
 <div
-  class="alert alert--accent border border-separator"
+  class="alert alert--accent"
   data-slot="alert-root"
 >
   <div

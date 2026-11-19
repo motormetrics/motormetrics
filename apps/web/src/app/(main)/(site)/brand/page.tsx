@@ -333,7 +333,7 @@ export default function BrandPage() {
 
       <section className="flex flex-col gap-4">
         <SectionHead title="Wordmark and name" />
-        <Card className="border border-separator p-6">
+        <Card className="p-6">
           <Wordmark className="text-3xl" colour="currentColor" />
           <Typography.Paragraph color="muted">
             The wordmark and the name are written the same way: MotorMetrics,

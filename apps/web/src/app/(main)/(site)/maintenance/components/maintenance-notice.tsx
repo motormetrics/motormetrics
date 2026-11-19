@@ -73,7 +73,7 @@ export function MaintenanceNotice() {
 
       {/* Status Section */}
       <motion.div variants={staggerItemVariants}>
-        <Card className="border border-separator">
+        <Card>
           <Card.Content>
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
@@ -127,7 +127,7 @@ export function MaintenanceNotice() {
           variants={staggerContainerVariants}
         >
           <motion.div variants={staggerItemVariants}>
-            <Card className="border border-separator">
+            <Card>
               <Card.Content className="flex flex-row items-start gap-4">
                 <Zap className="mt-1 size-6 flex-shrink-0 text-accent" />
                 <div>
@@ -143,7 +143,7 @@ export function MaintenanceNotice() {
             </Card>
           </motion.div>
           <motion.div variants={staggerItemVariants}>
-            <Card className="border border-separator">
+            <Card>
               <Card.Content className="flex flex-row items-start gap-4">
                 <Shield className="mt-1 size-6 flex-shrink-0 text-accent" />
                 <div>
@@ -158,7 +158,7 @@ export function MaintenanceNotice() {
             </Card>
           </motion.div>
           <motion.div variants={staggerItemVariants}>
-            <Card className="border border-separator">
+            <Card>
               <Card.Content className="flex flex-row items-start gap-4">
                 <TrendingUp className="mt-1 size-6 flex-shrink-0 text-accent" />
                 <div>
@@ -173,7 +173,7 @@ export function MaintenanceNotice() {
             </Card>
           </motion.div>
           <motion.div variants={staggerItemVariants}>
-            <Card className="border border-separator">
+            <Card>
               <Card.Content className="flex flex-row items-start gap-4">
                 <Wrench className="mt-1 size-6 flex-shrink-0 text-accent" />
                 <div>

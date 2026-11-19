@@ -171,7 +171,7 @@ export function InsetVariant({
           <Brand />
           <Sidebar.Trigger />
         </div>
-        <Sidebar.Main>
+        <Sidebar.Main className="bg-background">
           <div className="flex items-center gap-2 px-4 pt-4 max-md:hidden md:px-10">
             <Sidebar.Trigger />
             <Breadcrumbs className="min-w-0">
