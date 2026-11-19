@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatOrdinal } from "../format-ordinal";
+import { formatOrdinal } from "./format-ordinal";
 
 describe("formatOrdinal", () => {
   it("should format basic ordinals correctly", () => {

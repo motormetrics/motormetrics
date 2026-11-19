@@ -3,7 +3,7 @@ import {
   extractFileExtension,
   getContentType,
   getFileExtension,
-} from "../file-utils";
+} from "./file-utils";
 
 describe("getContentType", () => {
   it.each([

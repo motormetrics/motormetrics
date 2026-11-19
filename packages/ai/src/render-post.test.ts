@@ -3,8 +3,8 @@ import {
   collectCategories,
   collectHighlights,
   renderPostContent,
-} from "../render-post";
-import type { GeneratedPost, PostChart } from "../schemas";
+} from "./render-post";
+import type { GeneratedPost, PostChart } from "./schemas";
 
 const chart: PostChart = {
   type: "bar",

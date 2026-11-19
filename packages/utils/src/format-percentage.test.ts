@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatPercent, formatPercentage } from "../format-percentage";
+import { formatPercent, formatPercentage } from "./format-percentage";
 
 describe("formatPercentage", () => {
   it("should format a value with 1 decimal place and % suffix", () => {

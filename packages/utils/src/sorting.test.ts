@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SortDirection, sortByName, sortByValue } from "../sorting";
+import { SortDirection, sortByName, sortByValue } from "./sorting";
 
 describe("SortDirection", () => {
   it("should have ASC and DESC values", () => {

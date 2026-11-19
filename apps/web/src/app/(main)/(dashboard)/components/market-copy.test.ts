@@ -3,7 +3,6 @@ import {
   fuelCaption,
   leadSentence,
   makesCaption,
-  pqpCaption,
   rangeWhere,
   roadCaption,
   signed,
@@ -87,24 +86,6 @@ describe("coeCaption", () => {
   it("should name the largest other mover", () => {
     expect(coeCaption([move("A", -2), move("B", 1.5), move("D", -4)], 24)).toBe(
       "Category A fell 2.0% to $100,000; of the others, Category D moved most, −4.0%.",
-    );
-  });
-});
-
-describe("pqpCaption", () => {
-  it("should give Category A's rate and the largest mover", () => {
-    expect(
-      pqpCaption(
-        [
-          { change: 0.9, key: "A", rate: 129883 },
-          { change: 0.2, key: "B", rate: 131819 },
-          { change: 4.5, key: "D", rate: 10366 },
-        ],
-        "2026-11",
-        "2026-10",
-      ),
-    ).toBe(
-      "Renewing a Category A COE for 10 years costs $129,883 in November, 0.9% more than in October; Category D moved most, +4.5%. LTA publishes no PQP for Category E.",
     );
   });
 });

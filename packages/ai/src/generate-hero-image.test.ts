@@ -3,8 +3,8 @@ import {
   HERO_IMAGE_INSTRUCTION,
   HERO_IMAGE_SIZE,
   HERO_IMAGE_SUBJECTS,
-} from "../config";
-import { generateHeroImage } from "../generate-hero-image";
+} from "./config";
+import { generateHeroImage } from "./generate-hero-image";
 
 const { imageModel, generateImage, uploadPostHeroImage } = vi.hoisted(() => ({
   imageModel: vi.fn(),
@@ -13,7 +13,7 @@ const { imageModel, generateImage, uploadPostHeroImage } = vi.hoisted(() => ({
 }));
 vi.mock("@ai-sdk/gateway", () => ({ gateway: { imageModel } }));
 vi.mock("ai", () => ({ generateImage }));
-vi.mock("../blob", () => ({ uploadPostHeroImage }));
+vi.mock("./blob", () => ({ uploadPostHeroImage }));
 
 const params = {
   title: "Registrations rose",

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { uploadPostHeroImage } from "../blob";
+import { uploadPostHeroImage } from "./blob";
 
 const { put } = vi.hoisted(() => ({ put: vi.fn() }));
 vi.mock("@vercel/blob", () => ({ put }));

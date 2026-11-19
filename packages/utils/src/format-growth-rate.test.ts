@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatGrowthRate } from "../format-growth-rate";
+import { formatGrowthRate } from "./format-growth-rate";
 
 describe("formatGrowthRate", () => {
   it("should add + sign for positive values", () => {

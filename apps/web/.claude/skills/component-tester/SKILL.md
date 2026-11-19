@@ -62,6 +62,6 @@ Flag components with coverage below:
 
 ## Related Files
 
-- Test location: `__tests__/` directories next to components
+- Test location: beside the component (`trend-chart.tsx` → `trend-chart.test.tsx`)
 - Test suffix: `.test.ts` or `.test.tsx`
 - Configuration: `vitest.config.ts` in project root

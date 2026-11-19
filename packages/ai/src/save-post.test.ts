@@ -1,7 +1,7 @@
 import { posts } from "@motormetrics/database/schema";
 import { PgDialect } from "drizzle-orm/pg-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { type PostParams, savePost, updatePostHeroImage } from "../save-post";
+import { type PostParams, savePost, updatePostHeroImage } from "./save-post";
 
 const {
   insert,
@@ -23,7 +23,7 @@ const {
   generateDocumentEmbedding: vi.fn(),
 }));
 vi.mock("@motormetrics/database/client", () => ({ db: { insert, update } }));
-vi.mock("../embedding", () => ({ generateDocumentEmbedding }));
+vi.mock("./embedding", () => ({ generateDocumentEmbedding }));
 
 const fetchMock = vi.fn<typeof fetch>();
 const timestamp = new Date("2026-10-04T00:00:00.000Z");
