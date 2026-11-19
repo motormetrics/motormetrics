@@ -121,7 +121,7 @@ async function GuideContent({
  */
 export default function GuidePage({ params }: PageProps) {
   return (
-    <OverviewPage className="gap-8 max-md:gap-6">
+    <OverviewPage className="mx-auto max-w-5xl gap-8 max-md:gap-6">
       <Suspense fallback={<GuideSkeleton />}>
         <Guide params={params} />
       </Suspense>
