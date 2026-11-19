@@ -1,6 +1,5 @@
 import { OG_COLOURS } from "@web/lib/og/colours";
 import { sparkline } from "@web/lib/og/sparkline";
-import { DeltaChip } from "@web/lib/og/templates/delta-chip";
 import { Frame } from "@web/lib/og/templates/frame";
 import { Pill } from "@web/lib/og/templates/pill";
 
@@ -11,10 +10,10 @@ const CHART_PAD = 16;
 export interface CoePremiumSeries {
   /** e.g. "Cat A" */
   label: string;
-  /** Latest premium, already formatted */
-  premium: string;
-  /** Change against the previous exercise, in percent */
-  delta: number;
+  /** The month's first bidding premium, already formatted */
+  first: string;
+  /** The month's second bidding premium; absent until that exercise is held */
+  second?: string;
   /** Monthly premiums, oldest first */
   trend: number[];
 }
@@ -91,33 +90,49 @@ export function CoePremiums({
                     {category.label}
                   </span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                  <span
-                    style={{
-                      fontSize: 72,
-                      lineHeight: 1,
-                      fontWeight: 800,
-                      letterSpacing: "-0.04em",
-                      color: OG_COLOURS.ink,
-                    }}
-                  >
-                    {category.premium}
-                  </span>
-                  <DeltaChip delta={category.delta} size="lg" />
+                <div style={{ display: "flex", gap: 24 }}>
+                  {[
+                    { label: "1st bidding", value: category.first },
+                    { label: "2nd bidding", value: category.second },
+                  ].map(({ label, value }) => (
+                    <div
+                      key={label}
+                      style={{
+                        width: 248,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 6,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: 20,
+                          fontWeight: 600,
+                          color: OG_COLOURS.subtle,
+                        }}
+                      >
+                        {label}
+                      </span>
+                      <span
+                        style={{
+                          height: 48,
+                          display: "flex",
+                          alignItems: "center",
+                          fontSize: value ? 48 : 26,
+                          lineHeight: 1,
+                          fontWeight: value ? 800 : 600,
+                          letterSpacing: value ? "-0.04em" : "0",
+                          color: value ? OG_COLOURS.ink : OG_COLOURS.faint,
+                        }}
+                      >
+                        {value ?? "Not held yet"}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
           </div>
-          <span
-            style={{
-              marginTop: 18,
-              fontSize: 22,
-              fontWeight: 600,
-              color: OG_COLOURS.subtle,
-            }}
-          >
-            vs previous exercise
-          </span>
         </div>
         <div
           style={{

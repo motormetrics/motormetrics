@@ -8,7 +8,7 @@ import {
   TopMakesFigure,
 } from "@web/app/(main)/(dashboard)/components/car-figures";
 import {
-  CategoryATrendFigure,
+  CarCategoriesTrendFigure,
   CoePremiumsFigure,
 } from "@web/app/(main)/(dashboard)/components/coe-figures";
 import { buildHomeFaqs } from "@web/app/(main)/(dashboard)/components/faq-data";
@@ -157,8 +157,8 @@ export default function HomePage() {
           <CoePremiumsFigure />
         </SectionErrorBoundary>
         <Hairline />
-        <SectionErrorBoundary title="Category A premiums unavailable">
-          <CategoryATrendFigure />
+        <SectionErrorBoundary title="Category A and B premiums unavailable">
+          <CarCategoriesTrendFigure />
         </SectionErrorBoundary>
         <Hairline />
         <SectionErrorBoundary title="Fuel types unavailable">
