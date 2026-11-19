@@ -240,7 +240,7 @@ Every other page names a static image in its `openGraph` block, because a page's
 discards any image inherited from a parent segment; Next.js reuses it for `twitter:image`. The
 constants are in `@web/lib/metadata/social`:
 
-- Makes, make comparisons, fuel types, vehicle types and the learn index use a section card
+- Makes, make comparisons and the learn index use a section card
   (`makesCardImages`, `learnCardImages`, …): a PNG in `public/og` shared by the section's index and
   detail pages, so it costs no render. They were drawn once with the `Article` card (pill, title, one
   line, no date); redraw one the same way if its copy changes.
