@@ -9,6 +9,8 @@ export type PremiumTrendPoint = {
   /** "Nov 1": the month and the bidding number. */
   label: string;
   premium: number;
+  /** A second category's premium at the same exercise, drawn behind the first. */
+  second?: number;
   /** "First bidding, November 2026", the tooltip header. */
   title: string;
 };
@@ -22,16 +24,23 @@ interface GridLineProps {
 }
 
 /**
- * One category's closing premium per exercise as a single line. The y-axis
- * spans the data, not zero; the section's source note says so.
+ * One category's closing premium per exercise as a line, with a second
+ * category behind it when `secondName` is given. The y-axis spans the data,
+ * not zero; the section's source note says so.
  */
 export function PremiumTrendChart({
   ariaLabel,
   data,
+  name = "Category A premium",
+  secondName,
   ticks,
 }: {
   ariaLabel: string;
   data: PremiumTrendPoint[];
+  /** The first line's name. */
+  name?: string;
+  /** The second line's name; each point then carries `second`. */
+  secondName?: string;
   /** Ticks from `premiumAxisTicks`, not anchored at zero. */
   ticks: number[];
 }) {
@@ -67,12 +76,24 @@ export function PremiumTrendChart({
           ticks={ticks}
           width={56}
         />
+        {secondName ? (
+          <LineChart.Line
+            activeDot={{ fill: "var(--chart-4)", r: 4, strokeWidth: 0 }}
+            dataKey="second"
+            dot={false}
+            isAnimationActive={false}
+            name={secondName}
+            stroke="var(--chart-4)"
+            strokeWidth={2}
+            type="linear"
+          />
+        ) : null}
         <LineChart.Line
           activeDot={{ fill: "var(--chart-1)", r: 4, strokeWidth: 0 }}
           dataKey="premium"
           dot={false}
           isAnimationActive={false}
-          name="Category A premium"
+          name={name}
           stroke="var(--chart-1)"
           strokeWidth={2}
           type="linear"
@@ -88,9 +109,28 @@ export function PremiumTrendChart({
             return (
               <ChartTooltip>
                 <ChartTooltip.Header>{point.title}</ChartTooltip.Header>
-                <span className="font-semibold text-sm tabular-nums">
-                  {formatCurrency(point.premium)}
-                </span>
+                {secondName && point.second !== undefined ? (
+                  <>
+                    <ChartTooltip.Item>
+                      <ChartTooltip.Indicator color="var(--chart-1)" />
+                      <ChartTooltip.Label>{name}</ChartTooltip.Label>
+                      <ChartTooltip.Value>
+                        {formatCurrency(point.premium)}
+                      </ChartTooltip.Value>
+                    </ChartTooltip.Item>
+                    <ChartTooltip.Item>
+                      <ChartTooltip.Indicator color="var(--chart-4)" />
+                      <ChartTooltip.Label>{secondName}</ChartTooltip.Label>
+                      <ChartTooltip.Value>
+                        {formatCurrency(point.second)}
+                      </ChartTooltip.Value>
+                    </ChartTooltip.Item>
+                  </>
+                ) : (
+                  <span className="font-semibold text-sm tabular-nums">
+                    {formatCurrency(point.premium)}
+                  </span>
+                )}
               </ChartTooltip>
             );
           }}

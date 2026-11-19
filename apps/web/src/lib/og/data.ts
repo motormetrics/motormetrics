@@ -97,6 +97,7 @@ export async function loadSiteDefault(): Promise<CardData<SiteDefaultProps>> {
   ]);
   const registrations = month ? await getCarsData(month) : null;
   const categoryA = findCategory(latest, "Category A");
+  const categoryB = findCategory(latest, "Category B");
   const electric = registrations
     ? toFuelSlices(registrations.fuelType, registrations.total).find(
         (slice) => slice.label === "Electric",
@@ -104,7 +105,8 @@ export async function loadSiteDefault(): Promise<CardData<SiteDefaultProps>> {
     : undefined;
 
   return {
-    coePremium: categoryA ? formatCurrency(categoryA.premium) : "—",
+    coePremiumA: categoryA ? formatCurrency(categoryA.premium) : "—",
+    coePremiumB: categoryB ? formatCurrency(categoryB.premium) : "—",
     registrations: registrations ? formatCount(registrations.total) : "—",
     electricShare: electric ? formatPercent(electric.share) : "—",
     monthLabel: month ? formatDateToMonthYear(month) : "",
@@ -151,19 +153,26 @@ export async function loadCoePremiums(): Promise<CardData<CoePremiumsProps> | nu
     return null;
   }
 
+  // The month's first and second exercise: the latest result is one of them,
+  // and the exercise before it is the first when the latest is the second.
   const series = (
     current: SelectCOE,
     trends: { month: string; premium: number }[],
   ) => {
     const recent = trends.slice(-TREND_POINTS);
+    const earlier = findCategory(previous, current.vehicleClass);
+    const first =
+      current.biddingNo === 1
+        ? current
+        : earlier?.month === current.month
+          ? earlier
+          : undefined;
 
     return {
       label: current.vehicleClass.replace("Category", "Cat"),
-      premium: formatCurrency(current.premium),
-      delta: percentChange(
-        current.premium,
-        findCategory(previous, current.vehicleClass)?.premium,
-      ),
+      first: first ? formatCurrency(first.premium) : "—",
+      second:
+        current.biddingNo === 1 ? undefined : formatCurrency(current.premium),
       trend: recent.map((point) => point.premium),
       fromMonth: recent[0]?.month,
     };

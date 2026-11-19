@@ -7,7 +7,9 @@ import { StatTile } from "@web/lib/og/templates/stat-tile";
 export interface SiteDefaultProps {
   height: number;
   /** Latest Category A premium, already formatted */
-  coePremium: string;
+  coePremiumA: string;
+  /** Latest Category B premium, already formatted */
+  coePremiumB: string;
   /** Latest month's registrations, already formatted */
   registrations: string;
   /** Battery-electric share of the latest month, already formatted */
@@ -19,7 +21,8 @@ export interface SiteDefaultProps {
 /** 01 · Site default: home and any page without its own card */
 export function SiteDefault({
   height,
-  coePremium,
+  coePremiumA,
+  coePremiumB,
   registrations,
   electricShare,
   monthLabel,
@@ -55,7 +58,8 @@ export function SiteDefault({
       </p>
       <div style={{ flex: 1, minHeight: 36 }} />
       <div style={{ display: "flex", gap: 18 }}>
-        <StatTile value={coePremium} label="Cat A COE premium" />
+        <StatTile value={coePremiumA} label="Cat A COE premium" />
+        <StatTile value={coePremiumB} label="Cat B COE premium" />
         <StatTile value={registrations} label="cars registered" />
         <StatTile value={electricShare} label="electric share" />
       </div>

@@ -143,16 +143,27 @@ export async function CoePremiumsFigure() {
   );
 }
 
-/** Category A's closing premium over the last 24 exercises, as a line. */
-export async function CategoryATrendFigure() {
-  const window = (await getCategoryExercises("Category A")).slice(-EXERCISES);
+/** Category A and B closing premiums over the last 24 exercises, as two lines. */
+export async function CarCategoriesTrendFigure() {
+  const [categoryA, categoryB] = await Promise.all([
+    getCategoryExercises("Category A"),
+    getCategoryExercises("Category B"),
+  ]);
+  const window = categoryA.slice(-EXERCISES);
   if (window.length < 2) {
     return null;
   }
 
+  const premiumB = new Map(
+    categoryB.map((exercise) => [
+      `${exercise.month}:${exercise.biddingNo}`,
+      exercise.premium,
+    ]),
+  );
   const data = window.map((exercise) => ({
     label: formatExerciseTick(exercise),
     premium: exercise.premium,
+    second: premiumB.get(`${exercise.month}:${exercise.biddingNo}`),
     title: formatExercise(exercise),
   }));
   const first = window[0];
@@ -160,23 +171,32 @@ export async function CategoryATrendFigure() {
 
   return (
     <section
-      aria-labelledby="category-a-trend-heading"
+      aria-labelledby="car-categories-trend-heading"
       className="flex scroll-mt-24 flex-col gap-6"
-      id="category-a-trend"
+      id="car-categories-trend"
     >
       <SectionHead
         title={
-          <span id="category-a-trend-heading">
-            Category A{" "}
+          <span id="car-categories-trend-heading">
+            Category A and B{" "}
             <span className={PERIOD}>last {window.length} exercises</span>
           </span>
         }
       />
-      <LegendItem className="bg-chart-1" label="Category A premium" />
+      <div className="flex flex-wrap gap-x-4 gap-y-2">
+        <LegendItem className="bg-chart-1" label="Category A premium" />
+        <LegendItem className="bg-chart-4" label="Category B premium" />
+      </div>
       <PremiumTrendChart
-        ariaLabel={`Category A premium, ${exerciseName(first)} to ${exerciseName(latest)}`}
+        ariaLabel={`Category A and Category B premiums, ${exerciseName(first)} to ${exerciseName(latest)}`}
         data={data}
-        ticks={premiumAxisTicks(window.map((exercise) => exercise.premium))}
+        name="Category A premium"
+        secondName="Category B premium"
+        ticks={premiumAxisTicks(
+          data.flatMap(({ premium, second }) =>
+            second === undefined ? [premium] : [premium, second],
+          ),
+        )}
       />
       <SourceNote>
         Source: LTA via DataMall · Quota premium at the close of each exercise,{" "}
