@@ -131,6 +131,7 @@ export default defineConfig({
             "motion/react-client",
             "next/cache",
             "next/image",
+            "nuqs",
             "nuqs/adapters/testing",
             "nuqs/server",
             "reading-time",

@@ -1,5 +1,8 @@
 import type { SelectPost } from "@motormetrics/database/schema";
-import { getMonthlyRegistrationTotals } from "@web/queries/cars/monthly-registrations";
+import {
+  getMonthlyRegistrationTotals,
+  getMonthlyRegistrationTotalsByFuelType,
+} from "@web/queries/cars/monthly-registrations";
 import { getCoeResults } from "@web/queries/coe/historical-results";
 import { getPqpRates } from "@web/queries/coe/pqp/rates";
 import { getDeregistrations } from "@web/queries/deregistrations/all";
@@ -31,10 +34,21 @@ const registrations: Series = {
   },
 };
 
+const electricRegistrations: Series = {
+  label: "Electric car registrations",
+  load: async () => {
+    const totals = await getMonthlyRegistrationTotalsByFuelType(
+      "Electric",
+      HISTORY,
+    );
+    return new Map(totals.map(({ month, total }) => [month, total]));
+  },
+};
+
 /** The series each topic's posts are about. A topic not listed gets no chart. */
 const SERIES: Record<string, Series> = {
   cars: registrations,
-  "electric-vehicles": registrations,
+  "electric-vehicles": electricRegistrations,
   "monthly-update": registrations,
   coe: {
     label: "Category A premium",
@@ -77,7 +91,8 @@ const SERIES: Record<string, Series> = {
  * The chart for each post's card, keyed by post id: the series its topic is
  * about, over the months up to the one it reports on. Every series comes from
  * a cached query, so this adds no request-time work. A post with no month, an
- * unlisted topic or fewer than two months of data gets no chart.
+ * unlisted topic, a series that failed to load or fewer than two months of
+ * data gets no chart.
  */
 export async function getPostTrends(
   posts: SelectPost[],
@@ -91,7 +106,16 @@ export async function getPostTrends(
   ];
   const loaded = new Map(
     await Promise.all(
-      series.map(async (entry) => [entry, await entry.load()] as const),
+      series.map(async (entry) => {
+        try {
+          return [entry, await entry.load()] as const;
+        } catch (error) {
+          // A chart is an extra: a series that fails to load leaves its
+          // posts without one rather than taking the list down with it.
+          console.error(`[Blog] Failed to load "${entry.label}"`, error);
+          return [entry, undefined] as const;
+        }
+      }),
     ),
   );
 
