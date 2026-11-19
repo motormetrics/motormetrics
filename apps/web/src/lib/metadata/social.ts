@@ -33,8 +33,9 @@ export const siteCardImages = cardImages(
 );
 
 /**
- * Static section cards in `public/og`: one per section, shared by its index
- * and detail pages, so sharing a page costs no render.
+ * Section cards: one per section, shared by its index and detail pages. The
+ * route at `app/og/[card]` draws each once at build time, so sharing a page
+ * costs no render.
  */
 export const makesCardImages = cardImages(
   "/og/makes.png",

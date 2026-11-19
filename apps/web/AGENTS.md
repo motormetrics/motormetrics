@@ -241,9 +241,10 @@ discards any image inherited from a parent segment; Next.js reuses it for `twitt
 constants are in `@web/lib/metadata/social`:
 
 - Makes, make comparisons and the learn index use a section card
-  (`makesCardImages`, `learnCardImages`, …): a PNG in `public/og` shared by the section's index and
-  detail pages, so it costs no render. They were drawn once with the `Article` card (pill, title, one
-  line, no date); redraw one the same way if its copy changes.
+  (`makesCardImages`, `learnCardImages`, …): one image shared by the section's index and detail
+  pages. The route handler at `src/app/og/[card]/route.tsx` draws them with the `Article` card (pill,
+  title, one line, no date) and prerenders each at build time through `generateStaticParams`, so
+  they cost no render and follow the shared frame. Their copy lives in that file.
 - About, advertise, brand, contact and legal use `siteCardImages`, the root `/opengraph-image`.
 
 Social referrals were under 1% of visitors and none landed on make, fuel-type, vehicle-type,
