@@ -36,7 +36,7 @@ export function generateStaticParams() {
 
 export async function GET(
   _request: Request,
-  { params }: RouteContext<"/og/[card]">,
+  { params }: { params: Promise<{ card: string }> },
 ) {
   const { card } = await params;
   const copy = CARDS[card];
