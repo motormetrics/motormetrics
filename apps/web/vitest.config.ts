@@ -143,6 +143,9 @@ export default defineConfig({
           browser: {
             enabled: true,
             headless: true,
+            // Vitest 5.1 mocks through an import map, under which the
+            // next/font/google mock in global-error.test.tsx fails to import.
+            importMapMocks: false,
             provider: playwright(),
             instances: [{ browser: "chromium" }],
           },

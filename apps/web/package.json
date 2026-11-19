@@ -27,7 +27,7 @@
     "@better-auth/drizzle-adapter": "catalog:",
     "@flags-sdk/vercel": "1.6.0",
     "@gravity-ui/icons": "2.18.0",
-    "@heroui-pro/react": "1.0.0-beta.8",
+    "@heroui-pro/react": "1.0.0-beta.11",
     "@heroui/react": "catalog:",
     "@heroui/styles": "catalog:",
     "@motormetrics/ai": "workspace:*",
