@@ -168,8 +168,12 @@ export async function getPostTrends(
     }
 
     const { byMonth, incompleteMonth, secondByMonth } = series;
-    const months = trailingMonths(month, WINDOW).filter((key) =>
-      byMonth.has(key),
+    // A month counts only when every series on the chart has a figure for
+    // it, so a missing one is left out rather than drawn as zero.
+    const months = trailingMonths(month, WINDOW).filter(
+      (key) =>
+        byMonth.get(key) !== undefined &&
+        (!secondByMonth || secondByMonth.get(key) !== undefined),
     );
 
     const values = months.map((key) => byMonth.get(key) ?? 0);
