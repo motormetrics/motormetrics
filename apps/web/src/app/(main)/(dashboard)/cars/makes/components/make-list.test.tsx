@@ -33,10 +33,10 @@ vi.mock("next/form", async () => {
   return { ...MockForm, default: MockForm };
 });
 
-const row = (make: string, slug: string, compareHref?: string) =>
+const row = (make: string, slug: string, compareWith?: string) =>
   ({
     change: "+1.0%",
-    compareHref,
+    compareWith,
     count: 100,
     href: `/cars/makes/${slug}`,
     logoUrl: null,
@@ -89,7 +89,7 @@ describe("MakeList", () => {
   it("should make a comparison pick a button, never a link", async () => {
     const screen = await renderList([
       row("BMW", "bmw"),
-      row("TOYOTA", "toyota", "/cars/makes/compare?make=bmw&make=toyota"),
+      row("TOYOTA", "toyota", "bmw"),
     ]);
 
     await expect
@@ -107,7 +107,7 @@ describe("MakeList", () => {
     release = capture.release;
     const screen = await renderList([
       row("BMW", "bmw"),
-      row("TOYOTA", "toyota", "/cars/makes/compare?make=bmw&make=toyota"),
+      row("TOYOTA", "toyota", "bmw"),
     ]);
 
     await screen.getByRole("button", { name: "Compare with TOYOTA" }).click();

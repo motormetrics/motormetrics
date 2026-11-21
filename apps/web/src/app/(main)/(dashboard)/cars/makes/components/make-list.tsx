@@ -1,6 +1,7 @@
 "use client";
 
 import { SearchField, Typography } from "@heroui/react";
+import { serialize as serializeCompare } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import {
   BarHeader,
   BarRow,
@@ -17,10 +18,11 @@ export interface MakeListRow {
   change: string;
   count: number;
   /**
-   * The comparison with the selected make while one is being picked. It is
-   * opened by a button, never a link, so crawlers cannot walk every pair.
+   * The selected make's slug while a second make is being picked. The row
+   * then opens the comparison of the two through a button, never a link, so
+   * crawlers cannot walk every pair.
    */
-  compareHref?: string;
+  compareWith?: string;
   /** The make's own page. */
   href: string;
   logoUrl: string | null;
@@ -112,13 +114,15 @@ export function MakeList({
               label={
                 <>
                   <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="sm" />
-                  {row.compareHref ? (
+                  {row.compareWith ? (
                     <NavButton
                       aria-label={`Compare with ${row.make}`}
                       // Sized and set like the name links on the other rows,
                       // so the list keeps one column edge and one weight.
                       className="h-auto min-w-0 truncate px-0 font-semibold text-foreground text-sm hover:bg-transparent hover:text-accent hover:underline"
-                      href={row.compareHref}
+                      action="/cars/makes/compare"
+                      serialize={serializeCompare}
+                      values={{ make: [row.compareWith, row.slug] }}
                       size="sm"
                       variant="ghost"
                     >

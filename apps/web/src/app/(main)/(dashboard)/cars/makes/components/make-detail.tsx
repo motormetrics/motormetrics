@@ -1,6 +1,7 @@
 import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { TwoShadeTrendChart } from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
+import { serialize as serializeCompare } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import {
   loadMakeRows,
   type MakeRow,
@@ -233,7 +234,7 @@ export async function MakeDetail({
   makesCount: number;
   params: MakesSearchParams;
   /** The makes ranked either side, offered as a comparison with this one. */
-  peers: { href: string; make: string }[];
+  peers: Pick<MakeRow, "make" | "slug">[];
   row: MakeRow;
   /** All registrations in the period, for the share note. */
   total: number;
@@ -312,12 +313,11 @@ export async function MakeDetail({
             <ArrowRight className="size-4" />
           </Link>
           <NavButton
+            action="/cars/makes"
             aria-expanded={params.compare}
-            href={serialize("/cars/makes", {
-              ...params,
-              compare: params.compare ? null : true,
-            })}
             scroll={false}
+            serialize={serialize}
+            values={{ ...params, compare: params.compare ? null : true }}
             size="sm"
             variant="secondary"
           >
@@ -340,9 +340,11 @@ export async function MakeDetail({
           </span>
           {peers.map((peer) => (
             <NavButton
-              href={peer.href}
-              key={peer.href}
+              action="/cars/makes/compare"
+              key={peer.slug}
+              serialize={serializeCompare}
               size="sm"
+              values={{ make: [row.slug, peer.slug] }}
               variant="secondary"
             >
               {peer.make}
@@ -350,9 +352,11 @@ export async function MakeDetail({
           ))}
           <span className="text-muted">or any make in the list</span>
           <NavButton
+            action="/cars/makes"
             className="ml-auto"
-            href={serialize("/cars/makes", { ...params, compare: null })}
             scroll={false}
+            serialize={serialize}
+            values={{ ...params, compare: null }}
             size="sm"
             variant="tertiary"
           >
