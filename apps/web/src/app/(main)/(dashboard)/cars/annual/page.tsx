@@ -44,28 +44,45 @@ import type { Metadata } from "next";
 import { cache } from "react";
 import type { WebPage, WithContext } from "schema-dts";
 
-export const metadata: Metadata = {
-  title: "Annual Vehicle Population Singapore",
-  description:
-    "Annual motor vehicle population in Singapore by vehicle type and fuel type. Track the growth of electric, hybrid, petrol, and diesel vehicles on Singapore roads.",
-  openGraph: {
-    ...baseOpenGraph,
-    title: "Annual Vehicle Population - Singapore",
-    description:
-      "Explore annual vehicle population trends in Singapore with interactive charts and key statistics.",
-    url: `${SITE_URL}/cars/annual`,
-  },
-  alternates: {
-    canonical: "/cars/annual",
-  },
-};
+/**
+ * Worded for what people search ("how many cars are there in Singapore"),
+ * which this page ranks for but did not win clicks on as "Annual Vehicle
+ * Population". The title stays evergreen; the description quotes the latest
+ * year-end count so the snippet answers before the click.
+ */
+const title = "How Many Cars Are There in Singapore?";
+const fallbackDescription =
+  "Singapore's car and vehicle population at each year end, by vehicle type and fuel type, from LTA.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const population = await loadPopulation();
+  let description = fallbackDescription;
+  if (population) {
+    const { cars, classes, data } = population;
+    const allVehicles = classes.reduce((sum, row) => sum + row.population, 0);
+    description = `Singapore had ${formatCount(cars.series.at(-1) ?? 0)} cars on the road at the end of ${data.year}, out of ${formatCount(allVehicles)} vehicles. Car and vehicle population by year, type and fuel, from LTA.`;
+  }
+
+  return {
+    title,
+    description,
+    openGraph: {
+      ...baseOpenGraph,
+      title: `${title} - Car Population`,
+      description,
+      url: `${SITE_URL}/cars/annual`,
+    },
+    alternates: {
+      canonical: "/cars/annual",
+    },
+  };
+}
 
 const structuredData: WithContext<WebPage> = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Annual Vehicle Population",
-  description:
-    "Motor vehicle population in Singapore by vehicle type and type of fuel used, with interactive charts and year-over-year analysis",
+  name: title,
+  description: fallbackDescription,
   url: `${SITE_URL}/cars/annual`,
   publisher: {
     "@type": "Organization",
