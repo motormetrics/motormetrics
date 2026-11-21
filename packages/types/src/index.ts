@@ -77,6 +77,13 @@ export interface PQP {
   pqp: number;
 }
 
+export interface CoeRevalidation {
+  month: string;
+  type: string;
+  category: string;
+  number: number;
+}
+
 export interface Deregistration {
   month: string;
   category: string;
