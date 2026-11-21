@@ -1,19 +1,36 @@
-"use client";
-
 import { Button, type ButtonProps } from "@heroui/react";
-import { useRouter } from "next/navigation";
+import Form from "next/form";
 
 /**
- * A button that navigates in the browser. The makes index uses it for the
- * detail panel's `?make=` and `?compare=` views and the comparison picks, so
- * those URLs never appear as links in the HTML for a crawler to walk.
+ * A button that opens `href` through a GET form. The makes index uses it for
+ * the detail panel's `?make=` and `?compare=` views and the comparison picks:
+ * readers get an ordinary client-side navigation, while the URLs never appear
+ * as links in the HTML for a crawler to walk.
+ *
+ * The form is `display: contents`, so the button lays out as if it stood
+ * alone in its row.
  */
 export function NavButton({
   href,
-  scroll = true,
+  scroll,
   ...props
-}: Omit<ButtonProps, "onPress"> & { href: string; scroll?: boolean }) {
-  const router = useRouter();
+}: Omit<ButtonProps, "onPress" | "type"> & {
+  href: string;
+  scroll?: boolean;
+}) {
+  const [action, query] = href.split("?");
 
-  return <Button {...props} onPress={() => router.push(href, { scroll })} />;
+  return (
+    <Form action={action} className="contents" scroll={scroll}>
+      {[...new URLSearchParams(query)].map(([name, value]) => (
+        <input
+          key={`${name}=${value}`}
+          name={name}
+          type="hidden"
+          value={value}
+        />
+      ))}
+      <Button {...props} type="submit" />
+    </Form>
+  );
 }
