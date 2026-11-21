@@ -130,6 +130,7 @@ export default defineConfig({
             "motion/react",
             "motion/react-client",
             "next/cache",
+            "next/form",
             "next/image",
             "nuqs",
             "nuqs/adapters/testing",
