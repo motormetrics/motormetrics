@@ -3,6 +3,8 @@ import {
   monthsCaption,
   pqpLead,
   ratesCaption,
+  renewalSeries,
+  renewalsCaption,
   trendCaption,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-captions";
 import { describe, expect, it } from "vitest";
@@ -117,5 +119,59 @@ describe("monthsCaption", () => {
     expect(monthsCaption("Category A", rates([100, 90, 99]))).toBe(
       "The Category A PQP changed +10.0% in May 2026.",
     );
+  });
+});
+
+const CATEGORIES = ["Category A", "Category B"];
+
+const revalidations = [
+  { month: "2026-09", type: "10 Year", category: "Category A", number: 272 },
+  { month: "2026-08", type: "10 Year", category: "Category A", number: 121 },
+  { month: "2026-08", type: "10 Year", category: "Category B", number: 307 },
+  { month: "2026-09", type: "10 Year", category: "Category B", number: 627 },
+  { month: "2026-09", type: "5 Year", category: "Category A", number: 593 },
+  { month: "2026-09", type: "10 Year", category: "Category C", number: 49 },
+];
+
+describe("renewalSeries", () => {
+  it("should keep one term and the given categories, oldest month first", () => {
+    expect(renewalSeries(revalidations, CATEGORIES, "10")).toEqual([
+      { month: "2026-08", counts: { "Category A": 121, "Category B": 307 } },
+      { month: "2026-09", counts: { "Category A": 272, "Category B": 627 } },
+    ]);
+  });
+
+  it("should count a category missing from a month as zero", () => {
+    expect(renewalSeries(revalidations, CATEGORIES, "5")).toEqual([
+      { month: "2026-09", counts: { "Category A": 593, "Category B": 0 } },
+    ]);
+  });
+
+  it("should keep only the latest months", () => {
+    expect(
+      renewalSeries(revalidations, CATEGORIES, "10", 1).map(
+        ({ month }) => month,
+      ),
+    ).toEqual(["2026-09"]);
+  });
+});
+
+describe("renewalsCaption", () => {
+  const series = renewalSeries(revalidations, CATEGORIES, "10");
+
+  it("should quote the latest month against the one before", () => {
+    expect(renewalsCaption("Category A", "10", series)).toBe(
+      "In September 2026, 272 Category A COEs were renewed for 10 years, up from 121 in August.",
+    );
+  });
+
+  it("should quote the latest month alone without a previous month", () => {
+    expect(renewalsCaption("Category B", "10", series.slice(-1))).toBe(
+      "In September 2026, 627 Category B COEs were renewed for 10 years.",
+    );
+  });
+
+  it("should return undefined without data", () => {
+    expect(renewalsCaption("Category A", "10", [])).toBeUndefined();
   });
 });

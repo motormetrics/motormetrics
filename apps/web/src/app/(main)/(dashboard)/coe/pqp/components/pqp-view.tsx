@@ -2,12 +2,20 @@ import {
   groupByExercise,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import type { PQPMonthRate } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-captions";
+import {
+  type PQPMonthRate,
+  renewalSeries,
+} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-captions";
 import {
   loadSearchParams,
   type PQPCategoryKey,
 } from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
-import { getCoeResults, getPQPOverview } from "@web/queries/coe";
+import {
+  getCoeResults,
+  getPQPOverview,
+  PQP_REPORTED_CATEGORIES,
+} from "@web/queries/coe";
+import { getCarCoeRevalidations } from "@web/queries/coe-revalidation/cars";
 import type { Pqp } from "@web/types/coe";
 import type { SearchParams } from "nuqs/server";
 import { cache, Suspense } from "react";
@@ -25,9 +33,10 @@ export const categoryName = (key: PQPCategoryKey) =>
  * Everything here is cached, so parts built only on it need no boundary.
  */
 export const loadPqpData = cache(async () => {
-  const [overview, coeResults] = await Promise.all([
+  const [overview, coeResults, revalidations] = await Promise.all([
     getPQPOverview(),
     getCoeResults(),
+    getCarCoeRevalidations(),
   ]);
   // The query returns the months newest first; the page reads oldest first.
   const ascending = [...overview.trendData].sort((a, b) =>
@@ -44,6 +53,7 @@ export const loadPqpData = cache(async () => {
     latestExercise: groupByExercise(coeResults).at(-1),
     latestPremium: (key: PQPCategoryKey) =>
       premiums.get(categoryName(key)) ?? 0,
+    revalidations,
   };
 });
 
@@ -54,7 +64,7 @@ export const loadPqpData = cache(async () => {
  */
 export const loadPqpView = cache(
   async (searchParams: Promise<SearchParams>) => {
-    const [{ category, term }, data] = await Promise.all([
+    const [{ category, term, trend }, data] = await Promise.all([
       loadSearchParams(searchParams),
       loadPqpData(),
     ]);
@@ -63,8 +73,13 @@ export const loadPqpView = cache(
       month: point.month,
       rate: point[categoryName(category)] * factor,
     }));
+    const renewals = renewalSeries(
+      data.revalidations,
+      PQP_REPORTED_CATEGORIES,
+      term,
+    );
 
-    return { ...data, category, factor, rates, term };
+    return { ...data, category, factor, rates, renewals, term, trend };
   },
 );
 

@@ -25,11 +25,16 @@ export const PQP_CATEGORY_KEYS: readonly PQPCategoryKey[] =
 export const PQP_TERMS = ["5", "10"] as const;
 export type PQPTerm = (typeof PQP_TERMS)[number];
 
+/** What the trend chart plots: the published rate, or how many renewed. */
+export const PQP_TREND_VIEWS = ["rate", "renewals"] as const;
+export type PQPTrendView = (typeof PQP_TREND_VIEWS)[number];
+
 export const searchParams = {
   category: parseAsStringLiteral(PQP_CATEGORY_KEYS).withDefault(
     PQP_CATEGORY_KEYS[0],
   ),
   term: parseAsStringLiteral(PQP_TERMS).withDefault("10"),
+  trend: parseAsStringLiteral(PQP_TREND_VIEWS).withDefault("rate"),
 };
 
 export const loadSearchParams = createLoader(searchParams);

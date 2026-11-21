@@ -4,7 +4,23 @@ import { cn } from "@heroui/react";
 import { ChartTooltip } from "@heroui-pro/react";
 import { LineChart } from "@heroui-pro/react/line-chart";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
-import { compactCurrency } from "@web/utils/formatting/chart-axis";
+import {
+  compactCount,
+  compactCurrency,
+} from "@web/utils/formatting/chart-axis";
+
+/** What the lines measure: the PQP in dollars, or COEs renewed. */
+export type PQPChartUnit = "currency" | "count";
+
+const FORMAT: Record<PQPChartUnit, (value: number) => string> = {
+  count: (value) => value.toLocaleString("en-SG"),
+  currency: formatCurrency,
+};
+
+const COMPACT: Record<PQPChartUnit, (value: number) => string> = {
+  count: compactCount,
+  currency: compactCurrency,
+};
 
 export interface PQPSeries {
   /** The data key, e.g. `Category A`. */
@@ -68,14 +84,17 @@ export function PQPChart({
   selected,
   series,
   ticks,
+  unit = "currency",
 }: {
   data: PQPTrendPoint[];
   /** The key drawn in the accent. */
   selected: string;
   series: PQPSeries[];
-  /** Ticks from `axisTicks`, not anchored at zero. */
+  /** Ticks from `axisTicks`. */
   ticks: number[];
+  unit?: PQPChartUnit;
 }) {
+  const format = FORMAT[unit];
   const lastIndex = data.length - 1;
   // The selected line is drawn last so it sits on top.
   const ordered = [...series].sort(
@@ -171,7 +190,7 @@ export function PQPChart({
         <LineChart.YAxis
           domain={[ticks[0] ?? "auto", ticks.at(-1) ?? "auto"]}
           orientation="left"
-          tickFormatter={compactCurrency}
+          tickFormatter={COMPACT[unit]}
           ticks={ticks}
           width={56}
         />
@@ -205,7 +224,7 @@ export function PQPChart({
                         x={cx + 10}
                         y={cy + labelOffset(key)}
                       >
-                        {formatCurrency(Number(data[lastIndex]?.[key]))}
+                        {format(Number(data[lastIndex]?.[key]))}
                       </text>
                     ) : null}
                   </g>
@@ -241,7 +260,7 @@ export function PQPChart({
                     <ChartTooltip.Indicator color={colorOf(key)} />
                     <ChartTooltip.Label>{label}</ChartTooltip.Label>
                     <ChartTooltip.Value>
-                      {formatCurrency(Number(point[key]))}
+                      {format(Number(point[key]))}
                     </ChartTooltip.Value>
                   </ChartTooltip.Item>
                 ))}
