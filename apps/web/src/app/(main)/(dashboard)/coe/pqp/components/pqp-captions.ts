@@ -9,6 +9,80 @@ export interface PQPMonthRate {
   rate: number;
 }
 
+/** One row of LTA's monthly COE revalidation (renewal) data. */
+export interface PQPRevalidationRow {
+  month: string;
+  /** "5 Year" or "10 Year". */
+  type: string;
+  /** "Category A". */
+  category: string;
+  number: number;
+}
+
+/** How many COEs were renewed in one month, per category ("Category A"). */
+export interface PQPMonthRenewals {
+  month: string;
+  counts: Record<string, number>;
+}
+
+/** `1389` → `1,389`. */
+export const formatRenewals = (value: number) => value.toLocaleString("en-SG");
+
+/**
+ * Renewals at one term, one point per month, oldest first, over the latest
+ * `months` months of data. A category missing from a month counts as 0.
+ */
+export function renewalSeries(
+  rows: PQPRevalidationRow[],
+  categories: readonly string[],
+  term: "5" | "10",
+  months = 12,
+): PQPMonthRenewals[] {
+  const byMonth = new Map<string, PQPMonthRenewals>();
+  for (const row of rows) {
+    if (row.type !== `${term} Year` || !categories.includes(row.category)) {
+      continue;
+    }
+    const point = byMonth.get(row.month) ?? {
+      month: row.month,
+      counts: Object.fromEntries(categories.map((category) => [category, 0])),
+    };
+    point.counts[row.category] = row.number;
+    byMonth.set(row.month, point);
+  }
+
+  return [...byMonth.values()]
+    .sort((a, b) => a.month.localeCompare(b.month))
+    .slice(-months);
+}
+
+/**
+ * The caption over the renewals chart, e.g. "In September 2026, 272 Category A
+ * COEs were renewed for 10 years, up from 121 in August."
+ */
+export function renewalsCaption(
+  category: string,
+  term: "5" | "10",
+  series: PQPMonthRenewals[],
+): string | undefined {
+  const latest = series.at(-1);
+  if (!latest) {
+    return undefined;
+  }
+
+  const count = latest.counts[category] ?? 0;
+  const opening = `In ${formatMonth(latest.month)}, ${formatRenewals(count)} ${category} COEs were renewed for ${term} years`;
+  const previous = series.at(-2);
+  if (!previous) {
+    return `${opening}.`;
+  }
+
+  const before = previous.counts[category] ?? 0;
+  const change =
+    count === before ? "the same as" : count > before ? "up from" : "down from";
+  return `${opening}, ${change} ${formatRenewals(before)} in ${formatMonthName(previous.month)}.`;
+}
+
 /** A category's latest rate beside its latest closing premium. */
 export interface PQPCategoryRate {
   key: string;

@@ -12,6 +12,7 @@ import {
   monthsCaption,
   type PQPCategoryRate,
   ratesCaption,
+  renewalsCaption,
   trendCaption,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-captions";
 import {
@@ -19,6 +20,7 @@ import {
   type PQPSeries,
   type PQPTrendPoint,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-chart";
+import { TrendViewTabs } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-filters";
 import {
   PQPPremiumBars,
   type PQPPremiumPoint,
@@ -103,7 +105,11 @@ export async function PQPCalculator() {
   );
 }
 
-/** Figure 1: every category's PQP by month, at the selected term. */
+/**
+ * Figure 1: every category's PQP by month at the selected term, or how many
+ * COEs were renewed for that term each month. The switch changes only this
+ * figure, so it sits in the figure's head.
+ */
 export function PQPTrend({ searchParams }: PQPPageProps) {
   return (
     <section className={SECTION} id="pqp-trend">
@@ -115,10 +121,14 @@ export function PQPTrend({ searchParams }: PQPPageProps) {
         }
         eyebrow="Figure 1 · Trend"
         title={
-          <>
-            PQP by month,{" "}
-            <SelectedLabel part="term" searchParams={searchParams} /> renewal
-          </>
+          <Suspense fallback="PQP by month, 10-year renewal">
+            <TrendTitle searchParams={searchParams} />
+          </Suspense>
+        }
+        trailing={
+          <Suspense fallback={<Skeleton className="h-10 w-48" />}>
+            <TrendViewTabs />
+          </Suspense>
         }
       />
       <SectionErrorBoundary title="PQP trend unavailable">
@@ -127,26 +137,72 @@ export function PQPTrend({ searchParams }: PQPPageProps) {
         </Suspense>
       </SectionErrorBoundary>
       <SourceNote>
-        Source: LTA via DataMall · PQP published for each month,{" "}
-        <SelectedLabel part="term" searchParams={searchParams} /> renewal.
-        Y-axis does not start at zero. Hover or tap for values.
+        <Suspense fallback="Source: LTA via DataMall · PQP published for each month, 10-year renewal. Y-axis does not start at zero. Hover or tap for values.">
+          <TrendSource searchParams={searchParams} />
+        </Suspense>
       </SourceNote>
     </section>
   );
 }
 
+async function TrendTitle({ searchParams }: PQPPageProps) {
+  const { term, trend } = await loadPqpView(searchParams);
+  return trend === "renewals"
+    ? `COEs renewed by month, ${term}-year`
+    : `PQP by month, ${term}-year renewal`;
+}
+
+async function TrendSource({ searchParams }: PQPPageProps) {
+  const { term, trend } = await loadPqpView(searchParams);
+  return trend === "renewals"
+    ? `Source: LTA via DataMall · COE revalidations (renewals) for ${term} years, by month. LTA publishes these a month or two behind the PQP. Hover or tap for values.`
+    : `Source: LTA via DataMall · PQP published for each month, ${term}-year renewal. Y-axis does not start at zero. Hover or tap for values.`;
+}
+
 async function TrendCaption({ searchParams }: PQPPageProps) {
-  const { category, rates } = await loadPqpView(searchParams);
-  return trendCaption(`Category ${category}`, rates) ?? null;
+  const { category, rates, renewals, term, trend } =
+    await loadPqpView(searchParams);
+  const caption =
+    trend === "renewals"
+      ? renewalsCaption(`Category ${category}`, term, renewals)
+      : trendCaption(`Category ${category}`, rates);
+  return caption ?? null;
 }
 
 async function TrendChart({ searchParams }: PQPPageProps) {
-  const { ascending, category, factor } = await loadPqpView(searchParams);
-
+  const view = await loadPqpView(searchParams);
   const series: PQPSeries[] = PQP_CATEGORY_KEYS.map((key) => ({
     key: categoryName(key),
     label: `Category ${key}`,
   }));
+
+  if (view.trend === "renewals") {
+    const data: PQPTrendPoint[] = view.renewals.map((point, index) => ({
+      label: formatChartMonth(point.month),
+      title: formatMonth(point.month),
+      year:
+        index === 0 || point.month.endsWith("-01")
+          ? point.month.slice(0, 4)
+          : "",
+      ...point.counts,
+    }));
+    const ticks = axisTicks(
+      view.renewals.flatMap((point) => Object.values(point.counts)),
+      { zero: true },
+    );
+
+    return (
+      <PQPChart
+        data={data}
+        selected={categoryName(view.category)}
+        series={series}
+        ticks={ticks}
+        unit="count"
+      />
+    );
+  }
+
+  const { ascending, category, factor } = view;
   const data: PQPTrendPoint[] = ascending.map((point, index) => ({
     label: formatChartMonth(point.month),
     title: formatMonth(point.month),

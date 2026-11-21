@@ -6,12 +6,19 @@ import {
   formatMonth,
   toCategory,
 } from "@web/app/(main)/(dashboard)/coe/components/coe-exercise-utils";
-import { pqpLead } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-captions";
+import {
+  formatRenewals,
+  pqpLead,
+} from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-captions";
 import {
   loadPqpData,
   loadPqpView,
   type PQPPageProps,
 } from "@web/app/(main)/(dashboard)/coe/pqp/components/pqp-view";
+import {
+  PQP_CATEGORY_KEYS,
+  type PQPCategoryKey,
+} from "@web/app/(main)/(dashboard)/coe/pqp/search-params";
 import { HeadAnswer } from "@web/app/(main)/(dashboard)/coe/premiums/components/head-answer";
 import {
   type KeyNumber,
@@ -83,16 +90,25 @@ export async function PQPLead({ searchParams }: PQPPageProps) {
 
 /** The figures a renewal is weighed against, at the selected term. */
 export async function PQPKeyNumbers({ searchParams }: PQPPageProps) {
-  const { category, factor, latestExercise, latestPremium, rates, term } =
-    await loadPqpView(searchParams);
+  const {
+    category,
+    factor,
+    latestExercise,
+    latestPremium,
+    rates,
+    renewals,
+    term,
+  } = await loadPqpView(searchParams);
   const latest = rates.at(-1);
   if (!latest) {
     return null;
   }
 
   const previous = rates.at(-2);
-  const threeMonthsAgo = rates.at(-4);
+  const latestRenewals = renewals.at(-1);
   const fullRate = latest.rate / factor;
+  const renewed = (key: PQPCategoryKey) =>
+    formatRenewals(latestRenewals?.counts[`Category ${key}`] ?? 0);
   const items: KeyNumber[] = [
     {
       label: "Previous month",
@@ -117,12 +133,25 @@ export async function PQPKeyNumbers({ searchParams }: PQPPageProps) {
           note: "The full PQP",
           value: formatCurrency(fullRate),
         },
+    // Both categories side by side, so neither is quoted alone. LTA publishes
+    // these with a lag, so the note names the month.
     {
-      label: "Three months ago",
-      note: threeMonthsAgo
-        ? `${formatMonth(threeMonthsAgo.month)}, published rate`
+      label: `Renewed for ${term} years`,
+      note: latestRenewals
+        ? `COEs renewed in ${formatMonth(latestRenewals.month)}`
         : "Not published",
-      value: threeMonthsAgo ? formatCurrency(threeMonthsAgo.rate) : "—",
+      // One line per category: side by side they wrap mid-pair in the rail.
+      value: latestRenewals ? (
+        <span className="flex flex-col">
+          {PQP_CATEGORY_KEYS.map((key) => (
+            <span key={key}>
+              Cat {key} {renewed(key)}
+            </span>
+          ))}
+        </span>
+      ) : (
+        "—"
+      ),
     },
   ];
 
