@@ -26,8 +26,7 @@ export const PQP_TERMS = ["5", "10"] as const;
 export type PQPTerm = (typeof PQP_TERMS)[number];
 
 /** What the trend chart plots: the published rate, or how many renewed. */
-export const PQP_TREND_VIEWS = ["rate", "renewals"] as const;
-export type PQPTrendView = (typeof PQP_TREND_VIEWS)[number];
+const PQP_TREND_VIEWS = ["rate", "renewals"] as const;
 
 export const searchParams = {
   category: parseAsStringLiteral(PQP_CATEGORY_KEYS).withDefault(
