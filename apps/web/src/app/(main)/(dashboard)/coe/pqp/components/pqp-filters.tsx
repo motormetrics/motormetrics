@@ -19,6 +19,10 @@ import { useTransition } from "react";
  * component.
  */
 const TERMS = ["5", "10"] as const;
+const TREND_VIEWS = [
+  { id: "rate", label: "Rate" },
+  { id: "renewals", label: "Renewals" },
+] as const;
 
 /** In the filters panel each switch spans the row and its items share the width. */
 const SEGMENT_CLASS = "w-full";
@@ -110,6 +114,44 @@ export function TermTabs() {
       {TERMS.map((option) => (
         <Segment.Item className={SEGMENT_ITEM_CLASS} id={option} key={option}>
           {option}-year
+        </Segment.Item>
+      ))}
+    </Segment>
+  );
+}
+
+/**
+ * What the trend chart plots: the published PQP, or how many COEs were renewed
+ * each month. It changes only that figure, so it sits in the figure's head
+ * rather than with the page's filters.
+ */
+export function TrendViewTabs() {
+  const [isPending, startTransition] = useTransition();
+  const [trend, setTrend] = useQueryState(
+    "trend",
+    parseAsStringLiteral(TREND_VIEWS.map(({ id }) => id))
+      .withDefault("rate")
+      .withOptions({ shallow: false, startTransition }),
+  );
+
+  return (
+    <Segment
+      aria-label="Trend chart measure"
+      className={cn(isPending && "opacity-70")}
+      onSelectionChange={(key) => {
+        posthog.capture("dashboard_filter_changed", {
+          filter: "trend",
+          value: key,
+        });
+        setTrend(key as (typeof TREND_VIEWS)[number]["id"]);
+      }}
+      selectedKey={trend}
+      size="md"
+      variant="ghost"
+    >
+      {TREND_VIEWS.map(({ id, label }) => (
+        <Segment.Item className="px-2" id={id} key={id}>
+          {label}
         </Segment.Item>
       ))}
     </Segment>
