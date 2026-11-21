@@ -1,7 +1,7 @@
 "use client";
 
 import { SearchField, Typography } from "@heroui/react";
-import { serialize as serializeCompare } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
+import { serializeCompareSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import {
   BarHeader,
   BarRow,
@@ -121,7 +121,7 @@ export function MakeList({
                       // so the list keeps one column edge and one weight.
                       className="h-auto min-w-0 truncate px-0 font-semibold text-foreground text-sm hover:bg-transparent hover:text-accent hover:underline"
                       action="/cars/makes/compare"
-                      serialize={serializeCompare}
+                      serialize={serializeCompareSearchParams}
                       values={{ make: [row.compareWith, row.slug] }}
                       size="sm"
                       variant="ghost"

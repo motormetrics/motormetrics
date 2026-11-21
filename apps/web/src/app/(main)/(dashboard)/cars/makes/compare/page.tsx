@@ -23,7 +23,7 @@ import {
   makeOptions,
   selectMakes,
 } from "@web/app/(main)/(dashboard)/cars/makes/compare/components/selection";
-import { loadSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
+import { loadCompareSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import { SectionErrorBoundary } from "@web/components/error-boundary";
 import { OverviewPage } from "@web/components/shared/overview";
 import { PageHead } from "@web/components/shared/page-head";
@@ -74,7 +74,7 @@ async function resolveSelection(
   searchParams: PageProps["searchParams"],
 ): Promise<Selection> {
   const [{ make }, rows] = await Promise.all([
-    loadSearchParams(searchParams),
+    loadCompareSearchParams(searchParams),
     getDistinctMakes(),
   ]);
   const slugs = selectMakes(

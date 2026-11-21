@@ -1,7 +1,7 @@
 import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { TwoShadeTrendChart } from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
-import { serialize as serializeCompare } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
+import { serializeCompareSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import {
   loadMakeRows,
   type MakeRow,
@@ -342,7 +342,7 @@ export async function MakeDetail({
             <NavButton
               action="/cars/makes/compare"
               key={peer.slug}
-              serialize={serializeCompare}
+              serialize={serializeCompareSearchParams}
               size="sm"
               values={{ make: [row.slug, peer.slug] }}
               variant="secondary"
