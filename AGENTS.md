@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Guidance for coding agents (Claude Code, Codex, opencode, Cursor, and others) working in this repository.
+Guidance for coding agents (Claude Code, Codex, Cursor, and others) working in this repository.
 
 ## Documentation Access
 
