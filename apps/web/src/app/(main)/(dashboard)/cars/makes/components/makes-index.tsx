@@ -1,5 +1,4 @@
 import { Skeleton } from "@heroui/react";
-import { serialize as serializeCompare } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import { MakeDetail } from "@web/app/(main)/(dashboard)/cars/makes/components/make-detail";
 import {
   MakeList,
@@ -15,7 +14,6 @@ import {
 import {
   loadSearchParams,
   type Range,
-  serialize,
 } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { SectionHead, SourceNote } from "@web/components/shared/overview";
 import { getCarsLatestMonth } from "@web/queries/cars";
@@ -133,33 +131,23 @@ async function MakeResults({ searchParams }: IndexProps) {
 
   // While picking a make to compare with, every other make leads straight
   // into the comparison with the selected one.
-  const comparing = Boolean(selected && params.compare);
-  const compareHrefOf = (row: MakeRow) =>
-    selected && comparing && row.slug !== selected.slug
-      ? serializeCompare("/cars/makes/compare", {
-          make: [selected.slug, row.slug],
-        })
-      : undefined;
+  const comparingWith = selected && params.compare ? selected.slug : undefined;
 
   // The makes ranked either side of the selected one, as quick picks.
   const peers = selected
     ? [
         ...rows.slice(Math.max(selectedIndex - 1, 0), selectedIndex),
         ...rows.slice(selectedIndex + 1, selectedIndex + 3),
-      ].map((row) => ({
-        href:
-          compareHrefOf(row) ??
-          serialize("/cars/makes", { ...params, make: row.slug }),
-        make: row.make,
-      }))
+      ]
     : [];
 
   const listRows: MakeListRow[] = ordered.map((row) => ({
     change: changeFigure(row),
     count: row.count,
-    // The link in the HTML is the make's own page, one cached page per make,
-    // so no filter variant of this page is ever a link for a crawler.
-    href: compareHrefOf(row) ?? `/cars/makes/${row.slug}`,
+    compareWith: row.slug === comparingWith ? undefined : comparingWith,
+    // The only link in the HTML is the make's own page, one cached page per
+    // make, so no filter variant of this page is ever a link for a crawler.
+    href: `/cars/makes/${row.slug}`,
     logoUrl: row.logoUrl,
     make: row.make,
     slug: row.slug,

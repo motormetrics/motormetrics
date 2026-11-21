@@ -1,6 +1,7 @@
 import { Typography } from "@heroui/react";
 import { buttonVariants } from "@heroui/styles";
 import { TwoShadeTrendChart } from "@web/app/(main)/(dashboard)/cars/components/two-shade-trend-chart";
+import { serializeCompareSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import {
   loadMakeRows,
   type MakeRow,
@@ -9,6 +10,7 @@ import {
   periodLabel,
   rangeWindow,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/make-rows";
+import { NavButton } from "@web/app/(main)/(dashboard)/cars/makes/components/nav-button";
 import {
   type MakesSearchParams,
   serialize,
@@ -216,7 +218,8 @@ function MixBar({
 /**
  * Direction D's make detail beside the index list: the make's figures for the
  * selected period and powertrain, and its registrations by month. "All makes"
- * clears `?make=`; the make's own page stays one link away.
+ * clears `?make=`; the make's own page stays one link away. The compare
+ * controls are buttons, so no `?make=` or comparison URL is a crawlable link.
  */
 export async function MakeDetail({
   latestMonth,
@@ -230,8 +233,8 @@ export async function MakeDetail({
   /** How many makes registered cars in the period, for "Rank 6 of 63". */
   makesCount: number;
   params: MakesSearchParams;
-  /** The makes ranked either side, linked into a comparison with this one. */
-  peers: { href: string; make: string }[];
+  /** The makes ranked either side, offered as a comparison with this one. */
+  peers: Pick<MakeRow, "make" | "slug">[];
   row: MakeRow;
   /** All registrations in the period, for the share note. */
   total: number;
@@ -309,18 +312,18 @@ export async function MakeDetail({
             {row.make} page
             <ArrowRight className="size-4" />
           </Link>
-          <Link
+          <NavButton
+            action="/cars/makes"
             aria-expanded={params.compare}
-            className={buttonVariants({ size: "sm", variant: "secondary" })}
-            href={serialize("/cars/makes", {
-              ...params,
-              compare: params.compare ? null : true,
-            })}
             scroll={false}
+            serialize={serialize}
+            values={{ ...params, compare: params.compare ? null : true }}
+            size="sm"
+            variant="secondary"
           >
             <Plus className="size-4" />
             Add to compare
-          </Link>
+          </NavButton>
         </div>
       </div>
 
@@ -336,22 +339,29 @@ export async function MakeDetail({
             Compare <span className="font-semibold">{row.make}</span> with
           </span>
           {peers.map((peer) => (
-            <Link
-              className={buttonVariants({ size: "sm", variant: "secondary" })}
-              href={peer.href}
-              key={peer.href}
+            <NavButton
+              action="/cars/makes/compare"
+              key={peer.slug}
+              serialize={serializeCompareSearchParams}
+              size="sm"
+              values={{ make: [row.slug, peer.slug] }}
+              variant="secondary"
             >
               {peer.make}
-            </Link>
+            </NavButton>
           ))}
           <span className="text-muted">or any make in the list</span>
-          <Link
-            className={`ml-auto ${buttonVariants({ size: "sm", variant: "tertiary" })}`}
-            href={serialize("/cars/makes", { ...params, compare: null })}
+          <NavButton
+            action="/cars/makes"
+            className="ml-auto"
             scroll={false}
+            serialize={serialize}
+            values={{ ...params, compare: null }}
+            size="sm"
+            variant="tertiary"
           >
             Cancel
-          </Link>
+          </NavButton>
         </div>
       ) : null}
 

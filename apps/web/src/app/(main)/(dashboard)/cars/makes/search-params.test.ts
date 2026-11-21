@@ -1,4 +1,4 @@
-import { serialize as serializeCompare } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
+import { serializeCompareSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/compare/search-params";
 import {
   loadSearchParams,
   type MakesSearchParams,
@@ -45,7 +45,9 @@ describe("loadSearchParams", () => {
 describe("compare serialize", () => {
   it("should repeat the make key for the two makes", () => {
     expect(
-      serializeCompare("/cars/makes/compare", { make: ["bmw", "audi"] }),
+      serializeCompareSearchParams("/cars/makes/compare", {
+        make: ["bmw", "audi"],
+      }),
     ).toBe("/cars/makes/compare?make=bmw&make=audi");
   });
 });

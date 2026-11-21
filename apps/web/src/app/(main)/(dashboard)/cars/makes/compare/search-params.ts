@@ -14,7 +14,8 @@ const compareSearchParams = {
   make: parseAsNativeArrayOf(parseAsString),
 };
 
-export const loadSearchParams = createLoader(compareSearchParams);
+export const loadCompareSearchParams = createLoader(compareSearchParams);
 
 /** Builds links into the comparison, e.g. from the makes index. */
-export const serialize = createSerializer(compareSearchParams);
+export const serializeCompareSearchParams =
+  createSerializer(compareSearchParams);
