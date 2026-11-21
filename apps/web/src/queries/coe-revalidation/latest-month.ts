@@ -9,7 +9,7 @@ import { cacheLife, cacheTag } from "next/cache";
 export async function getCoeRevalidationLatestMonth() {
   "use cache";
   cacheLife("max");
-  cacheTag("coe-revalidation:months");
+  cacheTag("coe:revalidation:months");
 
   const [result] = await db
     .select({ month: max(coeRevalidation.month) })

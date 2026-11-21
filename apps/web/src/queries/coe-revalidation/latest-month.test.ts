@@ -19,7 +19,7 @@ describe("getCoeRevalidationLatestMonth", () => {
 
     expect(result).toEqual({ month: "2026-09" });
     expect(cacheLifeMock).toHaveBeenCalledWith("max");
-    expect(cacheTagMock).toHaveBeenCalledWith("coe-revalidation:months");
+    expect(cacheTagMock).toHaveBeenCalledWith("coe:revalidation:months");
   });
 
   it("should return null month when no data exists", async () => {

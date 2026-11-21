@@ -35,6 +35,6 @@ describe("getCarCoeRevalidations", () => {
 
     expect(result).toEqual(rows);
     expect(cacheLifeMock).toHaveBeenCalledWith("max");
-    expect(cacheTagMock).toHaveBeenCalledWith("coe-revalidation:months");
+    expect(cacheTagMock).toHaveBeenCalledWith("coe:revalidation:months");
   });
 });

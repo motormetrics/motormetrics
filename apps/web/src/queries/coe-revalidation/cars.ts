@@ -14,7 +14,7 @@ const CAR_CATEGORIES = ["Category A", "Category B"];
 export async function getCarCoeRevalidations() {
   "use cache";
   cacheLife("max");
-  cacheTag("coe-revalidation:months");
+  cacheTag("coe:revalidation:months");
 
   return db
     .select({

@@ -63,7 +63,7 @@ async function processCoeRevalidationData(): Promise<UpdaterResult> {
   const result = await updateCoeRevalidation();
 
   if (result.recordsProcessed > 0) {
-    await redis.set("last_updated:coe-revalidation", Date.now());
+    await redis.set("last_updated:coe:revalidation", Date.now());
   }
 
   return result;
