@@ -5,6 +5,7 @@ import { auth } from "@web/lib/auth";
 import { carPopulationWorkflow } from "@web/workflows/car-population";
 import { carsWorkflow } from "@web/workflows/cars";
 import { coeWorkflow } from "@web/workflows/coe";
+import { coeRevalidationWorkflow } from "@web/workflows/coe-revalidation";
 import { deregistrationsWorkflow } from "@web/workflows/deregistrations";
 import { monthlyUpdateWorkflow } from "@web/workflows/monthly-update";
 import { vehiclePopulationWorkflow } from "@web/workflows/vehicle-population";
@@ -14,6 +15,7 @@ import { start } from "workflow/api";
 const WORKFLOWS = {
   cars: carsWorkflow,
   coe: coeWorkflow,
+  "coe-revalidation": coeRevalidationWorkflow,
   deregistrations: deregistrationsWorkflow,
   "vehicle-population": vehiclePopulationWorkflow,
   "monthly-update": monthlyUpdateWorkflow,
