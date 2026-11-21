@@ -124,10 +124,12 @@ function WhatsNew() {
         <Chip color="accent" size="sm" variant="primary">
           New
         </Chip>
-        <Card.Title className="text-sm">COE renewals</Card.Title>
-        <Card.Description className="text-xs">
+        <Typography.Heading className="text-sm" level={4}>
+          COE renewals
+        </Typography.Heading>
+        <Typography.Paragraph color="muted" size="sm">
           See how many owners renew their COE each month.
-        </Card.Description>
+        </Typography.Paragraph>
       </Card.Header>
       <Card.Footer>
         {/* The site's link colour is the accent, which sinks into the band. */}
