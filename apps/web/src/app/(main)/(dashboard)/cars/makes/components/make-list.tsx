@@ -6,6 +6,7 @@ import {
   BarRow,
 } from "@web/app/(main)/(dashboard)/cars/makes/components/bar-row";
 import { SortSwitch } from "@web/app/(main)/(dashboard)/cars/makes/components/makes-filters";
+import { NavButton } from "@web/app/(main)/(dashboard)/cars/makes/components/nav-button";
 import { makesSearchParams } from "@web/app/(main)/(dashboard)/cars/makes/search-params";
 import { MakeAvatar } from "@web/components/shared/make-avatar";
 import Link from "next/link";
@@ -16,9 +17,11 @@ export interface MakeListRow {
   change: string;
   count: number;
   /**
-   * Where the make's name leads: its own page, or the comparison with the
-   * selected make while one is being picked.
+   * The comparison with the selected make while one is being picked. It is
+   * opened by a button, never a link, so crawlers cannot walk every pair.
    */
+  compareHref?: string;
+  /** The make's own page. */
   href: string;
   logoUrl: string | null;
   make: string;
@@ -61,7 +64,8 @@ export function MakeSearchField({
  * with no round trip.
  *
  * Every make's name is a plain link to that make's own page, one cached page
- * per make. No row links to a filtered view of this page.
+ * per make, or a button into the comparison while a second make is being
+ * picked. No row links to a filtered view of this page.
  */
 export function MakeList({
   changeHeading,
@@ -108,13 +112,27 @@ export function MakeList({
               label={
                 <>
                   <MakeAvatar logoUrl={row.logoUrl} make={row.make} size="sm" />
-                  <Link
-                    className="truncate font-semibold text-foreground no-underline hover:text-accent hover:underline"
-                    href={row.href}
-                    prefetch={false}
-                  >
-                    {row.make}
-                  </Link>
+                  {row.compareHref ? (
+                    <NavButton
+                      aria-label={`Compare with ${row.make}`}
+                      // Sized and set like the name links on the other rows,
+                      // so the list keeps one column edge and one weight.
+                      className="h-auto min-w-0 truncate px-0 font-semibold text-foreground text-sm hover:bg-transparent hover:text-accent hover:underline"
+                      href={row.compareHref}
+                      size="sm"
+                      variant="ghost"
+                    >
+                      {row.make}
+                    </NavButton>
+                  ) : (
+                    <Link
+                      className="truncate font-semibold text-foreground no-underline hover:text-accent hover:underline"
+                      href={row.href}
+                      prefetch={false}
+                    >
+                      {row.make}
+                    </Link>
+                  )}
                 </>
               }
               percent={(row.count / leader) * 100}

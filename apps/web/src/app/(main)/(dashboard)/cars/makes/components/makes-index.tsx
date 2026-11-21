@@ -157,9 +157,10 @@ async function MakeResults({ searchParams }: IndexProps) {
   const listRows: MakeListRow[] = ordered.map((row) => ({
     change: changeFigure(row),
     count: row.count,
-    // The link in the HTML is the make's own page, one cached page per make,
-    // so no filter variant of this page is ever a link for a crawler.
-    href: compareHrefOf(row) ?? `/cars/makes/${row.slug}`,
+    compareHref: compareHrefOf(row),
+    // The only link in the HTML is the make's own page, one cached page per
+    // make, so no filter variant of this page is ever a link for a crawler.
+    href: `/cars/makes/${row.slug}`,
     logoUrl: row.logoUrl,
     make: row.make,
     slug: row.slug,
