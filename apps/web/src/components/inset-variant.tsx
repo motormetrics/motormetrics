@@ -1,6 +1,6 @@
 "use client";
 
-import { Breadcrumbs, Typography } from "@heroui/react";
+import { Breadcrumbs, Card, Chip, Link, Typography } from "@heroui/react";
 import { Sidebar } from "@heroui-pro/react";
 import {
   LogoMark,
@@ -8,7 +8,7 @@ import {
   Wordmark,
 } from "@web/components/brand-logo";
 import { FOOTER_NAV_ITEMS, SIDEBAR_GROUPS } from "@web/config/navigation";
-import Link from "next/link";
+import NextLink from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 
@@ -47,14 +47,14 @@ const getCrumbs = (pathname: string, currentUrl?: string) => {
 /** The bars and the wordmark in white, as the brand sheet sets them on deep blue. */
 function Brand() {
   return (
-    <Link
+    <NextLink
       aria-label="MotorMetrics home"
       className="flex shrink-0 items-center gap-2 px-1 py-2 no-underline"
       href="/"
     >
       <LogoMark inner={MARK_ACCENT_ON_DARK} outer="#FFFFFF" size={26} />
       <Wordmark className="text-lg" colour="#FFFFFF" />
-    </Link>
+    </NextLink>
   );
 }
 
@@ -106,6 +106,42 @@ function Groups({
   });
 }
 
+/**
+ * What is new on the site, above the source line. Temporary: remove it once the
+ * COE renewals data has been out for a month or so (around 2027-01-01).
+ *
+ * Transparent on the Deep Blue band: inside the sidebar `--default` and
+ * `--separator` are the band's own tint and rule, and the text takes the band's
+ * foreground, so a default (white) card would carry light text.
+ */
+function WhatsNew() {
+  return (
+    <Card
+      className="gap-2 border border-separator bg-default"
+      variant="transparent"
+    >
+      <Card.Header className="gap-1">
+        <Chip color="accent" size="sm" variant="primary">
+          New
+        </Chip>
+        <Card.Title className="text-sm">COE renewals</Card.Title>
+        <Card.Description className="text-xs">
+          See how many owners renew their COE each month.
+        </Card.Description>
+      </Card.Header>
+      <Card.Footer>
+        {/* The site's link colour is the accent, which sinks into the band. */}
+        <Link
+          className="text-foreground text-xs underline"
+          href="/coe/pqp?trend=renewals#pqp-trend"
+        >
+          View on PQP rates
+        </Link>
+      </Card.Footer>
+    </Card>
+  );
+}
+
 function Source() {
   return (
     <Typography.Paragraph
@@ -151,6 +187,7 @@ export function InsetVariant({
           <Groups currentUrl={currentUrl} />
         </Sidebar.Content>
         <Sidebar.Footer>
+          <WhatsNew />
           <Source />
         </Sidebar.Footer>
       </Sidebar>
@@ -162,6 +199,7 @@ export function InsetVariant({
           <Groups currentUrl={currentUrl} idSuffix="-mobile" />
         </Sidebar.Content>
         <Sidebar.Footer>
+          <WhatsNew />
           <Source />
         </Sidebar.Footer>
       </Sidebar.Mobile>
