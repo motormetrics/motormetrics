@@ -66,9 +66,22 @@ const LABEL_CLEARANCE = 16;
 const PLOT_HEIGHT = 244;
 
 /** "+0.4% vs previous month", with a true minus for a fall. */
-const formatChange = (current: number, previous: number): string => {
-  const ratio = (current - previous) / previous;
-  return `${ratio < 0 ? "−" : "+"}${Math.abs(ratio * 100).toFixed(1)}% vs previous month`;
+/**
+ * "+0.4% vs previous month" for the PQP. Renewals show the change in COEs
+ * instead ("+151 vs previous month"): a category can renew none in a month,
+ * and a percentage on zero is meaningless. A fall takes a true minus.
+ */
+const formatChange = (
+  current: number,
+  previous: number,
+  unit: PQPChartUnit,
+): string => {
+  const difference = current - previous;
+  const sign = difference < 0 ? "−" : "+";
+  if (unit === "count" || previous === 0) {
+    return `${sign}${FORMAT[unit](Math.abs(difference))} vs previous month`;
+  }
+  return `${sign}${Math.abs((difference / previous) * 100).toFixed(1)}% vs previous month`;
 };
 
 /**
@@ -266,7 +279,7 @@ export function PQPChart({
                 ))}
                 <span className="text-muted text-xs tabular-nums">
                   {previous
-                    ? `${selectedLabel} ${formatChange(Number(point[selected]), Number(previous[selected]))}`
+                    ? `${selectedLabel} ${formatChange(Number(point[selected]), Number(previous[selected]), unit)}`
                     : "First month shown"}
                 </span>
               </ChartTooltip>
