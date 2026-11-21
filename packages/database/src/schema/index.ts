@@ -14,6 +14,11 @@ export {
   type SelectPqp,
 } from "./coe";
 export {
+  coeRevalidation,
+  type InsertCoeRevalidation,
+  type SelectCoeRevalidation,
+} from "./coe-revalidation";
+export {
   deregistrations,
   type InsertDeregistration,
   type SelectDeregistration,

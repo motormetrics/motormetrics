@@ -25,6 +25,10 @@ export const config: VercelConfig = {
       schedule: "0 10 * * *",
     },
     {
+      path: "/api/workflows/coe-revalidation",
+      schedule: "0 10 * * *",
+    },
+    {
       path: "/api/workflows/vehicle-population",
       schedule: "0 10 1 * *",
     },

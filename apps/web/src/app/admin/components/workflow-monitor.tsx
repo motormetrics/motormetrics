@@ -16,6 +16,11 @@ const WORKFLOW_TYPES: WorkflowType[] = [
   { id: "cars", name: "Cars", description: "Car registration data" },
   { id: "coe", name: "COE", description: "COE bidding results" },
   {
+    id: "coe-revalidation",
+    name: "COE Revalidation",
+    description: "Monthly COE renewals",
+  },
+  {
     id: "deregistrations",
     name: "Deregistrations",
     description: "Vehicle deregistration statistics",
