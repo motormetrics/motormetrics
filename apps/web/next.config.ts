@@ -136,16 +136,6 @@ const nextConfig: NextConfig = {
         destination,
         permanent: true,
       })),
-      // Added 2026-11-23, review 2027-11-23: the prerendered Makes copy is
-      // reached only through the rewrite below. Visited directly, its filters
-      // would change the URL but not the figures. Redirects match the incoming
-      // path, so the rewrite is unaffected. Keep this for as long as that
-      // rewrite exists, whatever Search Console shows at review.
-      {
-        source: "/cars/makes/all",
-        destination: "/cars/makes",
-        permanent: true,
-      },
       {
         source: "/instagram",
         destination: "https://www.instagram.com/motormetrics",
@@ -169,40 +159,25 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
-    return {
-      // Checked before pages, so they can stand in for one.
-      beforeFiles: [
-        // The unfiltered Makes page is served from a fully prerendered copy;
-        // any of the page's params sends the request to the dynamic page.
-        {
-          source: "/cars/makes",
-          missing: ["make", "compare", "fuel", "range", "sort"].map((key) => ({
-            type: "query" as const,
-            key,
-          })),
-          destination: "/cars/makes/all",
-        },
-      ],
-      afterFiles: [
-        {
-          source: "/:path*",
-          has: [{ type: "host", value: "api.motormetrics.app" }],
-          destination: "/api/v1/:path*",
-        },
-        {
-          source: "/ingest/static/:path*",
-          destination: "https://eu-assets.i.posthog.com/static/:path*",
-        },
-        {
-          source: "/ingest/array/:path*",
-          destination: "https://eu-assets.i.posthog.com/array/:path*",
-        },
-        {
-          source: "/ingest/:path*",
-          destination: "https://eu.i.posthog.com/:path*",
-        },
-      ],
-    };
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "api.motormetrics.app" }],
+        destination: "/api/v1/:path*",
+      },
+      {
+        source: "/ingest/static/:path*",
+        destination: "https://eu-assets.i.posthog.com/static/:path*",
+      },
+      {
+        source: "/ingest/array/:path*",
+        destination: "https://eu-assets.i.posthog.com/array/:path*",
+      },
+      {
+        source: "/ingest/:path*",
+        destination: "https://eu.i.posthog.com/:path*",
+      },
+    ];
   },
   async headers() {
     return [
