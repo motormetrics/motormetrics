@@ -136,9 +136,11 @@ const nextConfig: NextConfig = {
         destination,
         permanent: true,
       })),
-      // The prerendered Makes copy is reached only through the rewrite below:
-      // visited directly, its filters would change the URL but not the
-      // figures. Redirects match the incoming path, so the rewrite is unaffected.
+      // Added 2026-11-23, review 2027-11-23: the prerendered Makes copy is
+      // reached only through the rewrite below. Visited directly, its filters
+      // would change the URL but not the figures. Redirects match the incoming
+      // path, so the rewrite is unaffected. Keep this for as long as that
+      // rewrite exists, whatever Search Console shows at review.
       {
         source: "/cars/makes/all",
         destination: "/cars/makes",
