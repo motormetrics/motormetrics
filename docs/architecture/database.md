@@ -320,7 +320,7 @@ While the schema doesn't use foreign key constraints, there are logical relation
 **Migration Workflow**:
 ```bash
 # 1. Modify schema files in packages/database/src/schema/
-# 2. Apply to the development branch and iterate there
+# 2. Apply to the vercel-dev branch and iterate there
 pnpm db:push
 
 # 3. Once the shape has settled, generate the migration
@@ -330,7 +330,7 @@ pnpm db:generate
 #    preview branches and production apply it on deploy via vercel-build.
 ```
 
-Do not run `pnpm db:migrate` against development: `push` has already applied the
+Do not run `pnpm db:migrate` against `vercel-dev`: `push` has already applied the
 changes without recording a ledger row, so the migration replays and fails. See
 [packages/database/AGENTS.md](../../packages/database/AGENTS.md) for the full rules.
 

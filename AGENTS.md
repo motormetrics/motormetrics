@@ -78,8 +78,9 @@ sets that deploy's `DATABASE_URL` and `NEON_REALTIME_*` variables.
 
 `vercel-build` runs `db:migrate` before `next build`, so **every deploy applies pending
 migrations**. A preview applies them to its own `preview/<git-branch>` branch, so an
-unmerged PR's migration no longer lands anywhere shared. The `development` branch is
-managed by `db:push` instead and receives no migrations.
+unmerged PR's migration no longer lands anywhere shared. The `vercel-dev` branch (the
+Vercel Development environment, used locally) is managed by `db:push` instead and
+receives no migrations.
 
 ## Domain Convention
 
