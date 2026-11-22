@@ -136,6 +136,14 @@ const nextConfig: NextConfig = {
         destination,
         permanent: true,
       })),
+      // The prerendered Makes copy is reached only through the rewrite below:
+      // visited directly, its filters would change the URL but not the
+      // figures. Redirects match the incoming path, so the rewrite is unaffected.
+      {
+        source: "/cars/makes/all",
+        destination: "/cars/makes",
+        permanent: true,
+      },
       {
         source: "/instagram",
         destination: "https://www.instagram.com/motormetrics",
