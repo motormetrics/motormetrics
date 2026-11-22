@@ -112,7 +112,7 @@ describe("CoeResultsLive", () => {
     state.pathname = "/coe";
     realtime.listeners.change.length = 0;
     realtime.listeners.state.length = 0;
-    process.env.NEXT_PUBLIC_NEON_REALTIME_URL = "wss://realtime.example";
+    process.env.NEON_REALTIME_URL = "wss://realtime.example";
   });
 
   afterEach(() => {

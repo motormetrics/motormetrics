@@ -34,7 +34,7 @@ export function CoeResultsLive() {
   const router = useRouter();
 
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_NEON_REALTIME_URL;
+    const url = process.env.NEON_REALTIME_URL;
     const resultsWindow = getResultsWindow(new Date());
     if (!url || !resultsWindow || !COE_RESULTS_ROUTE_PATTERN.test(pathname)) {
       return;
