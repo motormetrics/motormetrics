@@ -71,10 +71,16 @@ Core cross-cutting variables:
 
 Vercel, Singapore region. Push to main deploys production; pull requests get preview URLs.
 
+The database is the `motormetrics-pg18` Neon project (Postgres 18, which Neon Realtime
+needs), connected through the Neon Vercel integration. The integration creates a
+`preview/<git-branch>` Neon branch for each preview deploy, branched from `production`, and
+sets that deploy's `DATABASE_URL` and `NEON_REALTIME_*` variables.
+
 `vercel-build` runs `db:migrate` before `next build`, so **every deploy applies pending
-migrations** — including previews, which target the shared `staging` Neon branch. An
-unmerged PR's migration therefore lands on staging permanently. The `development`
-branch is managed by `db:push` instead and receives no migrations.
+migrations**. A preview applies them to its own `preview/<git-branch>` branch, so an
+unmerged PR's migration no longer lands anywhere shared. The `vercel-dev` branch (the
+Vercel Development environment, used locally) is managed by `db:push` instead and
+receives no migrations.
 
 ## Domain Convention
 
