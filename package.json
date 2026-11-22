@@ -61,5 +61,9 @@
       "version": "26.8.2",
       "onFail": "download"
     }
+  },
+  "dependencies": {
+    "@neon/config": "1.14.6",
+    "@neon/env": "2.1.9"
   }
 }
