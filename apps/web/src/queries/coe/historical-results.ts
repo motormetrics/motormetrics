@@ -1,5 +1,5 @@
 import { db } from "@motormetrics/database/client";
-import { coe } from "@motormetrics/database/schema";
+import { coeResults } from "@motormetrics/database/schema";
 import { getDateRangeFromPeriod } from "@web/lib/coe/calculations";
 import type { COEResult } from "@web/types";
 import type { Period } from "@web/types/coe";
@@ -21,8 +21,12 @@ export async function getCoeResults(): Promise<COEResult[]> {
 
   const results = await db
     .select()
-    .from(coe)
-    .orderBy(asc(coe.month), asc(coe.biddingNo), asc(coe.vehicleClass));
+    .from(coeResults)
+    .orderBy(
+      asc(coeResults.month),
+      asc(coeResults.biddingNo),
+      asc(coeResults.vehicleClass),
+    );
 
   return results as COEResult[];
 }
@@ -35,8 +39,8 @@ export async function getCoeResultsByPeriod(
   cacheTag(`coe:period:${period}`);
 
   const [latestResult, earliestResult] = await db.batch([
-    db.select({ month: max(coe.month) }).from(coe),
-    db.select({ month: min(coe.month) }).from(coe),
+    db.select({ month: max(coeResults.month) }).from(coeResults),
+    db.select({ month: min(coeResults.month) }).from(coeResults),
   ]);
 
   const latestMonth = latestResult[0]?.month;
@@ -54,9 +58,13 @@ export async function getCoeResultsByPeriod(
 
   const results = await db
     .select()
-    .from(coe)
-    .where(and(gte(coe.month, start), lte(coe.month, end)))
-    .orderBy(asc(coe.month), asc(coe.biddingNo), asc(coe.vehicleClass));
+    .from(coeResults)
+    .where(and(gte(coeResults.month, start), lte(coeResults.month, end)))
+    .orderBy(
+      asc(coeResults.month),
+      asc(coeResults.biddingNo),
+      asc(coeResults.vehicleClass),
+    );
 
   return results as COEResult[];
 }

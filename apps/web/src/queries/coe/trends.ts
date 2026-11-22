@@ -1,5 +1,8 @@
 import { db } from "@motormetrics/database/client";
-import { coe, type SelectCOE } from "@motormetrics/database/schema";
+import {
+  coeResults,
+  type SelectCoeResult,
+} from "@motormetrics/database/schema";
 import { getDateRangeForYear } from "@web/lib/coe/calculations";
 import type { COECategory } from "@web/types";
 import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
@@ -10,22 +13,25 @@ const fetchCoeResults = async (
   endMonth: string,
   category?: COECategory,
 ) => {
-  const filters = [gte(coe.month, startMonth), lte(coe.month, endMonth)];
+  const filters = [
+    gte(coeResults.month, startMonth),
+    lte(coeResults.month, endMonth),
+  ];
 
   if (category) {
-    filters.push(eq(coe.vehicleClass, category));
+    filters.push(eq(coeResults.vehicleClass, category));
   }
 
   return db
     .select()
-    .from(coe)
+    .from(coeResults)
     .where(and(...filters))
-    .orderBy(asc(coe.month), desc(coe.biddingNo));
+    .orderBy(asc(coeResults.month), desc(coeResults.biddingNo));
 };
 
 const upsertMonthlyTrend = (
   trends: Map<string, CoeMonthlyPremium>,
-  result: SelectCOE,
+  result: SelectCoeResult,
 ) => {
   const biddingNo = result.biddingNo;
 

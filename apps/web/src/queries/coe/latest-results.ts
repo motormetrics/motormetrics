@@ -1,5 +1,5 @@
 import { db } from "@motormetrics/database/client";
-import { coe } from "@motormetrics/database/schema";
+import { coeResults } from "@motormetrics/database/schema";
 import type { COEResult } from "@web/types";
 import { and, asc, eq, max, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
@@ -10,23 +10,25 @@ export async function getLatestCoeResults(): Promise<COEResult[]> {
   cacheTag("coe:latest");
 
   // Use SQL subqueries to get latest month and latest bidding number in a single query
-  const latestMonthSubquery = db.select({ month: max(coe.month) }).from(coe);
+  const latestMonthSubquery = db
+    .select({ month: max(coeResults.month) })
+    .from(coeResults);
 
   const latestBiddingSubquery = db
-    .select({ biddingNo: max(coe.biddingNo) })
-    .from(coe)
-    .where(eq(coe.month, sql`(${latestMonthSubquery})`));
+    .select({ biddingNo: max(coeResults.biddingNo) })
+    .from(coeResults)
+    .where(eq(coeResults.month, sql`(${latestMonthSubquery})`));
 
   const results = await db
     .select()
-    .from(coe)
+    .from(coeResults)
     .where(
       and(
-        eq(coe.month, sql`(${latestMonthSubquery})`),
-        eq(coe.biddingNo, sql`(${latestBiddingSubquery})`),
+        eq(coeResults.month, sql`(${latestMonthSubquery})`),
+        eq(coeResults.biddingNo, sql`(${latestBiddingSubquery})`),
       ),
     )
-    .orderBy(asc(coe.vehicleClass));
+    .orderBy(asc(coeResults.vehicleClass));
 
   return results as COEResult[];
 }

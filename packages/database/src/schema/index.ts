@@ -8,12 +8,14 @@ export { cars, type InsertCar, type SelectCar } from "./cars";
 export {
   coe,
   coeInterimResults,
+  coeResults,
   type InsertCOE,
   type InsertCoeInterimResult,
   type InsertPqp,
   pqp,
   type SelectCOE,
   type SelectCoeInterimResult,
+  type SelectCoeResult,
   type SelectPqp,
 } from "./coe";
 export {

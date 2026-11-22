@@ -1,5 +1,5 @@
 import { db } from "@motormetrics/database/client";
-import { coe, pqp } from "@motormetrics/database/schema";
+import { coeResults, pqp } from "@motormetrics/database/schema";
 import type { Pqp } from "@web/types/coe";
 import { and, desc, eq, inArray, max, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
@@ -52,11 +52,13 @@ export async function getPQPOverview(
   cacheTag("coe:pqp");
 
   // The latest exercise: the highest bidding number within the latest month
-  const latestCoeMonth = db.select({ month: max(coe.month) }).from(coe);
+  const latestCoeMonth = db
+    .select({ month: max(coeResults.month) })
+    .from(coeResults);
   const latestCoeBiddingNo = db
-    .select({ biddingNo: max(coe.biddingNo) })
-    .from(coe)
-    .where(eq(coe.month, sql`(${latestCoeMonth})`));
+    .select({ biddingNo: max(coeResults.biddingNo) })
+    .from(coeResults)
+    .where(eq(coeResults.month, sql`(${latestCoeMonth})`));
 
   const [recentMonthRows, latestCoeResults] = await db.batch([
     db
@@ -66,15 +68,15 @@ export async function getPQPOverview(
       .limit(12),
     db
       .select({
-        vehicleClass: coe.vehicleClass,
-        premium: coe.premium,
+        vehicleClass: coeResults.vehicleClass,
+        premium: coeResults.premium,
       })
-      .from(coe)
+      .from(coeResults)
       .where(
         and(
-          eq(coe.month, sql`(${latestCoeMonth})`),
-          eq(coe.biddingNo, sql`(${latestCoeBiddingNo})`),
-          inArray(coe.vehicleClass, categories),
+          eq(coeResults.month, sql`(${latestCoeMonth})`),
+          eq(coeResults.biddingNo, sql`(${latestCoeBiddingNo})`),
+          inArray(coeResults.vehicleClass, categories),
         ),
       ),
   ]);

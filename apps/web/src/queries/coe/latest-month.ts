@@ -1,5 +1,5 @@
 import { db } from "@motormetrics/database/client";
-import { coe } from "@motormetrics/database/schema";
+import { coeResults } from "@motormetrics/database/schema";
 import { max } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 
@@ -12,8 +12,8 @@ export async function getCOELatestMonth(): Promise<string | null> {
   cacheTag("coe:months");
 
   const [{ latestMonth }] = await db
-    .select({ latestMonth: max(coe.month) })
-    .from(coe);
+    .select({ latestMonth: max(coeResults.month) })
+    .from(coeResults);
 
   return latestMonth ?? null;
 }
