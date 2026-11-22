@@ -327,7 +327,7 @@ pnpm db:push
 pnpm db:generate
 
 # 4. Review generated SQL in migrations/, then commit it —
-#    staging and production apply it on deploy via vercel-build.
+#    preview branches and production apply it on deploy via vercel-build.
 ```
 
 Do not run `pnpm db:migrate` against development: `push` has already applied the

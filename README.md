@@ -43,7 +43,7 @@ pnpm dev:web
 
 The web development script uses Portless with the hostname `motormetrics.localhost`; a git worktree gets its branch as a subdomain (`<branch>.motormetrics.localhost`). Use the URL printed when it starts. Set `NEXT_PUBLIC_SITE_URL` and your OAuth configuration to match it.
 
-Development databases use `db:push`. Staging and production use committed migrations; see [packages/database/AGENTS.md](packages/database/AGENTS.md) before making schema changes.
+Development databases use `db:push`. Preview and production deploys use committed migrations; see [packages/database/AGENTS.md](packages/database/AGENTS.md) before making schema changes.
 
 ## Development Commands
 
@@ -120,7 +120,7 @@ The [MCP server README](apps/mcp/README.md) describes the blog and maintenance t
 
 Pushes to `main` deploy production on Vercel at [motormetrics.app](https://motormetrics.app). Pull requests receive preview deployments.
 
-The web application's `vercel-build` applies pending database migrations before building. **Preview deployments apply migrations to the shared staging Neon branch**, so an unmerged PR's migration persists there. Development uses `db:push` and receives no migrations.
+The web application's `vercel-build` applies pending database migrations before building. **Each preview deployment applies migrations to its own `preview/<git-branch>` Neon branch**, created by the Neon Vercel integration, so an unmerged PR's migration never reaches a shared branch. Development uses `db:push` and receives no migrations.
 
 ## Documentation
 
