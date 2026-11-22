@@ -51,7 +51,7 @@ const page = ({
 const TODAY = "2026-11-18";
 
 describe("parseClosingResults", () => {
-  it("reads the closing results of an exercise that ended today", () => {
+  it("should read the closing results of an exercise that ended today", () => {
     const parsed = parseClosingResults(page(), TODAY);
 
     expect(parsed).toMatchObject({
@@ -111,7 +111,7 @@ describe("parseClosingResults", () => {
     ]);
   });
 
-  it("reads the 1st exercise as bidding number 1", () => {
+  it("should read the 1st exercise as bidding number 1", () => {
     const parsed = parseClosingResults(
       page({
         ended:
@@ -124,14 +124,14 @@ describe("parseClosingResults", () => {
     expect(parsed).toMatchObject({ month: "2026-12", biddingNo: 1 });
   });
 
-  it("is stale when the latest exercise ended before today", () => {
+  it("should be stale when the latest exercise ended before today", () => {
     expect(parseClosingResults(page(), "2026-11-20")).toEqual({
       status: "stale",
       endedOn: "2026-11-18",
     });
   });
 
-  it("has not ended when the page has no closing heading", () => {
+  it("should not have ended when the page has no closing heading", () => {
     expect(parseClosingResults(page({ ended: null }), TODAY)).toEqual({
       status: "not-ended",
     });
@@ -179,7 +179,7 @@ describe("parseClosingResults", () => {
       TODAY,
       "category-A",
     ],
-  ])("throws on %s", (_, html, today, check) => {
+  ])("should throw on %s", (_, html, today, check) => {
     expect(() => parseClosingResults(html, today)).toThrow(
       ClosingResultsParseError,
     );

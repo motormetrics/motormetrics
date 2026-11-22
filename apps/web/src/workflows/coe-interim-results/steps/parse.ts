@@ -62,14 +62,16 @@ const ENDED_HEADING =
 const RESULTS_HEADING =
   /Results for ([A-Z]+) (\d{4}) (1st|2nd) Open Bidding Exercise/i;
 
+// `&amp;` is decoded last, so an escaped entity such as `&amp;lt;` stays
+// `&lt;` rather than being unescaped twice.
 const decodeEntities = (text: string): string =>
   text
     .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&#39;/g, "'")
-    .replace(/&quot;/g, '"');
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, "&");
 
 const toText = (html: string): string =>
   decodeEntities(html.replace(/<[^>]*>/g, " "))
