@@ -289,9 +289,15 @@ Web-specific variables (see root `AGENTS.md` for the cross-cutting ones):
   production via the dashboard or `vercel flags enable|disable --environment`. Keys:
   `advertise-page`. (`advertise-nav` and `blog-nav` were removed: they were
   read at request time in the main layout, which pulled every page out of the static shell.)
+- `NEON_REALTIME_SECRET` / `NEXT_PUBLIC_NEON_REALTIME_URL`: Neon Realtime, per Neon branch (enable it
+  with `neon realtime enable`; `neon env pull --service realtime` writes both). `/api/coe/live` seals
+  the same-day COE results query with the secret; `CoeResultsLive` opens the WebSocket at the URL during
+  the weekday results window. Without them the live refresh is off and pages still show interim results
+  on load
 - `QSTASH_TOKEN` / `QSTASH_CURRENT_SIGNING_KEY` / `QSTASH_NEXT_SIGNING_KEY`: Upstash QStash. The
   hourly (`0 * * * *`) `ev-charging-live` schedule lives in QStash, not `vercel.ts` crons; it forwards
-  `CRON_SECRET` as the bearer token so the route needs no QStash-specific verification
+  `CRON_SECRET` as the bearer token so the route needs no QStash-specific verification. So does the
+  weekday `coe-interim-results` schedule (`5-45/10 8 * * 1-5` UTC), which fills `coe_interim_results`
 - `VERCEL_ENV`: social media redirects and production-only features activate only when this is `"production"`
 - `NEXT_PUBLIC_VERCEL_URL`: client-side deployment URL, without the `https://` protocol. `SITE_URL` falls back to it
   when `NEXT_PUBLIC_SITE_URL` is unset

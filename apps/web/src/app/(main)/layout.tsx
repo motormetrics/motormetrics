@@ -1,4 +1,5 @@
 import { Announcement } from "@web/components/announcement";
+import { CoeResultsLive } from "@web/components/coe-results-live";
 import { Footer } from "@web/components/footer";
 import { InsetVariant } from "@web/components/inset-variant";
 import { NotificationPrompt } from "@web/components/notification-prompt";
@@ -12,6 +13,7 @@ export default function MainLayout({
     <div className="min-h-screen text-foreground">
       <NotificationPrompt />
       <SurveyPrompt />
+      <CoeResultsLive />
 
       {/*
         The page runs the full width of the card beside the sidebar; there is
