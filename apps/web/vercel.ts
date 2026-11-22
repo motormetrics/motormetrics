@@ -11,6 +11,9 @@ export const config: VercelConfig = {
   // The live EV charging ingest (/api/workflows/ev-charging-live) is not
   // here: Hobby caps crons at once a day, so it runs hourly from
   // a QStash schedule (id `ev-charging-live`) that forwards CRON_SECRET.
+  // Same-day COE results (/api/workflows/coe-interim-results) also run from
+  // QStash (id `coe-interim-results`), at 16:05–16:45 SGT on weekdays
+  // (`5-45/10 8 * * 1-5` UTC), forwarding CRON_SECRET.
   crons: [
     {
       path: "/api/workflows/cars",

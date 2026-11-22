@@ -50,6 +50,12 @@ const LEGACY_PATH_REDIRECTS = [
   ["/cars/vehicle-types/:type*", "/cars?dimension=vehicleType"],
 ] as const;
 
+// The Neon Realtime endpoint CoeResultsLive opens a WebSocket to. It differs
+// per Neon branch, so it comes from the environment rather than a fixed host.
+const NEON_REALTIME_ORIGIN = process.env.NEXT_PUBLIC_NEON_REALTIME_URL
+  ? new URL(process.env.NEXT_PUBLIC_NEON_REALTIME_URL).origin
+  : "";
+
 // Static CSP, not nonce-based: a nonce needs a per-request render, which
 // would pull every page out of the static shell. vercel.live and pusher
 // serve the preview toolbar; cartocdn serves the EV charging map's styles,
@@ -60,7 +66,7 @@ const CONTENT_SECURITY_POLICY = [
   "style-src 'self' 'unsafe-inline' https://vercel.live",
   "img-src 'self' blob: data: https://assets.motormetrics.app https://*.blob.vercel-storage.com https://images.unsplash.com https://*.basemaps.cartocdn.com https://vercel.live https://vercel.com",
   "font-src 'self' data: https://vercel.live https://assets.vercel.com",
-  "connect-src 'self' https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://vercel.live wss://ws-us3.pusher.com",
+  `connect-src 'self' https://basemaps.cartocdn.com https://*.basemaps.cartocdn.com https://vercel.live wss://ws-us3.pusher.com ${NEON_REALTIME_ORIGIN}`.trimEnd(),
   "worker-src 'self' blob:",
   "frame-src https://vercel.live",
   "frame-ancestors 'self'",

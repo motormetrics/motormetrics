@@ -1,4 +1,4 @@
-import type { SelectCOE } from "@motormetrics/database/schema";
+import type { SelectCoeResult } from "@motormetrics/database/schema";
 import { formatCurrency } from "@motormetrics/utils/format-currency";
 import { formatDateToMonthYear } from "@motormetrics/utils/format-date-to-month-year";
 import type { CoePremiumsProps } from "@web/lib/og/cards/coe-premiums";
@@ -31,7 +31,7 @@ const shortMonth = (month: string) => formatDateToMonthYear(month).slice(0, 3);
 const percentChange = (current: number, previous: number | undefined) =>
   previous ? ((current - previous) / previous) * 100 : 0;
 
-const findCategory = (results: SelectCOE[], category: string) =>
+const findCategory = (results: SelectCoeResult[], category: string) =>
   results.find((result) => result.vehicleClass === category);
 
 /** The latest bidding exercise's rows and the one before it, empty when absent. */
@@ -156,7 +156,7 @@ export async function loadCoePremiums(): Promise<CardData<CoePremiumsProps> | nu
   // The month's first and second exercise: the latest result is one of them,
   // and the exercise before it is the first when the latest is the second.
   const series = (
-    current: SelectCOE,
+    current: SelectCoeResult,
     trends: { month: string; premium: number }[],
   ) => {
     const recent = trends.slice(-TREND_POINTS);

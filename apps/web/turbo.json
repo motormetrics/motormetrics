@@ -6,6 +6,7 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "env": [
         "CRON_SECRET",
+        "NEXT_PUBLIC_NEON_REALTIME_URL",
         "NEXT_PUBLIC_POSTHOG_HOST",
         "NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN"
       ]
@@ -14,6 +15,7 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "passThroughEnv": [
         "CRON_SECRET",
+        "NEXT_PUBLIC_NEON_REALTIME_URL",
         "NEXT_PUBLIC_POSTHOG_HOST",
         "NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN"
       ]

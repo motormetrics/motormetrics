@@ -10,6 +10,10 @@ vi.mock("@web/workflows/coe/steps/process-data", () => ({
   updateCoe: vi.fn(),
 }));
 
+vi.mock("@web/workflows/coe/steps/evict-interim-results", () => ({
+  evictInterimResults: vi.fn(),
+}));
+
 vi.mock("@web/queries/coe/latest-month", () => ({
   getCOELatestRecord: vi.fn(),
 }));
@@ -46,12 +50,14 @@ vi.mock("workflow", () => ({
 import { redis } from "@motormetrics/utils/redis";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";
 import { coeWorkflow } from "@web/workflows/coe";
+import { evictInterimResults } from "@web/workflows/coe/steps/evict-interim-results";
 import { updateCoe } from "@web/workflows/coe/steps/process-data";
 import { revalidateTag } from "next/cache";
 
 describe("coeWorkflow", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(evictInterimResults).mockResolvedValue(0);
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
@@ -68,6 +74,35 @@ describe("coeWorkflow", () => {
 
     expect(result.message).toBe("No COE records processed.");
     expect(getCOELatestRecord).not.toHaveBeenCalled();
+  });
+
+  it("should evict interim results even when no records are processed", async () => {
+    vi.mocked(updateCoe).mockResolvedValueOnce({
+      recordsProcessed: 0,
+      table: "coe",
+      message: "",
+      timestamp: "",
+    });
+    vi.mocked(evictInterimResults).mockResolvedValueOnce(5);
+    vi.mocked(getCOELatestRecord).mockResolvedValueOnce({
+      id: "test-id",
+      month: "2026-11",
+      biddingNo: 2,
+      vehicleClass: "Category A",
+      quota: 1193,
+      bidsSuccess: 1130,
+      bidsReceived: 1464,
+      premium: 130100,
+    });
+
+    const result = await coeWorkflow({});
+
+    expect(evictInterimResults).toHaveBeenCalledOnce();
+    expect(result.message).toBe(
+      "[COE] Data processed and cache revalidated successfully",
+    );
+    expect(revalidateTag).toHaveBeenCalledWith("coe:month:2026-11", "max");
+    expect(redis.set).not.toHaveBeenCalled();
   });
 
   it("should return message when no COE records found", async () => {

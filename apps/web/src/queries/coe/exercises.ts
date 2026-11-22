@@ -1,5 +1,8 @@
 import { db } from "@motormetrics/database/client";
-import { coe, type SelectCOE } from "@motormetrics/database/schema";
+import {
+  coeResults,
+  type SelectCoeResult,
+} from "@motormetrics/database/schema";
 import type { COECategory } from "@web/types";
 import { and, asc, desc, eq, lte, or } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
@@ -8,7 +11,7 @@ import { cacheLife, cacheTag } from "next/cache";
 export interface ExerciseRows {
   biddingNo: number;
   month: string;
-  rows: SelectCOE[];
+  rows: SelectCoeResult[];
 }
 
 /**
@@ -29,10 +32,13 @@ export async function getExercisePair(month?: string): Promise<{
   cacheTag("coe:exercises", month ? `coe:month:${month}` : "coe:latest");
 
   const recent = await db
-    .selectDistinct({ biddingNo: coe.biddingNo, month: coe.month })
-    .from(coe)
-    .where(month ? lte(coe.month, month) : undefined)
-    .orderBy(desc(coe.month), desc(coe.biddingNo))
+    .selectDistinct({
+      biddingNo: coeResults.biddingNo,
+      month: coeResults.month,
+    })
+    .from(coeResults)
+    .where(month ? lte(coeResults.month, month) : undefined)
+    .orderBy(desc(coeResults.month), desc(coeResults.biddingNo))
     .limit(2);
 
   if (recent.length === 0) {
@@ -41,18 +47,18 @@ export async function getExercisePair(month?: string): Promise<{
 
   const rows = await db
     .select()
-    .from(coe)
+    .from(coeResults)
     .where(
       or(
         ...recent.map((exercise) =>
           and(
-            eq(coe.month, exercise.month),
-            eq(coe.biddingNo, exercise.biddingNo),
+            eq(coeResults.month, exercise.month),
+            eq(coeResults.biddingNo, exercise.biddingNo),
           ),
         ),
       ),
     )
-    .orderBy(asc(coe.vehicleClass));
+    .orderBy(asc(coeResults.vehicleClass));
 
   const exerciseAt = (index: number): ExerciseRows | null => {
     const exercise = recent[index];
@@ -99,14 +105,14 @@ export async function getCategoryExercises(
 
   return db
     .select({
-      biddingNo: coe.biddingNo,
-      bidsReceived: coe.bidsReceived,
-      bidsSuccess: coe.bidsSuccess,
-      month: coe.month,
-      premium: coe.premium,
-      quota: coe.quota,
+      biddingNo: coeResults.biddingNo,
+      bidsReceived: coeResults.bidsReceived,
+      bidsSuccess: coeResults.bidsSuccess,
+      month: coeResults.month,
+      premium: coeResults.premium,
+      quota: coeResults.quota,
     })
-    .from(coe)
-    .where(eq(coe.vehicleClass, category))
-    .orderBy(asc(coe.month), asc(coe.biddingNo));
+    .from(coeResults)
+    .where(eq(coeResults.vehicleClass, category))
+    .orderBy(asc(coeResults.month), asc(coeResults.biddingNo));
 }
