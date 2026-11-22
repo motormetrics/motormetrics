@@ -1,10 +1,6 @@
 import type { COECategory } from "@motormetrics/types";
 import type { COEResult } from "@web/types";
 
-/** The OneMotoring page the closing results are read from. */
-export const COE_OPEN_BIDDING_URL =
-  "https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/coe-open-bidding.html";
-
 /**
  * What the page says about the latest exercise.
  *
