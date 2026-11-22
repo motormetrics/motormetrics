@@ -47,10 +47,12 @@ const ready = (offsetMs: number) => ({
   status: "ready",
   updatedAt: performance.timeOrigin + offsetMs,
 });
+// Built per test: the fake timers replace `performance`, so its timeOrigin
+// must be read after they are installed.
 // Revalidated after this page was requested, so the page is stale.
-const READY_AFTER_LOAD = ready(1000);
+const readyAfterLoad = () => ready(1000);
 // Revalidated before this page was requested, so the page is fresh.
-const READY_BEFORE_LOAD = ready(-1000);
+const readyBeforeLoad = () => ready(-1000);
 
 const ROW = { month: "2026-11", bidding_no: 2 };
 
@@ -88,6 +90,14 @@ const renderAndListen = async () => {
   return screen;
 };
 
+// The poll timer is only set once the previous response is parsed, so advance
+// one poll interval at a time until the assertion holds.
+const pollUntil = (assertion: () => void) =>
+  vi.waitFor(async () => {
+    await vi.advanceTimersByTimeAsync(5_000);
+    assertion();
+  });
+
 // Renders, then waits until the sealed query from the route is subscribed.
 const renderAndSubscribe = async () => {
   const screen = await renderAndListen();
@@ -112,7 +122,7 @@ describe("CoeResultsLive", () => {
   });
 
   it("should refresh once the arrived results are revalidated", async () => {
-    respondWith(LIVE, READY_AFTER_LOAD);
+    respondWith(LIVE, readyAfterLoad());
     await renderAndSubscribe();
 
     expect(createRealtimeClient).toHaveBeenCalledWith({
@@ -131,7 +141,7 @@ describe("CoeResultsLive", () => {
 
   it("should refresh even when the revalidation predates the page", async () => {
     // The page saw the rows arrive live, so it renders the old results.
-    respondWith(LIVE, READY_BEFORE_LOAD);
+    respondWith(LIVE, readyBeforeLoad());
     await renderAndSubscribe();
 
     emitChange({ status: "live", data: [ROW] });
@@ -140,19 +150,17 @@ describe("CoeResultsLive", () => {
   });
 
   it("should wait for the cache revalidation before refreshing", async () => {
-    const fetchMock = respondWith(LIVE, PENDING, PENDING, READY_AFTER_LOAD);
+    const fetchMock = respondWith(LIVE, PENDING, PENDING, readyAfterLoad());
     await renderAndSubscribe();
 
     emitChange({ status: "live", data: [ROW] });
     await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
     expect(refresh).not.toHaveBeenCalled();
 
-    await vi.advanceTimersByTimeAsync(5_000);
-    expect(fetchMock).toHaveBeenCalledTimes(3);
+    await pollUntil(() => expect(fetchMock).toHaveBeenCalledTimes(3));
     expect(refresh).not.toHaveBeenCalled();
 
-    await vi.advanceTimersByTimeAsync(5_000);
-    await vi.waitFor(() => expect(refresh).toHaveBeenCalledOnce());
+    await pollUntil(() => expect(refresh).toHaveBeenCalledOnce());
   });
 
   it("should listen on nested COE pages", async () => {
@@ -174,17 +182,16 @@ describe("CoeResultsLive", () => {
   });
 
   it("should refresh a page requested before the revalidation", async () => {
-    const fetchMock = respondWith(PENDING, READY_AFTER_LOAD);
+    const fetchMock = respondWith(PENDING, readyAfterLoad());
     await renderAndListen();
-    await vi.advanceTimersByTimeAsync(5_000);
 
-    await vi.waitFor(() => expect(refresh).toHaveBeenCalledOnce());
+    await pollUntil(() => expect(refresh).toHaveBeenCalledOnce());
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(createRealtimeClient).not.toHaveBeenCalled();
   });
 
   it("should leave a page requested after the revalidation alone", async () => {
-    const fetchMock = respondWith(READY_BEFORE_LOAD);
+    const fetchMock = respondWith(readyBeforeLoad());
     await renderAndListen();
     await vi.advanceTimersByTimeAsync(60_000);
 
@@ -227,7 +234,7 @@ describe("CoeResultsLive", () => {
   });
 
   it("should refresh when the query expires after the results arrived", async () => {
-    respondWith(LIVE, READY_AFTER_LOAD);
+    respondWith(LIVE, readyAfterLoad());
     await renderAndSubscribe();
 
     await emitState({ status: "stale" });
