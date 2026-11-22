@@ -201,6 +201,9 @@ the Next.js metadata template in `src/app/layout.tsx`:
 - Redirects are permanent (`permanent: true`, a 308) in `redirects()` in `next.config.ts`. Each
   one carries a comment with the date added and a review date 12 months later, and a GitHub
   issue is opened for that review.
+- Exception: a redirect that must drop the query string lives in `src/proxy.ts`, because a
+  `redirects()` entry always carries the query over to the destination. It keeps the same dated
+  comment. Today that is `/cars/makes?make=<slug>` to `/cars/makes/<slug>`.
 - At review, remove a redirect only if Search Console shows no impressions on the old URL for
   the past 3 months and no backlinks still point to it. Otherwise move the review out another
   12 months.
