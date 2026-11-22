@@ -4,8 +4,8 @@
 
 Modify schema files in `src/schema/`, then `pnpm push` to apply them to the
 **development** Neon branch and iterate there. Once the shape has settled, `pnpm
-generate` and review the generated SQL in `migrations/`. Commit it — staging and
-production apply it on deploy, since `vercel-build` runs `db:migrate`. Types update
+generate` and review the generated SQL in `migrations/`. Commit it — preview
+branches and production apply it on deploy, since `vercel-build` runs `db:migrate`. Types update
 automatically via Drizzle inference; never hand-edit generated migrations.
 
 **Do not run `pnpm migrate` against development.** `push` has already applied those
