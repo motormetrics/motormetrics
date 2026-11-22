@@ -42,6 +42,9 @@ export async function GET(): Promise<Response> {
   });
   // Raw SQL because @neon/realtime-drizzle supports drizzle-orm 0.45 only and
   // this repo is on Drizzle 1.0. The query has no parameters.
+  // TODO: switch to drizzleAdapter() from @neon/realtime-drizzle and seal a
+  // Drizzle select on coeInterimResults once its drizzle-orm peer range
+  // includes 1.x (0.2.0 allows >=0.45.2 <0.46.0).
   const sealed = await realtime.seal({
     query: rawSql<{ month: string; bidding_no: number }>(
       "select month, bidding_no from coe_interim_results",
