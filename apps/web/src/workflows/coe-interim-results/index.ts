@@ -59,6 +59,10 @@ export async function coeInterimResultsWorkflow(): Promise<CoeInterimResultsWork
     };
   }
 
+  // Its own step, after the insert: a failed Redis write retries alone, so the
+  // completed insert keeps its row count and the run still revalidates.
+  await stampLastUpdated();
+
   await emitEvent({ type: "step:start", step: "revalidateCoeCache" });
   await revalidateCoeCache(month);
   await emitEvent({
@@ -111,11 +115,13 @@ async function storeResults(
 ): Promise<number> {
   "use step";
 
-  const inserted = await storeInterimResults(month, biddingNo, results);
-  if (inserted > 0) {
-    await redis.set(LAST_UPDATED_COE_KEY, Date.now());
-  }
-  return inserted;
+  return storeInterimResults(month, biddingNo, results);
+}
+
+async function stampLastUpdated(): Promise<void> {
+  "use step";
+
+  await redis.set(LAST_UPDATED_COE_KEY, Date.now());
 }
 
 async function revalidateCoeCache(month: string): Promise<void> {
