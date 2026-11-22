@@ -64,7 +64,7 @@ describe("coeInterimResultsWorkflow", () => {
     vi.setSystemTime(new Date("2026-11-18T08:05:00Z"));
   });
 
-  it("stores today's results, stamps the update time and revalidates", async () => {
+  it("should store today's results, stamp the update time and revalidate", async () => {
     servePage(page("18/11/2026"));
     vi.mocked(storeInterimResults).mockResolvedValueOnce(5);
 
@@ -88,7 +88,7 @@ describe("coeInterimResultsWorkflow", () => {
     expect(revalidateTag).toHaveBeenCalledWith("coe:latest", "max");
   });
 
-  it("skips when the exercise is already stored", async () => {
+  it("should skip when the exercise is already stored", async () => {
     servePage(page("18/11/2026"));
     vi.mocked(storeInterimResults).mockResolvedValueOnce(0);
 
@@ -99,7 +99,7 @@ describe("coeInterimResultsWorkflow", () => {
     expect(revalidateTag).not.toHaveBeenCalled();
   });
 
-  it("skips on a day that is not a results day", async () => {
+  it("should skip on a day that is not a results day", async () => {
     servePage(page("04/11/2026"));
 
     const result = await coeInterimResultsWorkflow();
@@ -109,7 +109,7 @@ describe("coeInterimResultsWorkflow", () => {
     expect(reportParseFailure).not.toHaveBeenCalled();
   });
 
-  it("reports and fails fatally when the page cannot be read", async () => {
+  it("should report and fail fatally when the page cannot be read", async () => {
     servePage(page("18/11/2026", letters.slice(0, 4).map(row).join("")));
 
     await expect(coeInterimResultsWorkflow()).rejects.toMatchObject({
@@ -122,7 +122,7 @@ describe("coeInterimResultsWorkflow", () => {
     expect(storeInterimResults).not.toHaveBeenCalled();
   });
 
-  it("throws a retryable error when OneMotoring is unavailable", async () => {
+  it("should throw a retryable error when OneMotoring is unavailable", async () => {
     servePage("", 503);
 
     await expect(coeInterimResultsWorkflow()).rejects.toThrow("HTTP 503");
