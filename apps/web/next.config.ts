@@ -159,25 +159,40 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "api.motormetrics.app" }],
-        destination: "/api/v1/:path*",
-      },
-      {
-        source: "/ingest/static/:path*",
-        destination: "https://eu-assets.i.posthog.com/static/:path*",
-      },
-      {
-        source: "/ingest/array/:path*",
-        destination: "https://eu-assets.i.posthog.com/array/:path*",
-      },
-      {
-        source: "/ingest/:path*",
-        destination: "https://eu.i.posthog.com/:path*",
-      },
-    ];
+    return {
+      // Checked before pages, so they can stand in for one.
+      beforeFiles: [
+        // The unfiltered Makes page is served from a fully prerendered copy;
+        // any of the page's params sends the request to the dynamic page.
+        {
+          source: "/cars/makes",
+          missing: ["make", "compare", "fuel", "range", "sort"].map((key) => ({
+            type: "query" as const,
+            key,
+          })),
+          destination: "/cars/makes/all",
+        },
+      ],
+      afterFiles: [
+        {
+          source: "/:path*",
+          has: [{ type: "host", value: "api.motormetrics.app" }],
+          destination: "/api/v1/:path*",
+        },
+        {
+          source: "/ingest/static/:path*",
+          destination: "https://eu-assets.i.posthog.com/static/:path*",
+        },
+        {
+          source: "/ingest/array/:path*",
+          destination: "https://eu-assets.i.posthog.com/array/:path*",
+        },
+        {
+          source: "/ingest/:path*",
+          destination: "https://eu.i.posthog.com/:path*",
+        },
+      ],
+    };
   },
   async headers() {
     return [
