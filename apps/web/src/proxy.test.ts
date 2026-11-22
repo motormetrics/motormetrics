@@ -171,6 +171,36 @@ describe("proxy", () => {
     });
   });
 
+  describe("old make links on the makes index", () => {
+    async function makes(query: string) {
+      const { proxy } = await import("@web/proxy");
+      return proxy(
+        new NextRequest(`http://localhost/cars/makes?${query}`, {
+          headers: { accept: "text/html" },
+        }),
+      );
+    }
+
+    it("should redirect a make to its own page and drop the rest of the query", async () => {
+      const response = await makes("make=BMW&fuel=Electric&range=12m");
+
+      expect(response.status).toBe(308);
+      expect(response.headers.get("location")).toBe(
+        "http://localhost/cars/makes/bmw",
+      );
+    });
+
+    it.each([
+      "fuel=Electric",
+      "make=",
+      "make=..%2Fadmin",
+    ])("should leave %s to the page", async (query) => {
+      const response = await makes(query);
+
+      expect(response.headers.get("location")).toBeNull();
+    });
+  });
+
   describe("admin routes", () => {
     async function requestAdmin(session: unknown, permitted = false) {
       const { auth } = await import("@web/lib/auth");
@@ -238,6 +268,18 @@ describe("proxy", () => {
           accept: "text/html",
         }),
       ).toBe(true);
+    });
+
+    it("should run for the makes index with a make query", async () => {
+      expect(
+        await matches("/cars/makes?make=bmw", { accept: "text/html" }),
+      ).toBe(true);
+    });
+
+    it("should not run for the makes index without a make query", async () => {
+      expect(
+        await matches("/cars/makes?fuel=Electric", { accept: "text/html" }),
+      ).toBe(false);
     });
 
     it("should not run for the make comparison page without a make query", async () => {

@@ -14,6 +14,9 @@ const ratelimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(60, "1 m"),
 });
 
+/** A make's slug as `slugify` writes it. */
+const MAKE_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -59,6 +62,21 @@ export async function proxy(request: NextRequest) {
     if (curated) {
       return NextResponse.redirect(
         new URL(comparePath(pairSlug(curated)), request.url),
+      );
+    }
+  }
+
+  // The index used to link every make card to `?make=<slug>`, a detail panel
+  // inside this page, and crawlers still hold thousands of those URLs. Each
+  // one rendered the whole index on the server. Nothing links to them now, so
+  // they go to the make's own page, with the rest of the query dropped so
+  // every variant lands on one URL. Added 2026-11-23, review 2027-11-23.
+  if (pathname === "/cars/makes") {
+    const make = request.nextUrl.searchParams.get("make")?.trim().toLowerCase();
+    if (make && MAKE_SLUG.test(make)) {
+      return NextResponse.redirect(
+        new URL(`/cars/makes/${make}`, request.url),
+        308,
       );
     }
   }
@@ -145,6 +163,11 @@ export const config = {
     // Only selector submissions, for the curated-pair redirect.
     {
       source: "/cars/makes/compare",
+      has: [{ type: "query", key: "make" }],
+    },
+    // Only old `?make=` links, for the redirect to the make's page.
+    {
+      source: "/cars/makes",
       has: [{ type: "query", key: "make" }],
     },
     // Only Markdown requests reach the proxy for public pages, so page views,
