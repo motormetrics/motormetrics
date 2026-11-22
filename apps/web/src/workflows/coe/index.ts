@@ -3,6 +3,7 @@ import { LAST_UPDATED_COE_KEY } from "@web/config/workflow";
 import { getCoeMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import type { UpdaterResult } from "@web/lib/updater";
 import { getCOELatestRecord } from "@web/queries/coe/latest-month";
+import { evictInterimResults } from "@web/workflows/coe/steps/evict-interim-results";
 import { updateCoe } from "@web/workflows/coe/steps/process-data";
 import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
@@ -32,7 +33,18 @@ export async function coeWorkflow(
     data: { recordsProcessed: result.recordsProcessed },
   });
 
-  if (result.recordsProcessed === 0) {
+  // Before the early return: a run that adds no CSV rows can still find
+  // same-day results whose exercise is now in `coe`, and must revalidate
+  // once it deletes them.
+  await emitEvent({ type: "step:start", step: "evictInterimResults" });
+  const evicted = await evictInterimCoeResults();
+  await emitEvent({
+    type: "data:processed",
+    step: "evictInterimResults",
+    data: { recordsEvicted: evicted },
+  });
+
+  if (result.recordsProcessed === 0 && evicted === 0) {
     return { message: "No COE records processed." };
   }
 
@@ -65,6 +77,12 @@ async function processCoeData(): Promise<UpdaterResult> {
 
   return result;
 }
+async function evictInterimCoeResults(): Promise<number> {
+  "use step";
+
+  return evictInterimResults();
+}
+
 async function getLatestCoeMonth(): Promise<string | null> {
   "use step";
 
