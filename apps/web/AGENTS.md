@@ -289,7 +289,7 @@ Web-specific variables (see root `AGENTS.md` for the cross-cutting ones):
   production via the dashboard or `vercel flags enable|disable --environment`. Keys:
   `advertise-page`. (`advertise-nav` and `blog-nav` were removed: they were
   read at request time in the main layout, which pulled every page out of the static shell.)
-- `NEON_REALTIME_SECRET` / `NEXT_PUBLIC_NEON_REALTIME_URL`: Neon Realtime, per Neon branch (enable it
+- `NEON_REALTIME_SECRET` / `NEON_REALTIME_URL`: Neon Realtime, per Neon branch (enable it
   with `neon realtime enable`; `neon env pull --service realtime` writes both). `/api/coe/live` seals
   the same-day COE results query with the secret; `CoeResultsLive` opens the WebSocket at the URL during
   the weekday results window. Without them the live refresh is off and pages still show interim results

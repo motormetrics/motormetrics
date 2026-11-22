@@ -52,8 +52,11 @@ const LEGACY_PATH_REDIRECTS = [
 
 // The Neon Realtime endpoint CoeResultsLive opens a WebSocket to. It differs
 // per Neon branch, so it comes from the environment rather than a fixed host.
-const NEON_REALTIME_ORIGIN = process.env.NEXT_PUBLIC_NEON_REALTIME_URL
-  ? new URL(process.env.NEXT_PUBLIC_NEON_REALTIME_URL).origin
+// The Neon integration sets NEON_REALTIME_URL with no NEXT_PUBLIC_ twin, so
+// `env` below inlines it into the client bundle under its own name.
+const NEON_REALTIME_URL = process.env.NEON_REALTIME_URL ?? "";
+const NEON_REALTIME_ORIGIN = NEON_REALTIME_URL
+  ? new URL(NEON_REALTIME_URL).origin
   : "";
 
 // Static CSP, not nonce-based: a nonce needs a per-request render, which
@@ -79,6 +82,7 @@ const CONTENT_SECURITY_POLICY = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
+  env: { NEON_REALTIME_URL },
   cacheComponents: true,
   partialPrefetching: true,
   images: {
