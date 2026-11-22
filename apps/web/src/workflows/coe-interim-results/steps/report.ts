@@ -2,7 +2,7 @@
 // server PostHog client, and one event does not warrant adding posthog-node.
 const POSTHOG_CAPTURE_URL = "https://eu.i.posthog.com/i/v0/e/";
 
-export const PARSE_FAILED_EVENT = "coe_interim_results_parse_failed";
+const PARSE_FAILED_EVENT = "coe_interim_results_parse_failed";
 
 /**
  * Sends a PostHog event when the OneMotoring page has a closing heading but

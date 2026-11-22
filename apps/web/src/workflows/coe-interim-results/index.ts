@@ -4,7 +4,6 @@ import { getCoeMonthlyRevalidationTags } from "@web/lib/cache-tags";
 import {
   type ClosingResults,
   ClosingResultsParseError,
-  COE_OPEN_BIDDING_URL,
   parseClosingResults,
 } from "@web/workflows/coe-interim-results/steps/parse";
 import { reportParseFailure } from "@web/workflows/coe-interim-results/steps/report";
@@ -12,6 +11,10 @@ import { storeInterimResults } from "@web/workflows/coe-interim-results/steps/st
 import { emitEvent } from "@web/workflows/shared";
 import { revalidateTag } from "next/cache";
 import { FatalError } from "workflow";
+
+/** The OneMotoring page the closing results are read from. */
+const COE_OPEN_BIDDING_URL =
+  "https://onemotoring.lta.gov.sg/content/onemotoring/home/buying/coe-open-bidding.html";
 
 interface CoeInterimResultsWorkflowResult {
   message: string;
