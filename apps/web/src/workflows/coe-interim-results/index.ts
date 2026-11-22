@@ -59,10 +59,6 @@ export async function coeInterimResultsWorkflow(): Promise<CoeInterimResultsWork
     };
   }
 
-  // Its own step, after the insert: a failed Redis write retries alone, so the
-  // completed insert keeps its row count and the run still revalidates.
-  await stampLastUpdated();
-
   await emitEvent({ type: "step:start", step: "revalidateCoeCache" });
   await revalidateCoeCache(month);
   await emitEvent({
@@ -70,6 +66,11 @@ export async function coeInterimResultsWorkflow(): Promise<CoeInterimResultsWork
     step: "revalidateCoeCache",
     data: { month },
   });
+
+  // Its own step, after the revalidation: a failed Redis write retries alone.
+  // Open COE pages wait for this stamp (via /api/coe/live) before refreshing,
+  // so it must only land once the fresh results can be served.
+  await stampLastUpdated();
 
   return {
     message: `[COE INTERIM] Stored ${inserted} results for ${month} exercise ${biddingNo}`,
@@ -127,7 +128,9 @@ async function stampLastUpdated(): Promise<void> {
 async function revalidateCoeCache(month: string): Promise<void> {
   "use step";
 
+  // Expire outright rather than "max": open pages refresh straight after this
+  // run, and stale-while-revalidate would serve them the old results.
   for (const tag of getCoeMonthlyRevalidationTags(month)) {
-    revalidateTag(tag, "max");
+    revalidateTag(tag, { expire: 0 });
   }
 }

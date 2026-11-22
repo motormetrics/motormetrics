@@ -34,9 +34,3 @@ export const getResultsWindow = (now: Date): ResultsWindow | null => {
 
   return now.getTime() < end ? { start, end } : null;
 };
-
-/** Whether `now` falls inside today's results window. */
-export const isInResultsWindow = (now: Date): boolean => {
-  const today = getResultsWindow(now);
-  return today !== null && now.getTime() >= today.start;
-};

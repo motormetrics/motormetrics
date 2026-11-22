@@ -2,6 +2,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const storedRows = vi.hoisted(() => ({ value: [] as { id: string }[] }));
 const seal = vi.hoisted(() => vi.fn());
+const stamp = vi.hoisted(() => ({ value: null as number | null }));
+
+vi.mock("@motormetrics/utils/redis", () => ({
+  redis: { get: vi.fn(async () => stamp.value) },
+}));
 
 vi.mock("@motormetrics/database/client", () => ({
   db: {
@@ -36,6 +41,7 @@ describe("GET /api/coe/live", () => {
     vi.stubEnv("NEON_REALTIME_SECRET", "secret");
     vi.stubEnv("DATABASE_URL", "postgresql://user:pass@host/neondb");
     storedRows.value = [];
+    stamp.value = null;
     seal.mockResolvedValue(SEALED);
   });
 
@@ -46,7 +52,7 @@ describe("GET /api/coe/live", () => {
 
     expect(response.status).toBe(200);
     expect(response.headers.get("Cache-Control")).toBe("no-store");
-    expect(await response.json()).toEqual(SEALED);
+    expect(await response.json()).toEqual({ status: "live", query: SEALED });
     expect(createRealtime).toHaveBeenCalledWith({
       secret: "secret",
       db: "neondb",
@@ -71,13 +77,31 @@ describe("GET /api/coe/live", () => {
     expect(seal).not.toHaveBeenCalled();
   });
 
-  it("should return 204 once the day's results are stored", async () => {
+  it("should report pending while the results await revalidation", async () => {
     at("16:10");
     storedRows.value = [{ id: "row" }];
+    // Yesterday's CSV run stamped the key, not today's interim run.
+    stamp.value = new Date("2026-11-17T16:00:00+08:00").getTime();
 
     const response = await GET();
 
-    expect(response.status).toBe(204);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ status: "pending" });
+    expect(seal).not.toHaveBeenCalled();
+  });
+
+  it("should report ready once today's results are revalidated", async () => {
+    at("16:10");
+    storedRows.value = [{ id: "row" }];
+    stamp.value = new Date("2026-11-18T16:06:00+08:00").getTime();
+
+    const response = await GET();
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      status: "ready",
+      updatedAt: stamp.value,
+    });
     expect(seal).not.toHaveBeenCalled();
   });
 

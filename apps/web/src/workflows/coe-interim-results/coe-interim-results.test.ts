@@ -84,8 +84,14 @@ describe("coeInterimResultsWorkflow", () => {
       "last_updated:coe",
       expect.any(Number),
     );
-    expect(revalidateTag).toHaveBeenCalledWith("coe:month:2026-11", "max");
-    expect(revalidateTag).toHaveBeenCalledWith("coe:latest", "max");
+    expect(revalidateTag).toHaveBeenCalledWith("coe:month:2026-11", {
+      expire: 0,
+    });
+    expect(revalidateTag).toHaveBeenCalledWith("coe:latest", { expire: 0 });
+    // Open pages treat the stamp as "fresh results are servable".
+    expect(vi.mocked(redis.set).mock.invocationCallOrder[0]).toBeGreaterThan(
+      vi.mocked(revalidateTag).mock.invocationCallOrder[0],
+    );
   });
 
   it("should skip when the exercise is already stored", async () => {

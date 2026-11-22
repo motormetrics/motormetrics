@@ -1,7 +1,4 @@
-import {
-  getResultsWindow,
-  isInResultsWindow,
-} from "@web/lib/coe/results-window";
+import { getResultsWindow } from "@web/lib/coe/results-window";
 import { describe, expect, it } from "vitest";
 
 // Wednesday 18 November 2026, given as SGT wall-clock times.
@@ -24,17 +21,5 @@ describe("getResultsWindow", () => {
   it("should return nothing at the weekend", () => {
     expect(getResultsWindow(sgt("16:00", "2026-11-21"))).toBeNull();
     expect(getResultsWindow(sgt("16:00", "2026-11-22"))).toBeNull();
-  });
-});
-
-describe("isInResultsWindow", () => {
-  it.each([
-    [false, "15:54"],
-    [true, "15:55"],
-    [true, "16:05"],
-    [true, "16:44"],
-    [false, "16:45"],
-  ])("should be %s at %s SGT", (expected, time) => {
-    expect(isInResultsWindow(sgt(time))).toBe(expected);
   });
 });

@@ -41,8 +41,20 @@ vi.mock("@neon/realtime/client", () => ({
 import { createRealtimeClient } from "@neon/realtime/client";
 
 const SEALED = { capability: "sealed", expiresAt: 1, queryFingerprint: "fp" };
+const LIVE = { status: "live", query: SEALED };
+const PENDING = { status: "pending" };
+const ready = (offsetMs: number) => ({
+  status: "ready",
+  updatedAt: performance.timeOrigin + offsetMs,
+});
+// Revalidated after this page was requested, so the page is stale.
+const READY_AFTER_LOAD = ready(1000);
+// Revalidated before this page was requested, so the page is fresh.
+const READY_BEFORE_LOAD = ready(-1000);
 
-const respondWith = (...responses: (typeof SEALED | null)[]) => {
+const ROW = { month: "2026-11", bidding_no: 2 };
+
+const respondWith = (...responses: (object | null)[]) => {
   const fetchMock = vi.spyOn(globalThis, "fetch");
   for (const body of responses) {
     fetchMock.mockResolvedValueOnce(
@@ -52,6 +64,18 @@ const respondWith = (...responses: (typeof SEALED | null)[]) => {
     );
   }
   return fetchMock;
+};
+
+const emitChange = (snapshot: Snapshot) => {
+  for (const listener of realtime.listeners.change) {
+    listener(snapshot);
+  }
+};
+
+const emitState = async (state: State) => {
+  for (const listener of realtime.listeners.state) {
+    await listener(state);
+  }
 };
 
 // Wednesday 18 November 2026, as SGT wall-clock time.
@@ -87,8 +111,8 @@ describe("CoeResultsLive", () => {
     vi.clearAllMocks();
   });
 
-  it("should refresh once and close when the day's results arrive", async () => {
-    respondWith(SEALED);
+  it("should refresh once the arrived results are revalidated", async () => {
+    respondWith(LIVE, READY_AFTER_LOAD);
     await renderAndSubscribe();
 
     expect(createRealtimeClient).toHaveBeenCalledWith({
@@ -96,17 +120,47 @@ describe("CoeResultsLive", () => {
     });
     expect(realtime.client.subscribe).toHaveBeenCalledWith(SEALED);
 
-    for (const listener of realtime.listeners.change) {
-      listener({ status: "live", data: [] });
-    }
+    emitChange({ status: "live", data: [] });
     expect(refresh).not.toHaveBeenCalled();
 
-    for (const listener of realtime.listeners.change) {
-      listener({ status: "live", data: [{ month: "2026-11", bidding_no: 2 }] });
-    }
-    expect(refresh).toHaveBeenCalledOnce();
+    emitChange({ status: "live", data: [ROW] });
     expect(realtime.subscription.unsubscribe).toHaveBeenCalled();
     expect(realtime.client.close).toHaveBeenCalled();
+    await vi.waitFor(() => expect(refresh).toHaveBeenCalledOnce());
+  });
+
+  it("should refresh even when the revalidation predates the page", async () => {
+    // The page saw the rows arrive live, so it renders the old results.
+    respondWith(LIVE, READY_BEFORE_LOAD);
+    await renderAndSubscribe();
+
+    emitChange({ status: "live", data: [ROW] });
+
+    await vi.waitFor(() => expect(refresh).toHaveBeenCalledOnce());
+  });
+
+  it("should wait for the cache revalidation before refreshing", async () => {
+    const fetchMock = respondWith(LIVE, PENDING, PENDING, READY_AFTER_LOAD);
+    await renderAndSubscribe();
+
+    emitChange({ status: "live", data: [ROW] });
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    expect(refresh).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(5_000);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(refresh).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(5_000);
+    await vi.waitFor(() => expect(refresh).toHaveBeenCalledOnce());
+  });
+
+  it("should listen on nested COE pages", async () => {
+    state.pathname = "/coe/results";
+    respondWith(LIVE);
+    await renderAndSubscribe();
+
+    expect(realtime.client.subscribe).toHaveBeenCalledWith(SEALED);
   });
 
   it("should not subscribe when the route has nothing to seal", async () => {
@@ -119,9 +173,29 @@ describe("CoeResultsLive", () => {
     expect(createRealtimeClient).not.toHaveBeenCalled();
   });
 
+  it("should refresh a page requested before the revalidation", async () => {
+    const fetchMock = respondWith(PENDING, READY_AFTER_LOAD);
+    await renderAndListen();
+    await vi.advanceTimersByTimeAsync(5_000);
+
+    await vi.waitFor(() => expect(refresh).toHaveBeenCalledOnce());
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(createRealtimeClient).not.toHaveBeenCalled();
+  });
+
+  it("should leave a page requested after the revalidation alone", async () => {
+    const fetchMock = respondWith(READY_BEFORE_LOAD);
+    await renderAndListen();
+    await vi.advanceTimersByTimeAsync(60_000);
+
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(refresh).not.toHaveBeenCalled();
+    expect(createRealtimeClient).not.toHaveBeenCalled();
+  });
+
   it("should wait for the window to open before fetching", async () => {
     at("15:50");
-    const fetchMock = respondWith(SEALED);
+    const fetchMock = respondWith(LIVE);
     await renderAndListen();
     expect(fetchMock).not.toHaveBeenCalled();
 
@@ -130,7 +204,7 @@ describe("CoeResultsLive", () => {
   });
 
   it("should close the subscription when the window ends", async () => {
-    respondWith(SEALED);
+    respondWith(LIVE);
     await renderAndSubscribe();
 
     await vi.advanceTimersByTimeAsync(45 * 60 * 1000);
@@ -141,12 +215,10 @@ describe("CoeResultsLive", () => {
   });
 
   it("should renew an expired sealed query", async () => {
-    respondWith(SEALED, SEALED);
+    respondWith(LIVE, LIVE);
     await renderAndSubscribe();
 
-    for (const listener of realtime.listeners.state) {
-      await listener({ status: "stale" });
-    }
+    await emitState({ status: "stale" });
 
     await vi.waitFor(() =>
       expect(realtime.subscription.renew).toHaveBeenCalledWith(SEALED),
@@ -155,12 +227,10 @@ describe("CoeResultsLive", () => {
   });
 
   it("should refresh when the query expires after the results arrived", async () => {
-    respondWith(SEALED, null);
+    respondWith(LIVE, READY_AFTER_LOAD);
     await renderAndSubscribe();
 
-    for (const listener of realtime.listeners.state) {
-      await listener({ status: "stale" });
-    }
+    await emitState({ status: "stale" });
 
     await vi.waitFor(() => expect(refresh).toHaveBeenCalledOnce());
     expect(realtime.subscription.renew).not.toHaveBeenCalled();
@@ -174,7 +244,7 @@ describe("CoeResultsLive", () => {
   ])("should do nothing %s", async (_, pathname, time, date) => {
     state.pathname = pathname;
     at(time, date);
-    const fetchMock = respondWith(SEALED);
+    const fetchMock = respondWith(LIVE);
     await renderAndListen();
     await vi.advanceTimersByTimeAsync(60 * 60 * 1000);
 
